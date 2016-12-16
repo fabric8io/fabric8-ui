@@ -39,8 +39,8 @@ if [ $? -eq 0 ]; then
   if [ $? -eq 0 ]; then
     echo 'CICO: build OK'
     docker build -t almighty-ui-deploy -f Dockerfile.deploy . && \
-    docker tag almighty-ui-deploy registry.ci.centos.org:5000/almighty/almighty-ui:latest && \
-    docker push registry.ci.centos.org:5000/almighty/almighty-ui:latest
+    docker tag almighty-ui-deploy registry.ci.centos.org:5000/fabric8io/fabric8-ui:latest && \
+    docker push registry.ci.centos.org:5000/fabric8io/fabric8-ui:latest
     if [ $? -eq 0 ]; then
       echo 'CICO: image pushed, ready to update deployed app'
       exit 0
