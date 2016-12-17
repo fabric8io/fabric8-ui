@@ -4,14 +4,14 @@
       <li [routerLinkActive]="['active']">
         <a>pmuir <b class="caret"></b></a>
       </li>
-      <li [routerLinkActive]="['active']">
-        <a [routerLink]="['/home']" id="header_menuHome">Home</a>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <a [routerLink]="['/']" id="header_menuHome">Home</a>
       </li>
       <li [routerLinkActive]="['active']">
-        <a [routerLink]="['/profile']" >Profile</a>
+        <a [routerLink]="['/pmuir']" >Profile</a>
         <ul class="nav navbar-nav navbar-persistent">
           <li [routerLinkActive]="['active']">
-            <a [routerLink]="['/profile']">Profile</a>
+            <a [routerLink]="['/pmuir']">Profile</a>
           </li>
           <li [routerLinkActive]="['active']">
             <a [routerLink]="['/collaboration']">Collaboration Spaces</a>
@@ -42,7 +42,7 @@
         </a>
         <ul class="dropdown-menu">
           <li>
-            <a [routerLink]="['/profile']" >Profile</a>
+            <a [routerLink]="['/pmuir']" >Profile</a>
           </li>
           <li>
             <a [routerLink]="['/help']" >Help</a>
@@ -70,7 +70,7 @@
         </a>
         <ul class="dropdown-menu">
           <li>
-            <a [routerLink]="['/profile']" >Profile</a>
+            <a [routerLink]="['/pmuir']" >Profile</a>
           </li>
           <li>
             <a [routerLink]="['/help']" >Help</a>
