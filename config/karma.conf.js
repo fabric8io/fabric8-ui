@@ -25,7 +25,10 @@ module.exports = function(config) {
      *
      * we are building the test environment in ./spec-bundle.js
      */
-    files: [ { pattern: './config/spec-bundle.js', watched: false } ],
+    files: [
+      { pattern: './src/assets/img/*', watched: false, included: false, served: true },
+      { pattern: './config/spec-bundle.js', watched: false }
+    ],
 
     /*
      * preprocess matching files before serving them to the browser
@@ -76,6 +79,7 @@ module.exports = function(config) {
      * start these browsers
      * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
      */
+/*
     browsers: [
       'Chrome'
     ],
@@ -85,6 +89,25 @@ module.exports = function(config) {
         base: 'Chrome',
         flags: ['--no-sandbox']
       }
+    },
+*/
+    customLaunchers: {
+      'PhantomJS_custom': {
+        base: 'PhantomJS',
+        options: {
+          windowName: 'alm-window',
+          settings: {
+            webSecurityEnabled: false
+          },
+        },
+        flags: ['--load-images=true'],
+        debug: true
+      }
+    },
+    phantomjsLauncher: {
+      // Have phantomjs exit if a ResourceError is encountered
+      // (useful if karma exits without killing phantom)
+      exitOnResourceError: true
     },
 
     /*
