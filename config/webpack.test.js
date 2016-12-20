@@ -8,10 +8,12 @@ const path = require('path');
 /**
  * Webpack Plugins
  */
+const webpack = require('webpack');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 /**
  * Webpack Constants
@@ -26,6 +28,10 @@ const API_URL = process.env.API_URL || (ENV==='inmemory'?'app/':'http://localhos
  */
 module.exports = function (options) {
   return {
+
+    entry: {
+      'app': './src/main.browser.ts'
+    },
 
     /**
      * Source map for Karma from the help of karma-sourcemap-loader &  karma-webpack
@@ -52,7 +58,8 @@ module.exports = function (options) {
       /**
        * Make sure root is src
        */
-      modules: [ path.resolve(__dirname, 'src'), 'node_modules' ]
+      //modules: [ path.resolve(__dirname, 'src'), 'node_modules' ]
+      root: helpers.root('src')
 
     },
 
@@ -63,7 +70,12 @@ module.exports = function (options) {
      */
     module: {
 
-      preLoaders: [
+    /**
+     * An array of applied pre and post loaders.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
+     */
+    preLoaders: [
 
         /**
          * Tslint loader support for *.ts files
@@ -189,7 +201,6 @@ module.exports = function (options) {
      *
      * See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
      */
-
      postLoaders: [
       /**
        * Instruments JS files with Istanbul for subsequent code coverage reporting.
