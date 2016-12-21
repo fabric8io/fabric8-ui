@@ -11,7 +11,8 @@ exports.config = {
   // use `npm run e2e`
   specs: [
     helpers.root('src/**/**.e2e.ts'),
-    helpers.root('src/**/*.e2e.ts')
+    helpers.root('src/**/*.e2e.ts'),
+    helpers.root('src/tests/**/*.spec.js')
   ],
   exclude: [],
 
@@ -29,10 +30,10 @@ exports.config = {
   directConnect: true,
 
   capabilities: {
-    'browserName': 'chrome',
-    'chromeOptions': {
-      'args': ['show-fps-counter=true']
-    }
+    'browserName': 'phantomjs',
+    'phantomjs.binary.path': require('phantomjs-prebuilt').path,
+    'phantomjs.cli.args': ['--webdriver-loglevel=ERROR', '--local-storage-path=/tmp/phantom_' + Math.random()]
+
   },
 
   onPrepare: function() {

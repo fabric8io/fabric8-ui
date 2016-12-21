@@ -91,6 +91,7 @@ module.exports = function(config) {
       }
     },
 */
+    browsers: ['PhantomJS_custom'],
     customLaunchers: {
       'PhantomJS_custom': {
         base: 'PhantomJS',

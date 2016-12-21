@@ -17,6 +17,7 @@ require('core-js/es6');
 require('core-js/es7/reflect');
 
 // Typescript emit helpers polyfill
+require('reflect-metadata');
 require('ts-helpers');
 
 require('zone.js/dist/zone');
