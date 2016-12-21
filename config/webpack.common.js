@@ -84,7 +84,7 @@ module.exports = function (options) {
       extensions: ['.ts', '.js', '.json'],
 
       // An array of directory names to be resolved to the current directory
-      modules: [helpers.root('src'), 'node_modules']
+      modulesDirectories: [helpers.root('src'), 'node_modules']
 
     },
 
@@ -95,7 +95,7 @@ module.exports = function (options) {
      */
     module: {
 
-      rules: [
+      loaders: [
 
         /*
          * Typescript loader support for .ts and Angular 2 async routes via .async.ts

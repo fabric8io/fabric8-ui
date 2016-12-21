@@ -189,7 +189,7 @@
     "typedoc": "0.5.0",
     "typescript": "2.0.6",
     "url-loader": "0.5.7",
-    "webpack": "2.1.0-beta.25",
+    "webpack": "2.1.0-beta.22",
     "webpack-bundle-analyzer": "1.5.3",
     "webpack-dashboard": "0.2.0",
     "webpack-dev-middleware": "1.6.1",
