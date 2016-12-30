@@ -33,16 +33,16 @@ RUN yum install -y wget bzip2 git java-1.8.0-openjdk nmap-ncat psmisc \
   && yum remove -y wget \
   && yum clean all
 
-ENV ALMIGHTY_USER_NAME=almighty
+ENV FABRIC8_USER_NAME=fabric8
 
-RUN useradd --user-group --create-home --shell /bin/false ${ALMIGHTY_USER_NAME}
+RUN useradd --user-group --create-home --shell /bin/false ${FABRIC8_USER_NAME}
 
-ENV HOME=/home/${ALMIGHTY_USER_NAME}
+ENV HOME=/home/${FABRIC8_USER_NAME}
 
 COPY . $HOME
-RUN chown -R ${ALMIGHTY_USER_NAME}:${ALMIGHTY_USER_NAME} $HOME/*
+RUN chown -R ${FABRIC8_USER_NAME}:${FABRIC8_USER_NAME} $HOME/*
 
-USER ${ALMIGHTY_USER_NAME}
+USER ${FABRIC8_USER_NAME}
 WORKDIR $HOME/
 
 VOLUME /dist
