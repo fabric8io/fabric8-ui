@@ -22,8 +22,7 @@ export class SignupComponent implements OnInit {
   complete() {
     // Fake a login
     localStorage.setItem('auth_token', 'pmuir');
-    // Another nice hack!
-    window.location.href = '/home';
+    this.router.navigate(['/home']);
   }
 
 }

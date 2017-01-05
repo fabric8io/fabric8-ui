@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
-
+import { Router } from '@angular/router';
+import { ContextService } from '../../shared/context.service';
+import { Broadcaster } from '../../shared/broadcaster.service';
 
 @Component({
   selector: 'alm-analyzeOverview',
@@ -13,7 +14,10 @@ export class AnalyzeOverviewComponent implements OnInit {
 
 
   constructor(
-    private router: Router) {
+    private router: Router,
+    public context: ContextService,
+    private broadcaster: Broadcaster
+  ) {
   }
 
   ngOnInit() {
@@ -22,6 +26,10 @@ export class AnalyzeOverviewComponent implements OnInit {
 
   onImgLoad() {
     this.imgLoaded = true;
+  }
+
+  saveDescription() {
+    this.broadcaster.broadcast('save', 1);
   }
 
 }

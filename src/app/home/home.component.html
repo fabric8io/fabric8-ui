@@ -28,7 +28,7 @@
                             </h2>
                             <div class="card-pf-items">
                                 <ul class="list-unstyled">
-                                    <li *ngFor="let s of dummy.spaces"><a [routerLink]="['/pmuir/' + s.path]">{{s.name}}</a></li>
+                                    <li *ngFor="let s of dummy.spaces"><a [routerLink]="[ s.path]">{{s.name}}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                     <small>{{dummy.resources.startDate | date:'d'}} – {{dummy.resources.endDate | date:'d MMM'}}</small>
                 </div>
             </div>
-            <div class="row x-small" *ngFor="let r of dummy.resources.list" >
+            <div class="row x-small" *ngFor="let r of dummy.resources.list">
                 <div class="col-md-6">
                     <small>{{r.type.name}}</small>
                 </div>

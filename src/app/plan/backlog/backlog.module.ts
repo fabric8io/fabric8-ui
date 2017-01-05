@@ -3,8 +3,6 @@ import { CommonModule }     from '@angular/common';
 import { HttpModule, Http } from '@angular/http';
 
 import { CollapseDirective } from 'ng2-bootstrap/ng2-bootstrap';
-import { LocalStorageModule } from 'angular-2-local-storage';
-
 
 import { BacklogComponent }     from './backlog.component';
 import { BacklogRoutingModule } from './backlog-routing.module';
@@ -14,11 +12,7 @@ import { BacklogRoutingModule } from './backlog-routing.module';
   imports: [
     CommonModule,
     BacklogRoutingModule,
-    HttpModule,
-    LocalStorageModule.withConfig({
-      prefix: 'fabric8',
-      storageType: 'localStorage'
-    })
+    HttpModule
   ],
   declarations: [ BacklogComponent, /*CollapseDirective*/ ],
 })

@@ -8,6 +8,7 @@ import { HttpModule } from '@angular/http';
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
 import { DropdownModule } from 'ng2-dropdown';
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -33,13 +34,14 @@ import { DummyService } from './dummy/dummy.service';
 import { Logger } from './shared/logger.service';
 import { UserService } from './user/user.service';
 import { ToggleService } from './toggle/toggle.service';
+import { ContextService } from './shared/context.service';
 
 // Share Modules
 import { PublicModule } from './public/public.module';
 
 // Shared Components
 import { SpaceDialogModule } from './space-dialog/space-dialog.module';
-import { DeleteAccountDialogModule} from './delete-account-dialog/delete-account-dialog.module';
+import { DeleteAccountDialogModule } from './delete-account-dialog/delete-account-dialog.module';
 
 // Login
 import { SigninComponent } from './signin/signin.component';
@@ -62,14 +64,19 @@ export type StoreType = {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  imports: [ // import other modules with the components, directives and pipes needed by the components in this module
+  imports: [ // import (in alphabetical order) other modules with the components, directives and pipes needed by the components in this module
     BrowserModule,
     DeleteAccountDialogModule,
     DropdownModule,
     FormsModule,
     HttpModule,
+    LocalStorageModule.withConfig({
+      prefix: 'fabric8',
+      storageType: 'localStorage'
+    }),
     PublicModule,
     SpaceDialogModule,
+    // AppRoutingModule must appear last
     AppRoutingModule
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
@@ -84,16 +91,17 @@ export type StoreType = {
     APP_PROVIDERS,
     AuthenticationService,
     Broadcaster,
+    ContextService,
     DummyService,
     Logger,
     LoginService,
     ToggleService,
     UserService
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(public appRef: ApplicationRef, public appState: AppState) {}
+  constructor(public appRef: ApplicationRef, public appState: AppState) { }
 
   hmrOnInit(store: StoreType) {
     if (!store || !store.state) return;
@@ -119,7 +127,7 @@ export class AppModule {
     // recreate root elements
     store.disposeOldHosts = createNewHosts(cmpLocation);
     // save input values
-    store.restoreInputValues  = createInputTransfer();
+    store.restoreInputValues = createInputTransfer();
     // remove styles
     removeNgStyles();
   }

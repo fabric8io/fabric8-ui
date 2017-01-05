@@ -1,172 +1,73 @@
 <nav class="navbar navbar-default navbar-pf" role="navigation" *ngIf="loggedIn">
-  <div class="collapse navbar-collapse navbar-collapse-1">
-    <ul class="nav navbar-nav navbar-primary persistent-secondary">
-      <!-- This part of the menu is dynamic based on context -->
-      <li class="context dropdown" dropdown>
-        <a dropdown-open>
-          <span>
-            <span class="{{context().type.icon}}"></span> {{context().name}}
-          </span>
-          <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li *ngFor="let m of dummy.contextMenuItems">
-            <a [routerLink]="[m.path]" *ngIf="m != context()"><span class="{{m.type.icon}}"></span> {{m.name}}</a>
-          </li>
-          <li>
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/spaces']">Browse all</a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a [routerLink]="[urlFeatureToggle + '/home']">Account home</a>
-          </li>
-          <li>
-            <!-- TODO: This should pop up the new space dialog -->
-            <a>New space</a>
-          </li>
+    <div class="collapse navbar-collapse navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-primary persistent-secondary">
+            <!-- This part of the menu is dynamic based on context -->
+            <li class="context dropdown" dropdown>
+                <a dropdown-open>
+                    <span>
+                        <span class="{{context.current.type.icon}}"></span> {{context.current.name}}
+                    </span>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li *ngFor="let m of dummy.contexts">
+                        <a [routerLink]="[urlFeatureToggle + m.path]" *ngIf="m != context.current"><span class="{{m.type.icon}}"></span> {{m.name}}</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="[urlFeatureToggle + '/pmuir/spaces']">Browse all</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a [routerLink]="[urlFeatureToggle + '/home']">Account home</a>
+                    </li>
+                    <li>
+                        <!-- TODO: This should pop up the new space dialog -->
+                        <a>New space</a>
+                    </li>
+                </ul>
+            </li>
+            <li *ngFor="let m of context.current.type.menus" [class.active]="m.active">
+                <a [routerLink]="[urlFeatureToggle + m.fullPath]">
+                    <span *ngIf="m.icon" class="{{m.icon}}"></span>
+                    <span *ngIf="m.name">{{m.name}}</span>
+                </a>
+                <ul class="nav navbar-nav navbar-persistent" *ngIf="m.menus">
+                    <li *ngFor="let n of m.menus" [class.active]="n.active">
+                        <a [routerLink]="[urlFeatureToggle + n.fullPath]">{{n.name}}</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
-      </li>
-      <li [routerLinkActive]="['active']" *ngIf="!router.url.includes('BalloonPopGame')">
-        <a [routerLink]="[urlFeatureToggle + '/home']" id="header_menuHome">Home</a>
-      </li>
-      <li [routerLinkActive]="['active']" *ngIf="!router.url.includes('BalloonPopGame')">
-        <a [routerLink]="[urlFeatureToggle + '/pmuir']">Profile</a>
-        <ul class="nav navbar-nav navbar-persistent">
-          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir']">Profile</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/spaces']">Collaboration Spaces</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/resources']">Resources</a>
-          </li>
+    </div>
+    <div class="navbar-collapse navbar-collapse-1 nav-mob-scroll">
+        <ul id="header_rightDropdown" class="nav navbar-nav navbar-utility">
+            <li>
+                <a *ngIf="!loggedIn" (click)='login();'>Sign In</a>
+            </li>
+            <li *ngIf="loggedIn" dropdown class="pull-right dropdown">
+                <a dropdown-open>
+                    <a *ngIf="loggedInUser" id="header_dropdownToggle">
+                        <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
+                        <img (load)="onImgLoad()" src="{{ loggedInUser.attributes?.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}" class="pull-left marginR10" /> {{loggedInUser.attributes?.fullName}}
+                    </a>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a [routerLink]="[urlFeatureToggle + '/pmuir']">Profile</a>
+                    </li>
+                    <li>
+                        <a href="https://fabric8.io/guide/getStarted/index.html">Help</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a [routerLink]="[urlFeatureToggle + '/pmuir/settings']">Settings</a>
+                    </li>
+                    <li>
+                        <a *ngIf="loggedIn" (click)='logout();'>Sign out</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
-      </li>
-      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}" *ngIf="router.url.includes('BalloonPopGame')">
-        <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame']" id="header_menu-analyze">Analyze</a>
-        <ul class="nav navbar-nav navbar-persistent">
-          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame']">Overview</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/readme']">README</a>
-          </li>
-        </ul>
-      </li>
-      <li [routerLinkActive]="['active']" *ngIf="router.url.includes('BalloonPopGame')">
-        <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/plan']">Plan</a>
-        <ul class="nav navbar-nav navbar-persistent">
-          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/plan']">Backlog</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/plan/board']">Board</a>
-          </li>
-        </ul>
-      </li>
-      <li [routerLinkActive]="['active']" *ngIf="router.url.includes('BalloonPopGame')">
-        <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/create']">Create</a>
-        <ul class="nav navbar-nav navbar-persistent">
-          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/create']">Codebases</a>
-          </li>
-          <li [routerLinkActive]="['active']" *ngIf="selectedFeatureToggle === 'Beta' || selectedFeatureToggle === 'Alpha'">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/create/workspaces']">Workspaces</a>
-          </li>
-        </ul>
-      </li>
-      <li [routerLinkActive]="['active']" *ngIf="router.url.includes('BalloonPopGame')">
-        <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/run']">Run</a>
-        <ul class="nav navbar-nav navbar-persistent">
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/run']">Pipelines</a>
-          </li>
-        </ul>
-      </li>
-      <li [routerLinkActive]="['active']" *ngIf="router.url.includes('BalloonPopGame')">
-        <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/settings']" id="header_menu-analyze-settings" routerLinkActive="active"><span class="pficon pficon-settings"></span></a>
-        <ul class="nav navbar-nav navbar-persistent">
-          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/settings']">Overview</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/settings/work']">Work</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/settings/security']">Security</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/BalloonPopGame/settings/alerts']">Alerts</a>
-          </li>
-        </ul>
-      </li>
-      <li [routerLinkActive]="['active']" *ngIf="!router.url.includes('BalloonPopGame')">
-        <a [routerLink]="[urlFeatureToggle + '/pmuir/settings']" id="header_menu-settings" routerLinkActive="active"><span class="pficon pficon-settings"></span></a>
-        <ul class="nav navbar-nav navbar-persistent">
-          <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/settings']">Profile</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/settings/account']">Account</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/settings/emails']">Emails</a>
-          </li>
-          <li [routerLinkActive]="['active']">
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/settings/notifications']">Notifications</a>
-          </li>
-        </ul>
-      </li>
-      <!-- end dynamic section -->
-    </ul>
-  </div>
-  <div class="navbar-collapse navbar-collapse-1 nav-mob-scroll ">
-    <ul id="header_rightDropdown" class="nav navbar-nav navbar-utility">
-      <!-- This part of the menu is dynamic based on context -->
-      <li class="context dropdown " dropdown>
-        <a dropdown-open>
-          <span>
-            {{selectedFeatureToggle}}
-          </span>
-          <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li *ngFor="let toggle of togglePaths" (click)="setFeatureToggle(toggle)">
-            <span>{{toggle.name}}</span>
-          </li>
-        </ul>
-      </li>
-      <li>
-        <a *ngIf="!loggedIn" (click)='login();'>Sign In</a>
-      </li>
-      <li *ngIf="loggedIn" dropdown class="pull-right dropdown">
-        <a dropdown-open>
-          <a *ngIf="loggedInUser" id="header_dropdownToggle">
-            <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
-            <img (load)="onImgLoad()" src="{{ loggedInUser.attributes?.imageURL }}"
-                 [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}"
-                 class="pull-left marginR10" />
-            {{loggedInUser.attributes?.fullName}}
-          </a>
-          <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li>
-            <a [routerLink]="[urlFeatureToggle + '/pmuir']">Profile</a>
-          </li>
-          <li>
-            <a href="https://fabric8.io/guide/getStarted/index.html">Help</a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/settings']">Settings</a>
-          </li>
-          <li>
-            <a *ngIf="loggedIn" (click)='logout();'>Sign out</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+    </div>
 </nav>

@@ -13,15 +13,12 @@ export class SigninComponent implements OnInit {
     private router: Router) {
   }
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
   signin() {
     // Fake a login
     localStorage.setItem('auth_token', 'pmuir');
-    // Another nice hack!
-    window.location.href = '/home';
+    this.router.navigate(['/home']);
   }
 
 }

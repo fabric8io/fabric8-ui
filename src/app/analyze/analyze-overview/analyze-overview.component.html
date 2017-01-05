@@ -1,147 +1,151 @@
-<div id="analyze-overview" class="container content">
-  <div class="top row">
-    <div class="col-md-3">
-      <div class="panel panel-300 panel-default">
-        <div class="panel-heading">
-          <h2 class="panel-title">Welcome</h2>
-        </div>
-        <div class="panel-body">
-          <p>
-            Various text and links to help the user get started – ideating, coding, importing, setting up pipelines, etc.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="row">
-        <div class="panel panel-140 panel-default">
-          <div class="panel-body">
-            <form class="form-horizontal">
-              <div class="form-group">
-                <div class="col-sm-12">
-                  <textarea id="description" class="form-control" placeholder="Project description. Click to edit..." value="" rows="4"></textarea>
+<div id="analyze-overview" class="container content" *ngIf="context.current.space">
+    <div class="top row">
+        <div class="col-md-3">
+            <div class="panel panel-300 panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Welcome</h2>
                 </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="panel panel-140 panel-default">
-          <div class="panel-heading">
-            <h2 class="panel-title">
-              Open Scenarios (0)</h2>
-          </div>
-          <div class="panel-body">
-
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>State</th>
-                  <th>Title</th>
-                </tr>
-                </thead>
-              </table>
+                <div class="panel-body">
+                    <p>
+                        Various text and links to help the user get started – ideating, coding, importing, setting up pipelines, etc.
+                    </p>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="panel panel-300 panel-default">
-        <div class="panel-heading">
-          <h2 class="panel-title">Team</h2>
-        </div>
-        <div class="panel-body team">
-          <ul class="list-unstyled">
-            <li>
-              <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
-              <img (load)="onImgLoad()" src="https://avatars2.githubusercontent.com/u/157761?v=3&s=460" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}"
-                   class="pull-left marginR10" /> pmuir
-            </li>
-          </ul>
-          <button class="btn btn-primary bottom-right" type="button" (click)="teamMembership.open()">Invite Someone</button>
-        </div>
-
-      </div>
-    </div>
-  </div>
-  <div class="bottom row">
-    <div class="col-md-3">
-      <div class="panel panel-300 panel-default">
-        <div class="panel-heading">
-          <h2 class="panel-title">Useful Data</h2>
-        </div>
-        <div class="panel-body">
-          <!-- TODO insert chart -->
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="panel panel-300 panel-default">
-        <div class="panel-heading">
-          <h2 class="panel-title">New Work Item</h2>
-        </div>
-        <div class="panel-body">
-
-          <form class="form-horizontal">
-            <div class="form-group">
-              <div class="col-sm-12">
-                <input type="text" id="title" class="form-control" placeholder="Enter title...">
-              </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="panel panel-140 panel-default">
+                    <div class="panel-body">
+                        <form class="form-horizontal" (ngSubmit)="saveDescription()" role="form">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <textarea name="description" id="description" class="form-control" placeholder="Project description. Click to edit..." rows="4" [(ngModel)]="context.current.space.description"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-default pull-right" value="0">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-              <div class="col-sm-12">
-                <select id="scenario" class="form-control">
+            <div class="row">
+                <div class="panel panel-140 panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">
+                            Open Scenarios (0)</h2>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>State</th>
+                                        <th>Title</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-300 panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Team</h2>
+                </div>
+                <div class="panel-body team">
+                    <ul class="list-unstyled">
+                        <li>
+                            <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
+                            <img (load)="onImgLoad()" src="https://avatars2.githubusercontent.com/u/157761?v=3&s=460" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}" class="pull-left marginR10" /> pmuir
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary bottom-right" type="button" (click)="teamMembership.open()">Invite Someone</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="bottom row">
+        <div class="col-md-3">
+            <div class="panel panel-300 panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Useful Data</h2>
+                </div>
+                <div class="panel-body">
+                    <!-- TODO insert chart -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-300 panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">New Work Item</h2>
+                </div>
+                <div class="panel-body">
+
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="text" id="title" class="form-control" placeholder="Enter title...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <select id="scenario" class="form-control">
                   <option>Scenario</option>
                 </select>
-              </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary bottom-right" type="button">Create</button>
+                    </form>
+                </div>
             </div>
-            <button class="btn btn-primary bottom-right" type="button">Create</button>
-          </form>
         </div>
-      </div>
+        <div class="col-md-2">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame/create']);">
+
+                <div class="panel-heading">
+                    <h2 class="panel-title text-center">Codebases</h2>
+                </div>
+                <div class="panel-body">
+                    <p class="number text-center">0</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame/run']);">
+
+                <div class="panel-heading">
+                    <h2 class="panel-title text-center">Pipelines Executing</h2>
+                </div>
+                <div class="panel-body">
+                    <p class="text-center number">0</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame']);">
+
+                <div class="panel-heading">
+                    <h2 class="panel-title text-center">Hypotheses Evaluating</h2>
+                </div>
+                <div class="panel-body">
+
+                    <p class="text-center number">0</p>
+                </div>
+
+            </div>
+        </div>
     </div>
-    <div class="col-md-2">
-      <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame/create']);">
-
-        <div class="panel-heading">
-          <h2 class="panel-title text-center">Codebases</h2>
-        </div>
-        <div class="panel-body">
-          <p class="number text-center">0</p>
-        </div>
-
-      </div>
-    </div>
-    <div class="col-md-2">
-      <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame/run']);">
-
-        <div class="panel-heading">
-          <h2 class="panel-title text-center">Pipelines Executing</h2>
-        </div>
-        <div class="panel-body">
-          <p class="text-center number">0</p>
-        </div>
-
-      </div>
-    </div>
-    <div class="col-md-2">
-      <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame']);">
-
-        <div class="panel-heading">
-          <h2 class="panel-title text-center">Hypotheses Evaluating</h2>
-        </div>
-        <div class="panel-body">
-
-          <p class="text-center number">0</p>
-        </div>
-
-      </div>
-    </div>
-  </div>
 </div>
 
 <modal #teamMembership title="Manage membership of BalloonPopGame Team">
