@@ -39,13 +39,11 @@ export class UserService {
   }
 
   getUser(): Promise<User> {
-    // Check if there is already a user logged in
+    // Check if we have the user data if not then check if the user is logged in.
+    // We need the auth key to get the user data. So either we already the data or we don't have the keys
+    //   in either case don't try to get the data.
     if (Object.keys(this.userData).length || !this.auth.isLoggedIn()) {
       return new Promise((resolve, reject) => {
-        // console.log('beginning of getUser() = ' + Object.keys(this.userData));
-        // console.log('beginning of getUser() = ' + JSON.stringify(this.userData, null, 2));
-        // console.log('Object.keys(this.userData).length = ' + Object.keys(this.userData).length);
-        // console.log('this.auth.isLoggedIn() = ' + this.auth.isLoggedIn());
         resolve(this.userData);
       });
     } else {
