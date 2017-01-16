@@ -9,4 +9,14 @@ export interface Space {
     privateSpace?: boolean;
     teams: Team[];
     defaultTeam: Team;
+    id: string;
+    attributes: SpaceAttributes;
+    type: string;
+}
+
+export class SpaceAttributes {
+    name: string;
+    'updated-at': string;
+    'created-at': string;
+    version: number;
 }

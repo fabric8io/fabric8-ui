@@ -252,7 +252,15 @@ export class DummyService {
         path: '/pmuir/BalloonPopGame',
         description: 'Microservices architected search engine',
         teams: [],
-        defaultTeam: null
+        defaultTeam: null,
+        id: '0',
+        attributes: {
+          name: 'Bobo',
+          'created-at': '2017-01-01',
+          'updated-at': '2017-01-02',
+          version: 1
+        },
+        type: 'spaces'
       } as Space
     ], [
       'hysterix',
@@ -261,7 +269,15 @@ export class DummyService {
         path: '/pmuir/BalloonPopGame',
         description: 'Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.',
         teams: [],
-        defaultTeam: null
+        defaultTeam: null,
+        id: '1',
+        attributes: {
+          name: 'Hysterix',
+          'created-at': '2017-01-01',
+          'updated-at': '2017-01-02',
+          version: 1
+        },
+        type: 'spaces'
       } as Space
     ], [
       'fabric8',
@@ -270,7 +286,15 @@ export class DummyService {
         path: '/pmuir/BalloonPopGame',
         description: 'Fabric8 is an open source integrated development platform for Kubernetes',
         teams: [],
-        defaultTeam: null
+        defaultTeam: null,
+        id: '2',
+        attributes: {
+          name: 'fabric8io',
+          'created-at': '2017-01-01',
+          'updated-at': '2017-01-02',
+          version: 1
+        },
+        type: 'spaces'
       } as Space
     ], [
       'balloonpopgame',
@@ -282,7 +306,15 @@ export class DummyService {
           this.TEAMS.get('balloonpopgame'),
           this.TEAMS.get('balloonpopgame_ux')
         ],
-        defaultTeam: this.TEAMS.get('balloonpopgame')
+        defaultTeam: this.TEAMS.get('balloonpopgame'),
+        id: '3',
+        attributes: {
+          name: 'BalloonPopGame',
+          'created-at': '2017-01-01',
+          'updated-at': '2017-01-02',
+          version: 1
+        },
+        type: 'spaces'
       } as Space
     ]
   ]);
