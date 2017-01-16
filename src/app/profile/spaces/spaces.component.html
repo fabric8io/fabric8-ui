@@ -31,9 +31,9 @@
       </div>
       <div class="row">
         <table class="spaces table">
-          <tr *ngFor="let s of dummy.spaces">
+          <tr *ngFor="let s of spaces">
             <td>
-              <h2><a [routerLink]="['/pmuir/' + s.path]">{{s.name}}</a></h2>
+              <h2><a [routerLink]="['/pmuir/' + s.path]">{{s.attributes.name}}</a></h2>
               <p>{{s.description}}</p>
             </td>
           </tr>
