@@ -166,7 +166,7 @@ export class DummyService {
             path: 'create',
             menus: [
               {
-                name: 'Codesbases',
+                name: 'Codebases',
                 path: ''
               }, {
                 name: 'Workspaces',
