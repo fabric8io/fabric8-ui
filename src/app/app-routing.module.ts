@@ -1,4 +1,4 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
@@ -22,7 +22,7 @@ export const routes: Routes = [
     path: 'signup',
     loadChildren: './signup/signup.module#SignupModule'
   },
-    {
+  {
     path: '_control',
     loadChildren: './control/control.module#ControlModule'
   },
@@ -36,186 +36,91 @@ export const routes: Routes = [
     path: 'home',
     loadChildren: './home/home.module#HomeModule'
   },
-  {
-    path: 'beta/home',
-    loadChildren: './home/home.module#HomeModule'
-  },
-  {
-    path: 'alpha/home',
-    loadChildren: './home/home.module#HomeModule'
-  },
-
-  // Analyze
-  {
-    path: 'pmuir/BalloonPopGame',
-    loadChildren: './analyze/analyze.module#AnalyzeModule'
-  },
-  {
-    path: 'beta/pmuir/BalloonPopGame',
-    loadChildren: './analyze/analyze.module#AnalyzeModule'
-  },
-  {
-    path: 'alpha/pmuir/BalloonPopGame',
-    loadChildren: './analyze/analyze.module#AnalyzeModule'
-  },
-
-  // Plan
-  {
-    path: 'pmuir/BalloonPopGame/plan',
-    loadChildren: './plan/plan.module#PlanModule'
-  },
-  {
-    path: 'beta/pmuir/BalloonPopGame/plan',
-    loadChildren: './plan-alpha/plan.module#PlanModule'
-  },
-  {
-    path: 'alpha/pmuir/BalloonPopGame/plan',
-    loadChildren: './plan-alpha/plan.module#PlanModule'
-  },
-
-  // Create
-  {
-    path: 'pmuir/BalloonPopGame/create',
-    loadChildren: './create/create.module#CreateModule'
-  },
-  {
-    path: 'beta/pmuir/BalloonPopGame/create',
-    loadChildren: './create/create.module#CreateModule'
-  },
-  {
-    path: 'alpha/pmuir/BalloonPopGame/create',
-    loadChildren: './create/create.module#CreateModule'
-  },
-
-  // Run
-  {
-    path: 'pmuir/BalloonPopGame/run',
-    loadChildren: './run/run.module#RunModule'
-  },
-  {
-    path: 'beta/pmuir/BalloonPopGame/run',
-    loadChildren: './run/run.module#RunModule'
-  },
-  {
-    path: 'alpha/pmuir/BalloonPopGame/run',
-    loadChildren: './run/run.module#RunModule'
-  },
-
-  // Space-settings
-  {
-    path: 'pmuir/BalloonPopGame/settings',
-    loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
-  },
-  {
-    path: 'beta/pmuir/BalloonPopGame/settings',
-    loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
-  },
-  {
-    path: 'alpha/pmuir/BalloonPopGame/settings',
-    loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
-  },
-
   // Chat
+  // TODO I think this can be removed (PLM)
   {
     path: 'chat',
     loadChildren: './chat/chat.module#ChatModule'
   },
-  {
-    path: 'beta/chat',
-    loadChildren: './chat/chat.module#ChatModule'
-  },
-  {
-    path: 'alpha/chat',
-    loadChildren: './chat/chat.module#ChatModule'
-  },
-
   // Dashboard
+  // TODO I think this can be removed (PLM)
   {
     path: 'dashboard',
     loadChildren: './dashboard/dashboard.module#DashboardModule'
   },
-  {
-    path: 'beta/dashboard',
-    loadChildren: './dashboard/dashboard.module#DashboardModule'
-  },
-  {
-    path: 'alpha/dashboard',
-    loadChildren: './dashboard/dashboard.module#DashboardModule'
-  },
-
   // Help
+  // TODO I think this can be removed (PLM)
   {
     path: 'help',
     loadChildren: './help/help.module#HelpModule'
   },
-  {
-    path: 'beta/help',
-    loadChildren: './help/help.module#HelpModule'
-  },
-  {
-    path: 'alpha/help',
-    loadChildren: './help/help.module#HelpModule'
-  },
-
   // Learn
+  // TODO I think this can be removed (PLM)
   {
     path: 'learn',
     loadChildren: './learn/learn.module#LearnModule'
   },
-  {
-    path: 'beta/learn',
-    loadChildren: './learn/learn.module#LearnModule'
-  },
-  {
-    path: 'alpha/learn',
-    loadChildren: './learn/learn.module#LearnModule'
-  },
-
   // Notifications
+  // TODO I think this can be removed (PLM)
   {
     path: 'notifications',
     loadChildren: './notifications/notifications.module#NotificationsModule'
   },
-  {
-    path: 'beta/notifications',
-    loadChildren: './notifications/notifications.module#NotificationsModule'
-  },
-  {
-    path: 'alpha/notifications',
-    loadChildren: './notifications/notifications.module#NotificationsModule'
-  },
 
-  // Profile
+  // Parameterized <Entity> route
+  // Must be the last item in the routing table, as this essentially acts as a "fallback route"
   {
-    path: 'pmuir',
-    loadChildren: './profile/profile.module#ProfileModule'
-  },
-  {
-    path: 'beta/pmuir',
-    loadChildren: './profile/profile.module#ProfileModule'
-  },
-  {
-    path: 'alpha/pmuir',
-    loadChildren: './profile/profile.module#ProfileModule'
-  },
+    path: ':entity',
+    children: [
+      // Profile
+      {
+        path: '',
+        loadChildren: './profile/profile.module#ProfileModule'
+      },
+      // Settings
+      {
+        path: 'settings',
+        loadChildren: './settings/settings.module#SettingsModule'
+      },
+      {
+        // Parameterized <Space> route
+        // Must be the last item in the :entity routing table, as this essentially acts as a
+        path: ':space',
+        children: [
+          // Analyze
+          {
+            path: '',
+            loadChildren: './analyze/analyze.module#AnalyzeModule'
+          },
+          // Plan
+          {
+            path: 'plan',
+            loadChildren: './plan/plan.module#PlanModule'
+          },
+          // Create
+          {
+            path: 'create',
+            loadChildren: './create/create.module#CreateModule'
+          },
+          // Run
+          {
+            path: 'run',
+            loadChildren: './run/run.module#RunModule'
+          },
+          // Space-settings
+          {
+            path: 'settings',
+            loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
+          },
 
-  // Settings
-  {
-    path: 'pmuir/settings',
-    loadChildren: './settings/settings.module#SettingsModule'
-  },
-  {
-    path: 'beta/pmuir/settings',
-    loadChildren: './settings/settings.module#SettingsModule'
-  },
-  {
-    path: 'alpha/pmuir/settings',
-    loadChildren: './settings/settings.module#SettingsModule'
-  },
+        ]
+      }
+    ]
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {enableTracing: true})],
+  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

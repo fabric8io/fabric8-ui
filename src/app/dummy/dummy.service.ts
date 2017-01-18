@@ -241,6 +241,14 @@ export class DummyService {
           this.USERS.get('qodfathr')
         ]
       } as Team
+    ], [
+      'bobo',
+      {
+        name: '',
+        members: [
+          this.USERS.get('pmuir')
+        ]
+      } as Team
     ]
   ]);
 
@@ -249,10 +257,12 @@ export class DummyService {
       'bobo',
       {
         name: 'Bobo',
-        path: '/pmuir/BalloonPopGame',
+        path: '/pmuir/Bobo',
         description: 'Microservices architected search engine',
-        teams: [],
-        defaultTeam: null
+        teams: [
+          this.TEAMS.get('bobo')
+        ],
+        defaultTeam: this.TEAMS.get('bobo')
       } as Space
     ], [
       'hysterix',
@@ -304,6 +314,15 @@ export class DummyService {
         type: this.CONTEXT_TYPES.get('space'),
         path: '/pmuir/BalloonPopGame',
         name: 'BalloonPopGame'
+      } as Context
+    ], [
+      'bobo',
+      {
+        entity: this.USERS.get('pmuir'),
+        space: this.SPACES.get('bobo'),
+        type: this.CONTEXT_TYPES.get('space'),
+        path: '/pmuir/Bobo',
+        name: 'Bobo'
       } as Context
     ], [
       'ux',
