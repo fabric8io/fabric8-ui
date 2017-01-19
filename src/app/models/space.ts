@@ -2,7 +2,7 @@ import { Team } from './team';
 import { ProcessTemplate } from './process-template';
 
 export interface Space {
-    name: String;
+    name: string;
     path: String;
     description: String;
     process?: ProcessTemplate;

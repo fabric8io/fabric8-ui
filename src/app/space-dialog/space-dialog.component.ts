@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DummyService } from '../dummy/dummy.service';
-import { Space } from '../models/space';
+import { Space, SpaceAttributes } from '../models/space';
 import { ProcessTemplate } from '../models/process-template';
 import { Broadcaster } from '../shared/broadcaster.service';
+import { SpaceService } from "../profile/spaces/space.service";
 
 
 
 @Component({
   selector: 'space-dialog',
   templateUrl: './space-dialog.component.html',
-  styleUrls: ['./space-dialog.component.scss']
+  styleUrls: ['./space-dialog.component.scss'],
+  providers: [SpaceService]
 })
 export class SpaceDialogComponent {
 
@@ -19,7 +21,8 @@ export class SpaceDialogComponent {
   constructor(
     private router: Router,
     public dummy: DummyService,
-    private broadcaster: Broadcaster) {
+    private broadcaster: Broadcaster,
+    private spaceService: SpaceService) {
       this.resetNewSpace();
   }
 
@@ -28,6 +31,10 @@ export class SpaceDialogComponent {
     // TODO: Once we have dynamic routing, fix this
     this.newSpace.path = '/pmuir/BalloonPopGame';
     this.newSpace.description = this.newSpace.name;
+    this.newSpace.attributes = new SpaceAttributes();
+    this.newSpace.attributes.name = this.newSpace.name;
+    this.newSpace.type = 'spaces';
+    this.spaceService.create(this.newSpace);
     this.dummy.spaces.push(this.newSpace);
     this.broadcaster.broadcast('save', 1);
     this.router.navigate([this.newSpace.path]);
