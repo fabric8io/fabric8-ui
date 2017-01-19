@@ -70,6 +70,22 @@ export class SpaceService {
       .catch(this.handleError);
   }
 
+  create(space: Space): Promise<Space> {
+    let url = this.spacesUrl;
+    let payload = JSON.stringify({data: space});
+    return this.http
+      .post(url, payload, {headers: this.headers})
+      .toPromise()
+      .then(response => {
+        let newSpace: Space = response.json().data as Space;
+        // Add the newly created space at the top of the spaces list.
+        this.spaces.splice(0, 0, newSpace);
+        // Rebuild the map after updating the list
+        this.buildSpaceIndexMap();
+        return newSpace;
+      }).catch(this.handleError);
+  }
+
   // Adds or updates the client-local list of spaces,
   // with spaces retrieved from the server, usually as a page in a paginated collection.
   // If a space already exists in the client-local collection,

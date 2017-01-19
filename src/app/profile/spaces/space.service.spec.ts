@@ -88,4 +88,20 @@ describe('Service: SpaceService', () => {
     });
   }));
 
+  it('Add new space', async(() => {
+    mockService.connections.subscribe((connection: any) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          body: JSON.stringify({data: responseData[0]}),
+          status: 201
+        })
+      ));
+    });
+
+    spaceService.create(responseData[0])
+      .then(data => {
+        expect(data).toEqual(expectedResponse[0]);
+      });
+  }));
+
 });
