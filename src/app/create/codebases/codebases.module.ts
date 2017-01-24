@@ -1,3 +1,4 @@
+import { module } from '@angular/upgrade/src/angular_js';
 import { NgModule }         from '@angular/core';
 import { CommonModule }     from '@angular/common';
 import { HttpModule, Http } from '@angular/http';
@@ -11,4 +12,5 @@ import { CodebasesRoutingModule } from './codebases-routing.module';
 })
 export class CodebasesModule {
   constructor(http: Http) {}
+
 }
