@@ -1,4 +1,9 @@
 ///////////////////////////
+// icon styles
+///////////////////////////
+@import 'icons';
+
+///////////////////////////
 // Utility styles
 ///////////////////////////
 
@@ -6,19 +11,19 @@
 @mixin padding-x($count:15) {
   @for $i from 0 through $count {
     .padding-#{$i} {
-      padding: #{$i}px;
+      padding: #{$i}px !important;
     }
     .padding-top-#{$i} {
-      padding-top: #{$i}px;
+      padding-top: #{$i}px !important;
     }
     .padding-left-#{$i} {
-      padding-left: #{$i}px;
+      padding-left: #{$i}px !important;
     }
     .padding-bottom-#{$i} {
-      padding-bottom: #{$i}px;
+      padding-bottom: #{$i}px !important;
     }
     .padding-right-#{$i} {
-      padding-right: #{$i}px;
+      padding-right: #{$i}px !important;
     }
   }
 }
@@ -26,19 +31,19 @@
 @mixin margin-x($count:15) {
   @for $i from 0 through $count {
     .margin-#{$i} {
-      margin: #{$i}px;
+      margin: #{$i}px !important;
     }
     .margin-top-#{$i} {
-      margin-top: #{$i}px;
+      margin-top: #{$i}px !important;
     }
     .margin-left-#{$i} {
-      margin-left: #{$i}px;
+      margin-left: #{$i}px !important;
     }
     .margin-bottom-#{$i} {
-      margin-bottom: #{$i}px;
+      margin-bottom: #{$i}px !important;
     }
     .margin-right-#{$i} {
-      margin-right: #{$i}px;
+      margin-right: #{$i}px !important;
     }
   }
 }
@@ -119,10 +124,20 @@ body
     {
       flex-direction: row;
     }
+    &.with-wrap
+    {
+      flex-wrap: wrap;
+    }
     // Make sure the main,section,aside parts fill the screen and collapse header and footer if not there
     >main,section,aside
     {
       @extend .flex-grow-1;
+    }
+    >.container-fluid
+    {
+      position:relative;
+      width:100%;
+      flex-grow:1;
     }
 
 }
@@ -224,5 +239,95 @@ footer
   }
 
 }
+
+  .btn{
+    min-width: 90px;
+  }
+
+
+// chromeless dialog suppresses all chrome in the ng2-bootstrap modal component
+.chromeless-modal
+{
+  .modal-content
+  {
+    display:flex;
+    border:solid 0 lime;
+    padding:0;
+    margin:0;
+    .modal-header{
+      display:none;
+    }
+    .modal-footer{
+      display:none;
+    }
+    .modal-body{
+      flex:1;
+      display:flex;
+      border:solid 0 orangered;
+      padding:0;
+      .chromeless-modal-content
+      {
+        flex:1;
+        display:flex;
+        border:solid 0 brown;
+        padding:0;
+
+      }
+    }
+
+  }
+}
+
+// wizard
+$wizard-padding:$grid-gutter-width/2;
+
+.wizard-container{
+  flex:1;
+  display:flex;
+  border:solid 0 orange;
+  position:relative;
+  .wizard{
+    flex:1;
+    display:flex;
+    border:solid 0 darkorange;
+    position:relative;
+    padding:0;
+    padding-bottom:$wizard-padding;
+
+    .wizard-step{
+
+      display:none;
+      // at least 50% of view height
+      min-height: 50vh;
+      &.active{
+        display:flex;
+        flex-direction: column;
+      }
+      flex:1;
+      border:solid 0 olivedrab;
+      >header{
+        display:flex;
+        position:relative;
+        justify-content: center;
+        padding:$wizard-padding;
+        background-color: $navbar-default-bg;
+      }
+      >section
+      {
+        flex:1;
+        display:flex;
+        position:relative;
+      }
+      >footer{
+        display:flex;
+        position:relative;
+        justify-content:flex-end;
+        padding:$wizard-padding;
+        padding-bottom:0;
+      }
+    }
+  }
+}
+
 
 
