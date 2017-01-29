@@ -33,6 +33,24 @@ export class SpaceService {
     return this.getSpacesDelegate(url, isAll);
   }
 
+  getSpaceByName(spaceName: string): Promise<Space> {
+    let result = this.spaces.find(space => space.attributes.name === spaceName);
+    if (result == null) {
+      let url = `${this.spacesUrl}/${spaceName}`;
+      return this.http.get(url, { headers: this.headers } )
+        .toPromise()
+        .then((response) => {
+          let space: Space = response.json().data as Space;
+          this.spaces.splice(this.spaces.length, 0, space);
+          this.buildSpaceIndexMap();
+          return space;
+        })
+        .catch (this.handleError);
+    } else {
+      return Promise.resolve(result);
+    }
+  }
+
   getMoreSpaces(): Promise<any> {
     if (this.nextLink) {
       let isAll = false;
