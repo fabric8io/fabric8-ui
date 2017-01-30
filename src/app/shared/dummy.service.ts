@@ -258,12 +258,12 @@ export class DummyService {
       {
         name: 'Bobo',
         path: '/pmuir/BalloonPopGame',
-        description: 'Microservices architected search engine',
         teams: [],
         defaultTeam: null,
         id: '0',
         attributes: {
           name: 'Bobo',
+          description: 'Microservices architected search engine',
           'created-at': '2017-01-01',
           'updated-at': '2017-01-02',
           version: 1
@@ -275,12 +275,12 @@ export class DummyService {
       {
         name: 'Hysterix',
         path: '/pmuir/BalloonPopGame',
-        description: 'Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.',
         teams: [],
         defaultTeam: null,
         id: '1',
         attributes: {
           name: 'Hysterix',
+          description: 'Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.',
           'created-at': '2017-01-01',
           'updated-at': '2017-01-02',
           version: 1
@@ -292,12 +292,12 @@ export class DummyService {
       {
         name: 'fabric8io',
         path: '/pmuir/BalloonPopGame',
-        description: 'Fabric8 is an open source integrated development platform for Kubernetes',
         teams: [],
         defaultTeam: null,
         id: '2',
         attributes: {
           name: 'fabric8io',
+          description: 'Fabric8 is an open source integrated development platform for Kubernetes',
           'created-at': '2017-01-01',
           'updated-at': '2017-01-02',
           version: 1
@@ -309,7 +309,6 @@ export class DummyService {
       {
         name: 'BalloonPopGame',
         path: '/pmuir/BalloonPopGame',
-        description: 'Balloon popping fun for everyone!',
         teams: [
           this.TEAMS.get('balloonpopgame'),
           this.TEAMS.get('balloonpopgame_ux')
@@ -318,6 +317,7 @@ export class DummyService {
         id: '3',
         attributes: {
           name: 'BalloonPopGame',
+          description: 'Balloon popping fun for everyone!',
           'created-at': '2017-01-01',
           'updated-at': '2017-01-02',
           version: 1

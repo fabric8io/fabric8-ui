@@ -104,6 +104,25 @@ export class SpaceService {
       }).catch(this.handleError);
   }
 
+  update(space: Space): Promise<Space> {
+    let url = `${this.spacesUrl}/${space.attributes.name}`;
+    let payload = JSON.stringify({data: space});
+    return this.http
+      .patch(url, payload, {headers: this.headers})
+      .toPromise()
+      .then(response => {
+        let updatedSpace = response.json().data as Space;
+        // Find the index in the big list
+        let updateIndex = this.spaces.findIndex(item => item.id == updatedSpace.id);
+        if (updateIndex > -1) {
+          // Update space attributes
+          this.spaces[updateIndex].attributes = updatedSpace.attributes;
+        }
+        return updatedSpace;
+      })
+      .catch(this.handleError);
+  }
+
   // Adds or updates the client-local list of spaces,
   // with spaces retrieved from the server, usually as a page in a paginated collection.
   // If a space already exists in the client-local collection,
