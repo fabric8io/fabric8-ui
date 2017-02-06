@@ -17,7 +17,7 @@
         </a>
         <ul class="dropdown-menu view-width-100">
           <li>
-            <a [routerLink]="[urlFeatureToggle + '/pmuir']">
+            <a [routerLink]="['pmuir']">
               <span class="nav-item-text">Profile</span>
             </a>
           </li>
@@ -28,7 +28,7 @@
           </li>
           <li class="divider"></li>
           <li>
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/settings']">
+            <a [routerLink]="['pmuir/settings']">
               <span class="nav-item-text">Settings</span>
             </a>
           </li>
@@ -58,7 +58,7 @@
         </a>
         <ul class="dropdown-menu">
           <li *ngFor="let m of dummy.contexts">
-            <a [routerLink]="[urlFeatureToggle + m.path]" *ngIf="m.path !== null && m != context.current">
+            <a [routerLink]="[m.path]" *ngIf="m.path !== null && m != context.current">
               <span class="nav-item-icon">
                 <span class="nav-icon {{m.type.icon}}"></span>
               </span>
@@ -72,7 +72,7 @@
             </a>
           </li>
           <li>
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/spaces']">
+            <a [routerLink]="['pmuir/spaces']">
               <span class="nav-item-icon">
               </span>
               <span class="nav-item-text">
@@ -82,7 +82,7 @@
           </li>
           <li class="divider"></li>
           <li>
-            <a [routerLink]="[urlFeatureToggle + '/home']">
+            <a [routerLink]="['home']">
               <span class="nav-item-icon">
               </span>
               <span class="nav-item-text">
@@ -102,7 +102,7 @@
         </ul>
       </li>
       <li *ngFor="let m of context.current.type.menus" [class.active]="m.active" [class.with-no-children]="(m.menus||[]).length===0">
-        <a [routerLink]="[urlFeatureToggle + m.fullPath]">
+        <a [routerLink]="[m.fullPath]">
           <span *ngIf="m.icon" class="nav-item-icon">
             <span  class="nav-icon {{m.icon}}"></span>
           </span>
@@ -110,7 +110,7 @@
         </a>
         <ul class="nav navbar-nav navbar-persistent" *ngIf="m.menus">
           <li *ngFor="let n of m.menus" [class.active]="n.active">
-            <a [routerLink]="[urlFeatureToggle + n.fullPath]">
+            <a [routerLink]="[n.fullPath]">
               <span class="nav-item-text">
                 {{n.name}}
               </span>
@@ -138,14 +138,14 @@
         </a>
         <ul class="dropdown-menu">
           <li>
-            <a [routerLink]="[urlFeatureToggle + '/pmuir']"><span class="nav-item-text">Profile</span> </a>
+            <a [routerLink]="['pmuir']"><span class="nav-item-text">Profile</span> </a>
           </li>
           <li>
             <a href="https://fabric8.io/guide/getStarted/index.html"><span class="nav-item-text">Help</span></a>
           </li>
           <li class="divider"></li>
           <li>
-            <a [routerLink]="[urlFeatureToggle + '/pmuir/settings']"><span class="nav-item-text">Settings</span></a>
+            <a [routerLink]="['pmuir/settings']"><span class="nav-item-text">Settings</span></a>
           </li>
           <li>
             <a *ngIf="loggedIn" (click)='logout();'><span class="nav-item-text">Sign out</span></a>
