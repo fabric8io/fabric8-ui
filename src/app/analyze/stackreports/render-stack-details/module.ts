@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 //import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -8,11 +8,17 @@ import { StackAnalysesService } from '../stack-analyses.service';
 import { StackAnalysesModel } from '../stack-analyses.model';
 
 
+import {StackRecoModule} from '../stack-recommendation/module';
+import {ContainerTogglerModule} from '../container-toggler/module';
+
+
 
 import { CommonModule }     from '@angular/common';
 
 @NgModule({
-  declarations: [ RenderStackDetailsComponent ]
+  imports: [StackRecoModule, ContainerTogglerModule],
+  declarations: [ RenderStackDetailsComponent ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class StackModule {
   constructor() {}

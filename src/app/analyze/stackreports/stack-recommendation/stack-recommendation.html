@@ -1,0 +1,17 @@
+
+
+<div class="stack-recommendation">
+
+    <table>
+        <thead>
+            <th *ngFor="let header of headers">{{header}}</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of rows">
+                <td>{{row.name}}</td>
+                <td>{{row.version}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

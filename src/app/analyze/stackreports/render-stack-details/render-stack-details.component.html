@@ -162,6 +162,18 @@
 
 </div>
 
+<!-- Stack Recommendation Section -->
+<div class="row">
+  <div class="col-xs-12 col-md-6 col-lg-4">
+    <stack-recommendation [rows]="currentStackRows" [headers]="currentStackHeaders"></stack-recommendation>
+  </div>
+  <div class="col-xs-12 col-md-6 col-lg-8">
+    <container-toggler (prevBtn)="handlePrevious($event)" (nextBtn)="handleNext($event)"></container-toggler>
+    <stack-recommendation [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers" id="rec_container"></stack-recommendation>
+  </div>
+</div>
+<!-- Stack Recommendation Section -->
+
 
 </div>
 

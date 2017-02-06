@@ -37,12 +37,70 @@ export class RenderStackDetailsComponent implements OnInit {
   componentDataObject = {};
   componentsDataTable = [];
 
+  currentStackRows : Array<any> = [];
+  currentStackHeaders : Array<string> = [];
+
+  recoArray : Array<any> = [];
+  currentIndex : number = 0;
+
   constructor(private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
 
   ngOnInit() {
     debugger;
     this.getStackAnalyses();
     //this.getComponentAnalyses();
+
+    this.currentStackHeaders = [
+        'name',
+        'version'
+    ];
+
+    this.currentStackRows = [
+        { name: 'Sample1', version: '0.1.1' },
+        { name: 'Sample1', version: '0.1.1' },
+        { name: 'Sample1', version: '0.1.1' },
+        { name: 'Sample1', version: '0.1.1' }
+    ];
+
+    this.recoArray = [
+      {
+        'headers': [
+          'name',
+          'version'
+        ],
+        'rows': [
+          { name: 'Sample1', version: '0.1.1' },
+          { name: 'Sample1', version: '0.1.1' },
+          { name: 'Sample1', version: '0.1.1' },
+          { name: 'Sample1', version: '0.1.1' }
+        ]
+      },
+      {
+        'headers': [
+          'name1',
+          'version1'
+        ],
+        'rows': [
+          { name: 'Sample6', version: '0.1.1' },
+          { name: 'Sample7', version: '0.1.1' },
+          { name: 'Sample8', version: '0.1.1' },
+          { name: 'Sample1', version: '0.1.1' }
+        ]
+      },
+      {
+        'headers': [
+          'name2',
+          'version2'
+        ],
+        'rows': [
+          { name: 'Sample3', version: '0.1.1' },
+          { name: 'Sample4', version: '0.1.1' },
+          { name: 'Sample5', version: '0.1.1' },
+          { name: 'Sample1', version: '0.1.1' }
+        ]
+      }
+    ];
+
   }
 
   getStackAnalyses() {
@@ -95,6 +153,14 @@ export class RenderStackDetailsComponent implements OnInit {
       },
       error => this.errorMessage = <any>error
       );
+  }
+
+  handleNext(value) : void {
+    ++ this.currentIndex;
+  }
+
+  handlePrevious(value) : void {
+    -- this.currentIndex;
   }
 
   getComponentAnalyses(item) {
