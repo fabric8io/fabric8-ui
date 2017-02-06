@@ -1,0 +1,168 @@
+<div class="container">
+  <div class="widget-span">
+    <h1>Stack </h1>
+    <div class="nav-text">
+      <span id="packageInfo">
+        <h2> meanjs 0.5.0</h2>
+      </span>
+    </div>
+
+  </div>
+
+
+  <div id="result-body" class="container widget-row widget-span" style='display:block'>
+<!-- <div class="widget-span"> -->
+<!-- <br> -->
+<!-- <div class="stack_info_container"> -->
+
+<div class="row">
+  <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+    <h4><span class="nav-text">
+            <span class="ui-icon ui-icon-info"></span>Usage</span>
+      <a href='https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#usage-stack'>
+        <!-- <img title='Overview on how this stack is being used. Click for more info.'
+             src="../assets/icons/266-question.svg"></img> -->
+      </a>
+    </h4>
+    <div id="usage">
+      <p> Average Public Component Usage: {{average_usage}}</p>
+      <p> Components with Low Public Usage: {{low_public_usage_components}}</p>
+      <p> Components Redistributed by Red Hat: {{redhat_distributed_components}}</p>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+    <h4>
+      <span class="nav-text">Popularity</span>
+      <a href='https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#popularity-stack'>
+        <!-- <img title='Overview on how popular this stack is. Click for more info.'
+              src="icons/266-question.svg"></img> -->
+      </a>
+    </h4>
+    <div id="popularity">
+      <p> Average Component GitHub Stars: {{average_stars}}</p>
+      <p> Average Component GitHub Forks: {{average_forks}}</p>
+      <p> Components with Low Popularity: {{low_popularity_components}}</p>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+    <h4>
+      <span class="nav-text">Licenses</span>
+      <a href='https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#licenses-stack'>
+        <!-- <img title='Licenses found by OSLC. Click for more info.'
+               src="icons/266-question.svg">
+             </img> -->
+      </a>
+    </h4>
+    <div id='licenses'>
+      <p> Licenses Found: {{total_licenses}}</p>
+      <p> Distinct Licenses: {{distinct_licenses.length }} </p>
+      <p> Licenses: {{distinct_licenses}} </p>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+    <h4>
+      <span class="nav-text">Security</span>
+      <a href='https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#security-stack'>
+        <!-- <img title='CVEs found in this stack. Click for more info.'
+              src="icons/266-question.svg">
+            </img> -->
+      </a>
+    </h4>
+    <div id='security'>
+      <p>Total CVEs: {{total_security_issues}}</p>
+      <p>CVSS: {{cvss}}</p>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+    <h4><span class="nav-text">Metadata</span>
+      <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#metadata-stack">
+        <!-- <img title="Info from metadata files. Click for more info."
+              src="icons/266-question.svg"></img> -->
+      </a>
+    </h4>
+    <div id="metadata">
+      <p> Components with tests: {{components_with_tests}} </p>
+      <p> Components with dependency lock file: {{components_with_dependency_lock_file}} </p>
+      <!-- <span *ngFor="let entry of required_enginesArr">
+          Required {{entry.key}} version : {{entry.value}}<br>
+        </span> -->
+    </div>
+  </div>
+</div>
+
+
+<!-- </div> -->
+<!-- </div> -->
+<div class="row">
+  <h1> Components </h1>
+
+<!--  <table class="table table-striped" [mfData]="componentsDataTable" #mf="mfDataTable" [mfRowsOnPage]="5">
+    <thead>
+      <tr>
+        <th style="width: 10%">
+<mfDefaultSorter by="ecosystem">Ecosystem</mfDefaultSorter>
+</th>
+<th style="width: 10%">
+<mfDefaultSorter by="package">Package</mfDefaultSorter>
+</th>
+<th style="width: 10%">
+<mfDefaultSorter by="version">Version</mfDefaultSorter>
+</th>
+<th style="width: 10%">
+<mfDefaultSorter by="latest_version">Latest Version</mfDefaultSorter>
+</th>
+<th style="width: 10%">
+<mfDefaultSorter by="public_usage">Public Usage</mfDefaultSorter>
+</th>
+<th style="width: 10%">
+<mfDefaultSorter by="relative_public_usage">Relative Public Usage</mfDefaultSorter>
+</th>
+<th style="width: 10%">
+<mfDefaultSorter by="poplarity">Popularity</mfDefaultSorter>
+</th>
+<th style="width: 10%">
+<mfDefaultSorter by="redhat_usage">Redhat Usage</mfDefaultSorter>
+</th>
+<th style="width: 10%">
+<mfDefaultSorter by="licence">Licence</mfDefaultSorter>
+</th>
+</tr>
+</thead>
+<tbody>
+  <tr *ngFor="let item of mf.data">
+    <td>{{item.ecosystem}}</td>
+    <td (click)="tdClicked(item)">{{item.package}}</td>
+    <td>{{item.version}}</td>
+    <td>{{item.latest_version}}</td>
+    <td>{{item.public_usage}}</td>
+    <td>{{item.relative_public_usage}}</td>
+    <td>{{item.popularity}}</td>
+    <td>{{item.redhat_usage}}</td>
+    <td>{{item.licence}}</td>
+  </tr>
+</tbody>
+<tfoot>
+  <tr>
+    <td colspan="4">
+      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+    </td>
+  </tr>
+</tfoot>
+</table> -->
+
+</div>
+
+
+</div>
+
+</div>
