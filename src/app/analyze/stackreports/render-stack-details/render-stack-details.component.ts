@@ -4,14 +4,14 @@ import { StackAnalysesService } from '../stack-analyses.service';
 import { StackAnalysesModel } from '../stack-analyses.model';
 import { RenderComponentService } from '../render-component.service';
 import {RenderNextService} from './render-next-service';
-
+import {AddWorkFlowService} from './add-work-flow.service';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-render-stack-details',
   templateUrl: './render-stack-details.component.html',
   styleUrls: ['./render-stack-details.component.css'],
-  providers: [RenderNextService, StackAnalysesService, StackAnalysesModel, RenderComponentService]
+  providers: [AddWorkFlowService, RenderNextService, StackAnalysesService, StackAnalysesModel, RenderComponentService]
 })
 export class RenderStackDetailsComponent implements OnInit {
   errorMessage: string;
@@ -46,7 +46,7 @@ export class RenderStackDetailsComponent implements OnInit {
   recoArray : Array<any> = [];
   currentIndex : number = 0;
 
-  constructor(private renderNextService : RenderNextService, private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
+  constructor(private addWorkFlowService : AddWorkFlowService, private renderNextService : RenderNextService, private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
 
   ngOnInit() {
     ////debugger;
@@ -100,16 +100,35 @@ export class RenderStackDetailsComponent implements OnInit {
     for(let i in missing_packages) {
       this.recoArray[this.currentIndex]['rows'].push({
         'name': missing_packages[i],
-        'version': ''
+        'version': '',
+        'custom': {
+          'name': 'Add',
+          'type': 'checkbox'
+        }
       });
     }
     for(let i in version_mismatch) {
       this.recoArray[this.currentIndex]['rows'].push({
         'name': version_mismatch[i],
-        'version': ''
+        'version': '',
+        'custom': {
+          'name': 'Update',
+          'type': 'checkbox'
+        }
       });
     }
   }
+
+  /* Add Workflow */
+  addWorkFlow() : void {
+    let workflow : Observable<any> = this.addWorkFlowService.addWorkFlow();
+    workflow.subscribe((data) => {
+      console.log(data);
+    })
+  }
+  /* Add workflow */
+
+
   /* Get Recommendation */
 
   getComponents(components) : void {

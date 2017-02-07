@@ -10,6 +10,10 @@
             <tr *ngFor="let row of rows">
                 <td>{{row.name}}</td>
                 <td>{{row.version}}</td>
+                <td *ngIf="row.custom">
+                    <label>{{row.custom.name}}</label>
+                    <input [type]="row.custom.type" value="" />
+                </td>
             </tr>
         </tbody>
     </table>
