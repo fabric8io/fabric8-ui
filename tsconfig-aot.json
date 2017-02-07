@@ -11,6 +11,7 @@
     "strictNullChecks": false,
     "removeComments": false,
     "noImplicitAny": true,
+    "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
     "baseUrl": "",
     "mapRoot": "",
