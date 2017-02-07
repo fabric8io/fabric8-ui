@@ -169,8 +169,8 @@
   </div>
   <div class="col-xs-12 col-md-6 col-lg-8">
     <container-toggler (prevBtn)="handlePrevious($event)" (nextBtn)="handleNext($event)"></container-toggler>
-    <stack-recommendation [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers" id="rec_container"></stack-recommendation>
-    <button (click)="addWorkFlow()" id="addWorkflow">Submit</button>
+    <stack-recommendation (customEvent)="addWorkItem($event)" [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers" id="rec_container"></stack-recommendation>
+   <!-- <button (click)="addWorkFlow()" id="addWorkflow">Submit</button> -->
   </div>
 </div>
 <!-- Stack Recommendation Section -->

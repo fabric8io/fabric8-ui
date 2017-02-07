@@ -1,4 +1,8 @@
-import {Component, ViewEncapsulation, Input} from '@angular/core';
+import {Component, ViewEncapsulation, Input, Output, EventEmitter} from '@angular/core';
+
+import {AddWorkFlowService} from '../render-stack-details/add-work-flow.service';
+
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'stack-recommendation',
@@ -12,10 +16,12 @@ export class StackRecommendationComponent {
     @Input() headers;
     @Input() rows;
 
+    @Output() customEvent = new EventEmitter();
+
     //private headers : Array<string> = [];
     //private rows : Array<any> = [];
 
-    constructor() {
+    constructor(private addWorkFlowService : AddWorkFlowService) {
 
         /*this.headers = [
             'name',
@@ -30,5 +36,10 @@ export class StackRecommendationComponent {
         ];*/
 
     }
+
+      /* Add Workflow */
+  eventHandler(row) : void {
+    this.customEvent.emit(row);
+  }
 
 }

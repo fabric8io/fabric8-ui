@@ -13,9 +13,9 @@ export class AddWorkFlowService {
 
     constructor(private http: Http) { }
 
-    addWorkFlow() : Observable<any> {
+    addWorkFlow(workItemData : any) : Observable<any> {
 
-        let workItemData : any = {"data":{"attributes":{"system.state":"new","system.title":"Sample Test","system.description":"Sample Description to test"},"relationships":{"baseType":{"data":{"id":"userstory","type":"workitemtypes"}}},"type":"workitems","id":"55"}};
+        //{"data":{"attributes":{"system.state":"new","system.title":"Sample Test","system.description":"Sample Description to test"},"relationships":{"baseType":{"data":{"id":"userstory","type":"workitemtypes"}}},"type":"workitems","id":"55"}};
 
         let headers = new Headers({ 'Content-Type': 'application/json' , 'Authorization':this.authoBearerToken});
         let options = new RequestOptions({ headers: headers });

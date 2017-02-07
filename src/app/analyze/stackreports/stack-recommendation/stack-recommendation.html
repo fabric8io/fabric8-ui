@@ -10,9 +10,13 @@
             <tr *ngFor="let row of rows">
                 <td>{{row.name}}</td>
                 <td>{{row.version}}</td>
-                <td *ngIf="row.custom">
+                <!--td *ngIf="row.custom">
                     <label>{{row.custom.name}}</label>
                     <input [type]="row.custom.type" value="" />
+                </td-->
+                <td *ngIf="row.custom">
+                    <!-- TODO: To change the event to delegate instead of attaching more events -->
+                    <input (click)="eventHandler(row)" type="button" value="{{row.custom.name}}" />
                 </td>
             </tr>
         </tbody>

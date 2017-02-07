@@ -82,6 +82,17 @@ export class RenderStackDetailsComponent implements OnInit {
 
   }
 
+  /* Adding Single Work item */
+  addWorkItem(row : any) : void {
+    let workItemData : any = {"data":{"attributes":{"system.state":"new","system.title":"Sample Test","system.description":"Sample Description to test"},"relationships":{"baseType":{"data":{"id":"userstory","type":"workitemtypes"}}},"type":"workitems","id":"55"}};  
+    workItemData.data.attributes["system.title"] = row.custom.name + ' ' + row.name + ' ' + row.version;
+    let workflow : Observable<any> = this.addWorkFlowService.addWorkFlow(workItemData);
+    workflow.subscribe((data) => {
+      console.log(data);
+    });
+  }
+  /* Adding Single Work item */
+
   /* Get Recommendation */
   getRecommendations(components, recommendation : any) : void {
     console.log('Inside');
@@ -120,12 +131,12 @@ export class RenderStackDetailsComponent implements OnInit {
   }
 
   /* Add Workflow */
-  addWorkFlow() : void {
-    let workflow : Observable<any> = this.addWorkFlowService.addWorkFlow();
+  /*addWorkFlow() : void {
+    let workflow : Observable<any> = this.addWorkFlowService.addWorkFlow(null);
     workflow.subscribe((data) => {
       console.log(data);
     })
-  }
+  }*/
   /* Add workflow */
 
 
