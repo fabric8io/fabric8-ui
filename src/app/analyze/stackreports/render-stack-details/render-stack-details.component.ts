@@ -103,11 +103,51 @@ export class RenderStackDetailsComponent implements OnInit {
 
   }
 
+  /* Get Recommendation */
+  getRecommendations(components, recommendation : any) : void {
+    console.log('Inside');
+    console.log(recommendation);
+    const similar_stacks : any = recommendation.similar_stacks[0];
+    const analysis : any = similar_stacks.analysis;
+    let missing_packages : Array<any> = analysis.missing_packages;
+    let version_mismatch : Array<any> = analysis.version_mismatch;
+
+    const url : string = analysis.uri;
+    this.recoArray[this.currentIndex]['rows'] = [];
+    for (var component in components) {
+      this.recoArray[this.currentIndex]['rows'].push({ name: components[component].name, version: components[component].version });
+    }
+    for(let i in missing_packages) {
+      this.recoArray[this.currentIndex]['rows'].push({
+        'name': missing_packages[i],
+        'version': ''
+      });
+    }
+    for(let i in version_mismatch) {
+      this.recoArray[this.currentIndex]['rows'].push({
+        'name': version_mismatch[i],
+        'version': ''
+      });
+    }
+  }
+  /* Get Recommendation */
+
+  getComponents(components) : void {
+    this.currentStackRows = [];
+    for (var component in components) {
+      this.currentStackRows.push({ name: components[component].name, version: components[component].version });
+    }
+  }
+
   getStackAnalyses() {
     this.stackAnalysesService.getStackAnalyses()
       .subscribe(
       stackAnalysesData => {
         this.stackAnalysesData = stackAnalysesData;
+
+        this.getRecommendations(this.stackAnalysesData[0].components, this.stackAnalysesData[0].recommendation.recommendations);
+        this.getComponents(this.stackAnalysesData[0].components);
+
         this.average_usage = this.stackAnalysesData[0].usage.average_usage;
         this.low_public_usage_components = this.stackAnalysesData[0].usage.low_public_usage_components;
         this.redhat_distributed_components = this.stackAnalysesData[0].usage.redhat_distributed_components;
@@ -126,7 +166,7 @@ export class RenderStackDetailsComponent implements OnInit {
         this.components_with_dependency_lock_file = this.stackAnalysesData[0].metadata.components_with_dependency_lock_file;
         this.required_engines = this.stackAnalysesData[0].metadata.required_engines;
         for (var key in this.required_engines) {
-          debugger;
+          //debugger;
           this.required_enginesArr.push({ key: key, value: this.required_engines[key] });
         }
 
