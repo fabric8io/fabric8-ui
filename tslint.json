@@ -58,7 +58,6 @@
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
-    "no-unreachable": true,
     "no-unused-expression": true,
     "no-use-before-declare": true,
     "no-var-keyword": true,
@@ -83,7 +82,7 @@
     "trailing-comma": [
       true,
       {
-        "multiline": false,
+        "multiline": "never",
         "singleline": "never"
       }
     ],
@@ -102,7 +101,6 @@
       "check-open-brace",
       "check-catch",
       "check-else",
-      "check-finally",
       "check-whitespace"
     ],
     "quotemark": [
@@ -110,7 +108,7 @@
       "single",
       "avoid-escape"
     ],
-    "semicolon": [true, "always"],
+    "semicolon": true,
     "variable-name": [
       true,
       "check-format",

@@ -9,7 +9,7 @@
     "sourceMap": true,
     "noEmitHelpers": true,
     "strictNullChecks": false,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "baseUrl": "./src",
     "paths": {
     },
