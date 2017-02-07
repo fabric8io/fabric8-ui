@@ -11,6 +11,7 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 import { DropdownModule } from 'ng2-dropdown';
 import { LocalStorageModule } from 'angular-2-local-storage';
 
+import { ReactiveFormsModule } from '@angular/forms';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -85,7 +86,8 @@ export type StoreType = {
     SpaceWizardModule,
     StackDetailsModule,
     // AppRoutingModule must appear last
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,

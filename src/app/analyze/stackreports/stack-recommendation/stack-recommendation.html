@@ -17,9 +17,9 @@
                         <!-- TODO: To change the event to delegate instead of attaching more events -->
                         <span *ngIf="!clickable">
                             <label>{{row.custom.name}}</label>
-                            <input [type]="row.custom.type" value="{{row.custom.name}}" />
+                            <input name="{{row.name}}" [type]="row.custom.type" value="{{row.custom.name}}" />
                         </span>
-                    <span *ngIf="clickable">
+                        <span *ngIf="clickable">
                             <input (click)="eventHandler(row)" type="button" value="{{row.custom.name}}" />
                         </span>
                     </span>

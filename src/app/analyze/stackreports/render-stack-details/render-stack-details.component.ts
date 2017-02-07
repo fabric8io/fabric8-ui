@@ -6,6 +6,7 @@ import { RenderComponentService } from '../render-component.service';
 import {RenderNextService} from './render-next-service';
 import {AddWorkFlowService} from './add-work-flow.service';
 import { Observable } from 'rxjs/Observable';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-render-stack-details',
@@ -48,7 +49,10 @@ export class RenderStackDetailsComponent implements OnInit {
 
   similar_stacks: Array<any> = [];
 
-  constructor(private addWorkFlowService : AddWorkFlowService, private renderNextService : RenderNextService, private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
+  public recomendationForm = this.fb.group({
+    row: ["[{name: 'Sample1', version: '0.1.1', custom: '{name: 'Add'}'}]"]
+  });
+  constructor(public fb: FormBuilder, private addWorkFlowService : AddWorkFlowService, private renderNextService : RenderNextService, private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
 
   ngOnInit() {
     ////debugger;
@@ -57,7 +61,8 @@ export class RenderStackDetailsComponent implements OnInit {
 
     this.currentStackHeaders = [
         'name',
-        'version'
+        'version',
+        'action'
     ];
 
     this.currentStackRows = [
@@ -87,7 +92,7 @@ export class RenderStackDetailsComponent implements OnInit {
 
   /* Adding Single Work item */
   addWorkItem(row : any) : void {
-    let workItemData : any = {"data":{"attributes":{"system.state":"new","system.title":"Sample Test","system.description":"Sample Description to test"},"relationships":{"baseType":{"data":{"id":"userstory","type":"workitemtypes"}}},"type":"workitems","id":"55"}};  
+    let workItemData : any = {"data":{"attributes":{"system.state":"new","system.title":"Sample Test","system.description":"Sample Description to test"},"relationships":{"baseType":{"data":{"id":"userstory","type":"workitemtypes"}}},"type":"workitems","id":"55"}};
     workItemData.data.attributes["system.title"] = row.custom.name + ' ' + row.name + ' ' + row.version;
     let workflow : Observable<any> = this.addWorkFlowService.addWorkFlow(workItemData);
     workflow.subscribe((data) => {
@@ -240,4 +245,10 @@ export class RenderStackDetailsComponent implements OnInit {
     this.getComponentAnalyses(item);
   }
 
+  // process recomendation form //
+  processForm(row: any) {
+    console.log(event);
+    console.log(this.recomendationForm.value);
+  }
+  // process recomendation form //
 }
