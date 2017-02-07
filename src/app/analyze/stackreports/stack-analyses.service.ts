@@ -7,8 +7,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class StackAnalysesService {
-  //let id = '888d1fa0d88e4fbeab7e0e20d21f6912';
-  private stackAnalysesUrl = 'http://ose-vm1.lab.eng.blr.redhat.com:32000/api/v1/stack-analyses/888d1fa0d88e4fbeab7e0e20d21f6912';
+  
+  private stackAnalysesUrl = '';
 
   constructor(private http: Http) { }
 
@@ -18,7 +18,6 @@ export class StackAnalysesService {
       .catch(this.handleError);
   }
   private extractData(res: Response) {
-    debugger;
     let body = res.json();
     return body.result || {};
   }

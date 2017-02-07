@@ -3,12 +3,15 @@ import { Component, OnInit} from '@angular/core';
 import { StackAnalysesService } from '../stack-analyses.service';
 import { StackAnalysesModel } from '../stack-analyses.model';
 import { RenderComponentService } from '../render-component.service';
+import {RenderNextService} from './render-next-service';
+
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-render-stack-details',
   templateUrl: './render-stack-details.component.html',
   styleUrls: ['./render-stack-details.component.css'],
-  providers: [StackAnalysesService, StackAnalysesModel, RenderComponentService]
+  providers: [RenderNextService, StackAnalysesService, StackAnalysesModel, RenderComponentService]
 })
 export class RenderStackDetailsComponent implements OnInit {
   errorMessage: string;
@@ -43,10 +46,10 @@ export class RenderStackDetailsComponent implements OnInit {
   recoArray : Array<any> = [];
   currentIndex : number = 0;
 
-  constructor(private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
+  constructor(private renderNextService : RenderNextService, private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
 
   ngOnInit() {
-    debugger;
+    ////debugger;
     this.getStackAnalyses();
     //this.getComponentAnalyses();
 
@@ -74,30 +77,6 @@ export class RenderStackDetailsComponent implements OnInit {
           { name: 'Sample1', version: '0.1.1' },
           { name: 'Sample1', version: '0.1.1' }
         ]
-      },
-      {
-        'headers': [
-          'name1',
-          'version1'
-        ],
-        'rows': [
-          { name: 'Sample6', version: '0.1.1' },
-          { name: 'Sample7', version: '0.1.1' },
-          { name: 'Sample8', version: '0.1.1' },
-          { name: 'Sample1', version: '0.1.1' }
-        ]
-      },
-      {
-        'headers': [
-          'name2',
-          'version2'
-        ],
-        'rows': [
-          { name: 'Sample3', version: '0.1.1' },
-          { name: 'Sample4', version: '0.1.1' },
-          { name: 'Sample5', version: '0.1.1' },
-          { name: 'Sample1', version: '0.1.1' }
-        ]
       }
     ];
 
@@ -112,8 +91,9 @@ export class RenderStackDetailsComponent implements OnInit {
     let missing_packages : Array<any> = analysis.missing_packages;
     let version_mismatch : Array<any> = analysis.version_mismatch;
 
-    const url : string = analysis.uri;
+    const url : string = similar_stacks.uri;
     this.recoArray[this.currentIndex]['rows'] = [];
+    this.recoArray[this.currentIndex]['url'] = url;
     for (var component in components) {
       this.recoArray[this.currentIndex]['rows'].push({ name: components[component].name, version: components[component].version });
     }
@@ -166,11 +146,11 @@ export class RenderStackDetailsComponent implements OnInit {
         this.components_with_dependency_lock_file = this.stackAnalysesData[0].metadata.components_with_dependency_lock_file;
         this.required_engines = this.stackAnalysesData[0].metadata.required_engines;
         for (var key in this.required_engines) {
-          //debugger;
+          //////debugger;
           this.required_enginesArr.push({ key: key, value: this.required_engines[key] });
         }
 
-        debugger;
+        ////debugger;
         for (var i = 0; i < this.stackAnalysesData[0].components.length; i++) {
           var myObj = Object.assign({}, this.stackAnalysesModel);
           myObj.ecosystem = this.stackAnalysesData[0].components[i].ecosystem;
@@ -196,7 +176,12 @@ export class RenderStackDetailsComponent implements OnInit {
   }
 
   handleNext(value) : void {
-    ++ this.currentIndex;
+    //++ this.currentIndex;
+    //Hit a new Ajax call and populate the Array
+    let nextObservable : Observable<any> = this.renderNextService.getNextList(this.recoArray[this.currentIndex]['url']);
+    nextObservable.subscribe((data) => {
+      console.log(data);
+    });
   }
 
   handlePrevious(value) : void {
@@ -207,7 +192,7 @@ export class RenderStackDetailsComponent implements OnInit {
     this.renderComponentService.getComponentAnalyses(item)
       .subscribe(
       componentAnalysesData => {
-        debugger;
+        ////debugger;
         this.componentAnalysesData = componentAnalysesData;
       },
       error => this.errorMessage = <any>error
