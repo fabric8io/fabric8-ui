@@ -7,6 +7,7 @@ import {DataTableModule} from "angular2-datatable";
 import { RenderStackDetailsComponent } from './render-stack-details.component';
 import { StackAnalysesService } from '../stack-analyses.service';
 import { StackAnalysesModel } from '../stack-analyses.model';
+import { ModalModule } from 'ng2-modal';
 
 
 import {StackRecoModule} from '../stack-recommendation/module';
@@ -17,7 +18,7 @@ import {ContainerTogglerModule} from '../container-toggler/module';
 import { CommonModule }     from '@angular/common';
 
 @NgModule({
-  imports: [StackRecoModule, ContainerTogglerModule, CommonModule, DataTableModule],
+  imports: [StackRecoModule, ContainerTogglerModule, CommonModule, DataTableModule, ModalModule],
   declarations: [ RenderStackDetailsComponent ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

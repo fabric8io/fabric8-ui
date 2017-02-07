@@ -46,6 +46,8 @@ export class RenderStackDetailsComponent implements OnInit {
   recoArray : Array<any> = [];
   currentIndex : number = 0;
 
+  similar_stacks: Array<any> = [];
+
   constructor(private addWorkFlowService : AddWorkFlowService, private renderNextService : RenderNextService, private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
 
   ngOnInit() {
@@ -98,12 +100,15 @@ export class RenderStackDetailsComponent implements OnInit {
   getRecommendations(components, recommendation : any) : void {
     console.log('Inside');
     console.log(recommendation);
-    const similar_stacks : any = recommendation.similar_stacks[0];
-    const analysis : any = similar_stacks.analysis;
+    this.similar_stacks = recommendation.similar_stacks;
+    const analysis : any = this.similar_stacks[0].analysis;
     let missing_packages : Array<any> = analysis.missing_packages;
     let version_mismatch : Array<any> = analysis.version_mismatch;
     
-    const url : string = similar_stacks.uri;
+    //const url : string = similar_stacks.uri;
+
+
+    const url : string = this.similar_stacks[0].uri;
     this.recoArray[this.currentIndex]['rows'] = [];
     this.recoArray[this.currentIndex]['url'] = url;
     // for (var component in components) {
