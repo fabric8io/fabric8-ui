@@ -188,9 +188,9 @@
 
 <modal #similarStack title="Create work item form recomendation with button">
     <modal-content>
-        <form [name]="recomendationForm" (ngSubmit)="processForm()">
+        <form [formGroup]="recomendationForm" (ngSubmit)="processForm()">
             <stack-recommendation [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers" [clickable]="false" id="rec_container"></stack-recommendation>
-            <button (click)="processForm()" type="submit" class="btn btn-primary">Create</button><button class="btn btn-danger" (click)="similarStack.close()">Close</button>
+            <button (click)="processForm();similarStack.close()" type="submit" class="btn btn-primary">Create</button><button class="btn btn-danger" (click)="similarStack.close()">Close</button>
         </form>
     </modal-content>
 </modal>
