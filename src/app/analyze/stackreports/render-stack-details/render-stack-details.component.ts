@@ -68,8 +68,9 @@ export class RenderStackDetailsComponent implements OnInit {
     this.recoArray = [
       {
         'headers': [
-          'name',
-          'version'
+          'Name',
+          'Version',
+          'Action'
         ],
         'rows': [
           { name: 'Sample1', version: '0.1.1' },
@@ -101,13 +102,13 @@ export class RenderStackDetailsComponent implements OnInit {
     const analysis : any = similar_stacks.analysis;
     let missing_packages : Array<any> = analysis.missing_packages;
     let version_mismatch : Array<any> = analysis.version_mismatch;
-
+    
     const url : string = similar_stacks.uri;
     this.recoArray[this.currentIndex]['rows'] = [];
     this.recoArray[this.currentIndex]['url'] = url;
-    for (var component in components) {
-      this.recoArray[this.currentIndex]['rows'].push({ name: components[component].name, version: components[component].version });
-    }
+    // for (var component in components) {
+    //   this.recoArray[this.currentIndex]['rows'].push({ name: components[component].name, version: components[component].version });
+    // }
     for(let i in missing_packages) {
       this.recoArray[this.currentIndex]['rows'].push({
         'name': missing_packages[i],
