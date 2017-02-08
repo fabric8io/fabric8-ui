@@ -28,7 +28,8 @@ const routes: Routes = [
     children: [
       { path: '', component: AnalyzeOverviewComponent },
       { path: 'readme', loadChildren: './readme/readme.module#ReadmeModule' },
-      { path: 'stack', component: RenderStackDetailsComponent }
+      { path: 'stack', loadChildren: './stack/stack.module#StackModule' },
+      //{ path: 'stack', component: RenderStackDetailsComponent }
     ]
   }
 ];
