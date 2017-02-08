@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {DataTableModule} from "angular2-datatable";
 //import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -18,7 +18,8 @@ import {ContainerTogglerModule} from '../container-toggler/module';
 import { CommonModule }     from '@angular/common';
 
 @NgModule({
-  imports: [StackRecoModule, ContainerTogglerModule, CommonModule, DataTableModule, ModalModule],
+  imports: [StackRecoModule, ContainerTogglerModule, CommonModule, DataTableModule,
+            ModalModule, ReactiveFormsModule, FormsModule],
   declarations: [ RenderStackDetailsComponent ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -51,7 +51,7 @@ export class RenderStackDetailsComponent implements OnInit {
   similar_stacks: Array<any> = [];
 
   public recomendationForm = this.fb.group({
-    row: ["[{name: 'Sample1', version: '0.1.1', custom: '{name: 'Add'}'}]"]
+    row: ['']
   });
   constructor(public fb: FormBuilder, private addWorkFlowService : AddWorkFlowService, private renderNextService : RenderNextService, private stackAnalysesService: StackAnalysesService, private stackAnalysesModel: StackAnalysesModel, private renderComponentService: RenderComponentService) { }
 
@@ -299,7 +299,8 @@ export class RenderStackDetailsComponent implements OnInit {
 
   // process recomendation form //
   processForm(row: any) {
-    console.log(event);
+    console.log("====================================================");
+    console.log(row);
     console.log(this.recomendationForm.value);
   }
   // process recomendation form //
