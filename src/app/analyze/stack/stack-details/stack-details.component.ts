@@ -1,6 +1,6 @@
 import { Stack } from './../../../models/stack';
 import { ComponentAnalysesService } from './../component-analyses.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 
 import { StackAnalysesService } from '../stack-analyses.service';
 import { StackAnalysesModel } from '../stack-analyses.model';
@@ -14,7 +14,8 @@ import { FormBuilder } from '@angular/forms';
 @Component({
   selector: 'stack-details',
   templateUrl: './stack-details.component.html',
-  styleUrls: ['./stack-details.component.css'],
+  styleUrls: ['./stack-details.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   providers: [AddWorkFlowService, RenderNextService, StackAnalysesService, StackAnalysesModel, RenderComponentService, ComponentAnalysesService]
 })
 
