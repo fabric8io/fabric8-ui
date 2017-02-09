@@ -1,7 +1,7 @@
 import { StackDetailsModule } from './analyze/stack/stack-details/stack-details.module';
 import './rxjs-extensions';
 
-import { NgModule, ApplicationRef } from '@angular/core';
+import { NgModule, ApplicationRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -11,6 +11,7 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 import { DropdownModule } from 'ng2-dropdown';
 import { LocalStorageModule } from 'angular-2-local-storage';
 
+import { ReactiveFormsModule } from '@angular/forms';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -25,6 +26,12 @@ import { AppState, InternalStateType } from './app.service';
 // Footer & Header
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
+
+//stackreports
+
+//import {RenderStackDetailsComponent} from './analyze/stackreports/render-stack-details/render-stack-details.component';
+
+import {StackModule} from './analyze/stackreports/render-stack-details/module';
 
 // Shared Services
 import { AuthenticationService } from './shared/authentication.service';
@@ -69,6 +76,7 @@ export type StoreType = {
     DropdownModule,
     FormsModule,
     HttpModule,
+    //StackModule,
     LocalStorageModule.withConfig({
       prefix: 'fabric8',
       storageType: 'localStorage'
@@ -78,7 +86,8 @@ export type StoreType = {
     SpaceWizardModule,
     StackDetailsModule,
     // AppRoutingModule must appear last
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
@@ -98,6 +107,7 @@ export type StoreType = {
     ToggleService,
     UserService
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule {
@@ -139,4 +149,3 @@ export class AppModule {
   }
 
 }
-

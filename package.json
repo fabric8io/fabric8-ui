@@ -103,6 +103,7 @@
     "@angularclass/hmr": "1.2.0",
     "@angularclass/hmr-loader": "3.0.2",
     "angular-in-memory-web-api": "0.1.13",
+    "angular2-datatable": "^0.5.3",
     "angular2-flash-messages": "^1.0.4",
     "chunk-manifest-webpack2-plugin": "^1.0.1",
     "core-js": "2.4.1",
