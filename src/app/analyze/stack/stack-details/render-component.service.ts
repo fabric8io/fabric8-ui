@@ -1,31 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { Logger } from '../../shared/logger.service';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+import { StackAnalysesModel } from '../stack-analyses.model';
+
 @Injectable()
-export class StackAnalysesService {
+export class RenderComponentService {
 
-  private stackAnalysesUrl = process.env.STACK_API_URL;
+  private componentAnalysesUrl = process.env.STACK_API_URL + '/analyses';
 
-  constructor(private http: Http, private logger: Logger) { }
+  constructor(private http: Http, private stackAnalysesModel: StackAnalysesModel) { }
 
-  getStackAnalyses(id: string): Observable<any> {
-    return this.http.get(this.buildStackAnalysesUrl(id))
+
+  getComponentAnalyses(data: StackAnalysesModel): Observable<any> {
+    return this.http.get(this.componentAnalysesUrl + data.ecosystem +
+      '/' + data.pkg + '/' + data.version)
       .map(this.extractData)
       .catch(this.handleError);
   }
-
-  private buildStackAnalysesUrl(id: string): string {
-    return this.stackAnalysesUrl + 'stack-analyses/' + id;
-  }
-
   private extractData(res: Response) {
     let body = res.json();
-    return body.result || {};
+    return body || {};
   }
 
   private handleError(error: Response | any) {
@@ -38,7 +36,7 @@ export class StackAnalysesService {
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
-    this.logger.error(errMsg);
+    console.error(errMsg);
     return Observable.throw(errMsg);
   }
 

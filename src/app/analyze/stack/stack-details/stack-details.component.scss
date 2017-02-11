@@ -1,0 +1,34 @@
+//.render-stack-tiles {
+//  padding: 1em;
+//  background: #eeeeee;
+//  border: 2px solid #fff;
+//}
+
+.modal-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  font-family: 'Segoe UI Light';
+  .modal-inner {
+    left: 50%;
+    top: 50%;
+    position: relative;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    color: #555;
+    width: 50%;
+      .modal-head {
+        padding: 10px;
+        background: #030303;
+        color: #fff;
+        font-size: 20px;
+          .close_icon {
+            float: right;
+            cursor: pointer;
+          }
+      }
+  }
+}

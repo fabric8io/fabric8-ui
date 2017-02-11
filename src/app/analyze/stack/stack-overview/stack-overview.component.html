@@ -1,24 +1,26 @@
 <div id="stack" class="container content">
   <h1>Stack Reports</h1>
   <div class="row" *ngIf="context.current.space?.stacks">
-    <div>
+    <div class="row">
       <div>
-        <div class="col-sm-12">
-          <b>Codebase</b>
-        </div>
-      </div>
-    </div>
-    <div class="panel-group">
-      <div class="panel" *ngFor="let stack of context.current.space.stacks">
-        <div class="row panel-heading" (click)="collapsed.set(stack, !collapsed.get(stack))">
-          <div>
-            <h4 class="col-sm-12 panel-title">
-              {{stack.codebase}}
-            </h4>
+        <div>
+          <div class="col-sm-12">
+            <b>Codebase</b>
           </div>
         </div>
-        <div class="row panel-body" [collapse]="!collapsed.get(stack)">
-          <stack-details [stack]="stack"></stack-details>
+      </div>
+      <div class="panel-group">
+        <div class="panel" *ngFor="let stack of context.current.space.stacks">
+          <div class="row panel-heading" (click)="collapsed.set(stack, !collapsed.get(stack))">
+            <div>
+              <h4 class="col-sm-12 panel-title">
+                {{stack.codebase}}
+              </h4>
+            </div>
+          </div>
+          <div class="row panel-body" [collapse]="!collapsed.get(stack)">
+            <stack-details [stack]="stack"></stack-details>
+          </div>
         </div>
       </div>
     </div>

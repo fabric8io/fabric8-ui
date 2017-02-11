@@ -3,46 +3,51 @@
     <h1>Stack </h1>
     <div class="nav-text">
       <span id="packageInfo">
-        <h2> meanjs 0.5.0</h2>
+        <h2> {{ packageName }} - {{ packageVersion}}</h2>
       </span>
     </div>
 
   </div>
 
 
-  <div id="result-body" class="container widget-row widget-span" style="display:block">
+  <div id="result-body" class="container widget-row widget-span" style='display:block'>
     <!-- <div class="widget-span"> -->
     <!-- <br> -->
     <!-- <div class="stack_info_container"> -->
 
     <div class="row">
       <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <h4><span class="nav-text">
-            <span class="ui-icon ui-icon-info"></span>Usage</span>
-          <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#usage-stack">
-            <!-- <img title='Overview on how this stack is being used. Click for more info.'
-             src="../assets/icons/266-question.svg"></img> -->
-          </a>
-        </h4>
-        <div id="usage">
-          <p> Average Public Component Usage: {{averageUsage}}</p>
-          <p> Components with Low Public Usage: {{lowPublicUsageComponents}}</p>
-          <p> Components Redistributed by Red Hat: {{redhatDistributedComponents}}</p>
+        <div class="card-pf card-pf-accented card-pf card-pf-view">
+          <h2 class="card-pf-title">
+            <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#usage-stack"><span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Usage</a>
+          </h2>
+          <div class="card-pf-body">
+            <div id="usage">
+              <p> Average Public Component Usage: {{averageUsage}}</p>
+              <p> Components with Low Public Usage: {{lowPublicUsageComponents}}</p>
+              <p> Components Redistributed by Red Hat: {{redhatDistributedComponents}}</p>
+            </div>
+            <p class="card-pf-view-notifications">
+            </p>
+          </div>
         </div>
       </div>
       <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <h4>
-          <span class="nav-text">Popularity</span>
-          <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#popularity-stack">
-            <!-- <img title='Overview on how popular this stack is. Click for more info.'
-              src="icons/266-question.svg"></img> -->
-          </a>
-        </h4>
-        <div id="popularity">
-          <p> Average Component GitHub Stars: {{averageStars}}</p>
-          <p> Average Component GitHub Forks: {{averageForks}}</p>
-          <p> Components with Low Popularity: {{lowPopularityComponents}}</p>
+        <div class="card-pf card-pf-accented card-pf-view">
+          <h2 class="card-pf-title">
+            <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#popularity-stack"><span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Popularity</a>
+          </h2>
+          <div class="card-pf-body">
 
+            <div id="popularity">
+              <p> Average Component GitHub Stars: {{averageStars}}</p>
+              <p> Average Component GitHub Forks: {{averageForks}}</p>
+              <p> Components with Low Popularity: {{lowPopularityPomponents}}</p>
+
+            </div>
+            <p class="card-pf-view-notifications">
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -50,119 +55,151 @@
 
     <div class="row">
       <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <h4>
-          <span class="nav-text">Licenses</span>
-          <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#licenses-stack">
-            <!-- <img title='Licenses found by OSLC. Click for more info.'
-               src="icons/266-question.svg">
-             </img> -->
-          </a>
-        </h4>
-        <div id="licenses">
-          <p> Licenses Found: {{totalLicenses}}</p>
-          <p> Distinct Licenses: {{distinctLicenses.length }} </p>
-          <p> Licenses: {{distinctLicenses}} </p>
+        <div class="card-pf card-pf-accented card-pf-view">
+          <h2 class="card-pf-title">
+            <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#licenses-stack"><span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Licenses</a>
+          </h2>
+          <div class="card-pf-body">
+
+            <div id='licenses'>
+              <p> Licenses Found: {{totalLicenses}}</p>
+              <p> Distinct Licenses: {{distinctLicenses.length }} </p>
+              <p> Licenses: {{distinctLicenses}} </p>
+            </div>
+            <p class="card-pf-view-notifications">
+            </p>
+          </div>
         </div>
       </div>
       <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <h4>
-          <span class="nav-text">Security</span>
-          <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#security-stack">
-            <!-- <img title='CVEs found in this stack. Click for more info.'
-              src="icons/266-question.svg">
-            </img> -->
-          </a>
-        </h4>
-        <div id="security">
-          <p>Total CVEs: {{totalSecurityIssues}}</p>
-          <p>CVSS: {{cvss}}</p>
+        <div class="card-pf card-pf-accented card-pf-view">
+          <h2 class="card-pf-title">
+            <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#security-stack"><span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Security</a>
+          </h2>
+          <div class="card-pf-body">
+            <div id='security '>
+              <p>Total CVEs: {{totalSecurityIssues}}</p>
+              <p>CVSS: {{cvss}}</p>
+            </div>
+            <p class="card-pf-view-notifications">
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
-
-
     <div class="row">
       <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <h4><span class="nav-text">Metadata</span>
-          <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#metadata-stack">
-            <!-- <img title="Info from metadata files. Click for more info."
-              src="icons/266-question.svg"></img> -->
-          </a>
-        </h4>
-        <div id="metadata">
+        <div class="card-pf card-pf-accented card-pf-view">
+          <h2 class="card-pf-title">
+            <a href="https://gitlab.cee.redhat.com/bayesian/Bayesian/tree/master/docs/stack-analysis.md#metadata-stack"><span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Metadata</a>
+          </h2>
+          <div class="card-pf-body">
+            <div id="metadata">
           <p> Components with tests: {{componentsWithTests}} </p>
           <p> Components with dependency lock file: {{componentsWithDependencyLockFile}} </p>
-          <!-- <span *ngFor="let entry of required_enginesArr">
+          <span *ngFor="let entry of required_enginesArr">
           Required {{entry.key}} version : {{entry.value}}<br>
-        </span> -->
+        </span>
+        </div>
+            <p class="card-pf-view-notifications">
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
 
-    <!-- </div> -->
-    <!-- </div> -->
     <div class="row">
       <h1> Components </h1>
 
-      <!--  <table class="table table-striped" [mfData]="componentsDataTable" #mf="mfDataTable" [mfRowsOnPage]="5">
-    <thead>
-      <tr>
-        <th style="width: 10%">
-<mfDefaultSorter by="ecosystem">Ecosystem</mfDefaultSorter>
-</th>
-<th style="width: 10%">
-<mfDefaultSorter by="package">Package</mfDefaultSorter>
-</th>
-<th style="width: 10%">
-<mfDefaultSorter by="version">Version</mfDefaultSorter>
-</th>
-<th style="width: 10%">
-<mfDefaultSorter by="latest_version">Latest Version</mfDefaultSorter>
-</th>
-<th style="width: 10%">
-<mfDefaultSorter by="public_usage">Public Usage</mfDefaultSorter>
-</th>
-<th style="width: 10%">
-<mfDefaultSorter by="relative_public_usage">Relative Public Usage</mfDefaultSorter>
-</th>
-<th style="width: 10%">
-<mfDefaultSorter by="poplarity">Popularity</mfDefaultSorter>
-</th>
-<th style="width: 10%">
-<mfDefaultSorter by="redhat_usage">Redhat Usage</mfDefaultSorter>
-</th>
-<th style="width: 10%">
-<mfDefaultSorter by="licence">Licence</mfDefaultSorter>
-</th>
-</tr>
-</thead>
-<tbody>
-  <tr *ngFor="let item of mf.data">
-    <td>{{item.ecosystem}}</td>
-    <td (click)="tdClicked(item)">{{item.package}}</td>
-    <td>{{item.version}}</td>
-    <td>{{item.latest_version}}</td>
-    <td>{{item.public_usage}}</td>
-    <td>{{item.relative_public_usage}}</td>
-    <td>{{item.popularity}}</td>
-    <td>{{item.redhat_usage}}</td>
-    <td>{{item.licence}}</td>
-  </tr>
-</tbody>
-<tfoot>
-  <tr>
-    <td colspan="4">
-      <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
-    </td>
-  </tr>
-</tfoot>
-</table> -->
+      <table class="table table-striped" [mfData]="componentsDataTable" #mf="mfDataTable" [mfRowsOnPage]="5">
+        <thead>
+          <tr>
+            <th>
+              <mfDefaultSorter by="ecosystem">Ecosystem</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="package">Package</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="version">Version</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="latestVersion">Latest Version</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="publicUsage">Public Usage</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="relativePublicUsage">Relative Public Usage</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="poplarity">Popularity</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="redhatUsage">Redhat Usage</mfDefaultSorter>
+            </th>
+            <th>
+              <mfDefaultSorter by="licence">Licence</mfDefaultSorter>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of mf.data">
+            <td>{{item.ecosystem}}</td>
+            <td (click)="tdClicked(item)">{{item.package}}</td>
+            <td>{{item.version}}</td>
+            <td>{{item.latestVersion}}</td>
+            <td>{{item.publicUsage}}</td>
+            <td>{{item.relativePublicUsage}}</td>
+            <td>{{item.popularity}}</td>
+            <td>{{item.redhatUsage}}</td>
+            <td>{{item.licence}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4">
+              <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
 
     </div>
 
+    <!-- Stack Recommendation Section -->
+    <div class="row">
+      <div class="col-xs-12 col-md-6 col-lg-4">
+        <stack-recommendation [rows]="currentStackRows" [headers]="currentStackHeaders"></stack-recommendation>
+      </div>
+      <div class="col-xs-12 col-md-6 col-lg-8">
+        <container-toggler (prevBtn)="handlePrevious($event)" (nextBtn)="handleNext($event)"></container-toggler>
+        <stack-recommendation (customEvent)="addWorkItem($event)" [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers"
+          [clickable]="true" id="rec_container"></stack-recommendation>
+          <!-- <button (click)="addWorkFlow()" id="addWorkflow">Submit</button> -->
+      </div>
+    </div>
+    <!-- Stack Recommendation Section -->
+    <div class="row">
+      <h1>Similar stacks</h1>
+      <ul>
+        <li *ngFor="let s of similarStacks">
+          <a (click)="similarStack.open()"> {{ s.uri }} </a>
+        </li>
+      </ul>
+    </div>
 
   </div>
 
-</div>
+
+  <modal #similarStack title="Create work item form recomendation with button">
+    <modal-content>
+      <form [name]="recomendationForm" (ngSubmit)="processForm()">
+        <stack-recommendation [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers" [clickable]="false"
+          id="rec_container"></stack-recommendation>
+          <button type="submit" class="btn btn-primary">Create</button><button class="btn btn-danger" (click)="similarStack.close()">Close</button>
+      </form>
+    </modal-content>
+  </modal>

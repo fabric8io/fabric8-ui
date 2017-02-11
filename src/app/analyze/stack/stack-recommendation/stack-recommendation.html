@@ -1,0 +1,27 @@
+<div class="stack-recommendation">
+
+  <table class="table table-striped table-bordered">
+    <thead>
+      <th *ngFor="let header of headers">{{header}}</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows">
+        <td>{{row.name}}</td>
+        <td>{{row.version}}</td>
+        <td>
+          <span *ngIf="row.custom">
+              <!-- TODO: To change the event to delegate instead of attaching more events -->
+              <span *ngIf="!clickable">
+                 <label>{{row.custom.name}}</label>
+                 <input name="{{row.name}}" [type]="row.custom.type" value="{{row.custom.name}}" />
+              </span>
+          <span *ngIf="clickable">
+              <input (click)="eventHandler(row)" type="button" value="{{row.custom.name}}" class="btn btn-primary"/>
+          </span>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

@@ -1,6 +1,6 @@
 import { Stack } from './../../../models/stack';
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
+import { Router } from '@angular/router';
 
 import { ContextService } from './../../../shared/context.service';
 
@@ -17,7 +17,7 @@ export class StackOverviewComponent implements OnInit {
   constructor(
     private router: Router,
     public context: ContextService) {
-      this.collapsed = new Map();
+    this.collapsed = new Map();
   }
 
   ngOnInit() {
