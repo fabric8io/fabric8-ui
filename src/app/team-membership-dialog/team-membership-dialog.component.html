@@ -34,7 +34,7 @@
                     <th>Name</th>
                 </tr>
             </thead>
-            <tr *ngFor="let u of team.members">
+            <tr *ngFor="let u of team?.members">
                 <td>
                     {{u.attributes.username}}
                 </td>
