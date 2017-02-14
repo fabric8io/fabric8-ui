@@ -1,7 +1,7 @@
 import { MenuItem } from './../models/menu-item';
 import { ProfileService } from './../profile/profile.service';
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { AuthenticationService, Broadcaster, Logger, UserService, User } from 'ngx-login-client';
 
@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
     public profile: ProfileService
   ) {
     router.events.subscribe((val) => {
-      if (val instanceof NavigationStart) {
+      if (val instanceof NavigationEnd) {
         this.onNavigate(val.url);
       }
     });
