@@ -1,7 +1,7 @@
 import { MenuItem } from './../models/menu-item';
 import { ProfileService } from './../profile/profile.service';
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 
 import { AuthenticationService, Broadcaster, Logger, UserService, User } from 'ngx-login-client';
 
@@ -44,8 +44,8 @@ export class HeaderComponent implements OnInit {
     public profile: ProfileService
   ) {
     router.events.subscribe((val) => {
-      if (val instanceof NavigationEnd) {
-        this.onNavigate();
+      if (val instanceof NavigationStart) {
+        this.onNavigate(val.url);
       }
     });
   }
@@ -71,9 +71,9 @@ export class HeaderComponent implements OnInit {
     this.listenToEvents();
   }
 
-  onNavigate(): void {
+  onNavigate(url: string): void {
     this.getLoggedUser();
-    this.broadcaster.broadcast('navigate');
+    this.broadcaster.broadcast('navigate', {url: url});
     if (this.context.current) {
       this.setActiveMenus(this.context.current);
       this.setHiddenMenus(this.context.current);

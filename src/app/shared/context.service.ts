@@ -27,8 +27,8 @@ export class ContextService {
     private broadcaster: Broadcaster,
     private user: UserService) {
     // Listen for any context refreshes requested by the app
-    this.broadcaster.on<string>('navigate').subscribe(message => {
-      this.current = this.computeContext();
+    this.broadcaster.on<any>('navigate').subscribe(message => {
+      this.current = this.computeContext(message.url);
     });
 
     // Initialize the default context when the logged in user changes and add as a recent context
@@ -40,14 +40,14 @@ export class ContextService {
         this.addRecentContext(this._default);
       }
       // recompute the context if needed
-      this.current = this.computeContext();
+      this.current = this.computeContext(this.router.url);
       // Initialize all recent contexts
       for (let c of this.recent) {
         this.buildContextMenus(c);
       }
     });
     // Finally, compute the initial Context
-    this.computeContext();
+    this.computeContext(this.router.url);
   }
 
   get recent(): Context[] {
@@ -112,10 +112,10 @@ export class ContextService {
     }
   }
 
-  private computeContext(): Context {
+  private computeContext(url: string): Context {
     // First, check if there is a recent context
-    let entityStr: string = this.extractEntity(this.router.url);
-    let spaceStr: string = this.extractSpace(this.router.url);
+    let entityStr: string = this.extractEntity(url);
+    let spaceStr: string = this.extractSpace(url);
     // TODO Implement team URLs
     let teamStr: string = null;
     // The 'ctxPath' is the raw path to the context only, with all extraneous info removed
@@ -136,7 +136,7 @@ export class ContextService {
     }
 
     // Otherwise, we have to build it
-    return this.buildContext(this.router.url);
+    return this.buildContext(url);
   }
 
   private buildContext(path: string) {
