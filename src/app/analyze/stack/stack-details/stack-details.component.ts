@@ -24,28 +24,10 @@ export class StackDetailsComponent implements OnInit {
   @Input() stack: Stack;
 
   errorMessage: string;
-  stackAnalysesData: {};
-  componentAnalysesData: {};
+  stackAnalysesData: Array<any> = [];
+  componentAnalysesData: any = {};
   mode = 'Observable';
-  averageUsage = '';
-  lowPublicUsageComponents = '';
-  redhatDistributedComponents = '';
 
-  averageStars = '';
-  averageForks = '';
-  lowPopularityComponents = '';
-
-  distinctLicenses = '';
-  totalLicenses = '';
-
-  totalSecurityIssues = '';
-  cvss = '';
-
-  packageName = '';
-  packageVersion = '';
-
-  componentsWithTests = '';
-  componentsWithDependencyLockFile = '';
   requiredEngines = {};
   requiredEnginesArr = [];
 
@@ -63,6 +45,10 @@ export class StackDetailsComponent implements OnInit {
   public recommendationForm = this.fb.group({
     row: ["[{name: 'Sample1', version: '0.1.1', custom: '{name: 'Add'}'}]"]
   });
+
+  private stackAnalysisRawData: any = {};
+
+
   constructor(
     public fb: FormBuilder,
     private addWorkFlowService: AddWorkFlowService,
@@ -72,9 +58,28 @@ export class StackDetailsComponent implements OnInit {
     private logger: Logger
   ) { }
 
+  private setStackAnalysisRawData(): void {
+    this.stackAnalysisRawData = {
+      packageName: '',
+      packageVersion: '',
+      averageUsage: '',
+      lowPublicUsageComponents: '',
+      redhatDistributedComponents: '',
+      averageStars: '',
+      averageForks: '',
+      lowPopularityComponents: '',
+      distinctLicenses: '',
+      totalLicenses: '',
+      totalSecurityIssues: '',
+      cvss: '',
+      componentsWithTests: '',
+      componentsWithDependencyLockFile: ''
+    };
+  }
+
   ngOnInit() {
     this.getStackAnalyses(this.stack.uuid);
-
+    this.setStackAnalysisRawData();
 
     this.currentStackHeaders = [
       'name',
@@ -163,7 +168,7 @@ export class StackDetailsComponent implements OnInit {
         'attributes': {
           'system.state': 'new',
           'system.title': '',
-          'system.description': 'Sample Description to test'
+          'system.description': 'Relevant description goes here.'
         },
         'relationships':
         {
@@ -200,14 +205,15 @@ export class StackDetailsComponent implements OnInit {
     this.recoArray[this.currentIndex]['url'] = url;
     for (let component in components) {
       if (components.hasOwnProperty(component)) {
-        this.recoArray[this.currentIndex]['rows'].push({ name: components[component].name, version: components[component].version });
+        this.recoArray[this.currentIndex]['rows'].push({ name: components[component].name,
+          version: components[component].version });
       }
     }
     for (let i in missingPackages) {
       if (missingPackages.hasOwnProperty(i)) {
         this.recoArray[this.currentIndex]['rows'].push({
-          'name': missingPackages[i],
-          'version': '',
+          'name': i,
+          'version': missingPackages[i],
           'custom': {
             'name': 'Add',
             'type': 'checkbox'
@@ -218,8 +224,8 @@ export class StackDetailsComponent implements OnInit {
     for (let i in versionMismatch) {
       if (versionMismatch.hasOwnProperty(i)) {
         this.recoArray[this.currentIndex]['rows'].push({
-          'name': versionMismatch[i],
-          'version': '',
+          'name': i,
+          'version': versionMismatch[i],
           'custom': {
             'name': 'Update',
             'type': 'checkbox'
@@ -234,66 +240,107 @@ export class StackDetailsComponent implements OnInit {
     this.currentStackRows = [];
     for (let component in components) {
       if (components.hasOwnProperty(component)) {
-        this.currentStackRows.push({ name: components[component].name, version: components[component].version });
+        this.currentStackRows.push({ name: components[component].name,
+          version: components[component].version });
       }
     }
   }
 
+  // TODO: To be removed after the demo
+  private fetchStaticRecommendation(): any {
+    return {
+            'recommendations': {
+                'similar_stacks': [
+                    {
+                        'analysis': {
+                            'version_mismatch': {
+                                'vertx:vertx-web-templ-freemarker': '3.3.4',
+                                'vertx:vertx-web-templ-mvel': '3.4.0'
+                            },
+                            'missing_packages': {
+                                'vertx:vertx-mongo-embedded-db' :'3.3.3'
+                            }
+                        },
+                        'similarity': 0.7009090909090909,
+                        'uri': 'http://cucos-01.lab.eng.brq.redhat.com:32100/api/v1.0/appstack/18'
+                    }
+                ]
+            }
+        };
+  }
 
+  private setComponentsToGrid(stackData: any): void {
+    let components: Array<any> = stackData.components;
+    let length: number = components.length;
+    for (let i = 0; i < length; i++) {
+      let myObj: any = {};
+      myObj.ecosystem = components[i].ecosystem;
+      myObj.pkg = components[i].name;
+      myObj.version = components[i].version;
+      myObj.latestVersion = components[i].latest_version;
+      myObj.publicUsage = components[i].dependents_count;
+      myObj.relativePublicUsage = components[i].relative_usage;
+      myObj.popularity = '';
+      if (components[i].github_details.forks_count) {
+        myObj.popularity = components[i].github_details.forks_count
+                            + '/'
+                            + components[i].github_details.stargazers_count;
+      }
+
+      myObj.redhatUsage = '';
+      myObj.licence = components[i].licenses[0];
+      this.componentsDataTable.push(myObj);
+    }
+  }
+
+  private setStackMetrics(stackData: any): void {
+    this.stackAnalysisRawData.packageName = stackData.name;
+    this.stackAnalysisRawData.packageVersion = stackData.version;
+    this.stackAnalysisRawData.averageUsage = stackData.usage.average_usage;
+    this.stackAnalysisRawData.lowPublicUsageComponents = stackData.usage.low_public_usage_components;
+    this.stackAnalysisRawData.redhatDistributedComponents = stackData.usage.redhat_distributed_components;
+
+    this.stackAnalysisRawData.averageStars = stackData.popularity.average_stars;
+    this.stackAnalysisRawData.averageForks = stackData.popularity.average_forks;
+    this.stackAnalysisRawData.lowPopularityComponents = stackData.popularity.low_popularity_components;
+
+    this.stackAnalysisRawData.distinctLicenses = stackData.distinct_licenses;
+    this.stackAnalysisRawData.totalLicenses = stackData.total_licenses;
+
+    this.stackAnalysisRawData.totalSecurityIssues = stackData.total_security_issues;
+    this.stackAnalysisRawData.cvss = stackData.cvss;
+
+    this.stackAnalysisRawData.componentsWithTests = stackData.metadata.components_with_tests;
+    this.stackAnalysisRawData.componentsWithDependencyLockFile = stackData.metadata.components_with_dependency_lock_file;
+    this.stackAnalysisRawData.requiredEngines = stackData.metadata.required_engines;
+    for (let key in this.requiredEngines) {
+      if (this.requiredEngines.hasOwnProperty(key)) {
+        this.requiredEnginesArr.push({ key: key, value: this.requiredEngines[key] });
+      }
+    }
+  }
 
   private getStackAnalyses(id: string) {
-    this.stackAnalysesService.getStackAnalyses(id)
-      .subscribe(
-      stackAnalysesData => {
-        this.stackAnalysesData = stackAnalysesData;
+    let stackAnalysesData: any = {};
+    this  .stackAnalysesService
+          .getStackAnalyses(id)
+          .subscribe(data => {
+            stackAnalysesData = data;
+            stackAnalysesData = stackAnalysesData[0];
 
-        this.getRecommendations(this.stackAnalysesData[0].components, this.stackAnalysesData[0].recommendation.recommendations);
-        this.getComponents(this.stackAnalysesData[0].components);
+            if (!stackAnalysesData.recommendation) {
+              // Add static recommendations here in case recommendations are not fetched
+              // from the API
+              // Solely for Demo purpose and to be removed later.
+              stackAnalysesData['recommendation'] = this.fetchStaticRecommendation();
+            }
 
-        this.packageName = this.stackAnalysesData[0].name;
-        this.packageVersion = this.stackAnalysesData[0].version;
-        this.averageUsage = this.stackAnalysesData[0].usage.average_usage;
-        this.lowPublicUsageComponents = this.stackAnalysesData[0].usage.low_public_usage_components;
-        this.redhatDistributedComponents = this.stackAnalysesData[0].usage.redhat_distributed_components;
+            this.getRecommendations(stackAnalysesData.components,
+              stackAnalysesData.recommendation.recommendations);
 
-        this.averageStars = this.stackAnalysesData[0].popularity.average_stars;
-        this.averageForks = this.stackAnalysesData[0].popularity.average_forks;
-        this.lowPopularityComponents = this.stackAnalysesData[0].popularity.low_popularity_components;
-
-        this.distinctLicenses = this.stackAnalysesData[0].distinct_licenses;
-        this.totalLicenses = this.stackAnalysesData[0].total_licenses;
-
-        this.totalSecurityIssues = this.stackAnalysesData[0].total_security_issues;
-        this.cvss = this.stackAnalysesData[0].cvss;
-
-        this.componentsWithTests = this.stackAnalysesData[0].metadata.components_with_tests;
-        this.componentsWithDependencyLockFile = this.stackAnalysesData[0].metadata.components_with_dependency_lock_file;
-        this.requiredEngines = this.stackAnalysesData[0].metadata.required_engines;
-        for (let key in this.requiredEngines) {
-          if (this.requiredEngines.hasOwnProperty(key)) {
-            this.requiredEnginesArr.push({ key: key, value: this.requiredEngines[key] });
-          }
-        }
-
-        for (let i = 0; i < this.stackAnalysesData[0].components.length; i++) {
-          let myObj: any = {};
-          myObj.ecosystem = this.stackAnalysesData[0].components[i].ecosystem;
-          myObj.pkg = this.stackAnalysesData[0].components[i].name;
-          myObj.version = this.stackAnalysesData[0].components[i].version;
-          myObj.latestVersion = this.stackAnalysesData[0].components[i].latest_version;
-          myObj.publicUsage = this.stackAnalysesData[0].components[i].dependents_count;
-          myObj.relativePublicUsage = this.stackAnalysesData[0].components[i].relative_usage;
-          if (this.stackAnalysesData[0].components[i].github_details.forks_count) {
-            myObj.popularity = this.stackAnalysesData[0].components[i].github_details.forks_count + "/" + this.stackAnalysesData[0].components[i].github_details.stargazers_count;
-          } else {
-            myObj.popularity = '';
-          }
-
-          myObj.redhatUsage = '';
-          myObj.licence = this.stackAnalysesData[0].components[i].licenses[0];
-          this.componentsDataTable.push(myObj);
-        }
-
+            this.getComponents(stackAnalysesData.components);
+            this.setStackMetrics(stackAnalysesData);
+            this.setComponentsToGrid(stackAnalysesData);
       },
       error => this.errorMessage = <any>error
       );

@@ -322,10 +322,10 @@ export class DummyService {
         stacks: [
           {
             codebase: 'https://github.com/BalloonPopGame/BalloonPopGame',
-            uuid: '888d1fa0d88e4fbeab7e0e20d21f6912'
+            uuid: 'e7815fca5e0946ab8701220fbda22e38'
           }, {
             codebase: 'https://github.com/BalloonPopGame/BalloonPopGame-UI',
-            uuid: '888d1fa0d88e4fbeab7e0e20d21f6912'
+            uuid: 'e7815fca5e0946ab8701220fbda22e38'
           }
         ]
       } as Space

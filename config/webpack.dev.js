@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 // if env is 'inmemory', the inmemory debug resource is used
 const API_URL = process.env.API_URL || (ENV==='inmemory'?'app/':'http://localhost:8080/api/');
-const STACK_API_URL = process.env.STACK_API_URL || '';
+const STACK_API_URL = process.env.STACK_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
 const FORGE_URL = process.env.FORGE_URL || 'http://localhost:8080/forge';
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
 

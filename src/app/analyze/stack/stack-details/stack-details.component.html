@@ -3,7 +3,7 @@
     <h1>Stack </h1>
     <div class="nav-text">
       <span id="packageInfo">
-        <h2> {{ packageName }} - {{ packageVersion}}</h2>
+        <h2> {{stackAnalysisRawData.packageName }} - {{stackAnalysisRawData.packageVersion}}</h2>
       </span>
     </div>
 
@@ -23,9 +23,9 @@
           </h2>
           <div class="card-pf-body">
             <div>
-              <p> Average Public Component Usage: {{averageUsage}}</p>
-              <p> Components with Low Public Usage: {{lowPublicUsageComponents}}</p>
-              <p> Components Redistributed by Red Hat: {{redhatDistributedComponents}}</p>
+              <p> Average Public Component Usage: {{stackAnalysisRawData.averageUsage}}</p>
+              <p> Components with Low Public Usage: {{stackAnalysisRawData.lowPublicUsageComponents}}</p>
+              <p> Components Redistributed by Red Hat: {{stackAnalysisRawData.redhatDistributedComponents}}</p>
             </div>
             <p class="card-pf-view-notifications">
             </p>
@@ -40,9 +40,9 @@
           <div class="card-pf-body">
 
             <div>
-              <p> Average Component GitHub Stars: {{averageStars}}</p>
-              <p> Average Component GitHub Forks: {{averageForks}}</p>
-              <p> Components with Low Popularity: {{lowPopularityComponents}}</p>
+              <p> Average Component GitHub Stars: {{stackAnalysisRawData.averageStars}}</p>
+              <p> Average Component GitHub Forks: {{stackAnalysisRawData.averageForks}}</p>
+              <p> Components with Low Popularity: {{stackAnalysisRawData.lowPopularityComponents}}</p>
 
             </div>
             <p class="card-pf-view-notifications">
@@ -62,9 +62,9 @@
           <div class="card-pf-body">
 
             <div>
-              <p> Licenses Found: {{totalLicenses}}</p>
-              <p> Distinct Licenses: {{distinctLicenses.length}} </p>
-              <p> Licenses: {{distinctLicenses}} </p>
+              <p> Licenses Found: {{stackAnalysisRawData.totalLicenses}}</p>
+              <p> Distinct Licenses: {{stackAnalysisRawData.distinctLicenses.length}} </p>
+              <p> Licenses: {{stackAnalysisRawData.distinctLicenses}} </p>
             </div>
             <p class="card-pf-view-notifications">
             </p>
@@ -78,8 +78,8 @@
           </h2>
           <div class="card-pf-body">
             <div>
-              <p>Total CVEs: {{totalSecurityIssues}}</p>
-              <p>CVSS: {{cvss}}</p>
+              <p>Total CVEs: {{stackAnalysisRawData.totalSecurityIssues}}</p>
+              <p>CVSS: {{stackAnalysisRawData.cvss}}</p>
             </div>
             <p class="card-pf-view-notifications">
             </p>
@@ -96,8 +96,8 @@
           </h2>
           <div class="card-pf-body">
             <div>
-              <p> Components with tests: {{componentsWithTests}} </p>
-              <p> Components with dependency lock file: {{componentsWithDependencyLockFile}} </p>
+              <p> Components with tests: {{stackAnalysisRawData.componentsWithTests}} </p>
+              <p> Components with dependency lock file: {{stackAnalysisRawData.componentsWithDependencyLockFile}} </p>
               <span *ngFor="let entry of requiredEnginesArr">
                 Required {{entry.key}} version : {{entry.value}}<br>
               </span>
