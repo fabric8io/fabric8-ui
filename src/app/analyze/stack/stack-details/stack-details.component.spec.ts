@@ -7,7 +7,7 @@ import { FormBuilder, NgForm } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
 import { ModalModule } from 'ngx-modal';
 import { DataTableModule } from 'angular2-datatable';
-
+import { AuthenticationService } from 'ngx-login-client';
 import { Stack } from './../../../models/stack';
 import { StackRecommendationModule } from '../stack-recommendation/stack-recommendation.module';
 import
@@ -21,6 +21,14 @@ describe('StackDetailsComponent', () => {
   let fixture: ComponentFixture<StackDetailsComponent>;
 
   beforeEach(async(() => {
+    let fakeAuthService: any = {
+      getToken: function () {
+        return '';
+      },
+      isLoggedIn: function () {
+        return true;
+      }
+    };
     TestBed.configureTestingModule({
         imports: [ContainerTogglerModule,
               DataTableModule,
@@ -30,7 +38,13 @@ describe('StackDetailsComponent', () => {
               ReactiveFormsModule
               ],
         declarations: [StackDetailsComponent, NgForm],
-        providers: [FormBuilder]
+        providers: [
+          FormBuilder,
+          {
+            provide: AuthenticationService,
+            useValue: fakeAuthService
+          }
+        ]
       })
       .compileComponents()
       .then(() => {
