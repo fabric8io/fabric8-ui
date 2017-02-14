@@ -56,11 +56,11 @@ describe('Service: SpaceService', () => {
     {
       name: 'TestSpace',
       path: 'testspace',
-      description: 'This is a space for unit test',
       teams: [],
       defaultTeam: null,
       'attributes': {
         'name': 'TestSpace',
+        'description': 'This is a space for unit test',
         'created-at': null,
         'updated-at': null,
         'version': 0
@@ -101,6 +101,41 @@ describe('Service: SpaceService', () => {
     spaceService.create(responseData[0])
       .then(data => {
         expect(data).toEqual(expectedResponse[0]);
+      });
+  }));
+
+  it('Get a single space', async(() => {
+    mockService.connections.subscribe((connection: any) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          body: JSON.stringify({data: responseData[0]}),
+          status: 200
+        })
+      ));
+    });
+
+    spaceService.getSpaceByName(responseData[0].attributes.name)
+      .then(data => {
+        expect(data).toEqual(expectedResponse[0]);
+      });
+  }));
+
+  it('Update a space', async(() => {
+    let updatedData: Space = cloneDeep(responseData[0]);
+    updatedData.attributes.description = 'Updated description';
+
+    mockService.connections.subscribe((connection: any) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          body: JSON.stringify({data: updatedData}),
+          status: 200
+        })
+      ));
+    });
+
+    spaceService.update(updatedData)
+      .then(data => {
+        expect(data).toEqual(updatedData);
       });
   }));
 

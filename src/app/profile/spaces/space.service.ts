@@ -33,6 +33,24 @@ export class SpaceService {
     return this.getSpacesDelegate(url, isAll);
   }
 
+  getSpaceByName(spaceName: string): Promise<Space> {
+    let result = this.spaces.find(space => space.attributes.name === spaceName);
+    if (result == null) {
+      let url = `${this.spacesUrl}/${spaceName}`;
+      return this.http.get(url, { headers: this.headers } )
+        .toPromise()
+        .then((response) => {
+          let space: Space = response.json().data as Space;
+          this.spaces.splice(this.spaces.length, 0, space);
+          this.buildSpaceIndexMap();
+          return space;
+        })
+        .catch (this.handleError);
+    } else {
+      return Promise.resolve(result);
+    }
+  }
+
   getMoreSpaces(): Promise<any> {
     if (this.nextLink) {
       let isAll = false;
@@ -84,6 +102,25 @@ export class SpaceService {
         this.buildSpaceIndexMap();
         return newSpace;
       }).catch(this.handleError);
+  }
+
+  update(space: Space): Promise<Space> {
+    let url = `${this.spacesUrl}/${space.attributes.name}`;
+    let payload = JSON.stringify({data: space});
+    return this.http
+      .patch(url, payload, {headers: this.headers})
+      .toPromise()
+      .then(response => {
+        let updatedSpace = response.json().data as Space;
+        // Find the index in the big list
+        let updateIndex = this.spaces.findIndex(item => item.id == updatedSpace.id);
+        if (updateIndex > -1) {
+          // Update space attributes
+          this.spaces[updateIndex].attributes = updatedSpace.attributes;
+        }
+        return updatedSpace;
+      })
+      .catch(this.handleError);
   }
 
   // Adds or updates the client-local list of spaces,

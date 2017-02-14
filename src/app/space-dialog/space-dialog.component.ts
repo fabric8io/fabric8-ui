@@ -32,7 +32,6 @@ export class SpaceDialogComponent {
     console.log(this.newSpace);
     // TODO: Once we have dynamic routing, fix this
     this.newSpace.path = '/pmuir/BalloonPopGame';
-    this.newSpace.description = this.newSpace.name;
     this.newSpace.attributes = new SpaceAttributes();
     this.newSpace.attributes.name = this.newSpace.name;
     this.newSpace.type = 'spaces';
