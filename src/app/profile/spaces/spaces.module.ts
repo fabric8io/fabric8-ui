@@ -4,12 +4,11 @@ import { HttpModule, Http } from '@angular/http';
 
 import { SpacesComponent }     from './spaces.component';
 import { SpacesRoutingModule } from './spaces-routing.module';
-
-import { SpaceDialogModule } from '../../space-dialog/space-dialog.module';
+import { SpaceWizardModule } from './../../space-wizard/space-wizard.module';
 
 @NgModule({
-  imports:      [ CommonModule, SpacesRoutingModule, HttpModule, SpaceDialogModule ],
-  declarations: [ SpacesComponent ],
+  imports:      [ CommonModule, SpacesRoutingModule, HttpModule, SpaceWizardModule ],
+  declarations: [ SpacesComponent ]
 })
 export class SpacesModule {
   constructor(http: Http) {}

@@ -42,7 +42,6 @@ import { ToggleService } from './toggle/toggle.service';
 import { ContextService } from './shared/context.service';
 
 // Shared Components
-import { SpaceDialogModule } from './space-dialog/space-dialog.module';
 import { SpaceWizardModule } from './space-wizard/space-wizard.module';
 import { PublicModule } from './public/public.module';
 import { DeleteAccountDialogModule } from './delete-account-dialog/delete-account-dialog.module';
@@ -80,7 +79,6 @@ export type StoreType = {
       storageType: 'localStorage'
     }),
     PublicModule,
-    SpaceDialogModule,
     SpaceWizardModule,
     StackDetailsModule,
     ReactiveFormsModule,
