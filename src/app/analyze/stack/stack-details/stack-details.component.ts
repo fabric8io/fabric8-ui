@@ -58,25 +58,6 @@ export class StackDetailsComponent implements OnInit {
     private logger: Logger
   ) { }
 
-  private setStackAnalysisRawData(): void {
-    this.stackAnalysisRawData = {
-      packageName: '',
-      packageVersion: '',
-      averageUsage: '',
-      lowPublicUsageComponents: '',
-      redhatDistributedComponents: '',
-      averageStars: '',
-      averageForks: '',
-      lowPopularityComponents: '',
-      distinctLicenses: '',
-      totalLicenses: '',
-      totalSecurityIssues: '',
-      cvss: '',
-      componentsWithTests: '',
-      componentsWithDependencyLockFile: ''
-    };
-  }
-
   ngOnInit() {
     this.getStackAnalyses(this.stack.uuid);
     this.setStackAnalysisRawData();
@@ -111,10 +92,29 @@ export class StackDetailsComponent implements OnInit {
     ];
   }
 
+  private setStackAnalysisRawData(): void {
+    this.stackAnalysisRawData = {
+      packageName: '',
+      packageVersion: '',
+      averageUsage: '',
+      lowPublicUsageComponents: '',
+      redhatDistributedComponents: '',
+      averageStars: '',
+      averageForks: '',
+      lowPopularityComponents: '',
+      distinctLicenses: '',
+      totalLicenses: '',
+      totalSecurityIssues: '',
+      cvss: '',
+      componentsWithTests: '',
+      componentsWithDependencyLockFile: ''
+    };
+  }
+
 
   /* Modal - TODO: Make it Angular2, For now it is in Plain Javascript */
 
-  openModal(modalInformation): void {
+  private openModal(modalInformation): void {
     let body: HTMLElement = document.getElementsByTagName('body')[0];
     let modal: Element;
 
@@ -149,7 +149,7 @@ export class StackDetailsComponent implements OnInit {
     });
   }
 
-  closeModal(): void {
+  private closeModal(): void {
     let body: HTMLElement = document.getElementsByTagName('body')[0];
 
     let cache: NodeList = document.getElementsByClassName('modal-container');
@@ -162,7 +162,7 @@ export class StackDetailsComponent implements OnInit {
   /* Modal */
 
   /* Adding Single Work item */
-  addWorkItem(row: any): void {
+  private addWorkItem(row: any): void {
     let workItemData: any = {
       'data': {
         'attributes': {
@@ -181,20 +181,23 @@ export class StackDetailsComponent implements OnInit {
       }
     };
 
-    workItemData.data.attributes['system.title'] = row.custom.name + ' ' + row.name + ' ' + row.version;
+    workItemData.data.attributes['system.title']
+     = row.custom.name + ' ' + row.name + ' ' + row.version;
+
     let workflow: Observable<any> = this.addWorkFlowService.addWorkFlow(workItemData);
     workflow.subscribe((data) => {
       let baseUrl: string = 'http://demo.almighty.io/work-item/list/detail/' + data.data.id;
       this.openModal({
         header: 'Response for Work item',
-        subject: 'Successfully created a work item. You can see it here! <a target="_blank" href="' + baseUrl + '">Link</a>'
+        subject: `Successfully created a work item. 
+                  You can see it here! <a target="_blank" href="' + baseUrl + '">Link</a>`
       });
     });
   }
   /* Adding Single Work item */
 
   /* Get Recommendation */
-  getRecommendations(components: any, recommendation: any): void {
+  private getRecommendations(components: any, recommendation: any): void {
     this.similarStacks = recommendation.similar_stacks;
     const analysis: any = this.similarStacks[0].analysis;
     let missingPackages: Array<any> = analysis.missing_packages;
@@ -236,7 +239,7 @@ export class StackDetailsComponent implements OnInit {
   }
 
 
-  getComponents(components): void {
+  private getComponents(components): void {
     this.currentStackRows = [];
     for (let component in components) {
       if (components.hasOwnProperty(component)) {
@@ -258,7 +261,7 @@ export class StackDetailsComponent implements OnInit {
                                 'vertx:vertx-web-templ-mvel': '3.4.0'
                             },
                             'missing_packages': {
-                                'vertx:vertx-mongo-embedded-db' :'3.3.3'
+                                'vertx:vertx-mongo-embedded-db': '3.3.3'
                             }
                         },
                         'similarity': 0.7009090909090909,
@@ -297,12 +300,18 @@ export class StackDetailsComponent implements OnInit {
     this.stackAnalysisRawData.packageName = stackData.name;
     this.stackAnalysisRawData.packageVersion = stackData.version;
     this.stackAnalysisRawData.averageUsage = stackData.usage.average_usage;
-    this.stackAnalysisRawData.lowPublicUsageComponents = stackData.usage.low_public_usage_components;
-    this.stackAnalysisRawData.redhatDistributedComponents = stackData.usage.redhat_distributed_components;
+
+    this.stackAnalysisRawData.lowPublicUsageComponents
+     = stackData.usage.low_public_usage_components;
+
+    this.stackAnalysisRawData.redhatDistributedComponents
+     = stackData.usage.redhat_distributed_components;
 
     this.stackAnalysisRawData.averageStars = stackData.popularity.average_stars;
     this.stackAnalysisRawData.averageForks = stackData.popularity.average_forks;
-    this.stackAnalysisRawData.lowPopularityComponents = stackData.popularity.low_popularity_components;
+
+    this.stackAnalysisRawData.lowPopularityComponents
+     = stackData.popularity.low_popularity_components;
 
     this.stackAnalysisRawData.distinctLicenses = stackData.distinct_licenses;
     this.stackAnalysisRawData.totalLicenses = stackData.total_licenses;
@@ -311,7 +320,10 @@ export class StackDetailsComponent implements OnInit {
     this.stackAnalysisRawData.cvss = stackData.cvss;
 
     this.stackAnalysisRawData.componentsWithTests = stackData.metadata.components_with_tests;
-    this.stackAnalysisRawData.componentsWithDependencyLockFile = stackData.metadata.components_with_dependency_lock_file;
+
+    this.stackAnalysisRawData.componentsWithDependencyLockFile
+     = stackData.metadata.components_with_dependency_lock_file;
+
     this.stackAnalysisRawData.requiredEngines = stackData.metadata.required_engines;
     for (let key in this.requiredEngines) {
       if (this.requiredEngines.hasOwnProperty(key)) {
@@ -346,21 +358,22 @@ export class StackDetailsComponent implements OnInit {
       );
   }
 
-  handleNext(value: any): void {
+  private handleNext(value: any): void {
     // ++ this.currentIndex;
     // Hit a new Ajax call and populate the Array
-    let nextObservable: Observable<any> = this.renderNextService.getNextList(this.recoArray[this.currentIndex]['url']);
+    let nextObservable: Observable<any> 
+    = this.renderNextService.getNextList(this.recoArray[this.currentIndex]['url']);
     nextObservable.subscribe((data) => {
       this.logger.log(data);
     });
   }
 
-  handlePrevious(value: any): void {
+  private handlePrevious(value: any): void {
     --this.currentIndex;
   }
 
   // process recomendation form //
-  processForm(row: any) {
+  private processForm(row: any) {
     this.logger.log(event);
     this.logger.log(this.recommendationForm.value);
   }
