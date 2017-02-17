@@ -1,0 +1,6 @@
+source "http://rubygems.org"
+
+gem 'patternfly-sass', '~> 3.13.0'
+gem 'rake', '~> 10.4'
+gem 'gem-path', '~> 0.6.1'
+

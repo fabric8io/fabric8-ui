@@ -1,0 +1,65 @@
+base = 'assets/vendor'
+dest = '../../src/assets/vendor/patternfly'
+
+desc "Collect assets"  
+task :collect do
+  types = ['fonts', 'stylesheets', 'images', 'javascripts']
+  FileUtils.rm_rf base
+  FileUtils.mkdir_p base
+  types.each do |t|
+    FileUtils.mkdir_p "#{base}/#{t}"
+  end
+  `bundle install`
+  patternfly_gem_path = gem_path('patternfly-sass') 
+  paths = Array.new
+  paths << patternfly_gem_path
+  paths << gem_path('bootstrap-sass')
+  paths << gem_path('font-awesome-sass')
+  paths.each do |p|
+    types.each do |t|
+      FileUtils.cp_r "#{p}/assets/#{t}", "#{base}" if File.directory? "#{p}/assets/#{t}"
+    end
+  end
+  File.open("#{base}/.patternfly-gem-path", 'w') { |file| file.write(patternfly_gem_path) }
+end
+
+desc "Upgrade install of SASS"
+task :upgrade => :collect do
+  FileUtils.mkdir_p dest
+  FileUtils.rm_rf dest
+  FileUtils.cp_r base, dest
+  FileUtils.rm_rf base
+end
+
+def gem_path(name) 
+  # find the exact gem
+  if gem_path = find_gem_path(name)
+    say(gem_path)
+
+  # find the require file
+  elsif path = Gem.find_files("#{name}.rb").first
+    # favor gem first (e.g. rake gem)
+    if gem_path = Gem.path.find{ |p|
+          break $1 if path =~ %r{(#{p}(/[^/]+){2})}
+        }
+      gem_path
+    else
+      path
+    end
+  else
+    alert_error("#{name} not found")
+    terminate_interaction(1)
+  end
+end
+
+def find_gem_path name
+  gem_path = Gem.path.find do |base|
+    gem_path = $LOAD_PATH.find do |path|
+      gem_path = path[%r{#{base}/(bundler/)?gems/#{name}\-[^/-]+/}]
+      break gem_path if gem_path
+    end
+    break gem_path if gem_path
+  end
+  gem_path[0...-1] if gem_path
+end
+

@@ -1,0 +1,39 @@
+version: '2'
+
+services:
+
+  core:
+    image: almightycore/almighty-core:latest
+    command: -dbhost db
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - default
+  ui:
+    build: .
+    entrypoint:
+      - /usr/local/bin/wait-for-it.sh
+      - core:8080
+      - --
+      - npm
+      - start
+    ports:
+      # TODO: Currently it only works if the UI port
+      # is opened on the host as well.
+      - "8088:8088"
+    environment:
+      API_URL: http://core:8080/api/
+    depends_on:
+      - core
+    networks:
+      - default
+  db:
+    image: centos/postgresql-95-centos7
+    ports:
+      - "5432"
+    environment:
+      POSTGRESQL_ADMIN_PASSWORD: mysecretpassword
+    networks:
+      - default

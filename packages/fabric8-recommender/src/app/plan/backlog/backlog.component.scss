@@ -1,0 +1,50 @@
+.sub {
+    .list-group-item {
+        border: none;
+    }
+    
+}
+
+.sub.list-group {
+    border: none;
+}
+
+.wrapper {
+    padding-left: 250px;
+}
+
+.sidebar-wrapper {
+    margin-left: -250px;
+    left: 250px;
+    width: 250px;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 1000;
+    .open {
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 1;
+        padding-left: 10px;
+        padding-top: 10px;
+    }
+    .panel {
+        list-style: none;
+        margin: 0;
+        padding-top: 10px;
+        position: absolute;
+        top: 0;
+        width: 250px;
+        .close {
+            padding-right: 10px;
+        }
+        .panel-body {
+            padding-top: 25px;
+        }
+    }
+}
+
+.page-content-wrapper {
+    width: 100%;
+    margin-left: 20px;
+}
