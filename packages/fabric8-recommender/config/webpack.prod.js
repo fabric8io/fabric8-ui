@@ -24,9 +24,10 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
-const API_URL = process.env.API_URL || 'http://api.almighty.io/api/';
-const STACK_API_URL = process.env.STACK_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
-const FORGE_URL = process.env.FORGE_URL;
+const FABRIC8_API_URL = process.env.FABRIC8_API_URL || 'http://api.almighty.io/api/';
+// TODO Move Bayesian
+const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
+const FABRIC8_FORGE_URL = process.env.FORGE_URL;
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
 
 const HOST = process.env.HOST || 'localhost';
@@ -36,9 +37,9 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   port: PORT,
   ENV: ENV,
   HMR: false,
-  API_URL: API_URL,
-  STACK_API_URL: STACK_API_URL,
-  FORGE_URL: FORGE_URL,
+  FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
+  FABRIC8_RECOMMENDER_API_URL: FABRIC8_RECOMMENDER_API_URL,
+  FABRIC8_FORGE_URL: FABRIC8_FORGE_URL,
   PUBLIC_PATH: PUBLIC_PATH
 
 });
@@ -159,9 +160,9 @@ module.exports = function (env) {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
-          'API_URL' : JSON.stringify(METADATA.API_URL),
-          'STACK_API_URL' : JSON.stringify(METADATA.STACK_API_URL),
-          'FORGE_URL': JSON.stringify(METADATA.FORGE_URL),
+          'FABRIC8_WIT_API_URL' : JSON.stringify(METADATA.FABRIC8_WIT_API_URL),
+          'FABRIC8_RECOMMENDER_API_URL' : JSON.stringify(METADATA.FABRIC8_RECOMMENDER_API_URL),
+          'FABRIC8_FORGE_URL': JSON.stringify(METADATA.FABRIC8_FORGE_URL),
           'PUBLIC_PATH' : JSON.stringify(METADATA.PUBLIC_PATH)
         }
       }),

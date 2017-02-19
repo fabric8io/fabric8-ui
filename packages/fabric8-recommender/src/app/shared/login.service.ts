@@ -1,6 +1,8 @@
+import { WIT_API_URL } from 'ngx-fabric8-wit';
+
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
@@ -12,22 +14,20 @@ export class LoginService {
 
   private REDIRECT_URL_KEY = 'redirectUrl';
 
-  private githubUrl: string;  // URL to web api
+  private authUrl: string;  // URL to web api
 
   constructor(
     private http: Http,
     private router: Router,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
+    @Inject(WIT_API_URL) apiUrl: string
   ) {
-    this.githubUrl = process.env.API_URL;
-    if (this.githubUrl.substr(this.githubUrl.length - 1, 1) !== '/') {
-      this.githubUrl += '/';
-    }
-    this.githubUrl += 'login/authorize ';
+    this.authUrl = apiUrl + 'login/authorize';
+    console.log(this.authUrl);
   }
 
   gitHubSignIn() {
-    window.location.href = this.githubUrl;
+    window.location.href = this.authUrl;
   }
 
   public redirectAfterLogin() {

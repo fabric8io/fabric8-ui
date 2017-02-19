@@ -1,5 +1,6 @@
-import { ContextCurrentUserAuthGuard } from './shared/context-current-user-auth-guard.service';
-import { AuthGuard } from './shared/auth-guard.service';
+import { recommenderApiUrlProvider } from './shared/recommender-api.provider';
+import { authApiUrlProvider } from './shared/auth-api.provider';
+import { witApiUrlProvider } from './shared/wit-api.provider';
 import './rxjs-extensions';
 
 import { NgModule, ApplicationRef } from '@angular/core';
@@ -32,6 +33,9 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 
 // Shared Services
+import { ApiLocatorService } from './shared/api-locator.service';
+import { AuthGuard } from './shared/auth-guard.service';
+import { ContextCurrentUserAuthGuard } from './shared/context-current-user-auth-guard.service';
 import { DummyService } from './shared/dummy.service';
 import { LoginService } from './shared/login.service';
 import { ToggleService } from './toggle/toggle.service';
@@ -92,6 +96,8 @@ export type StoreType = {
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
+    ApiLocatorService,
+    authApiUrlProvider,
     AuthenticationService,
     AuthGuard,
     Broadcaster,
@@ -101,8 +107,10 @@ export type StoreType = {
     Logger,
     LoginService,
     ProfileService,
+    recommenderApiUrlProvider,
     ToggleService,
-    UserService
+    UserService,
+    witApiUrlProvider
   ],
   schemas: [],
   bootstrap: [AppComponent]

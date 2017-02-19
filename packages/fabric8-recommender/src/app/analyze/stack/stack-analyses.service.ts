@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { RECOMMENDER_API_URL } from './recommender-api';
+import { Injectable, Inject } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Logger } from 'ngx-login-client';
 
@@ -9,10 +10,15 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class StackAnalysesService {
 
-  private stackAnalysesUrl = process.env.STACK_API_URL;
+  private stackAnalysesUrl;
 
-  constructor(private http: Http,
-              private logger: Logger) { }
+  constructor(
+    private http: Http,
+    private logger: Logger,
+    @Inject(RECOMMENDER_API_URL) apiUrl: string
+  ) {
+    this.stackAnalysesUrl = apiUrl;
+  }
 
   getStackAnalyses(id: string): Observable<any> {
     return this.http.get(this.buildStackAnalysesUrl(id))

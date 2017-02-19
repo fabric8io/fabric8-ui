@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
 import { cloneDeep } from 'lodash';
 
+import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, Logger } from 'ngx-login-client';
 
 import { Space } from '../../models/space';
@@ -10,8 +11,8 @@ import { Space } from '../../models/space';
 @Injectable()
 export class SpaceService {
 
-  private headers = new Headers({'Content-Type': 'application/json'});
-  private spacesUrl = process.env.API_URL + 'spaces';
+  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private spacesUrl;
   private nextLink: string = null;
 
   // Array of all spaces that have been retrieved from the REST API.
@@ -20,11 +21,15 @@ export class SpaceService {
   // value = array index of space in spaces array instance.
   private spaceIdIndexMap = {};
 
-  constructor(private http: Http, private logger: Logger, private auth: AuthenticationService) {
+  constructor(
+    private http: Http,
+    private logger: Logger,
+    private auth: AuthenticationService,
+    @Inject(WIT_API_URL) apiUrl: string) {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
-    logger.log('SpaceService using url:' + this.spacesUrl);
+    this.spacesUrl = apiUrl + 'spaces';
   }
 
   getSpaces(pageSize: number = 20): Promise<Space[]> {
@@ -44,7 +49,7 @@ export class SpaceService {
 
   getSpacesDelegate(url: string, isAll: boolean): Promise<any> {
     return this.http
-      .get(url, {headers: this.headers})
+      .get(url, { headers: this.headers })
       .toPromise()
       .then(response => {
         // Extract links from JSON API response.
@@ -72,9 +77,9 @@ export class SpaceService {
 
   create(space: Space): Promise<Space> {
     let url = this.spacesUrl;
-    let payload = JSON.stringify({data: space});
+    let payload = JSON.stringify({ data: space });
     return this.http
-      .post(url, payload, {headers: this.headers})
+      .post(url, payload, { headers: this.headers })
       .toPromise()
       .then(response => {
         let newSpace: Space = response.json().data as Space;

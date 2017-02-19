@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { AuthenticationService } from 'ngx-login-client';
+import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -8,14 +9,18 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class AddWorkFlowService {
 
-  private stackWorkItemUrl = process.env.API_URL + 'workitems';
+  private stackWorkItemUrl;
 
   private headers: Headers = new Headers({'Content-Type': 'application/json'});
 
-  constructor(private http: Http, private auth: AuthenticationService) {
+  constructor(
+    private http: Http,
+    private auth: AuthenticationService,
+    @Inject(WIT_API_URL) apiUrl: string) {
     if (this.auth.getToken() !== null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
+    this.stackWorkItemUrl = apiUrl + '/workitems';
   }
 
   addWorkFlow(workItemData: any): Observable<any> {
