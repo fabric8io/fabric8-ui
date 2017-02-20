@@ -6,106 +6,99 @@
         <h2> {{stackAnalysisRawData.packageName }} - {{stackAnalysisRawData.packageVersion}}</h2>
       </span>
     </div>
-
   </div>
 
-
   <div id="result-body" class="container widget-row widget-span">
-    <!-- <div class="widget-span"> -->
-    <!-- <br> -->
-    <!-- <div class="stack_info_container"> -->
-
     <div class="row">
-      <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <div class="card-pf card-pf-accented card-pf card-pf-view">
-          <h2 class="card-pf-title">
-            <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Usage
-          </h2>
-          <div class="card-pf-body">
-            <div>
-              <p> Average Public Component Usage: {{stackAnalysisRawData.averageUsage}}</p>
-              <p> Components with Low Public Usage: {{stackAnalysisRawData.lowPublicUsageComponents}}</p>
-              <p> Components Redistributed by Red Hat: {{stackAnalysisRawData.redhatDistributedComponents}}</p>
+      <button (click)="stackModule.open()">Stack Reports</button>
+      <modal #stackModule title="Report" cancelButtonLabel="close" modalClass="modal-lg">
+        <modal-content>
+          
+            <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+              <div class="card-pf card-pf-accented card-pf card-pf-view">
+                <h2 class="card-pf-title">
+                  <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Usage
+                </h2>
+                <div class="card-pf-body">
+                  <div>
+                    <p> Average Public Component Usage: {{stackAnalysisRawData.averageUsage}}</p>
+                    <p> Components with Low Public Usage: {{stackAnalysisRawData.lowPublicUsageComponents}}</p>
+                    <p> Components Redistributed by Red Hat: {{stackAnalysisRawData.redhatDistributedComponents}}</p>
+                  </div>
+                  <p class="card-pf-view-notifications">
+                  </p>
+                </div>
+              </div>
             </div>
-            <p class="card-pf-view-notifications">
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <div class="card-pf card-pf-accented card-pf-view">
-          <h2 class="card-pf-title">
-            <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Popularity
-          </h2>
-          <div class="card-pf-body">
-
-            <div>
-              <p> Average Component GitHub Stars: {{stackAnalysisRawData.averageStars}}</p>
-              <p> Average Component GitHub Forks: {{stackAnalysisRawData.averageForks}}</p>
-              <p> Components with Low Popularity: {{stackAnalysisRawData.lowPopularityComponents}}</p>
-
+            <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+              <div class="card-pf card-pf-accented card-pf-view">
+                <h2 class="card-pf-title">
+                  <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Popularity
+                </h2>
+                <div class="card-pf-body">
+                  <div>
+                    <p> Average Component GitHub Stars: {{stackAnalysisRawData.averageStars}}</p>
+                    <p> Average Component GitHub Forks: {{stackAnalysisRawData.averageForks}}</p>
+                    <p> Components with Low Popularity: {{stackAnalysisRawData.lowPopularityComponents}}</p>
+                  </div>
+                  <p class="card-pf-view-notifications">
+                  </p>
+                </div>
+              </div>
             </div>
-            <p class="card-pf-view-notifications">
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
 
-
-    <div class="row">
-      <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <div class="card-pf card-pf-accented card-pf-view">
-          <h2 class="card-pf-title">
-            <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Licenses
-          </h2>
-          <div class="card-pf-body">
-
-            <div>
-              <p> Licenses Found: {{stackAnalysisRawData.totalLicenses}}</p>
-              <p> Distinct Licenses: {{stackAnalysisRawData.distinctLicenses.length}} </p>
-              <p> Licenses: {{stackAnalysisRawData.distinctLicenses}} </p>
+            <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+              <div class="card-pf card-pf-accented card-pf-view">
+                <h2 class="card-pf-title">
+                  <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Licenses
+                </h2>
+                <div class="card-pf-body">
+                  <div>
+                    <p> Licenses Found: {{stackAnalysisRawData.totalLicenses}}</p>
+                    <p> Distinct Licenses: {{stackAnalysisRawData.distinctLicenses.length}} </p>
+                    <p> Licenses: {{stackAnalysisRawData.distinctLicenses}} </p>
+                  </div>
+                  <p class="card-pf-view-notifications">
+                  </p>
+                </div>
+              </div>
             </div>
-            <p class="card-pf-view-notifications">
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <div class="card-pf card-pf-accented card-pf-view">
-          <h2 class="card-pf-title">
-            <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Security
-          </h2>
-          <div class="card-pf-body">
-            <div>
-              <p>Total CVEs: {{stackAnalysisRawData.totalSecurityIssues}}</p>
-              <p>CVSS: {{stackAnalysisRawData.cvss}}</p>
+            <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+              <div class="card-pf card-pf-accented card-pf-view">
+                <h2 class="card-pf-title">
+                  <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Security
+                </h2>
+                <div class="card-pf-body">
+                  <div>
+                    <p>Total CVEs: {{stackAnalysisRawData.totalSecurityIssues}}</p>
+                    <p>CVSS: {{stackAnalysisRawData.cvss}}</p>
+                  </div>
+                  <p class="card-pf-view-notifications">
+                  </p>
+                </div>
+              </div>
             </div>
-            <p class="card-pf-view-notifications">
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-sm-6 col-lg-6 render-stack-tiles ">
-        <div class="card-pf card-pf-accented card-pf-view">
-          <h2 class="card-pf-title">
-            <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Metadata
-          </h2>
-          <div class="card-pf-body">
-            <div>
-              <p> Components with tests: {{stackAnalysisRawData.componentsWithTests}} </p>
-              <p> Components with dependency lock file: {{stackAnalysisRawData.componentsWithDependencyLockFile}} </p>
-              <span *ngFor="let entry of requiredEnginesArr">
-                Required {{entry.key}} version : {{entry.value}}<br>
-              </span>
+            <div class="col-sm-6 col-lg-6 render-stack-tiles ">
+              <div class="card-pf card-pf-accented card-pf-view">
+                <h2 class="card-pf-title">
+                  <span class="pf pficon-help"></span><span class="card-pf-view-count"></span> Metadata
+                </h2>
+                <div class="card-pf-body">
+                  <div>
+                    <p> Components with tests: {{stackAnalysisRawData.componentsWithTests}} </p>
+                    <p> Components with dependency lock file: {{stackAnalysisRawData.componentsWithDependencyLockFile}} </p>
+                    <span *ngFor="let entry of requiredEnginesArr">
+                      Required {{entry.key}} version : {{entry.value}}<br>
+                    </span>
+                  </div>
+                  <p class="card-pf-view-notifications"></p>
+                </div>
+              </div>
             </div>
-            <p class="card-pf-view-notifications"></p>
-          </div>
-        </div>
-      </div>
+            
+        </modal-content>
+      </modal>
     </div>
 
 
@@ -194,26 +187,25 @@
 </div>
 
 
-  <modal #similarStack title="Create work item form recomendation with button">
-    <modal-content>
-      <form [name]="recommendationForm" (submit)="addMultipleWorkItem($event)">
-        <stack-recommendation [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers" [clickable]="false"
-          (customEvent)="addSelectedItem($event)" id="rec_container"></stack-recommendation>
-          <div><span [hidden]="!multiRecommendMsg">Successfully created a work item. You can see it here! <a target="_blank" href={{multiRecommendMsg}}>Link</a></span></div>
-          <button type="submit" class="btn btn-primary">Create</button><button class="btn btn-danger" (click)="similarStack.close()">Close</button>
-      </form>
-    </modal-content>
-  </modal>
+<modal #similarStack title="Create work item form recomendation with button">
+  <modal-content>
+    <form [name]="recommendationForm" (submit)="addMultipleWorkItem($event)">
+      <stack-recommendation [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers" [clickable]="false"
+        (customEvent)="addSelectedItem($event)" id="rec_container"></stack-recommendation>
+        <div><span [hidden]="!multiRecommendMsg">Successfully created a work item. You can see it here! <a target="_blank" href="{{multiRecommendMsg}}">Link</a></span></div>
+        <button type="submit" class="btn btn-primary">Create</button><button class="btn btn-danger" (click)="similarStack.close()">Close</button>
+    </form>
+  </modal-content>
+</modal>
 
 <div class="row">
-    <modal #workItemRespModal title="Response for Work item" cancelButtonLabel="close it">
-        <modal-content>
-            <div>
-              <span>Successfully created a work item. You can see it here!
-                 <a target="_blank" href="{{workItemRespMsg}}">Link</a>
-              </span>
-            </div>
-        </modal-content>
-    </modal>
+  <modal #workItemRespModal title="Response for Work item" cancelButtonLabel="close">
+    <modal-content>
+      <div>
+        <span>Successfully created a work item. You can see it here!
+            <a target="_blank" href="{{workItemRespMsg}}">Link</a>
+        </span>
+      </div>
+    </modal-content>
+  </modal>
 </div>
-
