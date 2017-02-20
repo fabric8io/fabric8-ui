@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { Logger } from 'ngx-login-client';
@@ -22,6 +22,7 @@ import { AddWorkFlowService } from './add-work-flow.service';
 export class StackDetailsComponent implements OnInit {
 
   @Input() stack: Stack;
+  @ViewChild('workItemRespModal') modal: any;
 
   errorMessage: string;
   stackAnalysesData: Array<any> = [];
@@ -41,6 +42,7 @@ export class StackDetailsComponent implements OnInit {
   currentIndex: number = 0;
 
   similarStacks: Array<any> = [];
+  workItemRespMsg: string = '';
 
   workItemData: any = {};
   multilpeActionData: any = {};
@@ -114,56 +116,6 @@ export class StackDetailsComponent implements OnInit {
       componentsWithDependencyLockFile: ''
     };
   }
-
-
-  /* Modal - TODO: Make it Angular2, For now it is in Plain Javascript */
-
-  private openModal(modalInformation): void {
-    let body: HTMLElement = document.getElementsByTagName('body')[0];
-    let modal: Element;
-
-    this.closeModal();
-
-    modal = document.createElement('div');
-    modal.classList.add('modal-container');
-
-    let innerModal: Element = document.createElement('div');
-    innerModal.classList.add('modal-inner');
-
-    modal.appendChild(innerModal);
-
-    let head: Element = document.createElement('div');
-    head.innerHTML = modalInformation.header + '<span class="close_icon">x</span>';
-    head.classList.add('modal-head');
-
-    let subject: Element = document.createElement('div');
-    subject.innerHTML = modalInformation.subject;
-    subject.classList.add('modal-subject');
-
-    innerModal.appendChild(head);
-    innerModal.appendChild(subject);
-
-    body.appendChild(modal);
-
-    modal.addEventListener('click', (event) => {
-      let tgt: any = event.target;
-      if (tgt.classList.contains('close_icon')) {
-        this.closeModal();
-      }
-    });
-  }
-
-  private closeModal(): void {
-    let body: HTMLElement = document.getElementsByTagName('body')[0];
-
-    let cache: NodeList = document.getElementsByClassName('modal-container');
-
-    if (cache && cache.length > 0) {
-      body.removeChild(cache[0]);
-    }
-  }
-
-  /* Modal */
   
   private getWorkItemData(): any {
     this.workItemData = {
@@ -196,11 +148,7 @@ export class StackDetailsComponent implements OnInit {
     let workflow: Observable<any> = this.addWorkFlowService.addWorkFlow(workItemData);
     workflow.subscribe((data) => {
       let baseUrl: string = 'http://demo.almighty.io/work-item/list/detail/' + data.data.id;
-      this.openModal({
-        header: 'Response for Work item',
-        subject: `Successfully created a work item. 
-                  You can see it here! <a target="_blank" href=" ${baseUrl} ">Link</a>`
-      });
+      this.showModal(baseUrl);
     });
   }
   /* Adding Single Work item */
@@ -211,12 +159,6 @@ export class StackDetailsComponent implements OnInit {
       this.multilpeActionData[row.name] = row;
     }
   }
-
-  /* get selected item */
-
-
-
-  /* get selected item */
 
   /* Get Recommendation */
   private getRecommendations(components: any, recommendation: any): void {
@@ -413,6 +355,11 @@ export class StackDetailsComponent implements OnInit {
   private addMultipleWorkItem(event: any): void {
     event.preventDefault();
     this.multipleRecoWorkItem(this.multilpeActionData);
+  }
+
+   private showModal(baseUrl: string): void {
+    this.workItemRespMsg = baseUrl;
+    this.modal.open();
   }
 
 }

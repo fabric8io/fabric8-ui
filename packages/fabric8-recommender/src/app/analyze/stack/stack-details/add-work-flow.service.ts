@@ -20,7 +20,7 @@ export class AddWorkFlowService {
     if (this.auth.getToken() !== null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
-    this.stackWorkItemUrl = apiUrl + '/workitems';
+    this.stackWorkItemUrl = apiUrl + 'workitems';
   }
 
   addWorkFlow(workItemData: any): Observable<any> {
