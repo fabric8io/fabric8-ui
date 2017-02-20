@@ -4,10 +4,12 @@ import { MockBackend } from '@angular/http/testing';
 
 import { cloneDeep } from 'lodash';
 
-import { AuthenticationService, Logger} from 'ngx-login-client';
+import { AuthenticationService, Logger } from 'ngx-login-client';
 
 import { Space } from '../../models/space';
 import { SpaceService } from './space.service';
+import { ApiLocatorService } from './../../shared/api-locator.service';
+import { witApiUrlProvider } from './../../shared/wit-api.provider';
 
 describe('Service: SpaceService', () => {
 
@@ -39,7 +41,9 @@ describe('Service: SpaceService', () => {
           provide: AuthenticationService,
           useValue: fakeAuthService
         },
-        SpaceService
+        SpaceService,
+        witApiUrlProvider,
+        ApiLocatorService
       ]
     });
   });
