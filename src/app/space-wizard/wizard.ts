@@ -1,42 +1,4 @@
-// TODO: refactor and refine domain model for wizard and configurator
-import { Space, SpaceAttributes } from '../models/space'
-
-export class Wizard {
-
-  activeStep: number = 0;
-
-  constructor() { }
-  step(step: number = 0) {
-    this.activeStep = step;
-  }
-};
-
-// The navigator is used to inject wizard navigation into components and allow them to participate
-// in wizard navigation
-export class WizardNavigator {
-  navigate(wizard: Wizard, steps: Array<WizardStepConfig> = [], wizardStepName: string = '') {
-    try {
-      let wizardStepConfig = steps.find((wizardStepConfig) => {
-        return wizardStepConfig.name.toLowerCase() === (wizardStepName || '').toLowerCase()
-      });
-      if (wizardStepConfig) {
-        wizard.step(wizardStepConfig.step);
-      } else {
-        console.error(`WizardNavigationError: The ${wizardStepName} wizard step was not found or configured.`)
-      }
-    } catch (err) {
-      console.error(`WizardNavigationException:${err.message}.`)
-    }
-  }
-};
-
-export class WizardStepConfig {
-  step: number = 0;
-  name: string = '';
-
-  constructor() { }
-
-};
+import { Space, SpaceAttributes } from '../models/space';
 
 export class ProjectType {
   description: string;
@@ -80,18 +42,6 @@ export class PipelineStageInfo {
 
 export class PipelineTaskInfo {
   name: string = '';
-}
-
-export interface IWizardStep {
-  index: number;
-}
-
-export interface IWizardSteps {
-  space: IWizardStep;
-  forge: IWizardStep;
-  quickStart: IWizardStep;
-  stack: IWizardStep;
-  pipeline: IWizardStep;
 }
 
 export class SpaceConfigurator {
