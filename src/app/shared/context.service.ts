@@ -34,7 +34,15 @@ export class ContextService {
     // Initialize the default context when the logged in user changes and add as a recent context
     this.broadcaster.on<User>('currentUserChanged').subscribe(message => {
       if (message.attributes.username) {
-        this._default = this.buildContext(message.attributes.username);
+        let c: Context = {
+          'entity': this.dummy.lookupEntity(message.attributes.username),
+          'space': null,
+          'type': 'user',
+          'name': message.attributes.username,
+          'path': '/' + message.attributes.username
+        } as Context;
+        this.buildContextMenus(c);
+        this._default = c;
         console.log('Initializing default context for ' + message.attributes.username, this._default + ';');
         this.addRecentContext(this._default);
       }
@@ -117,8 +125,8 @@ export class ContextService {
 
   private computeContext(url: string): Context {
     // First, check if there is a recent context
-    let entityStr: string = this.extractEntity(url);
-    let spaceStr: string = this.extractSpace(url);
+    let entityStr: string = this.extractEntity();
+    let spaceStr: string = this.extractSpace();
     // TODO Implement team URLs
     let teamStr: string = null;
     // The 'ctxPath' is the raw path to the context only, with all extraneous info removed
@@ -139,13 +147,13 @@ export class ContextService {
     }
 
     // Otherwise, we have to build it
-    return this.buildContext(url);
+    return this.buildContext();
   }
 
-  private buildContext(path: string) {
+  private buildContext() {
     let c: Context = {
-      'entity': this.loadEntity(path),
-      'space': this.loadSpace(path),
+      'entity': this.loadEntity(),
+      'space': this.loadSpace(),
       'type': null,
       'name': null,
       'path': null
@@ -167,46 +175,35 @@ export class ContextService {
     }
   }
 
-  private extractEntity(path: string): string {
-    let e = this.removeLeadingChars(path, '/').split('/')[0];
-    if (e && !this.checkForReservedWords(e)) {
-      return e;
-    } else {
-      return null;
-    }
-  }
-
-  private loadEntity(path: string): Entity {
-    return this.dummy.lookupEntity(this.extractEntity(path));
-  }
-
-  private extractSpace(path: string): string {
-    let s = this.removeTrailingChars(this.removeLeadingChars(path, '/'), '?').split('/')[1];
-    if (s && !this.checkForReservedWords(s)) {
-      return s;
+  private extractEntity(): string {
+    let params = this.getRouteParams();
+    if (params) {
+      return params["entity"];
     }
     return null;
   }
 
-  private loadSpace(path: string): Space {
-    return this.dummy.lookupSpace(this.extractSpace(path));
+  private loadEntity(): Entity {
+    return this.dummy.lookupEntity(this.extractEntity());
   }
 
-  private removeLeadingChars(str: string, char: string): string {
-    return str.startsWith(char) ? str.slice(1, str.length) : str;
-  }
-
-  private removeTrailingChars(str: string, char: string): string {
-    return str.split(char)[0];
-  }
-
-  private checkForReservedWords(arg: string): boolean {
-    for (let r of this.dummy.RESERVED_WORDS) {
-      if (arg === r) {
-        return true;
-      }
+  private extractSpace(): string {
+    let params = this.getRouteParams();
+    if (params) {
+      return params["space"];
     }
-    return false;
+    return null;
+  }
+
+  private getRouteParams(): any {
+    if (this.router && this.router.routerState && this.router.routerState.snapshot && this.router.routerState.snapshot.root && this.router.routerState.snapshot.root.firstChild) {
+      return this.router.routerState.snapshot.root.firstChild.params;
+    }
+    return null;
+  }
+
+  private loadSpace(): Space {
+    return this.dummy.lookupSpace(this.extractSpace());
   }
 
   private buildPath(...args: string[]): string {

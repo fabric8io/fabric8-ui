@@ -30,6 +30,18 @@ export const routes: Routes = [
     loadChildren: './home/home.module#HomeModule'
   },
 
+  // Profile
+  {
+    path: ':entity',
+    loadChildren: './profile/profile.module#ProfileModule'
+  },
+
+  // Settings
+  {
+    path: ':entity/settings',
+    loadChildren: './settings/settings.module#SettingsModule'
+  },
+
   // Analyze
   {
     path: ':entity/:space',
@@ -60,17 +72,6 @@ export const routes: Routes = [
     loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
   },
 
-  // Profile
-  {
-    path: ':entity',
-    loadChildren: './profile/profile.module#ProfileModule'
-  },
-
-  // Settings
-  {
-    path: ':entity/settings',
-    loadChildren: './settings/settings.module#SettingsModule'
-  },
 ];
 
 @NgModule({
