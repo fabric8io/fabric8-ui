@@ -13,7 +13,9 @@
       <button (click)="stackModule.open()">Stack Reports</button>
       <modal #stackModule title="Report" cancelButtonLabel="close" modalClass="modal-lg">
         <modal-content>
-          
+            <!-- Recommender -->
+            <f8-recommender [recommendations]="recommendations"></f8-recommender>
+            <h1 class="keep-left">Stack Overview</h1>
             <div class="col-sm-6 col-lg-6 render-stack-tiles ">
               <div class="card-pf card-pf-accented card-pf card-pf-view">
                 <h2 class="card-pf-title">
@@ -175,10 +177,7 @@
       </div>
       
     </div>
-    <div class="row">
-      <!-- Recommender -->
-      <f8-recommender [recommendations]="recommendations"></f8-recommender>
-    </div>
+    
     <!-- Stack Recommendation Section -->
     <div class="row">
       <h1>Similar stacks</h1>
