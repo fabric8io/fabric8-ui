@@ -16,6 +16,7 @@ import { StackRecommendationModule } from '../stack-recommendation/stack-recomme
 import { StackDetailsComponent } from './stack-details.component';
 import { RecommenderModule } from '../recommender/recommender.module';
 
+import { StackComponentsModule } from '../stack-components/stack-components.module';
 import { recommenderApiUrlProvider } from './../../../shared/recommender-api.provider';
 import { ApiLocatorService } from './../../../shared/api-locator.service';
 import { witApiUrlProvider } from './../../../shared/wit-api.provider';
@@ -39,6 +40,7 @@ describe('StackDetailsComponent', () => {
         ModalModule,
         StackRecommendationModule,
         RecommenderModule,
+        StackComponentsModule,
         HttpModule,
         ReactiveFormsModule
       ],
