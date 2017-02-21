@@ -9,13 +9,18 @@ import { StackAnalysesService } from '../stack-analyses.service';
 import { StackAnalysesModel } from '../stack-analyses.model';
 import { RenderNextService } from './render-next-service';
 import { AddWorkFlowService } from './add-work-flow.service';
+import { PagerService } from '../pager.service';
 
 @Component({
   selector: 'stack-details',
   templateUrl: './stack-details.component.html',
   styleUrls: ['./stack-details.component.scss'],
-  providers: [AddWorkFlowService, RenderNextService, StackAnalysesService,
-    StackAnalysesModel, Logger],
+  providers: [AddWorkFlowService,
+              Logger,
+              PagerService,
+              RenderNextService,
+              StackAnalysesService,
+              StackAnalysesModel],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -48,6 +53,12 @@ export class StackDetailsComponent implements OnInit {
   multilpeActionData: any = {};
   multiRecommendMsg: string = '';
 
+  // pager object
+  pager: any = {};
+
+  // paged items
+  pagedItems: any[];
+
   public recommendationForm = this.fb.group({
     row: ["[{name: 'Sample1', version: '0.1.1', custom: '{name: 'Add'}'}]"]
   });
@@ -60,6 +71,7 @@ export class StackDetailsComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     private addWorkFlowService: AddWorkFlowService,
+    private pagerService: PagerService,
     private renderNextService: RenderNextService,
     private stackAnalysesService: StackAnalysesService,
     private stackAnalysesModel: StackAnalysesModel,
@@ -85,8 +97,26 @@ export class StackDetailsComponent implements OnInit {
         suggestion: 'Recommended',
         action: 'Remove',
         message: 'Vertx Web applications have different version'
+      },
+      {
+        suggestion: 'Recommended',
+        action: 'Upgrade',
+        message: 'Vertx Web applications have different version'
+      },
+      {
+        suggestion: 'Recommended',
+        action: 'Downgrade',
+        message: 'Vertx Web applications have different version'
+      },
+      {
+        suggestion: 'Recommended',
+        action: 'Remove',
+        message: 'Vertx Web applications have different version'
       }
     ];
+
+    // initialize to page 1
+    this.setPage(1);
 
     this.currentStackHeaders = [
       'name',
@@ -383,5 +413,16 @@ export class StackDetailsComponent implements OnInit {
     this.workItemRespMsg = baseUrl;
     this.modal.open();
   }
+
+  private setPage(page: number) {
+        if (page < 1 || page > this.pager.totalPages) {
+            return;
+        }
+        // get pager object from service
+        this.pager = this.pagerService.getPager(this.recommendations.length, page);
+
+        // get current page of items
+        this.pagedItems = this.recommendations.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    }
 
 }
