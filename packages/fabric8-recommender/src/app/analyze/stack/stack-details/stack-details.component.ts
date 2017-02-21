@@ -101,17 +101,44 @@ export class StackDetailsComponent implements OnInit {
       {
         suggestion: 'Recommended',
         action: 'Upgrade',
-        message: 'Vertx Web applications have different version'
+        message: 'Vertx Web applications have different version',
+        pop: [
+          {
+            itemName: 'Create WorkItem',
+            identifier: 'CREATE_WORK_ITEM'
+          }, {
+            itemName: 'Dismiss Recommendation',
+            identifier: 'DISMISS'
+          }
+        ]
       },
       {
         suggestion: 'Recommended',
         action: 'Downgrade',
-        message: 'Vertx Web applications have different version'
+        message: 'Vertx Web applications have different version',
+        pop: [
+          {
+            itemName: 'Create WorkItem',
+            identifier: 'CREATE_WORK_ITEM'
+          }, {
+            itemName: 'Dismiss Recommendation',
+            identifier: 'DISMISS'
+          }
+        ]
       },
       {
         suggestion: 'Recommended',
         action: 'Remove',
-        message: 'Vertx Web applications have different version'
+        message: 'Vertx Web applications have different version',
+        pop: [
+          {
+            itemName: 'Create WorkItem',
+            identifier: 'CREATE_WORK_ITEM'
+          }, {
+            itemName: 'Dismiss Recommendation',
+            identifier: 'DISMISS'
+          }
+        ]
       }
     ];
 
