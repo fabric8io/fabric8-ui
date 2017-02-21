@@ -1,6 +1,6 @@
 <div id="stack" class="container content">
   <h1>Stack Reports</h1>
-  <div class="row" *ngIf="context.current.space?.stacks">
+  <div class="row" *ngIf="context && context.current && context.current.space && context.current.space?.stacks">
     <div class="row">
       <div>
         <div>

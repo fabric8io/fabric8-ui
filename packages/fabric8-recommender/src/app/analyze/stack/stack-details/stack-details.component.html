@@ -170,8 +170,14 @@
         <f8-container-toggler (prevBtn)="handlePrevious($event)" (nextBtn)="handleNext($event)"></f8-container-toggler>
         <stack-recommendation (customEvent)="addWorkItem($event)" [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers"
           [clickable]="true"></stack-recommendation>
-          <!-- <button (click)="addWorkFlow()" id="addWorkflow">Submit</button> -->
+
+        <!-- <button (click)="addWorkFlow()" id="addWorkflow">Submit</button> -->
       </div>
+      
+    </div>
+    <div class="row">
+      <!-- Recommender -->
+      <f8-recommender [recommendations]="recommendations"></f8-recommender>
     </div>
     <!-- Stack Recommendation Section -->
     <div class="row">

@@ -1,0 +1,23 @@
+.recommendation-header {
+    .recommender-action-group {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        .create-work-item {
+            background: #fff;
+            color: #ccc;
+            box-shadow: none;   
+        }
+    }
+    &:after {
+        content: '';
+        clear: both;
+        float: none;
+        display: block;
+    }
+}
+.keep-left {
+    float: left;
+}
+.keep-right {
+    float: right;
+}

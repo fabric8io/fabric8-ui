@@ -1,0 +1,65 @@
+<div class="row recommendation-header">
+    <h1 class="keep-left">Recommendations</h1>
+    <div class="keep-right recommender-action-group">
+        <button class="btn btn-default keep-left create-work-item" type="button">Create Work Item</button>
+        <button class="btn btn-link dropdown-toggle keep-right" type="button" id="dropdownKebabRight2" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="true">
+        <span class="fa fa-ellipsis-v"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight2">
+            <li><a href="#">Create Work Item</a></li>
+            <li><a href="#">Dismiss Recommendation</a></li>
+        </ul>
+    </div>
+</div>
+<div class="list-group">
+    <!-- No recommendations scenario -->
+    <div class="list-group-item list-view-pf-stacked">
+        <div class="list-view-pf-main-info" *ngIf="recommendationsList.length === 0">
+            <div class="list-view-pf-body">
+                <div class="list-view-pf-description">
+                    <div class="list-group-item-heading">
+                        No recommendations.
+                    </div>
+                    <div class="list-group-item-text">
+                        Some information goes here if you want to change your current stack.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- No recommendations scenario -->
+
+    <div class="list-group-item list-view-pf-stacked" *ngFor="let recommendation of recommendationsList">
+        <div class="list-view-pf-checkbox">
+            <input type="checkbox">
+        </div>
+        <div class="list-view-pf-actions">
+            <div class="dropdown pull-right dropdown-kebab-pf">
+                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebabRight2" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="true">
+                <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight2">
+                    <li><a href="#">Create Work Item</a></li>
+                    <li><a href="#">Dismiss Recommendation</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="list-view-pf-main-info">
+            <div class="list-view-pf-left">
+                <span class="pficon pficon-info"></span>
+            </div>
+            <div class="list-view-pf-body">
+                <div class="list-view-pf-description">
+                    <div class="list-group-item-heading">
+                        {{recommendation.suggestion}}
+                    </div>
+                    <div class="list-group-item-text">
+                        {{recommendation.action}} {{recommendation.message}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

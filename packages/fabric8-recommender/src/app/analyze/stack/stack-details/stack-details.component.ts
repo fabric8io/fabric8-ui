@@ -54,6 +54,8 @@ export class StackDetailsComponent implements OnInit {
 
   private stackAnalysisRawData: any = {};
 
+  private recommendations: Array<any> = [];
+
 
   constructor(
     public fb: FormBuilder,
@@ -67,6 +69,24 @@ export class StackDetailsComponent implements OnInit {
   ngOnInit() {
     this.getStackAnalyses(this.stack.uuid);
     this.setStackAnalysisRawData();
+
+    this.recommendations = [
+      {
+        suggestion: 'Recommended',
+        action: 'Upgrade',
+        message: 'Vertx Web applications have different version'
+      },
+      {
+        suggestion: 'Recommended',
+        action: 'Downgrade',
+        message: 'Vertx Web applications have different version'
+      },
+      {
+        suggestion: 'Recommended',
+        action: 'Remove',
+        message: 'Vertx Web applications have different version'
+      }
+    ];
 
     this.currentStackHeaders = [
       'name',
@@ -116,7 +136,7 @@ export class StackDetailsComponent implements OnInit {
       componentsWithDependencyLockFile: ''
     };
   }
-  
+
   private getWorkItemData(): any {
     this.workItemData = {
       'data': {
@@ -325,7 +345,7 @@ export class StackDetailsComponent implements OnInit {
   private handleNext(value: any): void {
     // ++ this.currentIndex;
     // Hit a new Ajax call and populate the Array
-    let nextObservable: Observable<any> 
+    let nextObservable: Observable<any>
     = this.renderNextService.getNextList(this.recoArray[this.currentIndex]['url']);
     nextObservable.subscribe((data) => {
       this.logger.log(data);
@@ -340,9 +360,11 @@ export class StackDetailsComponent implements OnInit {
   private multipleRecoWorkItem(rows: any): void {
     let workItemData: any = this.getWorkItemData();
 
-    for(let row in rows) {
-     workItemData.data.attributes['system.title'] += rows[row].custom.name + ' '
-     + rows[row].name + ' ' + rows[row].version;
+    for (let row in rows) {
+      if (rows.hasOwnProperty(row)) {
+        workItemData.data.attributes['system.title'] += rows[row].custom.name + ' '
+        + rows[row].name + ' ' + rows[row].version;
+      }
     }
     let workflow: Observable<any> = this.addWorkFlowService.addWorkFlow(workItemData);
     workflow.subscribe((data) => {
