@@ -1,8 +1,8 @@
-<div class="row recommendation-header">
+<div class="recommendation-header">
     <h1 class="keep-left">Recommendations</h1>
-    <div class="keep-right recommender-action-group">
-        <button class="btn btn-default keep-left create-work-item" type="button">Create Work Item</button>
-        <button class="btn btn-link dropdown-toggle keep-right" type="button" id="dropdownKebabRight2" data-toggle="dropdown" aria-haspopup="true"
+    <div class="keep-right recommender-action-group recommendation-group-item">
+        <button (click)="handleMultipleWorkItemCreation($event)" [ngClass]="{'btn-default disable-create-work-item': newRecommendations.length === 0, 'btn-primary': newRecommendations.length > 0}" class="btn keep-left create-work-item" type="button">Create Work Item</button>
+        <button #allRecommendation class="btn btn-link dropdown-toggle keep-right" type="button" (click)="handleRecommendationAction(allRecommendation)" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="true">
         <span class="fa fa-ellipsis-v"></span>
         </button>
@@ -32,7 +32,7 @@
 
     <div #listGroupItem class="list-group-item list-view-pf-stacked recommendation-group-item" *ngFor="let recommendation of recommendationsList">
         <div class="list-view-pf-checkbox">
-            <input (change)="handleWorkItemSelection(listGroupItem)" type="checkbox" />
+            <input (change)="handleWorkItemSelection(listGroupItem, recommendation)" type="checkbox" />
         </div>
         <div class="list-view-pf-actions">
             <div class="dropdown pull-right dropdown-kebab-pf">

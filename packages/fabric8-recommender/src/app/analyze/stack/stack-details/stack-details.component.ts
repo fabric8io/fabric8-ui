@@ -84,22 +84,48 @@ export class StackDetailsComponent implements OnInit {
 
     this.recommendations = [
       {
-        suggestion: 'Recommended',
+        suggestion: 'Recommended1',
         action: 'Upgrade',
-        message: 'Vertx Web applications have different version'
+        message: 'Vertx Web applications have different version',
+        pop: [
+          {
+            itemName: 'Create WorkItem',
+            identifier: 'CREATE_WORK_ITEM'
+          }, {
+            itemName: 'Dismiss Recommendation',
+            identifier: 'DISMISS'
+          }
+        ]
       },
       {
-        suggestion: 'Recommended',
+        suggestion: 'Recommended2',
         action: 'Downgrade',
-        message: 'Vertx Web applications have different version'
+        message: 'Vertx Web applications have different version',
+        pop: [
+          {
+            itemName: 'Create WorkItem',
+            identifier: 'CREATE_WORK_ITEM'
+          }, {
+            itemName: 'Dismiss Recommendation',
+            identifier: 'DISMISS'
+          }
+        ]
       },
       {
-        suggestion: 'Recommended',
+        suggestion: 'Recommended3',
         action: 'Remove',
-        message: 'Vertx Web applications have different version'
-      },
-      {
-        suggestion: 'Recommended',
+        message: 'Vertx Web applications have different version',
+        pop: [
+          {
+            itemName: 'Create WorkItem',
+            identifier: 'CREATE_WORK_ITEM'
+          }, {
+            itemName: 'Dismiss Recommendation',
+            identifier: 'DISMISS'
+          }
+        ]
+      }, {
+        suggestion: 'Recommended4',
         action: 'Upgrade',
         message: 'Vertx Web applications have different version',
         pop: [
@@ -113,7 +139,7 @@ export class StackDetailsComponent implements OnInit {
         ]
       },
       {
-        suggestion: 'Recommended',
+        suggestion: 'Recommended5',
         action: 'Downgrade',
         message: 'Vertx Web applications have different version',
         pop: [
@@ -127,7 +153,7 @@ export class StackDetailsComponent implements OnInit {
         ]
       },
       {
-        suggestion: 'Recommended',
+        suggestion: 'Recommended6',
         action: 'Remove',
         message: 'Vertx Web applications have different version',
         pop: [

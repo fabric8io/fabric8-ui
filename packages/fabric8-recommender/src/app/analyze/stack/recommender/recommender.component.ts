@@ -14,6 +14,8 @@ export class RecommenderComponent {
     @Input() recommendations;
     private recommendationsList: Array<any> = [];
 
+    private newRecommendations: Array<any> = [];
+
     constructor(private addWorkFlowService: AddWorkFlowService) {}
 
     ngOnInit() {
@@ -40,7 +42,7 @@ export class RecommenderComponent {
      */
     private handleDropDownClick(item: any, recommender: any, event: Event): void {
         if (item && item.identifier === 'CREATE_WORK_ITEM') {
-            this.handleCreateWorkItemAction(recommender);
+            this.handleCreateWorkItemAction([recommender]);
         }
         event.preventDefault();
     }
@@ -106,15 +108,39 @@ export class RecommenderComponent {
      *  handleCreateWorkItemAction - takes recommendation and returns nothing
      *  Creates work items in specified format to be consumed for POST request 
      */
-    private handleCreateWorkItemAction(recommendation: any): void {
+    private handleCreateWorkItemAction(recommendations: Array<any>): void {
         let workItems = [];
-        if (recommendation) {
-            let item: any = {
-                title: recommendation['action'],
-                description: recommendation['message']
-            };
-            workItems.push(item);
+        let length: number = recommendations.length;
+        if (recommendations && length > 0) {
+            for (let i: number = 0; i < length; ++ i) {
+                let item: any = {
+                    title: recommendations[i]['action'],
+                    description: recommendations[i]['message']
+                };
+                workItems.push(item);
+            }
             this.addWorkItems(workItems);
+        }
+    }
+
+
+    /*
+     *  handleMultipleWorkItemCreation - takes and returns nothing
+     *  handles the creation of multiple work items that are checked 
+     */
+    private handleMultipleWorkItemCreation(event: Event): void {
+        if (this.newRecommendations.length > 0) {
+            this.handleCreateWorkItemAction(this.newRecommendations);
+        }
+        event.preventDefault();
+    }
+
+    private handleCheckBoxChange(recommendation: any): void {
+        let index: number = this.newRecommendations.indexOf(recommendation);
+        if (index === -1) {
+            this.newRecommendations.push(recommendation);
+        } else {
+            this.newRecommendations.splice(index, 1);
         }
     }
 
@@ -151,12 +177,13 @@ export class RecommenderComponent {
         Handles Work Item selection
         1. Toggles the selected area
      */
-    private handleWorkItemSelection(element: HTMLElement): void {
+    private handleWorkItemSelection(element: HTMLElement, recommendation: any): void {
         if (element.classList.contains('active')) {
             element.classList.remove('active');
         } else {
             element.classList.add('active');
         }
+        this.handleCheckBoxChange(recommendation);
     }
 
 }
