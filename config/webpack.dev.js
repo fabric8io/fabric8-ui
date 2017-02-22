@@ -55,6 +55,11 @@ module.exports = function (options) {
      */
     devtool: 'cheap-module-source-map',
 
+    module: {
+      'preLoaders': [
+        {test: /\.js$/, loader: 'source-map'}
+      ]
+    },
     /**
      * Options affecting the output of the compilation.
      *
