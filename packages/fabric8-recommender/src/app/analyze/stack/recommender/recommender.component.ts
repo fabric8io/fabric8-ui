@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
@@ -9,7 +9,7 @@ import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
     styleUrls: ['./recommender.scss']
 })
 
-export class RecommenderComponent {
+export class RecommenderComponent implements OnChanges {
 
     @Input() recommendations;
     private recommendationsList: Array<any> = [];
@@ -18,8 +18,9 @@ export class RecommenderComponent {
 
     constructor(private addWorkFlowService: AddWorkFlowService) {}
 
-    ngOnInit() {
+    ngOnChanges() {
         if (this.recommendations) {
+            this.recommendationsList = [];
             let length: number = this.recommendations.length;
             let recommendation: any, eachOne: any;
             for (let i: number = 0; i < length; ++ i) {

@@ -205,18 +205,18 @@ export class StackDetailsComponent implements OnInit {
     this.stackAnalysisRawData = {
       packageName: '',
       packageVersion: '',
-      averageUsage: '',
-      lowPublicUsageComponents: '',
-      redhatDistributedComponents: '',
+      averageUsage: 'NA',
+      lowPublicUsageComponents: 'NA',
+      redhatDistributedComponents: 'NA',
       averageStars: '',
       averageForks: '',
       lowPopularityComponents: '',
       distinctLicenses: '',
       totalLicenses: '',
-      totalSecurityIssues: '',
-      cvss: '',
-      componentsWithTests: '',
-      componentsWithDependencyLockFile: ''
+      totalSecurityIssues: 'NA',
+      cvss: 'NA',
+      componentsWithTests: 'NA',
+      componentsWithDependencyLockFile: 'NA'
     };
   }
 
@@ -366,13 +366,14 @@ export class StackDetailsComponent implements OnInit {
   private setStackMetrics(stackData: any): void {
     this.stackAnalysisRawData.packageName = stackData.name;
     this.stackAnalysisRawData.packageVersion = stackData.version;
-    this.stackAnalysisRawData.averageUsage = stackData.usage.average_usage;
+    if (stackData.usage) {
+      this.stackAnalysisRawData.averageUsage = stackData.usage.average_usage;
+      this.stackAnalysisRawData.lowPublicUsageComponents
+      = stackData.usage.low_public_usage_components;
+      this.stackAnalysisRawData.redhatDistributedComponents
+      = stackData.usage.redhat_distributed_components;
+    }
 
-    this.stackAnalysisRawData.lowPublicUsageComponents
-     = stackData.usage.low_public_usage_components;
-
-    this.stackAnalysisRawData.redhatDistributedComponents
-     = stackData.usage.redhat_distributed_components;
 
     this.stackAnalysisRawData.averageStars = stackData.popularity.average_stars;
     this.stackAnalysisRawData.averageForks = stackData.popularity.average_forks;
@@ -383,15 +384,19 @@ export class StackDetailsComponent implements OnInit {
     this.stackAnalysisRawData.distinctLicenses = stackData.distinct_licenses;
     this.stackAnalysisRawData.totalLicenses = stackData.total_licenses;
 
+    if (stackData.total_security_issues)
     this.stackAnalysisRawData.totalSecurityIssues = stackData.total_security_issues;
+
+    if (stackData.cvss)
     this.stackAnalysisRawData.cvss = stackData.cvss;
 
+    if (stackData.metadata) {
     this.stackAnalysisRawData.componentsWithTests = stackData.metadata.components_with_tests;
-
     this.stackAnalysisRawData.componentsWithDependencyLockFile
      = stackData.metadata.components_with_dependency_lock_file;
-
     this.stackAnalysisRawData.requiredEngines = stackData.metadata.required_engines;
+    }
+
     for (let key in this.requiredEngines) {
       if (this.requiredEngines.hasOwnProperty(key)) {
         this.requiredEnginesArr.push({ key: key, value: this.requiredEngines[key] });
@@ -405,7 +410,11 @@ export class StackDetailsComponent implements OnInit {
           .getStackAnalyses(id)
           .subscribe(data => {
             stackAnalysesData = data;
-            stackAnalysesData = stackAnalysesData[0];
+            if (Object.prototype.toString.call(stackAnalysesData) !== '[object Array]') {
+              stackAnalysesData = stackAnalysesData.result[0];
+            } else {
+              stackAnalysesData = stackAnalysesData[0];
+            }
 
             if (!stackAnalysesData.recommendation) {
               // Add static recommendations here in case recommendations are not fetched
