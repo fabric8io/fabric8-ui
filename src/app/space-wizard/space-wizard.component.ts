@@ -1,22 +1,17 @@
+import { WizardSteps } from './../shared-component/wizard/wizard-steps';
+import { Wizard } from './../shared-component/wizard/wizard';
+import { ContextService } from './../shared/context.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Broadcaster } from 'ngx-login-client';
+import { Broadcaster, User } from 'ngx-login-client';
 
 import { DummyService } from '../shared/dummy.service';
-import { SpaceConfigurator, IWizardSteps, Wizard } from './wizard';
+import { SpaceConfigurator } from './wizard';
 import { Space, SpaceAttributes } from '../models/space';
 import { ProcessTemplate } from '../models/process-template';
 import { SpaceService } from '../profile/spaces/space.service';
-
-interface IModal {
-  closeOnEscape: boolean;
-  closeOnOutsideClick: boolean;
-  open();
-  close();
-  onOpen();
-  onClose();
-}
+import { Modal } from '../shared-component/modal/modal';
 
 @Component({
   host: {
@@ -32,14 +27,15 @@ export class SpaceWizardComponent implements OnInit {
 
   configurator: SpaceConfigurator;
   wizard: Wizard = new Wizard();
-  wizardSteps: IWizardSteps;
-  @Input() host: IModal;
+  wizardSteps: WizardSteps;
+  @Input() host: Modal;
 
   constructor(
     private router: Router,
     public dummy: DummyService,
     private broadcaster: Broadcaster,
-    private spaceService: SpaceService) {
+    private spaceService: SpaceService,
+    private context: ContextService) {
   }
 
   ngOnInit() {
@@ -49,18 +45,21 @@ export class SpaceWizardComponent implements OnInit {
       forge: { index: 1 },
       quickStart: { index: 2 },
       stack: { index: 3 },
-      pipeline: { index: 4 },
+      pipeline: { index: 4 }
     };
     this.host.closeOnEscape = true;
     this.host.closeOnOutsideClick = false;
   }
 
+  next() {
+    console.log('here');
+  }
+
   reset() {
     let configurator = new SpaceConfigurator();
     let space = {} as Space;
-    space.name = 'BalloonPopGame';
-    // TODO: Once we have dynamic routing, fix this
-    space.path = '/pmuir/BalloonPopGame';
+    space.name = '';
+    space.path = '';
     space.attributes = new SpaceAttributes();
     space.attributes.name = space.name;
     space.type = 'spaces';
@@ -77,6 +76,12 @@ export class SpaceWizardComponent implements OnInit {
     let space = this.configurator.space;
     space.description = space.name;
     space.attributes.name = space.name;
+    if (this.context.current.entity) {
+      // TODO Implement space name validation
+      // Support organisations as well
+      space.path =
+        (this.context.current.entity as User).attributes.username + '/' + this.convertNameToPath(space.name);
+    }
 
     console.log(space);
 
@@ -101,6 +106,11 @@ export class SpaceWizardComponent implements OnInit {
     if (this.host) {
       this.host.close();
     }
+  }
+
+  private convertNameToPath(name: string) {
+    // convert to ASCII etc.
+    return name.replace(' ', '-').toLowerCase();
   }
 
 }

@@ -1,54 +1,57 @@
 <div class="wizard">
-  <div class="wizard-step" [class.active]="wizard.activeStep==0">
-    <header>
-      <h3>Create a new collaboration space</h3>
-    </header>
-    <section class="margin-top-15">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-xs-12">
-            <form class="form-horizontal" role="form" (ngSubmit)="createSpace()">
-              <div class="form-group has-clear">
-                <label class="control-label col-xs-4">Space Name</label>
-                <div class="col-xs-8">
-                  <input id="spaceName" name="spaceName" type="text" class="form-control" placeholder="Enter a unique name for your space"
-                    [(ngModel)]="configurator.space.name" required />
+  <form role="form" #spaceForm="ngForm" (ngSubmit)="wizard.step(wizardSteps.forge.index)">
+    <div class="wizard-step" [class.active]="wizard.activeStep==0">
+
+      <header>
+        <h3>Create a new collaboration space</h3>
+      </header>
+      <section class="margin-top-15">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-12">
+              <div class="form-horizontal">
+                <div class="form-group has-clear">
+                  <label class="control-label col-xs-4">Space Name</label>
+                  <div class="col-xs-8">
+                    <input id="spaceName" name="spaceName" type="text" class="form-control" placeholder="Enter a unique name for your space"
+                      [(ngModel)]="configurator.space.name" required />
+                  </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label class="control-label col-xs-4 ">Development Process</label>
-                <div class="col-xs-8">
-                  <select class="form-control" id="developmentProcess" [(ngModel)]="configurator.space.process" name="developmentProcess">
+                <div class="form-group">
+                  <label class="control-label col-xs-4 ">Development Process</label>
+                  <div class="col-xs-8">
+                    <select class="form-control" id="developmentProcess" [(ngModel)]="configurator.space.process" name="developmentProcess">
                         <option *ngFor="let p of dummy.processTemplates" [ngValue]="p">{{p.name}}</option>
                     </select>
+                  </div>
                 </div>
-              </div>
-              <div class="col-xs-8 col-xs-offset-4">
-                <h4>What type of space would you like to create</h4>
-              </div>
-              <div class="form-group">
                 <div class="col-xs-8 col-xs-offset-4">
-                  <div class="radio">
-                    <label><input type="radio"   id="publicSpace" name="SpaceView" [(ngModel)]="configurator.space.privateSpace" [value]="false" /><strong> Public : </strong> Anyone can access this space.</label>
-                  </div>
-                  <div class="radio">
-                    <label><input type="radio"   id="privateSpace" name="SpaceView" [(ngModel)]="configurator.space.privateSpace" [value]="true" /><strong> Private : </strong> Only authorized people can access this space.</label>
+                  <h4>What type of space would you like to create</h4>
+                </div>
+                <div class="form-group">
+                  <div class="col-xs-8 col-xs-offset-4">
+                    <div class="radio">
+                      <label><input type="radio"   id="publicSpace" name="SpaceView" [(ngModel)]="configurator.space.privateSpace" [value]="false" /><strong> Public : </strong> Anyone can access this space.</label>
+                    </div>
+                    <div class="radio">
+                      <label><input type="radio"   id="privateSpace" name="SpaceView" [(ngModel)]="configurator.space.privateSpace" [value]="true" /><strong> Private : </strong> Only authorized people can access this space.</label>
+                    </div>
                   </div>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <footer>
-      <a class="btn btn-default margin-right-5" (click)="cancel()">Cancel</a>
-      <a class="btn btn-default" (click)="wizard.step(wizardSteps.forge.index)">Next</a>
-    </footer>
-  </div>
+      </section>
+      <footer>
+        <button class="btn btn-default margin-right-5" (click)="cancel()">Cancel</button>
+        <button class="btn btn-default" type="submit" [disabled]="!spaceForm.form.valid">Next</button>
+      </footer>
+    </div>
+  </form>
   <div class="wizard-step" [class.active]="wizard.activeStep===wizardSteps.forge.index">
     <header>
-      <h3>Your <strong>BaloonPopGame</strong> Space is ready! How would you like to get started ?</h3>
+      <h3>Your <strong>{{configurator.space.name}}</strong> Space is ready! How would you like to get started ?</h3>
     </header>
     <section class="flex-container in-row-direction flex-grow-1 margin-top-15">
       <div class="section-column">
@@ -83,7 +86,7 @@
   </div>
   <div class="wizard-step" [class.active]="wizard.activeStep===wizardSteps.quickStart.index">
     <header>
-      <h3>Define a QuickStart to add to the <strong>BaloonPopGame</strong> space. </h3>
+      <h3>Define a QuickStart to add to the <strong>{{configurator.space.name}}></strong> space. </h3>
     </header>
     <section class="margin-top-15">
       <div class="container-fluid">
@@ -132,7 +135,7 @@
   </div>
   <div class="wizard-step" [class.active]="wizard.activeStep===wizardSteps.stack.index">
     <header>
-      <h3>Select a project type to add to the <strong>BaloonPopGame</strong> space.</h3>
+      <h3>Select a project type to add to the <strong>{{configurator.space.name}}</strong> space.</h3>
     </header>
     <section class="layout-block-container">
       <div *ngFor="let stack of configurator.availableStacks" (click)="configurator.project.stack=stack" class="layout-block layout-block-stack">
@@ -158,7 +161,7 @@
   </div>
   <div class="wizard-step" [class.active]="wizard.activeStep===wizardSteps.pipeline.index">
     <header>
-      <h3>Select a pipeline type to add to the <strong>BaloonPopGame</strong> space.</h3>
+      <h3>Select a pipeline type to add to the <strong>{{configurator.space.name}}</strong> space.</h3>
     </header>
     <section class="layout-block-container">
       <div *ngFor="let pipeline of configurator.availablePipelines" class="layout-block layout-block-pipeline" (click)="configurator.project.pipeline=pipeline">
