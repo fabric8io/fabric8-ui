@@ -37,6 +37,11 @@ export class PublicComponent implements OnInit {
     } else {
       this.loggedIn = this.auth.isLoggedIn();
     }
+
+    this.broadcaster.on('logout').subscribe(() => {
+      this.loggedIn = false;
+    });
+
     this.broadcaster.on<User>('currentUserChanged').subscribe(val => {
       if (this.auth.isLoggedIn()) {
         this.profile.initDefaults(val);
