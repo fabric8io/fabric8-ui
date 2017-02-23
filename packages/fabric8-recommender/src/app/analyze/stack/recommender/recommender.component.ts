@@ -17,6 +17,8 @@ export class RecommenderComponent implements OnChanges {
     private newRecommendations: Array<any> = [];
     private isSelectAll: boolean = false;
 
+    private recommendationHeaderActions: Array<any> = [];
+
     constructor(private addWorkFlowService: AddWorkFlowService) {}
 
     ngOnChanges() {
@@ -24,6 +26,20 @@ export class RecommenderComponent implements OnChanges {
             this.recommendationsList = [];
             let length: number = this.recommendations.length;
             let recommendation: any, eachOne: any;
+
+            this.recommendationHeaderActions = [
+                {
+                    itemName: 'Create WorkItem',
+                    identifier: 'CREATE_WORK_ITEM'
+                }, {
+                    itemName: 'Dismiss Recommendation',
+                    identifier: 'DISMISS'
+                }, {
+                    itemName: 'Restore Recommendation',
+                    identifier: 'RESTORE'
+                }
+            ];
+
             for (let i: number = 0; i < length; ++ i) {
                 recommendation = {};
                 eachOne = this.recommendations[i];
@@ -73,6 +89,32 @@ export class RecommenderComponent implements OnChanges {
                 }
             }
         }
+        let currentTarget: any = event.currentTarget;
+        this.hideDropDown(currentTarget.parentNode);
+        event.preventDefault();
+    }
+
+
+    private hideDropDown(element: Element): void {
+        if (element.classList.contains('show-drop')) {
+            element.classList.remove('show-drop');
+        }
+    }
+
+
+    private handleAllActionDropDownClick(item: any, event: Event): void {
+        if (item) {
+            let identifier: string = item.identifier;
+            if (identifier === 'CREATE_WORK_ITEM') {
+               this.handleMultipleWorkItemCreation(event);
+            } else if (identifier === 'DISMISS') {
+                this.handleDismissWorkItemAction(this.newRecommendations);
+            } else if (identifier === 'RESTORE') {
+                this.handleRestoreWorkItemAction(this.newRecommendations);
+            }
+        }
+        let currentTarget: any = event.currentTarget;
+        this.hideDropDown(currentTarget.parentNode);
         event.preventDefault();
     }
 
