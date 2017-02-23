@@ -7,7 +7,6 @@
       </span>
     </div>
   </div>
-
   <div id="result-body" class="container widget-row widget-span">
     <div class="row">
       <button (click)="stackModule.open()">Stack Reports</button>
@@ -17,7 +16,6 @@
           <div>
             <f8-recommender [recommendations]="recommendations"></f8-recommender>
             <!-- pager -->
-            
           </div>
           <h1 class="keep-left">Stack Overview</h1>
           <div class="col-sm-6 col-lg-6 render-stack-tiles ">
@@ -52,7 +50,6 @@
               </div>
             </div>
           </div>
-
           <div class="col-sm-6 col-lg-6 render-stack-tiles ">
             <div class="card-pf card-pf-accented card-pf-view">
               <h2 class="card-pf-title">
@@ -84,7 +81,6 @@
               </div>
             </div>
           </div>
-
           <div class="col-sm-6 col-lg-6 render-stack-tiles ">
             <div class="card-pf card-pf-accented card-pf-view">
               <h2 class="card-pf-title">
@@ -102,104 +98,14 @@
               </div>
             </div>
           </div>
-
           <div>
             <f8-stack-components [dependencies]="dependencyItem"></f8-stack-components>
           </div>
-
         </modal-content>
       </modal>
     </div>
-
-
-    <div class="row">
-      <h1> Components </h1>
-
-      <table class="table table-striped" [mfData]="componentsDataTable" #mf="mfDataTable" [mfRowsOnPage]="5">
-        <thead>
-          <tr>
-            <th>
-              <mfDefaultSorter by="ecosystem">Ecosystem</mfDefaultSorter>
-            </th>
-            <th>
-              <mfDefaultSorter by="package">Package</mfDefaultSorter>
-            </th>
-            <th>
-              <mfDefaultSorter by="version">Version</mfDefaultSorter>
-            </th>
-            <th>
-              <mfDefaultSorter by="latestVersion">Latest Version</mfDefaultSorter>
-            </th>
-            <th>
-              <mfDefaultSorter by="publicUsage">Public Usage</mfDefaultSorter>
-            </th>
-            <th>
-              <mfDefaultSorter by="relativePublicUsage">Relative Public Usage</mfDefaultSorter>
-            </th>
-            <th>
-              <mfDefaultSorter by="poplarity">Popularity</mfDefaultSorter>
-            </th>
-            <th>
-              <mfDefaultSorter by="redhatUsage">Redhat Usage</mfDefaultSorter>
-            </th>
-            <th>
-              <mfDefaultSorter by="licence">Licence</mfDefaultSorter>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of mf.data">
-            <td>{{item.ecosystem}}</td>
-            <td>{{item.pkg}}</td>
-            <td>{{item.version}}</td>
-            <td>{{item.latestVersion}}</td>
-            <td>{{item.publicUsage}}</td>
-            <td>{{item.relativePublicUsage}}</td>
-            <td>{{item.popularity}}</td>
-            <td>{{item.redhatUsage}}</td>
-            <td>{{item.licence}}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="4">
-              <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-
-    </div>
-
-    <!-- Stack Recommendation Section -->
-    <div class="row">
-      <div class="col-xs-12 col-md-6 col-lg-4">
-        <stack-recommendation [rows]="currentStackRows" [headers]="currentStackHeaders"></stack-recommendation>
-      </div>
-      <div class="col-xs-12 col-md-6 col-lg-8">
-        <f8-container-toggler (prevBtn)="handlePrevious($event)" (nextBtn)="handleNext($event)"></f8-container-toggler>
-        <stack-recommendation (customEvent)="addWorkItem($event)" [rows]="recoArray[currentIndex].rows" [headers]="recoArray[currentIndex].headers"
-          [clickable]="true"></stack-recommendation>
-
-          <!-- <button (click)="addWorkFlow()" id="addWorkflow">Submit</button> -->
-      </div>
-
-    </div>
-
-    <!-- Stack Recommendation Section -->
-    <div class="row">
-      <h1>Similar stacks</h1>
-      <ul>
-        <li *ngFor="let s of similarStacks">
-          <a (click)="similarStack.open()"> {{ s.uri }} </a>
-        </li>
-      </ul>
-    </div>
-
   </div>
 </div>
-
-
 <modal #similarStack title="Create work item form recomendation with button">
   <modal-content>
     <form [name]="recommendationForm" (submit)="addMultipleWorkItem($event)">
@@ -210,7 +116,6 @@
     </form>
   </modal-content>
 </modal>
-
 <div class="row">
   <modal #workItemRespModal title="Response for Work item" cancelButtonLabel="close">
     <modal-content>
