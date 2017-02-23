@@ -10,7 +10,13 @@ export class StackComponents {
     @Input() dependencies;
     private dependenciesList: Array<any> = [];
 
-    constructor() {}
+    private fieldName: string;
+    private fieldValue: string;
+
+    constructor() {
+        this.fieldName = 'name';
+        this.fieldValue = '';
+    }
 
     ngOnInit() {
         if (this.dependencies) {
@@ -30,5 +36,10 @@ export class StackComponents {
                 this.dependenciesList.push(dependency);
             }
         }
+    }
+
+    private handleKeyUpEvent(event: Event): void {
+        let target: any = event.target;
+        this.fieldValue = target.value;
     }
 }
