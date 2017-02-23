@@ -1,7 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule, Http } from '@angular/http';
-import { DataTableModule } from 'angular2-datatable';
 
 import { StackDetailsComponent } from './stack-details.component';
 import { ModalModule } from 'ngx-modal';
@@ -15,7 +14,6 @@ import { StackComponentsModule } from '../stack-components/stack-components.modu
 @NgModule({
   imports: [CommonModule,
             ContainerTogglerModule,
-            DataTableModule,
             HttpModule,
             ModalModule,
             RecommenderModule,

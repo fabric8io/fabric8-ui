@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, NgForm } from '@angular/forms';
 import { HttpModule, Http } from '@angular/http';
 
-import { DataTableModule } from 'angular2-datatable';
 import { ModalModule } from 'ngx-modal';
 import { AuthenticationService } from 'ngx-login-client';
 import { ContainerTogglerModule } from 'ngx-widgets';
@@ -36,7 +35,6 @@ describe('StackDetailsComponent', () => {
     };
     TestBed.configureTestingModule({
       imports: [ContainerTogglerModule,
-        DataTableModule,
         ModalModule,
         StackRecommendationModule,
         RecommenderModule,
