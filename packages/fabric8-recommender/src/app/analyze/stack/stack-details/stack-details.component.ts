@@ -16,11 +16,11 @@ import { PagerService } from '../pager.service';
   templateUrl: './stack-details.component.html',
   styleUrls: ['./stack-details.component.scss'],
   providers: [AddWorkFlowService,
-              Logger,
-              PagerService,
-              RenderNextService,
-              StackAnalysesService,
-              StackAnalysesModel],
+    Logger,
+    PagerService,
+    RenderNextService,
+    StackAnalysesService,
+    StackAnalysesModel],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -66,6 +66,8 @@ export class StackDetailsComponent implements OnInit {
   private stackAnalysisRawData: any = {};
 
   private recommendations: Array<any> = [];
+
+  private dependencyItem: Array<any> = [];
 
 
   constructor(
@@ -168,6 +170,40 @@ export class StackDetailsComponent implements OnInit {
       }
     ];
 
+    this.dependencyItem = [{
+      name: "v1.vmnei.nameistoobigiguess",
+      curVersion: "4.0",
+      latestVersion: "3.1",
+      dateAdded: "10/17/15",
+      pubPopularity: "500",
+      enterpriseUsage: "1/7",
+      teamUsage: "1/3"
+    }, {
+      name: "v1.vmnei.name",
+      curVersion: "4.0",
+      latestVersion: "3.1",
+      dateAdded: "10/17/15",
+      pubPopularity: "500",
+      enterpriseUsage: "1/7",
+      teamUsage: "1/3"
+    }, {
+      name: "v1.vmnei.name",
+      curVersion: "4.0",
+      latestVersion: "3.1",
+      dateAdded: "10/17/15",
+      pubPopularity: "500",
+      enterpriseUsage: "1/7",
+      teamUsage: "1/3"
+    }, {
+      name: "v1.vmnei.name",
+      curVersion: "4.0",
+      latestVersion: "3.1",
+      dateAdded: "10/17/15",
+      pubPopularity: "500",
+      enterpriseUsage: "1/7",
+      teamUsage: "1/3"
+    }];
+
     // initialize to page 1
     // this.setPage(1);
 
@@ -246,7 +282,7 @@ export class StackDetailsComponent implements OnInit {
     let workItemData: any = this.getWorkItemData();
 
     workItemData.data.attributes['system.title']
-     = row.custom.name + ' ' + row.name + ' ' + row.version;
+      = row.custom.name + ' ' + row.name + ' ' + row.version;
 
     let workflow: Observable<any> = this.addWorkFlowService.addWorkFlow(workItemData);
     workflow.subscribe((data) => {
@@ -257,7 +293,7 @@ export class StackDetailsComponent implements OnInit {
   /* Adding Single Work item */
   private addSelectedItem(row: any): void {
     if (row.name in this.multilpeActionData) {
-        delete this.multilpeActionData[row.name];
+      delete this.multilpeActionData[row.name];
     } else {
       this.multilpeActionData[row.name] = row;
     }
@@ -275,8 +311,10 @@ export class StackDetailsComponent implements OnInit {
     this.recoArray[this.currentIndex]['url'] = url;
     for (let component in components) {
       if (components.hasOwnProperty(component)) {
-        this.recoArray[this.currentIndex]['rows'].push({ name: components[component].name,
-          version: components[component].version });
+        this.recoArray[this.currentIndex]['rows'].push({
+          name: components[component].name,
+          version: components[component].version
+        });
       }
     }
     for (let i in missingPackages) {
@@ -310,8 +348,10 @@ export class StackDetailsComponent implements OnInit {
     this.currentStackRows = [];
     for (let component in components) {
       if (components.hasOwnProperty(component)) {
-        this.currentStackRows.push({ name: components[component].name,
-          version: components[component].version });
+        this.currentStackRows.push({
+          name: components[component].name,
+          version: components[component].version
+        });
       }
     }
   }
@@ -319,24 +359,24 @@ export class StackDetailsComponent implements OnInit {
   // TODO: To be removed after the demo
   private fetchStaticRecommendation(): any {
     return {
-            'recommendations': {
-                'similar_stacks': [
-                    {
-                        'analysis': {
-                            'version_mismatch': {
-                                'vertx:vertx-web-templ-freemarker': '3.3.4',
-                                'vertx:vertx-web-templ-mvel': '3.4.0'
-                            },
-                            'missing_packages': {
-                                'vertx:vertx-mongo-embedded-db': '3.3.3'
-                            }
-                        },
-                        'similarity': 0.7009090909090909,
-                        'uri': 'http://cucos-01.lab.eng.brq.redhat.com:32100/api/v1.0/appstack/18'
-                    }
-                ]
-            }
-        };
+      'recommendations': {
+        'similar_stacks': [
+          {
+            'analysis': {
+              'version_mismatch': {
+                'vertx:vertx-web-templ-freemarker': '3.3.4',
+                'vertx:vertx-web-templ-mvel': '3.4.0'
+              },
+              'missing_packages': {
+                'vertx:vertx-mongo-embedded-db': '3.3.3'
+              }
+            },
+            'similarity': 0.7009090909090909,
+            'uri': 'http://cucos-01.lab.eng.brq.redhat.com:32100/api/v1.0/appstack/18'
+          }
+        ]
+      }
+    };
   }
 
   private setComponentsToGrid(stackData: any): void {
@@ -353,8 +393,8 @@ export class StackDetailsComponent implements OnInit {
       myObj.popularity = '';
       if (components[i].github_details.forks_count) {
         myObj.popularity = components[i].github_details.forks_count
-                            + '/'
-                            + components[i].github_details.stargazers_count;
+          + '/'
+          + components[i].github_details.stargazers_count;
       }
 
       myObj.redhatUsage = '';
@@ -366,6 +406,7 @@ export class StackDetailsComponent implements OnInit {
   private setStackMetrics(stackData: any): void {
     this.stackAnalysisRawData.packageName = stackData.name;
     this.stackAnalysisRawData.packageVersion = stackData.version;
+
     if (stackData.usage) {
       this.stackAnalysisRawData.averageUsage = stackData.usage.average_usage;
       this.stackAnalysisRawData.lowPublicUsageComponents
@@ -373,13 +414,11 @@ export class StackDetailsComponent implements OnInit {
       this.stackAnalysisRawData.redhatDistributedComponents
       = stackData.usage.redhat_distributed_components;
     }
-
-
     this.stackAnalysisRawData.averageStars = stackData.popularity.average_stars;
     this.stackAnalysisRawData.averageForks = stackData.popularity.average_forks;
 
     this.stackAnalysisRawData.lowPopularityComponents
-     = stackData.popularity.low_popularity_components;
+      = stackData.popularity.low_popularity_components;
 
     this.stackAnalysisRawData.distinctLicenses = stackData.distinct_licenses;
     this.stackAnalysisRawData.totalLicenses = stackData.total_licenses;
@@ -394,6 +433,7 @@ export class StackDetailsComponent implements OnInit {
     this.stackAnalysisRawData.componentsWithTests = stackData.metadata.components_with_tests;
     this.stackAnalysisRawData.componentsWithDependencyLockFile
      = stackData.metadata.components_with_dependency_lock_file;
+
     this.stackAnalysisRawData.requiredEngines = stackData.metadata.required_engines;
     }
 
@@ -438,7 +478,7 @@ export class StackDetailsComponent implements OnInit {
     // ++ this.currentIndex;
     // Hit a new Ajax call and populate the Array
     let nextObservable: Observable<any>
-    = this.renderNextService.getNextList(this.recoArray[this.currentIndex]['url']);
+      = this.renderNextService.getNextList(this.recoArray[this.currentIndex]['url']);
     nextObservable.subscribe((data) => {
       this.logger.log(data);
     });
@@ -455,7 +495,7 @@ export class StackDetailsComponent implements OnInit {
     for (let row in rows) {
       if (rows.hasOwnProperty(row)) {
         workItemData.data.attributes['system.title'] += rows[row].custom.name + ' '
-        + rows[row].name + ' ' + rows[row].version;
+          + rows[row].name + ' ' + rows[row].version;
       }
     }
     let workflow: Observable<any> = this.addWorkFlowService.addWorkFlow(workItemData);
@@ -471,20 +511,20 @@ export class StackDetailsComponent implements OnInit {
     this.multipleRecoWorkItem(this.multilpeActionData);
   }
 
-   private showModal(baseUrl: string): void {
+  private showModal(baseUrl: string): void {
     this.workItemRespMsg = baseUrl;
     this.modal.open();
   }
 
   private setPage(page: number) {
-        if (page < 1 || page > this.pager.totalPages) {
-            return;
-        }
-        // get pager object from service
-        this.pager = this.pagerService.getPager(this.recommendations.length, page);
-
-        // get current page of items
-        this.pagedItems = this.recommendations.slice(this.pager.startIndex, this.pager.endIndex + 1);
+    if (page < 1 || page > this.pager.totalPages) {
+      return;
     }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(this.recommendations.length, page);
+
+    // get current page of items
+    this.pagedItems = this.recommendations.slice(this.pager.startIndex, this.pager.endIndex + 1);
+  }
 
 }

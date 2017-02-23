@@ -103,6 +103,10 @@
             </div>
           </div>
 
+          <div>
+            <f8-stack-components [dependencies]="dependencyItem"></f8-stack-components>
+          </div>
+
         </modal-content>
       </modal>
     </div>
@@ -190,10 +194,6 @@
           <a (click)="similarStack.open()"> {{ s.uri }} </a>
         </li>
       </ul>
-    </div>
-
-    <div class="row">
-      <f8-stack-components></f8-stack-components>
     </div>
 
   </div>
