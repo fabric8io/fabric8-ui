@@ -15,6 +15,7 @@ export class RecommenderComponent implements OnChanges {
     private recommendationsList: Array<any> = [];
 
     private newRecommendations: Array<any> = [];
+    private isSelectAll: boolean = false;
 
     constructor(private addWorkFlowService: AddWorkFlowService) {}
 
@@ -136,12 +137,19 @@ export class RecommenderComponent implements OnChanges {
         event.preventDefault();
     }
 
-    private handleCheckBoxChange(recommendation: any): void {
+    private handleCheckBoxChange(recommendation: any, all: boolean = false): void {
         let index: number = this.newRecommendations.indexOf(recommendation);
         if (index === -1) {
-            this.newRecommendations.push(recommendation);
+            if (recommendation.isChecked) {
+                this.newRecommendations.push(recommendation);
+            }
         } else {
-            this.newRecommendations.splice(index, 1);
+            if (!recommendation.isChecked) {
+                this.newRecommendations.splice(index, 1);
+            }
+        }
+        if (!all) {
+            this.isSelectAll = this.recommendationsList.length === this.newRecommendations.length;
         }
     }
 
@@ -178,13 +186,19 @@ export class RecommenderComponent implements OnChanges {
         Handles Work Item selection
         1. Toggles the selected area
      */
-    private handleWorkItemSelection(element: HTMLElement, recommendation: any): void {
-        if (element.classList.contains('active')) {
-            element.classList.remove('active');
-        } else {
-            element.classList.add('active');
-        }
+    private handleWorkItemSelection(event: Event, recommendation: any): void {
+        let target: any = event.target;
+        recommendation.isChecked = target.checked;
         this.handleCheckBoxChange(recommendation);
+    }
+
+
+    private handleAllItemSelection(element: HTMLElement, event: Event): void {
+        this.isSelectAll = !this.isSelectAll;
+        this.recommendationsList.forEach(recommendation => {
+            recommendation.isChecked = this.isSelectAll;
+            this.handleCheckBoxChange(recommendation, true);
+        });
     }
 
 }

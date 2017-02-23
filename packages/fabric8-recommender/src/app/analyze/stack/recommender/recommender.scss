@@ -27,3 +27,12 @@
         display: block;
     }
 }
+
+.select-all-container {
+    &:after {
+        content: '';
+        float: none;
+        clear: both;
+        display: block;
+    }
+}

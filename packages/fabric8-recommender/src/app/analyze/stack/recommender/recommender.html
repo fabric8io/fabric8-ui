@@ -14,8 +14,8 @@
 </div>
 <div class="list-group">
     <!-- No recommendations scenario -->
-    <div class="list-group-item list-view-pf-stacked">
-        <div class="list-view-pf-main-info" *ngIf="recommendationsList.length === 0">
+    <div class="list-group-item list-view-pf-stacked" *ngIf="recommendationsList.length === 0">
+        <div class="list-view-pf-main-info">
             <div class="list-view-pf-body">
                 <div class="list-view-pf-description">
                     <div class="list-group-item-heading">
@@ -29,10 +29,18 @@
         </div>
     </div>
     <!-- No recommendations scenario -->
-
-    <div #listGroupItem class="list-group-item list-view-pf-stacked recommendation-group-item" *ngFor="let recommendation of recommendationsList">
+    
+    <!-- Header to handle multiple items -->
+    <div class="list-group-item list-view-pf-stacked select-all-container" *ngIf="recommendationsList.length > 0">
         <div class="list-view-pf-checkbox">
-            <input (change)="handleWorkItemSelection(listGroupItem, recommendation)" type="checkbox" />
+            <input [checked]="isSelectAll" (change)="handleAllItemSelection(listGroupItem, $event)" type="checkbox" />
+        </div>
+    </div>
+    <!-- Header to handle multiple items -->
+
+    <div #listGroupItem [ngClass]="{'active': recommendation.isChecked}" class="list-group-item list-view-pf-stacked recommendation-group-item" *ngFor="let recommendation of recommendationsList">
+        <div class="list-view-pf-checkbox">
+            <input [checked]="recommendation.isChecked" (change)="handleWorkItemSelection($event, recommendation)" type="checkbox" />
         </div>
         <div class="list-view-pf-actions">
             <div class="dropdown pull-right dropdown-kebab-pf">

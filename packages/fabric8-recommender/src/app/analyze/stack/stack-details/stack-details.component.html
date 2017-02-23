@@ -15,25 +15,9 @@
         <modal-content>
           <!-- Recommender -->
           <div>
-            <f8-recommender [recommendations]="pagedItems"></f8-recommender>
+            <f8-recommender [recommendations]="recommendations"></f8-recommender>
             <!-- pager -->
-            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-              <li [ngClass]="{disabled:pager.currentPage === 1}">
-                <a (click)="setPage(1)">First</a>
-              </li>
-              <li [ngClass]="{disabled:pager.currentPage === 1}">
-                <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-              </li>
-              <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-                <a (click)="setPage(page)">{{page}}</a>
-              </li>
-              <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                <a (click)="setPage(pager.currentPage + 1)">Next</a>
-              </li>
-              <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                <a (click)="setPage(pager.totalPages)">Last</a>
-              </li>
-            </ul>
+            
           </div>
           <h1 class="keep-left">Stack Overview</h1>
           <div class="col-sm-6 col-lg-6 render-stack-tiles ">

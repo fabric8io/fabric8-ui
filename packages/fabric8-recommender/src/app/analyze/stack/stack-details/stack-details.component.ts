@@ -169,7 +169,7 @@ export class StackDetailsComponent implements OnInit {
     ];
 
     // initialize to page 1
-    this.setPage(1);
+    // this.setPage(1);
 
     this.currentStackHeaders = [
       'name',
