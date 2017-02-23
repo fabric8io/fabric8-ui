@@ -26,6 +26,9 @@
     .show-drop {
         display: block;
     }
+    &.top-level-selection {
+        position: relative;
+    }
 }
 
 .select-all-container {
@@ -35,4 +38,27 @@
         clear: both;
         display: block;
     }
+}
+
+.dismissed {
+    text-decoration: line-through;
+    color: #ccc;
+}
+
+.deactivate {
+    color: #ccc;
+    cursor: default;
+
+    &:hover {
+        background: #ccc;
+    }
+
+    a {
+        color: inherit;
+        cursor: auto;
+    }
+}
+
+.activate {
+    cursor: pointer;
 }

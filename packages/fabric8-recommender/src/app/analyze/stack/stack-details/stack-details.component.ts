@@ -96,6 +96,9 @@ export class StackDetailsComponent implements OnInit {
           }, {
             itemName: 'Dismiss Recommendation',
             identifier: 'DISMISS'
+          }, {
+            itemName: 'Restore Recommendation',
+            identifier: 'RESTORE'
           }
         ]
       },
@@ -110,6 +113,9 @@ export class StackDetailsComponent implements OnInit {
           }, {
             itemName: 'Dismiss Recommendation',
             identifier: 'DISMISS'
+          }, {
+            itemName: 'Restore Recommendation',
+            identifier: 'RESTORE'
           }
         ]
       },
@@ -124,6 +130,9 @@ export class StackDetailsComponent implements OnInit {
           }, {
             itemName: 'Dismiss Recommendation',
             identifier: 'DISMISS'
+          }, {
+            itemName: 'Restore Recommendation',
+            identifier: 'RESTORE'
           }
         ]
       }, {
@@ -137,6 +146,9 @@ export class StackDetailsComponent implements OnInit {
           }, {
             itemName: 'Dismiss Recommendation',
             identifier: 'DISMISS'
+          }, {
+            itemName: 'Restore Recommendation',
+            identifier: 'RESTORE'
           }
         ]
       },
@@ -151,6 +163,9 @@ export class StackDetailsComponent implements OnInit {
           }, {
             itemName: 'Dismiss Recommendation',
             identifier: 'DISMISS'
+          }, {
+            itemName: 'Restore Recommendation',
+            identifier: 'RESTORE'
           }
         ]
       },
@@ -165,6 +180,9 @@ export class StackDetailsComponent implements OnInit {
           }, {
             itemName: 'Dismiss Recommendation',
             identifier: 'DISMISS'
+          }, {
+            itemName: 'Restore Recommendation',
+            identifier: 'RESTORE'
           }
         ]
       }
@@ -299,12 +317,64 @@ export class StackDetailsComponent implements OnInit {
     }
   }
 
+
+  private setRecommendations(missing: Array<any>, version: Array<any>): void {
+    this.recommendations = [];
+    for (let i in missing) {
+      if (missing.hasOwnProperty(i)) {
+        this.recommendations.push({
+          suggestion: 'Recommended',
+          action: 'Add',
+          message: i + ' ' + missing[i],
+          pop: [
+            {
+              itemName: 'Create WorkItem',
+              identifier: 'CREATE_WORK_ITEM'
+            }, {
+              itemName: 'Dismiss Recommendation',
+              identifier: 'DISMISS'
+            }, {
+              itemName: 'Restore Recommendation',
+              identifier: 'RESTORE'
+            }
+          ]
+        });
+      }
+    }
+
+    for (let i in version) {
+      if (version.hasOwnProperty(i)) {
+        this.recommendations.push({
+          suggestion: 'Recommended',
+          action: 'Upgrade',
+          message: i + ' ' + version[i],
+          pop: [
+            {
+              itemName: 'Create WorkItem',
+              identifier: 'CREATE_WORK_ITEM'
+            }, {
+              itemName: 'Dismiss Recommendation',
+              identifier: 'DISMISS'
+            }, {
+              itemName: 'Restore Recommendation',
+              identifier: 'RESTORE'
+            }
+          ]
+        });
+      }
+    }
+  }
+
   /* Get Recommendation */
   private getRecommendations(components: any, recommendation: any): void {
     this.similarStacks = recommendation.similar_stacks;
     const analysis: any = this.similarStacks[0].analysis;
     let missingPackages: Array<any> = analysis.missing_packages;
     let versionMismatch: Array<any> = analysis.version_mismatch;
+
+
+    // Call the recommendations with the missing packages and version mismatches
+    this.setRecommendations(missingPackages, versionMismatch);
 
     const url: string = this.similarStacks[0].uri;
     this.recoArray[this.currentIndex]['rows'] = [];
