@@ -13,7 +13,7 @@
         </ul>
     </div>
 </div>
-<div class="list-group">
+<div class="list-group recommendation-container">
     <!-- No recommendations scenario -->
     <div class="list-group-item list-view-pf-stacked" *ngIf="recommendationsList.length === 0">
         <div class="list-view-pf-main-info">
@@ -32,7 +32,7 @@
     <!-- No recommendations scenario -->
     
     <!-- Header to handle multiple items -->
-    <div class="list-group-item list-view-pf-stacked select-all-container" *ngIf="recommendationsList.length > 0">
+    <div class="select-all-container" *ngIf="recommendationsList.length > 0">
         <div class="list-view-pf-checkbox">
             <input [checked]="isSelectAll" (change)="handleAllItemSelection(listGroupItem, $event)" type="checkbox" />
         </div>
@@ -58,7 +58,7 @@
         </div>
         <div class="list-view-pf-main-info">
             <div class="list-view-pf-left">
-                <span class="pficon pficon-info"></span>
+                <span class="pficon pficon-info" [ngClass]="{'dismissed': recommendation.isDismissed === true}"></span>
             </div>
             <div class="list-view-pf-body">
                 <div class="list-view-pf-description" [ngClass]="{'dismissed': recommendation.isDismissed === true}">
