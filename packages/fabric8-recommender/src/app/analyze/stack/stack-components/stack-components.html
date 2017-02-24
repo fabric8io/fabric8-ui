@@ -4,33 +4,22 @@
     <!-- Toolbar -->
     <div class="toolbar-pf table-view-pf-toolbar" id="toolbar1">
         <div class="col-sm-12">
-            <form class="toolbar-pf-actions">
+            <form class="row toolbar-pf-actions">
                 <div class="form-group toolbar-pf-filter">
                     <label class="sr-only" for="filter">Name</label>
                     <div class="input-group">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle" id="filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Name <span class="caret"></span></button>
+                        <div (click)="handleDropDownClick(fieldContainer)" #fieldContainer class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" id="filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{currentFilter}} <span class="caret"></span></button>
                             <ul class="dropdown-menu">
-                                <li><a href="#" id="filter1">Name</a></li>
-                                <li><a href="#" id="filter2">Current version</a></li>
-                                <li><a href="#" id="filter3">Latest Version</a></li>
-                                <li><a href="#" id="filter4">Date Added</a></li>
+                                <li (click)="handleFilterFieldClick(fieldContainer, filter, $event)" *ngFor="let filter of filters">
+                                    <a href="#">{{filter.name}}</a>
+                                </li>
                             </ul>
                         </div>
-                        <input type="text" (keyup)="handleKeyUpEvent($event)" class="form-control" placeholder="Filter By Name..." autocomplete="off" id="filterInput">
+                        <input type="text" (keyup)="handleKeyUpEvent($event)" class="form-control" placeholder="Filter By {{currentFilter}}..." autocomplete="off" id="filterInput">
                     </div>
                 </div>
             </form>
-            <div class="row toolbar-pf-results">
-                <div class="col-sm-9">
-                    <div class="hidden">
-                        <h5>0 Results</h5>
-                        <p>Active filters:</p>
-                        <ul class="list-inline"></ul>
-                        <p><a href="#">Clear All Filters</a></p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

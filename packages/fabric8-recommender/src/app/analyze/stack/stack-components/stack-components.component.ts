@@ -13,9 +13,25 @@ export class StackComponents {
     private fieldName: string;
     private fieldValue: string;
 
+    private filters: Array<any> = [];
+    private currentFilter: string = '';
+
     constructor() {
         this.fieldName = 'name';
         this.fieldValue = '';
+
+        this.filters = [{
+            name: 'Name',
+            identifier: 'name'
+        }, {
+            name: 'Current Version',
+            identifier: 'curVersion'
+        }, {
+            name: 'Enterprise Usage',
+            identifier: 'enterpriseUsage'
+        }];
+
+        this.currentFilter = this.filters[0].name;
     }
 
     ngOnInit() {
@@ -41,5 +57,25 @@ export class StackComponents {
     private handleKeyUpEvent(event: Event): void {
         let target: any = event.target;
         this.fieldValue = target.value;
+    }
+
+    private handleDropDownClick(element: Element): void {
+        if (element.classList.contains('open')) {
+            element.classList.remove('open');
+        } else {
+            element.classList.add('open');
+        }
+    }
+
+    private handleFilterFieldClick(element: Element, field: any, event: Event): void {
+        event.stopPropagation();
+        this.currentFilter = field.name;
+        this.fieldName = field.identifier;
+        if (element.classList.contains('open')) {
+            element.classList.remove('open');
+        } else {
+            element.classList.add('open');
+        }
+        event.preventDefault();
     }
 }

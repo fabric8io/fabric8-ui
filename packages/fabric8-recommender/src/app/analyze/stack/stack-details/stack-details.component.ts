@@ -189,37 +189,37 @@ export class StackDetailsComponent implements OnInit {
     ];
 
     this.dependencyItem = [{
-      name: "v1.vmnei.nameistoobigiguess",
-      curVersion: "4.0",
-      latestVersion: "3.1",
-      dateAdded: "10/17/15",
-      pubPopularity: "500",
-      enterpriseUsage: "1/7",
-      teamUsage: "1/3"
+      name: 'v1.vmnei.somename',
+      curVersion: '1.0',
+      latestVersion: '3.1',
+      dateAdded: '10/17/15',
+      pubPopularity: '500',
+      enterpriseUsage: '1/7',
+      teamUsage: '1/3'
     }, {
-      name: "v1.vmnei.name",
-      curVersion: "4.0",
-      latestVersion: "3.1",
-      dateAdded: "10/17/15",
-      pubPopularity: "500",
-      enterpriseUsage: "1/7",
-      teamUsage: "1/3"
+      name: 'v1.vmnei.anothername',
+      curVersion: '2.0',
+      latestVersion: '3.1',
+      dateAdded: '10/17/15',
+      pubPopularity: '500',
+      enterpriseUsage: '2/7',
+      teamUsage: '1/3'
     }, {
-      name: "v1.vmnei.name",
-      curVersion: "4.0",
-      latestVersion: "3.1",
-      dateAdded: "10/17/15",
-      pubPopularity: "500",
-      enterpriseUsage: "1/7",
-      teamUsage: "1/3"
+      name: 'v1.vmnei.differentname',
+      curVersion: '3.0',
+      latestVersion: '3.1',
+      dateAdded: '10/17/15',
+      pubPopularity: '500',
+      enterpriseUsage: '3/7',
+      teamUsage: '1/3'
     }, {
-      name: "v1.vmnei.name",
-      curVersion: "4.0",
-      latestVersion: "3.1",
-      dateAdded: "10/17/15",
-      pubPopularity: "500",
-      enterpriseUsage: "1/7",
-      teamUsage: "1/3"
+      name: 'v1.vmnei.notatallaname',
+      curVersion: '4.0',
+      latestVersion: '3.1',
+      dateAdded: '10/17/15',
+      pubPopularity: '500',
+      enterpriseUsage: '4/7',
+      teamUsage: '1/3'
     }];
 
     // initialize to page 1
