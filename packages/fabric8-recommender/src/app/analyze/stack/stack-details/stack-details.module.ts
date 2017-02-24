@@ -10,6 +10,7 @@ import { ContainerTogglerModule } from 'ngx-widgets';
 
 import { RecommenderModule } from '../recommender/recommender.module';
 import { StackComponentsModule } from '../stack-components/stack-components.module';
+import { OverviewModule } from '../overview/overview.module';
 
 @NgModule({
   imports: [CommonModule,
@@ -18,6 +19,7 @@ import { StackComponentsModule } from '../stack-components/stack-components.modu
             ModalModule,
             RecommenderModule,
             StackComponentsModule,
+            OverviewModule,
             StackRecommendationModule],
   declarations: [ StackDetailsComponent ],
   exports: [ StackDetailsComponent ],

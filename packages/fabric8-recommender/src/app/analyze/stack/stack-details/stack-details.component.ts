@@ -519,26 +519,29 @@ export class StackDetailsComponent implements OnInit {
     this  .stackAnalysesService
           .getStackAnalyses(id)
           .subscribe(data => {
-            stackAnalysesData = data;
-            if (Object.prototype.toString.call(stackAnalysesData) !== '[object Array]') {
-              stackAnalysesData = stackAnalysesData.result[0];
-            } else {
-              stackAnalysesData = stackAnalysesData[0];
+            // TODO: Handle Error checking properly.
+            if (data && Object.keys(data).length !== 0) {
+              stackAnalysesData = data;
+              if (Object.prototype.toString.call(stackAnalysesData) !== '[object Array]') {
+                stackAnalysesData = stackAnalysesData.result[0];
+              } else {
+                stackAnalysesData = stackAnalysesData[0];
+              }
+
+              if (!stackAnalysesData.recommendation) {
+                // Add static recommendations here in case recommendations are not fetched
+                // from the API
+                // Solely for Demo purpose and to be removed later.
+                stackAnalysesData['recommendation'] = this.fetchStaticRecommendation();
+              }
+
+              this.getRecommendations(stackAnalysesData.components,
+                stackAnalysesData.recommendation.recommendations);
+
+              this.getComponents(stackAnalysesData.components);
+              this.setStackMetrics(stackAnalysesData);
+              this.setComponentsToGrid(stackAnalysesData);
             }
-
-            if (!stackAnalysesData.recommendation) {
-              // Add static recommendations here in case recommendations are not fetched
-              // from the API
-              // Solely for Demo purpose and to be removed later.
-              stackAnalysesData['recommendation'] = this.fetchStaticRecommendation();
-            }
-
-            this.getRecommendations(stackAnalysesData.components,
-              stackAnalysesData.recommendation.recommendations);
-
-            this.getComponents(stackAnalysesData.components);
-            this.setStackMetrics(stackAnalysesData);
-            this.setComponentsToGrid(stackAnalysesData);
       },
       error => this.errorMessage = <any>error
       );
