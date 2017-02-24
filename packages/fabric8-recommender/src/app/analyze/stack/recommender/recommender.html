@@ -39,7 +39,7 @@
     </div>
     <!-- Header to handle multiple items -->
 
-    <div #listGroupItem [ngClass]="{'active': recommendation.isChecked}" class="list-group-item list-view-pf-stacked recommendation-group-item" *ngFor="let recommendation of recommendationsList">
+    <div #listGroupItem class="list-group-item list-view-pf-stacked recommendation-group-item" *ngFor="let recommendation of recommendationsList">
         <div class="list-view-pf-checkbox">
             <input [checked]="recommendation.isChecked" (change)="handleWorkItemSelection($event, recommendation)" type="checkbox" />
         </div>
