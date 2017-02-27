@@ -1,5 +1,11 @@
 # fabric8-recommender
 
+## Getting started:
+
+This library does not run on it's own. It must be imported. 
+
+`npm install fabric8-recommender`
+
 ## Building it 
  
 #### Install the dependencies:
