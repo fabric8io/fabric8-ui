@@ -29,7 +29,7 @@ export class StackDetailsComponent implements OnInit {
   @Input() stack: Stack;
   @ViewChild('workItemRespModal') modal: any;
 
-  errorMessage: string;
+  errorMessage: any = {};
   stackAnalysesData: Array<any> = [];
   componentAnalysesData: any = {};
   mode = 'Observable';
@@ -480,9 +480,9 @@ export class StackDetailsComponent implements OnInit {
     if (stackData.usage) {
       this.stackAnalysisRawData.averageUsage = stackData.usage.average_usage;
       this.stackAnalysisRawData.lowPublicUsageComponents
-      = stackData.usage.low_public_usage_components;
+        = stackData.usage.low_public_usage_components;
       this.stackAnalysisRawData.redhatDistributedComponents
-      = stackData.usage.redhat_distributed_components;
+        = stackData.usage.redhat_distributed_components;
     }
     this.stackAnalysisRawData.averageStars = stackData.popularity.average_stars;
     this.stackAnalysisRawData.averageForks = stackData.popularity.average_forks;
@@ -494,17 +494,17 @@ export class StackDetailsComponent implements OnInit {
     this.stackAnalysisRawData.totalLicenses = stackData.total_licenses;
 
     if (stackData.total_security_issues)
-    this.stackAnalysisRawData.totalSecurityIssues = stackData.total_security_issues;
+      this.stackAnalysisRawData.totalSecurityIssues = stackData.total_security_issues;
 
     if (stackData.cvss)
-    this.stackAnalysisRawData.cvss = stackData.cvss;
+      this.stackAnalysisRawData.cvss = stackData.cvss;
 
     if (stackData.metadata) {
-    this.stackAnalysisRawData.componentsWithTests = stackData.metadata.components_with_tests;
-    this.stackAnalysisRawData.componentsWithDependencyLockFile
-     = stackData.metadata.components_with_dependency_lock_file;
+      this.stackAnalysisRawData.componentsWithTests = stackData.metadata.components_with_tests;
+      this.stackAnalysisRawData.componentsWithDependencyLockFile
+        = stackData.metadata.components_with_dependency_lock_file;
 
-    this.stackAnalysisRawData.requiredEngines = stackData.metadata.required_engines;
+      this.stackAnalysisRawData.requiredEngines = stackData.metadata.required_engines;
     }
 
     for (let key in this.requiredEngines) {
@@ -516,34 +516,40 @@ export class StackDetailsComponent implements OnInit {
 
   private getStackAnalyses(id: string) {
     let stackAnalysesData: any = {};
-    this  .stackAnalysesService
-          .getStackAnalyses(id)
-          .subscribe(data => {
-            // TODO: Handle Error checking properly.
-            if (data && Object.keys(data).length !== 0) {
-              stackAnalysesData = data;
-              if (Object.prototype.toString.call(stackAnalysesData) !== '[object Array]') {
-                stackAnalysesData = stackAnalysesData.result[0];
-              } else {
-                stackAnalysesData = stackAnalysesData[0];
-              }
+    this.stackAnalysesService
+      .getStackAnalyses(id)
+      .subscribe(data => {
+        if (data && Object.keys(data).length !== 0) {
+          stackAnalysesData = data;
+          if (Object.prototype.toString.call(stackAnalysesData) !== '[object Array]') {
+            stackAnalysesData = stackAnalysesData.result[0];
+          } else {
+            stackAnalysesData = stackAnalysesData[0];
+          }
 
-              if (!stackAnalysesData.recommendation) {
-                // Add static recommendations here in case recommendations are not fetched
-                // from the API
-                // Solely for Demo purpose and to be removed later.
-                stackAnalysesData['recommendation'] = this.fetchStaticRecommendation();
-              }
+          if (!stackAnalysesData.recommendation) {
+            // Add static recommendations here in case recommendations are not fetched
+            // from the API
+            // Solely for Demo purpose and to be removed later.
+            stackAnalysesData['recommendation'] = this.fetchStaticRecommendation();
+          }
 
-              this.getRecommendations(stackAnalysesData.components,
-                stackAnalysesData.recommendation.recommendations);
+          this.getRecommendations(stackAnalysesData.components,
+            stackAnalysesData.recommendation.recommendations);
 
-              this.getComponents(stackAnalysesData.components);
-              this.setStackMetrics(stackAnalysesData);
-              this.setComponentsToGrid(stackAnalysesData);
-            }
+          this.getComponents(stackAnalysesData.components);
+          this.setStackMetrics(stackAnalysesData);
+          this.setComponentsToGrid(stackAnalysesData);
+        } else {
+          this.errorMessage.message = `This could take a while. Return to pipeline to keep
+           working or stay on this screen to review progress.`;
+          this.errorMessage.stack = '';
+        }
       },
-      error => this.errorMessage = <any>error
+      error => {
+        this.errorMessage.message = <any>error.message;
+        this.errorMessage.stack = <any>error.stack;
+      }
       );
   }
 
