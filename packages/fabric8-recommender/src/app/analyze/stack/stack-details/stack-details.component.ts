@@ -28,6 +28,7 @@ export class StackDetailsComponent implements OnInit {
 
   @Input() stack: Stack;
   @ViewChild('workItemRespModal') modal: any;
+  @ViewChild('stackModule') modalStackModule: any;
 
   errorMessage: any = {};
   stackAnalysesData: Array<any> = [];
@@ -605,5 +606,16 @@ export class StackDetailsComponent implements OnInit {
     // get current page of items
     this.pagedItems = this.recommendations.slice(this.pager.startIndex, this.pager.endIndex + 1);
   }
+
+   private showStackModal(event): void {
+    this.modalStackModule.open();
+    //TODO : below hack needs to be removed
+    // This hack was introduced as c3's chart was not properly rendered on load 
+    // but on triggering some random changes works fine
+
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 100);
+   }
 
 }

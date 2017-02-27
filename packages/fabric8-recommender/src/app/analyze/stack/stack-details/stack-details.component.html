@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <button (click)="stackModule.open()">Stack Reports</button>
+    <button (click)="showStackModal($event)">Stack Reports</button>
     <modal #stackModule title="Report title on {{stackAnalysisRawData.packageName}}" modalClass="modal-lg modal-fullscreen">
       <modal-content>
         <div [hidden]="errorMessage.message">
@@ -15,7 +15,7 @@
           </div>
           <!-- Stack Overview -->
           
-          <div>
+         <!-- <div>
             <h1 class="keep-left">Stack Overview</h1>
             <div class="col-sm-6 col-lg-6 render-stack-tiles ">
               <div class="card-pf card-pf-accented card-pf card-pf-view">
@@ -97,7 +97,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
           <div>
             <f8-stack-components [dependencies]="dependencyItem"></f8-stack-components>
           </div>

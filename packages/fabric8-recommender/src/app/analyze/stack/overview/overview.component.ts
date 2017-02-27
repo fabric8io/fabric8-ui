@@ -14,7 +14,26 @@ export class OverviewComponent {
                     ['data1', 30],
                     ['data2', 120]
                 ],
-                type : 'donut'
+                type: 'donut'
+            },
+            chartOptions: {
+                donut: {
+                    width: 50
+                },
+                color: {
+                    pattern: ['#696969', '#A9A9A9']
+                }
+            },
+            configs: {
+                legend: {
+                    position: 'inset',
+                    inset: {
+                        anchor: 'top-right',
+                        x: 70,
+                        y: 120,
+                        step: 2
+                    }
+                }
             }
         };
     }
