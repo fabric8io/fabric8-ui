@@ -16,7 +16,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <input type="text" (keyup)="handleKeyUpEvent($event)" class="form-control" placeholder="Filter By {{currentFilter}}..." autocomplete="off" id="filterInput">
+                            <input type="text" (keyup)="handleKeyUpEvent($event)" class="form-control stack-components-form-control" placeholder="Filter By {{currentFilter}}..." autocomplete="off" id="filterInput">
                         </div>
                     </div>
                 </form>
@@ -27,17 +27,14 @@
         <table class="table table-striped table-bordered table-hover" id="table1">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Current Version</th>
-                    <th>Latest Version</th>
-                    <th>Date Added</th>
-                    <th>Public Popularity</th>
-                    <th>Enterprise Usage</th>
-                    <th>Team Usage</th>
+                    <th (click)="handleTableOrderClick(header)" *ngFor="let header of headers">
+                        {{header.name}}
+                        <span *ngIf="header.isSortable" class="fa {{header.sortDirectionClass || sortDirectionClass}}"></span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let dependency of (dependenciesList | filter: fieldName: fieldValue)">
+                <tr *ngFor="let dependency of (dependenciesList | orderBy : orderByName : direction | filter: fieldName: fieldValue)">
                     <td>{{dependency.name}}</td>
                     <td>{{dependency.curVersion}}</td>
                     <td>{{dependency.latestVersion}}</td>

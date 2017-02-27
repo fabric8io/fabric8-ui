@@ -9,6 +9,8 @@ export class StackComponents {
 
     @Input() dependencies;
     private dependenciesList: Array<any> = [];
+    private headers: Array<any> = [];
+    private keys: any = [];
 
     private fieldName: string;
     private fieldValue: string;
@@ -16,9 +18,18 @@ export class StackComponents {
     private filters: Array<any> = [];
     private currentFilter: string = '';
 
+    private orderByName: string = '';
+    private direction: string = '';
+    private angleUp: string = 'fa-angle-up';
+    private angleDown: string = 'fa-angle-down';
+    private sortDirectionClass: string = this.angleDown;
+
     constructor() {
         this.fieldName = 'name';
         this.fieldValue = '';
+
+        this.orderByName = 'enterpriseUsage';
+        this.direction = 'down';
 
         this.filters = [{
             name: 'Name',
@@ -32,22 +43,61 @@ export class StackComponents {
         }];
 
         this.currentFilter = this.filters[0].name;
+
+
+        this.keys = {
+            name: 'name',
+            currentVersion: 'curVersion',
+            latestVersion: 'latestVersion',
+            dateAdded: 'dateAdded',
+            publicPopularity: 'pubPopularity',
+            enterpriseUsage: 'enterpriseUsage',
+            teamUsage: 'teamUsage'
+        };
     }
 
     ngOnInit() {
         if (this.dependencies) {
             let length: number = this.dependencies.length;
             let dependency: any, eachOne: any;
+            this.headers = [
+                {
+                    name: 'Name',
+                    identifier: this.keys['name'],
+                    isSortable: true
+                }, {
+                    name: 'Current Version',
+                    identifier: this.keys['currentVersion'],
+                    isSortable: true
+                }, {
+                    name: 'Latest Version',
+                    identifier: this.keys['latestVersion']
+                }, {
+                    name: 'Date Added',
+                    identifier: this.keys['dateAdded']
+                }, {
+                    name: 'Public Popularity',
+                    identifier: this.keys['publicPopularity']
+                }, {
+                    name: 'Enterprise Usage',
+                    identifier: this.keys['enterpriseUsage'],
+                    isSortable: true
+                }, {
+                    name: 'Team Usage',
+                    identifier: this.keys['teamUsage']
+                }
+            ];
+
             for (let i: number = 0; i < length; ++ i) {
                 dependency = {};
                 eachOne = this.dependencies[i];
-                dependency['name'] = eachOne['name'];
-                dependency['curVersion'] = eachOne['curVersion'];
-                dependency['latestVersion'] = eachOne['latestVersion'];
-                dependency['dateAdded'] = eachOne['dateAdded'];
-                dependency['pubPopularity'] = eachOne['pubPopularity'];
-                dependency['enterpriseUsage'] = eachOne['enterpriseUsage'];
-                dependency['teamUsage'] = eachOne['teamUsage'];
+                dependency[this.keys['name']] = eachOne['name'];
+                dependency[this.keys['currentVersion']] = eachOne['curVersion'];
+                dependency[this.keys['latestVersion']] = eachOne['latestVersion'];
+                dependency[this.keys['dateAdded']] = eachOne['dateAdded'];
+                dependency[this.keys['publicPopularity']] = eachOne['pubPopularity'];
+                dependency[this.keys['enterpriseUsage']] = eachOne['enterpriseUsage'];
+                dependency[this.keys['teamUsage']] = eachOne['teamUsage'];
 
                 this.dependenciesList.push(dependency);
             }
@@ -77,5 +127,19 @@ export class StackComponents {
             element.classList.add('open');
         }
         event.preventDefault();
+    }
+
+    private handleTableOrderClick(header: any): void {
+        if (header.isSortable) {
+            this.orderByName = header.identifier;
+            if (!header.direction || header.direction.toLowerCase() === 'down') {
+                header.direction = 'up';
+                header.sortDirectionClass = this.angleUp;
+            } else {
+                header.direction = 'down';
+                header.sortDirectionClass = this.angleDown;
+            }
+            this.direction = header.direction;
+        }
     }
 }

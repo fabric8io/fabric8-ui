@@ -14,6 +14,7 @@ import { Stack } from '../../../models/stack';
 import { StackRecommendationModule } from '../stack-recommendation/stack-recommendation.module';
 import { StackDetailsComponent } from './stack-details.component';
 import { RecommenderModule } from '../recommender/recommender.module';
+import { OverviewModule } from '../overview/overview.module';
 
 import { StackComponentsModule } from '../stack-components/stack-components.module';
 import { recommenderApiUrlProvider } from './../../../shared/recommender-api.provider';
@@ -38,6 +39,7 @@ describe('StackDetailsComponent', () => {
         ModalModule,
         StackRecommendationModule,
         RecommenderModule,
+        OverviewModule,
         StackComponentsModule,
         HttpModule,
         ReactiveFormsModule

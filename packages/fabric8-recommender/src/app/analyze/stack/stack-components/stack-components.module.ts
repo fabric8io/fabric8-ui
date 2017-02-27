@@ -3,16 +3,19 @@ import { CommonModule } from '@angular/common';
 
 import { StackComponents } from './stack-components.component';
 import { TableFilter } from './table-filter.pipe';
+import { TableOrderByPipe } from './table-orderby.pipe';
 
 @NgModule({
     imports: [CommonModule],
     declarations: [
         StackComponents,
-        TableFilter
+        TableFilter,
+        TableOrderByPipe
     ],
     exports: [
         StackComponents,
-        TableFilter
+        TableFilter,
+        TableOrderByPipe
     ]
 })
 
