@@ -20,6 +20,8 @@ import '@angularclass/hmr';
 // RxJS
 import 'rxjs';
 
+import '../node_modules/patternfly-sass-with-css/assets/css/patternfly.css';
+
 if ('production' === ENV) {
   // Production
 

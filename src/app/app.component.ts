@@ -14,7 +14,6 @@ import { AboutService } from './shared/about.service';
     'class':'app app-component flex-container in-column-direction flex-grow-1'
   },
   selector: 'f8-app',
-  encapsulation: ViewEncapsulation.None,
   styleUrls: [ './app.component.scss' ],
   templateUrl: './app.component.html'
 })

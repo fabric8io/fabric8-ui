@@ -121,7 +121,7 @@
     "ngx-login-client": "0.1.7",
     "ngx-widgets": "0.2.20",
     "offline-plugin": "^4.6.1",
-    "patternfly-sass": "^3.21.0",
+    "patternfly-sass-with-css": "3.21.2",
     "rxjs": "5.0.0-beta.12",
     "web-app-manifest-loader": "^0.1.1",
     "webpack-manifest-plugin": "^1.1.0",

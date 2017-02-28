@@ -30,7 +30,8 @@ const sassModules = [
     path: 'font-awesome',
     sass: 'scss'
   }, {
-    name: 'patternfly'
+    name: 'patternfly',
+    module: 'patternfly-sass-with-css'
   }
 ];
 
@@ -172,14 +173,13 @@ module.exports = function (options) {
           loaders: [
             {
               loader: "css-to-string-loader"
-            },
-            {
+            }, {
+              loader: "style-loader"
+            }, {
               loader: "css-loader"
-            },
-          ],
-        },
-
-        {
+            }
+          ]
+        }, {
           test: /\.scss$/,
           loaders: [
             {
