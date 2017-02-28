@@ -14,8 +14,8 @@
             <overview-stack></overview-stack>
           </div>
           <!-- Stack Overview -->
-          
-         <!-- <div>
+
+          <!-- <div>
             <h1 class="keep-left">Stack Overview</h1>
             <div class="col-sm-6 col-lg-6 render-stack-tiles ">
               <div class="card-pf card-pf-accented card-pf card-pf-view">
@@ -102,16 +102,33 @@
             <f8-stack-components [dependencies]="dependencyItem"></f8-stack-components>
           </div>
         </div>
-        <div class="error-msg" [hidden]="!errorMessage.message">
-          <div class="warning-icon" [hidden]="!errorMessage.stack">
-            <i class="pficon-warning-triangle-o"></i>
-          </div>
-          <div class="container-progress progress" [hidden]="errorMessage.stack">
-            <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-              <span>50%</span>
+        <div class="error-msg blank-slate-pf" [hidden]="!errorMessage.message">
+          <div [hidden]="!errorMessage.stack">
+            <div class="warning-icon blank-slate-pf-icon">
+              <i class="pficon-warning-triangle-o"></i>
             </div>
+            <h1>
+              Repost has failed
+            </h1>
+            <p>
+              {{errorMessage.message}}
+            </p>
           </div>
-          <span>{{errorMessage.message}}</span>
+          <div [hidden]="errorMessage.stack">
+            <div class="container-progress progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
+                <span>50%</span>
+              </div>
+            </div>
+            <h1>
+              Report is loading...
+            </h1>
+            <span>{{errorMessage.message}}</span>
+          </div>
+          <div class="blank-slate-pf-secondary-action">
+            <button class="btn btn-default btn-lg" (click)="stackModule.close()">Cancel</button>
+            <button class="btn btn-primary btn-lg" (click)="stackModule.close()">Return to pipeline</button>
+          </div>
         </div>
       </modal-content>
     </modal>
