@@ -6,6 +6,9 @@ This library does not run on it's own. It must be imported.
 
 `npm install fabric8-recommender`
 
+There are several services and a couple of models used by them available.
+`npm install fabric8-recommender`
+
 ## Building it 
  
 #### Install the dependencies:

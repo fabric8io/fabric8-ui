@@ -1,0 +1,16 @@
+.stack-components {
+    .stack-components-toolbar {
+        margin: 0;
+        padding: 10px 0 0px 10px;
+        border: 1px solid #d1d1d1;
+        &:after {
+            content: '';
+            clear: both;
+            float: none;
+            display: block;
+        }
+    }
+    .stack-components-form-control {
+        width: 200px;
+    }
+}

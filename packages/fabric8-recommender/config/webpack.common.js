@@ -1,352 +1,390 @@
-/**
- * @author: @AngularClass
- */
-
 const webpack = require('webpack');
 const helpers = require('./helpers');
-const ngtools = require('@ngtools/webpack');
+const path = require('path');
+const sass = require('./sass');
 
-/*
- * Webpack Plugins
- */
-// problem with copy-webpack-plugin
 const AssetsPlugin = require('assets-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const ngcWebpack = require('ngc-webpack');
+const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
+const OptimizeJsPlugin = require('optimize-js-plugin');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+const sassLintPlugin = require('sasslint-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+
+const precss = require('precss');
+
+// ExtractTextPlugin
+const extractCSS = new ExtractTextPlugin({
+  filename: '[name].[id]' + (helpers.isProd ? '.[contenthash]' : '') + '.css',
+  allChunks: true
+}
+);
+
 
 /*
  * Webpack Constants
  */
 const HMR = helpers.hasProcessFlag('hot');
+const AOT = helpers.hasNpmFlag('aot');
 const METADATA = {
-  title: 'Fabric8',
+  title: 'Fabric8 Planner',
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer()
 };
 
-/*
- * Webpack configuration
- *
- * See: http://webpack.github.io/docs/configuration.html#cli
- */
-module.exports = function (options) {
-  const isProd = options.env === 'production';
-  const aotMode = false;//options && options.aot !== undefined;
-  console.log('The options from the webpack config: ' + JSON.stringify(options, null, 2));
-  // const entryFile = aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts';
-  // const outPath = aotMode ? 'dist' : 'aot';
-  // const devtool = aotMode ? 'source-map' : 'eval-source-map';
-  // const srcPath = path.join(__dirname, 'demo', 'src');
-  var config = {
-  // return {
+module.exports = {
 
-    /*
-     * Cache generated modules and chunks to improve performance for multiple incremental builds.
-     * This is enabled by default in watch mode.
-     * You can pass false to disable it.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#cache
-     */
-    //cache: false,
+  resolve: {
+    extensions: ['.ts', '.js', '.json'],
 
-    /*
-     * The entry point for the bundle
-     * Our Angular.js app
-     *
-     * See: http://webpack.github.io/docs/configuration.html#entry
-     */
-    entry: {
-      'polyfills': './src/polyfills.browser.ts',
-      'vendor': './src/vendor.browser.ts',
-      // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
-      'main': './src/main.browser.ts'
-    },
+    // An array of directory names to be resolved to the current directory
+    modules: [helpers.root('src'), helpers.root('node_modules')],
+  },
 
-    /*
-     * Options affecting the resolving of modules.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#resolve
-     */
-    resolve: {
+  stats: {
+    colors: true,
+    reasons: true
+  },
 
-      /*
-       * An array of extensions that should be used to resolve modules.
-       *
-       * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
-       */
-      extensions: ['.ts', '.js', '.json'],
+  module: {
+    rules: [
+      // {
+      //   enforce: 'pre',
+      //   test: /\.ts$/,
+      //   use: 'tslint-loader',
+      //   exclude: [helpers.root('node_modules')]
+      // },
+      {
+        test: /\.ts$/,
+        use: [
+          {
+            loader: 'awesome-typescript-loader',
+          },
+          {
+            loader: 'angular2-template-loader'
+          }
+        ],
+        exclude: [/\.(spec|e2e)\.ts$/]
+      },
 
-      // An array of directory names to be resolved to the current directory
-      modulesDirectories: [helpers.root('src'), 'node_modules']
-
-    },
-
-    /*
-     * Options affecting the normal modules.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#module
-     */
-    module: {
-
-      loaders: [
-
-        /*
-         * Typescript loader support for .ts and Angular 2 async routes via .async.ts
-         * Replace templateUrl and stylesUrl with require()
-         *
-         * See: https://github.com/s-panferov/awesome-typescript-loader
-         * See: https://github.com/TheLarkInn/angular2-template-loader
-         */
-        {
-          test: /\.ts$/,
-          loaders: aotMode ? [
-            '@ngtools/webpack'
-          ] : [
-            '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-            'awesome-typescript-loader',
-            'angular2-template-loader',
-            'angular2-router-loader'
+      // Support for *.json files.
+      {
+        test: /\.json$/,
+        use: ['json-loader']
+      },
+      {
+        test: /\.css$/,
+        loader: extractCSS.extract({
+          fallback: "style-loader",
+          use: "css-loader?sourceMap&context=/"
+        })
+      },
+      {
+        test: /^(?!.*component).*\.scss$/,
+        use: extractCSS.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: helpers.isProd,
+                sourceMap: true,
+                context: '/'
+              }
+            }, {
+              loader: 'sass-loader',
+              options: {
+                includePaths: sass.modules.map(function (val) {
+                  return val.sassPath;
+                }),
+                sourceMap: true
+              }
+            }
           ],
-          // loaders: '@ngtools/webpack',
-          exclude: [/\.(spec|e2e)\.ts$/]
-        },
+        })
+      }, {
+        test: /\.component\.scss$/,
+        use: [
+          {
+            loader: 'to-string-loader'
+          }, {
+            loader: 'css-loader',
+            options: {
+              minimize: helpers.isProd,
+              sourceMap: true,
+              context: '/'
+            }
+          }, {
+            loader: 'sass-loader',
+            options: {
+              includePaths: sass.modules.map(function (val) {
+                return val.sassPath;
+              }),
+              sourceMap: true
+            }
+          }
+        ],
+      },
 
-        /*
-         * Json loader support for *.json files.
-         *
-         * See: https://github.com/webpack/json-loader
-         */
-        {
-          test: /\.json$/,
-          loader: 'json-loader'
-        },
+      /* File loader for supporting fonts, for example, in CSS files.
+       */
+      {
+        test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
+        loaders: [
+          {
+            loader: "url-loader",
+            query: {
+              limit: 3000,
+              name: 'assets/fonts/[name].' + (helpers.isProd ? '[hash]' : '') + '[ext]'
+            }
+          }
+        ]
+      }, {
+        test: /\.jpg$|\.png$|\.gif$|\.jpeg$/,
+        loaders: [
+          {
+            loader: "url-loader",
+            query: {
+              limit: 3000,
+              name: 'assets/fonts/[name].' + (helpers.isProd ? '[hash]' : '') + '[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.html$/,
+        use: ['raw-loader']
+      }
+    ]
+  },
 
-        /* Raw loader support for *.html
-         * Returns file content as string
-         *
-         * See: https://github.com/webpack/raw-loader
-         */
-        {
-          test: /\.html$/,
-          loader: 'raw-loader',
-          exclude: [helpers.root('src/index.html')]
-        },
+  plugins: [
+    new AssetsPlugin({
+      path: helpers.root('dist'),
+      filename: 'webpack-assets.json',
+      prettyPrint: true
+    }),
 
-        /*
-         * to string and css loader support for *.css files
-         * Returns file content as string
-         *
-         */
-        {
-          test: /\.css$/,
-          loaders: ['to-string-loader', 'css-loader']
-        },
-
-        {
-          test: /\.scss$/,
-          loaders: ["css-to-string", "css-loader", "sass-loader"]
-        },
-        // old way
-/*
-        {
-          test: /\.css$/,
-          exclude: helpers.root('src', 'app'),
-          loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
-        },
-        {
-          test: /\.css$/,
-          include: helpers.root('src', 'app'),
-          loader: 'raw!postcss'
-        },
-        {
-          test: /\.scss$/,
-          exclude: helpers.root('src', 'app'),
-          loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!resolve-url!sass?sourceMap')
-        },
-        {
-          test: /\.scss$/,
-          include: helpers.root('src', 'app'),
-          loaders: ['exports-loader?module.exports.toString()', 'css', 'postcss', 'sass']
-        },
-*/
-
-
-
-        /* File loader for supporting images, for example, in CSS files.
-         */
-        {
-          test: /\.(jpg|png|gif)$/,
-          loader: 'file'
-        },
-        {
-          test: /manifest.json$/,
-          loader: 'file-loader?name=manifest.json!web-app-manifest-loader'
-        }
-      ]
-    },
-    
     /*
-     * Add additional plugins to the compiler.
+     * Plugin: ForkCheckerPlugin
+     * Description: Do type checking in a separate process, so webpack don't need to wait.
      *
-     * See: http://webpack.github.io/docs/configuration.html#plugins
+     * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
      */
-    plugins: [
-      /*
-       * Plugin: AssetsPlugin
-       * Description: Webpack plugin that emits a json file with assets paths.
-       * When working with Webpack you might want to generate your bundles with a generated hash in them (for cache busting).
-       * This plug-in outputs a json file with the paths of the generated assets so you can find them from somewhere else.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-       * See: https://github.com/kossnocorp/assets-webpack-plugin
-       */
-      new AssetsPlugin({
-        path: helpers.root('dist'),
-        filename: 'webpack-assets.json',
-        prettyPrint: true
-      }),
+    new CheckerPlugin(),
 
-      /*
-       * Plugin: ForkCheckerPlugin
-       * Description: Do type checking in a separate process, so webpack don't need to wait.
-       *
-       * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
-       */
-      new ForkCheckerPlugin(),
 
-      /*
-       * Plugin: CommonsChunkPlugin
-       * Description: Shares common code between the pages.
-       * It identifies common modules and put them into a commons chunk.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-       * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-       */
-      new CommonsChunkPlugin({
-        name: ['polyfills', 'vendor'].reverse()
-      }),
+    // new sassLintPlugin({
+    //   configFile: '.sass-lint.yml',
+    //   context: ['inherits from webpack'],
+    //   ignoreFiles: [],
+    //   ignorePlugins: [],
+    //   glob: '**/*.s?(a|c)ss',
+    //   quiet: false,
+    //   failOnWarning: false,
+    //   failOnError: false,
+    //   testing: false
+    // }),
+    /**
+     * Plugin: ContextReplacementPlugin
+     * Description: Provides context to Angular's use of System.import
+     *
+     * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
+     * See: https://github.com/angular/angular/issues/11580
+     */
+    new webpack.ContextReplacementPlugin(
+      // The (\\|\/) piece accounts for path separators in *nix and Windows
+      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+      helpers.root('src') // location of your src
+    ),
 
-      /*
-       * Plugin: ContextReplacementPlugin
-       * Description: Provides context to Angular's use of System.import
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
-       * See: https://github.com/angular/angular/issues/11580
-       */
-      new ContextReplacementPlugin(
-        // The (\\|\/) piece accounts for path separators in *nix and Windows
-        /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-        helpers.root('src') // location of your src
-      ),
+    /**
+     * Webpack plugin to optimize a JavaScript file for faster initial load
+     * by wrapping eagerly-invoked functions.
+     *
+     * See: https://github.com/vigneshshanmugam/optimize-js-plugin
+     */
 
-      /*
-       * Plugin: CopyWebpackPlugin
-       * Description: Copy files and directories in webpack.
-       *
-       * Copies project static assets.
-       *
-       * See: https://www.npmjs.com/package/copy-webpack-plugin
-       */
-      new CopyWebpackPlugin([{
+    new OptimizeJsPlugin({
+      sourceMap: false
+    }),
+
+    new HtmlWebpackPlugin({
+      template: 'src/index.html',
+      title: METADATA.title,
+      chunksSortMode: 'dependency',
+      metadata: METADATA,
+      inject: 'head'
+    }),
+
+    /**
+     * Plugin: CopyWebpackPlugin
+     * Description: Copy files and directories in webpack.
+     *
+     * Copies project static assets.
+     *
+     * See: https://www.npmjs.com/package/copy-webpack-plugin
+     */
+    new CopyWebpackPlugin([
+      {
         from: 'src/assets',
         to: 'assets'
-      }, {
-        from: 'src/meta'
-      }]),
-
-
-      /*
-       * Plugin: HtmlWebpackPlugin
-       * Description: Simplifies creation of HTML files to serve your webpack bundles.
-       * This is especially useful for webpack bundles that include a hash in the filename
-       * which changes every compilation.
-       *
-       * See: https://github.com/ampedandwired/html-webpack-plugin
-       */
-      new HtmlWebpackPlugin({
-        template: 'src/index.html',
-        title: METADATA.title,
-        chunksSortMode: 'dependency',
-        metadata: METADATA,
-        inject: 'head'
-      }),
-
-      /*
-       * Plugin: ScriptExtHtmlWebpackPlugin
-       * Description: Enhances html-webpack-plugin functionality
-       * with different deployment options for your scripts including:
-       *
-       * See: https://github.com/numical/script-ext-html-webpack-plugin
-       */
-      new ScriptExtHtmlWebpackPlugin({
-        defaultAttribute: 'defer'
-      }),
-
-      /*
-       * Plugin: HtmlElementsPlugin
-       * Description: Generate html tags based on javascript maps.
-       *
-       * If a publicPath is set in the webpack output configuration, it will be automatically added to
-       * href attributes, you can disable that by adding a "=href": false property.
-       * You can also enable it to other attribute by settings "=attName": true.
-       *
-       * The configuration supplied is map between a location (key) and an element definition object (value)
-       * The location (key) is then exported to the template under then htmlElements property in webpack configuration.
-       *
-       * Example:
-       *  Adding this plugin configuration
-       *  new HtmlElementsPlugin({
-       *    headTags: { ... }
-       *  })
-       *
-       *  Means we can use it in the template like this:
-       *  <%= webpackConfig.htmlElements.headTags %>
-       *
-       * Dependencies: HtmlWebpackPlugin
-       */
-      new HtmlElementsPlugin({
-        headTags: require('./head-config.common')
-      }),
-
-      /*
-       * Plugin LoaderOptionsPlugin (experimental)
-       *
-       * See: https://gist.github.com/sokra/27b24881210b56bbaff7
-       */
-      new LoaderOptionsPlugin({})
-
-    ],
+      }
+    ]),
 
     /*
-     * Include polyfills or mocks for various node stuff
-     * Description: Node configuration
+     * Plugin: HtmlElementsPlugin
+     * Description: Generate html tags based on javascript maps.
      *
-     * See: https://webpack.github.io/docs/configuration.html#node
+     * If a publicPath is set in the webpack output configuration, it will be automatically added to
+     * href attributes, you can disable that by adding a "=href": false property.
+     * You can also enable it to other attribute by settings "=attName": true.
+     *
+     * The configuration supplied is map between a location (key) and an element definition object (value)
+     * The location (key) is then exported to the template under then htmlElements property in webpack configuration.
+     *
+     * Example:
+     *  Adding this plugin configuration
+     *  new HtmlElementsPlugin({
+     *    headTags: { ... }
+     *  })
+     *
+     *  Means we can use it in the template like this:
+     *  <%= webpackConfig.htmlElements.headTags %>
+     *
+     * Dependencies: HtmlWebpackPlugin
      */
-    node: {
-      global: true,
-      crypto: 'empty',
-      process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false
-    }
-  };
+    new HtmlElementsPlugin({
+      headTags: require('./head-config.common')
+    }),
 
-  if (aotMode) {
-    config.plugins.push(new ngtools.AotPlugin({
-      tsConfigPath: 'tsconfig-aot.json',
-      // entryModule: './src/app/app.module#AppModule',
-      // genDir: './src/aot'
-    }));
-  }
+    /*
+     * Plugin: ScriptExtHtmlWebpackPlugin
+     * Description: Enhances html-webpack-plugin functionality
+     * with different deployment options for your scripts including:
+     *
+     * See: https://github.com/numical/script-ext-html-webpack-plugin
+     */
+    new ScriptExtHtmlWebpackPlugin({
+      defaultAttribute: 'defer'
+    }),
 
-  return config;
+    /**
+     * Plugin: ExtractTextPlugin
+     * Description: Extracts imported CSS files into external stylesheet
+     *
+     * See: https://github.com/webpack/extract-text-webpack-plugin
+     */
+    // new ExtractTextPlugin('[name].[contenthash].css'),
+    // new ExtractTextPlugin('[name].css'),
+
+    new webpack.LoaderOptionsPlugin({
+      // debug: true,
+      // options: {
+      //   /**
+      //    * Html loader advanced options
+      //    *
+      //    * See: https://github.com/webpack/html-loader#advanced-options
+      //    */
+      //   // TODO: Need to workaround Angular 2's html syntax => #id [bind] (event) *ngFor
+      //   htmlLoader: {
+      //     minimize: true,
+      //     removeAttributeQuotes: false,
+      //     caseSensitive: true,
+      //     customAttrSurround: [
+      //       [/#/, /(?:)/],
+      //       [/\*/, /(?:)/],
+      //       [/\[?\(?/, /(?:)/]
+      //     ],
+      //     customAttrAssign: [/\)?\]?=/]
+      //   },
+      //
+      //   context: helpers.root(),
+      //   // output: {
+      //   //   path: helpers.root('dist')
+      //   // },
+      //   tslintLoader: {
+      //     emitErrors: false,
+      //     failOnHint: false,
+      //     resourcePath: 'src'
+      //   },
+      //   /**
+      //    * Sass
+      //    * Reference: https://github.com/jtangelder/sass-loader
+      //    * Transforms .scss files to .css
+      //    */
+      //   sassLoader: {
+      //     //includePaths: [path.resolve(__dirname, "node_modules/foundation-sites/scss")]
+      //   }
+      // }
+    }),
+    // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
+    // Only emit files when there are no errors
+    new webpack.NoEmitOnErrorsPlugin(),
+
+    // // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
+    // // Dedupe modules in the output
+    // new webpack.optimize.DedupePlugin(),
+
+    // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+    // Minify all javascript, switch loaders to minimizing mode
+    // new webpack.optimize.UglifyJsPlugin({sourceMap: true, mangle: { keep_fnames: true }}),
+
+    // Copy assets from the public folder
+    // Reference: https://github.com/kevlened/copy-webpack-plugin
+    // new CopyWebpackPlugin([{
+    //   from: helpers.root('src/public')
+    // }]),
+
+    // Reference: https://github.com/johnagan/clean-webpack-plugin
+    // Removes the bundle folder before the build
+    new CleanWebpackPlugin(['bundles'], {
+      root: helpers.root(),
+      verbose: false,
+      dry: false
+    }),
+
+    // Fix Angular 2
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)async/,
+      helpers.root('node_modules/@angular/core/src/facade/async.js')
+    ),
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)collection/,
+      helpers.root('node_modules/@angular/core/src/facade/collection.js')
+    ),
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)errors/,
+      helpers.root('node_modules/@angular/core/src/facade/errors.js')
+    ),
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)lang/,
+      helpers.root('node_modules/@angular/core/src/facade/lang.js')
+    ),
+    new NormalModuleReplacementPlugin(
+      /facade(\\|\/)math/,
+      helpers.root('node_modules/@angular/core/src/facade/math.js')
+    ),
+    extractCSS,
+
+    // new ngcWebpack.NgcWebpackPlugin({
+    //   disabled: !AOT,
+    //   tsConfig: helpers.root('tsconfig.webpack.json'),
+    //   resourceOverride: helpers.root('config/resource-override.js')
+    // })
+
+  ]
 };
