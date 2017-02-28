@@ -126,6 +126,7 @@ module.exports = function (options) {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
+          'API_URL': JSON.stringify(METADATA.FABRIC8_WIT_API_URL),
           'FABRIC8_WIT_API_URL': JSON.stringify(METADATA.FABRIC8_WIT_API_URL),
           'FABRIC8_RECOMMENDER_API_URL': JSON.stringify(METADATA.FABRIC8_RECOMMENDER_API_URL),
           'FABRIC8_FORGE_URL': JSON.stringify(METADATA.FABRIC8_FORGE_URL),
