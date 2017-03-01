@@ -171,7 +171,7 @@ module.exports = function (options) {
           test: /\.css$/,
           loaders: [
             {
-              loader: "css-to-string-loader"
+              loader: "to-string-loader"
             },
             {
               loader: "style-loader"
@@ -186,7 +186,7 @@ module.exports = function (options) {
           test: /\.scss$/,
           loaders: [
             {
-              loader: 'css-to-string-loader'
+              loader: 'to-string-loader'
             },
             {
               loader: 'css-loader'

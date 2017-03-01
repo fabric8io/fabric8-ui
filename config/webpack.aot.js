@@ -176,7 +176,7 @@ module.exports = function (env) {
         },
         {
           test: /\.scss$/,
-          loaders: ["css-to-string", "css", "sass"]
+          loaders: ["to-string", "css", "sass"]
         },
 
         /* Raw loader support for *.html
