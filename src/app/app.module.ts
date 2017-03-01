@@ -84,7 +84,6 @@ export type StoreType = {
     StackDetailsModule,
     ReactiveFormsModule,
     WidgetsModule,
-    PlannerModule,
     // AppRoutingModule must appear last
     AppRoutingModule
   ],
