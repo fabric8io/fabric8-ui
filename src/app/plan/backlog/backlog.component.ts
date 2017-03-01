@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 @Component({
+  host:{
+    'class':"app-component flex-container in-column-direction flex-grow-1"
+  },
   selector: 'alm-backlog',
   templateUrl: 'backlog.component.html',
   styleUrls: ['./backlog.component.scss']

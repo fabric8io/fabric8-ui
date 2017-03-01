@@ -50,6 +50,8 @@ import { StackDetailsModule } from './analyze/stack/stack-details/stack-details.
 
 // Component Services
 import { ProfileService } from './profile/profile.service';
+import { SpaceService } from 'ngx-fabric8-wit';
+import {AuthUserResolve} from './shared/common.resolver';
 
 // Login
 
@@ -110,7 +112,9 @@ export type StoreType = {
     ToggleService,
     UserService,
     witApiUrlProvider,
-    AboutService
+    AboutService,
+    SpaceService,
+    AuthUserResolve
   ],
   schemas: [],
   bootstrap: [AppComponent]
