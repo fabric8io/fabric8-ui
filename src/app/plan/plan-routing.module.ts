@@ -1,17 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PlanComponent } from './plan.component';
-import { BacklogComponent } from './backlog/backlog.component';
-
 const routes: Routes = [
   {
-    path: '',
-    component: PlanComponent,
-    children: [
-      { path: '', component: BacklogComponent },
-      { path: 'board', loadChildren: './board/board.module#BoardModule' },
-    ]
+    path: ''
   }
 ];
 

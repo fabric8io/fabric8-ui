@@ -158,7 +158,12 @@ export class DummyService {
               {
                 name: 'Backlog',
                 path: ''
-              }, {
+              },
+              {
+                name: 'Backlog',
+                path: 'list'
+              },
+              {
                 name: 'Board',
                 path: 'board'
               }

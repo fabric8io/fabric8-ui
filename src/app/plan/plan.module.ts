@@ -2,15 +2,14 @@ import { NgModule }         from '@angular/core';
 import { CommonModule }     from '@angular/common';
 import { HttpModule, Http } from '@angular/http';
 
-import { PlanComponent }     from './plan.component';
-import { PlanRoutingModule } from './plan-routing.module';
+import { WorkItemModule } from 'fabric8-planner';
 
-import { BacklogModule } from './backlog/backlog.module';
+import { PlanRoutingModule } from './plan-routing.module';
 
 
 @NgModule({
-  imports:      [ BacklogModule, CommonModule, PlanRoutingModule, HttpModule ],
-  declarations: [ PlanComponent ],
+  imports:      [ CommonModule, PlanRoutingModule, WorkItemModule ],
+  declarations: []
 })
 export class PlanModule {
   constructor(http: Http) {}
