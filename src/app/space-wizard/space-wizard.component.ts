@@ -65,7 +65,6 @@ export class SpaceWizardComponent implements OnInit {
     space.attributes = new SpaceAttributes();
     space.attributes.name = space.name;
     space.type = 'spaces';
-    space.description = space.name;
     space.privateSpace = false;
     space.process = this.dummy.processTemplates[0];
     configurator.space = space;
@@ -76,7 +75,6 @@ export class SpaceWizardComponent implements OnInit {
   finish() {
     console.log('finish!', this._context);
     let space = this.configurator.space;
-    space.description = space.name;
     space.attributes.name = space.name;
     console.log(this._context);
     if (this._context && this._context.entity) {

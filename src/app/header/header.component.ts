@@ -10,7 +10,6 @@ import { ContextType } from './../models/context-type';
 import { Context } from './../models/context';
 import { ContextService } from '../shared/context.service';
 import { DummyService } from './../shared/dummy.service';
-import { SpaceService } from 'ngx-fabric8-wit';
 
 
 interface MenuHiddenCallback {
@@ -46,7 +45,6 @@ export class HeaderComponent implements OnInit {
     private broadcaster: Broadcaster,
     public dummy: DummyService,
     contextService: ContextService,
-    private spaceService: SpaceService,
     public profile: ProfileService
   ) {
     router.events.subscribe((val) => {
@@ -64,10 +62,6 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenToEvents();
-
-    this.spaceService.getSpaces().then(() => {
-      this.spaceService.getCurrentSpace();
-    });
   }
 
   get loggedInUser(): User {
