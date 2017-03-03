@@ -26,10 +26,9 @@ export class SpacesComponent implements OnInit {
 
   ngOnInit() {
     this.spaceService.getSpaces(this.pageSize)
-      .then(spaces => {
+      .subscribe(spaces => {
         this._spaces = spaces;
-      })
-      .catch((e) => this.logger.error(e));
+      });
     this.searchTermStream
       .debounceTime(300)
       .distinctUntilChanged()

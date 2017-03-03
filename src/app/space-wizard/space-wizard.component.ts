@@ -86,23 +86,26 @@ export class SpaceWizardComponent implements OnInit {
       space.path = this.dummy.currentUser + '/' + this.convertNameToPath(space.name);
     }
 
-    this.spaceService.create(space).then((createdSpace => {
-      this.dummy.spaces.push(space);
-      this.broadcaster.broadcast('save', 1);
-      if (space.path) {
-        this.router.navigate([space.path]);
-      }
-      this.reset();
-    })).catch((err) => {
-      // TODO:consistent error handling on failures
-      let errMessage = `Failed to create the collaboration space:
-        space name :
-        ${space.name}
-        message:
-        ${err.message}
-        `;
-      alert(errMessage);
-    });
+    this.spaceService.create(space)
+      .subscribe(
+        (createdSpace) => {
+          this.dummy.spaces.push(space);
+          this.broadcaster.broadcast('save', 1);
+          if (space.path) {
+            this.router.navigate([space.path]);
+          }
+          this.reset();
+        },
+        (err) => {
+          // TODO:consistent error handling on failures
+          let errMessage = `Failed to create the collaboration space:
+            space name :
+            ${space.name}
+            message:
+            ${err.message}
+            `;
+          alert(errMessage);
+        });
   }
 
   cancel() {
