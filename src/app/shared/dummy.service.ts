@@ -395,11 +395,7 @@ export class DummyService {
       .subscribe(message => {
         this.save();
       });
-    this.broadcaster.on<User>('currentUserInit').subscribe(
-      message => {
-        this.addUser(message);
-      }
-    );
+
     this.broadcaster.on<string>('logout').subscribe(
       message => {
         this._currentUser = null;
@@ -467,7 +463,7 @@ export class DummyService {
     }
   }
 
-  private addUser(add: User) {
+  public addUser(add: User) {
     if (add && add.attributes) {
       let existing: User = this.lookupUser(add.attributes.username);
       if (existing) {
@@ -477,8 +473,8 @@ export class DummyService {
         this.users.push(add);
         this.save();
       }
+      this.broadcaster.broadcast('currentUserChanged', this.currentUser);
     }
-    this.broadcaster.broadcast('currentUserChanged', this.currentUser);
   }
 
   private makePseudoRandmonString(len: number): string {

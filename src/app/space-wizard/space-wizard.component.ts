@@ -4,9 +4,10 @@ import { Wizard } from './../shared-component/wizard/wizard';
 import { ContextService } from './../shared/context.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Http } from '@angular/http';
 
 import { SpaceService, Space, ProcessTemplate, SpaceAttributes } from 'ngx-fabric8-wit';
-import { Broadcaster, User } from 'ngx-login-client';
+import { Broadcaster, User, HttpService } from 'ngx-login-client';
 
 import { DummyService } from '../shared/dummy.service';
 import { SpaceConfigurator } from './wizard';
@@ -19,8 +20,12 @@ import { Modal } from '../shared-component/modal/modal';
   selector: 'space-wizard',
   templateUrl: './space-wizard.component.html',
   styleUrls: ['./space-wizard.component.scss'],
-  providers: [SpaceService]
-
+  providers: [SpaceService,
+    {
+      provide: Http,
+      useClass: HttpService
+    }
+  ]
 })
 export class SpaceWizardComponent implements OnInit {
 

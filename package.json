@@ -115,7 +115,7 @@
     "ngx-dropdown": "0.0.22",
     "ngx-modal": "0.0.29",
     "ngx-fabric8-wit": "6.6.2",
-    "ngx-login-client": "0.1.8",
+    "ngx-login-client": "0.4.3",
     "ngx-widgets": "0.9.2",
     "offline-plugin": "4.6.1",
     "rxjs": "5.0.1",

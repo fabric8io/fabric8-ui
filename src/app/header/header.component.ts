@@ -62,6 +62,10 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenToEvents();
+
+    this.userService.getUser().subscribe((userData) => {
+      this.dummy.addUser(userData);
+    });
   }
 
   get loggedInUser(): User {
@@ -82,7 +86,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onNavigate(url: string): void {
-    this.getLoggedUser();
     this.broadcaster.broadcast('navigate', { url: url } as Navigation);
   }
 
@@ -99,16 +102,15 @@ export class HeaderComponent implements OnInit {
       .subscribe(message => {
         this.resetData();
       });
+
+    this.broadcaster.on<any>('authenticationError')
+      .subscribe(() => {
+        this.logout();
+      });
   }
 
   private get currentUser(): User {
     return this.dummy.currentUser;
-  }
-
-  private getLoggedUser(): void {
-    if (this.auth.isLoggedIn) {
-      this.userService.getUser();
-    }
   }
 
   private setHiddenMenus(context: Context) {

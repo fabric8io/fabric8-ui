@@ -60,14 +60,6 @@ module.exports = function (options) {
      */
     devtool: 'inline-source-map',
 
-    // While this does provide debugging of the imported npm modules it also lists a whole stack of them that it can't find.
-    //   This is a distraction while trying to debug actual issues. If you are trying to debug an imported issue then turn
-    //   it on, but please don't commit it.
-    // module: {
-    //   'preLoaders': [
-    //     { test: /\.js$/, loader: 'source-map' }
-    //   ]
-    // },
     /**
      * Options affecting the output of the compilation.
      *
