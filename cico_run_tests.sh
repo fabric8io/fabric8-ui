@@ -40,7 +40,7 @@ docker exec fabric8-ui-builder ./run_functional_tests.sh
 if [ $? -eq 0 ]; then
   echo 'CICO: functional tests OK'
   docker exec fabric8-ui-builder npm run build:prod
-  docker exec -u root fabric8-ui-builder cp -r /home/fabric8/dist /
+  docker exec -u root fabric8-ui-builder cp -r /home/fabric8/fabric8-ui/dist /
 else
   echo 'CICO: functional tests FAIL'
   exit 1

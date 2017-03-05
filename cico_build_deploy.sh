@@ -22,7 +22,7 @@ service docker start
 
 # Build builder image
 docker build -t fabric8-ui-builder -f Dockerfile.builder .
-mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder -t -v $(pwd)/dist:/dist:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP fabric8-ui-builder
+mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder -t -v $(pwd)/dist:/dist:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN fabric8-ui-builder
 
 # Build almigty-ui
 docker exec fabric8-ui-builder npm install
@@ -43,15 +43,17 @@ docker exec fabric8-ui-builder ./run_functional_tests.sh
 if [ $? -eq 0 ]; then
   echo 'CICO: functional tests OK'
   docker exec fabric8-ui-builder npm run build:prod
-  docker exec -u root fabric8-ui-builder cp -r /home/fabric8/dist /
+  docker exec -u root fabric8-ui-builder cp -r /home/fabric8/fabric8-ui/dist /
   ## All ok, deploy
   if [ $? -eq 0 ]; then
     echo 'CICO: build OK'
+    set -e
     docker build -t fabric-ui-deploy -f Dockerfile.deploy . && \
-    docker tag fabric-ui-deploy 8.43.84.245.xip.io/fabric8io/fabric8-ui:latest && \
+    docker tag fabric-ui-deploy 8.43.84.245.xip.io/fabric8io/fabric8-ui:latest
     docker push 8.43.84.245.xip.io/fabric8io/fabric8-ui:latest
+    docker exec fabric8-planner-builder npm run semantic-release
     if [ $? -eq 0 ]; then
-      echo 'CICO: image pushed, ready to update deployed app'
+      echo 'CICO: image pushed, npmjs published, ready to update deployed app'
       exit 0
     else
       echo 'CICO: Image push to registry failed'

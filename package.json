@@ -1,6 +1,6 @@
 {
   "name": "fabric8-ui",
-  "version": "0.0.1",
+  "version": "0.0.0-development",
   "description": "The Fabric8 UI console for the Red Hat Developer Experience project",
   "keywords": [
     "angular2",
@@ -60,6 +60,7 @@
     "protractor": "protractor",
     "reinstall": "npm run clean && npm install",
     "rimraf": "rimraf",
+    "semantic-release": "semantic-release pre && npm run build && cp -r .git dist && npm publish dist/ && semantic-release post",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
     "server:dev": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch --content-base src/",
     "server:prod": "http-server dist --cors",
@@ -220,5 +221,16 @@
   "engines": {
     "node": ">= 4.2.1",
     "npm": ">= 3"
-  }
+  },
+    "release": {
+     "branch": "master",
+     "verifyConditions": {
+       "path": "./node_modules/@krux/condition-jenkins"
+     }
+   },
+   "config": {
+     "commitizen": {
+       "path": "./node_modules/cz-conventional-changelog"
+     }
+   }
 }
