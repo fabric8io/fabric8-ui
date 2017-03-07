@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster, User, UserService, Entity } from 'ngx-login-client';
-import { Space, Contexts, Context, ContextType, ContextTypes } from 'ngx-fabric8-wit';
+import { Space, Contexts, Context, ContextType, ContextTypes, SpaceService } from 'ngx-fabric8-wit';
 import { Subject } from 'rxjs/Subject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
@@ -13,6 +13,11 @@ import { Observable } from 'rxjs';
 
 import { DummyService } from './../shared/dummy.service';
 import { Navigation } from './../models/navigation';
+
+interface RawContext {
+  entity: any;
+  space: any;
+}
 
 /*
  * A shared service that manages the users current context. The users context is defined as the
@@ -33,7 +38,8 @@ export class ContextService implements Contexts {
     private router: Router,
     private broadcaster: Broadcaster,
     private user: UserService,
-    private menus: MenusService) {
+    private menus: MenusService,
+    private spaceService: SpaceService) {
 
     let addRecent = new Subject<Context>();
     // Initialize the default context when the logged in user changes
@@ -78,8 +84,29 @@ export class ContextService implements Contexts {
       .combineLatest(
       // First, the navigation event
       this.broadcaster.on<Navigation>('navigate')
+        // Eliminate duplicate navigation events
+        // TODO this doesn't work quite perfectly
+        .distinctUntilKeyChanged('url')
+        // Extract the entity and space names from the URL
+        .map(val => {
+          return { entity: this.extractEntity(), space: this.extractSpace() } as RawContext;
+        })
+        // Process the navigation only if it is safe
+        .filter(val => {
+          return !(this.checkForReservedWords(val.entity) || this.checkForReservedWords(val.space));
+        })
+        // Fetch the objects from the REST API
+        .switchMap(val => {
+          return Observable.zip(
+            this.loadUser(val.entity),
+            this.loadSpace(val.entity, val.space),
+            (entity, space) => {
+              return { entity: entity, space: space } as RawContext;
+            }
+          );
+        })
         // Use a map to convert from a navigation url to a context
-        .map(val => this.computeContext()),
+        .map(val => this.buildContext(val)),
       // Then, the default context
       this._default,
       // Finally, the projection, which allows us to select the default
@@ -159,38 +186,15 @@ export class ContextService implements Contexts {
     return this.dummy.currentUser;
   }
 
-  private computeContext(): Context {
-    // First, check if there is a recent context
-    let entityStr: string = this.extractEntity();
-    let spaceStr: string = this.extractSpace();
-    if (this.checkForReservedWords(entityStr) || this.checkForReservedWords(spaceStr)) {
-      return null;
-    }
-    // TODO Implement team URLs
-    let teamStr: string = null;
-    // The 'ctxPath' is the raw path to the context only, with all extraneous info removed
-    let ctxPath = '';
-    if (entityStr) {
-      ctxPath = '/' + entityStr;
-    }
-    if (spaceStr) {
-      ctxPath = ctxPath + '/' + spaceStr;
-    }
-    if (!ctxPath) {
-      return null;
-    }
-
-    // Otherwise, we have to build it
-    return this.buildContext();
-  }
-
-  private buildContext() {
+  private buildContext(val: RawContext) {
+    let ctxEntity: Entity = (val.entity && val.entity.id) ? val.entity : null;
+    let ctxSpace: Space = (val.space && val.space.id) ? val.space : null;
     let c: Context = {
-      user: this.loadUser(),
-      space: this.loadSpace(),
-      type: null,
-      name: null,
-      path: null
+      'entity': ctxEntity,
+      'space': ctxSpace,
+      'type': null,
+      'name': null,
+      'path': null
     } as Context;
     // TODO Support other types of entity
     if (c.user && c.space) {
@@ -217,8 +221,8 @@ export class ContextService implements Contexts {
     return null;
   }
 
-  private loadUser(): User {
-    return this.dummy.lookupUser(this.extractEntity());
+  private loadUser(entityName: string): Observable<Entity> {
+    return Observable.of(this.dummy.lookupUser(entityName));
   }
 
   private extractSpace(): string {
@@ -230,14 +234,24 @@ export class ContextService implements Contexts {
   }
 
   private getRouteParams(): any {
-    if (this.router && this.router.routerState && this.router.routerState.snapshot && this.router.routerState.snapshot.root && this.router.routerState.snapshot.root.firstChild) {
+    if (
+      this.router &&
+      this.router.routerState &&
+      this.router.routerState.snapshot &&
+      this.router.routerState.snapshot.root &&
+      this.router.routerState.snapshot.root.firstChild
+    ) {
       return this.router.routerState.snapshot.root.firstChild.params;
     }
     return null;
   }
 
-  private loadSpace(): Space {
-    return this.dummy.lookupSpace(this.extractSpace());
+  private loadSpace(entityName: string, spaceName: string): Observable<Space> {
+    if (entityName && spaceName) {
+      return this.spaceService.getSpaceByName(entityName, spaceName);
+    } else {
+      return Observable.of({} as Space);
+    }
   }
 
   private checkForReservedWords(arg: string): boolean {
