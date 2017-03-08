@@ -119,6 +119,11 @@ module.exports = function (options) {
           exclude: [
             // Example helpers.nodeModulePath("fabric8-planner"),
             // Exclude any problematic sourcemaps
+            helpers.nodeModulePath("mydatepicker"),
+            helpers.nodeModulePath("ng2-completer"),
+            helpers.nodeModulePath("angular2-flash-messages"),
+            helpers.nodeModulePath("ngx-dropdown"),
+            helpers.nodeModulePath("ngx-modal")
           ],
           use: ["source-map-loader"],
           enforce: "pre"
