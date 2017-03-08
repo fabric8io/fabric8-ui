@@ -123,7 +123,8 @@ module.exports = function (options) {
             helpers.nodeModulePath("ng2-completer"),
             helpers.nodeModulePath("angular2-flash-messages"),
             helpers.nodeModulePath("ngx-dropdown"),
-            helpers.nodeModulePath("ngx-modal")
+            helpers.nodeModulePath("ngx-modal"),
+            helpers.nodeModulePath("ng2-dnd")
           ],
           use: ["source-map-loader"],
           enforce: "pre"
