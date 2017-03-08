@@ -13,7 +13,7 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { PlannerModule } from 'fabric8-planner';
-import { DropdownModule } from 'ngx-dropdown';
+import { DropdownModule } from 'ng2-bootstrap';
 import { AuthenticationService, Broadcaster, Logger, UserService} from 'ngx-login-client';
 import { WidgetsModule } from 'ngx-widgets';
 
