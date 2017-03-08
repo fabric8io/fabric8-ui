@@ -65,6 +65,8 @@ export class HeaderComponent implements OnInit {
 
     this.userService.getUser().subscribe((userData) => {
       this.dummy.addUser(userData);
+    }, (error) => {
+      this.logger.log('Error retrieving user data: ' + error);
     });
   }
 
