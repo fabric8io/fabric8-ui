@@ -29,10 +29,7 @@ export class AnalyzeOverviewComponent {
   }
 
   saveDescription() {
-    this.spaceService.update(this.space)
-      .subscribe(updatedSpace => {
-        this.broadcaster.broadcast('save', updatedSpace);
-      });
+    this.spaceService.update(this.space);
   }
 
 }
