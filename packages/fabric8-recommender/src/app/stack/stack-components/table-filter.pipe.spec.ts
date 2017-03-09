@@ -1,11 +1,4 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
-
-import { Pipe, PipeTransform, Injectable } from '@angular/core';
 import { TableFilter } from './table-filter.pipe';
 
 describe('pipe :filter', () => {

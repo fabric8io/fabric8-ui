@@ -1,8 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 
 import { OverviewComponent } from './overview.component';
