@@ -127,15 +127,32 @@ export class HeaderComponent implements OnInit {
           n.hide = true;
         }
         if (n.menus) {
+          let foundPath = false;
           for (let o of n.menus) {
             // Clear the menu's active state
             o.active = false;
             if (o.fullPath === this.router.url) {
+              foundPath = true;
               o.active = true;
               n.active = true;
             }
             if (this.menuCallbacks.has(o.path) && this.menuCallbacks.get(o.path)(this, this.context)) {
               o.hide = true;
+            }
+          }
+          if(!foundPath) {
+            // routes that can't be correctly matched based on the url should use the parent path
+            for (let o of n.menus) {
+              o.active = false;
+              let parentPath = '/' + this.router.routerState.snapshot.root.firstChild.url.join('/');
+              if (o.fullPath === parentPath) {
+                foundPath = true;
+                o.active = true;
+                n.active = true;
+              }
+              if (this.menuCallbacks.has(o.path) && this.menuCallbacks.get(o.path)(this, this.context)) {
+                o.hide = true;
+              }
             }
           }
         } else if (n.fullPath === this.router.url) {
