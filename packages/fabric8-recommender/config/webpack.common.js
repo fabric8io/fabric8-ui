@@ -40,7 +40,7 @@ const extractCSS = new ExtractTextPlugin({
 const HMR = helpers.hasProcessFlag('hot');
 const AOT = helpers.hasNpmFlag('aot');
 const METADATA = {
-  title: 'Fabric8 Planner',
+  title: 'Fabric8 Stack Analysis',
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer()
 };
