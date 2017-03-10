@@ -135,7 +135,7 @@ export class StackComponents implements OnChanges {
                 dependency[this.keys['currentVersion']] = eachOne['version'];
                 dependency[this.keys['latestVersion']] = eachOne['latest_version'] || 'NA';
                 dependency[this.keys['publicPopularity']] =
-                  eachOne['github_details'] ? (eachOne['github_details'].stargazers_count === -1? 'NA' :    eachOne['github_details'].stargazers_count) : 'NA';
+                  eachOne['github_details'] ? (eachOne['github_details'].stargazers_count === -1? 'NA' : eachOne['github_details'].stargazers_count) : 'NA';
                 dependency[this.keys['enterpriseUsage']] = eachOne['enterpriseUsage'] || 'NA';
 
                 this.dependenciesList.push(dependency);

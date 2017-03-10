@@ -46,8 +46,6 @@ import { GlobalConstants } from '../constants/constants.service';
  * Passes the tailored response to each of the children.
  */
 export class StackDetailsComponent implements OnInit {
-
-  //@Input() stack: Stack;
   @Input() stack;
   @ViewChild('stackModule') modalStackModule: any;
 
@@ -78,7 +76,7 @@ export class StackDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    //this.getStackAnalyses(this.stack.uuid);
+    this.getStackAnalyses(this.stack.uuid);
     this.setStackAnalysisChartData();
   }
 
@@ -89,14 +87,6 @@ export class StackDetailsComponent implements OnInit {
    */
   private setStackAnalysisChartData(): void {
     this.stackOverviewData = {
-      dependencyChart: [
-        ['internal', 11],
-        ['external', 21]
-      ],
-      compUsageChart: [
-        ['in teams', 2],
-        ['in organizations', 3]
-      ],
       CVEdata: ['CVE-2014-0001', 'CVE-2014-12345', 'CVE-2013-78934']
     };
 
@@ -242,16 +232,7 @@ export class StackDetailsComponent implements OnInit {
   }
 
   public showStackModal(): void {
-    console.clear();
-    console.log(this.recommendations);
-    this.getStackAnalyses('8950acb76bc84235873d73d149cb9f61');
     this.modalStackModule.open();
-    // TODO : below hack needs to be removed
-    // This hack was introduced as c3's chart was not properly rendered on load
-    // but on triggering some random changes works fine
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 100);
   }
 
 }
