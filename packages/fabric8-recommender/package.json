@@ -1,7 +1,7 @@
 {
   "name": "fabric8-stack-analysis",
   "version": "0.0.0-development",
-  "description": "A planner front-end for Fabric8.",
+  "description": "A Stack Analysis Feature",
   "main": "bundles/fabric8-stack-analysis.umd.js",
   "module": "index.js",
   "typings": "index.d.ts",
