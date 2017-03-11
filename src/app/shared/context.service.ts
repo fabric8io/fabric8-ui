@@ -221,8 +221,8 @@ export class ContextService implements Contexts {
     return null;
   }
 
-  private loadUser(userName: string): Observable<Entity> {
-    return Observable.of(this.dummy.lookupUser(userName));
+  private loadUser(userName: string): Observable<User> {
+    return this.user.getUserByUsername(userName);
   }
 
   private extractSpace(): string {
