@@ -103,110 +103,6 @@ export class DummyService {
     ]
   ]);
 
-  readonly SPACES: Map<string, Space> = new Map<string, Space>([
-    [
-      'bobo',
-      {
-        name: 'Bobo',
-        path: '/pmuir/BalloonPopGame',
-        teams: [],
-        defaultTeam: this.TEAMS.get('balloonpopgame'),
-        id: '0',
-        attributes: {
-          name: 'Bobo',
-          description: 'Microservices architected search engine',
-          'created-at': '2017-01-01',
-          'updated-at': '2017-01-02',
-          version: 1
-        },
-        type: 'spaces',
-        links: {self:''},
-        relationships: {
-          areas: {links:{related:''}},
-          iterations: {links:{related:''}}
-        }
-      } as Space
-    ], [
-      'hysterix',
-      {
-        name: 'Hysterix',
-        path: '/pmuir/hysterix',
-        teams: [],
-        defaultTeam: this.TEAMS.get('balloonpopgame'),
-        id: '1',
-        attributes: {
-          name: 'Hysterix',
-          description: 'Hystrix is a latency and fault tolerance library designed to isolate points of access to remote systems, services and 3rd party libraries, stop cascading failure and enable resilience in complex distributed systems where failure is inevitable.',
-          'created-at': '2017-01-01',
-          'updated-at': '2017-01-02',
-          version: 1
-        },
-        type: 'spaces',
-        links: {self:''},
-        relationships: {
-          areas: {links:{related:''}},
-          iterations: {links:{related:''}}
-        }
-      } as Space
-    ], [
-      'fabric8',
-      {
-        name: 'fabric8io',
-        path: '/pmuir/BalloonPopGame',
-        teams: [],
-        defaultTeam: this.TEAMS.get('balloonpopgame'),
-        id: '2',
-        attributes: {
-          name: 'fabric8io',
-          description: 'Fabric8 is an open source integrated development platform for Kubernetes',
-          'created-at': '2017-01-01',
-          'updated-at': '2017-01-02',
-          version: 1
-        },
-        type: 'spaces',
-        links: {self:''},
-        relationships: {
-          areas: {links:{related:''}},
-          iterations: {links:{related:''}}
-        }
-      } as Space
-    ], [
-      'balloonpopgame',
-      {
-        name: 'BalloonPopGame',
-        path: '/pmuir/BalloonPopGame',
-        teams: [
-          this.TEAMS.get('balloonpopgame'),
-          this.TEAMS.get('balloonpopgame_ux')
-        ],
-        defaultTeam: this.TEAMS.get('balloonpopgame'),
-        id: '3',
-        attributes: {
-          name: 'BalloonPopGame',
-          description: 'Balloon popping fun for everyone!',
-          'created-at': '2017-01-01',
-          'updated-at': '2017-01-02',
-          version: 1
-        },
-        type: 'spaces',
-        links: {self:''},
-        relationships: {
-          areas: {links:{related:''}},
-          iterations: {links:{related:''}}
-        },
-        stacks: [
-          {
-            codebase: 'https://github.com/BalloonPopGame/BalloonPopGame',
-            uuid: 'e7815fca5e0946ab8701220fbda22e38'
-          }, {
-            codebase: 'https://github.com/BalloonPopGame/BalloonPopGame-UI',
-            uuid: 'e7815fca5e0946ab8701220fbda22e38'
-          }
-        ]
-      } as Space
-    ]
-  ]);
-
   readonly PROCESS_TEMPLATES: ProcessTemplate[] = [
     { name: 'Agile' },
     { name: 'Scrum' },
@@ -223,7 +119,7 @@ export class DummyService {
     private localStorageService: LocalStorageService,
     private broadcaster: Broadcaster
   ) {
-    this._spaces = this.initDummy('spaces', this.SPACES);
+    this._spaces = [];
     this._recentContexts = [];
     this._users = this.initDummy('users', this.USERS);
     this.broadcaster.on<string>('save')
@@ -284,14 +180,6 @@ export class DummyService {
       }
     }
     return null;
-  }
-
-  lookupSpace(space: string): Space {
-    if (space) {
-      return this.SPACES.get(space.toLowerCase());
-    } else {
-      return null;
-    }
   }
 
   public addUser(add: User) {
