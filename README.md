@@ -18,6 +18,10 @@ to your `.bash_profile` and reload the shell.
 
 * Run `ext install EditorConfig` to read the .editorconfig file
 
+## Get dependencies
+
+Run `npm install`. This will download all the required dependencies to be able to start the UI.
+
 ## To start
 
 Run `npm start`. This will start the UI with livereload enabled. Then navigate to <http://localhost:3000>.
