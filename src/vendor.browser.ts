@@ -25,6 +25,9 @@ import 'ng2-bootstrap';
 
 import 'patternfly-sass-with-css/assets/css/patternfly.css';
 
+// CSS for Code Prettify, used for code syntax highlight
+import 'assets/stylesheets/_prettify.min.css'
+
 if ('production' === ENV) {
   // Production
 
