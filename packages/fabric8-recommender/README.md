@@ -1,32 +1,156 @@
-# fabric8-recommender
+= Fabric8 Recommender
 
-## Getting started:
+image:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic%20release-b4d455.svg[Semantic Release, link="https://github.com/semantic-release/semantic-release"]
 
-This library does not run on it's own. It must be imported. 
+**Fabric8 Recommender is a stack analysis feature.**
 
-`npm install fabric8-recommender`
+== Running the app
 
-There are several services and a couple of models used by them available.
-`npm install fabric8-recommender`
+=== Set NODE_ENV
+If you're just trying to test the application, please use inmemory mode which
+will load the app with mock data for you. If you, however, want to contribute
+to the codebase, unset it back or to "development" (default) mode and rebuild.
 
-## Building it 
- 
-#### Install the dependencies:
- 
- `npm install`
- 
-#### If you need to update the dependencies you can reinstall:
- 
- `npm run reinstall`
- 
-#### Run the tests:
- 
- `npm test`
- 
-#### Build the library:
- 
- `npm run build`
 
-## VS Code
+[source,shell]
+```
+$ export NODE_ENV=inmemory # <1>
+$ export NODE_ENV=development # <2>
+$ export NODE_ENV=production # <3>
 
-* Run `ext install EditorConfig` to read the .editorconfig file
+<1> In-memory mode for trying-out the app
+<2> Development mode for contributing to the source
+<2> Production mode for deploying the application
+```
+
+Once you're done setting the environment, you can proceed with the next step(s)
+
+NOTE: If you're directly trying to run the app in dev mode, you can skip this
+step, as *`NODE_ENV`* is treated as `"development"` by default.
+
+=== First run
+
+If you're trying to run the app for the first time:
+
+ $ npm install
+
+Then, start the app with:
+
+ $ npm start
+
+=== Fresh run
+
+If you trying to refresh your installation, you need to run:
+
+ $ npm run reinstall
+
+Then, start the app with:
+
+ $ npm start
+
+=== Testcase run
+
+To run the linter, build validator, unit tests, and functional test use:
+
+ $ npm test
+
+== Other useful scripts
+
+The *`package.json`* file's `scripts:` section lists _all the tasks_ we run.
+
+Here are some of the most useful/frequently used scripts you may need to run:
+
+[cols="1,2,4", options="header"]
+|===
+|Scipt
+|Command
+|Description
+
+|Lint
+|`$ npm run lint`
+|Runs the TypeScript and Angular 2 linter
+
+|Validation
+|`$ npm run validate`
+|Validates the webpack build
+
+|Unit Tests
+|`$ npm run test:unit`
+|Runs the unit tests
+
+|Functional Tests
+|`$ npm run test:func`
+|Runs the functional tests
+
+|Continuous Tests
+|`$ npm run watch:test`
+|Looks for changes in source code and runs unit tests
+|===
+
+== Building the app
+
+=== Production build
+
+To generate production build, set API URL and run build script as follows:
+
+----
+$ npm run build:prod
+----
+
+The build output will be under `dist` directory.
+
+*To create a docker image,* run this command immediately after the production
+build completion:
+
+----
+
+=== Library Build
+
+==== For production:
+
+To build the fabric8-stack-analysis as an npm library, use:
+
+----
+$ npm run build
+----
+
+The created library will be placed in `dist`.
+
+IMPORTANT: *You shouldn't ever publish the build manually,* instead you should
+let the CD pipeline do a semantic release.
+
+==== For development:
+
+To build fabric8-stack-analysis as an npm library and embed it into a webapp such as
+fabric8-ui, you should:
+
+Step 1: Run `npm run watch:library` in the source directory::
+This will build fabric8-stack-analysis as a library and then set up a watch task to
+rebuild any ts, html and scss files you change.
+
+Step 2: Run `npm link <path to fabric8-stack-analysis>/dist-watch`::
+In the webapp into which you are embedding. This will create a symlink from
+`node_modules/fabric8-stack-analysis` to the `dist-watch` directory and install that
+symlinked node module into your webapp.
+
+Step 3: Run your webapp in development mode::
+Make sure you have a watch on `node_modules/fabric8-stack-analysis` enabled. You will
+have access to both JS and SASS sourcemaps if your webapp is properly setup.
+
+NOTE: `fabric8-ui` is setup to do reloading and sourcemaps automatically when you
+run `npm start`.
+
+== CSS and SASS
+
+fabric8-stack-analysis uses SASS for it's stylesheets. It also uses the Angular emulation
+of the shadow dom, so you will normally want to place your styles in the
+`.component.scss` file next to the html and the typescript.
+
+
+We use mixins to avoid polluting components with uncessary style classes, and to avoid
+an explosion of shared files.
+
+The `src/assets/stylesheets/` directory includes a `shared` directory. These are
+shared global styles that we will refactor out in to a shared library at some point.
+Only update these styles if you are making a truly global style, and are going to
+synchronise your changes across all the various UI projects.
