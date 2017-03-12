@@ -29,10 +29,14 @@ export class SpacesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spaceService.getSpaces(this.pageSize)
-      .subscribe(spaces => {
-        this._spaces = spaces;
-      });
+    if (this.context && this.context.user) {
+      this.spaceService.getSpacesByUser(this.context.user.attributes.username)
+        .subscribe(spaces => {
+          this._spaces = spaces;
+        });
+    } else {
+      this.logger.error("Failed to retrieve list of spaces owned by user");
+    }
     this.searchTermStream
       .debounceTime(300)
       .distinctUntilChanged()
