@@ -18,6 +18,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Observable } from 'rxjs';
 
+import { LocalStorageService } from 'angular-2-local-storage';
+
+
 import { DummyService } from './../shared/dummy.service';
 import { Navigation } from './../models/navigation';
 import { MenusService } from './../header/menus.service';
@@ -51,7 +54,8 @@ export class ContextService implements Contexts {
     private spaceService: SpaceService,
     private userService: UserService,
     private notifications: Notifications,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private localStorage: LocalStorageService) {
 
     this._addRecent = new Subject<Context>();
     // Initialize the default context when the logged in user changes
@@ -112,7 +116,8 @@ export class ContextService implements Contexts {
         recent.unshift(ctx);
         return recent;
         // The final value to scan is the initial value, used when the app starts
-      }, this.dummy.recent)
+      }, this.loadRecent())
+      // Finally save the list of recent contexts
       .do(val => {
         // Truncate the number of recent contexts to the correct length
         if (val.length > this.RECENT_CONTEXT_LENGTH) {
@@ -122,10 +127,8 @@ export class ContextService implements Contexts {
           );
         }
       })
-      // Finally save the list of recent contexts
       .do(val => {
-        this.dummy.recent = val;
-        this.broadcaster.broadcast('save');
+        this.saveRecent(val);
       })
       .multicast(() => new ReplaySubject(1));
     // Finally, start broadcasting
@@ -320,6 +323,24 @@ export class ContextService implements Contexts {
       }
     }
     return false;
+  }
+
+  private loadRecent(): Context[] {
+    let res: Context[] = [];
+    if (this.localStorage.get('recentContexts')) {
+      for (let ctx of this.localStorage.get<RawContext[]>('recentContexts')) {
+        res.push(this.buildContext(ctx));
+      }
+    }
+    return res;
+  }
+
+  private saveRecent(recent: Context[]) {
+    let res: RawContext[] = [];
+    for (let ctx of recent) {
+      res.push({ user: ctx.user.attributes.username, space: (ctx.space ? ctx.space.name : null) } as RawContext);
+    }
+    this.localStorage.set('recentContexts', res);
   }
 
 }
