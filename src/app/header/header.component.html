@@ -69,7 +69,7 @@
             </a>
           </li>
           <li>
-            <a [routerLink]="['pmuir/_spaces']">
+            <a [routerLink]="[loggedInUser.attributes.username,'_spaces']">
               <span class="nav-item-icon">
               </span>
               <span class="nav-item-text">
@@ -135,14 +135,14 @@
         </a>
         <ul class="dropdown-menu">
           <li>
-            <a [routerLink]="['pmuir']"><span class="nav-item-text">Profile</span> </a>
+            <a [routerLink]="[loggedInUser.attributes.username]"><span class="nav-item-text">Profile</span> </a>
           </li>
           <li>
             <a href="https://fabric8.io/guide/getStarted/index.html"><span class="nav-item-text">Help</span></a>
           </li>
           <li class="divider"></li>
           <li>
-            <a [routerLink]="['pmuir/_settings']"><span class="nav-item-text">Settings</span></a>
+            <a [routerLink]="[loggedInUser.attributes.username,'_settings']"><span class="nav-item-text">Settings</span></a>
           </li>
           <li>
             <a *ngIf="loggedInUser" (click)="auth.logout();"><span class="nav-item-text">Sign out</span></a>
