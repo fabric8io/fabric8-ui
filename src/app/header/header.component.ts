@@ -43,9 +43,10 @@ export class HeaderComponent implements OnInit {
     ]
   ]);
 
-  context: Context;
   recent: Context[];
   loggedInUser: User;
+  private _context: Context;
+  private _defaultContext: Context;
   private _loggedInUserSubscription: Subscription;
 
   constructor(
@@ -65,9 +66,12 @@ export class HeaderComponent implements OnInit {
       }
     });
     contexts.current.subscribe(val => {
-      this.context = val;
+      this._context = val;
       this.updateMenus();
     });
+    contexts.default.subscribe(val => {
+      this._defaultContext = val;
+    })
     contexts.recent.subscribe(val => this.recent = val);
 
     // Currently logged in user
@@ -100,6 +104,10 @@ export class HeaderComponent implements OnInit {
     this.imgLoaded = false;
   }
 
+  get context(): Context {
+    return this._context || this._defaultContext;
+  }
+
   private updateMenus() {
     if (this.context && this.context.type && this.context.type.hasOwnProperty('menus')) {
       for (let n of (this.context.type as MenuedContextType).menus) {
@@ -122,7 +130,7 @@ export class HeaderComponent implements OnInit {
               this.menuCallbacks.get(o.path)(this).subscribe(val => o.hide = val);
             }
           }
-          if (!foundPath) {
+          if (!foundPath && this.router.routerState.snapshot.root.firstChild) {
             // routes that can't be correctly matched based on the url should use the parent path
             for (let o of n.menus) {
               o.active = false;

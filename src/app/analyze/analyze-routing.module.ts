@@ -7,21 +7,6 @@ import { AnalyzeOverviewComponent } from './analyze-overview/analyze-overview.co
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'pmuir/BalloonPopGame',
-    pathMatch: 'full'
-  },
-  {
-    path: '',
-    redirectTo: 'beta/pmuir/BalloonPopGame',
-    pathMatch: 'full'
-  },
-  {
-    path: '',
-    redirectTo: 'alpha/pmuir/BalloonPopGame',
-    pathMatch: 'full'
-  },
-  {
-    path: '',
     component: AnalyzeComponent,
     children: [
       { path: '', component: AnalyzeOverviewComponent },

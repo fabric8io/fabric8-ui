@@ -7,11 +7,6 @@ import { SettingsOverviewComponent } from './settings-overview/settings-overview
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'pmuir/BalloonPopGame/settings',
-    pathMatch: 'full'
-  },
-  {
-    path: '',
     component: SpaceSettingsComponent,
     children: [
       { path: '', component: SettingsOverviewComponent },

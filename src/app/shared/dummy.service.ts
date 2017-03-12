@@ -109,46 +109,20 @@ export class DummyService {
     { name: 'Issue Tracking' },
     { name: 'Scenario Driven Planning' }
   ];
-  private _spaces: Space[];
-  private _recentContexts: Context[];
 
   constructor(
     private http: Http,
     private localStorageService: LocalStorageService,
     private broadcaster: Broadcaster
   ) {
-    this._spaces = [];
-    this._recentContexts = [];
-    this.broadcaster.on<string>('save')
-      .subscribe(message => {
-        this.save();
-      });
-    this.save();
-  }
-
-  get spaces(): Space[] {
-    return this._spaces;
   }
 
   get resources(): Resources {
     return this.RESOURCES;
   }
 
-  get recent(): Context[] {
-    return this._recentContexts;
-  }
-
-  set recent(recent: Context[]) {
-    this._recentContexts = recent;
-  }
-
   get processTemplates(): ProcessTemplate[] {
     return this.PROCESS_TEMPLATES;
-  }
-
-  save(): void {
-    this.localStorageService.set('spaces', this._spaces);
-    this.localStorageService.set('contexts', this._recentContexts);
   }
 
   private makePseudoRandmonString(len: number): string {

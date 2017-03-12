@@ -1,5 +1,3 @@
-import { NotificationsService } from './shared/notifications.service';
-import { NotificationsModule } from './settings/notifications/notifications.module';
 import './rxjs-extensions';
 
 import { NgModule, ApplicationRef } from '@angular/core';
@@ -36,6 +34,7 @@ import { HeaderComponent } from './header/header.component';
 import { ApiLocatorService } from './shared/api-locator.service';
 import { AuthGuard } from './shared/auth-guard.service';
 import { ContextCurrentUserAuthGuard } from './shared/context-current-user-auth-guard.service';
+import { ContextResolver } from './shared/context-resolver.service';
 import { DummyService } from './shared/dummy.service';
 import { LoginService } from './shared/login.service';
 import { ToggleService } from './toggle/toggle.service';
@@ -43,6 +42,7 @@ import { ContextService } from './shared/context.service';
 import { AboutService } from './shared/about.service';
 import { SpacesService } from './shared/spaces.service';
 import { MenusService } from './header/menus.service';
+import { NotificationsService } from './shared/notifications.service';
 
 // Shared Components
 import { SpaceWizardModule } from './space-wizard/space-wizard.module';
@@ -110,14 +110,16 @@ export type StoreType = {
     AuthenticationService,
     AuthGuard,
     ContextCurrentUserAuthGuard,
+    ContextService,
     {
       provide: Contexts,
-      useClass: ContextService
+      useExisting: ContextService
     },
     {
       provide: Spaces,
       useClass: SpacesService
     },
+    ContextResolver,
     DummyService,
     Logger,
     LoginService,

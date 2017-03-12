@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { SigninComponent } from './signin/signin.component';
+import { ContextResolver } from './shared/context-resolver.service';
+
 
 export const routes: Routes = [
   {
@@ -33,42 +35,63 @@ export const routes: Routes = [
   // Profile
   {
     path: ':entity',
+    resolve: {
+      context: ContextResolver
+    },
     loadChildren: './profile/profile.module#ProfileModule'
   },
 
   // Settings
   {
     path: ':entity/_settings',
+    resolve: {
+      context: ContextResolver
+    },
     loadChildren: './settings/settings.module#SettingsModule'
   },
 
   // Analyze
   {
     path: ':entity/:space',
+    resolve: {
+      context: ContextResolver
+    },
     loadChildren: './analyze/analyze.module#AnalyzeModule'
   },
 
   // Plan
   {
     path: ':entity/:space/plan',
+    resolve: {
+      context: ContextResolver
+    },
     loadChildren: './plan/plan.module#PlanModule'
   },
 
   // Create
   {
     path: ':entity/:space/create',
+    resolve: {
+      context: ContextResolver
+    },
     loadChildren: './create/create.module#CreateModule'
   },
 
   // Run
   {
     path: ':entity/:space/run',
+    resolve: {
+      context: ContextResolver
+    },
     loadChildren: './run/run.module#RunModule'
   },
 
   // Space-settings
   {
     path: ':entity/:space/settings',
+    resolve: {
+      context: ContextResolver
+    },
     loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
   }
 ];

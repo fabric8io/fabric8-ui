@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Broadcaster, User, UserService, Entity } from 'ngx-login-client';
 import {
@@ -17,6 +17,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Observable } from 'rxjs';
+
+import { LocalStorageService } from 'angular-2-local-storage';
+
 
 import { DummyService } from './../shared/dummy.service';
 import { Navigation } from './../models/navigation';
@@ -38,9 +41,10 @@ export class ContextService implements Contexts {
 
   readonly RECENT_CONTEXT_LENGTH = 8;
 
-  private _current: ConnectableObservable<Context>;
+  private _current: Subject<Context> = new ReplaySubject<Context>(1);
   private _default: ConnectableObservable<Context>;
   private _recent: ConnectableObservable<Context[]>;
+  private _addRecent: Subject<Context>;
 
   constructor(
     private dummy: DummyService,
@@ -49,9 +53,11 @@ export class ContextService implements Contexts {
     private menus: MenusService,
     private spaceService: SpaceService,
     private userService: UserService,
-    private notifications: Notifications) {
+    private notifications: Notifications,
+    private route: ActivatedRoute,
+    private localStorage: LocalStorageService) {
 
-    let addRecent = new Subject<Context>();
+    this._addRecent = new Subject<Context>();
     // Initialize the default context when the logged in user changes
     this._default = this.userService.loggedInUser
       // First use map to convert the broadcast event to just a username
@@ -92,17 +98,58 @@ export class ContextService implements Contexts {
       })
       .multicast(() => new ReplaySubject(1));
     // Subscribe the the default context to the recent space collector
-    this._default.subscribe(addRecent);
+    this._default.subscribe(this._addRecent);
 
-    // Compute the current context
-    this._current = this.broadcaster.on<Navigation>('navigate')
-      // Eliminate duplicate navigation events
-      // TODO this doesn't work quite perfectly
-      .distinctUntilKeyChanged('url')
-      // Extract the user and space names from the URL
-      .map(val => {
-        return { user: this.extractUser(), space: this.extractSpace(), url: val.url } as RawContext;
+    // Create the recent space list
+    this._recent = this._addRecent
+      // Map from the context being added to an array of recent contexts
+      // The scan operator allows us to access the list of recent contexts and add ours
+      .scan((recent, ctx) => {
+        // First, check if this context is already in the list
+        // If it is, remove it, so we don't get duplicates
+        for (let i = recent.length - 1; i >= 0; i--) {
+          if (recent[i].path === ctx.path) {
+            recent.splice(i, 1);
+          }
+        }
+        // Then add this context to the top of the list
+        recent.unshift(ctx);
+        return recent;
+        // The final value to scan is the initial value, used when the app starts
+      }, this.loadRecent())
+      // Finally save the list of recent contexts
+      .do(val => {
+        // Truncate the number of recent contexts to the correct length
+        if (val.length > this.RECENT_CONTEXT_LENGTH) {
+          val.splice(
+            this.RECENT_CONTEXT_LENGTH,
+            val.length - this.RECENT_CONTEXT_LENGTH
+          );
+        }
       })
+      .do(val => {
+        this.saveRecent(val);
+      })
+      .multicast(() => new ReplaySubject(1));
+    // Finally, start broadcasting
+    this._default.connect();
+    this._recent.connect();
+  }
+
+  get recent(): Observable<Context[]> {
+    return this._recent;
+  }
+
+  get current(): Observable<Context> {
+    return this._current;
+  }
+
+  get default(): Observable<Context> {
+    return this._default;
+  }
+
+  changeContext(navigation: Observable<Navigation>): Observable<Context> {
+    let res = navigation
       // Process the navigation only if it is safe
       .filter(val => {
         if (this.checkForReservedWords(val.user)) {
@@ -124,10 +171,6 @@ export class ContextService implements Contexts {
       })
       // Fetch the objects from the REST API
       .switchMap(val => {
-        if (val.url.endsWith('/home')) {
-          // Handle the special URLs
-          return this._default;
-        }
         if (val.space) {
           // If it's a space that's been requested then load the space creator as the owner
           return this
@@ -140,8 +183,9 @@ export class ContextService implements Contexts {
                 message: `${val.url} not found`,
                 type: NotificationType.WARNING
               } as Notification);
-              return Observable.throw(`Space with name ${val.space} and owner ${val.user}
+              console.log(`Space with name ${val.space} and owner ${val.user}
                 from path ${val.url} was not found because of ${err}`);
+              return Observable.of({} as RawContext);
             });
         } else {
           // Otherwise, load the user and use that as the owner
@@ -155,7 +199,8 @@ export class ContextService implements Contexts {
                 message: `${val.url} not found`,
                 type: NotificationType.WARNING
               } as Notification);
-              return Observable.throw(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
+              console.log(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
+              return Observable.of({} as RawContext);
             });
         }
       })
@@ -165,78 +210,36 @@ export class ContextService implements Contexts {
       // Broadcast the spaceChanged event
       // Ensure the menus are built
       .do(val => {
-        this.menus.attach(val);
+        if (val) this.menus.attach(val);
       })
       .do(val => {
-        console.log('Context Changed to', val);
-        this.broadcaster.broadcast('contextChanged', val);
+        if (val) {
+          console.log('Context Changed to', val);
+          this.broadcaster.broadcast('contextChanged', val);
+        }
       })
       .do(val => {
-        if (val.space) {
+        if (val && val.space) {
           console.log('Space Changed to', val);
           this.broadcaster.broadcast('spaceChanged', val.space);
         }
       })
-      .multicast(() => new ReplaySubject(1));
-    // Subscribe the current context to the revent space collector
-    this._current.subscribe(addRecent);
-
-    // Create the recent space list
-    this._recent = addRecent
-      // Map from the context being added to an array of recent contexts
-      // The scan operator allows us to access the list of recent contexts and add ours
-      .scan((recent, ctx) => {
-        // First, check if this context is already in the list
-        // If it is, remove it, so we don't get duplicates
-        for (let i = recent.length - 1; i >= 0; i--) {
-          if (recent[i].path === ctx.path) {
-            recent.splice(i, 1);
-          }
-        }
-        // Then add this context to the top of the list
-        recent.unshift(ctx);
-        return recent;
-        // The final value to scan is the initial value, used when the app starts
-      }, this.dummy.recent)
+      // Subscribe the current context to the revent space collector
       .do(val => {
-        // Truncate the number of recent contexts to the correct length
-        if (val.length > this.RECENT_CONTEXT_LENGTH) {
-          val.splice(
-            this.RECENT_CONTEXT_LENGTH,
-            val.length - this.RECENT_CONTEXT_LENGTH
-          );
-        }
+        if (val) this._addRecent.next(val);
       })
-      // Finally save the list of recent contexts
       .do(val => {
-        this.dummy.recent = val;
-        this.broadcaster.broadcast('save');
+        this._current.next(val);
       })
-      .multicast(() => new ReplaySubject(1));
-    // Finally, start broadcasting
-    this._current.connect();
-    this._default.connect();
-    this._recent.connect();
-  }
-
-  get recent(): Observable<Context[]> {
-    return this._recent;
-  }
-
-  get current(): Observable<Context> {
-    return this._current;
-  }
-
-  get default(): Observable<Context> {
-    return this._default;
+      .multicast(() => new Subject());
+    res.connect();
+    return res;
   }
 
   private buildContext(val: RawContext) {
-    let ctxEntity: Entity = (val.user && val.user.id) ? val.user : null;
-    let ctxSpace: Space = (val.space && val.space.id) ? val.space : null;
     let c: Context = {
-      'user': ctxEntity,
-      'space': ctxSpace,
+      'user': (val.user && val.user.id) ? val.user : null,
+      'space': (val.space && val.space.id) ? val.space : null,
       'type': null,
       'name': null,
       'path': null
@@ -320,6 +323,24 @@ export class ContextService implements Contexts {
       }
     }
     return false;
+  }
+
+  private loadRecent(): Context[] {
+    let res: Context[] = [];
+    if (this.localStorage.get('recentContexts')) {
+      for (let ctx of this.localStorage.get<RawContext[]>('recentContexts')) {
+        res.push(this.buildContext(ctx));
+      }
+    }
+    return res;
+  }
+
+  private saveRecent(recent: Context[]) {
+    let res: RawContext[] = [];
+    for (let ctx of recent) {
+      res.push({ user: ctx.user.attributes.username, space: (ctx.space ? ctx.space.name : null) } as RawContext);
+    }
+    this.localStorage.set('recentContexts', res);
   }
 
 }
