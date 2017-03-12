@@ -109,7 +109,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame/create']);">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name ,'create']);">
 
                 <div class="panel-heading">
                     <h2 class="panel-title text-center">Codebases</h2>
@@ -121,7 +121,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame/run']);">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name ,'run']);">
 
                 <div class="panel-heading">
                     <h2 class="panel-title text-center">Pipelines Executing</h2>
@@ -133,7 +133,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame']);">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name]);">
 
                 <div class="panel-heading">
                     <h2 class="panel-title text-center">Hypotheses Evaluating</h2>
