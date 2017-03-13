@@ -1,2 +1,3 @@
 // export { AUTH_API_URL } from './src/app/shared/auth-api';
-export { FabricStackAnalysisModule } from './src/app/stack/'
+export { StackDetailsModule } from './src/app/stack/stack-details/stack-details.module';
+
