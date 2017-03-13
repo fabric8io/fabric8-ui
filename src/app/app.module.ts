@@ -46,7 +46,6 @@ import { NotificationsService } from './shared/notifications.service';
 
 // Shared Components
 import { SpaceWizardModule } from './space-wizard/space-wizard.module';
-import { PublicModule } from './public/public.module';
 import { DeleteAccountDialogModule } from './delete-account-dialog/delete-account-dialog.module';
 import { StackDetailsModule } from './analyze/stack/stack-details/stack-details.module';
 import { recommenderApiUrlProvider } from './shared/recommender-api.provider';
@@ -87,7 +86,6 @@ export type StoreType = {
       prefix: 'fabric8',
       storageType: 'localStorage'
     }),
-    PublicModule,
     SpaceWizardModule,
     StackDetailsModule,
     ReactiveFormsModule,
