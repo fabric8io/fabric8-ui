@@ -5,7 +5,7 @@ import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 
 @Component({
     selector: 'f8-recommender',
-    templateUrl: './recommender.html',
+    templateUrl: './recommender.component.html',
     styleUrls: ['./recommender.component.scss'],
     providers: [AddWorkFlowService]
 })

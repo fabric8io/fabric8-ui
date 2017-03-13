@@ -6,7 +6,7 @@ import {
 
 @Component({
     selector: 'f8-stack-components',
-    templateUrl: './stack-components.html',
+    templateUrl: './stack-components.component.html',
     styleUrls: ['./stack-components.component.scss']
 })
 

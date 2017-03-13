@@ -13,7 +13,7 @@ import { StackAnalysesService } from '../stack-analyses.service';
 import { GlobalConstants } from '../constants/constants.service';
 
 @Component({
-  selector: 'alm-stack',
+  selector: 'stack-details',
   templateUrl: './stack-details.component.html',
   styleUrls: ['./stack-details.component.scss'],
   providers: [
