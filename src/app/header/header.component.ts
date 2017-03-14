@@ -87,6 +87,7 @@ export class HeaderComponent implements OnInit {
         } else {
           this.resetData();
           this.loggedInUser = null;
+          this.router.navigate(['/', 'public']);
         }
       }
     );
@@ -97,7 +98,7 @@ export class HeaderComponent implements OnInit {
   }
 
   login() {
-    this.loginService.redirectToAuth();
+    this.router.navigate(['/', 'public']);
   }
 
   onImgLoad() {

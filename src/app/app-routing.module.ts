@@ -8,6 +8,18 @@ import { ContextCurrentUserAuthGuard } from './shared/context-current-user-auth-
 
 
 export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'public',
+    pathMatch: 'full'
+  },
+
+  // Redirect login to public to cope with shared login module
+  {
+    path: 'login',
+    redirectTo: 'public',
+    pathMatch: 'full'
+  },
 
   // Temporary page to control the app
   {

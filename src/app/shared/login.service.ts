@@ -4,8 +4,8 @@ import { Injectable, Inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Broadcaster, AuthenticationService, UserService } from 'ngx-login-client';
-import { WIT_API_URL, Notifications, Notification, NotificationType } from 'ngx-fabric8-wit';
+import { Broadcaster, AuthenticationService } from 'ngx-login-client';
+import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { ContextService } from './context.service';
 import { Navigation } from './../models/navigation';
@@ -16,10 +16,9 @@ export class LoginService {
 
   static readonly REDIRECT_URL_KEY = 'redirectUrl';
   static readonly DEFAULT_URL = '/home';
-  // URLs that the redirect should ignore
-  static readonly BANNED_REDIRECT_URLS = ['/'];
   static readonly LOGIN_URL = '/';
-
+  // URLs that the redirect should ignore
+  static readonly BANNED_REDIRECT_URLS = [ '/', '/public'];
 
   private authUrl: string;  // URL to web api
 
@@ -29,17 +28,20 @@ export class LoginService {
     @Inject(WIT_API_URL) apiUrl: string,
     private broadcaster: Broadcaster,
     private authService: AuthenticationService,
-    private contextService: ContextService,
-    private notifications: Notifications,
-    private userService: UserService
+    private contextService: ContextService
   ) {
     this.authUrl = apiUrl + 'login/authorize';
     this.broadcaster.on('authenticationError').subscribe(() => {
       this.authService.logout();
+      this.redirectToLogin(this.router.url);
+    });
+    this.broadcaster.on('logout').subscribe(() => {
+      this.router.navigateByUrl(LoginService.LOGIN_URL);
+      //this.contextService.changeContext(Observable.of({url: LoginService.LOGIN_URL} as Navigation));
     });
   }
 
-  redirectToAuth() {
+  gitHubSignIn() {
     window.location.href = this.authUrl;
   }
 
@@ -54,7 +56,7 @@ export class LoginService {
   public redirectToLogin(currentUrl: string) {
     console.log('Please login to access ' + currentUrl);
     this.redirectUrl = currentUrl;
-    window.location.href = LoginService.LOGIN_URL;
+    this.router.navigateByUrl(LoginService.LOGIN_URL);
   }
 
   public logout() {
@@ -68,9 +70,7 @@ export class LoginService {
       let item: any = part.split('=');
       result[item[0]] = decodeURIComponent(item[1]);
     });
-    if (result['error']) {
-      this.notifications.message({ message: result['error'], type: NotificationType.DANGER } as Notification);
-    } else if (result['token_json']) {
+    if (result['token_json']) {
       // Handle the case that this is a login
       this.authService.logIn(result['token_json']);
     } else if (this.authService.isLoggedIn()) {

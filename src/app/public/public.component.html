@@ -1,0 +1,29 @@
+<div *ngIf="!auth.isLoggedIn()">
+  <div class="f8background"></div>
+
+  <div class="navbar navbar-default">
+    <div class="pull-right form-group">
+      <!--<span class="signin col-md-6">
+            <a [routerLink]="['/signin']">Sign In</a>
+        </span>-->
+      <span class="search col-md-6">
+            <input type="search" class="form-control" placeholder="search" />
+        </span>
+    </div>
+  </div>
+
+
+  <div class="signup">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <p class="socialLogin">
+          <span>Sign in with</span> <a (click)="gitSignin()"><span class="fa fa-github"></span></a> <span class="fa fa-gitlab"></span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="auth.isLoggedIn()">
+  <div class="spinner spinner-lg"></div>
+</div>
