@@ -46,8 +46,8 @@ module.exports = webpackMerge(commonConfig, {
   output: {
     path: helpers.root('dist'),
     publicPath: METADATA.PUBLIC_PATH,
-    filename: 'bundles/fabric8-stack-analysis.js',
-    library: 'fabric8-stack-analysis',
+    filename: 'bundles/fabric8-stack-analysis-ui.js',
+    library: 'fabric8-stack-analysis-ui',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },

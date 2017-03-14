@@ -108,7 +108,7 @@ build completion:
 
 ==== For production:
 
-To build the fabric8-stack-analysis as an npm library, use:
+To build the fabric8-stack-analysis-ui as an npm library, use:
 
 ----
 $ npm run build
@@ -121,20 +121,20 @@ let the CD pipeline do a semantic release.
 
 ==== For development:
 
-To build fabric8-stack-analysis as an npm library and embed it into a webapp such as
+To build fabric8-stack-analysis-ui as an npm library and embed it into a webapp such as
 fabric8-ui, you should:
 
 Step 1: Run `npm run watch:library` in the source directory::
-This will build fabric8-stack-analysis as a library and then set up a watch task to
+This will build fabric8-stack-analysis-ui as a library and then set up a watch task to
 rebuild any ts, html and scss files you change.
 
-Step 2: Run `npm link <path to fabric8-stack-analysis>/dist-watch`::
+Step 2: Run `npm link <path to fabric8-stack-analysis-ui>/dist-watch`::
 In the webapp into which you are embedding. This will create a symlink from
-`node_modules/fabric8-stack-analysis` to the `dist-watch` directory and install that
+`node_modules/fabric8-stack-analysis-ui` to the `dist-watch` directory and install that
 symlinked node module into your webapp.
 
 Step 3: Run your webapp in development mode::
-Make sure you have a watch on `node_modules/fabric8-stack-analysis` enabled. You will
+Make sure you have a watch on `node_modules/fabric8-stack-analysis-ui` enabled. You will
 have access to both JS and SASS sourcemaps if your webapp is properly setup.
 
 NOTE: `fabric8-ui` is setup to do reloading and sourcemaps automatically when you
@@ -142,7 +142,7 @@ run `npm start`.
 
 == CSS and SASS
 
-fabric8-stack-analysis uses SASS for it's stylesheets. It also uses the Angular emulation
+fabric8-stack-analysis-ui uses SASS for it's stylesheets. It also uses the Angular emulation
 of the shadow dom, so you will normally want to place your styles in the
 `.component.scss` file next to the html and the typescript.
 
