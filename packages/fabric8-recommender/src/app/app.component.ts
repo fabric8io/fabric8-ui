@@ -10,7 +10,7 @@ export class AppComponent {
     public codebases: Array<any> = [
         {
         name: 'Pllm',
-        uuid: '8950acb76bc84235873d73d149cb9f61',
-        },
+        uuid: 'ff59ea91cf264003bc6dc12621c91205'
+        }
     ];
 }

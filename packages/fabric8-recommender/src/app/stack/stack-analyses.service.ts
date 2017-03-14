@@ -16,7 +16,7 @@ export class StackAnalysesService {
     private http: Http,
     // private logger: Logger,
   ) {
-    this.stackAnalysesUrl =  'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/'; //apiUrl;
+    this.stackAnalysesUrl =  ' http://bayesian-api-bayesian-staging.b6ff.rh-idev.openshiftapps.com/api/v1/'; //apiUrl;
   }
 
   getStackAnalyses(id: string): Observable<any> {
