@@ -25,7 +25,7 @@ export class MenusService {
                 name: 'Profile',
                 path: ''
               }, {
-                name: 'Collaboration Spaces',
+                name: 'Spaces',
                 path: '_spaces'
               }, {
                 name: 'Resources',

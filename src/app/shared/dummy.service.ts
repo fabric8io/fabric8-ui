@@ -16,7 +16,7 @@ import { Email } from './../models/email';
 export class DummyService {
 
   readonly RESERVED_WORDS: string[] = [
-    'home', 'public'
+    'home'
   ];
 
   readonly RESOURCES: Resources = {
@@ -104,10 +104,10 @@ export class DummyService {
   ]);
 
   readonly PROCESS_TEMPLATES: ProcessTemplate[] = [
-    { name: 'Agile' },
-    { name: 'Scrum' },
-    { name: 'Issue Tracking' },
-    { name: 'Scenario Driven Planning' }
+    { name: 'Agile', description: 'Lorem ipsum' },
+    { name: 'Scrum', description: 'Scrum is Scrum' },
+    { name: 'Issue Tracking', description: 'How boring' },
+    { name: 'Scenario Driven Planning', description: 'We love Todd' }
   ];
 
   constructor(

@@ -21,7 +21,7 @@
         <div class="form-group">
           <div class="col-md-10 col-sm-10 col-xs-10">
             <div class="search-pf-input-group">
-              <input id="spacesSearch" type="search" class="form-control" placeholder="Search collaboration spaces..." #search (keyup)="searchSpaces(search.value)">
+              <input id="spacesSearch" type="search" class="form-control" placeholder="Search spaces..." #search (keyup)="searchSpaces(search.value)">
             </div>
           </div>
           <div class="col-md-2 col-sm-2 col-xs-2">
@@ -45,7 +45,7 @@
 </div>
 
 <!-- Create Space modal -->
-<modal #createSpace title="Create new collaboration space">
+<modal #createSpace title="Create new space">
   <modal-content>
     <space-wizard [host]="createSpace"></space-wizard>
   </modal-content>

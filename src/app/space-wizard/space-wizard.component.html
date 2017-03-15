@@ -1,7 +1,10 @@
 <div class="wizard">
-  <form class="wizard-step" [class.active]="wizard.activeStep==0" role="form" #spaceForm="ngForm" (ngSubmit)="wizard.step(wizardSteps.forge.index)">
+  <form class="wizard-step" [class.active]="wizard.activeStep==0" role="form" #spaceForm="ngForm" (ngSubmit)="createSpace()">
     <header>
-      <h3>Create a new collaboration space</h3>
+      <h3>Create Space</h3>
+      <div>
+        <a (click)="cancel()"><span class="pficon pficon-close"></span></a>
+      </div>
     </header>
     <section class="margin-top-15">
       <div class="container-fluid">
@@ -9,10 +12,10 @@
           <div class="col-xs-12">
             <div class="form-horizontal">
               <div class="form-group has-clear">
-                <label class="control-label col-xs-4">Space Name</label>
+                <label class="control-label col-xs-4">Name</label>
                 <div class="col-xs-8">
-                  <input id="spaceName" name="spaceName" type="text" class="form-control" placeholder="Enter a unique name for your space"
-                    [(ngModel)]="configurator.space.name" required />
+                  <input id="name" name="name" type="text" class="form-control" maxlength="16" minlength="6" placeholder="Enter a unique name for your space"
+                    [(ngModel)]="configurator.space.name" #name="ngModel" required />
                 </div>
               </div>
               <div class="form-group">
@@ -23,15 +26,12 @@
                     </select>
                 </div>
               </div>
-              <div class="col-xs-8 col-xs-offset-4">
-                <h4>What type of space would you like to create</h4>
+              <div *ngIf="configurator.space.process" class="col-xs-offset-4 col-xs-8 padding-top-15">
+                {{configurator.space.process.description}}
               </div>
-              <div class="form-group">
-                <div class="col-xs-8 col-xs-offset-4">
-                  <div class="radio">
-                    <label><input type="radio" id="publicSpace" name="SpaceView" [(ngModel)]="configurator.space.privateSpace" [value]="false" checked/><strong> Public : </strong> Anyone can access this space.</label>
-                  </div>
-                </div>
+              <div class="col-xs-8 col-xs-offset-4 padding-top-15">
+                This space will be <strong>public</strong>, which means that anyone ca access this code and participate in
+                creating the product.
               </div>
             </div>
           </div>
@@ -39,13 +39,12 @@
       </div>
     </section>
     <footer>
-      <button class="btn btn-default margin-right-5" (click)="cancel()">Cancel</button>
-      <button class="btn btn-default" type="submit" [disabled]="!spaceForm.form.valid">Next</button>
+      <button class="btn btn-default" type="submit" [disabled]="!spaceForm.form.valid">Create Space</button>
     </footer>
   </form>
   <div class="wizard-step" [class.active]="wizard.activeStep===wizardSteps.forge.index">
     <header>
-      <h3>Your <strong>{{configurator.space.name}}</strong> Space is ready! How would you like to get started ?</h3>
+      <h3>Your <strong>{{configurator.space.attributes.name}}</strong> Space is ready! How would you like to get started ?</h3>
     </header>
     <section class="flex-container in-row-direction flex-grow-1 margin-top-15">
       <div class="section-column">
@@ -73,9 +72,7 @@
       </div>
     </section>
     <footer>
-      <a class="btn btn-default margin-right-5" (click)="cancel()">Cancel</a>
-      <a class="btn btn-default margin-right-5" (click)="wizard.step(wizardSteps.space.index)">Back</a>
-      <a class="btn btn-default" (click)="finish()">Finish</a>
+      <a class="btn btn-default" (click)="finish()">No thanks, just take me to {{configurator.space.attributes.name}}</a>
     </footer>
   </div>
   <div class="wizard-step" [class.active]="wizard.activeStep===wizardSteps.quickStart.index">

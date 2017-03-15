@@ -46,7 +46,7 @@ export class AppComponent {
   }
 
   handleAction($event: any): void {
-    this.notifications.actionSubject.next($event.notification.action);
+    this.notifications.actionSubject.next($event.action);
   }
 
 }
