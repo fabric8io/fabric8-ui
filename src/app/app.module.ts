@@ -47,7 +47,7 @@ import { NotificationsService } from './shared/notifications.service';
 // Shared Components
 import { SpaceWizardModule } from './space-wizard/space-wizard.module';
 import { DeleteAccountDialogModule } from './delete-account-dialog/delete-account-dialog.module';
-import { StackDetailsModule } from './analyze/stack/stack-details/stack-details.module';
+import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { recommenderApiUrlProvider } from './shared/recommender-api.provider';
 import { authApiUrlProvider } from './shared/auth-api.provider';
 import { witApiUrlProvider } from './shared/wit-api.provider';

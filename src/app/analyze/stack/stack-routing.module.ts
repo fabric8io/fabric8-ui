@@ -13,13 +13,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: StackComponent,
-    children: [
-      {
-        path: '',
-        component: StackOverviewComponent
-      }
-    ]
+    component: StackComponent
   }
 
 ];

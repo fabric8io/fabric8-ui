@@ -1,4 +1,4 @@
-import { StackDetailsModule } from './stack-details/stack-details.module';
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule, Http } from '@angular/http';
@@ -6,11 +6,11 @@ import { HttpModule, Http } from '@angular/http';
 import { StackComponent } from './stack.component';
 import { StackRoutingModule } from './stack-routing.module';
 
-import { StackOverviewModule } from './stack-overview/stack-overview.module';
+import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 
 @NgModule({
   imports: [
-    StackOverviewModule,
+    StackDetailsModule,
     CommonModule,
     StackRoutingModule,
     HttpModule
