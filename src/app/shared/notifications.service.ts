@@ -41,4 +41,8 @@ export class NotificationsService implements Notifications {
     return this.notificationService.getNotifications();
   }
 
+  get recent(): Observable<Notification[]> {
+    return Observable.empty();
+  }
+
 }
