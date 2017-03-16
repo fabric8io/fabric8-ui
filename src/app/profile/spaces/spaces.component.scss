@@ -1,3 +1,70 @@
-.spaces.table {
-    margin-top:30px;
+@import '../../../assets/stylesheets/base';
+.height0 {
+  height: 0;
+}
+.posRel {
+  position: relative;
+}
+.spaces-page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  position: relative;
+  >main {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: stretch;
+    >aside {
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      align-items: stretch;
+      .contents {
+        flex: 1;
+        display: flex;
+        overflow: auto;
+        align-items: center;
+        flex-direction: column;
+        img {
+          height: 250px;
+          max-width: 100%;
+        }
+      }
+    }
+    >section {
+      flex: 9;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      align-items: stretch;
+      .row {
+        margin-right: 0;
+        margin-left: 0;
+      }
+      .contents {
+        flex: 1;
+        display: flex;
+        overflow: auto;
+        align-items: stretch;
+      }
+    }
+  }
+}
+
+.spaces-list-page {
+  flex:1;
+  padding-top: 20px;
+  .spaces-list-wrap {
+    flex: auto;
+    -webkit-flex: auto;
+    -ms-flex: auto;
+    overflow-y: scroll;
+    width: $width100;
+    margin-bottom: 0;
+    .space-item {
+      border-top: 1px solid $color-pf-black-300;
+    }
+  }
 }

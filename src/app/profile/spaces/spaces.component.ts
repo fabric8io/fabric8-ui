@@ -15,7 +15,8 @@ import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 })
 export class SpacesComponent implements OnInit {
 
-  _spaces: Space[];
+  contentItemHeight: number = 54;
+  _spaces: Space[] = [];
   pageSize: number = 20;
   searchTermStream = new Subject<string>();
   context: Context;
@@ -29,14 +30,6 @@ export class SpacesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.context && this.context.user) {
-      this.spaceService.getSpacesByUser(this.context.user.attributes.username)
-        .subscribe(spaces => {
-          this._spaces = spaces;
-        });
-    } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
-    }
     this.searchTermStream
       .debounceTime(300)
       .distinctUntilChanged()
@@ -46,6 +39,32 @@ export class SpacesComponent implements OnInit {
       .subscribe(values => {
         this._spaces = values;
       });
+  }
+
+  initSpaces(event: any): void {
+    this.pageSize = event.pageSize;
+    if (this.context && this.context.user) {
+      this.spaceService.getSpacesByUser(this.context.user.attributes.username, this.pageSize)
+        .subscribe(spaces => {
+          this._spaces = spaces;
+        });
+    } else {
+      this.logger.error("Failed to retrieve list of spaces owned by user");
+    }
+  }
+
+  fetchMoreSpaces($event): void {
+    if (this.context && this.context.user) {
+      this.spaceService.getMoreSpacesByUser()
+        .subscribe(spaces => {
+            this._spaces = this._spaces.concat(spaces);
+          },
+          err => {
+            this.logger.error(err);
+          });
+    } else {
+      this.logger.error("Failed to retrieve list of spaces owned by user");
+    }
   }
 
   get spaces(): Space[] {

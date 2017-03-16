@@ -1,22 +1,24 @@
-<div id="overview" class="container content">
-  <div class="row">
-    <div class="col-md-2">
-      <div class="row">
-        <img src="{{context?.user?.attributes?.imageURL}}" width="150" height="250" />
+<div id="overview" class="container-fluid spaces-page height-100">
+  <main class="row">
+    <aside>
+      <div class="contents">
+        <div class="row">
+          <img src="{{context?.user?.attributes?.imageURL}}" />
+        </div>
+        <div class="row">
+          <h2>{{context?.user?.attributes?.fullName}}</h2>
+        </div>
+        <div class="row">
+          <p>
+            {{context?.user?.attributes?.username}}
+          </p>
+          <p>
+            {{context?.user?.attributes?.bio}}
+          </p>
+        </div>
       </div>
-      <div class="row">
-        <h2>{{context?.user?.attributes?.fullName}}</h2>
-      </div>
-      <div class="row">
-        <p>
-          {{context?.user?.attributes?.username}}
-        </p>
-        <p>
-          {{context?.user?.attributes?.bio}}
-        </p>
-      </div>
-    </div>
-    <div class="col-md-10">
+    </aside>
+    <section>
       <div class="row">
         <div class="form-group">
           <div class="col-md-10 col-sm-10 col-xs-10">
@@ -29,18 +31,22 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <table class="spaces table">
-          <tr *ngFor="let s of spaces">
-            <td *ngIf="s.relationalData && s.relationalData.creator && s.relationalData.creator.attributes">
-              <h2><a [routerLink]="['/', s.relationalData.creator.attributes.username, s.attributes.name]">{{s.attributes.name}}</a></h2>
-              <p>{{s.description}}</p>
-            </td>
-          </tr>
-        </table>
+      <div class="contents posRel height0">
+        <div class="spaces-list-page flex-container in-column-direction flex-grow-1">
+          <div class="spaces-list-wrap" almInfiniteScroll (eachElementHeightInPx)='contentItemHeight' (initItems)='initSpaces($event)' (fetchMore)='fetchMoreSpaces($event)'>
+            <div>
+            <div *ngFor="let s of spaces">
+              <div class="space-item" *ngIf="s.relationalData && s.relationalData.creator && s.relationalData.creator.attributes">
+                <h2><a [routerLink]="['/', s.relationalData.creator.attributes.username, s.attributes.name]">{{s.attributes.name}}</a></h2>
+                <p>{{s.description}}</p>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
 </div>
 
