@@ -8,6 +8,9 @@ import { Broadcaster } from 'ngx-base';
 import { SpaceNamespaceService } from './../../shared/runtime-console/space-namespace.service';
 
 @Component({
+  host: {
+    'class': 'cards-pf flex-container'
+  },
   selector: 'alm-analyzeOverview',
   templateUrl: 'analyze-overview.component.html',
   styleUrls: ['./analyze-overview.component.scss']

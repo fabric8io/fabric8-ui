@@ -1,55 +1,9 @@
-.team {
-  .img-icon{
-    width: 25px;
-    height: 25px;
-  }
-  .member {
-    height: 35px;
-  }
-}
+@import '../../../assets/stylesheets/base';
+@import '../../../assets/stylesheets/shared/layout';
 
-.number {
-  font-size: 96px;
+.blank-slate-pf {
+  min-height: 425px;
 }
-
-.panel-300 {
-  .panel-body {
-    height: 300px;
-  }
-}
-
-.panel-title {
-  min-height: 30px;
-}
-
-.panel-140 {
-  .panel-body {
-    height: 140px;
-  }
-}
-
-.pull-down {
-  display: table-cell;
-  vertical-align: bottom;
-  float: none;
-  padding: 5px;
-}
-
-.bottom-right {
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 30px;
-  margin: 30px;
-  right: 0;
-}
-
-.text-bottom
-{
-  float: none;
-  display: table-cell;
-  vertical-align: bottom;
-}
-
-.clickable {
-  cursor: pointer;
+.card-pf-footer {
+  padding: 20px;
 }

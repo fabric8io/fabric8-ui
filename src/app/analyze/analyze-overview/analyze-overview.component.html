@@ -1,151 +1,218 @@
-<div id="analyze-overview" class="container content">
-    <div class="top row">
-        <div class="col-md-3">
-            <div class="panel panel-300 panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Welcome</h2>
-                </div>
-                <div class="panel-body">
-                    <p>
-                        Various text and links to help the user get started – ideating, coding, importing, setting up pipelines, etc.
-                    </p>
-                </div>
-            </div>
+<div id="analyze-overview" class="container-fluid analyze-overview-wrapper">
+  <section class="row row-cards-pf">
+    <div class="col-md-4">
+      <div class="card-pf card-pf-utilization">
+        <div class="card-pf-heading">
+          <h2 class="card-pf-title">BalloonPopGame</h2>
         </div>
-        <div class="col-md-6">
-            <div class="row">
-                <div class="panel panel-140 panel-default">
-                    <div class="panel-body">
-                        <form class="form-horizontal" (ngSubmit)="saveDescription()" role="form">
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <textarea name="description" id="description" class="form-control" placeholder="Project description. Click to edit..." rows="4"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-12">
-                                    <button type="submit" class="btn btn-default pull-right" value="0">Save</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="panel panel-140 panel-default">
-                    <div class="panel-heading">
-                        <h2 class="panel-title">
-                            Open Scenarios (0)</h2>
-                    </div>
-                    <div class="panel-body">
-
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>State</th>
-                                        <th>Title</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="card-pf-body">
+          <p>
+            Description of the "SPACE" goes here...
+          </p>
+          <p>
+            The Space owner would write the description here...
+          </p>
+          <p>
+            This is an editable field.
+          </p>
         </div>
-        <div class="col-md-3">
-            <div class="panel panel-300 panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Team</h2>
-                </div>
-                <div class="panel-body team">
-                    <ul class="list-unstyled">
-                        <li *ngFor="let u of space?.defaultTeam?.members" class="member">
-                            <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
-                            <img (load)="onImgLoad()" src="{{u.attributes.imageURL}}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}" class="pull-left marginR10" />{{u.attributes.username}}
-                        </li>
-                    </ul>
-                    <button class="btn btn-primary bottom-right" type="button" (click)="teamMembership.open()">Invite Someone</button>
-                </div>
-
-            </div>
-        </div>
+      </div>
     </div>
-    <div class="bottom row">
-        <div class="col-md-3">
-            <div class="panel panel-300 panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Useful Data</h2>
-                </div>
-                <div class="panel-body">
-                    <!-- TODO insert chart -->
-                </div>
-            </div>
+    <div class="col-md-8">
+      <div class="card-pf card-pf-utilization">
+        <div class="card-pf-heading">
+          <h2 class="card-pf-title">Analytical Report</h2>
         </div>
-        <div class="col-md-3">
-            <div class="panel panel-300 panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">New Work Item</h2>
+        <div class="card-pf-body">
+          <form>
+            <div class="form-group">
+              <div class="combobox-container">
+                <input type="hidden" name="" value="">
+                <div class="input-group col-sm-7">
+                  <input type="text" autocomplete="false" placeholder="Select your build/pipeline" class="combobox form-control">
+                  <span class="input-group-addon dropdown-toggle" data-dropdown="dropdown">
+                    <span class="caret"></span> <span class="glyphicon glyphicon-remove"></span>
+                  </span>
                 </div>
-                <div class="panel-body">
-
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <input type="text" id="title" class="form-control" placeholder="Enter title...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <select id="scenario" class="form-control">
-                  <option>Scenario</option>
-                </select>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary bottom-right" type="button">Create</button>
-                    </form>
-                </div>
+              </div>
+              <select class="combobox form-control hide">
+                <option value="" selected="selected">Select your build/pipeline</option>
+                <option value="AL">Pipeline 1</option>
+                <option value="AK">Pipeline 2</option>
+                <option value="AZ">Pipeline 3</option>
+                <option value="AR">Pipeline 4</option>
+                <option value="CA">Pipeline 5</option>
+                <option value="CO">Pipeline 6</option>
+                <option value="CT">Pipeline 7</option>
+                <option value="DE">Pipeline 8</option>
+              </select>
             </div>
+          </form>
+          <div>
+            <a>Build #102</a>: you have used <a>Java JDK 2.0.3</a>. A better way to run/deploy would be to use <a>Java JDK 2.0.8</a>.
+          </div>
+          <div>
+            <a>Build #102</a>: we recommend that you can use <a>Java JDK 2.0.8</a>.
+          </div>
         </div>
-        <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name ,'create']);">
-
-                <div class="panel-heading">
-                    <h2 class="panel-title text-center">Codebases</h2>
-                </div>
-                <div class="panel-body">
-                    <p class="number text-center">0</p>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name ,'run']);">
-
-                <div class="panel-heading">
-                    <h2 class="panel-title text-center">Pipelines Executing</h2>
-                </div>
-                <div class="panel-body">
-                    <p class="text-center number">0</p>
-                </div>
-
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name]);">
-
-                <div class="panel-heading">
-                    <h2 class="panel-title text-center">Hypotheses Evaluating</h2>
-                </div>
-                <div class="panel-body">
-
-                    <p class="text-center number">0</p>
-                </div>
-
-            </div>
-        </div>
+      </div>
     </div>
+  </section>
+  <section class="row row-cards-pf">
+    <div class="col-md-4">
+      <div class="card-pf">
+        <div class="flex-container in-column-direction">
+          <h2 class="card-pf-title card-pf-utilization-details">
+            <span>My Work Items</span>
+            <span class="badge">20</span>
+          </h2>
+        </div>
+        <div class="card-pf-body">
+          <div class="blank-slate-pf">
+            <div class="blank-slate-pf-icon">
+              <span class="pficon pficon pficon-add-circle-o"></span>
+            </div>
+            <h1>Create a Work Item</h1>
+            <p>
+              Planner will help you to create different types of work items and assign team members to items.
+            </p>
+            <div class="blank-slate-pf-main-action">
+              <button class="btn btn-primary btn-lg">Create a Work Item</button>
+            </div>
+          </div>
+          <div class="analyze-overview-items-detail">
+            <div class="card-pf-body">
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="card-pf-footer">
+          <a class="margin-bottom-10">
+            <i class="pficon pficon-add-circle-o"></i>
+            <span>Create a Work item</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-pf">
+        <div class="flex-container in-column-direction">
+          <h2 class="card-pf-title card-pf-utilization-details">
+            <span>Codebases</span>
+            <span class="badge">20</span>
+          </h2>
+          <div class="card-pf-body">
+            <div class="blank-slate-pf">
+              <div class="blank-slate-pf-icon">
+                <span class="pficon pficon pficon-add-circle-o"></span>
+              </div>
+              <h1>Add a Codebase</h1>
+              <p>
+                You can either start coding from scratch or import your code repository.
+              </p>
+              <div class="blank-slate-pf-main-action">
+                <button class="btn btn-primary btn-lg">Add a Codebase</button>
+              </div>
+            </div>
+            <div class="analyze-overview-items-detail">
+              <div class="card-pf-body ">
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              <p>
+                Work Items <a>#201</a> assigned to you by <a>@magranfie</a> under wireframe label
+              </p>
+              </div>
+            </div>
+          </div>
+          <div class="card-pf-footer">
+            <a class="margin-bottom-10">
+              <i class="pficon pficon-add-circle-o"></i>
+              <span>Add a Codebase</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-pf">
+        <div class="flex-container in-column-direction">
+          <h2 class="card-pf-title card-pf-utilization-details">
+            <span>Pipelines</span>
+            <span class="badge">0</span>
+          </h2>
+          <div class="card-pf-body">
+            <div class="blank-slate-pf">
+              <div class="blank-slate-pf-icon">
+                <span class="fa fa-code-fork"></span>
+              </div>
+              <h1>There are no pipelines executing</h1>
+              <p>
+                This will update once you commit and build your codebase.
+                Click the 'Refresh' button to see the latest updates.
+              </p>
+              <div class="blank-slate-pf-main-action">
+                <button class="btn btn-primary btn-lg">Refresh</button>
+              </div>
+            </div>
+            <div class="analyze-overview-items-detail">
+              <div class="card-pf-body">
+                <p>
+                  <i>Pipeline execution updates are provided here.</i>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="card-pf-footer">
+            <a class="margin-bottom-10">
+              &nbsp;&nbsp;&nbsp;
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <modal #teamMembership title="Manage membership of BalloonPopGame Team">
