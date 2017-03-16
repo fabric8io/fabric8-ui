@@ -86,13 +86,13 @@ versionning rules.
 A commit message consists of a *header*, *body* and *footer*. The header
 has a *type*, *scope* and *subject*:
 
-....
+----
 <type>(<scope>): <subject>
 <BLANK LINE>
 <body>
 <BLANK LINE>
 <footer>
-....
+----
 
 The *header* is mandatory and the *scope* of the header is optional.
 
@@ -156,37 +156,37 @@ https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit
 
 Appears under ``Features'' header, pencil subheader:
 
-....
+----
 feat(pencil): add 'graphiteWidth' option
-....
+----
 
 Appears under ``Bug Fixes'' header, graphite subheader, with a link to
 issue #28:
 
-....
+----
 fix(graphite): stop graphite breaking when width < 0.1
 
 Closes #28
-....
+----
 
 Appears under ``Performance Improvements'' header, and under ``Breaking
 Changes'' with the breaking change explanation:
 
-....
+----
 perf(pencil): remove graphiteWidth option
 
 BREAKING CHANGE: The graphiteWidth option has been removed. The default graphite width of 10mm is always used for performance reason.
-....
+----
 
 The following commit and commit `667ecc1` do not appear in the changelog
 if they are under the same release. If not, the revert commit appears
 under the ``Reverts'' header.
 
-....
+----
 revert: feat(pencil): add 'graphiteWidth' option
 
 This reverts commit 667ecc1654a317a13331b17617d973392f415f02.
-....
+----
 
 ### Commitizen - craft valid commit messages
 
