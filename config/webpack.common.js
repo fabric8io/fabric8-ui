@@ -338,7 +338,8 @@ module.exports = function (options) {
         template: 'src/index.html',
         title: METADATA.title,
         chunksSortMode: 'dependency',
-        metadata: METADATA
+        metadata: METADATA,
+        filename: (isProd ? 'f8-ui.html' : 'index.html')
       }),
 
       /*
