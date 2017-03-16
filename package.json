@@ -105,7 +105,7 @@
     "angular2-datatable": "0.5.3",
     "chunk-manifest-webpack2-plugin": "1.0.1",
     "core-js": "2.4.1",
-    "fabric8-planner": "0.12.2",
+    "fabric8-planner": "0.15.2",
     "http-server": "0.9.0",
     "ie-shim": "0.1.0",
     "lodash": "4.17.4",
