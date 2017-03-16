@@ -137,9 +137,6 @@ A detailed explanation can be found in this [document][commit-message-format].
 
 Based on https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit
 
-[commit-message-format]: https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#
-
-
 ### Examples
 
 Appears under "Features" header, pencil subheader:
@@ -176,7 +173,6 @@ This reverts commit 667ecc1654a317a13331b17617d973392f415f02.
 
 Commitizen helps you craft correct commit messages. Install it using `npm install commitizen -g`. Then run `git cz` rather than `git commit`.
 
-### Validate-commit-msg - validate commit messages
+### Validate commit messages
 
-The validate-commit-msg githook checks for invalid commit messages.
 
