@@ -129,6 +129,12 @@ export class StackDetailsComponent implements OnInit {
           suggestion: 'Recommended',
           action: 'Add',
           message: key[0] + ' ' + missing[i][key[0]],
+          codebase: {
+            'repository': 'Exciting',
+            'branch': 'task-101',
+            'filename': 'package.json',
+            'linenumber': 1
+          },
           pop: this.getRecommendationActions()
         });
       }
@@ -141,6 +147,12 @@ export class StackDetailsComponent implements OnInit {
           suggestion: 'Recommended',
           action: 'Upgrade',
           message: key[0] + ' ' + version[i][key[0]],
+          codebase: {
+            'repository': 'Exciting',
+            'branch': 'task-101',
+            'filename': 'package.json',
+            'linenumber': 1
+          },
           pop: this.getRecommendationActions()
         });
       }
