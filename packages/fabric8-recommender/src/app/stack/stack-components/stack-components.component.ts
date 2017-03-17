@@ -3,6 +3,7 @@ import {
     Input,
     OnChanges
 } from '@angular/core';
+import { GlobalConstants } from '../constants/constants.service';
 
 @Component({
     selector: 'f8-stack-components',
@@ -47,6 +48,7 @@ import {
 export class StackComponents implements OnChanges {
 
     @Input() dependencies;
+    public messages: any;
     private dependenciesList: Array<any> = [];
     private headers: Array<any> = [];
     private keys: any = [];
@@ -63,7 +65,10 @@ export class StackComponents implements OnChanges {
     private angleDown: string = 'fa-angle-down';
     public sortDirectionClass: string = this.angleDown;
 
-    constructor() {
+    constructor(private constants: GlobalConstants) {
+        this.constants.getMessages('stackRecommender').subscribe((message) => {
+            this.messages = message;
+        });
         this.fieldName = 'name';
         this.fieldValue = '';
 
