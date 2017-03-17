@@ -1,0 +1,10 @@
+@import 'patternfly/variables';
+//remove toolbar box shadow
+.toolbar-pf
+{
+  box-shadow: none !important;
+}
+// add border top to filter results
+.toolbar-pf-results {
+  border-top : 1px solid $color-pf-black-300;
+}
