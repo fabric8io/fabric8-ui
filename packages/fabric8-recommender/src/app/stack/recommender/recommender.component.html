@@ -1,7 +1,7 @@
 <div class="recommendation-header">
-    <h1 class="keep-left">Recommendations</h1>
+    <h1 class="keep-left">{{messages && messages.title}}</h1>
     <div class="keep-right recommender-action-group  top-level-selection recommendation-group-item">
-        <button (click)="handleMultipleWorkItemCreation($event)" [ngClass]="{'btn-default disable-create-work-item': !canCreateAllWorkItems(), 'btn-primary': canCreateAllWorkItems()}" class="btn keep-left create-work-item" type="button">Create Work Item</button>
+        <button (click)="handleMultipleWorkItemCreation($event)" [ngClass]="{'btn-default disable-create-work-item': !canCreateAllWorkItems(), 'btn-primary': canCreateAllWorkItems()}" class="btn keep-left create-work-item" type="button">{{messages && messages.create_work_item}}</button>
         <button #allRecommendation class="btn btn-link dropdown-toggle keep-right" type="button" (click)="handleRecommendationAction(allRecommendation)" data-toggle="dropdown" aria-haspopup="true"
                 aria-expanded="true">
         <span class="fa fa-ellipsis-v"></span>
@@ -20,10 +20,10 @@
             <div class="list-view-pf-body">
                 <div class="list-view-pf-description">
                     <div class="list-group-item-heading">
-                        No recommendations.
+                        {{messages && messages.no_recommendations_text}}
                     </div>
                     <div class="list-group-item-text">
-                        Some information goes here if you want to change your current stack.
+                        {{messages && messages.no_recommendations_suggestion}}
                     </div>
                 </div>
             </div>

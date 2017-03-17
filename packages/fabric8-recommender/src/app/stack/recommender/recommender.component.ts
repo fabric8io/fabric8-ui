@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-
+import { GlobalConstants } from '../constants/constants.service';
 import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 
 @Component({
@@ -54,14 +54,21 @@ import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 export class RecommenderComponent implements OnChanges {
 
     @Input() recommendations;
+    public messages: any;
     private recommendationsList: Array<any> = [];
-
     private newRecommendations: Array<any> = [];
     private isSelectAll: boolean = false;
 
     private recommendationHeaderActions: Array<any> = [];
 
-    constructor(private addWorkFlowService: AddWorkFlowService) {}
+    constructor(
+        private addWorkFlowService: AddWorkFlowService,
+        private constants: GlobalConstants
+    ) {
+        this.constants.getMessages('stackRecommender').subscribe((message) => {
+            this.messages = message;
+        });
+    }
 
     ngOnChanges() {
         if (this.recommendations) {
@@ -89,6 +96,7 @@ export class RecommenderComponent implements OnChanges {
                 recommendation['action'] = eachOne['action'];
                 recommendation['message'] = eachOne['message'];
                 recommendation['pop'] = eachOne['pop'];
+                recommendation['codebase'] = eachOne['codebase'];
 
                 this.recommendationsList.push(recommendation);
             }
@@ -205,23 +213,22 @@ export class RecommenderComponent implements OnChanges {
      */
     private getWorkItemData(): any {
         let workItemData = {
-            'data': {
-                'attributes': {
-                    'system.state': 'new',
-                    'system.title': '',
-                    'system.description': ''
-                },
-                'relationships': {
-                    'baseType': {
-                        'data': {
-                            'id': 'userstory',
-                            'type': 'workitemtypes'
-                        }
-                    }
-                },
-                'type': 'workitems',
-                'id': '55'
-            }
+          'data': {
+            'attributes': {
+              'system.state': 'open',
+              'system.title': '',
+              'system.codebase': ''
+            },
+            'type': 'workitems',
+            'relationships': {
+              'baseType': {
+                'data': {
+                  'id': '86af5178-9b41-469b-9096-57e5155c3f31',
+                  'type': 'workitemtypes'
+                }
+              }
+            }
+          }
         };
         return workItemData;
     }
@@ -240,8 +247,9 @@ export class RecommenderComponent implements OnChanges {
             if (workItems[i]) {
                 workItem = workItems[i];
                 if (newItem) {
-                    newItem.data.attributes['system.title'] += workItem['title'];
-                    newItem.data.attributes['system.description'] += workItem['description'];
+                    newItem.data.attributes['system.title'] = workItem['title'];
+                    newItem.data.attributes['system.description'] = workItem['description'];
+                    newItem.data.attributes['system.codebase'] = workItem['codebase'];
                 }
             }
         }
@@ -267,7 +275,8 @@ export class RecommenderComponent implements OnChanges {
                 if (this.canCreateWorkItem(recommendations[i])) {
                     let item: any = {
                         title: recommendations[i]['action'],
-                        description: recommendations[i]['message']
+                        description: recommendations[i]['message'],
+                        codebase: recommendations[i]['codebase']
                     };
                     workItems.push(item);
                 }
