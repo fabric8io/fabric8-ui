@@ -1,6 +1,8 @@
 import {
     STACK_DETAILS_CONSTANT,
-    STACK_RECOMMENDER_CONSTANT
+    STACK_RECOMMENDER_CONSTANT,
+    OVERVIEW_CONSTANT,
+    STACK_COMPONENTS_CONSTANT
 } from './global-constants';
 
 /**
@@ -14,5 +16,7 @@ import {
 
 export const MESSAGE_MAP: any = {
     'stackDetails': STACK_DETAILS_CONSTANT,
-    'stackRecommender': STACK_RECOMMENDER_CONSTANT
+    'stackRecommender': STACK_RECOMMENDER_CONSTANT,
+    'overview': OVERVIEW_CONSTANT,
+    'stackComponents': STACK_COMPONENTS_CONSTANT
 };
