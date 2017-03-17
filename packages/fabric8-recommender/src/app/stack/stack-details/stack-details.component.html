@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <button class="stack-reports-btn" (click)="showStackModal()">Stack Reports</button>
+    <button class="stack-reports-btn" (click)="showStackModal()">{{messages && messages.title}}</button>
     <modal #stackModule title="Report title on {{stackAnalysisRawData && stackAnalysisRawData.packageName}}" modalClass="modal-lg modal-fullscreen">
       <modal-content>
           <div [hidden]="errorMessage.message">
@@ -22,7 +22,7 @@
                 <i class="pficon-warning-triangle-o"></i>
               </div>
               <h1>
-                Repost has failed
+                {{messages && messages['report_failure']}}
               </h1>
               <p>
                 {{errorMessage.message}}
@@ -35,13 +35,13 @@
                 </div>
               </div>
               <h1>
-                Report is loading...
+                {{messages && messages['report_loading']}}
               </h1>
               <span>{{errorMessage.message}}</span>
             </div>
             <div class="blank-slate-pf-secondary-action">
-              <button class="btn btn-default btn-lg" (click)="stackModule.close()">Cancel</button>
-              <button class="btn btn-primary btn-lg" (click)="stackModule.close()">Return to pipeline</button>
+              <button class="btn btn-default btn-lg" (click)="stackModule.close()">{{messages && messages['cancel']}}</button>
+              <button class="btn btn-primary btn-lg" (click)="stackModule.close()">{{messages && messages['return_to_pipeline']}}</button>
             </div>
           </div>
       </modal-content>

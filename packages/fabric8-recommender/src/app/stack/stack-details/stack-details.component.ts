@@ -48,6 +48,7 @@ import { GlobalConstants } from '../constants/constants.service';
 export class StackDetailsComponent implements OnInit {
   @Input() stack;
   @ViewChild('stackModule') modalStackModule: any;
+  public messages: any;
 
   errorMessage: any = {};
   stackAnalysesData: Array<any> = [];
@@ -72,8 +73,12 @@ export class StackDetailsComponent implements OnInit {
   constructor(
     private stackAnalysesService: StackAnalysesService,
     // private logger: Logger,
-    private messages: GlobalConstants
-  ) { }
+    private constants: GlobalConstants
+  ) {
+    this.constants.getMessages('stackDetails').subscribe((message) => {
+      this.messages = message;
+    });
+  }
 
   ngOnInit() {
     this.getStackAnalyses(this.stack.uuid);
@@ -89,10 +94,6 @@ export class StackDetailsComponent implements OnInit {
     this.stackOverviewData = {
       CVEdata: ['CVE-2014-0001', 'CVE-2014-12345', 'CVE-2013-78934']
     };
-
-    this.messages.getMessages('stackDetails').subscribe((messages) => {
-      console.log(messages);
-    });
   }
 
   /**

@@ -66,7 +66,7 @@ export class StackComponents implements OnChanges {
     public sortDirectionClass: string = this.angleDown;
 
     constructor(private constants: GlobalConstants) {
-        this.constants.getMessages('stackRecommender').subscribe((message) => {
+        this.constants.getMessages('stackComponents').subscribe((message) => {
             this.messages = message;
         });
         this.fieldName = 'name';
