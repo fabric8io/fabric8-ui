@@ -9,6 +9,7 @@ import { RestangularModule } from 'ng2-restangular';
 import { KubernetesRestangularModule } from 'fabric8-runtime-console/src/app/kubernetes/service/kubernetes.restangular';
 import { LoginService } from 'fabric8-runtime-console/src/app/shared/login.service';
 import { OnLogin } from 'fabric8-runtime-console/src/app/shared/onlogin.service';
+import { OAuthConfigStore } from 'fabric8-runtime-console/src/app/kubernetes/store/oauth-config-store';
 
 @NgModule({
   imports:      [ CommonModule,
@@ -18,7 +19,7 @@ import { OnLogin } from 'fabric8-runtime-console/src/app/shared/onlogin.service'
     HttpModule,
     SpaceModule ],
   declarations: [ PipelinesComponent ],
-  providers: [ LoginService, OnLogin ]
+  providers: [ LoginService, OnLogin, OAuthConfigStore ]
 })
 export class PipelinesModule {
   constructor(http: Http) {}

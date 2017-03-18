@@ -15,7 +15,7 @@ export OAUTH_LOGOUT_URI="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE
 # This is devshift
 export PROXIED_K8S_API_SERVER="${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
 # This is our proxy that we will connect to
-export K8S_API_SERVER="localhost:4200"
+export K8S_API_SERVER="localhost:3000"
 
 if [ -z "${OAUTH_ISSUER}" ]; then
   export OAUTH_ISSUER="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
