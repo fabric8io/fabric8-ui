@@ -7,6 +7,8 @@ import { PipelinesRoutingModule } from './pipelines-routing.module';
 import { SpaceModule } from 'fabric8-runtime-console';
 import { RestangularModule } from 'ng2-restangular';
 import { KubernetesRestangularModule } from 'fabric8-runtime-console/src/app/kubernetes/service/kubernetes.restangular';
+import { LoginService } from 'fabric8-runtime-console/src/app/shared/login.service';
+import { OnLogin } from 'fabric8-runtime-console/src/app/shared/onlogin.service';
 
 @NgModule({
   imports:      [ CommonModule,
@@ -16,6 +18,7 @@ import { KubernetesRestangularModule } from 'fabric8-runtime-console/src/app/kub
     HttpModule,
     SpaceModule ],
   declarations: [ PipelinesComponent ],
+  providers: [ LoginService, OnLogin ]
 })
 export class PipelinesModule {
   constructor(http: Http) {}
