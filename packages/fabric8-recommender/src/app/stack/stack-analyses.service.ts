@@ -1,7 +1,5 @@
-// import { RECOMMENDER_API_URL } from './recommender-api';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-// import { Logger } from '../node_modules/ngx-login-client';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
@@ -14,9 +12,7 @@ export class StackAnalysesService {
 
   constructor(
     private http: Http,
-    // private logger: Logger,
   ) {
-    // console.log('This is the link', FABRIC8_STACK_API_URL);
     this.stackAnalysesUrl = 'http://recommender.api.prod-preview.openshift.io/api/v1/';
   }
 
@@ -45,7 +41,6 @@ export class StackAnalysesService {
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
-   // this.logger.error(errMsg);
     return Observable.throw(errMsg);
   }
 
