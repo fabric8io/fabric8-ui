@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { OverviewComponent } from './overview.component';
 import { ChartComponent } from './chart-component';
 
+import { GlobalConstants } from '../constants/constants.service';
+
 describe('StackOverviewComponent', () => {
     let component: OverviewComponent;
     let fixture: ComponentFixture<OverviewComponent>;
@@ -21,7 +23,9 @@ describe('StackOverviewComponent', () => {
                 HttpModule
             ],
             declarations: [OverviewComponent, ChartComponent],
-            providers: []
+            providers: [
+                GlobalConstants
+            ]
         })
             .compileComponents();
     }));
