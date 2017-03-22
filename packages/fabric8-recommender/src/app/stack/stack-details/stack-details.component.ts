@@ -106,12 +106,6 @@ export class StackDetailsComponent implements OnInit {
       {
         itemName: 'Create WorkItem',
         identifier: 'CREATE_WORK_ITEM'
-      }, {
-        itemName: 'Dismiss Recommendation',
-        identifier: 'DISMISS'
-      }, {
-        itemName: 'Restore Recommendation',
-        identifier: 'RESTORE'
       }
     ];
   }
