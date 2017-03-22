@@ -13,8 +13,9 @@ import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularcla
 
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { PlannerModule } from 'fabric8-planner';
+import { Broadcaster, Logger } from 'ngx-base';
 import { DropdownModule } from 'ngx-dropdown';
-import { AuthenticationService, Broadcaster, Logger, UserService, HttpService } from 'ngx-login-client';
+import { AuthenticationService, UserService, HttpService } from 'ngx-login-client';
 import { WidgetsModule } from 'ngx-widgets';
 
 
@@ -58,8 +59,9 @@ import { ssoApiUrlProvider } from './shared/sso-api.provider';
 
 // Component Services
 import { ProfileService } from './profile/profile.service';
-import { SpaceService, Contexts, Spaces, Notifications } from 'ngx-fabric8-wit';
-import {AuthUserResolve} from './shared/common.resolver';
+import { Notifications } from 'ngx-base';
+import { SpaceService, Contexts, Spaces } from 'ngx-fabric8-wit';
+import { AuthUserResolve } from './shared/common.resolver';
 
 // Login
 

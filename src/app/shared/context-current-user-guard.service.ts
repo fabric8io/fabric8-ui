@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable';
-import { Contexts, Notification, Notifications, NotificationType } from 'ngx-fabric8-wit';
+import { Notification, Notifications, NotificationType } from 'ngx-base';
+import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { Injectable } from '@angular/core';
 import {

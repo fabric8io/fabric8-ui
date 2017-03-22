@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Broadcaster, User, UserService } from 'ngx-login-client';
+import { Broadcaster } from 'ngx-base';
+import { User, UserService } from 'ngx-login-client';
 import { Team, Space, Contexts } from 'ngx-fabric8-wit';
 
 import { DummyService } from './../shared/dummy.service';

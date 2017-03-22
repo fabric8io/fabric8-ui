@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Broadcaster } from 'ngx-login-client';
+import { Broadcaster } from 'ngx-base';
 
 import { ProfileService } from './../../profile/profile.service';
 

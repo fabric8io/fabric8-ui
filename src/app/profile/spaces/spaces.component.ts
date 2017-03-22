@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router }            from '@angular/router';
 import { Subject } from 'rxjs';
 
-import { Logger } from 'ngx-login-client';
+import { Logger } from 'ngx-base';
 import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 
 

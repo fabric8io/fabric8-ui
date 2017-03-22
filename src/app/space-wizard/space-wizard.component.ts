@@ -4,19 +4,16 @@ import { Http } from '@angular/http';
 
 import { Observable } from 'rxjs';
 
+import { Broadcaster, Notification, NotificationType, NotificationAction, Notifications } from 'ngx-base';
 import {
   SpaceService,
   Space,
   ProcessTemplate,
   SpaceAttributes,
   Context,
-  Contexts,
-  Notification,
-  NotificationType,
-  NotificationAction,
-  Notifications
+  Contexts
 } from 'ngx-fabric8-wit';
-import { Broadcaster, User, HttpService, UserService } from 'ngx-login-client';
+import { User, HttpService, UserService } from 'ngx-login-client';
 
 import { DummyService } from '../shared/dummy.service';
 import { SpaceConfigurator } from './wizard';

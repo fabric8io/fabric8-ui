@@ -2,7 +2,7 @@ import { Space, Contexts, SpaceService } from 'ngx-fabric8-wit';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Broadcaster } from 'ngx-login-client';
+import { Broadcaster } from 'ngx-base';
 
 @Component({
   selector: 'alm-analyzeOverview',

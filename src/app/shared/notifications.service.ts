@@ -1,7 +1,7 @@
 import { NotificationService } from 'ngx-widgets';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { Notifications, Notification, NotificationAction } from 'ngx-fabric8-wit';
+import { Notifications, Notification, NotificationAction } from 'ngx-base';
 
 @Injectable()
 export class NotificationsService implements Notifications {

@@ -4,8 +4,9 @@ import { Injectable, Inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Broadcaster, AuthenticationService, UserService } from 'ngx-login-client';
-import { WIT_API_URL, Notifications, Notification, NotificationType } from 'ngx-fabric8-wit';
+import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
+import { AuthenticationService, UserService } from 'ngx-login-client';
+import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { ContextService } from './context.service';
 import { Navigation } from './../models/navigation';

@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Broadcaster, User, UserService, Entity } from 'ngx-login-client';
+import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
+import { User, UserService, Entity } from 'ngx-login-client';
 import {
   Space,
   Context,
   Contexts,
   ContextTypes,
   SpaceService,
-  Notifications,
-  Notification,
-  NotificationType
 } from 'ngx-fabric8-wit';
 import { Subject } from 'rxjs/Subject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';

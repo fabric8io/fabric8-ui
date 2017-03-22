@@ -5,8 +5,9 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { cloneDeep } from 'lodash';
 
-import { WIT_API_URL, Notifications, Notification, NotificationType } from 'ngx-fabric8-wit';
-import { Broadcaster, Profile, User, UserService } from 'ngx-login-client';
+import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
+import { WIT_API_URL  } from 'ngx-fabric8-wit';
+import { Profile, User, UserService } from 'ngx-login-client';
 
 import { DummyService } from './../shared/dummy.service';
 

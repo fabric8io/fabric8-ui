@@ -9,7 +9,8 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { AuthenticationService, Logger } from 'ngx-login-client';
+import { Logger } from 'ngx-base';
+import { AuthenticationService } from 'ngx-login-client';
 import { LoginService } from './login.service';
 
 

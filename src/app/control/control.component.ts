@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
-import { Notification, Notifications, NotificationType } from 'ngx-fabric8-wit';
-import { Broadcaster } from 'ngx-login-client';
+import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 
 
 @Component({

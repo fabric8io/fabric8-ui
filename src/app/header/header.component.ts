@@ -3,7 +3,8 @@ import { Router, NavigationEnd } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
 
-import { Broadcaster, Logger, UserService, User } from 'ngx-login-client';
+import { Broadcaster, Logger } from 'ngx-base';
+import { UserService, User } from 'ngx-login-client';
 import { ContextType, Context, Contexts } from 'ngx-fabric8-wit';
 
 import { LoginService } from './../shared/login.service';

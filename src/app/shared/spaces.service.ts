@@ -1,4 +1,4 @@
-import { Broadcaster } from 'ngx-login-client';
+import { Broadcaster } from 'ngx-base';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Injectable } from '@angular/core';

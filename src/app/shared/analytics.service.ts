@@ -1,8 +1,9 @@
 import { NotificationsService } from './notifications.service';
-import { Contexts, Notifications, Spaces } from 'ngx-fabric8-wit';
+import { Contexts, Spaces } from 'ngx-fabric8-wit';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { Broadcaster, UserService } from 'ngx-login-client';
+import { Broadcaster, Notifications } from 'ngx-base';
+import { UserService } from 'ngx-login-client';
 import { ObservableFabric8UIConfig } from './config/fabric8-ui-config.service';
 
 declare global {
