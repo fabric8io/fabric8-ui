@@ -1,17 +1,18 @@
 import { Space } from 'ngx-fabric8-wit';
-export class ProjectType {
+
+export class CodebaseType {
   description: string;
 
   constructor() { }
 
 }
 
-export class ProjectInfo {
+export class CodebaseInfo {
   name: string;
   pipelineName: string;
   topLevelPackage: string;
   version: string;
-  type: ProjectType;
+  type: CodebaseType;
   stack: StackInfo;
   pipeline: PipelineInfo;
 
@@ -47,10 +48,10 @@ export class SpaceConfigurator {
   // represents the selected or created collaboration space
   space: Space;
   // represents the project being configured
-  project: ProjectInfo = new ProjectInfo;
+  project: CodebaseInfo = new CodebaseInfo;
 
   // TODO:dynamic observable list
-  availableProjectTypes: Array<ProjectType> = [
+  availableProjectTypes: Array<CodebaseType> = [
     { description: 'Creates a new Obsidian :: QuickStart :: Spring Boot Tomcate - Rest' }
   ];
   // TODO:dynamic observable list
@@ -172,6 +173,6 @@ export class SpaceConfigurator {
 
   constructor() {
     this.space = {} as Space;
-    this.project = new ProjectInfo();
+    this.project = new CodebaseInfo();
   }
 }
