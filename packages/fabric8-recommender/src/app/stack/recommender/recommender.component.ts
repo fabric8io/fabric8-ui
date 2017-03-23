@@ -2,6 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { GlobalConstants } from '../constants/constants.service';
 import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
+import {Space, Contexts} from 'ngx-fabric8-wit';
 
 @Component({
     selector: 'f8-recommender',
@@ -60,13 +61,24 @@ export class RecommenderComponent implements OnChanges {
     private isSelectAll: boolean = false;
 
     private recommendationHeaderActions: Array<any> = [];
+    private space: Space;
+
+    private spaceName: string;
+    private userName: string;
 
     constructor(
         private addWorkFlowService: AddWorkFlowService,
-        private constants: GlobalConstants
+        private constants: GlobalConstants,
+        private context: Contexts
     ) {
         this.constants.getMessages('stackRecommender').subscribe((message) => {
             this.messages = message;
+        });
+
+        this.context.current.subscribe( val => {
+            console.log('Inside', val);
+            this.spaceName = val.name;
+            this.userName = val.user.attributes.username;
         });
     }
 
@@ -249,9 +261,11 @@ export class RecommenderComponent implements OnChanges {
         }
 
         let workFlow: Observable<any> = this.addWorkFlowService.addWorkFlow(newItem);
+        console.log(this.userName, this.spaceName);
         workFlow.subscribe((data) => {
             if (data) {
-                let baseUrl: string = 'http://demo.almighty.io/work-item/list/detail/' + data.data.id;
+                //let baseUrl: string = 'http://demo.almighty.io/work-item/list/detail/' + data.data.id;
+                let baseUrl: string = `http://prod-preview.openshift.io/${this.userName}/${this.spaceName}/plan/detail/` + data.data.id;
                 console.log(baseUrl);
             }
         });

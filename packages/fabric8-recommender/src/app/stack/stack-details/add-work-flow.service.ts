@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { AuthenticationService } from 'ngx-login-client';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { WIT_API_URL, Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -13,16 +13,24 @@ export class AddWorkFlowService {
 
   private headers: Headers = new Headers({'Content-Type': 'application/json'});
   private workItemsRoute: string = 'workitems';
-
+  private spacesString: string = 'spaces';
+  private spaceId: string;
   constructor(
     private http: Http,
     @Inject(WIT_API_URL) apiUrl: string,
-    private auth: AuthenticationService
+    private auth: AuthenticationService,
+    private context: Contexts
     ) {
     if (this.auth.getToken() !== null) {
        this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
      }
-     this.stackWorkItemUrl = apiUrl + this.workItemsRoute;
+     this.context.current.subscribe(currentContext => {
+        this.spaceId = currentContext.space.id;
+        this.stackWorkItemUrl = apiUrl + this.spacesString + '/' + this.spaceId + '/' + this.workItemsRoute;
+     });
+
+     // this.stackWorkItemUrl = apiUrl + this.workItemsRoute;
+     // this.stackWorkItemUrl = 'http://api.prod-preview.openshift.io/api/spaces/4903a1f1-09e8-4406-b156-d6aa02c62795/workitems';
     }
 
   addWorkFlow(workItemData: any): Observable<any> {
