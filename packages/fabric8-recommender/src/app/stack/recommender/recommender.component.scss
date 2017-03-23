@@ -1,14 +1,21 @@
 @import '../../../assets/stylesheets/base';
 
+.default-button-state {
+    background: #fff;
+    color: #ccc;
+    box-shadow: none;  
+}
+
 .recommendation-header {
     padding-right: 10px;
     .recommender-action-group {
         margin-top: 20px;
         margin-bottom: 10px;
         .disable-create-work-item {
-            background: #fff;
-            color: #ccc;
-            box-shadow: none;   
+            @extend .default-button-state;
+        }
+        .create-work-item {
+            margin-right: 5px;
         }
     }
     &:after {
@@ -43,6 +50,10 @@
     .list-view-pf-checkbox {
         margin-left: 15px;
     }
+    .each-work-item {
+        @extend .default-button-state;
+        color: #555;
+    }
     button {
         outline: none;
         &.dropdown-toggle {
@@ -71,6 +82,11 @@
         .list-view-pf-checkbox {
             margin: 0;
             padding: 0;
+            .select-all-check {
+                &:hover {
+                    cursor: pointer;
+                }
+            }
         }
     }
 }
