@@ -49,6 +49,7 @@ export class StackComponents implements OnChanges {
 
     @Input() dependencies;
     public messages: any;
+    public sortDirectionClass: string = this.angleDown;
     private dependenciesList: Array<any> = [];
     private headers: Array<any> = [];
     private keys: any = [];
@@ -63,7 +64,6 @@ export class StackComponents implements OnChanges {
     private direction: string = '';
     private angleUp: string = 'fa-angle-up';
     private angleDown: string = 'fa-angle-down';
-    public sortDirectionClass: string = this.angleDown;
 
     constructor(private constants: GlobalConstants) {
         this.constants.getMessages('stackComponents').subscribe((message) => {
@@ -106,47 +106,6 @@ export class StackComponents implements OnChanges {
         }
     }
 
-    private handleDependencies(dependencies: Array<any>): void {
-        if (dependencies) {
-            let length: number = dependencies.length;
-            let dependency: any, eachOne: any;
-            this.headers = [
-                {
-                    name: 'Name',
-                    identifier: this.keys['name'],
-                    isSortable: true
-                }, {
-                    name: 'Current Version',
-                    identifier: this.keys['currentVersion'],
-                    isSortable: true
-                }, {
-                    name: 'Latest Version',
-                    identifier: this.keys['latestVersion']
-                }, {
-                    name: 'Public Popularity',
-                    identifier: this.keys['publicPopularity']
-                }, {
-                    name: 'Enterprise Usage',
-                    identifier: this.keys['enterpriseUsage'],
-                    isSortable: true
-                }
-            ];
-
-            this.dependenciesList = [];
-            for (let i: number = 0; i < length; ++ i) {
-                dependency = {};
-                eachOne = dependencies[i];
-                dependency[this.keys['name']] = eachOne['name'];
-                dependency[this.keys['currentVersion']] = eachOne['version'];
-                dependency[this.keys['latestVersion']] = eachOne['latest_version'] || 'NA';
-                dependency[this.keys['publicPopularity']] =
-                  eachOne['github_details'] ? (eachOne['github_details'].stargazers_count === -1? 'NA' : eachOne['github_details'].stargazers_count) : 'NA';
-                dependency[this.keys['enterpriseUsage']] = eachOne['enterpriseUsage'] || 'NA';
-
-                this.dependenciesList.push(dependency);
-            }
-        }
-    }
     /**
      * handleKeyUpEvent - takes an event and returns nothing
      * 
@@ -197,6 +156,48 @@ export class StackComponents implements OnChanges {
                 header.sortDirectionClass = this.angleDown;
             }
             this.direction = header.direction;
+        }
+    }
+
+    private handleDependencies(dependencies: Array<any>): void {
+        if (dependencies) {
+            let length: number = dependencies.length;
+            let dependency: any, eachOne: any;
+            this.headers = [
+                {
+                    name: 'Name',
+                    identifier: this.keys['name'],
+                    isSortable: true
+                }, {
+                    name: 'Current Version',
+                    identifier: this.keys['currentVersion'],
+                    isSortable: true
+                }, {
+                    name: 'Latest Version',
+                    identifier: this.keys['latestVersion']
+                }, {
+                    name: 'Public Popularity',
+                    identifier: this.keys['publicPopularity']
+                }, {
+                    name: 'Enterprise Usage',
+                    identifier: this.keys['enterpriseUsage'],
+                    isSortable: true
+                }
+            ];
+
+            this.dependenciesList = [];
+            for (let i: number = 0; i < length; ++ i) {
+                dependency = {};
+                eachOne = dependencies[i];
+                dependency[this.keys['name']] = eachOne['name'];
+                dependency[this.keys['currentVersion']] = eachOne['version'];
+                dependency[this.keys['latestVersion']] = eachOne['latest_version'] || 'NA';
+                dependency[this.keys['publicPopularity']] =
+                  eachOne['github_details'] ? (eachOne['github_details'].stargazers_count === -1? 'NA' : eachOne['github_details'].stargazers_count) : 'NA';
+                dependency[this.keys['enterpriseUsage']] = eachOne['enterpriseUsage'] || 'NA';
+
+                this.dependenciesList.push(dependency);
+            }
         }
     }
 }

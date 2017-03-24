@@ -110,14 +110,6 @@ export class RecommenderComponent implements OnChanges {
     }
 
     /*
-     * canCreateWorkItem - takes a recommendation and returns a boolean
-     * Checks if it is ok to enable creation of a work item 
-     */
-    private canCreateWorkItem(recommendation: any): boolean {
-        return !recommendation.isDismissed;
-    }
-
-    /*
      *  handleDropDownClick - takes item, recommender, event and returns nothing
      *  Checks for which of the list item is clicked and transfers the call to 
      *  the specific function accordingly. 
@@ -151,15 +143,6 @@ export class RecommenderComponent implements OnChanges {
     }
 
     /**
-     * This toggles the visibility of the drop down list.
-     */
-    private hideDropDown(element: Element): void {
-        if (element.classList.contains('show-drop')) {
-            element.classList.remove('show-drop');
-        }
-    }
-
-    /**
      * Handles the click from the list item - drop down
      * 1. Create Work Item
      * 2. Dismiss
@@ -181,6 +164,83 @@ export class RecommenderComponent implements OnChanges {
         event.preventDefault();
     }
 
+    /*
+        Handles Recommendation action
+        1. Opens a small popup
+        2. Shows various options
+    */
+    public handleRecommendationAction(element: HTMLElement): void {
+        let sibling: Element = element.nextElementSibling;
+        this.removeAllDrop();
+        if (sibling) {
+            sibling.classList.add('show-drop');
+        }
+    }
+
+    /*
+        Handles Work Item selection
+        1. Toggles the selected area
+     */
+    public handleWorkItemSelection(event: Event, recommendation: any): void {
+        let target: any = event.target;
+        recommendation.isChecked = target.checked;
+        this.handleCheckBoxChange(recommendation);
+    }
+
+    public handleAllItemSelection(): void {
+        this.isSelectAll = !this.isSelectAll;
+        this.recommendationsList.forEach(recommendation => {
+            recommendation.isChecked = this.isSelectAll;
+            this.handleCheckBoxChange(recommendation, true);
+        });
+    }
+
+    /**
+     * 'activate' - this classname gets added if any of the action items can be enabled
+     *  so that user can perform the actions
+     * 
+     *  'deactivate' - this classname gets added if any of the action needs to be disabled.
+     *  so that it is disabled for the user to perform any action
+     */
+     public getCurrentClass(item: any, recommendation: any): string {
+        let className: string = 'deactivate';
+        let identifier: string = item.identifier;
+
+        if (identifier === 'RESTORE') {
+            className = recommendation.isDismissed ? 'activate' : className;
+        } else {
+            className = !recommendation.isDismissed ? 'activate' : className;
+        }
+        return className;
+    }
+
+    /**
+     * Checks if multiple work items can be created
+     * returns true/false
+     */
+     public canCreateAllWorkItems(): boolean {
+        if (this.newRecommendations.length > 0) {
+            return this.newRecommendations.some(recommendation => recommendation.isDismissed === false || recommendation.isDismissed === undefined);
+        }
+        return false;
+    }
+
+    /*
+     * canCreateWorkItem - takes a recommendation and returns a boolean
+     * Checks if it is ok to enable creation of a work item 
+     */
+    private canCreateWorkItem(recommendation: any): boolean {
+        return !recommendation.isDismissed;
+    }
+
+    /**
+     * This toggles the visibility of the drop down list.
+     */
+    private hideDropDown(element: Element): void {
+        if (element.classList.contains('show-drop')) {
+            element.classList.remove('show-drop');
+        }
+    }
 
     /*
      *  toggleWorkItem - takes recommendations array, a boolean and returns nothing
@@ -264,11 +324,18 @@ export class RecommenderComponent implements OnChanges {
         console.log(this.userName, this.spaceName);
         workFlow.subscribe((data) => {
             if (data) {
-                //let baseUrl: string = 'http://demo.almighty.io/work-item/list/detail/' + data.data.id;
                 let baseUrl: string = `http://prod-preview.openshift.io/${this.userName}/${this.spaceName}/plan/detail/` + data.data.id;
-                console.log(baseUrl);
+                this.displayWorkItemResponse(baseUrl);
             }
         });
+    }
+
+    /**
+     * displayWorkItemResponse - takes a message string and returns nothing
+     * Displays the response received from the creation of work items
+     */
+    private displayWorkItemResponse(message: string): void {
+        console.log(message);
     }
 
     /*
@@ -339,68 +406,6 @@ export class RecommenderComponent implements OnChanges {
                 }
             }
         }
-    }
-
-    /*
-        Handles Recommendation action
-        1. Opens a small popup
-        2. Shows various options
-    */
-    public handleRecommendationAction(element: HTMLElement): void {
-        let sibling: Element = element.nextElementSibling;
-        this.removeAllDrop();
-        if (sibling) {
-            sibling.classList.add('show-drop');
-        }
-    }
-
-    /*
-        Handles Work Item selection
-        1. Toggles the selected area
-     */
-    public handleWorkItemSelection(event: Event, recommendation: any): void {
-        let target: any = event.target;
-        recommendation.isChecked = target.checked;
-        this.handleCheckBoxChange(recommendation);
-    }
-
-
-    public handleAllItemSelection(): void {
-        this.isSelectAll = !this.isSelectAll;
-        this.recommendationsList.forEach(recommendation => {
-            recommendation.isChecked = this.isSelectAll;
-            this.handleCheckBoxChange(recommendation, true);
-        });
-    }
-
-    /**
-     * 'activate' - this classname gets added if any of the action items can be enabled
-     *  so that user can perform the actions
-     * 
-     *  'deactivate' - this classname gets added if any of the action needs to be disabled.
-     *  so that it is disabled for the user to perform any action
-     */
-     public getCurrentClass(item: any, recommendation: any): string {
-        let className: string = 'deactivate';
-        let identifier: string = item.identifier;
-
-        if (identifier === 'RESTORE') {
-            className = recommendation.isDismissed ? 'activate' : className;
-        } else {
-            className = !recommendation.isDismissed ? 'activate' : className;
-        }
-        return className;
-    }
-
-    /**
-     * Checks if multiple work items can be created
-     * returns true/false
-     */
-     public canCreateAllWorkItems(): boolean {
-        if (this.newRecommendations.length > 0) {
-            return this.newRecommendations.some(recommendation => recommendation.isDismissed === false || recommendation.isDismissed === undefined);
-        }
-        return false;
     }
 
 }

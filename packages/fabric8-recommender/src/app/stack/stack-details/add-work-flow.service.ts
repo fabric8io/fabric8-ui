@@ -15,22 +15,20 @@ export class AddWorkFlowService {
   private workItemsRoute: string = 'workitems';
   private spacesString: string = 'spaces';
   private spaceId: string;
+
   constructor(
     private http: Http,
     @Inject(WIT_API_URL) apiUrl: string,
     private auth: AuthenticationService,
     private context: Contexts
-    ) {
-    if (this.auth.getToken() !== null) {
-       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
-     }
-     this.context.current.subscribe(currentContext => {
+  ) {
+      if (this.auth.getToken() !== null) {
+        this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+      }
+      this.context.current.subscribe(currentContext => {
         this.spaceId = currentContext.space.id;
         this.stackWorkItemUrl = apiUrl + this.spacesString + '/' + this.spaceId + '/' + this.workItemsRoute;
-     });
-
-     // this.stackWorkItemUrl = apiUrl + this.workItemsRoute;
-     // this.stackWorkItemUrl = 'http://api.prod-preview.openshift.io/api/spaces/4903a1f1-09e8-4406-b156-d6aa02c62795/workitems';
+      });
     }
 
   addWorkFlow(workItemData: any): Observable<any> {
