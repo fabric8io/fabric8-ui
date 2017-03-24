@@ -56,6 +56,7 @@ export class RecommenderComponent implements OnChanges {
 
     @Input() recommendations;
     public messages: any;
+    public workItemResponse: string;
     private recommendationsList: Array<any> = [];
     private newRecommendations: Array<any> = [];
     private isSelectAll: boolean = false;
@@ -75,11 +76,13 @@ export class RecommenderComponent implements OnChanges {
             this.messages = message;
         });
 
-        this.context.current.subscribe( val => {
-            console.log('Inside', val);
-            this.spaceName = val.name;
-            this.userName = val.user.attributes.username;
-        });
+        if (this.context && this.context.current) {
+            this.context.current.subscribe( val => {
+                console.log('Inside', val);
+                this.spaceName = val.name;
+                this.userName = val.user.attributes.username;
+            });
+        }
     }
 
     ngOnChanges() {
@@ -306,12 +309,15 @@ export class RecommenderComponent implements OnChanges {
      *  Handles single as well as multiple work items 
      */
     private addWorkItems(workItems: Array<any>): void {
+        this.workItemResponse = null;
         let length: number = workItems.length;
         let newItem: any, workItem: any;
         newItem = this.getWorkItemData();
         for (let i: number = 0; i < length; ++ i) {
             if (workItems[i]) {
                 workItem = workItems[i];
+                // TODO: Handle the case of sending multiple work items concurrently
+                // once the API Payload is properly set at the receiving end.
                 if (newItem) {
                     newItem.data.attributes['system.title'] = workItem['title'];
                     newItem.data.attributes['system.description'] = workItem['description'];
@@ -336,6 +342,7 @@ export class RecommenderComponent implements OnChanges {
      */
     private displayWorkItemResponse(message: string): void {
         console.log(message);
+        this.workItemResponse = message;
     }
 
     /*

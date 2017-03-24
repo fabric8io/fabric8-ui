@@ -55,4 +55,7 @@
             </div>
         </div>
     </div>
+    <div [hidden]="!workItemResponse" class="col-xs-12 work-item-response">
+        Successfully created the work item. <a target="_blank" href="{{workItemResponse}}">View WorkItem</a>
+    </div>
 </div>

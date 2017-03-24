@@ -25,10 +25,13 @@ export class AddWorkFlowService {
       if (this.auth.getToken() !== null) {
         this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
       }
-      this.context.current.subscribe(currentContext => {
-        this.spaceId = currentContext.space.id;
-        this.stackWorkItemUrl = apiUrl + this.spacesString + '/' + this.spaceId + '/' + this.workItemsRoute;
-      });
+
+      if (this.context && this.context.current) {
+        this.context.current.subscribe(currentContext => {
+          this.spaceId = currentContext.space.id;
+          this.stackWorkItemUrl = apiUrl + this.spacesString + '/' + this.spaceId + '/' + this.workItemsRoute;
+        });
+      }
     }
 
   addWorkFlow(workItemData: any): Observable<any> {
