@@ -147,9 +147,25 @@ export class PipelinesComponent implements OnInit {
 
 
   ngOnInit() {
-    this.pipelinesStore.loadAll()
-      .combineLatest(this.buildStore.loadAll(), combineBuildConfigAndBuilds)
+    Observable.zip(
+      this.pipelinesStore
+        .loadAll()
+        .filter(pipelines => pipelines.length > 0)
+        .distinctUntilChanged()
+        .do((val, error, complete) => {
+          if (val) console.log('pipelinesStoreEmits', val);
+        }),
+      this.buildStore
+        .loadAll()
+        .filter(pipelines => pipelines.length > 0)
+        .distinctUntilChanged()
+        .do((val, error, complete) => {
+          if (val) console.log('buildStoreEmits', val);
+        }),
+      combineBuildConfigAndBuilds
+    )
       .map(filterPipelines)
+      .distinctUntilChanged()
       .do(val => {
         (val as BuildConfig[])
           .forEach(buildConfig => {

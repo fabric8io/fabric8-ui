@@ -32,17 +32,13 @@ export class ToolsNamespaceScope extends StaticNamespaceScope {
         userService
           .loggedInUser
           .map(user => user.attributes.username)
-          .do(val => console.log(val))
           .first(),
         fabric8UIConfig
           .map(config => config.pipelinesNamespace)
-          .do(val => console.log(val))
           .first(),
         (username: string, namespace: string) => ({ username, namespace })
       )
-        .do(val => console.log(val))
         .map(val => `${val.username}${val.namespace}`)
-        .do(val => console.log(val))
     );
   }
 }
