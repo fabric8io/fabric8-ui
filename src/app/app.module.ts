@@ -3,12 +3,18 @@ import './rxjs-extensions';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpModule, Http } from '@angular/http';
 
 import { removeNgStyles, createNewHosts, createInputTransfer } from '@angularclass/hmr';
 
-import { DropdownModule } from 'ng2-dropdown';
 import { LocalStorageModule } from 'angular-2-local-storage';
+import { PlannerModule } from 'fabric8-planner';
+import { Broadcaster, Logger } from 'ngx-base';
+import { DropdownModule } from 'ngx-dropdown';
+import { AuthenticationService, UserService, HttpService } from 'ngx-login-client';
+import { WidgetsModule } from 'ngx-widgets';
+
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -21,33 +27,65 @@ import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
-// Footer
+// Footer & Header
 import { FooterComponent } from './footer/footer.component';
-
-// Header
 import { HeaderComponent } from './header/header.component';
 
 // Shared Services
-import { AuthenticationService } from './auth/authentication.service';
-import { Broadcaster } from './shared/broadcaster.service';
-import { DummyService } from './dummy/dummy.service';
-import { Logger } from './shared/logger.service';
-import { UserService } from './user/user.service';
+import { ApiLocatorService } from './shared/api-locator.service';
+import { AuthGuard } from './shared/auth-guard.service';
+import { ContextCurrentUserGuard } from './shared/context-current-user-guard.service';
+import { ContextResolver } from './shared/context-resolver.service';
+import { DummyService } from './shared/dummy.service';
+import { LoginService } from './shared/login.service';
 import { ToggleService } from './toggle/toggle.service';
 import { ContextService } from './shared/context.service';
-import { ProfileService } from './profile/profile.service';
-
-// Share Modules
-import { PublicModule } from './public/public.module';
+import { AboutService } from './shared/about.service';
+import { SpacesService } from './shared/spaces.service';
+import { MenusService } from './header/menus.service';
+import { NotificationsService } from './shared/notifications.service';
 
 // Shared Components
-import { SpaceDialogModule } from './space-dialog/space-dialog.module';
+import { SpaceWizardModule } from './space-wizard/space-wizard.module';
 import { DeleteAccountDialogModule } from './delete-account-dialog/delete-account-dialog.module';
+import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
+import { recommenderApiUrlProvider } from './shared/recommender-api.provider';
+import { authApiUrlProvider } from './shared/auth-api.provider';
+import { witApiUrlProvider } from './shared/wit-api.provider';
+import { ssoApiUrlProvider } from './shared/sso-api.provider';
+import { forgeApiUrlProvider } from './shared/forge-api.provider';
+
+
+// Component Services
+import { ProfileService } from './profile/profile.service';
+import { Notifications } from 'ngx-base';
+import { SpaceService, Contexts, Spaces } from 'ngx-fabric8-wit';
+import { AuthUserResolve } from './shared/common.resolver';
+
+import { AnalyticService } from './shared/analytics.service';
+import { ConfigStore } from './base/config.store';
+import { fabric8UIConfigProvider } from './shared/config/fabric8-ui-config.service';
+import { Fabric8UIOnLogin } from './shared/runtime-console/fabric8-ui-onlogin.service';
+
+
+import {
+  // Base functionality for the runtime console
+  KubernetesStoreModule,
+  KubernetesRestangularModule,
+  PipelineModule,
+  OnLogin
+} from 'fabric8-runtime-console';
+import { RestangularModule } from 'ng2-restangular';
+
+import { Fabric8UIHttpService } from './shared/fabric8-ui-http.service';
+import { OAuthConfigStoreGuard } from './shared/runtime-console/oauth-config-store-guard.service';
+import { SpaceNamespaceScope } from './shared/runtime-console/space-namespace.scope';
+import { DevNamespaceScope } from 'fabric8-runtime-console/src/app/kubernetes/service/devnamespace.scope';
+import { SwitchableNamespaceScope } from './shared/runtime-console/switchable-namepsace.scope';
+import { NamespaceScope } from 'fabric8-runtime-console/src/app/kubernetes/service/namespace.scope';
+
 
 // Login
-import { SigninComponent } from './signin/signin.component';
-import { LoginComponent } from './login/login.component';
-import { LoginService } from './login/login.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -75,31 +113,84 @@ export type StoreType = {
       prefix: 'fabric8',
       storageType: 'localStorage'
     }),
-    PublicModule,
-    SpaceDialogModule,
+    SpaceWizardModule,
+    StackDetailsModule,
+    ReactiveFormsModule,
+    WidgetsModule,
     // AppRoutingModule must appear last
-    AppRoutingModule
+    AppRoutingModule,
+    KubernetesStoreModule,
+    RestangularModule,
+    KubernetesRestangularModule
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
     FooterComponent,
-    HeaderComponent,
-    LoginComponent,
-    SigninComponent
+    HeaderComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
+    // Broadcaster must come first
+    Broadcaster,
     ENV_PROVIDERS,
     APP_PROVIDERS,
+    ApiLocatorService,
+    authApiUrlProvider,
     AuthenticationService,
-    Broadcaster,
+    AuthGuard,
+    ContextCurrentUserGuard,
     ContextService,
+    {
+      provide: Contexts,
+      useExisting: ContextService
+    },
+    {
+      provide: Spaces,
+      useClass: SpacesService
+    },
+    ContextResolver,
     DummyService,
+    forgeApiUrlProvider,
     Logger,
     LoginService,
     ProfileService,
+    recommenderApiUrlProvider,
     ToggleService,
-    UserService
+    UserService,
+    witApiUrlProvider,
+    ssoApiUrlProvider,
+    AboutService,
+    SpaceService,
+    AuthUserResolve,
+    HttpService,
+    {
+      provide: Http,
+      useClass: Fabric8UIHttpService
+    },
+    MenusService,
+    NotificationsService,
+    {
+      provide: Notifications,
+      useExisting: NotificationsService
+    },
+    fabric8UIConfigProvider,
+    ConfigStore,
+    AnalyticService,
+    {
+      provide: OnLogin,
+      useClass: Fabric8UIOnLogin
+    },
+    {
+      provide: DevNamespaceScope,
+      useClass: SpaceNamespaceScope
+    },
+    SwitchableNamespaceScope,
+    {
+      provide: NamespaceScope,
+      useExisting: SwitchableNamespaceScope
+    },
+    OAuthConfigStoreGuard
   ],
+  schemas: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
@@ -141,4 +232,3 @@ export class AppModule {
   }
 
 }
-

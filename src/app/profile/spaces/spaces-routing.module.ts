@@ -6,12 +6,7 @@ import { SpacesComponent } from './spaces.component';
 const routes: Routes = [
   {
     path: '',
-    component: SpacesComponent,
-    children: [
-      {
-        path: ''
-      }
-    ]
+    component: SpacesComponent
   }
 ];
 

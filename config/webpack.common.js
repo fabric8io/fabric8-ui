@@ -5,26 +5,58 @@
 const webpack = require('webpack');
 const helpers = require('./helpers');
 const ngtools = require('@ngtools/webpack');
+var path = require('path');
+var stringify = require('json-stringify');
 
 /*
  * Webpack Plugins
  */
-// problem with copy-webpack-plugin
-const AssetsPlugin = require('assets-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const DefinePlugin = require('webpack/lib/DefinePlugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
-const HtmlElementsPlugin = require('./html-elements-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+// const ngcWebpack = require('ngc-webpack');
+const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
+const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+
+
+
+const sassModules = [
+  {
+    name: 'bootstrap'
+  }, {
+    name: 'font-awesome',
+    module: 'font-awesome',
+    path: 'font-awesome',
+    sass: 'scss'
+  }, {
+    name: 'patternfly',
+    module: 'patternfly-sass-with-css'
+  }
+];
+
+sassModules.forEach(function (val) {
+  val.module = val.module || val.name + '-sass';
+  val.path = val.path || path.join(val.module, 'assets');
+  val.modulePath = val.modulePath || path.join('node_modules', val.path);
+  val.sass = val.sass || path.join('stylesheets');
+  val.sassPath = path.join(helpers.root(), val.modulePath, val.sass);
+});
+
 
 /*
  * Webpack Constants
  */
-const HMR = helpers.hasProcessFlag('hot');
+// const HMR = helpers.hasProcessFlag('hot');
+// const AOT = helpers.hasNpmFlag('aot');
 const METADATA = {
   title: 'Fabric8',
   baseUrl: '/',
@@ -39,13 +71,19 @@ const METADATA = {
 module.exports = function (options) {
   const isProd = options.env === 'production';
   const aotMode = false;//options && options.aot !== undefined;
-  console.log('The options from the webpack config: ' + JSON.stringify(options, null, 2));
+  console.log('The options from the webpack config: ' + stringify(options, null, 2));
+
+  // ExtractTextPlugin
+  const extractCSS = new ExtractTextPlugin({
+    filename: '[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css',
+    allChunks: true }
+  );
+
   // const entryFile = aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts';
   // const outPath = aotMode ? 'dist' : 'aot';
   // const devtool = aotMode ? 'source-map' : 'eval-source-map';
   // const srcPath = path.join(__dirname, 'demo', 'src');
   var config = {
-  // return {
 
     /*
      * Cache generated modules and chunks to improve performance for multiple incremental builds.
@@ -60,7 +98,7 @@ module.exports = function (options) {
      * The entry point for the bundle
      * Our Angular.js app
      *
-     * See: http://webpack.github.io/docs/configuration.html#entry
+     * See: https://webpack.js.org/configuration/entry-context/#entry
      */
     entry: {
       'polyfills': './src/polyfills.browser.ts',
@@ -72,19 +110,26 @@ module.exports = function (options) {
     /*
      * Options affecting the resolving of modules.
      *
-     * See: http://webpack.github.io/docs/configuration.html#resolve
+     * See: https://webpack.js.org/configuration/resolve
      */
     resolve: {
 
-      /*
-       * An array of extensions that should be used to resolve modules.
+      /**
+       * An array that automatically resolve certain extensions.
+       * Which is what enables users to leave off the extension when importing.
        *
-       * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
+       * See: https://webpack.js.org/configuration/resolve/#resolve-extensions
        */
       extensions: ['.ts', '.js', '.json'],
 
-      // An array of directory names to be resolved to the current directory
-      modulesDirectories: [helpers.root('src'), 'node_modules']
+      /**
+       * Tell webpack what directories should be searched when resolving modules.
+       *
+       * We enable this in dev as it allows npm link to work
+       *
+       * See: https://webpack.js.org/configuration/resolve/#resolve-modules
+       */
+      modules: [ helpers.root('src'), helpers.root('node_modules')]
 
     },
 
@@ -95,7 +140,7 @@ module.exports = function (options) {
      */
     module: {
 
-      loaders: [
+      rules: [
 
         /*
          * Typescript loader support for .ts and Angular 2 async routes via .async.ts
@@ -106,14 +151,14 @@ module.exports = function (options) {
          */
         {
           test: /\.ts$/,
-          loaders: aotMode ? [
+          use: aotMode ? [
             '@ngtools/webpack'
           ] : [
-            '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-            'awesome-typescript-loader',
-            'angular2-template-loader',
-            'angular2-router-loader'
-          ],
+              '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
+              'awesome-typescript-loader',
+              'angular2-template-loader',
+              'angular2-router-loader'
+            ],
           // loaders: '@ngtools/webpack',
           exclude: [/\.(spec|e2e)\.ts$/]
         },
@@ -125,7 +170,7 @@ module.exports = function (options) {
          */
         {
           test: /\.json$/,
-          loader: 'json-loader'
+          use: ['json-loader']
         },
 
         /* Raw loader support for *.html
@@ -135,8 +180,8 @@ module.exports = function (options) {
          */
         {
           test: /\.html$/,
-          loader: 'raw-loader',
-          exclude: [helpers.root('src/index.html')]
+          use: ['html-loader'],
+          exclude: [path.resolve(__dirname, 'src/index.html')]
         },
 
         /*
@@ -146,52 +191,88 @@ module.exports = function (options) {
          */
         {
           test: /\.css$/,
-          loaders: ['to-string-loader', 'css-loader']
+          use: extractCSS.extract({
+            fallback: "style-loader",
+            loader: "css-loader?sourceMap&context=/"
+          })
+        },
+        {
+          test: /^(?!.*component).*\.scss$/,
+          use: extractCSS.extract({
+              fallback: 'style-loader',
+              use: [
+                {
+                  loader: 'css-loader',
+                  options: {
+                    minimize: isProd,
+                    sourceMap: true,
+                    context: '/'
+                  }
+                }, {
+                  loader: 'sass-loader',
+                  options: {
+                    includePaths: sassModules.map(function (val) {
+                      return val.sassPath;
+                    }),
+                    sourceMap: true
+                  }
+                }
+              ],
+          })
+        }, {
+          test: /\.component\.scss$/,
+          use: [
+            {
+              loader: 'to-string-loader'
+            }, {
+              loader: 'css-loader',
+              options: {
+                minimize: isProd,
+                sourceMap: true,
+                context: '/'
+              }
+            }, {
+              loader: 'sass-loader',
+              options: {
+                includePaths: sassModules.map(function (val) {
+                  return val.sassPath;
+                }),
+                sourceMap: true
+              }
+            }
+          ],
         },
 
-        {
-          test: /\.scss$/,
-          loaders: ["css-to-string", "css-loader", "sass-loader"]
-        },
-        // old way
-/*
-        {
-          test: /\.css$/,
-          exclude: helpers.root('src', 'app'),
-          loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
-        },
-        {
-          test: /\.css$/,
-          include: helpers.root('src', 'app'),
-          loader: 'raw!postcss'
-        },
-        {
-          test: /\.scss$/,
-          exclude: helpers.root('src', 'app'),
-          loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!resolve-url!sass?sourceMap')
-        },
-        {
-          test: /\.scss$/,
-          include: helpers.root('src', 'app'),
-          loaders: ['exports-loader?module.exports.toString()', 'css', 'postcss', 'sass']
-        },
-*/
-
-
-
-        /* File loader for supporting images, for example, in CSS files.
+        /**
+         * Fil e loader for supporting fonts, for example, in CSS files.
          */
         {
-          test: /\.(jpg|png|gif)$/,
-          loader: 'file'
+          test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
+          use: [
+            {
+              loader: 'url-loader',
+              query: {
+                limit: 3000,
+                name: 'assets/fonts/[name].' + (isProd ? '[hash]' : '') + '[ext]'
+              }
+            }
+          ]
         },
         {
-          test: /manifest.json$/,
-          loader: 'file-loader?name=manifest.json!web-app-manifest-loader'
+          test: /\.jpg$|\.png$|\.gif$|\.jpeg$/,
+          use: [
+            {
+              loader: 'url-loader',
+              query: {
+                limit: 3000,
+                name: 'assets/images/[name].' + (isProd ? '[hash]' : '') + '[ext]'
+              }
+            }
+          ]
         }
       ]
     },
-    
+
     /*
      * Add additional plugins to the compiler.
      *
@@ -199,27 +280,12 @@ module.exports = function (options) {
      */
     plugins: [
       /*
-       * Plugin: AssetsPlugin
-       * Description: Webpack plugin that emits a json file with assets paths.
-       * When working with Webpack you might want to generate your bundles with a generated hash in them (for cache busting).
-       * This plug-in outputs a json file with the paths of the generated assets so you can find them from somewhere else.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-       * See: https://github.com/kossnocorp/assets-webpack-plugin
-       */
-      new AssetsPlugin({
-        path: helpers.root('dist'),
-        filename: 'webpack-assets.json',
-        prettyPrint: true
-      }),
-
-      /*
        * Plugin: ForkCheckerPlugin
        * Description: Do type checking in a separate process, so webpack don't need to wait.
        *
        * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
        */
-      new ForkCheckerPlugin(),
+      new CheckerPlugin(),
 
       /*
        * Plugin: CommonsChunkPlugin
@@ -243,7 +309,7 @@ module.exports = function (options) {
       new ContextReplacementPlugin(
         // The (\\|\/) piece accounts for path separators in *nix and Windows
         /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-        helpers.root('src') // location of your src
+        path.resolve(__dirname, 'src') // location of your src
       ),
 
       /*
@@ -254,13 +320,15 @@ module.exports = function (options) {
        *
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
-      new CopyWebpackPlugin([{
-        from: 'src/assets',
-        to: 'assets'
-      }, {
-        from: 'src/meta'
-      }]),
-
+      new CopyWebpackPlugin([
+        {
+          from: 'src/meta'
+        },
+        {
+          from: 'node_modules/fabric8-runtime-console/src/img',
+          to: 'img'
+        }
+      ]),
 
       /*
        * Plugin: HtmlWebpackPlugin
@@ -274,8 +342,7 @@ module.exports = function (options) {
         template: 'src/index.html',
         title: METADATA.title,
         chunksSortMode: 'dependency',
-        metadata: METADATA,
-        inject: 'head'
+        metadata: METADATA
       }),
 
       /*
@@ -290,38 +357,13 @@ module.exports = function (options) {
       }),
 
       /*
-       * Plugin: HtmlElementsPlugin
-       * Description: Generate html tags based on javascript maps.
-       *
-       * If a publicPath is set in the webpack output configuration, it will be automatically added to
-       * href attributes, you can disable that by adding a "=href": false property.
-       * You can also enable it to other attribute by settings "=attName": true.
-       *
-       * The configuration supplied is map between a location (key) and an element definition object (value)
-       * The location (key) is then exported to the template under then htmlElements property in webpack configuration.
-       *
-       * Example:
-       *  Adding this plugin configuration
-       *  new HtmlElementsPlugin({
-       *    headTags: { ... }
-       *  })
-       *
-       *  Means we can use it in the template like this:
-       *  <%= webpackConfig.htmlElements.headTags %>
-       *
-       * Dependencies: HtmlWebpackPlugin
-       */
-      new HtmlElementsPlugin({
-        headTags: require('./head-config.common')
-      }),
-
-      /*
        * Plugin LoaderOptionsPlugin (experimental)
        *
        * See: https://gist.github.com/sokra/27b24881210b56bbaff7
        */
-      new LoaderOptionsPlugin({})
+      new LoaderOptionsPlugin({}),
 
+      extractCSS
     ],
 
     /*
@@ -342,7 +384,7 @@ module.exports = function (options) {
 
   if (aotMode) {
     config.plugins.push(new ngtools.AotPlugin({
-      tsConfigPath: 'tsconfig-aot.json',
+      tsConfigPath: 'tsconfig-aot.json'
       // entryModule: './src/app/app.module#AppModule',
       // genDir: './src/aot'
     }));

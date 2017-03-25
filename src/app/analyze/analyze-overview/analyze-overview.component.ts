@@ -1,27 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Space, Contexts, SpaceService } from 'ngx-fabric8-wit';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContextService } from '../../shared/context.service';
-import { Broadcaster } from '../../shared/broadcaster.service';
+
+import { Broadcaster } from 'ngx-base';
 
 @Component({
   selector: 'alm-analyzeOverview',
   templateUrl: 'analyze-overview.component.html',
   styleUrls: ['./analyze-overview.component.scss']
 })
-export class AnalyzeOverviewComponent implements OnInit {
+export class AnalyzeOverviewComponent {
 
   imgLoaded: Boolean = false;
 
+  space: Space;
 
   constructor(
     private router: Router,
-    public context: ContextService,
+    context: Contexts,
+    private spaceService: SpaceService,
     private broadcaster: Broadcaster
   ) {
-  }
-
-  ngOnInit() {
-
+    context.current.subscribe(val => this.space = val.space);
   }
 
   onImgLoad() {
@@ -29,7 +29,7 @@ export class AnalyzeOverviewComponent implements OnInit {
   }
 
   saveDescription() {
-    this.broadcaster.broadcast('save', 1);
+    this.spaceService.update(this.space);
   }
 
 }

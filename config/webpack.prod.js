@@ -5,12 +5,15 @@
 const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
+const stringify = require('json-stringify');
 
 /**
  * Webpack Plugins
  */
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
@@ -19,31 +22,47 @@ const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const ngtools = require('@ngtools/webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const OfflinePlugin = require('offline-plugin');
+
 
 /**
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
-const API_URL = process.env.API_URL || 'http://api.almighty.io/api/';
-const FORGE_URL = process.env.FORGE_URL;
+const FABRIC8_FORGE_API_URL = process.env.FABRIC8_FORGE_API_URL;
+const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL;
+const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
+const FABRIC8_SSO_API_URL = process.env.FABRIC8_SSO_API_URL;
+const FABRIC8_FORGE_URL = process.env.FORGE_URL;
+const FABRIC8_PIPELINES_NAMESPACE = process.env.FABRIC8_PIPELINES_NAMESPACE;
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
+const BUILD_NUMBER = process.env.BUILD_NUMBER;
+const BUILD_TIMESTAMP = process.env.BUILD_TIMESTAMP;
+const BUILD_VERSION = process.env.BUILD_VERSION;
 
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
-const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
+const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
   HMR: false,
-  API_URL: API_URL,
-  FORGE_URL: FORGE_URL,
-  PUBLIC_PATH: PUBLIC_PATH
-
+  FABRIC8_FORGE_API_URL: FABRIC8_FORGE_API_URL,
+  FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
+  FABRIC8_SSO_API_URL: FABRIC8_SSO_API_URL,
+  FABRIC8_RECOMMENDER_API_URL: FABRIC8_RECOMMENDER_API_URL,
+  FABRIC8_FORGE_URL: FABRIC8_FORGE_URL,
+  FABRIC8_PIPELINES_NAMESPACE: FABRIC8_PIPELINES_NAMESPACE,
+  PUBLIC_PATH: PUBLIC_PATH,
+  BUILD_NUMBER: BUILD_NUMBER,
+  BUILD_TIMESTAMP: BUILD_TIMESTAMP,
+  BUILD_VERSION: BUILD_VERSION
 });
 
 module.exports = function (env) {
-  console.log('The env from the webpack.prod config: ' + JSON.stringify(env, null, 2));
-  return webpackMerge(commonConfig({env: ENV}), {
+  // stringify can't cope with undefined
+  console.log('The env from the webpack.prod config: ' + (env ? stringify(env , null, 2) : env));
+  return webpackMerge(commonConfig({ env: ENV }), {
 
     /**
      * Developer tool to enhance debugging
@@ -51,7 +70,12 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#devtool
      * See: https://github.com/webpack/docs/wiki/build-performance#sourcemaps
      */
-    devtool: 'source-map',
+
+    // PROD VALUE
+    devtool: 'cheap-module-source-map',
+
+    // DEBUG VALUE
+    //devtool: 'inline-source-map',
 
     /**
      * Options affecting the output of the compilation.
@@ -101,17 +125,23 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
+      new CopyWebpackPlugin([
+        {
+          from: 'src/config',
+          to: 'config'
+        }
+      ]),
 
       /**
        * Plugin: @ngtools/webpack
        * Description: Set up AoT for webpack, including SASS precompile
        */
- /*     new ngtools.AotPlugin({
-        tsConfigPath: 'tsconfig-aot.json',
-        // mainPath: "src/main.browser.ts"
-        // entryModule: 'src/app/app.module#AppModule',
-        // genDir: 'aot'
-      }),
+      /*     new ngtools.AotPlugin({
+       tsConfigPath: 'tsconfig-aot.json',
+       // mainPath: "src/main.browser.ts"
+       // entryModule: 'src/app/app.module#AppModule',
+       // genDir: 'aot'
+     }),
 */
       /**
        * Plugin: WebpackMd5Hash
@@ -124,11 +154,11 @@ module.exports = function (env) {
       /**
        * Webpack plugin and CLI utility that represents bundle content as convenient interactive zoomable treemap
        */
-/*
-      new BundleAnalyzerPlugin({
-        generateStatsFile: true
-      }),
-*/
+      /*
+            new BundleAnalyzerPlugin({
+              generateStatsFile: true
+            }),
+      */
 
       /**
        * Plugin: DedupePlugin
@@ -151,16 +181,31 @@ module.exports = function (env) {
        */
       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
       new DefinePlugin({
-        'ENV': JSON.stringify(METADATA.ENV),
+        'ENV': stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'process.env': {
-          'ENV': JSON.stringify(METADATA.ENV),
-          'NODE_ENV': JSON.stringify(METADATA.ENV),
+          'ENV': stringify(METADATA.ENV),
+          'NODE_ENV': stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
-          'API_URL' : JSON.stringify(METADATA.API_URL),
-          'FORGE_URL': JSON.stringify(METADATA.FORGE_URL),
-          'PUBLIC_PATH' : JSON.stringify(METADATA.PUBLIC_PATH)
+          'FABRIC8_FORGE_API_URL': stringify(METADATA.FABRIC8_FORGE_API_URL),
+          'FABRIC8_WIT_API_URL': stringify(METADATA.FABRIC8_WIT_API_URL),
+          'FABRIC8_SSO_API_URL': stringify(METADATA.FABRIC8_SSO_API_URL),
+          'FABRIC8_RECOMMENDER_API_URL': stringify(METADATA.FABRIC8_RECOMMENDER_API_URL),
+          'FABRIC8_FORGE_URL': stringify(METADATA.FABRIC8_FORGE_URL),
+          'FABRIC8_PIPELINES_NAMESPACE': stringify(METADATA.FABRIC8_PIPELINES_NAMESPACE),
+          'PUBLIC_PATH': stringify(METADATA.PUBLIC_PATH),
+          'BUILD_NUMBER': stringify(METADATA.BUILD_NUMBER),
+          'BUILD_TIMESTAMP': stringify(METADATA.BUILD_TIMESTAMP),
+          'BUILD_VERSION': stringify(METADATA.BUILD_VERSION),
         }
+      }),
+
+      /*
+       * Generate FavIcons from the master svg in all formats
+       */
+      new FaviconsWebpackPlugin({
+        logo: './src/assets/icon/fabric8_icon.svg',
+        prefix: 'assets/icons-[hash]/'
       }),
 
       /**
@@ -195,7 +240,8 @@ module.exports = function (env) {
         compress: {
           screw_ie8: true
         }, //prod
-        comments: false //prod
+        comments: false, //prod
+        sourceMap: true
       }),
 
       /**
@@ -239,6 +285,7 @@ module.exports = function (env) {
        */
       new LoaderOptionsPlugin({
         debug: false,
+        minimize: true,
         options: {
 
           /**
@@ -272,7 +319,10 @@ module.exports = function (env) {
             customAttrAssign: [/\)?\]?=/]
           }
         }
-      })
+      }),
+
+      // OfflinePlugin always goes last
+      new OfflinePlugin()
     ],
 
     /*

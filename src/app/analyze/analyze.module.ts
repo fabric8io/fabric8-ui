@@ -1,16 +1,20 @@
-import { NgModule }         from '@angular/core';
-import { CommonModule }     from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { HttpModule, Http } from '@angular/http';
 
-import { AnalyzeComponent }     from './analyze.component';
+import { AnalyzeComponent } from './analyze.component';
 import { AnalyzeRoutingModule } from './analyze-routing.module';
 
-import { AnalyzeOverviewModule } from './analyze-overview/analyze-overview.module'
+import { AnalyzeOverviewModule } from './analyze-overview/analyze-overview.module';
+
 
 @NgModule({
-  imports:      [ AnalyzeOverviewModule, CommonModule, AnalyzeRoutingModule, HttpModule ],
-  declarations: [ AnalyzeComponent ],
+  imports: [AnalyzeOverviewModule,
+            AnalyzeRoutingModule,
+            CommonModule,
+            HttpModule],
+  declarations: [AnalyzeComponent]
 })
 export class AnalyzeModule {
-  constructor(http: Http) {}
+  constructor(http: Http) { }
 }

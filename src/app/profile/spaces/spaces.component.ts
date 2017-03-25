@@ -1,10 +1,10 @@
-import { DummyService } from './../../dummy/dummy.service';
 import { Component, OnInit } from '@angular/core';
 import { Router }            from '@angular/router';
+import { Subject } from 'rxjs';
 
-import { Logger } from "../../shared/logger.service";
-import { SpaceService } from './space.service';
-import { Space } from "../../models/space";
+import { Logger } from 'ngx-base';
+import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
+
 
 
 @Component({
@@ -17,20 +17,42 @@ export class SpacesComponent implements OnInit {
 
   _spaces: Space[];
   pageSize: number = 20;
+  searchTermStream = new Subject<string>();
+  context: Context;
 
   constructor(
-    private router: Router, public dummy: DummyService, private spaceService: SpaceService, private logger: Logger) {
+    private router: Router,
+    private spaceService: SpaceService,
+    private logger: Logger,
+    private contexts: Contexts) {
+      this.contexts.current.subscribe(val => this.context = val);
   }
 
   ngOnInit() {
-    this.spaceService.getSpaces(this.pageSize)
-      .then((spaces) => {
-        this._spaces = spaces;
+    if (this.context && this.context.user) {
+      this.spaceService.getSpacesByUser(this.context.user.attributes.username)
+        .subscribe(spaces => {
+          this._spaces = spaces;
+        });
+    } else {
+      this.logger.error("Failed to retrieve list of spaces owned by user");
+    }
+    this.searchTermStream
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .switchMap((searchText: string) => {
+        return this.spaceService.search(searchText);
       })
-      .catch((e) => this.logger.error(e));
+      .subscribe(values => {
+        this._spaces = values;
+      });
   }
 
   get spaces(): Space[] {
     return this._spaces;
+  }
+
+  searchSpaces(searchText: string) {
+    this.searchTermStream.next(searchText);
   }
 }

@@ -1,4 +1,4 @@
-<div class="col-md-12 col-sm-12 col-xs-12 createTeamMembershipBlock" *ngIf="context.current.space">
+<div class="col-md-12 col-sm-12 col-xs-12 createTeamMembershipBlock">
     <div class="col-md-12 col-sm-12 col-xs-12">
         <h4 class="teamMembershipName">Manage membership of BalloonPopGame Team</h4>
         <div class="form-group">
@@ -34,7 +34,7 @@
                     <th>Name</th>
                 </tr>
             </thead>
-            <tr *ngFor="let u of team.members">
+            <tr *ngFor="let u of team?.members">
                 <td>
                     {{u.attributes.username}}
                 </td>

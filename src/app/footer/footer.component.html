@@ -1,1 +1,10 @@
-<div id="footer_container" class="footer" >Copyright 2017 Red Hat</div>
+<div id="footer_container" class="footer">
+  Copyright 2017 Red Hat
+  (<a href="https://github.com/fabric8io/fabric8-ui/releases/tag/v{{about.buildVersion}}" *ngIf="about.buildVersion">
+    v{{about.buildVersion}}
+  </a>
+  <span *ngIf="about.buildNumber">
+    Build#{{about.buildNumber}} {{about.buildTimestamp}}
+  </span>
+  <span *ngIf="!(about.buildNumber || about.buildVersion)">Development Build</span> )
+</div>

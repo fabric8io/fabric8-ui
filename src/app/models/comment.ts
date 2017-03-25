@@ -1,4 +1,4 @@
-import { User } from './user';
+import { User } from 'ngx-login-client';
 
 export class Comment {
     id: string;

@@ -14,7 +14,7 @@ export class ReadmeComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
   }
 
 }

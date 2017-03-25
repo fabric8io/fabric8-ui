@@ -1,10 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
+import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { DummyService } from './../dummy/dummy.service';
-import { Broadcaster } from '../shared/broadcaster.service';
-import { Profile } from './../models/profile';
-import { User } from './../models/user';
+import { Observable } from 'rxjs';
+import { cloneDeep } from 'lodash';
+
+import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
+import { WIT_API_URL  } from 'ngx-fabric8-wit';
+import { Profile, User, UserService } from 'ngx-login-client';
+
+import { DummyService } from './../shared/dummy.service';
 
 
 /*
@@ -14,73 +19,66 @@ import { User } from './../models/user';
 @Injectable()
 export class ProfileService {
 
+  private static readonly HEADERS: Headers = new Headers({ 'Content-Type': 'application/json' });
+  private profileUrl: string;
+  private _loggedInUser: User;
+
   constructor(
     private dummy: DummyService,
     private router: Router,
-    private broadcaster: Broadcaster
+    private broadcaster: Broadcaster,
+    userService: UserService,
+    @Inject(WIT_API_URL) apiUrl: string,
+    private http: Http,
+    private notifications: Notifications
   ) {
+    this.profileUrl = apiUrl + 'users';
+    userService.loggedInUser.subscribe(val => this._loggedInUser = val);
   }
 
   get current(): Profile {
-    // TODO Remove dummy
-    if (this.dummy.currentUser) {
-      return this.dummy.currentUser.attributes;
-    }
+    return this._loggedInUser.attributes;
   }
 
   save() {
-    this.addPrimaryToEmails();
-    // TODO Remove dummy
-    this.broadcaster.broadcast('save');
-  }
-
-  removeEmailFromCurrent(del: string) {
-    for (let i: number = this.current.emails.length - 1; i >= 0; i--) {
-      if (this.current.emails[i] === del) {
-        this.current.emails.splice(i, 1);
+    let profile = cloneDeep(this.current);
+    delete profile.username;
+    let payload = JSON.stringify({
+      data: {
+        attributes: profile,
+        type: 'identities'
       }
-    }
-    if (del === this.current.publicEmail) {
-      this.current.publicEmail = this.current.primaryEmail;
-    }
-    if (del === this.current.notificationEmail) {
-      this.current.notificationEmail = this.current.primaryEmail;
-    }
+    });
+    return this.http
+      .patch(this.profileUrl, payload, { headers: ProfileService.HEADERS })
+      .map((response) => {
+        return response.json().data as User;
+      })
+      .do(val => this.notifications.message({
+        message: 'User profile updated',
+        type: NotificationType.SUCCESS
+      } as Notification))
+      .catch(error => {
+        this.notifications.message({
+          message: 'Ooops, something went wrong, your profile was not updated',
+          type: NotificationType.DANGER
+        } as Notification);
+        console.log('Error updating user profile', error);
+        return Observable.empty();
+      });
   }
 
-  checkProfileSufficient(): boolean {
+  get sufficient(): boolean {
     if (this.current &&
       this.current.fullName &&
-      this.current.primaryEmail &&
+      this.current.email &&
       this.current.username
-      /* TODO Add imageURL
-      this.current.imageURL
-      */
-      ) {
+      // TODO Add imageURL
+      //this.current.imageURL
+    ) {
       return true;
     } else {
       return false;
-    }
-  }
-
-  initDefaults() {
-    this.current.emails = this.current.emails || [] as string[];
-    this.current.primaryEmail = this.current.primaryEmail || '';
-    this.current.notificationEmail = this.current.notificationEmail || this.current.primaryEmail;
-    this.current.publicEmail = this.current.publicEmail || this.current.primaryEmail;
-    this.current.emailPreference = this.current.emailPreference || 'all';
-    this.current.notificationMethods = this.current.notificationMethods || [] as string[];
-    this.addPrimaryToEmails();
-  }
-
-  private addPrimaryToEmails() {
-    if (this.current.primaryEmail && this.current.primaryEmail) {
-      for (let e of this.current.emails) {
-        if (e === this.current.primaryEmail) {
-          return;
-        }
-      }
-      this.current.emails.unshift(this.current.primaryEmail);
     }
   }
 

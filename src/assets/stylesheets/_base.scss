@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'custom';
-@import '../vendor/patternfly/stylesheets/patternfly';
-//@import '../vendor/patternfly/stylesheets/font-awesome-compass';
-@import '../vendor/patternfly/stylesheets/font-awesome';
+@import 'shared/variables';
+@import 'shared/custom-variables';
+@import 'shared/custom-mixins';
+@import 'fabric8-ui-mixins';
+@import 'fabric8-ui-variables';

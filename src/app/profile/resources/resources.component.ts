@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
-import { DummyService } from '../../dummy/dummy.service';
+import { Router } from '@angular/router';
+
+import { Context, Contexts } from 'ngx-fabric8-wit';
+
+import { DummyService } from '../../shared/dummy.service';
 
 
 @Component({
@@ -10,13 +13,17 @@ import { DummyService } from '../../dummy/dummy.service';
 })
 export class ResourcesComponent implements OnInit {
 
+  context: Context;
+
   constructor(
     private router: Router,
-    public dummy: DummyService) {
+    private dummy: DummyService,
+    private contexts: Contexts) {
+    this.contexts.current.subscribe(val => this.context = val);
   }
 
   ngOnInit() {
-    
+
   }
 
 }

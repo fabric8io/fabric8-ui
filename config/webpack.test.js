@@ -4,6 +4,7 @@
 
 const helpers = require('./helpers');
 const path = require('path');
+var stringify = require('json-stringify');
 
 /**
  * Webpack Plugins
@@ -13,13 +14,38 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 /**
  * Webpack Constants
  */
 const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
-const API_URL = process.env.API_URL || (ENV==='inmemory'?'app/':'http://localhost:8080/api/');
+const FABRIC8_FORGE_API_URL = process.env.FABRIC8_FORGE_API_URL;
+const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL;
+const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
+const FABRIC8_PIPELINES_NAMESPACE = process.env.FABRIC8_PIPELINES_NAMESPACE || '-development';
+
+const sassModules = [
+  {
+    name: 'bootstrap'
+  }, {
+    name: 'font-awesome',
+    module: 'font-awesome',
+    path: 'font-awesome',
+    sass: 'scss'
+  }, {
+    name: 'patternfly',
+    module: 'patternfly-sass-with-css'
+  }
+];
+
+sassModules.forEach(function (val) {
+  val.module = val.module || val.name + '-sass';
+  val.path = val.path || path.join(val.module, 'assets');
+  val.modulePath = val.modulePath || path.join('node_modules', val.path);
+  val.sass = val.sass || path.join('stylesheets');
+  val.sassPath = path.join(helpers.root(), val.modulePath, val.sass);
+});
 
 /**
  * Webpack configuration
@@ -53,14 +79,7 @@ module.exports = function (options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
-      extensions: ['', '.ts', '.js'],
-
-      /**
-       * Make sure root is src
-       */
-      //modules: [ path.resolve(__dirname, 'src'), 'node_modules' ]
-      root: helpers.root('src')
-
+      extensions: ['.ts', '.js']
     },
 
     /**
@@ -70,26 +89,6 @@ module.exports = function (options) {
      */
     module: {
 
-    /**
-     * An array of applied pre and post loaders.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
-     */
-    preLoaders: [
-
-        /**
-         * Tslint loader support for *.ts files
-         *
-         * See: https://github.com/wbuchwalter/tslint-loader
-         */
-        {
-          test: /\.ts$/,
-          loader: 'tslint-loader',
-          exclude: [helpers.root('node_modules')]
-        }
-
-      ],
-
       /**
        * An array of automatically applied loaders.
        *
@@ -98,7 +97,7 @@ module.exports = function (options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#module-loaders
        */
-      loaders: [
+      rules: [
 
         /**
          * Source map loader support for *.js files
@@ -108,11 +107,11 @@ module.exports = function (options) {
          */
         {
           test: /\.js$/,
-          loader: 'source-map-loader',
+          use: ['source-map-loader'],
           exclude: [
             // these packages have problems with their sourcemaps
-            helpers.root('node_modules/rxjs'),
-            helpers.root('node_modules/@angular')
+            path.resolve(__dirname, 'node_modules/rxjs'),
+            path.resolve(__dirname, 'node_modules/@angular')
           ]
         },
 
@@ -123,7 +122,7 @@ module.exports = function (options) {
          */
         {
           test: /\.ts$/,
-          loaders: [
+          use: [
             'awesome-typescript-loader',
             'angular2-template-loader'
           ],
@@ -137,35 +136,74 @@ module.exports = function (options) {
          */
         {
           test: /\.json$/,
-          loader: 'json-loader',
-          exclude: [helpers.root('src/index.html')]
+          use: ['json-loader'],
+          exclude: [ path.resolve(__dirname, 'src/index.html') ]
         },
 
-        /**
-         * Raw loader support for *.css files
+        /*
+         * to string and css loader support for *.css files
          * Returns file content as string
          *
-         * See: https://github.com/webpack/raw-loader
          */
         {
           test: /\.css$/,
-          exclude: helpers.root('src', 'app'),
-          loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
+          use: [
+            {
+              loader: "to-string-loader"
+            },
+            {
+              loader: "style-loader"
+            },
+            {
+              loader: "css-loader"
+            }
+          ]
         },
-        {
-          test: /\.css$/,
-          include: helpers.root('src', 'app'),
-          loader: 'raw!postcss'
-        },
+
         {
           test: /\.scss$/,
-          exclude: helpers.root('src', 'app'),
-          loader: ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!resolve-url!sass?sourceMap')
+          use: [
+            {
+              loader: 'to-string-loader'
+            },
+            {
+              loader: 'css-loader'
+            },
+            {
+              loader: 'sass-loader',
+              query: {
+                includePaths: sassModules.map(function (val) {
+                  return val.sassPath;
+                })
+              }
+            }
+          ]
         },
-        { 
-          test: /\.scss$/,
-          include: helpers.root('src', 'app'),
-          loaders: ['exports-loader?module.exports.toString()', 'css', 'postcss', 'sass']
+
+        /* File loader for supporting fonts, for example, in CSS files.
+         */
+        {
+          test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
+          loaders: [
+            {
+              loader: "url-loader",
+              query: {
+                limit: 3000,
+                name: 'vendor/fonts/[name].[hash].[ext]'
+              }
+            }
+          ]
+        }, {
+          test: /\.jpg$|\.png$|\.gif$|\.jpeg$/,
+          loaders: [
+            {
+              loader: "url-loader",
+              query: {
+                limit: 3000,
+                name: 'vendor/images/[name].[hash].[ext]'
+              }
+            }
+          ]
         },
 
         /**
@@ -177,58 +215,17 @@ module.exports = function (options) {
         {
           test: /\.html$/,
           loader: 'raw-loader',
-          exclude: [helpers.root('src/index.html')]
-        },
-
-        // /**
-        //  * Instruments JS files with Istanbul for subsequent code coverage reporting.
-        //  * Instrument only testing sources.
-        //  *
-        //  * See: https://github.com/deepsweet/istanbul-instrumenter-loader
-        //  */
-        // {
-        //   enforce: 'post',
-        //   test: /\.(js|ts)$/,
-        //   loader: 'istanbul-instrumenter-loader',
-        //   include: helpers.root('src'),
-        //   exclude: [
-        //     /\.(e2e|spec)\.ts$/,
-        //     /node_modules/
-        //   ]
-        // }
-
+          exclude: [ path.resolve(__dirname, 'src/index.html') ]
+        }
       ]
     },
 
-    /**
-     * An array of applied pre and post loaders.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
-     */
-     postLoaders: [
-      /**
-       * Instruments JS files with Istanbul for subsequent code coverage reporting.
-       * Instrument only testing sources.
-       *
-       * See: https://github.com/deepsweet/istanbul-instrumenter-loader
-       */
-      {
-        test: /\.(js|ts)$/, loader: 'istanbul-instrumenter-loader',
-        include: helpers.root('src'),
-        exclude: [
-          /\.(e2e|spec)\.ts$/,
-          /node_modules/
-        ]
-      }
-    ],
-
-    /**
+     /**
      * Add additional plugins to the compiler.
      *
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-
       /**
        * Plugin: DefinePlugin
        * Description: Define free variables.
@@ -240,13 +237,15 @@ module.exports = function (options) {
        */
       // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
       new DefinePlugin({
-        'ENV': JSON.stringify(ENV),
+        'ENV': stringify(ENV),
         'HMR': false,
         'process.env': {
-          'ENV': JSON.stringify(ENV),
-          'API_URL': JSON.stringify(API_URL),
-          'NODE_ENV': JSON.stringify(ENV),
-          'HMR': false,
+          'ENV': stringify(ENV),
+          'FABRIC8_FORGE_API_URL': stringify(FABRIC8_FORGE_API_URL),
+          'FABRIC8_WIT_API_URL': stringify(FABRIC8_WIT_API_URL),
+          'FABRIC8_RECOMMENDER_API_URL' : stringify(FABRIC8_RECOMMENDER_API_URL),
+          'NODE_ENV': stringify(ENV),
+          'HMR': false
         }
       }),
 
@@ -260,7 +259,7 @@ module.exports = function (options) {
       new ContextReplacementPlugin(
         // The (\\|\/) piece accounts for path separators in *nix and Windows
         /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-        helpers.root('src') // location of your src
+        path.resolve(__dirname, 'src') // location of your src
       ),
 
        /**
@@ -282,11 +281,9 @@ module.exports = function (options) {
             emitErrors: false,
             failOnHint: false,
             resourcePath: 'src'
-          },
-
+          }
         }
-      }),
-
+      })
     ],
 
     /**
@@ -303,6 +300,5 @@ module.exports = function (options) {
       clearImmediate: false,
       setImmediate: false
     }
-
   };
 };

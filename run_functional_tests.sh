@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 LOGFILE=$(pwd)/functional_tests.log
-echo Using logfile $LOGFILE 
+echo Using logfile $LOGFILE
 
 # For the functional tests, we are mocking the core
 export NODE_ENV=inmemory

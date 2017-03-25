@@ -2,6 +2,9 @@ FROM centos:7
 MAINTAINER "Konrad Kleine <kkleine@redhat.com>"
 ENV LANG=en_US.utf8
 
+# load the gpg keys
+COPY gpg /gpg
+
 # gpg keys listed at https://github.com/nodejs/node
 RUN set -ex \
   && for key in \
@@ -14,15 +17,13 @@ RUN set -ex \
     B9AE9905FFD7803F25714661B63B535A4C206CA9 \
     C4F0DFFF4E8C1A8236409D08E73BC641CC11F4C8 \
   ; do \
-    gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" || \
-    gpg --keyserver pgp.mit.edu --recv-keys "$key" || \
-    gpg --keyserver keyserver.pgp.com --recv-keys "$key" ; \
+    gpg --import "/gpg/${key}.gpg" ; \
   done
 
 #ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 6.5.0
 
-RUN yum install -y wget bzip2 git java-1.8.0-openjdk nmap-ncat psmisc \
+RUN yum install -y bzip2 fontconfig java-1.8.0-openjdk nmap-ncat psmisc git \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
   && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
@@ -30,7 +31,6 @@ RUN yum install -y wget bzip2 git java-1.8.0-openjdk nmap-ncat psmisc \
   && tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 \
   && rm "node-v$NODE_VERSION-linux-x64.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
-  && yum remove -y wget \
   && yum clean all
 
 ENV FABRIC8_USER_NAME=fabric8
@@ -39,11 +39,14 @@ RUN useradd --user-group --create-home --shell /bin/false ${FABRIC8_USER_NAME}
 
 ENV HOME=/home/${FABRIC8_USER_NAME}
 
-COPY . $HOME
+ENV WORKSPACE=$HOME/fabric8-ui
+RUN mkdir $WORKSPACE
+
+COPY . $WORKSPACE
 RUN chown -R ${FABRIC8_USER_NAME}:${FABRIC8_USER_NAME} $HOME/*
 
 USER ${FABRIC8_USER_NAME}
-WORKDIR $HOME/
+WORKDIR $WORKSPACE/
 
 VOLUME /dist
 

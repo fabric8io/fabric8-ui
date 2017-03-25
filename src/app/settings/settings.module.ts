@@ -9,7 +9,7 @@ import { ProfileModule } from './profile/profile.module'
 
 @NgModule({
   imports:      [ CommonModule, SettingsRoutingModule, HttpModule, ProfileModule ],
-  declarations: [ SettingsComponent ],
+  declarations: [ SettingsComponent ]
 })
 export class SettingsModule {
   constructor(http: Http) {}

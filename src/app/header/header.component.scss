@@ -1,107 +1,117 @@
 @import '../../assets/stylesheets/base';
 
-.dropdown {
-    a:hover {
-        text-decoration: none;
-    }
-    a {
-        color: white;
-        background-color: transparent !important;
-    }
+$pf-cust-navbar-text-size:$font-size-large;
+
+$pf-custom-navbar-top-border-width:2px;
+$pf-custom-navbar-header-border-width:0;
+
+$pf-custom-navbar-item-height:$pf-cust-navbar-text-size*2;
+$pf-custom-navbar-persistent-nav-offset:$pf-custom-navbar-item-height+ $pf-custom-navbar-header-border-width;
+$pf-custom-navbar-font-size:$pf-cust-navbar-text-size;
+$pf-custom-navbar-icon-height:$pf-cust-navbar-text-size *1.5;
+$pf-custom-navbar-icon-min-width:$pf-cust-navbar-text-size*1.6;
+$pf-custom-navbar-item-padding:0;
+
+$pf-custom-navbar-debug-border:0;
+
+.view-width-100
+{
+  width:100vw !important;
 }
 
-.vertical-center {
-    min-height: 100%;
-    /* Fallback for browsers do NOT support vh unit */
-    min-height: 100vh;
-    /* These two lines are counted as one :-)       */
-    display: flex;
-    align-items: center;
-}
-.navbar-pf {
-    .navbar-nav li a {
-        line-height: em(20);
-        text-shadow:none;
-        cursor: pointer;
-        .img-icon{
-            width: em(25);
-            height: em(25);
-            margin-top: em(-3);
-        }
-    }
-     .navbar-collapse span.fa,span.pficon {
-         font-size:em(20);
-     }
- }
-  @media (max-width: $grid-float-breakpoint){
-    .navbar-collapse {
-        max-height: none;
-    }
-    .nav-mob-scroll{
-        overflow-x: scroll !important;
-        .nav-list-mob-scroll{
-            width: 170%;
-        }
-    }
- }
-.navbar-pf {
-    .navbar-primary
-    {
-      position:relative;
-      height:auto !important;
-    }
-    .navbar-primary.persistent-secondary
-    >li
-    {
-      a{
-        // hack:ensures elements do not cause secondsry menu to  'jiggle'
-        max-height:$navbar-height;
-      }
+.navbar-pf
+{
+  border-top-width:$pf-custom-navbar-top-border-width;
+  //ensures the bottom navbar border is visible;
+  margin-bottom:1px;
+  .navbar-header{
+    border-bottom-width: $pf-custom-navbar-header-border-width;
+  }
+  // Note: The socondary persistent nav uses bottom margin to regulat the height of the overall navbar
+  // together with the height of the nav header and top colored border
+  .navbar-primary.persistent-secondary{
+    >li{
       &.active {
+        margin-bottom:$pf-custom-navbar-item-height;
         &.with-no-children
         {
-          margin-bottom:0px
+            // Note: this collapses the persistent menu
+            margin-bottom:$pf-custom-navbar-header-border-width !important;
+        }
+        ul.navbar-persistent
+        {
+          top:$pf-custom-navbar-persistent-nav-offset;
         }
       }
     }
-}
-.no-link {
-    color: $color-pf-white;
-    text-decoration: none;
-}
+  }
+  // Note the height of the a element is the element with the most effect on navigation height
+  a{
+    padding-top:$pf-custom-navbar-item-padding !important;
+    padding-bottom:$pf-custom-navbar-item-padding !important;
+    margin:0 !important;
 
-.toggle-btn{
-    max-width: em(132);
-    padding: em(20) 0;
-    .detail-status-dropdown {
-        text-align: $textRight;
-        .dropdown-icon {
-            float: left;
-            margin-right: em(5);
-            font-size: em(12);
-            margin-top: em(5);
-        }
-        .dropdown-text {
-            float: left;
-            text-transform: capitalize;
-            text-align:left;
-        }
-        .caret{
-            margin-top: em(5);
-        }
-        .dropdown-ul {
-            min-width: em(132);
-            width: em(132);
-            top: em(25);
-            .dropdown-li {
-                width: $width100;
-                float: left;
-                a{
-                    width: $width100;
-                    float: left;
-                    padding: em(2) em(10);
-                }
-            }
-        }
+    display:inline-block;
+    height:$pf-custom-navbar-item-height !important;
+    // border:solid $pf-custom-navbar-debug-border orangered !important;
+    vertical-align: top !important;
+    position:relative !important;
+    width:100%;
+    >div{
+     position:relative;
+     height:100% !important;
     }
+  }
+  span.nav-item-text{
+
+     position:relative;
+     height:100%;
+     top:0;
+
+     line-height:$pf-custom-navbar-item-height !important; // $pf-custom-navbar-font-size;
+     font-size:$pf-custom-navbar-font-size;
+     font-weight: lighter !important;
+     border:solid $pf-custom-navbar-debug-border orange !important;
+     display:inline-block !important;
+   }
+   span.nav-item-icon{
+     position:relative;
+     height:100%;
+     line-height:$pf-custom-navbar-icon-height !important;
+     min-width:$pf-custom-navbar-icon-min-width;
+     display:inline-block !important;
+     vertical-align: top !important;
+     border:solid $pf-custom-navbar-debug-border darkorange;
+
+     >img{
+       position:relative;
+       height:$pf-custom-navbar-icon-height !important ;
+       min-width:$pf-custom-navbar-icon-height;
+       display:inline-block !important;
+       border:solid $pf-custom-navbar-debug-border lime !important;
+       margin:auto;
+       padding:0;
+     }
+     >span
+     {
+       &.nav-icon{
+          display:inline-block;
+          position:relative;
+          height:100%;
+          width:100%;
+          margin:0;
+          line-height:100%;
+          text-align: center;
+          border:solid $pf-custom-navbar-debug-border lime !important;
+         &:before {
+            position:relative;
+            width:100%;
+            height:100%;
+            line-height: $pf-custom-navbar-item-height;
+            font-size:$pf-cust-navbar-text-size;
+            vertical-align:center;
+         }
+       }
+     }
+   }
 }

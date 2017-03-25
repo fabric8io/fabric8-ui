@@ -12,6 +12,8 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const cloneDeep = require('lodash/cloneDeep');
 
 /**
  * Webpack Constants
@@ -21,21 +23,48 @@ const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 // if env is 'inmemory', the inmemory debug resource is used
-const API_URL = process.env.API_URL || (ENV==='inmemory'?'app/':'http://localhost:8080/api/');
-const FORGE_URL = process.env.FORGE_URL || 'http://localhost:8080/forge';
+const FABRIC8_FORGE_API_URL = process.env.FABRIC8_FORGE_API_URL || 'https://forge.api.prod-preview.openshift.io';
+const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL || 'http://api.prod-preview.openshift.io/api/';
+const FABRIC8_SSO_API_URL = process.env.FABRIC8_SSO_API_URL || 'http://sso.prod-preview.openshift.io/';
+const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
+const FABRIC8_FORGE_URL = process.env.FABRIC8_FORGE_URL;
+const FABRIC8_PIPELINES_NAMESPACE = process.env.FABRIC8_PIPELINES_NAMESPACE;
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
+const BUILD_NUMBER = process.env.BUILD_NUMBER;
+const BUILD_TIMESTAMP = process.env.BUILD_TIMESTAMP;
+const BUILD_VERSION = process.env.BUILD_VERSION;
 
+const OSO_CORS_PROXY = {
+  target: `https://${process.env.KUBERNETES_SERVICE_HOST}:${process.env.KUBERNETES_SERVICE_PORT}`,
+  // Remove our prefix from the forwarded path
+  pathRewrite: { '^/_p/oso': '' },
+  // Disable cert checks for dev only
+  secure: false,
+  //changeOrigin: true,
+  logLevel: "debug",
+    onProxyRes: function (proxyRes, req, res) {
+    proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+  },
+};
 
-const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
+const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
   HMR: HMR,
-  API_URL: API_URL,
-  FORGE_URL: FORGE_URL,
-  PUBLIC_PATH: PUBLIC_PATH
-
+  FABRIC8_FORGE_API_URL: FABRIC8_FORGE_API_URL,
+  FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
+  FABRIC8_SSO_API_URL: FABRIC8_SSO_API_URL,
+  FABRIC8_RECOMMENDER_API_URL: FABRIC8_RECOMMENDER_API_URL,
+  FABRIC8_FORGE_URL: FABRIC8_FORGE_URL,
+  FABRIC8_PIPELINES_NAMESPACE: FABRIC8_PIPELINES_NAMESPACE,
+  PUBLIC_PATH: PUBLIC_PATH,
+  BUILD_NUMBER: BUILD_NUMBER,
+  BUILD_TIMESTAMP: BUILD_TIMESTAMP,
+  BUILD_VERSION: BUILD_VERSION,
 });
+
+console.log(helpers.nodeModulePath('fabric8-planner'));
 
 /**
  * Webpack configuration
@@ -43,7 +72,7 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
-  return webpackMerge(commonConfig({env: ENV}), {
+  return webpackMerge(commonConfig({ env: ENV }), {
 
     /**
      * Developer tool to enhance debugging
@@ -51,7 +80,7 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#devtool
      * See: https://github.com/webpack/docs/wiki/build-performance#sourcemaps
      */
-    devtool: 'cheap-module-source-map',
+    devtool: 'inline-source-map',
 
     /**
      * Options affecting the output of the compilation.
@@ -66,6 +95,7 @@ module.exports = function (options) {
        * See: http://webpack.github.io/docs/configuration.html#output-path
        */
       path: helpers.root('dist'),
+
       publicPath: METADATA.PUBLIC_PATH,
 
       /**
@@ -92,10 +122,42 @@ module.exports = function (options) {
       chunkFilename: '[id].chunk.js',
 
       library: 'ac_[name]',
+
       libraryTarget: 'var'
     },
 
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: [
+            // Example helpers.nodeModulePath("fabric8-planner"),
+            // Exclude any problematic sourcemaps
+            helpers.nodeModulePath("mydatepicker"),
+            helpers.nodeModulePath("ng2-completer"),
+            helpers.nodeModulePath("angular2-flash-messages"),
+            helpers.nodeModulePath("ngx-dropdown"),
+            helpers.nodeModulePath("ngx-modal"),
+            helpers.nodeModulePath("ng2-dnd")
+          ],
+          use: ["source-map-loader"],
+          enforce: "pre"
+        }
+      ]
+    },
+
     plugins: [
+      new CopyWebpackPlugin([
+        {
+          from: 'src/config',
+          to: '_config',
+          transform: function env(content, path) {
+            return content.toString('utf-8').replace(/{{ .Env.([a-zA-Z0-9_-]*) }}/g, function(match, p1, offset, string){
+              return process.env[p1];
+            });
+          }
+        }
+      ]),
       /**
        * Plugin: DefinePlugin
        * Description: Define free variables.
@@ -113,9 +175,17 @@ module.exports = function (options) {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
-          'API_URL' : JSON.stringify(METADATA.API_URL),
-          'FORGE_URL' : JSON.stringify(METADATA.FORGE_URL),
-          'PUBLIC_PATH' : JSON.stringify(METADATA.PUBLIC_PATH)
+          'API_URL': JSON.stringify(METADATA.FABRIC8_WIT_API_URL),
+          'FABRIC8_FORGE_API_URL': JSON.stringify(METADATA.FABRIC8_FORGE_API_URL),
+          'FABRIC8_WIT_API_URL': JSON.stringify(METADATA.FABRIC8_WIT_API_URL),
+          'FABRIC8_SSO_API_URL': JSON.stringify(METADATA.FABRIC8_SSO_API_URL),
+          'FABRIC8_RECOMMENDER_API_URL': JSON.stringify(METADATA.FABRIC8_RECOMMENDER_API_URL),
+          'FABRIC8_FORGE_URL': JSON.stringify(METADATA.FABRIC8_FORGE_URL),
+          'FABRIC8_PIPELINES_NAMESPACE': JSON.stringify(FABRIC8_PIPELINES_NAMESPACE),
+          'PUBLIC_PATH': JSON.stringify(METADATA.PUBLIC_PATH),
+          'BUILD_NUMBER': JSON.stringify(BUILD_NUMBER),
+          'BUILD_TIMESTAMP': JSON.stringify(BUILD_TIMESTAMP),
+          'BUILD_VERSION': JSON.stringify(BUILD_VERSION)
         }
       }),
 
@@ -166,10 +236,14 @@ module.exports = function (options) {
       host: METADATA.host,
       historyApiFallback: true,
       watchOptions: {
-        aggregateTimeout: 300,
-        poll: 1000
+        aggregateTimeout: 2000
       },
-      outputPath: helpers.root('dist/')
+      proxy: {
+        "/_p/oso/api/*": cloneDeep(OSO_CORS_PROXY),
+        "/_p/oso/apis/*": cloneDeep(OSO_CORS_PROXY),
+        "/_p/oso/oapi/*": cloneDeep(OSO_CORS_PROXY),
+        "/_p/oso/swaggerapi/*": cloneDeep(OSO_CORS_PROXY)
+      }
     },
 
     /*

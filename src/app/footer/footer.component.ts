@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AboutService } from '../shared/about.service';
 
 @Component({
   selector: 'alm-app-footer',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 
 export class FooterComponent {
+
+  constructor(public about: AboutService) {
+
+  }
+
 }

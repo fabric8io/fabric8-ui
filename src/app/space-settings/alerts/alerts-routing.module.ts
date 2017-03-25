@@ -6,12 +6,7 @@ import { AlertsComponent } from './alerts.component';
 const routes: Routes = [
   {
     path: '',
-    component: AlertsComponent,
-    children: [
-      {
-        path: ''
-      }
-    ]
+    component: AlertsComponent
   }
 ];
 

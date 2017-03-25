@@ -1,4 +1,4 @@
-<div class="container-fluid container-cards-pf">
+<div class="container-fluid container-cards-pf" *ngIf="loggedInUser">
   <div class="row">
     <div class="col-xs-12">
       <div class="btn-group">
@@ -11,29 +11,13 @@
     <div class="col-sm-4">
       <div class="card-pf card-pf-accented">
         <div class="card-pf-title">
-          <h4>Recent Collaboration Spaces</h4>
-          <a (click)="createSpace.open()">New</a> | <a [routerLink]="['/pmuir/spaces']">Browse</a>
+          <h4>Recent Spaces</h4>
+          <a (click)="createSpace.open()" href="javascript:void(0)">New</a> | <a [routerLink]="['/', loggedInUser.attributes.username, '_spaces']">Browse</a>
         </div>
         <div class="card-pf-body">
           <div class="card-pf-items">
             <ul class="list-unstyled">
-              <li *ngFor="let s of dummy.spaces"><a [routerLink]="[ s.path]"><small>{{s.name}}</small></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="card-pf card-pf-accented">
-        <div class="card-pf-title">
-          <h4>Recent Activity <small>*</small></h4>
-          <p style="font-size:xx-small;" ><span> * for the currently logged in user.</span></p>
-        </div>
-        <div class="card-pf-body">
-          <div class="card-pf-items">
-            <ul class="list-unstyled">
-              <li><small>TODO: Add infinite scroll</small></li>
-              <li><small>TODO: What does the activity look like?</small></li>
+              <li *ngFor="let s of spaces.recent | async"><a [routerLink]="['/', s.relationalData.creator.attributes.username, s.attributes.name]"><small>{{s.attributes.name}}</small></a></li>
             </ul>
           </div>
         </div>
@@ -43,7 +27,7 @@
       <div class="card-pf card-pf-accented ">
         <div class="card-pf-title">
           <h4>
-            <a [routerLink]="['/pmuir/resources']">Resource Usage</a>
+            <a [routerLink]="['/pmuir/_resources']">Resource Usage</a>
           </h4>
           <h5>From {{dummy.resources.startDate | date:'d MMM'}} to {{dummy.resources.endDate | date:'d MMM'}}</h5>
         </div>
@@ -62,8 +46,8 @@
   </div>
 </div>
 <!-- Create Space modal -->
-<modal #createSpace title="Create a new collaboration space">
-  <modal-content>
-    <space-dialog></space-dialog>
+<modal #createSpace class="chromeless-modal" >
+  <modal-content class="chromeless-modal-content" >
+      <space-wizard [host]="createSpace" ></space-wizard>
   </modal-content>
 </modal>

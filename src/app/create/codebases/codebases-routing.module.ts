@@ -6,12 +6,7 @@ import { CodebasesComponent } from './codebases.component';
 const routes: Routes = [
   {
     path: '',
-    component: CodebasesComponent,
-    children: [
-      {
-        path: ''
-      }
-    ]
+    component: CodebasesComponent
   }
 ];
 

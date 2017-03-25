@@ -1,29 +1,36 @@
-import { DummyService } from './../dummy/dummy.service';
-import { Broadcaster } from './../shared/broadcaster.service';
-import { User } from './../models/user';
-import { Team } from './../models/team';
-import { ContextService } from './../shared/context.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { Broadcaster } from 'ngx-base';
+import { User, UserService } from 'ngx-login-client';
+import { Team, Space, Contexts } from 'ngx-fabric8-wit';
+
+import { DummyService } from './../shared/dummy.service';
 
 @Component({
   selector: 'team-membership-dialog',
   templateUrl: './team-membership-dialog.component.html',
   styleUrls: ['./team-membership-dialog.component.scss']
 })
-export class TeamMembershipDialogComponent {
+export class TeamMembershipDialogComponent implements OnInit{
 
   public searchString: string;
+  public space: Space;
 
   constructor(
     public dummy: DummyService,
-    private context: ContextService,
-    private broadcaster: Broadcaster
+    private context: Contexts,
+    private broadcaster: Broadcaster,
+    private userService: UserService
 
   ) { }
 
+  ngOnInit() {
+    this.context.current.subscribe(val => this.space = val.space);
+  }
+
   get team(): Team {
-    return this.context.current.space.defaultTeam;
+    return this.space ? this.space.defaultTeam : null;
   }
 
   remove(remove: User) {
@@ -38,26 +45,20 @@ export class TeamMembershipDialogComponent {
   }
 
   add() {
-    let add: User;
-    for (let u of this.dummy.users) {
-      if (u.attributes.username === this.searchString) {
-        add = u;
-      }
-    }
-    if (add) {
+    this.userService
+    .getUserByUsername(this.searchString)
+    .subscribe(user => {
       // TODO Hacky check to make sure we don't dupe members
       for (let u of this.team.members) {
-        if (u === add) {
+        if (u === user) {
           // TODO make this a form error
           console.log(this.searchString + ' is already part of the team');
           return;
         }
       }
-      this.team.members.push(add);
+      this.team.members.push(user);
       this.broadcaster.broadcast('save', 1);
-    } else {
-      // TODO make this a form error
-      console.log(this.searchString + ' not found in user list');
-    }
+    });
+    // TODO Add user not found
   }
 }

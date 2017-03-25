@@ -1,0 +1,23 @@
+<div id="tokens" class="content container">
+  <h2>Tokens</h2>
+  <div class="row">
+    <div class="col-xs-8 col-xs-offset-2">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="personalAccessToken" class="col-xs-4 control-label">Personal Access Token</label>
+          <div class="col-xs-6">
+            <input type="text" class="form-control" id="personalAccessToken" placeholder="" name="personalAccessToken" readonly [(ngModel)]="personalAccessToken">
+          </div>
+          <div class="col-xs-2">
+            <button type="button" class="btn btn-default" (click)="show()" [disabled]="!hidden">Show</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6 col-xs-offset-4">
+            <small>Your personal access token allows you to start using the openshift.io APIs.</small>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

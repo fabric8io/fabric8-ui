@@ -13,12 +13,12 @@ set -e
 yum -y install \
   docker \
   make \
-  git 
+  git
 service docker start
 
 # Build builder image
 docker build -t fabric8-ui-builder -f Dockerfile.builder .
-mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder -e "API_URL=http://demo.api.almighty.io/api/" -t -v $(pwd)/dist:/dist:Z fabric8-ui-builder
+mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder -t -v $(pwd)/dist:/dist:Z fabric8-ui-builder
 
 # Build almighty-ui
 docker exec fabric8-ui-builder npm install
@@ -40,7 +40,7 @@ docker exec fabric8-ui-builder ./run_functional_tests.sh
 if [ $? -eq 0 ]; then
   echo 'CICO: functional tests OK'
   docker exec fabric8-ui-builder npm run build:prod
-  docker exec -u root fabric8-ui-builder cp -r /home/fabric8/dist /
+  docker exec -u root fabric8-ui-builder cp -r /home/fabric8/fabric8-ui/dist /
 else
   echo 'CICO: functional tests FAIL'
   exit 1

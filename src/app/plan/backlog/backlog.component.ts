@@ -4,7 +4,10 @@ import { Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 @Component({
-  selector: 'alm-backlog',
+  host:{
+    'class':"app-component view-content height-100 flex-container in-column-direction flex-grow-1"
+  },
+  selector: 'f8-backlog',
   templateUrl: 'backlog.component.html',
   styleUrls: ['./backlog.component.scss']
 })

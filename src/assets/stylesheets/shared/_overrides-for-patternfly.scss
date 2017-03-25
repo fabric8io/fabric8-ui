@@ -1,0 +1,8 @@
+//remove toolbar box shadow
+.toolbar-pf
+{
+  box-shadow: none !important;
+}
+.form-control, .btn, .dropdown-menu, .badge {
+font-size: $font-size-base;
+}

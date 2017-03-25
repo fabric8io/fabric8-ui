@@ -1,10 +1,14 @@
-import { DummyService } from './../dummy/dummy.service';
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
+
+import { Spaces, Context, Contexts } from 'ngx-fabric8-wit';
+import { UserService, User } from 'ngx-login-client';
+
+import { DummyService } from './../shared/dummy.service';
 
 @Component({
-  host:{
-      'class':"app-component flex-container in-column-direction flex-grow-1"
+  host: {
+    'class': "app-component flex-container in-column-direction flex-grow-1"
   },
   selector: 'alm-home',
   templateUrl: './home.component.html',
@@ -12,10 +16,35 @@ import { Router }            from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
+  loggedInUser: User;
+
+  private _context: Context;
+  private _defaultContext: Context;
+
   constructor(
-    private router: Router, public dummy: DummyService) {
+    public dummy: DummyService,
+    userService: UserService,
+    public spaces: Spaces,
+    private router: Router,
+    private contexts: Contexts
+  ) {
+    userService.loggedInUser.subscribe(val => this.loggedInUser = val);
+    contexts.current.subscribe(val => {
+      this._context = val;
+    });
+    contexts.default.subscribe(val => {
+      this._defaultContext = val;
+    });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
+
+  get context(): Context {
+    if (this.router.url === '/_home') {
+      return this._defaultContext;
+    } else {
+      return this._context;
+    }
+  }
 
 }

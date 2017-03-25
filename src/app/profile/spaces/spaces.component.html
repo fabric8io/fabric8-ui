@@ -2,17 +2,17 @@
   <div class="row">
     <div class="col-md-2">
       <div class="row">
-        <img src="https://avatars2.githubusercontent.com/u/157761?v=3&s=460" width="150" height="250" />
+        <img src="{{context?.user?.attributes?.imageURL}}" width="150" height="250" />
       </div>
       <div class="row">
-        <h2>Pete Muir</h2>
+        <h2>{{context?.user?.attributes?.fullName}}</h2>
       </div>
       <div class="row">
         <p>
-          pmuir
+          {{context?.user?.attributes?.username}}
         </p>
         <p>
-          I like writing clever one-line bios about myself. See? I just did.
+          {{context?.user?.attributes?.bio}}
         </p>
       </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="form-group">
           <div class="col-md-10 col-sm-10 col-xs-10">
             <div class="search-pf-input-group">
-              <input id="spacesSearch" type="search" class="form-control" placeholder="Search collaboration spaces...">
+              <input id="spacesSearch" type="search" class="form-control" placeholder="Search spaces..." #search (keyup)="searchSpaces(search.value)">
             </div>
           </div>
           <div class="col-md-2 col-sm-2 col-xs-2">
@@ -32,8 +32,8 @@
       <div class="row">
         <table class="spaces table">
           <tr *ngFor="let s of spaces">
-            <td>
-              <h2><a [routerLink]="['/pmuir/' + s.path]">{{s.attributes.name}}</a></h2>
+            <td *ngIf="s.relationalData && s.relationalData.creator && s.relationalData.creator.attributes">
+              <h2><a [routerLink]="['/', s.relationalData.creator.attributes.username, s.attributes.name]">{{s.attributes.name}}</a></h2>
               <p>{{s.description}}</p>
             </td>
           </tr>
@@ -45,8 +45,8 @@
 </div>
 
 <!-- Create Space modal -->
-<modal #createSpace title="Create new collaboration space">
+<modal #createSpace title="Create new space">
   <modal-content>
-    <space-dialog></space-dialog>
+    <space-wizard [host]="createSpace"></space-wizard>
   </modal-content>
 </modal>

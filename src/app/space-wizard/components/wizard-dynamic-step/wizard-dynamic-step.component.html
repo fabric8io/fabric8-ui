@@ -1,0 +1,51 @@
+<header>Header</header>
+<section style="overflow:auto;" class="flex-container in-column-direction flex-grow-1 flex-align-content-stretch margin-top-15 container-fluid width-100">
+  <div class="col-xs-12">
+    <div style="min-height:50vh;"  class="form-horizontal">
+      <div  class="form-group" *ngFor="let field of fieldSet">
+        <label class="control-label col-xs-4">{{field.display.label}}</label>
+        <div class="col-xs-8"  [ngSwitch]="field.display.inputType">
+            <div *ngSwitchCase="'singleInput'" [ngSwitch]="field.valueType">
+              <input *ngSwitchCase="'string'" name="{{field.name}}" [(ngModel)]="field.value" type="text" class="form-control" placeholder="{{field.description}}"
+                [required]="field.display.required" [disabled]="!field.display.enabled" />
+              <input *ngSwitchCase="'boolean'" type="checkbox" name="{{field.name}}" [(ngModel)]="field.value" class="form-control" [required]="field.display.required"
+                [disabled]="!field.display.enabled">
+              <input *ngSwitchCase="'number'" type="number" name="{{field.name}}" [(ngModel)]="field.value" class="form-control" [required]="field.display.required"
+                [disabled]="!field.display.enabled">
+              <div class="errorLabel help-block">
+                <span *ngIf="field.display.message">{{field.display.message.description}}</span>
+                <span *ngIf="!field.display.message && field.display.required">{{field.display.label}} is a required field</span>
+              </div>
+              <span *ngIf="field.display.note"><span class="fa fa-info-circle"></span> <i>{{field.display.note}}</i></span>
+            </div>
+            <div *ngSwitchCase="'singleSelection'">
+              <select class="form-control" [(ngModel)]="field.value" name="{{field.name}}" *ngIf="field.valueType != 'projectType'">
+                <option value="{{option.id}}" *ngFor="let option of field.display.options">
+                  {{option.id}}
+                </option>
+              </select>
+              <div class="errorLabel help-block">
+                <span *ngIf="field.display.message">{{field.display.message.description}}</span>
+                <span *ngIf="!field.display.message && field.display.required ">{{field.display.label}} is a required field</span>
+              </div>
+              <span *ngIf="field.display.note"><span class="fa fa-info-circle"></span> <i>{{field.display.note}}</i></span>
+            </div>
+            <div *ngSwitchCase="'multipleSelection'">
+              <ss-multiselect-dropdown    [(ngModel)]="field.value"  [options]="field.display.options" [texts]="multiSelectTexts" [settings]="multiSelectSettings"   ></ss-multiselect-dropdown>
+              <div class="errorLabel help-block">
+                <span *ngIf="field.display.message">{{field.display.message.description}}</span>
+                <span *ngIf="!field.display.message && field.display.required">{{field.display.label}} is a required field</span>
+              </div>
+              <span *ngIf="field.display.note"><span class="fa fa-info-circle"></span> <i>{{field.display.note}}</i></span>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <a class="btn btn-default margin-right-5" (click)="workflow.cancel()">Cancel</a>
+  <a class="btn btn-default margin-right-5" (click)="workflow.gotoPreviousStep()">Back</a>
+  <a class="btn btn-default margin-right-5 " (click)="workflow.gotoNextStep()">Next</a>
+  <a class="btn btn-default" (click)="workflow.finish()">Finish</a>
+</footer>

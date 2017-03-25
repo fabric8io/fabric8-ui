@@ -6,7 +6,7 @@ import { ControlComponent } from './control.component';
 const routes: Routes = [
   {
     path: '',
-    component: ControlComponent,
+    component: ControlComponent
   }
 
 ];

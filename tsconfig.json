@@ -9,6 +9,7 @@
     "sourceMap": true,
     "noEmitHelpers": true,
     "strictNullChecks": false,
+    "noUnusedLocals": false,
     "baseUrl": "./src",
     "paths": {
     },
@@ -24,7 +25,8 @@
       "selenium-webdriver",
       "source-map",
       "uglify-js",
-      "webpack"
+      "webpack",
+      "segment-analytics"
     ]
   },
   "exclude": [

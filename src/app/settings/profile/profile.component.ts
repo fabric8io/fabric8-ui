@@ -1,8 +1,9 @@
-import { Broadcaster } from './../../shared/broadcaster.service';
-import { ProfileService } from './../../profile/profile.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { Broadcaster } from 'ngx-base';
+
+import { ProfileService } from './../../profile/profile.service';
 
 @Component({
   selector: 'alm-profile',
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit {
   }
 
   save() {
-    this.profile.save();
+    this.profile.save().subscribe(val => console.log('Profile update'));
   }
 
 }

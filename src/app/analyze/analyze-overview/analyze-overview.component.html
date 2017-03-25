@@ -1,4 +1,4 @@
-<div id="analyze-overview" class="container content" *ngIf="context.current.space">
+<div id="analyze-overview" class="container content">
     <div class="top row">
         <div class="col-md-3">
             <div class="panel panel-300 panel-default">
@@ -19,7 +19,7 @@
                         <form class="form-horizontal" (ngSubmit)="saveDescription()" role="form">
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <textarea name="description" id="description" class="form-control" placeholder="Project description. Click to edit..." rows="4" [(ngModel)]="context.current.space.description"></textarea>
+                                    <textarea name="description" id="description" class="form-control" placeholder="Project description. Click to edit..." rows="4"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -61,7 +61,7 @@
                 </div>
                 <div class="panel-body team">
                     <ul class="list-unstyled">
-                        <li *ngFor="let u of context.current.space.defaultTeam.members" class="member">
+                        <li *ngFor="let u of space?.defaultTeam?.members" class="member">
                             <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
                             <img (load)="onImgLoad()" src="{{u.attributes.imageURL}}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}" class="pull-left marginR10" />{{u.attributes.username}}
                         </li>
@@ -109,7 +109,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame/create']);">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name ,'create']);">
 
                 <div class="panel-heading">
                     <h2 class="panel-title text-center">Codebases</h2>
@@ -121,7 +121,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame/run']);">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name ,'run']);">
 
                 <div class="panel-heading">
                     <h2 class="panel-title text-center">Pipelines Executing</h2>
@@ -133,7 +133,7 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/pmuir/BalloonPopGame']);">
+            <div class="panel panel-300 panel-default clickable" (click)="router.navigate(['/', space.relationalData.creator.attributes.username, space.attributes.name]);">
 
                 <div class="panel-heading">
                     <h2 class="panel-title text-center">Hypotheses Evaluating</h2>

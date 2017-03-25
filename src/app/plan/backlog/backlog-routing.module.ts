@@ -1,17 +1,27 @@
 import { NgModule }  from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+// import { WorkItemListComponent } from 'fabric8-planner';
+
 import { BacklogComponent } from './backlog.component';
+import { AuthUserResolve } from '../../shared/common.resolver';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'list',
     component: BacklogComponent,
-    children: [
-      {
-        path: ''
-      }
-    ]
+    resolve: {
+      authuser: AuthUserResolve
+    }//,
+    // children: [
+    //   {
+    //     path: '',
+    //     component: WorkItemListComponent,
+    //     resolve: {
+    //       authuser: AuthUserResolve
+    //     },
+    //   }
+    // ]
   }
 ];
 

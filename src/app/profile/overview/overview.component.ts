@@ -1,9 +1,9 @@
-import { ContextService } from './../../shared/context.service';
-import { UserService } from './../../user/user.service';
-import { DummyService } from './../../dummy/dummy.service';
+import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Component, OnInit } from '@angular/core';
 import { Router }            from '@angular/router';
 
+// import { UserService } from './../../user/user.service';
+import { DummyService } from './../../shared/dummy.service';
 
 @Component({
   selector: 'alm-overview',
@@ -12,8 +12,11 @@ import { Router }            from '@angular/router';
 })
 export class OverviewComponent implements OnInit {
 
+  context: Context;
+
   constructor(
-    private router: Router, public dummy: DummyService, public context: ContextService) {
+    private router: Router, public dummy: DummyService, contexts: Contexts) {
+      contexts.current.subscribe(val => this.context = val);
   }
 
   ngOnInit() {

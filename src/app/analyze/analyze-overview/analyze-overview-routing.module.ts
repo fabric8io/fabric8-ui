@@ -6,12 +6,7 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
 const routes: Routes = [
   {
     path: '',
-    component: AnalyzeOverviewComponent,
-    children: [
-      {
-        path: ''
-      }
-    ]
+    component: AnalyzeOverviewComponent
   }
 ];
 

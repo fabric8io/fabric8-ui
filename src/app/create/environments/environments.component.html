@@ -1,0 +1,37 @@
+<div id="environments" class="content container">
+  <alm-toolbar [config]="toolbarConfig" (onFilterChange)="filterChange($event)" (onSortChange)="sortChange($event)"></alm-toolbar>
+  <div class="environment" *ngFor="let environment of environments | async">
+    <h2>{{environment.name}}</h2>
+    <small>
+      OpenShift Project: {{environment.namespaceRef}}
+    </small>
+
+    <alm-tree-list #treeList [listTemplate]="treeListTemplate" [loadTemplate]="treeListLoadTemplate" [nodes]="nodes" [options]="options"
+      [showExpander]="false">
+      <template #treeListLoadTemplate let-node="node" let-index="index">
+        <span>Loading...</span>
+      </template>
+      <template #treeListTemplate let-node="node" let-index="index">
+        <div [ngSwitch]="node.parent?.data?.name?.toLowerCase()">
+          <div *ngSwitchCase="'deployments'">
+            <alm-tree-list-item [node]="node" [template]="treeListItemTemplate">
+              <template #treeListItemTemplate>
+                <div class='list-group-item deployment'>
+                  <!--<fabric8-deployments-list-entry [deployment]="node.data.deployment" class="deployments-list-entry"></fabric8-deployments-list-entry>-->
+                </div>
+              </template>
+            </alm-tree-list-item>
+          </div>
+          <div *ngSwitchDefault>
+            <alm-tree-list-item [node]="node" [template]="treeListItemTemplate">
+              <template #treeListItemTemplate>
+                <span title="{{node.data.subTitle}}">{{ node.data.name }}</span>
+                <span>&nbsp;{{ childrenCount(node) }}</span>
+              </template>
+            </alm-tree-list-item>
+          </div>
+        </div>
+      </template>
+    </alm-tree-list>
+  </div>
+</div>

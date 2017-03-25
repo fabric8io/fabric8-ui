@@ -14,11 +14,11 @@ export class DeleteAccountDialogComponent {
   }
 
   ngOnInit() {
-    
+
   }
 
   deleteAccount() {
-    
+
   }
 
  }

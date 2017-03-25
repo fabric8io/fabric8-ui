@@ -1,11 +1,16 @@
-<header class="padding-bottom-10" >
+<header>
   <alm-app-header></alm-app-header>
 </header>
+
+<alm-toast-notification-list
+    [notifications]="notifications.current"
+    (onActionSelect)="handleAction($event)">
+</alm-toast-notification-list>
 <main class="view-container flex-container in-column-direction">
   <div class="view overflow-auto">
     <router-outlet></router-outlet>
   </div>
 </main>
 <footer>
-  <alm-app-footer ></alm-app-footer>
+  <alm-app-footer></alm-app-footer>
 </footer>

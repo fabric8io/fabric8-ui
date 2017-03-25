@@ -1,4 +1,6 @@
-$debug-pf-border:0px;
+@import '../../assets/stylesheets/base';
+
+$debug-pf-border:0;
 
 $content-offset: 15px;
 
@@ -12,7 +14,7 @@ $debug-pf-column-color:lighten($debug-pf-color,50%);
   position:relative;
   border :solid $debug-pf-border $debug-pf-color;
   width:100%;
-  margin-top:0px;
+  margin-top:0;
   overflow:auto;
 }
 .row
@@ -30,15 +32,15 @@ div[class*='col-']
   padding-right:$content-offset;
   .card-pf
   {
-    padding:0px $content-offset;
-    min-height:200px;
+    padding:0 $content-offset;
+    min-height:250px;
     .card-pf-title
     {
-      background-color: #EEE;
+      background-color:$navbar-default-bg;
       margin-left:-$content-offset;
       margin-right:-$content-offset;
-      margin-top:0px;
-      margin-bottom:0px;
+      margin-top:0;
+      margin-bottom:0;
       padding-bottom:$content-offset;
       padding-left:$content-offset;
       padding-right:$content-offset;

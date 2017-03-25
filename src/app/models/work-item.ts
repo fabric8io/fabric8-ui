@@ -1,5 +1,6 @@
+import { User } from 'ngx-login-client';
+
 import { Comments, Comment } from './comment';
-import { User } from './user';
 
 export class WorkItem {
   attributes: WorkItemAttributes;

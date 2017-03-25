@@ -6,12 +6,7 @@ import { ReadmeComponent } from './readme.component';
 const routes: Routes = [
   {
     path: '',
-    component: ReadmeComponent,
-    children: [
-      {
-        path: ''
-      }
-    ]
+    component: ReadmeComponent
   }
 ];
 

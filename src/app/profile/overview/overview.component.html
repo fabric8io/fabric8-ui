@@ -2,23 +2,23 @@
   <div class="row">
     <div class="col-md-2">
       <div class="row">
-        <img src="{{context.current.entity.attributes.imageURL}}" width="150" height="250" />
+        <img src="{{context?.user?.attributes?.imageURL}}" width="150" height="250" />
       </div>
       <div class="row">
-        <h2>{{context.current.entity.attributes.fullName}}</h2>
+        <h2>{{context?.user?.attributes?.fullName}}</h2>
       </div>
       <div class="row">
         <p>
-          {{context.current.entity.attributes.username}}
+          {{context?.user?.attributes?.username}}
         </p>
         <p>
-          {{context.current.entity.attributes.bio}}
+          {{context?.user?.attributes?.bio}}
         </p>
       </div>
     </div>
     <div class="col-md-10">
       <div class="row">
-        <h1>Pinned Collaboration Spaces</h1>
+        <h1>Pinned Spaces</h1>
         <p>Customize</p>
       </div>
       <div *ngFor="let s of dummy.spaces; let i = index;" [ngClass]="{row: (i % 3 == 2) }">

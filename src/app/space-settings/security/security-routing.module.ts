@@ -6,12 +6,7 @@ import { SecurityComponent } from './security.component';
 const routes: Routes = [
   {
     path: '',
-    component: SecurityComponent,
-    children: [
-      {
-        path: ''
-      }
-    ]
+    component: SecurityComponent
   }
 ];
 

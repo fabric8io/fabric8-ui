@@ -1,0 +1,4 @@
+{
+  "pipelinesNamespace": "{{ .Env.FABRIC8_PIPELINES_NAMESPACE }}",
+  "analyticsWriteKey": "{{ .Env.ANALYTICS_WRITE_KEY }}"
+}
