@@ -9,15 +9,3 @@ RUN chmod -R 777 /usr/share/nginx/html/
 
 
 USER ${FABRIC8_USER_NAME}
-
-# TODO This should be in the OpenShift template, not here
-ENV WS_K8S_API_SERVER "tsrv.devshift.net:8443"
-ENV K8S_API_SERVER_PROTOCOL "http"
-ENV K8S_API_SERVER_BASE_PATH "/_p/oso"
-ENV OAUTH_ISSUER "https://tsrv.devshift.net:8443"
-ENV OAUTH_CLIENT_ID "fabric8"
-ENV OAUTH_SCOPE "user:full"
-ENV OAUTH_AUTHORIZE_URI "https://tsrv.devshift.net:8443/oauth/authorize"
-ENV AUTH_LOGOUT_URI "https://tsrv.devshift.net:8443/connect/endsession?id_token={{id_token}}"
-ENV FABRIC8_PIPELINES_NAMESPACE "-development"
-ENV ANALYTICS_WRITE_KEY="B1ASbgoKVpsyv9mcnmbmO7YoggygHq9H"
