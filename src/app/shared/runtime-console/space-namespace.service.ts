@@ -120,10 +120,7 @@ export class SpaceNamespaceService {
         if (val.configMap) {
           return this.configMapService.update(cm);
         } else {
-          //let resty: any = this.configMapService.restangularize(cm);
-          //return this.configMapService.create(resty);
-          console.log('Creation not yet implemented');
-          return Observable.empty();
+          return this.configMapService.create(cm, cm.namespace);
         }
       });
   }
