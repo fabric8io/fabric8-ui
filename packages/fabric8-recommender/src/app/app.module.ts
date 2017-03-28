@@ -8,6 +8,7 @@ import { authApiUrlProvider } from './shared/auth-api.provider';
 import { AuthenticationService, Broadcaster, AUTH_API_URL } from 'ngx-login-client';
 import { Contexts } from 'ngx-fabric8-wit';
 
+// Imports stackdetailsmodule
 import { StackDetailsModule } from './stack/stack-details/stack-details.module';
 
 @NgModule({
