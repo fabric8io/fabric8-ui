@@ -1,0 +1,26 @@
+<alm-slide-out-panel [panelState]="panelState" (panelStateChange)="togglePanelState($event)">
+  <form class="form-horizontal" role="form">
+    <p class="fields-status-pf">The fields marked with <span class="required-pf">*</span> are required.</p>
+    <div class="form-group">
+      <label for="spacePath" class="col-sm-2 control-label" disabled>Space Path</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="spacePath" name="spacePath" disabled
+               [ngModel]="context.path">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="gitHubRepo" class="col-sm-2 control-label required-pf">GitHub Repository</label>
+      <div class="col-sm-9">
+        <input type="text" class="form-control" id="gitHubRepo" name="gitHubRepo"
+               placeholder="git@github.com:almighty/almighty-core.git"
+               [(ngModel)]="gitHubRepo">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-3">
+        <button type="submit" class="btn btn-primary"
+                (click)="create($event)">Associate Repository</button>
+      </div>
+    </div>
+  </form>
+</alm-slide-out-panel>

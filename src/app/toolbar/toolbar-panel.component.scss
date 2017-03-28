@@ -1,0 +1,12 @@
+@import '../../assets/stylesheets/base';
+
+.toolbar-header {
+  padding: 0 rem(20);
+  border-bottom: 1px solid $color-pf-black-300;
+}
+
+.toolbar-pf-action-right {
+  .pficon-add-circle-o{
+    color: $color-pf-blue-400;
+  }
+}

@@ -3,6 +3,11 @@
 {
   box-shadow: none !important;
 }
+
 .form-control, .btn, .dropdown-menu, .badge {
 font-size: $font-size-base;
+}
+
+.form-control {
+  height: 29px;
 }

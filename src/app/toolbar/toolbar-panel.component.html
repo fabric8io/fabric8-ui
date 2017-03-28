@@ -1,0 +1,13 @@
+<div class="toolbar-header">
+  <alm-toolbar
+      [config]="toolbarConfig"
+      [viewsTemplate]="addTemplate"
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)">
+    <template #add>
+      <div class="with-cursor-pointer" placement="bottom" tooltip="Add A Codebase" (click)="onClick()">
+        <i class="pficon pficon-add-circle-o margin-top-4"></i>
+      </div>
+    </template>
+  </alm-toolbar>
+</div>

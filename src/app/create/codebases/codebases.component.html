@@ -1,5 +1,70 @@
+<toolbar-panel (onAddClick)="create.togglePanel($event)"></toolbar-panel>
+<codebases-create (onCreate)="addCodebase($event)" #create></codebases-create>
 <div id="codebases" class="container content">
-  <!-- can someone please show me how to make this be a relative url for the current component's directory?
-       I really just want to use 'codebases.png', but I've been unable to figure out how to do that -->
-  <img src='/assets/img/mockups/codebases.png' style="width:100%;">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="heading list-group list-view-pf">
+        <div class="list-view-pf-description">
+          <div class="list-group-item-heading">
+            <span>Name</span>
+          </div>
+          <div class="list-group-item-text">
+            <span>Created Date</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <alm-listview
+          [config]="listViewConfig"
+          [items]="codebases"
+          [itemTemplate]="itemTemplate"
+          [itemExpandedTemplate]="itemExpandedTemplate">
+        <template #itemTemplate let-codebase="item" let-index="index">
+          <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
+          <div class="list-view-pf-description">
+            <div class="list-group-item-heading">
+              <a href="{{getUrl(codebase)}}" target="_blank">{{getName(codebase)}}</a>
+            </div>
+            <div class="list-group-item-text">
+              {{codebase.attributes.createdAt | date:'medium'}}
+            </div>
+          </div>
+          <!--
+          <div class="list-view-pf-additional-info">
+            <div class="list-view-pf-additional-info-item">
+              {{item.attributes.createdAt | date:'medium'}}
+            </div>
+          </div>
+          -->
+        </template>
+        <template #itemExpandedTemplate let-codebase="item" let-index="index">
+          <div class="row">
+            <div class="col-md-3">
+              <dl class="dl-horizontal">
+                <dt>Commit History</dt>
+              </dl>
+            </div>
+            <div class="col-md-9">
+              <dl class="dl-horizontal">
+                <dt>Git URL</dt>
+                <dd><a href="{{getUrl(codebase)}}" target="_blank">{{getUrl(codebase)}}</a></dd>
+                <dt>Latest Commit SHA1</dt>
+                <dd>9bc99eb964c57200ff163619326b9cfaa82aee8b</dd>
+                <dt>Status</dt>
+                <dd>3 commits ahead of Master</dd>
+                <dd>25 total files changed</dd>
+                <dt>Dependents</dt>
+                <dd>0 Packages / 0 Applications</dd>
+                <dt>License</dt>
+                <dd>None</dd>
+              </dl>
+            </div>
+          </div>
+        </template>
+      </alm-listview>
+    </div>
+  </div>
 </div>
