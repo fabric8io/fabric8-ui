@@ -3,9 +3,9 @@ def ci (){
     stage('build'){
         sh 'npm install'
     }
-    stage('functional test'){
-        sh './run_functional_tests.sh'
-    }
+    // stage('functional test'){
+    //     sh './run_functional_tests.sh'
+    // }
 }
 
 def cd (b){
@@ -18,9 +18,9 @@ def cd (b){
         sh 'npm run build'
     }
 
-    stage('functional test'){
-        sh './run_functional_tests.sh'
-    }
+    // stage('functional test'){
+    //     sh './run_functional_tests.sh'
+    // }
 
     stage('release'){
         def published = npmRelease{
