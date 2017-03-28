@@ -1,6 +1,6 @@
 {
   "name": "fabric8-stack-analysis-ui",
-  "version": "0.0.3",
+  "version": "0.0.0-development",
   "description": "A Stack Analysis Feature",
   "main": "bundles/fabric8-stack-analysis-ui.umd.js",
   "module": "index.js",
