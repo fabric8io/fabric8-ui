@@ -363,7 +363,9 @@ module.exports = function (options) {
        */
       new LoaderOptionsPlugin({}),
 
-      extractCSS
+      extractCSS,
+
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ],
 
     /*

@@ -244,7 +244,8 @@ module.exports = function (env) {
           keep_fnames: true
         }, //prod
         compress: {
-          screw_ie8: true
+          screw_ie8: true,
+          warnings: false
         }, //prod
         comments: false, //prod
         sourceMap: true
