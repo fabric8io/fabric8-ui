@@ -2,14 +2,13 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 
-import { StackDetailsComponent } from './stack-details.component';
 import { ModalModule } from 'ngx-modal';
 
+import { GlobalConstants } from '../constants/constants.service';
+import { OverviewModule } from '../overview/overview.module';
 import { RecommenderModule } from '../recommender/recommender.module';
 import { StackComponentsModule } from '../stack-components/stack-components.module';
-import { OverviewModule } from '../overview/overview.module';
-
-import { GlobalConstants } from '../constants/constants.service';
+import { StackDetailsComponent } from './stack-details.component';
 
 @NgModule({
   imports: [

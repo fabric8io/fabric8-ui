@@ -21,7 +21,6 @@
     "outDir": "dist",
     "paths": {
       "@angular/common": ["node_modules/@angular/common"],
-      "@angular/forms": ["node_modules/@angular/forms"],
       "rxjs/*": ["node_modules/rxjs/*"]
     },
     "lib": [

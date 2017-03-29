@@ -1,8 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core';
+
 import { Observable } from 'rxjs/Observable';
+import { Space, Contexts } from 'ngx-fabric8-wit';
+
 import { GlobalConstants } from '../constants/constants.service';
 import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
-import {Space, Contexts} from 'ngx-fabric8-wit';
 
 @Component({
     selector: 'f8-recommender',
