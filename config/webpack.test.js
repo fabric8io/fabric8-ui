@@ -111,8 +111,13 @@ module.exports = function (options) {
           use: ['source-map-loader'],
           exclude: [
             // these packages have problems with their sourcemaps
-            path.resolve(__dirname, 'node_modules/rxjs'),
-            path.resolve(__dirname, 'node_modules/@angular')
+            helpers.nodeModulePath("mydatepicker"),
+            helpers.nodeModulePath("ng2-completer"),
+            helpers.nodeModulePath("angular2-flash-messages"),
+            helpers.nodeModulePath("ngx-dropdown"),
+            helpers.nodeModulePath("ngx-modal"),
+            helpers.nodeModulePath("ng2-modal"),
+            helpers.nodeModulePath("ng2-dnd")
           ]
         },
 
@@ -300,6 +305,8 @@ module.exports = function (options) {
       module: false,
       clearImmediate: false,
       setImmediate: false
-    }
+    },
+
+    stats: "verbose"
   };
 };
