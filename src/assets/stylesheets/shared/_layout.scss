@@ -238,8 +238,7 @@ footer
 }
 
 .btn{
-  min-width: 90px;
-  font-size: $font-size-base;
+  min-width: 0px !important; //Don't overwrite this css
 }
 
 // chromeless dialog suppresses all chrome in the ng2-bootstrap modal component

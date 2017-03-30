@@ -1,55 +1,71 @@
-.team {
-  .img-icon{
-    width: 25px;
-    height: 25px;
+@import '../../../assets/stylesheets/base';
+@import '../../../assets/stylesheets/shared/layout';
+
+.analyze-overview-wrapper {
+  .space-overview-wrapper {
+    padding-bottom: 0;
+    @extend .flex-container;
+    > div {
+      aside {
+        padding: 0 rem(20);
+        height: 100%;
+        @extend .flex-container;
+        .card-pf {
+          @extend .flex-container;
+          flex: 1;
+          -webkit-flex: 1;
+          min-height: rem(288);
+          .badge {
+            margin-top: rem(-4);
+          }
+          p {
+            white-space: pre-line;
+          }
+          .analyze-overview-add-items {
+          }
+          .analyze-overview-items-detail {
+            @extend .flex-container;
+            @extend .in-column-direction;
+            @extend .flex-grow-1;
+            .card-pf-body {
+              flex: auto;
+              -webkit-flex: auto;
+              ul {
+                list-style: none;
+                padding: 0;
+                li {
+                  margin-bottom: rem(10);
+                }
+              }
+            }
+            .card-pf-footer {
+              flex: none;
+              -webkit-flex: none;
+              @extend .flex-container;
+              a {
+                &:hover {
+                  text-decoration: none;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+          .analytical-report-list {
+            list-style: none;
+            padding: 0;
+            li {
+              margin-bottom: rem(10);
+            }
+          }
+        }
+      }
+    }
+    .analyze-overview-info-wrapper {
+      @extend .flex-grow-2;
+      margin: 0 20px;
+      .card-pf-body {
+        justify-content: space-between;
+      }
+    }
   }
-  .member {
-    height: 35px;
-  }
-}
-
-.number {
-  font-size: 96px;
-}
-
-.panel-300 {
-  .panel-body {
-    height: 300px;
-  }
-}
-
-.panel-title {
-  min-height: 30px;
-}
-
-.panel-140 {
-  .panel-body {
-    height: 140px;
-  }
-}
-
-.pull-down {
-  display: table-cell;
-  vertical-align: bottom;
-  float: none;
-  padding: 5px;
-}
-
-.bottom-right {
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 30px;
-  margin: 30px;
-  right: 0;
-}
-
-.text-bottom
-{
-  float: none;
-  display: table-cell;
-  vertical-align: bottom;
-}
-
-.clickable {
-  cursor: pointer;
 }
