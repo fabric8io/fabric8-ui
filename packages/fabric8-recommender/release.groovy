@@ -39,6 +39,7 @@ def updateDownstreamProjects(v){
         ]
         version = v
         containerName = 'ui'
+        autoMerge = true
     }
 }
 return this
