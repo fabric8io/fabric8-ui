@@ -1,4 +1,3 @@
-
 /**
  * Allows to piggy-back contextual information onto workflow transitions
  */

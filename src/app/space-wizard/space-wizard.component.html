@@ -1,18 +1,21 @@
 <div class="wizard">
-  <form class="wizard-step" [class.active]="workflow.isStepActive({name:steps.space})" role="form" #spaceForm="ngForm" (ngSubmit)="createSpace()"
-    novalidate>
+  <form class="wizard-step" [class.active]="workflow.isStepActive({name:steps.space})" role="form" #spaceForm="ngForm"
+        (ngSubmit)="createSpace()"
+        novalidate>
     <header>
       <h3>Create a new collaboration space</h3>
     </header>
-    <section class="flex-container in-column-direction flex-grow-1 flex-align-content-stretch margin-top-15 container-fluid">
+    <section
+      class="flex-container in-column-direction flex-grow-1 flex-align-content-stretch margin-top-15 container-fluid">
       <div class="row">
         <div class="col-xs-12">
           <div class="form-horizontal">
             <div class="form-group">
               <label class="control-label col-xs-4">Name</label>
               <div class="col-xs-8">
-                <input id="name" name="name" type="text" class="form-control" placeholder="Enter a unique name for your space" [(ngModel)]="configurator.space.name"
-                  #name="ngModel" required uniqueSpaceName validSpaceName />
+                <input id="name" name="name" type="text" class="form-control"
+                       placeholder="Enter a unique name for your space" [(ngModel)]="configurator.space.name"
+                       #name="ngModel" required uniqueSpaceName validSpaceName/>
                 <div *ngIf="name.errors && (name.dirty || name.touched)" class="alert alert-danger">
                   <div [hidden]="!name.errors.required">
                     Name is required
@@ -24,7 +27,8 @@
                     Name cannot be more than {{name.errors.maxLength?.max}} characters long.
                   </div>
                   <div [hidden]="!name.errors.unique">
-                    Name '{{name.errors.unique?.requestedName}}'' is already in use as {{name.errors.unique?.existingSpace.relationalData.creator.attributes.username}}/{{name.errors.unique?.existingSpace.attributes.name}}.
+                    Name '{{name.errors.unique?.requestedName}}'' is already in use as
+                    {{name.errors.unique?.existingSpace.relationalData.creator.attributes.username}}/{{name.errors.unique?.existingSpace.attributes.name}}.
                   </div>
                   <div [hidden]="!name.errors.invalid">
                     Name must contain only letters (upper case or lower case), numbers, underscores (_) or hyphens(-).
@@ -36,16 +40,18 @@
             <div class="form-group">
               <label class="control-label col-xs-4 ">Development Process</label>
               <div class="col-xs-8">
-                <select class="form-control" id="developmentProcess" [(ngModel)]="configurator.space.process" name="developmentProcess">
-                        <option *ngFor="let p of dummy.processTemplates" [ngValue]="p">{{p.name}}</option>
-                    </select>
+                <select class="form-control" id="developmentProcess" [(ngModel)]="configurator.space.process"
+                        name="developmentProcess">
+                  <option *ngFor="let p of dummy.processTemplates" [ngValue]="p">{{p.name}}</option>
+                </select>
               </div>
             </div>
             <div *ngIf="configurator.space.process" class="col-xs-offset-4 col-xs-8 padding-top-15">
               {{configurator.space.process.description}}
             </div>
             <div class="col-xs-8 col-xs-offset-4 padding-top-15">
-              This space will be <strong>public</strong>, which means that anyone can access this code and participate in
+              This space will be <strong>public</strong>, which means that anyone can access this code and participate
+              in
               creating the product.
             </div>
           </div>
@@ -60,7 +66,8 @@
   </form>
   <div class="wizard-step" [class.active]="workflow.isStepActive({name:steps.forge})">
     <header>
-      <h3>Your <strong>{{configurator.space.attributes.name}}</strong> Space is ready! How would you like to get started ?</h3>
+      <h3>Your <strong>{{configurator.space.attributes.name}}</strong> Space is ready! How would you like to get started
+        ?</h3>
     </header>
     <section class="flex-container in-row-direction flex-grow-1 margin-top-15">
       <div class="section-column">
@@ -90,14 +97,16 @@
     <footer>
       <!--<a class="btn btn-default margin-right-5" (click)="workflow.cancel()">Cancel</a>
       <a class="btn btn-default margin-right-5" (click)="workflow.gotoPreviousStep()">Back</a>-->
-      <a class="btn btn-default" (click)="finish()">No thanks, just take me to {{configurator.space.attributes.name}}</a>
+      <a class="btn btn-default" (click)="finish()">No thanks, just take me to
+        {{configurator.space.attributes.name}}</a>
     </footer>
   </div>
   <div class="wizard-step" [class.active]="workflow.isStepActive({name:steps.quickStart})">
     <header>
       <h3>Define a QuickStart to add to the <strong>{{configurator.space.name}}></strong> space. </h3>
     </header>
-    <section class="flex-container in-column-direction flex-grow-1  flex-align-content-stretch margin-top-15 container-fluid">
+    <section
+      class="flex-container in-column-direction flex-grow-1  flex-align-content-stretch margin-top-15 container-fluid">
       <!--<div class="container-fluid">-->
       <div class="row">
         <div class="col-xs-12">
@@ -105,30 +114,36 @@
             <div class="form-group has-clear">
               <label class="control-label col-sm-4">Project type *</label>
               <div class="col-sm-8">
-                <select class="form-control" id="projectType" [(ngModel)]="configurator.project.type" name="projectType">
-                            <option *ngFor="let projectType of configurator.availableProjectTypes" [ngValue]="pt">{{projectType.description}}</option>
-                        </select>
+                <select class="form-control" id="projectType" [(ngModel)]="configurator.project.type"
+                        name="projectType">
+                  <option *ngFor="let projectType of configurator.availableProjectTypes" [ngValue]="pt">
+                    {{projectType.description}}
+                  </option>
+                </select>
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-sm-4">Project Name *</label>
               <div class="col-sm-8">
-                <input id="projectName" name="projectName" type="text" class="form-control" placeholder="demo" [(ngModel)]="configurator.project.name"
-                  required />
+                <input name="projectName" type="text" class="form-control" placeholder="demo"
+                       [(ngModel)]="configurator.project.name"
+                       required/>
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-sm-4">Top level package</label>
               <div class="col-sm-8">
-                <input id="topLevelPackage" name="projectVersion" type="text" class="form-control" placeholder="com.example" [(ngModel)]="configurator.project.topLevelPackage"
+                <input id="topLevelPackage" name="projectVersion" type="text" class="form-control"
+                       placeholder="com.example" [(ngModel)]="configurator.project.topLevelPackage"
                 />
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-sm-4">Project version*</label>
               <div class="col-sm-8">
-                <input id="projectVersion" name="projectVersion" type="text" class="form-control" placeholder="1.0.0-SNAPSHOT" [(ngModel)]="configurator.project.version"
-                  required />
+                <input id="projectVersion" name="projectVersion" type="text" class="form-control"
+                       placeholder="1.0.0-SNAPSHOT" [(ngModel)]="configurator.project.version"
+                       required/>
               </div>
             </div>
           </form>
@@ -147,7 +162,8 @@
       <h3>Select a project type to add to the <strong>{{configurator.space.name}}</strong> space.</h3>
     </header>
     <section class="layout-block-container">
-      <div *ngFor="let stack of configurator.availableStacks" (click)="configurator.project.stack=stack" class="layout-block layout-block-stack">
+      <div *ngFor="let stack of configurator.availableStacks" (click)="configurator.project.stack=stack"
+           class="layout-block layout-block-stack">
         <section>
           <div class="layout-block-icon icon-stack {{stack.icon}}"></div>
         </section>
@@ -157,7 +173,8 @@
     <div class="form-group">
       <label class="control-label col-sm-3">Project Name</label>
       <div class="col-sm-9 ">
-        <input id="projectName" name="projectName" type="text" class="form-control" placeholder="HighScoreService" [(ngModel)]="configurator.project.name"
+        <input name="projectName" type="text" class="form-control" placeholder="HighScoreService"
+               [(ngModel)]="configurator.project.name"
         />
       </div>
     </div>
@@ -173,7 +190,8 @@
       <h3>Select a pipeline type to add to the <strong>{{configurator.space.name}}</strong> space.</h3>
     </header>
     <section class="layout-block-container">
-      <div *ngFor="let pipeline of configurator.availablePipelines" class="layout-block layout-block-pipeline" (click)="configurator.project.pipeline=pipeline">
+      <div *ngFor="let pipeline of configurator.availablePipelines" class="layout-block layout-block-pipeline"
+           (click)="configurator.project.pipeline=pipeline">
         <header><span class="layout-block-title">{{pipeline.name}}</span></header>
         <section>
           <div><span class="layout-block-title">Stages</span></div>
@@ -190,8 +208,9 @@
     <div class="form-group">
       <label class="control-label col-sm-3">Pipeline Name</label>
       <div class="col-sm-9 ">
-        <input id="pipelineName" name="pipelineName" type="text" class="form-control" placeholder="CanaryReleaseStageAndApprovePromote"
-          [(ngModel)]="configurator.project.pipelineName" />
+        <input id="pipelineName" name="pipelineName" type="text" class="form-control"
+               placeholder="CanaryReleaseStageAndApprovePromote"
+               [(ngModel)]="configurator.project.pipelineName"/>
       </div>
     </div>
     <footer>
@@ -200,11 +219,13 @@
       <a class="btn btn-default" (click)="finish()">Finish</a>
     </footer>
   </div>
-  <wizard-dynamic-step class="wizard-step" [class.active]="workflow.isStepActive({name:steps.forgeStarter})" commandName="{{commands.forgeStarter}}"
-    stepName="{{steps.forgeStarter}}" [workflow]="workflow">
+  <wizard-dynamic-step class="wizard-step" [class.active]="workflow.isStepActive({name:steps.forgeStarter})"
+                       commandName="{{commands.forgeStarter}}"
+                       stepName="{{steps.forgeStarter}}" [workflow]="workflow">
   </wizard-dynamic-step>
-  <wizard-dynamic-step class="wizard-step" [class.active]="workflow.isStepActive({name:steps.forgeQuickStart})" commandName="{{commands.forgeQuickStart}}"
-    stepName="{{steps.forgeQuickStart}}" [workflow]="workflow">
+  <wizard-dynamic-step class="wizard-step" [class.active]="workflow.isStepActive({name:steps.forgeQuickStart})"
+                       commandName="{{commands.forgeQuickStart}}"
+                       stepName="{{steps.forgeQuickStart}}" [workflow]="workflow">
   </wizard-dynamic-step>
 
 </div>

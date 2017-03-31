@@ -1,4 +1,3 @@
-
 export interface IAppGeneratorCommand {
   name: string;
   parameters?: {
@@ -8,11 +7,11 @@ export interface IAppGeneratorCommand {
         [key: string]: any;
       },
       [key: string]: any;
-    }|any;
+    } | any;
     data?: any,
     inputs?: any
     [key: string]: any;
 
-  }
+  };
 }
 

@@ -13,8 +13,6 @@ export class AlertsComponent implements OnInit {
     private router: Router) {
   }
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {}
 
 }

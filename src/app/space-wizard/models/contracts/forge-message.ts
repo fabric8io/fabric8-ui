@@ -1,7 +1,6 @@
-export interface IForgeMessage
-{
-  description:string;
-  input:string;
-  severity:string;
-  showError:boolean;
+export interface IForgeMessage {
+  description: string;
+  input: string;
+  severity: string;
+  showError: boolean;
 }

@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer, Subscriber, Subject } from 'rxjs/Rx';
-import { LoggerFactory, ILoggerDelegate } from '../../common/logger';
-
-import { IWorkflowStep } from '../contracts/workflow-step';
-import { IWorkflowLocator } from '../contracts/workflow-locator';
-import { IWorkflowTransition } from '../contracts/workflow-transition';
-import { IWorkflowTransitionContext } from '../contracts/workflow-transition-context';
-import { WorkflowTransitionDirection } from '../contracts/workflow-transition-direction';
+import { Observable, Observer, Subject } from 'rxjs/Rx';
+import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
 import { IWorkflow } from '../contracts/workflow';
 import { IWorkflowOptions } from '../contracts/workflow-options';
+
+import { IWorkflowStep } from '../contracts/workflow-step';
+import { IWorkflowTransition } from '../contracts/workflow-transition';
+import { WorkflowTransitionDirection } from '../contracts/workflow-transition-direction';
 
 import { WorkflowStep } from './workflow-step';
 import { WorkflowTransition } from './workflow-transition';
@@ -21,10 +19,7 @@ export class Workflow implements IWorkflow {
 
   private _steps: Array<IWorkflowStep> = [];
   private _workflowTransitionSubject: Subject<IWorkflowTransition>;
-  private _activeStep: IWorkflowStep
-
-  private log: ILoggerDelegate = () => { };
-
+  private _activeStep: IWorkflowStep;
 
   constructor(loggerFactory: LoggerFactory) {
 
@@ -41,17 +36,19 @@ export class Workflow implements IWorkflow {
   };
 
   set steps(value: Array<IWorkflowStep>) {
-    this.initialize({ steps: () => value });
+    this.initialize({steps: () => value});
   }
 
   /** default cancel handler */
   cancel(options: any): any {
     return null;
   }
+
   /** default finish handler */
   finish(options: any): any {
     return null;
   }
+
   /** default reset handler */
   reset(options: any): any {
     return null;
@@ -72,29 +69,31 @@ export class Workflow implements IWorkflow {
   }
 
   initialize(options: IWorkflowOptions) {
-    this.log("Initializing the workflow ...")
-    let workflow = this;
-    this._steps = [];
+    this.log('Initializing the workflow ...');
+    let workflow           = this;
+    this._steps            = [];
     // ensure callback have correct 'this'
-    let items = options.steps.apply(workflow) || [];
+    let items              = options.steps.apply(workflow) || [];
     // first sort by index
-    items = items.sort((i) => { return i.index; });
+    items                  = items.sort((i) => {
+      return i.index;
+    });
     // retrieve the default first item, i.e the one with the lowest index.
     let firstIndex: number = 0;
     if (items.length > 0) {
-      firstIndex = items[0].index;
+      firstIndex = items[ 0 ].index;
     }
     // then insert items
     for (let item of items) {
       if (item.index && item.index < firstIndex) {
-        firstIndex = item.index
+        firstIndex = item.index;
       }
       let step = new WorkflowStep(item, () => workflow);
       this._steps.push(step);
     }
     // Set up the 'first step' handler/closure that will dynamically use index or
     // the  IWorkflowStepQuery optionally passed in with workflow options;
-    this.firstStep = () => {
+    this.firstStep  = () => {
       let firstStep: IWorkflowStep = null;
       if (!options.firstStep) {
         options.firstStep = () => firstIndex;
@@ -105,27 +104,27 @@ export class Workflow implements IWorkflow {
         firstStep = workflow.findStep(firstIndex);
       }
       return firstStep;
-    }
+    };
     // now set active step to firstStep
     this.activeStep = this.firstStep();
     if (options.cancel) {
       this.cancel = (...args) => {
-        var timer = setTimeout(() => {
+        let timer = setTimeout(() => {
           clearTimeout(timer);
-          this.log("Invoking cancel ... ");
+          this.log('Invoking cancel ... ');
           options.cancel.apply(workflow, args);
         }, 10);
-      }
+      };
       return true;
     }
     if (options.finish) {
       this.finish = (...args) => {
-        var timer = setTimeout(() => {
+        let timer = setTimeout(() => {
           clearTimeout(timer);
-          this.log("Invoking finish ... ");
+          this.log('Invoking finish ... ');
           options.finish.apply(workflow, args);
-        }, 10)
-      }
+        }, 10);
+      };
     }
   }
 
@@ -138,18 +137,15 @@ export class Workflow implements IWorkflow {
       if (typeof step === 'number') {
         // check by number
         return step === this.activeStep.index;
-      }
-      else if (typeof step === 'string') {
+      } else if (typeof step === 'string') {
         // check by name
         return step.toLowerCase() === this.activeStep.name.toLowerCase();
-      }
-      else {
-        //check by partial
-        if (step.index !== null && step.index != undefined) {
+      } else {
+        // check by partial
+        if (step.index !== null && step.index !== undefined) {
           // check by partial.number
           return step === this.activeStep.index;
-        }
-        else if (step.name) {
+        } else if (step.name) {
           // check by partial.name
           return step.name.toLowerCase() === this.activeStep.name.toLowerCase();
         }
@@ -161,33 +157,43 @@ export class Workflow implements IWorkflow {
   findStep(destination: number | string | Partial<IWorkflowStep>) {
     let step: IWorkflowStep = null;
     if (typeof destination === 'number') {
-      step = this.steps.find((step) => step.index === destination)
+      step = this.steps.find((s) => s.index === destination);
       return step;
-    }
-    else if (typeof destination === 'string') {
-      step = this.steps.find((step) => step.name.toLowerCase() === destination.toLowerCase())
+    } else if (typeof destination === 'string') {
+      step = this.steps.find((s) => s.name.toLowerCase() === destination.toLowerCase());
       return step;
-    }
-    else {
-      if (destination.index !== null && destination.index != undefined) {
-        step = this.steps.find((s) => s.index === destination.index)
+    } else {
+      if (destination.index !== null && destination.index !== undefined) {
+        step = this.steps.find((s) => s.index === destination.index);
         return step;
-      }
-      else if (destination.name) {
-        step = this.steps.find((s) => s.name.toLowerCase() === destination.name.toLowerCase())
+      } else if (destination.name) {
+        step = this.steps.find((s) => s.name.toLowerCase() === destination.name.toLowerCase());
       }
     }
     return step;
   }
-  //TODO: convert to promise for async long running transiitions
-  gotoStep(destination: number | string | Partial<IWorkflowStep>, transitionOptions: Partial<IWorkflowTransition> = { canContinue: true, direction: WorkflowTransitionDirection.GO, context: {} }) {
+
+  // TODO: convert to promise for async long running transiitions
+  gotoStep(destination: number
+             | string
+             | Partial<IWorkflowStep>, transitionOptions: Partial<IWorkflowTransition> = {
+             canContinue: true,
+             direction  : WorkflowTransitionDirection.GO,
+             context    : {}
+           }) {
 
     let destinationStep = this.findStep(destination);
     if (destinationStep) {
       transitionOptions.canContinue = transitionOptions.canContinue || true;
-      transitionOptions.direction = transitionOptions.direction || WorkflowTransitionDirection.GO;
-      transitionOptions.context = transitionOptions.context || {};
-      let transition = this.workflowTransitionShouldContinue({ from: this.activeStep, to: destinationStep, direction: transitionOptions.direction, canContinue: transitionOptions.canContinue, context: transitionOptions.context });
+      transitionOptions.direction   = transitionOptions.direction || WorkflowTransitionDirection.GO;
+      transitionOptions.context     = transitionOptions.context || {};
+      let transition                = this.workflowTransitionShouldContinue({
+                                                                              from       : this.activeStep,
+                                                                              to         : destinationStep,
+                                                                              direction  : transitionOptions.direction,
+                                                                              canContinue: transitionOptions.canContinue,
+                                                                              context    : transitionOptions.context
+                                                                            });
       if (transition.canContinue === true) {
         let activeStep = this.activeStep;
         let targetStep = destinationStep;
@@ -196,15 +202,18 @@ export class Workflow implements IWorkflow {
           let newDestinationStep = transition.to;
           this.log(`transition destination step = '${destinationStep.name}' modified to be '${newDestinationStep.name}' `);
           // modify prev step handler if target step changed
-          let priorHandler = newDestinationStep.gotoPreviousStep;
+          let priorHandler                    = newDestinationStep.gotoPreviousStep;
           // by dynamically adding the gotoNextStep function using a closure to retrieve previous step
           newDestinationStep.gotoPreviousStep = () => {
-            let step = this.gotoStep(transition.from, { canContinue: true, direction: WorkflowTransitionDirection.PREVIOUS });
+            let step                            = this.gotoStep(transition.from, {
+              canContinue: true,
+              direction  : WorkflowTransitionDirection.PREVIOUS
+            });
             // restore prior handler
             newDestinationStep.gotoPreviousStep = priorHandler;
             return step;
-          }
-          destinationStep = transition.to;
+          };
+          destinationStep                     = transition.to;
         }
         this.activeStep = transition.to;
       }
@@ -213,29 +222,27 @@ export class Workflow implements IWorkflow {
   }
 
   gotoNextStep(destination?: number | string | Partial<IWorkflowStep>) {
-    this.log(`gotoNextStep ...`)
+    this.log(`gotoNextStep ...`);
     let nextStep: IWorkflowStep = null;
-    let activeStep = this.activeStep;
+    let activeStep              = this.activeStep;
     if (!destination) {
       // if nothing specified (i.e no branching) then just do the default behavior based on nextIndex
       if (activeStep) {
         nextStep = this.findStep(activeStep.nextIndex);
         this.log(`Found next step = ${nextStep.name} ...`);
-      }
-      else {
+      } else {
         // if no active step then the firstStep is the next step
         this.activeStep = this.firstStep();
         this.log(`Found next step = ${this.activeStep.name} ...`);
         return this.activeStep;
       }
-    }
-    else {
+    } else {
       // otherwise 'branch' to specified step
       nextStep = this.findStep(destination);
       this.log(`Found next step = ${nextStep.name} ...`);
     }
     if (!nextStep) {
-      let currentStep = "";
+      let currentStep = '';
       if (this.activeStep) {
         currentStep = ` for ${this.activeStep.name}`;
       }
@@ -243,38 +250,47 @@ export class Workflow implements IWorkflow {
     }
     // setup the previous step handler and transition to nextstep if the step is valid
     if (nextStep) {
-      let priorHandler = nextStep.gotoPreviousStep;
+      let priorHandler          = nextStep.gotoPreviousStep;
       // by dynamically adding the gotoNextStep function using a closure to retrieve previous step
       nextStep.gotoPreviousStep = () => {
-        let step = this.gotoStep(activeStep, { canContinue: true, direction: WorkflowTransitionDirection.PREVIOUS });
+        let step                  = this.gotoStep(activeStep, {
+          canContinue: true,
+          direction  : WorkflowTransitionDirection.PREVIOUS
+        });
         // restore prior handler
         nextStep.gotoPreviousStep = priorHandler;
         return step;
-      }
-      this.gotoStep(nextStep.index, { canContinue: true, direction: WorkflowTransitionDirection.NEXT, context: {} })
+      };
+      this.gotoStep(nextStep.index, {canContinue: true, direction: WorkflowTransitionDirection.NEXT, context: {}});
     }
     return nextStep;
   }
 
   gotoPreviousStep() {
-    this.log(`gotoPreviousStep ...`)
-    let workflow = this;
-    let previousStep = null
+    this.log(`gotoPreviousStep ...`);
+    let workflow          = this;
+    let previousStep      = null;
     let currentActiveStep = this.activeStep;
     if (currentActiveStep.gotoPreviousStep) {
-      previousStep = currentActiveStep.gotoPreviousStep()
+      previousStep = currentActiveStep.gotoPreviousStep();
     }
     return previousStep;
   }
 
-  //TODO needs to return a promise to cater for async step continuation
-  private workflowTransitionShouldContinue(options: Partial<IWorkflowTransition> = { canContinue: false, context: { direction: WorkflowTransitionDirection.GO } }): IWorkflowTransition {
+  // TODO needs to return a promise to cater for async step continuation
+  private workflowTransitionShouldContinue(options: Partial<IWorkflowTransition> = {
+                                             canContinue: false,
+                                             context    : {direction: WorkflowTransitionDirection.GO}
+                                           }): IWorkflowTransition {
     let transition = new WorkflowTransition(options);
-    this.log(`Notify workflow transition subscribers of an upcoming '${transition.direction}' transition from '${transition.from ? transition.from.name : "null"}' to '${transition.to ? transition.to.name : "null"}' `);
+    this.log(`Notify workflow transition subscribers of an upcoming '${transition.direction}' transition from '${transition.from ? transition.from.name : 'null'}' to '${transition.to ? transition.to.name : 'null'}' `);
     this.workflowTransitionSubject.next(transition);
     this.log(`workflowTransitionShouldContinue = ${transition.canContinue}`);
     if (transition.canContinue === false) {
-      this.log({ message: `Note: workflow will not proceed from '${transition.from ? transition.from.name : "null"}' to '${transition.to ? transition.to.name : "null"}' because transition.canContinue=${transition.canContinue}`, warning: true });
+      this.log({
+                 message: `Note: workflow will not proceed from '${transition.from ? transition.from.name : 'null'}' to '${transition.to ? transition.to.name : 'null'}' because transition.canContinue=${transition.canContinue}`,
+                 warning: true
+               });
 
     }
     return transition;
@@ -284,18 +300,24 @@ export class Workflow implements IWorkflow {
     this._workflowTransitionSubject = this._workflowTransitionSubject || new Subject<IWorkflowTransition>();
     return this._workflowTransitionSubject;
   }
+
   set workflowTransitionSubject(value: Subject<IWorkflowTransition>) {
     this._workflowTransitionSubject = value;
   }
 
-  //Note: every subscriber gets an observable instance
+  // Note: every subscriber gets an observable instance
   get transitions(): Observable<IWorkflowTransition> {
-    let me = this;
+    let me                                           = this;
     let transitions: Observable<IWorkflowTransition> = Observable.create((observer: Observer<IWorkflowTransition>) => {
-      me.workflowTransitionSubject.subscribe(observer)
-      this.log("Observer is now subscribed to workflow transitions ...");
+      me.workflowTransitionSubject.subscribe(observer);
+      this.log('Observer is now subscribed to workflow transitions ...');
 
     });
     return transitions;
   }
-};
+
+  private log: ILoggerDelegate = () => {
+  };
+
+}
+
