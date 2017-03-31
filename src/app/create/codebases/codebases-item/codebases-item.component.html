@@ -1,0 +1,27 @@
+<div class="list-view-pf-left">
+  <span class="fa list-view-pf-icon-sm" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
+</div>
+<div class="list-view-pf-body">
+  <div class="list-view-pf-description">
+    <div class="list-group-item-heading">
+      <span class="list-group-heading" *ngIf="index === 0">NAME</span>
+      <a [href]="htmlUrl" target="_blank" *ngIf="!isHtmlUrlInvalid()">{{fullName}}</a>
+      <span *ngIf="isHtmlUrlInvalid()">Invalid URL</span>
+    </div>
+    <div class="list-group-item-text">
+      <span class="list-group-heading" *ngIf="index === 0">CREATED DATE</span>
+      {{createdDate | date:'medium'}}
+    </div>
+  </div>
+  <div class="list-group-item-text">
+    <span class="list-group-heading" *ngIf="index === 0">LAST COMMIT</span>
+    {{lastCommitDate | date:'medium'}}
+  </div>
+  <!--
+  <div class="list-view-pf-additional-info">
+    <div class="list-view-pf-additional-info-item">
+      {{lastCommitDate | date:'medium'}}
+    </div>
+  </div>
+  -->
+</div>

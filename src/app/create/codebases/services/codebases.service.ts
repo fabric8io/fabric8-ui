@@ -14,14 +14,43 @@ export class CodebasesService {
   private nextLink: string = null;
 
   constructor(
-    private http: Http,
-    private logger: Logger,
-    private auth: AuthenticationService,
-    private userService: UserService,
-    @Inject(WIT_API_URL) apiUrl: string) {
+      private http: Http,
+      private logger: Logger,
+      private auth: AuthenticationService,
+      private userService: UserService,
+      @Inject(WIT_API_URL) apiUrl: string) {
+    if (this.auth.getToken() != null) {
+      this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+    }
     this.spacesUrl = apiUrl + 'spaces';
   }
 
+  /**
+   * Add a codbase to the given space
+   *
+   * @param spaceId The ID associated with the given space
+   * @param codebase The codebase to add
+   * @returns {Observable<Codebase>}
+   */
+  addCodebase(spaceId: string, codebase: Codebase): Observable<Codebase> {
+    let url = `${this.spacesUrl}/${spaceId}/codebases`;
+    let payload = JSON.stringify({ data: codebase });
+    return this.http
+      .post(url, payload, { headers: this.headers })
+      .map(response => {
+        return response.json().data as Codebase;
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+  }
+
+  /**
+   * Get the codebases associated with give space
+   *
+   * @param spaceId The ID associated with the given space
+   * @returns {Observable<Codebase>}
+   */
   getCodebases(spaceId: string): Observable<Codebase[]> {
     let url = `${this.spacesUrl}/${spaceId}/codebases`;
     return this.http.get(url, { headers: this.headers })
@@ -37,12 +66,59 @@ export class CodebasesService {
       });
   }
 
-  getCodebasesPaged(spaceId: string, pageSize: number = 20): Observable<Codebase[]> {
+  /**
+   * Get codebase pages associated with give space
+   *
+   * @param spaceId The ID associated with the given space
+   * @param pageSize The page limit to retrieve (default is 20)
+   * @returns {Observable<Codebase[]>}
+   */
+  getPagedCodebases(spaceId: string, pageSize: number = 20): Observable<Codebase[]> {
     let url = `${this.spacesUrl}/${spaceId}/codebases` + '?page[limit]=' + pageSize;
-    return this.getCodebasesDelegate(url, true);
+    return this.getCodebasesDelegate(url);
   }
 
-  getCodebasesDelegate(url: string, isAll: boolean): Observable<Codebase[]> {
+  /**
+   * Get more codebase pages associated with give space
+   *
+   * @returns {Observable<Codebase[]>}
+   */
+  getMoreCodebases(): Observable<Codebase[]> {
+    if (this.nextLink) {
+      return this.getCodebasesDelegate(this.nextLink);
+    } else {
+      return Observable.throw('No more codebases found');
+    }
+  }
+
+  /**
+   * Update codebase
+   *
+   * @param codebase
+   * @returns {Observable<Codebase>}
+   */
+  update(codebase: Codebase): Observable<Codebase> {
+    let url = `${this.spacesUrl}/${codebase.id}`;
+    let payload = JSON.stringify({ data: codebase });
+    return this.http
+      .patch(url, payload, { headers: this.headers })
+      .map(response => {
+        return response.json().data as Codebase;
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+  }
+
+  // Private
+
+  /**
+   * Get the codebases associated with the given space
+   *
+   * @param url The URL used to retrieve paged codebases
+   * @returns {Observable<Codebase[]>}
+   */
+  private getCodebasesDelegate(url: string): Observable<Codebase[]> {
     return this.http
       .get(url, { headers: this.headers })
       .map(response => {
@@ -55,48 +131,12 @@ export class CodebasesService {
         } else {
           this.nextLink = null;
         }
-        // Extract data from JSON API response, and assert to an array of spaces.
-        let newCodebases: Codebase[] = response.json().data as Codebase[];
-        return newCodebases;
+        return response.json().data as Codebase[];
       })
       .do(codebases => codebases.forEach(codebase => {
         codebase.name = this.getName(codebase);
         codebase.url = this.getUrl(codebase);
       }))
-      .catch((error) => {
-        return this.handleError(error);
-      });
-  }
-
-  getMoreCodebases(): Observable<Codebase[]> {
-    if (this.nextLink) {
-      return this.getCodebasesDelegate(this.nextLink, false);
-    } else {
-      return Observable.throw('No more codebases found');
-    }
-  }
-
-  create(spaceId: string, codebase: Codebase): Observable<Codebase> {
-    let url = `${this.spacesUrl}/${spaceId}/codebases`;
-    let payload = JSON.stringify({ data: codebase });
-    return this.http
-      .post(url, payload, { headers: this.headers })
-      .map(response => {
-        return response.json().data as Codebase;
-      })
-      .catch((error) => {
-        return this.handleError(error);
-      });
-  }
-
-  update(codebase: Codebase): Observable<Codebase> {
-    let url = `${this.spacesUrl}/${codebase.id}`;
-    let payload = JSON.stringify({ data: codebase });
-    return this.http
-      .patch(url, payload, { headers: this.headers })
-      .map(response => {
-        return response.json().data as Codebase;
-      })
       .catch((error) => {
         return this.handleError(error);
       });

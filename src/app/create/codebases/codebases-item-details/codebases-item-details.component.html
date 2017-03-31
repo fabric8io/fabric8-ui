@@ -1,0 +1,25 @@
+<div class="row">
+  <!--
+  <div class="col-md-3">
+    <dl class="dl-horizontal">
+      <dt>Commit History</dt>
+    </dl>
+  </div>
+  -->
+  <div class="col-md-9">
+    <dl class="dl-horizontal" *ngIf="isHtmlUrlInvalid()">
+      <dt>Git URL</dt>
+      <dd>Invalid URL</dd>
+    </dl>
+    <dl class="dl-horizontal" *ngIf="!isHtmlUrlInvalid()">
+      <dt>Git URL</dt>
+      <dd><a [href]="htmlUrl" target="_blank">{{gitUrl}}</a></dd>
+      <dt>Latest Commit SHA1</dt>
+      <dd>{{lastCommit}}</dd>
+      <dt>Status</dt>
+      <dd>{{filesChanged}} total files changed</dd>
+      <dt>License</dt>
+      <dd>{{license || 'None'}}</dd>
+    </dl>
+  </div>
+</div>

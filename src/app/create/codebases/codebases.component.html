@@ -1,67 +1,22 @@
-<toolbar-panel (onAddClick)="create.togglePanel($event)"></toolbar-panel>
-<div id="codebases" class="container content">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="heading list-group list-view-pf">
-        <div class="list-view-pf-description">
-          <div class="list-group-item-heading">
-            <span>Name</span>
-          </div>
-          <div class="list-group-item-text">
-            <span>Created Date</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<toolbar-panel></toolbar-panel>
+<div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
       <alm-listview
+          [actionTemplate]="actionTemplate"
           [config]="listViewConfig"
           [items]="codebases"
           [itemTemplate]="itemTemplate"
-          [itemExpandedTemplate]="itemExpandedTemplate">
-        <ng-template #itemTemplate let-codebase="item" let-index="index">
-          <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
-          <div class="list-view-pf-description">
-            <div class="list-group-item-heading">
-              <a href="{{codebase.url}}" target="_blank">{{codebase.name}}</a>
-            </div>
-            <div class="list-group-item-text">
-              {{codebase.attributes.createdAt | date:'medium'}}
-            </div>
-          </div>
-          <!--
-          <div class="list-view-pf-additional-info">
-            <div class="list-view-pf-additional-info-item">
-              {{item.attributes.createdAt | date:'medium'}}
-            </div>
-          </div>
-          -->
+          [itemExpandedTemplate]="itemExpandedTemplate"
+          (onActionSelect)="openAddCodebasePanel()">
+        <ng-template #itemTemplate let-item="item" let-index="index">
+          <codebases-item [codebase]="item" [index]="index"></codebases-item>
         </ng-template>
-        <ng-template #itemExpandedTemplate let-codebase="item" let-index="index">
-          <div class="row">
-            <div class="col-md-3">
-              <dl class="dl-horizontal">
-                <dt>Commit History</dt>
-              </dl>
-            </div>
-            <div class="col-md-9">
-              <dl class="dl-horizontal">
-                <dt>Git URL</dt>
-                <dd><a href="{{getUrl(codebase)}}" target="_blank">{{codebase.url}}</a></dd>
-                <dt>Latest Commit SHA1</dt>
-                <dd>9bc99eb964c57200ff163619326b9cfaa82aee8b</dd>
-                <dt>Status</dt>
-                <dd>3 commits ahead of Master</dd>
-                <dd>25 total files changed</dd>
-                <dt>Dependents</dt>
-                <dd>0 Packages / 0 Applications</dd>
-                <dt>License</dt>
-                <dd>None</dd>
-              </dl>
-            </div>
-          </div>
+        <ng-template #actionTemplate let-item="item" let-index="index">
+          <codebases-item-actions [codebase]="item" [index]="index"></codebases-item-actions>
+        </ng-template>
+        <ng-template #itemExpandedTemplate let-item="item" let-index="index">
+          <codebases-item-details [codebase]="item"></codebases-item-details>
         </ng-template>
       </alm-listview>
     </div>

@@ -1,20 +1,13 @@
-.content {}
+@import '../../../assets/stylesheets/base';
 
-.avatar {
-  font-size: 18px;
-  margin-right: 10px;
+.blank-slate-pf {
+  margin-top: 20px;
 }
 
-.heading {
-  &.list-group {
-    border-top: none;
-    margin-left: 60px;
-    .list-group-item-heading {
-      margin-right: 150px;
-    }
-  }
+codebases-item {
+  display: flex;
 }
 
-.list-view-pf-expand {
-  margin-top: 15px;
+.list-view-pf-main-info {
+  display: block;
 }
