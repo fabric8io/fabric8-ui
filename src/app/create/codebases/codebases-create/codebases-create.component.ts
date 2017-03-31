@@ -17,7 +17,7 @@ export class CodebasesCreateComponent implements OnInit {
 
   context: Context;
   gitHubRepo: string;
-  panelState: string = "out";
+  panelState: string = 'out';
 
   constructor(
       private codebasesService: CodebasesService,
@@ -36,7 +36,7 @@ export class CodebasesCreateComponent implements OnInit {
     let codebase = this.createTransientCodebase();
     this.codebasesService.create(this.context.space.id, codebase).subscribe(codebase => {
       this.onCreate.emit(codebase);
-      this.togglePanelState("out");
+      this.togglePanelState('out');
     });
   }
 
@@ -51,10 +51,10 @@ export class CodebasesCreateComponent implements OnInit {
   }
 
   togglePanel($event: MouseEvent): void {
-    if (this.panelState === "in") {
-      this.panelState = "out";
+    if (this.panelState === 'in') {
+      this.panelState = 'out';
     } else {
-      this.panelState = "in";
+      this.panelState = 'in';
     }
   }
 

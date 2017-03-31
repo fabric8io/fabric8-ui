@@ -1,18 +1,17 @@
-/** 
+/**
  * workflow contract exports
-*/
+ */
 export { IWorkflowStepQuery } from './contracts/workflow-step-query';
 export { WorkflowTransitionDirection } from './contracts/workflow-transition-direction';
-export { WorkflowDirection } from './contracts/workflow-direction';
-export { IWorkflowTransitionContext } from './contracts/workflow-transition-context';
-export { IWorkflowLocator } from './contracts/workflow-locator';
-export { IWorkflowStepLocator } from './contracts/workflow-step-locator';
-export { IWorkflowCallback } from './contracts/workflow-callback';
-export { IWorkflowTransition } from './contracts/workflow-transition';
-export { IWorkflowOptions } from './contracts/workflow-options';
 export { IWorkflow } from './contracts/workflow';
+export { WorkflowDirection } from './contracts/workflow-direction';
+export { IWorkflowCallback } from './contracts/workflow-callback';
+export { IWorkflowLocator } from './contracts/workflow-locator';
+export { IWorkflowOptions } from './contracts/workflow-options';
 export { IWorkflowStep } from './contracts/workflow-step';
-
+export { IWorkflowStepLocator } from './contracts/workflow-step-locator';
+export { IWorkflowTransition } from './contracts/workflow-transition';
+export { IWorkflowTransitionContext } from './contracts/workflow-transition-context';
 
 /** concrete exports */
 export { WorkflowFactory } from './concrete/workflow-factory';

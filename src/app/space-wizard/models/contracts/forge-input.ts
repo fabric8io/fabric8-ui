@@ -1,18 +1,18 @@
-import {IForgeValueChoice} from './forge-value-choice';
+import { IForgeValueChoice } from './forge-value-choice';
 
 export interface IForgeInput {
   name: string;
   label: string;
   description?: string;
-  note?:string;
-  "class": string;
-  value:any;// string|Array<string>;
-  valueType?:string,
+  note?: string;
+  'class': string;
+  value: any; // string|Array<string>;
+  valueType?: string;
   valueChoices?: Array<IForgeValueChoice>;
   enabled: boolean;
   required: boolean;
   deprecated: boolean;
-  version?:string;
+  version?: string;
   // other properties
-  [key:string]:any;
+  [key: string]: any;
 }

@@ -1,1 +1,1 @@
-export { INotifyPropertyChanged } from './notify-property-changed'
+export { INotifyPropertyChanged } from './notify-property-changed';

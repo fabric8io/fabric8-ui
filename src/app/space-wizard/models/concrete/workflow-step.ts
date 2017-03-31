@@ -1,15 +1,14 @@
-import { IWorkflowStep } from '../contracts/workflow-step';
+import { IWorkflow } from '../contracts/workflow';
 import { IWorkflowLocator } from '../contracts/workflow-locator';
+import { IWorkflowStep } from '../contracts/workflow-step';
 import { IWorkflowTransitionContext } from '../contracts/workflow-transition-context';
 import { WorkflowTransitionDirection } from '../contracts/workflow-transition-direction';
-import { IWorkflow } from '../contracts/workflow';
 
 /** implementation of the IWorkflowstep */
 export class WorkflowStep implements IWorkflowStep {
 
-
   index: number = 0;
-  name: string = "";
+  name: string  = '';
   nextIndex: number;
 
   constructor(options: Partial<IWorkflowStep>, private workflowLocator: IWorkflowLocator) {
@@ -33,10 +32,12 @@ export class WorkflowStep implements IWorkflowStep {
     return this;
   }
 
-  gotoStep(destination: number | string | IWorkflowStep, context: IWorkflowTransitionContext = { direction: WorkflowTransitionDirection.GO }) {
+  gotoStep(destination: number
+             | string
+             | IWorkflowStep, context: IWorkflowTransitionContext = {direction: WorkflowTransitionDirection.GO}) {
     let step: IWorkflowStep = null;
     if (this.isActive) {
-      //you can only goto a step if 'this' is the active step
+      // you can only goto a step if 'this' is the active step
       step = this.workflowLocator().gotoStep(destination, context);
     }
     return step;
@@ -54,4 +55,5 @@ export class WorkflowStep implements IWorkflowStep {
   set workflow(value: IWorkflow) {
   }
 
-};
+}
+

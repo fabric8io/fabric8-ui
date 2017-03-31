@@ -1,5 +1,5 @@
-import { IFieldSet } from '../contracts/field-set';
 import { IFieldInfo } from '../contracts/field-info';
+import { IFieldSet } from '../contracts/field-set';
 
 export { IFieldSet } from '../contracts/field-set';
 export { IFieldInfo } from '../contracts/field-info';
