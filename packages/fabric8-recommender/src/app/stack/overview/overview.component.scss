@@ -1,0 +1,39 @@
+.overview-stack {
+    padding: 15px 25px 15px 25px;
+    background: #fafafa;
+
+    .overview-cards {
+        margin-left: 0;
+
+        .f8-icon-size {
+            font-size: 30px;
+        }
+        .overview-star-icon {
+            color: #E8AE3C;
+        }
+        .overview-fork-icon {
+            color: #E08030;
+        }
+        .overview-depen-icon {
+            color: #3788C9;
+        }
+        .f8-chart-numeric {
+            font-size: 30px;
+            font-weight: 100;
+        }
+        .f8-chart-description {
+            font-size: 15px;
+            font-weight: 100;
+        }
+        .sub-description {
+            margin-top: -15px;
+            font-size: 12px;
+        }
+        .overview-code-metric-icon {
+            color: #3788c9;
+        }
+        .license-entries {
+            line-height: 25px;
+        }
+    }
+}

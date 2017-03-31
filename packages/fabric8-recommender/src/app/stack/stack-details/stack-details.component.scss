@@ -12,7 +12,15 @@
         margin: 0 auto;
     }
 }
-.modal-fullscreen {
-    width: 90%;
-    height: 90%;
+.stack-details {
+    .modal-body {
+        padding: 0;
+    }
+    .modal-fullscreen {
+        width: 90%;
+        height: 90%;
+    }
+    .make-center {
+        text-align: center;
+    }
 }

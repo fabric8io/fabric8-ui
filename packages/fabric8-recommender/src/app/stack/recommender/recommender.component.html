@@ -1,61 +1,60 @@
-<div class="recommendation-header">
-    <h1 class="keep-left">{{messages && messages.title}}</h1>
-    <div class="keep-right recommender-action-group  top-level-selection recommendation-group-item">
-        <button (click)="handleMultipleWorkItemCreation($event)" [ngClass]="{'btn-default disable-create-work-item': !canCreateAllWorkItems(), 'btn-primary': canCreateAllWorkItems()}" class="btn keep-left create-work-item" type="button">{{messages && messages.create_work_items}}</button>
+<div class="stack-recommendation">
+    <div class="recommendation-header">
+        <h1 class="keep-left">{{messages && messages.title}}</h1>
     </div>
-</div>
-<div class="list-group recommendation-container">
-    <!-- No recommendations scenario -->
-    <div class="list-group-item list-view-pf-stacked" *ngIf="recommendationsList.length === 0">
-        <div class="list-view-pf-main-info">
-            <div class="list-view-pf-body">
-                <div class="list-view-pf-description">
-                    <div class="list-group-item-heading">
-                        {{messages && messages.no_recommendations_text}}
-                    </div>
-                    <div class="list-group-item-text">
-                        {{messages && messages.no_recommendations_suggestion}}
+    <div class="list-group recommendation-container">
+        <!-- No recommendations scenario -->
+        <div class="list-group-item list-view-pf-stacked" *ngIf="recommendationsList.length === 0">
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                        <div class="list-group-item-heading">
+                            {{messages && messages.no_recommendations_text}}
+                        </div>
+                        <div class="list-group-item-text">
+                            {{messages && messages.no_recommendations_suggestion}}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- No recommendations scenario -->
-    
-    <!-- Header to handle multiple items -->
-    <div class="select-all-container" *ngIf="recommendationsList.length > 0">
-        <div class="list-view-pf-checkbox">
-            <input class="select-all-check" [checked]="isSelectAll" (change)="handleAllItemSelection()" type="checkbox" placement="right" title="" tooltip="{{messages && messages.select_all_text}}" />
+        <!-- No recommendations scenario -->
+        
+        <!-- Header to handle multiple items -->
+        <div class="select-all-container" *ngIf="recommendationsList.length > 0">
+            <div class="list-view-pf-checkbox">
+                <input class="select-all-check" [checked]="isSelectAll" (change)="handleAllItemSelection()" type="checkbox" placement="right" title="" tooltip="{{messages && messages.select_all_text}}" />
+            </div>
+            <div class="keep-right recommender-action-group  top-level-selection recommendation-group-item">
+                <button (click)="handleMultipleWorkItemCreation($event)" [ngClass]="{'btn-default disable-create-work-item': !canCreateAllWorkItems(), 'btn-primary': canCreateAllWorkItems()}" class="btn keep-left create-work-item" type="button">{{messages && messages.create_work_items}}</button>
+            </div>
         </div>
-    </div>
-    <!-- Header to handle multiple items -->
+        <!-- Header to handle multiple items -->
 
-    <div #listGroupItem class="list-group-item list-view-pf-stacked recommendation-group-item recommendation-list" *ngFor="let recommendation of recommendationsList">
-        <div class="list-view-pf-checkbox">
-            <input [checked]="recommendation.isChecked" (change)="handleWorkItemSelection($event, recommendation)" type="checkbox" />
-        </div>
-        <div class="list-view-pf-actions">
-            <button (click)="handleDropDownClick(recommendation.pop[0], recommendation, $event)" class="each-work-item btn btn-default" type="button">
-                {{messages && messages.create_work_item}}
-            </button>
-        </div>
-        <div class="list-view-pf-main-info">
-            <div class="list-view-pf-left">
-                <span class="pficon pficon-info" [ngClass]="{'dismissed': recommendation.isDismissed === true}"></span>
+        <div #listGroupItem class="list-group-item list-view-pf-stacked recommendation-group-item recommendation-list" *ngFor="let recommendation of recommendationsList">
+            <div class="list-view-pf-checkbox">
+                <input [checked]="recommendation.isChecked" (change)="handleWorkItemSelection($event, recommendation)" type="checkbox" />
             </div>
-            <div class="list-view-pf-body">
-                <div class="list-view-pf-description" [ngClass]="{'dismissed': recommendation.isDismissed === true}">
-                    <!-- <div class="list-group-item-heading">
-                        {{recommendation.suggestion}}
-                    </div> -->
-                    <div class="list-group-item-text">
-                        {{recommendation.suggestion}} - {{recommendation.action}} {{recommendation.message}}
+            <div class="list-view-pf-actions">
+                <button (click)="handleDropDownClick(recommendation.pop[0], recommendation, $event)" class="each-work-item btn btn-default" type="button">
+                    {{messages && messages.create_work_item}}
+                </button>
+            </div>
+            <div class="list-view-pf-main-info">
+                <div class="list-view-pf-left">
+                    <span class="pficon pficon-info" [ngClass]="{'dismissed': recommendation.isDismissed === true}"></span>
+                </div>
+                <div class="list-view-pf-body">
+                    <div class="list-view-pf-description" [ngClass]="{'dismissed': recommendation.isDismissed === true}">
+                        <div class="list-group-item-text">
+                            {{recommendation.suggestion}} - {{recommendation.action}} {{recommendation.message}}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div [hidden]="!workItemResponse" class="col-xs-12 work-item-response">
-        Successfully created the work item. <a target="_blank" href="{{workItemResponse}}">View WorkItem</a>
+        <div [hidden]="!workItemResponse" class="col-xs-12 work-item-response">
+            Successfully created the work item. <a target="_blank" href="{{workItemResponse}}">View WorkItem</a>
+        </div>
     </div>
 </div>

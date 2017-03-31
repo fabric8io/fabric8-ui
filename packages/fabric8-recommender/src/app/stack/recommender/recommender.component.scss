@@ -1,114 +1,118 @@
 @import '../../../assets/stylesheets/base';
 
-.default-button-state {
-    background: #fff;
-    color: #ccc;
-    box-shadow: none;  
-}
+.stack-recommendation {
+    padding: 15px 25px 15px 25px;
+    .default-button-state {
+        background: #fff;
+        color: #ccc;
+        box-shadow: none;  
+    }
 
-.recommendation-header {
-    padding-right: 10px;
-    .recommender-action-group {
-        margin-top: 20px;
-        margin-bottom: 10px;
-        .disable-create-work-item {
-            @extend .default-button-state;
-        }
-        .create-work-item {
-            margin-right: 5px;
-        }
-    }
-    &:after {
-        content: '';
-        clear: both;
-        float: none;
-        display: block;
-    }
-}
-.keep-left {
-    float: left;
-}
-.keep-right {
-    float: right;
-}
-.recommendation-group-item {
-    &.active {
-        z-index: unset;
-    }
-    .show-drop {
-        display: block;
-    }
-    &.top-level-selection {
-        position: relative;
-    }
-    .list-view-pf-checkbox, .list-view-pf-actions, .list-view-pf-main-info {
-        margin-bottom: 0;
-        margin-top: 0;
-        padding-bottom: 0;
-        padding-top: 0;
-    }
-    .each-work-item {
+    .disable-create-work-item {
         @extend .default-button-state;
-        color: #555;
     }
-    button {
-        outline: none;
-        &.dropdown-toggle {
-            text-align: right;
-            font-size: 16px;
-            color: #000;
-            min-width: 30px;
+    .create-work-item {
+        margin-right: 5px;
+    }
+
+    .recommendation-header {
+        padding-right: 10px;
+        .recommender-action-group {
+            margin-top: 20px;
+            margin-bottom: 10px;
         }
-    }
-}
-.recommendation-container {
-    border: 1px solid #ededed;
-    .list-view-pf-checkbox {
-        border-right: 0;
-    }
-    .select-all-container {
-        padding: 15px;
-        margin: 0;
-        background: #ededed;
         &:after {
             content: '';
-            float: none;
             clear: both;
+            float: none;
             display: block;
         }
-        .list-view-pf-checkbox {
-            margin: 0;
-            padding: 0;
-            .select-all-check {
-                &:hover {
-                    cursor: pointer;
-                }
+    }
+    .keep-left {
+        float: left;
+    }
+    .keep-right {
+        float: right;
+    }
+    .recommendation-group-item {
+        &.active {
+            z-index: unset;
+        }
+        .show-drop {
+            display: block;
+        }
+        &.top-level-selection {
+            position: relative;
+        }
+        .list-view-pf-checkbox, .list-view-pf-actions, .list-view-pf-main-info {
+            margin-bottom: 0;
+            margin-top: 0;
+            padding-bottom: 0;
+            padding-top: 0;
+        }
+        .each-work-item {
+            @extend .default-button-state;
+            color: #555;
+        }
+        button {
+            outline: none;
+            &.dropdown-toggle {
+                text-align: right;
+                font-size: 16px;
+                color: #000;
+                min-width: 30px;
             }
         }
     }
-    .work-item-response {
-        margin: 10px 0 10px 0;
+    .recommendation-container {
+        border: 1px solid #ededed;
+        .list-view-pf-checkbox {
+            border-right: 0;
+        }
+        .select-all-container {
+            padding: 15px;
+            margin: 0;
+            background: #ededed;
+            &:after {
+                content: '';
+                float: none;
+                clear: both;
+                display: block;
+            }
+            .list-view-pf-checkbox {
+                margin: 0;
+                padding: 0;
+                .select-all-check {
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+        .work-item-response {
+            margin: 10px 0 10px 0;
+        }
     }
-}
-.dismissed {
-    text-decoration: line-through;
-    color: #ccc;
-}
-
-.deactivate {
-    color: #ccc;
-    cursor: default;
-
-    &:hover {
-        background: #ccc;
+    .dismissed {
+        text-decoration: line-through;
+        color: #ccc;
     }
 
-    a {
-        color: inherit;
-        cursor: auto;
-    }
-}
+    .deactivate {
+        color: #ccc;
+        cursor: default;
 
-.activate {
-    cursor: pointer;
+        &:hover {
+            background: #ccc;
+        }
+
+        a {
+            color: inherit;
+            cursor: auto;
+        }
+    }
+
+    .activate {
+        cursor: pointer;
+    }
 }
