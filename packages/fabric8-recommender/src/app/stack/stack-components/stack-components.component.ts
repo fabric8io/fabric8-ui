@@ -48,8 +48,6 @@ import { GlobalConstants } from '../constants/constants.service';
 export class StackComponents implements OnChanges {
 
     @Input() dependencies;
-    public messages: any;
-    public sortDirectionClass: string = this.angleDown;
     private dependenciesList: Array<any> = [];
     private headers: Array<any> = [];
     private keys: any = [];
@@ -64,6 +62,9 @@ export class StackComponents implements OnChanges {
     private direction: string = '';
     private angleUp: string = 'fa-angle-up';
     private angleDown: string = 'fa-angle-down';
+
+    public messages: any;
+    public sortDirectionClass: string = this.angleDown;
 
     constructor(private constants: GlobalConstants) {
         this.constants.getMessages('stackComponents').subscribe((message) => {
