@@ -4,34 +4,34 @@
       <li dropdown class="pull-right dropdown" *ngIf="loggedInUser">
         <a dropdown-open class="pull-right">
           <div id="header_dropdownToggle_header">
-            <span class="nav-item-icon">
-              <span *ngIf="!imgLoaded" class="nav-icon pficon-user"></span>
+            <span class="user-icon">
+              <span *ngIf="!imgLoaded" class="pficon-user"></span>
               <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
             </span>
-            <span class="nav-item-text">{{loggedInUser.attributes.fullName}}</span>
-            <span class="nav-icon caret"></span>
+            <span>{{loggedInUser.attributes.fullName}}</span>
+            <span class="caret"></span>
           </div>
         </a>
         <ul class="dropdown-menu view-width-100">
           <li>
             <a [routerLink]="['/', loggedInUser.attributes.username]">
-              <span class="nav-item-text">Profile</span>
+              <span>Profile</span>
             </a>
           </li>
           <li>
             <a href="https://fabric8.io/guide/getStarted/index.html">
-              <span class="nav-item-text">Help</span>
+              <span>Help</span>
             </a>
           </li>
           <li class="divider"></li>
           <li>
             <a [routerLink]="['/', loggedInUser.attributes.username, '_settings']">
-              <span class="nav-item-text">Settings</span>
+              <span>Settings</span>
             </a>
           </li>
           <li>
             <a (click)="logout();">
-              <span class="nav-item-text">Log Out</span>
+              <span>Log Out</span>
             </a>
           </li>
         </ul>
@@ -45,11 +45,11 @@
         <a dropdown-open>
           <div id="header_dropdownToggle">
             <span class="nav-item-icon">
-              <span class="nav-icon {{context.type.icon}}"></span>
+              <span class=" {{context.type.icon}}"></span>
             </span>
-            <span class="nav-item-text">{{context.name}}</span>
+            <span>{{context.name}}</span>
             <span class="nav-item-icon">
-              <span class="nav-icon caret"></span>
+              <span class="caret"></span>
             </span>
           </div>
         </a>
@@ -57,24 +57,22 @@
           <li *ngFor="let m of recent">
             <a [routerLink]="[m.path]" *ngIf="m.path !== null && m.path != context.path">
               <span class="nav-item-icon">
-                <span class="nav-icon {{m.type.icon}}"></span>
+                <span class=" {{m.type.icon}}"></span>
               </span>
-              <span class="nav-item-text">{{m.name}}</span>
+              <span>{{m.name}}</span>
             </a>
             <a *ngIf="m.path === null">
               <span class="nav-item-icon">
-                <span class="nav-icon {{m.type.icon}}"></span>
+                <span class=" {{m.type.icon}}"></span>
               </span>
-              <span class="nav-item-text">{{m.name}}</span>
+              <span>{{m.name}}</span>
             </a>
           </li>
           <li>
             <a [routerLink]="[loggedInUser.attributes.username,'_spaces']">
               <span class="nav-item-icon">
               </span>
-              <span class="nav-item-text">
                 Browse all
-              </span>
             </a>
           </li>
           <li class="divider"></li>
@@ -82,16 +80,14 @@
             <a [routerLink]="['_home']">
               <span class="nav-item-icon">
               </span>
-              <span class="nav-item-text">
                 Account home
-              </span>
             </a>
           </li>
           <li>
             <!-- TODO: This should pop up the new space dialog -->
             <a>
               <span class="nav-item-icon"></span>
-              <span class="nav-item-text" (click)="spaceWizard.open()">
+              <span (click)="spaceWizard.open()">
                 New space
               </span>
             </a>
@@ -101,14 +97,14 @@
       <li *ngFor="let m of context?.type.menus" [class.active]="m.active" [class.with-no-children]="(m.menus||[]).length===0">
         <a [routerLink]="[m.fullPath]" *ngIf="!m.hide">
           <span *ngIf="m.icon" class="nav-item-icon">
-            <span  class="nav-icon {{m.icon}}"></span>
+            <span class="{{m.icon}}"></span>
           </span>
-          <span *ngIf="m.name" class="nav-item-text">{{m.name}}</span>
+          <span *ngIf="m.name">{{m.name}}</span>
         </a>
         <ul class="nav navbar-nav navbar-persistent" *ngIf="m.menus">
           <li *ngFor="let n of m.menus" [class.active]="n.active">
             <a [routerLink]="[n.fullPath]" *ngIf="!n.hide">
-              <span class="nav-item-text">
+              <span>
                 {{n.name}}
               </span>
             </a>
@@ -119,7 +115,7 @@
     <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
       <li dropdown class="dropdown status-dropdown">
         <a dropdown-open>
-          <span class="nav-item-text">
+          <span>
             <span class="pficon pficon-ok"></span>
             Status
           </span>
@@ -128,25 +124,25 @@
           <div class="arrow"></div>
           <ul class="list-group">
             <li class="list-group-item">
-              <span class="nav-item-text">
+              <span>
                 <span class="i pficon pficon-ok"></span>
                 Platform
               </span>
             </li>
             <li class="list-group-item">
-              <span class="nav-item-text">
+              <span>
                 <span class="i pficon pficon-ok"></span>
                 Planner
               </span>
             </li>
             <li class="list-group-item">
-              <span class="nav-item-text">
+              <span>
                 <span class="i pficon pficon-ok"></span>
                 Che
               </span>
             </li>
             <li class="list-group-item">
-              <span class="nav-item-text">
+              <span>
                 <span class="i pficon pficon-ok"></span>
                 Pipeline
               </span>
@@ -158,31 +154,29 @@
         <a *ngIf="!loggedInUser" (click)="login();">Log In</a>
       </li>
       <li *ngIf="loggedInUser" dropdown class="pull-right dropdown">
-        <a dropdown-open>
+        <a dropdown-open class="user-dropdown">
           <div *ngIf="loggedInUser" id="header_dropdownToggle2">
-            <span class="nav-item-icon">
-              <span *ngIf="!imgLoaded" class="nav-icon pficon-user"></span>
+            <span class="user-icon">
+              <span *ngIf="!imgLoaded" class="pficon-user"></span>
               <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
             </span>
-            <span class="nav-item-text">{{loggedInUser.attributes.fullName}}</span>
-            <span class="nav-item-icon">
-              <span class="nav-icon caret"></span>
-            </span>
+            <span>{{loggedInUser.attributes.fullName}}</span>
+            <span class="caret"></span>
           </div>
         </a>
         <ul class="dropdown-menu">
           <li>
-            <a [routerLink]="[loggedInUser.attributes.username]"><span class="nav-item-text">Profile</span> </a>
+            <a [routerLink]="[loggedInUser.attributes.username]"><span>Profile</span> </a>
           </li>
           <li>
-            <a href="https://fabric8.io/guide/getStarted/index.html"><span class="nav-item-text">Help</span></a>
+            <a href="https://fabric8.io/guide/getStarted/index.html"><span>Help</span></a>
           </li>
           <li class="divider"></li>
           <li>
-            <a [routerLink]="[loggedInUser.attributes.username,'_settings']"><span class="nav-item-text">Settings</span></a>
+            <a [routerLink]="[loggedInUser.attributes.username,'_settings']"><span>Settings</span></a>
           </li>
           <li>
-            <a *ngIf="loggedInUser" (click)="logout();"><span class="nav-item-text">Log Out</span></a>
+            <a *ngIf="loggedInUser" (click)="logout();"><span>Log Out</span></a>
           </li>
         </ul>
       </li>
