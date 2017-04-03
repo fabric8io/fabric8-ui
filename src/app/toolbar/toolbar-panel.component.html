@@ -4,10 +4,10 @@
       [viewsTemplate]="addTemplate"
       (onFilterChange)="filterChange($event)"
       (onSortChange)="sortChange($event)">
-    <template #add>
+    <ng-template #add>
       <div class="with-cursor-pointer" placement="bottom" tooltip="Add A Codebase" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
         <i class="pficon pficon-add-circle-o margin-top-4"></i>
       </div>
-    </template>
+    </ng-template>
   </alm-toolbar>
 </div>

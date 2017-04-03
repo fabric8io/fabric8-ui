@@ -21,7 +21,7 @@
           [items]="codebases"
           [itemTemplate]="itemTemplate"
           [itemExpandedTemplate]="itemExpandedTemplate">
-        <template #itemTemplate let-codebase="item" let-index="index">
+        <ng-template #itemTemplate let-codebase="item" let-index="index">
           <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
           <div class="list-view-pf-description">
             <div class="list-group-item-heading">
@@ -38,8 +38,8 @@
             </div>
           </div>
           -->
-        </template>
-        <template #itemExpandedTemplate let-codebase="item" let-index="index">
+        </ng-template>
+        <ng-template #itemExpandedTemplate let-codebase="item" let-index="index">
           <div class="row">
             <div class="col-md-3">
               <dl class="dl-horizontal">
@@ -62,7 +62,7 @@
               </dl>
             </div>
           </div>
-        </template>
+        </ng-template>
       </alm-listview>
     </div>
   </div>
