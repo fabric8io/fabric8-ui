@@ -4,6 +4,15 @@
 {
   width:100vw !important;
 }
+.navbar-pf .navbar-primary.persistent-secondary {
+  > li {
+    &.active {
+      &.with-no-children {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
 .navbar-nav {
   .pficon-settings {
     margin-top: -5px;
