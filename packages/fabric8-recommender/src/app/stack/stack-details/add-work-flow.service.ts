@@ -28,8 +28,10 @@ export class AddWorkFlowService {
 
       if (this.context && this.context.current) {
         this.context.current.subscribe(currentContext => {
-          this.spaceId = currentContext.space.id;
-          this.stackWorkItemUrl = apiUrl + this.spacesString + '/' + this.spaceId + '/' + this.workItemsRoute;
+          if (currentContext.space) {
+            this.spaceId = currentContext.space.id;
+            this.stackWorkItemUrl = apiUrl + this.spacesString + '/' + this.spaceId + '/' + this.workItemsRoute;
+          }
         });
       }
     }
