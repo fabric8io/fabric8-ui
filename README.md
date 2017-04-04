@@ -132,7 +132,7 @@ If the commit reverts a previous commit, it should begin with `revert: `, follow
 
 ### Type
 
-If the prefix is `feat`, `fix` or `perf`, it will always appear in the changelog.
+If the prefix is `fix`, `feat`,  or `perf`, it will always appear in the changelog.
 
 Other prefixes are up to your discretion. Suggested prefixes are `docs`, `chore`, `style`, `refactor`, and `test` for non-changelog related tasks.
 
