@@ -29,8 +29,10 @@ export class AddCodebaseWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.codebases = this.spaces.current
+      .filter(space => space !== null)
       .switchMap(space => this.codebaseService.getCodebases(space.id));
     this.codebaseCount = this.spaces.current
+      .filter(space => space !== null)
       .switchMap(space => this.codebaseService.getCodebases(space.id))
       .map(codebases => codebases.length);
   }

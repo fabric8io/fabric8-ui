@@ -1,8 +1,8 @@
 <div class="edit-space-description-widget card-pf card-pf-utilization">
   <div class="card-pf-heading">
-    <h2 class="card-pf-title">{{space.attributes.name}}</h2>
+    <h2 class="card-pf-title">{{space?.attributes.name}}</h2>
   </div>
   <div class="card-pf-body">
-    <div almEditable [editable]="isEditable() | async" (onUpdate)="saveDescription($event)">{{space.attributes.description}}</div>
+    <div almEditable [editable]="isEditable() | async" (onUpdate)="saveDescription($event)">{{space?.attributes.description}}</div>
   </div>
 </div>
