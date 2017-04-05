@@ -175,17 +175,39 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
    * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
    */
   private getGitHubRepoFullName(): string {
-    let httpsName = this.getGitHubRepoFullNameFromHttpsUrl(this.gitHubRepo);
-    let sshName = this.getGitHubRepoFullNameFromSshUrl(this.gitHubRepo);
-    return (httpsName !== null)
-      ? httpsName : (sshName !== null)
-        ? sshName : this.gitHubRepo;
+    let fullName = this.getGitHubRepoFullNameFromBrowserUrl(this.gitHubRepo);
+    if (fullName !== null) {
+      return fullName;
+    }
+    fullName = this.getGitHubRepoFullNameFromHttpsUrl(this.gitHubRepo);
+    if (fullName !== null) {
+      return fullName;
+    }
+    fullName = this.getGitHubRepoFullNameFromSshUrl(this.gitHubRepo);
+    if (fullName !== null) {
+      return fullName;
+    }
+    return this.gitHubRepo;
+  }
+
+  /**
+   * Get GitHub full name from browser URL
+   *
+   * @param url The GitHub browser URL (e.g., https://github.com/almighty/almighty-core)
+   * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
+   */
+  private getGitHubRepoFullNameFromBrowserUrl(url: string): string {
+    let prefix = "https://github.com/";
+    let postfix = ".git";
+    let start = url.indexOf(prefix);
+    let end = url.lastIndexOf(".git");
+    return (start !== -1 && end === -1) ? url.substring(prefix.length, url.length) : null;
   }
 
   /**
    * Get GitHub full name from HTTPS URL
    *
-   * @param url The GitHub clone URL (e.g., https://github.com/almighty/almighty-core.git)
+   * @param url The GitHub HTTPS URL (e.g., https://github.com/almighty/almighty-core.git)
    * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
    */
   private getGitHubRepoFullNameFromHttpsUrl(url: string): string {
