@@ -103,6 +103,9 @@ export class MenusService {
               }, {
                 name: 'Alerts',
                 path: 'alerts'
+              }, {
+                name: 'Areas',
+                path: 'areas'
               }
             ]
           }
