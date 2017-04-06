@@ -29,3 +29,20 @@
     }
   }
 }
+.navbar-pf .navbar-primary {
+  > .active > a {
+    background-color: $color-pf-black-900;
+    background-image: linear-gradient(to bottom, $color-pf-black-700 0, $color-pf-black-900 100%);
+    border-bottom-color: $color-pf-black-900;
+  }
+  &.persistent-secondary > li > .navbar-persistent {
+    background: $color-pf-black-900;
+    border-bottom: 1px solid $color-pf-black;
+    > li a {
+      color: $color-pf-white;
+      &:hover {
+        color: $color-pf-black-300;
+      }
+    }
+  }
+}

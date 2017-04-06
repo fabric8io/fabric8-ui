@@ -4,10 +4,31 @@
   box-shadow: none !important;
 }
 
-.form-control, .btn, .dropdown-menu, .badge {
+.form-control, .btn, .dropdown-menu, .badge, .filter-select {
 font-size: $font-size-base;
 }
 
 .form-control {
   height: 29px;
+}
+
+h1 {
+  font-size: 2em;
+  line-height: 1.3em;
+}
+h2 {
+  font-size: 1.5em;
+  line-height: 1.3em;
+}
+h3 {
+  font-size: 1.3em;
+  line-height: 1.3em;
+}
+h4 {
+  font-size: 1.2em;
+  line-height: 1.3em;
+}
+h5 {
+  font-size: 1.1em;
+  line-height: 1.3em;
 }
