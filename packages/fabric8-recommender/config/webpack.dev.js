@@ -69,7 +69,8 @@ module.exports = function (options) {
           'ENV': JSON.stringify(METADATA.ENV),
           'API_URL': JSON.stringify(METADATA.API_URL),
           'FORGE_URL': JSON.stringify(METADATA.FORGE_URL),
-          'PUBLIC_PATH': JSON.stringify(METADATA.PUBLIC_PATH)
+          'PUBLIC_PATH': JSON.stringify(METADATA.PUBLIC_PATH),
+          'FABRIC8_RECOMMENDER_API': JSON.stringify(METADATA.FABRIC8_RECOMMENDER_API_URL)
         }
       })
     ],
