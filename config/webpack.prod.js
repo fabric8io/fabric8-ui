@@ -328,8 +328,13 @@ module.exports = function (env) {
         }
       }),
 
+      // this turns on Service Workers, but it is currently cause us to have to hard refresh twice to see any change in production
+      //   therefore we are turning it off for now.
       // OfflinePlugin always goes last
+/*
       new OfflinePlugin()
+*/
+
     ],
 
     /*

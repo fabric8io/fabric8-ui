@@ -32,9 +32,13 @@ export function main() : Promise < any > {
     .catch(err => console.error(err));
 }
 
+// this turns on Service Workers, but it is currently cause us to have to hard refresh twice to see any change in production
+// therefore we are turning it off for now.
+/*
 if ('production' === ENV) {
   offlinePluginInstall();
 }
+*/
 
 // needed for hmr in prod this is replace for document ready
 bootloader(main);
