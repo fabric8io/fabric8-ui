@@ -1,3 +1,41 @@
-<div id="areas" class="content container">
-  <h1>AREAS</h1>
+<div class="container-fluid">
+  <h3 class="areas-header">Areas that make up the {{context.space.attributes.name}} Space:</h3>
+  <div class="row">
+    <div class="col-md-11">
+      Areas
+    </div>
+    <div class="table-action-heading" (click)="addChildArea()">
+      <i class="pficon pficon-add-circle-o margin-top-4">
+      </i>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <alm-listview
+        [config]="listViewConfig"
+        [itemTemplate]="itemTemplate"
+        [actionTemplate]="actionTemplate"
+        [items]="areas" >
+        <template #itemTemplate let-item="item" let-index="index">
+          <div class="list-view-pf-body areas-display">
+            <div class="list-view-pf-description">
+              <div class="list-group-item-heading">
+                {{itemPath(item.attributes)}}
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #actionTemplate let-item="item" let-index="index">
+          <span class="dropdown-kebab-pf areas-display dropdown" dropdown>
+            <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
+              <span class="fa fa-ellipsis-v"></span>
+            </button>
+            <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" dropdownMenu>
+              <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="addChildArea(item.id)">Add Child Area</a></li>
+            </ul>
+          </span>
+        </template>
+      </alm-listview>
+    </div>
+  </div>
 </div>

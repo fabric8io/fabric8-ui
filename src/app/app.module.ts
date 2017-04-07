@@ -61,7 +61,7 @@ import { Fabric8RuntimeConsoleResolver } from './shared/runtime-console/oauth-co
 // Component Services
 import { ProfileService } from './profile/profile.service';
 import { Notifications } from 'ngx-base';
-import { SpaceService, Contexts, Spaces } from 'ngx-fabric8-wit';
+import { SpaceService, Contexts, Spaces, AreaService } from 'ngx-fabric8-wit';
 import { AuthUserResolve } from './shared/common.resolver';
 
 import { AnalyticService } from './shared/analytics.service';
@@ -87,7 +87,6 @@ import { OAuthConfigStoreGuard } from './shared/runtime-console/oauth-config-sto
 import { SpaceNamespaceScope } from './shared/runtime-console/space-namespace.scope';
 import { Fabric8RuntimeConsoleService } from './shared/runtime-console/fabric8-runtime-console.service';
 import { SpaceNamespaceService } from './shared/runtime-console/space-namespace.service';
-
 
 // Login
 
@@ -140,6 +139,7 @@ export type StoreType = {
     ENV_PROVIDERS,
     APP_PROVIDERS,
     ApiLocatorService,
+    AreaService,
     authApiUrlProvider,
     AuthenticationService,
     AuthGuard,
