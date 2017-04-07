@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { IModalHost } from '../../space-wizard/models/modal-host';
 
 import { Context, AreaService, Area, AreaAttributes } from 'ngx-fabric8-wit';
 import { ListViewConfig, EmptyStateConfig } from 'ngx-widgets';
@@ -18,7 +19,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   private listViewConfig: ListViewConfig;
   private areaSubscription: Subscription;
   private selectedAreaId: string;
-
+  @ViewChild('createArea') createArea: IModalHost;
 
   constructor(
     private contexts: ContextService,
@@ -38,6 +39,12 @@ export class AreasComponent implements OnInit, OnDestroy {
     } as ListViewConfig;
 
     this.areaSubscription = this.areaService.getAllBySpaceId(this.context.space.id).subscribe(areas => {
+      this.selectedAreaId = this.context.space.id;
+      areas.forEach((area) => {
+        if (area.attributes.parent_path == '/') {
+          this.selectedAreaId = area.id;
+        }
+      });
       this.areas = areas;
     });
   }
@@ -47,9 +54,10 @@ export class AreasComponent implements OnInit, OnDestroy {
   }
 
   addChildArea(id: string) {
-    this.selectedAreaId = id;
-    console.log('adding child area:' + id);
-    //launch modal with area in dialog
+    if (id) {
+      this.selectedAreaId = id;
+    }
+    this.createArea.open();
   }
 
   itemPath(item: AreaAttributes) {
@@ -59,5 +67,9 @@ export class AreasComponent implements OnInit, OnDestroy {
       return item.name;
     }
     return parentPath + '/' + item.name;
+  }
+
+  addArea(area: Area) {
+    this.areas.push(area);
   }
 }
