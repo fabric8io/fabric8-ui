@@ -1,6 +1,6 @@
 export class Workspace {
   attributes: WorkspaceAttributes;
-  links?: WorkspaceLinks;
+  links?: WorkspaceOpenLinks;
   type: string;
 }
 
@@ -10,5 +10,12 @@ export class WorkspaceAttributes {
 }
 
 export class WorkspaceLinks {
+  links?: {
+    open?: string;
+  }
+}
+
+export class WorkspaceOpenLinks {
   open?: string;
 }
+

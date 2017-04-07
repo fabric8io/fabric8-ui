@@ -61,9 +61,15 @@ export class WorkspacesService {
       });
   }
 
-  openWorkspace(openUrl: string): Observable<WorkspaceLinks> {
+  /**
+   * Open workspace associated with a codebase.
+   *
+   * @param url The open codebase URL (e.g., `${this.workspacesUrl}/${codebaseId}/open/${workspaceId}`)
+   * @returns {Observable<WorkspaceLinks>}
+   */
+  openWorkspace(url: string): Observable<WorkspaceLinks> {
     return this.http
-      .post(openUrl, null, { headers: this.headers })
+      .post(url, null, { headers: this.headers })
       .map(response => {
         return response.json() as WorkspaceLinks;
       })

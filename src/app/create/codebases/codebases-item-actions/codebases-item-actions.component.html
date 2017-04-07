@@ -1,5 +1,8 @@
 <span class="list-group-heading" *ngIf="index === 0">WORKSPACES</span>
-<select class="combobox form-control" [(ngModel)]="workspaceUrl" (ngModelChange)="validateWorkspaceUrl()">
+<select class="combobox form-control"
+        [attr.disabled]="workspaces === undefined || workspaces.length === 0"
+        [(ngModel)]="workspaceUrl"
+        (ngModelChange)="validateWorkspaceUrl()">
   <option value="default">Select a Workspace</option>
   <option *ngFor="let workspace of workspaces" [value]="workspace.links.open">
     {{workspace.attributes.name.length > 0 ? workspace.attributes.name : "Default"}}
@@ -19,7 +22,7 @@
          [attr.disabled]="isHtmlUrlInvalid()"
          (click)="createAndOpenWorkspace()">Create Workspace and Open in Editor</a>
     </li>
-    <li *ngIf="!workspaceUrlInvalid === true" [ngClass]="{'disabled': isHtmlUrlInvalid()}">
+    <li *ngIf="workspaceUrlInvalid !== true" [ngClass]="{'disabled': isHtmlUrlInvalid()}">
       <a href="javascript:void(0)" class="secondary-action"
          [attr.disabled]="isHtmlUrlInvalid()"
          (click)="openWorkspace()">Open Workspace in Editor</a>

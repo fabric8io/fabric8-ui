@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Codebase } from '../services/codebase';
 import { Notification, NotificationType, Notifications } from 'ngx-base';
+import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
 import { Workspace } from '../services/workspace';
 
@@ -10,19 +11,22 @@ import { Workspace } from '../services/workspace';
   selector: 'codebases-item-actions',
   templateUrl: './codebases-item-actions.component.html',
   styleUrls: ['./codebases-item-actions.component.scss'],
-  providers: [WorkspacesService]
+  providers: [WindowService, WorkspacesService]
 })
 export class CodebasesItemActionsComponent implements OnInit {
   @Input() codebase: Codebase;
   @Input() index: number = -1;
 
+  nativeWindow: Window;
   workspaceUrl: string = "default";
   workspaceUrlInvalid: boolean = true;
   workspaces: Workspace[];
 
   constructor(
       private notifications: Notifications,
+      private windowService: WindowService,
       private workspacesService: WorkspacesService) {
+    this.nativeWindow = this.windowService.getNativeWindow();
   }
 
   ngOnInit() {
@@ -38,17 +42,22 @@ export class CodebasesItemActionsComponent implements OnInit {
    * Create workspace and open in editor
    */
   createAndOpenWorkspace(): void {
+    let newWindow = this.nativeWindow.open();
     this.workspacesService.createWorkspace(this.codebase.id).subscribe(workspaceLinks => {
       if (workspaceLinks != null) {
-        this.workspaceUrl = workspaceLinks.open; // Make this the current selection
+        this.workspaceUrl = workspaceLinks.links.open; // Make this the current selection
 
         this.notifications.message({
           message: `Workspace created!`,
           type: NotificationType.SUCCESS
         } as Notification);
 
-        this.openWorkspace();
-        this.updateWorkspaces(); // Get newly created workspace
+        newWindow.location.href = this.workspaceUrl;
+
+        // Workspace creation takes a while
+        setTimeout(() => {
+          this.updateWorkspaces(); // Get newly created workspace
+        }, 60000);
       }
     }, error => {
       this.handleError("Failed to create workspace", NotificationType.DANGER);
@@ -66,9 +75,10 @@ export class CodebasesItemActionsComponent implements OnInit {
    * Open workspace in editor
    */
   openWorkspace(): void {
-    this.workspacesService.openWorkspace(this.workspaceUrl).subscribe(workspaceLinks => {
+    let newWindow = this.nativeWindow.open();
+    this.workspacesService.createWorkspace(this.workspaceUrl).subscribe(workspaceLinks => {
       if (workspaceLinks != null) {
-        window.open(workspaceLinks.open);
+        newWindow.location.href = workspaceLinks.links.open;
       }
     }, error => {
       this.handleError("Failed to open workspace", NotificationType.DANGER);
@@ -131,7 +141,7 @@ export class CodebasesItemActionsComponent implements OnInit {
         this.workspaceUrl = "default";
       }
     }, error => {
-      this.handleError("Failed to retrieve workspaces", NotificationType.DANGER);
+      this.handleError("Failed to retrieve workspaces", NotificationType.WARNING);
     });
   }
 
