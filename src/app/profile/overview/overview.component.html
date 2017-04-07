@@ -1,40 +1,119 @@
-<div id="overview" class="container content">
+<div id="overview" class="container content padding-top-15">
   <div class="row">
+    <h1>Profile</h1>
+    <!-- left column -->
     <div class="col-md-2">
       <div class="row">
-        <img src="{{context?.user?.attributes?.imageURL}}" width="150" height="250" />
-      </div>
-      <div class="row">
-        <h2>{{context?.user?.attributes?.fullName}}</h2>
-      </div>
-      <div class="row">
-        <p>
-          {{context?.user?.attributes?.username}}
-        </p>
-        <p>
-          {{context?.user?.attributes?.bio}}
-        </p>
-      </div>
-    </div>
-    <div class="col-md-10">
-      <div class="row">
-        <h1>Pinned Spaces</h1>
-        <p>Customize</p>
-      </div>
-      <div *ngFor="let s of dummy.spaces; let i = index;" [ngClass]="{row: (i % 3 == 2) }">
-        <div class="col-md-4">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <p>
-                <a [routerLink]="[s.path]">{{s.name}}</a>
-              </p>
-              <p>
-                {{s.description}}
-              </p>
-            </div>
-          </div>
+        <div class="width-100">
+          <section class="profile-image-overlay posRel">
+            <img src="{{context?.user?.attributes?.imageURL}}" class="width-100 profile-img" />
+            <span class="pficon pficon-edit edit-profile-img"></span>
+          </section>
+          <section>
+            <h2 class="pull-left">{{context?.user?.attributes?.fullName}}</h2>
+            <span class="pficon pficon-edit pull-right edit-profile-name-icon"></span>
+          </section>
+          <p>
+            {{context?.user?.attributes?.username}}
+          </p>
+          <!--<p>
+            {{context?.user?.attributes?.bio}}
+          </p>-->
+          <hr />
+          <p class="profile-email-wrapper">
+            <span class="fa fa-envelope"></span>
+            <a href="mailto:xyz@email.com" class="margin-left-5 margin-right-5">xyz@email.com</a>
+            <span class="pficon pficon-edit pull-right"></span>
+          </p>
+          <p>
+            <span class="fa fa-external-link"></span>
+            <a href="www.xyz.com" class="margin-left-5 margin-right-5">www.xyz.com</a>
+          </p>
+          <p>I'm a designer in Raleigh, North Carolina.</p>
         </div>
       </div>
+    </div>
+    <!-- center column -->
+    <div class="col-md-8 nav-tabs-area">
+      <tabset #staticTabs>
+        <tab heading="Activity">
+          <div class="overview-nav-tab-content">
+            <div class="blank-slate-pf" id="">
+              <h1>No Activity Message</h1>
+              <p>
+                Go to your <a href="#">home</a> page to get started in Openshift.io.
+              </p>
+              <div class="blank-slate-pf-main-action">
+                <button class="btn btn-primary btn-lg"> Go to my home dashboard </button>
+              </div>
+            </div>
+            <div class="activity-content">
+              <h2>Jryhanych's recent activity</h2>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <p class="margin-0">
+                    @jryhanych added <a>BalloonPopGame</a> space
+                    <span class="margin-left-10 pull-right">Just now</span>
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="margin-0">
+                    @jryhanych added <a>BalloonPopGame</a> space
+                    <span class="margin-left-10 pull-right">Just now</span>
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="margin-0">
+                    @jryhanych added <a>BalloonPopGame</a> space
+                    <span class="margin-left-10 pull-right">Just now</span>
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="margin-0">
+                    @jryhanych added <a>BalloonPopGame</a> space
+                    <span class="margin-left-10 pull-right">Just now</span>
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="margin-0">
+                    @jryhanych added <a>BalloonPopGame</a> space
+                    <span class="margin-left-10 pull-right">Just now</span>
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="margin-0">
+                    @jryhanych added <a>BalloonPopGame</a> space
+                    <span class="margin-left-10 pull-right">Just now</span>
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="margin-0">
+                    @jryhanych added <a>BalloonPopGame</a> space
+                    <span class="margin-left-10 pull-right">Just now</span>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </tab>
+        <tab>
+          <template tabHeading>
+            Spaces <span class="badge">2</span>
+          </template>
+          <div class="overview-nav-tab-content">
+            Static content Spaces
+          </div>
+        </tab>
+        <tab heading="Work Items">
+          <div class="overview-nav-tab-content">
+            Static content Work items
+          </div>
+        </tab>
+      </tabset>
+    </div>
+    <!-- right column -->
+    <div class="col-md-2">
+      <button class="btn btn-lg btn-default width-100">Update Profile</button>
     </div>
   </div>
 </div>

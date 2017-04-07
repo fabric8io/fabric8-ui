@@ -2,6 +2,8 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Component, OnInit } from '@angular/core';
 import { Router }            from '@angular/router';
 
+import { TabsetComponent } from 'ng2-bootstrap';
+
 // import { UserService } from './../../user/user.service';
 import { DummyService } from './../../shared/dummy.service';
 

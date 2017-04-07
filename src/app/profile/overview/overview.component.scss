@@ -1,1 +1,25 @@
-.content {}
+@import '../../../assets/stylesheets/base';
+@import '../../../assets/stylesheets/shared/layout';
+
+//tabs content area
+.overview-nav-tab-content {
+  padding: rem(20) 0;
+}
+.edit-profile-img {
+  position: absolute;
+  right: rem(5);
+  top: rem(5);
+  color: $color-pf-black-300;
+  cursor: pointer;
+}
+.edit-profile-name-icon {
+  margin-top: rem(25);
+  cursor: pointer;
+  color: $color-pf-black-500;
+}
+.profile-email-wrapper {
+  .pficon-edit {
+    cursor: pointer;
+    color: $color-pf-black-500;
+  }
+}
