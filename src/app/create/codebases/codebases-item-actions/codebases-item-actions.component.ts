@@ -55,9 +55,9 @@ export class CodebasesItemActionsComponent implements OnInit {
         newWindow.location.href = this.workspaceUrl;
 
         // Workspace creation takes a while
-        setTimeout(() => {
-          this.updateWorkspaces(); // Get newly created workspace
-        }, 60000);
+        //setTimeout(() => {
+        //  this.updateWorkspaces(); // Get newly created workspace
+        //}, 60000);
       }
     }, error => {
       this.handleError("Failed to create workspace", NotificationType.DANGER);
