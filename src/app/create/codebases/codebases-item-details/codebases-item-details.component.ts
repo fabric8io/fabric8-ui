@@ -29,7 +29,7 @@ export class CodebasesItemDetailsComponent implements OnInit {
     this.contexts.current.subscribe(val => this.context = val);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.codebase == undefined || this.codebase.attributes.type !== 'git') {
       return;
     }
@@ -53,7 +53,7 @@ export class CodebasesItemDetailsComponent implements OnInit {
     this.gitHubService.getRepoLicenseByUrl(this.codebase.attributes.url).subscribe(gitHubRepoLicense => {
       this.license = gitHubRepoLicense.license.name;
     }, error => {
-      this.logger.error("Failed to retrieve GitHub repo license");
+      this.license = "None"
     });
   }
 

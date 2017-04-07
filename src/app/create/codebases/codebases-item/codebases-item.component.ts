@@ -30,7 +30,7 @@ export class CodebasesItemComponent implements OnInit {
     private notifications: Notifications) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.codebase === undefined) {
       return;
     }

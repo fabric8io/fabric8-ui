@@ -17,19 +17,18 @@ export class CodebasesItemActionsComponent implements OnInit {
   @Input() codebase: Codebase;
   @Input() index: number = -1;
 
-  nativeWindow: Window;
   workspaceUrl: string = "default";
   workspaceUrlInvalid: boolean = true;
   workspaces: Workspace[];
+  workspacesAvailable: boolean = false;
 
   constructor(
       private notifications: Notifications,
       private windowService: WindowService,
       private workspacesService: WorkspacesService) {
-    this.nativeWindow = this.windowService.getNativeWindow();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.codebase === undefined) {
       return;
     }
@@ -42,22 +41,17 @@ export class CodebasesItemActionsComponent implements OnInit {
    * Create workspace and open in editor
    */
   createAndOpenWorkspace(): void {
-    let newWindow = this.nativeWindow.open();
     this.workspacesService.createWorkspace(this.codebase.id).subscribe(workspaceLinks => {
       if (workspaceLinks != null) {
-        this.workspaceUrl = workspaceLinks.links.open; // Make this the current selection
+        this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
 
         this.notifications.message({
           message: `Workspace created!`,
           type: NotificationType.SUCCESS
         } as Notification);
 
-        newWindow.location.href = this.workspaceUrl;
-
-        // Workspace creation takes a while
-        //setTimeout(() => {
-        //  this.updateWorkspaces(); // Get newly created workspace
-        //}, 60000);
+        // Todo: Cannot update workspaces after creating a new one -- Che takes too long.
+        //this.updateWorkspaces();
       }
     }, error => {
       this.handleError("Failed to create workspace", NotificationType.DANGER);
@@ -75,10 +69,9 @@ export class CodebasesItemActionsComponent implements OnInit {
    * Open workspace in editor
    */
   openWorkspace(): void {
-    let newWindow = this.nativeWindow.open();
-    this.workspacesService.createWorkspace(this.workspaceUrl).subscribe(workspaceLinks => {
+    this.workspacesService.openWorkspace(this.workspaceUrl).subscribe(workspaceLinks => {
       if (workspaceLinks != null) {
-        newWindow.location.href = workspaceLinks.links.open;
+        this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
       }
     }, error => {
       this.handleError("Failed to open workspace", NotificationType.DANGER);
@@ -93,6 +86,19 @@ export class CodebasesItemActionsComponent implements OnInit {
   }
 
   // Private
+
+  /**
+   * Get the worksapce name from given URL
+   *
+   * (e.g., https://che-<username>-che.d800.free-int.openshiftapps.com/che/quydcbib)
+   *
+   * @param url The URL used to open a workspace
+   * @returns {string} The workspace name (e.g., quydcbib)
+   */
+  getWorkspaceName(url: string): string {
+    let index = url.lastIndexOf("/");
+    return url.substring(index, url.length);
+  }
 
   /**
    * Helper to test if codebase contains a valid GitHub HTML URL
@@ -135,10 +141,11 @@ export class CodebasesItemActionsComponent implements OnInit {
    * Helper to update workspaces
    */
   private updateWorkspaces(): void {
+    this.workspacesAvailable = false;
     this.workspacesService.getWorkspaces(this.codebase.id).subscribe(workspaces => {
-      if (workspaces != null) {
+      if (workspaces != null && workspaces.length > 0) {
         this.workspaces = workspaces;
-        this.workspaceUrl = "default";
+        this.workspacesAvailable = true;
       }
     }, error => {
       this.handleError("Failed to retrieve workspaces", NotificationType.WARNING);

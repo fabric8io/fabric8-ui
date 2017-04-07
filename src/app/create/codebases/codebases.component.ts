@@ -42,7 +42,7 @@ export class CodebasesComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updateCodebases();
 
     this.emptyStateConfig = {

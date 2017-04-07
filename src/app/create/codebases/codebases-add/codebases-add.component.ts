@@ -47,7 +47,7 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
     this.contexts.current.subscribe(val => this.context = val);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updateCodebases();
   }
 
@@ -89,21 +89,24 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
     // Add codebase to space
     this.codebasesService.addCodebase(this.context.space.id, codebase)
       .do(() => this.togglePanel("out"))
-      .do(createdCodebase => this.broadcaster.broadcast('codebaseAdded', createdCodebase))
-      .switchMap(createdCodebase => {
+      .do(codebase => this.broadcaster.broadcast('codebaseAdded', codebase))
+
+      .switchMap(codebase => {
+        let fullName = this.getGitHubRepoFullName(codebase.attributes.url);
+        this.notifications.message({
+          message: `Codebase "${fullName}" added!`,
+          type: NotificationType.SUCCESS
+        } as Notification);
+
         // On a successful creation, always navigate to the spaces create screen
         return this.contexts.current.map(context => `${context.path}/create`);
       })
       .do(url => this.close(url))
-      .subscribe(codebase => {
-        this.notifications.message({
-          message: `Codebase "${this.gitHubRepoFullName}" added!`,
-          type: NotificationType.SUCCESS
-        } as Notification);
-    }, error => {
-      this.gitHubRepoInvalid = true;
-      this.handleError("Failed to associate codebase with space", NotificationType.DANGER);
-    });
+      .subscribe(() => {
+      }, error => {
+        this.gitHubRepoInvalid = true;
+        this.handleError("Failed to associate codebase with space", NotificationType.DANGER);
+      });
   }
 
   /**
@@ -112,7 +115,7 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
    * @param $event MouseEvent for onclick
    */
   fetchCodebase($event: MouseEvent): void {
-    this.gitHubRepoFullName = this.getGitHubRepoFullName();
+    this.gitHubRepoFullName = this.getGitHubRepoFullName(this.gitHubRepo);
     this.gitHubRepoInvalid = this.isGitHubRepoFullNameInvalid();
     if (this.gitHubRepoInvalid) {
       return;
@@ -172,22 +175,23 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
   /**
    * Get GitHub full name
    *
+   * @param repo The GitHub repo URL
    * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
    */
-  private getGitHubRepoFullName(): string {
-    let fullName = this.getGitHubRepoFullNameFromBrowserUrl(this.gitHubRepo);
+  private getGitHubRepoFullName(repo: string): string {
+    let fullName = this.getGitHubRepoFullNameFromBrowserUrl(repo);
     if (fullName !== null) {
       return fullName;
     }
-    fullName = this.getGitHubRepoFullNameFromHttpsUrl(this.gitHubRepo);
+    fullName = this.getGitHubRepoFullNameFromHttpsUrl(repo);
     if (fullName !== null) {
       return fullName;
     }
-    fullName = this.getGitHubRepoFullNameFromSshUrl(this.gitHubRepo);
+    fullName = this.getGitHubRepoFullNameFromSshUrl(repo);
     if (fullName !== null) {
       return fullName;
     }
-    return this.gitHubRepo;
+    return repo;
   }
 
   /**
