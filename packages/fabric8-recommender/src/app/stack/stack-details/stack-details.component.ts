@@ -81,7 +81,7 @@ export class StackDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getStackAnalyses(this.stack.uuid);
+    //this.getStackAnalyses(this.stack.uuid);
   }
 
   public showStackModal(): void {
