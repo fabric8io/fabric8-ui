@@ -1,5 +1,4 @@
 FROM centos:7
-MAINTAINER "Konrad Kleine <kkleine@redhat.com>"
 ENV LANG=en_US.utf8
 
 # load the gpg keys
@@ -23,23 +22,43 @@ RUN set -ex \
 #ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 6.5.0
 
-RUN yum install -y bzip2 fontconfig java-1.8.0-openjdk nmap-ncat psmisc git \
-  && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
+RUN yum -y update && \
+    yum install -y bzip2 fontconfig tar java-1.8.0-openjdk nmap-ncat psmisc gtk3 git \
+      python-setuptools xorg-x11-xauth wget unzip which \
+      xorg-x11-server-Xvfb xfonts-100dpi libXfont GConf2 \
+      xorg-x11-fonts-75dpi xfonts-scalable xfonts-cyrillic \
+      ipa-gothic-fonts xorg-x11-utils xorg-x11-fonts-Type1 xorg-x11-fonts-misc && \
+      yum -y clean all
+
+RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" \
   && curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
   && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
   && grep " node-v$NODE_VERSION-linux-x64.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
   && tar -xJf "node-v$NODE_VERSION-linux-x64.tar.xz" -C /usr/local --strip-components=1 \
   && rm "node-v$NODE_VERSION-linux-x64.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
-  && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
-  && yum clean all
+  && ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
+# Uncomment it if you want to use firefox
+#RUN  wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz \
+#  && tar -xvf geckodriver-v0.14.0-linux64.tar.gz \
+#  && chmod +x geckodriver \
+#  && rm geckodriver-v0.14.0-linux64.tar.gz \
+#  && mv geckodriver /usr/bin \
+#  && yum install -y firefox \
+#  && npm install -g karma-firefox-launcher
+
+RUN npm install -g jasmine-node protractor
+
+COPY google-chrome.repo /etc/yum.repos.d/google-chrome.repo
+RUN yum install -y xorg-x11-server-Xvfb google-chrome-stable
+
+ENV DISPLAY=:99
 ENV FABRIC8_USER_NAME=fabric8
 
 RUN useradd --user-group --create-home --shell /bin/false ${FABRIC8_USER_NAME}
 
 ENV HOME=/home/${FABRIC8_USER_NAME}
-
-ENV WORKSPACE=$HOME/fabric8-ui
+ENV WORKSPACE=$HOME/fabric8-planner
 RUN mkdir $WORKSPACE
 
 COPY . $WORKSPACE
@@ -50,4 +69,4 @@ WORKDIR $WORKSPACE/
 
 VOLUME /dist
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/home/fabric8/fabric8-planner/docker-entrypoint.sh"]
