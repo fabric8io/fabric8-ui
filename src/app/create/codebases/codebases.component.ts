@@ -1,36 +1,50 @@
 import { Component, ContentChild, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { Codebase } from './services/codebase';
 import { CodebasesService } from './services/codebases.service';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { GitHubService } from "./services/github.service";
-import { ListViewConfig, EmptyStateConfig } from 'ngx-widgets';
-import { Broadcaster, Logger, Notification, NotificationType, Notifications } from 'ngx-base';
+import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
+
+import {
+  EmptyStateConfig,
+  Filter,
+  FilterEvent,
+  ListViewConfig,
+  SortEvent,
+  SortField
+} from 'ngx-widgets';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases',
   templateUrl: './codebases.component.html',
   styleUrls: ['./codebases.component.scss'],
-  providers: [CodebasesService, GitHubService]
+  providers: [CodebasesService, DatePipe, GitHubService]
 })
 export class CodebasesComponent implements OnInit {
   @ContentChild('actionTemplate') actionTemplate: TemplateRef<any>;
   @ContentChild('itemTemplate') itemTemplate: TemplateRef<any>;
   @ContentChild('itemExpandedTemplate') itemExpandedTemplate: TemplateRef<any>;
 
+  allCodebases: Codebase[];
+  appliedFilters: Filter[];
   codebases: Codebase[];
   context: Context;
+  currentSortField: SortField;
   emptyStateConfig: EmptyStateConfig;
+  isAscendingSort: boolean = true;
   listViewConfig: ListViewConfig;
+  resultsCount: number = 0;
 
   constructor(
       private broadcaster: Broadcaster,
       private codebasesService: CodebasesService,
       private contexts: Contexts,
+      private datePipe: DatePipe,
       private gitHubService: GitHubService,
-      private logger: Logger,
       private notifications: Notifications,
       private router: Router) {
     this.contexts.current.subscribe(val => this.context = val);
@@ -75,16 +89,92 @@ export class CodebasesComponent implements OnInit {
     this.router.navigate([`${this.context.path}/create`, { outlets: { action: 'add-codebase' }}]);
   }
 
+  // Filter
+
+  applyFilters(filters: Filter[]): void {
+    this.appliedFilters = filters;
+    this.codebases = [];
+    if (filters && filters.length > 0) {
+      this.allCodebases.forEach((codebase) => {
+        if (this.matchesFilters(codebase, filters)) {
+          this.codebases.push(codebase);
+        }
+      });
+    } else {
+      this.codebases = this.allCodebases;
+    }
+    this.resultsCount = this.codebases.length;
+  }
+
+  filterChange($event: FilterEvent): void {
+    this.applyFilters($event.appliedFilters);
+  }
+
+  matchesFilter(codebase: Codebase, filter: Filter): boolean {
+    let match = true;
+
+    if (filter.field.id === 'name') {
+      match = codebase.name.match(filter.value) !== null;
+    } else if (filter.field.id === 'createdAt') {
+      let date = this.datePipe.transform(codebase.gitHubRepo.createdAt, 'medium');
+      match = date.match(filter.value) !== null;
+    } else if (filter.field.id === "pushedAt") {
+      let date = this.datePipe.transform(codebase.gitHubRepo.pushedAt, 'medium');
+      match = date.match(filter.value) !== null;
+    }
+    return match;
+  }
+
+  matchesFilters(codebase: Codebase, filters: Filter[]): boolean {
+    let matches = true;
+
+    filters.forEach((filter) => {
+      if (!this.matchesFilter(codebase, filter)) {
+        matches = false;
+        return false;
+      }
+    });
+    return matches;
+  }
+
+  // Sort
+
+  compare(codebase1: Codebase, codebase2: Codebase): number {
+    var compValue = 0;
+    if (this.currentSortField.id === 'name') {
+      compValue = codebase1.name.localeCompare(codebase2.name);
+    } else if (this.currentSortField.id === 'createdAt') {
+      let date1 = new Date(codebase1.gitHubRepo.createdAt); // 2011-04-07T10:12:58Z
+      let date2 = new Date(codebase2.gitHubRepo.createdAt);
+      compValue = (date1 > date2) ? 1 : -1;
+    } else if (this.currentSortField.id === 'pushedAt') {
+      let date1 = new Date(codebase1.gitHubRepo.pushedAt);
+      let date2 = new Date(codebase2.gitHubRepo.pushedAt);
+      compValue = (date1 > date2) ? 1 : -1;
+    }
+    if (!this.isAscendingSort) {
+      compValue = compValue * -1;
+    }
+    return compValue;
+  }
+
+  sortChange($event: SortEvent): void {
+    this.currentSortField = $event.field;
+    this.isAscendingSort = $event.isAscending;
+    this.codebases.sort((codebase1: Codebase, codebase2: Codebase) => this.compare(codebase1, codebase2));
+  }
+
   // Private
 
   /**
    * Add latest codebase
    */
   private addCodebase(codebase: Codebase): void {
-    if (this.codebases === undefined) {
-      this.codebases = [];
+    if (this.allCodebases === undefined) {
+      this.allCodebases = [];
     }
-    this.codebases.push(codebase);
+    this.allCodebases.push(codebase);
+    this.applyFilters(this.appliedFilters);
   }
 
   /**
@@ -94,7 +184,8 @@ export class CodebasesComponent implements OnInit {
     // Get codebases
     this.codebasesService.getCodebases(this.context.space.id).subscribe(codebases => {
       if (codebases != null) {
-        this.codebases = codebases;
+        this.allCodebases = codebases;
+        this.codebases = this.allCodebases;
       }
     }, error => {
       this.handleError("Failed to retrieve codebases", NotificationType.DANGER);

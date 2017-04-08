@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Logger, Broadcaster } from 'ngx-base';
+import { Broadcaster } from 'ngx-base';
 import { Notification, NotificationType, Notifications } from 'ngx-base';
 
 import { Codebase } from '../services/codebase';
@@ -40,7 +40,6 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
       private codebasesService: CodebasesService,
       private contexts: Contexts,
       private gitHubService: GitHubService,
-      private logger: Logger,
       private notifications: Notifications,
       private router: Router,
       private route: ActivatedRoute) {

@@ -10,8 +10,8 @@ import { CodebasesComponent } from './codebases.component';
 import { CodebasesItemModule } from './codebases-item/codebases-item.module';
 import { CodebasesItemActionsModule } from './codebases-item-actions/codebases-item-actions.module';
 import { CodebasesItemDetailsModule } from './codebases-item-details/codebases-item-details.module';
+import { CodebasesToolbarModule } from './codebases-toolbar/codebases-toolbar.module';
 import { CodebasesRoutingModule } from './codebases-routing.module';
-import { ToolbarPanelModule } from '../../toolbar/toolbar-panel.module';
 
 @NgModule({
   imports: [
@@ -19,13 +19,13 @@ import { ToolbarPanelModule } from '../../toolbar/toolbar-panel.module';
     CodebasesItemModule,
     CodebasesItemActionsModule,
     CodebasesItemDetailsModule,
+    CodebasesToolbarModule,
     CodebasesRoutingModule,
     CommonModule,
     DropdownModule,
     FormsModule,
     HttpModule,
-    ListViewModule,
-    ToolbarPanelModule
+    ListViewModule
   ],
   declarations: [CodebasesComponent],
   exports: [CodebasesComponent]

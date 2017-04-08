@@ -1,4 +1,7 @@
-<toolbar-panel></toolbar-panel>
+<codebases-toolbar
+  (onFilterChange)="filterChange($event)"
+  (onSortChange)="sortChange($event)"
+  [resultsCount]="resultsCount"></codebases-toolbar>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">

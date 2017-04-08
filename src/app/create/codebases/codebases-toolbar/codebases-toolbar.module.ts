@@ -1,7 +1,7 @@
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ToolbarPanelComponent } from './toolbar-panel.component';
+import { CodebasesToolbarComponent } from './codebases-toolbar.component';
 
 import {
   ComponentLoaderFactory,
@@ -21,7 +21,7 @@ import { ToolbarModule } from 'ngx-widgets';
     ToolbarModule
   ],
   declarations: [
-    ToolbarPanelComponent
+    CodebasesToolbarComponent
   ],
   providers: [
     ComponentLoaderFactory,
@@ -29,6 +29,6 @@ import { ToolbarModule } from 'ngx-widgets';
     PositioningService,
     TooltipConfig
   ],
-  exports: [ToolbarPanelComponent]
+  exports: [CodebasesToolbarComponent]
 })
-export class ToolbarPanelModule { }
+export class CodebasesToolbarModule { }

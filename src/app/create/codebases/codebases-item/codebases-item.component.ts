@@ -21,9 +21,6 @@ export class CodebasesItemComponent implements OnInit {
   fullName: string;
   lastCommitDate: string;
   htmlUrl: string;
-  workspaceUrl: string = "default";
-  workspaceUrlInvalid: boolean = true;
-  workspaces: Workspace[];
 
   constructor(
     private gitHubService: GitHubService,
@@ -79,6 +76,11 @@ export class CodebasesItemComponent implements OnInit {
       this.fullName = gitHubRepoDetails.full_name;
       this.lastCommitDate = gitHubRepoDetails.pushed_at;
       this.htmlUrl = gitHubRepoDetails.html_url;
+
+      // Save for filter
+      this.codebase.gitHubRepo = {};
+      this.codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
+      this.codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
     }, error => {
       this.handleError(`Failed to retrieve GitHub repo: ${this.codebase.attributes.url}`, NotificationType.WARNING);
     });
