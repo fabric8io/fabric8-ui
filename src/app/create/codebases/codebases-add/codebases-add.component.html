@@ -19,13 +19,20 @@
       </div>
     </div>
     <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-3">
-        <button type="submit" class="btn btn-primary"
-                (click)="fetchCodebase($event)">Sync</button>
+      <div class="col-sm-11">
+        <div class="details-pull-right">
+          <button type="submit" class="btn btn-primary"
+                  [disabled]="gitHubRepo === undefined || gitHubRepo.trim().length === 0"
+                  (click)="fetchCodebase($event)">Sync</button>
+        </div>
       </div>
     </div>
     <div *ngIf="gitHubRepoDetails !== undefined && gitHubRepoFullNameInvalid !== true">
-      <hr class="col-sm-11">
+      <div class="form-group">
+        <div class="col-sm-11">
+          <div class="details-border"></div>
+        </div>
+      </div>
       <div class="form-group">
         <label for="created" class="col-sm-2 control-label" disabled>Created</label>
         <div class="col-sm-9">
@@ -55,9 +62,11 @@
         </div>
       </div>
       <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-3">
-          <button type="submit" class="btn btn-primary"
-                  (click)="addCodebase($event)">Associate Repository to Space</button>
+        <div class="col-sm-11">
+          <div class="details-pull-right">
+            <button type="submit" class="btn btn-primary"
+                    (click)="addCodebase($event)">Associate Repository to Space</button>
+          </div>
         </div>
       </div>
     </div>

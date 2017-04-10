@@ -1,0 +1,10 @@
+@import '../../../../assets/stylesheets/base';
+
+.details-pull-right {
+  float: right;
+}
+
+.details-border {
+  border-top: 1px solid $color-pf-black-400;
+  margin-left: 35px;
+}
