@@ -9,5 +9,6 @@ export const OVERVIEW_CONSTANT: any = {
     'licenseInformation': 'License Information',
     'issueMetrics': 'Issue Metrics',
     'activity': 'Activity',
-    'codeMetrics': 'Code Metrics'
+    'codeMetrics': 'Code Metrics',
+    'dependencies': 'Dependencies'
 };

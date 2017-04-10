@@ -1,81 +1,86 @@
 <div class="overview-stack">
-    <h1>{{messages && messages.title}}</h1>
-    <div class="row">
-        <div class="col-xs-5">
-            <div class="overview-cards card-pf card-pf-utilization">
-                <div>
-                    <h2 class="card-pf-title">
-                        {{messages && messages.summary}}
-                    </h2>
-                </div>
-                <div class="card-pf-body">
-                    <div class="row make-center">
-                        <div *ngFor="let summary of summaryChartInfo" class="col-md-4">
-                            <div class="row f8-icon-size {{summary.className}}">
-                                <i class="fa {{summary.icon}}"></i>
-                            </div>
-                            <div class="row f8-chart-numeric">
-                                {{summary.numeric}}
-                            </div>
-                            <div class="row f8-chart-description">
-                                <p>{{summary.description}}</p>
-                                <p *ngIf="summary.subDescription" class="sub-description">{{summary.subDescription}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="overview-cards card-pf card-pf-utilization">
-                <div>
-                    <h2 class="card-pf-title">
-                        {{messages && messages.licenseInformation}}
-                    </h2>
-                </div>
-                <div class="card-pf-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h2>{{licenseChartInfo && licenseChartInfo.code}}</h2>
-                            <p>{{licenseChartInfo && licenseChartInfo.description}}</p>
-                        </div>
-                        <div class="col-md-6 license-entries">
-                            <div *ngFor="let license of licenseChartInfo.each">
-                                <i class="fa {{license.icon}}"></i>
-                                {{license && license.name}}
-                                {{license && license.comment}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <h1>{{messages && messages.title}}</h1>
+  <div class="row">
+    <!--<div class="col-sm-4 col-xs-12">
+      <div class="overview-cards card-pf card-pf-utilization">
+        <div>
+          <h2 class="card-pf-title">
+            {{messages && messages.security}}
+          </h2>
         </div>
-        <div class="col-md-3">
-
+      </div>
+    </div>-->
+    <div class="col-sm-2 col-xs-12">
+      <div class="overview-cards card-pf card-pf-utilization ">
+        <div>
+          <h2 class="card-pf-title ">
+            {{messages && messages.dependencies}}
+          </h2>
         </div>
-        <div class="col-md-4">
-            <div class="overview-cards card-pf card-pf-utilization">
-                <div>
-                    <h2 class="card-pf-title">
-                        {{messages && messages.codeMetrics}}
-                    </h2>
-                </div>
-                <div class="card-pf-body">
-                    <div class="row make-center">
-                        <div *ngFor="let codeMetric of codeMetricChartInfo" class="col-md-4">
-                            <div class="row f8-icon-size {{codeMetric.className}}">
-                                <i class="fa {{codeMetric.icon}}"></i>
-                            </div>
-                            <div class="row f8-chart-numeric">
-                                {{codeMetric.numeric}}
-                            </div>
-                            <div class="row f8-chart-description">
-                                <p>{{codeMetric.description}}</p>
-                                <p *ngIf="codeMetric.subDescription" class="sub-description">{{codeMetric.subDescription}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="card-pf-body ">
+          <div class="row make-center ">
+            <div class="col-sm-12">
+              <div class="row f8-icon-size {{summaryInfo.className}} ">
+                <i class="fa {{summaryInfo.icon}} "></i>
+              </div>
+              <div class="row f8-chart-numeric ">
+                {{summaryInfo.numeric}}
+              </div>
+              <div class="row f8-chart-description ">
+                <p>{{summaryInfo.description}}</p>
+                <p *ngIf="summaryInfo.subDescription " class="sub-description ">{{summaryInfo.subDescription}}</p>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+    <div class="col-sm-3 col-xs-12">
+      <div class="overview-cards card-pf card-pf-utilization ">
+        <div>
+          <h2 class="card-pf-title ">
+            {{messages && messages.codeMetrics}}
+          </h2>
+        </div>
+        <div class="card-pf-body ">
+          <div class="row make-center ">
+            <div *ngFor="let codeMetric of codeMetricsInfo " class="col-sm-4 ">
+              <div class="row f8-icon-size {{codeMetric.className}} ">
+                <i class="fa {{codeMetric.icon}} "></i>
+              </div>
+              <div class="row f8-chart-numeric ">
+                {{codeMetric.numeric}}
+              </div>
+              <div class="row f8-chart-description ">
+                <p>{{codeMetric.description}}</p>
+                <p *ngIf="codeMetric.subDescription " class="sub-description ">{{codeMetric.subDescription}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3 col-xs-12">
+      <div class="overview-cards card-pf card-pf-utilization ">
+        <div>
+          <h2 class="card-pf-title ">
+            {{messages && messages.licenseInformation}}
+          </h2>
+        </div>
+        <div class="card-pf-body ">
+          <div class="row ">
+            <div class="col-md-6 ">
+              <h2>{{licenseChartInfo && licenseChartInfo.code}}</h2>
+              <p>{{licenseChartInfo && licenseChartInfo.description}}</p>
+            </div>
+            <div class="col-md-6 license-entries ">
+              <div *ngFor="let license of licenseChartInfo.each ">
+                <i class="fa {{license.icon}} "></i> {{license && license.name}} {{license && license.comment}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

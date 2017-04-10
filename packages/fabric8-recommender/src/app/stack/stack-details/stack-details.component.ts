@@ -82,22 +82,10 @@ export class StackDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.getStackAnalyses(this.stack.uuid);
-    this.setStackAnalysisChartData();
   }
 
   public showStackModal(): void {
     this.modalStackModule.open();
-  }
-
-  /**
-   * setStackAnalysisChartData - takes nothing and returns nothing
-   * This function helps in setting the data that will be passed for
-   * overview component
-   */
-  private setStackAnalysisChartData(): void {
-    this.stackOverviewData = {
-      CVEdata: ['CVE-2014-0001', 'CVE-2014-12345', 'CVE-2013-78934']
-    };
   }
 
   /**
@@ -129,11 +117,11 @@ export class StackDetailsComponent implements OnInit {
           action: 'Add',
           message: key[0] + ' ' + missing[i][key[0]],
           codebase: {
-            'repository': 'Test_Repo',
-            'branch': 'task-1234',
-            'filename': 'package.json',
-            'linenumber': 35
-          },
+            'repository': 'Test_Repo',
+            'branch': 'task-1234',
+            'filename': 'package.json',
+            'linenumber': 35
+          },
           pop: this.getRecommendationActions()
         });
       }
@@ -147,11 +135,11 @@ export class StackDetailsComponent implements OnInit {
           action: 'Upgrade',
           message: key[0] + ' ' + version[i][key[0]],
           codebase: {
-            'repository': 'Exciting',
-            'branch': 'task-101',
-            'filename': 'package.json',
-            'linenumber': 1
-          },
+            'repository': 'Exciting',
+            'branch': 'task-101',
+            'filename': 'package.json',
+            'linenumber': 1
+          },
           pop: this.getRecommendationActions()
         });
       }
@@ -160,6 +148,42 @@ export class StackDetailsComponent implements OnInit {
 
   private setDependencies(components: Array<any>): void {
     this.dependencies = components;
+  }
+
+  private setOverviewData(components: Array<any>): void {
+    // set the package dependencies number
+    let noOfComponents: number = components.length;
+    let totalCyclometricComplex: number = 0;
+    let avgCyclometricComplex: number = 0;
+    let totalNoOfLines: number = 0;
+    let totalNoOfFiles: number = 0;
+    let cveData: any = {
+      cveString: '',
+      cveScore: 0
+    };
+    let security = {
+      'CVE-2014-0001': 2,
+      'CVE-2014-12345': 4,
+      'CVE-2013-78934': 6
+    };
+    components.forEach(item => {
+      totalNoOfFiles += item.code_metrics.total_files;
+      totalNoOfLines += item.code_metrics.code_lines;
+      totalCyclometricComplex += item.code_metrics.average_cyclomatic_complexity;
+    });
+    for (let key in security) {
+      if (security[key] > cveData.cveScore) {
+        cveData.cveScore = security[key];
+        cveData.cveString = key;
+      }
+    }
+    this.stackOverviewData = {
+      noOfComponents: noOfComponents,
+      totalNoOfFiles: totalNoOfFiles,
+      totalNoOfLines: totalNoOfLines,
+      avgCyclometricComplex: Math.round(totalCyclometricComplex / noOfComponents * 1000) / 1000,
+      cvdData: cveData
+    };
   }
 
   private setComponentsToGrid(stackData: any): void {
@@ -197,20 +221,25 @@ export class StackDetailsComponent implements OnInit {
     this.stackAnalysesService
       .getStackAnalyses(id)
       .subscribe(data => {
-        // Enter the actual scene only if the data is valid and the data has something inside.
+        // Enter the actual scene only if the data is valid and the data 
+        // has something inside.
         if (data && Object.keys(data).length !== 0) {
           stackAnalysesData = data;
           let result: any;
           let components: Array<any> = [];
 
           // Check if the data has results key
-          if (stackAnalysesData.hasOwnProperty('result') && stackAnalysesData.result.length > 0) {
+          if (stackAnalysesData.hasOwnProperty('result') &&
+            stackAnalysesData.result.length > 0) {
             result = stackAnalysesData.result[0];
             if (result.hasOwnProperty('components')) {
               components = result.components;
               // Call the stack-components with the components information so that
               // It can parse the necessary information and show relevant things.
               this.setDependencies(components);
+
+              // set the overview data :-
+              this.setOverviewData(components);
             }
 
             this.setComponentsToGrid(result);
@@ -225,7 +254,8 @@ export class StackDetailsComponent implements OnInit {
               let missingPackages: Array<any> = analysis.missing_packages;
               let versionMismatch: Array<any> = analysis.version_mismatch;
 
-              // Call the recommendations with the missing packages and version mismatches
+              // Call the recommendations with the missing packages 
+              // and version mismatches
               this.setRecommendations(missingPackages, versionMismatch);
             }
           }
