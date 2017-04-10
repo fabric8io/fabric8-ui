@@ -1,0 +1,14 @@
+@import '../../../assets/stylesheets/base';
+@import '../../../assets/stylesheets/shared/layout';
+
+// errorpages
+.error-page {
+  background: $color-pf-black-200;
+}
+.errorPageWrapper {
+  position: relative;
+  top: 110px;
+  .error-page-text {
+    padding-left: 100px;
+  }
+}
