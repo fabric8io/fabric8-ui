@@ -100,11 +100,11 @@ import { witApiUrlProvider }             from './shared/wit-api.provider';
 // Component Services
 import { ConfigStore }               from './base/config.store';
 import { DeleteAccountDialogModule } from './delete-account-dialog/delete-account-dialog.module';
+import { ErrorService }              from './error/error.service';
 import { ProfileService }            from './profile/profile.service';
 import { SpaceWizardModule }         from './space-wizard/space-wizard.module';
 import { ToggleService }             from './toggle/toggle.service';
 
-// Login
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -171,6 +171,7 @@ export type StoreType = {
       useExisting: ContextService
     },
     DummyService,
+    ErrorService,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
     {

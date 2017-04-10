@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { trimEnd } from 'lodash';
 
+// import { ErrorModule } from './error/error.module';
 import { LoginComponent } from './login/login.component';
 import { SigninComponent } from './signin/signin.component';
 import { ContextResolver } from './shared/context-resolver.service';
@@ -93,7 +94,22 @@ export const routes: Routes = [
       context: ContextResolver
     },
     loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
-  }
+  },
+
+  // Error Pages
+  {
+    path: 'errors',
+    loadChildren: './error/error.module#ErrorModule'
+  },
+  {
+    path: '404',
+    loadChildren: './error/error.module#ErrorModule'
+  },
+
+  // {
+  //   path: '4*',
+  //   redirectTo: 'errors'
+  // }
 ];
 
 @NgModule({
