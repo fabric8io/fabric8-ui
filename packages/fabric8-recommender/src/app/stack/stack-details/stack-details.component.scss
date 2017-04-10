@@ -23,4 +23,23 @@
     .make-center {
         text-align: center;
     }
+
+    .pre-loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.5);
+        z-index: 99;
+
+        .loader-icon {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            transform: translate(-50%, -50%)
+        }
+    }
 }

@@ -86,6 +86,7 @@ gulp.task('build-library',
     'post-transpile',
     'transpile-sass',
     'copy-html',
+    'copy-images',
     'copy-static-assets'
   ]);
 
@@ -106,6 +107,16 @@ gulp.task('copy-static-assets', function () {
     'package.json',
   ])
     .pipe(gulp.dest(libraryDist));
+});
+
+gulp.task('copy-images', function () {
+  return copyToDist([
+    'src/**/*.svg',
+    'src/**/*.png',
+    'src/**/*.jpg',
+    'src/**/*.jpeg',
+    'src/**/*.gif'
+  ]);
 });
 
 gulp.task('copy-watch', ['post-transpile'], function () {

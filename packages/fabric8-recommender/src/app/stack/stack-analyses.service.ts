@@ -14,19 +14,12 @@ export class StackAnalysesService {
 
   constructor(
     private http: Http,
-    @Inject(WIT_API_URL) apiUrl: string,
-  ) {
-      this.stackAnalysesUrl = 'https://recommender.api.prod-preview.openshift.io/api/v1/';
-    }
+  ) {}
 
-  getStackAnalyses(id: string): Observable<any> {
-    return this.http.get(this.buildStackAnalysesUrl(id))
+  getStackAnalyses(url: string): Observable<any> {
+    return this.http.get(url)
       .map(this.extractData)
       .catch(this.handleError);
-  }
-
-  private buildStackAnalysesUrl(id: string): string {
-    return this.stackAnalysesUrl + 'stack-analyses/' + id;
   }
 
   private extractData(res: Response) {

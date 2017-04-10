@@ -1,8 +1,11 @@
 <div class="container stack-details">
   <div class="row">
-    <button class="stack-reports-btn" (click)="showStackModal()">{{messages && messages.title}}</button>
-    <modal #stackModule title="Report title on Application, Build #{{stack.uuid}}" modalClass="modal-lg modal-fullscreen" (onOpen)="getStackAnalyses(stack.uuid);">
+    <a class="stack-reports-btn" (click)="showStackModal($event)">{{messages && messages.title}}</a>
+    <modal #stackModule title="Report title on Application, Build #{{buildId}}" modalClass="modal-lg modal-fullscreen" (onOpen)="getStackAnalyses(stack);">
       <modal-content>
+          <div *ngIf="isLoading" class="pre-loader">
+            <img src="../../../assets/icon/loader.gif" class="loader-icon" />
+          </div>
           <div [hidden]="errorMessage.message">
             <!-- Recommender -->
             <div>

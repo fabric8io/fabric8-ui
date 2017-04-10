@@ -66,6 +66,9 @@ export class StackDetailsComponent implements OnInit {
   workItemData: any = {};
   multilpeActionData: any = {};
 
+  buildId: string = '';
+  isLoading: boolean = true;
+
   private recommendations: Array<any> = [];
   private dependencies: Array<any> = [];
   private stackOverviewData: any = {};
@@ -82,9 +85,14 @@ export class StackDetailsComponent implements OnInit {
 
   ngOnInit() {
     //this.getStackAnalyses(this.stack.uuid);
+    if (this.stack) {
+      this.setBuildId();
+      // this.getStackAnalyses(this.stack);
+    }
   }
 
-  public showStackModal(): void {
+  public showStackModal(event: Event): void {
+    event.preventDefault;
     this.modalStackModule.open();
   }
 
@@ -100,6 +108,18 @@ export class StackDetailsComponent implements OnInit {
         identifier: 'CREATE_WORK_ITEM'
       }
     ];
+  }
+
+  private setBuildId(): void {
+    let currentStackUrl: string = this.stack;
+    let splitForBuildId: string = currentStackUrl.split('/stack-analyses/')[1];
+    if (splitForBuildId) {
+      let splitLen: number = splitForBuildId.length;
+      if (splitForBuildId[splitLen - 1] === '/') {
+        splitForBuildId = splitForBuildId.substring(0, splitLen - 1);
+      }
+      this.buildId = splitForBuildId;
+    }
   }
 
   /**
@@ -216,13 +236,16 @@ export class StackDetailsComponent implements OnInit {
    * getStackAnalyses - takes an id (string) and returns nothing.
    * This hits the service and gets the response and passes it on to different functions.
    */
-  private getStackAnalyses(id: string): void {
+  private getStackAnalyses(url: string): void {
+    if (! url) return;
+    this.isLoading = true;
     let stackAnalysesData: any = {};
     this.stackAnalysesService
-      .getStackAnalyses(id)
+      .getStackAnalyses(url)
       .subscribe(data => {
         // Enter the actual scene only if the data is valid and the data 
         // has something inside.
+        this.clearLoader();
         if (data && Object.keys(data).length !== 0) {
           stackAnalysesData = data;
           let result: any;
@@ -272,6 +295,10 @@ export class StackDetailsComponent implements OnInit {
         this.errorMessage.message = <any>error.message;
         this.errorMessage.stack = <any>error.stack;
       });
+  }
+
+  private clearLoader(): void {
+    this.isLoading = false;
   }
 
 }

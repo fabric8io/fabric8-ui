@@ -7,10 +7,5 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-    public codebases: Array<any> = [
-        {
-        name: 'Pllm',
-        uuid: 'ff59ea91cf264003bc6dc12621c91205'
-        }
-    ];
+    public stackUrl: string = 'https://recommender.api.prod-preview.openshift.io/api/v1/stack-analyses/ff59ea91cf264003bc6dc12621c91205';
 }
