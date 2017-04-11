@@ -33,6 +33,16 @@ export const routes: Routes = [
     loadChildren: './home/home.module#HomeModule'
   },
 
+  // Error Pages
+  {
+    path: '_errors',
+    loadChildren: './error/error.module#ErrorModule'
+  },
+  {
+    path: '404',
+    loadChildren: './error/error.module#ErrorModule'
+  },
+
   // Profile
   {
     path: ':entity',
@@ -94,17 +104,8 @@ export const routes: Routes = [
       context: ContextResolver
     },
     loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
-  },
+  }
 
-  // Error Pages
-  {
-    path: 'errors',
-    loadChildren: './error/error.module#ErrorModule'
-  },
-  {
-    path: '404',
-    loadChildren: './error/error.module#ErrorModule'
-  },
 
   // {
   //   path: '4*',
