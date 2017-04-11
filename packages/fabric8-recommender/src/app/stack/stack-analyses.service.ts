@@ -11,6 +11,23 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 export class StackAnalysesService {
 
   private stackAnalysesUrl: string = '';
+  private cvssScale: any = {
+    low: {
+      start: 0.0,
+      end: 3.9,
+      iconClass: 'fa fa-check-circle-o'
+    },
+    medium: {
+      start: 4.0,
+      end: 6.9,
+      iconClass: 'fa fa-check-circle-o'
+    },
+    high: {
+      start: 7.0,
+      end: 10.0,
+      iconClass: 'pficon pficon-warning-triangle-o'
+    }
+  };
 
   constructor(
     private http: Http,
@@ -20,6 +37,23 @@ export class StackAnalysesService {
     return this.http.get(url)
       .map(this.extractData)
       .catch(this.handleError);
+  }
+
+  getCvssObj(score: number): any {
+    if (score) {
+      let iconClass: string = 'this.cvssScale.low.iconClass';
+      let displayColor: string = 'orange';
+      if (score >= this.cvssScale.high.start) {
+        iconClass = this.cvssScale.high.iconClass;
+        displayColor = 'red';
+      }
+      return {
+        iconClass: iconClass,
+        value: score,
+        percentScore: (score / 10 * 100),
+        displayColor: displayColor
+      };
+    }
   }
 
   private extractData(res: Response) {

@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import * as _ from 'lodash';
 import { GlobalConstants } from '../constants/constants.service';
+import { StackAnalysesService } from '../stack-analyses.service';
 
 @Component({
   selector: 'overview-stack',
@@ -9,6 +11,7 @@ import { GlobalConstants } from '../constants/constants.service';
 export class OverviewComponent implements OnChanges {
   @Input() stackOverviewData;
 
+  public securityInfo: any = {};
   public summaryInfo: Array<any> = [];
   public codeMetricsInfo: Array<any> = [];
   public licenseChartInfo: any = {};
@@ -16,7 +19,9 @@ export class OverviewComponent implements OnChanges {
   private cveDataList: any;
   private messages: any;
 
-  constructor(private constants: GlobalConstants) {
+  constructor(
+    private constants: GlobalConstants,
+    private stackAnalysesService: StackAnalysesService) {
     this.constants.getMessages('overview').subscribe((message) => {
       this.messages = message;
     });
@@ -39,40 +44,38 @@ export class OverviewComponent implements OnChanges {
       description: 'lines of code',
       className: 'overview-code-metric-icon'
     }, {
-      key: 'avgCyclometricComplex',
+      key: 'avgCycloComplexity',
       icon: 'pficon-virtual-machine',
       numeric: 0,
       description: 'Avg. cyclomatic complexity',
       className: 'overview-code-metric-icon'
     }, {
       key: 'noOfFiles',
-      icon: 'pficon-replicator',
+      icon: 'fa-file-o',
       numeric: 0,
       description: 'total files',
       className: 'overview-code-metric-icon'
     }];
 
-    let licenseChart: any = {
-      code: 'ASL 2.0',
-      description: 'Common stack license',
-      each: [{
-        icon: 'pficon-warning-triangle-o',
-        name: 'Free Art license',
-        comment: 'is outlier'
-      }, {
-        icon: 'pficon-warning-triangle-o',
-        name: 'Rsfs license',
-        comment: 'is outlier'
-      }, {
-        icon: 'pficon-warning-triangle-o',
-        name: 'MITNFA license',
-        comment: 'is outlier'
-      }]
-    };
-
+    this.buildSecurity(this.stackOverviewData.cvss);
     this.buildSummary(summaryInfo);
     this.buildCodeMetrics(codeMetrics);
-    this.buildLicenseChart(licenseChart);
+    this.buildLicenseChart(this.stackOverviewData.licenseList);
+  }
+
+  private buildSecurity(cvss: any): void {
+    if (this.securityInfo && cvss) {
+      let cvssValue = cvss.value;
+      if (cvssValue < 0) {
+        this.securityInfo.value = -1;
+      } else if (cvssValue < 7.0) {
+        this.securityInfo.value = cvssValue;
+      } else {
+        let cvssObj = cvssValue >= 0 ? this.stackAnalysesService.getCvssObj(cvssValue) : null;
+        this.securityInfo = cvssObj;
+        this.securityInfo.id = cvss.id;
+      }
+    }
   }
 
   private buildSummary(summaryChart: any): void {
@@ -87,7 +90,7 @@ export class OverviewComponent implements OnChanges {
           break;
         case 'noOfFiles': item.numeric = this.stackOverviewData.totalNoOfFiles;
           break;
-        case 'avgCyclometricComplex': item.numeric = this.stackOverviewData.avgCyclometricComplex;
+        case 'avgCycloComplexity': item.numeric = this.stackOverviewData.avgCycloComplexity;
           break;
         default:
       }
@@ -95,8 +98,43 @@ export class OverviewComponent implements OnChanges {
     this.codeMetricsInfo = codeMetrics;
   }
 
-  private buildLicenseChart(licenseChart: any): void {
-    this.licenseChartInfo = licenseChart;
+  private buildLicenseChart(licenseList: Array<string>): void {
+    let columnData = [];
+    let licenseMap = _.groupBy(licenseList, (value) => {
+      return value;
+    });
+    for (let key in licenseMap) {
+      if (licenseMap.hasOwnProperty(key)) {
+        let temp = [];
+        temp.push(key);
+        temp.push(licenseMap[key].length);
+        columnData.push(temp);
+      }
+    }
+    this.licenseChartInfo = {
+      data: {
+        columns: columnData,
+        type: 'donut',
+        labels: false
+      },
+      chartOptions: {
+        size: {
+          height: 240,
+          width: 240
+        },
+        donut: {
+          width: 13,
+          label: {
+            show: false
+          }
+        }
+      },
+      configs: {
+        legend: {
+          position: 'right'
+        }
+      }
+    };
   }
 }
 

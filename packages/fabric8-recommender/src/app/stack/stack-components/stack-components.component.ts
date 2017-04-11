@@ -3,12 +3,17 @@ import {
     Input,
     OnChanges
 } from '@angular/core';
+
 import { GlobalConstants } from '../constants/constants.service';
+import { StackAnalysesService } from '../stack-analyses.service';
 
 @Component({
     selector: 'f8-stack-components',
     templateUrl: './stack-components.component.html',
-    styleUrls: ['./stack-components.component.scss']
+    styleUrls: ['./stack-components.component.scss'],
+    providers: [
+        StackAnalysesService
+    ]
 })
 
 /**
@@ -66,7 +71,10 @@ export class StackComponents implements OnChanges {
     public messages: any;
     public sortDirectionClass: string = this.angleDown;
 
-    constructor(private constants: GlobalConstants) {
+    constructor(
+        private constants: GlobalConstants,
+        private stackAnalysesService: StackAnalysesService
+    ) {
         this.constants.getMessages('stackComponents').subscribe((message) => {
             this.messages = message;
         });
@@ -89,11 +97,16 @@ export class StackComponents implements OnChanges {
 
         this.currentFilter = this.filters[0].name;
 
-
         this.keys = {
             name: 'name',
             currentVersion: 'curVersion',
             latestVersion: 'latestVersion',
+            cveid: 'cveid',
+            cvss: 'cvss',
+            license: 'license',
+            linesOfCode: 'linesOfCode',
+            avgCycloComplexity: 'avgCycloComplexity',
+            noOfFiles: 'noOfFiles',
             dateAdded: 'dateAdded',
             publicPopularity: 'pubPopularity',
             enterpriseUsage: 'enterpriseUsage',
@@ -113,7 +126,7 @@ export class StackComponents implements OnChanges {
      * Gets triggered everytime a value is typed in the filter box
      * Sets the received value to the fieldValue
      */
-     public handleKeyUpEvent(event: Event): void {
+    public handleKeyUpEvent(event: Event): void {
         let target: any = event.target;
         this.fieldValue = target.value;
     }
@@ -121,7 +134,7 @@ export class StackComponents implements OnChanges {
     /**
      * Handles the click after changing the filters.
      */
-     public handleDropDownClick(element: Element): void {
+    public handleDropDownClick(element: Element): void {
         if (element.classList.contains('open')) {
             element.classList.remove('open');
         } else {
@@ -146,7 +159,7 @@ export class StackComponents implements OnChanges {
      * This changes the tables entries either to ascending order or 
      * desending order in context to the field
      */
-     public handleTableOrderClick(header: any): void {
+    public handleTableOrderClick(header: any): void {
         if (header.isSortable) {
             this.orderByName = header.identifier;
             if (!header.direction || header.direction.toLowerCase() === 'down') {
@@ -157,6 +170,25 @@ export class StackComponents implements OnChanges {
                 header.sortDirectionClass = this.angleDown;
             }
             this.direction = header.direction;
+        }
+    }
+
+    private getCveId(security: any): string {
+        if (security && security.vulnerabilities && security.vulnerabilities[0].id) {
+            return security.vulnerabilities[0].id;
+        } else {
+            return 'NA';
+        }
+    }
+
+    private getCvssString(security: any): any {
+        if (security && security.vulnerabilities && security.vulnerabilities[0].cvss) {
+            let cvssValue = parseFloat(security.vulnerabilities[0].cvss);
+            return this.stackAnalysesService.getCvssObj(cvssValue);
+        } else {
+            return {
+                value: 'NA'
+            };
         }
     }
 
@@ -177,26 +209,44 @@ export class StackComponents implements OnChanges {
                     name: 'Latest Version',
                     identifier: this.keys['latestVersion']
                 }, {
-                    name: 'Public Popularity',
-                    identifier: this.keys['publicPopularity']
+                    name: 'CVE ID',
+                    identifier: this.keys['cveid']
                 }, {
-                    name: 'Enterprise Usage',
-                    identifier: this.keys['enterpriseUsage'],
+                    name: 'CVSS',
+                    identifier: this.keys['cvss']
+                }, {
+                    name: 'License',
+                    identifier: this.keys['license']
+                }, {
+                    name: 'Lines Of Code',
+                    identifier: this.keys['linesOfCode'],
+                    isSortable: true
+                }, {
+                    name: 'Avgerage Cyclomatic Complexity',
+                    identifier: this.keys['avgCycloComplexity']
+                }, {
+                    name: 'Total Files',
+                    identifier: this.keys['noOfFiles'],
                     isSortable: true
                 }
             ];
 
             this.dependenciesList = [];
-            for (let i: number = 0; i < length; ++ i) {
+            for (let i: number = 0; i < length; ++i) {
                 dependency = {};
                 eachOne = dependencies[i];
+                let cycloMaticValue = eachOne['code_metrics']['average_cyclomatic_complexity'];
                 dependency[this.keys['name']] = eachOne['name'];
                 dependency[this.keys['currentVersion']] = eachOne['version'];
                 dependency[this.keys['latestVersion']] = eachOne['latest_version'] || 'NA';
-                dependency[this.keys['publicPopularity']] =
-                  eachOne['github_details'] ? (eachOne['github_details'].stargazers_count === -1? 'NA' : eachOne['github_details'].stargazers_count) : 'NA';
-                dependency[this.keys['enterpriseUsage']] = eachOne['enterpriseUsage'] || 'NA';
+                dependency[this.keys['cveid']] = this.getCveId(eachOne['security']);
+                dependency[this.keys['cvss']] = this.getCvssString(eachOne['security']);
+                dependency[this.keys['license']] = eachOne['licenses'];
+                dependency[this.keys['linesOfCode']] = eachOne['code_metrics']['code_lines'];
 
+                dependency[this.keys['avgCycloComplexity']]
+                    = cycloMaticValue !== -1 ? cycloMaticValue : 'NA';
+                dependency[this.keys['noOfFiles']] = eachOne['code_metrics']['total_files'];
                 this.dependenciesList.push(dependency);
             }
         }

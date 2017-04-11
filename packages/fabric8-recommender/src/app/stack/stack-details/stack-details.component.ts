@@ -6,8 +6,6 @@ import {
   ViewChild
 } from '@angular/core';
 
-// import { Logger } from '../../node_modules/ngx-login-client';
-
 import { StackAnalysesService } from '../stack-analyses.service';
 
 import { GlobalConstants } from '../constants/constants.service';
@@ -17,7 +15,6 @@ import { GlobalConstants } from '../constants/constants.service';
   templateUrl: './stack-details.component.html',
   styleUrls: ['./stack-details.component.scss'],
   providers: [
-    // Logger,
     StackAnalysesService
   ],
   encapsulation: ViewEncapsulation.None
@@ -75,7 +72,6 @@ export class StackDetailsComponent implements OnInit {
 
   constructor(
     private stackAnalysesService: StackAnalysesService,
-    // private logger: Logger,
     private constants: GlobalConstants
   ) {
     this.constants.getMessages('stackDetails').subscribe((message) => {
@@ -84,15 +80,13 @@ export class StackDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.getStackAnalyses(this.stack.uuid);
     if (this.stack) {
       this.setBuildId();
-      // this.getStackAnalyses(this.stack);
     }
   }
 
   public showStackModal(event: Event): void {
-    event.preventDefault;
+    event.preventDefault();
     this.modalStackModule.open();
   }
 
@@ -171,38 +165,49 @@ export class StackDetailsComponent implements OnInit {
   }
 
   private setOverviewData(components: Array<any>): void {
-    // set the package dependencies number
-    let noOfComponents: number = components.length;
-    let totalCyclometricComplex: number = 0;
-    let avgCyclometricComplex: number = 0;
+    // set the default values - start
+    let noOfComponents: number = components ? components.length : 0;
+    let totalCycloComplexity: number = 0;
+    let avgCycloComplexity: any = 'NA';
+    let validComponentsWithCycloValue: number = 0;
     let totalNoOfLines: number = 0;
     let totalNoOfFiles: number = 0;
-    let cveData: any = {
-      cveString: '',
-      cveScore: 0
+    let cvssObj: any = {
+      id: '',
+      value: -1 // -1 to say that no package is vulnerable
     };
-    let security = {
-      'CVE-2014-0001': 2,
-      'CVE-2014-12345': 4,
-      'CVE-2013-78934': 6
-    };
+    let licenseList: Array<string> = [];
+    // set the default values - end
     components.forEach(item => {
       totalNoOfFiles += item.code_metrics.total_files;
       totalNoOfLines += item.code_metrics.code_lines;
-      totalCyclometricComplex += item.code_metrics.average_cyclomatic_complexity;
-    });
-    for (let key in security) {
-      if (security[key] > cveData.cveScore) {
-        cveData.cveScore = security[key];
-        cveData.cveString = key;
+      if (item.code_metrics.average_cyclomatic_complexity !== -1) {
+        totalCycloComplexity += item.code_metrics.average_cyclomatic_complexity;
+        validComponentsWithCycloValue += 1;
       }
+
+      if (item.security && item.security.vulnerabilities && item.security.vulnerabilities[0].cvss) {
+        let value = parseFloat(item.security.vulnerabilities[0].cvss);
+        if (value > cvssObj.value) {
+          cvssObj.value = value;
+          cvssObj.id = item.security.vulnerabilities[0].id;
+        }
+      }
+      if (item.licenses && item.licenses.length) {
+        licenseList = [...licenseList, ...item.licenses];
+      }
+    });
+    if (validComponentsWithCycloValue > 0) {
+      avgCycloComplexity =
+        Math.round(totalCycloComplexity / validComponentsWithCycloValue * 1000) / 1000;
     }
     this.stackOverviewData = {
       noOfComponents: noOfComponents,
       totalNoOfFiles: totalNoOfFiles,
       totalNoOfLines: totalNoOfLines,
-      avgCyclometricComplex: Math.round(totalCyclometricComplex / noOfComponents * 1000) / 1000,
-      cvdData: cveData
+      avgCycloComplexity: avgCycloComplexity,
+      cvss: cvssObj,
+      licenseList: licenseList
     };
   }
 
@@ -237,7 +242,7 @@ export class StackDetailsComponent implements OnInit {
    * This hits the service and gets the response and passes it on to different functions.
    */
   private getStackAnalyses(url: string): void {
-    if (! url) return;
+    if (!url) return;
     this.isLoading = true;
     let stackAnalysesData: any = {};
     this.stackAnalysesService
@@ -288,7 +293,6 @@ export class StackDetailsComponent implements OnInit {
            working or stay on this screen to review progress.`;
           this.errorMessage.stack = '';
         }
-        console.log(this.recommendations);
       },
       error => {
         // Throw error when the service fails

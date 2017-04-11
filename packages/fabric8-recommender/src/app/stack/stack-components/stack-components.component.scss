@@ -16,7 +16,33 @@
     .stack-components-form-control {
         width: 200px;
     }
-    table td{
-        font-size: 12px;
+    table {
+        th {
+            span.fa {
+                cursor: pointer;
+            }
+        }
+
+        td {
+            font-size: 12px;
+           
+            i {
+                margin-right: 3px;
+                font-size: 14px;
+
+                &.pficon-warning-triangle-o {
+                    &:before {
+                        color: red;
+                    }
+                }
+
+                &.fa-check-circle-o {
+                    color: orange;
+                }
+            }
+        }
+    }
+    .alert-warning {
+        margin-top: 15px;
     }
 }

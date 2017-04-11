@@ -2,8 +2,8 @@
     padding: 15px 25px 15px 25px;
     background: #fafafa;
 
-    .overview-cards {
-        height: 220px;
+    .overview-card {
+        height: 225px;
         margin-left: 0;
 
         .f8-icon-size {
@@ -36,5 +36,91 @@
         .license-entries {
             line-height: 25px;
         }
+
+        &.security-card {
+            .cvss-id {
+                font-size: 20px;
+                font-weight: 100;
+                margin-top: 5px;
+
+                i {
+                    font-size: 15px;
+
+                    &.pficon-warning-triangle-o {
+                        &:before {
+                            color: red;
+                        }
+                    }
+
+                    &.fa-check-circle-o {
+                        color: orange;
+                    }
+                }
+            }
+
+            .cvss-data {
+                height: 50px;
+                margin-top: 10px;
+
+                & > div {
+                    height: 100%;
+                    position: relative;
+
+                    .cvss-score {
+                        font-size: 30px;
+                        font-weight: 100;
+                        position: absolute;
+                        left: 20px;
+                    }
+
+                    .cvss-score-label {
+                        font-size: 15px;
+                        font-weight: 100;
+                        position: absolute;
+                        bottom: 6px;
+                        left: 65px;
+
+                        .label-1 {
+                            font-size: 18px;
+                        }
+                    }
+
+                    .cvss-indication {
+                        position: absolute;
+                        right: 20px;
+                        bottom: 6px;
+                    }
+                }
+            }
+
+            .progress-bar {
+                cursor: pointer;
+            }
+        }
+
+        f8-chart {
+            margin-top: -48px;
+            text-align: center;
+        }
+
+        .warning-icon {
+            font-size: 60px;
+            opacity: 0.9;
+            margin: 0 0 10px 0;
+
+            &.fa-check-circle-o {
+                color: orange;
+            }
+        }
+
+        .cvss-id {
+            font-size: 20px;
+            font-weight: 100;
+            margin-top: 5px;
+        }
+    }
+
+    .alert-warning {
+        margin-top: 15px;
     }
 }
