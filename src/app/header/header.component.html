@@ -41,7 +41,7 @@
   <div class="collapse navbar-collapse navbar-collapse-1">
     <ul class="nav navbar-nav navbar-primary persistent-secondary navbar-left">
       <!-- This part of the menu is dynamic based on context -->
-      <li class="context dropdown" dropdown  *ngIf="loggedInUser">
+      <li class="context dropdown" dropdown *ngIf="loggedInUser">
         <a dropdown-open>
           <div id="header_dropdownToggle">
             <span class="nav-item-icon">
@@ -53,7 +53,7 @@
             </span>
           </div>
         </a>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu recent-items">
           <li *ngFor="let m of recent">
             <a [routerLink]="[m.path]" *ngIf="m.path !== null && m.path != context.path">
               <span class="nav-item-icon">
@@ -68,28 +68,31 @@
               <span>{{m.name}}</span>
             </a>
           </li>
+          <li class="divider"></li>
+          <li>
+            <!-- TODO: This should pop up the new space dialog -->
+            <a (click)="spaceWizard.open()">
+              <span class="nav-item-icon">
+                <i class="pficon pficon-add-circle-o"></i>
+              </span>
+              Create space
+            </a>
+          </li>
           <li>
             <a [routerLink]="[loggedInUser.attributes.username,'_spaces']">
               <span class="nav-item-icon">
+                <i class="fa fa-th"></i>
               </span>
-                Browse all
+                View all spaces
             </a>
           </li>
           <li class="divider"></li>
           <li>
             <a [routerLink]="['_home']">
               <span class="nav-item-icon">
+                <i class="pficon pficon-home"></i>
               </span>
-                Account home
-            </a>
-          </li>
-          <li>
-            <!-- TODO: This should pop up the new space dialog -->
-            <a>
-              <span class="nav-item-icon"></span>
-              <span (click)="spaceWizard.open()">
-                New space
-              </span>
+              Account home
             </a>
           </li>
         </ul>
@@ -113,12 +116,9 @@
       </li>
     </ul>
     <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
-      <li dropdown class="dropdown status-dropdown">
+      <li dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok">
         <a dropdown-open>
-          <span>
-            <span class="pficon pficon-ok"></span>
-            Status
-          </span>
+          <span class="pficon pficon-warning-triangle-o pficon-white"></span>
         </a>
         <div class="dropdown-menu infotip bottom-right">
           <div class="arrow"></div>
@@ -137,27 +137,32 @@
             </li>
             <li class="list-group-item">
               <span>
-                <span class="i pficon pficon-ok"></span>
+                <span class="i pficon pficon-error-circle-o"></span>
                 Che
               </span>
             </li>
             <li class="list-group-item">
               <span>
-                <span class="i pficon pficon-ok"></span>
+                <span class="i pficon pficon-warning-triangle-o"></span>
                 Pipeline
               </span>
             </li>
           </ul>
         </div>
       </li>
-      <li>
-        <a *ngIf="!loggedInUser" (click)="login();">Log In</a>
+      <li class="login-block">
+        <a *ngIf="!loggedInUser" (click)="login();">
+          <span class="logged-out-user">
+            <i class="pficon pficon-user"></i>
+          </span>
+          Log In
+        </a>
       </li>
-      <li *ngIf="loggedInUser" dropdown class="pull-right dropdown">
+      <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
         <a dropdown-open class="user-dropdown">
           <div *ngIf="loggedInUser" id="header_dropdownToggle2">
             <span class="user-icon">
-              <span *ngIf="!imgLoaded" class="pficon-user"></span>
+              <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
               <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
             </span>
             <span>{{loggedInUser.attributes.fullName}}</span>
@@ -172,9 +177,6 @@
             <a href="https://fabric8.io/guide/getStarted/index.html"><span>Help</span></a>
           </li>
           <li class="divider"></li>
-          <li>
-            <a [routerLink]="[loggedInUser.attributes.username,'_settings']"><span>Settings</span></a>
-          </li>
           <li>
             <a *ngIf="loggedInUser" (click)="logout();"><span>Log Out</span></a>
           </li>

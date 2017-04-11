@@ -15,6 +15,20 @@ export class MenusService {
         ContextTypes.BUILTIN.get('user'),
         [
           {
+            path: '_settings',
+            icon: 'pficon pficon-settings',
+            menus: [
+              {
+                name: 'Profile',
+                path: ''
+              },
+              {
+                name: 'Access Tokens',
+                path: 'tokens'
+              }
+            ]
+          },
+          {
             name: 'Home',
             path: '/_home'
           }, {
@@ -32,20 +46,6 @@ export class MenusService {
                 path: '_resources'
               }
             ]
-          },
-          {
-            path: '_settings',
-            icon: 'pficon pficon-settings',
-            menus: [
-              {
-                name: 'Profile',
-                path: ''
-              },
-              {
-                name: 'Access Tokens',
-                path: 'tokens'
-              }
-            ]
           }
         ]
       ],
@@ -53,6 +53,30 @@ export class MenusService {
         ContextTypes.BUILTIN.get('space'),
         [
           {
+            name: '',
+            path: 'settings',
+            icon: 'pficon pficon-settings',
+            menus: [
+              {
+                name: 'Overview',
+                path: '',
+                icon: '',
+                menus: []
+              }, {
+                name: 'Work',
+                path: 'work'
+              }, {
+                name: 'Security',
+                path: 'security'
+              }, {
+                name: 'Alerts',
+                path: 'alerts'
+              }, {
+                name: 'Areas',
+                path: 'areas'
+              }
+            ]
+          }, {
             name: 'Analyze',
             path: ''
           }, {
@@ -82,30 +106,6 @@ export class MenusService {
               {
                 name: 'Environments',
                 path: 'environments'
-              }
-            ]
-          }, {
-            name: '',
-            path: 'settings',
-            icon: 'pficon pficon-settings',
-            menus: [
-              {
-                name: 'Overview',
-                path: '',
-                icon: '',
-                menus: []
-              }, {
-                name: 'Work',
-                path: 'work'
-              }, {
-                name: 'Security',
-                path: 'security'
-              }, {
-                name: 'Alerts',
-                path: 'alerts'
-              }, {
-                name: 'Areas',
-                path: 'areas'
               }
             ]
           }

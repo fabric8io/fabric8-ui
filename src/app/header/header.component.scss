@@ -4,28 +4,113 @@
 {
   width:100vw !important;
 }
-.navbar-pf .navbar-primary.persistent-secondary {
-  > li {
-    &.active {
-      &.with-no-children {
-        margin-bottom: 0;
+.navbar-pf .navbar-primary {
+  li.context {
+    cursor: pointer;
+    > a {
+      background: none;
+      border-top: none;
+      border-bottom: none;
+      padding-bottom: 16px;
+      border-right: 1px solid $color-pf-black-600; // to match visual design
+      &:hover {
+        background-color: #1d1d1d; // no PatternFly color variables - copied from PatternFly CSS
+        border-top-color: #5c5c5c; // no PatternFly color variables - copied from PatternFly CSS
+        color: $color-pf-black-300;
+        background-image: linear-gradient(to bottom, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
+          background-image: -webkit-linear-gradient(top, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
+          background-image: -o-linear-gradient(top, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
+        background-repeat: repeat-x;
+      }
+    }
+  }
+  &.persistent-secondary {
+    background: none;
+    > li {
+      &.active {
+        &.with-no-children {
+          margin-bottom: 0;
+        }
       }
     }
   }
 }
 .navbar-nav {
+  .recent-items {
+    li {
+      a {
+        padding-left: 20px;
+      }
+    }
+  }
+  .nav-item-icon {
+    margin-right: 5px;
+  }
   .pficon-settings {
     margin-top: -5px;
   }
-  .user-dropdown {
-    padding: 9px 14px;
+  .status-dropdown {
+    &:hover {
+      cursor: pointer;
+    }
   }
-  .user-icon {
-    display: inline-block;
-    vertical-align: text-bottom;
-    img {
-      width: 24px;
-      height: 23px;
+  &.navbar-right {
+    .infotip {
+      right: -20px;
+      .pficon {
+        margin-right: 5px;
+      }
+    }
+    .status-dropdown {
+      a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+      }
+      .pficon-white {
+        font-size: 1.3em;
+        &:before {
+          color: $color-pf-white;
+        }
+      }
+    }
+    .login-block {
+      border-left: 1px solid $color-pf-black-600;
+      a {
+        padding-top: 11px;
+        padding-bottom:11px;
+        .logged-out-user {
+          border: 1px solid $color-pf-black-600;
+          padding: 2px;
+          display: inline-block;
+          vertical-align: text-bottom;
+          i {
+            color: $color-pf-black-500;
+          }
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .user-icon {
+      display: inline-block;
+      vertical-align: text-bottom;
+      img {
+        width: 24px;
+        height: 23px;
+      }
+    }
+    .user-dropdown {
+      border-left: 1px solid $color-pf-black-600;
+      padding: 10px 14px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .user-dropdown-menu{
+      .dropdown-menu {
+        margin-top: 2px;
+      }
     }
   }
 }
