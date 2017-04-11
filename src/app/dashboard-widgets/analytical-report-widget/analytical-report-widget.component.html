@@ -5,7 +5,7 @@
   <div class="card-pf-body">
     <form>
       <div class="form-group">
-        <div class="combobox-container">
+        <!--<div class="combobox-container">
           <input type="hidden" name="" value="">
           <div class="input-group col-sm-7">
             <input type="text" autocomplete="false" placeholder="Select your build/pipeline" class="combobox form-control">
@@ -14,27 +14,20 @@
               <span class="glyphicon glyphicon-remove"></span>
             </span>
           </div>
-        </div>
-        <select class="combobox form-control hide">
+        </div>-->
+        <select name="pipeSelect" [(ngModel)]="currentPipeline" (change)="selectedPipeline()" class="combobox form-control">
           <option value="" selected="selected">Select your build/pipeline</option>
-          <option value="AL">Pipeline 1</option>
-          <option value="AK">Pipeline 2</option>
-          <option value="AZ">Pipeline 3</option>
-          <option value="AR">Pipeline 4</option>
-          <option value="CA">Pipeline 5</option>
-          <option value="CO">Pipeline 6</option>
-          <option value="CT">Pipeline 7</option>
-          <option value="DE">Pipeline 8</option>
+          <option *ngFor="let build of buildConfigs | async" [ngValue]="build">{{ build.name }}</option>
         </select>
       </div>
     </form>
-    <div>
-      <a>Build #102</a>: you have used <a>Java JDK 2.0.3</a>. A better way to run/deploy would be to use <a>Java JDK 2.0.8</a>
-      <stack-details [stack]="codebases && codebases[0]"></stack-details>
-    </div>
-    <div>
-      <a>Build #102</a>: we recommend that you can use <a>Java JDK 2.0.8</a>
-      <stack-details [stack]="codebases && codebases[0]"></stack-details>
+    <div class="pipeline-builds">
+      <div *ngFor="let build of currentPipelineBuilds">
+        <a>Build #{{build.buildNumber}}</a>
+        <div *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']">
+          You can view the stack analysis reports here: <stack-details *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']" [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
+        </div>
+      </div>
     </div>
   </div>
 </div>
