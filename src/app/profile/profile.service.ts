@@ -41,9 +41,17 @@ export class ProfileService {
   ) {
     this.profileUrl = apiUrl + 'users';
     this._profile = userService.loggedInUser
-      .skipWhile(user => !user)
+      .skipWhile(user => {
+        return !user || !user.attributes;
+      })
       .map(user => cloneDeep(user) as ExtUser)
-      .do(user => user.attributes.store = (user as any).attributes.contextInformation || {})
+      .do(user => {
+        if(user.attributes) {
+          user.attributes.store = (user as any).attributes.contextInformation || {};
+        } else {
+          user.attributes = { "fullName": "", "imageURL": "", "username": "", "store": { } };
+        }
+      })
       .map(user => user.attributes)
       .publishReplay(1);
     this._profile.connect();
