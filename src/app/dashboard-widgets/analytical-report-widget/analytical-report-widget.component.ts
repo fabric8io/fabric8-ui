@@ -9,16 +9,8 @@ import { Contexts } from 'ngx-fabric8-wit';
 import {
   BuildConfig,
   BuildConfigs,
-  combineBuildConfigAndBuilds,
-  filterPipelines,
-  BuildConfigStore,
-  BuildStore,
   Build
 } from 'fabric8-runtime-console';
-
-import { Fabric8RuntimeConsoleService } from './../../shared/runtime-console/fabric8-runtime-console.service';
-
-import { DummyService } from './../shared/dummy.service';
 
 @Component({
   selector: 'fabric8-analytical-report-widget',
@@ -26,11 +18,6 @@ import { DummyService } from './../shared/dummy.service';
   styleUrls: ['./analytical-report-widget.component.scss']
 })
 export class AnalyticalReportWidgetComponent implements OnInit {
-
-  public codebases: Array<any> = [{
-    name: 'Pllm',
-    uuid: 'ff59ea91cf264003bc6dc12621c91205'
-  }];
 
   buildConfigs: Observable<BuildConfigs>;
   buildConfigsCount: Observable<number>;
