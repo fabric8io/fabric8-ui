@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse navbar-pf" role="navigation" *ngIf="context">
+<nav class="navbar navbar-inverse navbar-pf" role="navigation" *ngIf="context && !isGettingStartedPage">
   <div class="navbar-header">
     <ul class="nav navbar-nav navbar-right hidden-sm hidden-md hidden-lg ">
       <li dropdown class="pull-right dropdown" *ngIf="loggedInUser">

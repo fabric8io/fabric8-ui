@@ -1,0 +1,53 @@
+@import '../../assets/stylesheets/base';
+@import '../../assets/stylesheets/shared/layout';
+
+.checkbox input[type="checkbox"] {
+  margin-left: 0;
+  margin-right: 5px;
+  position: relative;
+}
+
+.checkbox label {
+  padding-left: 0;
+}
+
+.circle {
+  border-radius: 50%;
+  border: 3px solid $color-pf-blue-300;
+  font-weight: 400;
+  height: 50px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  text-align: center;
+  top: -15px;
+  width: 50px;
+}
+
+.getting-started {
+  padding-bottom: 20px;
+}
+
+.getting-started-title {
+  font-weight: 400;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-top: 10px;
+}
+
+.help-block {
+  position: relative;
+  top: -10px;
+}
+
+.success-border {
+  border-top: 1px solid $color-pf-black-400;
+  margin-top: 20px;
+  padding-top: 20px;
+}
+
+.success-title {
+  font-weight: 400;
+}

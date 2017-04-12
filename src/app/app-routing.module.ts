@@ -33,6 +33,12 @@ export const routes: Routes = [
     loadChildren: './home/home.module#HomeModule'
   },
 
+  // Getting started
+  {
+    path: '_gettingstarted',
+    loadChildren: './getting-started/getting-started.module#GettingStartedModule'
+  },
+  
   // Error Pages
   {
     path: '_error',

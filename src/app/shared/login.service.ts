@@ -38,7 +38,8 @@ export class LoginService {
     private notifications: Notifications,
     private userService: UserService
   ) {
-    this.authUrl = apiUrl + 'login/authorize?link=true';
+    // Removed ?link=true in favor of getting started page
+    this.authUrl = apiUrl + 'login/authorize';
     this.broadcaster.on('authenticationError').subscribe(() => {
       this.authService.logout();
     });

@@ -121,6 +121,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  get isGettingStartedPage(): boolean {
+    return (this.router.url.indexOf("_gettingstarted") !== -1);
+  }
+
   private updateMenus() {
     if (this.context && this.context.type && this.context.type.hasOwnProperty('menus')) {
       for (let n of (this.context.type as MenuedContextType).menus) {

@@ -11,7 +11,8 @@ const routes: Routes = [
     children: [
       { path: '', component: OverviewComponent },
       { path: '_spaces', loadChildren: './spaces/spaces.module#SpacesModule' },
-      { path: '_resources', loadChildren: './resources/resources.module#ResourcesModule' }
+      { path: '_resources', loadChildren: './resources/resources.module#ResourcesModule' },
+      { path: '_update', loadChildren: './update/update.module#UpdateModule' }
     ]
   }
 ];

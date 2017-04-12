@@ -30,7 +30,7 @@ export class LandingPageComponent implements OnInit {
   }
 
   login() {
-    this.loginService.redirectUrl = '/_home';
+    this.loginService.redirectUrl = '/_gettingstarted';
     this.broadcaster.broadcast('login');
     this.loginService.redirectToAuth();
   }

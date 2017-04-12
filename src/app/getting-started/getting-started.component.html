@@ -1,0 +1,96 @@
+<div id="overview" class="container content padding-top-15" *ngIf="showGettingStarted">
+  <div class="row">
+    <h1 class="getting-started-title">Getting started in OpenShift.io</h1>
+    <p class="getting-started">
+      Welcome to OpenShift.io! To get started you will need to create a username and connect
+      your GitHub and OpenShift.com accounts.
+    </p>
+    <p class="padding-bottom-15">
+      The fields marked with <span class="required-pf">*</span> are required.
+    </p>
+    <form role="form">
+      <div class="row">
+        <div class="col-md-1">
+          <h2 class="circle">1</h2>
+        </div>
+        <div class="col-md-11 padding-left-0">
+          <h2>Select a username</h2>
+          <div class="form-group">
+            <label for="username" class="control-label required-pf">Username</label>
+            <div [ngClass]="{'has-error': usernameInvalid}">
+              <div class="col-md-5 padding-left-0">
+                <input type="text" class="form-control" id="username" name="username" maxlength="62" required
+                       [disabled]="registrationCompleted"
+                       [(ngModel)]="username"
+                       (change)="updateUsername()">
+              </div>
+              <div class="col-md-7 padding-left-0">
+                <span class="help-block padding-0">
+                Username must be less than 63 characters and can't begin with a dash or underscore. They may contain
+                lowercase letters, numbers, dashes, or underscores.
+              </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-1">
+          <h2 class="circle">2</h2>
+        </div>
+        <div class="col-md-11 padding-left-0">
+          <h2>Connected accounts</h2>
+          <p class="getting-started">
+            This is where we explain that the user must connet their GitHub and OpenShift accounts to OpenShit.io.
+            We also explain all the benefits that come with connecting accounts.
+          </p>
+          <label class="margin-bottom-10" *ngIf="!(gitHubLinked && openShiftLinked)">
+            Select accounts to authorize
+          </label>
+          <label class="margin-bottom-15 required-pf" *ngIf="gitHubLinked && openShiftLinked">
+            Authorized accounts
+          </label>
+          <div class="form-group" *ngIf="!gitHubLinked">
+            <div class="checkbox">
+              <input type="checkbox" id="authGitHub" name="authGitHub"
+                     [(ngModel)]="authGitHub">
+              <label for="authGitHub"class="required-pf">GitHub</label>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="gitHubLinked">
+            <span>You've authorized GitHub.</span>
+          </div>
+          <div class="form-group" *ngIf="!openShiftLinked">
+            <div class="checkbox">
+              <input type="checkbox" id="authOpenShift" name="authOpenShift"
+                     [(ngModel)]="authOpenShift">
+              <label for="authOpenShift" class="required-pf">OpenShift.com</label>
+            </div>
+          </div>
+          <div class="form-group" *ngIf="openShiftLinked">
+            <span>You've authorized OpenShift.com.</span>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-lg btn-default" id="connect"
+                    [disabled]="isConnectAccountsDisabled"
+                    (click)="connectAccounts()">Connect accounts</button>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="isSuccess">
+        <div class="col-md-12">
+          <div class="success-border">
+            <h2 class="success-title">Success! You're ready to start in OpenShift.io.</h2>
+            <p>
+              Go to your <a [routerLink]="['/', '_home']">home</a> page to start coding, plan work, or do other things.
+              You can also fill out more information about you in your
+              <a [routerLink]="['/', '_home']">profile</a> so that teammates can identify you.
+            </p>
+            <button class="btn btn-lg btn-primary"
+                    (click)="routeToHome()">Get Started</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

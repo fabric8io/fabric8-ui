@@ -25,4 +25,7 @@ export class OverviewComponent implements OnInit {
 
   }
 
+  routeToUpdateProfile(): void {
+    this.router.navigate(['/', this.context.user.attributes.username, "_update"]);
+  }
 }
