@@ -2,9 +2,10 @@
   <h2 class="margin-0">
     <strong>{{space?.attributes.name | spaceName}}</strong>
   </h2>
-  <p>
-    <strong>Description of the "Space" goes here</strong>
-  </p>
   <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
-  <p almEditable [editable]="isEditable() | async" (onUpdate)="saveDescription($event)" class="space-description">{{space.attributes.description}}</p>
+  <div class="form-group">
+    <textarea almEditable row="2" placeholder="Description goes here"
+    [editable]="isEditable() | async"
+    (onUpdate)="saveDescription($event)" class="space-description form-control">{{space.attributes.description}}</textarea>
+  </div>
 </div>
