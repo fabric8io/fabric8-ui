@@ -32,6 +32,31 @@
           margin-bottom: 0;
         }
       }
+      .recent-items-toggle {
+        width: 275px;
+        .recent-item-text {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        .caret {
+          position: absolute;
+          right: 0;
+          margin-right: 5px;
+          margin-top: 3px;
+        }
+      }
+    }
+    .recent-items-dropdown {
+      &.open {
+        .recent-items {
+          width: 275px;
+        }
+      }
+    }
+    .recent-item-text-dropdown {
+      @extend .recent-item-text;
+      margin-right: 2px;
     }
   }
 }

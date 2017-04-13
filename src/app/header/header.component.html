@@ -41,9 +41,9 @@
   <div class="collapse navbar-collapse navbar-collapse-1">
     <ul class="nav navbar-nav navbar-primary persistent-secondary navbar-left">
       <!-- This part of the menu is dynamic based on context -->
-      <li class="context dropdown" dropdown *ngIf="loggedInUser">
-        <a dropdown-open>
-          <div id="header_dropdownToggle">
+      <li class="context dropdown recent-items-dropdown" dropdown *ngIf="loggedInUser">
+        <a class="recent-items-toggle" dropdown-open data-toggle="tooltip" title="{{context.name}}">
+          <div id="header_dropdownToggle" class="recent-item-text">
             <span class="nav-item-icon">
               <span class=" {{context.type.icon}}"></span>
             </span>
@@ -54,8 +54,8 @@
           </div>
         </a>
         <ul class="dropdown-menu recent-items">
-          <li *ngFor="let m of recent">
-            <a [routerLink]="[m.path]" *ngIf="m.path !== null && m.path != context.path">
+          <li class="recent-items-toggle" *ngFor="let m of recent">
+            <a class="recent-item-text-dropdown" [routerLink]="[m.path]" *ngIf="m.path !== null && m.path != context.path" data-toggle="tooltip" title="{{m.name}}">
               <span class="nav-item-icon">
                 <span class=" {{m.type.icon}}"></span>
               </span>
