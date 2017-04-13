@@ -48,17 +48,14 @@ export class Fabric8ForgeService extends ForgeService {
     // map the forge command system name into the parameters
     switch ( command.name ) {
       case ForgeCommands.forgeStarter: {
-        // TODO when laucnpad is integrated into the back end the command
-        // will change to:
-        //command.parameters.pipeline.name = 'launchpad-new-starer-project';
-        command.parameters.pipeline.name = 'obsidian-new-project';
+        // note that this is now deprecated
+        command.parameters.pipeline.name = 'launchpad-new-starer-project';
         return this.forgeHttpCommandRequest(request);
       }
       case ForgeCommands.forgeQuickStart: {
-        // TODO when laucnpad is integrated into the back end the command
-        // will change to:
-        //command.parameters.pipeline.name = 'launchpad-new-project';
-        command.parameters.pipeline.name = 'fabric8-new-quickstart';
+        command.parameters.pipeline.name = 'launchpad-new-project';
+        // here are the fabric8 upstream quickstarts:
+        //command.parameters.pipeline.name = 'fabric8-new-quickstart';
         return this.forgeHttpCommandRequest(request);
       }
       case ForgeCommands.forgeImportGit: {
