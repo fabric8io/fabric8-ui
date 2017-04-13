@@ -6,9 +6,14 @@ import {
   ViewChild
 } from '@angular/core';
 
+import {Observable} from 'rxjs';
+
+// import { Logger } from '../../node_modules/ngx-login-client';
+
 import { StackAnalysesService } from '../stack-analyses.service';
 
 import { GlobalConstants } from '../constants/constants.service';
+import {getStackRecommendations, getResultInformation} from '../utils/stack-api-utils';
 
 @Component({
   selector: 'stack-details',
@@ -20,25 +25,25 @@ import { GlobalConstants } from '../constants/constants.service';
   encapsulation: ViewEncapsulation.None
 })
 /**
- * StackDetailsComponent - Provides the detailed analysis for the given codebase 
+ * StackDetailsComponent - Provides the detailed analysis for the given codebase
  * by giving recommendation, overview and information about the dependencies of their packages
- * 
+ *
  * implements OnInit
- * 
+ *
  * Selector: 'stack-details'
  * Template: stack-details.component.html
  * Style: stack-details.component.scss
- * 
+ *
  * Services:
  * 1. AddWorkFlowService
  * 2. Logger
  * 3. StackAnalysesService
- * 
+ *
  * Parent component that includes,
  * 1. Recommendations
  * 2. Overview
  * 3. Components/Dependencies
- * 
+ *
  * Hits the Stack Analysis Service, gets the response
  * Passes the tailored response to each of the children.
  */
@@ -219,32 +224,6 @@ export class StackDetailsComponent implements OnInit {
     };
   }
 
-  private setComponentsToGrid(stackData: any): void {
-    let components: Array<any> = stackData.components;
-    let length: number = components.length;
-    for (let i: number = 0; i < length; i++) {
-      let myObj: any = {};
-      myObj.ecosystem = components[i].ecosystem;
-      myObj.pkg = components[i].name;
-      myObj.version = components[i].version;
-      myObj.latestVersion = components[i].latest_version;
-      myObj.publicUsage = components[i].dependents_count;
-      myObj.relativePublicUsage = components[i].relative_usage;
-      myObj.popularity = '';
-      if (components[i].github_details.forks_count) {
-        myObj.popularity = components[i].github_details.forks_count;
-      }
-      if (components[i].github_details.stargazers_count) {
-        myObj.popularity += '/'
-          + components[i].github_details.stargazers_count;
-      }
-
-      myObj.redhatUsage = '';
-      myObj.licence = components[i].licenses[0];
-      this.componentsDataTable.push(myObj);
-    }
-  }
-
   /**
    * getStackAnalyses - takes an id (string) and returns nothing.
    * This hits the service and gets the response and passes it on to different functions.
@@ -264,37 +243,51 @@ export class StackDetailsComponent implements OnInit {
           let result: any;
           let components: Array<any> = [];
 
-          // Check if the data has results key
-          if (stackAnalysesData.hasOwnProperty('result') &&
-            stackAnalysesData.result.length > 0) {
-            result = stackAnalysesData.result[0];
-            if (result.hasOwnProperty('components')) {
-              components = result.components;
-              // Call the stack-components with the components information so that
-              // It can parse the necessary information and show relevant things.
-              this.setDependencies(components);
+          /**
+           * Get Result Information from utils
+           */
+          let resultInformationObservable: Observable<any> = getResultInformation(data);
+          if (resultInformationObservable) {
+            resultInformationObservable.subscribe((response) => {
+              console.log(response);
+              if (response) {
+                if (response.hasOwnProperty('components')) {
+                  // Call the stack-components with the components information so that
+                  // It can parse the necessary information and show relevant things.
+                  this.setDependencies(response.components);
 
-              // set the overview data :-
-              this.setOverviewData(components);
-            }
-
-            this.setComponentsToGrid(result);
+                  // set the overview data :-
+                  this.setOverviewData(response.components);
+                }
+              }
+            });
           }
+          // Ends Result Information
 
-          // Check if the data has recommendation key
-          if (stackAnalysesData.hasOwnProperty('recommendation')) {
-            let recommendation: any = stackAnalysesData.recommendation.recommendations;
-            if (recommendation) {
-              this.similarStacks = recommendation.similar_stacks;
-              const analysis: any = this.similarStacks[0].analysis;
-              let missingPackages: Array<any> = analysis.missing_packages;
-              let versionMismatch: Array<any> = analysis.version_mismatch;
+          /**
+           * Get Recommendations from utils
+           */
+          let recObservable: Observable<any> = getStackRecommendations(data);
+          if (recObservable) {
+            recObservable.subscribe((recommendations) => {
+              let missingPackages: Array<any> = [];
+              let versionMismatch: Array<any> = [];
+              if (recommendations) {
+                if (recommendations.hasOwnProperty('missing')) {
+                  missingPackages = recommendations['missing'];
+                }
+                if (recommendations.hasOwnProperty('version')) {
+                  versionMismatch = recommendations['version'];
+                }
 
-              // Call the recommendations with the missing packages 
-              // and version mismatches
-              this.setRecommendations(missingPackages, versionMismatch);
-            }
+                // Call the recommendations with the missing packages
+                // and version mismatches
+                this.setRecommendations(missingPackages, versionMismatch);
+              }
+            });
           }
+          // Ends Recommendations
+
         } else {
           // Set an error if the data is invalid or not proper.
           this.errorMessage.message = `This could take a while. Return to pipeline to keep
