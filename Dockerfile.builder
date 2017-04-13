@@ -38,7 +38,6 @@ ENV FABRIC8_USER_NAME=fabric8
 RUN useradd --user-group --create-home --shell /bin/false ${FABRIC8_USER_NAME}
 
 ENV HOME=/home/${FABRIC8_USER_NAME}
-
 ENV WORKSPACE=$HOME/fabric8-ui
 RUN mkdir $WORKSPACE
 
@@ -50,4 +49,4 @@ WORKDIR $WORKSPACE/
 
 VOLUME /dist
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/home/fabric8/fabric8-ui/docker-entrypoint.sh"]
