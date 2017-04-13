@@ -1,6 +1,12 @@
 <div class="create-work-item-widget card-pf">
-  <div class="flex-container in-column-direction">
-    <h2 class="card-pf-title card-pf-utilization-details">
+  <div class="card-pf-heading">
+    <div class="card-pf-heading-details">
+      <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
+        <span>Create work item</span>
+        <i class="pficon pficon-add-circle-o"></i>
+      </a>
+    </div>
+    <h2 class="card-pf-title">
       <span>My Work Items</span>
       <span class="badge">{{myWorkItemsCount | async}}</span>
     </h2>
@@ -10,33 +16,29 @@
       <div class="blank-slate-pf-icon">
         <span class="pficon pficon pficon-add-circle-o"></span>
       </div>
-      <h1>Create a Work Item</h1>
+      <h1>You can view your recent work items</h1>
+      <p>
+        Planner will help you to create different types of work-items,
+        allows you to assign team members and iterations.
+      </p>
       <div class="blank-slate-pf-main-action">
-        <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create a Work Item</button>
+        <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
       </div>
     </div>
-    <div class="analyze-overview-items-detail" *ngIf="(myWorkItemsCount | async) > 0">
-      <div class="card-pf-body">
-        <p *ngFor="let workItem of myWorkItems | async | take: 10">
-          <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}}"></span>
-          <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]">#{{workItem.id}}</a>
-          <span *ngIf="workItem.attributes['system.created_at']">
-            created <span id="created_at" [innerHTML]="workItem.attributes['system.created_at'] | almMomentTime"></span>
-          </span>
-          <span *ngIf="workItem.relationalData?.area?.attributes?.name">
-            in {{workItem.relationalData?.area?.attributes?.name}}
-          </span>
-          <span *ngIf="workItem.relationalData?.creator?.attributes">
-            by {{workItem.relationalData?.creator | almUserName:'unknown'}}
-          </span>
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class="card-pf-footer">
-    <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
-      <i class="pficon pficon-add-circle-o"></i>
-      <span>Create a Work item</span>
-    </a>
+    <ul class="list-group analyze-overview-items-detail" *ngIf="(myWorkItemsCount | async) > 0">
+      <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 10">
+        <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}}"></span>
+        <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]">#{{workItem.id}}</a>
+        <span *ngIf="workItem.attributes['system.created_at']">
+          created <span id="created_at" [innerHTML]="workItem.attributes['system.created_at'] | almMomentTime"></span>
+        </span>
+        <span *ngIf="workItem.relationalData?.area?.attributes?.name">
+          in {{workItem.relationalData?.area?.attributes?.name}}
+        </span>
+        <span *ngIf="workItem.relationalData?.creator?.attributes">
+          by {{workItem.relationalData?.creator | almUserName:'unknown'}}
+        </span>
+      </li>
+    </ul>
   </div>
 </div>

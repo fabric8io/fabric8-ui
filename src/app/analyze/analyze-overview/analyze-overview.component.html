@@ -1,7 +1,15 @@
-<div id="analyze-overview" class="container-fluid analyze-overview-wrapper">
+<div id="analyze-overview" class="cards-pf container-fluid analyze-overview-wrapper">
+  <section class="row row-cards-pf">
+    <div class="col-md-10">
+      <fabric8-edit-space-description-widget></fabric8-edit-space-description-widget>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary btn-lg pull-right width-100">Add to Space</button>
+    </div>
+  </section>
   <section class="row row-cards-pf">
     <div class="col-md-4">
-      <fabric8-edit-space-description-widget></fabric8-edit-space-description-widget>
+      <fabric8-add-codebase-widget></fabric8-add-codebase-widget>
     </div>
     <div class="col-md-8">
       <fabric8-analytical-report-widget></fabric8-analytical-report-widget>
@@ -12,10 +20,10 @@
       <fabric8-create-work-item-widget></fabric8-create-work-item-widget>
     </div>
     <div class="col-md-4">
-      <fabric8-add-codebase-widget></fabric8-add-codebase-widget>
+      <fabric8-pipelines-widget></fabric8-pipelines-widget>
     </div>
     <div class="col-md-4">
-      <fabric8-pipelines-widget></fabric8-pipelines-widget>
+      <fabric8-environment-widget></fabric8-environment-widget>
     </div>
   </section>
 </div>

@@ -1,3 +1,4 @@
+import { EnvironmentWidgetModule } from './../../dashboard-widgets/environment-widget/environment-widget.module';
 import { PipelinesWidgetModule } from './../../dashboard-widgets/pipelines-widget/pipelines-widget.module';
 import { AddCodebaseWidgetModule } from './../../dashboard-widgets/add-codebase-widget/add-codebase-widget.module';
 import { CreateWorkItemWidgetModule } from './../../dashboard-widgets/create-work-item-widget/create-work-item-widget.module';
@@ -28,7 +29,8 @@ import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module'
     AnalyticalReportWidgetModule,
     CreateWorkItemWidgetModule,
     AddCodebaseWidgetModule,
-    PipelinesWidgetModule
+    PipelinesWidgetModule,
+    EnvironmentWidgetModule
   ],
   declarations: [AnalyzeOverviewComponent]
 })

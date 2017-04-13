@@ -2,6 +2,9 @@
 
 .edit-space-description-widget {
     max-height: 245px;
+    h2 {
+      text-transform: capitalize;
+    }
     .space-description {
         overflow-y: scroll;
         max-height: 122px;

@@ -1,33 +1,34 @@
 <div class="add-codebase-widget card-pf">
-  <div class="flex-container in-column-direction">
-    <h2 class="card-pf-title card-pf-utilization-details">
-      <span>Codebases</span>
-      <span class="badge">{{codebaseCount | async}}</span>
-    </h2>
-    <div class="card-pf-body">
-      <div class="blank-slate-pf" *ngIf="(codebaseCount | async) === 0">
-        <div class="blank-slate-pf-icon">
-          <span class="pficon pficon pficon-import"></span>
-        </div>
-        <h1>Import a Codebase</h1>
-        <div class="blank-slate-pf-main-action">
-          <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import a Codebase</button>
-        </div>
+  <div class="card-pf-heading">
+      <div class="card-pf-heading-details">
+        <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
+          <span>Create Codebase</span>
+          <i class="pficon pficon-add-circle-o"></i>
+        </a>
       </div>
-      <div class="analyze-overview-items-detail" *ngIf="(codebaseCount | async) > 0">
-        <div class="card-pf-body ">
-          <p *ngFor="let codebase of codebases | async">
-            <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
-            <a href="{{codebase.url}}" target="_blank">{{codebase.name}}</a>
-          </p>
-        </div>
+      <h2 class="card-pf-title">
+        <span>Codebases</span>
+        <span class="badge">{{codebaseCount | async}}</span>
+      </h2>
+  </div>
+  <div class="card-pf-body">
+    <div class="blank-slate-pf" *ngIf="(codebaseCount | async) === 0">
+      <div class="blank-slate-pf-icon">
+        <span class="pficon pficon-add-circle-o"></span>
+      </div>
+      <h1>Add Code</h1>
+      <div class="blank-slate-pf-main-action">
+        <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Add to space</button>
+      </div>
+      <div class="blank-slate-pf-main-action">
+        <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import from git</button>
       </div>
     </div>
-    <div class="card-pf-footer">
-      <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
-        <i class="pficon pficon-import"></i>
-        <span>Import a Codebase</span>
-      </a>
-    </div>
+    <ul class="list-group analyze-overview-items-detail" *ngIf="(codebaseCount | async) > 0">
+      <li class="list-group-item" *ngFor="let codebase of codebases | async">
+        <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
+        <a href="{{codebase.url}}" target="_blank">{{codebase.name}}</a>
+      </li>
+    </ul>
   </div>
 </div>

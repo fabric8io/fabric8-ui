@@ -1,12 +1,10 @@
-<div class="edit-space-description-widget card-pf card-pf-utilization">
-  <div class="card-pf-heading">
-    <h2 class="card-pf-title">{{space?.attributes.name | spaceName}}</h2>
-  </div>
-  <div class="card-pf-body">
-    <p>
-      <b>Description</b>
-    </p>
-    <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
-    <p almEditable [editable]="isEditable() | async" (onUpdate)="saveDescription($event)" class="space-description">{{space.attributes.description}}</p>
-  </div>
+<div class="edit-space-description-widget">
+  <h2 class="margin-0">
+    <strong>{{space?.attributes.name | spaceName}}</strong>
+  </h2>
+  <p>
+    <strong>Description of the "Space" goes here</strong>
+  </p>
+  <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
+  <p almEditable [editable]="isEditable() | async" (onUpdate)="saveDescription($event)" class="space-description">{{space.attributes.description}}</p>
 </div>
