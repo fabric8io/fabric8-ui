@@ -8,7 +8,7 @@ import { DummyService } from './../shared/dummy.service';
 
 @Component({
   host: {
-    'class': "app-component flex-container in-column-direction flex-grow-1"
+    'class': "app-component"
   },
   selector: 'alm-home',
   templateUrl: './home.component.html',

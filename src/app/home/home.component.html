@@ -1,13 +1,197 @@
-<div class="container-fluid container-cards-pf" *ngIf="loggedInUser && loggedInUser.attributes">
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="btn-group">
-        <a class="btn btn-default " type="button" href="https://fabric8.io/guide/getStarted/index.html">Learn</a>
-        <button class="btn btn-default " type="button" (click)="createSpace.open()">Start Collaborating</button>
+<div class="container-fluid home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
+  <section class="row row-cards-pf">
+    <div class="col-md-12">
+      <section class="card-pf">
+        <aside class="col-md-4 text-center">
+          <span class="pficon pficon-home pf-icon-home"></span>
+          <h1>
+            <strong>Welcome to Fabric8! <br />
+            Message goes here</strong>
+          </h1>
+        </aside>
+        <aside class="col-md-8">
+          <div class="col-md-4 col-lg-4">
+            <div class="card-pf-view">
+              <div class="card-pf-body">
+                <div class="card-pf-top-element">
+                  <span class="pficon pficon-home card-pf-icon-circle"></span>
+                </div>
+                <h2 class="text-center">
+                  Review Fabric8 setup guide here
+                </h2>
+                <p class="card-pf-info text-center">The following snippet of text is
+                  <a>rendered as link text</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-lg-4">
+            <div class="card-pf-view">
+              <div class="card-pf-body">
+                <div class="card-pf-top-element">
+                  <span class="pficon pficon-home card-pf-icon-circle"></span>
+                </div>
+                <h2 class="text-center">
+                  Setup your profile and preferences
+                </h2>
+                <p class="card-pf-info text-center">The following snippet of text is
+                  <a>rendered as link text</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-lg-4">
+            <div class="card-pf-view">
+              <div class="card-pf-body">
+                <div class="card-pf-top-element">
+                  <span class="pficon pficon-home card-pf-icon-circle"></span>
+                </div>
+                <h2 class="text-center">
+                  View Documentation and FAQ
+                </h2>
+                <p class="card-pf-info text-center">The following snippet of text is
+                  <a>rendered as link text</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </div>
+  </section>
+  <section class="row row-cards-pf">
+    <div class="col-md-4">
+      <div class="card-pf">
+        <div class="card-pf-heading">
+          <h2 class="card-pf-title">Activity</h2>
+        </div>
+        <div class="card-pf-body">
+          <div class="blank-slate-pf">
+            <h1>No Recent Activity</h1>
+            <p>Recent activity will show here, once you <a>create a space,
+              update content or do something else</a></p>
+          </div>
+          <div class="home-activity-list-result">
+            <ul class="list-group list-view-pf list-view-pf-view">
+              <li class="list-group-item">
+                <div class="list-view-pf-actions">
+                  <span>Just now</span>
+                </div>
+                <div class="list-view-pf-main-info">
+                  <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                      <div class="list-group-item-text">
+                        @Username added <a>BalloonPopGame</a> space
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="row row-cards-pf">
+    <div class="col-md-4">
+      <div class="card-pf">
+        <div class="card-pf-heading">
+          <div class="card-pf-heading-details">
+            <a class="btn btn-link">
+              <span>Create a space</span>
+              <i class="pficon pficon-add-circle-o"></i>
+            </a>
+          </div>
+          <h2 class="card-pf-title">Spaces</h2>
+        </div>
+        <div class="card-pf-body">
+          <div class="blank-slate-pf">
+            <div class="blank-slate-pf-icon">
+              <span class="pficon pficon pficon-add-circle-o"></span>
+            </div>
+            <h1>Create a Space</h1>
+            <p>A Space is something A Space is something A Space is something
+              A Space is something A Space is something A Space is something
+              A Space is something. Currently, there are no spaces for this organization</p>
+            <p>Learn how to get started <a>in the documentation</a></p>
+            <div class="blank-slate-pf-main-action">
+              <button class="btn btn-primary btn-lg"> Create a space </button>
+            </div>
+          </div>
+          <div class="home-space-list-result">
+            <ul class="list-group list-view-pf list-view-pf-view">
+              <li class="list-group-item">
+                <div class="list-view-pf-actions">
+                  <button class="btn btn-default">Action</button>
+                  <div class="dropdown pull-right dropdown-kebab-pf">
+                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebabRight9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      <span class="fa fa-ellipsis-v"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight9">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="#">Separated link</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="list-view-pf-main-info">
+                  <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                      <div class="list-group-item-text">
+                        Space name goes here
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="list-view-pf-actions">
+                  <button class="btn btn-default">Action</button>
+                  <div class="dropdown pull-right dropdown-kebab-pf">
+                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebabRight9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      <span class="fa fa-ellipsis-v"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight9">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="#">Separated link</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="list-view-pf-main-info">
+                  <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                      <div class="list-group-item-text">
+                        Space name goes here
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-pf">
+        <div class="card-pf-heading">
+          <h2 class="card-pf-title">Resource usage</h2>
+        </div>
+        <div class="card-pf-body">
+          <div class="blank-slate-pf">
+            <h1>No Resource are currently being used</h1>
+            <p>Add a resource such as memory, CPU, or storage by <a>create a space,
+              update content or do something else</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--<div class="row row-cards-pf">
     <div class="col-sm-4">
       <div class="card-pf card-pf-accented">
         <div class="card-pf-title">
@@ -49,7 +233,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 <!-- Create Space modal -->
 <modal #createSpace modalClass="modal-lg chromeless-modal">
