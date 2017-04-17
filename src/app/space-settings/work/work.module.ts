@@ -1,12 +1,12 @@
 import { NgModule }         from '@angular/core';
 import { CommonModule }     from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 
 import { WorkComponent }     from './work.component';
 import { WorkRoutingModule } from './work-routing.module';
 
 @NgModule({
-  imports:      [ CommonModule, WorkRoutingModule, HttpModule ],
+  imports:      [ CommonModule, WorkRoutingModule ],
   declarations: [ WorkComponent ],
 })
 export class WorkModule {

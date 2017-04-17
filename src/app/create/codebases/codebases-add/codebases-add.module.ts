@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 
 import { CodebasesAddRoutingModule } from './codebases-add-routing.module';
 import { CodebasesService } from './../services/codebases.service';
@@ -14,7 +14,6 @@ import { CodebasesAddComponent } from './codebases-add.component';
     CodebasesAddRoutingModule,
     CommonModule,
     FormsModule,
-    HttpModule,
     SlideOutPanelModule
   ],
   declarations: [CodebasesAddComponent],

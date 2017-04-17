@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 
 import { ToolbarModule, ToolbarConfig } from 'ngx-widgets';
 import {
@@ -24,7 +24,6 @@ import { PipelinesRoutingModule } from './pipelines-routing.module';
   imports: [
     CommonModule,
     PipelinesRoutingModule,
-    HttpModule,
     PipelineModule,
     ToolbarModule,
     DropdownModule

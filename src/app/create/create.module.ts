@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 
 import { RestangularModule } from 'ng2-restangular';
 
@@ -19,8 +19,7 @@ import { CodebasesModule } from './codebases/codebases.module';
   imports: [
     CodebasesModule,
     CommonModule,
-    CreateRoutingModule,
-    HttpModule
+    CreateRoutingModule
   ],
   declarations: [CreateComponent],
   providers: [

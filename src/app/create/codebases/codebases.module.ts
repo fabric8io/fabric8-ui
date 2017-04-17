@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'ng2-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 import { ListViewModule } from 'ngx-widgets';
 
 import { CodebasesAddModule } from './codebases-add/codebases-add.module';
@@ -24,7 +24,6 @@ import { CodebasesRoutingModule } from './codebases-routing.module';
     CommonModule,
     DropdownModule,
     FormsModule,
-    HttpModule,
     ListViewModule
   ],
   declarations: [CodebasesComponent],

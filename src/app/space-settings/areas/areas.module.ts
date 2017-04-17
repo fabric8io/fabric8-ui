@@ -1,7 +1,7 @@
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 
 import { DropdownModule } from 'ng2-bootstrap';
 import { ListViewModule } from 'ngx-widgets';
@@ -16,7 +16,6 @@ import { CreateAreaDialogModule } from './create-area-dialog/create-area-dialog.
   imports: [
     CommonModule,
     AreasRoutingModule,
-    HttpModule,
     ListViewModule,
     DropdownModule,
     CreateAreaDialogModule,

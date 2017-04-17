@@ -1,12 +1,12 @@
 import { Fabric8UISpaceNamespace } from './../../shared/runtime-console/fabric8-ui-space-namespace.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 import { EnvironmentModule, SpaceNamespace } from 'fabric8-runtime-console';
 
 
 @NgModule({
-  imports: [CommonModule, HttpModule, EnvironmentModule],
+  imports: [CommonModule, EnvironmentModule],
   providers: [
     {
       provide: SpaceNamespace,

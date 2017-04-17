@@ -4,7 +4,7 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { ControlComponent } from './control.component';
@@ -12,7 +12,7 @@ import { ControlRoutingModule } from './control-routing.module';
 
 
 @NgModule({
-  imports: [CommonModule, ControlRoutingModule, HttpModule, FormsModule],
+  imports: [CommonModule, ControlRoutingModule, FormsModule],
   declarations: [ControlComponent]
 })
 export class ControlModule {

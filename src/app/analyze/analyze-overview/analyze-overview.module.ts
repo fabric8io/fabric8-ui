@@ -7,7 +7,7 @@ import { EditSpaceDescriptionWidgetModule } from './../../dashboard-widgets/edit
 import { TeamMembershipDialogModule } from './../../team-membership-dialog/team-membership-dialog.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
+import { Http } from '@angular/http';
 import { ModalModule } from 'ngx-modal';
 import { FormsModule } from '@angular/forms';
 // import { Broadcaster } from 'ngx-login-client';
@@ -21,7 +21,6 @@ import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module'
   imports: [
     CommonModule,
     AnalyzeOverviewRoutingModule,
-    HttpModule,
     ModalModule,
     FormsModule,
     TeamMembershipDialogModule,
