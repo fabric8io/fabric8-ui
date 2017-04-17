@@ -35,13 +35,13 @@ export const routes: Routes = [
 
   // Error Pages
   {
-    path: '_errors',
+    path: '_error',
     loadChildren: './error/error.module#ErrorModule'
   },
-  {
-    path: '404',
-    loadChildren: './error/error.module#ErrorModule'
-  },
+  // {
+  //   path: '404',
+  //   loadChildren: './error/error.module#ErrorModule'
+  // },
 
   // Profile
   {
@@ -104,12 +104,12 @@ export const routes: Routes = [
       context: ContextResolver
     },
     loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
-  }
+  },
 
 
   // {
-  //   path: '4*',
-  //   redirectTo: 'errors'
+  //   path: '**',
+  //   loadChildren: './error/error.module#ErrorModule'
   // }
 ];
 

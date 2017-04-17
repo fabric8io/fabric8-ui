@@ -10,6 +10,7 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { ContextService } from './context.service';
 import { Navigation } from './../models/navigation';
+import { ErrorService } from '../error/error.service';
 
 
 @Injectable()
@@ -31,6 +32,7 @@ export class LoginService {
     private localStorage: LocalStorageService,
     @Inject(WIT_API_URL) private apiUrl: string,
     private broadcaster: Broadcaster,
+    private errorService: ErrorService,
     private authService: AuthenticationService,
     private contextService: ContextService,
     private notifications: Notifications,
@@ -74,6 +76,8 @@ export class LoginService {
     });
     if (result['error']) {
       this.notifications.message({ message: result['error'], type: NotificationType.DANGER } as Notification);
+      // this.errorService.updateMessage('Error logging in');
+      // this.router.navigate(['_error']);
     } else if (result['token_json']) {
       // Handle the case that this is a login
       this.authService.logIn(result['token_json']);
