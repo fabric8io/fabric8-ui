@@ -52,7 +52,7 @@ export class AnalyticService {
     // User login and logout
     this.userService.loggedInUser
       .subscribe(user => {
-        if (user) {
+        if (user && user.id) {
           this.identifyUser(user);
           this.analytics.track('logged in', {
             url: this.router.url

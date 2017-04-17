@@ -97,7 +97,7 @@
           </li>
         </ul>
       </li>
-      <li *ngFor="let m of context?.type.menus" [class.active]="m.active" [class.with-no-children]="(m.menus||[]).length===0">
+      <li *ngFor="let m of context?.type?.menus" [class.active]="m.active" [class.with-no-children]="(m.menus||[]).length===0">
         <a [routerLink]="[m.fullPath]" *ngIf="!m.hide">
           <span *ngIf="m.icon" class="nav-item-icon">
             <span class="{{m.icon}}"></span>
