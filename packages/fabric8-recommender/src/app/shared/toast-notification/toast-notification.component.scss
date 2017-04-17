@@ -1,0 +1,17 @@
+@import '../../../assets/stylesheets/base';
+
+//Toast notification style
+.toast-notification-container {
+  position: fixed;
+  top: em(36);
+  right: em(50);
+  z-index: 10;
+  width: 630px;
+  .toast-notification-wrapper {
+    width: $width100;
+    .toast-wrapper a {
+      margin-left: 20px;
+    }
+  }
+}
+

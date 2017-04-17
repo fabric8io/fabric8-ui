@@ -58,7 +58,7 @@ export class RecommenderComponent implements OnChanges {
 
     @Input() recommendations;
     public messages: any;
-    public workItemResponse: string;
+    public workItemResponse: Array<any> = [];
     private recommendationsList: Array<any> = [];
     private newRecommendations: Array<any> = [];
     private isSelectAll: boolean = false;
@@ -79,7 +79,7 @@ export class RecommenderComponent implements OnChanges {
         });
 
         if (this.context && this.context.current) {
-            this.context.current.subscribe( val => {
+            this.context.current.subscribe(val => {
                 console.log('Inside', val);
                 this.spaceName = val.name;
                 this.userName = val.user.attributes.username;
@@ -100,9 +100,10 @@ export class RecommenderComponent implements OnChanges {
                 }
             ];
 
-            for (let i: number = 0; i < length; ++ i) {
+            for (let i: number = 0; i < length; ++i) {
                 recommendation = {};
                 eachOne = this.recommendations[i];
+                recommendation['key'] = eachOne['key'];
                 recommendation['suggestion'] = eachOne['suggestion'];
                 recommendation['action'] = eachOne['action'];
                 recommendation['message'] = eachOne['message'];
@@ -112,7 +113,8 @@ export class RecommenderComponent implements OnChanges {
                     message: eachOne['workItem']['message'],
                     action: eachOne['workItem']['action']
                 };
-
+                recommendation['showCreateButton'] = true;
+                recommendation['showViewButton'] = false;
                 this.recommendationsList.push(recommendation);
             }
         }
@@ -130,19 +132,19 @@ export class RecommenderComponent implements OnChanges {
                 if (this.canCreateWorkItem(recommender)) {
                     this.handleCreateWorkItemAction([recommender]);
                 } else {
-                    console.log ('Cannot create work item as it has been dismissed');
+                    console.log('Cannot create work item as it has been dismissed');
                 }
             } else if (identifier === 'DISMISS') {
                 if (!recommender.isDismissed) {
                     this.handleDismissWorkItemAction([recommender]);
                 } else {
-                    console.log ('Work item is already dismissed');
+                    console.log('Work item is already dismissed');
                 }
             } else if (identifier === 'RESTORE') {
                 if (recommender.isDismissed) {
                     this.handleRestoreWorkItemAction([recommender]);
                 } else {
-                    console.log ('Work item is not dismissed');
+                    console.log('Work item is not dismissed');
                 }
             }
         }
@@ -161,7 +163,7 @@ export class RecommenderComponent implements OnChanges {
         if (item) {
             let identifier: string = item.identifier;
             if (identifier === 'CREATE_WORK_ITEM') {
-               this.handleMultipleWorkItemCreation(event);
+                this.handleMultipleWorkItemCreation(event);
             } else if (identifier === 'DISMISS') {
                 this.handleDismissWorkItemAction(this.newRecommendations);
             } else if (identifier === 'RESTORE') {
@@ -211,7 +213,7 @@ export class RecommenderComponent implements OnChanges {
      *  'deactivate' - this classname gets added if any of the action needs to be disabled.
      *  so that it is disabled for the user to perform any action
      */
-     public getCurrentClass(item: any, recommendation: any): string {
+    public getCurrentClass(item: any, recommendation: any): string {
         let className: string = 'deactivate';
         let identifier: string = item.identifier;
 
@@ -227,7 +229,7 @@ export class RecommenderComponent implements OnChanges {
      * Checks if multiple work items can be created
      * returns true/false
      */
-     public canCreateAllWorkItems(): boolean {
+    public canCreateAllWorkItems(): boolean {
         if (this.newRecommendations.length > 0) {
             return this.newRecommendations.some(recommendation => recommendation.isDismissed === false || recommendation.isDismissed === undefined);
         }
@@ -258,7 +260,7 @@ export class RecommenderComponent implements OnChanges {
      */
     private toggleWorkItem(recommendations: Array<any>, todo: boolean): void {
         let length: number = recommendations.length;
-        for (let i: number = 0; i < length; ++ i) {
+        for (let i: number = 0; i < length; ++i) {
             if (recommendations && recommendations.length > 0) {
                 recommendations[i].isDismissed = todo;
             }
@@ -288,22 +290,22 @@ export class RecommenderComponent implements OnChanges {
      */
     private getWorkItemData(): any {
         let workItemData = {
-          'data': {
-            'attributes': {
-              'system.state': 'open',
-              'system.title': '',
-              'system.codebase': ''
-            },
-            'type': 'workitems',
-            'relationships': {
-              'baseType': {
-                'data': {
-                  'id': '86af5178-9b41-469b-9096-57e5155c3f31',
-                  'type': 'workitemtypes'
-                }
-              }
-            }
-          }
+            'data': {
+                'attributes': {
+                    'system.state': 'open',
+                    'system.title': '',
+                    'system.codebase': ''
+                },
+                'type': 'workitems',
+                'relationships': {
+                    'baseType': {
+                        'data': {
+                            'id': '86af5178-9b41-469b-9096-57e5155c3f31',
+                            'type': 'workitemtypes'
+                        }
+                    }
+                }
+            }
         };
         return workItemData;
     }
@@ -315,11 +317,10 @@ export class RecommenderComponent implements OnChanges {
      *  Handles single as well as multiple work items 
      */
     private addWorkItems(workItems: Array<any>): void {
-        this.workItemResponse = null;
         let length: number = workItems.length;
         let newItem: any, workItem: any;
         newItem = this.getWorkItemData();
-        for (let i: number = 0; i < length; ++ i) {
+        for (let i: number = 0; i < length; ++i) {
             if (workItems[i]) {
                 workItem = workItems[i];
                 // TODO: Handle the case of sending multiple work items concurrently
@@ -328,6 +329,7 @@ export class RecommenderComponent implements OnChanges {
                     newItem.data.attributes['system.title'] = workItem['title'];
                     newItem.data.attributes['system.description'] = workItem['description'];
                     newItem.data.attributes['system.codebase'] = workItem['codebase'];
+                    newItem.key = workItem['key'];
                 }
             }
         }
@@ -336,8 +338,16 @@ export class RecommenderComponent implements OnChanges {
         console.log(this.userName, this.spaceName);
         workFlow.subscribe((data) => {
             if (data) {
-                let baseUrl: string = `http://prod-preview.openshift.io/${this.userName}/${this.spaceName}/plan/detail/` + data.data.id;
-                this.displayWorkItemResponse(baseUrl);
+                let inputUrlArr: Array<string> = [];
+                if (data.links && data.links.self && data.links.self.length) {
+                    inputUrlArr = data.links.self.split('/api/');
+                    let hostString = inputUrlArr[0] ? inputUrlArr[0].replace('api.', '') : '';
+                    let baseUrl: string = hostString +
+                        `/${this.userName}/${this.spaceName}/plan/detail/` + data.data.id;
+                    this.displayWorkItemResponse(baseUrl, data.data.id);
+                    newItem.url = baseUrl;
+                    this.toggleWorkItemButton(newItem);
+                }
             }
         });
     }
@@ -346,9 +356,26 @@ export class RecommenderComponent implements OnChanges {
      * displayWorkItemResponse - takes a message string and returns nothing
      * Displays the response received from the creation of work items
      */
-    private displayWorkItemResponse(message: string): void {
-        console.log(message);
-        this.workItemResponse = message;
+    private displayWorkItemResponse(url: string, id: any): void {
+        let notification = {
+            iconClass: '',
+            alertClass: '',
+            text: null,
+            link: null,
+            linkText: this.messages.view_work_item
+        };
+        if (id) {
+            notification.iconClass = 'pficon-ok';
+            notification.alertClass = 'alert-success';
+            notification.text = this.messages.toastDisplay.text1 +
+                id + this.messages.toastDisplay.text2;
+            notification.link = url;
+        } else {
+            notification.iconClass = 'pficon-error-circle-o';
+            notification.alertClass = 'alert-danger';
+            notification.text = this.messages.create_work_item_error;
+        }
+        this.workItemResponse.push(notification);
     }
 
     /*
@@ -359,9 +386,8 @@ export class RecommenderComponent implements OnChanges {
         let workItems = [];
         let length: number = recommendations.length;
         if (recommendations && length > 0) {
-            for (let i: number = 0; i < length; ++ i) {
+            for (let i: number = 0; i < length; ++i) {
                 if (this.canCreateWorkItem(recommendations[i])) {
-                    console.log(recommendations[i]);
                     let description: string = recommendations[i]['workItem']['message'];
                     let codebase: any = recommendations[i]['workItem']['codebase'];
                     description += '<br />';
@@ -372,9 +398,9 @@ export class RecommenderComponent implements OnChanges {
                     let item: any = {
                         title: recommendations[i]['workItem']['action'],
                         description: description,
-                        codebase: codebase
+                        codebase: codebase,
+                        key: recommendations[i]['key']
                     };
-                    console.log(item, 'here');
                     workItems.push(item);
                 }
             }
@@ -383,6 +409,22 @@ export class RecommenderComponent implements OnChanges {
             } else {
                 console.log('Work items are empty and cannot be added');
             }
+        }
+    }
+
+    /**
+     * Method to toggle the work item button from Create to View.
+     * @param workItem - workItem to toggle
+     */
+    private toggleWorkItemButton(workItem: any): any {
+        if (workItem.key) {
+            this.recommendationsList.forEach((item, index) => {
+                if (workItem.key === item.key) {
+                    item.showCreateButton = false;
+                    item.showViewButton = true;
+                    item.viewWorkItemLink = workItem.url;
+                }
+            });
         }
     }
 
@@ -422,7 +464,7 @@ export class RecommenderComponent implements OnChanges {
         let showDrops: any = document.querySelectorAll('.show-drop');
         if (showDrops) {
             let length: number = showDrops.length;
-            for (let i: number = 0; i < length; ++ i) {
+            for (let i: number = 0; i < length; ++i) {
                 if (showDrops[i]) {
                     showDrops[i].classList.remove('show-drop');
                 }

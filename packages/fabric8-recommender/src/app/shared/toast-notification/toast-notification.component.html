@@ -1,0 +1,14 @@
+<!-- Toast notification HTML -->
+<div class="toast-notification-container">
+  <div *ngFor="let notification of notifications" class="toast-pf alert {{notification.alertClass}} alert-dismissable toast-notification-wrapper">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" (click)="closeToastNotification(notification)">
+      <span class="pficon pficon-close"></span>
+    </button>
+    <span class="pficon {{notification.iconClass}}"></span>
+    <div class="toast-wrapper">
+      <span>{{notification.text}}</span>
+      <a *ngIf="notification.link" href="{{notification.link}}">{{notification.linkText}}</a>
+    </div>
+  </div>
+</div>
+<!-- Toast notification end HTML -->

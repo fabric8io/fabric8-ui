@@ -11,13 +11,14 @@ import { StackAnalysesService } from '../stack-analyses.service';
 export class OverviewComponent implements OnChanges {
   @Input() stackOverviewData;
 
-  public securityInfo: any = {};
-  public summaryInfo: Array<any> = [];
-  public codeMetricsInfo: Array<any> = [];
-  public licenseChartInfo: any = {};
+  public overviewData = null;
 
   private cveDataList: any;
   private messages: any;
+  private securityInfo: any;
+  private summaryInfo: any;
+  private codeMetricsInfo: Array<any>;
+  private licenseChartInfo: any;
 
   constructor(
     private constants: GlobalConstants,
@@ -28,8 +29,7 @@ export class OverviewComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.stackOverviewData);
-    let summaryInfo: any = {
+    this.summaryInfo = {
       icon: 'pficon-replicator',
       numeric: 0,
       description: 'Dependencies',
@@ -37,7 +37,7 @@ export class OverviewComponent implements OnChanges {
       className: 'overview-depen-icon'
     };
 
-    let codeMetrics: Array<any> = [{
+    this.codeMetricsInfo = [{
       key: 'noOfLines',
       icon: 'fa-list-alt',
       numeric: 0,
@@ -45,7 +45,7 @@ export class OverviewComponent implements OnChanges {
       className: 'overview-code-metric-icon'
     }, {
       key: 'avgCycloComplexity',
-      icon: 'pficon-virtual-machine',
+      icon: 'pficon-topology',
       numeric: 0,
       description: 'Avg. cyclomatic complexity',
       className: 'overview-code-metric-icon'
@@ -57,14 +57,24 @@ export class OverviewComponent implements OnChanges {
       className: 'overview-code-metric-icon'
     }];
 
+    this.buildOverviewData();
+  }
+
+  private buildOverviewData(): void {
     this.buildSecurity(this.stackOverviewData.cvss);
-    this.buildSummary(summaryInfo);
-    this.buildCodeMetrics(codeMetrics);
+    this.buildSummary(this.summaryInfo);
+    this.buildCodeMetrics(this.codeMetricsInfo);
     this.buildLicenseChart(this.stackOverviewData.licenseList);
+    this.overviewData = {};
+    this.overviewData.securityInfo = this.securityInfo;
+    this.overviewData.summaryInfo = this.summaryInfo;
+    this.overviewData.codeMetricsInfo = this.codeMetricsInfo;
+    this.overviewData.licenseChartInfo = this.licenseChartInfo;
   }
 
   private buildSecurity(cvss: any): void {
-    if (this.securityInfo && cvss) {
+    if (cvss) {
+      this.securityInfo = {};
       let cvssValue = cvss.value;
       if (cvssValue < 0) {
         this.securityInfo.value = -1;

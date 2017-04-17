@@ -1,46 +1,51 @@
+<fab-toast-notification [notifications]="workItemResponse"></fab-toast-notification>
 <div class="stack-recommendation">
-    <div class="recommendation-header">
-        <h1 class="keep-left">{{messages && messages.title}}</h1>
-    </div>
-    <div class="list-group recommendation-container">
-        <!-- No recommendations scenario -->
-        <div class="list-group-item list-view-pf-stacked" *ngIf="recommendationsList.length === 0">
-            <div class="list-view-pf-main-info">
-                <div class="list-view-pf-body">
-                    <div class="list-view-pf-description">
-                        <div class="list-group-item-heading">
-                            {{messages && messages.no_recommendations_text}}
-                        </div>
-                        <div class="list-group-item-text">
-                            {{messages && messages.no_recommendations_suggestion}}
-                        </div>
-                    </div>
-                </div>
+  <div class="recommendation-header">
+    <h1 class="keep-left">{{messages && messages.title}}</h1>
+  </div>
+  <div class="list-group recommendation-container">
+    <!-- No recommendations scenario -->
+    <div class="list-group-item list-view-pf-stacked" *ngIf="recommendationsList.length === 0">
+      <div class="list-view-pf-main-info">
+        <div class="list-view-pf-body">
+          <div class="list-view-pf-description">
+            <div class="list-group-item-heading">
+              {{messages && messages.no_recommendations_text}}
             </div>
+            <div class="list-group-item-text">
+              {{messages && messages.no_recommendations_suggestion}}
+            </div>
+          </div>
         </div>
-        <!-- No recommendations scenario -->
+      </div>
+    </div>
+    <!-- No recommendations scenario -->
 
-        <div #listGroupItem class="list-group-item list-view-pf-stacked recommendation-group-item recommendation-list" *ngFor="let recommendation of recommendationsList">
-            <div class="list-view-pf-actions">
-                <button (click)="handleDropDownClick(recommendation.pop[0], recommendation, $event)" class="each-work-item btn btn-default" type="button">
+    <div #listGroupItem class="list-group-item list-view-pf-stacked recommendation-group-item recommendation-list" *ngFor="let recommendation of recommendationsList">
+      <div class="list-view-pf-actions">
+        <button *ngIf="recommendation.showCreateButton" (click)="handleDropDownClick(recommendation.pop[0], recommendation, $event)"
+          class="each-work-item btn btn-default" type="button">
                     {{messages && messages.create_work_item}}
                 </button>
-            </div>
-            <div class="list-view-pf-main-info">
-                <div class="list-view-pf-left">
-                    <span class="pficon pficon-info" [ngClass]="{'dismissed': recommendation.isDismissed === true}"></span>
-                </div>
-                <div class="list-view-pf-body">
-                    <div class="list-view-pf-description" [ngClass]="{'dismissed': recommendation.isDismissed === true}">
-                        <div class="list-group-item-text">
-                            {{recommendation.suggestion}} - {{recommendation.action}} {{recommendation.message}}
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <button *ngIf="recommendation.showViewButton" class="each-work-item btn btn-default">
+          <a href="{{recommendation.viewWorkItemLink}}">{{messages && messages.view_work_item}}</a>
+          </button>
+      </div>
+      <div class="list-view-pf-main-info">
+        <div class="list-view-pf-left">
+          <span class="pficon pficon-info" [ngClass]="{'dismissed': recommendation.isDismissed === true}"></span>
         </div>
-        <div [hidden]="!workItemResponse" class="col-xs-12 work-item-response">
-            Successfully created the work item. <a target="_blank" href="{{workItemResponse}}">View WorkItem</a>
+        <div class="list-view-pf-body">
+          <div class="list-view-pf-description" [ngClass]="{'dismissed': recommendation.isDismissed === true}">
+            <div class="list-group-item-text">
+              {{recommendation.suggestion}} - {{recommendation.action}} {{recommendation.message}}
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+    <!--<div [hidden]="!workItemResponse.length" class="col-xs-12 work-item-response">
+      Successfully created the work item. <a target="_blank" href="{{workItemResponse}}">View WorkItem</a>
+    </div>-->
+  </div>
 </div>
