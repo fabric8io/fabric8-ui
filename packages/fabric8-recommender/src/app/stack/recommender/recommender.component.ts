@@ -107,7 +107,11 @@ export class RecommenderComponent implements OnChanges {
                 recommendation['action'] = eachOne['action'];
                 recommendation['message'] = eachOne['message'];
                 recommendation['pop'] = eachOne['pop'];
-                recommendation['codebase'] = eachOne['codebase'];
+                recommendation['workItem'] = {
+                    codebase: eachOne['workItem']['codebase'],
+                    message: eachOne['workItem']['message'],
+                    action: eachOne['workItem']['action']
+                };
 
                 this.recommendationsList.push(recommendation);
             }
@@ -357,11 +361,20 @@ export class RecommenderComponent implements OnChanges {
         if (recommendations && length > 0) {
             for (let i: number = 0; i < length; ++ i) {
                 if (this.canCreateWorkItem(recommendations[i])) {
+                    console.log(recommendations[i]);
+                    let description: string = recommendations[i]['workItem']['message'];
+                    let codebase: any = recommendations[i]['workItem']['codebase'];
+                    description += '<br />';
+                    description += 'Repository: ' + codebase['repository'];
+                    description += '<br /> Branch: ' + codebase['branch'];
+                    description += '<br /> Filename: ' + codebase['filename'];
+                    description += '<br /> Line Number: ' + codebase['linenumber'];
                     let item: any = {
-                        title: recommendations[i]['action'],
-                        description: recommendations[i]['message'],
-                        codebase: recommendations[i]['codebase']
+                        title: recommendations[i]['workItem']['action'],
+                        description: description,
+                        codebase: codebase
                     };
+                    console.log(item, 'here');
                     workItems.push(item);
                 }
             }

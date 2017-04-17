@@ -129,12 +129,16 @@ export class StackDetailsComponent implements OnInit {
         this.recommendations.push({
           suggestion: 'Recommended',
           action: 'Add',
-          message: key[0] + ' ' + missing[i][key[0]],
-          codebase: {
-            'repository': 'Test_Repo',
-            'branch': 'task-1234',
-            'filename': 'package.json',
-            'linenumber': 35
+          message: key[0] + ' : ' + missing[i][key[0]],
+          workItem: {
+            action: 'Add ' + key[0] + ' with version ' + missing[i][key[0]],
+            message: 'Stack analytics have identified a potentially missing library. It\'s recommended that you add "' + key[0] + '" with version ' + missing[i][key[0]] + ' to your application as many other Vert.x OpenShift applications have it included',
+            codebase: {
+              'repository': 'Test_Repo',
+              'branch': 'task-1234',
+              'filename': 'package.json',
+              'linenumber': 35
+            }
           },
           pop: this.getRecommendationActions()
         });
@@ -146,13 +150,17 @@ export class StackDetailsComponent implements OnInit {
         let key: any = Object.keys(version[i]);
         this.recommendations.push({
           suggestion: 'Recommended',
-          action: 'Upgrade',
-          message: key[0] + ' ' + version[i][key[0]],
-          codebase: {
-            'repository': 'Exciting',
-            'branch': 'task-101',
-            'filename': 'package.json',
-            'linenumber': 1
+          action: 'Add',
+          message: key[0] + ' : ' + version[i][key[0]],
+          workItem: {
+            action: 'Upgrade ' + key[0] + ' with version ' + version[i][key[0]],
+            message: 'Stack analytics have identified a potentially version upgrade. It\'s recommended that you upgrade "' + key[0] + '" with version ' + version[i][key[0]] + ' to your application as many other Vert.x OpenShift applications have it included',
+            codebase: {
+              'repository': 'Exciting',
+              'branch': 'task-101',
+              'filename': 'package.json',
+              'linenumber': 1
+            }
           },
           pop: this.getRecommendationActions()
         });
