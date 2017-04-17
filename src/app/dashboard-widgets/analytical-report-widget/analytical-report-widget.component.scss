@@ -1,1 +1,39 @@
 @import '../../../assets/stylesheets/base';
+
+@mixin transform-translate($x, $y) {
+    -webkit-transform: translate($x, $y);
+      -ms-transform: translate($x, $y);
+          transform: translate($x, $y);
+}
+
+.card-pf-body {
+    min-height: 360px;
+    &.analytical-report-body {
+        .fabric8-stack-analysis {
+            .recommendation-list {
+                .list-view-pf-main-info {
+                    margin-bottom: 0;
+                    margin-top: 0;
+                    padding-bottom: 0;
+                    padding-top: 0;
+                    &.no-recommendations {
+                        background: $color-pf-black-100;
+                        padding: 10px;
+                        border: 1px solid $color-pf-black-150;
+                    }
+                }
+            }
+        }
+        .pipelines-absent {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+            top: 20%;
+            position: relative;
+            @include transform-translate(0%, -20%);
+            h2 {
+                margin: 0 0 40px 0;
+            }
+        }
+    }
+}

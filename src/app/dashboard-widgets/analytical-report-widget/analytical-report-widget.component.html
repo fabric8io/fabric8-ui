@@ -2,32 +2,76 @@
   <div class="card-pf-heading">
     <h2 class="card-pf-title">Stack Report</h2>
   </div>
-  <div class="card-pf-body card-f8-body">
-    <form>
-      <div class="form-group">
-        <!--<div class="combobox-container">
-          <input type="hidden" name="" value="">
-          <div class="input-group col-sm-7">
-            <input type="text" autocomplete="false" placeholder="Select your build/pipeline" class="combobox form-control">
-            <span class="input-group-addon dropdown-toggle" data-dropdown="dropdown">
-              <span class="caret"></span>
-              <span class="glyphicon glyphicon-remove"></span>
-            </span>
+  <div class="card-pf-body card-f8-body analytical-report-body">
+    <div *ngIf="buildConfigs" class="pipelines-present">
+      <form>
+        <div class="form-group row">
+          <!--<div class="combobox-container">
+            <input type="hidden" name="" value="">
+            <div class="input-group col-sm-7">
+              <input type="text" autocomplete="false" placeholder="Select your build/pipeline" class="combobox form-control">
+              <span class="input-group-addon dropdown-toggle" data-dropdown="dropdown">
+                <span class="caret"></span>
+                <span class="glyphicon glyphicon-remove"></span>
+              </span>
+            </div>
+          </div>-->
+          <div class="col-xs-12 col-md-4">
+            <select name="pipeSelect" [(ngModel)]="currentPipeline" (change)="selectedPipeline()" class="combobox form-control">
+              <option value="" selected disabled>Select pipeline</option>
+              <option *ngFor="let build of buildConfigs | async" [ngValue]="build">{{ build.name }}</option>
+            </select>
           </div>
-        </div>-->
-        <select name="pipeSelect" [(ngModel)]="currentPipeline" (change)="selectedPipeline()" class="combobox form-control">
-          <option value="" selected="selected">select your build/pipeline</option>
-          <option *ngFor="let build of buildConfigs | async" [ngValue]="build">{{ build.name }}</option>
-        </select>
-      </div>
-    </form>
-    <div class="pipeline-builds">
-      <div *ngFor="let build of currentPipelineBuilds">
-        <a>Build #{{build.buildNumber}}</a>
-        <div *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']">
-          You can view the stack analysis reports here: <stack-details *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']" [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
+          <div class="col-xs-12 col-md-4">
+            <select name="buildSelect" [(ngModel)]="currentBuild" (change)="selectedBuild()" class="combobox form-control">
+              <option value="1" selected disabled>Select build</option>
+              <option *ngFor="let build of currentPipelineBuilds" [ngValue]="build">Build #{{ build.buildNumber }}</option>
+            </select>
+          </div>
         </div>
+      </form>
+      <div class="pipeline-builds row">
+        <div *ngIf="currentBuild" class="col-xs-12">
+          <div *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">
+            <div class="fabric8-stack-analysis" *ngIf="stackAnalysisInformation['recommendations']">
+              <div class="recommendation-header">
+                <h1 class="keep-left">Recommendations <small>(only <b>top-{{stackAnalysisInformation.recommendationsLimit}}</b>)</small></h1>
+              </div>
+              <div class="list-group-item list-view-pf-stacked recommendation-group-item recommendation-list" *ngFor="let recommendation of stackAnalysisInformation['recommendations']">
+                <div class="list-view-pf-main-info">
+                  <div class="list-view-pf-left">
+                    <span class="pficon pficon-info"></span>
+                  </div>
+                  <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                      <div class="list-group-item-text">
+                        {{recommendation.suggestion}}: {{recommendation.action}} {{recommendation.message}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="recommendation-list" *ngIf="!stackAnalysisInformation['recommendations'] || stackAnalysisInformation['recommendations'].length === 0">
+                <div class="no-recommendations list-view-pf-main-info">
+                  <div class="list-view-pf-left">
+                    <span class="pficon pficon-info"></span>
+                  </div>
+                  <div class="list-view-pf-body">
+                    <b>No recommendations.</b> &nbsp; Your stack looks great.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--You can view the stack analysis reports here: <stack-details *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']" [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
+        --></div>
+          <div *ngIf="!currentBuild">No records found</div>
+        </div>
+        <div class="col-xs-12" *ngIf="!currentBuild">No records found</div>
       </div>
+    </div>
+    <div *ngIf="!buildConfigs" class="pipelines-absent">
+      <h2>No results found</h2>
+      <p>When you run a build, a stack analysis is run that will provide recommendations around your technology stack</p>
     </div>
   </div>
   <div class="card-pf-footer card-f8-footer">
