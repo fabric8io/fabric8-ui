@@ -4,8 +4,28 @@
   </h2>
   <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
   <div class="form-group">
-    <textarea almEditable row="2" placeholder="Description goes here"
-    [editable]="isEditable() | async"
-    (onUpdate)="saveDescription($event)" class="space-description form-control">{{space.attributes.description}}</textarea>
+    <textarea row="2"
+              placeholder="Description goes here"
+              class="space-description form-control"
+              *ngIf="isEditing && (isEditable() | async)"
+              (keyup.enter)="onUpdateDescription(description.value)"
+              (keydown.enter)="preventDef($event)"
+              #description>{{space.attributes.description}}</textarea>
+    <div class="pull-right" *ngIf="isEditing">
+      <button id="_btn_cancel"
+              class="pull-right btn btn-default edit-space-description-btn"
+              (click)="stopEditingDescription()">
+        <span class="fa fa-close"></span>
+      </button>
+      <!--Save icon-->
+      <button id="workItemTitle_btn_save"
+              class="pull-right btn btn-default edit-space-description-btn "
+              (click)="saveDescription()" >
+        <span class="fa fa-check"></span>
+      </button>
+    </div>
+    <span *ngIf="!isEditing || !(isEditable() | async)" (click)="startEditingDescription()">
+      {{space.attributes.description}}
+    </span>
   </div>
 </div>

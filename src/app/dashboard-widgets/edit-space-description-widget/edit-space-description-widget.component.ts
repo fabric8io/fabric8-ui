@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { Observable, Subject } from 'rxjs';
-import { cloneDeep } from 'lodash';
 
 import { Broadcaster } from 'ngx-base';
 import { Contexts, SpaceService, Space, Spaces } from 'ngx-fabric8-wit';
-import { UserService } from 'ngx-login-client';
+import { UserService, User } from 'ngx-login-client';
 
 import { SpaceNamespaceService } from './../../shared/runtime-console/space-namespace.service';
 import { DummyService } from './../shared/dummy.service';
@@ -22,6 +20,11 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
 
   private _descriptionUpdater: Subject<string> = new Subject();
 
+  private loggedInUser: User;
+  @ViewChild('description') description: any;
+
+  private isEditing: boolean = false;
+
   constructor(
     private spaces: Spaces,
     private contexts: Contexts,
@@ -34,6 +37,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
       this.space = val;
       console.log('newspace', val);
     });
+    userService.loggedInUser.subscribe(val => this.loggedInUser = val);
   }
 
   ngOnInit() {
@@ -54,23 +58,39 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
       .do(val => console.log(val))
       .switchMap(patch => this.spaceService
         .update(patch)
-        .do(val => console.log('updatedspace', val))
+        .do(val => {
+          console.log('updatedspace', val);
+          this.isEditing = false;
+          this.space.attributes.description = val.attributes.description;
+        })
         .do(updated => this.broadcaster.broadcast('spaceUpdated', updated))
         .switchMap(updated => this.spaceNamespaceService.updateConfigMap(Observable.of(updated)))
       )
       .subscribe();
   }
 
-  saveDescription($event) {
-    this._descriptionUpdater.next($event);
+  onUpdateDescription(description) {
+    this._descriptionUpdater.next(description);
+  }
+
+  preventDef(event: any) {
+    event.preventDefault();
+  }
+
+  saveDescription() {
+    this._descriptionUpdater.next(this.description.nativeElement.value);
+  }
+
+  stopEditingDescription() {
+    this.isEditing = false;
+  }
+
+  startEditingDescription() {
+    this.isEditing = true;
   }
 
   isEditable(): Observable<boolean> {
-    return Observable.combineLatest(
-      this.contexts.current.map(val => val.user.id),
-      this.userService.loggedInUser.map(val => val.id),
-      (a, b) => (a === b)
-    );
+    return this.contexts.current.map(val => val.user.id === this.loggedInUser.id);
   }
 
 }

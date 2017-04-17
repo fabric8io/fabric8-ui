@@ -25,3 +25,11 @@
         }
     }
 }
+
+.edit-space-description-btn {
+  cursor: pointer;
+  width: em(42);
+  text-align: $textCenter;
+  padding: 0 !important;
+  margin-left: em(5);
+}
