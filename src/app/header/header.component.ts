@@ -102,9 +102,7 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.loginService.logout();
-    this.broadcaster.on('logout').subscribe(() => {
-      window.location.href = '/';
-    });
+
   }
 
   onImgLoad() {

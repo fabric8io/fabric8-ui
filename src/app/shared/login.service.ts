@@ -29,7 +29,7 @@ export class LoginService {
   constructor(
     private router: Router,
     private localStorage: LocalStorageService,
-    @Inject(WIT_API_URL) apiUrl: string,
+    @Inject(WIT_API_URL) private apiUrl: string,
     private broadcaster: Broadcaster,
     private authService: AuthenticationService,
     private contextService: ContextService,
@@ -62,6 +62,7 @@ export class LoginService {
 
   public logout() {
     this.authService.logout();
+    window.location.href = this.apiUrl + '/logout?redirect=' + window.location.origin;
   }
 
   public login() {
