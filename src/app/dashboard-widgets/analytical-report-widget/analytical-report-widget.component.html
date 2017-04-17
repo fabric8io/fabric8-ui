@@ -2,7 +2,7 @@
   <div class="card-pf-heading">
     <h2 class="card-pf-title">Stack Report</h2>
   </div>
-  <div class="card-pf-body">
+  <div class="card-pf-body card-f8-body">
     <form>
       <div class="form-group">
         <!--<div class="combobox-container">
@@ -16,7 +16,7 @@
           </div>
         </div>-->
         <select name="pipeSelect" [(ngModel)]="currentPipeline" (change)="selectedPipeline()" class="combobox form-control">
-          <option value="" selected="selected">Select your build/pipeline</option>
+          <option value="" selected="selected">select your build/pipeline</option>
           <option *ngFor="let build of buildConfigs | async" [ngValue]="build">{{ build.name }}</option>
         </select>
       </div>
@@ -29,5 +29,10 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="card-pf-footer card-f8-footer">
+    <!-- <button class="btn btn-default pull-right">
+      <i class="fa fa-external-link"></i> See All
+    </button> -->
   </div>
 </div>

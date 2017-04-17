@@ -11,16 +11,16 @@
         <span class="badge">{{codebaseCount | async}}</span>
       </h2>
   </div>
-  <div class="card-pf-body">
-    <div class="blank-slate-pf" *ngIf="(codebaseCount | async) === 0">
-      <div class="blank-slate-pf-icon">
-        <span class="pficon pficon-add-circle-o"></span>
+  <div class="card-pf-body card-f8-body">
+    <div class="blank-slate-f8-card" *ngIf="(codebaseCount | async) === 0">
+      <div class="blank-slate-f8-icon">
+        <i class="pficon pficon-add-circle-o"></i>
       </div>
-      <h1>Add Code</h1>
-      <div class="blank-slate-pf-main-action">
+      <h3>This Space has no Codebases</h3>
+      <div class="blank-slate-f8-main-action">
         <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Add to space</button>
       </div>
-      <div class="blank-slate-pf-main-action">
+      <div class="blank-slate-f8-main-action">
         <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import from git</button>
       </div>
     </div>
@@ -30,5 +30,10 @@
         <a href="{{codebase.url}}" target="_blank">{{codebase.name}}</a>
       </li>
     </ul>
+  </div>
+  <div class="card-pf-footer card-f8-footer">
+    <button class="btn btn-link pull-right">
+      See All
+    </button>
   </div>
 </div>

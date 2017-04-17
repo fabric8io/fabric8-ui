@@ -5,17 +5,17 @@
       <span class="badge">{{buildConfigsCount | async}}</span>
     </h2>
   </div>
-  <div class="card-pf-body">
-    <div class="blank-slate-pf" *ngIf="(buildConfigsCount | async) === 0">
-      <div class="blank-slate-pf-icon">
-        <span class="pficon pficon-add-circle-o"></span>
+  <div class="card-pf-body card-f8-body">
+    <div class="blank-slate-f8-card" *ngIf="(buildConfigsCount | async) === 0">
+      <div class="blank-slate-f8-icon">
+        <span class="pficon pficon-info"></span>
       </div>
-      <h1>No Pipelines have run</h1>
+      <h3>No Pipelines have run</h3>
       <p>
         Pipelines run when you commit and build your code base.
       </p>
-      <div class="blank-slate-pf-main-action">
-        <button class="btn btn-primary btn-lg">Add to space</button>
+      <div class="blank-slate-f8-main-action">
+        <button class="btn btn-primary btn-lg">Add to Space</button>
       </div>
     </div>
     <ul class='list-group' *ngIf="(buildConfigsCount | async) > 0">
@@ -26,5 +26,10 @@
         and took {{buildconfig.lastBuild?.duration | amDuration: 'ms'}}.
       </li>
     </ul>
+  </div>
+  <div class="card-pf-footer card-f8-footer">
+    <button class="btn btn-link pull-right">
+      See All
+    </button>
   </div>
 </div>

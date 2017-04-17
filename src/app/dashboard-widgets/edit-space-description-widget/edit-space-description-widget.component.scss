@@ -7,21 +7,6 @@
     }
     .space-description {
         margin:rem(10) 0;
-    }
-    p[contenteditable="true"] {
-        &:hover {
-            &:after {
-                content: '\f040'; //pencil icon
-                font-family: FontAwesome;
-                position: absolute;
-                right: 13px;
-                top: 105px;
-            }
-        }
-        &:focus {
-            border: 1px solid $color-pf-blue;
-            box-shadow: 0 0 2px $color-pf-blue-300;
-            outline: none;
-        }
+        resize: none;
     }
 }

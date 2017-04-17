@@ -11,17 +11,16 @@
       <span class="badge">{{myWorkItemsCount | async}}</span>
     </h2>
   </div>
-  <div class="card-pf-body">
-    <div class="blank-slate-pf" *ngIf="(myWorkItemsCount | async) === 0">
-      <div class="blank-slate-pf-icon">
-        <span class="pficon pficon pficon-add-circle-o"></span>
+  <div class="card-pf-body card-f8-body">
+    <div class="blank-slate-f8-card" *ngIf="(myWorkItemsCount | async) === 0">
+      <div class="blank-slate-f8-icon">
+        <i class="pficon pficon-add-circle-o"></i>
       </div>
-      <h1>You can view your recent work items</h1>
+      <h3>You can view your recent work items</h3>
       <p>
-        Planner will help you to create different types of work-items,
-        allows you to assign team members and iterations.
+        Planner will help you to create different types of work-items, allows you to assign team members and iterations.
       </p>
-      <div class="blank-slate-pf-main-action">
+      <div class="blank-slate-f8-main-action">
         <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
       </div>
     </div>
@@ -40,5 +39,10 @@
         </span>
       </li>
     </ul>
+  </div>
+  <div class="card-pf-footer card-f8-footer">
+    <button class="btn btn-link pull-right">
+      See All
+    </button>
   </div>
 </div>
