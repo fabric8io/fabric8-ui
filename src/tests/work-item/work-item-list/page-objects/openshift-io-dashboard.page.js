@@ -139,6 +139,49 @@ class OpenShiftIoDashboardPage {
     return new OpenShiftIoSpaceHomePage();
   }
 
+  /* Header nav bar - left side of display  */
+   get leftNavBar () {
+     browser.wait(until.elementToBeClickable(element(by.xpath(".//*[contains(@class,'navbar-left')]"))), constants.LONG_WAIT, 'Failed to find NavBarLeft');
+     return element(by.xpath(".//*[contains(@class,'navbar-left')]"));
+  }
+
+  /* Header dropdown - leftmost in navigation bar - displys current space name */
+  get headerDropDownToggle () {
+    return element(by.id("header_dropdownToggle"));
+  }
+  clickHeaderDropDownToggle () {
+    browser.wait(until.elementToBeClickable(this.headerDropDownToggle), constants.LONG_WAIT, 'Failed to find headerDropDownToggle');
+    return this.headerDropDownToggle.click();
+  }
+
+  /* Create a new space from within the header dropdown toggle */
+  get createSpaceFromNavBar () {
+    return this.leftNavBar.element(by.xpath(".//*[contains(@class,'pficon-add-circle-o')]"));
+  }
+  clickCreateSpaceFromNavBar () {
+    browser.wait(until.elementToBeClickable(this.createSpaceFromNavBar), constants.LONG_WAIT, 'Failed to find createSpaceFromHeader');
+    return this.createSpaceFromNavBar.click();
+  }
+
+  /* View all spaces from within the header dropdown toggle */
+  get viewAllSpacesFromNavBar () {
+    return this.leftNavBar.element(by.xpath(".//*[contains(@class,'nav-item-icon')]"));
+  }
+  clickViewAllSpacesFromNavBar () {
+    browser.wait(until.elementToBeClickable(this.viewAllSpacesFromNavBar), constants.LONG_WAIT, 'Failed to find viewAllSpacesFromNavBar');
+    return this.viewAllSpacesFromNavBar.click();
+  }
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

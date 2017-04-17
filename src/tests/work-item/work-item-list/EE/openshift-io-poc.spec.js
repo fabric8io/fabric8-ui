@@ -79,21 +79,32 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 //    OpenShiftIoDashboardPage = OpenShiftIoRegistrationPage.clickSubmitButton();
 
     /* Step - on home page - create new space - embed time in space name to ensure unique space name */
-    OpenShiftIoDashboardPage.clickNewSpaceButton();
+    
+    /* Commented out due to - https://github.com/fabric8io/fabric8-planner/issues/1638 */
+//    OpenShiftIoDashboardPage.clickNewSpaceButton();
+
+     OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
+     OpenShiftIoDashboardPage.clickCreateSpaceFromNavBar();  
+
     var spaceTime = returnTime();
     OpenShiftIoDashboardPage.typeNewSpaceName((spaceTime));
     OpenShiftIoDashboardPage.typeDevProcess("Scenario Driven Planning");
     OpenShiftIoDashboardPage.clickCreateSpaceButton();
 
     /* Step - in space options dialog, wizard is not working - so simply cancel */
-    //OpenShiftIoDashboardPage.clickWizardButton();
-    //OpenShiftIoDashboardPage.clickCloseButton();
+    // OpenShiftIoDashboardPage.clickWizardButton();
+    // OpenShiftIoDashboardPage.clickCloseButton();
     // The following line is temporary is is required by this issue:
     // https://github.com/fabric8io/fabric8-ui/issues/589
     OpenShiftIoDashboardPage.clickCancelXButton();
 
     /* Step - back in home page open the newly created space */
-    OpenShiftIoDashboardPage.clickBrowseSpaces();
+
+    /* Browse button was removed from the UI - April 17 */
+    //OpenShiftIoDashboardPage.clickBrowseSpaces();
+    OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
+    OpenShiftIoDashboardPage.clickViewAllSpacesFromNavBar();  
+
     OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickSelectSpace(spaceTime);
 
     /* Step - in the space home page, verify URL and end the test */
