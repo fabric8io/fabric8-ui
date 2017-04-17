@@ -1,6 +1,7 @@
 <div class="container-fluid home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
-  <section class="row row-cards-pf">
-    <div class="col-md-12">
+  <div class="cards-pf">
+    <div class="row row-cards-pf">
+      <div class="col-md-12">
       <section class="card-pf">
         <aside class="col-md-4 text-center">
           <span class="pficon pficon-home pf-icon-home"></span>
@@ -58,182 +59,146 @@
         </aside>
       </section>
     </div>
-  </section>
-  <section class="row row-cards-pf">
-    <div class="col-md-4">
-      <div class="card-pf">
-        <div class="card-pf-heading">
-          <h2 class="card-pf-title">Activity</h2>
-        </div>
-        <div class="card-pf-body">
-          <div class="blank-slate-pf">
-            <h1>No Recent Activity</h1>
-            <p>Recent activity will show here, once you <a>create a space,
-              update content or do something else</a></p>
-          </div>
-          <div class="home-activity-list-result">
-            <ul class="list-group list-view-pf list-view-pf-view">
-              <li class="list-group-item">
-                <div class="list-view-pf-actions">
-                  <span>Just now</span>
-                </div>
-                <div class="list-view-pf-main-info">
-                  <div class="list-view-pf-body">
-                    <div class="list-view-pf-description">
-                      <div class="list-group-item-text">
-                        @Username added <a>BalloonPopGame</a> space
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
-    <div class="col-md-4">
-      <div class="card-pf">
-        <div class="card-pf-heading">
-          <div class="card-pf-heading-details">
-            <a class="btn btn-link">
-              <span>Create a space</span>
-              <i class="pficon pficon-add-circle-o"></i>
-            </a>
+  </div>
+  <div class="cards-pf">
+    <div class="row row-cards-pf">
+      <div class="col-md-4">
+        <div class="card-pf">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Activity</h2>
           </div>
-          <h2 class="card-pf-title">Spaces</h2>
-        </div>
-        <div class="card-pf-body">
-          <div class="blank-slate-pf">
-            <div class="blank-slate-pf-icon">
-              <span class="pficon pficon pficon-add-circle-o"></span>
+          <div class="card-pf-body card-f8-body">
+            <div class="blank-slate-f8-card">
+              <div class="blank-slate-f8-icon">
+                <span class="pficon pficon-info"></span>
+              </div>
+              <h3>No Recent Activity</h3>
+              <p>Recent activity will show here, once you <a>create a space,
+                update content or do something else</a></p>
             </div>
-            <h1>Create a Space</h1>
-            <p>A Space is something A Space is something A Space is something
-              A Space is something A Space is something A Space is something
-              A Space is something. Currently, there are no spaces for this organization</p>
-            <p>Learn how to get started <a>in the documentation</a></p>
-            <div class="blank-slate-pf-main-action">
-              <button class="btn btn-primary btn-lg"> Create a space </button>
+            <!-- A list of the 5 most recent activities will be displayed in place of the Blank Slate. Additional activities are viewed by using the 'See All' button in the Card footer -->
+            <!-- <div class="home-activity-list-result">
+              <ul class="list-group list-view-pf list-view-pf-view">
+                <li class="list-group-item">
+                  <div class="list-view-pf-actions">
+                    <span>Just now</span>
+                  </div>
+                  <div class="list-view-pf-main-info">
+                    <div class="list-view-pf-body">
+                      <div class="list-view-pf-description">
+                        <div class="list-group-item-text">
+                          @Username added <a>BalloonPopGame</a> space
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-pf">
+          <div class="card-pf-heading">
+            <div class="card-pf-heading-details">
+              <a class="btn btn-link">
+                <span>Create a space</span>
+                <i class="pficon pficon-add-circle-o"></i>
+              </a>
+            </div>
+            <h2 class="card-pf-title">Spaces</h2>
+          </div>
+          <div class="card-pf-body card-f8-body">
+            <div class="blank-slate-f8-card">
+              <div class="blank-slate-f8-icon">
+                <span class="pficon pficon-add-circle-o"></span>
+              </div>
+              <h3>Create a Space</h3>
+              <p>Learn how to get started <a>in the documentation</a></p>
+              <div class="blank-slate-pf-main-action">
+                <button class="btn btn-primary btn-lg"> Create a space </button>
+              </div>
+            </div>
+            <!-- A list of the 5 most recent Spaces will be displayed in place of the Blank Slate. Additional Spaces are viewed by using the 'See All' button in the Card footer -->
+            <!-- <div class="home-space-list-result">
+              <ul class="list-group list-view-pf list-view-pf-view">
+                <li class="list-group-item">
+                  <div class="list-view-pf-actions">
+                    <button class="btn btn-default">Action</button>
+                    <div class="dropdown pull-right dropdown-kebab-pf">
+                      <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebabRight9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="fa fa-ellipsis-v"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight9">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="list-view-pf-main-info">
+                    <div class="list-view-pf-body">
+                      <div class="list-view-pf-description">
+                        <div class="list-group-item-text">
+                          Space name goes here
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item">
+                  <div class="list-view-pf-actions">
+                    <button class="btn btn-default">Action</button>
+                    <div class="dropdown pull-right dropdown-kebab-pf">
+                      <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebabRight9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="fa fa-ellipsis-v"></span>
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight9">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="list-view-pf-main-info">
+                    <div class="list-view-pf-body">
+                      <div class="list-view-pf-description">
+                        <div class="list-group-item-text">
+                          Space name goes here
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-pf">
+          <div class="card-pf-heading">
+            <h2 class="card-pf-title">Resource usage</h2>
+          </div>
+          <div class="card-pf-body card-f8-body">
+            <div class="blank-slate-f8-card">
+              <div class="blank-slate-f8-icon">
+                <span class="pficon pficon-info"></span>
+              </div>
+              <h3>No Resource are currently in use</h3>
+              <p>Add memory, CPU, or storage resources by <a href="#">creating a space</a> or <a href="#">updating content.</a></p>
             </div>
           </div>
-          <div class="home-space-list-result">
-            <ul class="list-group list-view-pf list-view-pf-view">
-              <li class="list-group-item">
-                <div class="list-view-pf-actions">
-                  <button class="btn btn-default">Action</button>
-                  <div class="dropdown pull-right dropdown-kebab-pf">
-                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebabRight9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                      <span class="fa fa-ellipsis-v"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight9">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li role="separator" class="divider"></li>
-                      <li><a href="#">Separated link</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="list-view-pf-main-info">
-                  <div class="list-view-pf-body">
-                    <div class="list-view-pf-description">
-                      <div class="list-group-item-text">
-                        Space name goes here
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li class="list-group-item">
-                <div class="list-view-pf-actions">
-                  <button class="btn btn-default">Action</button>
-                  <div class="dropdown pull-right dropdown-kebab-pf">
-                    <button class="btn btn-link dropdown-toggle" type="button" id="dropdownKebabRight9" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                      <span class="fa fa-ellipsis-v"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownKebabRight9">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li role="separator" class="divider"></li>
-                      <li><a href="#">Separated link</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="list-view-pf-main-info">
-                  <div class="list-view-pf-body">
-                    <div class="list-view-pf-description">
-                      <div class="list-group-item-text">
-                        Space name goes here
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card-pf">
-        <div class="card-pf-heading">
-          <h2 class="card-pf-title">Resource usage</h2>
-        </div>
-        <div class="card-pf-body">
-          <div class="blank-slate-pf">
-            <h1>No Resource are currently being used</h1>
-            <p>Add a resource such as memory, CPU, or storage by <a>create a space,
-              update content or do something else</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!--<div class="row row-cards-pf">
-    <div class="col-sm-4">
-      <div class="card-pf card-pf-accented">
-        <div class="card-pf-title">
-          <h4>Recent Spaces</h4>
-          <a (click)="createSpace.open()" href="javascript:void(0)">New</a> | <a [routerLink]="['/', loggedInUser.attributes.username, '_spaces']">Browse</a>
-        </div>
-        <div class="card-pf-body">
-          <div class="card-pf-items">
-            <ul class="list-unstyled">
-              <li *ngFor="let s of spaces.recent | async">
-                <a [routerLink]="['/', s.relationalData.creator.attributes.username, s.attributes.name]">
-                  <small>
-                    <span *ngIf="s.relationalData.creator.id !== loggedInUser.id">{{s.relationalData.creator.attributes.username}}/</span><span>{{s.attributes.name | spaceName}}</span>
-                  </small>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="card-pf card-pf-accented ">
-        <div class="card-pf-title">
-          <h4>
-            <a [routerLink]="['/pmuir/_resources']">Resource Usage</a>
-          </h4>
-          <h5>From {{dummy.resources.startDate | date:'d MMM'}} to {{dummy.resources.endDate | date:'d MMM'}}</h5>
-        </div>
-        <div class="card-pf-body">
-          <div class="card-pf-items">
-            <ul class="list-unstyled">
-              <li *ngFor="let r of dummy.resources.list">
-                <small>{{r.type.name}}</small>
-                <small>{{r.value}} of {{r.max}} <br /> {{r.type.unit}}</small>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
+  </div>
 </div>
 <!-- Create Space modal -->
 <modal #createSpace modalClass="modal-lg chromeless-modal">
