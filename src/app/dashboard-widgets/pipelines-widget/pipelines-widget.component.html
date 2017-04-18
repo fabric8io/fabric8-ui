@@ -1,8 +1,8 @@
-<div class="pipelines-widget card-pf">
+<div class="pipelines-widget card-pf card-f8">
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
-      <span>Pipelines</span>
-      <span class="badge">{{buildConfigsCount | async}}</span>
+      <a href="#">Pipelines</a>
+      <span class="badge card-f8-badge">{{buildConfigsCount | async}}</span>
     </h2>
   </div>
   <div class="card-pf-body card-f8-body">
@@ -26,10 +26,5 @@
         and took {{buildconfig.lastBuild?.duration | amDuration: 'ms'}}.
       </li>
     </ul>
-  </div>
-  <div class="card-pf-footer card-f8-footer">
-    <button class="btn btn-link pull-right">
-      See All
-    </button>
   </div>
 </div>

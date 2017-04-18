@@ -1,14 +1,14 @@
-<div class="add-codebase-widget card-pf">
+<div class="add-codebase-widget card-pf card-f8">
   <div class="card-pf-heading">
-      <div class="card-pf-heading-details">
+      <div class="card-pf-heading-details card-f8-heading-details">
         <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
           <span>Create Codebase</span>
           <i class="pficon pficon-add-circle-o"></i>
         </a>
       </div>
       <h2 class="card-pf-title">
-        <span>Codebases</span>
-        <span class="badge">{{codebaseCount | async}}</span>
+        <a href="#">Codebases</a>
+        <span class="badge card-f8-badge">{{codebaseCount | async}}</span>
       </h2>
   </div>
   <div class="card-pf-body card-f8-body">
@@ -30,10 +30,5 @@
         <a href="{{codebase.url}}" target="_blank">{{codebase.name}}</a>
       </li>
     </ul>
-  </div>
-  <div class="card-pf-footer card-f8-footer">
-    <button class="btn btn-link pull-right">
-      See All
-    </button>
   </div>
 </div>

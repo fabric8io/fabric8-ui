@@ -1,14 +1,14 @@
-<div class="create-work-item-widget card-pf">
+<div class="create-work-item-widget card-pf card-f8">
   <div class="card-pf-heading">
-    <div class="card-pf-heading-details">
+    <div class="card-pf-heading-details card-f8-heading-details">
       <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
         <span>Create work item</span>
         <i class="pficon pficon-add-circle-o"></i>
       </a>
     </div>
     <h2 class="card-pf-title">
-      <span>My Work Items</span>
-      <span class="badge">{{myWorkItemsCount | async}}</span>
+      <a href="#">My Work Items</a>
+      <span class="badge card-f8-badge">{{myWorkItemsCount | async}}</span>
     </h2>
   </div>
   <div class="card-pf-body card-f8-body">
@@ -39,10 +39,5 @@
         </span>
       </li>
     </ul>
-  </div>
-  <div class="card-pf-footer card-f8-footer">
-    <button class="btn btn-link pull-right">
-      See All
-    </button>
   </div>
 </div>

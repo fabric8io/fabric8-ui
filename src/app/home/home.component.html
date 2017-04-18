@@ -64,7 +64,7 @@
   <div class="cards-pf">
     <div class="row row-cards-pf">
       <div class="col-md-4">
-        <div class="card-pf">
+        <div class="card-pf card-f8">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Activity</h2>
           </div>
@@ -100,15 +100,17 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card-pf">
+        <div class="card-pf card-f8">
           <div class="card-pf-heading">
-            <div class="card-pf-heading-details" *ngIf="_spaces.length > 0">
+            <div class="card-pf-heading-details card-f8-heading-details" *ngIf="_spaces.length > 0">
               <a class="btn btn-link" (click)="createSpace.open()">
                 <span>Create a space</span>
                 <i class="pficon pficon-add-circle-o"></i>
               </a>
             </div>
-            <h2 class="card-pf-title">Spaces</h2>
+            <h2 class="card-pf-title">
+              <a href="#">Spaces</a>
+            </h2>
           </div>
           <div class="card-pf-body card-f8-body">
             <div class="blank-slate-f8-card" *ngIf="_spaces.length === 0">
@@ -158,7 +160,7 @@
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card-pf">
+        <div class="card-pf card-f8">
           <div class="card-pf-heading">
             <h2 class="card-pf-title">Resource usage</h2>
           </div>
