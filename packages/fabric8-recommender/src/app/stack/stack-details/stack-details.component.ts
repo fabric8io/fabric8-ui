@@ -236,10 +236,10 @@ export class StackDetailsComponent implements OnInit {
     this.stackAnalysesService
       .getStackAnalyses(url)
       .subscribe(data => {
-        // Enter the actual scene only if the data is valid and the data 
+        // Enter the actual scene only if the data is valid and the data
         // has something inside.
         this.clearLoader();
-        if (data && Object.keys(data).length !== 0) {
+        if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
           stackAnalysesData = data;
           let result: any;
           let components: Array<any> = [];
@@ -250,7 +250,6 @@ export class StackDetailsComponent implements OnInit {
           let resultInformationObservable: Observable<any> = getResultInformation(data);
           if (resultInformationObservable) {
             resultInformationObservable.subscribe((response) => {
-              console.log(response);
               if (response) {
                 if (response.hasOwnProperty('components')) {
                   // Call the stack-components with the components information so that

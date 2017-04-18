@@ -4,8 +4,8 @@
  */
 export const STACK_DETAILS_CONSTANT: any = {
     'title': 'Stack Reports',
-    'report_failure': 'Repost has failed',
+    'report_failure': 'Report has failed',
     'report_loading': 'Report is loading...',
-    'cancel': 'Cancel',
-    'return_to_pipeline': 'Return to pipeline'
+    'cancel': 'Stop Loading Report',
+    'return_to_pipeline': 'Continue Loading Report and Return to pipeline'
 };
