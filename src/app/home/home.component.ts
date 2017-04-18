@@ -1,10 +1,10 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
-import { Spaces, Context, Contexts } from 'ngx-fabric8-wit';
+import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
 
-import { DummyService } from './../shared/dummy.service';
+import { Logger } from 'ngx-base';
 
 @Component({
   host: {
@@ -20,24 +20,39 @@ export class HomeComponent implements OnInit {
 
   private _context: Context;
   private _defaultContext: Context;
+  private _spaces: Space[] = [];
 
   constructor(
-    public dummy: DummyService,
-    userService: UserService,
-    public spaces: Spaces,
+    private userService: UserService,
+    private spaceService: SpaceService,
     private router: Router,
-    private contexts: Contexts
+    private contexts: Contexts,
+    private logger: Logger
   ) {
-    userService.loggedInUser.subscribe(val => this.loggedInUser = val);
-    contexts.current.subscribe(val => {
+  }
+
+  ngOnInit() {
+    this.userService.loggedInUser.subscribe(val => this.loggedInUser = val);
+    this.contexts.current.subscribe(val => {
       this._context = val;
     });
-    contexts.default.subscribe(val => {
+    this.contexts.default.subscribe(val => {
       this._defaultContext = val;
+      this.initSpaces();
     });
   }
 
-  ngOnInit() { }
+  initSpaces() {
+    if (this.context && this.context.user) {
+      this.spaceService
+        .getSpacesByUser(this.context.user.attributes.username, 5)
+        .subscribe(spaces => {
+          this._spaces = spaces;
+        });
+    } else {
+      this.logger.error("Failed to retrieve list of spaces owned by user");
+    }
+  }
 
   get context(): Context {
     if (this.router.url === '/_home') {
