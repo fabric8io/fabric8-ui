@@ -80,7 +80,7 @@ synchronise your changes across all the various UI projects.
 ## Integrations
 
 fabric8-ui uses rxjs to provide loose coupling between modules (both those in the code base and those integrated via NPM). 
-To do this, fabric8-ui makes extensive use of the [Broadcaster](https://github.com/fabric8-ui/ngx-login-client/blob/master/src/app/shared/broadcaster.service.ts).
+To do this, fabric8-ui makes extensive use of the [Broadcaster](https://github.com/fabric8-ui/ngx-base/blob/master/src/app/broadcaster.service.ts).
 
 ### Context
 
@@ -94,16 +94,16 @@ new [Space](https://github.com/fabric8-ui/ngx-fabric8-wit/blob/master/src/app/mo
 ####  Notifications
 
 To send a notification to the user, the module should import [ngx-fabric8-wit](https://github.com/fabric8-ui/ngx-fabric8-wit)
-and inject the `[Notifications](https://github.com/fabric8-ui/ngx-fabric8-wit/blob/master/src/app/notifications/notifications.ts)`
-service, and call the `message()` method, passing in a [Notification](https://github.com/fabric8-ui/ngx-fabric8-wit/blob/master/src/app/notifications/notification.ts). You can subscribe to
-the result of `message()` to observe any [NotificationAction](https://github.com/fabric8-ui/ngx-fabric8-wit/blob/master/src/app/notifications/notification-action.ts)s that result
+and inject the [Notifications](https://github.com/fabric8-ui/ngx-base/blob/master/src/app/notifications/notifications.ts)
+service, and call the `message()` method, passing in a [Notification](https://github.com/fabric8-ui/ngx-base/blob/master/src/app/notifications/notification.ts). You can subscribe to
+the result of `message()` to observe any [NotificationAction](https://github.com/fabric8-ui/ngx-base/blob/master/src/app/notifications/notification-action.ts)s that result
 from the notification.
 
 ## Continuous Delivery & Semantic Relases
 
 In ngx-fabric8-wit we use the
-https://github.com/semantic-release/semantic-release[semantic-release
-plugin]. That means that all you have to do is use the AngularJS Commit
+[semantic-release
+plugin](https://github.com/semantic-release/semantic-release). That means that all you have to do is use the AngularJS Commit
 Message Conventions (documented below). Once the PR is merged, a new
 release will be automatically published to npmjs.com and a release tag
 created on github. The version will be updated following semantic
