@@ -86,11 +86,11 @@ class OpenShiftIoDashboardPage {
     return this.noThanksButton.click();
   }
 
-  get wizardStepTitle () {
-    return element(by.css(".wizard-step-title"));
-  }
+//  get wizardStepTitle () {
+//    return element(by.css(".wizard-step-title"));
+//  }
   get cancelXButton () {
-    return this.wizardStepTitle.element(by.css(".glyphicon.glyphicon-remove"));
+    return element(by.css(".glyphicon.glyphicon-remove"));
   }
   clickCancelXButton () {
     return this.cancelXButton.click();
@@ -167,21 +167,11 @@ class OpenShiftIoDashboardPage {
   get viewAllSpacesFromNavBar () {
     return this.leftNavBar.element(by.xpath(".//*[contains(@class,'nav-item-icon')]"));
   }
+
   clickViewAllSpacesFromNavBar () {
     browser.wait(until.elementToBeClickable(this.viewAllSpacesFromNavBar), constants.LONG_WAIT, 'Failed to find viewAllSpacesFromNavBar');
     return this.viewAllSpacesFromNavBar.click();
   }
-
-
-
-
-
-
-
-
-
-
-
 
 }
 

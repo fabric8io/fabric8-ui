@@ -33,7 +33,7 @@ class OpenShiftIoSpaceHomePage {
 
   /* Space name as displayed */
   displaySpaceName (spaceNameStr) {
-      var xpathStr = "//h2[contains(text(),'" + spaceNameStr + "')]";
+      var xpathStr = ".//*[contains(text(),'" + spaceNameStr + "')]";
       return element(by.xpath(xpathStr));
   }
 
