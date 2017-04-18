@@ -1,6 +1,10 @@
+// overwrite PatternFly header highlight
+.navbar-pf {
+  border-color: #cc0000;
+}
+
 //remove toolbar box shadow
-.toolbar-pf
-{
+.toolbar-pf {
   box-shadow: none !important;
 }
 
