@@ -3,25 +3,32 @@
     <div class="row row-cards-pf">
       <div class="col-md-12">
       <section class="card-pf">
-        <aside class="col-md-4 text-center">
-          <span class="pficon pficon-home pf-icon-home"></span>
-          <h1>
-            <strong>Welcome to Fabric8! <br />
-            Message goes here</strong>
-          </h1>
+        <aside class="col-md-4">
+          <div class="card-pf-view">
+            <div class="card-pf-body">
+              <div class="col-md-12 text-center">
+                <img src="../../assets/images/Logotype_RH_OpenShift-io_RGB_RedGray.png" class="home-logo"/>
+              </div>
+              <div class="col-md-12 margin-top-15">
+                <p class="card-pf-info text-center">Welcome to OpenShift.io, an end-to-end team development environment
+                  in the cloud.
+                </p>
+              </div>
+            </div>
+          </div>
         </aside>
         <aside class="col-md-8">
           <div class="col-md-4 col-lg-4">
             <div class="card-pf-view">
               <div class="card-pf-body">
                 <div class="card-pf-top-element">
-                  <span class="pficon pficon-home card-pf-icon-circle"></span>
+                  <span class="fa fa-book card-pf-icon-circle"></span>
                 </div>
-                <h2 class="text-center">
-                  Review Fabric8 setup guide here
+                <h2 class="card-pf-title text-center">
+                  OpenShift.io user guide
                 </h2>
-                <p class="card-pf-info text-center">The following snippet of text is
-                  <a>rendered as link text</a>
+                <p class="card-pf-info text-center">Learn more using our
+                  <a href="javascript:void(0)">documentation</a>.
                 </p>
               </div>
             </div>
@@ -30,13 +37,13 @@
             <div class="card-pf-view">
               <div class="card-pf-body">
                 <div class="card-pf-top-element">
-                  <span class="pficon pficon-home card-pf-icon-circle"></span>
+                  <span class="pficon pficon-user card-pf-icon-circle"></span>
                 </div>
-                <h2 class="text-center">
+                <h2 class="card-pf-title text-center">
                   Setup your profile and preferences
                 </h2>
-                <p class="card-pf-info text-center">The following snippet of text is
-                  <a>rendered as link text</a>
+                <p class="card-pf-info text-center">Let others know who you are by filling out
+                  <a [routerLink]="['/', loggedInUser.attributes.username]">your profile</a>.
                 </p>
               </div>
             </div>
@@ -45,13 +52,14 @@
             <div class="card-pf-view">
               <div class="card-pf-body">
                 <div class="card-pf-top-element">
-                  <span class="pficon pficon-home card-pf-icon-circle"></span>
+                  <span class="fa fa-cubes card-pf-icon-circle"></span>
                 </div>
-                <h2 class="text-center">
-                  View Documentation and FAQ
+                <h2 class="card-pf-title text-center">
+                  Learn more about OpenShift
                 </h2>
-                <p class="card-pf-info text-center">The following snippet of text is
-                  <a>rendered as link text</a>
+                <p class="card-pf-info text-center">See how
+                  <a href="javascript:void(0)">containerized development and deployment</a>
+                  can help you.
                 </p>
               </div>
             </div>

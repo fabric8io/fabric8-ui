@@ -1,4 +1,9 @@
 @import '../../assets/stylesheets/base';
+
+.card-pf-view .card-pf-title {
+  font-weight: 400;
+}
+
 .home-wrapper {
   background-color: $color-pf-black-150;
   height: 100%;
@@ -16,4 +21,9 @@
   .list-group {
     margin-bottom: 0px;
   }
+}
+
+.home-logo {
+  max-width: 450px;
+  width: 100%;
 }
