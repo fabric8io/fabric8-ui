@@ -65,7 +65,7 @@
             <button class="btn btn-default margin-right-5" type="button" (click)="workflow.gotoNextStep()">Forge
             </button>
             <!--<button  class="btn btn-default margin-right-5" type="button" (click)="workflow.cancel()">Cancel</button>-->
-            <button class="btn btn-default" [disabled]="!spaceForm.form.valid" type="submit">Create Space</button>
+            <button class="btn btn-primary" [disabled]="!spaceForm.form.valid" type="submit">Create Space</button>
           </div>
         </div>
       </footer>
@@ -78,7 +78,7 @@
           <div></div>
           <h2>Your <strong>{{configurator.space.attributes.name | spaceName}}</strong> Space is ready! What would you like to do ?
           </h2>
-          <span (click)="workflow-cancel()" class="glyphicon glyphicon-remove"></span>
+          <span (click)="workflow-cancel()" class="pficon pficon-close"></span>
         </div>
       </div>
     </header>
@@ -137,7 +137,7 @@
     <footer class="container-fluid">
       <div class="row">
         <div class="col-xs-12 wizard-step-tool-bar with-items-in-center">
-          <a class="btn btn-default" (click)="workflow.finish()">Take me to the
+          <a class="btn btn-primary" (click)="workflow.finish()">Take me to the
             {{configurator.space.attributes.name | spaceName}} space</a>
         </div>
       </div>
