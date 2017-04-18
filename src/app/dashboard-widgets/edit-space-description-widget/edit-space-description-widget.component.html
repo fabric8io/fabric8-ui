@@ -24,8 +24,8 @@
         <span class="fa fa-check"></span>
       </button>
     </div>
-    <span *ngIf="!isEditing || !(isEditable() | async)" (click)="startEditingDescription()">
-      {{space.attributes.description}}
+    <span *ngIf="!isEditing || !(isEditable() | async)" (click)="startEditingDescription()" class="edit-space-description-span">
+      {{space.attributes.description || "Enter a description"}}
     </span>
   </div>
 </div>

@@ -18,3 +18,14 @@
   padding: 0 !important;
   margin-left: em(5);
 }
+
+.edit-space-description-span {
+  line-height: 1.5;
+  &:hover {
+    &:after {
+      padding-left: 20px;
+      font-family: 'PatternFlyIcons-webfont';
+      content: '\E60A';
+    }
+  }
+}
