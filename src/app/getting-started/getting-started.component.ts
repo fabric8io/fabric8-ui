@@ -127,6 +127,8 @@ export class GettingStartedComponent implements OnInit {
       this.username = this.loggedInUser.attributes.username;
       if (error.status === 403) {
         this.handleError("Username cannot be updated more than once", NotificationType.WARNING);
+      } else if (error.status === 409) {
+        this.handleError("Username already exists", NotificationType.DANGER);
       } else {
         this.handleError("Failed to update username", NotificationType.DANGER);
       }
