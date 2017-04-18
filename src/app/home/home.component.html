@@ -103,7 +103,7 @@
         <div class="card-pf">
           <div class="card-pf-heading">
             <div class="card-pf-heading-details">
-              <a class="btn btn-link">
+              <a class="btn btn-link" (click)="createSpace.open()">
                 <span>Create a space</span>
                 <i class="pficon pficon-add-circle-o"></i>
               </a>
@@ -116,9 +116,9 @@
                 <span class="pficon pficon-add-circle-o"></span>
               </div>
               <h3>Create a Space</h3>
-              <p>Learn how to get started <a>in the documentation</a></p>
+              <p>Learn how to get started <a href="#">in the documentation</a></p>
               <div class="blank-slate-pf-main-action">
-                <button class="btn btn-primary btn-lg"> Create a space </button>
+                <button class="btn btn-primary btn-lg" (click)="createSpace.open()"> Create a space </button>
               </div>
             </div>
             <!-- A list of the 5 most recent Spaces will be displayed in place of the Blank Slate. Additional Spaces are viewed by using the 'See All' button in the Card footer -->
