@@ -19,7 +19,6 @@ export class GettingStartedComponent implements OnInit {
 
   authGitHub: boolean = false;
   authOpenShift: boolean = false;
-  gettingStartedCompleted: boolean = false;
   gitHubLinked: boolean = false;
   loggedInUser: User;
   openShiftLinked: boolean = false;
@@ -46,19 +45,21 @@ export class GettingStartedComponent implements OnInit {
     });
     auth.gitHubToken.subscribe(token => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
+      this.routeToHomeIfCompleted();
     });
     auth.openShiftToken.subscribe(token => {
       this.openShiftLinked = (token !== undefined && token.length !== 0);
-    });
-    this.isGettingStarted().subscribe(val => {
-      this.showGettingStarted = val;
-      if (!this.showGettingStarted) {
-        this.routeToHome();
-      }
+      this.routeToHomeIfCompleted();
     });
   }
 
   ngOnInit() {
+    // Page is hidden by default to prevent flashing, but must show when tokens cannot be obtained.
+    setTimeout(() => {
+      if (this.isGettingStarted()) {
+        this.showGettingStarted = true;
+      }
+    }, 1000);
   }
 
   /**
@@ -154,16 +155,11 @@ export class GettingStartedComponent implements OnInit {
   /**
    * Helper to determine if getting started page should be shown or forward to the home page.
    *
-   * @returns {Observable<boolean>}
+   * @returns {boolean}
    */
-  private isGettingStarted(): Observable<boolean> {
+  private isGettingStarted(): boolean {
     let wait = this.getRequestParam("wait");
-    return Observable.combineLatest(
-      Observable.of(wait).map(val => val),
-      Observable.of(this.gitHubLinked).map(val => val),
-      Observable.of(this.openShiftLinked).map(val => val),
-      (a, b, c) => !(a === null && b === true && c === true)
-    );
+    return !(this.gitHubLinked === true && this.openShiftLinked === true && wait === null);
   }
 
   /**
@@ -178,6 +174,15 @@ export class GettingStartedComponent implements OnInit {
       && this.username.trim().length < 63
       && this.username.trim().indexOf("-") === -1
       && this.username.trim().indexOf("_") === -1);
+  }
+
+  /**
+   * Helpfer to route to home page if getting started is completed
+   */
+  private routeToHomeIfCompleted(): void {
+    if (!this.isGettingStarted()) {
+      this.router.navigate(['/', '_home']);
+    }
   }
 
   private handleError(error: string, type: NotificationType) {
