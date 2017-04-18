@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
@@ -19,6 +19,7 @@ export class AddCodebaseWidgetComponent implements OnInit {
 
   codebases: Observable<Codebase[]>;
   codebaseCount: Observable<number>;
+  @Output() addToSpace = new EventEmitter();
 
   constructor(
     private context: Contexts,

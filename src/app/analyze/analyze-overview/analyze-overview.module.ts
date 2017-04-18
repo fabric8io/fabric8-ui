@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AnalyzeOverviewComponent } from './analyze-overview.component';
 import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module';
+import { SpaceWizardModule } from '../../space-wizard/space-wizard.module';
 
 
 
@@ -29,7 +30,8 @@ import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module'
     CreateWorkItemWidgetModule,
     AddCodebaseWidgetModule,
     PipelinesWidgetModule,
-    EnvironmentWidgetModule
+    EnvironmentWidgetModule,
+    SpaceWizardModule
   ],
   declarations: [AnalyzeOverviewComponent]
 })

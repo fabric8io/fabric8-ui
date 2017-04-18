@@ -4,13 +4,13 @@
       <fabric8-edit-space-description-widget></fabric8-edit-space-description-widget>
     </div>
     <div class="col-md-2">
-      <button class="btn btn-primary btn-lg pull-right width-100">Add to space</button>
+      <button class="btn btn-primary btn-lg pull-right width-100" (click)="openForgeWizard()">Add to space</button>
     </div>
   </section>
   <div class="cards-pf">
     <div class="row row-cards-pf">
       <div class="col-md-4">
-        <fabric8-add-codebase-widget></fabric8-add-codebase-widget>
+        <fabric8-add-codebase-widget (addToSpace)="openForgeWizard()"></fabric8-add-codebase-widget>
       </div>
       <div class="col-md-8">
         <fabric8-analytical-report-widget></fabric8-analytical-report-widget>
@@ -26,11 +26,18 @@
         <fabric8-pipelines-widget></fabric8-pipelines-widget>
       </div>
       <div class="col-md-4">
-        <fabric8-environment-widget></fabric8-environment-widget>
+        <fabric8-environment-widget (addToSpace)="openForgeWizard()"></fabric8-environment-widget>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Forge wizard modal -->
+<modal #updateSpace modalClass="modal-lg chromeless-modal">
+  <modal-content class="chromeless-modal-content">
+    <space-wizard #spaceWizard [host]="updateSpace"></space-wizard>
+  </modal-content>
+</modal>
 
 <modal #teamMembership title="Manage membership of BalloonPopGame Team">
     <modal-content>

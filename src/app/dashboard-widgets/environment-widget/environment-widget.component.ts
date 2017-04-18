@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 
@@ -8,5 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./environment-widget.component.scss']
 })
 export class EnvironmentWidgetComponent {
+
+  @Output() addToSpace = new EventEmitter();
 
 }
