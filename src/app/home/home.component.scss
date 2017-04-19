@@ -1,5 +1,15 @@
 @import '../../assets/stylesheets/base';
 
+.card-pf-heading-bg {
+  background-color: $color-pf-black-200;
+  margin-left: -20px;
+  margin-top: -2px;
+  margin-right: -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 2px;
+}
+
 .card-pf-view .card-pf-title {
   font-weight: 400;
 }
@@ -20,5 +30,27 @@
   }
   .list-group {
     margin-bottom: 0px;
+  }
+}
+
+.home-logo {
+  margin-top: 20px;
+  max-width: 350px;
+  width: 100%;
+}
+
+.workitem-card {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  p {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    &:first-child {
+      margin-top: -10px;
+    }
+    &:last-child {
+      margin-top: 40px;
+    }
   }
 }
