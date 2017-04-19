@@ -29,6 +29,12 @@ class OpenShiftIoDashboardPage {
   constructor() {
   };
 
+  get welcomeText () {
+    var xpathStr = ".//*[contains(text(),'Welcome to OpenShift.io, an end-to-end team development environment in the cloud.')]";
+    browser.wait(until.presenceOf(element(by.xpath(xpathStr))), constants.LONG_WAIT, 'Failed to find welcome message');
+     return element(by.xpath(xpathStr));
+  }
+
   get newSpaceButton () {
     return element(by.xpath(".//a[contains(text(),'New')]"));
   }
@@ -139,16 +145,23 @@ class OpenShiftIoDashboardPage {
     return new OpenShiftIoSpaceHomePage();
   }
 
+  /* -----------------------------------------------------------------*/
+  
   /* Header nav bar - left side of display  */
    get leftNavBar () {
      browser.wait(until.elementToBeClickable(element(by.xpath(".//*[contains(@class,'navbar-left')]"))), constants.LONG_WAIT, 'Failed to find NavBarLeft');
      return element(by.xpath(".//*[contains(@class,'navbar-left')]"));
   }
 
+  clickLeftNavBar () {
+    this.leftNavBar.click();
+  }
+
   /* Header dropdown - leftmost in navigation bar - displys current space name */
   get headerDropDownToggle () {
     return element(by.id("header_dropdownToggle"));
   }
+
   clickHeaderDropDownToggle () {
     browser.wait(until.elementToBeClickable(this.headerDropDownToggle), constants.LONG_WAIT, 'Failed to find headerDropDownToggle');
     return this.headerDropDownToggle.click();
@@ -158,6 +171,7 @@ class OpenShiftIoDashboardPage {
   get createSpaceFromNavBar () {
     return this.leftNavBar.element(by.xpath(".//*[contains(@class,'pficon-add-circle-o')]"));
   }
+
   clickCreateSpaceFromNavBar () {
     browser.wait(until.elementToBeClickable(this.createSpaceFromNavBar), constants.LONG_WAIT, 'Failed to find createSpaceFromHeader');
     return this.createSpaceFromNavBar.click();
@@ -165,12 +179,56 @@ class OpenShiftIoDashboardPage {
 
   /* View all spaces from within the header dropdown toggle */
   get viewAllSpacesFromNavBar () {
-    return this.leftNavBar.element(by.xpath(".//*[contains(@class,'nav-item-icon')]"));
+//    return this.leftNavBar.element(by.xpath(".//*[contains(@class,'fa fa-th')]"));
+    return this.leftNavBar.element(by.xpath(".//a[contains(@href,'almusertest1/_spaces')]"));
   }
-
+  
   clickViewAllSpacesFromNavBar () {
     browser.wait(until.elementToBeClickable(this.viewAllSpacesFromNavBar), constants.LONG_WAIT, 'Failed to find viewAllSpacesFromNavBar');
     return this.viewAllSpacesFromNavBar.click();
+  }
+
+  /* -----------------------------------------------------------------*/
+
+  /* Header nav bar - right side of display  */
+   get rightNavBar () {
+     browser.wait(until.elementToBeClickable(element(by.id("header_rightDropdown"))), constants.LONG_WAIT, 'Failed to find NavBarRight');
+     return element(by.id("header_rightDropdown"));
+  }
+
+  clickRightNavBar () {
+    this.rightNavBar.click();
+  }
+
+  /* Log Out drop down selection */
+  get logOut () {
+    return this.rightNavBar.element(by.xpath(".//span[contains(text(),'Log Out')]"));
+  }
+
+  clickLogOut () {
+     browser.wait(until.elementToBeClickable(this.logOut), constants.LONG_WAIT, 'Failed to find logOut');
+     return this.logOut.click();
+  }
+
+  /* -----------------------------------------------------------------*/
+
+  /* Navigation bar on dashboard/user home page */
+
+  get homeTab () {
+    return this.leftNavBar.element(by.xpath(".//*[contains(text(),'Home')]"));
+  }
+
+  clickHomeTab () {
+    this.homeTab.click();
+  }
+  
+  get profileTab () {
+    return this.leftNavBar.element(by.xpath(".//*[contains(text(),'Profile')]"));
+  }
+
+  clickProfileTab () {
+    browser.wait(until.elementToBeClickable(this.profileTab), constants.LONG_WAIT, 'Failed to find profileTab');
+    this.profileTab.click();
   }
 
 }

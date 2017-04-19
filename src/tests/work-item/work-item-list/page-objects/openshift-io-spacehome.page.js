@@ -100,35 +100,12 @@ class OpenShiftIoSpaceHomePage {
     return this.importCodebaseButton.click(); 
   }
 
-
-
-
   /* Pipelines title */
   get pipelinesTitle () {
     return element(by.xpath(".//span[contains(text(),'Pipelines')]"));
   }
 
- 
-
-
-/*
-
-
-
-Button with text
-Create a Work Item
-
-
-
-
-*/
-
-
-
-
-
-
-  /* "Plan" in page heading */
+   /* "Plan" in page heading */
   get headerPlan () {
     return element(by.xpath(".//*[contains(text(),'Plan')]"));
   }
@@ -136,6 +113,77 @@ Create a Work Item
     browser.wait(until.elementToBeClickable(this.headerPlan), constants.LONG_WAIT, 'Failed to find element headerPlan');
     return this.headerPlan.click();
   }
+
+  /* -----------------------------------------------------------------*/
+
+  /* Codebase widget */
+
+  get codeBaseWidget () {
+    return element(by.xpath(".//*[contains(@class,'add-codebase-widget')]"));
+  }
+
+  /* Add to space button within Codebase widget */
+  get codeBaseWidgetAddToSpaceButton () {
+    return this.codeBaseWidget.element(by.buttonText('Add to space'));
+  }
+
+  clickCodeBaseWidgetAddToSpaceButton () {
+    return this.codeBaseWidgetAddToSpaceButton.click();
+  }
+
+  /* -----------------------------------------------------------------*/
+
+  /* New project - 'how would you like to get started?' dialog */
+
+//    .//h3/strong[contains (text(), 'Plan')]                Plan out my space
+//    .//h3/strong[contains (text(), 'new code')]            Create new code from scratch 
+//    .//h3/strong[contains (text(), 'code')]                Import existing code
+//    .//h3/strong[contains (text(), 'technology stack')]    Select technology stack and pipeline
+
+  get technologyStack () {
+    return element(by.xpath(".//h3/strong[contains(text(),'technology stack')]"));
+  }
+
+  clickTechnologyStack () {
+    return this.technologyStack.click();
+  }
+
+  get nextButton () {
+    return element(by.buttonText('Next'));
+  }
+
+  clickNextButton () {
+    browser.wait(until.elementToBeClickable(this.nextButton), constants.LONG_WAIT, 'Failed to find element next button');
+    return this.nextButton.click();
+  }
+
+//    Launchpad: New Project
+//    Label Booster
+//    Label Project name
+//    Label Top level package
+//    Label Project version
+
+//    Obsidian: Configure pipeline
+//    Label Pipeline
+
+//    io.fabric8.forge.generator.github.GithubRepoStep
+//    Label Repository
+//    Label Descriptiopn
+
+
+
+
+
+
+
+  get noThanksButton () {
+    return element(by.xpath(".//a[contains(text(),'No thanks, take me to')]"));
+  }
+  clickNoThanksButton () {
+    return this.noThanksButton.click();
+  }
+
+
 
 
 

@@ -36,23 +36,6 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     page = new OpenShiftIoStartPage();  
   });
 
-// Commented out as of April 18 - feature not yet available
-//  /* Simple test for new user */
-//  it('should enable a new user to register', function() {
-//
-//    page.setEmail (EMAIL_ADDRESS);
-//    page.setVoucherCode (VOUCHER_CODE);
-//
-//    page.clickRegisterButton();
-//    expect (page.toastMessage.getText()).toBe("We've placed you on the waitlist! We'll be in touch soon.");
-//
-//    /* Verify that after registration the user is prevented from registering again */
-//    page.clickToastMessageCloseButton();
-//    expect (page.registerButton.isEnabled()).toBe(false);
-//    expect (page.email.isEnabled()).toBe(false);
-//    expect (page.voucherCode.isEnabled()).toBe(false);
-//  });
-
   /* Simple test for registered user */
   it('should enable a registered user to login', function() {
     
@@ -73,44 +56,28 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     OpenShiftIoDashboardPage = OpenShiftIoGithubLoginPage.clickGithubLoginButton();
     console.log ('EE POC test - Navigate to openshift.io home/dashboard page');
 
-//    Registration page appeared in the UI on April 11 at 10:00 and was gone at 14:00
-//    OpenShiftIoRegistrationPage = OpenShiftIoGithubLoginPage.clickGithubLoginButton();
-//    OpenShiftIoRegistrationPage.typeCountryField("United States");
-//    OpenShiftIoRegistrationPage.typeAddressLine1Field("314 Littleton Road");
-//    OpenShiftIoRegistrationPage.typeAddressCityField("Westford");
-//    OpenShiftIoRegistrationPage.typeAddressStateField("Massachusetts");
-//    OpenShiftIoRegistrationPage.typeAddressPostalCodeField("01886");
-//    OpenShiftIoRegistrationPage.clickTermsCheckBox();
-//    OpenShiftIoDashboardPage = OpenShiftIoRegistrationPage.clickSubmitButton();
-
     /* Step 3 - on home page - create new space - embed time in space name to ensure unique space name */
     console.log ('EE POC test - Create a new space');
     
+    /* ************************************************************************************* */
     /* Commented out due to - https://github.com/fabric8io/fabric8-planner/issues/1638 */
     // OpenShiftIoDashboardPage.clickNewSpaceButton();
 
-     OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
-     OpenShiftIoDashboardPage.clickCreateSpaceFromNavBar();  
+    /* Commented out temporarily to avoid creating unnecessary spaces during testing 
+
+    OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
+    OpenShiftIoDashboardPage.clickCreateSpaceFromNavBar();  
 
     var spaceTime = returnTime();
     OpenShiftIoDashboardPage.typeNewSpaceName((spaceTime));
     OpenShiftIoDashboardPage.typeDevProcess("Scenario Driven Planning");
-    OpenShiftIoDashboardPage.clickCreateSpaceButton();
+    OpenShiftIoDashboardPage.clickCreateSpaceButton();     */
+    /* ************************************************************************************* */
 
-    /* Step - in space options dialog, wizard is not working - so simply cancel */
-    // OpenShiftIoDashboardPage.clickWizardButton();
-    // OpenShiftIoDashboardPage.clickCloseButton();
-    // The following line is temporary is is required by this issue:
-    // https://github.com/fabric8io/fabric8-ui/issues/589
-    OpenShiftIoDashboardPage.clickCancelXButton();
+    /* Step 4 - Create a new project */
 
-    /* Step - back in home page open the newly created space */
-    console.log ('EE POC test - Navigate to home page/dashboard');
-
-    /* Browse button was removed from the UI - April 17 */
-    //OpenShiftIoDashboardPage.clickBrowseSpaces();
-    OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
-//    OpenShiftIoDashboardPage.clickViewAllSpacesFromNavBar();
+    /* Select a space to be used */
+    var spaceTime = '1490960814920';
 
     console.log ('EE POC test - Navigate to space home page/dashboard for space: ' + spaceTime);
     OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickSelectSpace(spaceTime);
@@ -124,16 +91,15 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
        console.log ('EE POC test - new space URL = ' + text);
     });
 
-    /* Step Verify that the Analtical Report page contains the expected UI elements */
-//    expect(OpenShiftIoSpaceHomePage.displaySpaceName(spaceTime).getText()).toBe(spaceTime);
-//    expect(OpenShiftIoSpaceHomePage.analyticalReportHeader.getText()).toBe("Analytical Report");
-    expect(OpenShiftIoSpaceHomePage.workitemTitle.getText()).toBe("My Work Items");
-//    expect(OpenShiftIoSpaceHomePage.createWorkitemButton.getText()).toBe("Create a Work Item");
-//    expect(OpenShiftIoSpaceHomePage.importCodebaseButton.getText()).toBe("Import a Codebase");
-  
-    /* TODO - Exercise the Plan page actions */ 
-//    OpenShiftIoSpaceHomePage.clickHeaderPlan();
-//    browser.get('https://prod-preview.openshift.io/almusertest1/' + spaceTime + '/plan');
+    /* Step 4 - Add a project to the space */
+    OpenShiftIoSpaceHomePage.clickCodeBaseWidgetAddToSpaceButton();
+    //    OpenShiftIoSpaceHomePage.clickTechnologyStack();
+    OpenShiftIoSpaceHomePage.clickNoThanksButton();
+
+
+    OpenShiftIoDashboardPage.clickRightNavBar();
+    OpenShiftIoDashboardPage.clickLogOut();
+    console.log ('EE Heartbeat test - Log Out');
 
   });
 
@@ -146,9 +112,3 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     console.log ("EE POC test - Creating space: " + n.toString());
     return n.toString();
   }
-
-
-
-
-
-
