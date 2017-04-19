@@ -7,9 +7,18 @@
 }
 
 .card-pf-body {
-    min-height: 360px;
     &.analytical-report-body {
         .fabric8-stack-analysis {
+            position: relative;
+            .recommender-overlay {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.5);
+                z-index: 99;
+            }
             .recommendation-list {
                 .list-view-pf-main-info {
                     margin-bottom: 0;
@@ -20,6 +29,15 @@
                         background: $color-pf-black-100;
                         padding: 10px;
                         border: 1px solid $color-pf-black-150;
+                    }
+                }
+                &.list-group-item {
+                    padding: 5px;
+                    .list-view-pf-left {
+                        padding-right: 10px;
+                        .pficon {
+                            font-size: 15px;
+                        }
                     }
                 }
             }
@@ -34,6 +52,9 @@
             h2 {
                 margin: 0 0 40px 0;
             }
+        }
+        .margin-fix {
+            margin: 10px 0;
         }
     }
 }

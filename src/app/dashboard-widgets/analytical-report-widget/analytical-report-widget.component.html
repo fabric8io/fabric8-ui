@@ -33,9 +33,12 @@
         </div>
       </form>
       <div class="pipeline-builds">
-        <div *ngIf="currentBuild" class="col-xs-12">
+        <div *ngIf="currentBuild" class="col-xs-12 recommendations-container">
           <div *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">
             <div class="fabric8-stack-analysis" *ngIf="stackAnalysisInformation['recommendations']">
+              <div *ngIf="stackAnalysisInformation['showLoader']" class="recommender-overlay">
+                <div class="spinner spinner-lg"></div>
+              </div>
               <div class="recommendation-header">
                 <h1 class="keep-left">Recommendations <small>(only <b>top-{{stackAnalysisInformation.recommendationsLimit}}</b>)</small></h1>
               </div>
@@ -64,11 +67,14 @@
                 </div>
               </div>
             </div>
+            <div class="margin-fix" *ngIf="!stackAnalysisInformation['recommendations']">
+              Stack Analysis is in progress.
+            </div>
             <!--You can view the stack analysis reports here: <stack-details *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']" [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
         --></div>
-          <div *ngIf="!currentBuild || !currentBuild.annotations || !currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">No records found</div>
+          <div class="margin-fix" *ngIf="!currentBuild || !currentBuild.annotations || !currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">No Records found</div>
         </div>
-        <div class="col-xs-12" *ngIf="!currentBuild">No records found</div>
+        <div class="col-xs-12 margin-fix" *ngIf="!currentBuild">No Records found</div>
       </div>
     </div>
     <div [hidden]="(buildConfigsCount | async)" class="pipelines-absent">

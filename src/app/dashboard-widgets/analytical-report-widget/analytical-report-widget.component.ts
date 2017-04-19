@@ -32,7 +32,8 @@ export class AnalyticalReportWidgetComponent implements OnInit {
 
   currentBuild: Build;
   stackAnalysisInformation: any = {
-    recommendationsLimit: 5
+    recommendationsLimit: 5,
+    showLoader: false
   };
 
   constructor(
@@ -57,8 +58,17 @@ export class AnalyticalReportWidgetComponent implements OnInit {
     this.currentPipelineBuilds = pipeline.builds;
   }
 
+  showLoader(): void {
+    this.stackAnalysisInformation['showLoader'] = true;
+  }
+
+  hideLoader(): void {
+    this.stackAnalysisInformation['showLoader'] = false;
+  }
+
   selectedBuild(): void {
     let build: Build = this.currentBuild;
+    this.showLoader();
     if (build.annotations['fabric8.io/bayesian.analysisUrl']) {
       let url: string = build.annotations['fabric8.io/bayesian.analysisUrl'];
       this.stackAnalysisService
@@ -70,7 +80,6 @@ export class AnalyticalReportWidgetComponent implements OnInit {
               recommendationsObservable.subscribe((result) => {
                 let missing: Array<any> = result.missing || [];
                 let version: Array<any> = result.version || [];
-
 
                 for (let i in missing) {
                   if (missing.hasOwnProperty(i)) {
@@ -97,8 +106,14 @@ export class AnalyticalReportWidgetComponent implements OnInit {
                 // Restrict the recommendations to a particular limit as specified in UX
                 this.stackAnalysisInformation['recommendations'].splice(this.stackAnalysisInformation['recommendationsLimit']);
               });
+            } else {
+              this.currentBuild = null;
             }
+            this.hideLoader();
         });
+      } else {
+        this.currentBuild = null;
+        this.hideLoader();
       }
   }
 
