@@ -28,7 +28,8 @@
                   OpenShift.io user guide
                 </h2>
                 <p class="card-pf-info text-center">Learn more using our
-                  <a href="javascript:void(0)">documentation</a>.
+                  <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift.io/1/html-single/user_guide"
+                     target="_blank">documentation</a>.
                 </p>
               </div>
             </div>
@@ -74,45 +75,9 @@
       <div class="col-md-4">
         <div class="card-pf card-f8">
           <div class="card-pf-heading">
-            <h2 class="card-pf-title">Activity</h2>
-          </div>
-          <div class="card-pf-body card-f8-body">
-            <div class="blank-slate-f8-card">
-              <div class="blank-slate-f8-icon">
-                <span class="pficon pficon-info"></span>
-              </div>
-              <h3>No Recent Activity</h3>
-              <p>Recent activity will show here, once you <a>create a space,
-                update content or do something else</a></p>
-            </div>
-            <!-- A list of the 5 most recent activities will be displayed in place of the Blank Slate. Additional activities are viewed by using the 'See All' button in the Card footer -->
-            <!-- <div class="home-activity-list-result">
-              <ul class="list-group list-view-pf list-view-pf-view">
-                <li class="list-group-item">
-                  <div class="list-view-pf-actions">
-                    <span>Just now</span>
-                  </div>
-                  <div class="list-view-pf-main-info">
-                    <div class="list-view-pf-body">
-                      <div class="list-view-pf-description">
-                        <div class="list-group-item-text">
-                          @Username added <a>BalloonPopGame</a> space
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div> -->
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card-pf card-f8">
-          <div class="card-pf-heading">
             <div class="card-pf-heading-details card-f8-heading-details" *ngIf="_spaces.length > 0">
               <a class="btn btn-link" (click)="createSpace.open()">
-                <span>Create a space</span>
+                <span>My spaces</span>
                 <i class="pficon pficon-add-circle-o"></i>
               </a>
             </div>
@@ -166,6 +131,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="col-md-4">
+        <fabric8-work-item-widget></fabric8-work-item-widget>
       </div>
       <div class="col-md-4">
         <alm-developer-poll></alm-developer-poll>

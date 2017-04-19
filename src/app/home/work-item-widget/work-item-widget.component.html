@@ -1,0 +1,42 @@
+<div class="create-work-item-widget card-pf card-f8">
+  <div class="card-pf-heading-bg">
+    <div class="card-pf-heading">
+      <h2 class="card-pf-title">My work items</h2>
+    </div>
+  </div>
+  <div class="card-pf-body card-f8-body">
+    <div class="col-xs-8 padding-none" *ngIf="spaces.length !== 0">
+      <select class="combobox form-control"
+          [disabled]="spaces.length === 0"
+          [(ngModel)]="currentSpaceId"
+          (ngModelChange)="fetchWorkItems()">
+        <option value="default">Space name selector</option>
+        <option *ngFor="let space of spaces" [value]="space.id">
+          {{space.attributes.name}}
+        </option>
+      </select>
+    </div>
+    <div *ngIf="workItems.length !== 0; then showWorkItems else showBlankState"></div>
+    <ng-template #showBlankState>
+      <div class="col-xs-12 blank-slate-workitem-card">
+        <p>Work items reflect the work to be done within a space.</p>
+        <p>Once you create a space or jion a space, your work items will begin displaying here.</p>
+        <p>Learn how to get started <a href="#">in the documentation</a></p>
+      </div>
+    </ng-template>
+    <ng-template #showWorkItems>
+      <div class="col-xs-12 margin-top-15 padding-none">
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let workItem of workItems | take: 6">
+            <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
+            <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
+            <span>{{workItem.id}}</span>
+            <span *ngIf="workItem.attributes">
+            {{workItem.attributes['system.title']}}
+          </span>
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+  </div>
+</div>
