@@ -184,6 +184,9 @@
           <li>
             <a href="https://fabric8.io/guide/getStarted/index.html"><span>Help</span></a>
           </li>
+          <li>
+            <a (click)="modal.openAboutModal($event);">About</a>
+          </li>
           <li class="divider"></li>
           <li>
             <a *ngIf="loggedInUser" (click)="logout();"><span>Log Out</span></a>
@@ -198,3 +201,5 @@
     <space-wizard [host]="spaceWizard"></space-wizard>
   </modal-content>
 </modal>
+<fab-about-modal #modal>
+</fab-about-modal>

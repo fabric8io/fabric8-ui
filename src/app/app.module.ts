@@ -105,6 +105,8 @@ import { ProfileService }            from './profile/profile.service';
 import { SpaceWizardModule }         from './space-wizard/space-wizard.module';
 import { ToggleService }             from './toggle/toggle.service';
 
+// About Modal
+import { AboutModalModule } from './about-modal/about-modal.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -123,6 +125,7 @@ export type StoreType = {
  */
 @NgModule({
   imports: [ // import (in alphabetical order) other modules with the components, directives and pipes needed by the components in this module
+    AboutModalModule,
     BrowserAnimationsModule,
     BrowserModule,
     DeleteAccountDialogModule,
@@ -142,7 +145,7 @@ export type StoreType = {
     StackDetailsModule,
     WidgetsModule,
     // AppRoutingModule must appear last
-    AppRoutingModule,
+    AppRoutingModule
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
