@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
-import { Contexts, Spaces } from 'ngx-fabric8-wit';
+import { Contexts, Spaces, Space } from 'ngx-fabric8-wit';
 
 import { Observable } from 'rxjs';
 
@@ -19,6 +19,7 @@ export class AddCodebaseWidgetComponent implements OnInit {
 
   codebases: Observable<Codebase[]>;
   codebaseCount: Observable<number>;
+  contextPath: Observable<string>;
   @Output() addToSpace = new EventEmitter();
 
   constructor(
@@ -29,6 +30,8 @@ export class AddCodebaseWidgetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.contextPath = this.context.current.map(context => context.path);
+
     this.codebases = this.spaces.current
       .filter(space => space !== null)
       .switchMap(space => this.codebaseService.getCodebases(space.id));

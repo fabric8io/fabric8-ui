@@ -7,7 +7,7 @@
         </a>
       </div>
       <h2 class="card-pf-title">
-        <a href="#">Codebases</a>
+        <a href="#" [routerLink]="[contextPath | async, 'create']">Codebases</a>
         <span class="badge card-f8-badge">{{codebaseCount | async}}</span>
       </h2>
   </div>
@@ -21,7 +21,7 @@
         <button class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to space</button>
       </div>
       <div class="blank-slate-f8-main-action">
-        <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import from git</button>
+        <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
       </div>
     </div>
     <ul class="list-group analyze-overview-items-detail" *ngIf="(codebaseCount | async) > 0">

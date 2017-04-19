@@ -7,7 +7,7 @@
       </a>
     </div>
     <h2 class="card-pf-title">
-      <a href="#">My Work Items</a>
+      <a [routerLink]="[contextPath | async, 'plan']">My Work Items</a>
       <span class="badge card-f8-badge">{{myWorkItemsCount | async}}</span>
     </h2>
   </div>

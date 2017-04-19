@@ -30,6 +30,7 @@ export class PipelinesWidgetComponent implements OnInit {
 
   buildConfigs: Observable<BuildConfigs>;
   buildConfigsCount: Observable<number>;
+  contextPath: Observable<string>;
 
   constructor(
     private context: Contexts,
@@ -38,6 +39,7 @@ export class PipelinesWidgetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.contextPath = this.context.current.map(context => context.path);
     let bcs = this.pipelinesService.current
       .publish();
     this.buildConfigs = bcs;
