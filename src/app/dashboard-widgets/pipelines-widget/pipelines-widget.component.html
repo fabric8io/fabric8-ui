@@ -6,7 +6,7 @@
     </h2>
   </div>
   <div class="card-pf-body card-f8-body">
-    <div class="blank-slate-f8-card" *ngIf="(buildConfigsCount | async) === 0">
+    <div class="blank-slate-f8-card" *ngIf="!(buildConfigsCount | async)">
       <div class="blank-slate-f8-icon">
         <span class="pficon pficon-info"></span>
       </div>
@@ -15,7 +15,7 @@
         Pipelines run when you commit and build your code base.
       </p>
       <div class="blank-slate-f8-main-action">
-        <button class="btn btn-primary btn-lg">Add to Space</button>
+        <button class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to Space</button>
       </div>
     </div>
     <ul class='list-group' *ngIf="(buildConfigsCount | async) > 0">

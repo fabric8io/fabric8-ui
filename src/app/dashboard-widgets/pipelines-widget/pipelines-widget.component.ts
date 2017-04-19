@@ -1,6 +1,6 @@
 import { PipelinesService } from './../../shared/runtime-console/pipelines.service';
 import { Observable } from 'rxjs/Rx';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
@@ -25,6 +25,8 @@ import { DummyService } from './../shared/dummy.service';
   styleUrls: ['./pipelines-widget.component.scss']
 })
 export class PipelinesWidgetComponent implements OnInit {
+
+  @Output() addToSpace = new EventEmitter();
 
   buildConfigs: Observable<BuildConfigs>;
   buildConfigsCount: Observable<number>;
