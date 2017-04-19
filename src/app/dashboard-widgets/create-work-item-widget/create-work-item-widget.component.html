@@ -26,17 +26,14 @@
     </div>
     <ul class="list-group analyze-overview-items-detail" *ngIf="(myWorkItemsCount | async) > 0">
       <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 10">
-        <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}}"></span>
-        <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]">#{{workItem.id}}</a>
-        <span *ngIf="workItem.attributes['system.created_at']">
-          created <span id="created_at" [innerHTML]="workItem.attributes['system.created_at'] | almMomentTime"></span>
-        </span>
-        <span *ngIf="workItem.relationalData?.area?.attributes?.name">
-          in {{workItem.relationalData?.area?.attributes?.name}}
-        </span>
-        <span *ngIf="workItem.relationalData?.creator?.attributes">
-          by {{workItem.relationalData?.creator | almUserName:'unknown'}}
-        </span>
+        <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
+        <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
+        <span>{{workItem.id}}</span>
+        <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="create-work-item-link">
+          <span *ngIf="workItem.attributes">
+            {{workItem.attributes['system.title']}}
+          </span>
+        </a>
       </li>
     </ul>
   </div>
