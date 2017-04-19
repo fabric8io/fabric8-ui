@@ -5,7 +5,7 @@
     </h2>
   </div>
   <div class="card-pf-body card-f8-body analytical-report-body">
-    <div *ngIf="buildConfigs" class="pipelines-present">
+    <div *ngIf="(buildConfigsCount | async) > 0" class="pipelines-present">
       <form>
         <div class="form-group">
           <!--<div class="combobox-container">
@@ -20,13 +20,13 @@
           </div>-->
           <div class="col-xs-12 col-md-4">
             <select name="pipeSelect" [(ngModel)]="currentPipeline" (change)="selectedPipeline()" class="combobox form-control">
-              <option value="" selected disabled>Select pipeline</option>
+              <option [ngValue]="default" [selected]="true" disabled>Select pipeline</option>
               <option *ngFor="let build of buildConfigs | async" [ngValue]="build">{{ build.name }}</option>
             </select>
           </div>
           <div class="col-xs-12 col-md-4">
             <select name="buildSelect" [(ngModel)]="currentBuild" (change)="selectedBuild()" class="combobox form-control">
-              <option value="1" selected disabled>Select build</option>
+              <option [ngValue]="default" [selected]="true" disabled>Select build</option>
               <option *ngFor="let build of currentPipelineBuilds" [ngValue]="build">Build #{{ build.buildNumber }}</option>
             </select>
           </div>
@@ -66,12 +66,12 @@
             </div>
             <!--You can view the stack analysis reports here: <stack-details *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']" [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
         --></div>
-          <div *ngIf="!currentBuild">No records found</div>
+          <div *ngIf="!currentBuild || !currentBuild.annotations || !currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">No records found</div>
         </div>
         <div class="col-xs-12" *ngIf="!currentBuild">No records found</div>
       </div>
     </div>
-    <div *ngIf="!buildConfigs" class="pipelines-absent">
+    <div [hidden]="(buildConfigsCount | async)" class="pipelines-absent">
       <h2>No results found</h2>
       <p>When you run a build, a stack analysis is run that will provide recommendations around your technology stack</p>
     </div>
