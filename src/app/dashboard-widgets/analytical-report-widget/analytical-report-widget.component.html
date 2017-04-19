@@ -7,7 +7,7 @@
   <div class="card-pf-body card-f8-body analytical-report-body">
     <div *ngIf="buildConfigs" class="pipelines-present">
       <form>
-        <div class="form-group row">
+        <div class="form-group">
           <!--<div class="combobox-container">
             <input type="hidden" name="" value="">
             <div class="input-group col-sm-7">
@@ -32,7 +32,7 @@
           </div>
         </div>
       </form>
-      <div class="pipeline-builds row">
+      <div class="pipeline-builds">
         <div *ngIf="currentBuild" class="col-xs-12">
           <div *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">
             <div class="fabric8-stack-analysis" *ngIf="stackAnalysisInformation['recommendations']">
