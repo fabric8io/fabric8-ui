@@ -48,7 +48,6 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 #  && npm install -g karma-firefox-launcher
 
 RUN npm install -g jasmine-node protractor
-RUN npm install protractor-jasmine2-screenshot-reporter
 
 COPY google-chrome.repo /etc/yum.repos.d/google-chrome.repo
 RUN yum install -y xorg-x11-server-Xvfb google-chrome-stable
