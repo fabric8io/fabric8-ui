@@ -154,7 +154,7 @@
                     <div class="list-view-pf-body">
                       <div class="list-view-pf-description">
                         <div class="list-group-item-text">
-                          <a [routerLink]="[space.path]" *ngIf="space.path !== null && space.path != context.path">
+                          <a [routerLink]="['/', space.relationalData.creator.attributes.username, space.attributes.name]">
                             {{space.attributes.name | spaceName}}
                           </a>
                         </div>
