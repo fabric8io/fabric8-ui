@@ -54,7 +54,7 @@ export class SpaceWizardComponent implements OnInit {
    * gleaned from the wizard information gathering
    * process.
    */
-  configurator: SpaceConfigurator;
+  configurator: SpaceConfigurator = SpaceConfigurator.default();
 
   private _workflow: IWorkflow = null;
   @Input()
@@ -90,8 +90,7 @@ export class SpaceWizardComponent implements OnInit {
   ngOnInit() {
     this.log(`ngInit ...`);
     this.configureComponentHost();
-    this.configurator = this.createSpaceConfigurator();
-    this._fieldLookupService.configurator=this.configurator;
+    this._fieldLookupService.configurator = this.configurator;
   }
 
   /**
@@ -100,79 +99,37 @@ export class SpaceWizardComponent implements OnInit {
   createAndInitializeWorkflow(): IWorkflow {
     let component = this;
     return this.workflowFactory.create({
-                                         steps: () => {
-                                           return [
-                                             { name: this.steps.space, index: 0, nextIndex: 1 },
-                                             { name: this.steps.forge, index: 1, nextIndex: 1 },
-                                             { name: this.steps.forgeQuickStart, index: 5, nextIndex: 1 },
-                                             { name: this.steps.forgeStarter, index: 6, nextIndex: 1 },
-                                             { name: this.steps.forgeImportGit, index: 7, nextIndex: 1 }
-                                           ];
-                                         },
-                                         firstStep: () => {
-                                           return {
-                                             index: 0
-                                           };
-                                         },
-                                         cancel: (... args) => {
-                                           /**
-                                            * Ensure 'finish' has the correct 'this'.
-                                            * That is why apply is being used.
-                                            */
-                                           component.cancel.apply(component, args);
-                                         },
-                                         finish: (... args) => {
-                                           /**
-                                            * Ensure 'finish' has the correct 'this'.
-                                            * That is why apply is being used.
-                                            */
-                                           component.finish.apply(component, args);
-                                         }
-                                       });
-  }
-
-  /**
-   * creates and initializes the default space configurator
-   */
-  createSpaceConfigurator(): SpaceConfigurator {
-    let configurator = new SpaceConfigurator();
-    configurator.space = this.createTransientSpace();
-    return configurator;
-  }
-
-  /**
-   * Creates and initializes a default
-   * transient collaboration space.
-   */
-  createTransientSpace(): Space {
-    let space = {} as Space;
-    space.name = '';
-    space.path = '';
-    space.attributes = new SpaceAttributes();
-    space.attributes.name = space.name;
-    space.type = 'spaces';
-    space.privateSpace = false;
-    space.process = this.dummy.processTemplates[ 0 ];
-    space.relationships = {
-      areas: {
-        links: {
-          related: ''
-        }
+      steps: () => {
+        return [
+          { name: this.steps.space, index: 0, nextIndex: 1 },
+          { name: this.steps.forge, index: 1, nextIndex: 1 },
+          { name: this.steps.forgeQuickStart, index: 5, nextIndex: 1 },
+          { name: this.steps.forgeStarter, index: 6, nextIndex: 1 },
+          { name: this.steps.forgeImportGit, index: 7, nextIndex: 1 }
+        ];
       },
-      iterations: {
-        links: {
-          related: ''
-        }
+      firstStep: () => {
+        return {
+          index: 0
+        };
       },
-      ['owned-by']: {
-        data: {
-          id: '',
-          type: 'identities'
-        }
+      cancel: (... args) => {
+        /**
+        * Ensure 'finish' has the correct 'this'.
+        * That is why apply is being used.
+        */
+        component.cancel.apply(component, args);
+      },
+      finish: (... args) => {
+        /**
+        * Ensure 'finish' has the correct 'this'.
+        * That is why apply is being used.
+        */
+        component.finish.apply(component, args);
       }
-    };
-    return space;
+    });
   }
+
 
   /**
    * Creates a persistent collaboration space
@@ -237,7 +194,7 @@ export class SpaceWizardComponent implements OnInit {
    */
   reset() {
     this.log(`reset ...`);
-    this.configurator = this.createSpaceConfigurator();
+    this.configurator = SpaceConfigurator.default();
     this.workflow = this.createAndInitializeWorkflow();
   }
 

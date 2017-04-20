@@ -36,7 +36,7 @@ export class FieldLookupService {
 
   static instanceCount: number = 1;
 
-  public configurator:SpaceConfigurator;
+  public configurator:SpaceConfigurator = SpaceConfigurator.default();
 
 
   constructor(loggerFactory: LoggerFactory){

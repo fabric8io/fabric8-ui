@@ -1,4 +1,4 @@
-import { Space } from 'ngx-fabric8-wit';
+import { Space, SpaceAttributes, SpaceService, SpaceNamePipe } from 'ngx-fabric8-wit';
 
 export class CodebaseType {
   description: string;
@@ -47,6 +47,39 @@ export class PipelineTaskInfo {
 }
 
 export class SpaceConfigurator {
+
+  static default():SpaceConfigurator {
+    let configurator = new SpaceConfigurator();
+    let space = {} as Space;
+    space.name = '';
+    space.path = '';
+    space.attributes = new SpaceAttributes();
+    space.attributes.name = space.name;
+    space.type = 'spaces';
+    space.privateSpace = false;
+    space.process = { name:'', description:''};
+    space.relationships = {
+      areas: {
+        links: {
+          related: ''
+        }
+      },
+      iterations: {
+        links: {
+          related: ''
+        }
+      },
+      ['owned-by']: {
+        data: {
+          id: '',
+          type: 'identities'
+        }
+      }
+    };
+    configurator.space = space;
+    return configurator;
+  }
+
   // represents the selected or created collaboration space
   space: Space;
   // represents the project being configured
