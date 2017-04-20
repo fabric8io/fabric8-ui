@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -15,6 +15,7 @@ import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 })
 export class SpacesComponent implements OnInit {
 
+  @Input() spaceId: string;
   contentItemHeight: number = 54;
   _spaces: Space[] = [];
   pageSize: number = 20;
@@ -60,6 +61,20 @@ export class SpacesComponent implements OnInit {
       this.spaceService.getMoreSpacesByUser()
         .subscribe(spaces => {
           this._spaces = this._spaces.concat(spaces);
+        },
+        err => {
+          this.logger.error(err);
+        });
+    } else {
+      this.logger.error("Failed to retrieve list of spaces owned by user");
+    }
+  }
+
+  removeSpaces(space: Space): void {
+    if (this.context && this.context.user) {
+      this.spaceService.deleteSpace(space)
+        .subscribe(spaces => {
+          this._spaces = this._spaces.filter(space => space !== spaces);
         },
         err => {
           this.logger.error(err);
