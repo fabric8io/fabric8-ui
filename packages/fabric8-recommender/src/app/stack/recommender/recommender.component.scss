@@ -1,4 +1,5 @@
 @import '../../../assets/stylesheets/base';
+@import '../stack-details/fabric8-stack-analysis-base';
 
 .stack-recommendation {
     @mixin strike-text {
@@ -9,7 +10,7 @@
     .strike-color {
         color: #bbbbbb !important;
     }
-    padding: 15px 25px 15px 25px;
+    @extend .base-container-layout;
     .default-button-state {
         background: #fff;
         color: #ccc;
@@ -83,12 +84,23 @@
         }
     }
     .recommendation-container {
-        border: 1px solid #ededed;
+        border: 0;
+        .no-recommendations {
+            border: 0;
+            &.list-group-item {
+                padding-left: 0;
+                padding-right: 0;
+            }
+        }
+        .list-group-item {
+            padding-top: 11px;
+            padding-bottom: 11px;
+        }
         .list-view-pf-checkbox {
             border-right: 0;
         }
         .select-all-container {
-            padding: 15px;
+            height: 45px;
             margin: 0;
             background: #fafafa;
             &:after {

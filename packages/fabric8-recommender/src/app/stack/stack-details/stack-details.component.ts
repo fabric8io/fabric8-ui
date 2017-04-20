@@ -71,6 +71,8 @@ export class StackDetailsComponent implements OnInit {
   buildId: string = '';
   isLoading: boolean = true;
 
+  modalHeader: string = null;
+
   private recommendations: Array<any> = [];
   private dependencies: Array<any> = [];
   private stackOverviewData: any = {};
@@ -126,7 +128,10 @@ export class StackDetailsComponent implements OnInit {
    * This function gets the missing packages information and version mismatch information
    * Displays the information accordingly on screen
    */
-  private setRecommendations(missing: Array<any>, version: Array<any>): void {
+  private setRecommendations(responseRecommendations: any): void {
+    let missing: Array<any> = responseRecommendations['missing'] || [];
+    let version: Array<any> = responseRecommendations['version'] || [];
+    let stackName: string = responseRecommendations['stackName'] || 'An existing stack';
     this.recommendations = [];
     for (let i in missing) {
       if (missing.hasOwnProperty(i)) {
@@ -135,6 +140,7 @@ export class StackDetailsComponent implements OnInit {
           suggestion: 'Recommended',
           action: 'Add',
           message: key[0] + ' : ' + missing[i][key[0]],
+          subMessage: stackName + ' has this dependency included',
           key: key[0],
           workItem: {
             action: 'Add ' + key[0] + ' with version ' + missing[i][key[0]],
@@ -151,16 +157,17 @@ export class StackDetailsComponent implements OnInit {
       }
     }
 
-    for (let i in version) {
-      if (version.hasOwnProperty(i)) {
-        let key: any = Object.keys(version[i]);
+    for (let i in missing) {
+      if (missing.hasOwnProperty(i)) {
+        let key: any = Object.keys(missing[i]);
         this.recommendations.push({
           suggestion: 'Recommended',
           action: 'Update',
-          message: key[0] + ' : ' + version[i][key[0]],
+          message: key[0] + ' : ' + missing[i][key[0]],
+          subMessage: stackName + ' has a different version of dependency',
           workItem: {
-            action: 'Update ' + key[0] + ' with version ' + version[i][key[0]],
-            message: 'Stack analytics have identified a potentially version upgrade. It\'s recommended that you upgrade "' + key[0] + '" with version ' + version[i][key[0]] + ' to your application as many other Vert.x OpenShift applications have it included',
+            action: 'Update ' + key[0] + ' with version ' + missing[i][key[0]],
+            message: 'Stack analytics have identified a potentially version upgrade. It\'s recommended that you upgrade "' + key[0] + '" with version ' + missing[i][key[0]] + ' to your application as many other Vert.x OpenShift applications have it included',
             codebase: {
               'repository': 'Exciting',
               'branch': 'task-101',
@@ -239,6 +246,7 @@ export class StackDetailsComponent implements OnInit {
         // Enter the actual scene only if the data is valid and the data
         // has something inside.
         this.clearLoader();
+        this.modalHeader = 'Updated just now';
         if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
           stackAnalysesData = data;
           let result: any;
@@ -273,16 +281,8 @@ export class StackDetailsComponent implements OnInit {
               let missingPackages: Array<any> = [];
               let versionMismatch: Array<any> = [];
               if (recommendations) {
-                if (recommendations.hasOwnProperty('missing')) {
-                  missingPackages = recommendations['missing'];
-                }
-                if (recommendations.hasOwnProperty('version')) {
-                  versionMismatch = recommendations['version'];
-                }
-
-                // Call the recommendations with the missing packages
-                // and version mismatches
-                this.setRecommendations(missingPackages, versionMismatch);
+                // Call the recommendations with the recommendations response object
+                this.setRecommendations(recommendations);
               }
             });
           }
@@ -293,12 +293,14 @@ export class StackDetailsComponent implements OnInit {
           this.errorMessage.message = `This could take a while. Return to pipeline to keep
            working or stay on this screen to review progress.`;
           this.errorMessage.stack = '';
+          this.modalHeader = 'Updating ...';
         }
       },
       error => {
         // Throw error when the service fails
         this.errorMessage.message = <any>error.message;
         this.errorMessage.stack = <any>error.stack;
+        this.modalHeader = 'Report failed ...';
       });
   }
 

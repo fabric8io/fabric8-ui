@@ -47,17 +47,31 @@ export function getStackRecommendations(data: any): Observable<any> {
                 let recommendation: any = recommendations.recommendations;
                 if (recommendation) {
                     let similarStacks = recommendation.similar_stacks;
-                    const analysis: any = similarStacks[0].analysis;
-                    let missingPackages: Array<any> = analysis.missing_packages;
-                    let versionMismatch: Array<any> = analysis.version_mismatch;
-                    let resultObject: any = {
-                        missing: missingPackages,
-                        version: versionMismatch
-                    };
-                    resultObservable = Observable.create((observer) => {
-                        observer.next(resultObject);
-                        observer.complete();
-                    });
+                    similarStacks = similarStacks.length > 0 ? similarStacks[0] : null;
+                    let resultObject: any = {};
+                    if (similarStacks) {
+                        const analysis: any = similarStacks.analysis;
+                        let missingPackages: Array<any> = analysis.missing_packages;
+                        let versionMismatch: Array<any> = analysis.version_mismatch;
+                        let similarity: number = similarStacks.similarity;
+                        let source: string = similarStacks.source;
+                        let stackId: string = similarStacks.stack_id;
+                        let stackName: string = similarStacks.stack_name;
+                        let usage: number = similarStacks.usage;
+                        resultObject = {
+                            missing: missingPackages,
+                            version: versionMismatch,
+                            similarity: similarity,
+                            source: source,
+                            stackId: stackId,
+                            stackName: stackName,
+                            usage: usage
+                        };
+                        resultObservable = Observable.create((observer) => {
+                            observer.next(resultObject);
+                            observer.complete();
+                        });
+                    }
                 }
             }
         });

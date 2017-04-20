@@ -1,22 +1,15 @@
 <fab-toast-notification [notifications]="workItemResponse"></fab-toast-notification>
 <div class="stack-recommendation">
   <div class="recommendation-header">
-    <h1 class="keep-left">{{messages && messages.title}}</h1>
+    <h1>{{messages && messages.title}}</h1>
+    <p>{{messages && messages.sub_title}}</p>
   </div>
   <div class="list-group recommendation-container">
     <!-- No recommendations scenario -->
-    <div class="list-group-item list-view-pf-stacked" *ngIf="recommendationsList.length === 0">
-      <div class="list-view-pf-main-info">
-        <div class="list-view-pf-body">
-          <div class="list-view-pf-description">
-            <div class="list-group-item-heading">
-              {{messages && messages.no_recommendations_text}}
-            </div>
-            <div class="list-group-item-text">
-              {{messages && messages.no_recommendations_suggestion}}
-            </div>
-          </div>
-        </div>
+    <div class="list-group-item list-view-pf-stacked no-recommendations" *ngIf="recommendationsList.length === 0">
+      <div class="alert alert-info">
+        <span class="pficon pficon-info"></span>
+        <strong>{{messages && messages.no_recommendations_text}}</strong> &nbsp; {{messages && messages.no_recommendations_suggestion}}
       </div>
     </div>
     <!-- No recommendations scenario -->
@@ -43,6 +36,7 @@
           <div class="list-view-pf-description" [ngClass]="{'dismissed': recommendation.isDismissed === true}">
             <div class="list-group-item-text" [ngClass]="{'strike-through-class': recommendation.showViewButton === true}">
               <span class="main-text-info">{{recommendation.suggestion}} - {{recommendation.action}} {{recommendation.message}}</span>
+              <span class="addtional-info">{{recommendation.subMessage}}</span>
             </div>
           </div>
         </div>

@@ -2,6 +2,9 @@
   <div class="row">
     <a class="stack-reports-btn" (click)="showStackModal($event)">{{messages && messages.title}}</a>
     <modal #stackModule title="Report title on Application, Build #{{buildId}}" modalClass="modal-lg modal-fullscreen" (onOpen)="getStackAnalyses(stack);">
+      <modal-header>
+          {{modalHeader}}
+      </modal-header>
       <modal-content>
           <div *ngIf="isLoading" class="pre-loader">
             <div class="pre-loader-spinner spinner spinner-lg"></div>

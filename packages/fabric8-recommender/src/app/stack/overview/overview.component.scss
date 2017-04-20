@@ -1,9 +1,9 @@
+@import '../stack-details/fabric8-stack-analysis-base';
 .overview-stack {
-    padding: 15px 25px 15px 25px;
+    @extend .base-container-layout;
     background-color: #ededed;
     border-top: 1px solid #d1d1d1;
     border-bottom: 1px solid #d1d1d1;
-
     .overview-card {
         height: 230px;
         margin-left: 0;

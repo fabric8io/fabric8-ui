@@ -107,6 +107,7 @@ export class RecommenderComponent implements OnChanges {
                 recommendation['suggestion'] = eachOne['suggestion'];
                 recommendation['action'] = eachOne['action'];
                 recommendation['message'] = eachOne['message'];
+                recommendation['subMessage'] = eachOne['subMessage'];
                 recommendation['pop'] = eachOne['pop'];
                 recommendation['workItem'] = {
                     codebase: eachOne['workItem']['codebase'],

@@ -16,8 +16,11 @@
     .stack-reports-btn {
         cursor: pointer;
     }
+    .modal-header {
+        padding: 15px 20px;
+    }
     .modal-body {
-        padding: 0;
+        padding: 0 20px 30px 20px;
     }
     .modal-fullscreen {
         width: 90%;
