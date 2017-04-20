@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
-import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
+import { Space, Spaces, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
 
 import { Logger } from 'ngx-base';
@@ -17,7 +17,7 @@ import { Logger } from 'ngx-base';
 export class HomeComponent implements OnInit {
 
   loggedInUser: User;
-
+  recent: Space[];
   private _context: Context;
   private _defaultContext: Context;
   private _spaces: Space[] = [];
@@ -27,8 +27,10 @@ export class HomeComponent implements OnInit {
     private spaceService: SpaceService,
     private router: Router,
     private contexts: Contexts,
+    private spaces: Spaces,
     private logger: Logger
   ) {
+    spaces.recent.subscribe(val => this.recent = val);
   }
 
   ngOnInit() {
