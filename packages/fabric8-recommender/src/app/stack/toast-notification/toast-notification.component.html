@@ -7,7 +7,7 @@
     <span class="pficon {{notification.iconClass}}"></span>
     <div class="toast-wrapper">
       <span>{{notification.text}}</span>
-      <a *ngIf="notification.link" href="{{notification.link}}">{{notification.linkText}}</a>
+      <a *ngIf="notification.link" target="_blank" href="{{notification.link}}">{{notification.linkText}}</a>
     </div>
   </div>
 </div>

@@ -14,15 +14,10 @@
         </div>
         <div class="card-pf-body">
           <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value === -1" class="row make-center">
-            <div class="pficon pficon-help warning-icon"></div>
+            <div class="pficon pficon-info warning-icon"></div>
             <div class="cvss-id">{{messages.noCve}}</div>
           </div>
-          <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value >= 0 && overviewData.securityInfo.value <= 3.9"
-            class="row make-center">
-            <div class="pficon pficon-ok warning-icon"></div>
-            <div class="cvss-id">{{messages.noSecurity}}</div>
-          </div>
-          <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value >= 4.0" class="row">
+          <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value !== -1" class="row">
             <div class="col-sm-12">
               <div class="cvss-id">{{overviewData.securityInfo.id}}
                 <i class="{{overviewData.securityInfo.iconClass}}" 

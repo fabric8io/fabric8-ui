@@ -15,8 +15,8 @@ export class StackAnalysesService {
     low: {
       start: 0.0,
       end: 3.9,
-      iconClass: 'pficon pficon-ok',
-      displayClass: 'progress-bar-success'
+      iconClass: 'pficon pficon-warning-triangle-o',
+      displayClass: 'progress-bar-warning'
     },
     medium: {
       start: 4.0,
@@ -27,8 +27,8 @@ export class StackAnalysesService {
     high: {
       start: 7.0,
       end: 10.0,
-      iconClass: 'pficon pficon-warning-triangle-o',
-      displayClass: 'progress-bar-warning'
+      iconClass: 'pficon pficon-warning-triangle-o warning-red-color',
+      displayClass: 'progress-bar-danger'
     }
   };
 
@@ -44,11 +44,11 @@ export class StackAnalysesService {
 
   getCvssObj(score: number): any {
     if (score) {
-      let iconClass: string = this.cvssScale.low.iconClass;
-      let displayClass: string = this.cvssScale.low.displayClass;
-      if (score >= this.cvssScale.medium.start) {
-        iconClass = this.cvssScale.medium.iconClass;
-        displayClass = this.cvssScale.medium.displayClass;
+      let iconClass: string = this.cvssScale.medium.iconClass;
+      let displayClass: string = this.cvssScale.medium.displayClass;
+      if (score >= this.cvssScale.high.start) {
+        iconClass = this.cvssScale.high.iconClass;
+        displayClass = this.cvssScale.high.displayClass;
       }
       return {
         iconClass: iconClass,

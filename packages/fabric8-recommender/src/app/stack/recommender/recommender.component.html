@@ -25,7 +25,7 @@
                     {{messages && messages.create_work_item}}
                 </button>
         <button *ngIf="recommendation.showViewButton" class="each-work-item btn btn-default">
-          <a href="{{recommendation.viewWorkItemLink}}">{{messages && messages.view_work_item}}</a>
+          <a target="_blank" href="{{recommendation.viewWorkItemLink}}">{{messages && messages.view_work_item}}</a>
           </button>
       </div>
       <div class="list-view-pf-main-info">

@@ -33,6 +33,10 @@
                 i {
                     margin-right: 3px;
                     font-size: 14px;
+                    
+                    &.warning-red-color::before {
+                        color: red;
+                    }
                 }
             }
         }

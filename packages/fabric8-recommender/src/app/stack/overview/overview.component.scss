@@ -52,6 +52,10 @@
                 i {
                     font-size: 15px;
                     cursor: pointer;
+
+                    &.warning-red-color::before {
+                        color: red;
+                    }
                 }
             }
 
