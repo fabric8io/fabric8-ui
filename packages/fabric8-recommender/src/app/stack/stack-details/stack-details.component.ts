@@ -132,6 +132,7 @@ export class StackDetailsComponent implements OnInit {
     let missing: Array<any> = responseRecommendations['missing'] || [];
     let version: Array<any> = responseRecommendations['version'] || [];
     let stackName: string = responseRecommendations['stackName'] || 'An existing stack';
+    let fileName: string = responseRecommendations['fileName'];
     this.recommendations = [];
     for (let i in missing) {
       if (missing.hasOwnProperty(i)) {
@@ -148,7 +149,7 @@ export class StackDetailsComponent implements OnInit {
             codebase: {
               'repository': 'Test_Repo',
               'branch': 'task-1234',
-              'filename': 'package.json',
+              'filename': fileName,
               'linenumber': 1
             }
           },
@@ -171,7 +172,7 @@ export class StackDetailsComponent implements OnInit {
             codebase: {
               'repository': 'Exciting',
               'branch': 'task-101',
-              'filename': 'package.json',
+              'filename': fileName,
               'linenumber': 1
             }
           },
@@ -278,8 +279,6 @@ export class StackDetailsComponent implements OnInit {
           let recObservable: Observable<any> = getStackRecommendations(data);
           if (recObservable) {
             recObservable.subscribe((recommendations) => {
-              let missingPackages: Array<any> = [];
-              let versionMismatch: Array<any> = [];
               if (recommendations) {
                 // Call the recommendations with the recommendations response object
                 this.setRecommendations(recommendations);

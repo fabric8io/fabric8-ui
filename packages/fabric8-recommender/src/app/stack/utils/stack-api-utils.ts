@@ -14,8 +14,8 @@ function stackApiUtils(data: any, target: string): Observable<any> {
                     result['result'] = data.result;
                 }
             } else if (target === 'ALL') {
-                if (data.hasOwnProperty('recommendations')) {
-                    result['recommendation'] = data.recommendations;
+                if (data.hasOwnProperty('recommendation')) {
+                    result['recommendation'] = data.recommendation;
                 }
                 if (data.hasOwnProperty('result')) {
                     result['result'] = data.result;
@@ -38,10 +38,15 @@ function stackApiUtils(data: any, target: string): Observable<any> {
  * Ouput: Observable of type 'any'
  */
 export function getStackRecommendations(data: any): Observable<any> {
-    let recommendationsObservable: Observable<any> = stackApiUtils(data, 'RECOM');
+    let recommendationsObservable: Observable<any> = stackApiUtils(data, 'ALL');
     let resultObservable: Observable<any> = null;
     if (recommendationsObservable) {
         recommendationsObservable.subscribe((result) => {
+            let resultData: Array<any> = result.result;
+            let fileName: string = '';
+            if (resultData && resultData.length > 0) {
+                fileName = resultData[0].manifest_name;
+            }
             let recommendations: any = result.recommendation;
             if (recommendations && recommendations.hasOwnProperty('recommendations')) {
                 let recommendation: any = recommendations.recommendations;
@@ -65,7 +70,8 @@ export function getStackRecommendations(data: any): Observable<any> {
                             source: source,
                             stackId: stackId,
                             stackName: stackName,
-                            usage: usage
+                            usage: usage,
+                            fileName: fileName
                         };
                         resultObservable = Observable.create((observer) => {
                             observer.next(resultObject);
