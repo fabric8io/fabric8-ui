@@ -1,6 +1,6 @@
 import { PipelinesService } from './../../shared/runtime-console/pipelines.service';
-import { Observable } from 'rxjs/Rx';
-import { Component, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs/Rx';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
@@ -22,7 +22,7 @@ import {StackAnalysesService, getStackRecommendations} from 'fabric8-stack-analy
     StackAnalysesService
   ]
 })
-export class AnalyticalReportWidgetComponent implements OnInit {
+export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
 
   buildConfigs: Observable<BuildConfigs>;
   buildConfigsCount: Observable<number>;
@@ -36,21 +36,28 @@ export class AnalyticalReportWidgetComponent implements OnInit {
     showLoader: false
   };
 
+  _contextSubscription: Subscription;
+
   constructor(
     private context: Contexts,
     private broadcaster: Broadcaster,
     private pipelinesService: PipelinesService,
     private stackAnalysisService: StackAnalysesService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
-    this.context.current.subscribe(context => console.log('Context', context));
+    this._contextSubscription = this.context.current.subscribe(context => console.log('Context', context));
 
     let bcs = this.pipelinesService.current
       .publish();
     this.buildConfigs = bcs;
     this.buildConfigsCount = bcs.map(buildConfigs => buildConfigs.length);
     bcs.connect();
+  }
+
+  ngOnDestroy() {
+    this._contextSubscription.unsubscribe();
   }
 
   selectedPipeline(): void {

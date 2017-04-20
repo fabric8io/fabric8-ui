@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 import { AuthenticationService, UserService } from 'ngx-login-client';
 import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEvent, SortField } from 'ngx-widgets';
@@ -25,7 +25,7 @@ import {
   templateUrl: 'pipelines.component.html',
   styleUrls: ['./pipelines.component.scss']
 })
-export class PipelinesComponent implements OnInit {
+export class PipelinesComponent implements OnInit, OnDestroy {
 
   toolbarConfig: ToolbarConfig;
   private _apps: FilterQuery[] = [];
@@ -40,6 +40,7 @@ export class PipelinesComponent implements OnInit {
     title: 'Application',
     sortType: 'alpha'
   } as SortField;
+  private _pipelinesSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -145,7 +146,7 @@ export class PipelinesComponent implements OnInit {
 
 
   ngOnInit() {
-    this.pipelinesService.current
+    this._pipelinesSubscription = this.pipelinesService.current
       .do(val => {
         (val as BuildConfig[])
           .forEach(buildConfig => {
@@ -163,6 +164,10 @@ export class PipelinesComponent implements OnInit {
         this.applyFilters();
         this.applySort();
       });
+  }
+
+  ngOnDestroy() {
+    this._pipelinesSubscription.unsubscribe();
   }
 
   get pipelines() {

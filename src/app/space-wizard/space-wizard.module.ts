@@ -37,7 +37,6 @@ import { VisibleItemsPipe } from './pipes/visible-items.pipe';
     IForgeServiceProvider.FactoryProvider,
     LoggerFactory,
     WorkflowFactory,
-    AuthenticationService,
     AppGeneratorConfigurationService
   ]
 })
