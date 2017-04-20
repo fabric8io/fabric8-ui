@@ -5,7 +5,7 @@
         <span style="vertical-align: center;" class="header-status">
           <span *ngIf="!forge.hasError && forge.processing===true" class="fa fa-refresh" ></span>
         </span>
-        <h2>{{forge.state.description}}</h2>
+        <h2>{{forge.state.title}}</h2>
         <span (click)="forge.close()" class="pficon pficon-close"></span>
       </div>
     </div>
@@ -46,12 +46,15 @@
                   [required]="forge.fields[i].display.required" [disabled]="!forge.fields[i].display.enabled">
               </div>
               <div *ngSwitchCase="'singleSelection'">
-                <select class="form-control" [(ngModel)]="forge.fields[i].value" (change)="forge.validate()" name="{{forge.fields[i].name}}"
+                <select class="combobox form-control" [(ngModel)]="forge.fields[i].value" (change)="forge.validate()" name="{{forge.fields[i].name}}"
                   *ngIf="forge.fields[i].valueType != 'projectType'">
-                <option value="{{choice.id}}" *ngFor="let choice of forge.fields[i].display.choices">
-                  {{choice.id}}
-                </option>
-              </select>
+                  <option  value="{{choice.id}}" *ngFor="let choice of forge.fields[i].display.choices">
+                    <div >
+                      <div class="widget-selection-id" >{{choice.id}}</div>
+                      <!--<div class="widget-selection-description" >{{choice.description||''}}</div>-->
+                    </div>
+                  </option>
+                </select>
               </div>
               <div *ngSwitchCase="'multipleSelection'" style="border:solid 1px #bbb; overflow:hidden;  ; border-radius:4px;">
                 <!--input-->
@@ -104,8 +107,8 @@
     <div class="row">
       <div class="col-xs-12 wizard-step-tool-bar with-items-at-end">
         <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult" (click)="forge.cancel()">Cancel</button>
-        <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult" [disabled]="(!forge.state.canMoveToPreviousStep)||(forge.processing === true)"
-          (click)="forge.gotoPreviousStep()">Back</button>
+        <!--<button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult" [disabled]="(!forge.state.canMoveToPreviousStep)||(forge.processing === true)"
+          (click)="forge.gotoPreviousStep()">Back</button>-->
         <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult" [disabled]="(!forge.state.canMoveToNextStep)||(forge.processing === true)"
           (click)="forge.gotoNextStep()">Next</button>
         <button type="button" class="btn btn-primary" *ngIf="!forge.hasError && !forge.hasResult" [disabled]="(!forge.state.canExecute)||(forge.processing === true)"

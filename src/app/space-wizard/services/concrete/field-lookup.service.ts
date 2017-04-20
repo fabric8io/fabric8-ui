@@ -58,6 +58,30 @@ export class FieldLookupService {
       this.log(`the current space is ${space.name}`);
     })
 
+    let title=appGeneratorResponse.payload.state.title || '';
+    switch( title.toLowerCase() ) {
+      case 'io.fabric8.forge.generator.github.githubrepostep': {
+        appGeneratorResponse.payload.state.title = 'GitHub repository information';
+        break;
+      }
+      case 'launchpad: new project': {
+        appGeneratorResponse.payload.state.title = 'Quickstart';
+        break;
+      }
+      case 'obsidian: configure pipeline': {
+        appGeneratorResponse.payload.state.title = 'Select a build pipeline ... ';
+        break;
+      }
+      case 'io.fabric8.forge.generator.kubernetes.createbuildconfigstep': {
+        appGeneratorResponse.payload.state.title = 'Select the pipeline build options ... ';
+
+      }
+      default: {
+        break;
+      }
+
+    }
+
     for( let field of appGeneratorResponse.payload.fields ) {
         switch(field.name.toLowerCase()){
           case 'gitrepository' : {
@@ -69,7 +93,7 @@ export class FieldLookupService {
               field.value = spaceName ;
               this.log(`Updating ${field.name} field to space name = '${spaceName}'  ...`);
             }
-            field.display.label = 'Github repository name';
+            field.display.label = 'Repository name';
             break;
           }
           case 'version' : {
@@ -78,6 +102,7 @@ export class FieldLookupService {
           }
           case 'type' : {
               field.display.note=field.display.note.replace(/configguration/ig,'configuration');
+              field.display.label = 'Technology Stack';
             break;
           }
           case 'named' : {
@@ -89,7 +114,7 @@ export class FieldLookupService {
               field.value = spaceName ;
               this.log(`Updating ${field.name} field to space name = '${spaceName}'  ...`);
             }
-            field.display.label = 'Github repository name';
+            field.display.label = 'GitHub repository name';
             if( field.display.note ){
               field.display.note=field.display.note.replace(/Downloadable project zip and/ig,'');
               field.display.note=field.display.note.replace(/project name/ig,'repository name');
