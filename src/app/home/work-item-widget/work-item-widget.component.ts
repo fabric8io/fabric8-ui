@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { WorkItemService, WorkItem } from 'fabric8-planner';
 import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
 
 @Component({
-  selector: 'fabric8-work-item-widget',
+  selector: 'alm-work-item-widget',
   templateUrl: './work-item-widget.component.html',
   styleUrls: ['./work-item-widget.component.scss'],
   providers: [SpaceService]
 })
-export class WorkItemWidgetComponent implements OnInit {
+export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   currentSpaceId: string = "default";
-  index: number = 0;
   loggedInUser: User;
   recentSpaces: Space[] = [];
+  recentSpaceIndex: number = 0;
+  subscriptions: Subscription[] = [];
   spaces: Space[] = [];
   workItems: WorkItem[] = [];
 
@@ -23,25 +25,37 @@ export class WorkItemWidgetComponent implements OnInit {
       private spaceService: SpaceService,
       private workItemService: WorkItemService,
       private userService: UserService) {
-    userService.loggedInUser.subscribe(user => {
+    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
-      spaceService.getSpacesByUser(user.attributes.username, 10).subscribe(spaces => {
+      this.subscriptions.push(spaceService.getSpacesByUser(user.attributes.username, 10).subscribe(spaces => {
         this.spaces = spaces;
-      });
-    });
-    spacesService.recent.subscribe(spaces => {
+      }));
+    }));
+    this.subscriptions.push(spacesService.recent.subscribe(spaces => {
       this.recentSpaces = spaces;
-      this.selectRecentSpace(this.index);
-    });
+      this.fetchRecentSpace();
+    }));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   fetchWorkItems(): void {
-    this.userService
-      .getAllUsers()
-      .do(() => this.workItemService._currentSpace = this.getSpaceById(this.currentSpaceId))
+    this.fetchWorkItemsBySpace(this.getSpaceById(this.currentSpaceId));
+  }
+
+  // Private
+
+  private fetchWorkItemsBySpace(space: Space): void {
+    this.subscriptions.push(this.userService
+      .getUser()
+      .do(() => this.workItemService._currentSpace = space)
       .do(() => this.workItemService.buildUserIdMap())
       .switchMap(() => this.userService.loggedInUser)
       .map(user => [{
@@ -54,23 +68,24 @@ export class WorkItemWidgetComponent implements OnInit {
       .map(val => val.workItems)
       // Resolve the work item type, creator and area
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
-      .do(workItems => workItems.forEach(workItem => this.workItemService.resolveAreaForWorkItem(workItem)))
-      // MUST DO creator after area due to bug in planner
+      .do(workItems => workItems.forEach(workItem => {
+        try {
+          this.workItemService.resolveAreaForWorkItem(workItem)
+        } catch (error) { /* No space */ }
+      }))
+      .do(workItems => {
+        workItems.forEach(workItem => {
+          if (workItem.relationalData === undefined) {
+            workItem.relationalData = {};
+          }
+        })
+      })
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveCreator(workItem)))
       .subscribe(workItems => {
         this.workItems = workItems;
-
-        // Select a recent space which is populated with work items assigned to the user
-        if (workItems.length > 0) {
-          this.index = -1;
-        } else if (this.index !== -1) {
-          this.index++;
-          this.selectRecentSpace(this.index);
-        }
-      });
+        this.selectRecentSpace(workItems);
+      }));
   }
-
-  // Private
 
   /**
    * Helper method to retrieve space using ID stored in select menu
@@ -88,17 +103,34 @@ export class WorkItemWidgetComponent implements OnInit {
   }
 
   /**
+   * Helper to fetch a recent space
+   *
+   * @param index The index of the recent space to fetch
+   */
+  private fetchRecentSpace(): void {
+    if (this.recentSpaces === undefined || this.recentSpaces.length === 0) {
+      return;
+    }
+    if (this.recentSpaceIndex !== -1 && this.recentSpaceIndex < this.recentSpaces.length) {
+      this.fetchWorkItemsBySpace(this.recentSpaces[this.recentSpaceIndex]);
+    }
+  }
+
+  /**
    * Helper to select a recent space which is populated with work items assigned to the user
    *
    * @param index The index of the next recent space
    */
-  private selectRecentSpace(index: number): void {
-    if (this.recentSpaces === undefined || this.recentSpaces.length === 0) {
+  private selectRecentSpace(workItems: WorkItem[]): void {
+    if (this.recentSpaceIndex === -1) {
       return;
     }
-    if (index < this.recentSpaces.length) {
-      this.currentSpaceId = this.recentSpaces[index].id;
-      this.fetchWorkItems();
+    if (workItems !== undefined && workItems.length !== 0) {
+      this.currentSpaceId = this.recentSpaces[this.recentSpaceIndex].id;
+      this.recentSpaceIndex = -1;
+    } else {
+      this.recentSpaceIndex++;
+      this.fetchRecentSpace();
     }
   }
 }

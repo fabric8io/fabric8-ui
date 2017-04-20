@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 
-const routes: Routes = [{
-  path: '',
+export const routes: Routes = [{
+  path: 'alm-work-item-widget',
   component: WorkItemWidgetComponent
 }];
 
