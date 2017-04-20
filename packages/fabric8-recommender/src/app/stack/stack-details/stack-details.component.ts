@@ -158,17 +158,17 @@ export class StackDetailsComponent implements OnInit {
       }
     }
 
-    for (let i in missing) {
-      if (missing.hasOwnProperty(i)) {
-        let key: any = Object.keys(missing[i]);
+    for (let i in version) {
+      if (version.hasOwnProperty(i)) {
+        let key: any = Object.keys(version[i]);
         this.recommendations.push({
           suggestion: 'Recommended',
           action: 'Update',
-          message: key[0] + ' : ' + missing[i][key[0]],
+          message: key[0] + ' : ' + version[i][key[0]],
           subMessage: stackName + ' has a different version of dependency',
           workItem: {
-            action: 'Update ' + key[0] + ' with version ' + missing[i][key[0]],
-            message: 'Stack analytics have identified a potentially version upgrade. It\'s recommended that you upgrade "' + key[0] + '" with version ' + missing[i][key[0]] + ' to your application as many other Vert.x OpenShift applications have it included',
+            action: 'Update ' + key[0] + ' with version ' + version[i][key[0]],
+            message: 'Stack analytics have identified a potentially version upgrade. It\'s recommended that you upgrade "' + key[0] + '" with version ' + version[i][key[0]] + ' to your application as many other Vert.x OpenShift applications have it included',
             codebase: {
               'repository': 'Exciting',
               'branch': 'task-101',
