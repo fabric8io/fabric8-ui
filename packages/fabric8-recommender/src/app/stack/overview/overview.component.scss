@@ -1,10 +1,16 @@
 .overview-stack {
     padding: 15px 25px 15px 25px;
-    background: #fafafa;
+    background-color: #ededed;
+    border-top: 1px solid #d1d1d1;
+    border-bottom: 1px solid #d1d1d1;
 
     .overview-card {
         height: 230px;
         margin-left: 0;
+
+        &:last-child {
+            margin-right: 0;
+        }
 
         .f8-icon-size {
             font-size: 30px;
@@ -16,10 +22,10 @@
             color: #E08030;
         }
         .overview-depen-icon {
-            color: #3788C9;
+            color: #ec7a08;
         }
         .f8-chart-numeric {
-            font-size: 30px;
+            font-size: 24pt;
             font-weight: 100;
         }
         .f8-chart-description {
@@ -45,16 +51,7 @@
 
                 i {
                     font-size: 15px;
-
-                    &.pficon-warning-triangle-o {
-                        &:before {
-                            color: red;
-                        }
-                    }
-
-                    &.fa-check-circle-o {
-                        color: orange;
-                    }
+                    cursor: pointer;
                 }
             }
 
@@ -104,13 +101,9 @@
         }
 
         .warning-icon {
-            font-size: 60px;
+            font-size: 44pt;
             opacity: 0.9;
             margin: 0 0 10px 0;
-
-            &.fa-check-circle-o {
-                color: orange;
-            }
         }
 
         .cvss-id {

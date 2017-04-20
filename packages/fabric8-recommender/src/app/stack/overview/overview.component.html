@@ -1,5 +1,5 @@
 <div class="overview-stack">
-  <h1>{{messages && messages.title}}</h1>
+  <h1 class="overview-title">{{messages && messages.title}}</h1>
   <div *ngIf="!overviewData.summaryInfo.numeric" class="alert alert-warning">
     <span class="pficon pficon-warning-triangle-o"></span>
     <b>{{messages.noDependencies}}</b> {{messages.dataAvailable}}
@@ -8,23 +8,26 @@
     <div class="col-sm-4 col-xs-12">
       <div class="overview-card card-pf card-pf-utilization security-card">
         <div>
-          <h2 class="card-pf-title">
+          <h3 class="card-pf-title">
             {{messages && messages.security}}
-          </h2>
+          </h3>
         </div>
         <div class="card-pf-body">
           <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value === -1" class="row make-center">
             <div class="pficon pficon-help warning-icon"></div>
             <div class="cvss-id">{{messages.noCve}}</div>
           </div>
-          <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value >= 0 && overviewData.securityInfo.value <= 6.9" class="row make-center">
-            <div class="fa fa-check-circle-o warning-icon"></div>
+          <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value >= 0 && overviewData.securityInfo.value <= 3.9"
+            class="row make-center">
+            <div class="pficon pficon-ok warning-icon"></div>
             <div class="cvss-id">{{messages.noSecurity}}</div>
           </div>
-          <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value >= 7.0" class="row">
+          <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value >= 4.0" class="row">
             <div class="col-sm-12">
               <div class="cvss-id">{{overviewData.securityInfo.id}}
-                <i class="{{overviewData.securityInfo.iconClass}}" data-toggle="tooltip" data-placement="top" title="{{messages.cvssScoreTooltip}}"></i>
+                <i class="{{overviewData.securityInfo.iconClass}}" 
+                  data-toggle="tooltip" data-placement="top" 
+                  title="{{messages.cvssScoreTooltip}}"></i>
               </div>
               <div class="row cvss-data">
                 <div class="col-sm-12">
@@ -35,8 +38,11 @@
               </div>
               <div class="progress">
                 <!--added inline style here to handle the dynamic value of cvss score for the progress bar-->
-                <div class="progress-bar" role="progressbar" [ngStyle]="{'width': overviewData.securityInfo.percentScore+'%', 'background-color': overviewData.securityInfo.displayColor}"
-                  data-toggle="tooltip" data-placement="top" title="{{overviewData.securityInfo.value}} {{messages.cvss}} {{messages.score}}">
+                <div class="progress-bar" role="progressbar" 
+                  [ngClass]="overviewData.securityInfo.displayClass" 
+                  [ngStyle]="{'width': overviewData.securityInfo.percentScore+'%'}"
+                  data-toggle="tooltip" data-placement="top" 
+                  title="{{overviewData.securityInfo.value}} {{messages.cvss}} {{messages.score}}">
                 </div>
               </div>
             </div>
@@ -47,9 +53,9 @@
     <div class="col-sm-2 col-xs-12 ">
       <div class="overview-card card-pf card-pf-utilization">
         <div>
-          <h2 class="card-pf-title ">
+          <h3 class="card-pf-title ">
             {{messages && messages.dependencies}}
-          </h2>
+          </h3>
         </div>
         <div class="card-pf-body ">
           <div class="row make-center ">
@@ -72,9 +78,9 @@
     <div class="col-sm-3 col-xs-12">
       <div class="overview-card card-pf card-pf-utilization ">
         <div>
-          <h2 class="card-pf-title ">
+          <h3 class="card-pf-title ">
             {{messages && messages.codeMetrics}}
-          </h2>
+          </h3>
         </div>
         <div class="card-pf-body ">
           <div class="row make-center ">
@@ -97,9 +103,9 @@
     <div class="col-sm-3 col-xs-12">
       <div class="overview-card card-pf card-pf-utilization">
         <div>
-          <h2 class="card-pf-title">
+          <h3 class="card-pf-title">
             {{messages && messages.license}}
-          </h2>
+          </h3>
         </div>
         <div class="card-pf-body">
           <div *ngIf="overviewData.licenseChartInfo && overviewData.licenseChartInfo.data.columns.length !== 0" class="row">

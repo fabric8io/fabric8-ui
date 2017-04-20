@@ -1,5 +1,5 @@
 <div class="stack-components">
-  <h1>{{messages && messages.title}}</h1>
+  <h1 class="stack-components-title">{{messages && messages.title}}</h1>
   <div *ngIf="dependencies && dependencies.length === 0" class="alert alert-warning">
     <span class="pficon pficon-warning-triangle-o"></span>
     <strong>No Dependencies</strong> available
@@ -43,7 +43,17 @@
           <td>{{dependency.curVersion}}</td>
           <td>{{dependency.latestVersion}}</td>
           <td>{{dependency.cveid}}</td>
-          <td><i *ngIf="dependency.cvss.iconClass" class="{{dependency.cvss.iconClass}}"></i>{{dependency.cvss.value}}</td>
+          <td>
+            <span *ngIf="dependency.cvss.value !== 'NA'" 
+              data-toggle="tooltip" data-placement="top" 
+              title="{{messages.cveTooltipText}}">
+              <i class="{{dependency.cvss.iconClass}}"></i>
+              {{dependency.cvss.value}}
+            </span>
+            <span *ngIf="dependency.cvss.value === 'NA'">
+              {{dependency.cvss.value}}
+            </span>
+          </td>
           <td class="ellipsis">{{dependency.license}}</td>
           <td>{{dependency.linesOfCode}}</td>
           <td>{{dependency.avgCycloComplexity}}</td>

@@ -15,6 +15,7 @@
     }
     .stack-components-form-control {
         width: 200px;
+        font-style: italic;
     }
     table {
         th {
@@ -26,18 +27,12 @@
         td {
             font-size: 12px;
            
-            i {
-                margin-right: 3px;
-                font-size: 14px;
+            span {
+                cursor: pointer;
 
-                &.pficon-warning-triangle-o {
-                    &:before {
-                        color: red;
-                    }
-                }
-
-                &.fa-check-circle-o {
-                    color: orange;
+                i {
+                    margin-right: 3px;
+                    font-size: 14px;
                 }
             }
         }
