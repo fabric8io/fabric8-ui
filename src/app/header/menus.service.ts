@@ -58,22 +58,10 @@ export class MenusService {
             icon: 'pficon pficon-settings',
             menus: [
               {
-                name: 'Overview',
+                name: 'Areas',
                 path: '',
                 icon: '',
                 menus: []
-              }, {
-                name: 'Work',
-                path: 'work'
-              }, {
-                name: 'Security',
-                path: 'security'
-              }, {
-                name: 'Alerts',
-                path: 'alerts'
-              }, {
-                name: 'Areas',
-                path: 'areas'
               }
             ]
           }, {
