@@ -53,7 +53,8 @@ export class Fabric8ForgeService extends ForgeService {
         return this.forgeHttpCommandRequest(request);
       }
       case ForgeCommands.forgeQuickStart: {
-        command.parameters.pipeline.name = 'launchpad-new-project';
+        //command.parameters.pipeline.name = 'launchpad-new-project';
+        command.parameters.pipeline.name = 'fabric8-new-project';
         // here are the fabric8 upstream quickstarts:
         //command.parameters.pipeline.name = 'fabric8-new-quickstart';
         return this.forgeHttpCommandRequest(request);

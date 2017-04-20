@@ -71,6 +71,10 @@ export class AppGeneratorConfigurationService {
         appGeneratorResponse.payload.state.title = 'GitHub repository information';
         break;
       }
+      case 'fabric8: new project': {
+        appGeneratorResponse.payload.state.title = 'Quickstart';
+        break;
+      }
       case 'launchpad: new project': {
         appGeneratorResponse.payload.state.title = 'Quickstart';
         break;
