@@ -12,44 +12,6 @@ export class MenusService {
   constructor() {
     this.menus = new Map<ContextType, MenuItem[]>([
       [
-        ContextTypes.BUILTIN.get('user'),
-        [
-          {
-            path: '_settings',
-            icon: 'pficon pficon-settings',
-            menus: [
-              {
-                name: 'Profile',
-                path: ''
-              },
-              {
-                name: 'Access Tokens',
-                path: 'tokens'
-              }
-            ]
-          },
-          {
-            name: 'Home',
-            path: '/_home'
-          }, {
-            name: 'Profile',
-            path: '',
-            menus: [
-              {
-                name: 'Profile',
-                path: ''
-              }, {
-                name: 'Spaces',
-                path: '_spaces'
-              }, {
-                name: 'Resources',
-                path: '_resources'
-              }
-            ]
-          }
-        ]
-      ],
-      [
         ContextTypes.BUILTIN.get('space'),
         [
           {
