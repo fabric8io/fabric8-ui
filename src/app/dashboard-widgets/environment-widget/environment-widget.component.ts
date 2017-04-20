@@ -12,11 +12,9 @@ import { Contexts } from 'ngx-fabric8-wit';
 })
 export class EnvironmentWidgetComponent implements OnInit{
 
-  @Output() addToSpace = new EventEmitter();
   contextPath: Observable<string>;
 
   constructor(private context: Contexts) {
-
   }
 
   ngOnInit() {
