@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { ContextService } from '../../../shared/context.service'
+
 import {
   AppGeneratorService,
   FieldCollection,
@@ -39,7 +41,7 @@ export class FieldLookupService {
   public configurator:SpaceConfigurator = SpaceConfigurator.default();
 
 
-  constructor(loggerFactory: LoggerFactory){
+  constructor(loggerFactory: LoggerFactory, private context:ContextService){
 
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, FieldLookupService.instanceCount++);
     if ( logger ) {
@@ -50,6 +52,12 @@ export class FieldLookupService {
   }
 
   public UpdateFields(context: string, appGeneratorResponse: IAppGeneratorResponse) : IAppGeneratorResponse {
+
+    this.context.current.subscribe(ctx=>{
+      let space= ctx.space;
+      this.log(`the current space is ${space.name}`);
+    })
+
     for( let field of appGeneratorResponse.payload.fields ) {
         switch(field.name.toLowerCase()){
           case 'gitrepository' : {
