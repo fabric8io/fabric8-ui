@@ -1,0 +1,18 @@
+@import '../../../assets/stylesheets/base';
+
+.blank-slate-workitem-card {
+  position: relative;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+  p {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    &:first-child {
+      margin-top: -20px;
+    }
+    &:last-child {
+      margin-top: 40px;
+    }
+  }
+}

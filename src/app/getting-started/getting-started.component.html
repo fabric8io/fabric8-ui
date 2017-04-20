@@ -44,41 +44,41 @@
             Please connect your GitHub and OpenShift accounts to OpenShit.io.
           </p>
           <div *ngIf="gitHubLinked && openShiftLinked; then allLinked else allUnlinked"></div>
-          <template #allLinked>
+          <ng-template #allLinked>
             <label class="margin-bottom-15 required-pf">
               Authorized accounts
             </label>
-          </template>
-          <template #allUnlinked>
+          </ng-template>
+          <ng-template #allUnlinked>
             <label class="margin-bottom-10">
               Select accounts to authorize
             </label>
-          </template>
+          </ng-template>
           <div class="form-group">
             <div *ngIf="gitHubLinked; then ghLinked else ghUnlinked"></div>
-            <template #ghLinked>
+            <ng-template #ghLinked>
               <span>You've authorized GitHub.</span>
-            </template>
-            <template #ghUnlinked>
+            </ng-template>
+            <ng-template #ghUnlinked>
               <div class="checkbox">
                 <input type="checkbox" id="authGitHub" name="authGitHub"
                        [(ngModel)]="authGitHub">
                 <label for="authGitHub" class="required-pf">GitHub</label>
               </div>
-            </template>
+            </ng-template>
           </div>
           <div class="form-group">
             <div *ngIf="openShiftLinked; then osoLinked else osoUnlinked"></div>
-            <template #osoLinked>
+            <ng-template #osoLinked>
               <span>You've authorized OpenShift.com.</span>
-            </template>
-            <template #osoUnlinked>
+            </ng-template>
+            <ng-template #osoUnlinked>
               <div class="checkbox">
                 <input type="checkbox" id="authOpenShift" name="authOpenShift"
                        [(ngModel)]="authOpenShift">
                 <label for="authOpenShift" class="required-pf">OpenShift.com</label>
               </div>
-            </template>
+            </ng-template>
           </div>
           <div class="form-group">
             <button class="btn btn-lg btn-default" id="connect"

@@ -8,9 +8,17 @@ import { SpaceWizardModule } from '../space-wizard/space-wizard.module';
 
 import { HomeComponent }   from './home.component';
 import { HomeRoutingModule }   from './home-routing.module';
+import { WorkItemWidgetModule }   from './work-item-widget/work-item-widget.module';
 
 @NgModule({
-  imports:      [ CommonModule, HomeRoutingModule, ModalModule, SpaceWizardModule, Fabric8WitModule ],
+  imports: [
+    CommonModule,
+    HomeRoutingModule,
+    ModalModule,
+    SpaceWizardModule,
+    Fabric8WitModule,
+    WorkItemWidgetModule
+  ],
   declarations: [ HomeComponent ]
 })
 export class HomeModule {
