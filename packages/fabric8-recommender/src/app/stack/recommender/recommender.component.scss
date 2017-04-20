@@ -1,6 +1,14 @@
 @import '../../../assets/stylesheets/base';
 
 .stack-recommendation {
+    @mixin strike-text {
+        text-decoration: line-through;
+        -moz-text-decoration: line-through;
+        -webkit-text-decoration: line-through;
+    }
+    .strike-color {
+        color: #bbbbbb !important;
+    }
     padding: 15px 25px 15px 25px;
     .default-button-state {
         background: #fff;
@@ -49,6 +57,16 @@
             margin-top: 0;
             padding-bottom: 0;
             padding-top: 0;
+        }
+        .pficon-info {
+            font-size: 16pt;
+        }
+        .main-text-info {
+            font-weight: bold;
+        }
+        .strike-through-class {
+            @extend .strike-color;
+            @include strike-text;
         }
         .each-work-item {
             @extend .default-button-state;

@@ -4,7 +4,7 @@
     <modal #stackModule title="Report title on Application, Build #{{buildId}}" modalClass="modal-lg modal-fullscreen" (onOpen)="getStackAnalyses(stack);">
       <modal-content>
           <div *ngIf="isLoading" class="pre-loader">
-            <img src="../../../assets/icon/loader.gif" class="loader-icon" />
+            <div class="pre-loader-spinner spinner spinner-lg"></div>
           </div>
           <div [hidden]="errorMessage.message">
             <!-- Recommender -->
@@ -37,14 +37,14 @@
                   <span>50%</span>
                 </div>
               </div>
-              <h1>
+              <h3>
                 {{messages && messages['report_loading']}}
-              </h1>
-              <span>{{errorMessage.message}}</span>
+              </h3>
+              <p>{{errorMessage.message}}</p>
             </div>
             <div class="blank-slate-pf-secondary-action">
-              <button class="btn btn-default btn-lg" (click)="stackModule.close()">{{messages && messages['cancel']}}</button>
-              <button class="btn btn-primary btn-lg" (click)="stackModule.close()">{{messages && messages['return_to_pipeline']}}</button>
+              <button class="btn btn-default" (click)="stackModule.close()">{{messages && messages['cancel']}}</button>
+              <button class="btn btn-primary" (click)="stackModule.close()">{{messages && messages['return_to_pipeline']}}</button>
             </div>
           </div>
       </modal-content>

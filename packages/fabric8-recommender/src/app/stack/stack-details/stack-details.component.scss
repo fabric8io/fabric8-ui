@@ -35,14 +35,8 @@
         right: 0;
         background: rgba(255, 255, 255, 0.5);
         z-index: 99;
-
-        .loader-icon {
-            position: relative;
+        .pre-loader-spinner {
             top: 50%;
-            left: 50%;
-            width: 100px;
-            height: 100px;
-            transform: translate(-50%, -50%)
         }
     }
 }
