@@ -103,6 +103,7 @@
       a {
         padding-top: 11px;
         padding-bottom:11px;
+        width: 200px;
         .logged-out-user {
           border: 1px solid $color-pf-black-600;
           padding: 2px;
@@ -128,13 +129,33 @@
     .user-dropdown {
       border-left: 1px solid $color-pf-black-600;
       padding: 10px 14px;
+      width: 200px;
       &:hover {
         cursor: pointer;
+      }
+      .user-dropdown-items {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-right: 5px;
+      }
+      .caret {
+        position: absolute;
+        right: 0;
+        margin-right: 5px;
+        margin-top: 8px;
       }
     }
     .user-dropdown-menu{
       .dropdown-menu {
-        margin-top: 2px;
+        li {
+          width: 196px;
+          a {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+        }
       }
     }
   }

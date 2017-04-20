@@ -167,8 +167,8 @@
         </a>
       </li>
       <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
-        <a dropdown-open class="user-dropdown">
-          <div *ngIf="loggedInUser" id="header_dropdownToggle2">
+        <a dropdown-open class="user-dropdown" title="{{loggedInUser.attributes.fullName}}">
+          <div *ngIf="loggedInUser" id="header_dropdownToggle2" class="user-dropdown-items">
             <span class="user-icon">
               <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
               <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
@@ -179,17 +179,25 @@
         </a>
         <ul class="dropdown-menu">
           <li>
-            <a [routerLink]="[loggedInUser.attributes.username]"><span>Profile</span> </a>
+            <a [routerLink]="[loggedInUser.attributes.username]">
+              Profile
+            </a>
           </li>
           <li>
-            <a href="https://fabric8.io/guide/getStarted/index.html"><span>Help</span></a>
+            <a href="https://fabric8.io/guide/getStarted/index.html">
+              Help
+            </a>
           </li>
           <li>
-            <a (click)="modal.openAboutModal($event);">About</a>
+            <a (click)="modal.openAboutModal($event);" class="pointer">
+              About
+            </a>
           </li>
           <li class="divider"></li>
           <li>
-            <a *ngIf="loggedInUser" (click)="logout();"><span>Log Out</span></a>
+            <a *ngIf="loggedInUser" (click)="logout();" class="pointer">
+              Log Out
+            </a>
           </li>
         </ul>
       </li>

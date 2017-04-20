@@ -14,8 +14,6 @@ import { Navigation } from './../models/navigation';
 import { MenuItem } from './../models/menu-item';
 import { DummyService } from './../shared/dummy.service';
 
-
-
 interface MenuHiddenCallback {
   (headerComponent: HeaderComponent): Observable<boolean>;
 }
