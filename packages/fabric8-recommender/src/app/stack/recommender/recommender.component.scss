@@ -44,6 +44,9 @@
         float: right;
     }
     .recommendation-group-item {
+        border: 1px solid #f5f5f5;
+        border-left: 0;
+        border-right: 0;
         &.active {
             z-index: unset;
         }
@@ -58,6 +61,9 @@
             margin-top: 0;
             padding-bottom: 0;
             padding-top: 0;
+        }
+        .list-view-pf-main-info {
+            display: flex;
         }
         .pficon-info {
             font-size: 16pt;

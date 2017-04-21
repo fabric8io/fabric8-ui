@@ -18,7 +18,7 @@
     <div class="select-all-container" *ngIf="recommendationsList.length > 0"></div>
     <!-- Header to handle multiple items -->
 
-    <div #listGroupItem class="list-group-item list-view-pf-stacked recommendation-group-item recommendation-list" *ngFor="let recommendation of recommendationsList">
+    <div #listGroupItem class="list-group-item recommendation-group-item recommendation-list" *ngFor="let recommendation of recommendationsList">
       <div class="list-view-pf-actions">
         <button *ngIf="recommendation.showCreateButton" (click)="handleDropDownClick(recommendation.pop[0], recommendation, $event)"
           class="each-work-item btn btn-default" type="button">
