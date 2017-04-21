@@ -1,144 +1,151 @@
-<nav class="navbar navbar-inverse navbar-pf" role="navigation" *ngIf="context && !isGettingStartedPage">
-  <div class="navbar-header">
-    <ul class="nav navbar-nav navbar-right hidden-sm hidden-md hidden-lg ">
-      <li dropdown class="pull-right dropdown" *ngIf="loggedInUser">
-        <a dropdown-open class="pull-right">
-          <div id="header_dropdownToggle_header">
+<div *ngIf="isGettingStartedPage; then showGettingStartedHeader else showHeader"></div>
+<ng-template #showGettingStartedHeader>
+  <nav class="navbar navbar-inverse navbar-pf" role="navigation">
+    <img src="../../assets/images/openshift-io_white.png" class="openshift-logo"/>
+  </nav>
+</ng-template>
+<ng-template #showHeader>
+  <nav class="navbar navbar-inverse navbar-pf" role="navigation" *ngIf="context">
+    <div class="navbar-header">
+      <ul class="nav navbar-nav navbar-right hidden-sm hidden-md hidden-lg ">
+        <li dropdown class="pull-right dropdown" *ngIf="loggedInUser">
+          <a dropdown-open class="pull-right">
+            <div id="header_dropdownToggle_header">
             <span class="user-icon">
               <span *ngIf="!imgLoaded" class="pficon-user"></span>
               <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
             </span>
-            <span>{{loggedInUser.attributes.fullName}}</span>
-            <span class="caret"></span>
-          </div>
-        </a>
-        <ul class="dropdown-menu view-width-100">
-          <li>
-            <a [routerLink]="['/', loggedInUser.attributes.username]">
-              <span>Profile</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://fabric8.io/guide/getStarted/index.html">
-              <span>Help</span>
-            </a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a [routerLink]="['/', loggedInUser.attributes.username, '_settings']">
-              <span>Settings</span>
-            </a>
-          </li>
-          <li>
-            <a (click)="logout();">
-              <span>Log Out</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <div class="collapse navbar-collapse navbar-collapse-1">
-    <ul class="nav navbar-nav navbar-primary persistent-secondary navbar-left">
-      <!-- This part of the menu is dynamic based on context -->
-      <li class="context dropdown recent-items-dropdown" dropdown *ngIf="loggedInUser">
-        <a class="recent-items-toggle" dropdown-open data-toggle="tooltip" title="{{context.name}}">
-          <div id="header_dropdownToggle" class="recent-item-text">
+              <span>{{loggedInUser.attributes.fullName}}</span>
+              <span class="caret"></span>
+            </div>
+          </a>
+          <ul class="dropdown-menu view-width-100">
+            <li>
+              <a [routerLink]="['/', loggedInUser.attributes.username]">
+                <span>Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://fabric8.io/guide/getStarted/index.html">
+                <span>Help</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a [routerLink]="['/', loggedInUser.attributes.username, '_settings']">
+                <span>Settings</span>
+              </a>
+            </li>
+            <li>
+              <a (click)="logout();">
+                <span>Log Out</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="collapse navbar-collapse navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-primary persistent-secondary navbar-left">
+        <!-- This part of the menu is dynamic based on context -->
+        <li class="context dropdown recent-items-dropdown" dropdown *ngIf="loggedInUser">
+          <a class="recent-items-toggle" dropdown-open data-toggle="tooltip" title="{{context.name}}">
+            <div id="header_dropdownToggle" class="recent-item-text">
             <span class="nav-item-icon">
               <span class=" {{context.type.icon}}"></span>
             </span>
-            <span>{{context.name}}</span>
-            <span class="nav-item-icon">
+              <span>{{context.name}}</span>
+              <span class="nav-item-icon">
               <span class="caret"></span>
             </span>
-          </div>
-        </a>
-        <ul class="dropdown-menu recent-items">
-          <li class="recent-items-toggle" *ngFor="let m of recent">
-            <a class="recent-item-text-dropdown"
-              [routerLink]="[m.path]"
-              *ngIf="m.path !== null && m.path != context.path"
-              data-toggle="tooltip" title="{{m.name}}">
+            </div>
+          </a>
+          <ul class="dropdown-menu recent-items">
+            <li class="recent-items-toggle" *ngFor="let m of recent">
+              <a class="recent-item-text-dropdown"
+                 [routerLink]="[m.path]"
+                 *ngIf="m.path !== null && m.path != context.path"
+                 data-toggle="tooltip" title="{{m.name}}">
               <span class="nav-item-icon">
                 <span class=" {{m.type.icon}}"></span>
               </span>
-              <span>{{m.name}}</span>
-            </a>
-            <a *ngIf="m.path === null">
+                <span>{{m.name}}</span>
+              </a>
+              <a *ngIf="m.path === null">
               <span class="nav-item-icon">
                 <span class=" {{m.type.icon}}"></span>
               </span>
-              <span>{{m.name}}</span>
-            </a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <!-- TODO: This should pop up the new space dialog -->
-            <a (click)="spaceWizard.open()">
+                <span>{{m.name}}</span>
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <!-- TODO: This should pop up the new space dialog -->
+              <a (click)="spaceWizard.open()">
               <span class="nav-item-icon">
                 <i class="pficon pficon-add-circle-o"></i>
               </span>
-              Create space
-            </a>
-          </li>
-          <li>
-            <a [routerLink]="[loggedInUser.attributes.username,'_spaces']">
+                Create space
+              </a>
+            </li>
+            <li>
+              <a [routerLink]="[loggedInUser.attributes.username,'_spaces']">
               <span class="nav-item-icon">
                 <i class="fa fa-th"></i>
               </span>
                 View all spaces
-            </a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a [routerLink]="['_home']">
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a [routerLink]="['_home']">
               <span class="nav-item-icon">
                 <i class="pficon pficon-home"></i>
               </span>
-              Account home
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li *ngFor="let m of context?.type?.menus" [class.active]="m.active" [class.with-no-children]="(m.menus||[]).length===0">
-        <a [routerLink]="[m.fullPath]" *ngIf="!m.hide">
+                Account home
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li *ngFor="let m of context?.type?.menus" [class.active]="m.active" [class.with-no-children]="(m.menus||[]).length===0">
+          <a [routerLink]="[m.fullPath]" *ngIf="!m.hide">
           <span *ngIf="m.icon" class="nav-item-icon">
             <span class="{{m.icon}}"></span>
           </span>
-          <span *ngIf="m.name">{{m.name}}</span>
-        </a>
-        <ul class="nav navbar-nav navbar-persistent" *ngIf="m.menus">
-          <li *ngFor="let n of m.menus" [class.active]="n.active">
-            <a [routerLink]="[n.fullPath]" [queryParams]="plannerFollowQueryParams" *ngIf="!n.hide">
+            <span *ngIf="m.name">{{m.name}}</span>
+          </a>
+          <ul class="nav navbar-nav navbar-persistent" *ngIf="m.menus">
+            <li *ngFor="let n of m.menus" [class.active]="n.active">
+              <a [routerLink]="[n.fullPath]" [queryParams]="plannerFollowQueryParams" *ngIf="!n.hide">
               <span>
                 {{n.name}}
               </span>
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
-      <li dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok">
-        <a dropdown-open>
-          <span class="pficon pficon-ok pficon-white"></span>
-        </a>
-        <div class="dropdown-menu infotip bottom-right">
-          <div class="arrow"></div>
-          <ul class="list-group">
-            <li class="list-group-item">
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
+        <li dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok">
+          <a dropdown-open>
+            <span class="pficon pficon-ok pficon-white"></span>
+          </a>
+          <div class="dropdown-menu infotip bottom-right">
+            <div class="arrow"></div>
+            <ul class="list-group">
+              <li class="list-group-item">
               <span>
                 <span class="pficon pficon-ok"></span>
                 Platform
               </span>
-            </li>
-            <li class="list-group-item">
+              </li>
+              <li class="list-group-item">
               <span>
                 <span class="pficon pficon-ok"></span>
                 Planner
               </span>
-            </li>
-            <li class="list-group-item">
+              </li>
+              <li class="list-group-item">
               <span>
                 <!--
                     example of the error icon
@@ -147,8 +154,8 @@
                 <span class="pficon pficon-ok"></span>
                 Che
               </span>
-            </li>
-            <li class="list-group-item">
+              </li>
+              <li class="list-group-item">
               <span>
                 <!--
                     example of the warning icon
@@ -157,60 +164,61 @@
                 <span class="pficon pficon-ok"></span>
                 Pipeline
               </span>
-            </li>
-          </ul>
-        </div>
-      </li>
-      <li class="login-block">
-        <a *ngIf="!loggedInUser" (click)="login();">
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="login-block">
+          <a *ngIf="!loggedInUser" (click)="login();">
           <span class="logged-out-user">
             <i class="pficon pficon-user"></i>
           </span>
-          Log In
-        </a>
-      </li>
-      <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
-        <a dropdown-open class="user-dropdown" title="{{loggedInUser.attributes.fullName}}">
-          <div *ngIf="loggedInUser" id="header_dropdownToggle2" class="user-dropdown-items">
+            Log In
+          </a>
+        </li>
+        <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
+          <a dropdown-open class="user-dropdown" title="{{loggedInUser.attributes.fullName}}">
+            <div *ngIf="loggedInUser" id="header_dropdownToggle2" class="user-dropdown-items">
             <span class="user-icon">
               <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
               <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
             </span>
-            <span>{{loggedInUser.attributes.fullName}}</span>
-            <span class="caret"></span>
-          </div>
-        </a>
-        <ul class="dropdown-menu">
-          <li>
-            <a [routerLink]="[loggedInUser.attributes.username]">
-              Profile
-            </a>
-          </li>
-          <li>
-            <a href="https://fabric8.io/guide/getStarted/index.html">
-              Help
-            </a>
-          </li>
-          <li>
-            <a (click)="modal.openAboutModal($event);" class="pointer">
-              About
-            </a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a *ngIf="loggedInUser" (click)="logout();" class="pointer">
-              Log Out
-            </a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-</nav>
-<modal #spaceWizard modalClass="modal-lg chromeless-modal" >
-  <modal-content class="chromeless-modal-content">
-    <space-wizard [host]="spaceWizard"></space-wizard>
-  </modal-content>
-</modal>
-<fab-about-modal #modal>
-</fab-about-modal>
+              <span>{{loggedInUser.attributes.fullName}}</span>
+              <span class="caret"></span>
+            </div>
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a [routerLink]="[loggedInUser.attributes.username]">
+                Profile
+              </a>
+            </li>
+            <li>
+              <a href="https://fabric8.io/guide/getStarted/index.html">
+                Help
+              </a>
+            </li>
+            <li>
+              <a (click)="modal.openAboutModal($event);" class="pointer">
+                About
+              </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a *ngIf="loggedInUser" (click)="logout();" class="pointer">
+                Log Out
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <modal #spaceWizard modalClass="modal-lg chromeless-modal" >
+    <modal-content class="chromeless-modal-content">
+      <space-wizard [host]="spaceWizard"></space-wizard>
+    </modal-content>
+  </modal>
+  <fab-about-modal #modal>
+  </fab-about-modal>
+</ng-template>
