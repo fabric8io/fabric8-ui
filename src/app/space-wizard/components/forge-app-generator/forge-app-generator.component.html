@@ -2,9 +2,9 @@
   <header class="container-fluid">
     <div class="row">
       <div class="col-xs-12 wizard-step-title">
-        <span style="vertical-align: center;" class="header-status">
-          <span *ngIf="!forge.hasError && forge.processing===true" class="fa fa-refresh" ></span>
-        </span>
+        <div class="busy-indicator">
+          <div *ngIf="!forge.hasError && forge.processing===true" class="spinner spinner-lg"></div>
+        </div>
         <h2>{{forge.state.title}}</h2>
         <span (click)="forge.close()" class="pficon pficon-close"></span>
       </div>

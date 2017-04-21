@@ -76,9 +76,17 @@ form
   min-height: 66vh;
 }
 
-.header-status
+.busy-indicator
 {
   min-width:50px;
+  min-height:60px;
+  vertical-align: center;
+  position:relative;
+  display:flex;
+  > div{
+    margin:auto;
+    padding:0;
+  }
 }
 
 header{
