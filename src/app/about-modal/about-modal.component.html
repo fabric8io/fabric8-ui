@@ -1,18 +1,30 @@
-<modal #aboutModal>
-  <modal-content>
-    <div class="col-md-12 col-sm-12 col-xs-12">
-      <div class="product-versions-pf">
-        <img _ngcontent-c8=""
-          class="home-logo margin-bottom-15 padding-bottom-10"
-          src="../../assets/images/Logotype_RH_OpenShift-io_RGB_RedGray.png" />
-        <ul class="list-unstyled margin-top-15">
-          <li><strong>Build</strong> <span *ngIf="about.buildNumber">#{{about.buildNumber}}</span></li>
-          <li><strong>Time stamp</strong><span *ngIf="about.buildNumber"> {{about.buildTimestamp}}</span></li>
-        </ul>
+<div class="modal fade" bsModal #staticModal="bs-modal" [config]="{backdrop: 'static'}"
+     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content about-modal-pf about-modal-f8-bg">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="staticModal.hide()">
+          <span class="pficon pficon-close"></span>
+        </button>
       </div>
-      <div class="trademark-pf">
-        Copyright &copy;2017 Red Hat,Inc.
+      <div class="modal-body">
+         <div class="product-versions-pf">
+          <img _ngcontent-c8=""
+            class="home-logo margin-bottom-15 padding-bottom-10"
+            src="../../assets/images/OpenShift-io_logo.svg" />
+          <ul class="list-unstyled margin-top-15">
+            <li><strong>Build</strong> <span *ngIf="about.buildNumber">#{{about.buildNumber}}</span></li>
+            <li><strong>Time stamp</strong><span *ngIf="about.buildNumber"> {{about.buildTimestamp}}</span></li>
+          </ul>
+        </div>
+        <div class="trademark-pf">
+          Copyright &copy;2017 Red Hat,Inc.
+        </div>
+        <div class="modal-footer">
+          <img src="../../assets/images/Logo_RH_RGB_Reverse.svg"
+          class="footr-logo pull-right" alt="Patternfly Symbol">
+        </div>
       </div>
     </div>
-  </modal-content>
-</modal>
+  </div>
+</div>

@@ -1,8 +1,11 @@
 import {
   Component,
+  Renderer2,
   ViewChild,
   OnInit,
   Output,
+  AfterViewInit,
+  ElementRef,
   EventEmitter,
   Input } from '@angular/core';
 import { AboutService } from '../shared/about.service';
@@ -12,16 +15,18 @@ import { AboutService } from '../shared/about.service';
   templateUrl: './about-modal.component.html',
   styleUrls: ['./about-modal.component.scss']
 })
-export class AboutModalComponent {
+export class AboutModalComponent implements AfterViewInit {
+  @ViewChild('staticModal') staticModal: any;
 
-  @ViewChild('aboutModal') aboutModal: any;
+  constructor(
+    public about: AboutService,
+    public renderer: Renderer2
+  ) {}
 
-  constructor(public about: AboutService) {
-    console.log(about.buildNumber, ' :modal ', about.buildTimestamp);
+  ngAfterViewInit() {}
+
+  open() {
+    this.staticModal.show();
   }
 
-  openAboutModal(event: any) {
-    event.stopPropagation();
-    this.aboutModal.open();
-  }
 }

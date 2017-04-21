@@ -183,9 +183,9 @@
               <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
               <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
             </span>
-              <span>{{loggedInUser.attributes.fullName}}</span>
-              <span class="caret"></span>
-            </div>
+            <span>{{loggedInUser.attributes.fullName}}</span>
+            <span class="caret"></span>
+          </div>
           </a>
           <ul class="dropdown-menu">
             <li>
@@ -199,7 +199,7 @@
               </a>
             </li>
             <li>
-              <a (click)="modal.openAboutModal($event);" class="pointer">
+              <a (click)="aboutModal.open()" class="pointer">
                 About
               </a>
             </li>
@@ -219,6 +219,6 @@
       <space-wizard [host]="spaceWizard"></space-wizard>
     </modal-content>
   </modal>
-  <fab-about-modal #modal>
+  <fab-about-modal #aboutModal>
   </fab-about-modal>
 </ng-template>
