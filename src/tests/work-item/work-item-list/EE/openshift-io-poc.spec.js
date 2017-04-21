@@ -63,7 +63,7 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     /* Commented out due to - https://github.com/fabric8io/fabric8-planner/issues/1638 */
     // OpenShiftIoDashboardPage.clickNewSpaceButton();
 
-    /* Commented out temporarily to avoid creating unnecessary spaces during testing 
+    /* Commented out temporarily to avoid creating unnecessary spaces during testing */
 
     OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
     OpenShiftIoDashboardPage.clickCreateSpaceFromNavBar();  
@@ -71,13 +71,13 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     var spaceTime = returnTime();
     OpenShiftIoDashboardPage.typeNewSpaceName((spaceTime));
     OpenShiftIoDashboardPage.typeDevProcess("Scenario Driven Planning");
-    OpenShiftIoDashboardPage.clickCreateSpaceButton();     */
+    OpenShiftIoDashboardPage.clickCreateSpaceButton();   
     /* ************************************************************************************* */
 
     /* Step 4 - Create a new project */
 
     /* Select a space to be used */
-    var spaceTime = '1490960814920';
+//    var spaceTime = '1490960814920';
 
     console.log ('EE POC test - Navigate to space home page/dashboard for space: ' + spaceTime);
     OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickSelectSpace(spaceTime);
@@ -96,10 +96,9 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     //    OpenShiftIoSpaceHomePage.clickTechnologyStack();
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
-
     OpenShiftIoDashboardPage.clickRightNavBar();
     OpenShiftIoDashboardPage.clickLogOut();
-    console.log ('EE Heartbeat test - Log Out');
+    console.log ('EE POC test - Log Out');
 
   });
 
