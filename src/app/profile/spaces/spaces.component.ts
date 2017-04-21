@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { Logger } from 'ngx-base';
 import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
+import { IModalHost } from '../../space-wizard/models/modal-host';
 
 
 
@@ -21,6 +22,8 @@ export class SpacesComponent implements OnInit {
   pageSize: number = 20;
   searchTermStream = new Subject<string>();
   context: Context;
+  spaceToDelete: Space;
+  @ViewChild('deleteSpace') deleteSpace: IModalHost;
 
   constructor(
     private router: Router,
@@ -70,18 +73,29 @@ export class SpacesComponent implements OnInit {
     }
   }
 
-  removeSpaces(space: Space): void {
-    if (this.context && this.context.user) {
+  removeSpace(): void {
+    if (this.context && this.context.user && this.spaceToDelete) {
+      let space = this.spaceToDelete;
       this.spaceService.deleteSpace(space)
         .subscribe(spaces => {
-          this._spaces = this._spaces.filter(space => space !== spaces);
+          let index = this._spaces.indexOf(space);
+          this._spaces.splice(index, 1);
+          this.spaceToDelete = undefined;
+          this.deleteSpace.close();
         },
         err => {
           this.logger.error(err);
+          this.spaceToDelete = undefined;
+          this.deleteSpace.close();
         });
     } else {
       this.logger.error("Failed to retrieve list of spaces owned by user");
     }
+  }
+
+  confirmDeleteSpace(space: Space): void {
+    this.spaceToDelete = space;
+    this.deleteSpace.open();
   }
 
   get spaces(): Space[] {
