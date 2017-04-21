@@ -45,16 +45,23 @@
                 <input *ngSwitchCase="'number'" type="number" name="{{forge.fields[i].name}}" [(ngModel)]="forge.fields[i].value" class="form-control"
                   [required]="forge.fields[i].display.required" [disabled]="!forge.fields[i].display.enabled">
               </div>
-              <div *ngSwitchCase="'singleSelection'">
-                <select class="combobox form-control" [(ngModel)]="forge.fields[i].value" (change)="forge.validate()" name="{{forge.fields[i].name}}"
-                  *ngIf="forge.fields[i].valueType != 'projectType'">
-                  <option  value="{{choice.id}}" *ngFor="let choice of forge.fields[i].display.choices">
-                    <div >
-                      <div class="widget-selection-id" >{{choice.id}}</div>
-                      <!--<div class="widget-selection-description" >{{choice.description||''}}</div>-->
-                    </div>
-                  </option>
-                </select>
+              <div class="combobox-container" *ngSwitchCase="'singleSelection'">
+                <input type="hidden" name value>
+                <div class="input-group">
+                  <input type="text" class="user-select-none" readonly="true"  (change)="forge.validate()"  (click)="forge.fields[i].display.open =!forge.fields[i].display.open"  [(ngModel)]="forge.fields[i].value" name="{{forge.fields[i].name}}" placeholder="select an option" class="combobox form-control"   >
+                  <ul class="dropdown-menu" [class.open]="forge.fields[i].display.open"  >
+                    <li   (click)="forge.fields[i].value=choice.id;forge.fields[i].display.open=false;forge.validate();"  *ngFor="let choice of forge.fields[i].display.choices">
+                      <div [class.selected]="forge.fields[i].value===choice.id" class="dropdown-menu-item user-select-none cursor-pointer" >
+                        <div class="item-name" >{{choice.id}}</div>
+                        <div class="item-description" >{{choice.description||''}}</div>
+                      </div>
+                    </li>
+                  </ul>
+                  <span class="input-group-addon" (click)="forge.fields[i].display.open =!forge.fields[i].display.open" >
+                    <span class="caret"></span>
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </span>
+                </div>
               </div>
               <div *ngSwitchCase="'multipleSelection'" style="border:solid 1px #bbb; overflow:hidden;  ; border-radius:4px;">
                 <!--input-->
@@ -91,12 +98,11 @@
                   </div>
                 </div>
               </div>
+              <span *ngIf="forge.fields[i].display.note"><span class="color-info fa fa-info-circle"></span> <i>{{forge.fields[i].display.note}}</i></span>
               <div class="errorLabel help-block">
                 <span *ngIf="forge.fields[i].display.message">{{forge.fields[i].display.message.description}}</span>
                 <span *ngIf="!forge.fields[i].display.message && field.display.required">{{forge.fields[i].display.label}} is a required field</span>
               </div>
-              <span *ngIf="forge.fields[i].display.note"><span
-              class="fa fa-info-circle"></span> <i>{{forge.fields[i].display.note}}</i></span>
             </div>
           </div>
         </div>

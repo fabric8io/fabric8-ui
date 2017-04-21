@@ -134,9 +134,10 @@ export class AppGeneratorConfigurationService {
             field.display.label = 'Name';
             if( field.display.note ){
               field.display.note=field.display.note.replace(/Downloadable project zip and/ig,'');
-              field.display.note=field.display.note.replace(/project name/ig,'repository name');
+              field.display.note=field.display.note.replace(/project name/ig,'name');
               field.display.note=field.display.note.replace(/are based/ig,'is based');
               field.display.note=field.display.note.replace(/application/ig,'Application');
+              field.display.note=field.display.note.replace(/application jar is/ig,'Application generated assets are');
 
             }
 
