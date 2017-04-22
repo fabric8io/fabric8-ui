@@ -1,6 +1,6 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, OnDestroy } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Logger } from 'ngx-base';
 import { AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
@@ -18,9 +18,10 @@ export class ExtProfile extends Profile {
 }
 
 @Injectable()
-export class GettingStartedService {
+export class GettingStartedService implements OnDestroy {
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private loggedInUser: User;
+  subscriptions: Subscription[] = [];
   private usersUrl: string;
 
   constructor(
@@ -29,15 +30,21 @@ export class GettingStartedService {
       private logger: Logger,
       private userService: UserService,
       @Inject(WIT_API_URL) apiUrl: string) {
-    userService.loggedInUser.subscribe(user => {
+    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       if (user !== undefined && user.attributes !== undefined) {
         this.loggedInUser = user;
       }
-    });
+    }));
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
     this.usersUrl = apiUrl + 'users';
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   /**

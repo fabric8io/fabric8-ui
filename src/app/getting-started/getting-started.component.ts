@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { Logger, Notification, NotificationType, Notifications } from 'ngx-base';
 import { AuthenticationService, UserService, User } from 'ngx-login-client';
@@ -15,7 +15,7 @@ import { ProviderService } from './services/provider.service';
   styleUrls: ['./getting-started.component.scss'],
   providers: [ GettingStartedService, ProviderService ]
 })
-export class GettingStartedComponent implements OnInit {
+export class GettingStartedComponent implements OnDestroy, OnInit {
 
   authGitHub: boolean = false;
   authOpenShift: boolean = false;
@@ -24,6 +24,7 @@ export class GettingStartedComponent implements OnInit {
   openShiftLinked: boolean = false;
   registrationCompleted: boolean = false;
   showGettingStarted: boolean = false;
+  subscriptions: Subscription[] = [];
   username: string;
   usernameInvalid: boolean = false;
 
@@ -35,25 +36,31 @@ export class GettingStartedComponent implements OnInit {
       private notifications: Notifications,
       private router: Router,
       private userService: UserService) {
-    userService.loggedInUser.subscribe(user => {
+    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       if (user === undefined || user.attributes === undefined) {
         return;
       }
       this.loggedInUser = user;
       this.username = this.loggedInUser.attributes.username;
       this.registrationCompleted = (user as ExtUser).attributes.registrationCompleted;
-    });
-    auth.gitHubToken.subscribe(token => {
+    }));
+    this.subscriptions.push(auth.gitHubToken.subscribe(token => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
       this.routeToHomeIfCompleted();
-    });
-    auth.openShiftToken.subscribe(token => {
+    }));
+    this.subscriptions.push(auth.openShiftToken.subscribe(token => {
       this.openShiftLinked = (token !== undefined && token.length !== 0);
       this.routeToHomeIfCompleted();
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Page is hidden by default to prevent flashing, but must show when tokens cannot be obtained.
     setTimeout(() => {
       if (this.isGettingStarted()) {
@@ -116,7 +123,7 @@ export class GettingStartedComponent implements OnInit {
     let profile = this.gettingStartedService.createTransientProfile();
     profile.username = this.username;
 
-    this.gettingStartedService.update(profile).subscribe(user => {
+    this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.loggedInUser = user;
       if (this.username === user.attributes.username) {
         this.notifications.message({
@@ -133,7 +140,7 @@ export class GettingStartedComponent implements OnInit {
       } else {
         this.handleError("Failed to update username", NotificationType.DANGER);
       }
-    });
+    }));
   }
 
   // Private
