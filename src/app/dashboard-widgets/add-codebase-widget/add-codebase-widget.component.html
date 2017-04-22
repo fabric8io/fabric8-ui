@@ -27,7 +27,7 @@
     <ul class="list-group analyze-overview-items-detail" *ngIf="(codebaseCount | async) > 0">
       <li class="list-group-item" *ngFor="let codebase of codebases | async">
         <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
-        <a href="{{codebase.url}}" target="_blank">{{codebase.name}}</a>
+        <a href="{{codebase.attributes.url}}" target="_blank">{{codebase.name}}</a>
       </li>
     </ul>
   </div>
