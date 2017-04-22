@@ -25,6 +25,6 @@
               [disabled]="voted"
               (click)="vote($event)">13+</button>
     </div>
-    <p class="padding-top-10">{{votes}} votes</p>
+    <p class="padding-top-10">{{ votes | number : fractionSize}} votes</p>
   </div>
 </div>
