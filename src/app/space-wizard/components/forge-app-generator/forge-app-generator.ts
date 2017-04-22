@@ -15,7 +15,7 @@ import {
   IField,
   IFieldCollection,
   IAppGeneratorError,
-  IAppGeneratorResult
+  IAppGeneratorMessage
 
 } from '../../services/app-generator.service';
 
@@ -28,8 +28,11 @@ export class ForgeAppGenerator {
   public processing: Boolean = false;
   public hasError: Boolean;
   public error: IAppGeneratorError;
+  public errorClassification: string = 'information'; 
   public hasResult: Boolean;
-  public result: IAppGeneratorResult;
+  public result: IAppGeneratorMessage;
+  public hasMessage: Boolean;
+  public message: IAppGeneratorMessage;
 
   private _fieldSet: IFieldCollection;
   private _responseHistory: Array<IAppGeneratorResponse>;
@@ -51,6 +54,7 @@ export class ForgeAppGenerator {
     this.fields = [];
     this.clearErrors();
     this.clearResult();
+    this.clearMessage();
     this.processing = false;
   }
 
@@ -70,12 +74,18 @@ export class ForgeAppGenerator {
     this.error.details = '';
     this.error.inner = '';
   }
+  public clearMessage() {
+    this.hasMessage = false;
+    this.message = this.message || {} as IAppGeneratorMessage;
+    this.message.title = '';
+    this.message.body = '';
+  }
 
   public clearResult() {
     this.hasResult = false;
-    this.result = this.result || {} as IAppGeneratorResult;
+    this.result = this.result || {} as IAppGeneratorMessage;
     this.result.title = '';
-    this.result.message = '';
+    this.result.body = '';
   }
 
   public reset() {
@@ -84,6 +94,7 @@ export class ForgeAppGenerator {
     this.fields = [];
     this.clearErrors();
     this.clearResult();
+    this.clearMessage();
   }
 
   public acknowledgeStarterApp() {
@@ -114,9 +125,18 @@ export class ForgeAppGenerator {
   }
 
 
+
+  private spinnerMessage(title:string):IAppGeneratorMessage {
+    this.hasMessage=true;
+    return {
+      title:title||'',
+      body:`<div class="busy-indicator"><div class="spinner spinner-lg"></div></div>`
+    }
+  }
+
   public begin() {
     this.reset();
-    this.processing = true;
+    this.message = this.spinnerMessage('Loading application generator ...');
     let request: IAppGeneratorRequest = {
       command: {
         name: `${this.name}`
@@ -130,13 +150,14 @@ export class ForgeAppGenerator {
       this.applyTheNextCommandResponse({ request, response });
       // do an initial validate
       this.validate().then( (validation) => {
-        this.processing = false;
+        this.clearMessage();
       }, (error) => {
-        this.processing = false;
+        this.clearMessage();
+        this.handleError(error);
       });
     }, (error) => {
+      this.clearMessage();
       this.handleError(error);
-      this.processing = false;
     });
   }
 
@@ -303,8 +324,8 @@ public execute() {
       }
       this.result = {
         title: `A starter application was successfully created.`,
-        message: this.formatConsoleText(`\n`, `${msg}`)
-      } as IAppGeneratorResult;
+        body: this.formatConsoleText(`\n`, `${msg}`)
+      } as IAppGeneratorMessage;
       this.hasResult = true;
     }
   }
@@ -318,12 +339,34 @@ public execute() {
     this._responseHistory = value;
   }
 
-
+  private hasResults(error:any) {
+    if( error ) {
+      if( error.descriptor ) {
+        return error.descriptor.hasResults||false;
+      }
+      if(error.inner){
+        return this.hasResults( error.inner )
+      }
+    }
+    return false;
+  }
+  private hasException(error:any) {
+    if( error ) {
+      if( error.descriptor ) {
+        return error.descriptor.hasException||false;
+      }
+      if(error.inner){
+        return this.hasResults( error.inner )
+      }
+    }
+    return false;
+  }
   private handleError(error): Observable<any> {
     this.log({ message: error.message, inner: error.inner, error: true });
-
+    let hasResults = this.hasResults(error);
+    let hasException = this.hasException(error);
+    this.errorClassification = hasResults ===true ? 'information' : 'error';
     this.hasError = true;
-    let details =
     this.error = {
       message: `Something went wrong while attempting to perform this operation ...`,
       details: this.formatConsoleText(

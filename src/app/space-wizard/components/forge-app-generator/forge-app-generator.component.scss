@@ -93,12 +93,36 @@ header{
   min-height:60px;
 }
 
-.message-console
+.app-generator-message
 {
-
-  .message-console-title
+  &.error
   {
-    .title-text{
+    .message-body
+    {
+      //background-color:#444;
+
+    }
+    .message-body-content
+    {
+      //color:#EFEFEF;
+    }
+
+  }
+  &.information
+  {
+    .message-body
+    {
+      background-color:$color-pf-white;
+    }
+    .message-body-content
+    {
+      color:$color-pf-black;
+    }
+
+  }
+  .message-title
+  {
+    .message-title-text{
       padding-left:5px;
       .pficon{
         margin-right:5px;
@@ -106,7 +130,7 @@ header{
     }
     margin-bottom:15px;
   }
-  .message-console-message
+  .message-body
   {
     border-style: none;
     max-width:860px;
@@ -116,8 +140,7 @@ header{
     width:100%;
     padding:0;
     position:relative;
-    background-color:#444;
-    .message-text
+    .message-body-content
     {
       min-height:100%;
       min-width:100%;
@@ -125,7 +148,6 @@ header{
       vertical-align: top;
       margin:0;
       border:none;
-      color:#EFEFEF;
       font-size: 1.5rem;
       padding:15px;
       white-space: pre;

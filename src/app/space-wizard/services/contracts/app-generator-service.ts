@@ -19,7 +19,7 @@ export {
   IAppGeneratorResponse,
   IAppGeneratorCommand,
   IAppGeneratorError,
-  IAppGeneratorResult,
+  IAppGeneratorMessage,
   IAppGeneratorResponseContext,
   IAppGeneratorState,
   IAppGeneratorCommandParameters
