@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-8 padding-left-none">
       <h1 class="getting-started-title">Getting started in OpenShift.io</h1>
-      <p class="getting-started">
+      <p class="getting-started-subtitle">
         Welcome to OpenShift.io! To get started you will need to create a username and connect
         your GitHub and OpenShift.com accounts.
       </p>
@@ -22,14 +22,16 @@
         </div>
         <div class="col-md-11 padding-left-0">
           <h2>Select a username</h2>
+          <p class="getting-started-subtitle">Pick a username to identify yourself in OpenShift.io. Choose wisely, this
+            cannot be changed once you leave the Getting Started page.
+          </p>
           <div class="form-group">
             <label for="username" class="control-label required-pf">Username</label>
             <div [ngClass]="{'has-error': usernameInvalid}">
               <div class="col-md-5 padding-left-0">
                 <input type="text" class="form-control" id="username" name="username" maxlength="62" required
-                       [disabled]="registrationCompleted"
-                       [(ngModel)]="username"
-                       (change)="updateUsername()">
+                       [disabled]="isUsernameDisabled"
+                       [(ngModel)]="username">
               </div>
               <div class="col-md-7 padding-left-0">
                 <span class="help-block padding-0">
@@ -37,6 +39,9 @@
                 lowercase letters, numbers, dashes, or underscores.
               </span>
               </div>
+              <button class="btn btn-lg btn-primary"
+                      [disabled]="isUsernameDisabled"
+                      (click)="saveUsername()">Save Username</button>
             </div>
           </div>
         </div>
@@ -47,7 +52,7 @@
         </div>
         <div class="col-md-11 padding-left-0">
           <h2>Connected accounts</h2>
-          <p class="getting-started">
+          <p class="getting-started-subtitle">
             Please connect your GitHub and OpenShift accounts to OpenShit.io.
           </p>
           <div *ngIf="gitHubLinked && openShiftLinked; then allLinked else allUnlinked"></div>

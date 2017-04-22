@@ -85,7 +85,16 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    * @returns {boolean} If the user has completed the getting started page
    */
   get isSuccess(): boolean {
-    return !this.usernameInvalid && this.gitHubLinked && this.openShiftLinked;
+    return (this.registrationCompleted && this.gitHubLinked && this.openShiftLinked);
+  }
+
+  /**
+   * Helper to test if username button should be disabled
+   *
+   * @returns {boolean}
+   */
+  get isUsernameDisabled(): boolean {
+    return this.registrationCompleted;
   }
 
   // Actions
@@ -111,11 +120,9 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   }
 
   /**
-   * Update username
-   *
-   * Note: This can only be done once per the user patch API
+   * Save username
    */
-  updateUsername(): void {
+  saveUsername(): void {
     this.usernameInvalid = !this.isUsernameValid();
     if (this.usernameInvalid) {
       return;
@@ -124,6 +131,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
     profile.username = this.username;
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
+      this.registrationCompleted = (user as ExtUser).attributes.registrationCompleted;
       this.loggedInUser = user;
       if (this.username === user.attributes.username) {
         this.notifications.message({
@@ -166,7 +174,8 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    */
   private isGettingStarted(): boolean {
     let wait = this.getRequestParam("wait");
-    return !(this.gitHubLinked === true && this.openShiftLinked === true && wait === null);
+    return !(wait === null && this.registrationCompleted === true
+      && this.gitHubLinked === true && this.openShiftLinked === true);
   }
 
   /**
