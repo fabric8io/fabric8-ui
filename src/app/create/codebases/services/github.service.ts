@@ -1,9 +1,8 @@
-import { LoginService } from './../../../shared/login.service';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { AuthenticationService, UserService } from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { cloneDeep } from 'lodash';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
@@ -21,7 +20,7 @@ import {
  * See: https://developer.github.com/v3/
  */
 @Injectable()
-export class GitHubService {
+export class GitHubService implements OnDestroy {
 
   private static readonly HEADERS = new Headers({
     'Content-Type': 'application/json',
@@ -31,17 +30,22 @@ export class GitHubService {
   private cache: Map<string, Observable<any>>;
   private context: Context;
   private gitHubUrl: string;
-
+  private subscriptions: Subscription[] = [];
 
   constructor(
-    private contexts: Contexts,
-    private http: Http,
-    private logger: Logger,
     private authService: AuthenticationService,
-    private userService: UserService) {
-    this.contexts.current.subscribe(val => this.context = val);
+      private contexts: Contexts,
+      private http: Http,
+      private logger: Logger) {
+    this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
     this.gitHubUrl = 'https://api.github.com';
     this.cache = new Map();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   /**

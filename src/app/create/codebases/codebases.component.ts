@@ -1,6 +1,7 @@
-import { Component, ContentChild, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { Codebase } from './services/codebase';
 import { CodebasesService } from './services/codebases.service';
@@ -24,7 +25,7 @@ import {
   styleUrls: ['./codebases.component.scss'],
   providers: [CodebasesService, DatePipe, GitHubService]
 })
-export class CodebasesComponent implements OnInit {
+export class CodebasesComponent implements OnDestroy, OnInit {
   @ContentChild('actionTemplate') actionTemplate: TemplateRef<any>;
   @ContentChild('itemTemplate') itemTemplate: TemplateRef<any>;
   @ContentChild('itemExpandedTemplate') itemExpandedTemplate: TemplateRef<any>;
@@ -38,6 +39,7 @@ export class CodebasesComponent implements OnInit {
   isAscendingSort: boolean = true;
   listViewConfig: ListViewConfig;
   resultsCount: number = 0;
+  subscriptions: Subscription[] = [];
 
   constructor(
       private broadcaster: Broadcaster,
@@ -47,13 +49,19 @@ export class CodebasesComponent implements OnInit {
       private gitHubService: GitHubService,
       private notifications: Notifications,
       private router: Router) {
-    this.contexts.current.subscribe(val => this.context = val);
+    this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
     this.gitHubService.clearCache();
-    this.broadcaster
+    this.subscriptions.push(this.broadcaster
       .on('codebaseAdded')
       .subscribe((codebase: Codebase) => {
         this.addCodebase(codebase);
-      });
+      }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   ngOnInit(): void {
@@ -182,14 +190,15 @@ export class CodebasesComponent implements OnInit {
    */
   private updateCodebases(): void {
     // Get codebases
-    this.codebasesService.getCodebases(this.context.space.id).subscribe(codebases => {
-      if (codebases != null) {
-        this.allCodebases = codebases;
-        this.codebases = this.allCodebases;
-      }
-    }, error => {
-      this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
-    });
+    this.subscriptions.push(this.codebasesService.getCodebases(this.context.space.id)
+      .subscribe(codebases => {
+        if (codebases != null) {
+          this.allCodebases = codebases;
+          this.codebases = this.allCodebases;
+        }
+      }, error => {
+        this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
+      }));
   }
 
   private handleError(error: string, type: NotificationType) {

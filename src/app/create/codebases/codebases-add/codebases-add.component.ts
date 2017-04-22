@@ -1,10 +1,12 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import {
+  AfterViewInit,
   Component,
+  OnDestroy,
   OnInit,
-  ViewEncapsulation,
-  AfterViewInit
+  ViewEncapsulation
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Broadcaster } from 'ngx-base';
@@ -23,7 +25,7 @@ import { removeAction } from '../../../app-routing.module';
   styleUrls: ['./codebases-add.component.scss'],
   providers: [CodebasesService, GitHubService]
 })
-export class CodebasesAddComponent implements OnInit, AfterViewInit {
+export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
 
   codebases: Codebase[];
   context: Context;
@@ -34,6 +36,7 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
   gitHubRepoDuplicated: boolean = false;
   license: string;
   panelState: string = "out";
+  subscriptions: Subscription[] = [];
 
   constructor(
       private broadcaster: Broadcaster,
@@ -43,11 +46,17 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
       private notifications: Notifications,
       private router: Router,
       private route: ActivatedRoute) {
-    this.contexts.current.subscribe(val => this.context = val);
+    this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
   }
 
   ngOnInit(): void {
     this.updateCodebases();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -86,10 +95,9 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
     }
 
     // Add codebase to space
-    this.codebasesService.addCodebase(this.context.space.id, codebase)
+    this.subscriptions.push(this.codebasesService.addCodebase(this.context.space.id, codebase)
       .do(() => this.togglePanel("out"))
       .do(codebase => this.broadcaster.broadcast('codebaseAdded', codebase))
-
       .switchMap(codebase => {
         let fullName = this.getGitHubRepoFullName(codebase.attributes.url);
         this.notifications.message({
@@ -102,10 +110,10 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
       })
       .do(url => this.close(url))
       .subscribe(() => {
-      }, error => {
+       }, error => {
         this.gitHubRepoInvalid = true;
         this.handleError("Failed to associate codebase with space", NotificationType.DANGER);
-      });
+      }));
   }
 
   /**
@@ -119,16 +127,18 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
     if (this.gitHubRepoInvalid) {
       return;
     }
-    this.gitHubService.getRepoDetailsByFullName(this.gitHubRepoFullName).subscribe(gitHubRepoDetails => {
-      this.gitHubRepoDetails = gitHubRepoDetails;
-    }, error => {
-      this.gitHubRepoInvalid = true;
-    });
-    this.gitHubService.getRepoLicenseByUrl(this.gitHubRepoFullName).subscribe(gitHubRepoLicense => {
-      this.license = gitHubRepoLicense.license.name;
-    }, error => {
-      this.license = "None"
-    });
+    this.subscriptions.push(this.gitHubService.getRepoDetailsByFullName(this.gitHubRepoFullName)
+      .subscribe(gitHubRepoDetails => {
+        this.gitHubRepoDetails = gitHubRepoDetails;
+      }, error => {
+        this.gitHubRepoInvalid = true;
+      }));
+    this.subscriptions.push(this.gitHubService.getRepoLicenseByUrl(this.gitHubRepoFullName)
+      .subscribe(gitHubRepoLicense => {
+        this.license = gitHubRepoLicense.license.name;
+      }, error => {
+        this.license = "None"
+      }));
   }
 
   /**
@@ -278,13 +288,14 @@ export class CodebasesAddComponent implements OnInit, AfterViewInit {
    */
   private updateCodebases(): void {
     // Get codebases
-    this.codebasesService.getCodebases(this.context.space.id).subscribe(codebases => {
-      if (codebases != null) {
-        this.codebases = codebases;
-      }
-    }, error => {
-      this.handleError("Failed to retrieve codebases", NotificationType.WARNING);
-    });
+    this.subscriptions.push(this.codebasesService.getCodebases(this.context.space.id)
+      .subscribe(codebases => {
+        if (codebases != null) {
+          this.codebases = codebases;
+        }
+      }, error => {
+        this.handleError("Failed to retrieve codebases", NotificationType.WARNING);
+      }));
   }
 
   private handleError(error: string, type: NotificationType) {

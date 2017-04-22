@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { Codebase } from '../services/codebase';
 import { Notification, NotificationType, Notifications } from 'ngx-base';
@@ -13,10 +14,11 @@ import { Workspace } from '../services/workspace';
   styleUrls: ['./codebases-item-actions.component.scss'],
   providers: [WindowService, WorkspacesService]
 })
-export class CodebasesItemActionsComponent implements OnInit {
+export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;
   @Input() index: number = -1;
 
+  subscriptions: Subscription[] = [];
   workspaceUrl: string = "default";
   workspaceUrlInvalid: boolean = true;
   workspaces: Workspace[];
@@ -26,6 +28,12 @@ export class CodebasesItemActionsComponent implements OnInit {
       private notifications: Notifications,
       private windowService: WindowService,
       private workspacesService: WorkspacesService) {
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   ngOnInit(): void {
@@ -41,21 +49,22 @@ export class CodebasesItemActionsComponent implements OnInit {
    * Create workspace and open in editor
    */
   createAndOpenWorkspace(): void {
-    this.workspacesService.createWorkspace(this.codebase.id).subscribe(workspaceLinks => {
-      if (workspaceLinks != null) {
-        this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
+    this.subscriptions.push(this.workspacesService.createWorkspace(this.codebase.id)
+      .subscribe(workspaceLinks => {
+        if (workspaceLinks != null) {
+          this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
 
-        this.notifications.message({
-          message: `Workspace created!`,
-          type: NotificationType.SUCCESS
-        } as Notification);
+          this.notifications.message({
+            message: `Workspace created!`,
+            type: NotificationType.SUCCESS
+          } as Notification);
 
-        // Todo: Cannot update workspaces after creating a new one -- Che takes too long.
-        //this.updateWorkspaces();
-      }
-    }, error => {
-      this.handleError("Failed to create workspace", NotificationType.DANGER);
-    });
+          // Todo: Cannot update workspaces after creating a new one -- Che takes too long.
+          //this.updateWorkspaces();
+        }
+      }, error => {
+        this.handleError("Failed to create workspace", NotificationType.DANGER);
+      }));
   }
 
   /**
@@ -69,13 +78,14 @@ export class CodebasesItemActionsComponent implements OnInit {
    * Open workspace in editor
    */
   openWorkspace(): void {
-    this.workspacesService.openWorkspace(this.workspaceUrl).subscribe(workspaceLinks => {
-      if (workspaceLinks != null) {
-        this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
-      }
-    }, error => {
-      this.handleError("Failed to open workspace", NotificationType.DANGER);
-    });
+    this.subscriptions.push(this.workspacesService.openWorkspace(this.workspaceUrl)
+      .subscribe(workspaceLinks => {
+        if (workspaceLinks != null) {
+          this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
+        }
+      }, error => {
+        this.handleError("Failed to open workspace", NotificationType.DANGER);
+      }));
   }
 
   /**
@@ -142,14 +152,15 @@ export class CodebasesItemActionsComponent implements OnInit {
    */
   private updateWorkspaces(): void {
     this.workspacesAvailable = false;
-    this.workspacesService.getWorkspaces(this.codebase.id).subscribe(workspaces => {
-      if (workspaces != null && workspaces.length > 0) {
-        this.workspaces = workspaces;
-        this.workspacesAvailable = true;
-      }
-    }, error => {
-      this.handleError("Failed to retrieve workspaces", NotificationType.WARNING);
-    });
+    this.subscriptions.push(this.workspacesService.getWorkspaces(this.codebase.id)
+      .subscribe(workspaces => {
+        if (workspaces != null && workspaces.length > 0) {
+          this.workspaces = workspaces;
+          this.workspacesAvailable = true;
+        }
+      }, error => {
+        this.handleError("Failed to retrieve workspaces", NotificationType.WARNING);
+      }));
   }
 
   private handleError(error: string, type: NotificationType) {

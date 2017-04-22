@@ -1,10 +1,10 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from "../services/github.service";
 import { Notification, NotificationType, Notifications } from 'ngx-base';
-import { Workspace } from '../services/workspace';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -13,7 +13,7 @@ import { Workspace } from '../services/workspace';
   styleUrls: ['./codebases-item.component.scss'],
   providers: [CodebasesService, GitHubService]
 })
-export class CodebasesItemComponent implements OnInit {
+export class CodebasesItemComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;
   @Input() index: number = -1;
 
@@ -21,10 +21,17 @@ export class CodebasesItemComponent implements OnInit {
   fullName: string;
   lastCommitDate: string;
   htmlUrl: string;
+  subscriptions: Subscription[] = [];
 
   constructor(
     private gitHubService: GitHubService,
     private notifications: Notifications) {
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   ngOnInit(): void {
@@ -71,19 +78,20 @@ export class CodebasesItemComponent implements OnInit {
    * Helper to update GitHub repo details
    */
   private updateGitHubRepoDetails(): void {
-    this.gitHubService.getRepoDetailsByUrl(this.codebase.attributes.url).subscribe(gitHubRepoDetails => {
-      this.createdDate = gitHubRepoDetails.created_at;
-      this.fullName = gitHubRepoDetails.full_name;
-      this.lastCommitDate = gitHubRepoDetails.pushed_at;
-      this.htmlUrl = gitHubRepoDetails.html_url;
+    this.subscriptions.push(this.gitHubService.getRepoDetailsByUrl(this.codebase.attributes.url)
+      .subscribe(gitHubRepoDetails => {
+        this.createdDate = gitHubRepoDetails.created_at;
+        this.fullName = gitHubRepoDetails.full_name;
+        this.lastCommitDate = gitHubRepoDetails.pushed_at;
+        this.htmlUrl = gitHubRepoDetails.html_url;
 
-      // Save for filter
-      this.codebase.gitHubRepo = {};
-      this.codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
-      this.codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
-    }, error => {
-      this.handleError(`Failed to retrieve GitHub repo: ${this.codebase.attributes.url}`, NotificationType.WARNING);
-    });
+        // Save for filter
+        this.codebase.gitHubRepo = {};
+        this.codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
+        this.codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
+      }, error => {
+        this.handleError(`Failed to retrieve GitHub repo: ${this.codebase.attributes.url}`, NotificationType.WARNING);
+      }));
   }
 
   private handleError(error: string, type: NotificationType) {
