@@ -1,0 +1,30 @@
+<div class="card-pf card-f8">
+  <div class="card-pf-heading">
+    <h2 class="card-pf-title">Developer poll</h2>
+  </div>
+  <div class="card-pf-body card-f8-body text-center">
+    <h3 class="margin-top-none">How many people are in your development team?</h3>
+    <p>i.e. Your sprint team</p>
+    <div class="margin-top-15">
+      <button type="submit" class="btn btn-lg btn-default width-100"
+              [disabled]="voted"
+              (click)="vote($event)">1-2</button>
+    </div>
+    <div class="margin-top-15">
+      <button type="submit" class="btn btn-lg btn-default width-100"
+              [disabled]="voted"
+              (click)="vote($event)">3-7</button>
+    </div>
+    <div class="margin-top-15">
+      <button type="submit" class="btn btn-lg btn-default width-100"
+              [disabled]="voted"
+              (click)="vote($event)">9-12</button>
+    </div>
+    <div class="margin-top-15 margin-bottom-15">
+      <button type="submit" class="btn btn-lg btn-default width-100"
+              [disabled]="voted"
+              (click)="vote($event)">13+</button>
+    </div>
+    <p class="padding-top-10">{{votes}} votes</p>
+  </div>
+</div>
