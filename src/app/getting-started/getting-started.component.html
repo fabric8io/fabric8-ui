@@ -26,19 +26,31 @@
             cannot be changed once you leave the Getting Started page.
           </p>
           <div class="form-group">
-            <label for="username" class="control-label required-pf">Username</label>
-            <div [ngClass]="{'has-error': usernameInvalid}">
-              <div class="col-md-5 padding-left-0">
-                <input type="text" class="form-control" id="username" name="username" maxlength="62" required
-                       [disabled]="isUsernameDisabled"
-                       [(ngModel)]="username">
+            <div *ngIf="isUsernameDisabled; then showUsernameUpdated else showUsernameInput"></div>
+            <ng-template #showUsernameUpdated>
+              <div class="margin-bottom-15">
+                <label class="margin-right-10">Username:</label>
+                <span>
+                  {{username}}<span class="pficon pficon-ok margin-left-10"></span>
+                </span>
               </div>
-              <div class="col-md-7 padding-left-0">
-                <span class="help-block padding-0">
-                Username must be less than 63 characters and can't begin with a dash or underscore. They may contain
-                lowercase letters, numbers, dashes, or underscores.
-              </span>
+            </ng-template>
+            <ng-template #showUsernameInput>
+              <label for="username" class="control-label required-pf">Username</label>
+              <div [ngClass]="{'has-error': usernameInvalid}">
+                <div class="col-md-5 padding-left-0">
+                  <input type="text" class="form-control" id="username" name="username" maxlength="62" required
+                         [(ngModel)]="username">
+                </div>
+                <div class="col-md-7 padding-left-0">
+                  <span class="help-block padding-0">
+                    Username must be less than 63 characters and can't begin with a dash or underscore. They may contain
+                    lowercase letters, numbers, dashes, or underscores.
+                  </span>
+                </div>
               </div>
+            </ng-template>
+            <div>
               <button class="btn btn-lg btn-primary"
                       [disabled]="isUsernameDisabled"
                       (click)="saveUsername()">Save Username</button>
@@ -57,7 +69,7 @@
           </p>
           <div *ngIf="gitHubLinked && openShiftLinked; then allLinked else allUnlinked"></div>
           <ng-template #allLinked>
-            <label class="margin-bottom-15 required-pf">
+            <label class="margin-bottom-15">
               Authorized accounts
             </label>
           </ng-template>
@@ -69,7 +81,9 @@
           <div class="form-group">
             <div *ngIf="gitHubLinked; then ghLinked else ghUnlinked"></div>
             <ng-template #ghLinked>
-              <span>You've authorized GitHub.</span>
+              <span>
+                You've authorized GitHub.<span class="pficon pficon-ok margin-left-10"></span>
+              </span>
             </ng-template>
             <ng-template #ghUnlinked>
               <div class="checkbox">
@@ -82,7 +96,9 @@
           <div class="form-group">
             <div *ngIf="openShiftLinked; then osoLinked else osoUnlinked"></div>
             <ng-template #osoLinked>
-              <span>You've authorized OpenShift.com.</span>
+              <span>
+                You've authorized OpenShift.com.<span class="pficon pficon-ok margin-left-10"></span>
+              </span>
             </ng-template>
             <ng-template #osoUnlinked>
               <div class="checkbox">
