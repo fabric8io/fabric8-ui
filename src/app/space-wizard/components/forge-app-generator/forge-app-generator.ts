@@ -28,7 +28,7 @@ export class ForgeAppGenerator {
   public processing: Boolean = false;
   public hasError: Boolean;
   public error: IAppGeneratorError;
-  public errorClassification: string = 'information'; 
+  public errorClassification: string = 'information';
   public hasResult: Boolean;
   public result: IAppGeneratorMessage;
   public hasMessage: Boolean;
@@ -127,16 +127,16 @@ export class ForgeAppGenerator {
 
 
   private spinnerMessage(title:string):IAppGeneratorMessage {
-    this.hasMessage=true;
+    this.hasMessage = true;
     return {
       title:title||'',
-      body:`<div class="busy-indicator"><div class="spinner spinner-lg"></div></div>`
+      body:``
     }
   }
 
   public begin() {
     this.reset();
-    this.message = this.spinnerMessage('Loading application generator ...');
+    this.message = this.spinnerMessage('Loading the application generator ...');
     let request: IAppGeneratorRequest = {
       command: {
         name: `${this.name}`
@@ -149,7 +149,7 @@ export class ForgeAppGenerator {
       this.log(`Begin response for command ${commandInfo}.`, request);
       this.applyTheNextCommandResponse({ request, response });
       // do an initial validate
-      this.validate().then( (validation) => {
+      this.validate(false).then( (validation) => {
         this.clearMessage();
       }, (error) => {
         this.clearMessage();
@@ -201,9 +201,8 @@ export class ForgeAppGenerator {
 
 public execute() {
     return new Promise<IAppGeneratorPair>((resolve, reject) => {
-      this.processing = true;
-      this.validate().then((validated) => {
-        this.processing = true;
+      this.message = this.spinnerMessage('Generating the application ...');
+      this.validate(false).then((validated) => {
         let cmd: IAppGeneratorCommand = validated.response.context.executeCommand;
         // pass along the validated data and fields
         let request: IAppGeneratorRequest = {
@@ -216,21 +215,21 @@ public execute() {
             this.log(`Execute response for command ${cmdInfo}.`, response , console.groupEnd);
             this.applyTheExecuteCommandResponse({request, response});
             resolve({request, response});
-            this.processing = false;
+            this.clearMessage();
           }, (error) => {
-            this.processing = false;
+            this.clearMessage();
             this.handleError(error);
           });
 
       }).catch(error => {
-        this.processing = false;
+        this.clearMessage();
         this.handleError(error);
         this.log({ message: error.message, warning: true } );
       });
     });
   }
 
-  public validate() {
+  public validate(showProcessing:Boolean = true) {
     return new Promise<IAppGeneratorPair>((resolve, reject) => {
       // update the values to be validated
       let cmd: IAppGeneratorCommand = this._currentResponse.context.validationCommand;
@@ -245,7 +244,7 @@ public execute() {
       };
       let commandInfo = `${cmd.name}:${cmd.parameters.pipeline.step.name}:${cmd.parameters.pipeline.step.index}`;
       this.log(`Validation request for command ${commandInfo}.`, request, console.group );
-      this.processing = true;
+      this.processing = showProcessing;
       this._appGeneratorService.getFields( request )
         .subscribe( (response) => {
           let validationState = response.payload.state;
@@ -369,9 +368,11 @@ public execute() {
     this.hasError = true;
     this.error = {
       message: `Something went wrong while attempting to perform this operation ...`,
-      details: this.formatConsoleText(
-        `<span class='wizard-status-warning' >${error.message || 'No details available.'}</span>`,
-        `${this.formatJson(error.inner)}`)
+      details:[
+        `<h2><span class='wizard-status-failed' ><strong>${error.name}</strong></span></h2>`,
+        `<h3><span class='wizard-status-failed' ><strong>${error.message || 'No details available.'}</strong></span><h3>`,
+        `${this.formatJson(error.inner)}`
+        ].join('')
     } as IAppGeneratorError;
     return Observable.empty();
   }

@@ -10,34 +10,41 @@
       </div>
     </div>
   </header>
-  <section [hidden]="!forge.hasError" class="app-generator-message error container-fluid padding-top-standard-offset">
-    <div class="message-title">
-      <h3 class="message-title-text"><span class="pficon pficon-error-circle-o"></span>{{forge.error.message||''}}</h3>
+  <section [class.hide]="!forge.hasMessage" class="app-generator-message container-fluid padding-top-standard-offset">
+    <div class="message-title-container">
+      <h2 class="message-title">
+        <span>
+          <span class="color-info fa fa-info-circle"></span>
+          <span>{{forge.message.title||''}}</span>
+        </span>
+      </h2>
     </div>
-    <div class="message-body">
-      <div [innerHTML]="forge.error.details" class="message-body-content">
+    <div class="message-body-container no-border">
+      <div class="message-body vertical-align-center">
+        <div class="busy-indicator">
+             <div class="spinner spinner-lg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section [class.hide]="!forge.hasError" class="app-generator-message container-fluid padding-top-standard-offset">
+    <div class="message-title-container">
+      <h2 class="message-title">
+        <span class="pficon pficon-error-circle-o"></span><span>{{forge.error.message||''}}</span>
+        </h2>
+    </div>
+    <div class="message-body-container">
+      <div [innerHTML]="forge.error.details" class="message-body">
 
       </div>
     </div>
   </section>
-  <section [hidden]="!forge.hasResult" class="app-generator-message information container-fluid padding-top-standard-offset">
-    <div class="message-title">
-      <h3 class="message-title-text"><span class="pficon pficon-ok"></span>{{forge.result.title||''}}</h3>
+  <section [class.hide]="!forge.hasResult" class="app-generator-message container-fluid padding-top-standard-offset">
+    <div class="message-title-container">
+      <h2 class="message-title"><span class="pficon pficon-ok"></span><span>{{forge.result.title||''}}</span></h2>
     </div>
-    <div class="message-body">
-      <div [innerHTML]="forge.result.body" class="message-body-content">
-      </div>
-    </div>
-  </section>
-  <section [hidden]="!forge.hasMessage" class="app-generator-message information container-fluid padding-top-standard-offset">
-    <div class="message-title">
-      <h3 class="message-title-text">
-        <span><span class="color-info fa fa-info-circle"></span>{{forge.message.title||''}}</span>
-      </h3>
-    </div>
-    <div class="message-body">
-      <div [innerHTML]="forge.message.body" class="message-body-content">
-
+    <div class="message-body-container">
+      <div [innerHTML]="forge.result.body" class="message-body">
       </div>
     </div>
   </section>

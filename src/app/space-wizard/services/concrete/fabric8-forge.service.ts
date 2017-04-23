@@ -120,14 +120,10 @@ ${this.expandJson(err)}
   private formatHttpError(error: Response, errorBody: string): string {
     let message =
 `
-===============================================================================
-Http Error
-Http Status Code : ${error.status || ''}
-Http Status : ${error.statusText || ''}
-===============================================================================
+Http Error Status Code : ${error.status || ''}
+Http Error Status : ${error.statusText || ''}
 Http Error Body:
 ${errorBody}
-===============================================================================
 `;
     // remove leading spaces from lines
     // message=(message||'').replace(/^\s*/gm, '')

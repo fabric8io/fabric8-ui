@@ -81,6 +81,7 @@ form
   min-width:50px;
   min-height:60px;
   vertical-align: center;
+  top:0px;
   position:relative;
   display:flex;
   > div{
@@ -95,6 +96,53 @@ header{
 
 .app-generator-message
 {
+  max-width:900px;
+  height:70vh;
+  padding:15px !important;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  &.hide{
+   display:none !important;
+  }
+  .message-title-container
+  {
+    .message-title{
+      padding-left:5px;
+      .pficon{
+        margin-right:5px;
+      }
+    }
+    margin-bottom:15px;
+  }
+  .message-body-container
+  {
+    flex-grow: 1;
+    position: relative;
+    border: solid 1px $color-pf-black-300;
+    &.no-border{
+      border-width:0;
+    }
+    overflow: auto;
+    .message-body
+    {
+      vertical-align: top;
+      position: relative;
+      min-height: 100% !important;
+      width: 100%;
+      margin: 0;
+      padding: 15px;
+      border: none;
+      line-height: 3.0rem;
+      font-size: 1.5rem;
+      white-space: pre-wrap;
+      &.vertical-align-center
+      {
+        vertical-align: center !important;
+      }
+    }
+
+  }
   &.error
   {
     .message-body
@@ -120,41 +168,7 @@ header{
     }
 
   }
-  .message-title
-  {
-    .message-title-text{
-      padding-left:5px;
-      .pficon{
-        margin-right:5px;
-      }
-    }
-    margin-bottom:15px;
-  }
-  .message-body
-  {
-    border-style: none;
-    max-width:860px;
-    min-height:50vh;
-    max-height:70vh;
-    overflow: auto;
-    width:100%;
-    padding:0;
-    position:relative;
-    .message-body-content
-    {
-      min-height:100%;
-      min-width:100%;
-      line-height:3.0rem;
-      vertical-align: top;
-      margin:0;
-      border:none;
-      font-size: 1.5rem;
-      padding:15px;
-      white-space: pre;
 
-    }
-
-  }
 }
 .combobox-container
 {
@@ -223,3 +237,4 @@ header{
 {
    color:$color-pf-blue-400;
 }
+
