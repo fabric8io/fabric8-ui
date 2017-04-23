@@ -13,7 +13,8 @@
 
 var OpenShiftIoRHDLoginPage = require('../page-objects/openshift-io-RHD-login.page'),
     testSupport = require('../testSupport'),
-    constants = require("../constants");
+    constants = require("../constants"),
+    OpenShiftIoGithubLoginPage = require('../page-objects/openshift-io-github-login.page');
 
 var until = protractor.ExpectedConditions;
 
@@ -174,7 +175,8 @@ class OpenShiftIoStartPage {
   }
   clickLoginButton () {
      this.loginButton.click();
-     return new OpenShiftIoRHDLoginPage();
+//     return new OpenShiftIoRHDLoginPage();
+     return new OpenShiftIoGithubLoginPage;
   }
 
   /* Analysis of Component/Bayesian UI elements */

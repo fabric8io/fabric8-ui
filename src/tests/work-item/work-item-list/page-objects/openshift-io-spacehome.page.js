@@ -114,6 +114,33 @@ class OpenShiftIoSpaceHomePage {
     return this.headerPlan.click();
   }
 
+
+
+  get wizardStepTitle () {
+//     return element(by.css(".wizard-step-title"));
+     return element(by.xpath(".//*[contains(@class,'wizard-step-title') and contains(text(),'Quickstart')]"));
+  }
+
+  get closeButton () {
+     return this.wizardStepTitle.element(by.css(".pficon.pficon-close"));
+  }
+  clickCloseButton () {
+     browser.wait(until.elementToBeClickable(this.closeButton), constants.WAIT, 'Failed to find CloseButton');
+     return this.closeButton.click();
+  }
+
+  get cancelButton () {
+    return wizardStepTitle.element(by.buttonText('Cancel'));
+  }
+
+  clickCancelButton () {
+    browser.wait(until.elementToBeClickable(this.cancelButton), constants.LONG_WAIT, 'Failed to find Cancel Button');
+    return this.cancelButton.click();
+  }
+
+
+
+
   /* -----------------------------------------------------------------*/
 
   /* Codebase widget */
@@ -124,12 +151,52 @@ class OpenShiftIoSpaceHomePage {
 
   /* Add to space button within Codebase widget */
   get codeBaseWidgetAddToSpaceButton () {
-    return this.codeBaseWidget.element(by.buttonText('Add to space'));
+    return this.codeBaseWidget.element(by.buttonText('Add to Space'));
   }
 
   clickCodeBaseWidgetAddToSpaceButton () {
+    browser.wait(until.elementToBeClickable(this.codeBaseWidgetAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element headerPlan');
     return this.codeBaseWidgetAddToSpaceButton.click();
   }
+
+  /* -----------------------------------------------------------------*/
+
+  /* Pipelines widget */
+
+  get pipelinesWidget () {
+    return element(by.xpath(".//*[contains(@class,'pipelines-widget')]"));
+  }
+
+  /* Add to space button within Pipelines widget */
+  get pipelinesWidgetAddToSpaceButton () {
+    return this.pipelinesWidget.element(by.buttonText('Add to Space'));
+  }
+
+  clickPipelinesWidgetAddToSpaceButton () {
+    browser.wait(until.elementToBeClickable(this.pipelinesWidgetAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element pipelines');
+    return this.pipelinesWidgetAddToSpaceButton.click();
+  }
+
+
+ /* -----------------------------------------------------------------*/
+
+ /* Page overview */
+
+  get analyzeOverview () {
+    return element(by.id("analyze-overview"));
+  }
+
+  /* Add to space button within analyzeOverview */
+  get analyzeOverviewAddToSpaceButton () {
+    return this.analyzeOverview.element(by.buttonText('Add to Space'));
+  }
+
+  clickAnalyzeOverviewAddToSpaceButton () {
+    browser.wait(until.elementToBeClickable(this.analyzeOverviewAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element analyzeOverviewAddToSpaceButton');
+    return this.analyzeOverviewAddToSpaceButton.click();
+  }
+
+
 
   /* -----------------------------------------------------------------*/
 
@@ -180,6 +247,7 @@ class OpenShiftIoSpaceHomePage {
     return element(by.xpath(".//a[contains(text(),'No thanks, take me to')]"));
   }
   clickNoThanksButton () {
+    browser.wait(until.elementToBeClickable(this.noThanksButton), constants.LONG_WAIT, 'Failed to find element noThanksButton button');
     return this.noThanksButton.click();
   }
 

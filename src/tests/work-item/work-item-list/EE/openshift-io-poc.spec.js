@@ -41,10 +41,11 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     
     /* Step 1 - on start page, login via github */
     console.log ('EE POC test - Navigate to RHD login page');
-    OpenShiftIoRHDLoginPage = page.clickLoginButton();
+    //OpenShiftIoRHDLoginPage = page.clickLoginButton();
 
     console.log ('EE POC test - Navigate to github login page');
-    OpenShiftIoGithubLoginPage = OpenShiftIoRHDLoginPage.clickGithubLoginButton();
+    //OpenShiftIoGithubLoginPage = OpenShiftIoRHDLoginPage.clickGithubLoginButton();
+    OpenShiftIoGithubLoginPage = page.clickLoginButton();
     
     /* Step 2 - on github login page, login */
     OpenShiftIoGithubLoginPage.clickGithubLoginField();
@@ -92,13 +93,15 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     });
 
     /* Step 4 - Add a project to the space */
-    OpenShiftIoSpaceHomePage.clickCodeBaseWidgetAddToSpaceButton();
-    //    OpenShiftIoSpaceHomePage.clickTechnologyStack();
+    //  OpenShiftIoSpaceHomePage.clickCodeBaseWidgetAddToSpaceButton();
+    OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();
+//    OpenShiftIoSpaceHomePage.clickTechnologyStack();
+
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
-    OpenShiftIoDashboardPage.clickRightNavBar();
-    OpenShiftIoDashboardPage.clickLogOut();
-    console.log ('EE POC test - Log Out');
+//    OpenShiftIoDashboardPage.clickRightNavBar();
+//    OpenShiftIoDashboardPage.clickLogOut();
+//    console.log ('EE POC test - Log Out');
 
   });
 
