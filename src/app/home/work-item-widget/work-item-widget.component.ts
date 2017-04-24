@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { WorkItemService, WorkItem } from 'fabric8-planner';
 import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
+import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'alm-work-item-widget',
@@ -12,6 +13,7 @@ import { UserService, User } from 'ngx-login-client';
   providers: [SpaceService]
 })
 export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
+  currentSpace: Space;
   currentSpaceId: string = "default";
   loggedInUser: User;
   recentSpaces: Space[] = [];
@@ -46,13 +48,41 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
     });
   }
 
+  /**
+   * Fetch work items
+   */
   fetchWorkItems(): void {
     this.fetchWorkItemsBySpace(this.getSpaceById(this.currentSpaceId));
   }
 
+  /**
+   * Fetch space for current space ID
+   *
+   * @returns {Observable<Space>}
+   */
+  get space(): Observable<Space> {
+    return this.userService.loggedInUser
+      .map(user => this.spaceService.getSpacesByUser(user.attributes.username, 10))
+      .switchMap(spaces => spaces)
+      .map(spaces => {
+        for (let i = 0; i < spaces.length; i++) {
+          if (this.currentSpaceId === spaces[i].id) {
+            return spaces[i];
+          }
+        }
+        return new Observable();
+      });
+  }
+
   // Private
 
+  /**
+   * Fetch work items by given space
+   *
+   * @param space The space to retrieve work items for
+   */
   private fetchWorkItemsBySpace(space: Space): void {
+    this.currentSpace = space;
     this.subscriptions.push(this.userService
       .getUser()
       .do(() => this.workItemService._currentSpace = space)

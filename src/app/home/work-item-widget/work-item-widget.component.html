@@ -35,8 +35,10 @@
             <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
             <span>{{workItem.id}}</span>
             <span *ngIf="workItem.attributes">
-            {{workItem.attributes['system.title']}}
-          </span>
+              <a [routerLink]="['/', loggedInUser.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.id]">
+                {{workItem.attributes['system.title']}}
+              </a>
+            </span>
           </li>
         </ul>
       </div>
