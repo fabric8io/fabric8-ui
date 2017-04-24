@@ -41,11 +41,11 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     
     /* Step 1 - on start page, login via github */
     console.log ('EE POC test - Navigate to RHD login page');
-    //OpenShiftIoRHDLoginPage = page.clickLoginButton();
+    OpenShiftIoRHDLoginPage = page.clickLoginButton();
 
     console.log ('EE POC test - Navigate to github login page');
-    //OpenShiftIoGithubLoginPage = OpenShiftIoRHDLoginPage.clickGithubLoginButton();
-    OpenShiftIoGithubLoginPage = page.clickLoginButton();
+    OpenShiftIoGithubLoginPage = OpenShiftIoRHDLoginPage.clickGithubLoginButton();
+    //OpenShiftIoGithubLoginPage = page.clickLoginButton();  Added April 19, not needed as of April 24
     
     /* Step 2 - on github login page, login */
     OpenShiftIoGithubLoginPage.clickGithubLoginField();
@@ -55,6 +55,13 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     OpenShiftIoGithubLoginPage.typeGithubPassword(browser.params.login.password);   
 
     OpenShiftIoDashboardPage = OpenShiftIoGithubLoginPage.clickGithubLoginButton();
+
+    // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
+    browser.get("https://prod-preview.openshift.io/");
+    element(by.id("name")).click();
+    element(by.xpath(".//*[@id='profilelink']/span")).click();
+    // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
+
     console.log ('EE POC test - Navigate to openshift.io home/dashboard page');
 
     /* Step 3 - on home page - create new space - embed time in space name to ensure unique space name */

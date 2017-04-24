@@ -175,8 +175,8 @@ class OpenShiftIoStartPage {
   }
   clickLoginButton () {
      this.loginButton.click();
-//     return new OpenShiftIoRHDLoginPage();
-     return new OpenShiftIoGithubLoginPage;
+     return new OpenShiftIoRHDLoginPage();
+//     return new OpenShiftIoGithubLoginPage;
   }
 
   /* Analysis of Component/Bayesian UI elements */
