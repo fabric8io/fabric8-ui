@@ -36,21 +36,9 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       private notifications: Notifications,
       private router: Router,
       private userService: UserService) {
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      if (user === undefined || user.attributes === undefined) {
-        return;
-      }
-      this.loggedInUser = user;
-      this.username = this.loggedInUser.attributes.username;
-      this.registrationCompleted = (user as ExtUser).attributes.registrationCompleted;
-    }));
-    this.subscriptions.push(auth.gitHubToken.subscribe(token => {
-      this.gitHubLinked = (token !== undefined && token.length !== 0);
-      this.routeToHomeIfCompleted();
-    }));
+    // Still need to retrieve OpenShift token for checkbox, in case the GitHub token cannot be obtained below.
     this.subscriptions.push(auth.openShiftToken.subscribe(token => {
       this.openShiftLinked = (token !== undefined && token.length !== 0);
-      this.routeToHomeIfCompleted();
     }));
   }
 
@@ -61,10 +49,32 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    // Page is hidden by default to prevent flashing, but must show when tokens cannot be obtained.
+    // Route to home if registration is complete.
+    this.userService.loggedInUser
+      .map(user => {
+        this.loggedInUser = user;
+        this.username = this.loggedInUser.attributes.username;
+        this.registrationCompleted = (user as ExtUser).attributes.registrationCompleted;
+      })
+      .switchMap(() => this.auth.gitHubToken)
+      .map(token => {
+        this.gitHubLinked = (token !== undefined && token.length !== 0);
+      })
+      .switchMap(() => this.auth.openShiftToken)
+      .map(token => {
+        this.openShiftLinked = (token !== undefined && token.length !== 0);
+      })
+      .do(() => {
+        this.routeToHomeIfCompleted();
+      })
+      .publish().connect();
+
+    // Page is hidden by default to prevent flashing, but must show if tokens cannot be obtained.
     setTimeout(() => {
-      if (this.isGettingStarted()) {
+      if (this.isUserGettingStarted()) {
         this.showGettingStarted = true;
+      } else {
+        this.routeToHomeIfCompleted();
       }
     }, 1000);
   }
@@ -129,6 +139,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
     }
     let profile = this.gettingStartedService.createTransientProfile();
     profile.username = this.username;
+    profile.registrationCompleted = true;
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.registrationCompleted = (user as ExtUser).attributes.registrationCompleted;
@@ -168,11 +179,20 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   }
 
   /**
+   * Helper to determin if we're on the getting started page
+   *
+   * @returns {boolean} True if the getting started page is shown
+   */
+  private isGettingStartedPage(): boolean {
+    return (this.router.url.indexOf("_gettingstarted") !== -1);
+  }
+
+  /**
    * Helper to determine if getting started page should be shown or forward to the home page.
    *
    * @returns {boolean}
    */
-  private isGettingStarted(): boolean {
+  private isUserGettingStarted(): boolean {
     let wait = this.getRequestParam("wait");
     return !(wait === null && this.registrationCompleted === true
       && this.gitHubLinked === true && this.openShiftLinked === true);
@@ -196,8 +216,9 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    * Helpfer to route to home page if getting started is completed
    */
   private routeToHomeIfCompleted(): void {
-    if (!this.isGettingStarted()) {
-      this.router.navigate(['/', '_home']);
+    // Ensure subscription doesn't route to home should tokens be updated before ngOnDestroy
+    if (this.isGettingStartedPage() && !this.isUserGettingStarted()) {
+      this.routeToHome();
     }
   }
 
