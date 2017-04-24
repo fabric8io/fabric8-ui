@@ -4,7 +4,10 @@
  */
 export const STACK_RECOMMENDER_CONSTANT: any = {
     'title': 'Recommendations',
-    'sub_title': 'Content goes here explaining recommendations',
+    'sub_title': {
+        'firstPart': 'Based on our analytics engine we found ',
+        'secondPart': ' recommendations to improve your application stack:'
+    },
     'create_work_item': 'Create Work Item',
     'create_work_items': 'Create Work Items',
     'view_work_item': 'View Work Item',

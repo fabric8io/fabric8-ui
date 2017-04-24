@@ -2,7 +2,7 @@
 <div class="stack-recommendation">
   <div class="recommendation-header">
     <h1>{{messages && messages.title}}</h1>
-    <p>{{messages && messages.sub_title}}</p>
+    <p *ngIf="recommendationsList.length > 0">{{messages && messages.sub_title.firstPart}}{{recommendationsList.length}}{{messages && messages.sub_title.secondPart}}</p>
   </div>
   <div class="list-group recommendation-container">
     <!-- No recommendations scenario -->
