@@ -223,3 +223,44 @@ header{
    color:$color-pf-blue-400;
 }
 
+.form-group{
+
+    .control-label{
+      // color:$color-pf-red;
+      &.required{
+        &:after{
+          content: '*';
+
+          padding:3px;
+          vertical-align:center;
+
+        }
+      }
+    }
+
+  &.has-danger{
+
+    .control-label{
+      // color:$color-pf-red;
+      &.required{
+        &:after{
+          content: '*'
+        }
+      }
+    }
+
+    .form-control-danger
+    {
+        border-color:$color-pf-red !important;
+        box-shadow: inset 0 1px 1px rgba(255, 0, 0, 0.075);
+    }
+    .form-control-feedback{
+        color:$color-pf-red !important;
+        position:relative;
+        text-align: left;
+        width:100%;
+    }
+
+
+  }
+}

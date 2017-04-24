@@ -164,6 +164,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
           required: sourceInput.required,
           enabled: sourceInput.enabled,
           visible: sourceInput.deprecated === false,
+          valid: true,
           index: 0
         }
       };
@@ -179,7 +180,9 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       if ( source.messages ) {
         for ( let message of source.messages ) {
           if ( message.input === sourceInput.name ) {
+            // if the field has a message then it means that something is not valid
             targetField.display.message = message;
+            targetField.display.valid = false;
           }
         }
       }
