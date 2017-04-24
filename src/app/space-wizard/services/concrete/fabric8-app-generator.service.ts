@@ -11,7 +11,6 @@ import {
   IAppGeneratorCommand,
   IAppGeneratorRequest,
   IAppGeneratorResponse,
-  IAppGeneratorResponseContext,
   IAppGeneratorState,
   IField,
   IFieldCollection,
@@ -21,18 +20,16 @@ import {
 import {
   IForgeCommandRequest,
   IForgeCommandResponse,
-  IForgeCommandPipeline,
   IForgeInput,
   IForgeService,
   IForgeServiceProvider,
   IForgeCommandData,
-  IForgeState,
   IForgeMetadata
 } from '../forge.service';
 
 import {
  AppGeneratorConfigurationService
-} from './app-generator-configuration.service'
+} from './app-generator-configuration.service';
 
 @Injectable()
 export class Fabric8AppGeneratorService extends AppGeneratorService {
@@ -133,7 +130,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       };
       this.forgeService.executeCommand( commandRequest )
       .map( (forgeResponse) => this.transformForgeResponseToAppGeneratorResponse(request, forgeResponse) )
-      .map( (forgeResponse) => this._configService.updateGeneratorResponse('',forgeResponse) )
+      .map( (forgeResponse) => this._configService.updateGeneratorResponse('', forgeResponse) )
       .subscribe( (response: IAppGeneratorResponse) => {
         this.log(`AppGenerator '${cmdDescription}' command completed`, response);
         observer.next(response);

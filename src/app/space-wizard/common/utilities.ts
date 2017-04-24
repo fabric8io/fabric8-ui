@@ -39,8 +39,8 @@
               t = `${t}\n${s}<span class='wizard-property-name' >${p}</span>${op.assign}${formatJson(obj[p], indent + 1)}`;
             } else {
               let propertyValue = `<span class = "wizard-property-value" >${obj[p]}</span>`;
-              if(propertyValue.toLowerCase().includes('exception') && !propertyValue.toLowerCase().includes('with-exception')){
-                propertyValue=`<span class = "wizard-property-value with-exception" >${obj[p]}</span>`;
+              if (propertyValue.toLowerCase().includes('exception') && !propertyValue.toLowerCase().includes('with-exception')) {
+                propertyValue = `<span class = "wizard-property-value with-exception" >${obj[p]}</span>`;
               }
               t = `${t}\n${s}<span class='wizard-property-name' >${p}</span>${op.assign}${propertyValue}`;
             }

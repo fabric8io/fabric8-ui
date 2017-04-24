@@ -81,11 +81,11 @@ export class Fabric8ForgeService extends ForgeService {
   }
 
   private buildCommandStatusArray(results) {
-    let status=[];
+    let status = [];
     if (Array.isArray(results)) {
       for (let result of results ) {
         // result has message and status properties
-        status.push(result)
+        status.push(result);
       }
     }
     return status;
@@ -93,28 +93,28 @@ export class Fabric8ForgeService extends ForgeService {
 
   private handleError(error: any): Observable<any> {
     let errorMessage: any;
-    let errorName:string = 'ForgeApiClientError';
+    let errorName: string = 'ForgeApiClientError';
     let innerError = error;
     if (error instanceof Response) {
       try {
         const body = error.json() || '';
         if (body.results) {
           errorName = 'ForgeApiPartialCommandCompletionError';
-          errorMessage = 'The forge command failed or partially succeeded'
+          errorMessage = 'The forge command failed or partially succeeded';
           innerError = {
-            partialCommandCompletionError:{
-              status:this.buildCommandStatusArray(body.results)
+            partialCommandCompletionError: {
+              status: this.buildCommandStatusArray(body.results)
             }
-          }
+          };
         } else {
           errorName = 'ForgeApiServerError';
-          errorMessage = 'An unexpected server side forge api error occurred'
+          errorMessage = 'An unexpected server side forge api error occurred';
           innerError = {
-            httpError:{
+            httpError: {
               status: error.status,
               statusText: error.statusText,
               url: error.url,
-              body: body,
+              body: body
             }
           };
         }
@@ -195,7 +195,7 @@ export class Fabric8ForgeService extends ForgeService {
         .map((response: Response) => {
           if (body.isExecute === true) {
             // if this is an execute command then handle the response differently
-            // becaus the data coming back is structured differently
+            // e the data coming back is structured differently
             let forgeResponse: IForgeCommandResponse = {
               payload: {
                 data: {

@@ -81,7 +81,7 @@ form
   min-width:50px;
   min-height:60px;
   vertical-align: center;
-  top:0px;
+  top:0;
   position:relative;
   display:flex;
   > div{
@@ -111,7 +111,7 @@ header{
   }
   .message-title-container
   {    .message-title{
-      padding-left:0px;
+      padding-left:0;
       .pficon{
         margin-right:15px;
       }
@@ -169,7 +169,7 @@ header{
   display:block;
   padding:0;
   margin:0;
-  border-width:0px;
+  border-width:0;
   overflow:auto;
   height:0;
   top:26px;
