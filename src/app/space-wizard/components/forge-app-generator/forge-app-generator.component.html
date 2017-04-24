@@ -5,16 +5,15 @@
         <div class="busy-indicator">
           <div *ngIf="!forge.hasError && forge.processing===true" class="spinner spinner-lg"></div>
         </div>
-        <h2>{{forge.state.title}}</h2>
+        <h2 class="busy-indicator-offset" >{{forge.state.title}}</h2>
         <span (click)="forge.close()" class="pficon pficon-close"></span>
       </div>
     </div>
   </header>
   <section [class.hide]="!forge.hasMessage" class="app-generator-message container-fluid padding-top-standard-offset">
     <div class="message-title-container">
-      <h2 class="message-title">
+      <h2 class="message-title busy-message-title">
         <span>
-          <span class="color-info fa fa-info-circle"></span>
           <span>{{forge.message.title||''}}</span>
         </span>
       </h2>
@@ -29,12 +28,12 @@
   </section>
   <section [class.hide]="!forge.hasError" class="app-generator-message container-fluid padding-top-standard-offset">
     <div class="message-title-container">
-      <h2 class="message-title">
-        <span class="pficon pficon-error-circle-o"></span><span>{{forge.error.message||''}}</span>
-        </h2>
+      <h2 class="message-title user-select-none">
+        <span class="pficon pficon-error-circle-o"></span><span>{{forge.error.title||''}}</span>
+      </h2>
     </div>
     <div class="message-body-container">
-      <div [innerHTML]="forge.error.details" class="message-body">
+      <div [innerHTML]="forge.error.message" class="message-body">
 
       </div>
     </div>

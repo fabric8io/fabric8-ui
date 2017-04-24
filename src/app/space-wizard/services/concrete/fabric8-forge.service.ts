@@ -53,10 +53,7 @@ export class Fabric8ForgeService extends ForgeService {
         return this.forgeHttpCommandRequest(request);
       }
       case ForgeCommands.forgeQuickStart: {
-        //command.parameters.pipeline.name = 'launchpad-new-project';
         command.parameters.pipeline.name = 'fabric8-new-project';
-        // here are the fabric8 upstream quickstarts:
-        //command.parameters.pipeline.name = 'fabric8-new-quickstart';
         return this.forgeHttpCommandRequest(request);
       }
       case ForgeCommands.forgeImportGit: {
@@ -83,110 +80,67 @@ export class Fabric8ForgeService extends ForgeService {
     }
   }
 
-  private expandJson(source: any, indent: number= 0): string {
-    return formatJson(source, indent);
-  }
-
-  private formatError(err: Error): string {
-    let message =
-`
-===============================================================================
-Error
-===============================================================================
-Error Name : ${err.name}
-Error Message :
-${err.message}
-===============================================================================
-Error Stack:
-${err.stack || 'no stack provided'}
-===============================================================================
-`;
-    return message;
-  }
-
-  private formatObjectError(err): string {
-    err = err || '';
-    let message =
-`
-===============================================================================
-Error
-===============================================================================
-${this.expandJson(err)}
-===============================================================================
-`;
-    return message;
-  }
-
-  private formatHttpError(error: Response, errorBody: string): string {
-    let message =
-`
-Http Error Status Code : ${error.status || ''}
-Http Error Status : ${error.statusText || ''}
-Http Error Body:
-${errorBody}
-`;
-    // remove leading spaces from lines
-    // message=(message||'').replace(/^\s*/gm, '')
-    // replace lines containing only  digits and spaces with a new line
-    // message=(message||'').replace(/[\n][\d]+[\s]*[\d]*[\s]*[\n]/gi,'\n')
-    // replace status success with new line
-    // collapse new lines
-    // message=(message||'').replace(/[\n]+/gi,'\n',)
-    // remove duplicate lines
-    // var re = /^(.*)(\r?\n\1)+$/gm;
-    // message=message.replace(re, "$1");
-    return message;
-  }
-
-  private buildErrorMessageFromResults(results): string {
-    let message = '';
+  private buildCommandStatusArray(results) {
+    let status=[];
     if (Array.isArray(results)) {
-      for (let result of results )
-      {
-          if (result.message) {
-            result.message = result.message.replace(/Exception:/gi, 'Exception:\n');
-            result.message = result.message.replace(/\[\{/gi, '\n[{\n');
-            result.message = result.message.replace(/\}\]/gi, '\n]}\n');
-            result.message = result.message.replace(/\"\,/gi, '",\n');
-            result.message = result.message.replace(/\{\"/gi, '{\n"');
-            result.message = result.message.replace(/\"\}/gi, '"\n}');
-            let status: string = (result.status || '').toLowerCase();
-            message = `${message}\n<span  class='wizard-status-${status}'>[${result.status}]</span>: ${result.message}`;
-          }
+      for (let result of results ) {
+        // result has message and status properties
+        status.push(result)
       }
     }
-    return message;
+    return status;
   }
 
   private handleError(error: any): Observable<any> {
-    let errMsg: string;
+    let errorMessage: any;
+    let errorName:string = 'ForgeApiClientError';
+    let innerError = error;
     if (error instanceof Response) {
       try {
         const body = error.json() || '';
         if (body.results) {
-          errMsg = this.buildErrorMessageFromResults(body.results);
-          errMsg = this.formatHttpError(error, errMsg);
+          errorName = 'ForgeApiPartialCommandCompletionError';
+          errorMessage = 'The forge command failed or partially succeeded'
+          innerError = {
+            partialCommandCompletionError:{
+              status:this.buildCommandStatusArray(body.results)
+            }
+          }
         } else {
-          errMsg = this.expandJson(body);
-          errMsg = this.formatHttpError(error, errMsg);
+          errorName = 'ForgeApiServerError';
+          errorMessage = 'An unexpected server side forge api error occurred'
+          innerError = {
+            httpError:{
+              status: error.status,
+              statusText: error.statusText,
+              url: error.url,
+              body: body,
+            }
+          };
         }
       } catch (ex) {
-        errMsg = this.formatError(ex);
+        errorName = 'ForgeApiClientExceptionError';
+        errorMessage = 'An unexpected error occurred while consuming the http response returned from the server';
+        innerError = error;
+        innerError.inner = ex;
       }
     } else if (error instanceof Error) {
-        errMsg = this.formatError(error);
+        errorName = 'ForgeApiClientError';
+        errorMessage = 'An unexpected client side error occurred';
+        innerError = error;
     } else {
-        errMsg = this.expandJson(error);
-        errMsg = this.formatObjectError(errMsg);
+        errorName = 'ForgeApiClientCustomError';
+        errorMessage = 'An unexpected client side custom error occurred';
+        innerError = error;
     }
     this.log({
-      message: errMsg,
+      message: errorMessage,
       error: true
     }, error);
     return Observable.throw({ origin: this.constructor.name,
-        name: 'AppGenerator Api Error',
-        message: errMsg,
-        inner: error
+        name: errorName,
+        message: errorMessage,
+        inner: innerError
       });
 
   }
@@ -240,6 +194,8 @@ ${errorBody}
         this._http.post(url, body, options)
         .map((response: Response) => {
           if (body.isExecute === true) {
+            // if this is an execute command then handle the response differently
+            // becaus the data coming back is structured differently
             let forgeResponse: IForgeCommandResponse = {
               payload: {
                 data: {
