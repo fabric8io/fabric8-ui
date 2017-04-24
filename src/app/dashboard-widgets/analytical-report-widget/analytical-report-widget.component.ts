@@ -33,7 +33,8 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
   currentBuild: Build;
   stackAnalysisInformation: any = {
     recommendationsLimit: 5,
-    showLoader: false
+    showLoader: false,
+    recommendations: []
   };
 
   _contextSubscription: Subscription;
@@ -88,13 +89,16 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
                 let missing: Array<any> = result.missing || [];
                 let version: Array<any> = result.version || [];
 
+                let stackName: string = result['stackName'] || 'An existing stack';
+
                 for (let i in missing) {
                   if (missing.hasOwnProperty(i)) {
                     let keys: Array<string> = Object.keys(missing[i]);
                     recommendations.push({
                       suggestion: 'Recommendation',
                       action: 'Add',
-                      message: keys[0] + ' : ' + missing[i][keys[0]]
+                      message: keys[0] + ' : ' + missing[i][keys[0]],
+                      subMessage: stackName + ' has this dependency included'
                     });
                   }
                 }
@@ -104,7 +108,8 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
                     recommendations.push({
                       suggestion: 'Recommendation',
                       action: 'Update',
-                      message: keys[0] + ' : ' + version[i][keys[0]]
+                      message: keys[0] + ' : ' + version[i][keys[0]],
+                      subMessage: stackName + ' has a different version of dependency'
                     });
                   }
                 }
@@ -114,7 +119,7 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
                 this.stackAnalysisInformation['recommendations'].splice(this.stackAnalysisInformation['recommendationsLimit']);
               });
             } else {
-              this.currentBuild = null;
+              this.stackAnalysisInformation['recommendations'].length = 0;
             }
             this.hideLoader();
         });

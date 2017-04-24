@@ -42,7 +42,7 @@
               <div class="recommendation-header">
                 <h1 class="keep-left">Recommendations <small>(only <b>top-{{stackAnalysisInformation.recommendationsLimit}}</b>)</small></h1>
               </div>
-              <div class="list-group-item list-view-pf-stacked recommendation-group-item recommendation-list" *ngFor="let recommendation of stackAnalysisInformation['recommendations']">
+              <div class="list-group-item recommendation-group-item recommendation-list" *ngFor="let recommendation of stackAnalysisInformation['recommendations']">
                 <div class="list-view-pf-main-info">
                   <div class="list-view-pf-left">
                     <span class="pficon pficon-info"></span>
@@ -50,7 +50,7 @@
                   <div class="list-view-pf-body">
                     <div class="list-view-pf-description">
                       <div class="list-group-item-text">
-                        {{recommendation.suggestion}}: {{recommendation.action}} {{recommendation.message}}
+                        <b>{{recommendation.suggestion}}: {{recommendation.action}} {{recommendation.message}}</b> &nbsp; {{recommendation.subMessage}}
                       </div>
                     </div>
                   </div>
@@ -62,16 +62,12 @@
                     <span class="pficon pficon-info"></span>
                   </div>
                   <div class="list-view-pf-body">
-                    <b>No recommendations.</b> &nbsp; Your stack looks great.
+                    <b>No recommendations.</b>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="margin-fix" *ngIf="!stackAnalysisInformation['recommendations']">
-              Stack Analysis is in progress.
-            </div>
-            <!--You can view the stack analysis reports here: <stack-details *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']" [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
-        --></div>
+          </div>
           <div class="margin-fix" *ngIf="!currentBuild || !currentBuild.annotations || !currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">No Records found</div>
         </div>
         <div class="col-xs-12 margin-fix" *ngIf="!currentBuild">No Records found</div>
