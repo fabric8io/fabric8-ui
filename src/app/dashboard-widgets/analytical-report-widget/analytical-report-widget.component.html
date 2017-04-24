@@ -1,7 +1,8 @@
 <div class="analytical-report-widget card-pf card-f8 card-pf-utilization">
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
-      Stack Reports
+      <span *ngIf="!currentBuild || !currentBuild.annotations || !currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">Stack Reports</span>
+      <stack-details [stack]="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']" *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
     </h2>
   </div>
   <div class="card-pf-body card-f8-body analytical-report-body">
