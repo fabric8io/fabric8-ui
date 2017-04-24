@@ -12,7 +12,7 @@
           <div [hidden]="errorMessage.message">
             <!-- Recommender -->
             <div>
-              <f8-recommender [recommendations]="recommendations"></f8-recommender>
+              <f8-recommender [data]="repoInfo && repoInfo" [recommendations]="recommendations"></f8-recommender>
             </div>
             <!-- Stack Overview -->
             <div>

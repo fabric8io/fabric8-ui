@@ -57,6 +57,8 @@ import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 export class RecommenderComponent implements OnChanges {
 
     @Input() recommendations;
+    @Input() data;
+
     public messages: any;
     public workItemResponse: Array<any> = [];
     private recommendationsList: Array<any> = [];
@@ -391,6 +393,10 @@ export class RecommenderComponent implements OnChanges {
                 if (this.canCreateWorkItem(recommendations[i])) {
                     let description: string = recommendations[i]['workItem']['message'];
                     let codebase: any = recommendations[i]['workItem']['codebase'];
+                    if (this.data && this.data.git) {
+                        codebase['repository'] = this.data.git.uri || '';
+                        codebase['branch'] = this.data.git.ref || 'master';
+                    }
                     description += '<br />';
                     description += 'Repository: ' + codebase['repository'];
                     description += '<br /> Branch: ' + codebase['branch'];

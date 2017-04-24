@@ -50,6 +50,8 @@ import {getStackRecommendations, getResultInformation} from '../utils/stack-api-
 export class StackDetailsComponent implements OnInit {
   @Input() stack;
   @Input() displayName;
+  @Input() repoInfo;
+
   @ViewChild('stackModule') modalStackModule: any;
   public messages: any;
 
