@@ -335,8 +335,11 @@ footer
 // wizard
 $wizard-spacing:$grid-gutter-width/2;
 $wizard-header-color:$color-pf-black-100;
+$wizard-header-divider-color: $color-pf-black-300;// $color-pf-black-200;
 $wizard-footer-color: $color-pf-white;// $color-pf-black-200;
 $wizard-footer-divider-color: $color-pf-black-300;// $color-pf-black-200;
+
+
 
 @mixin wizard-step-elements{
   // position buttons
@@ -344,6 +347,7 @@ $wizard-footer-divider-color: $color-pf-black-300;// $color-pf-black-200;
   >header{
     position:relative;
     background-color: $wizard-header-color;
+    // border-bottom:solid 1px $wizard-header-divider-color;
     &.container-fluid
     {
         padding-left:$wizard-spacing + $debug-border ;
@@ -358,6 +362,21 @@ $wizard-footer-divider-color: $color-pf-black-300;// $color-pf-black-200;
     &.container
     {
         width:100%;
+    }
+    &.forge-header
+    {
+      background-color: $color-pf-black-200;
+      .row {
+        &:first-of-type{
+          background-color: $color-pf-white !important;
+          border-bottom:solid 1px $color-pf-black-300;
+        }
+      }
+      .wizard-step-sub-title{
+        background-color: $color-pf-black-200;
+
+      }
+
     }
   }
   >section
@@ -399,6 +418,11 @@ $wizard-footer-divider-color: $color-pf-black-300;// $color-pf-black-200;
         width:100%;
         margin-left:0px;
         margin-right:0px;
+    }
+    &.forge-section
+    {
+      background-color: $color-pf-black-200;
+
     }
   }
   >footer{
@@ -534,6 +558,7 @@ $wizard-footer-divider-color: $color-pf-black-300;// $color-pf-black-200;
     }
   }
 }
+
 
 
 //////////////////////

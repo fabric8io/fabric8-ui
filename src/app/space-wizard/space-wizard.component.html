@@ -71,7 +71,7 @@
     </form>
   </div>
   <div class="wizard-step" [class.active]="workflow.isStepActive({name:steps.forge})">
-    <header class="container-fluid">
+    <header class="container-fluid forge-header">
       <div class="row">
         <div class="col-xs-12 wizard-step-title">
           <h4 class="text" >Welcome to your {{configurator.space.attributes.name | spaceName}} space.</h4>
@@ -85,7 +85,7 @@
         </div>
       </div>
     </header>
-    <section class="container-fluid flex-container in-column-direction with-content-stretch padding-standard-offset ">
+    <section class="forge-section container-fluid flex-container in-column-direction with-content-stretch padding-standard-offset ">
       <div class="row flex-grow-1 flex-container">
         <div class="col-xs-12 flex-grow-1 flex-container in-row-direction with-content-stretch">
           <div class="section-column cursor-pointer user-select-none">
@@ -131,7 +131,7 @@
     <footer class="container-fluid">
       <div class="row">
         <div class="col-xs-12 wizard-step-tool-bar with-items-in-center">
-          <a class="btn btn-primary" (click)="finish()"> No thanks, take me to the
+          <a class="btn btn-default" (click)="finish()"> No thanks, take me to the
             {{configurator.space.attributes.name | spaceName}} dashboard</a>
         </div>
       </div>

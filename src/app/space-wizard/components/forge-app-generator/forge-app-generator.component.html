@@ -2,10 +2,10 @@
   <header class="container-fluid">
     <div class="row">
       <div class="col-xs-12 wizard-step-title">
+        <h3 ><strong>{{forge.state.title}}</strong></h3>
         <div class="busy-indicator">
           <div *ngIf="!forge.hasError && forge.processing===true" class="spinner spinner-lg"></div>
         </div>
-        <h2 class="busy-indicator-offset" >{{forge.state.title}}</h2>
         <span (click)="forge.close()" class="pficon pficon-close"></span>
       </div>
     </div>
