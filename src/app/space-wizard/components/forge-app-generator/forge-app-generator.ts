@@ -36,7 +36,7 @@ export class ForgeAppGenerator {
   private _fieldSet: IFieldCollection;
   private _responseHistory: Array<IAppGeneratorResponse>;
   private _currentResponse: IAppGeneratorResponse;
-  private _isBegin: Boolean = false;
+  private _onBeginStep: Boolean = false;
 
   constructor(private _appGeneratorService: IAppGeneratorService, loggerFactory: LoggerFactory) {
     this.log = loggerFactory.createLoggerDelegate(this.constructor.name, ForgeAppGenerator.instanceCount++);
@@ -57,11 +57,11 @@ export class ForgeAppGenerator {
     this.clearMessage();
     this.processing = false;
   }
-  public get isBegin():Boolean {
-    return this._isBegin;
+  public get onBeginStep():Boolean {
+    return this._onBeginStep;
   }
-  public set isBegin(value:Boolean) {
-    this._isBegin = value;
+  public set onBeginStep(value:Boolean) {
+    this._onBeginStep = value;
   };
 
   public get fields(): IFieldCollection {
@@ -109,7 +109,7 @@ export class ForgeAppGenerator {
   public acknowledgeError()
   {
     this.clearErrors();
-    if(this.isBegin)
+    if(this.onBeginStep)
     {
       this.reset();
       // go back to forge selector
@@ -146,7 +146,7 @@ export class ForgeAppGenerator {
   }
 
   public begin() {
-    this.isBegin=true;
+    this.onBeginStep=true;
     this.reset();
     let title = 'Application Generator';
     this.state.title = title;
@@ -188,7 +188,7 @@ export class ForgeAppGenerator {
   }
 
   public gotoNextStep() {
-    this.isBegin=false;
+    this.onBeginStep=false;
     this.processing = true;
     this.validate().then((validated) => {
       if (validated.response.payload.state.valid ) {
@@ -225,7 +225,7 @@ export class ForgeAppGenerator {
   }
 
 public execute() {
-    this.isBegin=false;
+    this.onBeginStep=false;
     return new Promise<IAppGeneratorPair>((resolve, reject) => {
       this.state.title = 'Generating the application ...';
       this.message = this.spinnerMessage('Validating ...');
@@ -421,6 +421,12 @@ public execute() {
     }
     for (let p of Object.getOwnPropertyNames(source)) {
       if (p.startsWith('_')) {
+        continue;
+      }
+      if (p.startsWith('localizedMessage')) {
+        continue;
+      }
+      if (p.startsWith('stackTrace')) {
         continue;
       }
       if (Array.isArray(source[p]) === true) {
