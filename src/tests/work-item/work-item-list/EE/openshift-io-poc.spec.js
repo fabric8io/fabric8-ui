@@ -95,9 +95,12 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 //    OpenShiftIoSpaceHomePage.clickTechnologyStack();
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
-//    OpenShiftIoDashboardPage.clickRightNavBar();
-//    OpenShiftIoDashboardPage.clickLogOut();
-//    console.log ('EE POC test - Log Out');
+    /* For the purposes of this test - ignore all 'toast' popup warnings */
+    OpenShiftIoDashboardPage.waitForToastToClose();
+
+    OpenShiftIoDashboardPage.clickRightNavBar();
+    OpenShiftIoDashboardPage.clickLogOut();
+    console.log ('EE POC test - Log Out');
 
   });
 

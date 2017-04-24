@@ -202,7 +202,8 @@ class OpenShiftIoDashboardPage {
 
   /* Log Out drop down selection */
   get logOut () {
-    return this.rightNavBar.element(by.xpath(".//span[contains(text(),'Log Out')]"));
+//    return this.rightNavBar.element(by.xpath(".//*[contains(text(),'Log Out')]"));
+    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Log Out')]"));
   }
 
   clickLogOut () {
@@ -247,6 +248,16 @@ class OpenShiftIoDashboardPage {
     this.selectTheSpace(spaceName).click();
     return new OpenShiftIoSpaceHomePage();
   }
+
+  /* Are any warning displayed? */
+  get alertToastElements () {
+    return element(by.xpath(".//*[contains(@class, 'toast-pf')]"));
+  }
+
+  waitForToastToClose () {
+    return browser.wait(until.not(until.presenceOf(this.alertToastElements)));
+  }
+
 
 }
 
