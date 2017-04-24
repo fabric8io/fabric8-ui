@@ -231,6 +231,24 @@ class OpenShiftIoDashboardPage {
     this.profileTab.click();
   }
 
+
+
+  /* My Spaces UI card element */
+  get mySpacesCard () {
+    return element(by.xpath(".//div[contains(@class, 'col-md-4')]//*[contains(text(), 'My spaces')]/../../.."));    
+  }  
+  
+  selectTheSpace (spaceName) {
+    return this.mySpacesCard.element(by.xpath("//a[contains(text(),'" + spaceName + "')]"));
+  }
+
+  clickTheSpace (spaceName) {
+    browser.wait(until.elementToBeClickable(this.selectTheSpace(spaceName)), constants.LONG_WAIT, 'Failed to find element selected space ' + spaceName);
+    this.selectTheSpace(spaceName).click();
+    return new OpenShiftIoSpaceHomePage();
+  }
+
 }
 
 module.exports = OpenShiftIoDashboardPage;
+

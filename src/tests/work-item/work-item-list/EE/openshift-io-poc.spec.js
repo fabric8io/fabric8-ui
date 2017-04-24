@@ -66,13 +66,6 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     /* Step 3 - on home page - create new space - embed time in space name to ensure unique space name */
     console.log ('EE POC test - Create a new space');
-    
-    /* ************************************************************************************* */
-    /* Commented out due to - https://github.com/fabric8io/fabric8-planner/issues/1638 */
-    // OpenShiftIoDashboardPage.clickNewSpaceButton();
-
-    /* Commented out temporarily to avoid creating unnecessary spaces during testing */
-
     OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
     OpenShiftIoDashboardPage.clickCreateSpaceFromNavBar();  
 
@@ -80,15 +73,13 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     OpenShiftIoDashboardPage.typeNewSpaceName((spaceTime));
     OpenShiftIoDashboardPage.typeDevProcess("Scenario Driven Planning");
     OpenShiftIoDashboardPage.clickCreateSpaceButton();   
+
     /* ************************************************************************************* */
 
     /* Step 4 - Create a new project */
 
-    /* Select a space to be used */
-//    var spaceTime = '1490960814920';
-
     console.log ('EE POC test - Navigate to space home page/dashboard for space: ' + spaceTime);
-    OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickSelectSpace(spaceTime);
+    OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickSelectSpace(spaceTime);   // Generate warning on UI element
 
     /* Step - in the space home page, verify URL and end the test */
     browser.wait(until.urlContains('https://prod-preview.openshift.io/almusertest1/'+ spaceTime), constants.WAIT);
@@ -100,10 +91,8 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     });
 
     /* Step 4 - Add a project to the space */
-    //  OpenShiftIoSpaceHomePage.clickCodeBaseWidgetAddToSpaceButton();
     OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();
 //    OpenShiftIoSpaceHomePage.clickTechnologyStack();
-
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
 //    OpenShiftIoDashboardPage.clickRightNavBar();

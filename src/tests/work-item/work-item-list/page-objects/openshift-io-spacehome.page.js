@@ -377,5 +377,98 @@ module.exports = OpenShiftIoSpaceHomePage;
 //
 //  Account home
 //  .//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//i[contains(@class,'pficon-home')]
+// 
+// Elements under Navigation Bar
 //
-
+// .//*[contains(@class, 'navbar-left')]//*[contains(@class, 'pficon-settings')]
+// 
+// .//*[contains(@class, 'navbar-left')]//*[contains(text(), 'Analyze')]
+// 
+// .//*[contains(@class, 'navbar-left')]//*[contains(text(), 'Plan')]
+// 
+// .//*[contains(@class, 'navbar-left')]//*[contains(text(), 'Create')]
+// 
+// Right Navigation Bar
+// .//*[@id='header_rightDropdown']
+// 
+// Status Icon
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')]
+// 
+// Status Values
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'list-group')][1]      Platform
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'list-group')][2]      Planner
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'list-group')][3]      Che
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'list-group')][4]      Pipeline
+// 
+// User Header Dropdown
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Profile')]
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Help')]
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'About')]
+// .//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Log Out')]
+// 
+// UI Page Header - Edit Description and Add to Space Button
+// .margin-top-15
+// .//fabric8-edit-space-description-widget
+// .//fabric8-edit-space-description-widget/../../div/button
+// 
+// Analyze section of UI page
+// #analyze-overview
+// 
+// --------------------------
+// 
+// Codebases screen section
+// .//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Codebases')]/../../..
+// 
+// Codebases section title/link
+// .//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Codebases')]
+// .//*[contains(@class,'card-pf-title')]/..//*[contains(text(), 'Create Codebase')]
+// Button - Add Codebase
+// Button - Import Codebase
+// 
+// --------------------------
+// 
+// Pipelines section title/link
+// .//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Pipelines')]
+// 
+// Pipelines section
+// .//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Pipelines')]/../../..
+// .//*[@id='analyze-overview']/*/*/*/fabric8-pipelines-widget
+// .col-md-4>fabric8-pipelines-widget
+// .//fabric8-pipelines-widget
+// 
+// Button - Add to Space
+// 
+// --------------------------
+// 
+// My Workitems section title/link
+// .//*[contains(@class,'card-pf-title')]//*[contains(text(), 'My Work Items')]
+// 
+// My Workitems screen section
+// .//*[contains(@class,'card-pf-title')]//*[contains(text(), 'My Work Items')]/../../..
+// .//*[@id='analyze-overview']/*/*/*/fabric8-create-work-item-widget
+// .col-md-4>fabric8-create-work-item-widget
+// .//fabric8-create-work-item-widget
+// 
+// Button - Create Workitem
+// 
+// --------------------------
+// 
+// Environments screen section title/link
+// .//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Environments')]
+// 
+// Environments screen section
+// .//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Environments')]/../../..
+// .//*[@id='analyze-overview']/*/*/*/fabric8-environment-widget
+// .col-md-4>fabric8-environment-widget
+// ./fabric8-environment-widget
+// 
+// --------------------------
+// 
+// Stack Reports screen title/link
+// .//h2[contains(text(), 'Stack Reports')]
+// 
+// Stack Reports screen section
+// .//h2[contains(text(), 'Stack Reports')]/../../..
+// .//*[@id='analyze-overview']/*/*/*/fabric8-analytical-report-widget
+// .//fabric8-analytical-report-widget
