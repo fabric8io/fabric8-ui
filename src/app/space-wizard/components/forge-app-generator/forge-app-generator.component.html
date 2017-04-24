@@ -140,9 +140,9 @@
           (click)="forge.gotoNextStep()">Next</button>
         <button type="button" class="btn btn-primary" *ngIf="!forge.hasError && !forge.hasResult && !forge.hasMessage" [disabled]="(!forge.state.canExecute)||(forge.processing === true)"
           (click)="forge.finish()">Finish</button>
-        <button type="button" class="btn btn-primary" *ngIf="forge.hasError" (click)="forge.clearErrors()">OK</button>
+        <button type="button" class="btn btn-primary" *ngIf="forge.hasError" (click)="forge.acknowledgeError()">OK</button>
         <button class='btn btn-primary margin-right-5' *ngIf="forge.hasResult" (click)="forge.addResultToSpace()"><span class="pficon pficon-add-circle-o" ></span> Add this code base to my space</button>
-        <button type="button" class="btn btn-primary" *ngIf="forge.hasResult" (click)="forge.acknowledgeStarterApp()">OK</button>
+        <button type="button" class="btn btn-primary" *ngIf="forge.hasResult" (click)="forge.acknowledgeResult()">OK</button>
       </div>
     </div>
   </footer>

@@ -20,6 +20,7 @@ import {
 export class ForgeAppGenerator {
   static instanceCount: number = 1;
 
+
   public workflow: IWorkflow;
   public name: string;
   public state: IAppGeneratorState;
@@ -35,6 +36,7 @@ export class ForgeAppGenerator {
   private _fieldSet: IFieldCollection;
   private _responseHistory: Array<IAppGeneratorResponse>;
   private _currentResponse: IAppGeneratorResponse;
+  private _isBegin: Boolean = false;
 
   constructor(private _appGeneratorService: IAppGeneratorService, loggerFactory: LoggerFactory) {
     this.log = loggerFactory.createLoggerDelegate(this.constructor.name, ForgeAppGenerator.instanceCount++);
@@ -55,11 +57,18 @@ export class ForgeAppGenerator {
     this.clearMessage();
     this.processing = false;
   }
+  public get isBegin():Boolean {
+    return this._isBegin;
+  }
+  public set isBegin(value:Boolean) {
+    this._isBegin = value;
+  };
 
   public get fields(): IFieldCollection {
     this._fieldSet = this._fieldSet || [];
     return this._fieldSet;
   }
+
 
   public set fields(value: IFieldCollection) {
     this._fieldSet = value;
@@ -93,9 +102,24 @@ export class ForgeAppGenerator {
     this.clearResult();
     this.clearMessage();
   }
+  /**
+   * When an error occurs the error area will be displayed. On the beginning step
+   * and acknowldge will take back to the forge selector
+   */
+  public acknowledgeError()
+  {
+    this.clearErrors();
+    if(this.isBegin)
+    {
+      this.reset();
+      // go back to forge selector
+      this.workflow.gotoPreviousStep();
+    }
+  }
 
-  public acknowledgeStarterApp() {
+  public acknowledgeResult() {
     this.reset();
+    // add code base
     this.workflow.gotoPreviousStep();
   }
 
@@ -122,6 +146,7 @@ export class ForgeAppGenerator {
   }
 
   public begin() {
+    this.isBegin=true;
     this.reset();
     let title = 'Application Generator';
     this.state.title = title;
@@ -163,6 +188,7 @@ export class ForgeAppGenerator {
   }
 
   public gotoNextStep() {
+    this.isBegin=false;
     this.processing = true;
     this.validate().then((validated) => {
       if (validated.response.payload.state.valid ) {
@@ -199,6 +225,7 @@ export class ForgeAppGenerator {
   }
 
 public execute() {
+    this.isBegin=false;
     return new Promise<IAppGeneratorPair>((resolve, reject) => {
       this.state.title = 'Generating the application ...';
       this.message = this.spinnerMessage('Validating ...');
