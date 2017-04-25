@@ -17,6 +17,7 @@ export interface IField {
     visible: boolean;
     index: number;
     note?: string;
+    text?: string;
     message?: IFieldMessage | string;
     // other dynamic properties
     [key: string]: any;
