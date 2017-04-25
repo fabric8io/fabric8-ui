@@ -2,56 +2,25 @@
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
       <a [routerLink]="[contextPath | async, 'create', 'environments']">Environments</a>
-      <span class="badge card-f8-badge">3</span>
+      <span class="badge card-f8-badge">{{appsCount}}</span>
     </h2>
   </div>
   <div class="card-pf-body card-f8-body">
-    <div class="blank-slate-f8-card">
+    <div class="blank-slate-f8-card" *ngIf="appsCount === 0">
       <div class="blank-slate-f8-icon">
         <span class="pficon pficon-add-circle-o"></span>
       </div>
       <h3>This space has no environments</h3>
       <p>
-        Environments are created when you set up  a project and define the environments
+        Environments are created when you set up a project and define the environments
         and pipeline for your code to deploy to.
       </p>
     </div>
-    <!-- this is for the content that would replace the blank slate above -->
-    <!-- <ul class="list-group">
-      <li class="list-group-item">
-       <h2><strong>BalloonPopGame_Integration</strong></h2>
-       <div style="display:table">
-        <div class="col-md-4">
-          <a>3 Pods </a>
-          <a>8 Services</a>
-        </div>
-        <div class="col-md-4">
-          <a>2 configmaps</a>
-          <a>2 replicasets</a>
-        </div>
-        <div class="col-md-4">
-          <a>16 deployments</a>
-          <a>8 secrets</a>
-        </div>
-       </div>
+    <ul class="list-group" *ngIf="appsCount > 0">
+      <li class="list-group-item" *ngFor="let env of loadedEnvironments">
+        <h3>{{env.name}}</h3>
+        <div><a href="{{env.apps.deployUrl}}" target="_blank">{{env.apps.name}}</a> - {{env.apps.version}}</div>
       </li>
-      <li class="list-group-item">
-       <h2><strong>BalloonPopGame_Integration</strong></h2>
-       <div style="display:table">
-        <div class="col-md-4">
-          <a>3 Pods </a>
-          <a>8 Services</a>
-        </div>
-        <div class="col-md-4">
-          <a>2 configmaps</a>
-          <a>2 replicasets</a>
-        </div>
-        <div class="col-md-4">
-          <a>16 deployments</a>
-          <a>8 secrets</a>
-        </div>
-       </div>
-      </li>
-    </ul> -->
+    </ul>
   </div>
 </div>
