@@ -20,6 +20,8 @@ import {
   BuildStore
 } from 'fabric8-runtime-console';
 
+import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
+
 @Component({
   selector: 'alm-pipelines',
   templateUrl: 'pipelines.component.html',
@@ -28,6 +30,8 @@ import {
 export class PipelinesComponent implements OnInit, OnDestroy {
 
   toolbarConfig: ToolbarConfig;
+  openshiftConsoleUrl: string;
+
   private _apps: FilterQuery[] = [];
   private _codebases: FilterQuery[] = [];
   private _filteredPipelines: BuildConfig[] = [];
@@ -49,6 +53,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     private pipelinesService: PipelinesService
   ) {
 
+    this.updateConsoleLink();
+    
     this.toolbarConfig = {
       filterConfig: {
         fields: [
@@ -163,7 +169,21 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         this._allPipelines = val;
         this.applyFilters();
         this.applySort();
+        this.updateConsoleLink();
       });
+  }
+
+  updateConsoleLink() {
+    this.openshiftConsoleUrl = process.env.OPENSHIFT_CONSOLE_URL;
+    let pipelines = this._allPipelines;
+    if (this.openshiftConsoleUrl && pipelines && pipelines.length) {
+      let pipeline = pipelines[0];
+      let namespace = pipeline.namespace;
+      if (namespace) {
+        console.log("Found pipeline namespace: " + namespace);
+        this.openshiftConsoleUrl = pathJoin(this.openshiftConsoleUrl, "/project", namespace, "/browse/pipelines");
+      }
+    }
   }
 
   ngOnDestroy() {

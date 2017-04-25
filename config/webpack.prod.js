@@ -31,6 +31,7 @@ const OfflinePlugin = require('offline-plugin');
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+const OPENSHIFT_CONSOLE_URL = process.env.OPENSHIFT_CONSOLE_URL || 'https://console.starter-us-east-2.openshift.com/console/';
 const FABRIC8_FORGE_API_URL = process.env.FABRIC8_FORGE_API_URL;
 const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL;
 const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
@@ -50,6 +51,7 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   port: PORT,
   ENV: ENV,
   HMR: false,
+  OPENSHIFT_CONSOLE_URL: OPENSHIFT_CONSOLE_URL,
   FABRIC8_FORGE_API_URL: FABRIC8_FORGE_API_URL,
   FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
   FABRIC8_SSO_API_URL: FABRIC8_SSO_API_URL,
@@ -192,6 +194,7 @@ module.exports = function (env) {
           'ENV': stringify(METADATA.ENV),
           'NODE_ENV': stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
+          'OPENSHIFT_CONSOLE_URL': stringify(METADATA.OPENSHIFT_CONSOLE_URL),
           'FABRIC8_FORGE_API_URL': stringify(METADATA.FABRIC8_FORGE_API_URL),
           'FABRIC8_WIT_API_URL': stringify(METADATA.FABRIC8_WIT_API_URL),
           'FABRIC8_SSO_API_URL': stringify(METADATA.FABRIC8_SSO_API_URL),

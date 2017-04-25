@@ -20,6 +20,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
  * Webpack Constants
  */
 const ENV = process.env.ENV = process.env.NODE_ENV = 'test';
+const OPENSHIFT_CONSOLE_URL = process.env.OPENSHIFT_CONSOLE_URL || 'https://console.starter-us-east-2.openshift.com/console/';
 const FABRIC8_FORGE_API_URL = process.env.FABRIC8_FORGE_API_URL;
 const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL;
 const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
@@ -247,6 +248,7 @@ module.exports = function (options) {
         'HMR': false,
         'process.env': {
           'ENV': stringify(ENV),
+          'OPENSHIFT_CONSOLE_URL': stringify(OPENSHIFT_CONSOLE_URL),
           'FABRIC8_FORGE_API_URL': stringify(FABRIC8_FORGE_API_URL),
           'FABRIC8_WIT_API_URL': stringify(FABRIC8_WIT_API_URL),
           'FABRIC8_RECOMMENDER_API_URL' : stringify(FABRIC8_RECOMMENDER_API_URL),
