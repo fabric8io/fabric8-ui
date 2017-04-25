@@ -130,7 +130,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       };
       this.forgeService.executeCommand( commandRequest )
       .map( (forgeResponse) => this.transformForgeResponseToAppGeneratorResponse(request, forgeResponse) )
-      .map( (forgeResponse) => this._configService.updateGeneratorResponse('', forgeResponse) )
+      .map( (forgeResponse) => this._configService.augmentGeneratorResponse('', forgeResponse) )
       .subscribe( (response: IAppGeneratorResponse) => {
         this.log(`AppGenerator '${cmdDescription}' command completed`, response);
         observer.next(response);
@@ -249,10 +249,11 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       {
         hash[item] = true;
       }
+      let index:number = 0;
       for ( let choice of source.valueChoices ) {
-
         if ( source.description ) {
           items.push({
+            index: index,
             id: choice.id,
             name: choice.description,
             description: choice.description,
@@ -261,14 +262,15 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
           });
         } else {
           items.push({
+            index: index,
             id: choice.id,
             name: choice.id,
             description: choice.id,
             visible: true,
             selected: hash[choice.id] === true
           });
-
         }
+        index ++;
       }
     }
     return items;
