@@ -6,14 +6,14 @@ import {
   ViewChild
 } from '@angular/core';
 
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 // import { Logger } from '../../node_modules/ngx-login-client';
 
 import { StackAnalysesService } from '../stack-analyses.service';
 
 import { GlobalConstants } from '../constants/constants.service';
-import {getStackRecommendations, getResultInformation} from '../utils/stack-api-utils';
+import { getStackRecommendations, getResultInformation } from '../utils/stack-api-utils';
 
 @Component({
   selector: 'stack-details',
@@ -245,6 +245,7 @@ export class StackDetailsComponent implements OnInit {
     if (!url) return;
     this.isLoading = true;
     let stackAnalysesData: any = {};
+    this.errorMessage = {};
     this.stackAnalysesService
       .getStackAnalyses(url)
       .subscribe(data => {
