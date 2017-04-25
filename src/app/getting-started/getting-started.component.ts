@@ -208,8 +208,8 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
     return (this.username !== undefined
       && this.username.trim().length !== 0
       && this.username.trim().length < 63
-      && this.username.trim().indexOf("-") === -1
-      && this.username.trim().indexOf("_") === -1);
+      && this.username.trim().indexOf("-") !== 0
+      && this.username.trim().indexOf("_") !== 0);
   }
 
   /**
