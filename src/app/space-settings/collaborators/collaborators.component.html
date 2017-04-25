@@ -40,7 +40,7 @@
             </button>
             <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" dropdownMenu>
               <li role="menuitem"><a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a></li>
-              <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="removeUser(item)">Remove from space</a></li>
+              <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="confirmUserRemove(item)">Remove from space</a></li>
             </ul>
           </span>
         </template>
@@ -55,4 +55,15 @@
   </modal-content>
 </modal>
 
-<!-- need delete modal here, too -->
+
+<!-- Delete modal -->
+<modal #removeCollaborator title="Remove collaborator from space">
+  <modal-content *ngIf="userToRemove">
+    <div>You are about to remove collaborator {{userToRemove.attributes.fullName}} from this collaboration space.</div>
+    <div>The selected user will not be able to edit or be assigned work in the {{context.space.attributes.name}}.</div>
+    <div class="remove-footer pull-right">
+      <button class="btn btn-cancel" (click)="removeCollaborator.close()">Cancel</button>
+      <button class="btn btn-danger" (click)="removeUser()">Remove</button>
+    </div>
+  </modal-content>
+</modal>

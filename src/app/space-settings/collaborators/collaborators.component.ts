@@ -22,7 +22,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   private listViewConfig: ListViewConfig;
   private contextSubscription: Subscription;
   private collaboratorSubscription: Subscription;
+  private userToRemove: User;
   @ViewChild('addCollaborators') addCollaboratorsModal: IModalHost;
+  @ViewChild('removeCollaborator') removeCollaborator: IModalHost;
 
   constructor(
     private contexts: ContextService,
@@ -57,15 +59,22 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     this.addCollaboratorsModal.open();
   }
 
-  removeUser(user: User) {
-    this.collaboratorService.removeCollaborator(this.context.space.id, user.id).subscribe(() => {
-      this.collaborators.splice(this.collaborators.indexOf(user), 1);
+  confirmUserRemove(user: User): void {
+    this.userToRemove = user;
+    this.removeCollaborator.open();
+  }
+
+  removeUser() {
+    this.collaboratorService.removeCollaborator(this.context.space.id, this.userToRemove.id).subscribe(() => {
+      this.collaborators.splice(this.collaborators.indexOf(this.userToRemove), 1);
+      this.userToRemove = null;
+      this.removeCollaborator.close();
     });
   }
 
   addCollaboratorsToParent(addedUsers: User[]) {
     addedUsers.forEach(user => {
-      let matchingUser = _.find(this.collaborators, (existing) => {
+      let matchingUser = find(this.collaborators, (existing) => {
         return existing.id === user.id;
       });
       if(!matchingUser) {
