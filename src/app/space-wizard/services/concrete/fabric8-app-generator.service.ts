@@ -11,7 +11,6 @@ import {
   IAppGeneratorCommand,
   IAppGeneratorRequest,
   IAppGeneratorResponse,
-  IAppGeneratorResponseContext,
   IAppGeneratorState,
   IField,
   IFieldCollection,
@@ -21,18 +20,16 @@ import {
 import {
   IForgeCommandRequest,
   IForgeCommandResponse,
-  IForgeCommandPipeline,
   IForgeInput,
   IForgeService,
   IForgeServiceProvider,
   IForgeCommandData,
-  IForgeState,
   IForgeMetadata
 } from '../forge.service';
 
 import {
  AppGeneratorConfigurationService
-} from './app-generator-configuration.service'
+} from './app-generator-configuration.service';
 
 @Injectable()
 export class Fabric8AppGeneratorService extends AppGeneratorService {
@@ -54,11 +51,11 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     this.log(`New instance...`);
   }
 
-  private handleError(err): Observable<any> {
-    let errMessage = err.message ? err.message : err.status ? `${err.status} - ${err.statusText}` : 'Server Error';
-    this.log({ message: errMessage, inner: err, error: true });
-    return Observable.throw(new Error(errMessage));
-  }
+  // private handleError(err): Observable<any> {
+  //   let errMessage = err.message ? err.message : err.status ? `${err.status} - ${err.statusText}` : 'Server Error';
+  //   this.log({ message: errMessage, inner: err, error: true });
+  //   return Observable.throw(new Error(errMessage));
+  // }
 
   /**
    * update the values that will be transmitted to forge with the form
@@ -133,23 +130,18 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       };
       this.forgeService.executeCommand( commandRequest )
       .map( (forgeResponse) => this.transformForgeResponseToAppGeneratorResponse(request, forgeResponse) )
-      .map( (forgeResponse) => this._configService.updateGeneratorResponse('',forgeResponse) )
+      .map( (forgeResponse) => this._configService.augmentGeneratorResponse('', forgeResponse) )
       .subscribe( (response: IAppGeneratorResponse) => {
         this.log(`AppGenerator '${cmdDescription}' command completed`, response);
         observer.next(response);
         observer.complete();
       }, (err: Error|any) => {
          let error = {
-           name: 'ExecuteForgeCommand' ,
-           message: `The [ ${cmdDescription} ] command failed or only partially succeeded ...`,
-           inner: {
-             name: err.name,
-             message: err.message
-            }
+           origin: 'Fabric8AppGeneratorService',
+           name: 'ExecuteForgeCommandError' ,
+           message: `The <strong><i>${cmdDescription}</i></strong> command failed or only partially succeeded`,
+           inner: err
          };
-         if (err.stack) {
-           (<any>error).inner.stack = err.stack || '';
-         }
          this.log({ message: error.message , error: true }, err);
          return observer.error(error);
       });
@@ -167,11 +159,14 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
           choices: this.mapValueChoices(sourceInput),
           hasChoices: this.mapValueHasOptions(sourceInput),
           description: sourceInput.description,
+          // default text is the value
+          text: sourceInput.value,
           inputType: this.mapWidgetClassification(sourceInput),
           label: sourceInput.label,
           required: sourceInput.required,
           enabled: sourceInput.enabled,
           visible: sourceInput.deprecated === false,
+          valid: true,
           index: 0
         }
       };
@@ -187,7 +182,9 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       if ( source.messages ) {
         for ( let message of source.messages ) {
           if ( message.input === sourceInput.name ) {
+            // if the field has a message then it means that something is not valid
             targetField.display.message = message;
+            targetField.display.valid = false;
           }
         }
       }
@@ -254,26 +251,28 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       {
         hash[item] = true;
       }
+      let index:number = 0;
       for ( let choice of source.valueChoices ) {
-
         if ( source.description ) {
           items.push({
+            index: index,
             id: choice.id,
-            name: choice.description,
-            description: choice.description,
+            name: choice.id,
+            description: source.description,
             visible: true,
             selected: hash[choice.id] === true
           });
         } else {
           items.push({
+            index: index,
             id: choice.id,
             name: choice.id,
             description: choice.id,
             visible: true,
             selected: hash[choice.id] === true
           });
-
         }
+        index ++;
       }
     }
     return items;
