@@ -58,8 +58,14 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
     browser.get("https://prod-preview.openshift.io/");
-    element(by.id("name")).click();
-    element(by.xpath(".//*[@id='profilelink']/span")).click();
+    element(by.id("name")).isPresent().then(function(result) {
+      if ( result ) {        
+        element(by.id("name")).click();
+        element(by.xpath(".//*[@id='profilelink']/span")).click();
+      } else {
+        //do nothing
+      }
+    });
     // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
 
     console.log ('EE POC test - Navigate to openshift.io home/dashboard page');
