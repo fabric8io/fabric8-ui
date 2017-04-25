@@ -2,7 +2,7 @@
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
       <span *ngIf="!currentBuild || !currentBuild.annotations || !currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">Stack Reports</span>
-      <stack-details [stack]="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']" *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
+      <stack-details [repoInfo]="currentBuild.repositoryInformation" [stack]="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']" *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
     </h2>
   </div>
   <div class="card-pf-body card-f8-body analytical-report-body">
