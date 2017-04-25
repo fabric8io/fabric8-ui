@@ -5,7 +5,7 @@ export {
   IAppGeneratorRequest,
   IAppGeneratorCommand,
   IAppGeneratorError,
-  IAppGeneratorResult,
+  IAppGeneratorMessage,
   IAppGeneratorPair,
   IAppGeneratorResponseContext,
   IAppGeneratorState,

@@ -8,11 +8,11 @@ $icon-path: '../../assets/icon/';
 $wizard-padding: $grid-gutter-width / 2;
 $wizard-spacing: 5px;
 // shadow distance from element
-$wizard-shadow-offset: 0px;
+$wizard-shadow-offset: 3px;
 // makes shadow bigger
-$wizard-shadow-spread-radius: 1px;
+$wizard-shadow-spread-radius: 3px;
 // makes shadows edge blury
-$wizard-shadow-blur-radius: 1px;
+$wizard-shadow-blur-radius: 3px;
 //noinspection SassScssResolvedByNameOnly
 $wizard-section-column-background-color: $color-pf-white;// $btn-primary-bg;
 $wizard-layout-block-background-color: $color-pf-white;

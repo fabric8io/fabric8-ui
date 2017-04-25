@@ -3,10 +3,6 @@ import { Router } from '@angular/router';
 
 import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
 import {
-  Space,
-  Context,
-  Contexts,
-  ContextTypes,
   SpaceService,
   SpaceNamePipe
 } from 'ngx-fabric8-wit';
@@ -16,7 +12,6 @@ import { Observable } from 'rxjs';
 import { DummyService } from '../shared/dummy.service';
 
 import { SpaceNamespaceService } from '../shared/runtime-console/space-namespace.service';
-import { ContextService } from '../shared/context.service'
 
 import { ILoggerDelegate, LoggerFactory } from './common/logger';
 import { SpaceConfigurator } from './models/codebase';
@@ -122,14 +117,14 @@ export class SpaceWizardComponent implements OnInit {
         };
       },
       cancel: (... args) => {
-        /**
+       /*
         * Ensure 'finish' has the correct 'this'.
         * That is why apply is being used.
         */
         component.cancel.apply(component, args);
       },
       finish: (... args) => {
-        /**
+       /*
         * Ensure 'finish' has the correct 'this'.
         * That is why apply is being used.
         */
@@ -139,7 +134,7 @@ export class SpaceWizardComponent implements OnInit {
   }
 
 
-  /**
+  /*
    * Creates a persistent collaboration space
    * by invoking the spaceService
    */
