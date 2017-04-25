@@ -1,5 +1,14 @@
 <div id="pipelines" class="content container">
-  <alm-toolbar [config]="toolbarConfig" (onFilterChange)="filterChange($event)" (onSortChange)="sortChange($event)"></alm-toolbar>
-  <hr />
+  <alm-toolbar [config]="toolbarConfig"
+               [viewsTemplate]="addOpenShiftConsoleLink"
+               (onFilterChange)="filterChange($event)"
+               (onSortChange)="sortChange($event)">
+    <ng-template #addOpenShiftConsoleLink>
+      <div class="openshift-links" placement="bottom">
+        <a [href]="openshiftConsoleUrl" *ngIf="openshiftConsoleUrl" class="pull-right" title="View in the OpenShift Console">OpenShift Console</a>
+      </div>
+    </ng-template>
+  </alm-toolbar>
+  <hr/>
   <fabric8-pipelines-list [pipelines]="pipelines" [loading]="false"></fabric8-pipelines-list>
 </div>
