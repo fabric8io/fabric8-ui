@@ -1,0 +1,58 @@
+<div class="container-fluid">
+  <h3 class="collaborators-header">Collaborators of {{context.space.attributes.name | spaceName}} Space:</h3>
+  <div class="row">
+    <div class="col-md-11">
+      Collaborator details:
+    </div>
+    <div class="table-action-heading" (click)="launchAddCollaborators()">
+      <i class="pficon pficon-add-circle-o margin-top-4">
+      </i>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <alm-listview
+        [config]="listViewConfig"
+        [itemTemplate]="itemTemplate"
+        [actionTemplate]="actionTemplate"
+        [items]="collaborators" >
+        <template #itemTemplate let-item="item" let-index="index">
+          <div class="list-view-pf-body collaborators-display">
+            <div class="list-view-pf-description">
+              <div class="list-group-item-text">
+                <img [src]="item.attributes.imageURL" height="40"/>
+                <span class="list-group-item-description">
+                 {{item.attributes.fullName}}
+                  </span>
+              </div>
+            </div>
+            <div class="list-view-pf-description">
+              <div class="list-group-item">
+                {{item.attributes.email}}
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #actionTemplate let-item="item" let-index="index">
+          <span class="dropdown-kebab-pf collaborators-display dropdown" dropdown>
+            <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
+              <span class="fa fa-ellipsis-v"></span>
+            </button>
+            <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" dropdownMenu>
+              <li role="menuitem"><a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a></li>
+              <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="removeUser(item)">Remove from space</a></li>
+            </ul>
+          </span>
+        </template>
+      </alm-listview>
+    </div>
+  </div>
+</div>
+
+<modal #addCollaborators modalClass="chromeless-modal">
+  <modal-content class="chromeless-modal-content">
+    <add-collaborators-dialog [host]="addCollaborators" [spaceId]="context?.space.id" (onAdded)="addCollaboratorsToParent($event)"></add-collaborators-dialog>
+  </modal-content>
+</modal>
+
+<!-- need delete modal here, too -->

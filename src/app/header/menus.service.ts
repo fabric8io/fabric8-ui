@@ -24,6 +24,10 @@ export class MenusService {
                 path: '',
                 icon: '',
                 menus: []
+              },
+              {
+                name: 'Collaborators',
+                path: 'collaborators'
               }
             ]
           }, {

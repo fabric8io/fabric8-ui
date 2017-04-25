@@ -45,6 +45,7 @@ import {
   Contexts,
   SpaceService,
   Spaces,
+  CollaboratorService
 }                             from 'ngx-fabric8-wit';
 import {
   AuthenticationService,
@@ -165,6 +166,7 @@ export type StoreType = {
     AuthenticationService,
     AuthGuard,
     AuthUserResolve,
+    CollaboratorService,
     ConfigStore,
     ContextCurrentUserGuard,
     ContextResolver,

@@ -1,0 +1,39 @@
+@import '../../../assets/stylesheets/base';
+
+.blank-slate-pf {
+  margin-top: 20px;
+}
+
+.collaborators-header {
+  margin-bottom: 30px;
+}
+
+.list-group-item {
+  padding-left: 40px;
+}
+
+.list-group-item-description {
+  padding-left: 40px;
+}
+
+.list-view-pf-main-info {
+  display: block;
+}
+
+/* Margin for group heading */
+.list-view-pf-view {
+  margin-top: 75px;
+}
+
+.collaborators-display {
+  display: flex;
+}
+
+.table-action-heading {
+  cursor: pointer;
+  float: right;
+  padding-right: 32px;
+  .pficon {
+    color: $color-pf-blue-300;
+  }
+}
