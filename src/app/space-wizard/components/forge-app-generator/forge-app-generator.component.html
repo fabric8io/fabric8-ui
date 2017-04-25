@@ -73,7 +73,7 @@
                     <li   (click)="forge.fields[i].display.text=choice.name;forge.fields[i].value=choice.id;forge.fields[i].display.open=false;forge.validate();"  *ngFor="let choice of forge.fields[i].display.choices">
                       <div [class.selected]="forge.fields[i].value === choice.id" class="dropdown-menu-item user-select-none cursor-pointer" >
                         <div class="item-name" >{{choice.name}}</div>
-                        <div class="item-description" >{{choice.description||''}}</div>
+                        <div *ngIf="choice.description" class="item-description" >{{choice.description||''}}</div>
                       </div>
                     </li>
                   </ul>

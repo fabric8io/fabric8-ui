@@ -78,7 +78,7 @@ export class AppGeneratorConfigurationService {
         break;
       }
       case 'obsidian: configure pipeline': {
-        appGeneratorResponse.payload.state.title = 'Select a build pipeline ... ';
+        appGeneratorResponse.payload.state.title = 'Select a build pipeline strategy ... ';
         break;
       }
       case 'io.fabric8.forge.generator.kubernetes.createbuildconfigstep': {
@@ -102,8 +102,47 @@ export class AppGeneratorConfigurationService {
     return validationFields
   }
 
+  private augmentPipelineChoices( field:IField ) {
+    for( let choice of <Array<IFieldChoice>>field.display.choices ) {
+      switch(choice.id.toLowerCase()){
+        case 'canaryrelease': {
+          choice.index = 0;
+          choice.name = 'Canary Release'
+          choice.description = 'A canary - release continuous delivery pipeline strategy.';
+          break;
+        }
+        case 'canaryreleaseandstage': {
+          choice.index = 1;
+          choice.name = 'Canary Release and Stage'
+          choice.description = 'A canary - stage - release continuous delivery pipeline strategy.';
+          break;
+        }
+        case 'canaryreleasestageandapprovepromote': {
+          choice.index = 2;
+          choice.name = 'Canary Release and Stage with Approvals'
+          choice.description = 'A canary - stage - release - approval - promote continuous delivery pipeline strategy.';
+          break;
+        }
+        default:{
+          break;
+        }
+      }
+    }
+    field.display.choices=field.display.choices.sort( (c1,c2) => {
+        return c1.index - c2.index
+      })
+      let selected = field.display.choices.find(c=>c.selected);
+      if(selected){
+        field.display.text=selected.name;
+      }
+      else {
+        if(field.display.choices.length > 0){
+          field.display.text=field.display.choices[0].name;
+        }
+      }
+  }
+
   private augmentStackChoices( field:IField ) {
-      field.display.note=field.display.note.replace(/configguration/ig,'configuration');
       field.display.label = 'Technology Stack';
       for( let choice of <Array<IFieldChoice>>field.display.choices ) {
         switch(choice.id.toLowerCase()){
@@ -219,9 +258,13 @@ export class AppGeneratorConfigurationService {
             break;
           }
           case 'type' : {
-              field.display.note=field.display.note.replace(/configguration/ig,'configuration');
-              field.display.label = 'Technology Stack';
-              this.augmentStackChoices(field);
+            field.display.note=field.display.note.replace(/configguration/ig,'configuration');
+            field.display.label = 'Technology Stack';
+            this.augmentStackChoices(field);
+            break;
+          }
+          case 'pipeline' : {
+              this.augmentPipelineChoices(field);
             break;
           }
           case 'named' : {

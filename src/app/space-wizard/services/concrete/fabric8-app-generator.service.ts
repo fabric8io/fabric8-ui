@@ -159,6 +159,8 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
           choices: this.mapValueChoices(sourceInput),
           hasChoices: this.mapValueHasOptions(sourceInput),
           description: sourceInput.description,
+          // default text is the value
+          text: sourceInput.value,
           inputType: this.mapWidgetClassification(sourceInput),
           label: sourceInput.label,
           required: sourceInput.required,
@@ -255,8 +257,8 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
           items.push({
             index: index,
             id: choice.id,
-            name: choice.description,
-            description: choice.description,
+            name: choice.id,
+            description: source.description,
             visible: true,
             selected: hash[choice.id] === true
           });
