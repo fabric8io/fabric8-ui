@@ -74,12 +74,12 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     OpenShiftIoDashboardPage.typeDevProcess("Scenario Driven Planning");
     OpenShiftIoDashboardPage.clickCreateSpaceButton();   
 
-    /* ************************************************************************************* */
+    /* For the purposes of this test - ignore all 'toast' popup warnings */
+    OpenShiftIoDashboardPage.waitForToastToClose();
+    OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickNoThanksButton();
 
-    /* Step 4 - Create a new project */
-
+      /* Step 4 - Create a new project */
     console.log ('EE POC test - Navigate to space home page/dashboard for space: ' + spaceTime);
-    OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickSelectSpace(spaceTime);   // Generate warning on UI element
 
     /* Step - in the space home page, verify URL and end the test */
     browser.wait(until.urlContains('https://prod-preview.openshift.io/almusertest1/'+ spaceTime), constants.WAIT);
@@ -90,10 +90,15 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
        console.log ('EE POC test - new space URL = ' + text);
     });
 
-    /* Step 4 - Add a project to the space */
+    /* Add a project to the space */
     OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();
 //    OpenShiftIoSpaceHomePage.clickTechnologyStack();
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
+
+    OpenShiftIoDashboardPage.clickNameUnderLeftNavigationBar (spaceTime);
+    OpenShiftIoDashboardPage.clickAccountHomeUnderLeftNavigationBar();
+
+    /* Step 5 - log out */
 
     /* For the purposes of this test - ignore all 'toast' popup warnings */
     OpenShiftIoDashboardPage.waitForToastToClose();

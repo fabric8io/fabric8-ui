@@ -198,6 +198,50 @@ class OpenShiftIoSpaceHomePage {
 
 
 
+
+
+
+
+  get noThanksButton () {
+    return element(by.xpath(".//a[contains(text(),'No thanks, take me to')]"));
+  }
+  clickNoThanksButton () {
+    browser.wait(until.elementToBeClickable(this.noThanksButton), constants.LONG_WAIT, 'Failed to find element noThanksButton button');
+    return this.noThanksButton.click();
+  }
+
+
+/* 
+Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-dashboard.page.js, lower sections are page-specific.
+
+|------------------------------------------------------------------------------------------------------------------------------|
+|                                                    Top Navigation Bar                                                        |
+| Left Navigation Bar            |                                                            | Right Navigation Bar           |
+|                                |                                                            |                                | 
+|------------------------------------------------------------------------------------------------------------------------------|
+|                                       |                                                                                      |
+|                                       |                                                                                      |
+|          Codebases                    |                       Stack Reporrs                                                  |
+|                                       |                                                                                      |
+|                                       |                                                                                      |
+|------------------------------------------------------------------------------------------------------------------------------|
+|                                       |                                              |                                       |
+|                                       |                                              |                                       |
+|          My Work Items                |             Pipelines                        |        Environments                   |
+|                                       |                                              |                                       |
+|                                       |                                              |                                       |
+|------------------------------------------------------------------------------------------------------------------------------|
+*/
+
+/* UI Page Section: Analyze Overview (main body of page Bar */
+/* UI Page Section: Codebases */
+/* UI Page Section: Stack Reports */
+/* UI Page Section: My Work Items */
+/* UI Page Section: Pipelines */
+/* UI Page Section: Environments */
+
+
+
   /* -----------------------------------------------------------------*/
 
   /* New project - 'how would you like to get started?' dialog */
@@ -241,115 +285,6 @@ class OpenShiftIoSpaceHomePage {
 
 
 
-
-
-  get noThanksButton () {
-    return element(by.xpath(".//a[contains(text(),'No thanks, take me to')]"));
-  }
-  clickNoThanksButton () {
-    browser.wait(until.elementToBeClickable(this.noThanksButton), constants.LONG_WAIT, 'Failed to find element noThanksButton button');
-    return this.noThanksButton.click();
-  }
-
-
-// ----------------------------------------------------------------------------------------------------------
-
-/* UI Page Section: Right Navigation Bar */
-/* UI Page Section: Analyze Overview (main body of page Bar */
-/* UI Page Section: Codebases */
-/* UI Page Section: Stack Reports */
-/* UI Page Section: My Work Items */
-/* UI Page Section: Pipelines */
-/* UI Page Section: Environments */
-
-/* 
-Page layout as of April 24, 2017:
-
-|------------------------------------------------------------------------------------------------------------------------------|
-|                                                    Top Navigation Bar                                                        |
-| Left Navigation Bar            |                                                            | Right Navigation Bar           |
-|------------------------------------------------------------------------------------------------------------------------------|
-|                                       |                                                                                      |
-|                                       |                                                                                      |
-|          Codebases                    |                       Stack Reporrs                                                  |
-|                                       |                                                                                      |
-|                                       |                                                                                      |
-|------------------------------------------------------------------------------------------------------------------------------|
-|                                       |                                              |                                       |
-|                                       |                                              |                                       |
-|          My Work Items                |             Pipelines                        |        Environments                   |
-|                                       |                                              |                                       |
-|                                       |                                              |                                       |
-|------------------------------------------------------------------------------------------------------------------------------|
-*/
-
-  /* UI Page Section: Navigation Bar */
-
-  /* xpath = .//*[contains(@class, 'navbar-collapse')]  */
-  get topNavigationBar () {
-    return element(by.xpath(".//*[contains(@class, 'navbar-collapse')]"));
-  }
-  clicktopNavigationBar () {
-    browser.wait(until.elementToBeClickable(this.topNavigationBar), constants.LONG_WAIT, 'Failed to find element topNavigationBar');
-    return this.topNavigationBar.click();
-  }
-
-  /* UI Page Section: Left Navigation Bar */
-
-  /* xpath = .//*[contains(@class, 'navbar-left')] */
-  get leftNavigationBar () {
-    return element(by.xpath(".//*[contains(@class, 'navbar-left')]"));
-  }
-  clickleftNavigationBar () {
-    browser.wait(until.elementToBeClickable(this.leftNavigationBar), constants.LONG_WAIT, 'Failed to find element leftNavigationBar');
-    return this.leftNavigationBar.click();
-  }
-
-  /* User name in Left Navigation Bar */
-  /* xpath = .//*[contains(@class, 'navbar-left')]//*[contains(text(), 'almusertest')]  */
-  get userNameUnderLeftNavigationBar () {
-    return this.leftNavigationBar.element(by.xpath("//*[contains(text(), 'almusertest')]"));
-  }
-  clickUserNameUnderLeftNavigationBar () {
-    browser.wait(until.elementToBeClickable(this.userNameUnderLeftNavigationBar), constants.LONG_WAIT, 'Failed to find element username under leftNavigationBar');
-    return this.userNameUnderLeftNavigationBar.click();
-  }
-
-  /* Recent items under Left Navigation Bar */
-  /* xpath = .//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')] */
-  get recentItemsUnderLeftNavigationBar () {
-    return this.leftNavigationBar.element(by.xpath("/*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]"));
-  }
-
-  /* Create space in Left Navigation Bar */
-  /* xpath = .//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//*[contains(@class,'pficon-add-circle-o')]  */
-  get createSpaceUnderLeftNavigationBar () {
-    return this.recentItemsUnderLeftNavigationBar.element(by.xpath("//*[contains(@class,'pficon-add-circle-o')]"));
-  }
-  clickCreateSpaceUnderLeftNavigationBar () {
-    browser.wait(until.elementToBeClickable(this.createSpaceUnderLeftNavigationBar), constants.LONG_WAIT, 'Failed to find element createSpaceUnderLeftNavigationBar');
-    return this.createSpaceUnderLeftNavigationBar.click();
-  }
-
-  /* View all spaces in Left Navigation Bar */
-  /* xpath = .//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//i[contains(@class,'fa-th')]  */
-  get viewAllSpacesUnderLeftNavigationBar () {
-    return this.recentItemsUnderLeftNavigationBar.element(by.xpath("//*[contains(@class,'fa-th')]"));
-  }
-  clickViewAllSpacesUnderLeftNavigationBar () {
-    browser.wait(until.elementToBeClickable(this.viewAllSpacesUnderLeftNavigationBar), constants.LONG_WAIT, 'Failed to find element viewAllSpacesUnderLeftNavigationBar');
-    return this.viewAllSpacesUnderLeftNavigationBar.click();
-  }
-
-  /* Account home in Left Navigation Bar */
-  /* xpath = .//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//i[contains(@class,'pficon-home')]  */
-  get accountHomeUnderLeftNavigationBar () {
-    return this.recentItemsUnderLeftNavigationBar.element(by.xpath("/i[contains(@class,'pficon-home')]"));
-  }
-  clickAccountHomeUnderLeftNavigationBar () {
-    browser.wait(until.elementToBeClickable(this.accountHomeUnderLeftNavigationBar), constants.LONG_WAIT, 'Failed to find element accountHomeUnderLeftNavigationBar');
-    return this.accountHomeUnderLeftNavigationBar.click();
-  }
 
 
 }
