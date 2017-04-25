@@ -108,6 +108,9 @@
             font-size: 44pt;
             opacity: 0.9;
             margin: 0 0 10px 0;
+            &:before {
+                color: #72767b;
+            }
         }
 
         .cvss-id {

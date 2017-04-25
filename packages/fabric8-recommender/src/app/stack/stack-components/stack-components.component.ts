@@ -90,9 +90,6 @@ export class StackComponents implements OnChanges {
         }, {
             name: 'Current Version',
             identifier: 'curVersion'
-        }, {
-            name: 'Enterprise Usage',
-            identifier: 'enterpriseUsage'
         }];
 
         this.currentFilter = this.filters[0].name;

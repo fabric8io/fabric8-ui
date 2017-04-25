@@ -2,7 +2,7 @@
   <h1 class="overview-title">{{messages && messages.title}}</h1>
   <div *ngIf="!overviewData.summaryInfo.numeric" class="alert alert-warning">
     <span class="pficon pficon-warning-triangle-o"></span>
-    <b>{{messages.noDependencies}}</b> {{messages.dataAvailable}}
+    <b>{{messages.noDependencies.message}}</b> {{messages.noDependencies.submessage}}
   </div>
   <div *ngIf="overviewData.summaryInfo.numeric" class="row">
     <div class="col-sm-4 col-xs-12">
@@ -15,7 +15,8 @@
         <div class="card-pf-body">
           <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value === -1" class="row make-center">
             <div class="pficon pficon-info warning-icon"></div>
-            <div class="cvss-id">{{messages.noCve}}</div>
+            <div class="cvss-id">{{messages && messages.noCve.message}}</div>
+            <p>{{messages && messages.noCve.subMessage}}</p>
           </div>
           <div *ngIf="overviewData.securityInfo && overviewData.securityInfo.value !== -1" class="row">
             <div class="col-sm-12">

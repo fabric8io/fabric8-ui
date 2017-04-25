@@ -295,14 +295,15 @@ export class StackDetailsComponent implements OnInit {
           // Set an error if the data is invalid or not proper.
           this.errorMessage.message = `This could take a while. Return to pipeline to keep
            working or stay on this screen to review progress.`;
-          this.errorMessage.stack = '';
           this.modalHeader = 'Updating ...';
         }
       },
       error => {
+        this.clearLoader();
         // Throw error when the service fails
-        this.errorMessage.message = <any>error.message;
-        this.errorMessage.stack = <any>error.stack;
+        this.errorMessage.message = error.message;
+        this.errorMessage.status = error.status;
+        this.errorMessage.statusText = error.statusText;
         this.modalHeader = 'Report failed ...';
       });
   }

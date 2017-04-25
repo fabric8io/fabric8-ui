@@ -6,6 +6,10 @@
     border: none;
     .warning-icon{
         font-size: 6em;
+        
+        i:before {
+            color: #8b8d8f;
+        }
     }
     .container-progress{
         width: 50%;

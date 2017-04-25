@@ -23,18 +23,19 @@
             </div>
           </div>
           <div class="error-msg blank-slate-pf" [hidden]="!errorMessage.message">
-            <div [hidden]="!errorMessage.stack">
+            <div [hidden]="!errorMessage.status">
               <div class="warning-icon blank-slate-pf-icon">
                 <i class="pficon-warning-triangle-o"></i>
               </div>
               <h1>
                 {{messages && messages['report_failure']}}
+                <span *ngIf="errorMessage.status">{{messages && messages['error_code']}} {{errorMessage.status}}</span>
               </h1>
               <p>
-                {{errorMessage.message}}
+                {{messages && messages['error_text']}}{{errorMessage.message}}
               </p>
             </div>
-            <div [hidden]="errorMessage.stack">
+            <div [hidden]="errorMessage.status">
               <div class="container-progress progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
                   <span>50%</span>
@@ -45,8 +46,11 @@
               </h3>
               <p>{{errorMessage.message}}</p>
             </div>
-            <div class="blank-slate-pf-secondary-action">
+            <div [hidden]="errorMessage.status" class="blank-slate-pf-secondary-action">
               <button class="btn btn-default" (click)="stackModule.close()">{{messages && messages['cancel']}}</button>
+              <button class="btn btn-primary" (click)="stackModule.close()">{{messages && messages['load_and_return_to_pipeline']}}</button>
+            </div>
+            <div [hidden]="!errorMessage.status" class="blank-slate-pf-secondary-action">
               <button class="btn btn-primary" (click)="stackModule.close()">{{messages && messages['return_to_pipeline']}}</button>
             </div>
           </div>

@@ -2,7 +2,7 @@
   <h1 class="stack-components-title">{{messages && messages.title}}</h1>
   <div *ngIf="dependencies && dependencies.length === 0" class="alert alert-warning">
     <span class="pficon pficon-warning-triangle-o"></span>
-    <strong>No Dependencies</strong> available
+    <b>{{messages.noDependencies.message}}</b> {{messages.noDependencies.submessage}}
   </div>
   <div *ngIf="dependencies && dependencies.length !== 0">
     <!-- Toolbar -->
