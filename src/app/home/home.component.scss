@@ -1,13 +1,12 @@
 @import '../../assets/stylesheets/base';
 
-.card-pf-view .card-pf-title {
-  font-weight: 400;
-}
+$icon-path: '../../assets/icon/';
+$images-path: '../../assets/images/';
 
 .home-wrapper {
   background-color: $color-pf-black-150;
   height: 100%;
-  padding-top: 2rem;
+  //padding-top: 2rem;
   .pf-icon-home {
     font-size: $pf-icon-4x;
     padding: 5rem 0 3rem;
@@ -23,8 +22,46 @@
   }
 }
 
+.home-banner {
+  background-color: $color-pf-black-900;
+  background-image: url("#{$images-path}Header_background.png");
+  background-repeat: no-repeat;
+  color: $color-pf-white;
+  height: 325px;
+  margin-bottom: 40px;
+  margin-left: -40px;
+  margin-right: -40px;
+}
+
+.home-banner-title {
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.card-pf-view .card-pf-top-element .card-pf-icon-circle {
+  &.home-icon {
+    border-color: $color-pf-red-100;
+    border-width: 3px;
+    font-size: 30px;
+    height: 75px;
+    line-height: 71px;
+    width: 75px;
+  }
+}
+
 .home-logo {
-  margin-top: 20px;
+  margin-top: 0;
   max-width: 350px;
   width: 100%;
+}
+
+.home-title {
+  font-weight: 400;
+  margin-top: 30px;
+}
+
+.vert-center {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
