@@ -19,11 +19,16 @@
       </div>
     </div>
     <ul class='list-group' *ngIf="(buildConfigsCount | async) > 0">
-      <li class='list-group-item' *ngFor="let buildconfig of buildConfigs | async">
-        <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}"></span>
-        Last build for {{buildconfig.name}} was #{{buildconfig.lastVersion}}, ran
-        <span [innerHTML]="buildconfig.lastBuild?.creationTimestamp | amTimeAgo"></span>
-        and took {{buildconfig.lastBuild?.duration | amDuration: 'ms'}}.
+      <li class='list-group-item' *ngFor="let buildconfig of buildConfigs | async" >
+        <div>
+          <div>
+            <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}"></span>
+            <span class="pipeline-status-padding">{{buildconfig.name}}</span>
+            <span class="pipeline-status-padding">Build #{{buildconfig.lastVersion}}</span>
+          </div>
+          <div>Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}</div>
+          <div>Status: <b>{{buildconfig.statusPhase || 'Unknown'}}</b></div>
+        </div>
       </li>
     </ul>
   </div>
