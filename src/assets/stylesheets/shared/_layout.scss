@@ -607,7 +607,7 @@ span,div
     color:lime;
   }
   &.wizard-status-failed{
-    color:red;
+    color:$color-pf-red;
   }
   &.wizard-status-warning
   {
@@ -628,6 +628,21 @@ span,div
   &.wizard-result-property-value-link
   {
   }
+
+  &.wizard-property-name{
+    color:$color-pf-blue-400;
+    font-weight: bold;
+  }
+
+  &.wizard-property-value{
+    color:$color-pf-black;
+    &.with-exception{
+      color:$color-pf-red;
+      font-weight:bold;
+      font-style: italic;
+    }
+  }
+
 
 }
 

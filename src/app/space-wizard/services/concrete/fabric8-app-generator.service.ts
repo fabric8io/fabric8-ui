@@ -11,7 +11,6 @@ import {
   IAppGeneratorCommand,
   IAppGeneratorRequest,
   IAppGeneratorResponse,
-  IAppGeneratorResponseContext,
   IAppGeneratorState,
   IField,
   IFieldCollection,
@@ -21,18 +20,16 @@ import {
 import {
   IForgeCommandRequest,
   IForgeCommandResponse,
-  IForgeCommandPipeline,
   IForgeInput,
   IForgeService,
   IForgeServiceProvider,
   IForgeCommandData,
-  IForgeState,
   IForgeMetadata
 } from '../forge.service';
 
 import {
  AppGeneratorConfigurationService
-} from './app-generator-configuration.service'
+} from './app-generator-configuration.service';
 
 @Injectable()
 export class Fabric8AppGeneratorService extends AppGeneratorService {
@@ -54,11 +51,11 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     this.log(`New instance...`);
   }
 
-  private handleError(err): Observable<any> {
-    let errMessage = err.message ? err.message : err.status ? `${err.status} - ${err.statusText}` : 'Server Error';
-    this.log({ message: errMessage, inner: err, error: true });
-    return Observable.throw(new Error(errMessage));
-  }
+  // private handleError(err): Observable<any> {
+  //   let errMessage = err.message ? err.message : err.status ? `${err.status} - ${err.statusText}` : 'Server Error';
+  //   this.log({ message: errMessage, inner: err, error: true });
+  //   return Observable.throw(new Error(errMessage));
+  // }
 
   /**
    * update the values that will be transmitted to forge with the form
@@ -133,23 +130,18 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       };
       this.forgeService.executeCommand( commandRequest )
       .map( (forgeResponse) => this.transformForgeResponseToAppGeneratorResponse(request, forgeResponse) )
-      .map( (forgeResponse) => this._configService.updateGeneratorResponse('',forgeResponse) )
+      .map( (forgeResponse) => this._configService.updateGeneratorResponse('', forgeResponse) )
       .subscribe( (response: IAppGeneratorResponse) => {
         this.log(`AppGenerator '${cmdDescription}' command completed`, response);
         observer.next(response);
         observer.complete();
       }, (err: Error|any) => {
          let error = {
-           name: 'ExecuteForgeCommand' ,
-           message: `The [ ${cmdDescription} ] command failed or only partially succeeded ...`,
-           inner: {
-             name: err.name,
-             message: err.message
-            }
+           origin: 'Fabric8AppGeneratorService',
+           name: 'ExecuteForgeCommandError' ,
+           message: `The <strong><i>${cmdDescription}</i></strong> command failed or only partially succeeded`,
+           inner: err
          };
-         if (err.stack) {
-           (<any>error).inner.stack = err.stack || '';
-         }
          this.log({ message: error.message , error: true }, err);
          return observer.error(error);
       });

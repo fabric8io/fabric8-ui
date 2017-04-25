@@ -2,34 +2,53 @@
   <header class="container-fluid">
     <div class="row">
       <div class="col-xs-12 wizard-step-title">
-        <span style="vertical-align: center;" class="header-status">
-          <span *ngIf="!forge.hasError && forge.processing===true" class="fa fa-refresh" ></span>
-        </span>
-        <h2>{{forge.state.title}}</h2>
+        <div class="busy-indicator">
+          <div *ngIf="!forge.hasError && forge.processing===true" class="spinner spinner-lg"></div>
+        </div>
+        <h2 class="busy-indicator-offset" >{{forge.state.title}}</h2>
         <span (click)="forge.close()" class="pficon pficon-close"></span>
       </div>
     </div>
   </header>
-  <section [hidden]="!forge.hasError" class="message-console container-fluid padding-top-standard-offset">
-    <div class="message-console-title">
-      <h3 class="title-text"><span class="pficon pficon-error-circle-o"></span>{{forge.error.message||''}}</h3>
+  <section [class.hide]="!forge.hasMessage" class="app-generator-message container-fluid padding-top-standard-offset">
+    <div class="message-title-container">
+      <h2 class="message-title busy-message-title">
+        <span>
+          <span>{{forge.message.title||''}}</span>
+        </span>
+      </h2>
     </div>
-    <div class="message-console-message">
-      <div [innerHTML]="forge.error.details" class="message-text">
+    <div class="message-body-container no-border">
+      <div class="message-body vertical-align-center">
+        <div class="busy-indicator">
+             <div class="spinner spinner-lg"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section [class.hide]="!forge.hasError" class="app-generator-message container-fluid padding-top-standard-offset">
+    <div class="message-title-container">
+      <h2 class="message-title user-select-none">
+        <span class="pficon pficon-error-circle-o"></span><span>{{forge.error.title||''}}</span>
+      </h2>
+    </div>
+    <div class="message-body-container">
+      <div [innerHTML]="forge.error.message" class="message-body">
 
       </div>
     </div>
   </section>
-  <section [hidden]="!forge.hasResult" class="message-console container-fluid padding-top-standard-offset">
-    <div class="message-console-title">
-      <h3 class="title-text"><span class="pficon pficon-ok"></span>{{forge.result.title||''}}</h3>
+  <section [class.hide]="!forge.hasResult" class="app-generator-message container-fluid padding-top-standard-offset">
+    <div class="message-title-container">
+      <h2 class="message-title"><span class="pficon pficon-ok"></span><span>{{forge.result.title||''}}</span></h2>
     </div>
-    <div class="message-console-message">
-      <div [innerHTML]="forge.result.message" class="message-text">
+    <div class="message-body-container">
+      <div [innerHTML]="forge.result.body" class="message-body">
       </div>
     </div>
   </section>
-  <section [hidden]="forge.hasError||forge.hasResult" class="container-fluid padding-top-standard-offset">
+
+  <section [hidden]="forge.hasError||forge.hasResult||forge.hasMessage" class="container-fluid padding-top-standard-offset">
     <div class="row">
       <div class="col-xs-12">
         <div class="form-horizontal">
@@ -45,6 +64,7 @@
                 <input *ngSwitchCase="'number'" type="number" name="{{forge.fields[i].name}}" [(ngModel)]="forge.fields[i].value" class="form-control"
                   [required]="forge.fields[i].display.required" [disabled]="!forge.fields[i].display.enabled">
               </div>
+
               <div class="combobox-container" *ngSwitchCase="'singleSelection'">
                 <input type="hidden" name value>
                 <div class="input-group">
@@ -63,6 +83,7 @@
                   </span>
                 </div>
               </div>
+
               <div *ngSwitchCase="'multipleSelection'" style="border:solid 1px #bbb; overflow:hidden;  ; border-radius:4px;">
                 <!--input-->
                 <div class="input-group">
@@ -112,12 +133,12 @@
   <footer class="container-fluid">
     <div class="row">
       <div class="col-xs-12 wizard-step-tool-bar with-items-at-end">
-        <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult" (click)="forge.cancel()">Cancel</button>
-        <!--<button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult" [disabled]="(!forge.state.canMoveToPreviousStep)||(forge.processing === true)"
+        <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult && !forge.hasMessage" (click)="forge.cancel()">Cancel</button>
+        <!--<button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult !forge.hasMessage" [disabled]="(!forge.state.canMoveToPreviousStep)||(forge.processing === true)"
           (click)="forge.gotoPreviousStep()">Back</button>-->
-        <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult" [disabled]="(!forge.state.canMoveToNextStep)||(forge.processing === true)"
+        <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasError && !forge.hasResult && !forge.hasMessage" [disabled]="(!forge.state.canMoveToNextStep)||(forge.processing === true)"
           (click)="forge.gotoNextStep()">Next</button>
-        <button type="button" class="btn btn-primary" *ngIf="!forge.hasError && !forge.hasResult" [disabled]="(!forge.state.canExecute)||(forge.processing === true)"
+        <button type="button" class="btn btn-primary" *ngIf="!forge.hasError && !forge.hasResult && !forge.hasMessage" [disabled]="(!forge.state.canExecute)||(forge.processing === true)"
           (click)="forge.finish()">Finish</button>
         <button type="button" class="btn btn-primary" *ngIf="forge.hasError" (click)="forge.clearErrors()">OK</button>
         <button class='btn btn-primary margin-right-5' *ngIf="forge.hasResult" (click)="forge.addResultToSpace()"><span class="pficon pficon-add-circle-o" ></span> Add this code base to my space</button>

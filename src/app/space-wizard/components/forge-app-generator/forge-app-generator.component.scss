@@ -76,55 +76,84 @@ form
   min-height: 66vh;
 }
 
-.header-status
+.busy-indicator
 {
   min-width:50px;
+  min-height:60px;
+  vertical-align: center;
+  top:0;
+  position:relative;
+  display:flex;
+  > div{
+    margin:auto;
+    padding:0;
+  }
+}
+
+.busy-indicator-offset{
+  margin-left:-50px;
 }
 
 header{
   min-height:60px;
 }
 
-.message-console
+.app-generator-message
 {
-
-  .message-console-title
-  {
-    .title-text{
-      padding-left:5px;
+  max-width:900px;
+  height:70vh;
+  padding:15px !important;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  &.hide{
+   display:none !important;
+  }
+  .message-title-container
+  {    .message-title{
+      padding-left:0;
       .pficon{
-        margin-right:5px;
+        margin-right:15px;
+      }
+      &.busy-message-title
+      {
+        text-align: center !important;
       }
     }
-    margin-bottom:15px;
   }
-  .message-console-message
+  .message-body-container
   {
-    border-style: none;
-    max-width:860px;
-    min-height:50vh;
-    max-height:70vh;
+    flex-grow: 1;
+    position: relative;
+    border: solid 1px $color-pf-black-300;
+    &.no-border{
+      border-width:0;
+    }
     overflow: auto;
-    width:100%;
-    padding:0;
-    position:relative;
-    background-color:#444;
-    .message-text
+    .message-body
     {
-      min-height:100%;
-      min-width:100%;
-      line-height:3.0rem;
       vertical-align: top;
-      margin:0;
-      border:none;
-      color:#EFEFEF;
+      position: relative;
+      min-height: 100% !important;
+      width: 100%;
+      margin: 0;
+      padding: 15px;
+      padding-top:3px;
+      border: none;
+      line-height: 3.0rem;
       font-size: 1.5rem;
-      padding:15px;
-      white-space: pre;
-
+      white-space: pre; //pre-wrap;
+      &.vertical-align-center
+      {
+        vertical-align: center !important;
+      }
+      h1,h2,h3 {
+        margin:0
+      }
     }
 
   }
+
 }
 .combobox-container
 {
@@ -140,7 +169,7 @@ header{
   display:block;
   padding:0;
   margin:0;
-  border-width:0px;
+  border-width:0;
   overflow:auto;
   height:0;
   top:26px;
@@ -193,3 +222,4 @@ header{
 {
    color:$color-pf-blue-400;
 }
+
