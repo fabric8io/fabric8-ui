@@ -97,8 +97,11 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     });
 
     /* Add a project to the space */
+    console.log ('EE POC test - add new project to space');
     OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();
-//    OpenShiftIoSpaceHomePage.clickTechnologyStack();
+    OpenShiftIoSpaceHomePage.clickTechnologyStack();
+  
+    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
     OpenShiftIoDashboardPage.clickNameUnderLeftNavigationBar (spaceTime);

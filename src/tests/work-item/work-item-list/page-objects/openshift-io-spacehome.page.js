@@ -251,6 +251,32 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 //    .//h3/strong[contains (text(), 'code')]                Import existing code
 //    .//h3/strong[contains (text(), 'technology stack')]    Select technology stack and pipeline
 
+  /* Quickstart - Select technology stack and pipeline */
+
+  get quickStartCancelButton () {
+    return element(by.xpath("//*[contains(text(), 'Quickstart')]/../../../../..//button[contains(text(),'Cancel')]"));
+  }
+  clickQuickStartCancelButton () {
+    browser.wait(until.elementToBeClickable(this.quickStartCancelButton), constants.LONG_WAIT, 'Failed to find element quickStartCancelButton');
+    return this.quickStartCancelButton.click();
+  }
+
+  get quickStartNextButton () {
+    return element(by.xpath("//*[contains(text(), 'Quickstart')]/../../../../..//button[contains(text(),'Next')]"));
+  }
+  clickQuickStartNextButton () {
+    browser.wait(until.elementToBeClickable(this.quickStartNextButton), constants.LONG_WAIT, 'Failed to find element quickStartNextButton');
+    return this.quickStartNextButton.click();
+  }
+
+  get quickStartFinishButton () {
+    return element(by.xpath("//*[contains(text(), 'Quickstart')]/../../../../..//button[contains(text(),'Finish')]"));
+  }
+  clickQuickStartFinishButton () {
+      browser.wait(until.elementToBeClickable(this.quickStartFinishButton), constants.LONG_WAIT, 'Failed to find element quickStartFinishButton');
+      return this.quickStartFinishButton.click();
+  }
+
   get technologyStack () {
     return element(by.xpath(".//h3/strong[contains(text(),'technology stack')]"));
   }
@@ -258,6 +284,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   clickTechnologyStack () {
     return this.technologyStack.click();
   }
+
+
+
+
 
   get nextButton () {
     return element(by.buttonText('Next'));

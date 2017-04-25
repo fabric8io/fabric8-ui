@@ -169,9 +169,21 @@ class OpenShiftIoStartPage {
 
   /* Login for already registered users */
 
+  /* Login button in Nav bar*/
+  get navBarLoginButton () {
+     return element(by.xpath(".//a[@id='login')]"));
+  }
+  clickNavBarLoginButton () {
+     this.navBarLoginButton.click();
+     return new OpenShiftIoRHDLoginPage();
+//     return new OpenShiftIoGithubLoginPage;
+  }
+
+
   /* Login button */
   get loginButton () {
-     return element(by.cssContainingText('.btn.btn-link', 'Log In'));
+//     return element(by.cssContainingText('.btn.btn-link', 'Log In'));
+     return element(by.xpath(".//*[@id='login' and contains(@class, 'btn btn-outline')]"));
   }
   clickLoginButton () {
      this.loginButton.click();
