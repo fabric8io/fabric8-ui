@@ -45,7 +45,7 @@ export FABRIC8_SSO_API_URL=https://sso.openshift.io/
 export FABRIC8_WIT_API_URL=https://api.openshift.io/api/
 
 # TODO use prod preview for now
-export FABRIC8_FORGE_API_URL="https://forge.api.prod-preview.openshift.io'"
+export FABRIC8_FORGE_API_URL="https://forge.api.prod-preview.openshift.io"
 
 echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_SERVER}/"
 
