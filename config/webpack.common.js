@@ -281,7 +281,7 @@ module.exports = function (options) {
           ]
         },
         {
-          test: /\.jpg$|\.png$|\.gif$|\.jpeg$/,
+          test: /\.jpg$|\.png$|\.svg$|\.gif$|\.jpeg$/,
           use: [
             {
               loader: 'url-loader',
