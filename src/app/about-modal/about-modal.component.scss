@@ -1,8 +1,18 @@
-.about-modal-f8-bg {
+.modal-dialog-f8 {
+  width: 696px;
+}
+.about-modal-f8 {
   background-image: url(../../assets/images/RH-brand-bg.png);
   background-size: 100% 100%;
 }
-.footr-logo {
-  width: 100%;
-  max-width: 200px;
+.logo {
+  width: 250px;
+}
+.modal-footer {
+  img {
+    width: 85px;
+    position: absolute;
+    right: 23px;
+    bottom: 21px;
+  }
 }
