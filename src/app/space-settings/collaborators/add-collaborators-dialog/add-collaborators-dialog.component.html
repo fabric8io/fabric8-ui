@@ -1,0 +1,40 @@
+<div class="flex-dialog">
+  <form role="form" #collaboratorsForm="ngForm" (ngSubmit)="addCollaborators()" novalidate>
+    <header class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 add-dialog-header">
+          <h3>Add collaborators</h3>
+          <span (click)="cancel()" class="glyphicon glyphicon-remove"></span>
+        </div>
+      </div>
+    </header>
+    <section>
+      <div class="form">
+        <fieldset class="add-fieldset">
+        <div class="form-group">
+          <label class="control-label">Collaborators</label>
+          <div>
+            <ss-multiselect-dropdown
+              class="user-select"
+              style="width: 300px;"
+              name="collaboratorsId"
+              [options]="dropdownOptions"
+              [(ngModel)]="dropdownModel"
+              [settings]="dropdownSettings" required>
+            </ss-multiselect-dropdown>
+          </div>
+        </div>
+        </fieldset>
+      </div>
+    </section>
+    <footer>
+      <div class="add-footer">
+        <div>
+          <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel
+          </button>
+          <button class="btn btn-primary" [disabled]="!collaboratorsForm.form.valid" type="submit">Add</button>
+        </div>
+      </div>
+    </footer>
+  </form>
+</div>
