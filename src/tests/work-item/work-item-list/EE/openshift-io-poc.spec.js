@@ -59,11 +59,13 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
     browser.get("https://prod-preview.openshift.io/");
     element(by.id("name")).isPresent().then(function(result) {
-      if ( result ) {        
-        element(by.id("name")).click();
+      if ( result ) {       
+        browser.wait(until.elementToBeClickable(element(by.id("name")), constants.LONG_WAIT, 'Failed to find name/login name workaround')); 
+        element(by.id("name")).click();    
+        browser.wait(until.elementToBeClickable(element(by.xpath(".//*[@id='profilelink']/span")), constants.LONG_WAIT, 'Failed to find name/login profile workaround')); 
         element(by.xpath(".//*[@id='profilelink']/span")).click();
       } else {
-        //do nothing
+        console.log ("ERROR - April 24 workaround has failed");
       }
     });
     // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
@@ -100,6 +102,9 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     console.log ('EE POC test - add new project to space');
     OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();
     OpenShiftIoSpaceHomePage.clickTechnologyStack();
+
+    /* Choose project type */
+
   
     OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
     OpenShiftIoSpaceHomePage.clickNoThanksButton();

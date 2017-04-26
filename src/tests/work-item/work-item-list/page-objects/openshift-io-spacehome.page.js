@@ -285,9 +285,28 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return this.technologyStack.click();
   }
 
+  /* Technology Stack project types */
 
+  get vertXbasic () {
+    return element(by.xpath("Vert.x - Basic"));
+  }
+  clickVertXbasic () {
+    return this.vertXbasic.click();
+  }
 
+ get vertXcrud () {
+    return element(by.xpath("Vert.x - CRUD"));
+ }
+  clickVertXcrud () {
+    return this.vertXcrud.click();
+  }
 
+ get vertXconfigmap () {
+    return element(by.xpath("Vert.x - ConfigMap"));
+ }
+  clickVertXconfigmap () {
+    return this.vertXconfigmap.click();
+  }
 
   get nextButton () {
     return element(by.buttonText('Next'));
