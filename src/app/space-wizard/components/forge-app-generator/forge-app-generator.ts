@@ -200,6 +200,20 @@ export class ForgeAppGenerator {
         let request: IAppGeneratorRequest = {
           command: cmd
         };
+        //add the accumulated validation fields to the next command
+        // let vcmd: IAppGeneratorCommand = this._currentResponse.context.validationCommand;
+        // for ( let field of vcmd.parameters.fields)
+        // {
+        //   let requestField = cmd.parameters.fields.find((f) => f.name === field.name);
+        //   if(!requestField) {
+        //     cmd.parameters.fields.push(field);
+        //     let input=vcmd.parameters.data.inputs.find(i=>i.name === field.name);
+        //     if(input) {
+        //       cmd.parameters.data.inputs.push(input);
+        //     }
+        //   }
+        // }
+        //
         let cmdInfo = `${cmd.name} :: ${cmd.parameters.pipeline.step.name} :: ${cmd.parameters.pipeline.step.index}`;
         this.log(`Next request for command ${cmdInfo}.`, request, console.group);
         this._appGeneratorService.getFields( request )
@@ -286,17 +300,16 @@ public execute() {
             warning: !validationState.valid
           }, response, console.groupEnd);
 
-          // only assign these state fields ... not the entire state
+          // only assign these state fields ... not the entire state object
           this.state.canExecute = validationState.canExecute;
           this.state.canMoveToNextStep = validationState.canMoveToNextStep;
           this.state.canMovePreviousStep = validationState.canMovePreviousStep;
           this.state.valid = validationState.valid;
-
-          for ( let field of this.fields)
-          {
+          // update any fields with the same name
+          for ( let field of this.fields) {
             let found = response.payload.fields.find((f) => f.name === field.name);
-            // only need to update the display properties
             field.display = found.display;
+            field.value = found.value;
           }
           resolve({request, response});
           this.processing = false;
@@ -304,9 +317,9 @@ public execute() {
         }, ( error => {
           this.processing = false;
           reject({
-                   name: 'Validation Error',
-                   message: 'Something went wrong while attempting to validate the request.',
-                   inner: error} );
+            name: 'Validation Error',
+            message: 'Something went wrong while attempting to validate the request.',
+            inner: error} );
         }));
     });
   }

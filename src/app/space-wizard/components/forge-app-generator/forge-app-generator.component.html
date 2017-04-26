@@ -119,8 +119,10 @@
                   </div>
                 </div>
               </div>
-              <div *ngIf="!forge.fields[i].display.valid" class="form-control-feedback user-select-none"  >{{forge.fields[i].display.message.description}}</div>
               <small class="form-text text-muted user-select-none" *ngIf="forge.fields[i].display.note"><span class="color-info fa fa-info-circle"></span> <i>{{forge.fields[i].display.note}}</i></small>
+              <div *ngIf="!forge.fields[i].display.valid" style="position:relative;height:auto;display:block;" class="form-control-feedback user-select-none"  >
+                {{forge.fields[i].display.message.description}}
+              </div>
             </div>
           </div>
         </div>

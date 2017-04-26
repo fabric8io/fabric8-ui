@@ -68,6 +68,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
         let input: IForgeInput = inputs.find( i => i.name === field.name );
         if ( input ) {
           input.value = field.value;
+          this._configService.cleanseAppGeneratorRequest(command,input,field);
         }
       }
     }
@@ -130,7 +131,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       };
       this.forgeService.executeCommand( commandRequest )
       .map( (forgeResponse) => this.transformForgeResponseToAppGeneratorResponse(request, forgeResponse) )
-      .map( (response) => this._configService.augmentGeneratorResponse('', { request,response}) )
+      .map( (response) => this._configService.augmentAppGeneratorResponse('', { request,response}) )
       .subscribe( (response: IAppGeneratorResponse) => {
         this.log(`AppGenerator '${cmdDescription}' command completed`, response);
         observer.next(response);

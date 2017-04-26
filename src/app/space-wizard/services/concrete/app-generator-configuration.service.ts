@@ -284,11 +284,43 @@ export class AppGeneratorConfigurationService {
     })
   }
 
-  public augmentGeneratorResponse(context: string, execution: IAppGeneratorPair) : IAppGeneratorResponse {
+  public cleanseAppGeneratorRequest(command:IAppGeneratorCommand, input:IForgeInput, field:IField){
+      switch(input.name.toLowerCase()) {
+          case "named":{
+            if( !Array.isArray(input.value) ) {
+              let value: string = input.value||'';
+              if( value ) {
+                // convert to lower case
+                value = value.trim().toLowerCase();
+                //replace white space with dash
+                value = value.replace(/\s+/g,'-');
+                // replace underscores with dash
+                value = value.replace(/[_]+/g,'-');
+                input.value = value;
+              }
+            }
+            break;
+          }
+          default:{
+            break;
+          }
+      }
+  }
+
+  public augmentAppGeneratorResponse(context: string, execution: IAppGeneratorPair) : IAppGeneratorResponse {
     let response = execution.response;
     this.augmentTitle(context,execution);
     let validationFields=this.getValidationCommandFields(context,execution);
     for( let field of response.payload.fields ) {
+        if( field.display.message) {
+          if(!field.display.valid) {
+            field.display.message.description = field.display.message.description.trim();
+            if(!field.display.message.description.endsWith('.') && !field.display.message.description.endsWith('!') ){
+              field.display.message.description = `${field.display.message.description}.`
+            }
+            field.display.message.description =`${field.display.message.description} ${field.display.description}`;
+          }
+        }
         switch(field.name.toLowerCase()){
           case 'gitrepository' : {
             if( this.currentSpace && (this.currentSpace.attributes.name || '' ).length > 0 ) {
@@ -320,13 +352,22 @@ export class AppGeneratorConfigurationService {
             break;
           }
           case 'named' : {
-            if( this.currentSpace && (this.currentSpace.attributes.name || '' ).length > 0 ) {
-              let spaceName = this.currentSpace.attributes.name;
-              field.value = spaceName ;
-              field.value = spaceName ;
+            if(this.isFirstNonValidationStep(context,execution) === true ) {
+              // for first non validation step set default name to be space name
+              if( this.currentSpace && (this.currentSpace.attributes.name || '' ).length > 0 ) {
+                let spaceName = this.currentSpace.attributes.name;
+                field.value = spaceName ;
+              }
             }
             field.display.label = 'Name';
-            if( field.display.note ){
+            if( field.display.message) {
+              if(!field.display.valid){
+                field.display.message.description=field.display.message.description.replace(/project name/ig,'Name');
+                field.display.message.description=field.display.message.description.replace(/the repository/ig,'The GitHub repository');
+                field.display.message.description=field.display.message.description.replace(/-a-z0-9/ig,' dashes, letters, numbers ');
+              }
+            }
+            if( field.display.note ) {
               field.display.note=field.display.note.replace(/Downloadable project zip and/ig,'');
               field.display.note=field.display.note.replace(/project name/ig,'name');
               field.display.note=field.display.note.replace(/are based/ig,'is based');
@@ -334,6 +375,7 @@ export class AppGeneratorConfigurationService {
               field.display.note=field.display.note.replace(/application jar is/ig,'Application generated assets are');
 
             }
+
 
             break;
           }
