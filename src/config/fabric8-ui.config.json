@@ -1,5 +1,6 @@
 {
   "pipelinesNamespace": "{{ .Env.FABRIC8_PIPELINES_NAMESPACE }}",
   "analyticsWriteKey": "{{ .Env.ANALYTICS_WRITE_KEY }}",
+  "forgeApiUrl": "{{ .Env.FABRIC8_FORGE_API_URL }}",
   "openshiftConsoleUrl": "{{ .Env.OPENSHIFT_CONSOLE_URL }}"
 }
