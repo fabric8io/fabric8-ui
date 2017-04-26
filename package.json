@@ -110,7 +110,7 @@
     "chunk-manifest-webpack2-plugin": "1.0.1",
     "core-js": "2.4.1",
     "fabric8-planner": "0.23.28",
-    "fabric8-runtime-console": "0.15.5",
+    "fabric8-runtime-console": "0.15.6",
     "fabric8-stack-analysis-ui": "0.1.31",
     "http-server": "0.9.0",
     "ie-shim": "0.1.0",
