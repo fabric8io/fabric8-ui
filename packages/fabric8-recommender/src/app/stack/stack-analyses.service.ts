@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
-import { Http, Response } from '@angular/http';
-
+import { Http, Response, Headers, RequestOptions  } from '@angular/http';
+import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -10,6 +10,7 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 @Injectable()
 export class StackAnalysesService {
 
+  private headers: Headers = new Headers({'Content-Type': 'application/json'});
   private stackAnalysesUrl: string = '';
   private cvssScale: any = {
     low: {
@@ -34,10 +35,16 @@ export class StackAnalysesService {
 
   constructor(
     private http: Http,
-  ) {}
+    private auth: AuthenticationService,
+  ) {
+      if (this.auth.getToken() !== null) {
+        this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+      }
+  }
 
   getStackAnalyses(url: string): Observable<any> {
-    return this.http.get(url)
+    let options = new RequestOptions({ headers: this.headers });
+    return this.http.get(url, options)
       .map(this.extractData)
       .catch(this.handleError);
   }
