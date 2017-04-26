@@ -18,7 +18,7 @@ export interface IField {
     index: number;
     note?: string;
     text?: string;
-    message?: IFieldMessage | string;
+    message?: IFieldMessage;
     // other dynamic properties
     [key: string]: any;
   };
