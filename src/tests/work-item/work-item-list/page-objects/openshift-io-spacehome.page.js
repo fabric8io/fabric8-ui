@@ -21,16 +21,6 @@ class OpenShiftIoSpaceHomePage {
   constructor() {
   };
 
-
-  /* "Analyze" in page heading */
-  get headerAnalyzePlan () {
-    return element(by.xpath(".//*[contains(text(),'Analyze')]"));
-  }
-  clickHeaderAnalyze () {
-    browser.wait(until.elementToBeClickable(this.headerAnalyze), constants.LONG_WAIT, 'Failed to find element headerAnalyze');
-    return this.headerPlan.click();
-  }
-
   /* Space name as displayed */
   displaySpaceName (spaceNameStr) {
       var xpathStr = ".//*[contains(text(),'" + spaceNameStr + "')]";
@@ -92,12 +82,11 @@ class OpenShiftIoSpaceHomePage {
   }
 
   get importCodebaseButton () {
-    browser.wait(until.elementToBeClickable(element(by.xpath(".//*[contains(@class,'btn-lg') and contains(text(),'Import a Codebase')]"))), constants.LONG_WAIT, 'Failed to find import codebase button');
-    return element(by.xpath(".//*[contains(@class,'btn-lg') and contains(text(),'Import a Codebase')]"));
+    return element(by.xpath(".//button[contains(text(),'Import Codebase')]"));
   }
-
   clickImportCodebaseButton () {
-    return this.importCodebaseButton.click(); 
+    browser.wait(until.elementToBeClickable(this.importCodebaseButton), constants.LONG_WAIT, 'Failed to find element quickStartNextButton');
+    return this.importCodebaseButton.click();
   }
 
   /* Pipelines title */
@@ -105,38 +94,6 @@ class OpenShiftIoSpaceHomePage {
     return element(by.xpath(".//span[contains(text(),'Pipelines')]"));
   }
 
-   /* "Plan" in page heading */
-  get headerPlan () {
-    return element(by.xpath(".//*[contains(text(),'Plan')]"));
-  }
-  clickHeaderPlan () {
-    browser.wait(until.elementToBeClickable(this.headerPlan), constants.LONG_WAIT, 'Failed to find element headerPlan');
-    return this.headerPlan.click();
-  }
-
-
-
-  get wizardStepTitle () {
-//     return element(by.css(".wizard-step-title"));
-     return element(by.xpath(".//*[contains(@class,'wizard-step-title') and contains(text(),'Quickstart')]"));
-  }
-
-  get closeButton () {
-     return this.wizardStepTitle.element(by.css(".pficon.pficon-close"));
-  }
-  clickCloseButton () {
-     browser.wait(until.elementToBeClickable(this.closeButton), constants.WAIT, 'Failed to find CloseButton');
-     return this.closeButton.click();
-  }
-
-  get cancelButton () {
-    return wizardStepTitle.element(by.buttonText('Cancel'));
-  }
-
-  clickCancelButton () {
-    browser.wait(until.elementToBeClickable(this.cancelButton), constants.LONG_WAIT, 'Failed to find Cancel Button');
-    return this.cancelButton.click();
-  }
 
 
 
@@ -233,12 +190,82 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 |------------------------------------------------------------------------------------------------------------------------------|
 */
 
+ /* Analyze/Plan/Create - Navigation bar elements unique to space home display */
+
+  get headerAnalyze () {
+    return element(by.xpath(".//*[contains(text(),'Analyze')]"));
+  }
+  clickHeaderAnalyze () {
+    browser.wait(until.elementToBeClickable(this.headerAnalyze), constants.LONG_WAIT, 'Failed to find element headerAnalyze');
+    return this.headerPlan.click();
+  }
+
+  get headerPlan () {
+    return element(by.xpath(".//*[contains(text(),'Plan')]"));
+  }
+  clickHeaderPlan () {
+    browser.wait(until.elementToBeClickable(this.headerPlan), constants.LONG_WAIT, 'Failed to find element headerPlan');
+    return this.headerPlan.click();
+  }
+
+  get headerCreate () {
+    return element(by.xpath(".//*[contains(text(),'Create')]"));
+  }
+  clickHeaderCreate () {
+    browser.wait(until.elementToBeClickable(this.headerCreate), constants.LONG_WAIT, 'Failed to find element headerCreate');
+    return this.headerPlan.click();
+  }
+
+  /* Dialog to create new project/add to space */
+  get wizardStepTitle () {
+//     return element(by.css(".wizard-step-title"));
+     return element(by.xpath(".//*[contains(@class,'wizard-step-title') and contains(text(),'Quickstart')]"));
+  }
+
+  get closeButton () {
+     return this.wizardStepTitle.element(by.css(".pficon.pficon-close"));
+  }
+  clickCloseButton () {
+     browser.wait(until.elementToBeClickable(this.closeButton), constants.WAIT, 'Failed to find CloseButton');
+     return this.closeButton.click();
+  }
+
+  get cancelButton () {
+    return wizardStepTitle.element(by.buttonText('Cancel'));
+  }
+
+  clickCancelButton () {
+    browser.wait(until.elementToBeClickable(this.cancelButton), constants.LONG_WAIT, 'Failed to find Cancel Button');
+    return this.cancelButton.click();
+  }
+
+
+
+
+
+
+  /* Associate github repo in code base */
+  get gitHubRepo () {
+    return element(by.id("gitHubRepo"));
+  }
+  setGitHubRepo (newString) {
+    browser.wait(until.elementToBeClickable(this.gitHubRepo), constants.LONG_WAIT, 'Failed to find gitHubRepo');
+    return this.gitHubRepo.sendKeys(newString);
+  }
+
+
+
+
+
 /* UI Page Section: Analyze Overview (main body of page Bar */
 /* UI Page Section: Codebases */
 /* UI Page Section: Stack Reports */
 /* UI Page Section: My Work Items */
 /* UI Page Section: Pipelines */
 /* UI Page Section: Environments */
+
+
+
 
 
 
@@ -283,6 +310,25 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   clickTechnologyStack () {
     return this.technologyStack.click();
+  }
+
+
+  get okButton () {
+    return element(by.xpath(".//*[contains(text(), 'OK')]"));
+  }
+
+  clickOkButton () {
+     browser.wait(until.elementToBeClickable(this.okButton), constants.LONG_WAIT, 'Failed to find element OK button');
+     return this.okButton.click();
+  }
+
+  get syncButton () {
+    return element(by.xpath(".//*[contains(text(), 'Sync')]"));
+  }
+
+  clickSyncButton () {
+     browser.wait(until.elementToBeClickable(this.syncButton), constants.LONG_WAIT, 'Failed to find element Sync button');
+     return this.syncButton.click();
   }
 
   /* Technology Stack project types */

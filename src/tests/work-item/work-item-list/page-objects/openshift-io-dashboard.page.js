@@ -17,145 +17,22 @@ var testSupport = require('../testSupport'),
 
 var until = protractor.ExpectedConditions;
 
-  const devProcesses  = {
-    Agile: 0,
-    Scrum: 1,
-    IssueTracking: 2,
-    ScenarioDrivenPlanning: 3
-  }
-
 class OpenShiftIoDashboardPage {
 
   constructor() {
   };
 
-  get welcomeText () {
-    var xpathStr = ".//*[contains(text(),'Welcome to OpenShift.io, an end-to-end team development environment in the cloud.')]";
-    browser.wait(until.presenceOf(element(by.xpath(xpathStr))), constants.LONG_WAIT, 'Failed to find welcome message');
-     return element(by.xpath(xpathStr));
-  }
-
-  get newSpaceButton () {
-    return element(by.xpath(".//a[contains(text(),'New')]"));
-  }
-  clickNewSpaceButton () {
-    browser.wait(until.presenceOf(this.newSpaceButton), constants.LONG_WAIT, 'Failed to find new space buton');
-    return this.newSpaceButton.click();
-  }
-
-  get newSpaceName () {
-    return element(by.id("name"));
-   }
-  typeNewSpaceName (nameString) {
-    browser.wait(until.elementToBeClickable(this.newSpaceName), constants.LONG_WAIT, 'Failed to find new space name field');
-    return this.newSpaceName.sendKeys(nameString);
-  }
-
-  get devProcessPulldown () {
-    return element(by.id("developmentProcess"));
-  }
-  clickDevProcessPulldown () {
-    return this.devProcessPulldown.click();
-  }
-  typeDevProcess (processString) {
-    browser.wait(until.elementToBeClickable(this.devProcessPulldown), constants.LONG_WAIT, 'Failed to find new space name dev process');
-    return this.devProcessPulldown.sendKeys(processString);
-  }
-
-  get createSpaceButton () {
-    return element(by.buttonText('Create Space'));
-  }
-  clickCreateSpaceButton () {
-    browser.wait(until.elementToBeClickable(this.createSpaceButton), constants.LONG_WAIT, 'Failed to find element createSpaceButton');
-    return this.createSpaceButton.click();
-  }
-
-  get okButton () {
-    return element(by.buttonText('OK'));
-  }
-  clickOkButton () {
-    browser.wait(until.elementToBeClickable(this.okButton), constants.LONG_WAIT, 'Failed to find element okButton');
-    return this.okButton.click();
-  }
-
-  get cancelButton () {
-    return element(by.buttonText('Cancel'));
-  }
-  clickCancelButton () {
-    return this.cancelButton.click();
-  }
-
-  get noThanksButton () {
-    return element(by.xpath(".//a[contains(text(),'No thanks, just take me to')]"));
-  }
-  clickNoThanksButton () {
-    return this.noThanksButton.click();
-  }
-
-//  get wizardStepTitle () {
-//    return element(by.css(".wizard-step-title"));
-//  }
-  get cancelXButton () {
-    return element(by.css(".glyphicon.glyphicon-remove"));
-  }
-  clickCancelXButton () {
-    return this.cancelXButton.click();
-  }
-
-  get closeButton () {
-    return element(by.css(".pficon.pficon-close"));
-  }
-  clickCloseButton () {
-    return this.closeButton.click();
-  }
-
-  get wizardButton () {
-    return element(by.xpath(".//a[contains(text(),'Wizard')]"));
-  }
-  clickWizardButton () {
-    browser.wait(until.elementToBeClickable(this.wizardButton), constants.LONG_WAIT, 'Failed to find element wizardButton');
-    return this.wizardButton.click();
-  }
-
-  get spaceWizard () {
-    return element(by.css(".wizard-container"));
-  }
-  get newSpaceCancelButton () {
-     return this.spaceWizard.element(by.xpath(".//a[contains(text(),'Cancel')]"));
-  }
-  clickNewSpaceCancelButton () {
-    browser.wait(until.elementToBeClickable(this.newSpaceCancelButton), constants.LONG_WAIT, 'Failed to find element newSpaceCancelButton');
-    return this.newSpaceCancelButton.click();
-  }
-
-  get browseSpaces () {
-    return element(by.xpath(".//a[contains(text(),'Browse')]"));
-  }
-  clickBrowseSpaces () {
-    browser.wait(until.elementToBeClickable(this.browseSpaces), constants.LONG_WAIT, 'Failed to find element browseSpaces');
-    return this.browseSpaces.click();
-  }
-  
-  selectSpace (spaceName) {
-    return element(by.xpath(".//a[contains(text(),'" + spaceName + "')]"));
-  }
-  clickSelectSpace (spaceName) {
-    browser.wait(until.elementToBeClickable(this.selectSpace(spaceName)), constants.LONG_WAIT, 'Failed to find element selected space ' + spaceName);
-    this.selectSpace(spaceName).click();
-    return new OpenShiftIoSpaceHomePage();
-  }
-
   /* -----------------------------------------------------------------*/
   
-  /* Header nav bar - left side of display  */
-   get leftNavBar () {
-     browser.wait(until.elementToBeClickable(element(by.xpath(".//*[contains(@class,'navbar-left')]"))), constants.LONG_WAIT, 'Failed to find NavBarLeft');
-     return element(by.xpath(".//*[contains(@class,'navbar-left')]"));
-  }
-
-  clickLeftNavBar () {
-    this.leftNavBar.click();
-  }
+//  /* Header nav bar - left side of display  */
+//   get leftNavBar () {
+//     return element(by.xpath(".//*[contains(@class,'navbar-left')]"));
+//  }
+//
+//  clickLeftNavBar () {
+//    browser.wait(until.elementToBeClickable(this.leftNavBar), constants.LONG_WAIT, 'Failed to find NavBarLeft');
+//    this.leftNavBar.click();
+//  }
 
   /* Header dropdown - leftmost in navigation bar - displys current space name */
   get headerDropDownToggle () {
@@ -167,94 +44,15 @@ class OpenShiftIoDashboardPage {
     return this.headerDropDownToggle.click();
   }
 
-  /* Create a new space from within the header dropdown toggle */
-  get createSpaceFromNavBar () {
-    return this.leftNavBar.element(by.xpath(".//*[contains(@class,'pficon-add-circle-o')]"));
-  }
-
-  clickCreateSpaceFromNavBar () {
-    browser.wait(until.elementToBeClickable(this.createSpaceFromNavBar), constants.LONG_WAIT, 'Failed to find createSpaceFromHeader');
-    return this.createSpaceFromNavBar.click();
-  }
-
-  /* View all spaces from within the header dropdown toggle */
-  get viewAllSpacesFromNavBar () {
-//    return this.leftNavBar.element(by.xpath(".//*[contains(@class,'fa fa-th')]"));
-    return this.leftNavBar.element(by.xpath(".//a[contains(@href,'almusertest1/_spaces')]"));
-  }
-  
-  clickViewAllSpacesFromNavBar () {
-    browser.wait(until.elementToBeClickable(this.viewAllSpacesFromNavBar), constants.LONG_WAIT, 'Failed to find viewAllSpacesFromNavBar');
-    return this.viewAllSpacesFromNavBar.click();
-  }
-
-  /* -----------------------------------------------------------------*/
-
-  /* Header nav bar - right side of display  */
-   get rightNavBar () {
-     browser.wait(until.elementToBeClickable(element(by.id("header_rightDropdown"))), constants.LONG_WAIT, 'Failed to find NavBarRight');
-     return element(by.id("header_rightDropdown"));
-  }
-
-  clickRightNavBar () {
-    this.rightNavBar.click();
-  }
-
-  /* -----------------------------------------------------------------*/
-
-  /* Navigation bar on dashboard/user home page */
-
-  get homeTab () {
-    return this.leftNavBar.element(by.xpath(".//*[contains(text(),'Home')]"));
-  }
-
-  clickHomeTab () {
-    this.homeTab.click();
-  }
-  
-  get profileTab () {
-    return this.leftNavBar.element(by.xpath(".//*[contains(text(),'Profile')]"));
-  }
-
-  clickProfileTab () {
-    browser.wait(until.elementToBeClickable(this.profileTab), constants.LONG_WAIT, 'Failed to find profileTab');
-    this.profileTab.click();
-  }
-
-
-
-  /* My Spaces UI card element */
-  get mySpacesCard () {
-    return element(by.xpath(".//div[contains(@class, 'col-md-4')]//*[contains(text(), 'My spaces')]/../../.."));    
-  }  
-  
-  selectTheSpace (spaceName) {
-    return this.mySpacesCard.element(by.xpath("//a[contains(text(),'" + spaceName + "')]"));
-  }
-
-  clickTheSpace (spaceName) {
-    browser.wait(until.elementToBeClickable(this.selectTheSpace(spaceName)), constants.LONG_WAIT, 'Failed to find element selected space ' + spaceName);
-    this.selectTheSpace(spaceName).click();
-    return new OpenShiftIoSpaceHomePage();
-  }
-
-  /* Are any warning displayed? */
-  get alertToastElements () {
-    return element(by.xpath(".//*[contains(@class, 'toast-pf')]"));
-  }
-
-  waitForToastToClose () {
-    return browser.wait(until.not(until.presenceOf(this.alertToastElements)));
-  }
-
-  get noThanksButton () {
-    return element(by.xpath(".//a[contains(text(),'No thanks, take me to')]"));
-  }
-  clickNoThanksButton () {
-    browser.wait(until.elementToBeClickable(this.noThanksButton), constants.LONG_WAIT, 'Failed to find element noThanksButton button');
-    this.noThanksButton.click();
-    return new OpenShiftIoSpaceHomePage();
-  }
+//  /* Create a new space from within the header dropdown toggle */
+//  get createSpaceFromNavBar () {
+//    return this.leftNavBar.element(by.xpath(".//*[contains(@class,'pficon-add-circle-o')]"));
+//  }
+//
+//  clickCreateSpaceFromNavBar () {
+//    browser.wait(until.elementToBeClickable(this.createSpaceFromNavBar), constants.LONG_WAIT, 'Failed to find createSpaceFromHeader');
+//    return this.createSpaceFromNavBar.click();
+//  }
 
 /* 
 Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-dashboard.page.js, lower sections are page-specific.
@@ -278,6 +76,56 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 |------------------------------------------------------------------------------------------------------------------------------|
 */
 
+  /* Dialog to create new space and project */
+
+  get newSpaceName () {
+    return element(by.id("name"));
+   }
+  typeNewSpaceName (nameString) {
+    browser.wait(until.elementToBeClickable(this.newSpaceName), constants.LONG_WAIT, 'Failed to find new space name field');
+    return this.newSpaceName.sendKeys(nameString);
+  }
+
+  get createSpaceButton () {
+    return element(by.buttonText('Create Space'));
+  }
+  clickCreateSpaceButton () {
+    browser.wait(until.elementToBeClickable(this.createSpaceButton), constants.LONG_WAIT, 'Failed to find element createSpaceButton');
+    return this.createSpaceButton.click();
+  }
+
+  get devProcessPulldown () {
+    return element(by.id("developmentProcess"));
+  }
+  clickDevProcessPulldown () {
+    return this.devProcessPulldown.click();
+  }
+  typeDevProcess (processString) {
+    browser.wait(until.elementToBeClickable(this.devProcessPulldown), constants.LONG_WAIT, 'Failed to find new space name dev process');
+    return this.devProcessPulldown.sendKeys(processString);
+  }
+
+  get noThanksButton () {
+    return element(by.xpath(".//a[contains(text(),'No thanks, take me to')]"));
+  }
+  clickNoThanksButton () {
+    browser.wait(until.elementToBeClickable(this.noThanksButton), constants.LONG_WAIT, 'Failed to find element noThanksButton button');
+    this.noThanksButton.click();
+    return new OpenShiftIoSpaceHomePage();
+  }
+
+  /* -----------------------------------------------------------------*/
+
+  /* Are any warning displayed? */
+  get alertToastElements () {
+    return element(by.xpath(".//*[contains(@class, 'toast-pf')]"));
+  }
+
+  waitForToastToClose () {
+    return browser.wait(until.not(until.presenceOf(this.alertToastElements)));
+  }
+
+  /* -----------------------------------------------------------------*/
   /* UI Page Section: Navigation Bar */
 
   get topNavigationBar () {
@@ -288,6 +136,7 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return this.topNavigationBar.click();
   }
 
+  /* -----------------------------------------------------------------*/
   /* UI Page Section: Left Navigation Bar */
 
   get leftNavigationBar () {
@@ -323,7 +172,7 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   /* View all spaces in Left Navigation Bar */
-    get viewAllSpacesUnderLeftNavigationBar () {
+  get viewAllSpacesUnderLeftNavigationBar () {
     return element(by.xpath("//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//*[contains(@class,'fa-th')]"));
   }
   clickViewAllSpacesUnderLeftNavigationBar () {
@@ -340,6 +189,7 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return this.accountHomeUnderLeftNavigationBar.click();
   }
 
+  /* -----------------------------------------------------------------*/
   /* UI Page Section: Right Navigation Bar */
 
   get rightNavigationBar () {
@@ -427,12 +277,6 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
      return this.logOut.click();
   }
 
-
-
-
-
-
 }
 
 module.exports = OpenShiftIoDashboardPage;
-

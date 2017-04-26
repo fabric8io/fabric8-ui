@@ -56,7 +56,9 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     OpenShiftIoDashboardPage = OpenShiftIoGithubLoginPage.clickGithubLoginButton();
 
+    // ******************************************************************************************
     // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
+    //browser.get("https://prod-preview.openshift.io/");
     browser.get("https://prod-preview.openshift.io/");
     element(by.id("name")).isPresent().then(function(result) {
       if ( result ) {       
@@ -69,13 +71,14 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
       }
     });
     // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
+    // ******************************************************************************************
 
     console.log ('EE POC test - Navigate to openshift.io home/dashboard page');
 
     /* Step 3 - on home page - create new space - embed time in space name to ensure unique space name */
     console.log ('EE POC test - Create a new space');
     OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
-    OpenShiftIoDashboardPage.clickCreateSpaceFromNavBar();  
+    OpenShiftIoDashboardPage.clickCreateSpaceUnderLeftNavigationBar();  
 
     var spaceTime = returnTime();
     OpenShiftIoDashboardPage.typeNewSpaceName((spaceTime));
@@ -100,24 +103,29 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     /* Add a project to the space */
     console.log ('EE POC test - add new project to space');
-    OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();
+    OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();   //clickPipelinesWidgetAddToSpaceButton();
     OpenShiftIoSpaceHomePage.clickTechnologyStack();
 
-    /* Choose project type */
-
-  
-    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
+    OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
+    OpenShiftIoSpaceHomePage.clickOkButton();
+//    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
-    OpenShiftIoDashboardPage.clickNameUnderLeftNavigationBar (spaceTime);
-    OpenShiftIoDashboardPage.clickAccountHomeUnderLeftNavigationBar();
+    /* Import the code base */
+    OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
+    var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
+    OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
+    OpenShiftIoSpaceHomePage.clickSyncButton();
+
+//    OpenShiftIoDashboardPage.clickNameUnderLeftNavigationBar (spaceTime);
+//    OpenShiftIoDashboardPage.clickAccountHomeUnderLeftNavigationBar();
 
     /* Step 5 - log out */
 
     /* For the purposes of this test - ignore all 'toast' popup warnings */
     OpenShiftIoDashboardPage.waitForToastToClose();
 
-    OpenShiftIoDashboardPage.clickRightNavBar();
+    OpenShiftIoDashboardPage.clickrightNavigationBar();
     OpenShiftIoDashboardPage.clickLogOut();
     console.log ('EE POC test - Log Out');
 
@@ -130,5 +138,5 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     var d = new Date();
     var n = d.getTime();
     console.log ("EE POC test - Creating space: " + n.toString());
-    return n.toString();
+    return "test" + n.toString();
   }
