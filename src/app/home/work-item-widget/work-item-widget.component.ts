@@ -29,9 +29,11 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       private userService: UserService) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
-      this.subscriptions.push(spaceService.getSpacesByUser(user.attributes.username, 10).subscribe(spaces => {
-        this.spaces = spaces;
-      }));
+      if(user.attributes) {
+        this.subscriptions.push(spaceService.getSpacesByUser(user.attributes.username, 10).subscribe(spaces => {
+          this.spaces = spaces;
+        }));
+      }
     }));
     this.subscriptions.push(spacesService.recent.subscribe(spaces => {
       this.recentSpaces = spaces;
