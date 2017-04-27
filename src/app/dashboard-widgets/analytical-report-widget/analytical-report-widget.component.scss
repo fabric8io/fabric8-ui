@@ -8,6 +8,7 @@
 
 .card-pf-body {
     &.analytical-report-body {
+        position: relative;
         .fabric8-stack-analysis {
             position: relative;
             .recommender-overlay {
@@ -55,6 +56,20 @@
         }
         .margin-fix {
             margin: 10px 0;
+        }
+        .always-at-bottom {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+
+            .bottom-container {
+                position: relative;
+                .analysis-time {
+                    right: 10px;
+                    position: absolute;
+                    bottom: 0;
+                }
+            }
         }
     }
 }
