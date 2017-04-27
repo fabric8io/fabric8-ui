@@ -9,7 +9,7 @@
   display: inline-flex;
 }
 .combobox {
-  width: 330px;
+  width: 50%;
   position: absolute;
   top: 15px;
   right: 25px;
@@ -17,7 +17,7 @@
 .work-item-title {
   position: absolute;
   left: 115px;
-  width: 425px;
+  width: 65%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
