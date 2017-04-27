@@ -1,8 +1,18 @@
 @import '../../../assets/stylesheets/base';
 
-.blank-slate-pf {
-  min-height: 360px;
+.add-codebase-widget {
+  .card-f8-body {
+    overflow-y: hidden;
+  }
 }
-.card-pf-body {
-    min-height: 360px;
+.codebase-url {
+  position: absolute;
+  left: 50px;
+  width: 475px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-view-pf-view {
+  margin-top: 0;
 }

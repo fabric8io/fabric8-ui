@@ -2,7 +2,6 @@
   <div class="card-pf-heading">
     <div class="card-pf-heading-details card-f8-heading-details">
       <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
-        <span>Create work item</span>
         <i class="pficon pficon-add-circle-o"></i>
       </a>
     </div>
@@ -24,16 +23,24 @@
         <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
       </div>
     </div>
-    <ul class="list-group analyze-overview-items-detail" *ngIf="(myWorkItemsCount | async) > 0">
-      <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 10">
-        <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
-        <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
-        <span>{{workItem.id}}</span>
-        <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="create-work-item-link">
-          <span *ngIf="workItem.attributes">
-            {{workItem.attributes['system.title']}}
-          </span>
-        </a>
+    <ul class="list-group list-view-pf list-view-pf-view" *ngIf="(myWorkItemsCount | async) > 0">
+      <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 6">
+        <div class="list-view-pf-main-info">
+          <div class="list-view-pf-body">
+            <div class="list-view-pf-description">
+              <div class="list-group-item-text">
+                <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
+                <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
+                <span>{{workItem.id}}</span>
+                <span class="work-item-title" *ngIf="workItem.attributes">
+                  <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="create-work-item-link">
+                    {{workItem.attributes['system.title']}}
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
   </div>

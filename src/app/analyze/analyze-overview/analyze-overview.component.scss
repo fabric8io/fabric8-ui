@@ -1,7 +1,13 @@
 @import '../../../assets/stylesheets/base';
 @import '../../../assets/stylesheets/shared/layout';
 
+.cards-pf {
+  background-color: $color-pf-black-250;
+}
 .analyze-overview-wrapper {
-  background-color: $color-pf-black-150;
-  height: 100%;
+  background-color: $color-pf-black-250;
+  min-height: 100%;
+}
+.padding-top-0 {
+  padding-top: 0;
 }

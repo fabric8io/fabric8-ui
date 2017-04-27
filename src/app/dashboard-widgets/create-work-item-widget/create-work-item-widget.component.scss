@@ -1,10 +1,26 @@
 @import '../../../assets/stylesheets/base';
 
+.create-work-item-widget {
+  .card-f8-body {
+    overflow-y: hidden;
+  }
+}
 .create-work-item-icon {
-  padding-top: 5px;
+  padding-top: 0;
   padding-right: 10px;
 }
 
 .create-work-item-link {
   padding-left: 10px;
+}
+.work-item-title {
+  position: absolute;
+  left: 115px;
+  width: 420px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list-view-pf-view {
+  margin-top: 0;
 }

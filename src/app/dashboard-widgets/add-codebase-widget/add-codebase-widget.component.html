@@ -2,7 +2,6 @@
   <div class="card-pf-heading">
       <div class="card-pf-heading-details card-f8-heading-details">
         <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
-          <span>Create Codebase</span>
           <i class="pficon pficon-add-circle-o"></i>
         </a>
       </div>
@@ -24,10 +23,18 @@
         <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
       </div>
     </div>
-    <ul class="list-group analyze-overview-items-detail" *ngIf="(codebaseCount | async) > 0">
+    <ul class="list-group list-view-pf list-view-pf-view" *ngIf="(codebaseCount | async) > 0">
       <li class="list-group-item" *ngFor="let codebase of codebases | async">
-        <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
-        <a href="{{codebase.attributes.url}}" target="_blank">{{codebase.name}}</a>
+        <div class="list-view-pf-main-info">
+          <div class="list-view-pf-body">
+            <div class="list-view-pf-description">
+              <div class="list-group-item-text">
+                <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
+                <a href="{{codebase.attributes.url}}" target="_blank" class="codebase-url">{{codebase.name}}</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
   </div>

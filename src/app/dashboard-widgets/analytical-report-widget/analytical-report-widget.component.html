@@ -9,16 +9,6 @@
     <div *ngIf="(buildConfigsCount | async) > 0" class="pipelines-present">
       <form>
         <div class="form-group">
-          <!--<div class="combobox-container">
-            <input type="hidden" name="" value="">
-            <div class="input-group col-sm-7">
-              <input type="text" autocomplete="false" placeholder="Select your build/pipeline" class="combobox form-control">
-              <span class="input-group-addon dropdown-toggle" data-dropdown="dropdown">
-                <span class="caret"></span>
-                <span class="glyphicon glyphicon-remove"></span>
-              </span>
-            </div>
-          </div>-->
           <div class="col-xs-12 col-md-4">
             <select name="pipeSelect" [(ngModel)]="currentPipeline" (change)="selectedPipeline()" class="combobox form-control">
               <option [ngValue]="default" [selected]="true" disabled>Select pipeline</option>
@@ -74,9 +64,16 @@
         <div class="col-xs-12 margin-fix" *ngIf="!currentBuild">No Records found</div>
       </div>
     </div>
-    <div [hidden]="(buildConfigsCount | async)" class="pipelines-absent">
-      <h2>No results found</h2>
-      <p>When you run a build, a stack analysis is run that will provide recommendations around your technology stack</p>
+    <div [hidden]="(buildConfigsCount | async)" class="card-pf-body card-f8-body pipelines-absent">
+      <div class="blank-slate-f8-card">
+        <div class="blank-slate-f8-icon">
+          <i class="pficon pficon-info"></i>
+        </div>
+        <h3>No results found</h3>
+        <p>
+          When you run a build, a stack analysis is run that will provide recommendations around your technology stack.
+        </p>
+      </div>
     </div>
   </div>
 </div>
