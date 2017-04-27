@@ -10,8 +10,17 @@
 }
 .combobox {
   width: 330px;
-  @media (max-width: 1281px) {
+  @media (min-width: 1440px) and (max-width: 1920px) {
+    width: 60%;
+  }
+  @media (min-width: 1280px) and (max-width: 1440px) {
     width: 50%;
+  }
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    width: 50%;
+  }
+  @media (min-width: 990px) and (max-width: 1024px) {
+    width: 40%;
   }
   position: absolute;
   top: 15px;
@@ -21,8 +30,17 @@
   position: absolute;
   left: 115px;
   width: 425px;
-  @media (max-width: 1281px) {
+  @media (min-width: 1440px) and (max-width: 1920px) {
+    width: 70%;
+  }
+  @media (min-width: 1280px) and (max-width: 1440px) {
     width: 65%;
+  }
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    width: 50%;
+  }
+  @media (min-width: 990px) and (max-width: 1024px) {
+    width: 40%;
   }
   white-space: nowrap;
   overflow: hidden;

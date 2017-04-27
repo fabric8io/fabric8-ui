@@ -17,8 +17,14 @@
   position: absolute;
   left: 115px;
   width: 420px;
-  @media (max-width: 1281px) {
+  @media (min-width: 1440px) and (max-width: 1920px) {
+    width: 70%;
+  }
+  @media (min-width: 1280px) and (max-width: 1440px) {
     width: 64%;
+  }
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    width: 50%;
   }
   white-space: nowrap;
   overflow: hidden;
