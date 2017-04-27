@@ -9,6 +9,9 @@
   position: absolute;
   left: 50px;
   width: 475px;
+  @media (max-width: 1281px) {
+    width: 83%;
+  }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

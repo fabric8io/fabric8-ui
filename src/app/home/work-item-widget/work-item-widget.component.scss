@@ -10,6 +10,9 @@
 }
 .combobox {
   width: 330px;
+  @media (max-width: 1281px) {
+    width: 50%;
+  }
   position: absolute;
   top: 15px;
   right: 25px;
@@ -18,6 +21,9 @@
   position: absolute;
   left: 115px;
   width: 425px;
+  @media (max-width: 1281px) {
+    width: 65%;
+  }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
