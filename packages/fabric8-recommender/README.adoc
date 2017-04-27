@@ -50,7 +50,7 @@ Then, start the app with:
 
 === Testcase run
 
-To run the linter, build validator, unit tests, and functional test use:
+To run the linter, unit tests, and functional test use:
 
  $ npm test
 
