@@ -17,6 +17,10 @@
     <span class="list-group-heading" *ngIf="index === 0">LAST COMMIT</span>
     {{lastCommitDate | date:'medium'}}
   </div>
+  <div class="list-group-item-text">
+    <codebases-item-workspaces [codebase]="codebase" [index]="index"></codebases-item-workspaces>
+  </div>
+
   <!--
   <div class="list-view-pf-additional-info">
     <div class="list-view-pf-additional-info-item">

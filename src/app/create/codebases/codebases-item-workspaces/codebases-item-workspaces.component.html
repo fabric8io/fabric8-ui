@@ -1,0 +1,26 @@
+<span class="list-group-heading workspace-info" *ngIf="index === 0">CHE WORKSPACES
+  <i class="pficon pficon-info"
+     tooltip="Che workspaces are web based development environments for to your code and runtime needs"></i>
+</span>
+<div *ngIf="workspacesAvailable; then showOpenWorkspace else showCreateWorkspace"></div>
+<ng-template #showOpenWorkspace>
+  <select class="combobox form-control workspace-select"
+          [disabled]="!workspacesAvailable || workspaceBusy"
+          [(ngModel)]="workspaceUrl"
+          (ngModelChange)="setWorkspaceSelected()">
+    <option value="default">Select a Workspace</option>
+    <option *ngFor="let workspace of workspaces" [value]="workspace.links.open">
+      {{workspace.attributes.name.length > 0 ? workspace.attributes.name : "None"}}
+    </option>
+  </select>
+  <button class="btn btn-default btn-lg"
+          [disabled]="!workspaceSelected || workspaceBusy"
+          (click)="openWorkspace()">Open</button>
+</ng-template>
+<ng-template #showCreateWorkspace>
+  <a href="javascript:void(0)" (click)="createAndOpenWorkspace()">
+    <i class="pficon pficon-add-circle-o margin-right-5"></i>Create workspace</a>
+</ng-template>
+<div class="busy-indicator" *ngIf="workspaceBusy">
+  <div class="spinner spinner-sm"></div>
+</div>

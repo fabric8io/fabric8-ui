@@ -2,10 +2,9 @@ import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular
 import { Subscription } from 'rxjs';
 
 import { Codebase } from '../services/codebase';
-import { Notification, NotificationType, Notifications } from 'ngx-base';
+import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
 import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
-import { Workspace } from '../services/workspace';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -19,12 +18,9 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   @Input() index: number = -1;
 
   subscriptions: Subscription[] = [];
-  workspaceUrl: string = "default";
-  workspaceUrlInvalid: boolean = true;
-  workspaces: Workspace[];
-  workspacesAvailable: boolean = false;
 
   constructor(
+      private broadcaster: Broadcaster,
       private notifications: Notifications,
       private windowService: WindowService,
       private workspacesService: WorkspacesService) {
@@ -37,10 +33,6 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    if (this.codebase === undefined) {
-      return;
-    }
-    this.updateWorkspaces();
   }
 
   // Actions
@@ -52,15 +44,19 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.workspacesService.createWorkspace(this.codebase.id)
       .subscribe(workspaceLinks => {
         if (workspaceLinks != null) {
-          this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
+          let name = this.getWorkspaceName(workspaceLinks.links.open);
+          this.windowService.open(workspaceLinks.links.open, name);
 
           this.notifications.message({
             message: `Workspace created!`,
             type: NotificationType.SUCCESS
           } as Notification);
 
-          // Todo: Cannot update workspaces after creating a new one -- Che takes too long.
-          //this.updateWorkspaces();
+          // Poll for new workspaces
+          this.broadcaster.broadcast('workspaceCreated', {
+            codebase: this.codebase,
+            workspaceName: name
+          });
         }
       }, error => {
         this.handleError("Failed to create workspace", NotificationType.DANGER);
@@ -74,27 +70,6 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
     // Todo: Not yet supported by API
   }
 
-  /**
-   * Open workspace in editor
-   */
-  openWorkspace(): void {
-    this.subscriptions.push(this.workspacesService.openWorkspace(this.workspaceUrl)
-      .subscribe(workspaceLinks => {
-        if (workspaceLinks != null) {
-          this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
-        }
-      }, error => {
-        this.handleError("Failed to open workspace", NotificationType.DANGER);
-      }));
-  }
-
-  /**
-   * Validate workspace URL upon dropdown selection
-   */
-  validateWorkspaceUrl(): void {
-    this.workspaceUrlInvalid = this.isWorkspaceUrlInvalid();
-  }
-
   // Private
 
   /**
@@ -105,62 +80,9 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * @param url The URL used to open a workspace
    * @returns {string} The workspace name (e.g., quydcbib)
    */
-  getWorkspaceName(url: string): string {
-    let index = url.lastIndexOf("/");
+  private getWorkspaceName(url: string): string {
+    let index = url.lastIndexOf("/") + 1;
     return url.substring(index, url.length);
-  }
-
-  /**
-   * Helper to test if codebase contains a valid GitHub HTML URL
-   *
-   * @returns {boolean}
-   */
-  private isGitHubHtmlUrlInvalid(): boolean {
-    return (this.codebase.attributes.url === undefined
-      || this.codebase.attributes.url.trim().length === 0
-      || this.codebase.attributes.url.indexOf("https://github.com") === -1
-      || this.codebase.attributes.url.indexOf(".git") === -1);
-  }
-
-  /**
-   * Helper to test if codebase contains a valid HTML URL based on type
-   *
-   * @returns {boolean}
-   */
-  private isHtmlUrlInvalid(): boolean {
-    if (this.codebase.attributes.type === 'git') {
-      return this.isGitHubHtmlUrlInvalid();
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Helper to test if workspace URL is valid
-   *
-   * @returns {boolean}
-   */
-  private isWorkspaceUrlInvalid(): boolean {
-    let result = (this.workspaceUrl === undefined
-      || this.workspaceUrl.trim().length === 0
-      || this.workspaceUrl === "default");
-    return result;
-  }
-
-  /**
-   * Helper to update workspaces
-   */
-  private updateWorkspaces(): void {
-    this.workspacesAvailable = false;
-    this.subscriptions.push(this.workspacesService.getWorkspaces(this.codebase.id)
-      .subscribe(workspaces => {
-        if (workspaces != null && workspaces.length > 0) {
-          this.workspaces = workspaces;
-          this.workspacesAvailable = true;
-        }
-      }, error => {
-        this.handleError("Failed to retrieve workspaces", NotificationType.WARNING);
-      }));
   }
 
   private handleError(error: string, type: NotificationType) {

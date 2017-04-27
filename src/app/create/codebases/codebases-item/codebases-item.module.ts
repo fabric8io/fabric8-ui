@@ -4,9 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
 
 import { CodebasesItemComponent } from './codebases-item.component';
+import { CodebasesItemWorkspacesModule } from '../codebases-item-workspaces/codebases-item-workspaces.module';
 
 @NgModule({
   imports: [
+    CodebasesItemWorkspacesModule,
     CommonModule,
     FormsModule
   ],

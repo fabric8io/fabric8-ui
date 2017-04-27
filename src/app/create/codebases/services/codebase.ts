@@ -11,6 +11,8 @@ export class Codebase {
 
 export class CodebaseAttributes {
   createdAt?: string;
+  last_used_workspace: string;
+  stackId: string;
   type?: string;
   url?: string;
 }
