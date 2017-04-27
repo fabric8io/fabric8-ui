@@ -15,9 +15,11 @@
           <label class="control-label">Collaborators</label>
           <div>
             <ss-multiselect-dropdown
+              #typeahead
               class="user-select"
               style="width: 300px;"
               name="collaboratorsId"
+              (keyup)="changed($event)"
               [options]="dropdownOptions"
               [(ngModel)]="dropdownModel"
               [settings]="dropdownSettings" required>

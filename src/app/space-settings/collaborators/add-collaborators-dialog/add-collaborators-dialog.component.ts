@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Modal } from 'ngx-modal';
 import { Context, CollaboratorService } from 'ngx-fabric8-wit';
@@ -20,6 +20,7 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
   @Input() spaceId: string;
   @Input() collaborators: User[];
   @Output() onAdded = new EventEmitter<User[]>();
+  @ViewChild('typeahead') typeahead: any;
 
   public dropdownOptions: IMultiSelectOption[] = [];
   public dropdownModel: User[];
@@ -35,15 +36,6 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
-    this.userService.getAllUsers().subscribe((users) => {
-        users.forEach(user => {
-          this.dropdownOptions.push({
-            id: user,
-            name: user.attributes.fullName
-          });
-        })
-    });
 
     this.dropdownSettings = {
       pullRight: false,
@@ -72,6 +64,19 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
     this.collaboratorService.addCollaborators(this.spaceId, this.dropdownModel).subscribe(() => {
       this.onAdded.emit(this.dropdownModel as User[]);
       this.host.close();
+    });
+  }
+
+  changed(enteredValue: any) {
+    let searchValue = this.typeahead.searchFilterText;
+    this.userService.getUsersBySearchString(searchValue).subscribe((users) => {
+      this.dropdownOptions = [];
+      users.forEach(user => {
+        this.dropdownOptions.push({
+          id: user,
+          name: user.attributes.fullName
+        });
+      })
     });
   }
 
