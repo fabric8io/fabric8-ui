@@ -103,23 +103,23 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     /* Add a project to the space */
     console.log ('EE POC test - add new project to space');
-    OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();   //clickPipelinesWidgetAddToSpaceButton();
-    OpenShiftIoSpaceHomePage.clickTechnologyStack();
-    OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
-    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
+//    OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();   //clickPipelinesWidgetAddToSpaceButton();
+//    OpenShiftIoSpaceHomePage.clickTechnologyStack();
+//    OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
+//    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
 
 //    OpenShiftIoSpaceHomePage.clickOkButton();
 //    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
-    OpenShiftIoSpaceHomePage.clickNoThanksButton();
+//    OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
     /* Import the code base */
-    OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
-    var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
-    OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
-    OpenShiftIoSpaceHomePage.clickSyncButton();
+//    OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
+//    var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
+//    OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
+//    OpenShiftIoSpaceHomePage.clickSyncButton();
 
-//    OpenShiftIoDashboardPage.clickNameUnderLeftNavigationBar (spaceTime);
-//    OpenShiftIoDashboardPage.clickAccountHomeUnderLeftNavigationBar();
+    OpenShiftIoDashboardPage.clickNameUnderLeftNavigationBar (spaceTime);
+    OpenShiftIoDashboardPage.clickAccountHomeUnderLeftNavigationBar();
 
     /* Step 5 - log out */
 
