@@ -39,7 +39,9 @@ docker exec fabric8-ui-builder ./run_EE_tests.sh
 
 ## Test results to archive
 mkdir target
-docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/functional_tests.log target
-docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/target/ .
 
+if (docker exec fabric8-ui-builder test -f /home/fabric8/fabric8-ui/target/screenshots/my-report.html); then docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/target/ . ; fi
+#docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/target/ .
+
+docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/functional_tests.log target
 
