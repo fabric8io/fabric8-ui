@@ -73,8 +73,6 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
     setTimeout(() => {
       if (this.isUserGettingStarted()) {
         this.showGettingStarted = true;
-      } else {
-        this.routeToHomeIfCompleted();
       }
     }, 1000);
   }
