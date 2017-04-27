@@ -40,7 +40,7 @@ export class CreateWorkItemWidgetComponent implements OnInit {
   ngOnInit() {
     this.contextPath = this.contexts.current.map(context => context.path);
     this._myWorkItems = this.userService
-      .getAllUsers()
+      .getUser()
       .do(() => this.workItemService.buildUserIdMap())
       .switchMap(() => this.userService.loggedInUser)
       .map(user => [{
