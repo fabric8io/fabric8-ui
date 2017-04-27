@@ -1,7 +1,7 @@
 <div class="environment-widget card-pf card-f8">
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
-      <a [routerLink]="[contextPath | async, 'create', 'environments']">Environments</a>
+      <a [routerLink]="[contextPath | async, 'create', 'environments']">Applications</a>
       <span class="badge card-f8-badge">{{appsCount}}</span>
     </h2>
   </div>
@@ -10,10 +10,9 @@
       <div class="blank-slate-f8-icon">
         <span class="pficon pficon-add-circle-o"></span>
       </div>
-      <h3>This space has no environments</h3>
+      <h3>This space has no applications</h3>
       <p>
-        Environments are created when you set up a project and define the environments
-        and pipeline for your code to deploy to.
+        Applications are shown once you deploy your code through a pipeline onto the defined environments.
       </p>
     </div>
     <ul class="list-group" *ngIf="appsCount > 0">
