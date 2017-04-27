@@ -5,6 +5,10 @@ function stackApiUtils(data: any, target: string): Observable<any> {
     observable = Observable.create((observer) => {
         if (data) {
             let result: any = {};
+            result['finishedTime'] = data.finished_at;
+            result['requestId'] = data.request_id;
+            result['schema'] = data.schema;
+            result['startedTime'] = data.started_at;
             if (target === 'RECOM') {
                 if (data.hasOwnProperty('recommendation')) {
                     result['recommendation'] = data.recommendation;
@@ -44,6 +48,12 @@ export function getStackRecommendations(data: any): Observable<any> {
         recommendationsObservable.subscribe((result) => {
             let resultData: Array<any> = result.result;
             let fileName: string = '';
+
+            let finishedTime = result['finishedTime'];
+            let requestId = result['requestId'];
+            let schema = result['schema'];
+            let startedTime = result['startedTime'];
+
             if (resultData && resultData.length > 0) {
                 fileName = resultData[0].manifest_name;
             }
@@ -71,8 +81,13 @@ export function getStackRecommendations(data: any): Observable<any> {
                             stackId: stackId,
                             stackName: stackName,
                             usage: usage,
-                            fileName: fileName
+                            fileName: fileName,
+                            finishedTime: finishedTime,
+                            requestId: requestId,
+                            schema: schema,
+                            startedTime: startedTime
                         };
+
                         resultObservable = Observable.create((observer) => {
                             observer.next(resultObject);
                             observer.complete();
