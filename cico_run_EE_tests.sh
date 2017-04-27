@@ -37,3 +37,9 @@ docker exec fabric8-ui-builder npm install
 ## Exec EE tests
 docker exec fabric8-ui-builder ./run_EE_tests.sh
 
+## Test results to archive
+mkdir target
+docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/functional_tests.log target
+docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/target/ .
+
+

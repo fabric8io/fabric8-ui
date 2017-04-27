@@ -105,9 +105,10 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     console.log ('EE POC test - add new project to space');
     OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();   //clickPipelinesWidgetAddToSpaceButton();
     OpenShiftIoSpaceHomePage.clickTechnologyStack();
-
     OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
-    OpenShiftIoSpaceHomePage.clickOkButton();
+    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
+
+//    OpenShiftIoSpaceHomePage.clickOkButton();
 //    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
