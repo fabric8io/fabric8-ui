@@ -303,7 +303,7 @@ export class RecommenderComponent implements OnChanges {
                 'relationships': {
                     'baseType': {
                         'data': {
-                            'id': '86af5178-9b41-469b-9096-57e5155c3f31',
+                            'id': '26787039-b68f-4e28-8814-c2f93be1ef4e',
                             'type': 'workitemtypes'
                         }
                     }
