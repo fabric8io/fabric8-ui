@@ -34,7 +34,7 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    if (this.codebase === undefined) {
+    if (this.codebase === undefined || this.codebase.attributes === undefined) {
       return;
     }
     if (this.codebase.attributes.type === 'git') {

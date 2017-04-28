@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TooltipModule } from 'ng2-bootstrap';
 import { Http } from '@angular/http';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from "../services/github.service";
@@ -11,7 +12,8 @@ import { CodebasesItemWorkspacesModule } from '../codebases-item-workspaces/code
   imports: [
     CodebasesItemWorkspacesModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    TooltipModule
   ],
   declarations: [ CodebasesItemComponent ],
   exports: [ CodebasesItemComponent ],

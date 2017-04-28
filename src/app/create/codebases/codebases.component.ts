@@ -9,6 +9,8 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { GitHubService } from "./services/github.service";
 import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
 
+import { cloneDeep } from 'lodash';
+
 import {
   EmptyStateConfig,
   Filter,
@@ -83,6 +85,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       dblClick: false,
       dragEnabled: false,
       emptyStateConfig: this.emptyStateConfig,
+      headingRow: true,
       multiSelect: false,
       selectItems: false,
       //selectionMatchProp: 'name',
@@ -109,9 +112,10 @@ export class CodebasesComponent implements OnDestroy, OnInit {
         }
       });
     } else {
-      this.codebases = this.allCodebases;
+      this.codebases = cloneDeep(this.allCodebases);
     }
     this.resultsCount = this.codebases.length;
+    this.codebases.unshift({} as Codebase); // Add empty object for row header
   }
 
   filterChange($event: FilterEvent): void {
@@ -194,7 +198,8 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       .subscribe(codebases => {
         if (codebases != null) {
           this.allCodebases = codebases;
-          this.codebases = this.allCodebases;
+          this.codebases = cloneDeep(codebases);
+          this.codebases.unshift({} as Codebase); // Add empty object for row header
         }
       }, error => {
         this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
