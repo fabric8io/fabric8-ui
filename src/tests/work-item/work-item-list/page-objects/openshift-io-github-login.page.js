@@ -30,7 +30,10 @@ class OpenShiftIoGithubLoginPage {
 
   clickGithubLoginField () {
      browser.wait(until.presenceOf(this.githubLoginField), constants.LONG_WAIT, 'Failed to find github loginbutton');
-     return this.githubLoginField.click();
+     this.githubLoginField.click().then(function(){
+      console.log("OpenShiftIoGithubLoginPage - clicked element:githubLoginField");
+    });
+    return;
   }
 
   typeGithubLoginField (usernameString) {
@@ -42,7 +45,10 @@ class OpenShiftIoGithubLoginPage {
   }
 
   clickGithubPassword () {
-     return this.githubPassword.click();
+     this.githubPassword.click().then(function(){
+      console.log("OpenShiftIoGithubLoginPage - clicked element:githubPassword");
+    });
+    return;
   }
 
   typeGithubPassword (passwordString) {
@@ -55,7 +61,9 @@ class OpenShiftIoGithubLoginPage {
 
   clickGithubLoginButton () {
     browser.wait(until.presenceOf(this.githubLoginButton), constants.WAIT, 'Failed to find github login');
-    this.githubLoginButton.click();
+    this.githubLoginButton.click().then(function(){
+      console.log("OpenShiftIoGithubLoginPage - clicked element:githubLoginButton");
+    });
     return new OpenShiftIoDashboardPage();
 //    return new CompleteRegistrationPage();
 //    return new Fabric8MainPage();

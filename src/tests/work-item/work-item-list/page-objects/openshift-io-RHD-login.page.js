@@ -29,7 +29,9 @@ class OpenShiftIoRHDLoginPage {
   }
   clickGithubLoginButton () {
     browser.wait(until.presenceOf(this.githubLoginButton), constants.WAIT, 'Failed to find github login');
-    this.githubLoginButton.click();
+    this.githubLoginButton.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:githubLoginButton");
+    });
     return new OpenShiftIoGithubLoginPage();
   }
 
@@ -38,7 +40,9 @@ class OpenShiftIoRHDLoginPage {
   }
   clickStackoverflowLoginButton () {
     browser.wait(until.presenceOf(this.stackoverflowLoginButton), constants.WAIT, 'Failed to find stackoverflow login');
-    this.stackoverflowLoginButton.click();
+    this.stackoverflowLoginButton.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:stackoverflowLoginButton");
+    });
     return new OpenShiftIoGithubLoginPage();
   }
 
@@ -47,7 +51,9 @@ class OpenShiftIoRHDLoginPage {
   }
   clickLinkedinLoginButton () {
     browser.wait(until.presenceOf(this.linkedinLoginButton), constants.WAIT, 'Failed to find linked in login');
-    this.linkedinLoginButton.click();
+    this.linkedinLoginButton.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:linkedinLoginButton");
+    });
     return new OpenShiftIoGithubLoginPage();
   }
 
@@ -56,7 +62,9 @@ class OpenShiftIoRHDLoginPage {
   }
   clickTwitterLoginButton () {
     browser.wait(until.presenceOf(this.twitterLoginButton), constants.WAIT, 'Failed to find twitter login');
-    this.twitterLoginButton.click();
+    this.twitterLoginButton.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:twitterLoginButton");
+    });
     return new OpenShiftIoGithubLoginPage();
   }
 
@@ -65,7 +73,9 @@ class OpenShiftIoRHDLoginPage {
   }
   clickFacebookLoginButton () {
     browser.wait(until.presenceOf(this.facebookLoginButton), constants.WAIT, 'Failed to find facebook login');
-    this.facebookLoginButton.click();
+    this.facebookLoginButton.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:facebookLoginButton");
+    });
     return new OpenShiftIoGithubLoginPage();
   }
 
@@ -74,7 +84,9 @@ class OpenShiftIoRHDLoginPage {
   }
   clickGoogleLoginButton () {
     browser.wait(until.presenceOf(this.googleLoginButton), constants.WAIT, 'Failed to find google login');
-    this.googleLoginButton.click();
+    this.googleLoginButton.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:googleLoginButton");
+    });
     return new OpenShiftIoGithubLoginPage();
   }
 
@@ -83,7 +95,9 @@ class OpenShiftIoRHDLoginPage {
   }
   clickMicrosoftLoginButton () {
     browser.wait(until.presenceOf(this.microsoftLoginButton), constants.WAIT, 'Failed to find microsoft login');
-    this.microsoftLoginButton.click();
+    this.microsoftLoginButton.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:microsoftLoginButton");
+    });
     return new OpenShiftIoGithubLoginPage();
   }
 
@@ -92,7 +106,9 @@ class OpenShiftIoRHDLoginPage {
   }
   clickJbossdeveloperLoginButton () {
     browser.wait(until.presenceOf(this.jbossdeveloperLoginButton), constants.WAIT, 'Failed to find jbossdeveloper login');
-    this.jbossdeveloperLoginButton.click();
+    this.jbossdeveloperLoginButton.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:jbossdeveloperLoginButton");
+    });
     return new OpenShiftIoGithubLoginPage();
   }
 
@@ -102,20 +118,14 @@ class OpenShiftIoRHDLoginPage {
      return element(by.css(".login-username-field.field"));
   }
   clickRhdUsernameField () {
-     return this.rhdUsernameField.click();
+     return this.rhdUsernameField.click().then(function(){
+      console.log("OpenShiftIoRHDLoginPage - clicked element:rhdUsernameField");
+    });
+    return;
   }
   typeRhdUsernameField (usernameString) {
      return this.rhdUsernameField.sendKeys(usernameString);
   }
-
-
-// #password
-// #kc-login
-
-
-
-
-
 
 }
 

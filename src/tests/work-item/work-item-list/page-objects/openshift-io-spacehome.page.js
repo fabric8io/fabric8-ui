@@ -38,7 +38,10 @@ class OpenShiftIoSpaceHomePage {
   }
 
   clickAnalyticalReportCombo () {
-      return this.analyticalReportCombo.click();
+      this.analyticalReportCombo.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: analyticalReportCombo");
+    });
+    return;
   }
 
   /* Workitem title */
@@ -60,7 +63,10 @@ class OpenShiftIoSpaceHomePage {
   }
 
   clickCreateWorkitemButton () {
-    return this.createWorkitemButton.click(); 
+    this.createWorkitemButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: createWorkitemButton");
+    });
+    return; 
   }
 
   get createWorkItemIcon () {
@@ -69,7 +75,10 @@ class OpenShiftIoSpaceHomePage {
   }
 
   clickCreateWorkitemIcon () {
-    return this.createWorkItemIcon.click(); 
+    this.createWorkItemIcon.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: createWorkItemIcon");
+    });
+    return;
   }
 
   /* Codebases title */
@@ -86,17 +95,16 @@ class OpenShiftIoSpaceHomePage {
   }
   clickImportCodebaseButton () {
     browser.wait(until.elementToBeClickable(this.importCodebaseButton), constants.LONG_WAIT, 'Failed to find element quickStartNextButton');
-    return this.importCodebaseButton.click();
+    this.importCodebaseButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: importCodebaseButton");
+    });
+    return;
   }
 
   /* Pipelines title */
   get pipelinesTitle () {
     return element(by.xpath(".//span[contains(text(),'Pipelines')]"));
   }
-
-
-
-
 
   /* -----------------------------------------------------------------*/
 
@@ -113,7 +121,10 @@ class OpenShiftIoSpaceHomePage {
 
   clickCodeBaseWidgetAddToSpaceButton () {
     browser.wait(until.elementToBeClickable(this.codeBaseWidgetAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element headerPlan');
-    return this.codeBaseWidgetAddToSpaceButton.click();
+    this.codeBaseWidgetAddToSpaceButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: codeBaseWidgetAddToSpaceButton");
+    });
+    return;
   }
 
   /* -----------------------------------------------------------------*/
@@ -131,9 +142,11 @@ class OpenShiftIoSpaceHomePage {
 
   clickPipelinesWidgetAddToSpaceButton () {
     browser.wait(until.elementToBeClickable(this.pipelinesWidgetAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element pipelines');
-    return this.pipelinesWidgetAddToSpaceButton.click();
+    this.pipelinesWidgetAddToSpaceButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: pipelinesWidgetAddToSpaceButton");
+    });
+    return;
   }
-
 
  /* -----------------------------------------------------------------*/
 
@@ -150,21 +163,32 @@ class OpenShiftIoSpaceHomePage {
 
   clickAnalyzeOverviewAddToSpaceButton () {
     browser.wait(until.elementToBeClickable(this.analyzeOverviewAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element analyzeOverviewAddToSpaceButton');
-    return this.analyzeOverviewAddToSpaceButton.click();
+    this.analyzeOverviewAddToSpaceButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: analyzeOverviewAddToSpaceButton");
+    });
+    return;
   }
 
-
-
-
-
-
+  get addToSpaceButton () {
+    return element(by.xpath(".//*[contains(text(),'Add to space')]"));
+  }
+  clickAddToSpaceButton () {
+    browser.wait(until.elementToBeClickable(this.addToSpaceButton), constants.LONG_WAIT, 'Failed to find element addToSpaceButton button');
+    this.addToSpaceButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: addToSpaceButton");
+    });
+    return;
+  }
 
   get noThanksButton () {
     return element(by.xpath(".//a[contains(text(),'No thanks, take me to')]"));
   }
   clickNoThanksButton () {
     browser.wait(until.elementToBeClickable(this.noThanksButton), constants.LONG_WAIT, 'Failed to find element noThanksButton button');
-    return this.noThanksButton.click();
+    this.noThanksButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: noThanksButton");
+    });
+    return;
   }
 
 
@@ -197,7 +221,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
   clickHeaderAnalyze () {
     browser.wait(until.elementToBeClickable(this.headerAnalyze), constants.LONG_WAIT, 'Failed to find element headerAnalyze');
-    return this.headerPlan.click();
+    this.headerPlan.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: headerAnalyze");
+    });
+    return;
   }
 
   get headerPlan () {
@@ -205,7 +232,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
   clickHeaderPlan () {
     browser.wait(until.elementToBeClickable(this.headerPlan), constants.LONG_WAIT, 'Failed to find element headerPlan');
-    return this.headerPlan.click();
+    this.headerPlan.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: headerPlan");
+    });
+    return;
   }
 
   get headerCreate () {
@@ -213,7 +243,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
   clickHeaderCreate () {
     browser.wait(until.elementToBeClickable(this.headerCreate), constants.LONG_WAIT, 'Failed to find element headerCreate');
-    return this.headerPlan.click();
+    this.headerPlan.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: headerCreate");
+    });
+    return;
   }
 
   /* Dialog to create new project/add to space */
@@ -227,21 +260,24 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
   clickCloseButton () {
      browser.wait(until.elementToBeClickable(this.closeButton), constants.WAIT, 'Failed to find CloseButton');
-     return this.closeButton.click();
+     this.closeButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: closeButton");
+    });
+    return;
   }
 
   get cancelButton () {
     return wizardStepTitle.element(by.buttonText('Cancel'));
+//return element(by.xpath("//*[contains(text(),'Technology Stack')]/../../../../../../footer/*/*/button[contains(text(),'Cancel')]"));
   }
 
   clickCancelButton () {
     browser.wait(until.elementToBeClickable(this.cancelButton), constants.LONG_WAIT, 'Failed to find Cancel Button');
-    return this.cancelButton.click();
+    return this.cancelButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: cancelButton");
+    });
+    return;
   }
-
-
-
-
 
 
   /* Associate github repo in code base */
@@ -253,21 +289,12 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return this.gitHubRepo.sendKeys(newString);
   }
 
-
-
-
-
 /* UI Page Section: Analyze Overview (main body of page Bar */
 /* UI Page Section: Codebases */
 /* UI Page Section: Stack Reports */
 /* UI Page Section: My Work Items */
 /* UI Page Section: Pipelines */
 /* UI Page Section: Environments */
-
-
-
-
-
 
   /* -----------------------------------------------------------------*/
 
@@ -285,7 +312,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
   clickQuickStartCancelButton () {
     browser.wait(until.elementToBeClickable(this.quickStartCancelButton), constants.LONG_WAIT, 'Failed to find element quickStartCancelButton');
-    return this.quickStartCancelButton.click();
+    this.quickStartCancelButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: quickStartCancelButton");
+    });
+    return;
   }
 
   get quickStartNextButton () {
@@ -293,7 +323,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
   clickQuickStartNextButton () {
     browser.wait(until.elementToBeClickable(this.quickStartNextButton), constants.LONG_WAIT, 'Failed to find element quickStartNextButton');
-    return this.quickStartNextButton.click();
+    this.quickStartNextButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: quickStartNextButton");
+    });
+    return;
   }
 
   get quickStartFinishButton () {
@@ -301,7 +334,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
   clickQuickStartFinishButton () {
       browser.wait(until.elementToBeClickable(this.quickStartFinishButton), constants.LONG_WAIT, 'Failed to find element quickStartFinishButton');
-      return this.quickStartFinishButton.click();
+      this.quickStartFinishButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: quickStartFinishButton");
+    });
+    return;
   }
 
   get technologyStack () {
@@ -309,9 +345,11 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   clickTechnologyStack () {
-    return this.technologyStack.click();
+    this.technologyStack.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: technologyStack");
+    });
+    return;
   }
-
 
   get okButton () {
     return element(by.xpath(".//*[contains(text(), 'OK')]"));
@@ -319,7 +357,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   clickOkButton () {
      browser.wait(until.elementToBeClickable(this.okButton), constants.LONG_WAIT, 'Failed to find element OK button');
-     return this.okButton.click();
+     this.okButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: okButton");
+    });
+    return;
   }
 
   get syncButton () {
@@ -328,7 +369,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   clickSyncButton () {
      browser.wait(until.elementToBeClickable(this.syncButton), constants.LONG_WAIT, 'Failed to find element Sync button');
-     return this.syncButton.click();
+     this.syncButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: syncButton");
+    });
+    return;
   }
 
   /* Technology Stack project types */
@@ -337,21 +381,30 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return element(by.xpath("Vert.x - Basic"));
   }
   clickVertXbasic () {
-    return this.vertXbasic.click();
+    this.vertXbasic.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: vertXbasic");
+    });
+    return;
   }
 
  get vertXcrud () {
     return element(by.xpath("Vert.x - CRUD"));
  }
   clickVertXcrud () {
-    return this.vertXcrud.click();
+    this.vertXcrud.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: vertXcrud");
+    });
+    return;
   }
 
  get vertXconfigmap () {
     return element(by.xpath("Vert.x - ConfigMap"));
  }
   clickVertXconfigmap () {
-    return this.vertXconfigmap.click();
+    this.vertXconfigmap.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: vertXconfigmap");
+    });
+    return;
   }
 
   get nextButton () {
@@ -360,7 +413,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   clickNextButton () {
     browser.wait(until.elementToBeClickable(this.nextButton), constants.LONG_WAIT, 'Failed to find element next button');
-    return this.nextButton.click();
+    this.nextButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: nextButton");
+    });
+    return;
   }
 
 //    Launchpad: New Project
@@ -376,17 +432,9 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 //    Label Repository
 //    Label Descriptiopn
 
-
-
-
-
-
-
 }
 
 module.exports = OpenShiftIoSpaceHomePage;
-
-
 
 // UI ELement location strings:
 //

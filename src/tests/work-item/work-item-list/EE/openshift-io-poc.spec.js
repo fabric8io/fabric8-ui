@@ -25,8 +25,6 @@ var OpenShiftIoStartPage = require('../page-objects/openshift-io-start.page'),
 
 describe('openshift.io End-to-End POC test - Scenario - New user registers', function () {
   var page, items, browserMode;
-  var EMAIL_ADDRESS = "badaddress@bad.com";
-  var VOUCHER_CODE = "bad voucher code";
 
   beforeEach(function () {
     testSupport.setBrowserMode('desktop');
@@ -40,12 +38,8 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
   it('should enable a registered user to login', function() {
     
     /* Step 1 - on start page, login via github */
-    console.log ('EE POC test - Navigate to RHD login page');
     OpenShiftIoRHDLoginPage = page.clickLoginButton();
-
-    console.log ('EE POC test - Navigate to github login page');
     OpenShiftIoGithubLoginPage = OpenShiftIoRHDLoginPage.clickGithubLoginButton();
-    //OpenShiftIoGithubLoginPage = page.clickLoginButton();  Added April 19, not needed as of April 24
     
     /* Step 2 - on github login page, login */
     OpenShiftIoGithubLoginPage.clickGithubLoginField();
@@ -53,30 +47,9 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     OpenShiftIoGithubLoginPage.clickGithubPassword();
     OpenShiftIoGithubLoginPage.typeGithubPassword(browser.params.login.password);   
-
     OpenShiftIoDashboardPage = OpenShiftIoGithubLoginPage.clickGithubLoginButton();
 
-    // ******************************************************************************************
-    // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
-    //browser.get("https://prod-preview.openshift.io/");
-    browser.get("https://prod-preview.openshift.io/");
-    element(by.id("name")).isPresent().then(function(result) {
-      if ( result ) {       
-        browser.wait(until.elementToBeClickable(element(by.id("name")), constants.LONG_WAIT, 'Failed to find name/login name workaround')); 
-        element(by.id("name")).click();    
-        browser.wait(until.elementToBeClickable(element(by.xpath(".//*[@id='profilelink']/span")), constants.LONG_WAIT, 'Failed to find name/login profile workaround')); 
-        element(by.xpath(".//*[@id='profilelink']/span")).click();
-      } else {
-        console.log ("ERROR - April 24 workaround has failed");
-      }
-    });
-    // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
-    // ******************************************************************************************
-
-    console.log ('EE POC test - Navigate to openshift.io home/dashboard page');
-
     /* Step 3 - on home page - create new space - embed time in space name to ensure unique space name */
-    console.log ('EE POC test - Create a new space');
     OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
     OpenShiftIoDashboardPage.clickCreateSpaceUnderLeftNavigationBar();  
 
@@ -89,37 +62,29 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     OpenShiftIoDashboardPage.waitForToastToClose();
     OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickNoThanksButton();
 
-      /* Step 4 - Create a new project */
-    console.log ('EE POC test - Navigate to space home page/dashboard for space: ' + spaceTime);
-
     /* Step - in the space home page, verify URL and end the test */
-    browser.wait(until.urlContains('https://prod-preview.openshift.io/almusertest1/'+ spaceTime), constants.WAIT);
-    browser.wait(until.urlIs('https://prod-preview.openshift.io/almusertest1/'+ spaceTime), constants.WAIT); 
-    expect(browser.getCurrentUrl()).toEqual('https://prod-preview.openshift.io/almusertest1/'+ spaceTime);
+    browser.wait(until.urlContains('https://openshift.io/almusertest1/'+ spaceTime), constants.WAIT);
+    browser.wait(until.urlIs('https://openshift.io/almusertest1/'+ spaceTime), constants.WAIT); 
+    expect(browser.getCurrentUrl()).toEqual('https://openshift.io/almusertest1/'+ spaceTime);
 
     browser.getCurrentUrl().then(function (text) { 
        console.log ('EE POC test - new space URL = ' + text);
     });
 
     /* Add a project to the space */
-    console.log ('EE POC test - add new project to space');
-//    OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();   //clickPipelinesWidgetAddToSpaceButton();
-//    OpenShiftIoSpaceHomePage.clickTechnologyStack();
-//    OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
-//    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
+    OpenShiftIoDashboardPage.waitForToastToClose();
+    OpenShiftIoSpaceHomePage.clickAddToSpaceButton();  
+    OpenShiftIoSpaceHomePage.clickTechnologyStack();
+    OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
 
-//    OpenShiftIoSpaceHomePage.clickOkButton();
-//    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
-//    OpenShiftIoSpaceHomePage.clickNoThanksButton();
+    OpenShiftIoSpaceHomePage.clickOkButton();
+    OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
     /* Import the code base */
-//    OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
-//    var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
-//    OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
-//    OpenShiftIoSpaceHomePage.clickSyncButton();
-
-    OpenShiftIoDashboardPage.clickNameUnderLeftNavigationBar (spaceTime);
-    OpenShiftIoDashboardPage.clickAccountHomeUnderLeftNavigationBar();
+    OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
+    var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
+    OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
+    OpenShiftIoSpaceHomePage.clickSyncButton();
 
     /* Step 5 - log out */
 
@@ -128,8 +93,6 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     OpenShiftIoDashboardPage.clickrightNavigationBar();
     OpenShiftIoDashboardPage.clickLogOut();
-    console.log ('EE POC test - Log Out');
-
   });
 
 });
