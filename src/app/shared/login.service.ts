@@ -43,6 +43,12 @@ export class LoginService {
     this.broadcaster.on('authenticationError').subscribe(() => {
       this.authService.logout();
     });
+    this.broadcaster.on('noFederatedToken').subscribe(() => {
+      // Don't log out first time users from getting started as tokens may not exist
+      if (this.router.url !== "/" && this.router.url.indexOf("_gettingstarted") === -1) {
+        this.authService.logout();
+      }
+    });
   }
 
   redirectToAuth() {
