@@ -279,7 +279,6 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return;
   }
 
-
   /* Associate github repo in code base */
   get gitHubRepo () {
     return element(by.id("gitHubRepo"));
@@ -289,12 +288,197 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return this.gitHubRepo.sendKeys(newString);
   }
 
-/* UI Page Section: Analyze Overview (main body of page Bar */
-/* UI Page Section: Codebases */
+
+ /* -----------------------------------------------------------------*/
+
+ /* UI Page Section: Analyze Overview (main body of page Bar */
+
+ /* UI Page Section: Codebases */
+
+  get codebases () {
+    return element(by.xpath(".//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Codebases')]/../../.."));
+  }
+  clickCodebases () {
+    browser.wait(until.elementToBeClickable(this.codebases), constants.LONG_WAIT, 'Failed to find element codebases');
+    this.codebases.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: codebases");
+    });
+    return;
+  }
+
+  /* Codebases section title/link */
+
+  get codebasesSectionTitle () {
+    return element(by.xpath(".//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Codebases')]"));
+  }
+  clickCodebasesSectionTitle () {
+    browser.wait(until.elementToBeClickable(this.codebasesSectionTitle), constants.LONG_WAIT, 'Failed to find element codebasesSectionTitle');
+    this.codebasesSectionTitle.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: codebasesSectionTitle");
+    });
+    return;
+  }
+
+  /* Codebases create code base link */
+
+  get codebasesCreateLink () {
+    return element(by.xpath(".//*[contains(@class,'card-pf-title')]/..//*[contains(text(), 'Create Codebase')]"));
+  }
+  clickCodebasesCreateLink () {
+    browser.wait(until.elementToBeClickable(this.codebasesCreateLink), constants.LONG_WAIT, 'Failed to find element codebasesCreateLink');
+    this.codebasesCreateLink.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: codebasesCreateLink");
+    });
+    return;
+  }
+
+  get addCodebaseButton () {
+    return codebases.element(by.buttonText('Add Codebase'));
+  }
+
+  clickAddCodebaseButton () {
+    browser.wait(until.elementToBeClickable(this.addCodebaseButton), constants.LONG_WAIT, 'Failed to find addCodebaseButton Button');
+    return this.addCodebaseButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: addCodebaseButton");
+    });
+    return;
+  }
+
+  get importCodebaseButton () {
+    return this.codebases.element(by.buttonText('Import Codebase'));
+  }
+
+  clickImportCodebaseButton () {
+    browser.wait(until.elementToBeClickable(this.importCodebaseButton), constants.LONG_WAIT, 'Failed to find importCodebaseButton Button');
+    return this.importCodebaseButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: importCodebaseButton");
+    });
+    return;
+  }
+
 /* UI Page Section: Stack Reports */
-/* UI Page Section: My Work Items */
+
+  get stackReports () {
+    return element(by.xpath(".//fabric8-analytical-report-widget"));
+  }
+  clickStackReports () {
+    browser.wait(until.elementToBeClickable(this.stackReports), constants.LONG_WAIT, 'Failed to find element stackReports');
+    this.stackReports.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: stackReports");
+    });
+    return;
+  }
+
+  /* STack Reports */
+  get stackReportsSectionTitle () {
+    return element(by.xpath(".//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Stack Reports')]"));
+  }
+  clickStackReportsSectionTitle () {
+    browser.wait(until.elementToBeClickable(this.stackReportsSectionTitle), constants.LONG_WAIT, 'Failed to find element stackReportsSectionTitle');
+    this.stackReportsSectionTitle.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: SectionTitle");
+    });
+    return;
+  }
+
+/* UI Page Section: My Workitems */
+
+  get workitems () {
+    return element(by.xpath(".//fabric8-create-work-item-widget"));
+  }
+  clickworkitems () {
+    browser.wait(until.elementToBeClickable(this.workitems), constants.LONG_WAIT, 'Failed to find element workitems');
+    this.workitems.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: workitems");
+    });
+    return;
+  }
+
+  /* My Workitems section title/link */
+  get workitemsSectionTitle () {
+    return element(by.xpath(".//*[contains(@class,'card-pf-title')]//*[contains(text(), 'My WorkItems')]"));
+  }
+  clickWorkitemsSectionTitle () {
+    browser.wait(until.elementToBeClickable(this.workitemsSectionTitle), constants.LONG_WAIT, 'Failed to find element workitemsSectionTitle');
+    this.workitemsSectionTitle.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: workitemsSectionTitle");
+    });
+    return;
+  }
+
+  get createWorkitemButton () {
+    return pipelines.element(by.buttonText('Create workitem'));
+  }
+
+  clickCreateWorkitemButton () {
+    browser.wait(until.elementToBeClickable(this.createWorkitemButton), constants.LONG_WAIT, 'Failed to find createWorkitemButton Button');
+    return this.createWorkitemButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: createWorkitemButton");
+    });
+    return;
+  }
+
 /* UI Page Section: Pipelines */
+
+  get pipelines () {
+    return element(by.xpath(".//fabric8-pipelines-widget"));
+  }
+  clickPipelines () {
+    browser.wait(until.elementToBeClickable(this.pipelines), constants.LONG_WAIT, 'Failed to find element pipelines');
+    this.codebases.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: pipelines");
+    });
+    return;
+  }
+
+  /* Pipelines section title/link */
+  get pipelinesSectionTitle () {
+    return element(by.xpath(".//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Pipelines')]"));
+  }
+  clickPipelinesSectionTitle () {
+    browser.wait(until.elementToBeClickable(this.pipelinesSectionTitle), constants.LONG_WAIT, 'Failed to find element pipelinesSectionTitle');
+    this.pipelinesSectionTitle.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: pipelinesSectionTitle");
+    });
+    return;
+  }
+
+  get addToSpaceButton () {
+    return this.pipelines.element(by.buttonText('Add to Space'));
+  }
+
+  clickAddToSpaceButton () {
+    browser.wait(until.elementToBeClickable(this.addToSpaceButton), constants.LONG_WAIT, 'Failed to find addToSpaceButton Button');
+    return this.addToSpaceButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: addToSpaceButton");
+    });
+    return;
+  }
+
 /* UI Page Section: Environments */
+
+  get environments () {
+    return element(by.xpath(".//fabric8-environment-widget"));
+  }
+  clickEnvironments  () {
+    browser.wait(until.elementToBeClickable(this.environments), constants.LONG_WAIT, 'Failed to find element environments');
+    this.codebases.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: environments");
+    });
+    return;
+  }
+
+  /* Environments section title/link */
+  get environmentsSectionTitle () {
+    return element(by.xpath(".//*[contains(@class,'card-pf-title')]//*[contains(text(), 'Environments')]"));
+  }
+  clickEnvironmentsSectionTitle () {
+    browser.wait(until.elementToBeClickable(this.environmentsSectionTitle), constants.LONG_WAIT, 'Failed to find element environmentsSectionTitle');
+    this.environmentsSectionTitle.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: environmentsSectionTitle");
+    });
+    return;
+  }
 
   /* -----------------------------------------------------------------*/
 
@@ -419,24 +603,11 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return;
   }
 
-//    Launchpad: New Project
-//    Label Booster
-//    Label Project name
-//    Label Top level package
-//    Label Project version
-
-//    Obsidian: Configure pipeline
-//    Label Pipeline
-
-//    io.fabric8.forge.generator.github.GithubRepoStep
-//    Label Repository
-//    Label Descriptiopn
-
 }
 
 module.exports = OpenShiftIoSpaceHomePage;
 
-// UI ELement location strings:
+// UI ELement location strings - TODO - create element IDs for these UI elements
 //
 //  Navigation Bar
 //  .//*[contains(@class, 'navbar-collapse')]
