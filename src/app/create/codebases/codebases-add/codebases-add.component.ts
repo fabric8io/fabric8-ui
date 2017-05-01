@@ -184,23 +184,24 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
   /**
    * Get GitHub full name
    *
-   * @param repo The GitHub repo URL
+   * @param repoUrl The GitHub repo URL
    * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
    */
-  private getGitHubRepoFullName(repo: string): string {
-    let fullName = this.getGitHubRepoFullNameFromBrowserUrl(repo);
+  private getGitHubRepoFullName(repoUrl: string): string {
+    let url = repoUrl.trim();
+    let fullName = this.getGitHubRepoFullNameFromBrowserUrl(url);
     if (fullName !== null) {
       return fullName;
     }
-    fullName = this.getGitHubRepoFullNameFromHttpsUrl(repo);
+    fullName = this.getGitHubRepoFullNameFromHttpsUrl(url);
     if (fullName !== null) {
       return fullName;
     }
-    fullName = this.getGitHubRepoFullNameFromSshUrl(repo);
+    fullName = this.getGitHubRepoFullNameFromSshUrl(url);
     if (fullName !== null) {
       return fullName;
     }
-    return repo;
+    return url;
   }
 
   /**
