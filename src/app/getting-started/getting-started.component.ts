@@ -55,6 +55,11 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
         this.loggedInUser = user;
         this.username = this.loggedInUser.attributes.username;
         this.registrationCompleted = (user as ExtUser).attributes.registrationCompleted;
+
+        // Todo: Remove after summit?
+        if (!this.registrationCompleted) {
+          this.saveUsername();
+        }
       })
       .switchMap(() => this.auth.gitHubToken)
       .map(token => {
