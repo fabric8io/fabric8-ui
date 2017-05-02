@@ -16,7 +16,7 @@
   </div>
   <div class="row">
     <form role="form">
-      <!--<div class="row">
+      <div class="row">
         <div class="col-md-1">
           <h2 class="circle">1</h2>
         </div>
@@ -39,7 +39,9 @@
               <label for="username" class="control-label required-pf">Username</label>
               <div [ngClass]="{'has-error': usernameInvalid}">
                 <div class="col-md-5 padding-left-0">
+                  <!-- Disable username change for summit, but require save to set registration_complete -->
                   <input type="text" class="form-control" id="username" name="username" maxlength="62" required
+                         [disabled]="true"
                          [(ngModel)]="username">
                 </div>
                 <div class="col-md-7 padding-left-0">
@@ -57,10 +59,10 @@
             </div>
           </div>
         </div>
-      </div>-->
+      </div>
       <div class="row">
         <div class="col-md-1">
-          <h2 class="circle">1</h2>
+          <h2 class="circle">2</h2>
         </div>
         <div class="col-md-11 padding-left-0">
           <h2>Connected accounts</h2>
