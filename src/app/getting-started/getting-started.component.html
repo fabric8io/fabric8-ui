@@ -16,7 +16,7 @@
   </div>
   <div class="row">
     <form role="form">
-      <div class="row">
+      <!--<div class="row">
         <div class="col-md-1">
           <h2 class="circle">1</h2>
         </div>
@@ -26,7 +26,7 @@
             cannot be changed once you leave the Getting Started page.
           </p>
           <div class="form-group">
-            <div *ngIf="isUsernameDisabled; then showUsernameUpdated else showUsernameInput"></div>
+            <div *ngIf="isUsernameDisabled; then showUsernameUpdated; else showUsernameInput"></div>
             <ng-template #showUsernameUpdated>
               <div class="margin-bottom-15">
                 <label class="margin-right-10">Username:</label>
@@ -57,10 +57,10 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
       <div class="row">
         <div class="col-md-1">
-          <h2 class="circle">2</h2>
+          <h2 class="circle">1</h2>
         </div>
         <div class="col-md-11 padding-left-0">
           <h2>Connected accounts</h2>

@@ -22,7 +22,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   gitHubLinked: boolean = false;
   loggedInUser: User;
   openShiftLinked: boolean = false;
-  registrationCompleted: boolean = false;
+  registrationCompleted: boolean = true;
   showGettingStarted: boolean = false;
   subscriptions: Subscription[] = [];
   username: string;
