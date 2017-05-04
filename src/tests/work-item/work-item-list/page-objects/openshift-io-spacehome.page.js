@@ -116,8 +116,10 @@ class OpenShiftIoSpaceHomePage {
 
   /* Add to space button within Codebase widget */
   get codeBaseWidgetAddToSpaceButton () {
-    return this.codeBaseWidget.element(by.buttonText('Add to Space'));
+    return this.codeBaseWidget.element(by.xpath(".//*[contains(text(),'Add to space')]"));                   //by.buttonText('Add to space'));
   }
+
+
 
   clickCodeBaseWidgetAddToSpaceButton () {
     browser.wait(until.elementToBeClickable(this.codeBaseWidgetAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element headerPlan');
@@ -158,7 +160,7 @@ class OpenShiftIoSpaceHomePage {
 
   /* Add to space button within analyzeOverview */
   get analyzeOverviewAddToSpaceButton () {
-    return this.analyzeOverview.element(by.buttonText('Add to Space'));
+    return this.analyzeOverview.element(by.buttonText('Add to space'));
   }
 
   clickAnalyzeOverviewAddToSpaceButton () {
@@ -169,12 +171,12 @@ class OpenShiftIoSpaceHomePage {
     return;
   }
 
-  get addToSpaceButton () {
-    return element(by.xpath(".//*[contains(text(),'Add to space')]"));
+  get primaryAddToSpaceButton () {
+    return element(by.buttonText("Add to space"));   //xpath(".//button[contains(text(),'Add to space')]"));
   }
-  clickAddToSpaceButton () {
-    browser.wait(until.elementToBeClickable(this.addToSpaceButton), constants.LONG_WAIT, 'Failed to find element addToSpaceButton button');
-    this.addToSpaceButton.click().then(function(){
+  clickPrimaryAddToSpaceButton () {
+    browser.wait(until.elementToBeClickable(this.primaryAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element primaryAddToSpaceButton button');
+    this.primaryAddToSpaceButton.click().then(function(){
       console.log("OpenShiftIoSpaceHomePage - clicked element: addToSpaceButton");
     });
     return;
@@ -444,10 +446,10 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get addToSpaceButton () {
-    return this.pipelines.element(by.buttonText('Add to Space'));
+    return this.pipelines.element(by.buttonText('Add to space'));
   }
 
-  clickAddToSpaceButton () {
+  clickAddToSpaceButton2 () {
     browser.wait(until.elementToBeClickable(this.addToSpaceButton), constants.LONG_WAIT, 'Failed to find addToSpaceButton Button');
     return this.addToSpaceButton.click().then(function(){
       console.log("OpenShiftIoSpaceHomePage - clicked element: addToSpaceButton");

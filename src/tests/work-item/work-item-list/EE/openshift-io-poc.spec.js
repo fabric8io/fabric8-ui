@@ -31,12 +31,14 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     // Failed: Error while waiting for Protractor to sync with the page: "window.getAllAngularTestabilities is not a function"
     // http://stackoverflow.com/questions/38050626/angular-2-with-protractorjs-failed-error-while-waiting-for-protractor-to-sync-w 
     browser.ignoreSynchronization = true;
-    page = new OpenShiftIoStartPage();  
+    page = new OpenShiftIoStartPage(browser.params.target.url);  
   });
 
   /* Simple test for registered user */
   it('should enable a registered user to login', function() {
     
+    console.log ("Test for target URL: " + browser.params.target.url)
+
     /* Step 1 - on start page, login via github */
     OpenShiftIoRHDLoginPage = page.clickLoginButton();
     OpenShiftIoGithubLoginPage = OpenShiftIoRHDLoginPage.clickGithubLoginButton();
@@ -73,11 +75,15 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     /* Add a project to the space */
     OpenShiftIoDashboardPage.waitForToastToClose();
-    OpenShiftIoSpaceHomePage.clickAddToSpaceButton();  
+    OpenShiftIoSpaceHomePage.clickPrimaryAddToSpaceButton();  
     OpenShiftIoSpaceHomePage.clickTechnologyStack();
     OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
 
     OpenShiftIoSpaceHomePage.clickOkButton();
+
+    /* TODO - Trap 'Application Generation Error' here - if found, fail test and exit */
+    expect(OpenShiftIoDashboardPage.appGenerationError.isPresent()).toBe(false);
+
     OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
     /* Import the code base */

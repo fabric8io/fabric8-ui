@@ -20,9 +20,10 @@ var until = protractor.ExpectedConditions;
 
 class OpenShiftIoStartPage {
 
-  constructor() {
+  constructor(startUrl) {
 //    browser.get("https://prod-preview.openshift.io/");
-    browser.get("https://openshift.io/");
+//    browser.get("https://openshift.io/");
+  browser.get(startUrl);
   };
 
   /* Navigation panel UI objects */

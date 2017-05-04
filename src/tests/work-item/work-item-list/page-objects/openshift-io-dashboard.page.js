@@ -117,6 +117,18 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return browser.wait(until.not(until.presenceOf(this.alertToastElements)));
   }
 
+ /* -----------------------------------------------------------------*/
+
+  /* Did the App/Project Creation Fail? */
+  get appGenerationError () {
+    return element(by.xpath(".//*[contains(text(), 'Application Generator Error')]"));
+  }
+
+  waitForAppGenErrorToClose () {
+    return browser.wait(until.not(until.presenceOf(this.alertToastElements)));
+  }
+
+
   /* -----------------------------------------------------------------*/
   /* UI Page Section: Navigation Bar */
 

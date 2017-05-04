@@ -35,7 +35,7 @@ mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder --user=root 
 docker exec fabric8-ui-builder npm install
 
 ## Exec EE tests
-docker exec fabric8-ui-builder ./run_EE_tests.sh
+docker exec fabric8-ui-builder ./run_EE_tests.sh --params.target.url=$1
 
 ## cat the test log to stdout
 docker exec fabric8-ui-builder cat ./functional_tests.log
