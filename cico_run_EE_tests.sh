@@ -34,6 +34,7 @@ mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder --user=root 
 # Build
 docker exec fabric8-ui-builder npm install
 
+
 ## Clean up OpenShift builds, pipelines, etc. from prior jobs - commented out for now - until test can run more reliably
 ##
 ##docker exec fabric8-ui-builder wget https://github.com/openshift/origin/releases/download/v1.5.0/openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit.tar.gz
@@ -47,6 +48,10 @@ docker exec fabric8-ui-builder npm install
 ##docker exec fabric8-ui-builder openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit/oc delete build --all -n almusertest1-test
 ##docker exec fabric8-ui-builder openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit/oc delete build --all -n almusertest1-stage
 ##docker exec fabric8-ui-builder openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit/oc delete build --all -n almusertest1-run
+
+## Exec EE tests
+docker exec fabric8-ui-builder ./run_EE_tests.sh --params.target.url=$1
+
 
 ## Delete/cleanup Jenkins jobs - commented out for now - until test can run more reliably
 ##
