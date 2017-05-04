@@ -11,7 +11,8 @@ import {
   GitHubRepoCommit,
   GitHubRepoDetails,
   GitHubRepoLastCommit,
-  GitHubRepoLicense
+  GitHubRepoLicense,
+  GitHubUser,
 } from './github';
 
 /**
@@ -76,7 +77,8 @@ export class GitHubService implements OnDestroy {
       return this.cache.get(url);
     } else {
       let res = this.getHeaders()
-        .switchMap(newHeaders => this.http.get(url, { headers: newHeaders }))
+        .switchMap(newHeaders => this.http
+          .get(url, { headers: newHeaders }))
         .map(response => {
           return response.json() as GitHubRepoCommit;
         })
@@ -221,12 +223,47 @@ export class GitHubService implements OnDestroy {
     }
   }
 
+<<<<<<< a406c55bdabd321bcdf72558a95af4e23bb06040
+=======
+  /**
+   * Get authenticate GitHub user
+   *
+   * @returns {Observable<GitHubUser>}
+   */
+  getUser(): Observable<GitHubUser> {
+    let url = `${this.gitHubUrl}/user`;
+    if (this.cache.has(url)) {
+      return this.cache.get(url);
+    } else {
+      let res = this.getHeaders()
+        .switchMap(newHeaders => this.http
+          .get(url, { headers: newHeaders }))
+        .map(response => {
+          return response.json() as GitHubUser
+        })
+        .publishReplay(1)
+        .refCount()
+        .catch((error) => {
+          return this.handleError(error);
+        });
+      this.cache.set(url, res);
+      return res;
+    }
+  }
+
+  // Private
+
+>>>>>>> feat(): Added functionality to update profile page
   /**
    * Get GitHub headers for authentified user
    *
    * @returns {Headers}
    */
+<<<<<<< a406c55bdabd321bcdf72558a95af4e23bb06040
   getHeaders(): Observable<Headers> {
+=======
+  private getHeaders(): Observable<Headers> {
+>>>>>>> feat(): Added functionality to update profile page
     return this.authService.gitHubToken.map(token => {
       let newHeaders = cloneDeep(GitHubService.HEADERS);
       newHeaders.set('Authorization', `token ${token}`);

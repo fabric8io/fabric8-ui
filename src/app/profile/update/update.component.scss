@@ -1,10 +1,80 @@
 @import '../../../assets/stylesheets/base';
 @import '../../../assets/stylesheets/shared/layout';
+
 .checkbox input[type="checkbox"] {
   margin-left: 0;
   margin-right: 5px;
   position: relative;
 }
-.fields-status-pf { margin-top: -5px; }
-.getting-started { padding-bottom: 20px; }
-.margin-top-40 { margin-top: 40px; }
+
+.fields-status-pf {
+  margin-top: -5px;
+}
+
+.getting-started {
+  padding-bottom: 20px;
+}
+
+.margin-top-40 {
+  margin-top: 40px;
+}
+
+.padding-top-30 {
+  padding-top: 30px;
+}
+
+.padding-top-40 {
+  padding-top: 40px;
+}
+
+.profile-img,
+.profile-img-none {
+  height: 195px;
+  width: 195px;
+}
+
+.preview-cont {
+  display: flex;
+}
+
+.preview-btn {
+  margin-left: -21px;
+  margin-top: 99px;
+  > button {
+    height: 29px;
+  }
+}
+
+.preview-field {
+  flex-grow: 1;
+  margin-top: auto;
+  padding-left: 5px;
+}
+
+.preview-img,
+.preview-img-none {
+  height: 100px;
+  width: 100px;
+}
+
+.profile-img-none,
+.preview-img-none {
+  border-bottom: solid 1px $color-pf-black-250;
+  border-left: solid 2px $color-pf-black-250;
+  border-top: solid 2px $color-pf-black-250;
+  border-right: solid 1px $color-pf-black-250;
+}
+
+.token-body {
+  word-wrap: break-word;
+}
+
+.token-heading {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.token-heading-cont {
+  display: flex;
+}
