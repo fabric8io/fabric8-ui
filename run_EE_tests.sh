@@ -23,7 +23,7 @@ TEST_RESULT=$?
 set -x
 
 # cat log file to stdout
-cat $LOGFILE
+# cat $LOGFILE
 
 # Cleanup webdriver-manager and web app processes
 fuser -k -n tcp 4444

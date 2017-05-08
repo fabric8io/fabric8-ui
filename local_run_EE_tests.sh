@@ -19,7 +19,7 @@ node_modules/protractor/bin/protractor protractorEE.config.js --params.login.use
 TEST_RESULT=$?
 
 # cat log file to stdout 
-cat $LOGFILE
+# cat $LOGFILE
 
 # Return test result
 if [ $TEST_RESULT -eq 0 ]; then
