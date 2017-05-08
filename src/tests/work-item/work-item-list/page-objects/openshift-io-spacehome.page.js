@@ -561,6 +561,22 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return;
   }
 
+  get associateRepoButton () {
+    return element(by.xpath(".//*[contains(text(), 'Associate Repository to Space')]"));
+  }
+
+  clickAssociateRepoButton () {
+     browser.wait(until.elementToBeClickable(this.associateRepoButton), constants.LONG_WAIT, 'Failed to find element associateRepo button');
+     this.associateRepoButton.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: associateRepoButton");
+    });
+    return;
+  }
+
+
+
+
+
   /* Technology Stack project types */
 
   get vertXbasic () {

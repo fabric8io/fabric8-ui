@@ -22,6 +22,9 @@ node_modules/protractor/bin/protractor protractorEE.config.js --params.login.use
 TEST_RESULT=$?
 set -x
 
+# cat log file to stdout
+cat $LOGFILE
+
 # Cleanup webdriver-manager and web app processes
 fuser -k -n tcp 4444
 fuser -k -n tcp 8088

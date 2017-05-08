@@ -18,6 +18,9 @@ echo Running tests...
 node_modules/protractor/bin/protractor protractorEE.config.js --params.login.user=$1 --params.login.password=$2 --params.target.url=$3
 TEST_RESULT=$?
 
+# cat log file to stdout 
+cat $LOGFILE
+
 # Return test result
 if [ $TEST_RESULT -eq 0 ]; then
   echo 'Functional tests OK'

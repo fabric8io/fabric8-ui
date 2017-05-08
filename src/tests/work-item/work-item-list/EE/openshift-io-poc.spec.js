@@ -92,21 +92,46 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
     OpenShiftIoSpaceHomePage.clickSyncButton();
 
+    OpenShiftIoDashboardPage.waitForToastToClose();
+    OpenShiftIoSpaceHomePage.clickAssociateRepoButton();
+
+    OpenShiftIoDashboardPage.waitForToastToClose();
+
+    // Associate Repository to Space    button 
+
     /* Step 5 - log out */
 
     /* For the purposes of this test - ignore all 'toast' popup warnings */
     OpenShiftIoDashboardPage.waitForToastToClose();
 
-    OpenShiftIoDashboardPage.clickrightNavigationBar();
-    OpenShiftIoDashboardPage.clickLogOut();
+//    OpenShiftIoDashboardPage.clickrightNavigationBar();
+//    OpenShiftIoDashboardPage.clickLogOut();
   });
 
 });
 
   /* Get system time in seconds since 1970 */
   var returnTime = function () {
+
+    var month = new Array();
+    month[0] = "Jan";
+    month[1] = "Feb";
+    month[2] = "Mar";
+    month[3] = "Apr";
+    month[4] = "May";
+    month[5] = "Jun";
+    month[6] = "Jul";
+    month[7] = "Aug";
+    month[8] = "Sep";
+    month[9] = "Oct";
+    month[10] = "Nov";
+    month[11] = "Dec";
+
     var d = new Date();
+    var m = month[d.getMonth()];
+    var day = d.getDate(); 
     var n = d.getTime();
-    console.log ("EE POC test - Creating space: " + n.toString());
-    return "test" + n.toString();
+ 
+    console.log ("EE POC test - Creating space: " + m + day.toString() + n.toString());
+    return "test" +  m + day.toString() + n.toString();
   }
