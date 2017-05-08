@@ -1,0 +1,52 @@
+<div class="col-xs-6 margin-top-25" *ngIf="spaces.length !== 0">
+  <select class="combobox form-control"
+          [(ngModel)]="currentSpaceId"
+          (ngModelChange)="fetchWorkItems()">
+    <option value="default">Select a space to work with...</option>
+    <option *ngFor="let space of spaces" [value]="space.id">
+      {{space.attributes.name | spaceName}}
+    </option>
+  </select>
+</div>
+<div *ngIf="workItems.length === 0; then showBlankState else showWorkItems"></div>
+<ng-template #showBlankState>
+  <div class="col-xs-12 padding-none"
+       [ngClass]="{'margin-top-15': spaces.length !== 0}">
+    <div class="blank-slate-pf">
+      <div class="blank-slate-f8-icon">
+        <i class="pficon pficon-info"></i>
+      </div>
+      <p>Work items reflect the work to be done within a space.</p>
+      <p>Once you create a space or join a space, your work items will begin displaying here.</p>
+      <p>Learn how to get started
+        <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift.io/1/html-single/user_guide"
+           target="_blank">
+          in the documentation
+        </a>
+      </p>
+    </div>
+  </div>
+</ng-template>
+<ng-template #showWorkItems>
+  <div class="col-xs-12 padding-none">
+    <ul class="list-group list-view-pf list-view-pf-view">
+      <li class="list-group-item" *ngFor="let workItem of workItems | take: 10">
+        <div class="list-view-pf-main-info">
+          <div class="list-view-pf-body">
+            <div class="list-view-pf-description">
+              <div class="list-group-item-text">
+                <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
+                <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
+                <span>{{workItem.id}}</span>
+                <span class="work-item-title" *ngIf="workItem.attributes">
+                      <a [routerLink]="['/', loggedInUser.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.id]">
+                        {{workItem.attributes['system.title']}}</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</ng-template>
