@@ -152,7 +152,7 @@ export class CodebasesService {
     if (codebase.attributes.type === 'git') {
       return codebase.attributes.url.replace('.git', '').replace('git@github.com:', '');
     } else {
-      codebase.attributes.url;
+      return codebase.attributes.url;
     }
   }
 
@@ -160,7 +160,7 @@ export class CodebasesService {
     if (codebase.attributes.type === 'git') {
       return codebase.attributes.url.replace('.git', '').replace(':', '/').replace('git@', 'https://');
     } else {
-      codebase.attributes.url;
+      return codebase.attributes.url;
     }
   }
 
