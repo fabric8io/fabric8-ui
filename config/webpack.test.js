@@ -238,7 +238,7 @@ module.exports = function (options) {
           },
           include: helpers.root('src'),
           exclude: [
-            /\.(e2e|spec)\.ts$/,
+            /\.(e2e|spec|mock)\.ts$/,
             /node_modules/
           ]
         }

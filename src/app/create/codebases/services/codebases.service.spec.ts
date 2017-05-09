@@ -41,10 +41,6 @@ describe('Codebase: CodebasesService', () => {
             provide: WIT_API_URL,
             useValue: "http://example.com"
           },
-          {
-            provide: AUTH_API_URL,
-            useValue: 'http://example.com/auth'
-          },
           CodebasesService
         ]
       });
@@ -87,7 +83,6 @@ describe('Codebase: CodebasesService', () => {
 
     it('Add codebase', () => {
       // given
-      mockAuthService.getToken.and.returnValue('XXX');
       const expectedResponse = {"data": githubData};
       mockService.connections.subscribe((connection: any) => {
         connection.mockRespond(new Response(
