@@ -214,7 +214,7 @@ class OpenShiftIoStartPage {
 
   /* Login button in Nav bar*/
   get navBarLoginButton () {
-     return element(by.xpath(".//a[@id='login')]"));
+     return element(by.xpath(".//a[@id='login'and contains(text(), 'Log In')]"));
   }
   clickNavBarLoginButton () {
      this.navBarLoginButton.click().then(function(){
@@ -228,7 +228,7 @@ class OpenShiftIoStartPage {
   /* Login button */
   get loginButton () {
 //     return element(by.cssContainingText('.btn.btn-link', 'Log In'));
-     return element(by.xpath(".//*[@id='login' and contains(@class, 'btn btn-outline')]"));
+     return element(by.xpath(".//*[@id='login' and contains(text(), 'LOG IN')]"));     //@class, 'btn btn-outline')]"));
   }
   clickLoginButton () {
      this.loginButton.click().then(function(){

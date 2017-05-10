@@ -44,6 +44,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 |                                                    Top Navigation Bar                                                        |
 | Left Navigation Bar            |                                                            | Right Navigation Bar           |
 |                                |                                                            |                                | 
+|                                                                                                                              |
+| Persistent navigation bar                                                                                                    |
 |------------------------------------------------------------------------------------------------------------------------------|
 |                                       |                                              |                                       |
 |                                       |                                              |                                       |
@@ -127,6 +129,11 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   waitForAppGenErrorToClose () {
     return browser.wait(until.not(until.presenceOf(this.alertToastElements)));
   }
+
+  /* -----------------------------------------------------------------*/
+  /* UI Page Section: Persistent Navigation Bar */
+
+
 
 
   /* -----------------------------------------------------------------*/
