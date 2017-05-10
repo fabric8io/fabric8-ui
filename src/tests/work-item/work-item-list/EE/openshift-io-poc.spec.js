@@ -23,7 +23,7 @@ var OpenShiftIoStartPage = require('../page-objects/openshift-io-start.page'),
     testSupport = require('../testSupport'),
     constants = require("../constants");
 
-describe('openshift.io End-to-End POC test - Scenario - New user registers', function () {
+describe('openshift.io End-to-End POC test - Scenario - Existing user: ', function () {
   var page, items, browserMode;
 
   beforeEach(function () {
@@ -35,7 +35,7 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
   });
 
   /* Simple test for registered user */
-  it('should enable a registered user to login', function() {
+  it('should enable a registered user create a space, project, etc. ', function() {
     
     console.log ("Test for target URL: " + browser.params.target.url)
 
@@ -96,26 +96,40 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     OpenShiftIoSpaceHomePage.clickAssociateRepoButton();
     OpenShiftIoDashboardPage.waitForToastToClose();
 
-    /* Create a workspace */
+    /* TODO - Create a workspace */
 
-    /* Verify the workspace in Che */
+    /* Navigating thru the Plan/Create/Analyze tabs is not working in the UI - due to 
+       Angular bug with Protractor? Navigate directly to the URL instead */
+    // OpenShiftIoSpaceHomePage.clickHeaderAnalyze();
+//    var tmpString = "https://openshift.io/almusertest1/" + spaceTime + "/create";
 
+    /* Go to the Create page - https://openshift.io/almusertest1/testmay91494369460731/create  */
+    browser.get("https://openshift.io/almusertest1/" + spaceTime + "/create");
+    
+    /* Locate the first codebase */
+    OpenShiftIoSpaceHomePage.clickFirstPipeline();
+
+    /* TODO - Verify the workspace in Che - TODO - Create a page object modelk for the Che dashboard */
+    browser.get("https://che-almusertest1-che.8a09.starter-us-east-2.openshiftapps.com/dashboard/#/");
+
+    browser.wait(until.elementToBeClickable(element(by.xpath(".//*[@id='dashboardPageContent']/dashboard-last-workspaces"))), constants.LONG_WAIT, 'Failed to find element Che dashboard');
+    element(by.xpath(".//*[@id='dashboardPageContent']/dashboard-last-workspaces")).getText().then(function(text){
+      console.log("Che workspaces = " + text);
+    });
 
     /* Verify that the pipeline was created */
 
     /* Navigating thru the Plan/Create/Analyze tabs is not working in the UI - due to 
        Angular bug with Protractor? Navigate directly to the URL instead */
     // OpenShiftIoSpaceHomePage.clickHeaderAnalyze();
-    var tmpString = "https://openshift.io/almusertest1/" + spaceTime;
-    browser.get(tmpString);
+    browser.get("https://openshift.io/almusertest1/" + spaceTime);
 
     OpenShiftIoSpaceHomePage.clickPipelinesWidgetTitle();
     OpenShiftIoSpaceHomePage.pipelinesPage.getText().then(function(text){
-      console.log("Pipelines page = " + text);
+    //  console.log("Pipelines page = " + text);
 
       /* May 9, 2017 - clicking on a pipeline fails due to this error:
-      https://openshift.io/kleinhenz-1/osio-planner/plan/detail/682    */
-
+      https://openshift.io/kleinhenz-1/osio-planner/plan/detail/682    *
       /* Example of expected text:
          testmay91494354476064 created a few seconds ago
          Source Repository: https://github.com/almightytest/testmay91494354476064.git
@@ -123,16 +137,15 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
       expect(text).toContain(spaceTime + " created a few seconds ago");
       expect(text).toContain("Source Repository: https://github.com/almightytest/" + spaceTime + ".git");
-//      expect(text).toContain("No pipeline builds have run for " + spaceTime + ".");
     });
 
     /* Step 5 - log out */
 
     /* For the purposes of this test - ignore all 'toast' popup warnings */
-//    OpenShiftIoDashboardPage.waitForToastToClose();
+    OpenShiftIoDashboardPage.waitForToastToClose();
 
-//    OpenShiftIoDashboardPage.clickrightNavigationBar();
-//    OpenShiftIoDashboardPage.clickLogOut();
+    OpenShiftIoDashboardPage.clickrightNavigationBar();
+    OpenShiftIoDashboardPage.clickLogOut();
   });
 
 });

@@ -127,12 +127,14 @@ class OpenShiftIoSpaceHomePage {
   /* Pipelines widget */
 
   get pipelinesWidget () {
-    return element(by.xpath(".//*[contains(@class,'pipelines-widget')]"));
+//    return element(by.xpath(".//*[contains(@class,'pipelines-widget')]"));
+    return element(by.xpath(".//fabric8-pipelines-widget"));
   }
 
   /* Pipelines title */
   get pipelinesTitle () {
-    return element(by.xpath("//*[contains(@class,'pipelines-widget')]//*[contains(text(),'Pipelines')]"));
+//    return element(by.xpath("//*[contains(@class,'pipelines-widget')]//*[contains(text(),'Pipelines')]"));
+    return element(by.xpath(".//fabric8-pipelines-widget//*[contains(text(),'Pipelines')]"));
   }
 
   clickPipelinesWidgetTitle () {
@@ -164,16 +166,11 @@ class OpenShiftIoSpaceHomePage {
     return element(by.xpath(".//*[contains (@class,'pipelines-page')]"));
   }
 
-//*[contains(@class,'pipelines-widget')]
-
-
-
   /* Assume only one pipeline since this is a new space */
 //    .//contains[(@class,'pficon-build')][1]
 
   pipelineByName (pipelineNameString) {
-  //     .//*[contains(text(),'testMay81494273390587')]/../../../div-item-workspaces
-    var xpathString = ".//*[contains(text(),'" + pipelineNameString + "')]";
+    var xpathString = ".//*[contains(text(),'almightytest/" + pipelineNameString + "')]";
     return element(by.xpath(xpathString));
   }
   clickpipelineByName (pipelineNameString) {
@@ -184,10 +181,28 @@ class OpenShiftIoSpaceHomePage {
     return;
   }
 
+  pipelineByNameBuildIcon (pipelineNameString) {
+    var xpathString = ".//*[contains(text(),'almightytest/" + pipelineNameString + "')]/../../../div/codebases-item-workspaces";
+    return element(by.xpath(xpathString));
+  }
+  clickpipelineByNameBuildIcon (pipelineNameString) {
+    browser.wait(until.elementToBeClickable(this.pipelineByNameBuildIcon (pipelineNameString)), constants.LONG_WAIT, 'Failed to find element pipelineByNameBuildIcon');
+    this.pipelineByNameBuildIcon(pipelineNameString).click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: pipelineByNameBuildIcon");
+    });
+    return;
+  }
 
-
-
-
+  get firstPipeline () {
+    return element(by.xpath(".//codebases-item-workspaces[1]"));
+  }
+  clickFirstPipeline () {
+    browser.wait(until.elementToBeClickable(this.firstPipeline), constants.LONG_WAIT, 'Failed to find element firstPipeline');
+    this.firstPipeline.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: firstPipeline");
+    });
+    return;
+  }
 
 
  /* -----------------------------------------------------------------*/
