@@ -210,42 +210,6 @@ class OpenShiftIoStartPage {
     return;
   }
 
-  /* Login for already registered users */
-
-  /* Login button in Nav bar*/
-  get navBarLoginButton () {
-     return element(by.xpath(".//a[@id='login'and contains(text(), 'Log In')]"));
-  }
-  clickNavBarLoginButton () {
-     this.navBarLoginButton.click().then(function(){
-      console.log("OpenShiftIoStartPage - clicked element: navBarLoginButton");
-    });
-     return new OpenShiftIoRHDLoginPage();
-  }
-
-  /* Login button */
-  get loginButton () {
-    return element(by.xpath(".//*[@id='signUp']//*[@id='login']"));
-  }
-  clickLoginButton () {
-     this.loginButton.click().then(function(){
-      console.log("OpenShiftIoStartPage - clicked element: loginButton");
-    });
-     return new OpenShiftIoRHDLoginPage();
-  }
-
-  /* Botton of the page Login button */
-  get bottomLoginButton () {
-    return element(by.xpath(".//*[@id='bottomSignUp']//*[@id='login']"));
-  }
-  clickBottomLoginButton () {
-     this.bottomLoginButton.click().then(function(){
-      console.log("OpenShiftIoStartPage - clicked element: bottomLoginButton");
-    });
-     return new OpenShiftIoRHDLoginPage();
-  }
-
-
   /* Analysis of Component/Bayesian UI elements */
 
   /* Ecosystem */
@@ -323,6 +287,44 @@ class OpenShiftIoStartPage {
       console.log("OpenShiftIoStartPage - clicked element: uploadButton");
     });
     return;
+  }
+
+
+  /* -----------------------------------------------------------------*/
+
+  /* Login for already registered users */
+
+  /* Login button in Nav bar*/
+  get navBarLoginButton () {
+     return element(by.xpath(".//*[contains(@class,'navbar')]//a[@id='login'"));
+  }
+  clickNavBarLoginButton () {
+     this.navBarLoginButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: navBarLoginButton");
+    });
+     return new OpenShiftIoRHDLoginPage();
+  }
+
+  /* Login button */
+  get loginButton () {
+    return element(by.xpath(".//*[@id='signUp']//*[@id='login']"));
+  }
+  clickLoginButton () {
+     this.loginButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: loginButton");
+    });
+     return new OpenShiftIoRHDLoginPage();
+  }
+
+  /* Botton of the page Login button */
+  get bottomLoginButton () {
+    return element(by.xpath(".//*[@id='bottomSignUp']//*[@id='login']"));
+  }
+  clickBottomLoginButton () {
+     this.bottomLoginButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: bottomLoginButton");
+    });
+     return new OpenShiftIoRHDLoginPage();
   }
 
 }
