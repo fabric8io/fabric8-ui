@@ -79,7 +79,7 @@
               </a>
             </li>
             <li class="divider"></li>
-            <li>
+            <li id="createSpace">
               <!-- TODO: This should pop up the new space dialog -->
               <a (click)="spaceWizard.open()">
               <span class="nav-item-icon">
@@ -88,7 +88,7 @@
                 Create space
               </a>
             </li>
-            <li>
+            <li id="viewAllSpaces">
               <a [routerLink]="[loggedInUser.attributes.username,'_spaces']">
               <span class="nav-item-icon">
                 <i class="fa fa-th"></i>
@@ -97,7 +97,7 @@
               </a>
             </li>
             <li class="divider"></li>
-            <li>
+            <li id="accountHome">
               <a [routerLink]="['_home']">
               <span class="nav-item-icon">
                 <i class="pficon pficon-home"></i>
@@ -126,26 +126,26 @@
         </li>
       </ul>
       <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
-        <li dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok">
+        <li id="status" dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok">
           <a dropdown-open>
             <span class="pficon pficon-ok pficon-white"></span>
           </a>
           <div class="dropdown-menu infotip bottom-right">
             <div class="arrow"></div>
             <ul class="list-group">
-              <li class="list-group-item">
+              <li id="platformStatus" class="list-group-item">
               <span>
                 <span class="pficon pficon-ok"></span>
                 Platform
               </span>
               </li>
-              <li class="list-group-item">
+              <li id="plannerStatus" class="list-group-item">
               <span>
                 <span class="pficon pficon-ok"></span>
                 Planner
               </span>
               </li>
-              <li class="list-group-item">
+              <li id="cheStatus" class="list-group-item">
               <span>
                 <!--
                     example of the error icon
@@ -155,7 +155,7 @@
                 Che
               </span>
               </li>
-              <li class="list-group-item">
+              <li id="pipelineStatus" class="list-group-item">
               <span>
                 <!--
                     example of the warning icon
@@ -171,7 +171,7 @@
         <li class="login-block">
           <a *ngIf="!loggedInUser" (click)="login();">
           <span class="logged-out-user">
-            <i class="pficon pficon-user"></i>
+            <i id="login" class="pficon pficon-user"></i>
           </span>
             Log In
           </a>
@@ -188,23 +188,23 @@
           </div>
           </a>
           <ul class="dropdown-menu">
-            <li>
+            <li id="loggedinProfile">
               <a [routerLink]="[loggedInUser.attributes.username]">
                 Profile
               </a>
             </li>
-            <li>
+            <li id="loggedinHelp">
               <a href="https://fabric8.io/guide/getStarted/index.html">
                 Help
               </a>
             </li>
-            <li>
+            <li id="loggedinAbout">
               <a (click)="aboutModal.open()" class="pointer">
                 About
               </a>
             </li>
             <li class="divider"></li>
-            <li>
+            <li id="logout2">
               <a *ngIf="loggedInUser" (click)="logout();" class="pointer">
                 Log Out
               </a>
