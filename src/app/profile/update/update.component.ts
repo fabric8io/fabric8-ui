@@ -50,7 +50,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   showWorkItems: boolean = true;
   subscriptions: Subscription[] = [];
   token: string;
-  tokenPanelOpen: boolean = true;
+  tokenPanelOpen: boolean = false;
   username: string;
   usernameInvalid: boolean = false;
   url: string;
