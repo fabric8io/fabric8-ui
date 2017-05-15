@@ -23,42 +23,39 @@
 }
 
 @mixin create-padding-x-standard-offset() {
-
-    .padding-standard-offset {
-      padding: $grid-gutter-width/2 !important;
-    }
-
-    .padding-top-standard-offset {
-      padding-top: $grid-gutter-width/2 !important;
-    }
-    .padding-left-standard-offset {
-      padding-left: $grid-gutter-width/2 !important;
-    }
-    .padding-right-standard-offset {
-      padding-right: $grid-gutter-width/2 !important;
-    }
-    .padding-bottom-standard-offset {
-      padding-bottom: $grid-gutter-width/2 !important;
-    }
+  .padding-standard-offset {
+    padding: $grid-gutter-width/2 !important;
+  }
+  .padding-top-standard-offset {
+    padding-top: $grid-gutter-width/2 !important;
+  }
+  .padding-left-standard-offset {
+    padding-left: $grid-gutter-width/2 !important;
+  }
+  .padding-right-standard-offset {
+    padding-right: $grid-gutter-width/2 !important;
+  }
+  .padding-bottom-standard-offset {
+    padding-bottom: $grid-gutter-width/2 !important;
+  }
 }
 
 @mixin create-margin-x-standard-offset() {
-    .margin-standard-spacing {
-      margin: $grid-gutter-width/2 !important;
-    }
-
-    .margin-top-standard-offset {
-      margin-top: $grid-gutter-width/2 !important;
-    }
-    .margin-left-standard-offset {
-      margin-left: $grid-gutter-width/2 !important;
-    }
-    .margin-right-standard-offset {
-      margin-right: $grid-gutter-width/2 !important;
-    }
-    .margin-bottom-standard-offset {
-      margin-bottom: $grid-gutter-width/2 !important;
-    }
+  .margin-standard-spacing {
+    margin: $grid-gutter-width/2 !important;
+  }
+  .margin-top-standard-offset {
+    margin-top: $grid-gutter-width/2 !important;
+  }
+  .margin-left-standard-offset {
+    margin-left: $grid-gutter-width/2 !important;
+  }
+  .margin-right-standard-offset {
+    margin-right: $grid-gutter-width/2 !important;
+  }
+  .margin-bottom-standard-offset {
+    margin-bottom: $grid-gutter-width/2 !important;
+  }
 }
 
 
@@ -87,480 +84,290 @@
 @include create-margin-x-standard-offset();
 @include create-padding-x-standard-offset();
 
-.margin-none
-{
-  margin: 0 !important;
-}
-.margin-top-none
-{
-  margin-top: 0 !important;
-}
-.margin-bottom-none
-{
-  margin-bottom: 0 !important;
-}
-.margin-left-none
-{
-  margin-left: 0 !important;
-}
-.margin-right-none
-{
-  margin-right: 0 !important;
-}
-.padding-none
-{
-  padding: 0 !important;
-}
-.padding-top-none
-{
-  padding-top: 0 !important;
-}
-.padding-bottom-none
-{
-  padding-bottom: 0 !important;
-}
-.padding-left-none
-{
-  padding-left: 0 !important;
-}
-.padding-right-none
-{
-  padding-right: 0 !important;
-}
-
-.border-none
-{
-  border-width: 0 !important;
-}
-.border-top-none
-{
-  border-top-width: 0 !important;
-}
-.border-bottom-none
-{
-  border-bottom-width: 0 !important;
-}
-.border-left-none
-{
-  border-left-width: 0 !important;
-}
-.border-right-none
-{
-  border-right-width: 0 !important;
-}
-
-
-.width-100
-{
-  width:100%;
-}
-
-.height-100
-{
-  height:100%;
-}
-
-.overflow-auto{
-  overflow: auto;
-}
-
-.fill-container
-{
+.margin-none { margin: 0 !important; }
+.margin-top-none { margin-top: 0 !important; }
+.margin-bottom-none { margin-bottom: 0 !important; }
+.margin-left-none { margin-left: 0 !important; }
+.margin-right-none { margin-right: 0 !important; }
+.padding-none { padding: 0 !important; }
+.padding-top-none { padding-top: 0 !important; }
+.padding-bottom-none { padding-bottom: 0 !important; }
+.padding-left-none { padding-left: 0 !important; }
+.padding-right-none { padding-right: 0 !important; }
+.border-none { border-width: 0 !important; }
+.border-top-none { border-top-width: 0 !important; }
+.border-bottom-none { border-bottom-width: 0 !important; }
+.border-left-none { border-left-width: 0 !important; }
+.border-right-none { border-right-width: 0 !important; }
+.width-100 { width: 100%; }
+.height-100 { height: 100%; }
+.overflow-auto { overflow: auto; }
+.fill-container {
   position:absolute;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  padding:0;
-  margin:0;
-  border-width:0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  border-width: 0;
 }
-
-
 @import 'layout-debug';
-
 ///////////////////////
 // Styles relating to general html document
 ///////////////////////
-
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
-
-body
-{
+body {
   // Ensure that body element height at 'least' fills the viewport.
   // This means it can grow beyond, but wont be less
-  min-height:100vh;
+  position: relative;
+  min-height: 100vh;
   @include debug-stretch-to-fit-viewport;
-  position:relative;
-  margin:0;
-  padding:0;
-  display:flex;
-  font-size:$font-size-base;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  font-size: $font-size-base;
 }
-
-.app{
+.app {
   @extend .flex-grow-1;
   @extend .flex-container;
-};
-
+}
 // an app component is a marker class for angular component dom elements
-.app-component
-{
+.app-component {
   //root app component
-  &.app
-  {
-    >header{
-
-    }
-    >main
-    {
-    }
+  &.app {
     >footer{
-      .footer
-      {
+      .footer {
         text-align: $textCenter;
         font-size: $font-size-small;
-        border-top: 1px solid $color-pf-blue-300;
+        border-top: 1px solid;
+        border-color: color-pf-blue-300;
       }
-
     }
   }
-
-  // when app-component is the child of a bootstrap column div
-  div[class^="col-"] &
-  {
-    // margin-left:-$grid-gutter-width/2;
-    // margin-right:-$grid-gutter-width/2;
-  }
-  div[class*=" col-"] &
-  {
-    // margin-left:-$grid-gutter-width/2;
-    // margin-right:-$grid-gutter-width/2;
-  }
-
   // Note: making relative positioning helps positioning but creates extra margins
   // on nested components, but it offers good absolute positioning options for
   // child elements
-  position:relative;
+  position: relative;
   @include debug-app-component;
-
 };
-
-$content-padding:0;
-
-header
-{
-  //padding:$content-padding;
-}
-
-footer
-{
-  //padding:$content-padding;
-}
-
+$content-padding: 0;
 // helps to ensure that scrolling does not cross app footer or header
 // the reason for not using flex is that view will not always be a flex-container
 // This plays out in scenarios where view requires animation like slide ins/slie outs
 // These are not good for flex
-.view-container
-{
-  position:relative;
-  >.view
-  {
+.view-container {
+  position: relative;
+  >.view {
     @extend .fill-container;
-    &.with-rows
-    {
-      padding-left:$grid-gutter-width/2;
-      padding-right:$grid-gutter-width/2;
+    &.with-rows {
+      padding-left: $grid-gutter-width/2;
+      padding-right: $grid-gutter-width/2;
     }
-    >main,section,aside{
-      padding:$content-padding;
+    >main,
+     section,
+     aside{
+      padding: $content-padding;
       overflow: auto;
     }
-    >.view-content
-    {
-      position:relative;
-      padding-top:$content-padding;
+    >.view-content {
+      position: relative;
+      padding-top: $content-padding;
     }
   }
 }
-
 .dropdown {
-  a:hover {
-    text-decoration: none;
-  }
-
   a {
     color: $color-pf-white;
+    &:hover {
+      text-decoration: none;
+    }
   }
-
 }
-
-
 // chromeless dialog suppresses all chrome in the ng2-bootstrap modal component
-.chromeless-modal
-{
-  .modal-content
-  {
-    display:flex;
-    border:solid 0 lime;
-    padding:0;
-    margin:0;
-    .modal-header{
-      display:none;
+.chromeless-modal {
+  .modal-content {
+    display: flex;
+    border: solid 0;
+    border-color: lime;
+    padding: 0;
+    margin: 0;
+    .modal-header,
+    .modal-footer {
+      display: none;
     }
-    .modal-footer{
-      display:none;
-    }
-    .modal-body{
-      flex:1;
-      display:flex;
-      border:solid 0 orangered;
-      padding:0;
-      .chromeless-modal-content
-      {
-        flex:1;
-        display:flex;
-        border:solid 0 brown;
-        padding:0;
-
+    .modal-body {
+      flex: 1;
+      display: flex;
+      border: solid 0;
+      border-color: orangered;
+      padding: 0;
+      .chromeless-modal-content {
+        flex: 1;
+        display: flex;
+        border: solid 0;
+        border-color: brown;
+        padding: 0;
       }
     }
-
   }
 }
-
 // wizard
 $wizard-spacing:$grid-gutter-width/2;
 $wizard-header-color:$color-pf-black-100;
 $wizard-header-divider-color: $color-pf-black-300;// $color-pf-black-200;
 $wizard-footer-color: $color-pf-white;// $color-pf-black-200;
 $wizard-footer-divider-color: $color-pf-black-300;// $color-pf-black-200;
-
-
-
-@mixin wizard-step-elements{
+@mixin wizard-step-elements {
   // position buttons
-
   >header{
-    position:relative;
+    position: relative;
     background-color: $wizard-header-color;
-    // border-bottom:solid 1px $wizard-header-divider-color;
-    &.container-fluid
-    {
-        padding-left:$wizard-spacing + $debug-border ;
-        padding-right:$wizard-spacing + $debug-border ;
-        margin-left:0px;
-        margin-right:0px;
-        >.row{
-          margin-left:-($wizard-spacing + $debug-border) ;
-          margin-right:-($wizard-spacing + $debug-border);
-        }
+    &.container-fluid {
+      padding-left: $wizard-spacing + $debug-border ;
+      padding-right: $wizard-spacing + $debug-border ;
+      margin-left: 0;
+      margin-right: 0;
+      >.row {
+        margin-left: -($wizard-spacing + $debug-border) ;
+        margin-right: -($wizard-spacing + $debug-border);
+      }
     }
-    &.container
-    {
-        width:100%;
-    }
-    &.forge-header
-    {
+    &.container { width: 100%; }
+    &.forge-header {
       background-color: $color-pf-black-200;
       .row {
         &:first-of-type{
           background-color: $color-pf-white !important;
-          border-bottom:solid 1px $color-pf-black-300;
+          border-bottom: solid 1px;
+          border-color: $color-pf-black-300;
         }
       }
-      .wizard-step-sub-title{
-        background-color: $color-pf-black-200;
-
-      }
-
+      .wizard-step-sub-title { background-color: $color-pf-black-200; }
     }
   }
-  >section
-  {
-    flex:1;
+  >section {
+    flex: 1;
     //when using flex here it is important to stretch the content:
     //and choose the direction as column
-    // display:flex;
-    // flex-direction: column;
-    // align-content: stretch;
-    position:relative;
-    margin:0px;
-    padding:0px;
-    width:auto;
-    &.container-fluid
-    {
-        // Bug: there is an issue with this element, if the border/padding sum
-        // is less than 5px, content overflows and horizontal scroll bars kick
-        // in and it overflows the container.
-        .form-horizontal
-        {
-          padding-right:5px;
-        }
-        padding-left:$wizard-spacing  + $debug-border;
-        padding-right:$wizard-spacing + $debug-border;
-        position:relative;
-        >.row{
-          margin-left:-($wizard-spacing + $debug-border) ;
-          margin-right:-($wizard-spacing + $debug-border);
-          padding:0;
-          width:auto;
-          position:relative;
-        }
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    &.container-fluid {
+      // Bug: there is an issue with this element, if the border/padding sum
+      // is less than 5px, content overflows and horizontal scroll bars kick
+      // in and it overflows the container.
+      .form-horizontal { padding-right: 5px; }
+      position: relative;
+      padding-left: $wizard-spacing  + $debug-border;
+      padding-right: $wizard-spacing + $debug-border;
+      >.row {
+        position: relative;
+        width: auto;
+        margin-left: -($wizard-spacing + $debug-border) ;
+        margin-right: -($wizard-spacing + $debug-border);
+        padding: 0;
+      }
     }
-    &.container
-    {
-        padding-left:$wizard-spacing + $debug-border;
-        padding-right:$wizard-spacing + $debug-border;
-        width:100%;
-        margin-left:0px;
-        margin-right:0px;
+    &.container {
+        padding-left: $wizard-spacing + $debug-border;
+        padding-right: $wizard-spacing + $debug-border;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
     }
-    &.forge-section
-    {
-      background-color: $color-pf-black-200;
-
-    }
+    &.forge-section { background-color: $color-pf-black-200; }
   }
-  >footer{
-    position:relative;
-    border-top:solid 1px $wizard-footer-divider-color;
+  >footer {
+    position: relative;
+    border-top: solid 1px;
+    border-color: $wizard-footer-divider-color;
     background-color: $wizard-footer-color;
-    &.container-fluid
-    {
-        padding-left:$wizard-spacing + $debug-border ;
-        padding-right:$wizard-spacing + $debug-border ;
-        margin-left:0px;
-        margin-right:0px;
-        >.row{
-          margin-left:-($wizard-spacing + $debug-border) ;
-          margin-right:-($wizard-spacing + $debug-border);
-
-        }
+    &.container-fluid {
+      padding-left: $wizard-spacing + $debug-border ;
+      padding-right: $wizard-spacing + $debug-border ;
+      margin-left: 0;
+      margin-right: 0;
+      >.row {
+        margin-left: -($wizard-spacing + $debug-border) ;
+        margin-right: -($wizard-spacing + $debug-border);
+      }
     }
-    &.container
-    {
-        width:100%;
-    }
+    &.container { width: 100%; }
   }
-};
-
-
-.wizard-container{
-
-  flex:1;
-  display:flex;
-  //align-content: stretch;
-  position:relative;
-
-  .wizard{
-
-    flex:1;
-    display:flex;
-    //align-content: stretch;
-    position:relative;
-
-
+}
+.wizard-container {
+  flex: 1;
+  display: flex;
+  position: relative;
+  .wizard {
+    flex: 1;
+    display: flex;
+    position: relative;
     // only applies to rows in the wizard
-    .row{
-      padding-top:0px;
-    }
+    .row { padding-top: 0; }
     // only applies to buttons in the wizard
-    .btn{
-      min-width: 90px;
-    }
-
-    .wizard-step{
-      // at least 50% of view height
-      //min-height: 50vh;
-      flex:1;
+    .btn { min-width: 90px; }
+    .wizard-step {
       // by default the step is not visible but becomes
       // visible when the active class is applied.
-      display:none;
-      &.active{
-        display:flex;
+      display: none;
+      flex: 1;
+      &.active {
+        display: flex;
         flex-direction: column;
         align-content: stretch;
-        //align-content: stretch;
       }
-      position:relative;
+      position: relative;
       @include wizard-step-elements;
       // for cases where the step has a form element
-      >form{
-
-        flex:1;
-        display:flex;
+      >form {
+        flex: 1;
+        display: flex;
         flex-direction: column;
-        //align-content: stretch;
-        position:relative;
+        position: relative;
         @include wizard-step-elements;
-
       }
-
-      .wizard-step-title
-      {
-        position:relative;
-        display:flex;
+      .wizard-step-title {
+        position: relative;
+        display: flex;
         //main axis
         justify-content: space-between;
         //cross axis
         align-items: center;
         //main axis direction
         flex-direction: row;
-        .text{
-          font-weight: 600;
-        }
+        .text { font-weight: 600; }
       }
-
-      .wizard-step-sub-title
-      {
-          background-color:$color-pf-white;
-          display:flex;
+      .wizard-step-sub-title {
+          display: flex;
           justify-content: center;
-          .text{
-              font-weight: 600;
-
-          }
+          background-color: $color-pf-white;
+          .text { font-weight: 600; }
       }
-
-
-      .wizard-step-tool-bar
-      {
-        position:relative;
-        display:flex;
+      .wizard-step-tool-bar {
+        position: relative;
+        display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        padding-top:$wizard-spacing;
-        padding-bottom:$wizard-spacing;
-        &.with-items-at-end{
-          justify-content: flex-end;
-        }
-        &.with-items-at-start{
-          justify-content: flex-start;
-        }
-        &.with-items-in-center{
-          justify-content:center;
-        }
-        &.with-items-space-between{
-          justify-content:space-between;
-        }
-        &.with-items-space-around{
-          justify-content:space-around;
-        }
+        padding-top: $wizard-spacing;
+        padding-bottom: $wizard-spacing;
+        &.with-items-at-end { justify-content: flex-end; }
+        &.with-items-at-start { justify-content: flex-start; }
+        &.with-items-in-center { justify-content: center; }
+        &.with-items-space-between{ justify-content: space-between; }
+        &.with-items-space-around { justify-content: space-around; }
         //will stretch auto sized items
-        &.with-items-stretch{
-          justify-content:stretch;
-        }
+        &.with-items-stretch { justify-content: stretch; }
       }
     }
   }
 }
-
-
-
 //////////////////////
 // flex utility styles
 //////////////////////
@@ -572,143 +379,76 @@ $wizard-footer-divider-color: $color-pf-black-300;// $color-pf-black-200;
 }
 // create 12 flex grow partitions
 @include flex-grow-x(12);
-
-
-.flex-container
-{
-    display:flex;
-    &.in-column-direction
-    {
-      flex-direction: column;
-    }
-    &.in-row-direction
-    {
-      flex-direction: row;
-    }
-    &.with-wrap
-    {
-      flex-wrap: wrap;
-    }
-    &.with-content-stretch
-    {
-      align-content: stretch;
-    }
-    &.with-align-start
-    {
-      align-items:start;
-    }
-    &.with-align-end
-    {
-      align-items:end;
-    }
-    &.with-align-center
-    {
-      align-items:center;
-    }
-    &.with-align-stretch
-    {
-      align-items:stretch;
-    }
-
-    // Make sure the main,section,aside parts fill the screen and collapse header and footer if not there
-    >main,section,aside
-    {
-      @extend .flex-grow-1;
-    }
-    >.container-fluid
-    {
-      position:relative;
-      //width:100%;
-      flex-grow:1;
-      margin-left:0px;
-      margin-right:0px;
-    }
-
-}
-$color-error-light:lighter(#E26F6F,50%);//lighter($color-pf-red,30%);
-.color-error
-{
-  &.color-text{
-    color:$color-pf-red;
+.flex-container {
+  display: flex;
+  &.in-column-direction { flex-direction: column; }
+  &.in-row-direction { flex-direction: row; }
+  &.with-wrap { flex-wrap: wrap; }
+  &.with-content-stretch { align-content: stretch; }
+  &.with-align-start { align-items: start; }
+  &.with-align-end { align-items: end; }
+  &.with-align-center { align-items: center; }
+  &.with-align-stretch { align-items: stretch; }
+  // Make sure the main,section,aside parts fill the screen and collapse header and footer if not there
+  >main,
+   section,
+   aside {
+    @extend .flex-grow-1;
   }
-  &.color-border{
-    border: solid 1px $color-pf-red;
-  }
-  &.color-background-light{
-    background-color:$color-error-light;//$color-pf-black-200;
+  >.container-fluid {
+    position: relative;
+    flex-grow: 1;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
-
-.color-success
-{
-  &.color-text{
-    color:$color-pf-green;
+$color-error-light:lighter(#e26f6f, 50%);//lighter($color-pf-red,30%);
+.color-error {
+  &.color-text{ color: $color-pf-red; }
+  &.color-border {
+    border: solid 1px;
+    border-color: $color-pf-red;
   }
-  &.color-border{
-    border: solid 1px $color-pf-green;
-  }
-  &.color-background-light{
-    background-color:#EAF4EA;//$color-pf-light-green-100;
-  }
+  &.color-background-light { background-color: $color-error-light; }
 }
-
-span,div
-{
-  &.message-status-success{
-    color:$color-pf-green;
+.color-success {
+  &.color-text { color: $color-pf-green; }
+  &.color-border {
+    border: solid 1px;
+    border-color: $color-pf-green;
   }
-  &.message-status-failed{
-    color:$color-pf-red;
-  }
-  &.message-status-warning
-  {
-    color:$color-pf-gold;
-  }
-  &.wizard-result-property-name
-  {
-    display:inline-block;
-    min-width:200px;
+  &.color-background-light { background-color: #eaf4ea; }
+}
+span,
+div {
+  &.message-status-success{ color: $color-pf-green; }
+  &.message-status-failed { color: $color-pf-red; }
+  &.message-status-warning { color: $color-pf-gold; }
+  &.wizard-result-property-name {
+    display: inline-block;
+    min-width: 200px;
     text-align: left;
-
   }
-
-  &.wizard-result-property-value
-  {
-  }
-
-  &.wizard-result-property-value-link
-  {
-  }
-
-  &.wizard-property-name{
-    color:$color-pf-blue;
+  &.wizard-property-name {
     font-weight: bold;
+    color: $color-pf-blue;
   }
-
-  &.wizard-property-value{
-    color:$color-pf-black;
+  &.wizard-property-value {
+    color: $color-pf-black;
     &.with-exception{
-      color:$color-pf-red;
-      font-weight:bold;
+      font-weight: bold;
       font-style: italic;
+      color: $color-pf-red;
     }
   }
-
-
 }
-
-.cursor-pointer
-{
-  cursor: pointer;
-}
-
-.user-select-none
-{
+.cursor-pointer { cursor: pointer; }
+.user-select-none {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+         -o-user-select: none;
+            user-select: none;
 }
