@@ -1,10 +1,6 @@
 @import '../../../assets/stylesheets/base';
-.height0 {
-  height: 0;
-}
-.posRel {
-  position: relative;
-}
+.height0 { height: 0; }
+.posRel { position: relative; }
 .spaces-page {
   display: flex;
   flex: 1;
@@ -52,9 +48,8 @@
     }
   }
 }
-
 .spaces-list-page {
-  flex:1;
+  flex: 1;
   padding-top: 20px;
   .spaces-list-wrap {
     flex: auto;
@@ -64,7 +59,8 @@
     width: $width100;
     margin-bottom: 0;
     .space-item {
-      border-top: 1px solid $color-pf-black-300;
+      border-top: 1px solid;
+      border-top-color: $color-pf-black-300;
     }
   }
 }

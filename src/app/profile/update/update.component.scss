@@ -1,20 +1,10 @@
 @import '../../../assets/stylesheets/base';
 @import '../../../assets/stylesheets/shared/layout';
-
 .checkbox input[type="checkbox"] {
   margin-left: 0;
   margin-right: 5px;
   position: relative;
 }
-
-.fields-status-pf {
-  margin-top: -5px;
-}
-
-.getting-started {
-  padding-bottom: 20px;
-}
-
-.margin-top-40 {
-  margin-top: 40px;
-}
+.fields-status-pf { margin-top: -5px; }
+.getting-started { padding-bottom: 20px; }
+.margin-top-40 { margin-top: 40px; }
