@@ -21,7 +21,7 @@
     <div class="form-group">
       <div class="col-sm-11">
         <div class="details-pull-right">
-          <button type="submit" class="btn btn-primary"
+          <button type="submit" class="btn btn-primary" id="syncButton"
                   [disabled]="gitHubRepo === undefined || gitHubRepo.trim().length === 0"
                   (click)="fetchCodebase($event)">Sync</button>
         </div>
@@ -64,7 +64,7 @@
       <div class="form-group">
         <div class="col-sm-11">
           <div class="details-pull-right">
-            <button type="submit" class="btn btn-primary"
+            <button type="submit" class="btn btn-primary" id="associateButton"
                     (click)="addCodebase($event)">Associate Repository to Space</button>
           </div>
         </div>

@@ -22,8 +22,7 @@ import { removeAction } from '../../../app-routing.module';
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-add',
   templateUrl: './codebases-add.component.html',
-  styleUrls: ['./codebases-add.component.scss'],
-  providers: [CodebasesService, GitHubService]
+  styleUrls: ['./codebases-add.component.scss']
 })
 export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
 
