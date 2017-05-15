@@ -1,10 +1,8 @@
 @import '../../../../assets/stylesheets/base';
-
 .add-dialog {
   flex: 1;
   padding: 20px;
 }
-
 .add-dialog-header {
   position: relative;
   display: flex;
@@ -12,24 +10,17 @@
   align-items: center;
   flex-direction: row;
   background-color: $color-pf-black-300;
-  border-bottom: 1px solid $color-pf-black-500;
-
-  .glyphicon-remove {
-    cursor: pointer;
-  }
+  border-bottom: 1px solid;
+  border-bottom-color: $color-pf-black-500;
+  .glyphicon-remove { cursor: pointer; }
 }
-
-.user-select {
-  width: 400px;
-}
-
+.user-select { width: 400px; }
 .add-fieldset {
   padding: 20px;
   min-height: 400px;
 }
-
 .add-footer {
-  display:flex;
+  display: flex;
   flex-direction: row;
   justify-content: flex-end;
   padding-right: 50px;
