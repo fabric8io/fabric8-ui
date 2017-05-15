@@ -1,21 +1,13 @@
 @import '../../../assets/stylesheets/base';
-
-.content {}
-
-.openshift-links {
-  font-size: 12px;
-}
-
+.openshift-links { font-size: 12px; }
 .toolbar-header {
   padding: 0 rem(20);
-  border-bottom: 1px solid $color-pf-black-300;
+  border-bottom: 1px solid;
+  border-color: $color-pf-black-300;
 }
-
-
-.pipeline-list-view .list-view-pf-view, .list-view-pf-view, .list-group {
-  margin-top: 0px;
+.pipeline-list-view .list-view-pf-view,
+.list-view-pf-view,
+.list-group {
+  margin-top: 0;
 }
-
-.pipeline-list-view {
-  margin-right: 40px;
-}
+.pipeline-list-view { margin-right: 40px; }
