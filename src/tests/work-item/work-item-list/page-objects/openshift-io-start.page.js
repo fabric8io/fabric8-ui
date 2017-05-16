@@ -289,7 +289,6 @@ class OpenShiftIoStartPage {
     return;
   }
 
-
   /* -----------------------------------------------------------------*/
 
   /* Login for already registered users */
