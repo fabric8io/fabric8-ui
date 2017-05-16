@@ -78,9 +78,9 @@ describe('Codebases Item Component', () => {
     let debug = fixture.debugElement;
     comp.codebase = codebase;
     fixture.detectChanges();
-    let spanDisplyedInformation = debug.queryAll(By.css('.list-group-item-text'));
+    let spanDisplayedInformation = debug.queryAll(By.css('.list-group-item-text'));
     fixture.whenStable().then(() => {
-      expect(spanDisplyedInformation.length).toEqual(3)
+      expect(spanDisplayedInformation.length).toEqual(3)
     });
   }));
 
