@@ -10,8 +10,7 @@ import { Notification, NotificationType, Notifications } from 'ngx-base';
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item',
   templateUrl: './codebases-item.component.html',
-  styleUrls: ['./codebases-item.component.scss'],
-  providers: [CodebasesService, GitHubService]
+  styleUrls: ['./codebases-item.component.scss']
 })
 export class CodebasesItemComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;

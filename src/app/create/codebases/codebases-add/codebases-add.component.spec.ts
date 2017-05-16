@@ -23,7 +23,7 @@ import {
   tick
 } from '@angular/core/testing';
 
-describe('Codebase Add Component', () => {
+describe('Codebases Add Component', () => {
 
   let broadcasterMock: any;
   let codebasesServiceMock: any;
@@ -201,7 +201,6 @@ describe('Codebase Add Component', () => {
           fixture.whenStable().then(() => {
             // then
             expect(notificationMock.message).toHaveBeenCalled();
-            //expect().toBeTruthy();
           });
         });
       });
