@@ -13,7 +13,7 @@
  */
 
 let testSupport = require('../testSupport');
-let WorkItemListPage = require('./work-item-list.page');
+let Settings = require('../page-objects/settings.page');
 let until = protractor.ExpectedConditions;
 let waitTime = 30000;
 
