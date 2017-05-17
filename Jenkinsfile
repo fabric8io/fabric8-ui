@@ -5,28 +5,45 @@ def project = 'fabric8io/fabric8-ui'
 def ciDeploy = false
 def tempVersion
 def imageName
+node{
+    properties([
+        disableConcurrentBuilds()
+        ])
+}
+
 fabric8UITemplate{
     dockerNode{
-        ws {
-            if (utils.isCI()){
+        timeout(time: 1, unit: 'HOURS') {
+            ws {
                 checkout scm
                 readTrusted 'release.groovy'
                 def pipeline = load 'release.groovy'
 
-                container('ui'){
-                    tempVersion = pipeline.ci()
+                if (utils.isCI()){
+
+                    container('ui'){
+                        tempVersion = pipeline.ci()
+                    }
+
+                    imageName = "fabric8/fabric8-ui:${tempVersion}"
+                    container('docker'){
+                        pipeline.buildImage(imageName)
+                    }
+
+                    ciDeploy = true
+
+                } else if (utils.isCD()){
+
+                    container('ui'){
+                        pipeline.ci()
+                    }
+                    def v = getNewVersion {}
+                    imageName = "fabric8/fabric8-ui:v${v}"
+                    container('docker'){
+                        pipeline.buildImage(imageName)
+                    }
+                    pipeline.updateDownstreamProjects(v)
                 }
-
-                imageName = "fabric8/fabric8-ui:${tempVersion}"
-                container('docker'){
-                    pipeline.buildImage(imageName)
-                }
-
-                ciDeploy = true
-
-            } else if (utils.isCD()){
-
-                echo 'fabric8 UI release is handled by centos CI'
             }
         }
     }
