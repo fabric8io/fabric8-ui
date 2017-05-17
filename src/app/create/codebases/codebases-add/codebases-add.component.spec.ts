@@ -126,7 +126,8 @@ describe('Codebases Add Component', () => {
         fixture.detectChanges();
         fixture.whenStable().then(() => {
           // then
-          expect(form.nativeElement.querySelector('#created').value).toEqual('Mar 19, 2016, 11:42:15 AM');
+          expect(form.nativeElement.querySelector('#created').value).toBeTruthy();
+          expect(form.nativeElement.querySelector('#license').value).toEqual('Apache License 2.0');
         });
       });
     });
