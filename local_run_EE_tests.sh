@@ -21,6 +21,10 @@ TEST_RESULT=$?
 # cat log file to stdout 
 # cat $LOGFILE
 
+# Cleanup webdriver-manager and web app processes
+fuser -k -n tcp 4444
+fuser -k -n tcp 8088
+
 # Return test result
 if [ $TEST_RESULT -eq 0 ]; then
   echo 'Functional tests OK'
@@ -31,7 +35,7 @@ else
 fi
 
 # Cleanup webdriver-manager and web app processes
-fuser -k -n tcp 4444
-fuser -k -n tcp 8088
+#fuser -k -n tcp 4444
+#fuser -k -n tcp 8088
 
 

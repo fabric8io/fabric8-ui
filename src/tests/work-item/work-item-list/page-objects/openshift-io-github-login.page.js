@@ -69,6 +69,17 @@ class OpenShiftIoGithubLoginPage {
 //    return new Fabric8MainPage();
   }
 
+  get authorizeApplicationButton () {
+//    return element (by.id("js-oauth-authorize-btn"));
+    return element (by.xpath(".//button[contains(text(), 'Authorize application')]"));
+  }
+  clickAuthorizeApplicationButton () {
+    this.authorizeApplicationButton.click().then(function(){
+      console.log("OpenShiftIoGithubLoginPage - clicked element: authorizeApplicationButton");
+    });
+    return; 
+  }
+
 }
 
 module.exports = OpenShiftIoGithubLoginPage;

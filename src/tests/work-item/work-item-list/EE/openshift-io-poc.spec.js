@@ -32,6 +32,7 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     // http://stackoverflow.com/questions/38050626/angular-2-with-protractorjs-failed-error-while-waiting-for-protractor-to-sync-w 
     browser.ignoreSynchronization = true;
     page = new OpenShiftIoStartPage(browser.params.target.url);  
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 180000;
   });
 
   /* Simple test for registered user */
@@ -42,7 +43,7 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     /* Step 1 - on start page, login via github */
     OpenShiftIoRHDLoginPage = page.clickLoginButton();
     OpenShiftIoGithubLoginPage = OpenShiftIoRHDLoginPage.clickGithubLoginButton();
-    
+
     /* Step 2 - on github login page, login */
     OpenShiftIoGithubLoginPage.clickGithubLoginField();
     OpenShiftIoGithubLoginPage.typeGithubLoginField(browser.params.login.user); 
@@ -50,6 +51,15 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     OpenShiftIoGithubLoginPage.clickGithubPassword();
     OpenShiftIoGithubLoginPage.typeGithubPassword(browser.params.login.password);   
     OpenShiftIoDashboardPage = OpenShiftIoGithubLoginPage.clickGithubLoginButton();
+
+    /* This button appears after a large number of logins with the same account */
+    OpenShiftIoGithubLoginPage.authorizeApplicationButton.isPresent().then(function(result) {
+      if ( result ) {
+        OpenShiftIoGithubLoginPage.clickAuthorizeApplicationButton();
+      } else {
+        //do nothing
+      }
+    });
 
     /* Step 3 - on home page - create new space - embed time in space name to ensure unique space name */
     OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
