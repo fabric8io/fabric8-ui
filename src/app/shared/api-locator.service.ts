@@ -8,6 +8,7 @@ export class ApiLocatorService {
       ['wit', 'FABRIC8_WIT_API_URL'],
       ['recommender', 'FABRIC8_RECOMMENDER_API_URL'],
       ['sso', 'FABRIC8_SSO_API_URL'],
+      ['realm', 'REALM'],
       ['forge', 'FABRIC8_FORGE_API_URL']
 
     ]
@@ -34,6 +35,10 @@ export class ApiLocatorService {
 
   get witApiUrl(): string {
     return this.buildApiUrl('wit');
+  }
+
+  get realm(): string {
+    return this.envVars.get('realm');
   }
 
   get forgeApiUrl(): string {
