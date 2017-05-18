@@ -195,7 +195,7 @@
     "patternfly-sass-with-css": "3.21.2",
     "phantomjs-prebuilt": "2.1.14",
     "protractor": "5.1.1",
-    "protractor-browser-logs": "^1.0.350",
+    "protractor-browser-logs": "1.0.350",
     "protractor-jasmine2-screenshot-reporter": "0.3.5",
     "raw-loader": "0.5.1",
     "reflect-metadata": "0.1.10",
