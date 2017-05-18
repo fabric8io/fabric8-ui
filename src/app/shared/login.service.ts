@@ -11,6 +11,7 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { ContextService } from './context.service';
 import { Navigation } from './../models/navigation';
 import { ErrorService } from '../error/error.service';
+import {ApiLocatorService} from "./api-locator.service";
 
 
 @Injectable()
@@ -23,14 +24,12 @@ export class LoginService {
   static readonly LOGIN_URL = '/';
 
 
-  private authUrl: string;  // URL to web api
-
   public openShiftToken: string;
 
   constructor(
     private router: Router,
     private localStorage: LocalStorageService,
-    @Inject(WIT_API_URL) private apiUrl: string,
+    private apiLocator: ApiLocatorService,
     private broadcaster: Broadcaster,
     private errorService: ErrorService,
     private authService: AuthenticationService,
@@ -39,7 +38,6 @@ export class LoginService {
     private userService: UserService
   ) {
     // Removed ?link=true in favor of getting started page
-    this.authUrl = apiUrl + 'login/authorize';
     this.broadcaster.on('authenticationError').subscribe(() => {
       this.authService.logout();
     });
@@ -50,6 +48,14 @@ export class LoginService {
         this.authService.logout();
       }
     });
+  }
+
+  protected get apiUrl(): string {
+    return this.apiLocator.witApiUrl;
+  }
+
+  get authUrl(): string {
+    return this.apiUrl + 'login/authorize';
   }
 
   redirectToAuth() {

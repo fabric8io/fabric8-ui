@@ -35,8 +35,6 @@ export class Fabric8ForgeService extends ForgeService {
 
   static instanceCount: number = 1;
 
-  private _apiUrl: string;
-
   executeCommand(request: IForgeCommandRequest = {
       payload: {
         command: {
@@ -66,7 +64,7 @@ export class Fabric8ForgeService extends ForgeService {
     }
   }
 
-  constructor(private _http: Http, loggerFactory: LoggerFactory, apiLocator: ApiLocatorService,
+  constructor(private _http: Http, loggerFactory: LoggerFactory, private apiLocator: ApiLocatorService,
     private _authService: AuthenticationService) {
     super();
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, Fabric8ForgeService.instanceCount++);
@@ -74,12 +72,14 @@ export class Fabric8ForgeService extends ForgeService {
       this.log = logger;
     }
     this.log(`New instance...`);
-    this._apiUrl = apiLocator.forgeApiUrl;
     if ( this._authService == null ) {
       this.log({ message: `Injected AuthenticationService is null`, warning: true });
     }
   }
 
+  private get _apiUrl(): string {
+    return this.apiLocator.forgeApiUrl;
+  }
 
   private handleError(error: any): Observable<any> {
     let errorMessage: any;
