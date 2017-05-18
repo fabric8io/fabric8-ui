@@ -13,6 +13,11 @@
  */
 Error.stackTraceLimit = Infinity;
 
+// to fix issue with phamtomjs/polufill
+// https://github.com/angular/angular-cli/issues/1675
+require('intl');
+require('intl/locale-data/jsonp/en');
+
 require('core-js/es6');
 require('core-js/es7/reflect');
 

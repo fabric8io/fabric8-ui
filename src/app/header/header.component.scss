@@ -1,9 +1,5 @@
 @import '../../assets/stylesheets/base';
-
-.view-width-100
-{
-  width:100vw !important;
-}
+.view-width-100 { width: 100vw !important; }
 .navbar-pf .navbar-primary {
   li.context {
     cursor: pointer;
@@ -12,15 +8,16 @@
       border-top: none;
       border-bottom: none;
       padding-bottom: 16px;
-      border-right: 1px solid $color-pf-black-600; // to match visual design
+      border-right: 1px solid;
+      border-right-color: $color-pf-black-600; // to match visual design
       &:hover {
         background-color: #1d1d1d; // no PatternFly color variables - copied from PatternFly CSS
+        background-image: linear-gradient(to bottom, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
+        background-image: -webkit-linear-gradient(top, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
+        background-image: -o-linear-gradient(top, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
+        background-repeat: repeat-x;
         border-top-color: #5c5c5c; // no PatternFly color variables - copied from PatternFly CSS
         color: $color-pf-black-300;
-        background-image: linear-gradient(to bottom, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
-          background-image: -webkit-linear-gradient(top, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
-          background-image: -o-linear-gradient(top, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
-        background-repeat: repeat-x;
       }
     }
   }
@@ -28,9 +25,7 @@
     background: none;
     > li {
       &.active {
-        &.with-no-children {
-          margin-bottom: 0;
-        }
+        &.with-no-children { margin-bottom: 0; }
       }
       .recent-items-toggle {
         width: 275px;
@@ -49,9 +44,7 @@
     }
     .recent-items-dropdown {
       &.open {
-        .recent-items {
-          width: 275px;
-        }
+        .recent-items { width: 275px; }
       }
     }
     .recent-item-text-dropdown {
@@ -63,28 +56,18 @@
 .navbar-nav {
   .recent-items {
     li {
-      a {
-        padding-left: 20px;
-      }
+      a { padding-left: 20px; }
     }
   }
-  .nav-item-icon {
-    margin-right: 5px;
-  }
-  .pficon-settings {
-    margin-top: -5px;
-  }
+  .nav-item-icon { margin-right: 5px; }
+  .pficon-settings { margin-top: -5px; }
   .status-dropdown {
-    &:hover {
-      cursor: pointer;
-    }
+    &:hover { cursor: pointer; }
   }
   &.navbar-right {
     .infotip {
       right: -20px;
-      .pficon {
-        margin-right: 5px;
-      }
+      .pficon { margin-right: 5px; }
     }
     .status-dropdown {
       a {
@@ -93,29 +76,25 @@
       }
       .pficon-white {
         font-size: 1.3em;
-        &:before {
-          color: $color-pf-white;
-        }
+        &:before { color: $color-pf-white; }
       }
     }
     .login-block {
-      border-left: 1px solid $color-pf-black-600;
+      border-left: 1px solid;
+      border-left-color: $color-pf-black-600;
       a {
         padding-top: 11px;
         padding-bottom:11px;
         width: 200px;
         .logged-out-user {
-          border: 1px solid $color-pf-black-600;
+          border: 1px solid;
+          border-color: $color-pf-black-600;
           padding: 2px;
           display: inline-block;
           vertical-align: text-bottom;
-          i {
-            color: $color-pf-black-500;
-          }
+          i { color: $color-pf-black-500; }
         }
-        &:hover {
-          cursor: pointer;
-        }
+        &:hover { cursor: pointer; }
       }
     }
     .user-icon {
@@ -127,12 +106,11 @@
       }
     }
     .user-dropdown {
-      border-left: 1px solid $color-pf-black-600;
+      border-left: 1px solid;
+      border-left-color: $color-pf-black-600;
       padding: 10px 14px;
       width: 200px;
-      &:hover {
-        cursor: pointer;
-      }
+      &:hover { cursor: pointer; }
       .user-dropdown-items {
         text-overflow: ellipsis;
         overflow: hidden;
@@ -167,17 +145,14 @@
     border-bottom-color: $color-pf-black-900;
   }
   &.persistent-secondary > li > .navbar-persistent {
-    background: $color-pf-black-900;
+    background-color: $color-pf-black-900;
     border-bottom: 1px solid $color-pf-black;
     > li a {
       color: $color-pf-white;
-      &:hover {
-        color: $color-pf-black-300;
-      }
+      &:hover { color: $color-pf-black-300; }
     }
   }
 }
-
 .openshift-logo {
   height: 26px;
   margin-bottom: 9px;

@@ -16,8 +16,7 @@ export class WorkspaceCreatedEvent {
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item-workspaces',
   templateUrl: './codebases-item-workspaces.component.html',
-  styleUrls: ['./codebases-item-workspaces.component.scss'],
-  providers: [WindowService, WorkspacesService]
+  styleUrls: ['./codebases-item-workspaces.component.scss']
 })
 export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;
@@ -51,13 +50,13 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     }
     this.workspaces = [];
     this.updateWorkspaces();
+    this.workspacePollTimer = Observable.timer(3000, 30000).take(10);
     this.broadcaster.on('workspaceCreated')
       .subscribe((val) => {
         if ((val as WorkspaceCreatedEvent).codebase.id === this.codebase.id) {
           this.updateWorkspacesPoll((val as WorkspaceCreatedEvent).workspaceName);
         }
       });
-    this.workspacePollTimer = Observable.timer(3000, 30000).take(10);
   }
 
   // Actions

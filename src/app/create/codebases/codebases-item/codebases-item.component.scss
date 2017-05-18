@@ -1,14 +1,12 @@
 /* Margin for group heading */
-.list-view-pf-view {
-  margin-top: 75px;
-}
-
-.list-view-pf .list-group-item-heading {
-  flex-basis: calc(25% - 20px);
-  width: calc(25% - 20px);
-}
-
-.list-view-pf .list-group-item-text {
-  flex-basis: calc(25% - 40px);
-  width: calc(25% - 40px);
+.list-view-pf-view { margin-top: 75px; }
+.list-view-pf {
+  .list-group-item-heading {
+    flex-basis: calc(25% - 20px);
+    width: calc(25% - 20px);
+  }
+  .list-group-item-text {
+    flex-basis: calc(25% - 40px);
+    width: calc(25% - 40px);
+  }
 }

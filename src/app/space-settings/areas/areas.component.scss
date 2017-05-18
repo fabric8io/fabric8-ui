@@ -1,35 +1,14 @@
 @import '../../../assets/stylesheets/base';
-
-.blank-slate-pf {
-  margin-top: 20px;
-}
-
-.areas-header {
-  margin-bottom: 30px;
-}
-
-.list-group-item-heading {
-  padding-left: 50px;
-}
-
-.list-view-pf-main-info {
-  display: block;
-}
-
+.blank-slate-pf { margin-top: 20px; }
+.areas-header { margin-bottom: 30px; }
+.list-group-item-heading { padding-left: 50px; }
+.list-view-pf-main-info { display: block; }
 /* Margin for group heading */
-.list-view-pf-view {
-  margin-top: 75px;
-}
-
-.areas-display {
-  display: flex;
-}
-
+.list-view-pf-view { margin-top: 75px; }
+.areas-display { display: flex; }
 .table-action-heading {
   cursor: pointer;
   float: right;
   padding-right: 32px;
-  .pficon {
-    color: $color-pf-blue-300;
-  }
+  .pficon { color: $color-pf-blue-300; }
 }

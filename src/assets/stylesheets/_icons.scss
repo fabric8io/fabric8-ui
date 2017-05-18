@@ -1,123 +1,75 @@
-.icon-pipeline
-{
-  margin:0;
-  padding:0;
-  min-height:100px;
-  min-width:250px;
+.icon-pipeline {
+  margin: 0;
+  padding: 0;
+  min-height: 100px;
+  min-width: 250px;
   background-repeat: no-repeat;
-  background-size:cover;
-  background-position-x:0px;
-  background-position-y:0px;
-  margin-top:10px;
-
-  &.icon-pipeline-release
-  {
+  background-size: cover;
+  background-position-x: 0;
+  background-position-y: 0;
+  margin-top: 10px;
+  &.icon-pipeline-release {
     background-image: url("#{$icon-path}pipeline-release.png");
     background-size: 100%;
-    height:auto;
-    width:290px;
+    height: auto;
+    width: 290px;
 
   }
-  &.icon-pipeline-release-stage
-  {
+  &.icon-pipeline-release-stage {
     background-image: url("#{$icon-path}pipeline-release-stage.png");
     background-size: 100%;
-    height:auto;
-    width:500px;
+    height: auto;
+    width: 500px;
   }
 
   &.icon-pipeline-release-stage-approve-promote
   {
     background-size: 100%;
     background-image: url("#{$icon-path}pipeline-release-stage-approve-promote.png");
-    height:auto;
-    width:700px;
+    height: auto;
+    width: 700px;
   }
-
 }
-.icon-stack
-{
-  margin:0;
-  padding:0;
-  height:100px;
-  width:100px;
-  //min-width: 42px;
+.icon-stack {
+  margin: 0;
+  padding: 0;
+  height: 100px;
+  width: 100px;
   background-repeat: no-repeat;
-  background-size:cover;
+  background-size: cover;
   background-position-x: -10px;
-  &.icon-stack-camel
-  {
-    background-image: url("#{$icon-path}icon-stack-camel.png");
-  }
-
-  &.icon-stack-go
-  {
-    background-image: url("#{$icon-path}icon-stack-go.png");
-  }
-
-
-  &.icon-stack-java
-  {
-    background-image: url("#{$icon-path}icon-stack-java.png");
-  }
-
-  &.icon-stack-microservice
-  {
-    background-image: url("#{$icon-path}icon-stack-microservice.png");
-    //background-size:100%;
-  }
-
-  &.icon-stack-nodejs
-  {
+  &.icon-stack-camel { background-image: url("#{$icon-path}icon-stack-camel.png"); }
+  &.icon-stack-go { background-image: url("#{$icon-path}icon-stack-go.png"); }
+  &.icon-stack-java { background-image: url("#{$icon-path}icon-stack-java.png"); }
+  &.icon-stack-microservice { background-image: url("#{$icon-path}icon-stack-microservice.png"); }
+  &.icon-stack-nodejs {
     background-image: url("#{$icon-path}icon-stack-nodejs.png");
     background-position-x: -3px;
   }
-
-  &.icon-stack-rails
-  {
-    background-image: url("#{$icon-path}icon-stack-rails.png");
-  }
-
-  &.icon-stack-spring
-  {
+  &.icon-stack-rails { background-image: url("#{$icon-path}icon-stack-rails.png"); }
+  &.icon-stack-spring {
     background-size: 100%;
     background-image: url("#{$icon-path}icon-stack-spring.png");
     background-position-x: 3px;
   }
-
-  &.icon-stack-swift
-  {
-    background-image: url("#{$icon-path}icon-stack-swift.png");
-  }
-
-  &.icon-stack-vertx
-  {
+  &.icon-stack-swift { background-image: url("#{$icon-path}icon-stack-swift.png"); }
+  &.icon-stack-vertx {
     background-image: url("#{$icon-path}icon-stack-vertx.png");
     background-size: 100%;
     background-position-x: 0;
     background-position-y: 0;
-
   }
-
-  &.icon-stack-wildfly
-  {
+  &.icon-stack-wildfly {
     background-size: 100%;
     background-image: url("#{$icon-path}icon-stack-wildfly.png");
     background-position-x: 3px;
   }
-  &.icon-stack-funktion
-  {
-    background-image: url("#{$icon-path}icon-stack-funktion.png");
-  }
-  &.icon-stack-python
-  {
-    background-image: url("#{$icon-path}icon-stack-python.png");
-  }
-  &.icon-stack-maven
-  {
+  &.icon-stack-funktion { background-image: url("#{$icon-path}icon-stack-funktion.png"); }
+  &.icon-stack-python { background-image: url("#{$icon-path}icon-stack-python.png"); }
+  &.icon-stack-maven {
     background-image: url("#{$icon-path}icon-stack-maven.png");
     background-size: 110%;
-    background-position-x: 0px;
+    background-position-x: 0;
     background-position-y: 10px;
   }
 }

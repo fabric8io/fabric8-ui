@@ -6,7 +6,7 @@ import { Http } from '@angular/http';
 import { CodebasesAddRoutingModule } from './codebases-add-routing.module';
 import { CodebasesService } from './../services/codebases.service';
 import { SlideOutPanelModule } from 'ngx-widgets';
-
+import { GitHubService } from '../services/github.service';
 import { CodebasesAddComponent } from './codebases-add.component';
 
 @NgModule({
@@ -18,7 +18,7 @@ import { CodebasesAddComponent } from './codebases-add.component';
   ],
   declarations: [CodebasesAddComponent],
   exports: [CodebasesAddComponent],
-  providers: [CodebasesService]
+  providers: [GitHubService, CodebasesService]
 })
 export class CodebasesAddModule {
   constructor(http: Http) { }

@@ -1,27 +1,16 @@
 @import '../../../assets/stylesheets/base';
-
 .add-codebase-widget {
-  .card-f8-body {
-    overflow-y: hidden;
-  }
+  .card-f8-body { overflow-y: hidden; }
 }
 .codebase-url {
   position: absolute;
   left: 50px;
   width: 475px;
-  @media (min-width: 1440px) and (max-width: 1920px) {
-    width: 83%;
-  }
-  @media (min-width: 1280px) and (max-width: 1440px) {
-    width: 83%;
-  }
-  @media (min-width: 1024px) and (max-width: 1280px) {
-    width: 82%;
-  }
+  @media (min-width: 1440px) and (max-width: 1920px) { width: 83%; }
+  @media (min-width: 1280px) and (max-width: 1440px) { width: 83%; }
+  @media (min-width: 1024px) and (max-width: 1280px) { width: 82%; }
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.list-view-pf-view {
-  margin-top: 0;
-}
+.list-view-pf-view { margin-top: 0; }
