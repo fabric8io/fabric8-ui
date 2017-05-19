@@ -90,9 +90,9 @@ describe('Codebases Add Component', () => {
 
   it('Init component succesfully', async(() => {
     // given
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
-    let inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
+    const comp = fixture.componentInstance;
+    const debug = fixture.debugElement;
+    const inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
     inputGitHubRepo.nativeElement.value = 'start'
     inputGitHubRepo.nativeElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
@@ -102,34 +102,27 @@ describe('Codebases Add Component', () => {
     });
   }));
 
-  it('Display gihub repo details after sync button pressed', async(() => {
+  it('Display github repo details after sync button pressed', async(() => {
     // given
     gitHubServiceMock.getRepoDetailsByFullName.and.returnValue(Observable.of(expectedGitHubRepoDetails));
     gitHubServiceMock.getRepoLicenseByUrl.and.returnValue(Observable.of(expectedGitHubRepoLicense));
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
-    let inputSpace = debug.query(By.css('#spacePath'));
-    let inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
+    const debug = fixture.debugElement;
+    const inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
     const syncButton = debug.query(By.css('#syncButton'));
     const form = debug.query(By.css('form'));
-    inputGitHubRepo.nativeElement.value = 'start'
-    inputGitHubRepo.nativeElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      // when github repos added and sync button cliked
+      // when github repos added and sync button clicked
       inputGitHubRepo.nativeElement.value = 'TestSpace/toto';
       inputGitHubRepo.nativeElement.dispatchEvent(new Event('input'));
       fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        syncButton.nativeElement.click();
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-          // then
-          expect(form.nativeElement.querySelector('#created').value).toBeTruthy();
-          expect(form.nativeElement.querySelector('#license').value).toEqual('Apache License 2.0');
-        });
-      });
+    }).then(() => {
+      syncButton.nativeElement.click();
+      fixture.detectChanges();
+    }).then(() => {
+      expect(form.nativeElement.querySelector('#created').value).toBeTruthy();
+      expect(form.nativeElement.querySelector('#license').value).toEqual('Apache License 2.0');
     });
   }));
 
@@ -137,30 +130,23 @@ describe('Codebases Add Component', () => {
     // given
     gitHubServiceMock.getRepoDetailsByFullName.and.returnValue(Observable.of(expectedGitHubRepoDetails));
     gitHubServiceMock.getRepoLicenseByUrl.and.returnValue(Observable.of(expectedGitHubRepoLicense));
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
-    let inputSpace = debug.query(By.css('#spacePath'));
-    let inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
+    const debug = fixture.debugElement;
+    const inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
     const syncButton = debug.query(By.css('#syncButton'));
-    const form = debug.query(By.css('form'));
-    inputGitHubRepo.nativeElement.value = 'start'
-    inputGitHubRepo.nativeElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      // when github repos added and sync button cliked
+      // when github repos added and sync button clicked
       inputGitHubRepo.nativeElement.value = 'TestSpace::toto';
       inputGitHubRepo.nativeElement.dispatchEvent(new Event('input'));
       fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        syncButton.nativeElement.click();
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-          // then
-          let errorSpan = fixture.debugElement.query(By.css('.help-block'));
-          expect(errorSpan).toBeTruthy();
-        });
-      });
+    }).then(() => {
+      syncButton.nativeElement.click();
+      fixture.detectChanges();
+    }).then(() => {
+      // then
+      const errorSpan = fixture.debugElement.query(By.css('.help-block'));
+      expect(errorSpan).toBeTruthy();
     });
   }));
 
@@ -174,17 +160,12 @@ describe('Codebases Add Component', () => {
       isDisabled: false,
       isSeparator: false,
       name: "created",
-      title: "coode base created"
+      title: "code base created"
     };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
-    let inputSpace = debug.query(By.css('#spacePath'));
-    let inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
+    const debug = fixture.debugElement;
+    const inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
     const syncButton = debug.query(By.css('#syncButton'));
-    const form = debug.query(By.css('form'));
-    inputGitHubRepo.nativeElement.value = 'start'
-    inputGitHubRepo.nativeElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
@@ -195,14 +176,14 @@ describe('Codebases Add Component', () => {
       fixture.whenStable().then(() => {
         syncButton.nativeElement.click();
         fixture.detectChanges();
+      }).then(() => {
+        let addButton = fixture.debugElement.query(By.css('#associateButton'));
+        addButton.nativeElement.click();
+        fixture.detectChanges();
+      }).then(() => {
         fixture.whenStable().then(() => {
-          let addButton = fixture.debugElement.query(By.css('#associateButton'));
-          addButton.nativeElement.click();
-          fixture.detectChanges();
-          fixture.whenStable().then(() => {
-            // then
-            expect(notificationMock.message).toHaveBeenCalled();
-          });
+          // then
+          expect(notificationMock.message).toHaveBeenCalled();
         });
       });
     });
