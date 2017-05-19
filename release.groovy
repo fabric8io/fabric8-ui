@@ -7,6 +7,7 @@ def ci (){
         export FABRIC8_RECOMMENDER_API_URL="https://api-bayesian.dev.rdu2c.fabric8.io/api/v1/"
         export FABRIC8_FORGE_API_URL="https://forge.api.prod-preview.openshift.io"
         export FABRIC8_SSO_API_URL="https://sso.prod-preview.openshift.io/"
+        export REALM="fabric8"
 
         npm run build:prod
         '''
@@ -22,7 +23,7 @@ def ci (){
 
     def shortCommitSha = getNewVersion {}
     def tempVersion= 'SNAPSHOT.' + shortCommitSha + env.BUILD_NUMBER
-    return tempVersion    
+    return tempVersion
 }
 
 def buildImage(imageName){

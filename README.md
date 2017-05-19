@@ -8,11 +8,13 @@
 
 Make sure you set the URL to the services. For UI development, we recommend connecting to the dev environment API server. 
 
-To connect to the dev enviornment instances: 
+To connect to the dev environment instances: 
 * `export FABRIC8_WIT_API_URL="http://api.prod-preview.openshift.io/api/"`
 * `export FABRIC8_RECOMMENDER_API_URL="http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/"`
 * `export FABRIC8_FORGE_API_URL="https://forge.api.prod-preview.openshift.io"`
+* `export REALM="fabric8-test"`
 
+> NOTE: if running against local api (set by FABRIC8_WIT_API_URL="http://localhost:8080/api/") and REALM="fabric8-test"
 
 to your `.bash_profile` and reload the shell.
 

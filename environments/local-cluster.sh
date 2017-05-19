@@ -30,7 +30,7 @@ export K8S_API_SERVER_PROTOCOL="http"
 export K8S_API_SERVER_BASE_PATH="/_p/oso"
 export WS_K8S_API_SERVER=${PROXIED_K8S_API_SERVER}
 export FABRIC8_PIPELINES_NAMESPACE="-development"
-
+export REALM="fabric8"
 
 export NAMESPACE=`oc project -q`
 
@@ -52,5 +52,6 @@ echo "OAUTH_LOGOUT_URI               ${OAUTH_LOGOUT_URI}"
 echo "FABRIC8_PIPELINES_NAMESPACE    ${FABRIC8_PIPELINES_NAMESPACE}"
 echo "FABRIC8_SSO_API_URL            ${FABRIC8_SSO_API_URL}"
 echo "FABRIC8_WIT_API_URL            ${FABRIC8_WIT_API_URL}"
+echo "REALM                          ${REALM}"
 echo "FABRIC8_FORGE_API_URL          ${FABRIC8_FORGE_API_URL}"
 echo ""

@@ -97,6 +97,7 @@ import { SpaceNamespaceService }         from './shared/runtime-console/space-na
 import { SpacesService }                 from './shared/spaces.service';
 import { ssoApiUrlProvider }             from './shared/sso-api.provider';
 import { witApiUrlProvider }             from './shared/wit-api.provider';
+import { realmProvider }                 from './shared/realm-token.provider';
 
 // Component Services
 import { ConfigStore }               from './base/config.store';
@@ -215,7 +216,8 @@ export type StoreType = {
     ssoApiUrlProvider,
     ToggleService,
     UserService,
-    witApiUrlProvider
+    witApiUrlProvider,
+    realmProvider
   ],
   schemas: [],
   bootstrap: [AppComponent]
