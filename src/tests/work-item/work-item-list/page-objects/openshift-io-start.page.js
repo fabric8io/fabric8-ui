@@ -20,8 +20,10 @@ var until = protractor.ExpectedConditions;
 
 class OpenShiftIoStartPage {
 
-  constructor() {
-    browser.get("https://prod-preview.openshift.io/");
+  constructor(startUrl) {
+//    browser.get("https://prod-preview.openshift.io/");
+//    browser.get("https://openshift.io/");
+  browser.get(startUrl);
   };
 
   /* Navigation panel UI objects */
@@ -31,7 +33,10 @@ class OpenShiftIoStartPage {
      return element(by.css(".navbar-header"));
   }
   clickNavBar () {
-     return this.navBar.click();
+    this.navBar.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: navBar");
+    });
+    return;
   }
 
   /* OpenShift.io image */
@@ -39,7 +44,10 @@ class OpenShiftIoStartPage {
      return element(by.css(".navbar-brand>img"));
   }
   clickOpenShiftIoImage () {
-     return this.openShiftIoImage.click();
+    this.openShiftIoImage.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: openShiftIoImage");
+    });
+    return;
   }
 
   /* The navigation bar  */
@@ -47,7 +55,10 @@ class OpenShiftIoStartPage {
      return element(by.css(".navbar-header"));
   }
   clickNavBar () {
-     return this.navBar.click();
+    this.navBar.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: navBar");
+    });
+    return;
   }
 
   /* Navigation bar toggle (non-desktop mode only) */
@@ -55,7 +66,10 @@ class OpenShiftIoStartPage {
      return element(by.css(".navbar-toggle"));
   }
   clickNavBarToggle () {
-     return this.navBarToggle.click();
+    this.navBarToggle.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: navBarToggle");
+    });
+    return;
   }
 
   /* Sign in button in nav bar */
@@ -63,8 +77,10 @@ class OpenShiftIoStartPage {
      return element(by.cssContainingText('.nav.navbar-nav.navbar-utility', 'Log In'));
   }
   clickSignIn () {
-     this.signIn.click();
-     return new OpenShiftIoRHDLoginPage();
+     this.signIn.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: signIn");
+    });
+    return new OpenShiftIoRHDLoginPage();
   }
 
   /* Status icon */
@@ -72,7 +88,10 @@ class OpenShiftIoStartPage {
      return element(by.cssContainingText('pficon.pficon-info', 'Status'));
   }
   clickStatusIcon () {
-     return this.statusIcon.click();
+    this.statusIcon.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: statusIcon");
+    });
+    return;
   }
 
   /* Platform status */
@@ -80,7 +99,10 @@ class OpenShiftIoStartPage {
     return element(by.xpath("[.//text()[contains(.,'Platform')]]/.."));
   }
   clickPlatformStatus () {
-    return this.platformStatus.cliick();
+    this.platformStatus.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: platformStatus");
+    });
+    return;
   }
 
   /* Planner status */
@@ -88,7 +110,10 @@ class OpenShiftIoStartPage {
     return element(by.xpath("[.//text()[contains(.,'Planner')]]/.."));
   }
   clickPlannerStatus () {
-    return this.plannerStatus.cliick();
+    this.plannerStatus.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: plannerStatus");
+    });
+    return;
   }
 
   /* Che status */
@@ -96,7 +121,10 @@ class OpenShiftIoStartPage {
     return element(by.xpath("[.//text()[contains(.,'Che')]]/.."));
   }
   clickCheStatus () {
-    return this.cheStatus.cliick();
+    this.cheStatus.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: cheStatus");
+    });
+    return;
   }
 
   /* Pipeline status */
@@ -104,11 +132,11 @@ class OpenShiftIoStartPage {
     return element(by.xpath("[.//text()[contains(.,'Pipeline')]]/.."));
   }
   clickPipelineStatus () {
-    return this.pipelineStatus.cliick();
+    this.pipelineStatus.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: pipelineStatus");
+    });
+    return;
   }
-
-
-
 
   /* UI Element for new users to register */
 
@@ -117,7 +145,10 @@ class OpenShiftIoStartPage {
      return element(by.css("#email"));
   }
   clickEmail () {
-     return this.email.click();
+    this.email.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: email");
+    });
+    return;
   }
   setEmail (emailString) {
     return this.email.sendKeys(emailString);
@@ -128,7 +159,10 @@ class OpenShiftIoStartPage {
      return element(by.css("#vouchercode"));
   }
   clickVouchercode () {
-     return this.vouchercode.click();
+    this.vouchercode.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: voucherCode");
+    });
+    return;
   }
   setVoucherCode (vouchercodeString) {
     return this.voucherCode.sendKeys(vouchercodeString);
@@ -139,7 +173,10 @@ class OpenShiftIoStartPage {
      return element(by.css("#register"));
   }
   clickRegisterButton () {
-     return this.registerButton.click();
+    this.registerButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: registerButton");
+    });
+    return;
   }
 
   /* Toaster alert that registration was submitted */
@@ -154,8 +191,11 @@ class OpenShiftIoStartPage {
      return element(by.css(".pficon.pficon-close"));
   }
   clickToastMessageCloseButton () {
-     browser.wait(until.elementToBeClickable(this.toastMessageCloseButton), constants.WAIT, 'Failed to find toastMessageCloseButton');
-     return this.toastMessageCloseButton.click();
+    browser.wait(until.elementToBeClickable(this.toastMessageCloseButton), constants.WAIT, 'Failed to find toastMessageCloseButton');
+    this.toastMessageCloseButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: toastMessageCloseButton");
+    });
+    return;
   }
 
   /* The circle "X" close icon for the toaster alert */
@@ -163,32 +203,11 @@ class OpenShiftIoStartPage {
      return element(by.css(".pficon.pficon-error-circle-o"));
   }
   clickToastMessageCloseIcon () {
-     browser.wait(until.elementToBeClickable(this.toastMessageCloseIcon), constants.WAIT, 'Failed to find toastMessageCloseIcon');
-     return this.toastMessageCloseIcon.click();
-  }
-
-  /* Login for already registered users */
-
-  /* Login button in Nav bar*/
-  get navBarLoginButton () {
-     return element(by.xpath(".//a[@id='login')]"));
-  }
-  clickNavBarLoginButton () {
-     this.navBarLoginButton.click();
-     return new OpenShiftIoRHDLoginPage();
-//     return new OpenShiftIoGithubLoginPage;
-  }
-
-
-  /* Login button */
-  get loginButton () {
-//     return element(by.cssContainingText('.btn.btn-link', 'Log In'));
-     return element(by.xpath(".//*[@id='login' and contains(@class, 'btn btn-outline')]"));
-  }
-  clickLoginButton () {
-     this.loginButton.click();
-     return new OpenShiftIoRHDLoginPage();
-//     return new OpenShiftIoGithubLoginPage;
+    browser.wait(until.elementToBeClickable(this.toastMessageCloseIcon), constants.WAIT, 'Failed to find toastMessageCloseIcon');
+    this.toastMessageCloseIcon.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: toastMessageCloseIcon");
+    });
+    return;
   }
 
   /* Analysis of Component/Bayesian UI elements */
@@ -198,7 +217,10 @@ class OpenShiftIoStartPage {
      return element(by.css("#ecosystem"));
   }
   clickEcosystem () {
-     return this.ecosystem.click();
+    this.ecosystem.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: ecosystem");
+    });
+    return;
   }
   setEcosystem (ecosystemString) {
     return this.ecosystem.sendKeys(ecosystemString);
@@ -209,7 +231,10 @@ class OpenShiftIoStartPage {
      return element(by.css("#component"));
   }
   clickComponent () {
-     return this.component.click();
+    this.component.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: component");
+    });
+    return;
   }
   setComponent (componentString) {
     return this.component.sendKeys(componentString);
@@ -220,7 +245,10 @@ class OpenShiftIoStartPage {
      return element(by.css("#version"));
   }
   clickVersion () {
-     return this.version.click();
+    this.version.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: version");
+    });
+    return;
   }
   setVersion (VersionString) {
     return this.version.sendKeys(VersionString);
@@ -231,7 +259,10 @@ class OpenShiftIoStartPage {
      return element(by.css("#stackbtn"));
   }
   clickSubmitButton () {
-     return this.submitButton.click();
+    this.submitButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: submitButton");
+    });
+    return;
   }
 
   /* Manifest file to upload */
@@ -241,7 +272,10 @@ class OpenShiftIoStartPage {
      return element(by.css("#stackAnalysesFile"));
   }
   clickBrowseButton () {
-     return this.browseButton.click();
+    this.browseButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: browseButton");
+    });
+    return;
   }
 
   /* File upload button */
@@ -249,7 +283,47 @@ class OpenShiftIoStartPage {
      return element(by.css("#stacAnalysesFileUpload"));
   }
   clickUploadButton () {
-     return this.uploadButton.click();
+    this.uploadButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: uploadButton");
+    });
+    return;
+  }
+
+  /* -----------------------------------------------------------------*/
+
+  /* Login for already registered users */
+
+  /* Login button in Nav bar*/
+  get navBarLoginButton () {
+     return element(by.xpath(".//*[contains(@class,'navbar')]//a[@id='login'"));
+  }
+  clickNavBarLoginButton () {
+     this.navBarLoginButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: navBarLoginButton");
+    });
+     return new OpenShiftIoRHDLoginPage();
+  }
+
+  /* Login button */
+  get loginButton () {
+    return element(by.xpath(".//*[@id='signUp']//*[@id='login']"));
+  }
+  clickLoginButton () {
+     this.loginButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: loginButton");
+    });
+     return new OpenShiftIoRHDLoginPage();
+  }
+
+  /* Botton of the page Login button */
+  get bottomLoginButton () {
+    return element(by.xpath(".//*[@id='bottomSignUp']//*[@id='login']"));
+  }
+  clickBottomLoginButton () {
+     this.bottomLoginButton.click().then(function(){
+      console.log("OpenShiftIoStartPage - clicked element: bottomLoginButton");
+    });
+     return new OpenShiftIoRHDLoginPage();
   }
 
 }

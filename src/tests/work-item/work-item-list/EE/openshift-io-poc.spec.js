@@ -23,60 +23,45 @@ var OpenShiftIoStartPage = require('../page-objects/openshift-io-start.page'),
     testSupport = require('../testSupport'),
     constants = require("../constants");
 
-describe('openshift.io End-to-End POC test - Scenario - New user registers', function () {
+describe('openshift.io End-to-End POC test - Scenario - Existing user: ', function () {
   var page, items, browserMode;
-  var EMAIL_ADDRESS = "badaddress@bad.com";
-  var VOUCHER_CODE = "bad voucher code";
 
   beforeEach(function () {
     testSupport.setBrowserMode('desktop');
     // Failed: Error while waiting for Protractor to sync with the page: "window.getAllAngularTestabilities is not a function"
     // http://stackoverflow.com/questions/38050626/angular-2-with-protractorjs-failed-error-while-waiting-for-protractor-to-sync-w 
     browser.ignoreSynchronization = true;
-    page = new OpenShiftIoStartPage();  
+    page = new OpenShiftIoStartPage(browser.params.target.url);  
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 180000;
   });
 
   /* Simple test for registered user */
-  it('should enable a registered user to login', function() {
+  it('should enable a registered user create a space, project, etc. ', function() {
     
-    /* Step 1 - on start page, login via github */
-    console.log ('EE POC test - Navigate to RHD login page');
-    OpenShiftIoRHDLoginPage = page.clickLoginButton();
+    console.log ("Test for target URL: " + browser.params.target.url)
 
-    console.log ('EE POC test - Navigate to github login page');
+    /* Step 1 - on start page, login via github */
+    OpenShiftIoRHDLoginPage = page.clickLoginButton();
     OpenShiftIoGithubLoginPage = OpenShiftIoRHDLoginPage.clickGithubLoginButton();
-    //OpenShiftIoGithubLoginPage = page.clickLoginButton();  Added April 19, not needed as of April 24
-    
+
     /* Step 2 - on github login page, login */
     OpenShiftIoGithubLoginPage.clickGithubLoginField();
     OpenShiftIoGithubLoginPage.typeGithubLoginField(browser.params.login.user); 
 
     OpenShiftIoGithubLoginPage.clickGithubPassword();
     OpenShiftIoGithubLoginPage.typeGithubPassword(browser.params.login.password);   
-
     OpenShiftIoDashboardPage = OpenShiftIoGithubLoginPage.clickGithubLoginButton();
 
-    // ******************************************************************************************
-    // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
-    //browser.get("https://prod-preview.openshift.io/");
-    browser.get("https://prod-preview.openshift.io/");
-    element(by.id("name")).isPresent().then(function(result) {
-      if ( result ) {       
-        browser.wait(until.elementToBeClickable(element(by.id("name")), constants.LONG_WAIT, 'Failed to find name/login name workaround')); 
-        element(by.id("name")).click();    
-        browser.wait(until.elementToBeClickable(element(by.xpath(".//*[@id='profilelink']/span")), constants.LONG_WAIT, 'Failed to find name/login profile workaround')); 
-        element(by.xpath(".//*[@id='profilelink']/span")).click();
+    /* This button appears after a large number of logins with the same account */
+    OpenShiftIoGithubLoginPage.authorizeApplicationButton.isPresent().then(function(result) {
+      if ( result ) {
+        OpenShiftIoGithubLoginPage.clickAuthorizeApplicationButton();
       } else {
-        console.log ("ERROR - April 24 workaround has failed");
+        //do nothing
       }
     });
-    // April 24 - Workaround to bug:  https://github.com/fabric8io/fabric8-ui/issues/994
-    // ******************************************************************************************
-
-    console.log ('EE POC test - Navigate to openshift.io home/dashboard page');
 
     /* Step 3 - on home page - create new space - embed time in space name to ensure unique space name */
-    console.log ('EE POC test - Create a new space');
     OpenShiftIoDashboardPage.clickHeaderDropDownToggle();
     OpenShiftIoDashboardPage.clickCreateSpaceUnderLeftNavigationBar();  
 
@@ -89,37 +74,80 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
     OpenShiftIoDashboardPage.waitForToastToClose();
     OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickNoThanksButton();
 
-      /* Step 4 - Create a new project */
-    console.log ('EE POC test - Navigate to space home page/dashboard for space: ' + spaceTime);
-
     /* Step - in the space home page, verify URL and end the test */
-    browser.wait(until.urlContains('https://prod-preview.openshift.io/almusertest1/'+ spaceTime), constants.WAIT);
-    browser.wait(until.urlIs('https://prod-preview.openshift.io/almusertest1/'+ spaceTime), constants.WAIT); 
-    expect(browser.getCurrentUrl()).toEqual('https://prod-preview.openshift.io/almusertest1/'+ spaceTime);
+    browser.wait(until.urlContains('https://openshift.io/almusertest1/'+ spaceTime), constants.WAIT);
+    browser.wait(until.urlIs('https://openshift.io/almusertest1/'+ spaceTime), constants.WAIT); 
+    expect(browser.getCurrentUrl()).toEqual('https://openshift.io/almusertest1/'+ spaceTime);
 
     browser.getCurrentUrl().then(function (text) { 
        console.log ('EE POC test - new space URL = ' + text);
     });
 
     /* Add a project to the space */
-    console.log ('EE POC test - add new project to space');
-//    OpenShiftIoSpaceHomePage.clickPipelinesWidgetAddToSpaceButton();   //clickPipelinesWidgetAddToSpaceButton();
-//    OpenShiftIoSpaceHomePage.clickTechnologyStack();
-//    OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
-//    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
+    OpenShiftIoDashboardPage.waitForToastToClose();
+    OpenShiftIoSpaceHomePage.clickPrimaryAddToSpaceButton();  
+    OpenShiftIoSpaceHomePage.clickTechnologyStack();
+    OpenShiftIoSpaceHomePage.clickQuickStartFinishButton();
 
-//    OpenShiftIoSpaceHomePage.clickOkButton();
-//    OpenShiftIoSpaceHomePage.clickQuickStartCancelButton();
-//    OpenShiftIoSpaceHomePage.clickNoThanksButton();
+    OpenShiftIoSpaceHomePage.clickOkButton();
+
+    /* TODO - Trap 'Application Generation Error' here - if found, fail test and exit */
+    expect(OpenShiftIoDashboardPage.appGenerationError.isPresent()).toBe(false);
+
+    OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
     /* Import the code base */
-//    OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
-//    var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
-//    OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
-//    OpenShiftIoSpaceHomePage.clickSyncButton();
+    OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
+    var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
+    OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
+    OpenShiftIoSpaceHomePage.clickSyncButton();
 
-    OpenShiftIoDashboardPage.clickNameUnderLeftNavigationBar (spaceTime);
-    OpenShiftIoDashboardPage.clickAccountHomeUnderLeftNavigationBar();
+    OpenShiftIoDashboardPage.waitForToastToClose();
+    OpenShiftIoSpaceHomePage.clickAssociateRepoButton();
+    OpenShiftIoDashboardPage.waitForToastToClose();
+
+    /* TODO - Create a workspace */
+
+    /* Navigating thru the Plan/Create/Analyze tabs is not working in the UI - due to 
+       Angular bug with Protractor? Navigate directly to the URL instead */
+    // OpenShiftIoSpaceHomePage.clickHeaderAnalyze();
+//    var tmpString = "https://openshift.io/almusertest1/" + spaceTime + "/create";
+
+    /* Go to the Create page - https://openshift.io/almusertest1/testmay91494369460731/create  */
+    browser.get("https://openshift.io/almusertest1/" + spaceTime + "/create");
+    
+    /* Locate the first codebase */
+    OpenShiftIoSpaceHomePage.clickFirstPipeline();
+
+    /* TODO - Verify the workspace in Che - TODO - Create a page object modelk for the Che dashboard */
+    browser.get("https://che-almusertest1-che.8a09.starter-us-east-2.openshiftapps.com/dashboard/#/");
+
+    browser.wait(until.elementToBeClickable(element(by.xpath(".//*[@id='dashboardPageContent']/dashboard-last-workspaces"))), constants.LONG_WAIT, 'Failed to find element Che dashboard');
+    element(by.xpath(".//*[@id='dashboardPageContent']/dashboard-last-workspaces")).getText().then(function(text){
+      console.log("Che workspaces = " + text);
+    });
+
+    /* Verify that the pipeline was created */
+
+    /* Navigating thru the Plan/Create/Analyze tabs is not working in the UI - due to 
+       Angular bug with Protractor? Navigate directly to the URL instead */
+    // OpenShiftIoSpaceHomePage.clickHeaderAnalyze();
+    browser.get("https://openshift.io/almusertest1/" + spaceTime);
+
+    OpenShiftIoSpaceHomePage.clickPipelinesWidgetTitle();
+    OpenShiftIoSpaceHomePage.pipelinesPage.getText().then(function(text){
+    //  console.log("Pipelines page = " + text);
+
+      /* May 9, 2017 - clicking on a pipeline fails due to this error:
+      https://openshift.io/kleinhenz-1/osio-planner/plan/detail/682    *
+      /* Example of expected text:
+         testmay91494354476064 created a few seconds ago
+         Source Repository: https://github.com/almightytest/testmay91494354476064.git
+         No pipeline builds have run for testmay91494354476064.   */
+
+      expect(text).toContain(spaceTime + " created a few seconds ago");
+      expect(text).toContain("Source Repository: https://github.com/almightytest/" + spaceTime + ".git");
+    });
 
     /* Step 5 - log out */
 
@@ -128,16 +156,32 @@ describe('openshift.io End-to-End POC test - Scenario - New user registers', fun
 
     OpenShiftIoDashboardPage.clickrightNavigationBar();
     OpenShiftIoDashboardPage.clickLogOut();
-    console.log ('EE POC test - Log Out');
-
   });
 
 });
 
   /* Get system time in seconds since 1970 */
   var returnTime = function () {
+
+    var month = new Array();
+    month[0] = "jan";
+    month[1] = "feb";
+    month[2] = "mar";
+    month[3] = "apr";
+    month[4] = "may";
+    month[5] = "jun";
+    month[6] = "jul";
+    month[7] = "aug";
+    month[8] = "sep";
+    month[9] = "oct";
+    month[10] = "nov";
+    month[11] = "dec";
+
     var d = new Date();
+    var m = month[d.getMonth()];
+    var day = d.getDate(); 
     var n = d.getTime();
-    console.log ("EE POC test - Creating space: " + n.toString());
-    return "test" + n.toString();
+ 
+    console.log ("EE POC test - Creating space: " + m + day.toString() + n.toString());
+    return "test" +  m + day.toString() + n.toString();
   }

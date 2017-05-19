@@ -36,4 +36,15 @@ def buildImage(imageName){
     }
 }
 
+def updateDownstreamProjects(v){
+  pushPomPropertyChangePR {
+    propertyName = 'fabric8-ui'
+    projects = [
+            'fabric8io/fabric8-platform'
+    ]
+    containerName = 'ui'
+    version = v
+  }
+}
+
 return this

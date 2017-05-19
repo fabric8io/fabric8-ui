@@ -15,8 +15,15 @@ echo done.
 
 # Finally run protractor
 echo Running tests...
-node_modules/protractor/bin/protractor protractorEE.config.js --params.login.user=$1 --params.login.password=$2
+node_modules/protractor/bin/protractor protractorEE.config.js --params.login.user=$1 --params.login.password=$2 --params.target.url=$3
 TEST_RESULT=$?
+
+# cat log file to stdout 
+# cat $LOGFILE
+
+# Cleanup webdriver-manager and web app processes
+fuser -k -n tcp 4444
+fuser -k -n tcp 8088
 
 # Return test result
 if [ $TEST_RESULT -eq 0 ]; then
@@ -26,9 +33,4 @@ else
   echo 'Functional tests FAIL'
   exit 1
 fi
-
-# Cleanup webdriver-manager and web app processes
-fuser -k -n tcp 4444
-fuser -k -n tcp 8088
-
 
