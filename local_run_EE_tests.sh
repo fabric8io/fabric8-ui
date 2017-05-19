@@ -34,8 +34,3 @@ else
   exit 1
 fi
 
-# Cleanup webdriver-manager and web app processes
-#fuser -k -n tcp 4444
-#fuser -k -n tcp 8088
-
-
