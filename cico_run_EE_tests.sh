@@ -57,7 +57,7 @@ docker exec fabric8-ui-builder npm install
 ## curl  -d "json=%7B%7D&Submit=Yes"  -X POST -H "Authorization: Bearer ${TOKEN}" -H "Referer: https://jenkins-${ID}-jenkins.8a09.starter-us-east-2.openshiftapps.com/job/${GITID}/delete" -H "Content-Type: application/x-www-form-urlencoded" https://jenkins-${ID}-jenkins.8a09.starter-us-east-2.openshiftapps.com/job/${GITID}/doDelete
 
 # Exec EE tests
-docker exec fabric8-ui-builder ./run_EE_tests.sh --params.target.url=$1
+docker exec fabric8-ui-builder ./run_EE_tests.sh $1
 
 # Test results to archive
 docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/target/ .
