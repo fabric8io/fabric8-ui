@@ -24,6 +24,12 @@ class OpenShiftIoDashboardPage {
 
   /* -----------------------------------------------------------------*/
   
+  /* All elements on page */
+  get allElements () {
+    return element(by.xpath(".//*"));
+  }
+
+
   /* Header dropdown - leftmost in navigation bar - displys current space name */
   get headerDropDownToggle () {
     return element(by.id("header_dropdownToggle"));

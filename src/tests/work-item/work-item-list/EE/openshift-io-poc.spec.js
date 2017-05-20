@@ -52,6 +52,16 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     OpenShiftIoGithubLoginPage.typeGithubPassword(browser.params.login.password);   
     OpenShiftIoDashboardPage = OpenShiftIoGithubLoginPage.clickGithubLoginButton();
 
+    /* Seeing a problem where login is failing on Centos CI */    
+    OpenShiftIoGithubLoginPage.incorrectUsernameOrPassword.isPresent().then(function(result) {
+      if ( result ) {
+        console.log("UNEXPECTED ERROR - INCORRECT USERNAME OR PASSWORD ENTERED"); 
+        console.log ("Username entered = " + browser.params.login.user);
+      } else {
+        //do nothing 
+      }
+    });
+
     /* This button appears after a large number of logins with the same account */
     OpenShiftIoGithubLoginPage.authorizeApplicationButton.isPresent().then(function(result) {
       if ( result ) {

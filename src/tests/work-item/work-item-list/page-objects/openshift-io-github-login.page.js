@@ -80,6 +80,15 @@ class OpenShiftIoGithubLoginPage {
     return; 
   }
 
+  get incorrectUsernameOrPassword () {
+//    return element (by.xpath(".//button[contains(text(), 'Incorrect username or password.')]"));
+    return element (by.xpath('.//*[@id="js-flash-container"]/div/div/button'));
+  }
+
+//     //*[@id="js-flash-container"]/div/div/button
+//     #js-flash-container > div > div > button
+
+
 }
 
 module.exports = OpenShiftIoGithubLoginPage;
