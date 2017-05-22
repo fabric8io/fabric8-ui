@@ -28,6 +28,7 @@ docker exec fabric8-ui-builder ./run_unit_tests.sh
 
 if [ $? -eq 0 ]; then
   echo 'CICO: unit tests OK'
+  docker exec fabric8-ui-builder ./upload_to_codecov.sh
 else
   echo 'CICO: unit tests FAIL'
   exit 1
