@@ -31,6 +31,10 @@ export class ApiLocatorService {
     return this.buildApiUrl('wit');
   }
 
+  get realm(): string {
+    return this.envVars.get('realm');
+  }
+
   get recommenderApiUrl(): string {
     return this.buildApiUrl('recommender');
   }

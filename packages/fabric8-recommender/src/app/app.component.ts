@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-    public stackUrl: string = 'https://recommender.api.prod-preview.openshift.io/api/v1/stack-analyses/4dee41bf900a4c05aa96c91bd7a064c3';
+    public stackUrl: string = 'https://recommender.api.openshift.io/api/v1/stack-analyses/4dee41bf900a4c05aa96c91bd7a064c3';
 }

@@ -11,6 +11,7 @@ import { witApiUrlProvider } from './shared/wit-api.provider';
 import { ApiLocatorService } from './shared/api-locator.service';
 import { authApiUrlProvider } from './shared/auth-api.provider';
 import { ssoApiUrlProvider } from './shared/sso-api.provider';
+import { realmProvider } from './shared/realm-token.provider';
 
 // Imports stackdetailsmodule
 import { StackDetailsModule } from './stack/stack-details/stack-details.module';
@@ -25,6 +26,7 @@ import { StackDetailsModule } from './stack/stack-details/stack-details.module';
     witApiUrlProvider,
     authApiUrlProvider,
     ssoApiUrlProvider,
+    realmProvider,
     Contexts
   ],
   bootstrap:    [ AppComponent ]
