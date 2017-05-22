@@ -223,8 +223,6 @@ export class GitHubService implements OnDestroy {
     }
   }
 
-<<<<<<< a406c55bdabd321bcdf72558a95af4e23bb06040
-=======
   /**
    * Get authenticate GitHub user
    *
