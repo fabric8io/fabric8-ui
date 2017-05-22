@@ -229,9 +229,11 @@ export class StackComponents implements OnChanges {
             ];
 
             this.dependenciesList = [];
+            let linesOfCode: any = '';
             for (let i: number = 0; i < length; ++i) {
                 dependency = {};
                 eachOne = dependencies[i];
+                linesOfCode = eachOne['code_metrics']['code_lines'];
                 let cycloMaticValue = eachOne['code_metrics']['average_cyclomatic_complexity'];
                 dependency[this.keys['name']] = eachOne['name'];
                 dependency[this.keys['currentVersion']] = eachOne['version'];
@@ -239,7 +241,7 @@ export class StackComponents implements OnChanges {
                 dependency[this.keys['cveid']] = this.getCveId(eachOne['security']);
                 dependency[this.keys['cvss']] = this.getCvssString(eachOne['security']);
                 dependency[this.keys['license']] = eachOne['licenses'];
-                dependency[this.keys['linesOfCode']] = eachOne['code_metrics']['code_lines'];
+                dependency[this.keys['linesOfCode']] = (!linesOfCode || linesOfCode < 0) ? 'NA' : linesOfCode;
 
                 dependency[this.keys['avgCycloComplexity']]
                     = cycloMaticValue !== -1 ? cycloMaticValue : 'NA';
