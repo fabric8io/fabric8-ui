@@ -86,12 +86,12 @@ class CommonPage {
  
  //List/tree view of all work-items
  workitemslistPlan (baseUrl,username,spacename){
-   browser.get(baseUrl + username + "/" + spacename +"/plan/workitems");
+   browser.get(baseUrl + username + "/" + spacename +"/plan");
  }
 
 //Detail view of work item with id 42
  workitemWithId (baseUrl,username,spacename,id){
-   browser.get(baseUrl + username + "/" + spacename +"/plan/workitems/" +id);
+   browser.get(baseUrl + username + "/" + spacename +"/plan/detail/" +id);
  }
  
  //view for work items matching the query within this space
@@ -103,12 +103,12 @@ class CommonPage {
 
 //Backlog view for all work items in this space
  boardItemViewUrl (baseUrl,username,spacename){
-   browser.get(baseUrl + username + "/" + spacename +"/plan/boards");
+   browser.get(baseUrl + username + "/" + spacename +"/plan/board");
  }
 
 //Backlog view for work items matching the query within this space
  boardItemQueryUrl (baseUrl,username,spacename,query){
-   browser.get(baseUrl + username + "/" + spacename +"/plan/boards/q=" + query);
+   browser.get(baseUrl + username + "/" + spacename +"/plan/board?" + query);
  }
 
  /**Team URLs */
@@ -132,7 +132,7 @@ class CommonPage {
 
  //dashboard for workitems with in iteration and its children
  viewIteration (baseUrl,username,spacename,iterationname){
-   browser.get(baseUrl + username + "/" + spacename +"/iterations/" + iterationname);
+   browser.get(baseUrl + username + "/" + spacename +"/plan?iteration=" + iterationname);
  }
 
  //dashboard for workitems with in iteration and its children
@@ -169,6 +169,9 @@ class CommonPage {
    browser.get(baseUrl + username + "/" + spacename +"/workspaces");
  }
  
+ linkTextGeneric(text){
+   return element(by.linkText(text));
+ }
 }
 
 module.exports = CommonPage;
