@@ -251,17 +251,12 @@ export class GitHubService implements OnDestroy {
 
   // Private
 
->>>>>>> feat(): Added functionality to update profile page
   /**
    * Get GitHub headers for authentified user
    *
    * @returns {Headers}
    */
-<<<<<<< a406c55bdabd321bcdf72558a95af4e23bb06040
-  getHeaders(): Observable<Headers> {
-=======
   private getHeaders(): Observable<Headers> {
->>>>>>> feat(): Added functionality to update profile page
     return this.authService.gitHubToken.map(token => {
       let newHeaders = cloneDeep(GitHubService.HEADERS);
       newHeaders.set('Authorization', `token ${token}`);
