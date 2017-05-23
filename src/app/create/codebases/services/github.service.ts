@@ -59,8 +59,31 @@ export class GitHubService implements OnDestroy {
     this.cache = new Map();
   }
 
+  /**
+   * GitHub responses are cached due to rate limiting.
+   *
+   * Note: This was made public for the unit tests
+   *
+   * @param url
+   * @returns {undefined|Observable<any>}
+   */
   getCache(url: string): Observable<any>{
     return this.cache.get(url);
+  }
+
+  /**
+   * Get GitHub headers for authentified user
+   *
+   * Note: This was made public for the unit tests
+   *
+   * @returns {Headers}
+   */
+  getHeaders(): Observable<Headers> {
+    return this.authService.gitHubToken.map(token => {
+      let newHeaders = cloneDeep(GitHubService.HEADERS);
+      newHeaders.set('Authorization', `token ${token}`);
+      return newHeaders;
+    });
   }
 
   /**
@@ -250,19 +273,6 @@ export class GitHubService implements OnDestroy {
   }
 
   // Private
-
-  /**
-   * Get GitHub headers for authentified user
-   *
-   * @returns {Headers}
-   */
-  private getHeaders(): Observable<Headers> {
-    return this.authService.gitHubToken.map(token => {
-      let newHeaders = cloneDeep(GitHubService.HEADERS);
-      newHeaders.set('Authorization', `token ${token}`);
-      return newHeaders;
-    });
-  }
 
   /**
    * Get GitHub full name from clone URL
