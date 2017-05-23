@@ -102,6 +102,20 @@ export class StackDetailsComponent implements OnInit {
   }
 
   /**
+   * Gets triggered on close of modal,
+   * Clears the existing states to make it proper on open
+   */
+  public handleModalClose(): void {
+    this.resetFields();
+  }
+
+  private resetFields(): void {
+    this.recommendations = [];
+    this.stackOverviewData = [];
+    this.dependencies = [];
+  }
+
+  /**
    * getRecommendationActions - takes nothing and returns an Array<any>
    * This function returns the static Array of objects that are to be used
    * as actions for each recommendation.
