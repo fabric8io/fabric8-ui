@@ -102,8 +102,6 @@ The build output will be under `dist` directory.
 *To create a docker image,* run this command immediately after the production
 build completion:
 
-----
-
 === Library Build
 
 ==== For production:

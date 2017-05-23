@@ -12,7 +12,7 @@ const FORGE_URL = process.env.FORGE_URL || 'http://localhost:8080/forge';
 const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL || 'http://localhost:8080/api/';
 const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL;
 const FABRIC8_FORGE_URL = process.env.FABRIC8_FORGE_URL;
-const REALM = process.env.REALM || 'fabric8';
+const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
 const extractCSS = new ExtractTextPlugin('stylesheets/[name].css');
 const extractSASS = new ExtractTextPlugin('stylesheets/[name].scss');
@@ -21,7 +21,7 @@ const extractSASS = new ExtractTextPlugin('stylesheets/[name].scss');
 const METADATA = webpackMerge(commonConfig.metadata, {
   API_URL: API_URL,
   ENV: ENV,
-  REALM: REALM,
+  FABRIC8_REALM: FABRIC8_REALM,
   FORGE_URL: FORGE_URL,
   FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
   FABRIC8_RECOMMENDER_API_URL: FABRIC8_RECOMMENDER_API_URL,
@@ -72,7 +72,7 @@ module.exports = function (options) {
           'API_URL': JSON.stringify(METADATA.API_URL),
           'FORGE_URL': JSON.stringify(METADATA.FORGE_URL),
           'PUBLIC_PATH': JSON.stringify(METADATA.PUBLIC_PATH),
-          'REALM': JSON.stringify(METADATA.REALM),
+          'FABRIC8_REALM': JSON.stringify(METADATA.FABRIC8_REALM),
           'FABRIC8_RECOMMENDER_API': JSON.stringify(METADATA.FABRIC8_RECOMMENDER_API_URL)
         }
       })
