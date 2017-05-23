@@ -17,7 +17,11 @@ export class ContextResolver implements Resolve<Context> {
 
   constructor(private contextService: ContextService, private router: Router) {
     // The default place to navigate to if the context cannot be resolved is /home
-    this._lastRoute = '/_home';
+    this._lastRoute = '/_home'; // '/_error';
+    this.router.errorHandler = (err) => {
+      this.router.navigateByUrl(this._lastRoute);
+    }
+
     // Store the last visited URL so we can navigate back if the context
     // cannot be resolved
     this.router.events
@@ -33,15 +37,11 @@ export class ContextResolver implements Resolve<Context> {
         url: state.url,
         user: route.params['entity'],
         space: route.params['space']
-      } as Navigation))
-      .switchMap(val => {
-        if (val) {
-          return Observable.of(val);
-        } else {
-          this.router.navigateByUrl(this._lastRoute);
-          return Observable.of({} as Context);
-        }
-      }).first();
+      } as Navigation)).first()
+      .catch((err: any, caught: Observable<Context>) => {
+        console.log(`Caught in resolver ${err}`);
+        return Observable.throw(err);
+      });
   }
 
 }

@@ -198,7 +198,9 @@ export class ContextService implements Contexts {
               } as Notification);
               console.log(`Space with name ${val.space} and owner ${val.user}
                 from path ${val.url} was not found because of ${err}`);
-              return Observable.of({} as RawContext);
+                return Observable.throw(`Space with name ${val.space} and owner ${val.user}
+                from path ${val.url} was not found because of ${err}`);
+
             });
         } else {
           // Otherwise, load the user and use that as the owner
@@ -213,7 +215,7 @@ export class ContextService implements Contexts {
                 type: NotificationType.WARNING
               } as Notification);
               console.log(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
-              return Observable.of({} as RawContext);
+              return Observable.throw(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
             });
         }
       })
