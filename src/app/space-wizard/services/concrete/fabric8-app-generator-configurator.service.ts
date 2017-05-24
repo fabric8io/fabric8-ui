@@ -44,6 +44,24 @@ export class AppGeneratorConfiguratorService {
     });
 
   }
+
+  // appends fields that are needed but may only be entered at a later stage in the wizard
+  public appendAppGeneratorRequestMissingFields(command: IAppGeneratorCommand){
+    if ( command.parameters && command.parameters.data && command.parameters.data.inputs ) {
+        let inputs: Array<IForgeInput> = command.parameters.data.inputs||[];
+
+        let field =inputs.find(i => i.name.toLowerCase() === 'labelspace')
+        if( !field ) {
+          inputs.push(<IForgeInput>{name:'labelSpace',value:this.currentSpace.attributes.name});
+        }
+        else {
+          if( !field.value ) {
+            field.value=this.currentSpace.attributes.name;
+          }
+        }
+    }
+
+  }
   public scrubAppGeneratorRequest(command: IAppGeneratorCommand, input: IForgeInput, field: IField) {
     switch (input.name.toLowerCase()) {
       case 'named':
