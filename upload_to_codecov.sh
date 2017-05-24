@@ -10,7 +10,9 @@ set -e
 if [ -e "jenkins-env" ]; then
   # Only try to source lines with an equal sign in them.
   grep "=" jenkins-env > jenkins-env.clean
-  source jenkins-env.clean
+  if [ -e "jenkins-env.clean" ]; then
+    source jenkins-env.clean
+  fi
 fi
 
 bash <(curl -s https://codecov.io/bash) -t 274c63b8-b698-425d-a0ab-6a4020eca599 -f coverage/coverage.json
