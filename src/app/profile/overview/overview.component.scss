@@ -1,6 +1,11 @@
 @import '../../../assets/stylesheets/base';
 @import '../../../assets/stylesheets/shared/layout';
-.overview-nav-tab-content { padding: rem(20) 0; }
+
+//tabs content area
+.overview-nav-tab-content {
+  padding: rem(20) 0;
+}
+
 .edit-profile-img {
   position: absolute;
   right: rem(5);
@@ -8,14 +13,46 @@
   color: $color-pf-black-300;
   cursor: pointer;
 }
+
 .edit-profile-name-icon {
   margin-top: rem(25);
   cursor: pointer;
   color: $color-pf-black-500;
 }
+
 .profile-email-wrapper {
   .pficon-edit {
     cursor: pointer;
     color: $color-pf-black-500;
   }
+}
+
+.profile-img,
+.profile-img-none {
+  height: 195px;
+  width: 195px;
+}
+
+.preview-img,
+.preview-img-none {
+  height: 100px;
+  width: 100px;
+}
+
+.profile-img-none,
+.preview-img-none {
+  border-bottom: solid 1px $color-pf-black-250;
+  border-left: solid 2px $color-pf-black-250;
+  border-top: solid 2px $color-pf-black-250;
+  border-right: solid 1px $color-pf-black-250;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wrap {
+  word-wrap: break-word;
 }

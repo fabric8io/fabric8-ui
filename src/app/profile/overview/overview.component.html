@@ -1,35 +1,73 @@
-<div id="overview" class="container content padding-top-15">
+<div class="container content padding-top-15">
   <div class="row">
     <h1>Profile</h1>
     <!-- left column -->
     <div class="col-md-2">
       <div class="row">
         <div class="width-100">
-          <section class="profile-image-overlay posRel">
-            <img src="{{context?.user?.attributes?.imageURL}}" class="width-100 profile-img" />
-            <span class="pficon pficon-edit edit-profile-img"></span>
+          <section>
+            <div *ngIf="(context.user.attributes.imageURL !== undefined && context.user.attributes.imageURL.length !== 0); then showImageURL else addImageURL"></div>
+            <ng-template #showImageURL>
+              <img src="{{context.user.attributes.imageURL}}" class="profile-img">
+            </ng-template>
+            <ng-template #addImageURL>
+              <a href="javascript:void(0)"
+                 [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+                 [queryParams]="{ imageUrl: true }">
+                <img src="../../../assets/images/profile-user.png" class="profile-img-none">
+                <span class="pficon pficon-edit edit-profile-img"></span>
+              </a>
+            </ng-template>
           </section>
           <section>
             <h2 class="pull-left">{{context?.user?.attributes?.fullName}}</h2>
-            <span class="pficon pficon-edit pull-right edit-profile-name-icon"></span>
           </section>
           <p>
             {{context?.user?.attributes?.username}}
           </p>
-          <!--<p>
-            {{context?.user?.attributes?.bio}}
-          </p>-->
-          <hr />
-          <p class="profile-email-wrapper">
-            <span class="fa fa-envelope"></span>
-            <a href="mailto:xyz@email.com" class="margin-left-5 margin-right-5">xyz@email.com</a>
-            <span class="pficon pficon-edit pull-right"></span>
-          </p>
-          <p>
-            <span class="fa fa-external-link"></span>
-            <a href="www.xyz.com" class="margin-left-5 margin-right-5">www.xyz.com</a>
-          </p>
-          <p>I'm a designer in Raleigh, North Carolina.</p>
+          <hr>
+          <div *ngIf="(context.user.attributes.email !== undefined && context.user.attributes.email.length !== 0); then showEmail else addEmail"></div>
+          <ng-template #showEmail>
+            <p class="profile-email-wrapper margin-right-5 truncate">
+              <span class="fa fa-envelope"></span>
+              <a href="mailto:{{context.user.attributes.email}}" class="margin-left-5 margin-right-5">{{context.user.attributes.email}}</a>
+            </p>
+          </ng-template>
+          <ng-template #addEmail>
+            <p class="profile-email-wrapper">
+              <span class="fa fa-envelope"></span>
+              <a href="javascript:void(0)"
+                 [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+                 [queryParams]="{ email: true }">Add an email</a>
+            </p>
+          </ng-template>
+          <div *ngIf="(context.user.attributes.url !== undefined && context.user.attributes.url.length !== 0); then showUrl else addUrl"></div>
+          <ng-template #showUrl>
+            <p class="margin-right-5 truncate">
+              <span class="fa fa-external-link"></span>
+              <a href="{{context.user.attributes.url}}" target="_blank"
+                 class="margin-left-5 margin-right-5">{{context.user.attributes.url}}</a>
+            </p>
+          </ng-template>
+          <ng-template #addUrl>
+            <p class="wrap">
+              <span class="fa fa-external-link"></span>
+              <a href="javascript:void(0)"
+                 [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+                 [queryParams]="{ url: true }">Add a url</a>
+            </p>
+          </ng-template>
+          <div *ngIf="(context.user.attributes.bio !== undefined && context.user.attributes.bio.length !== 0); then showBio else addBio"></div>
+          <ng-template #showBio>
+            <p class="margin-right-5">{{context.user.attributes.bio}}</p>
+          </ng-template>
+          <ng-template #addBio>
+            <p>
+              <a href="javascript:void(0)"
+                 [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+                 [queryParams]="{ bio: true }">Add a bio</a>
+            </p>
+          </ng-template>
         </div>
       </div>
     </div>
@@ -38,75 +76,20 @@
       <tabset #staticTabs>
         <tab heading="Activity">
           <div class="overview-nav-tab-content">
-            <div class="blank-slate-pf" id="">
-              <h1>No Activity Message</h1>
-              <p>
-                Go to your <a href="#">home</a> page to get started in Openshift.io.
-              </p>
-              <div class="blank-slate-pf-main-action">
-                <button class="btn btn-primary btn-lg"> Go to my home dashboard </button>
-              </div>
-            </div>
-            <div class="activity-content">
-              <h2>Jryhanych's recent activity</h2>
-              <ul class="list-group">
-                <li class="list-group-item">
-                  <p class="margin-0">
-                    @jryhanych added <a>BalloonPopGame</a> space
-                    <span class="margin-left-10 pull-right">Just now</span>
-                  </p>
-                </li>
-                <li class="list-group-item">
-                  <p class="margin-0">
-                    @jryhanych added <a>BalloonPopGame</a> space
-                    <span class="margin-left-10 pull-right">Just now</span>
-                  </p>
-                </li>
-                <li class="list-group-item">
-                  <p class="margin-0">
-                    @jryhanych added <a>BalloonPopGame</a> space
-                    <span class="margin-left-10 pull-right">Just now</span>
-                  </p>
-                </li>
-                <li class="list-group-item">
-                  <p class="margin-0">
-                    @jryhanych added <a>BalloonPopGame</a> space
-                    <span class="margin-left-10 pull-right">Just now</span>
-                  </p>
-                </li>
-                <li class="list-group-item">
-                  <p class="margin-0">
-                    @jryhanych added <a>BalloonPopGame</a> space
-                    <span class="margin-left-10 pull-right">Just now</span>
-                  </p>
-                </li>
-                <li class="list-group-item">
-                  <p class="margin-0">
-                    @jryhanych added <a>BalloonPopGame</a> space
-                    <span class="margin-left-10 pull-right">Just now</span>
-                  </p>
-                </li>
-                <li class="list-group-item">
-                  <p class="margin-0">
-                    @jryhanych added <a>BalloonPopGame</a> space
-                    <span class="margin-left-10 pull-right">Just now</span>
-                  </p>
-                </li>
-              </ul>
-            </div>
+            <alm-activity></alm-activity>
           </div>
         </tab>
         <tab>
           <template tabHeading>
-            Spaces <span class="badge">2</span>
+            Spaces <!--<span class="badge" *ngIf="spaces?.length !== 0">{{spaces.length}}</span>-->
           </template>
           <div class="overview-nav-tab-content">
-            Static content Spaces
+            <alm-spaces></alm-spaces>
           </div>
         </tab>
         <tab heading="Work Items">
           <div class="overview-nav-tab-content">
-            Static content Work items
+            <alm-work-items></alm-work-items>
           </div>
         </tab>
       </tabset>

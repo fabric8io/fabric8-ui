@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ViewEncapsulation, Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 //
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
 import { INotifyPropertyChanged } from '../../core/component';
@@ -14,12 +14,17 @@ import {
 
 import { ForgeAppGenerator } from './forge-app-generator';
 import { FieldWidgetClassificationOptions } from '../../models/contracts/field-classification';
+import { CodebasesService } from '../../../create/codebases/services/codebases.service';
+
+import { AppGeneratorConfiguratorService } from '../../services/app-generator.service';
 
 
 @Component({
   host: {
    'class': 'wizard-step'
   },
+  // ensure that dynamically added html message get styles applied
+  encapsulation: ViewEncapsulation.None,
 
   selector: 'forge-app-generator',
   templateUrl: './forge-app-generator.component.html',
@@ -40,13 +45,15 @@ export class ForgeAppGeneratorComponent implements OnInit, OnDestroy, OnChanges 
 
   constructor(
     @Inject(IAppGeneratorServiceProvider.InjectToken) private _appGeneratorService: IAppGeneratorService,
+    private _codebasesService: CodebasesService,
+    private _configuratorService: AppGeneratorConfiguratorService,
     loggerFactory: LoggerFactory) {
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, ForgeAppGeneratorComponent.instanceCount++);
     if ( logger ) {
       this.log = logger;
     }
     this.log(`New instance ...`);
-    this.forge = new ForgeAppGenerator(this._appGeneratorService, loggerFactory);
+    this.forge = new ForgeAppGenerator(this._appGeneratorService, this._codebasesService, this._configuratorService, loggerFactory);
   }
 
   @Input()

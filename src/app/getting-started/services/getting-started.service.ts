@@ -30,11 +30,6 @@ export class GettingStartedService implements OnDestroy {
       private logger: Logger,
       private userService: UserService,
       @Inject(WIT_API_URL) apiUrl: string) {
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      if (user !== undefined && user.attributes !== undefined) {
-        this.loggedInUser = user;
-      }
-    }));
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
@@ -47,25 +42,28 @@ export class GettingStartedService implements OnDestroy {
     });
   }
 
-  /**
-   * Create transient profile with context information
-   *
-   * @returns {ExtProfile}
-   */
   createTransientProfile(): ExtProfile {
-    let profile = cloneDeep(this.loggedInUser) as ExtUser;
+    let profile: ExtUser;
 
-    if(profile.attributes) {
-      profile.attributes.contextInformation = (this.loggedInUser as ExtUser).attributes.contextInformation || {};
-    } else {
-      profile.attributes = {
-        "contextInformation": {},
-        "fullName": "",
-        "imageURL": "",
-        "username": "",
-        "registrationCompleted": false
-      };
-    }
+    this.userService.loggedInUser
+      .map(user => {
+        profile = cloneDeep(user) as ExtUser;
+
+        if(profile.attributes) {
+          profile.attributes.contextInformation = (user as ExtUser).attributes.contextInformation || {};
+        } else {
+          profile.attributes = {
+            "company": "",
+            "contextInformation": {},
+            "fullName": "",
+            "imageURL": "",
+            "username": "",
+            "registrationCompleted": false
+          };
+        }
+      })
+      .publish().connect();
+
     return profile.attributes;
   }
 

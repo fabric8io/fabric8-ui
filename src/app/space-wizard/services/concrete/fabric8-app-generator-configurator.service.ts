@@ -3,45 +3,27 @@ import { Injectable } from '@angular/core';
 import { ContextService } from '../../../shared/context.service';
 import {
   Space,
-  Context,
-  Contexts,
-  ContextTypes,
-  SpaceService,
-  SpaceNamePipe
+  Context
 } from 'ngx-fabric8-wit';
 
 import {
-  AppGeneratorService,
-  FieldCollection,
-  FieldWidgetClassification,
   FieldWidgetClassificationOptions,
   IAppGeneratorCommand,
-  IAppGeneratorRequest,
   IAppGeneratorResponse,
   IAppGeneratorPair,
-  IAppGeneratorResponseContext,
-  IAppGeneratorState,
   IField,
   IFieldCollection,
   IFieldChoice
 } from '../contracts/app-generator-service';
 /** dependencies */
 import {
-  IForgeCommandRequest,
-  IForgeCommandResponse,
-  IForgeCommandPipeline,
-  IForgeInput,
-  IForgeService,
-  IForgeServiceProvider,
-  IForgeCommandData,
-  IForgeState,
-  IForgeMetadata
+  IForgeInput
 } from '../forge.service';
 
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
 
 @Injectable()
-export class AppGeneratorConfigurationService {
+export class AppGeneratorConfiguratorService {
 
   static instanceCount: number = 1;
 
@@ -49,7 +31,7 @@ export class AppGeneratorConfigurationService {
 
   constructor(loggerFactory: LoggerFactory, private context: ContextService) {
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name,
-                                                    AppGeneratorConfigurationService.instanceCount++);
+                                                    AppGeneratorConfiguratorService.instanceCount++);
     if ( logger ) {
       this.log = logger;
     }
@@ -160,7 +142,7 @@ export class AppGeneratorConfigurationService {
         case 'pipeline' : {
           field.display.showLabel = false;
           field.display.note = null;
-          field.display.inputType = FieldWidgetClassificationOptions.SingleSelectionList
+          field.display.inputType = FieldWidgetClassificationOptions.SingleSelectionList;
           this.augmentPipelineChoices(field , context, execution);
           break;
         }
@@ -225,7 +207,7 @@ export class AppGeneratorConfigurationService {
         response.payload.state.title = 'Select the pipeline build options ... ';
         break;
       }
-      case 'io.fabric8.forge.generator.github.githubimportpickrepositoriesstep':{
+      case 'io.fabric8.forge.generator.github.githubimportpickrepositoriesstep': {
         response.payload.state.title = 'Select the GitHub repository that you wish to import ...';
         break;
       }
@@ -270,39 +252,58 @@ export class AppGeneratorConfigurationService {
 
   private augmentPipelineChoices( field: IField, context: string, execution: IAppGeneratorPair ) {
     // augment display properties
+    let source = field.source();
+    let index: number = 0;
+    let defaultIndex = 0;
     for ( let choice of <Array<IFieldChoice>>field.display.choices ) {
-      choice.default = false;
-      choice.hasIcon = true;
+      choice.isDefault = false;
+      choice.hasIcon = false;
+      choice.view = 'pipelineView';
+      let choiceSource = source.valueChoices.find(vc => vc.id === choice.id) || { environments: [], stages: [], color: 'success' , icon: 'fa-check-circle'};
+      let determineColor = (value: string): string => {
+        let found = (value || '').toLowerCase().includes('approve');
+        if (found) {
+          return 'warning';
+        }
+        return 'success';
+      };
+      let determineIcon = (value: string): string => {
+        let found = (value || '').toLowerCase().includes('approve');
+        if (found) {
+          return 'fa-pause-circle';
+        }
+        return 'fa-check-circle';
+      };
+      let buildStages = (value): Array<string> => {
+        let stages = [];
+        let n: number = 0;
+        for (let s of value.stages){
+          let stage = {
+            name: s,
+            index: n,
+            icon: determineIcon(s),
+            color: determineColor(s)
+          };
+          n++;
+          stages.push(stage);
+
+        }
+        return stages;
+      };
+      choice.model = {
+        environments: choiceSource.environments || [],
+        stages: buildStages(choiceSource)
+      };
+
+      choice.description = choiceSource.descriptionMarkdown;
+      choice.description = choice.description.replace(/\n\n/g, '\n');
+      choice.index = index ;
+      choice.name = choice.id;
+      choice.isDefault = index === defaultIndex;
       choice.verticalLayout = true;
-      choice.note=null;
-      choice.icon='icon-pipeline icon-pipeline-release';
-      switch (choice.id.toLowerCase()) {
-        case 'release': {
-          choice.icon='icon-pipeline icon-pipeline-release';
-          choice.index = 0;
-          choice.default = true;
-          choice.name = 'Release';
-          choice.description = null;// 'A release continuous delivery pipeline strategy.';
-          break;
-        }
-        case 'release and stage': {
-          choice.index = 1;
-          choice.icon='icon-pipeline icon-pipeline-release-stage';
-          choice.name = 'Release and Stage';
-          choice.description = null;//'A release and stage continuous delivery pipeline strategy.';
-          break;
-        }
-        case 'release, stage, approve and promote': {
-          choice.index = 2;
-          choice.icon='icon-pipeline icon-pipeline-release-stage-approve-promote';
-          choice.name = 'Release, Stage, Approve and Promote';
-          choice.description = null;// 'A release, stage, approve, promote continuous delivery pipeline strategy.';
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+      // suppress note
+      choice.note = null;
+      index ++;
     }
     // set the default for the first non validation step
     if ( this.isFirstNonValidationStep(context, execution) === true ) {
@@ -311,17 +312,19 @@ export class AppGeneratorConfigurationService {
       this.setFieldSelection( field );
     }
     this.sortFieldOptionsByIndex(field);
+    // suppress field note
+    field.display.note = null;
   }
 
   private augmentStackChoices( field: IField , context: string, execution: IAppGeneratorPair ) {
       field.display.label = 'Technology Stack';
       for ( let choice of <Array<IFieldChoice>>field.display.choices ) {
-        choice.hasIcon=false;
+        choice.hasIcon = false;
         switch ( choice.id.toLowerCase() ) {
           case 'configmaps - wildfly swarm': {
             choice.index = 10;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-wildfly';
+            choice.icon = 'icon-stack icon-stack-wildfly';
             choice.name = 'WildFly Swarm - ConfigMap';
             choice.description = 'Adds externalised environment configuration to WildFly Swarm - Basic';
             break;
@@ -329,7 +332,7 @@ export class AppGeneratorConfigurationService {
           case 'http api - wildfly swarm': {
             choice.index = 8;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-wildfly';
+            choice.icon = 'icon-stack icon-stack-wildfly';
             choice.name = 'WildFly Swarm - Basic';
             choice.description = 'Standalone Java EE application that exposes a simple HTTP endpoint';
             break;
@@ -337,7 +340,7 @@ export class AppGeneratorConfigurationService {
           case 'http crud - wildfly swarm': {
             choice.index = 9;
             // choice.hasIcon=true;
-            choice.icon='icon-stack  icon-stack-wildfly';
+            choice.icon = 'icon-stack  icon-stack-wildfly';
             choice.name = 'WildFly Swarm - CRUD';
             choice.description = 'Adds Create, Update and Delete to WildFly Swarm - Basic';
             break;
@@ -345,7 +348,7 @@ export class AppGeneratorConfigurationService {
           case 'health checks - wildfly swarm': {
             choice.index = 11;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-wildfly';
+            choice.icon = 'icon-stack icon-stack-wildfly';
             choice.name = 'WildFly Swarm - Health Check';
             choice.description = 'Adds health checks to WildFly Swarm - Basic';
             break;
@@ -353,7 +356,7 @@ export class AppGeneratorConfigurationService {
           case 'spring boot - crud': {
             choice.index = 5;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-spring';
+            choice.icon = 'icon-stack icon-stack-spring';
             choice.name = 'Spring Boot - CRUD';
             choice.description = 'Adds Create, Update and Delete to Spring Boot - Basic';
             break;
@@ -361,7 +364,7 @@ export class AppGeneratorConfigurationService {
           case 'spring boot - configmap': {
             choice.index = 6;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-spring';
+            choice.icon = 'icon-stack icon-stack-spring';
             choice.name = 'Spring Boot - ConfigMap';
             choice.description = 'Adds externalised environment configuration to Spring Boot - Basic';
             break;
@@ -369,7 +372,7 @@ export class AppGeneratorConfigurationService {
           case 'spring boot - http': {
             choice.index = 4;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-spring';
+            choice.icon = 'icon-stack icon-stack-spring';
             choice.name = 'Spring Boot - Basic';
             choice.description = 'Standalone Spring application that exposes a simple HTTP endpoint';
             break;
@@ -377,7 +380,7 @@ export class AppGeneratorConfigurationService {
           case 'spring boot health check example': {
             choice.index = 7;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-spring';
+            choice.icon = 'icon-stack icon-stack-spring';
             choice.name = 'Spring Boot - Health Check';
             choice.description = 'Adds health checks to Spring Boot - Basic';
             break;
@@ -385,7 +388,7 @@ export class AppGeneratorConfigurationService {
           case 'vert.x - http & config map': {
             choice.index = 3;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-vertx';
+            choice.icon = 'icon-stack icon-stack-vertx';
             choice.name = 'Vert.x - ConfigMap';
             choice.description = 'Adds externalised environment configuration to Vert.x - Basic';
             break;
@@ -393,7 +396,7 @@ export class AppGeneratorConfigurationService {
           case 'vert.x crud example using jdbc': {
             choice.index = 2;
             // choice.hasIcon=true;
-            choice.icon='icon-stack icon-stack-vertx';
+            choice.icon = 'icon-stack icon-stack-vertx';
             choice.name = 'Vert.x - CRUD';
             choice.description = 'Adds Create, Update and Delete to Vert.x - Basic';
             break;
@@ -402,9 +405,9 @@ export class AppGeneratorConfigurationService {
             choice.index = 1;
             // choice.hasIcon=true;
             // choice.verticalLayout=true;
-            choice.icon='icon-stack icon-stack-vertx';
+            choice.icon = 'icon-stack icon-stack-vertx';
             choice.name = 'Vert.x - Basic';
-            choice.default = true;
+            choice.isDefault = true;
             choice.description = 'Standalone reactive application in Java that exposes a simple HTTP endpoint';
             break;
           }
@@ -432,7 +435,7 @@ export class AppGeneratorConfigurationService {
   private setFieldSelection(field: IField) {
     let choice: IFieldChoice = field.display.choices.find( (c) => c.selected === true );
     if (!choice) {
-      choice = field.display.choices.find( (c) => c.default === true );
+      choice = field.display.choices.find( (c) => c.isDefault === true );
     }
     field.value = choice.id;
     field.display.text = choice.name;
@@ -441,14 +444,14 @@ export class AppGeneratorConfigurationService {
   }
 
   private setFieldDefaults(field: IField) {
-    let choice: IFieldChoice = field.display.choices.find( (c) => c.default === true );
+    let choice: IFieldChoice = field.display.choices.find( (c) => c.isDefault === true );
     field.value = choice.id;
     field.display.text = choice.name;
     field.display.note = choice.description;
     field.display.choices.filter((o) => {
         // set everything to not selected, except for default
         o.selected = false;
-        if (o.default === true) {
+        if (o.isDefault === true) {
           o.selected = true;
         }
     });

@@ -28,8 +28,8 @@ import {
 } from '../forge.service';
 
 import {
- AppGeneratorConfigurationService
-} from './app-generator-configuration.service';
+ AppGeneratorConfiguratorService
+} from './fabric8-app-generator-configurator.service';
 
 @Injectable()
 export class Fabric8AppGeneratorService extends AppGeneratorService {
@@ -42,7 +42,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
   constructor(
     @Inject(IForgeServiceProvider.InjectToken) private forgeService: IForgeService,
     loggerFactory: LoggerFactory,
-    private _configService: AppGeneratorConfigurationService) {
+    private _configuratorService: AppGeneratorConfiguratorService) {
     super();
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, Fabric8AppGeneratorService.instanceCount++);
     if ( logger ) {
@@ -50,12 +50,6 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     }
     this.log(`New instance...`);
   }
-
-  // private handleError(err): Observable<any> {
-  //   let errMessage = err.message ? err.message : err.status ? `${err.status} - ${err.statusText}` : 'Server Error';
-  //   this.log({ message: errMessage, inner: err, error: true });
-  //   return Observable.throw(new Error(errMessage));
-  // }
 
   /**
    * update the values that will be transmitted to forge with the form
@@ -68,7 +62,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
         let input: IForgeInput = inputs.find( i => i.name === field.name );
         if ( input ) {
           input.value = field.value;
-          this._configService.scrubAppGeneratorRequest(command, input, field);
+          this._configuratorService.scrubAppGeneratorRequest(command, input, field);
         }
       }
     }
@@ -131,7 +125,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
       };
       this.forgeService.executeCommand( commandRequest )
       .map( (forgeResponse) => this.transformForgeResponseIntoAnAppGeneratorResponse(request, forgeResponse) )
-      .map( (response) => this._configService.scrubAppGeneratorResponse('', { request, response }) )
+      .map( (response) => this._configuratorService.scrubAppGeneratorResponse('', { request, response }) )
       .subscribe( (response: IAppGeneratorResponse) => {
         this.log(`AppGenerator '${cmdDescription}' command completed`, response);
         observer.next(response);
@@ -140,7 +134,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
          let error = {
            origin: 'Fabric8AppGeneratorService',
            name: 'ExecuteForgeCommandError' ,
-           message: `The <strong><i>${cmdDescription}</i></strong> command failed or only partially succeeded`,
+           message: `The ${cmdDescription} command failed or only partially succeeded`,
            inner: err
          };
          this.log({ message: error.message , error: true }, err);
@@ -156,6 +150,8 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
         name: sourceInput.name,
         value: sourceInput.value,
         valueType: this.mapFieldValueDataType(sourceInput),
+        /** returns the original source data to be used  */
+        source: () => sourceInput,
         display: {
           choices: this.mapValueChoices(sourceInput),
           hasChoices: this.mapValueHasOptions(sourceInput),
@@ -264,7 +260,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
             name: choice.id,
             description: source.description,
             visible: true,
-            default: false,
+            isDefault: false,
             selected: hash[choice.id] === true
           });
         } else {
@@ -274,7 +270,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
             name: choice.id,
             description: choice.id,
             visible: true,
-            default: false,
+            isDefault: false,
             selected: hash[choice.id] === true
           });
         }

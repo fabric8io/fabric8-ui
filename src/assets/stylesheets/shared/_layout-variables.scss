@@ -1,0 +1,19 @@
+$debug-border: 0px;
+$debug-component-border: 0;
+$debug-component-spacing: 0;
+
+$debug-root-component-border-color: navy;
+$debug-component-border-color: lighten( navy,20%);
+$debug-child-component-border-color:lighten($debug-component-border-color,30%);
+
+$debug-div-border-color:orange;
+$debug-aside-border-color:darken(orangered,20%);
+$debug-section-border-color: lighten(orangered,0%);
+
+$debug-header-border-color:darkgreen;
+$debug-main-border-color:lighten($debug-header-border-color,10%);
+$debug-footer-border-color:lighten($debug-header-border-color,20%);
+
+$debug-bootstrap-container-color:darken(saddlebrown,10%);
+$debug-bootstrap-row-color:lighten($debug-bootstrap-container-color,10%);
+$debug-bootstrap-column-color:lighten($debug-bootstrap-container-color,20%);

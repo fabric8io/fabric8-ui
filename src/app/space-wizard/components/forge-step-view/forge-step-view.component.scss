@@ -1,0 +1,75 @@
+@import '../../../../assets/stylesheets/base';
+
+:host {
+
+    &.hidden {
+      display: none;
+    }
+
+    $base-color:$color-pf-black-300;
+    $active-color:$color-pf-blue-300;
+    $active-color-text:$color-pf-white;
+
+    .steps {
+
+       border:solid 0px $base-color;
+       display :flex;
+       padding:2.0rem;
+       flex-wrap: wrap;
+       flex-direction: row;
+
+       justify-content:  space-between;
+
+       align-content: center;
+       align-items: center;
+
+       .step-seperator{
+           border:solid 0px $base-color;
+           background-color:$base-color;
+           height:1px;
+           vertical-align: middle;
+           display:flex;
+           flex-grow:1;
+           flex-shrink:1;
+           flex-direction: column;
+           justify-content: center;
+           padding:0;
+           color:$base-color;
+       }
+       .step {
+            border:solid 0px $base-color;
+
+           //flex-grow:1;
+           display:flex;
+           color:$base-color;
+           justify-content: center;
+           flex-direction: column;
+           .step-text {
+            text-align: center;
+            font-size: smaller;
+            color:$base-color;
+           }
+           .step-graphic {
+                border:solid 1px $base-color;
+                width:4.0rem;
+                height:4.0rem;
+                padding:0.5rem;
+                border-radius: 50%;
+                display :flex;
+                flex-direction:row;
+                justify-content: center;
+                align-items: center;
+                position:relative;
+                vertical-align: middle;
+                &.active {
+                    border:solid 2px $active-color;
+                    background-color: $active-color;
+                    color:$active-color-text;
+                    font-weight: bold
+                }
+
+           }
+
+       }
+    }
+}

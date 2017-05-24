@@ -1,0 +1,16 @@
+<div class="pipeline" >
+  <ng-template ngFor let-stage [ngForOf] ="pipeline.stages" let-c="count" let-i="index" >
+    <div class="stage {{stage.color}}" >
+      <div *ngIf="stage.name" class="stage-text" >{{stage.name}}</div>
+      <div class="stage-graphic" >
+        <div class="stage-graphic-line" ></div>
+        <div class="stage-graphic-icon" >
+          <span class="fa {{stage.icon}}" ></span>
+        </div>
+        <div class="stage-graphic-line" ></div>
+      </div>
+      <div *ngIf="stage.details" class="stage-text">{{stage.details}}</div>
+    </div>
+    <div *ngIf="i<c-1" class="stage-seperator"><span class="fa fa-long-arrow-right"> </span></div>
+  </ng-template>
+</div>

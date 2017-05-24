@@ -1,4 +1,4 @@
-import { Space, SpaceAttributes, SpaceService, SpaceNamePipe } from 'ngx-fabric8-wit';
+import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 
 export class CodebaseType {
   description: string;
@@ -174,7 +174,7 @@ export class SpaceConfigurator {
     }
   ];
 
-  static default(): SpaceConfigurator {
+  static defaultValue(): SpaceConfigurator {
     let configurator = new SpaceConfigurator();
     let space = {} as Space;
     space.name = '';

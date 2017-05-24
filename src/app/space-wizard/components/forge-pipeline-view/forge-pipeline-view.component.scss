@@ -1,0 +1,86 @@
+    $base-color:gray;
+    .pipeline {
+       border:solid 0 $base-color;
+       padding: 0.25rem;
+       background-color: white;
+       display :flex;
+       flex-wrap: wrap;
+       flex-direction: row;
+       justify-content: start;
+       align-content: center;
+       align-items: center;
+
+       .stage-seperator {
+           height:1.0rem;
+           padding:0 5px;
+           color:$base-color;
+       }
+       .stage {
+           flex-shrink: 1;
+           flex-grow:1;
+           border:dashed 0 $base-color;
+           border-radius: .25rem;
+           margin:0.25rem;
+           padding:0.25rem;
+           min-width:125px;
+           max-width:180px;
+           //overflow: hidden;
+           color:$base-color;
+           display:flex;
+           flex-direction: column;
+           .stage-text {
+            text-align: center;
+            font-size: smaller;
+            color:$base-color;
+           }
+           .stage-graphic {
+            padding:0.25rem;
+            border:solid 0 $base-color;
+            display :flex;
+            flex-direction:row;
+            align-items: center;
+            position:relative;
+            vertical-align: middle;
+            .stage-graphic-line {
+                flex-grow:1;
+                flex-shrink: 1;
+                background-color: $base-color;
+                height:3px;
+            }
+            .stage-graphic-icon {
+                $size:1.5rem;
+                height:$size;
+                line-height:$size;
+                font-size: $size;
+                text-align: center;
+                vertical-align: middle;
+                color:$base-color;
+            }
+           }
+          &.success {
+              .stage-graphic-line {
+                  background-color: green !important;
+              }
+              .stage-graphic-icon{
+                  color: green !important;
+              }
+          }
+          &.error {
+              .stage-graphic-line{
+                  background-color: red !important;
+              }
+              .stage-graphic-icon{
+                  color: red !important;
+              }
+          }
+          &.warning {
+              .stage-graphic-line{
+                  background-color: orange !important;
+              }
+              .stage-graphic-icon{
+                  color: orange !important;
+              }
+          }
+
+       }
+    }
