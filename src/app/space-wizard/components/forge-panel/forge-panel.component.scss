@@ -1,0 +1,130 @@
+   @import '../../../../assets/stylesheets/base';
+  :host {
+   $panel-item-shadow-offset:3px;
+   $panel-item-spacing: 0;
+   $panel-item-shadow-blur-radius:3px;
+   $panel-item-shadow-spread-radius:3px;
+   $panel-item-border-color:#ededed;
+   $panel-item-layout-block-shadow-color: darken(#ededed, 10%);
+   $panel-item-section-column-background-color:$color-pf-white;
+   $panel-item-padding: $grid-gutter-width / 2;
+
+   header {
+      &.forge-header {
+        background-color: $color-pf-black-200;
+        .row {
+          &:first-of-type {
+            background-color: $color-pf-white !important;
+            border-bottom:solid 1px $color-pf-black-300;
+          }
+        }
+        .wizard-step-sub-title {
+          display: flex;
+          justify-content: center;
+          .text {
+            padding-top: 40px;
+            font-weight: 600;
+            padding-bottom: 20px;
+            margin-top: 0;
+            margin-bottom: 0;
+          }
+        }
+
+      }
+    }
+
+    section {
+      &.forge-section {
+        background-color: $color-pf-black-200;
+      }
+    }
+
+
+
+      .panel{
+        display:flex;
+        flex-grow:1;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap : wrap;
+        background-color:transparent;
+        box-shadow: none;
+        padding-bottom:60px;
+
+        .panel-item {
+          // this is a flex container for its children
+          display: flex;
+          //starting width
+          max-width: 180px;
+          flex-basis: 180px;
+          // but it can grow
+          flex-grow: 1;
+          //or shrink
+          flex-shrink:1;
+          // content flex from top to bottom
+          flex-direction: column;
+
+          margin: ($grid-gutter-width / 2);
+          border:solid 2px transparent;
+          box-shadow: $panel-item-shadow-offset  $panel-item-shadow-blur-radius $panel-item-shadow-spread-radius $panel-item-layout-block-shadow-color;
+
+          background-color: $panel-item-section-column-background-color;
+          > header {
+            padding-top: 10px;
+            text-align: center;
+            color: $color-pf-black;
+            font-weight: normal;
+          }
+          > section {
+            text-align: center;
+            flex-grow: 1;
+            padding-top: $panel-item-padding;
+          }
+          > div {
+            text-align: center;
+            flex-grow: 1;
+            padding-top: $panel-item-padding;
+          }
+          > footer {
+            text-align: center;
+            height: auto;
+            padding-bottom: 50px;
+          }
+
+          &:hover {
+            border: solid 2px $color-pf-blue-300;
+            box-shadow: $panel-item-shadow-offset  $panel-item-shadow-blur-radius $panel-item-shadow-spread-radius darken($panel-item-layout-block-shadow-color, 10%);
+          }
+          &:active {
+            padding-left: $panel-item-spacing - 1px;
+            margin-bottom:(($grid-gutter-width / 2) - 1px);
+
+            > header {
+              padding-top: 11px;
+              margin-bottom:-1px;
+
+            }
+            > section {
+              padding-top: $panel-item-padding + 1px;
+              margin-bottom:-1px;
+
+            }
+            > div {
+              padding-top: $panel-item-padding + 1px;
+              margin-bottom:-1px;
+            }
+            > footer {
+              padding-top: 1px;
+              margin-bottom:-1px;
+
+            }
+
+            border: solid 2px $color-pf-blue-400;
+            box-shadow: $panel-item-shadow-offset  $panel-item-shadow-blur-radius $panel-item-shadow-spread-radius darken($panel-item-layout-block-shadow-color, 20%);
+          }
+
+
+        }
+
+      }
+  }

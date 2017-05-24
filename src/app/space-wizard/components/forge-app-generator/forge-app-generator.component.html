@@ -68,22 +68,22 @@
              [class.col-xs-12]="field.display.showLabel!==false" [class.col-sm-4]="field.display.showLabel!==false" class="user-select-none control-label">{{field.display.label}}</label>
             <div [class.col-sm-8]="field.display.showLabel!==false" [class.col-xs-12]="field.display.showLabel===false" [ngSwitch]="forge.fields[i].display.inputType ">
               <div *ngSwitchCase="'singleInput'" [ngSwitch]="forge.fields[i].valueType">
-                <input *ngSwitchCase="'string'" id="{{forge.fields[i].name}}" name="{{forge.fields[i].name}}" (change)="forge.validate()"
+                <input *ngSwitchCase="'string'" id="{{forge.fields[i].name}}" title="{{forge.fields[i].display.label}}" name="{{forge.fields[i].name}}" (change)="forge.validate()"
                   (keyup.enter)="forge.validate()" [(ngModel)]="forge.fields[i].value" type="text" [class.form-control-danger]="!forge.fields[i].display.valid"
                   class="form-control" placeholder="{{forge.fields[i].description}}" [disabled]="forge.fields[i].display.enabled===false"
                   [required]="forge.fields[i].display.required" />
-                <input *ngSwitchCase="'boolean'" style="box-shadow:none;" [class.form-control-danger]="!forge.fields[i].display.valid" (change)="forge.validate()"
+                <input *ngSwitchCase="'boolean'" style="box-shadow:none;" title="{{forge.fields[i].display.label}}" [class.form-control-danger]="!forge.fields[i].display.valid" (change)="forge.validate()"
                   type="checkbox" name="{{forge.fields[i].name}}" [(ngModel)]="forge.fields[i].value" class="form-control"
                   [required]="forge.fields[i].display.required" [disabled]="forge.fields[i].display.enabled===false">
-                <input *ngSwitchCase="'number'" [class.form-control-danger]="!forge.fields[i].display.valid" type="number" (change)="forge.validate()"
+                <input *ngSwitchCase="'number'" [class.form-control-danger]="!forge.fields[i].display.valid" title="{{forge.fields[i].display.label}}" type="number" (change)="forge.validate()"
                   name="{{forge.fields[i].name}}" [(ngModel)]="forge.fields[i].value" class="form-control" [required]="forge.fields[i].display.required"
                   [disabled]="forge.fields[i].display.enabled===false">
               </div>
 
               <div class="combobox-container" *ngSwitchCase="'singleSelectionDropdown'">
-                <input type="hidden" name value>
+                <input type="hidden"   name value>
                 <div [class.width-100]="forge.fields[i].display.enabled===false" class="input-group">
-                  <input type="text" [class.form-control-danger]="!forge.fields[i].display.valid" id="{{forge.fields[i].name}}" name="{{forge.fields[i].name}}"
+                  <input type="text" title="{{forge.fields[i].display.label}}" [class.form-control-danger]="!forge.fields[i].display.valid" id="{{forge.fields[i].name}}" name="{{forge.fields[i].name}}"
                     class="user-select-none combobox form-control" readonly="true" (change)="forge.validate()" [disabled]="forge.fields[i].display.enabled===false"
                     (click)="forge.fields[i].display.open =!forge.fields[i].display.open" [(ngModel)]="forge.fields[i].display.text" placeholder="select an option">
                   <ul class="dropdown-menu" [class.open]="forge.fields[i].display.open">
@@ -115,7 +115,7 @@
                   <ul class="choice-menu" style="list-style:none;margin:0;padding:0">
                     <li style="display:flex;" class="choice-container" (click)="forge.fields[i].value=choice.id;forge.validate()"
                       *ngFor="let choice of forge.fields[i].display.choices">
-                      <input style="width:auto;" [checked]="forge.fields[i].value === choice.id" [value]="choice.id" type="radio" name="{{forge.fields[i].name}}"
+                      <input style="width:auto;" title="{{forge.fields[i].display.label}}" [checked]="forge.fields[i].value === choice.id" [value]="choice.id" type="radio" name="{{forge.fields[i].name}}"
                         class="user-select-none form-control margin-right-standard-offset" readonly="false" [disabled]="forge.fields[i].display.enabled===false" >
                       <div style="display:inline-block;flex-grow:1" [class.selected]="forge.fields[i].value === choice.id" class=" user-select-none cursor-pointer">
                         <div  [class.vertical-layout]="choice.verticalLayout===true" [class.selected]="forge.fields[i].value === choice.id" class="choice-item">
@@ -144,7 +144,7 @@
                     </div>
                   </div>
                   <input #optionFilter [class.form-control-danger]="!forge.fields[i].display.valid" id="{{forge.fields[i].name}}" name="{{forge.fields[i].name}}"
-                    class="form-control form-control-filter-input" (keyup)="filterList(forge.fields[i],optionFilter.value)"
+                    class="form-control form-control-filter-input" title="{{forge.fields[i].display.label}}" (keyup)="filterList(forge.fields[i],optionFilter.value)"
                   />
                   <div class="input-group-btn">
                     <div class="btn btn-default btn-sm btn-right-multi-select-button">

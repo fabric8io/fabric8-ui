@@ -1,0 +1,71 @@
+    <form role="form" #spaceForm="ngForm" (ngSubmit)="createSpace()" novalidate>
+      <header class="container-fluid">
+        <div class="row">
+          <div class="col-xs-12 wizard-step-title">
+            <h3><strong> Create Space </strong></h3>
+            <div></div>
+            <span (click)="workflow.cancel()" class="cursor-pointer pficon pficon-close"></span>
+          </div>
+        </div>
+      </header>
+      <section class="container-fluid padding-top-standard-offset">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label for="name" class="control-label col-xs-12 col-sm-4">Name</label>
+                <div class="col-xs-12 col-sm-8">
+                  <input id="name" name="name" type="text" class="form-control" placeholder="Enter a unique name for your space" [(ngModel)]="configurator.currentSpace.name"
+                    #name="ngModel" required uniqueSpaceName validSpaceName/>
+                  <div *ngIf="name.errors && (name.dirty || name.touched)" class="alert alert-danger">
+                    <div [hidden]="!name.errors.required">
+                      Name is required
+                    </div>
+                    <div [hidden]="!name.errors.minLength">
+                      Name must be at least {{name.errors.minLength?.min}} characters long.
+                    </div>
+                    <div [hidden]="!name.errors.maxLength">
+                      Name cannot be more than {{name.errors.maxLength?.max}} characters long.
+                    </div>
+                    <div [hidden]="!name.errors.unique">
+                      Name '{{name.errors.unique?.requestedName}}'' is already in use as {{name.errors.unique?.existingSpace.relationalData.creator.attributes.username}}/{{name.errors.unique?.existingSpace.attributes.name}}.
+                    </div>
+                    <div [hidden]="!name.errors.invalid">
+                      Name must contain only letters (upper case or lower case), numbers, spaces, underscores (_) or hyphens(-). It cannot start or end with a space, an underscore or a hyphen.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="developmentProcess" class="control-label col-xs-12 col-sm-4 ">Template</label>
+                <div class="col-xs-12 col-sm-8">
+                  <select class="form-control" id="developmentProcess" [(ngModel)]="configurator.currentSpace.process" name="developmentProcess">
+                    <option *ngFor="let p of dummy.processTemplates" [ngValue]="p">{{p.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div *ngIf="configurator.currentSpace.process?.description" class="padding-bottom-standard-offset col-xs-8 col-xs-offset-4">
+                  <div class="row">
+                    <div class="col-xs-12">
+                      <span class="pficon pficon-info "></span><span class="padding-left-5">{{configurator.currentSpace.process.description}}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  This space will be <strong>public</strong>, which means that anyone can access this code and participate
+                  in creating the product.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="container-fluid padding-top-standard-offset padding-bottom-standard-offset">
+        <div class="row">
+          <div class="col-xs-12 wizard-step-tool-bar with-items-at-end">
+            <button id="createSpaceButton" class="btn btn-primary" [disabled]="!spaceForm.form.valid" type="submit">Create Space</button>
+          </div>
+        </div>
+      </footer>
+    </form>

@@ -35,8 +35,8 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
   openForgeWizard() {
     this.updateSpace.open();
-    this.spaceWizard.configurator.space = this._context.space;
-    this.spaceWizard.workflow.gotoStep('forge-step');
+    this.spaceWizard.configurator.currentSpace = this._context.space;
+    this.spaceWizard.workflow.gotoStep(this.spaceWizard.configurator.steps.forge);
   }
 
 }

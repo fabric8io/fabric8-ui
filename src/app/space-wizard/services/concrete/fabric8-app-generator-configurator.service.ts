@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { ContextService } from '../../../shared/context.service';
 import {
   Space,
-  Context
+  Context,
+  SpaceAttributes
 } from 'ngx-fabric8-wit';
 
 import {
@@ -17,17 +18,69 @@ import {
 } from '../contracts/app-generator-service';
 /** dependencies */
 import {
-  IForgeInput
+  IForgeInput,
+  ForgeCommands
 } from '../forge.service';
 
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
+
 
 @Injectable()
 export class AppGeneratorConfiguratorService {
 
   static instanceCount: number = 1;
 
-  public currentSpace: Space;
+  public currentSpace: Space ;
+
+  /**
+   * Helps to specify wizard step names to prevent typos
+   */
+
+  public steps = {
+    space: 'space-step',
+    forge: 'forge-step',
+    forgeQuickStart: 'forge-quick-start-step',
+    forgeStarter: 'forge-starter-step',
+    forgeImportGit: 'forge-import-git-step'
+  };
+
+  public commands = {
+    forgeQuickStart: ForgeCommands.forgeQuickStart,
+    forgeStarter: ForgeCommands.forgeStarter,
+    forgeImportGit: ForgeCommands.forgeImportGit
+  };
+
+
+  public resetSpace(): Space {
+      let space = {} as Space;
+      space.name = '';
+      space.path = '';
+      space.attributes = new SpaceAttributes();
+      space.attributes.name = space.name;
+      space.type = 'spaces';
+      space.privateSpace = false;
+      space.process = { name: '', description: ''};
+      space.relationships = {
+        areas: {
+          links: {
+            related: ''
+          }
+        },
+        iterations: {
+          links: {
+            related: ''
+          }
+        },
+        ['owned-by']: {
+          data: {
+            id: '',
+            type: 'identities'
+          }
+        }
+      };
+     this.currentSpace = space;
+     return space;
+  }
 
   constructor(loggerFactory: LoggerFactory, private context: ContextService) {
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name,
@@ -42,7 +95,7 @@ export class AppGeneratorConfiguratorService {
         this.log(`the current space is updated to ${this.currentSpace.attributes.name}`);
       }
     });
-
+    this.resetSpace();
   }
 
   // appends fields that are needed but may only be entered at a later stage in the wizard
@@ -133,17 +186,6 @@ export class AppGeneratorConfiguratorService {
           break;
         }
         case 'gitrepository' : {
-          // if( this.currentSpace && (this.currentSpace.attributes.name || '' ).length > 0 ) {
-          //   let spaceName = this.currentSpace.attributes.name;
-          //   field.value = spaceName ;
-          //   let namedField = validationFields.find( f => f.name ==='named');
-          //   // handle the scenario when someone chages the name (that is defaulted to the space name) to something else
-          //   // and the expecation that this defaults to the repo name. Do if that changes then default repo name needs to
-          //   // change too !!
-          //   if( namedField &&  (namedField.value||'').toString() !== spaceName ) {
-          //       field.value= namedField.value
-          //   }
-          // }
           field.display.label = 'GitHub repository name';
           break;
         }
