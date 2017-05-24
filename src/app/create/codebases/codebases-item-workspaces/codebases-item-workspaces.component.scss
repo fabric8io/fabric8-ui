@@ -3,10 +3,10 @@
 codebases-item-workspaces { display: flex; }
 
 .busy-indicator {
+  position: relative;
   display: flex;
   height: auto;
   margin-left: 10px;
-  position: relative;
   vertical-align: center;
   width: 25px;
   > div {
