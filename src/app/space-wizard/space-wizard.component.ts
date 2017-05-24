@@ -1,4 +1,4 @@
-import { SpacesService } from './../shared/spaces.service';
+import { SpacesService } from '../shared/spaces.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -19,12 +19,9 @@ import { SpaceConfigurator } from './models/codebase';
 import { IModalHost } from './models/modal-host';
 import { IWorkflow, WorkflowFactory } from './models/workflow';
 import { ForgeCommands } from './services/forge.service';
-import { AppGeneratorConfigurationService } from './services/app-generator.service';
+import { AppGeneratorConfiguratorService } from './services/app-generator.service';
 
 @Component({
-  host: {
-    'class': 'wizard-container'
-  },
   selector: 'space-wizard',
   templateUrl: './space-wizard.component.html',
   styleUrls: ['./space-wizard.component.scss'],
@@ -58,7 +55,7 @@ export class SpaceWizardComponent implements OnInit {
    * gleaned from the wizard information gathering
    * process.
    */
-  configurator: SpaceConfigurator = SpaceConfigurator.default();
+  configurator: SpaceConfigurator = SpaceConfigurator.defaultValue();
 
   private _workflow: IWorkflow = null;
   @Input()
@@ -83,7 +80,7 @@ export class SpaceWizardComponent implements OnInit {
     loggerFactory: LoggerFactory,
     private spaceNamespaceService: SpaceNamespaceService,
     private spaceNamePipe: SpaceNamePipe,
-    private _appGeneratorConfigurationService: AppGeneratorConfigurationService,
+    private _configuratorService: AppGeneratorConfiguratorService,
     private spacesService: SpacesService
   ) {
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, SpaceWizardComponent.instanceCount++);
@@ -152,7 +149,7 @@ export class SpaceWizardComponent implements OnInit {
         return this.spaceService.create(space);
       })
       .do(createdSpace => {
-        this.spacesService.addRecent.next(createdSpace)
+        this.spacesService.addRecent.next(createdSpace);
       })
       .switchMap(createdSpace => {
         return this.spaceNamespaceService
@@ -163,7 +160,7 @@ export class SpaceWizardComponent implements OnInit {
       })
       .subscribe(createdSpace => {
         this.configurator.space = createdSpace;
-        this._appGeneratorConfigurationService.currentSpace = createdSpace;
+        this._configuratorService.currentSpace = createdSpace;
         let actionObservable = this.notifications.message({
           message: `Your new space is created!`,
           type: NotificationType.SUCCESS,
@@ -203,12 +200,13 @@ export class SpaceWizardComponent implements OnInit {
    * into a default empty state.
    */
   reset() {
-    this.configurator = SpaceConfigurator.default();
+    this.configurator = SpaceConfigurator.defaultValue();
     this.workflow = this.createAndInitializeWorkflow();
   }
 
   finish() {
     this.log(`finish ...`);
+    // navigate to the users space
     this.router.navigate([
       this.configurator.space.relationalData.creator.attributes.username,
       this.configurator.space.attributes.name
@@ -220,6 +218,7 @@ export class SpaceWizardComponent implements OnInit {
 
   cancel() {
     this.log(`cancel...`);
+    // just close the host dialog
     if (this.host) {
       this.host.close();
     }

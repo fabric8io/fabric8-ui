@@ -114,6 +114,8 @@ class OpenShiftIoSpaceHomePage {
     return this.codeBaseWidget.element(by.xpath(".//*[contains(text(),'Add to space')]"));                   //by.buttonText('Add to space'));
   }
 
+
+
   clickCodeBaseWidgetAddToSpaceButton () {
     browser.wait(until.elementToBeClickable(this.codeBaseWidgetAddToSpaceButton), constants.LONG_WAIT, 'Failed to find element headerPlan');
     this.codeBaseWidgetAddToSpaceButton.click().then(function(){

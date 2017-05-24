@@ -1,0 +1,9 @@
+<div class="steps" >
+  <ng-template ngFor let-step [ngForOf] ="sequence.steps" let-c="count" let-i="index" >
+    <div  class="step" >
+      <div [class.active]="step.active === true" class="step-graphic" >{{step.name}}
+      </div>
+    </div>
+    <div *ngIf="i<c-1" class="step-seperator"></div>
+  </ng-template>
+</div>

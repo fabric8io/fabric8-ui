@@ -1,7 +1,7 @@
 import { ClassProvider, FactoryProvider, OpaqueToken } from '@angular/core';
 import { LoggerFactory } from '../../common/logger';
 import { Fabric8AppGeneratorService } from '../concrete/fabric8-app-generator.service';
-import { AppGeneratorConfigurationService } from '../concrete/app-generator-configuration.service';
+import { AppGeneratorConfiguratorService } from '../concrete/fabric8-app-generator-configurator.service';
 
 import { AppGeneratorService, IAppGeneratorServiceToken } from '../contracts/app-generator-service';
 
@@ -19,10 +19,10 @@ export class IAppGeneratorServiceProvider {
   static get FactoryProvider(): FactoryProvider {
     return {
       provide: IAppGeneratorServiceToken,
-      useFactory: (forge: IForgeService, loggerFactory, appGeneratorConfigurationService) => {
-        return new Fabric8AppGeneratorService(forge, loggerFactory, appGeneratorConfigurationService);
+      useFactory: (forge: IForgeService, loggerFactory, appGeneratorConfiguratorService) => {
+        return new Fabric8AppGeneratorService(forge, loggerFactory, appGeneratorConfiguratorService);
       },
-      deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfigurationService ]
+      deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfiguratorService ]
     };
   }
 
@@ -71,7 +71,7 @@ export class FieldSetServiceProvider {
       useFactory: (forge: IForgeService, loggerFactory, appGeneratorConfigurationService) => {
         return new Fabric8AppGeneratorService(forge, loggerFactory, appGeneratorConfigurationService);
       },
-      deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfigurationService ],
+      deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfiguratorService ],
       multi: false
     };
   }

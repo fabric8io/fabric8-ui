@@ -33,7 +33,7 @@ const OfflinePlugin = require('offline-plugin');
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 const FABRIC8_FORGE_API_URL = process.env.FABRIC8_FORGE_API_URL;
 const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL;
-const REALM = process.env.REALM;
+const FABRIC8_REALM = process.env.FABRIC8_REALM;
 const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
 const FABRIC8_SSO_API_URL = process.env.FABRIC8_SSO_API_URL;
 const FABRIC8_FORGE_URL = process.env.FORGE_URL;
@@ -53,7 +53,7 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   HMR: false,
   FABRIC8_FORGE_API_URL: FABRIC8_FORGE_API_URL,
   FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
-  REALM: REALM,
+  FABRIC8_REALM: FABRIC8_REALM,
   FABRIC8_SSO_API_URL: FABRIC8_SSO_API_URL,
   FABRIC8_RECOMMENDER_API_URL: FABRIC8_RECOMMENDER_API_URL,
   FABRIC8_FORGE_URL: FABRIC8_FORGE_URL,
@@ -196,7 +196,7 @@ module.exports = function (env) {
           'HMR': METADATA.HMR,
           'FABRIC8_FORGE_API_URL': stringify(METADATA.FABRIC8_FORGE_API_URL),
           'FABRIC8_WIT_API_URL': stringify(METADATA.FABRIC8_WIT_API_URL),
-          'REALM': stringify(METADATA.REALM),
+          'FABRIC8_REALM': stringify(METADATA.FABRIC8_REALM),
           'FABRIC8_SSO_API_URL': stringify(METADATA.FABRIC8_SSO_API_URL),
           'FABRIC8_RECOMMENDER_API_URL': stringify(METADATA.FABRIC8_RECOMMENDER_API_URL),
           'FABRIC8_FORGE_URL': stringify(METADATA.FABRIC8_FORGE_URL),

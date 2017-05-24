@@ -136,6 +136,7 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     return browser.wait(until.not(until.presenceOf(this.alertToastElements)));
   }
 
+
   /* -----------------------------------------------------------------*/
   /* UI Page Section: Persistent Navigation Bar */
 

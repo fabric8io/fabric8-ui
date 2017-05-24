@@ -11,7 +11,8 @@ import {
   GitHubRepoCommit,
   GitHubRepoDetails,
   GitHubRepoLastCommit,
-  GitHubRepoLicense
+  GitHubRepoLicense,
+  GitHubUser,
 } from './github';
 
 /**
@@ -58,8 +59,31 @@ export class GitHubService implements OnDestroy {
     this.cache = new Map();
   }
 
+  /**
+   * GitHub responses are cached due to rate limiting.
+   *
+   * Note: This was made public for the unit tests
+   *
+   * @param url
+   * @returns {undefined|Observable<any>}
+   */
   getCache(url: string): Observable<any>{
     return this.cache.get(url);
+  }
+
+  /**
+   * Get GitHub headers for authentified user
+   *
+   * Note: This was made public for the unit tests
+   *
+   * @returns {Headers}
+   */
+  getHeaders(): Observable<Headers> {
+    return this.authService.gitHubToken.map(token => {
+      let newHeaders = cloneDeep(GitHubService.HEADERS);
+      newHeaders.set('Authorization', `token ${token}`);
+      return newHeaders;
+    });
   }
 
   /**
@@ -76,7 +100,8 @@ export class GitHubService implements OnDestroy {
       return this.cache.get(url);
     } else {
       let res = this.getHeaders()
-        .switchMap(newHeaders => this.http.get(url, { headers: newHeaders }))
+        .switchMap(newHeaders => this.http
+          .get(url, { headers: newHeaders }))
         .map(response => {
           return response.json() as GitHubRepoCommit;
         })
@@ -222,17 +247,32 @@ export class GitHubService implements OnDestroy {
   }
 
   /**
-   * Get GitHub headers for authentified user
+   * Get authenticate GitHub user
    *
-   * @returns {Headers}
+   * @returns {Observable<GitHubUser>}
    */
-  getHeaders(): Observable<Headers> {
-    return this.authService.gitHubToken.map(token => {
-      let newHeaders = cloneDeep(GitHubService.HEADERS);
-      newHeaders.set('Authorization', `token ${token}`);
-      return newHeaders;
-    });
+  getUser(): Observable<GitHubUser> {
+    let url = `${this.gitHubUrl}/user`;
+    if (this.cache.has(url)) {
+      return this.cache.get(url);
+    } else {
+      let res = this.getHeaders()
+        .switchMap(newHeaders => this.http
+          .get(url, { headers: newHeaders }))
+        .map(response => {
+          return response.json() as GitHubUser
+        })
+        .publishReplay(1)
+        .refCount()
+        .catch((error) => {
+          return this.handleError(error);
+        });
+      this.cache.set(url, res);
+      return res;
+    }
   }
+
+  // Private
 
   /**
    * Get GitHub full name from clone URL

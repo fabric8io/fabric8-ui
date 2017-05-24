@@ -5,8 +5,14 @@
     <div class="col-md-2">
       <div class="row">
         <div class="width-100">
-          <section class="profile-image-overlay posRel">
-            <img src="{{context?.user?.attributes?.imageURL}}" class="width-100 profile-img" />
+          <section>
+            <div *ngIf="(context.user.attributes.imageURL !== undefined && context.user.attributes.imageURL.length !== 0); then showImageURL else addImageURL"></div>
+            <ng-template #showImageURL>
+              <img src="{{context.user.attributes.imageURL}}" class="profile-img">
+            </ng-template>
+            <ng-template #addImageURL>
+              <img src="../../../assets/images/profile-user.png" class="profile-img-none">
+            </ng-template>
           </section>
           <section>
             <h2 class="pull-left">{{context?.user?.attributes?.fullName}}</h2>
@@ -23,98 +29,236 @@
           <p>
             <span class="fa fa-external-link"></span>
             <a href="javascript:void(0)" class="margin-left-5 margin-right-5"
-               (click)="setElementFocus($event, _email)">Add a url</a>
+               (click)="setElementFocus($event, _url)">Add a url</a>
           </p>
           <a href="javascript:void(0)" class="margin-left-5 margin-right-5"
-             (click)="setElementFocus($event, _email)">Add a bio</a>
+             (click)="setElementFocus($event, _bio)">Add a bio</a>
         </div>
       </div>
     </div>
     <!-- center column -->
     <div class="col-md-8">
-      <form class="col-sm-8" role="form">
-        <p class="fields-status-pf">The fields marked with <span class="required-pf">*</span> are required.</p>
-        <h2>Your profile</h2>
-        <div class="form-group">
-          <label for="username" class="control-label required-pf">Username</label>
-          <div [ngClass]="{'has-error': usernameInvalid === true}">
-            <input type="text" class="form-control" id="username" name="username" required
-                   [(ngModel)]="username">
-            <span class="help-block">
-              Username must be less than 63 characters and can't begin with a dash or underscore. They may contain
-              lowercase letters, numbers, dashes, or underscores.
-            </span>
+      <form role="form">
+        <div class="col-xs-8 padding-left-0">
+          <p class="fields-status-pf">The fields marked with <span class="required-pf">*</span> are required.</p>
+          <div class="form-group padding-top-15">
+            <label class="margin-right-10">Username:</label>
+            <span>{{username}}<span class="pficon pficon-ok margin-left-10 margin-right-0"></span>
+          </span>
+          </div>
+          <div class="form-group padding-top-10">
+            <div *ngIf="gitHubLinked && openShiftLinked; then allLinked else allUnlinked"></div>
+            <ng-template #allLinked>
+              <label class="margin-bottom-15">
+                Authorized accounts
+              </label>
+            </ng-template>
+            <ng-template #allUnlinked>
+              <label class="margin-bottom-10">
+                Select accounts to authorize
+              </label>
+            </ng-template>
+            <div class="form-group">
+              <div *ngIf="gitHubLinked; then ghLinked else ghUnlinked"></div>
+              <ng-template #ghLinked>
+              <span>
+                You've authorized GitHub.<span class="pficon pficon-ok margin-left-10"></span>
+              </span>
+              </ng-template>
+              <ng-template #ghUnlinked>
+                <div class="checkbox">
+                  <input type="checkbox" id="authGitHub" name="authGitHub"
+                         [(ngModel)]="authGitHub">
+                  <label for="authGitHub" class="required-pf">GitHub</label>
+                </div>
+              </ng-template>
+            </div>
+            <div class="form-group">
+              <div *ngIf="openShiftLinked; then osoLinked else osoUnlinked"></div>
+              <ng-template #osoLinked>
+              <span>
+                You've authorized OpenShift.com.<span class="pficon pficon-ok margin-left-10"></span>
+              </span>
+              </ng-template>
+              <ng-template #osoUnlinked>
+                <div class="checkbox">
+                  <input type="checkbox" id="authOpenShift" name="authOpenShift"
+                         [(ngModel)]="authOpenShift">
+                  <label for="authOpenShift" class="required-pf">OpenShift.com</label>
+                </div>
+              </ng-template>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-lg btn-default" id="connect"
+                      [disabled]="isConnectAccountsDisabled"
+                      (click)="connectAccounts()">Connect accounts</button>
+            </div>
+          </div>
+          <div class="form-group padding-top-15">
+            <label for="fullName" class="control-label margin-top-15">Name</label>
+            <div [ngClass]="{'has-error': fullNameInvalid}">
+              <input type="text" class="form-control" id="fullName" name="fullName"
+                     placeholder="Enter your full name"
+                     [(ngModel)]="fullName">
+            </div>
+          </div>
+          <div class="form-group padding-top-15">
+            <label for="email" class="control-label">Email</label>
+            <div [ngClass]="{'has-error': emailInvalid}">
+              <input type="text" class="form-control" id="email" name="email" #_email
+                     placeholder="name@gmail.com"
+                     [(ngModel)]="email"
+                     (change)="validateEmail()">
+            </div>
+          </div>
+          <div class="form-group padding-top-15">
+            <label for="company" class="control-label">Company</label>
+            <div [ngClass]="{'has-error': companyInvalid}">
+              <input type="text" class="form-control" id="company" name="company"
+                     placeholder="name@gmail.com"
+                     [(ngModel)]="company">
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="name" class="control-label">Name</label>
-          <div [ngClass]="{'has-error': nameInvalid === true}">
-            <input type="text" class="form-control" id="name" name="name"
-                   [(ngModel)]="name">
+        <div class="col-xs-8 padding-left-0">
+          <div class="form-group padding-top-15">
+            <label for="previewImg" class="control-label">Profile photo</label>
+            <div class="preview-cont">
+              <img id="previewImg" src="{{imageUrl}}" class="preview-img"
+                   *ngIf="imageUrl !== undefined && imageUrl.length > 0">
+              <img id="previewImg" src="../../../assets/images/profile-user.png" class="preview-img-none"
+                   *ngIf="imageUrl === undefined || imageUrl.length === 0">
+              <span class="preview-field" [ngClass]="{'has-error': imageUrlInvalid}">
+                <input type="text" class="form-control" id="imageUrl" name="imageUrl" #_imageUrl
+                       placeholder="http://www.myphoto.com"
+                       [(ngModel)]="imageUrl"
+                       (change)="validateImageUrl()">
+              </span>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="hideName" class="sr-only">Hide name</label>
-          <div class="checkbox">
-            <input type="checkbox" id="hideName" name="hideName"
-                   [(ngModel)]="hideName">Don't show my name
+        <div class="col-xs-4 padding-left-0">
+          <div class="form-group padding-top-15">
+            <div class="preview-btn">
+              <!-- Todo: use pficon-arrow when newer version of patternfly is available? -->
+              <button class="btn btn-default" id="linkImageUrl"
+                      [disabled]="imageUrlInvalid"
+                      (click)="linkImageUrl()">
+                <i class="fa fa-share-square-o"></i> Link Profile Photo</button>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="name" class="control-label">Email</label>
-          <div [ngClass]="{'has-error': emailInvalid === true}">
-            <input type="text" class="form-control" id="email" name="email" #_email
-                   [(ngModel)]="email">
+        <div class="col-xs-8 padding-left-0">
+          <div class="form-group padding-top-15">
+            <label for="url" class="control-label">Url</label>
+            <div [ngClass]="{'has-error': urlInvalid}">
+              <input type="text" class="form-control" id="url" name="url" #_url
+                     placeholder="http://www.myprofile.com"
+                     [(ngModel)]="url"
+                     (change)="validateUrl()">
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="hideName" class="sr-only">Hide email</label>
-          <div class="checkbox">
-            <input type="checkbox" id="hideEmail" name="hideEmail"
-                   [(ngModel)]="hideEmail">Don't show this email
+        <div class="col-xs-12 padding-left-0">
+          <div class="form-group padding-top-15">
+            <label for="bio">Bio</label>
+            <alm-remainingchars [config]="remainingCharsConfig" #_bio
+                                (onChange)="handleBioChange($event)"></alm-remainingchars>
+          </div>
+          <span class="pull-right chars-remaining-pf">
+            <span #remainingCountElement></span>
+            <span class="fields-status-pf">characters remaining</span>
+          </span>
+        </div>
+        <div class="col-xs-12 padding-left-0">
+          <div class="form-group padding-top-10">
+            <h2>Privacy</h2>
+            <p></p>
+          </div>
+          <div class="form-group padding-top-10">
+            <div class="col-xs-5 col-md-6 col-lg-5 padding-left-0 padding-right-0">
+              <label for="showFullName" class="control-label">Display name in your public profile</label>
+            </div>
+            <div class="col-xs-7 col-md-6 col-lg-7 padding-left-0">
+              <bSwitch id="showFullName" name="showFullName"
+                       [switch-disabled]="true"
+                       [(ngModel)]="showFullName"></bSwitch>
+            </div>
+          </div>
+          <div class="form-group padding-top-40">
+            <div class="col-xs-5 col-md-6 col-lg-5 padding-left-0 padding-right-0">
+              <label for="showEmail" class="control-label">Display email in your public profile</label>
+            </div>
+            <div class="col-xs-7 col-md-6 col-lg-7 col-lg-5 padding-left-0">
+              <bSwitch id="showEmail" name="showEmail"
+                       [switch-disabled]="true"
+                       [(ngModel)]="showEmail"></bSwitch>
+            </div>
+          </div>
+          <div class="form-group padding-top-40">
+            <div class="col-xs-5 col-md-6 col-lg-5 padding-left-0 padding-right-0">
+              <label for="showActivity" class="control-label">Display activity in your public profile</label>
+            </div>
+            <div class="col-xs-7 col-md-6 col-lg-7 padding-left-0">
+              <bSwitch id="showActivity" name="showActivity"
+                       [switch-disabled]="true"
+                       [(ngModel)]="showActivity"></bSwitch>
+            </div>
+          </div>
+          <div class="form-group padding-top-40">
+            <div class="col-xs-5 col-md-6 col-lg-5 padding-left-0 padding-right-0">
+              <label for="showSpaces" class="control-label">Display Spaces in your public profile</label>
+            </div>
+            <div class="col-xs-7 col-md-6 col-lg-7 padding-left-0">
+              <bSwitch id="showSpaces" name="showSpaces"
+                       [switch-disabled]="true"
+                       [(ngModel)]="showSpaces"></bSwitch>
+            </div>
+          </div>
+          <div class="form-group padding-top-40">
+            <div class="col-xs-7 col-md-9 col-lg-7 padding-left-0 padding-right-0">
+              <label for="showWorkItems" class="control-label">Display work items assigned to you in your public profile</label>
+            </div>
+            <div class="col-xs-5 col-md-3 col-lg-5 padding-left-0">
+              <bSwitch id="showWorkItems" name="showWorkItems"
+                       [switch-disabled]="true"
+                       [(ngModel)]="showWorkItems"></bSwitch>
+            </div>
           </div>
         </div>
-        <h2 class="margin-top-40">Connected accounts</h2>
-        <p class="getting-started">
-          Please connect your GitHub and OpenShift accounts to OpenShift.io.
-        </p>
-        <div class="form-group">
-          <label for="github" class="control-label required-pf">GitHub</label>
-          <div>
-            <button class="btn btn-lg btn-default" id="github"
-                    (click)="redirectToGitHubAuth()">Connect GitHub account</button>
+        <div class="col-xs-12 padding-left-0">
+          <div class="form-group padding-top-30">
+            <h2>Advanced</h2>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="openshift" class="control-label required-pf">OpenShift</label>
-          <div>
-            <button class="btn btn-lg btn-default" id="openshift"
-                    (click)="redirectToOpenShiftAuth()">Connect OpenShift account</button>
-          </div>
-        </div>
-        <!--
-        <fieldset class="fields-section-pf" id="test">
-          <legend class="fields-section-header-pf">
-            <span class="fa fa-angle-right fa-angle-down field-section-toggle-pf"></span>
-            <a href="#test" class="field-section-toggle-pf">Advanced Options</a>
-          </legend>
           <div class="form-group">
-            <label class="col-sm-2 control-label" for="">Entry Point 1</label>
-            <div class="col-sm-10">
-              <input type="text" id="" class="form-control"></div>
+            <label for="token" class="control-label margin-top-15">Personal Access Token</label>
+            <div class="panel panel-default" id="token">
+              <div class="panel-heading token-heading-cont">
+                <i class="padding-top-13 fa"
+                   [ngClass]="{'fa-angle-down': tokenPanelOpen, 'fa-angle-right': !tokenPanelOpen}"
+                   (click)="toggleTokenPanel()"></i>
+                <p class="token-heading padding-top-10 padding-right-15 margin-right-5"
+                   [ngClass]="{'padding-left-11': tokenPanelOpen, 'padding-left-15': !tokenPanelOpen}">{{token}}</p>
+                <button class="btn btn-lg btn-default"
+                        (click)="copyTokenToClipboard()">Copy</button>
+              </div>
+              <div class="panel-body margin-left-15 margin-right-15" *ngIf="tokenPanelOpen">
+                <p class="token-body padding-left-5 padding-right-5">{{token}}</p>
+              </div>
+            </div>
           </div>
-        </fieldset>
-        -->
-        <h2 class="margin-top-40">Update tenent</h2>
-        <div class="form-group">
-          <button class="btn btn-lg btn-default"
-                  (click)="updateTenent()">Update tenent</button>
+          <div class="form-group">
+            <button class="btn btn-lg btn-default"
+                    (click)="updateTenent()">Update tenent</button>
+          </div>
         </div>
       </form>
     </div>
     <!-- right column -->
     <div class="col-md-2">
-      <button class="btn btn-lg btn-default width-100" disabled>Update Profile</button>
+      <button class="btn btn-lg btn-primary width-100"
+              [disabled]="isUpdateProfileDisabled"
+              (click)="updateProfile()">Update Profile</button>
       <div class="margin-top-5">
         <button class="btn btn-lg btn-default width-100"
           (click)="routeToProfile()">Cancel</button>

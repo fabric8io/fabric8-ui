@@ -115,7 +115,6 @@ export class Workflow implements IWorkflow {
           options.cancel.apply(workflow, args);
         }, 10);
       };
-      return true;
     }
     if ( options.finish ) {
       this.finish = (... args) => {

@@ -1,7 +1,13 @@
 $icon-path:'../../../../assets/icon/';
 @import '../../../../assets/stylesheets/base';
 @import '../../../../assets/stylesheets/_icons';
+@import '../../../../assets/stylesheets/shared/_layout';
 
+// Note: because component encapsulation = ViewEncapsulation.None ... this class scoping is needed
+// to limit the scope of the classes in this component
+.forge-app-generator-component {
+
+  min-height: 80vh;
 
 @keyframes select-item {
   from {
@@ -74,10 +80,6 @@ $icon-path:'../../../../assets/icon/';
 
 }
 
-form
-{
-  min-height: 66vh;
-}
 
 .busy-indicator
 {
@@ -97,67 +99,226 @@ form
   margin-left:-50px;
 }
 
-header{
+>header {
+  min-height:60px;
+}
+>footer {
   min-height:60px;
 }
 
-.app-generator-message
-{
-  max-width:900px;
-  height:70vh;
-  padding:15px !important;
+
+
+// styling of the app generator message section
+.app-generator-message {
+
+  $color-success:$color-pf-green;
+  $color-success-border:$color-success;
+  $color-success-background:#EAF4EA;
+
+  $color-error:$color-pf-red;
+  $color-error-border:$color-error;
+  $color-error-background:$color-pf-black-100;
+
+  $color-warning:$color-pf-gold;
+  $color-warning-border:$color-warning;
+  $color-warning-background:$color-pf-black-100;
+
+  $standard-spacing:$grid-gutter-width/2;
+
+  //max-width:900px;
+  //height:70vh;
+  padding:$standard-spacing !important;
+
   position:relative;
+  width:100%;
+
   display:flex;
+  flex:1;
   flex-direction:column;
+
   &.hide{
    display:none !important;
   }
-  .message-title-container
-  {    .message-title{
-      padding-left:0;
-      .pficon{
-        margin-right:15px;
+  .message-title-container {
+    padding: $standard-spacing;
+    margin-bottom: $standard-spacing;
+    .message-title {
+      user-select: none;
+      .message-title-icon {
+        margin-right: $standard-spacing;
+        vertical-align: middle;
       }
-      &.busy-message-title
-      {
-        text-align: center !important;
+      .message-title-icon-label {
+        font-weight: bold;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .message-title-text {
+        font-weight: normal;
+        display: inline-block;
+        vertical-align: middle;
+        color: $color-pf-black;
       }
     }
   }
-  .message-body-container
-  {
+  .message-body-container {
+
     flex-grow: 1;
+    display:flex;
     position: relative;
     border: solid 1px $color-pf-black-300;
-    &.no-border{
-      border-width:0;
-    }
     overflow: auto;
-    .message-body
-    {
+
+    .message-body {
+      flex:1;
+      &, & > * {
+        white-space: pre-line;
+        //overflow: hidden;
+        //text-overflow: ellipsis;
+      }
+    }
+
+    .message-body {
+
       vertical-align: top;
       position: relative;
       min-height: 100% !important;
       width: 100%;
       margin: 0;
-      padding: 15px;
+      padding: $standard-spacing;
       padding-top:3px;
       border: none;
       line-height: 3.0rem;
       font-size: 1.5rem;
-      white-space: pre; //pre-wrap;
-      &.vertical-align-center
-      {
-        vertical-align: center !important;
+      //white-space:pre;
+
+      .message-status-success {
+        white-space: pre-line;
+        color: $color-success;
+        font-weight: bold;
       }
-      h1,h2,h3 {
-        margin:0;
+
+      .message-status-failed {
+        white-space: pre-line;
+        color: $color-error;
+        font-weight: bold;
+      }
+
+      .message-status-warning {
+        white-space: pre-line;
+        color: $color-warning;
+        font-weight: bold;
+      }
+
+      .property-name {
+
+        white-space: pre-line;
+        color:$color-pf-blue;
+        font-weight: bold;
+
+        &.property-name-result {
+
+          display: inline-block;
+          min-width: 220px;
+          text-align: left;
+          // font-weight: normal;
+          color: $color-pf-black;
+        }
+      }
+
+      .property-value{
+
+        color: $color-pf-black;
+        white-space: pre-line;
+
+        &.property-value-result {
+
+        }
+
+        &.property-value-error {
+
+          color: $color-error;
+          font-weight:bold;
+          font-style: italic;
+        }
+
+        &.property-value-link {
+
+          color: $color-pf-blue;
+        }
+      }
+    }
+  }
+
+  &.app-generator-message-error {
+    .message-title-container {
+
+      border: solid 1px $color-error-border;
+      background-color: $color-error-background;
+
+      .message-title {
+
+        .message-title-icon {
+          color:$color-error;
+        }
+
+        .message-title-icon-label {
+          color:$color-error;
+        }
+      }
+
+    }
+
+  }
+
+  &.app-generator-message-success {
+    .message-title-container {
+      border: solid 1px $color-success-border;
+      background-color: $color-success-background;
+
+      .message-title {
+
+        .message-title-icon {
+          color:$color-success;
+        }
+        .message-title-icon-label {
+          color:$color-success;
+        }
+      }
+
+    }
+  }
+  &.app-generator-message-processing
+  {
+    .message-title-container{
+      .message-title{
+        text-align: center !important;
+        .message-title-icon{
+        }
+        .message-title-icon-label{
+        }
+        .message-title-text{
+          font-size: 2.0rem;
+        }
+      }
+
+    }
+    .message-body-container{
+      border:solid 1px transparent;
+      .message-body{
+        vertical-align: middle;
       }
     }
 
   }
 
+
 }
+
+
+
+
 .combobox-container
 {
   input[type='text']{
@@ -238,6 +399,13 @@ header{
     {
       flex-grow:1;
       padding:5px;
+      .item-name {
+        font-weight:bold;
+      }
+      .item-description {
+        font-size: smaller;
+        white-space: pre-line;
+      }
       //border:solid 1px orange;
     }
     &.vertical-layout{
@@ -299,4 +467,6 @@ header{
 
 
   }
+}
+
 }

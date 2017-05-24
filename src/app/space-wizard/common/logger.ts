@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 
+let formatConsole: boolean = true;
+
 export interface ILogEntry {
   message: string;
   warning?: boolean;
   error?: boolean;
   info?: boolean;
   inner?: any;
+  origin?: string;
 }
 export interface ILoggerDelegate {
   (options: string | ILogEntry, ...args): void;
@@ -19,30 +22,36 @@ export interface ILoggerDelegate {
 export class LoggerFactory {
 
   private styles = {
+
     origin: `
       background:linear-gradient(#444, #333);
-      border-radius:15px;
       color:lime;
       font-style:italic;
-      border-left:solid 0px orangered;
-      padding:3px;
-      padding-left:10px;
-      padding-right:10px`,
+      padding:0 5px;
+      margin:0 0;
+      `,
     instance: `
       background:linear-gradient(#444, #333);
       color:orangered;
-      border-radius:10px;
-      padding:3px;
-      margin:3px 0;`,
+      padding:0 5px;
+      margin:0 0;
+      `,
     message: `
       background:linear-gradient(#444, #333);
       color:white;
-      border-radius:10px;
-      padding:3px 10px;`
+      padding:0 5px;
+      margin:0 0;
+      `
   };
 
   constructor() {
-    console.log(`%c${this.constructor.name} %cNew instance ...`, this.styles.origin, this.styles.message);
+    let fmt = formatConsole === true ? '%c' : '';
+    let msg = `${fmt}${this.constructor.name} ${fmt}New instance ...`;
+    if ( fmt.length > 0 ) {
+      console.log(msg, this.styles.origin, this.styles.message);
+    } else {
+      console.log(msg);
+    }
   }
 
   createLoggerDelegate(origin: string, instance: number = 0): ILoggerDelegate {
@@ -59,31 +68,18 @@ export class LoggerFactory {
       if ( entry.info === true ) {
         method = 'info';
       }
-      let msg = `${origin} ${instance} ${entry.message || ''}`;
-      console[ method ].apply(
-        null,
-        [ `%c${origin}%c ${instance} %c${entry.message || ''}`,
-          me.styles.origin,
-          me.styles.instance,
-          me.styles.message ]
-      );
-
-      if ( args && args.length === 1 ) {
-          if (typeof(args[0]) === 'function') {
-            args[0](msg);
-          } else {
-            console.dir(args[0]);
-          }
+      let fmt = formatConsole === true ? '%c' : '';
+      let msg = `${fmt}${origin}${fmt} ${instance} ${fmt}${entry.message || ''}`;
+      let functionArgs = args.filter(a => typeof(a) === 'function');
+      let otherArgs = args.filter(a => typeof(a) !== 'function');
+      let newArgs = [msg, ...otherArgs];
+      if ( fmt.length > 0 ) {
+        newArgs = [msg, me.styles.origin, me.styles.instance, me.styles.message, ...otherArgs];
       }
-      if ( args && args.length > 1 ) {
-          if (typeof(args[0]) === 'function') {
-            args[0](msg);
-          } else {
-            console.dir(args[0]);
-            if (typeof(args[1]) === 'function') {
-              args[1](msg);
-            }
-          }
+      if ( functionArgs.length > 0 ) {
+        functionArgs[0].apply(null, newArgs);
+      } else {
+        console[method].apply(null, newArgs);
       }
     }
 

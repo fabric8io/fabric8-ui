@@ -34,16 +34,16 @@
         for (let p of Object.getOwnPropertyNames(obj)) {
           let tmp = obj[p];
           if (Array.isArray(tmp)) {
-            t = `${t}\n${s}<span class='wizard-property-name' >${p}</span>${op.assign}${ar.start}${formatJson(tmp, indent + 1)}${ar.end}`;
+            t = `${t}\n${s}<span class="property-name" >${p}</span>${op.assign}${ar.start}${formatJson(tmp, indent + 1)}${ar.end}`;
           } else if (typeof(tmp) !== 'function') {
             if (typeof(tmp) === 'object') {
-              t = `${t}\n${s}<span class='wizard-property-name' >${p}</span>${op.assign}${formatJson(tmp, indent + 1)}`;
+              t = `${t}\n${s}<span class="property-name" >${p}</span>${op.assign}${formatJson(tmp, indent + 1)}`;
             } else {
-              let propertyValue = `<span class = "wizard-property-value" >${tmp}</span>`;
-              if (propertyValue.toLowerCase().includes('exception') && !propertyValue.toLowerCase().includes('with-exception')) {
-                propertyValue = `<span class = "wizard-property-value with-exception" >${obj[p]}</span>`;
+              let propertyValue = `<span class="property-value" >${tmp}</span>`;
+              if (propertyValue.toLowerCase().includes('exception') && !propertyValue.toLowerCase().includes('property-value-error')) {
+                propertyValue = `<span class="property-value property-value-error" >${obj[p]}</span>`;
               }
-              t = `${t}\n${s}<span class='wizard-property-name' >${p}</span>${op.assign}${propertyValue}`;
+              t = `${t}\n${s}<span class="property-name" >${p}</span>${op.assign}${propertyValue}`;
             }
           }
         }

@@ -8,7 +8,7 @@ import { Observable, Observer } from 'rxjs/Rx';
 import { ApiLocatorService } from '../../../shared/api-locator.service';
 
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
-import { formatJson, clone } from '../../common/utilities';
+import { clone } from '../../common/utilities';
 
 
 import {
