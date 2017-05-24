@@ -296,7 +296,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (this.company !== undefined && this.company.length > 0) {
       profile.company = this.company.trim();
     }
-    if (this.email !== undefined && this.email.length > 0) {
+    if (this.email !== undefined && this.email.trim().length > 0) {
       profile.email = this.email.trim();
     }
     if (this.fullName !== undefined && this.fullName.length > 0) {
@@ -318,9 +318,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   private isEmailValid(): boolean {
     if (this.email !== undefined && this.email.trim().length > 0)
-        return (this.email.trim().indexOf("@") !== -1);
+      return (this.email.trim().indexOf("@") !== -1);
     else {
-      return true;
+      return (this.email.trim().length > 0);
     }
   }
 

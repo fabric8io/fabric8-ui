@@ -48,18 +48,8 @@ export class GettingStartedService implements OnDestroy {
     this.userService.loggedInUser
       .map(user => {
         profile = cloneDeep(user) as ExtUser;
-
-        if(profile.attributes) {
+        if (profile.attributes != undefined) {
           profile.attributes.contextInformation = (user as ExtUser).attributes.contextInformation || {};
-        } else {
-          profile.attributes = {
-            "company": "",
-            "contextInformation": {},
-            "fullName": "",
-            "imageURL": "",
-            "username": "",
-            "registrationCompleted": false
-          };
         }
       })
       .publish().connect();
