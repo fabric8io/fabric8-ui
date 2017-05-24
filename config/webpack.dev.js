@@ -242,7 +242,9 @@ module.exports = function (options) {
     devServer: {
       port: METADATA.port,
       host: METADATA.host,
-      historyApiFallback: true,
+      historyApiFallback: {
+        disableDotRule: true,
+      },
       watchOptions: {
         aggregateTimeout: 2000
       },
