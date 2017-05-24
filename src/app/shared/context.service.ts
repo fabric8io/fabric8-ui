@@ -198,7 +198,7 @@ export class ContextService implements Contexts {
               } as Notification);
               console.log(`Space with name ${val.space} and owner ${val.user}
                 from path ${val.url} was not found because of ${err}`);
-                return Observable.throw(`Space with name ${val.space} and owner ${val.user}
+              return Observable.throw(`Space with name ${val.space} and owner ${val.user}
                 from path ${val.url} was not found because of ${err}`);
 
             });

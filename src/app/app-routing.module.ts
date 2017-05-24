@@ -104,6 +104,10 @@ export const routes: Routes = [
       context: ContextResolver
     },
     loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
+  },
+  {
+    path: '**',
+    redirectTo: '/_error'
   }
 ];
 
