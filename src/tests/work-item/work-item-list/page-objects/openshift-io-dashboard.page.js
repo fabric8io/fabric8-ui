@@ -24,12 +24,6 @@ class OpenShiftIoDashboardPage {
 
   /* -----------------------------------------------------------------*/
   
-  /* All elements on page */
-  get allElements () {
-    return element(by.xpath(".//*"));
-  }
-
-
   /* Header dropdown - leftmost in navigation bar - displys current space name */
   get headerDropDownToggle () {
     return element(by.id("header_dropdownToggle"));
@@ -191,7 +185,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   /* Create space in Left Navigation Bar */
     get createSpaceUnderLeftNavigationBar () {
-    return element(by.xpath("//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//*[contains(@class,'pficon-add-circle-o')]"));
+//    return element(by.xpath("//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//*[contains(@class,'pficon-add-circle-o')]"));
+    return element(by.id("header_createSpace"));
   }
   clickCreateSpaceUnderLeftNavigationBar () {
     browser.wait(until.elementToBeClickable(this.createSpaceUnderLeftNavigationBar), constants.LONG_WAIT, 'Failed to find element createSpaceUnderLeftNavigationBar');
@@ -203,7 +198,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   /* View all spaces in Left Navigation Bar */
   get viewAllSpacesUnderLeftNavigationBar () {
-    return element(by.xpath("//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//*[contains(@class,'fa-th')]"));
+//    return element(by.xpath("//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//*[contains(@class,'fa-th')]"));
+    return element(by.id("header_viewAllSpaces")); 
   }
   clickViewAllSpacesUnderLeftNavigationBar () {
     browser.wait(until.elementToBeClickable(this.viewAllSpacesUnderLeftNavigationBar), constants.LONG_WAIT, 'Failed to find element viewAllSpacesUnderLeftNavigationBar');
@@ -215,7 +211,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   /* Account home in Left Navigation Bar */
   get accountHomeUnderLeftNavigationBar () {
-    return element(by.xpath(".//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//i[contains(@class,'pficon-home')]"));
+//    return element(by.xpath(".//*[contains(@class, 'navbar-left')]//*[contains(@class,'recent-items')]//*[contains(@class,'nav-item-icon')]//i[contains(@class,'pficon-home')]"));
+    return element(by.id("header_accountHome"));
   }
   clickAccountHomeUnderLeftNavigationBar () {
     browser.wait(until.elementToBeClickable(this.accountHomeUnderLeftNavigationBar), constants.LONG_WAIT, 'Failed to find element accountHomeUnderLeftNavigationBar');
@@ -241,7 +238,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   /* Status icon */
   get statusIcon () {
-    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')]"));
+//    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')]"));
+    return element(by.id("header_status"));
   }
   clickStatusIcon () {
     browser.wait(until.elementToBeClickable(this.statusIcon), constants.LONG_WAIT, 'Failed to find element statusIcon');
@@ -252,7 +250,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get statusIconPlatform () {
-    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')][1]"));
+//    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')][1]"));
+    return element(by.id("header_platformStatus"));
   }
   clickStatusIconPlatform () {
     browser.wait(until.elementToBeClickable(this.statusIconPlatform), constants.LONG_WAIT, 'Failed to find element statusIconPlatform');
@@ -263,7 +262,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get statusIconPlanner () {
-    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')][2]"));
+//    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')][2]"));
+    return element(by.id("header_plannerStatus"));
   }
   clickStatusIconPlanner () {
     browser.wait(until.elementToBeClickable(this.statusIconPlanner), constants.LONG_WAIT, 'Failed to find element statusIconPlatnner');
@@ -274,7 +274,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get statusIconChe () {
-    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')][3]"));
+//    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')][3]"));
+    return element(by.id("header_cheStatus"));
   }
   clickStatusIconChe () {
     browser.wait(until.elementToBeClickable(this.statusIconChe), constants.LONG_WAIT, 'Failed to find element statusIconChe');
@@ -285,7 +286,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get statusIconPipeline () {
-    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')][3]"));
+//    return element(by.xpath(".//*[@id='header_rightDropdown']//*[contains(@class, 'status-dropdown')][4]"));
+    return element(by.id("header_pipelineStatus"));
   }
   clickStatusIconPipeline () {
     browser.wait(until.elementToBeClickable(this.statusIconPipeline), constants.LONG_WAIT, 'Failed to find element statusIconPipeline');
@@ -297,7 +299,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   /* Profile drop down selection */
   get profile () {
-    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Profile')]"));
+//    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Profile')]"));
+    return element(by.id("header_loggedinProfile"));
   }
   clickProfile () {
     browser.wait(until.elementToBeClickable(this.profile), constants.LONG_WAIT, 'Failed to find Profile');
@@ -309,7 +312,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   /* Help drop down selection */
   get help () {
-    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Help')]"));
+//    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Help')]"));
+    return element(by.id("header_loggedinHelp"));
   }
   clickHelp () {
     browser.wait(until.elementToBeClickable(this.help), constants.LONG_WAIT, 'Failed to find Help');
@@ -321,7 +325,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   /* About drop down selection */
   get about () {
-    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'About')]"));
+//    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'About')]"));
+    return element(by.id("header_loggedinAbout"));
   }
   clickAbout () {
     browser.wait(until.elementToBeClickable(this.about), constants.LONG_WAIT, 'Failed to find About');
@@ -333,7 +338,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
 
   /* Log Out drop down selection */
   get logOut () {
-    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Log Out')]"));
+//    return element(by.xpath("//*[@id='header_rightDropdown']//*[contains(@class, 'user-dropdown-menu')]//*[contains(text(),'Log Out')]"));
+    return element(by.id("header_logout"));
   }
   clickLogOut () {
     browser.wait(until.elementToBeClickable(this.logOut), constants.LONG_WAIT, 'Failed to find logOut');

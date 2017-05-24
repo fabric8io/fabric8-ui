@@ -65,12 +65,9 @@ class OpenShiftIoGithubLoginPage {
       console.log("OpenShiftIoGithubLoginPage - clicked element:githubLoginButton");
     });
     return new OpenShiftIoDashboardPage();
-//    return new CompleteRegistrationPage();
-//    return new Fabric8MainPage();
   }
 
   get authorizeApplicationButton () {
-//    return element (by.id("js-oauth-authorize-btn"));
     return element (by.xpath(".//button[contains(text(), 'Authorize application')]"));
   }
   clickAuthorizeApplicationButton () {
@@ -81,14 +78,8 @@ class OpenShiftIoGithubLoginPage {
   }
 
   get incorrectUsernameOrPassword () {
-//    return element (by.xpath(".//button[contains(text(), 'Incorrect username or password.')]"));
     return element (by.xpath('.//*[@id="js-flash-container"]/div/div/button'));
   }
-
-//     //*[@id="js-flash-container"]/div/div/button
-//     #js-flash-container > div > div > button
-
-
 }
 
 module.exports = OpenShiftIoGithubLoginPage;
