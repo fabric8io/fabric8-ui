@@ -12,4 +12,4 @@ if [ -e "jenkins-env" ]; then
   source jenkins-env
 fi
 
-bash <(curl -s https://codecov.io/bash) -t 2e7e06e5-1518-4680-93cb-cf6c80b9e38e -f coverage/coverage.json
+bash <(curl -s https://codecov.io/bash) -t 274c63b8-b698-425d-a0ab-6a4020eca599 -f coverage/coverage.json
