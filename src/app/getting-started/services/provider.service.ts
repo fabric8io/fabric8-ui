@@ -6,17 +6,28 @@ import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import * as jwt_decode from 'jwt-decode';
+import {ApiLocatorService} from "../../shared/api-locator.service";
+import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
 
 @Injectable()
 export class ProviderService {
-  private loginUrl: string;
 
   constructor(
       private auth: AuthenticationService,
-      private logger: Logger,
-      @Inject(WIT_API_URL) apiUrl: string) {
-    this.loginUrl = apiUrl + 'login';
+      private apiLocator: ApiLocatorService,
+      private logger: Logger) {
   }
+
+  protected get apiUrl(): string {
+    return this.apiLocator.witApiUrl;
+  }
+
+  protected get loginUrl(): string {
+    return pathJoin(this.apiUrl, 'login');
+  }
+
+
+
 
   /**
    * Link an OpenShift.com account to the user account
