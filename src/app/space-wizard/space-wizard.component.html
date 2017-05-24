@@ -1,13 +1,14 @@
 <div class="wizard">
-  <create-space class="wizard-step wizard-step-create-space" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.createSpace})" [workflow]="workflow" ></create-space>
+  <create-space class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.createSpace})" [workflow]="workflow" ></create-space>
+
   <forge-panel class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgePanel})" [workflow]="workflow" > </forge-panel>
   <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeStarter})" title="New Project Wizard "
-    commandName="{{configurator.commands.forgeStarter}}" stepName="{{configurator.workflowSteps.forgeStarter}}" [workflow]="workflow">
+    forgeCommandName="{{configurator.forgeCommands.forgeStarter}}" workflowStepName="{{configurator.workflowSteps.forgeStarter}}" [workflow]="workflow">
   </forge-app-generator>
   <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeQuickStart})" title="Quick Start"
-    commandName="{{configurator.commands.forgeQuickStart}}" stepName="{{configurator.workflowSteps.forgeQuickStart}}" [workflow]="workflow">
+    forgeCommandName="{{configurator.forgeCommands.forgeQuickStart}}" workflowStepName="{{configurator.workflowSteps.forgeQuickStart}}" [workflow]="workflow">
   </forge-app-generator>
   <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeImportGit})" title="Import Code"
-    commandName="{{configurator.commands.forgeImportGit}}" stepName="{{configurator.workflowSteps.forgeImportGit}}" [workflow]="workflow">
+    forgeCommandName="{{configurator.forgeCommands.forgeImportGit}}" workflowStepName="{{configurator.workflowSteps.forgeImportGit}}" [workflow]="workflow">
   </forge-app-generator>
 </div>

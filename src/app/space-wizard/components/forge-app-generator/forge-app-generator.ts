@@ -26,7 +26,7 @@ export class ForgeAppGenerator {
   static instanceCount: number = 1;
 
   public workflow: IWorkflow;
-  public name: string;
+  public commandName: string;
   public state: IAppGeneratorState;
 
   public hasErrorMessage: boolean;
@@ -195,7 +195,7 @@ export class ForgeAppGenerator {
     this.displayProcessingMessageView('Loading ...');
     let request: IAppGeneratorRequest = {
       command: {
-        name: `${this.name}`
+        name: `${this.commandName}`
       }
     };
     let commandInfo = `${request.command.name}`;

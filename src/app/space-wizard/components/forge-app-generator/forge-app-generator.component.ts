@@ -38,8 +38,8 @@ export class ForgeAppGeneratorComponent implements OnInit, OnDestroy, OnChanges 
 
   public forge: ForgeAppGenerator = null;
   @Input() title: string = 'Forge Command Wizard';
-  @Input() stepName: string = 'begin';
-  @Input() commandName: string = 'none';
+  @Input() workflowStepName: string = '';
+  @Input() forgeCommandName: string = 'none';
 
   private _workflow: IWorkflow;
 
@@ -71,7 +71,7 @@ export class ForgeAppGeneratorComponent implements OnInit, OnDestroy, OnChanges 
    */
   ngOnInit() {
     this.log(`ngOnInit ...`);
-    this.forge.name = this.commandName;
+    this.forge.commandName = this.forgeCommandName;
     this.forge.workflow = this.workflow;
   }
 
@@ -209,11 +209,11 @@ export class ForgeAppGeneratorComponent implements OnInit, OnDestroy, OnChanges 
   }
 
   private isTransitioningToThisStep(transition: IWorkflowTransition): boolean {
-    return transition.to && transition.to.name.toLowerCase() === this.stepName.toLowerCase();
+    return transition.to && transition.to.name.toLowerCase() === this.workflowStepName.toLowerCase();
   }
 
   private isTransitioningFromThisStep(transition: IWorkflowTransition): boolean {
-    return transition.from && transition.from.name.toLowerCase() === this.stepName.toLowerCase();
+    return transition.from && transition.from.name.toLowerCase() === this.workflowStepName.toLowerCase();
   }
 
   private subscribeToWorkflowTransitions(workflow: IWorkflow) {

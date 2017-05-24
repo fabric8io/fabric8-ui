@@ -44,7 +44,7 @@ export class AppGeneratorConfiguratorService {
     forgeImportGit: 'forge-import-git-step'
   };
 
-  public commands = {
+  public forgeCommands = {
     forgeQuickStart: ForgeCommands.forgeQuickStart,
     forgeStarter: ForgeCommands.forgeStarter,
     forgeImportGit: ForgeCommands.forgeImportGit

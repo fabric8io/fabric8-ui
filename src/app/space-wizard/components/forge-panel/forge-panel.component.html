@@ -29,7 +29,7 @@
             <section><span><br></span></section>
             <footer><span class="fa fa-3x fa-code" ></span></footer>
           </div>
-          <div id="importCodeButton" class="panel-item cursor-pointer user-select-none" (click)="workflow.gotoNextStep({name:configurator.steps.forgeImportGit})" >
+          <div id="importCodeButton" class="panel-item cursor-pointer user-select-none" (click)="workflow.gotoNextStep({name:configurator.workflowSteps.forgeImportGit})" >
             <header>
               <h3>Import existing <strong>code</strong></h3>
             </header>
@@ -38,7 +38,7 @@
               <span class="pficon fa-3x pficon-import " ></span>
             </footer>
           </div>
-          <div id="techStackButton" class="panel-item cursor-pointer user-select-none" (click)="workflow.gotoNextStep({name:configurator.steps.forgeQuickStart})" >
+          <div id="techStackButton" class="panel-item cursor-pointer user-select-none" (click)="workflow.gotoNextStep({name:configurator.workflowSteps.forgeQuickStart})" >
             <header>
               <h3>Select <strong>technology stack</strong> and <strong>pipeline</strong></h3>
             </header>
