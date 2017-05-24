@@ -1,8 +1,6 @@
 @import '../../../../assets/stylesheets/base';
 
-codebases-item-workspaces {
-  display: flex;
-}
+codebases-item-workspaces { display: flex; }
 
 .busy-indicator {
   display: flex;
@@ -12,8 +10,8 @@ codebases-item-workspaces {
   vertical-align: center;
   width: 25px;
   > div {
-    margin:auto;
-    padding:0;
+    margin: auto;
+    padding: 0;
   }
 }
 
