@@ -6,7 +6,7 @@
         <div class="busy-indicator">
           <div *ngIf="!forge.hasErrorMessage && forge.processing===true" class="spinner spinner-lg"></div>
         </div>
-        <span (click)="forge.close()" class="pficon pficon-close"></span>
+        <span id="forge-close-button" (click)="forge.close()" class="pficon pficon-close"></span>
       </div>
     </div>
   </header>
@@ -183,16 +183,16 @@
   <footer class="container-fluid padding-top-standard-offset" [class.border-transparent]="forge.hasProcessingMessage" >
     <div class="row">
       <div class="col-xs-12 wizard-step-tool-bar with-items-at-end">
-        <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasErrorMessage && !forge.hasSuccessMessage && !forge.hasProcessingMessage"
+        <button id="forge-cancel-button" type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasErrorMessage && !forge.hasSuccessMessage && !forge.hasProcessingMessage"
           (click)="forge.cancel()">Cancel</button>
         <!--<button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasErrorMessage && !forge.hasSuccessMessage !forge.hasProcessingMessage" [disabled]="(!forge.state.canMoveToPreviousStep)||(forge.processing === true)"
             (click)="forge.gotoPreviousStep()">Back</button>-->
-        <button type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasErrorMessage && !forge.hasSuccessMessage && !forge.hasProcessingMessage"
+        <button id="forge-next-button" type="button" class="btn btn-primary margin-right-5" *ngIf="!forge.hasErrorMessage && !forge.hasSuccessMessage && !forge.hasProcessingMessage"
           [disabled]="(!forge.state.canMoveToNextStep)||(forge.processing === true)" (click)="forge.gotoNextStep()">Next</button>
         <button type="button" class="btn btn-primary" *ngIf="!forge.hasErrorMessage && !forge.hasSuccessMessage && !forge.hasProcessingMessage"
           [disabled]="(!forge.state.canExecute)||(forge.processing === true)" (click)="forge.finish()">Finish</button>
-        <button type="button" class="btn btn-primary" *ngIf="forge.hasErrorMessage" (click)="forge.acknowledgeErrorMessage()">OK</button>
-        <button type="button" class="btn btn-primary" *ngIf="forge.hasSuccessMessage" (click)="forge.acknowledgeSuccessMessage()">OK</button>
+        <button id="forge-error-ok-button" type="button" class="btn btn-primary" *ngIf="forge.hasErrorMessage" (click)="forge.acknowledgeErrorMessage()">OK</button>
+        <button id="forge-ok-button" type="button" class="btn btn-primary" *ngIf="forge.hasSuccessMessage" (click)="forge.acknowledgeSuccessMessage()">OK</button>
       </div>
     </div>
   </footer>

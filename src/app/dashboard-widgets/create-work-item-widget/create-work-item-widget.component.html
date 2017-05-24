@@ -1,13 +1,13 @@
-<div class="create-work-item-widget card-pf card-f8">
+<div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf card-f8">
   <div class="card-pf-heading">
     <div class="card-pf-heading-details card-f8-heading-details">
-      <a class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
+      <a id="spacehome-my-workitems-add-button" class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
         <i class="pficon pficon-add-circle-o"></i>
       </a>
     </div>
     <h2 class="card-pf-title">
-      <a [routerLink]="[contextPath | async, 'plan']">My Work Items</a>
-      <span class="badge card-f8-badge">{{myWorkItemsCount | async}}</span>
+      <a id="spacehome-my-workitems-title" [routerLink]="[contextPath | async, 'plan']">My Work Items</a>
+      <span id="spacehome-my-workitems-badge" class="badge card-f8-badge">{{myWorkItemsCount | async}}</span>
     </h2>
   </div>
   <div class="card-pf-body card-f8-body">
@@ -20,10 +20,10 @@
         Planner will help you to create different types of work-items, allows you to assign team members and iterations.
       </p>
       <div class="blank-slate-f8-main-action">
-        <button class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
+        <button id="spacehome-my-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
       </div>
     </div>
-    <ul class="list-group list-view-pf list-view-pf-view" *ngIf="(myWorkItemsCount | async) > 0">
+    <ul id="spacehome-my-workitems-list" class="list-group list-view-pf list-view-pf-view" *ngIf="(myWorkItemsCount | async) > 0">
       <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 6">
         <div class="list-view-pf-main-info">
           <div class="list-view-pf-body">
