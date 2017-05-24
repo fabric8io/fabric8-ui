@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation, OnChanges } from '@angular/core';
 import * as _ from 'lodash';
 import { GlobalConstants } from '../constants/constants.service';
 import { StackAnalysesService } from '../stack-analyses.service';
@@ -6,6 +6,7 @@ import { StackAnalysesService } from '../stack-analyses.service';
 @Component({
   selector: 'overview-stack',
   templateUrl: './overview.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./overview.component.scss'],
 })
 export class OverviewComponent implements OnChanges {
@@ -41,7 +42,7 @@ export class OverviewComponent implements OnChanges {
       key: 'noOfLines',
       icon: 'fa-list-alt',
       numeric: 0,
-      description: 'lines of code',
+      description: 'Lines of code',
       className: 'overview-code-metric-icon'
     }, {
       key: 'avgCycloComplexity',
@@ -53,7 +54,7 @@ export class OverviewComponent implements OnChanges {
       key: 'noOfFiles',
       icon: 'fa-file-o',
       numeric: 0,
-      description: 'total files',
+      description: 'Total files',
       className: 'overview-code-metric-icon'
     }];
 
@@ -108,8 +109,20 @@ export class OverviewComponent implements OnChanges {
     this.codeMetricsInfo = codeMetrics;
   }
 
+  private sortChartColumnData(array: Array<any>): Array<any> {
+    return array.sort((a, b) => {
+      if (a[1] === b[1]) {
+        return 0;
+      }
+      return a[1] > b[1] ? -1 : 1;
+    });
+  }
+
   private buildLicenseChart(licenseList: Array<string>): void {
     let columnData = [];
+    let columnDataLength = 0;
+    let otherLicensesArray = [];
+    let otherLicensesRatio = 0;
     let licenseMap = _.groupBy(licenseList, (value) => {
       return value;
     });
@@ -121,6 +134,18 @@ export class OverviewComponent implements OnChanges {
         columnData.push(temp);
       }
     }
+    // sort the data array by license count
+    columnData = this.sortChartColumnData(columnData);
+    columnDataLength = columnData ? columnData.length : 0;
+    if (columnDataLength > 4) {
+      for (let i = 3; i < columnDataLength; i++) {
+        otherLicensesArray.push(columnData[i][0]);
+        otherLicensesRatio += columnData[i][1];
+      }
+      columnData.splice(4);
+      columnData[3][0] = this.messages.othersLegend;
+      columnData[3][1] = otherLicensesRatio;
+    }
     this.licenseChartInfo = {
       data: {
         columns: columnData,
@@ -129,19 +154,33 @@ export class OverviewComponent implements OnChanges {
       },
       chartOptions: {
         size: {
-          height: 240,
-          width: 240
+          height: 150,
+          width: 250
         },
         donut: {
           width: 13,
           label: {
             show: false
-          }
+          },
+          title: columnDataLength
         }
       },
       configs: {
         legend: {
           position: 'right'
+        },
+        tooltip: {
+          format: {
+            name: (name, ratio, id, index) => {
+              if (name === this.messages.othersLegend) {
+                return otherLicensesArray.toString();
+              }
+              return name;
+            },
+            value: (value, ratio, id, index) => {
+              return (ratio * 100).toFixed(2) + '%';
+            }
+          }
         }
       }
     };

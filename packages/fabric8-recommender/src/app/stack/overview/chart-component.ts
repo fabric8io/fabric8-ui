@@ -25,7 +25,12 @@ import * as c3 from 'c3';
     template: ``,
     encapsulation: ViewEncapsulation.None,
     inputs: ['data', 'chartOptions', 'configs'],
-    styles: [`.ng2-c3{ display:block;}`] // This is required for proper positioning of tooltip
+    styles: [
+        `.ng2-c3 {
+            display:block; // This is required for proper positioning of tooltip
+        }
+        `
+    ]
 })
 export class ChartComponent {
 

@@ -4,8 +4,10 @@
     background-color: #ededed;
     border-top: 1px solid #d1d1d1;
     border-bottom: 1px solid #d1d1d1;
+    
     .overview-card {
-        height: 230px;
+        height: 220px;
+        max-height: 220px;
         margin-left: 0;
 
         &:last-child {
@@ -31,14 +33,21 @@
         .f8-chart-description {
             font-size: 15px;
             font-weight: 100;
+
+            p {
+                margin: 0;
+            }
         }
+
         .sub-description {
             margin-top: -15px;
             font-size: 12px;
         }
+
         .overview-code-metric-icon {
             color: #3788c9;
         }
+
         .license-entries {
             line-height: 25px;
         }
@@ -99,11 +108,6 @@
             }
         }
 
-        f8-chart {
-            margin-top: -48px;
-            text-align: center;
-        }
-
         .warning-icon {
             font-size: 44pt;
             opacity: 0.9;
@@ -117,6 +121,16 @@
             font-size: 20px;
             font-weight: 100;
             margin-top: 5px;
+        }
+
+        f8-chart {
+            margin-top: -10px;
+            text-align: center;
+
+            .c3-chart-arcs-title {
+                font-size: 24pt;
+                font-weight: 100;
+            }
         }
     }
 

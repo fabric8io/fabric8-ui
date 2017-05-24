@@ -26,5 +26,6 @@ export const OVERVIEW_CONSTANT: any = {
         'subMessage': 'No known CVE data found for the dependencies.'
     },
     'noLicense': 'No License data available',
-    'cvssScoreTooltip': 'CVSS: Score to measure the impact of security vulnerability. In a scale from 0.0-10.0, vulnerabilities less than 7.0 are considered medium impact and more than or equal to 7.0 are considered high impact ones.'
+    'cvssScoreTooltip': 'CVSS: Score to measure the impact of security vulnerability. In a scale from 0.0-10.0, vulnerabilities less than 7.0 are considered medium impact and more than or equal to 7.0 are considered high impact ones.',
+    'othersLegend': 'Others'
 };
