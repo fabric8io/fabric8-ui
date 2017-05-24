@@ -12,6 +12,7 @@ import { ContextService } from './context.service';
 import { Navigation } from './../models/navigation';
 import { ErrorService } from '../error/error.service';
 import {ApiLocatorService} from "./api-locator.service";
+import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
 
 
 @Injectable()
@@ -55,7 +56,7 @@ export class LoginService {
   }
 
   get authUrl(): string {
-    return this.apiUrl + 'login/authorize';
+    return pathJoin(this.apiUrl, 'login/authorize');
   }
 
   redirectToAuth() {
