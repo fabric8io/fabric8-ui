@@ -36,9 +36,9 @@ export class AppGeneratorConfiguratorService {
    * Helps to specify wizard step names to prevent typos
    */
 
-  public steps = {
-    space: 'space-step',
-    forge: 'forge-step',
+  public workflowSteps = {
+    createSpace: 'space-step',
+    forgePanel: 'forge-step',
     forgeQuickStart: 'forge-quick-start-step',
     forgeStarter: 'forge-starter-step',
     forgeImportGit: 'forge-import-git-step'

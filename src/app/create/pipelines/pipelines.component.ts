@@ -216,6 +216,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   openForgeWizard() {
     this.updateSpace.open();
     this.spaceWizard.configurator.currentSpace = this._context.space;
-    this.spaceWizard.workflow.gotoStep(this.spaceWizard.configurator.steps.forge);
+    this.spaceWizard.workflow.gotoStep(this.spaceWizard.configurator.workflowSteps.forgePanel);
   }
 }

@@ -63,11 +63,11 @@ export class SpaceWizardComponent implements OnInit {
     return this.workflowFactory.create({
       steps: () => {
         return [
-          { name: this.configurator.steps.space, index: 0, nextIndex: 1 },
-          { name: this.configurator.steps.forge, index: 1, nextIndex: 1 },
-          { name: this.configurator.steps.forgeQuickStart, index: 5, nextIndex: 1 },
-          { name: this.configurator.steps.forgeStarter, index: 6, nextIndex: 1 },
-          { name: this.configurator.steps.forgeImportGit, index: 7, nextIndex: 1 }
+          { name: this.configurator.workflowSteps.createSpace, index: 0, nextIndex: 1 },
+          { name: this.configurator.workflowSteps.forgePanel, index: 1, nextIndex: 1 },
+          { name: this.configurator.workflowSteps.forgeQuickStart, index: 5, nextIndex: 1 },
+          { name: this.configurator.workflowSteps.forgeStarter, index: 6, nextIndex: 1 },
+          { name: this.configurator.workflowSteps.forgeImportGit, index: 7, nextIndex: 1 }
         ];
       },
       firstStep: () => {

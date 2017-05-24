@@ -32,17 +32,16 @@ $wizard-block-header-color: $color-pf-white;
 // make styles apply to host element and all child elements , including child components
 :host /deep/ {
 
-
   background-color: $color-pf-white;
 
-  //ensure consistent padding on bootstrap rows
-  //startswith col-
+  // ensure consistent padding on bootstrap rows
+  // startswith col-
   [class^="col-"]
   {
     padding-left:$grid-gutter-width/2;
     padding-right:$grid-gutter-width/2;
   }
-  //contains col-
+  // contains col-
   [class*=" col-"]
   {
     padding-left:$grid-gutter-width/2;
@@ -52,17 +51,14 @@ $wizard-block-header-color: $color-pf-white;
 
   flex:1;
   display:flex;
-  //align-content: stretch;
   position:relative;
   width:100%;
 
   @mixin wizard-step-child-elements {
     // position buttons
-
     >header {
       position:relative;
       background-color: $wizard-header-color;
-      // border-bottom:solid 1px $wizard-header-divider-color;
       &.container-fluid {
           padding-left:$wizard-spacing + $debug-border ;
           padding-right:$wizard-spacing + $debug-border ;
@@ -81,9 +77,6 @@ $wizard-block-header-color: $color-pf-white;
       flex:1;
       // when using flex here it is important to stretch the content:
       // and choose the direction as column
-      // display:flex;
-      // flex-direction: column;
-      // align-content: stretch;
       position:relative;
       margin:0;
       padding:0;
@@ -94,14 +87,12 @@ $wizard-block-header-color: $color-pf-white;
         // in and it overflows the container. This is caused by a margin of 20px
         // when it should be $grid-gutter-width / 2
         .form-horizontal {
-          //padding-right:5px;
           margin-left:-($grid-gutter-width / 2);
           margin-right:-($grid-gutter-width / 2);
         }
         .form-group {
-          //padding-right:5px;
-          margin-left:0;//-$wizard-spacing;
-          margin-right:0;//-$wizard-spacing;
+          margin-left:0;
+          margin-right:0;
         }
         padding-left:$wizard-spacing  + $debug-border;
         padding-right:$wizard-spacing + $debug-border;
@@ -148,11 +139,9 @@ $wizard-block-header-color: $color-pf-white;
   .wizard {
     flex:1;
     display:flex;
-    //align-content: stretch;
       border: solid 0 lime;
       position:relative;
       width:100%;
-    //width:100% !important;
     // only applies to rows in the wizard
     .row {
       padding-top:0;
@@ -165,9 +154,6 @@ $wizard-block-header-color: $color-pf-white;
       border: solid 0 green;
       position:relative;
       width:100%;
-      //width:100% !important;
-      // at least 50% of view height
-      //min-height: 50vh;
       flex:1;
       // by default the step is not visible but becomes
       // visible when the active class is applied.
@@ -177,7 +163,6 @@ $wizard-block-header-color: $color-pf-white;
         flex-direction: column;
         align-content: stretch;
         width:100% !important;
-        //align-content: stretch;
       }
       @include wizard-step-child-elements;
       // for cases where the step has a form element
@@ -186,7 +171,6 @@ $wizard-block-header-color: $color-pf-white;
         flex:1;
         display:flex;
         flex-direction: column;
-        //align-content: stretch;
         position:relative;
         width:100%;
         @include wizard-step-child-elements;
@@ -196,11 +180,11 @@ $wizard-block-header-color: $color-pf-white;
       .wizard-step-title {
         position:relative;
         display:flex;
-        //main axis
+        // main axis
         justify-content: space-between;
-        //cross axis
+        // cross axis
         align-items: center;
-        //main axis direction
+        // main axis direction
         flex-direction: row;
         .text{
           font-weight: 600;
@@ -228,7 +212,7 @@ $wizard-block-header-color: $color-pf-white;
         &.with-items-space-around{
           justify-content:space-around;
         }
-        //will stretch auto sized items
+        // will stretch auto sized items
         &.with-items-stretch{
           justify-content:stretch;
         }
