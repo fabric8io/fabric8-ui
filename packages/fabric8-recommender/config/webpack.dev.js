@@ -14,6 +14,7 @@ const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL;
 const FABRIC8_FORGE_URL = process.env.FABRIC8_FORGE_URL;
 const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
+const STACK_API_TOKEN = process.env.STACK_API_TOKEN;
 const extractCSS = new ExtractTextPlugin('stylesheets/[name].css');
 const extractSASS = new ExtractTextPlugin('stylesheets/[name].scss');
 
@@ -26,6 +27,7 @@ const METADATA = webpackMerge(commonConfig.metadata, {
   FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
   FABRIC8_RECOMMENDER_API_URL: FABRIC8_RECOMMENDER_API_URL,
   FABRIC8_FORGE_URL: FABRIC8_FORGE_URL,
+  STACK_API_TOKEN: STACK_API_TOKEN,
   PUBLIC_PATH: PUBLIC_PATH
 });
 
@@ -73,6 +75,7 @@ module.exports = function (options) {
           'FORGE_URL': JSON.stringify(METADATA.FORGE_URL),
           'PUBLIC_PATH': JSON.stringify(METADATA.PUBLIC_PATH),
           'FABRIC8_REALM': JSON.stringify(METADATA.FABRIC8_REALM),
+          'STACK_API_TOKEN': JSON.stringify(METADATA.STACK_API_TOKEN),
           'FABRIC8_RECOMMENDER_API': JSON.stringify(METADATA.FABRIC8_RECOMMENDER_API_URL)
         }
       })

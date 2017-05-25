@@ -138,6 +138,9 @@ have access to both JS and SASS sourcemaps if your webapp is properly setup.
 NOTE: `fabric8-ui` is setup to do reloading and sourcemaps automatically when you
 run `npm start`.
 
+** To hit stack analysis api in standalone mode **
+Put a token in the environment variable with key as 'STACK_API_TOKEN'
+
 == CSS and SASS
 
 fabric8-stack-analysis-ui uses SASS for it's stylesheets. It also uses the Angular emulation
