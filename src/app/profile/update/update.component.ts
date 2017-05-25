@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { Notification, NotificationType, Notifications } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { AuthenticationService, UserService, User } from 'ngx-login-client';
+import { UserService, User } from 'ngx-login-client';
 import { RemainingCharsComponent, RemainingCharsConfig } from 'ngx-widgets';
 
 import { CopyService } from '../services/copy.service';
@@ -12,6 +12,7 @@ import { ExtProfile, GettingStartedService } from '../../getting-started/service
 import { GitHubService } from "../../create/codebases/services/github.service";
 import { ProviderService } from '../../getting-started/services/provider.service';
 import { TenentService } from '../services/tenent.service';
+import {AuthenticationService} from "../../shared/authentication.service";
 
 @Component({
   selector: 'alm-update',

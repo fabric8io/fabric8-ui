@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
-import { AuthenticationService } from 'ngx-login-client';
 
 import { Observable, Observer } from 'rxjs/Rx';
 
@@ -22,6 +21,7 @@ import {
   IForgeInput,
   IForgeState
 } from '../contracts/forge-service';
+import {AuthenticationService} from "../../../shared/authentication.service";
 
 class CommandPipelineStep {
   public static begin = 'begin';

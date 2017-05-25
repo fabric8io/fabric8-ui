@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Headers, Http, Response, ResponseOptions, XHRBackend, HttpModule } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { AuthenticationService } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { GitHubService } from './github.service';
 import { GitHubRepoCommit } from "app/create/codebases/services/github";
@@ -9,6 +8,7 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 import { ContextsMock, expectedGitHubRepo, expectedGitHubRepoCommit, expectedGitHubRepoDetails, expectedGitHubRepoLicense } from './github.service.mock';
+import {AuthenticationService} from "../../../shared/authentication.service";
 
 
 function initTestBed(mockLog, mockAuthService) {

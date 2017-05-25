@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { AuthenticationService } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
 import { cloneDeep } from 'lodash';
@@ -14,6 +13,7 @@ import {
   GitHubRepoLicense,
   GitHubUser,
 } from './github';
+import {AuthenticationService} from "../../../shared/authentication.service";
 
 /**
  * Service to pull details from GitHub

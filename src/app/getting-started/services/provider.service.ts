@@ -1,10 +1,10 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-import {AuthenticationService} from "ngx-login-client";
 import {Logger} from "ngx-base";
 import * as jwt_decode from "jwt-decode";
 import {ApiLocatorService} from "../../shared/api-locator.service";
 import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
+import {AuthenticationService} from "../../shared/authentication.service";
 
 @Injectable()
 export class ProviderService {

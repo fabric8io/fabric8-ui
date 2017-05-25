@@ -48,7 +48,6 @@ import {
   CollaboratorService
 }                             from 'ngx-fabric8-wit';
 import {
-  AuthenticationService,
   HttpService,
   UserService
 }                             from 'ngx-login-client';
@@ -74,6 +73,7 @@ import { MenusService }    from './header/menus.service';
 // Shared Services
 import { AboutService }                  from './shared/about.service';
 import { AnalyticService }               from './shared/analytics.service';
+import { AuthenticationService }         from './shared/authentication.service';
 import { ApiLocatorService }             from './shared/api-locator.service';
 import { AuthGuard }                     from './shared/auth-guard.service';
 import { authApiUrlProvider }            from './shared/auth-api.provider';

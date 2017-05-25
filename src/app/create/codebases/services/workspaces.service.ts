@@ -1,12 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Headers, Http} from "@angular/http";
-import {AuthenticationService} from "ngx-login-client";
 import {Logger} from "ngx-base";
 import {Observable} from "rxjs";
 import {Codebase} from "./codebase";
 import {Workspace, WorkspaceLinks} from "./workspace";
 import {ApiLocatorService} from "../../../shared/api-locator.service";
 import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
+import {AuthenticationService} from "../../../shared/authentication.service";
 
 @Injectable()
 export class WorkspacesService {
