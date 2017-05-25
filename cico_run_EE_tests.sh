@@ -47,9 +47,6 @@ docker exec fabric8-ui-builder npm install
 ##docker exec fabric8-ui-builder openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit/oc delete build --all -n almusertest1-test
 ##docker exec fabric8-ui-builder openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit/oc delete build --all -n almusertest1-stage
 ##docker exec fabric8-ui-builder openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit/oc delete build --all -n almusertest1-run
-## Exec EE tests
-docker exec fabric8-ui-builder ./run_EE_tests.sh --params.target.url=$1
-
 
 ## Delete/cleanup Jenkins jobs - commented out for now - until test can run more reliably
 ##
@@ -61,6 +58,8 @@ docker exec fabric8-ui-builder ./run_EE_tests.sh --params.target.url=$1
 
 # Exec EE tests
 docker exec fabric8-ui-builder ./run_EE_tests.sh $1
+
 # Test results to archive
 docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/target/ .
 docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/functional_tests.log target
+
