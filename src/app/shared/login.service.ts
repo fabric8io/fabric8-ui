@@ -1,16 +1,11 @@
-import { Router } from '@angular/router';
-import { LocalStorageService } from 'angular-2-local-storage';
-import { Injectable, Inject } from '@angular/core';
-
-import { Observable } from 'rxjs';
-
-import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { AuthenticationService, UserService } from 'ngx-login-client';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-
-import { ContextService } from './context.service';
-import { Navigation } from './../models/navigation';
-import { ErrorService } from '../error/error.service';
+import {Router} from "@angular/router";
+import {LocalStorageService} from "angular-2-local-storage";
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
+import {Broadcaster, Notifications, Notification, NotificationType} from "ngx-base";
+import {AuthenticationService, UserService} from "ngx-login-client";
+import {ContextService} from "./context.service";
+import {ErrorService} from "../error/error.service";
 import {ApiLocatorService} from "./api-locator.service";
 import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
 

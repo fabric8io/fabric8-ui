@@ -1,15 +1,13 @@
-import { Http, Headers } from '@angular/http';
-import { Injectable, Inject } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { Observable, ConnectableObservable } from 'rxjs';
-import { cloneDeep } from 'lodash';
-
-import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { Profile, User, UserService } from 'ngx-login-client';
-
-import { DummyService } from './../shared/dummy.service';
+import {Http, Headers} from "@angular/http";
+import {Injectable} from "@angular/core";
+import {Router} from "@angular/router";
+import {Observable, ConnectableObservable} from "rxjs";
+import {cloneDeep} from "lodash";
+import {Broadcaster, Notifications, Notification, NotificationType} from "ngx-base";
+import {Profile, User, UserService} from "ngx-login-client";
+import {DummyService} from "./../shared/dummy.service";
+import {ApiLocatorService} from "../shared/api-locator.service";
+import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
 
 export class ExtUser extends User {
   attributes: ExtProfile;
@@ -27,7 +25,6 @@ export class ExtProfile extends Profile {
 export class ProfileService {
 
   private static readonly HEADERS: Headers = new Headers({ 'Content-Type': 'application/json' });
-  private profileUrl: string;
   private _profile: ConnectableObservable<ExtProfile>;
 
   constructor(
@@ -35,11 +32,10 @@ export class ProfileService {
     private router: Router,
     private broadcaster: Broadcaster,
     userService: UserService,
-    @Inject(WIT_API_URL) apiUrl: string,
+    private apiLocator: ApiLocatorService,
     private http: Http,
     private notifications: Notifications
   ) {
-    this.profileUrl = apiUrl + 'users';
     this._profile = userService.loggedInUser
       .skipWhile(user => {
         return !user || !user.attributes;
@@ -56,6 +52,15 @@ export class ProfileService {
       .publishReplay(1);
     this._profile.connect();
   }
+
+  protected get apiUrl(): string {
+    return this.apiLocator.witApiUrl;
+  }
+
+  protected get profileUrl(): string {
+    return pathJoin(this.apiUrl, 'users');
+  }
+
 
   get current(): Observable<ExtProfile> {
     return this._profile;

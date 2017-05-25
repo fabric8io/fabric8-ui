@@ -1,19 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
-import {
-  Http,
-  Response,
-  RequestOptions,
-  Request,
-  RequestOptionsArgs,
-  XHRBackend,
-  Headers
-} from '@angular/http';
-
-import { Observable } from 'rxjs';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { HttpService, SSO_API_URL } from 'ngx-login-client';
-
-import * as uuidV4 from 'uuid/v4';
+import {Injectable} from "@angular/core";
+import {Http, Response, RequestOptions, Request, RequestOptionsArgs, XHRBackend, Headers} from "@angular/http";
+import {Observable} from "rxjs";
+import {HttpService} from "ngx-login-client";
+import * as uuidV4 from "uuid/v4";
+import {ApiLocatorService} from "./api-locator.service";
 
 @Injectable()
 export class Fabric8UIHttpService extends Http {
@@ -22,10 +12,18 @@ export class Fabric8UIHttpService extends Http {
     backend: XHRBackend,
     options: RequestOptions,
     private httpService: HttpService,
-    @Inject(WIT_API_URL) private witApiUrl: string,
-    @Inject(SSO_API_URL) private ssoApiUrl: string) {
+    private apiLocator: ApiLocatorService) {
     super(backend, options);
   }
+
+  protected get witApiUrl(): string {
+    return this.apiLocator.witApiUrl;
+  }
+
+  protected get ssoApiUrl(): string {
+    return this.apiLocator.ssoApiUrl;
+  }
+
 
   request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
     let urlStr = (typeof url === 'string' ? url : url.url);
