@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
@@ -11,7 +12,7 @@ import { UserService, User } from 'ngx-login-client';
   templateUrl: 'overview.component.html',
   styleUrls: ['./overview.component.scss']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnDestroy, OnInit {
   context: Context;
   loggedInUser: User;
   subscriptions: Subscription[] = [];
@@ -20,7 +21,8 @@ export class OverviewComponent implements OnInit {
   constructor(
       private contexts: Contexts,
       private spaceService: SpaceService,
-      private userService: UserService) {
+      private userService: UserService,
+      private router: Router) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
