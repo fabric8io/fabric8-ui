@@ -104,7 +104,8 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     /* TODO - Trap 'Application Generation Error' here - if found, fail test and exit */
     expect(OpenShiftIoDashboardPage.appGenerationError.isPresent()).toBe(false);
 
-    OpenShiftIoSpaceHomePage.clickNoThanksButton();
+    /* May 26, 2017 - "no thanks" button removed from the UI */
+    //OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
     /* Import the code base */
     OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
