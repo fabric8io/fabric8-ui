@@ -1,16 +1,14 @@
-import { Router } from '@angular/router';
-import { LocalStorageService } from 'angular-2-local-storage';
-import { Injectable, Inject } from '@angular/core';
-
-import { Observable } from 'rxjs';
-
-import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { AuthenticationService, UserService } from 'ngx-login-client';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-
-import { ContextService } from './context.service';
-import { Navigation } from './../models/navigation';
-import { ErrorService } from '../error/error.service';
+import {Router} from "@angular/router";
+import {LocalStorageService} from "angular-2-local-storage";
+import {Injectable} from "@angular/core";
+import {Observable} from "rxjs";
+import {Broadcaster, Notifications, Notification, NotificationType} from "ngx-base";
+import {UserService} from "ngx-login-client";
+import {ContextService} from "./context.service";
+import {ErrorService} from "../error/error.service";
+import {ApiLocatorService} from "./api-locator.service";
+import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
+import {AuthenticationService} from "./authentication.service";
 
 
 @Injectable()
@@ -23,14 +21,12 @@ export class LoginService {
   static readonly LOGIN_URL = '/';
 
 
-  private authUrl: string;  // URL to web api
-
   public openShiftToken: string;
 
   constructor(
     private router: Router,
     private localStorage: LocalStorageService,
-    @Inject(WIT_API_URL) private apiUrl: string,
+    private apiLocator: ApiLocatorService,
     private broadcaster: Broadcaster,
     private errorService: ErrorService,
     private authService: AuthenticationService,
@@ -39,7 +35,6 @@ export class LoginService {
     private userService: UserService
   ) {
     // Removed ?link=true in favor of getting started page
-    this.authUrl = apiUrl + 'login/authorize';
     this.broadcaster.on('authenticationError').subscribe(() => {
       this.authService.logout();
     });
@@ -52,8 +47,21 @@ export class LoginService {
     });
   }
 
+  protected get apiUrl(): string {
+    return this.apiLocator.witApiUrl;
+  }
+
+  get authUrl(): string {
+    return pathJoin(this.apiUrl, 'login/authorize');
+  }
+
   redirectToAuth() {
-    window.location.href = this.authUrl;
+    var authUrl = this.authUrl;
+    if (authUrl.indexOf('?') < 0) {
+      // lets ensure there's a redirect parameter to avoid WIT barfing
+      authUrl += "?redirect=" + window.location.href;
+    }
+    window.location.href = authUrl;
   }
 
   public redirectAfterLogin() {

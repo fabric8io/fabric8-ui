@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
+import {currentOAuthConfig} from "fabric8-runtime-console/src/app/kubernetes/store/oauth-config-store";
 
 @Injectable()
 export class ApiLocatorService {
@@ -34,7 +35,7 @@ export class ApiLocatorService {
   }
 
   get witApiUrl(): string {
-    return this.buildApiUrl('wit');
+    return this.buildApiUrl('wit', (config) => config.witApiUrl);
   }
 
   get realm(): string {
@@ -42,23 +43,32 @@ export class ApiLocatorService {
   }
 
   get forgeApiUrl(): string {
-    let tmp=this.buildApiUrl('forge');
+    let tmp=this.buildApiUrl('forge', (config) => config.forgeApiUrl);
     return tmp
   }
 
   get ssoApiUrl(): string {
-    return this.buildApiUrl('sso');
+    return this.buildApiUrl('sso', (config) => config.ssoApiUrl);
   }
 
   get recommenderApiUrl(): string {
-    return this.buildApiUrl('recommender');
+    return this.buildApiUrl('recommender', (config) => config.recommenderApiUrl);
   }
 
   private loadEnvVar(key: string): void {
     this.envVars.set(key, process.env[this.DEFAULT_API_ENV_VAR_NAMES.get(key)]);
   }
 
-  private buildApiUrl(key: string): string {
+  private buildApiUrl(key: string, fn: (OAuthConfig) => string): string {
+    // for on premise and upstream we need to be able to dynamically discover endpoints
+    // via environment variables on the server side
+    let oauth = currentOAuthConfig();
+    if (oauth != null && fn) {
+      let value = fn(oauth);
+      if (value) {
+        return value;
+      }
+    }
     // Return any environment specified URLs for this API
     if (this.envVars.get(key)) {
       return this.envVars.get(key);

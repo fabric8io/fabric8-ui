@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
-import { AuthenticationService } from 'ngx-login-client';
 
 import { Observable, Observer } from 'rxjs/Rx';
 
@@ -22,6 +21,7 @@ import {
   IForgeInput,
   IForgeState
 } from '../contracts/forge-service';
+import {AuthenticationService} from "../../../shared/authentication.service";
 
 class CommandPipelineStep {
   public static begin = 'begin';
@@ -34,8 +34,6 @@ class CommandPipelineStep {
 export class Fabric8ForgeService extends ForgeService {
 
   static instanceCount: number = 1;
-
-  private _apiUrl: string;
 
   executeCommand(request: IForgeCommandRequest = {
       payload: {
@@ -66,7 +64,7 @@ export class Fabric8ForgeService extends ForgeService {
     }
   }
 
-  constructor(private _http: Http, loggerFactory: LoggerFactory, apiLocator: ApiLocatorService,
+  constructor(private _http: Http, loggerFactory: LoggerFactory, private apiLocator: ApiLocatorService,
     private _authService: AuthenticationService) {
     super();
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, Fabric8ForgeService.instanceCount++);
@@ -74,12 +72,14 @@ export class Fabric8ForgeService extends ForgeService {
       this.log = logger;
     }
     this.log(`New instance...`);
-    this._apiUrl = apiLocator.forgeApiUrl;
     if ( this._authService == null ) {
       this.log({ message: `Injected AuthenticationService is null`, warning: true });
     }
   }
 
+  private get _apiUrl(): string {
+    return this.apiLocator.forgeApiUrl;
+  }
 
   private handleError(error: any): Observable<any> {
     let errorMessage: any;

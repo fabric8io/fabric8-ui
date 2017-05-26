@@ -1,5 +1,4 @@
 import { Broadcaster } from 'ngx-base';
-import { AuthenticationService } from 'ngx-login-client';
 import { OnLogin } from 'fabric8-runtime-console';
 import { AnalyticService } from './shared/analytics.service';
 import { Spaces } from 'ngx-fabric8-wit';
@@ -12,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AboutService } from './shared/about.service';
 import { NotificationsService } from './shared/notifications.service';
 import { LoginService } from './shared/login.service';
+import {AuthenticationService} from "./shared/authentication.service";
 
 
 /*

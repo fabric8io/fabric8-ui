@@ -10,9 +10,9 @@ import {
 import { Observable } from 'rxjs';
 
 import { Logger } from 'ngx-base';
-import { AuthenticationService } from 'ngx-login-client';
 import { LoginService } from './login.service';
 import { Fabric8RuntimeConsoleService } from './runtime-console/fabric8-runtime-console.service';
+import {AuthenticationService} from "./authentication.service";
 
 
 // Basic guard that checks the user is logged in

@@ -1,12 +1,12 @@
-import { Injectable, Inject, OnDestroy } from '@angular/core';
-import { Headers, Http } from '@angular/http';
-import { Observable, Subscription } from 'rxjs';
-
-import { Logger } from 'ngx-base';
-import { AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-
-import { cloneDeep } from 'lodash';
+import {Injectable, OnDestroy} from "@angular/core";
+import {Headers, Http} from "@angular/http";
+import {Observable, Subscription} from "rxjs";
+import {Logger} from "ngx-base";
+import {Profile, User, UserService} from "ngx-login-client";
+import {cloneDeep} from "lodash";
+import {ApiLocatorService} from "../../shared/api-locator.service";
+import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
+import {AuthenticationService} from "../../shared/authentication.service";
 
 export class ExtUser extends User {
   attributes: ExtProfile;
@@ -22,18 +22,24 @@ export class GettingStartedService implements OnDestroy {
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private loggedInUser: User;
   subscriptions: Subscription[] = [];
-  private usersUrl: string;
 
   constructor(
       private auth: AuthenticationService,
       private http: Http,
       private logger: Logger,
-      private userService: UserService,
-      @Inject(WIT_API_URL) apiUrl: string) {
+      private apiLocator: ApiLocatorService,
+      private userService: UserService) {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
-    this.usersUrl = apiUrl + 'users';
+  }
+
+  protected get apiUrl(): string {
+    return this.apiLocator.witApiUrl;
+  }
+
+  protected get usersUrl(): string {
+    return pathJoin(this.apiUrl, 'users');
   }
 
   ngOnDestroy(): void {

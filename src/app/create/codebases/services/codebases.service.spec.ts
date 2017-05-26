@@ -1,24 +1,28 @@
 import { TestBed } from '@angular/core/testing';
 import { Http, Response, ResponseOptions, XHRBackend, HttpModule } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { AuthenticationService, UserService, AUTH_API_URL } from 'ngx-login-client';
+import { UserService, AUTH_API_URL } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { CodebasesService } from './codebases.service';
 import { Codebase } from './codebase';
 import { cloneDeep } from 'lodash';
+import {ApiLocatorService} from "../../../shared/api-locator.service";
+import {AuthenticationService} from "../../../shared/authentication.service";
 
 describe('Codebase: CodebasesService', () => {
   let mockLog: any;
   let mockAuthService: any;
   let mockUserService:  any;
+  let mockApiLocatorService:  any;
   let mockService: MockBackend;
   let codebasesService: CodebasesService;
 
   beforeEach(() => {
       mockLog = jasmine.createSpyObj('Logger', ['error']);
       mockAuthService = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-      mockUserService = jasmine.createSpy('UserService');
+      mockUserService = jasmine.createSpyObj('ApiLocatorService', ['witApiUrl']);
+      mockApiLocatorService = jasmine.createSpy('ApiLocator');
 
       TestBed.configureTestingModule({
         imports: [HttpModule],
@@ -32,6 +36,10 @@ describe('Codebase: CodebasesService', () => {
           {
             provide: AuthenticationService,
             useValue: mockAuthService
+          },
+          {
+            provide: ApiLocatorService,
+            useValue: mockApiLocatorService
           },
           {
             provide: UserService,

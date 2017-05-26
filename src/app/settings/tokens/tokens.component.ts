@@ -1,7 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs';
-import { AuthenticationService } from 'ngx-login-client';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {AuthenticationService} from "../../shared/authentication.service";
 
 @Component({
   selector: 'f8-settings-tokens',

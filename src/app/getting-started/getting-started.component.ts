@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Logger, Notification, NotificationType, Notifications } from 'ngx-base';
-import { AuthenticationService, UserService, User } from 'ngx-login-client';
+import { UserService, User } from 'ngx-login-client';
 
 import { ExtUser, GettingStartedService } from './services/getting-started.service';
 import { ProviderService } from './services/provider.service';
+import {AuthenticationService} from "../shared/authentication.service";
 
 @Component({
   encapsulation: ViewEncapsulation.None,

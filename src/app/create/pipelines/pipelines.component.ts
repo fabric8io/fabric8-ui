@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
 
-import { AuthenticationService, UserService } from 'ngx-login-client';
+import { UserService } from 'ngx-login-client';
 import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEvent, SortField } from 'ngx-widgets';
 
 
@@ -25,6 +25,7 @@ import { pathJoin } from "fabric8-runtime-console/src/app/kubernetes/model/utils
 import {IModalHost} from "../../space-wizard/models/modal-host";
 import {SpaceWizardComponent} from "../../space-wizard/space-wizard.component";
 import { Context, Contexts } from 'ngx-fabric8-wit';
+import {AuthenticationService} from "../../shared/authentication.service";
 
 @Component({
   selector: 'alm-pipelines',

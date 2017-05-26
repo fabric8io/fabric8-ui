@@ -36,7 +36,7 @@ export NAMESPACE=`oc project -q`
 
 echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_SERVER}/ with namespace ${NAMESPACE}"
 
-export FABRIC8_SSO_API_URL=`minishift openshift service keycloak -n ${NAMESPACE} --url`
+export FABRIC8_SSO_API_URL="`minishift openshift service keycloak -n ${NAMESPACE} --url`/"
 export FABRIC8_WIT_API_URL="`minishift openshift service wit -n ${NAMESPACE} --url`/api/"
 export FABRIC8_FORGE_API_URL=`minishift openshift service forge -n ${NAMESPACE} --url`
 

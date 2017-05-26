@@ -1,29 +1,37 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { AuthenticationService, UserService } from 'ngx-login-client';
+import { UserService } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { Observable } from 'rxjs';
 
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { Codebase } from './codebase';
+import {ApiLocatorService} from "../../../shared/api-locator.service";
+import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
+import {AuthenticationService} from "../../../shared/authentication.service";
 
 @Injectable()
 export class CodebasesService {
   private headers = new Headers({ 'Content-Type': 'application/json' });
-  private spacesUrl: string;
   private nextLink: string = null;
 
   constructor(
       private http: Http,
       private logger: Logger,
-      private auth: AuthenticationService,
-      private userService: UserService,
-      @Inject(WIT_API_URL) apiUrl: string) {
+      private apiLocator: ApiLocatorService,
+      private auth: AuthenticationService) {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
-    this.spacesUrl = apiUrl + 'spaces';
   }
+
+  protected get apiUrl(): string {
+    return this.apiLocator.witApiUrl;
+  }
+
+  protected get spacesUrl(): string {
+    return pathJoin(this.apiUrl, 'spaces');
+  }
+
 
   /**
    * Add a codbase to the given space
