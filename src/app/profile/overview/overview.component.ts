@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
@@ -21,8 +20,7 @@ export class OverviewComponent implements OnInit {
   constructor(
       private contexts: Contexts,
       private spaceService: SpaceService,
-      private userService: UserService,
-      private router: Router) {
+      private userService: UserService) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
@@ -41,12 +39,6 @@ export class OverviewComponent implements OnInit {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
-  }
-
-  // Actions
-
-  routeToHome(): void {
-    this.router.navigate(['/', '_home']);
   }
 
   routeToUpdateProfile(): void {
