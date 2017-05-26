@@ -1,8 +1,8 @@
-<div class="pipelines-widget card-pf card-f8">
+<div id="spacehome-pipelines-card" class="pipelines-widget card-pf card-f8">
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
-      <a [routerLink]="[contextPath | async, 'create', 'pipelines']">Pipelines</a>
-      <span class="badge card-f8-badge">{{buildConfigsCount | async}}</span>
+      <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, 'create', 'pipelines']">Pipelines</a>
+      <span id="spacehome-pipelines-badge" class="badge card-f8-badge">{{buildConfigsCount | async}}</span>
     </h2>
   </div>
   <div class="card-pf-body card-f8-body">
@@ -15,10 +15,10 @@
         Pipelines run when you commit and build your code base.
       </p>
       <div class="blank-slate-f8-main-action">
-        <button class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to Space</button>
+        <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to Space</button>
       </div>
     </div>
-    <ul class="list-group" *ngIf="(buildConfigsCount | async) > 0">
+    <ul id= "spacehome-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">
       <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async" >
         <div class="list-view-pf-main-info">
           <div class="list-view-pf-body">

@@ -80,7 +80,6 @@ $icon-path:'../../../../assets/icon/';
 
 }
 
-
 .busy-indicator
 {
   min-width:50px;
@@ -106,8 +105,6 @@ $icon-path:'../../../../assets/icon/';
   min-height:60px;
 }
 
-
-
 // styling of the app generator message section
 .app-generator-message {
 
@@ -125,8 +122,6 @@ $icon-path:'../../../../assets/icon/';
 
   $standard-spacing:$grid-gutter-width/2;
 
-  //max-width:900px;
-  //height:70vh;
   padding:$standard-spacing !important;
 
   position:relative;
@@ -172,15 +167,13 @@ $icon-path:'../../../../assets/icon/';
 
     .message-body {
       flex:1;
-      &, & > * {
+      white-space: pre-line;
+      // all child elements white space
+      & > * {
         white-space: pre-line;
-        //overflow: hidden;
-        //text-overflow: ellipsis;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
       }
-    }
-
-    .message-body {
-
       vertical-align: top;
       position: relative;
       min-height: 100% !important;
@@ -191,8 +184,17 @@ $icon-path:'../../../../assets/icon/';
       border: none;
       line-height: 3.0rem;
       font-size: 1.5rem;
-      //white-space:pre;
-
+      .message-details {
+        // by making the body height 0 but overflow visible
+        // then overall host dialog container does not expand
+        // but constrains text to message-body auto fit dimensions
+        // due to its flex layout
+        height:0;
+        overflow:visible;
+        &.hide {
+          overflow:hidden;
+        }
+      }
       .message-status-success {
         white-space: pre-line;
         color: $color-success;
@@ -267,9 +269,7 @@ $icon-path:'../../../../assets/icon/';
           color:$color-error;
         }
       }
-
     }
-
   }
 
   &.app-generator-message-success {
@@ -302,7 +302,6 @@ $icon-path:'../../../../assets/icon/';
           font-size: 2.0rem;
         }
       }
-
     }
     .message-body-container{
       border:solid 1px transparent;
@@ -310,10 +309,7 @@ $icon-path:'../../../../assets/icon/';
         vertical-align: middle;
       }
     }
-
   }
-
-
 }
 
 

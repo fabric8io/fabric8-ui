@@ -1,8 +1,8 @@
-<div class="environment-widget card-pf card-f8">
+<div d="spacehome-environments-card" class="environment-widget card-pf card-f8">
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
-      <a [routerLink]="[contextPath | async, 'create', 'apps']">Applications</a>
-      <span class="badge card-f8-badge">{{appsCount}}</span>
+      <a id="spacehome-environments-title" [routerLink]="[contextPath | async, 'create', 'apps']">Applications</a>
+      <span id="spacehome-environments-badge" class="badge card-f8-badge">{{appsCount}}</span>
     </h2>
   </div>
   <div class="card-pf-body card-f8-body">
@@ -15,7 +15,7 @@
         Applications are shown once you deploy your code through a pipeline onto the defined environments.
       </p>
     </div>
-    <ul class="list-group" *ngIf="appsCount > 0">
+    <ul id="spacehome-environments-list" class="list-group" *ngIf="appsCount > 0">
       <li class="list-group-item" *ngFor="let env of loadedEnvironments">
         <h3>{{env.name}}</h3>
         <div><a href="{{env.apps.deployUrl}}" target="_blank">{{env.apps.name}}</a> - {{env.apps.version}}</div>

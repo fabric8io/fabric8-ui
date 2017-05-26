@@ -2,7 +2,7 @@ import { IWorkflow } from '../contracts/workflow';
 import { IWorkflowLocator } from '../contracts/workflow-locator';
 import { IWorkflowStep } from '../contracts/workflow-step';
 import { IWorkflowTransitionContext } from '../contracts/workflow-transition-context';
-import { WorkflowTransitionDirection } from '../contracts/workflow-transition-direction';
+import { WorkflowTransitionAction } from '../contracts/workflow-transition-action';
 
 /** implementation of the IWorkflowStep */
 export class WorkflowStep implements IWorkflowStep {
@@ -34,7 +34,7 @@ export class WorkflowStep implements IWorkflowStep {
 
   gotoStep(destination: number
       | string
-      | IWorkflowStep, context: IWorkflowTransitionContext = { direction: WorkflowTransitionDirection.GO }) {
+      | IWorkflowStep, context: IWorkflowTransitionContext = { action: WorkflowTransitionAction.GO }) {
     let step: IWorkflowStep = null;
     if ( this.isActive ) {
       // you can only goto a step if 'this' is the active step

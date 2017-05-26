@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DropdownModule, TooltipModule } from 'ng2-bootstrap';
+import { DropdownModule } from 'ng2-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
 import { WindowService } from '../services/window.service';
@@ -11,8 +11,7 @@ import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.co
   imports: [
     CommonModule,
     DropdownModule,
-    FormsModule,
-    TooltipModule
+    FormsModule
   ],
   declarations: [ CodebasesItemWorkspacesComponent ],
   exports: [ CodebasesItemWorkspacesComponent ],

@@ -1,4 +1,4 @@
-import { WorkflowDirection } from './workflow-direction';
+import { WorkflowAction } from './workflow-action';
 import { IWorkflowStep } from './workflow-step';
 import { IWorkflowTransitionContext } from './workflow-transition-context';
 /**
@@ -14,6 +14,10 @@ export interface IWorkflowTransition {
   canContinue: boolean;
   /** Misc contextual information */
   context?: IWorkflowTransitionContext;
-  /** The workflow direction in which the transition is being made */
-  direction: WorkflowDirection;
+  /** The workflow action that caused the transition */
+  action: WorkflowAction;
+  /** Given the step name returns if the name is the transition target  */
+  isTransitioningTo(stepName: string): boolean;
+  /** Given the step name returns if the name is the transition source  */
+  isTransitioningFrom(stepName: string): boolean;
 }

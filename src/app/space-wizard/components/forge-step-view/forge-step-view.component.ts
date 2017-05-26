@@ -5,7 +5,7 @@ import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
 import { ForgeAppGenerator } from './forge-app-generator';
 
 import {
-  IAppGeneratorState,
+  IAppGeneratorState
 } from '../../services/app-generator.service';
 
 @Component({

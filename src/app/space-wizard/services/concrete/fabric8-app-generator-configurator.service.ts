@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { ContextService } from '../../../shared/context.service';
 import {
   Space,
-  Context
+  Context,
+  SpaceAttributes
 } from 'ngx-fabric8-wit';
 
 import {
@@ -17,17 +18,64 @@ import {
 } from '../contracts/app-generator-service';
 /** dependencies */
 import {
-  IForgeInput
+  IForgeInput,
+  ForgeCommands
 } from '../forge.service';
 
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
+
 
 @Injectable()
 export class AppGeneratorConfiguratorService {
 
   static instanceCount: number = 1;
 
-  public currentSpace: Space;
+  public get currentSpace(): Space {
+    if ( !this._currentSpace ) {
+      this._currentSpace = this.createTransientSpace();
+    }
+    return this._currentSpace;
+  }
+
+  public set currentSpace(value: Space) {
+    this._currentSpace = value;
+  }
+
+  public get newSpace(): Space {
+    if ( !this._newSpace ) {
+      this._newSpace = this.createTransientSpace();
+    }
+    return this._newSpace;
+  }
+  public set newSpace(value: Space) {
+    this._newSpace = value;
+  }
+
+  /**
+   * Helps to specify wizard step names to prevent typos
+   */
+
+  public workflowSteps = {
+    createSpace: 'space-step',
+    forgePanel: 'forge-step',
+    forgeQuickStart: 'forge-quick-start-step',
+    forgeStarter: 'forge-starter-step',
+    forgeImportGit: 'forge-import-git-step'
+  };
+
+  public forgeCommands = {
+    forgeQuickStart: ForgeCommands.forgeQuickStart,
+    forgeStarter: ForgeCommands.forgeStarter,
+    forgeImportGit: ForgeCommands.forgeImportGit
+  };
+
+  private _newSpace: Space;
+  private _currentSpace: Space;
+
+  public resetNewSpace(): Space {
+     this.newSpace = null;
+     return this.newSpace;
+  }
 
   constructor(loggerFactory: LoggerFactory, private context: ContextService) {
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name,
@@ -42,21 +90,19 @@ export class AppGeneratorConfiguratorService {
         this.log(`the current space is updated to ${this.currentSpace.attributes.name}`);
       }
     });
-
   }
 
   // appends fields that are needed but may only be entered at a later stage in the wizard
-  public appendAppGeneratorRequestMissingFields(command: IAppGeneratorCommand){
+  public appendAppGeneratorRequestMissingFields(command: IAppGeneratorCommand) {
     if ( command.parameters && command.parameters.data && command.parameters.data.inputs ) {
-        let inputs: Array<IForgeInput> = command.parameters.data.inputs||[];
+        let inputs: Array<IForgeInput> = command.parameters.data.inputs || [];
 
-        let field =inputs.find(i => i.name.toLowerCase() === 'labelspace')
-        if( !field ) {
-          inputs.push(<IForgeInput>{name:'labelSpace',value:this.currentSpace.attributes.name});
-        }
-        else {
-          if( !field.value ) {
-            field.value=this.currentSpace.attributes.name;
+        let field = inputs.find(i => i.name.toLowerCase() === 'labelspace');
+        if ( !field ) {
+          inputs.push(<IForgeInput>{name: 'labelSpace', value: this.currentSpace.attributes.name});
+        } else {
+          if ( !field.value ) {
+            field.value = this.currentSpace.attributes.name;
           }
         }
     }
@@ -133,17 +179,6 @@ export class AppGeneratorConfiguratorService {
           break;
         }
         case 'gitrepository' : {
-          // if( this.currentSpace && (this.currentSpace.attributes.name || '' ).length > 0 ) {
-          //   let spaceName = this.currentSpace.attributes.name;
-          //   field.value = spaceName ;
-          //   let namedField = validationFields.find( f => f.name ==='named');
-          //   // handle the scenario when someone chages the name (that is defaulted to the space name) to something else
-          //   // and the expecation that this defaults to the repo name. Do if that changes then default repo name needs to
-          //   // change too !!
-          //   if( namedField &&  (namedField.value||'').toString() !== spaceName ) {
-          //       field.value= namedField.value
-          //   }
-          // }
           field.display.label = 'GitHub repository name';
           break;
         }
@@ -200,6 +235,35 @@ export class AppGeneratorConfiguratorService {
     return response;
   }
 
+  private createTransientSpace(): Space {
+    let space = {} as Space;
+    space.name = '';
+    space.path = '';
+    space.attributes = new SpaceAttributes();
+    space.attributes.name = space.name;
+    space.type = 'spaces';
+    space.privateSpace = false;
+    space.process = { name: '', description: ''};
+    space.relationships = {
+      areas: {
+        links: {
+          related: ''
+        }
+      },
+      iterations: {
+        links: {
+          related: ''
+        }
+      },
+      ['owned-by']: {
+        data: {
+          id: '',
+          type: 'identities'
+        }
+      }
+    };
+    return space;
+  }
 
   private augmentTitle(context: string, execution: IAppGeneratorPair) {
     let response = execution.response;
@@ -474,7 +538,6 @@ export class AppGeneratorConfiguratorService {
         }
     });
   }
-
 
   private log: ILoggerDelegate = () => {};
 

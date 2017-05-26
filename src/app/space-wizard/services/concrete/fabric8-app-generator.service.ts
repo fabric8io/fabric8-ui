@@ -65,7 +65,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
           this._configuratorService.scrubAppGeneratorRequest(command, input, field);
         }
       }
-      if ( command.parameters.pipeline && command.parameters.pipeline.step && (command.parameters.pipeline.step.name||'').toLowerCase() === 'execute' ) {
+      if ( command.parameters.pipeline && command.parameters.pipeline.step && (command.parameters.pipeline.step.name || '').toLowerCase() === 'execute' ) {
         this._configuratorService.appendAppGeneratorRequestMissingFields(command);
       }
     }

@@ -83,24 +83,4 @@ describe('Codebases Item Component', () => {
       expect(spanDisplayedInformation.length).toEqual(3)
     });
   }));
-
-  it('Init component in error', async(() => {
-    // given
-    let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
-    comp.codebase = cloneDeep(codebase);
-    comp.codebase.attributes.url = 'bo:o';
-    const errorNotif = {
-      message: "An Error",
-      type: NotificationType.DANGER
-    };
-    notificationMock.message.and.returnValue(Observable.of(errorNotif));
-    fixture.detectChanges();
-    let spanParent = debug.query(By.css('.list-group-item-heading'));
-    let spanError = spanParent.query(By.css('span:last-child'));
-    fixture.whenStable().then(() => {
-      expect(spanError.nativeElement.textContent).toEqual("Invalid URL");
-      expect(notificationMock.message).toHaveBeenCalled();
-    });
-  }));
 });

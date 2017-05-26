@@ -1,4 +1,9 @@
 //
+import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
+import { CodebasesService } from '../../../create/codebases/services/codebases.service';
+import { Space } from 'ngx-fabric8-wit';
+import { Codebase } from '../../../create/codebases/services/codebase';
+
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
 import { IWorkflow } from '../../models/workflow';
 import { formatJson } from '../../common/utilities';
@@ -9,24 +14,41 @@ import {
   IAppGeneratorRequest,
   IAppGeneratorResponse,
   IAppGeneratorService,
+  IAppGeneratorServiceProvider,
   IAppGeneratorState,
   IFieldCollection,
-  IAppGeneratorMessage
+  IAppGeneratorMessage,
+  AppGeneratorConfiguratorService
 } from '../../services/app-generator.service';
 
-import { CodebasesService } from '../../../create/codebases/services/codebases.service';
-import { Codebase } from '../../../create/codebases/services/codebase';
-import { AppGeneratorConfiguratorService } from '../../services/app-generator.service';
-
-interface ICodebaseCreationDelegate {
-  (): Promise<object>;
+interface IAddCodebaseResult {
+    codebase: Codebase;
+    forgeResult: any;
+    space: Space;
 }
 
-export class ForgeAppGenerator {
+interface IAddCodebaseDelegate {
+  (): Promise<IAddCodebaseResult>;
+}
+
+
+export class ForgeAppGeneratorServiceClient {
+  /**
+   * make allowance for non-singleton d-i semantics
+   */
+  public static factoryProvider = {
+      provide: ForgeAppGeneratorServiceClient,
+      useFactory: (appGeneratorService, codebasesService, configuratorService, notifications, loggerFactory) => {
+        let tmp = new ForgeAppGeneratorServiceClient(appGeneratorService, codebasesService, configuratorService, notifications, loggerFactory);
+        return tmp;
+      },
+      deps: [IAppGeneratorServiceProvider.InjectToken, CodebasesService, AppGeneratorConfiguratorService, Notifications, LoggerFactory]
+  };
+
   static instanceCount: number = 1;
 
   public workflow: IWorkflow;
-  public name: string;
+  public commandName: string;
   public state: IAppGeneratorState;
 
   public hasErrorMessage: boolean;
@@ -43,18 +65,20 @@ export class ForgeAppGenerator {
   private _fieldSet: IFieldCollection;
   private _responseHistory: Array<IAppGeneratorResponse>;
   private _currentResponse: IAppGeneratorResponse;
-  private _onBeginStep: boolean = false;
-  private _onFinishStep: boolean = false;
-  private _onNextStep: boolean = false;
+  private _onCommandPipelineBeginStep: boolean = false;
+  private _onCommandPipelineExecuteStep: boolean = false;
+  private _onCommandPipelineNextStep: boolean = false;
 
   constructor(
     private _appGeneratorService: IAppGeneratorService,
     private _codebasesService: CodebasesService,
     private _configuratorService: AppGeneratorConfiguratorService,
+    private _notifications: Notifications,
     loggerFactory: LoggerFactory
     ) {
 
-    this.log = loggerFactory.createLoggerDelegate(this.constructor.name, ForgeAppGenerator.instanceCount++);
+    this.log = loggerFactory.createLoggerDelegate(this.constructor.name, ForgeAppGeneratorServiceClient.instanceCount++);
+    this.log(`New instance ...`);
 
     this.state = {
       canExecute: false,
@@ -76,34 +100,34 @@ export class ForgeAppGenerator {
 
   }
 
-  public get onBeginStep(): boolean {
-    return this._onBeginStep;
+  public get onCommandPipelineBeginStep(): boolean {
+    return this._onCommandPipelineBeginStep;
   }
 
-  public set onBeginStep(value: boolean) {
-    this._onFinishStep = false;
-    this._onNextStep = false;
-    this._onBeginStep = value;
+  public set onCommandPipelineBeginStep(value: boolean) {
+    this._onCommandPipelineExecuteStep = false;
+    this._onCommandPipelineNextStep = false;
+    this._onCommandPipelineBeginStep = value;
   }
 
-  public get onFinishStep(): boolean {
-    return this._onFinishStep;
+  public get onCommandPipelineExecuteStep(): boolean {
+    return this._onCommandPipelineExecuteStep;
   }
 
-  public set onFinishStep(value: boolean) {
-    this._onBeginStep = false;
-    this._onNextStep = false;
-    this._onFinishStep = value;
+  public set onCommandPipelineExecuteStep(value: boolean) {
+    this._onCommandPipelineBeginStep = false;
+    this._onCommandPipelineNextStep = false;
+    this._onCommandPipelineExecuteStep = value;
   }
 
-  public get onNextStep(): boolean {
-    return this._onFinishStep;
+  public get onCommandPipelineNextStep(): boolean {
+    return this._onCommandPipelineExecuteStep;
   }
 
-  public set onNextStep(value: boolean) {
-    this._onBeginStep = false;
-    this._onFinishStep = false;
-    this._onFinishStep = value;
+  public set onCommandPipelineNextStep(value: boolean) {
+    this._onCommandPipelineBeginStep = false;
+    this._onCommandPipelineExecuteStep = false;
+    this._onCommandPipelineExecuteStep = value;
   }
 
   public get fields(): IFieldCollection {
@@ -122,6 +146,7 @@ export class ForgeAppGenerator {
     this.clearErrorMessageView();
     this.clearSuccessMessageView();
     this.clearProcessingMessageView();
+    this.addCodebaseDelegate = null;
   }
   /**
    * When an error occurs the error area will be displayed. On the beginning step
@@ -129,27 +154,33 @@ export class ForgeAppGenerator {
    */
   public acknowledgeErrorMessage() {
     this.clearErrorMessageView();
-    if (this.onBeginStep) {
+    if (this.onCommandPipelineBeginStep) {
       // if the dynamic 'step' is on the on the first step then reset and
       // go back to the forge selector
       this.reset();
       this.workflow.gotoPreviousStep();
     }
   }
+  // TODO: revisit primary action and ux interaction model for long for errors and information ???
+  public showCodebaseAddedNotification( addCodeBaseResult: IAddCodebaseResult) {
+    // const notifcationAction : NotificationAction = {
+    //    name: `CodebaseDetails`,
+    //    title: `View Details`,
+    //    id: 'codebase-added'
+    // };
+    this._notifications.message(<Notification>{
+      message: `Your generated ${addCodeBaseResult.codebase.attributes.url} repository has been added to the ${this._configuratorService.currentSpace.attributes.name} space`,
+      type: NotificationType.SUCCESS
+      // ,primaryAction:notifcationAction
+    });
+    // .filter( action => action.id === notifcationAction.id)
+    // .subscribe(action => {
+    // });
+  }
+
 
   public acknowledgeSuccessMessage() {
-    if ( this.createCodebase ) {
-      this.createCodebase().then(
-        (createCodeBaseResults) => {
-          this.log({origin : 'acknowledgeSuccessMessage', message: 'Add codebase completed', info: true }, createCodeBaseResults);
-          this.reset();
-          // invoke the workflow complete handler that navigates to the current space
-          this.workflow.finish();
-        })
-        .catch((ex) => {
-          this.log({ origin : 'acknowledgeSuccessMessage', message: 'Add codebase error', error: true }, ex);
-        });
-    } else {
+    if ( !this.invokeAddCodebaseDelegate()) {
       // go back to the forge wizard selector
       this.reset();
       this.workflow.gotoPreviousStep();
@@ -160,19 +191,13 @@ export class ForgeAppGenerator {
     this.execute()
       .then(
         (execution) => {
-          this.createCodebase = this.getCodebaseCreatonFunction(execution);
+          this.addCodebaseDelegate = this.getAddCodebaseDelegate(execution);
         }
       )
-      // .then(
-      //   (createCodeBaseResult) => {
-      //     this.workflow.finish();
-      //   }
-      // )
       .catch(
         (ex) => {
           this.log({ origin : 'finish', message: 'App generator finish error', error: true }, ex);
       });
-
   }
 
   /** closes the workflow all together i.e shuts down the host dialog */
@@ -188,14 +213,14 @@ export class ForgeAppGenerator {
   }
 
   public begin() {
-    this.onBeginStep = true;
+    this.onCommandPipelineBeginStep = true;
     this.reset();
     let title = 'Application Generator';
     this.state.title = title;
     this.displayProcessingMessageView('Loading ...');
     let request: IAppGeneratorRequest = {
       command: {
-        name: `${this.name}`
+        name: `${this.commandName}`
       }
     };
     let commandInfo = `${request.command.name}`;
@@ -228,7 +253,7 @@ export class ForgeAppGenerator {
   }
 
   public gotoNextStep() {
-    this.onNextStep = true;
+    this.onCommandPipelineNextStep = true;
     this.processing = false;
     this.displayProcessingMessageView('Validating ...');
     this.validate({showProcessingIndicator: false }).then((validated) => {
@@ -288,7 +313,7 @@ export class ForgeAppGenerator {
   }
 
   public execute(): Promise<IAppGeneratorPair> {
-    this.onFinishStep = true;
+    this.onCommandPipelineExecuteStep = true;
     return new Promise<IAppGeneratorPair>((resolve, reject) => {
 
       this.state.title = 'Generating the application ...';
@@ -406,8 +431,8 @@ export class ForgeAppGenerator {
    * Create a function that returns a promise inidicating the successful association
    * of a codebase to the current space
    */
-  private getCodebaseCreatonFunction(execution: IAppGeneratorPair): ICodebaseCreationDelegate {
-    let delegate: ICodebaseCreationDelegate = () => {
+  private getAddCodebaseDelegate(execution: IAppGeneratorPair): IAddCodebaseDelegate {
+    let delegate: IAddCodebaseDelegate = () => {
       return new Promise<object>((resolve, reject) => {
         let createTransientCodeBase = (url) => {
           return {
@@ -424,7 +449,7 @@ export class ForgeAppGenerator {
         this._codebasesService.addCodebase( space.id, codeBase).subscribe(
           ( codebase ) => {
             this.log(`Successfully added codebase ${this.result.gitUrl} to space ${space.attributes.name} ...`, this.result, console.groupEnd);
-            resolve( <object>{
+            resolve( <IAddCodebaseResult>{
               codebase: codebase,
               forgeResult: this.result,
               space: space
@@ -627,8 +652,30 @@ export class ForgeAppGenerator {
     return formatJson(source);
   }
 
+  /** return true if delegate invoked , else return false */
+  private invokeAddCodebaseDelegate() {
+    if ( this.addCodebaseDelegate ) {
+      this.addCodebaseDelegate().then(
+        (addCodebaseResult: IAddCodebaseResult) => {
+          this.log({
+                     origin : 'acknowledgeSuccessMessage',
+                     message: 'Add codebase completed',
+                     info: true }, addCodebaseResult);
+          this.showCodebaseAddedNotification(addCodebaseResult);
+          this.reset();
+          // invoke the workflow complete handler that navigates to the current space
+          this.workflow.finish();
+        })
+      .catch((ex) => {
+        this.log({ origin : 'acknowledgeSuccessMessage', message: 'Add codebase error', error: true }, ex);
+      });
+      return true;
+    }
+    return false;
+  }
+
   /** logger delegate delegates logging to a logger */
   private log: ILoggerDelegate = () => { };
-  private createCodebase: ICodebaseCreationDelegate = (): Promise<object> => { return Promise.resolve(<object>{}); };
+  private addCodebaseDelegate: IAddCodebaseDelegate = (): Promise<object> => { return Promise.resolve(<object>{}); };
 
 }

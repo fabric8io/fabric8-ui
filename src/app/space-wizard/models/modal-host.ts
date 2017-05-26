@@ -6,7 +6,7 @@ export interface IModalHost {
   closeOnOutsideClick: boolean;
   onOpen();
   onClose();
-  open();
+  open(options?: any);
   close();
 }
 

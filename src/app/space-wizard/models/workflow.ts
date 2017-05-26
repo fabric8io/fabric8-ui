@@ -2,8 +2,8 @@
  * workflow contract exports
  */
 export { IWorkflowStepQuery } from './contracts/workflow-step-query';
-export { WorkflowTransitionDirection } from './contracts/workflow-transition-direction';
-export { WorkflowDirection } from './contracts/workflow-direction';
+export { WorkflowTransitionAction } from './contracts/workflow-transition-action';
+export { WorkflowAction } from './contracts/workflow-action';
 export { IWorkflowTransitionContext } from './contracts/workflow-transition-context';
 export { IWorkflowLocator } from './contracts/workflow-locator';
 export { IWorkflowStepLocator } from './contracts/workflow-step-locator';

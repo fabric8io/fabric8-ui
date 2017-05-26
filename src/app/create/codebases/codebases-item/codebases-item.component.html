@@ -1,31 +1,47 @@
-<div class="list-view-pf-left">
-  <span class="fa list-view-pf-icon-sm" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
-</div>
-<div class="list-view-pf-body">
-  <div class="list-view-pf-description">
-    <div class="list-group-item-heading">
-      <span class="list-group-heading" *ngIf="index === 0">NAME</span>
-      <a [href]="htmlUrl" target="_blank" *ngIf="!isHtmlUrlInvalid()">{{fullName}}</a>
-      <span *ngIf="isHtmlUrlInvalid()">Invalid URL</span>
+<div *ngIf="index === 0; then showHeader else showCol"></div>
+<ng-template #showHeader>
+  <div class="list-view-pf-left">
+    <!-- Extra margin for icon -->
+    <div class="margin-right-30"></div>
+  </div>
+  <div class="list-view-pf-body">
+    <div class="list-view-pf-description">
+      <div class="list-group-item-heading">
+        <span class="list-group-heading">NAME</span>
+      </div>
+      <div class="list-group-item-text">
+        <span class="list-group-heading">CREATED DATE</span>
+      </div>
     </div>
     <div class="list-group-item-text">
-      <span class="list-group-heading" *ngIf="index === 0">CREATED DATE</span>
-      {{createdDate | date:'medium'}}
+      <span class="list-group-heading">LAST COMMIT</span>
+    </div>
+    <div class="list-group-item-text">
+      <span class="list-group-heading">CHE WORKSPACES
+        <i class="pficon pficon-info margin-left-5"
+           tooltip="Che workspaces are web based development environments for your code and runtime needs"></i>
+      </span>
     </div>
   </div>
-  <div class="list-group-item-text">
-    <span class="list-group-heading" *ngIf="index === 0">LAST COMMIT</span>
-    {{lastCommitDate | date:'medium'}}
+</ng-template>
+<ng-template #showCol>
+  <div class="list-view-pf-left">
+    <span class="fa list-view-pf-icon-sm" [ngClass]="{'fa-github': codebase?.attributes?.type === 'git'}"></span>
   </div>
-  <div class="list-group-item-text">
-    <codebases-item-workspaces [codebase]="codebase" [index]="index"></codebases-item-workspaces>
-  </div>
-
-  <!--
-  <div class="list-view-pf-additional-info">
-    <div class="list-view-pf-additional-info-item">
+  <div class="list-view-pf-body">
+    <div class="list-view-pf-description">
+      <div class="list-group-item-heading">
+        <a [href]="htmlUrl" target="_blank">{{fullName}}</a>
+      </div>
+      <div class="list-group-item-text">
+        {{createdDate | date:'medium'}}
+      </div>
+    </div>
+    <div class="list-group-item-text">
       {{lastCommitDate | date:'medium'}}
     </div>
+    <div class="list-group-item-text">
+      <codebases-item-workspaces [codebase]="codebase" [index]="index"></codebases-item-workspaces>
+    </div>
   </div>
-  -->
-</div>
+</ng-template>

@@ -6,7 +6,7 @@ import { IWorkflowOptions } from '../contracts/workflow-options';
 
 import { IWorkflowStep } from '../contracts/workflow-step';
 import { IWorkflowTransition } from '../contracts/workflow-transition';
-import { WorkflowTransitionDirection } from '../contracts/workflow-transition-direction';
+import { WorkflowTransitionAction } from '../contracts/workflow-transition-action';
 
 import { WorkflowStep } from './workflow-step';
 import { WorkflowTransition } from './workflow-transition';
@@ -177,19 +177,19 @@ export class Workflow implements IWorkflow {
       | string
       | Partial<IWorkflowStep>, transitionOptions: Partial<IWorkflowTransition> = {
       canContinue: true,
-      direction: WorkflowTransitionDirection.GO,
+      action: WorkflowTransitionAction.GO,
       context: {}
     }) {
 
     let destinationStep = this.findStep(destination);
     if ( destinationStep ) {
       transitionOptions.canContinue = transitionOptions.canContinue || true;
-      transitionOptions.direction = transitionOptions.direction || WorkflowTransitionDirection.GO;
+      transitionOptions.action = transitionOptions.action || WorkflowTransitionAction.GO;
       transitionOptions.context = transitionOptions.context || {};
       let transition = this.workflowTransitionShouldContinue({
                                                                from: this.activeStep,
                                                                to: destinationStep,
-                                                               direction: transitionOptions.direction,
+                                                               action: transitionOptions.action,
                                                                canContinue: transitionOptions.canContinue,
                                                                context: transitionOptions.context
                                                              });
@@ -206,7 +206,7 @@ export class Workflow implements IWorkflow {
           newDestinationStep.gotoPreviousStep = () => {
             let step = this.gotoStep(transition.from, {
               canContinue: true,
-              direction: WorkflowTransitionDirection.PREVIOUS
+              action: WorkflowTransitionAction.PREVIOUS
             });
             // restore prior handler
             newDestinationStep.gotoPreviousStep = priorHandler;
@@ -254,13 +254,13 @@ export class Workflow implements IWorkflow {
       nextStep.gotoPreviousStep = () => {
         let step = this.gotoStep(activeStep, {
           canContinue: true,
-          direction: WorkflowTransitionDirection.PREVIOUS
+          action: WorkflowTransitionAction.PREVIOUS
         });
         // restore prior handler
         nextStep.gotoPreviousStep = priorHandler;
         return step;
       };
-      this.gotoStep(nextStep.index, { canContinue: true, direction: WorkflowTransitionDirection.NEXT, context: {} });
+      this.gotoStep(nextStep.index, { canContinue: true, action: WorkflowTransitionAction.NEXT, context: {} });
     }
     return nextStep;
   }
@@ -298,11 +298,11 @@ export class Workflow implements IWorkflow {
   private workflowTransitionShouldContinue(options: Partial<IWorkflowTransition> = {
       canContinue: false,
       context: {
-        direction: WorkflowTransitionDirection.GO
+        action: WorkflowTransitionAction.GO
       }
     }): IWorkflowTransition {
     let transition = new WorkflowTransition(options);
-    this.log(`Notify workflow transition subscribers of an upcoming '${transition.direction}' transition
+    this.log(`Notify workflow transition subscribers of an upcoming '${transition.action}' transition
                 from '${transition.from ? transition.from.name : 'null'}'
                 to '${transition.to ? transition.to.name : 'null'}' `);
     this.workflowTransitionSubject.next(transition);

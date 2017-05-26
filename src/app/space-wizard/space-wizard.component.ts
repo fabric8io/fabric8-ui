@@ -1,61 +1,33 @@
-import { SpacesService } from '../shared/spaces.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
-import {
-  SpaceService,
-  SpaceNamePipe
-} from 'ngx-fabric8-wit';
-import { UserService } from 'ngx-login-client';
-
 import { Observable } from 'rxjs';
-import { DummyService } from '../shared/dummy.service';
-
-import { SpaceNamespaceService } from '../shared/runtime-console/space-namespace.service';
 
 import { ILoggerDelegate, LoggerFactory } from './common/logger';
-import { SpaceConfigurator } from './models/codebase';
 import { IModalHost } from './models/modal-host';
 import { IWorkflow, WorkflowFactory } from './models/workflow';
-import { ForgeCommands } from './services/forge.service';
 import { AppGeneratorConfiguratorService } from './services/app-generator.service';
 
 @Component({
   selector: 'space-wizard',
   templateUrl: './space-wizard.component.html',
-  styleUrls: ['./space-wizard.component.scss'],
-  providers: [SpaceService]
+  styleUrls: ['./space-wizard.component.scss']
 })
 export class SpaceWizardComponent implements OnInit {
 
   static instanceCount: number = 1;
 
-  /**
-   * Helps to specify wizard step names to prevent typos
-   */
-  steps = {
-    space: 'space-step',
-    forge: 'forge-step',
-    forgeQuickStart: 'forge-quick-start-step',
-    forgeStarter: 'forge-starter-step',
-    forgeImportGit: 'forge-import-git-step'
-  };
-
-  commands = {
-    forgeQuickStart: ForgeCommands.forgeQuickStart,
-    forgeStarter: ForgeCommands.forgeStarter,
-    forgeImportGit: ForgeCommands.forgeImportGit
-  };
-
   @Input() host: IModalHost;
 
-  /**
-   * The configurator stores configuration settings
-   * gleaned from the wizard information gathering
-   * process.
+  private get configurator(): AppGeneratorConfiguratorService {
+     return this._configuratorService;
+  }
+  /*
+   * facilitates specifying a specific starting step when opening the host dialog
    */
-  configurator: SpaceConfigurator = SpaceConfigurator.defaultValue();
+  public get steps() {
+    return this.configurator.workflowSteps;
+  }
 
   private _workflow: IWorkflow = null;
   @Input()
@@ -72,16 +44,9 @@ export class SpaceWizardComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public dummy: DummyService,
-    private spaceService: SpaceService,
-    private notifications: Notifications,
-    private userService: UserService,
     private workflowFactory: WorkflowFactory,
     loggerFactory: LoggerFactory,
-    private spaceNamespaceService: SpaceNamespaceService,
-    private spaceNamePipe: SpaceNamePipe,
-    private _configuratorService: AppGeneratorConfiguratorService,
-    private spacesService: SpacesService
+    private _configuratorService: AppGeneratorConfiguratorService
   ) {
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, SpaceWizardComponent.instanceCount++);
     if (logger) {
@@ -104,11 +69,11 @@ export class SpaceWizardComponent implements OnInit {
     return this.workflowFactory.create({
       steps: () => {
         return [
-          { name: this.steps.space, index: 0, nextIndex: 1 },
-          { name: this.steps.forge, index: 1, nextIndex: 1 },
-          { name: this.steps.forgeQuickStart, index: 5, nextIndex: 1 },
-          { name: this.steps.forgeStarter, index: 6, nextIndex: 1 },
-          { name: this.steps.forgeImportGit, index: 7, nextIndex: 1 }
+          { name: this.configurator.workflowSteps.createSpace, index: 0, nextIndex: 1 },
+          { name: this.configurator.workflowSteps.forgePanel, index: 1, nextIndex: 1 },
+          { name: this.configurator.workflowSteps.forgeQuickStart, index: 5, nextIndex: 1 },
+          { name: this.configurator.workflowSteps.forgeStarter, index: 6, nextIndex: 1 },
+          { name: this.configurator.workflowSteps.forgeImportGit, index: 7, nextIndex: 1 }
         ];
       },
       firstStep: () => {
@@ -133,74 +98,12 @@ export class SpaceWizardComponent implements OnInit {
     });
   }
 
-
-  /*
-   * Creates a persistent collaboration space
-   * by invoking the spaceService
-   */
-  createSpace() {
-    this.log(`createSpace ...`);
-    let space = this.configurator.space;
-    console.log('Creating space', space);
-    space.attributes.name = space.name.replace(/ /g, '_');
-    this.userService.getUser()
-      .switchMap(user => {
-        space.relationships['owned-by'].data.id = user.id;
-        return this.spaceService.create(space);
-      })
-      .do(createdSpace => {
-        this.spacesService.addRecent.next(createdSpace);
-      })
-      .switchMap(createdSpace => {
-        return this.spaceNamespaceService
-          .updateConfigMap(Observable.of(createdSpace))
-          .map(() => createdSpace)
-          // Ignore any errors coming out here, we've logged and notified them earlier
-          .catch(err => Observable.of(createdSpace));
-      })
-      .subscribe(createdSpace => {
-        this.configurator.space = createdSpace;
-        this._configuratorService.currentSpace = createdSpace;
-        let actionObservable = this.notifications.message({
-          message: `Your new space is created!`,
-          type: NotificationType.SUCCESS,
-          primaryAction: {
-            name: `Open Space`,
-            title: `Open ${this.spaceNamePipe.transform(createdSpace.attributes.name)}`,
-            id: 'openSpace'
-          } as NotificationAction
-        } as Notification);
-        actionObservable
-          .filter(action => action.id === 'openSpace')
-          .subscribe(action => {
-            this.router.navigate([createdSpace.relationalData.creator.attributes.username,
-            createdSpace.attributes.name]);
-            if (this.host) {
-              this.host.close();
-              this.reset();
-            }
-          });
-        this.workflow.gotoNextStep();
-      },
-      err => {
-        console.log('Error creating space', err);
-        this.notifications.message({
-          message: `Failed to create "${space.name}"`,
-          type: NotificationType.DANGER
-        } as Notification);
-        if (this.host) {
-          this.host.close();
-          this.reset();
-        }
-      });
-  }
-
   /**
    * Resets the configurator, space and workflow object
    * into a default empty state.
    */
   reset() {
-    this.configurator = SpaceConfigurator.defaultValue();
+    this.configurator.resetNewSpace();
     this.workflow = this.createAndInitializeWorkflow();
   }
 
@@ -208,8 +111,8 @@ export class SpaceWizardComponent implements OnInit {
     this.log(`finish ...`);
     // navigate to the users space
     this.router.navigate([
-      this.configurator.space.relationalData.creator.attributes.username,
-      this.configurator.space.attributes.name
+      this.configurator.currentSpace.relationalData.creator.attributes.username,
+      this.configurator.currentSpace.attributes.name
     ]);
     if (this.host) {
       this.host.close();
@@ -226,6 +129,8 @@ export class SpaceWizardComponent implements OnInit {
 
   /**
    * Configures this component host dialog settings.
+   * host is an instance of the modal dialog object
+   * cast to IModalHost interface
    */
   configureComponentHost() {
 
@@ -235,15 +140,19 @@ export class SpaceWizardComponent implements OnInit {
     let me = this;
 
     /**
-     * Configure modal open and close intercept handlers.
-     * perform initialization and settings adjustments.
+     * Configure the modal dialog open and close intercept handlers.
      */
     let originalOpenHandler = this.host.open;
     this.host.open = function (...args) {
-      me.log(`Opening wizard modal dialog ...`);
+      me.log(`Opening wizard modal dialog ...`, args);
       me.reset();
+      if ( args.length > 0 && typeof args[0] === 'string' ) {
+        let step = args[0];
+        me.workflow.gotoStep(step);
+      }
       /**
-       * note: 'this' is not me ... but an instance of Modal.
+       * note: 'this' in this context is not me ( i.e component)
+       * ... but an instance of Modal.
        * That is why  => is not being used here
        */
       return originalOpenHandler.apply(this, args);
