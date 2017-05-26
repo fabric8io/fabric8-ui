@@ -138,7 +138,7 @@ have access to both JS and SASS sourcemaps if your webapp is properly setup.
 NOTE: `fabric8-ui` is setup to do reloading and sourcemaps automatically when you
 run `npm start`.
 
-** To hit stack analysis api in standalone mode **
+**To hit stack analysis api in standalone mode**
 Put a token in the environment variable with key as 'STACK_API_TOKEN'
 
 == CSS and SASS
@@ -155,3 +155,8 @@ The `src/assets/stylesheets/` directory includes a `shared` directory. These are
 shared global styles that we will refactor out in to a shared library at some point.
 Only update these styles if you are making a truly global style, and are going to
 synchronise your changes across all the various UI projects.
+
+== Contributing to the app
+
+The development guide is part of the link:./CONTRIBUTING.adoc[contributors'
+instructions]. Please check it out in order to contribute to this project.
