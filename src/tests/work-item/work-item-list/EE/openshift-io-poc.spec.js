@@ -108,13 +108,13 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     //OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
     /* Import the code base */
-    OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
-    var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
-    OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
-    OpenShiftIoSpaceHomePage.clickSyncButton();
+    //OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
+    //var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
+    //OpenShiftIoSpaceHomePage.setGitHubRepo(targetURL);
+    //OpenShiftIoSpaceHomePage.clickSyncButton();
 
-    OpenShiftIoDashboardPage.waitForToastToClose();
-    OpenShiftIoSpaceHomePage.clickAssociateRepoButton();
+    //OpenShiftIoDashboardPage.waitForToastToClose();
+    //OpenShiftIoSpaceHomePage.clickAssociateRepoButton();
     OpenShiftIoDashboardPage.waitForToastToClose();
 
     /* TODO - Create a workspace */
