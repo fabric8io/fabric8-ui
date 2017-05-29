@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
@@ -23,7 +24,8 @@ export class ActivityComponent implements OnDestroy, OnInit  {
 
   constructor(
       private contexts: Contexts,
-      private userService: UserService) {
+      private userService: UserService,
+      private router: Router) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
@@ -52,6 +54,12 @@ export class ActivityComponent implements OnDestroy, OnInit  {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
+  }
+
+  // Actions
+
+  routeToHome(): void {
+    this.router.navigate(['/', '_home']);
   }
 
   // Private

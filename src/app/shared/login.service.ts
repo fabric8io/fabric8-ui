@@ -53,7 +53,12 @@ export class LoginService {
   }
 
   redirectToAuth() {
-    window.location.href = this.authUrl;
+    var authUrl = this.authUrl;
+    if (authUrl.indexOf('?') < 0) {
+      // lets ensure there's a redirect parameter to avoid WIT barfing
+      authUrl += "?redirect=" + window.location.href;
+    }
+    window.location.href = authUrl;
   }
 
   public redirectAfterLogin() {

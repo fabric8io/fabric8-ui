@@ -20,3 +20,21 @@ export let fabric8UIConfigProvider = {
   useFactory: fabric8UIConfigFactory,
   deps: [ConfigStore]
 };
+
+function syncFabric8UIConfigFactory(): Fabric8UIConfig {
+  let answer = window['Fabric8UIEnv'] || {};
+  // lets filter out any values of "undefined" in case an env var is missing in the template expression
+  for (let key in answer) {
+    let value = answer[key];
+    if (value === "undefined") {
+      answer[key] = "";
+    }
+  }
+  return answer as Fabric8UIConfig;
+}
+
+export let syncFabric8UIConfigProvider = {
+  provide: Fabric8UIConfig,
+  useFactory: syncFabric8UIConfigFactory,
+  deps: []
+};

@@ -12,7 +12,7 @@ import { UserService, User } from 'ngx-login-client';
   templateUrl: 'overview.component.html',
   styleUrls: ['./overview.component.scss']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnDestroy, OnInit {
   context: Context;
   loggedInUser: User;
   subscriptions: Subscription[] = [];
@@ -41,12 +41,6 @@ export class OverviewComponent implements OnInit {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
-  }
-
-  // Actions
-
-  routeToHome(): void {
-    this.router.navigate(['/', '_home']);
   }
 
   routeToUpdateProfile(): void {

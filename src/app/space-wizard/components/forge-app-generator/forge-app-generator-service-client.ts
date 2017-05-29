@@ -1,5 +1,5 @@
 //
-import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
+import { Broadcaster, Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
 import { CodebasesService } from '../../../create/codebases/services/codebases.service';
 import { Space } from 'ngx-fabric8-wit';
 import { Codebase } from '../../../create/codebases/services/codebase';
@@ -38,11 +38,11 @@ export class ForgeAppGeneratorServiceClient {
    */
   public static factoryProvider = {
       provide: ForgeAppGeneratorServiceClient,
-      useFactory: (appGeneratorService, codebasesService, configuratorService, notifications, loggerFactory) => {
-        let tmp = new ForgeAppGeneratorServiceClient(appGeneratorService, codebasesService, configuratorService, notifications, loggerFactory);
+      useFactory: (appGeneratorService, codebasesService, configuratorService, notifications,broadcaster, loggerFactory) => {
+        let tmp = new ForgeAppGeneratorServiceClient(appGeneratorService, codebasesService, configuratorService, notifications, broadcaster, loggerFactory);
         return tmp;
       },
-      deps: [IAppGeneratorServiceProvider.InjectToken, CodebasesService, AppGeneratorConfiguratorService, Notifications, LoggerFactory]
+      deps: [IAppGeneratorServiceProvider.InjectToken, CodebasesService, AppGeneratorConfiguratorService, Notifications, Broadcaster, LoggerFactory]
   };
 
   static instanceCount: number = 1;
@@ -74,6 +74,7 @@ export class ForgeAppGeneratorServiceClient {
     private _codebasesService: CodebasesService,
     private _configuratorService: AppGeneratorConfiguratorService,
     private _notifications: Notifications,
+    private _broadcaster: Broadcaster,
     loggerFactory: LoggerFactory
     ) {
 
@@ -449,6 +450,7 @@ export class ForgeAppGeneratorServiceClient {
         this._codebasesService.addCodebase( space.id, codeBase).subscribe(
           ( codebase ) => {
             this.log(`Successfully added codebase ${this.result.gitUrl} to space ${space.attributes.name} ...`, this.result, console.groupEnd);
+            this._broadcaster.broadcast('codebaseAdded', codebase);
             resolve( <IAddCodebaseResult>{
               codebase: codebase,
               forgeResult: this.result,
