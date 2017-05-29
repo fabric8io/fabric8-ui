@@ -107,6 +107,7 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     /* May 26, 2017 - "no thanks" button removed from the UI */
     //OpenShiftIoSpaceHomePage.clickNoThanksButton();
 
+     /* May 28, 2017 - UI has changed - this step is not needed */
     /* Import the code base */
     //OpenShiftIoSpaceHomePage.clickImportCodebaseButton();
     //var targetURL = "https://github.com/almightytest/" + spaceTime + ".git";
