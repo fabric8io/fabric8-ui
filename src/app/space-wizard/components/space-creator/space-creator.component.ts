@@ -1,11 +1,14 @@
 import { SpacesService } from '../../../shared/spaces.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+//import { SpaceTemplateService } from '../list-space-template/list-space-template.service';
 import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
 import {
   SpaceService,
-  SpaceNamePipe
+  SpaceNamePipe,
+  ProcessTemplate,
+  SpaceTemplateService,
+  SpaceTemplate
 } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
@@ -17,20 +20,26 @@ import { IWorkflow } from '../../models/workflow';
 import { AppGeneratorConfiguratorService } from '../../services/app-generator.service';
 
 @Component({
-  selector: 'space-creator',
-  templateUrl: './space-creator.component.html',
-  styleUrls: ['./space-creator.component.scss'],
-  providers: [SpaceService]
+  selector: 'create-space',
+  templateUrl: './create-space.component.html',
+  styleUrls: ['./create-space.component.scss'],
+  providers: [SpaceService, SpaceTemplateService]
 })
 export class SpaceCreatorComponent implements OnInit {
 
   static instanceCount: number = 1;
+  spaceTemplates: SpaceTemplate[];
+  selectedTemplate: SpaceTemplate;
+
+  get configurator(): AppGeneratorConfiguratorService {
+     return this._configuratorService;
+  }
 
   @Input() workflow: IWorkflow = null;
 
   constructor(
     private router: Router,
-    public dummy: DummyService,
+    private spaceTemplateService: SpaceTemplateService,
     private spaceService: SpaceService,
     private notifications: Notifications,
     private userService: UserService,
@@ -46,10 +55,14 @@ export class SpaceCreatorComponent implements OnInit {
     }
     this.log(`New instance ...`);
 
+
   }
 
   ngOnInit() {
     this.log(`ngInit ...`);
+    this.spaceTemplateService.getSpaceTemplates().subscribe(templates => {
+      this.spaceTemplates = templates;
+    });
   }
 
   /*
@@ -64,6 +77,8 @@ export class SpaceCreatorComponent implements OnInit {
     this.userService.getUser()
       .switchMap(user => {
         space.relationships['owned-by'].data.id = user.id;
+        space.relationships['space-template'].data.id = this.selectedTemplate.id;
+        space.relationships['space-template'].data.type = this.selectedTemplate.type;
         return this.spaceService.create(space);
       })
       .do(createdSpace => {
