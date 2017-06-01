@@ -44,10 +44,26 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       showSelectBox: false,
       useExpandingRows: false
     } as ListViewConfig;
+    this.collaborators = [];
+  }
 
-    this.collaboratorSubscription = this.collaboratorService.getAllBySpaceId(this.context.space.id).subscribe(collaborators => {
+  initCollaborators(event: any): void {
+    let pageSize = event.pageSize;
+    console.log('event size from page', pageSize);
+    pageSize = 20;
+    this.collaboratorSubscription = this.collaboratorService.getInitialBySpaceId(this.context.space.id, pageSize).subscribe(collaborators => {
       this.collaborators = collaborators;
     });
+  }
+
+  fetchMoreCollaborators($event): void {
+    this.collaboratorService.getNextCollaborators()
+      .subscribe(collaborators => {
+        if(collaborators)
+          this.collaborators = this.collaborators.concat(collaborators);
+        }, err => {
+        console.log(err);
+      });
   }
 
   ngOnDestroy() {
