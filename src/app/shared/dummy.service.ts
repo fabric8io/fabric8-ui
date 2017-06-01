@@ -105,18 +105,6 @@ export class DummyService {
 
   readonly PROCESS_TEMPLATES: ProcessTemplate[] = [
     {
-      name: 'Agile',
-      description: `Agile-based planning (more generic than Scrum)`
-    },
-    {
-      name: 'Scrum',
-      description: `An iterative and incremental agile software development framework for managing product development.`
-    },
-    {
-      name: 'Issue Tracking',
-      description: `A very simple development methodology focused on the tracking of Issues and the Tasks needed to be completed to resolve a particular Issue.`
-    },
-    {
       name: 'Scenario Driven Planning',
       description: `An agile development methodology focused on real-world problems, or Scenarios, described in the language and from the viewpoint of the user. Scenarios deliver particular Value Propositions and are realized via Experiences.`
     }
