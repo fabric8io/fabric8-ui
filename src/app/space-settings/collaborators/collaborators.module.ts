@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Http } from '@angular/http';
 
 import { DropdownModule } from 'ng2-bootstrap';
-import { ListViewModule } from 'ngx-widgets';
+import { ListViewModule, InfiniteScrollModule } from 'ngx-widgets';
 import { ModalModule } from 'ngx-modal';
 
 import { CollaboratorsComponent } from './collaborators.component';
@@ -18,6 +18,7 @@ import { AddCollaboratorsDialogModule } from './add-collaborators-dialog/add-col
     CollaboratorsRoutingModule,
     ListViewModule,
     DropdownModule,
+    InfiniteScrollModule,
     AddCollaboratorsDialogModule,
     ModalModule,
     Fabric8WitModule

@@ -14,3 +14,10 @@
   .pficon { color: $color-pf-blue-300; }
 }
 .remove-footer { padding-top: 40px; }
+
+.collaborator-list-scroll {
+  max-height: 900px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+

@@ -10,41 +10,43 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
-      <alm-listview
-        [config]="listViewConfig"
-        [itemTemplate]="itemTemplate"
-        [actionTemplate]="actionTemplate"
-        [items]="collaborators" >
-        <template #itemTemplate let-item="item" let-index="index">
-          <div class="list-view-pf-body collaborators-display">
-            <div class="list-view-pf-description">
-              <div class="list-group-item-text">
-                <img [src]="item.attributes.imageURL" height="40"/>
-                <span class="list-group-item-description">
-                 {{item.attributes.fullName}}
-                  </span>
+    <div class="col-md-12 padding-none">
+      <div class="collaborator-list-scroll" almInfiniteScroll (eachElementHeightInPx)='54' (initItems)='initCollaborators($event)' (fetchMore)='fetchMoreCollaborators($event)'>
+        <alm-listview
+          [config]="listViewConfig"
+          [itemTemplate]="itemTemplate"
+          [actionTemplate]="actionTemplate"
+          [items]="collaborators" >
+          <template #itemTemplate let-item="item" let-index="index">
+            <div class="list-view-pf-body collaborators-display">
+              <div class="list-view-pf-description">
+                <div class="list-group-item-text">
+                  <img [src]="item.attributes.imageURL" height="40"/>
+                  <span class="list-group-item-description">
+                   {{item.attributes.fullName}}
+                    </span>
+                </div>
+              </div>
+              <div class="list-view-pf-description">
+                <div class="list-group-item">
+                  {{item.attributes.email}}
+                </div>
               </div>
             </div>
-            <div class="list-view-pf-description">
-              <div class="list-group-item">
-                {{item.attributes.email}}
-              </div>
-            </div>
-          </div>
-        </template>
-        <template #actionTemplate let-item="item" let-index="index">
-          <span class="dropdown-kebab-pf collaborators-display dropdown" dropdown>
-            <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
-              <span class="fa fa-ellipsis-v"></span>
-            </button>
-            <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" dropdownMenu>
-              <li role="menuitem"><a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a></li>
-              <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="confirmUserRemove(item)">Remove from space</a></li>
-            </ul>
-          </span>
-        </template>
-      </alm-listview>
+          </template>
+          <template #actionTemplate let-item="item" let-index="index">
+            <span class="dropdown-kebab-pf collaborators-display dropdown" dropdown>
+              <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
+                <span class="fa fa-ellipsis-v"></span>
+              </button>
+              <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" dropdownMenu>
+                <li role="menuitem"><a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a></li>
+                <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="confirmUserRemove(item)">Remove from space</a></li>
+              </ul>
+            </span>
+          </template>
+        </alm-listview>
+      </div>
     </div>
   </div>
 </div>
