@@ -18,10 +18,7 @@ var testSupport = require('../testSupport'),
 var until = protractor.ExpectedConditions;
 
   const devProcesses  = {
-    Agile: 0,
-    Scrum: 1,
-    IssueTracking: 2,
-    ScenarioDrivenPlanning: 3
+    ScenarioDrivenPlanning: 0
   }
 
 class OpenShiftIoRegistrationPage {
