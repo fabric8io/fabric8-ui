@@ -1,12 +1,10 @@
 import { SpacesService } from '../../../shared/spaces.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-//import { SpaceTemplateService } from '../list-space-template/list-space-template.service';
 import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
 import {
   SpaceService,
   SpaceNamePipe,
-  ProcessTemplate,
   SpaceTemplateService,
   SpaceTemplate
 } from 'ngx-fabric8-wit';
@@ -62,6 +60,10 @@ export class SpaceCreatorComponent implements OnInit {
     this.log(`ngInit ...`);
     this.spaceTemplateService.getSpaceTemplates().subscribe(templates => {
       this.spaceTemplates = templates;
+      const srumTemplates = templates.filter(template => template.attributes.name == "Scrum")
+      if (srumTemplates && srumTemplates.length > 0) {
+        this.selectedTemplate = srumTemplates[0];
+      }
     });
   }
 

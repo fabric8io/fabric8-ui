@@ -249,7 +249,6 @@ export class AppGeneratorConfiguratorService {
     space.attributes.name = space.name;
     space.type = 'spaces';
     space.privateSpace = false;
-    //space.process = { name: '', description: ''};
     space.relationships = {
       areas: {
         links: {
