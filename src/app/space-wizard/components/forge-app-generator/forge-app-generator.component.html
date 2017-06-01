@@ -168,7 +168,7 @@
             (click)="forgeClient.gotoPreviousStep()">Back</button>-->
         <button title="Next" id="forge-next-button" type="button" class="btn btn-primary margin-right-5" *ngIf="!forgeClient.hasErrorMessage && !forgeClient.hasSuccessMessage && !forgeClient.hasProcessingMessage"
           [disabled]="(!forgeClient.state.canMoveToNextStep)||(forgeClient.processing === true)" (click)="forgeClient.gotoNextStep()">Next</button>
-        <button title="Finish" type="button" class="btn btn-primary" *ngIf="!forgeClient.hasErrorMessage && !forgeClient.hasSuccessMessage && !forgeClient.hasProcessingMessage"
+        <button id="forge-finish-button" type="button" class="btn btn-primary" *ngIf="!forgeClient.hasErrorMessage && !forgeClient.hasSuccessMessage && !forgeClient.hasProcessingMessage"
           [disabled]="(!forgeClient.state.canExecute)||(forgeClient.processing === true)" (click)="forgeClient.finish()">Finish</button>
         <button title="OK" id="forge-error-ok-button" type="button" class="btn btn-primary" *ngIf="forgeClient.hasErrorMessage" (click)="forgeClient.acknowledgeErrorMessage()">OK</button>
         <button title="OK" id="forge-ok-button" type="button" class="btn btn-primary" *ngIf="forgeClient.hasSuccessMessage" (click)="forgeClient.acknowledgeSuccessMessage()">OK</button>

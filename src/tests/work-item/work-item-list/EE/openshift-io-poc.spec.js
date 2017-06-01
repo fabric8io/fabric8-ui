@@ -32,7 +32,7 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     // http://stackoverflow.com/questions/38050626/angular-2-with-protractorjs-failed-error-while-waiting-for-protractor-to-sync-w 
     browser.ignoreSynchronization = true;
     page = new OpenShiftIoStartPage(browser.params.target.url);  
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 180000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 360000;
   });
 
   /* Simple test for registered user */
@@ -146,7 +146,7 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     // OpenShiftIoSpaceHomePage.clickHeaderAnalyze();
     browser.get("https://openshift.io/almusertest1/" + spaceTime);
 
-    OpenShiftIoSpaceHomePage.clickPipelinesWidgetTitle();
+    OpenShiftIoSpaceHomePage.clickPipelinesSectionTitle();
     OpenShiftIoSpaceHomePage.pipelinesPage.getText().then(function(text){
     //  console.log("Pipelines page = " + text);
 
@@ -157,7 +157,7 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
          Source Repository: https://github.com/almightytest/testmay91494354476064.git
          No pipeline builds have run for testmay91494354476064.   */
 
-      expect(text).toContain(spaceTime + " created a few seconds ago");
+      expect(text).toContain("No pipeline builds have run for " + spaceTime);
       expect(text).toContain("Source Repository: https://github.com/almightytest/" + spaceTime + ".git");
     });
 
