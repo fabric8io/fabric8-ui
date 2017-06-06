@@ -18,9 +18,9 @@ import { IWorkflow } from '../../models/workflow';
 import { AppGeneratorConfiguratorService } from '../../services/app-generator.service';
 
 @Component({
-  selector: 'create-space',
-  templateUrl: './create-space.component.html',
-  styleUrls: ['./create-space.component.scss'],
+  selector: 'space-creator',
+  templateUrl: './space-creator.component.html',
+  styleUrls: ['./space-creator.component.scss'],
   //providers: [SpaceService, SpaceTemplateService]
 })
 export class SpaceCreatorComponent implements OnInit {
@@ -28,10 +28,6 @@ export class SpaceCreatorComponent implements OnInit {
   static instanceCount: number = 1;
   spaceTemplates: SpaceTemplate[];
   selectedTemplate: SpaceTemplate;
-
-  get configurator(): AppGeneratorConfiguratorService {
-     return this._configuratorService;
-  }
 
   @Input() workflow: IWorkflow = null;
 

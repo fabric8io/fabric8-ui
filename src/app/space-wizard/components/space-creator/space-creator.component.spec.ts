@@ -22,9 +22,9 @@ import {
   ComponentFixture,
   TestBed,
 } from '@angular/core/testing';
-import { CreateSpaceComponent } from './create-space.component';
+import { SpaceCreatorComponent } from './space-creator.component';
 
-describe('Create Space Component', () => {
+describe('Space Creator Component', () => {
 
   let routerMock: any;
   let spaceTemplateServiceMock: any;
@@ -126,7 +126,7 @@ describe('Create Space Component', () => {
 
     TestBed.configureTestingModule({
       imports: [FormsModule],
-      declarations: [CreateSpaceComponent],
+      declarations: [SpaceCreatorComponent],
       providers: [
         LoggerFactory,
         {
@@ -156,12 +156,12 @@ describe('Create Space Component', () => {
         {
           provide: Notifications, useValue: notificationMock
         },
-        CreateSpaceComponent
+        SpaceCreatorComponent
       ],
       // Tells the compiler not to error on unknown elements and attributes
       schemas: [NO_ERRORS_SCHEMA]
     });
-    fixture = TestBed.createComponent(CreateSpaceComponent);
+    fixture = TestBed.createComponent(SpaceCreatorComponent);
   });
 
   it('Retrieve template list onInit', async(() => {
