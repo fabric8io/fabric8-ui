@@ -431,7 +431,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get quickStartFinishButton () {
-    return element(by.xpath("//*[contains(text(), 'Quickstart')]/../../../../..//button[contains(text(),'Finish')]"));
+//    return element(by.xpath("//*[contains(text(), 'Quickstart')]/../../../../..//button[contains(text(),'Finish')]"));
+    return element(by.id("forge-finish-button"));
   }
   clickQuickStartFinishButton () {
       browser.wait(until.elementToBeClickable(this.quickStartFinishButton), constants.LONG_WAIT, 'Failed to find element quickStartFinishButton');
@@ -442,7 +443,8 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get technologyStack () {
-    return element(by.xpath(".//h3/strong[contains(text(),'technology stack')]"));
+//    return element(by.xpath(".//h3/strong[contains(text(),'technology stack')]"));
+    return element(by.id("forgeQuickStartButton"));
   }
 
   clickTechnologyStack () {
