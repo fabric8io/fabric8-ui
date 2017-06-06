@@ -24,7 +24,7 @@ mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder -e "API_URL=
 docker exec fabric8-ui-builder npm install
 
 ## Exec unit tests
-docker exec fabric8-ui-builder ./run_unit_tests.sh
+docker exec fabric8-ui-builder npm run test:unit
 
 if [ $? -eq 0 ]; then
   echo 'CICO: unit tests OK'
