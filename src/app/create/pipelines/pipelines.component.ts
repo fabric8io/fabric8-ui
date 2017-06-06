@@ -144,6 +144,16 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       let filteredPipelines = [];
       this._allPipelines.forEach(bc => {
         let matches = true;
+        let spaceId = "";
+        if (this._context) {
+          spaceId = this._context.name;
+        }
+        if (spaceId) {
+          let bcSpace = bc.labels['space'];
+          if (bcSpace && bcSpace !== spaceId) {
+            matches = false;
+          }
+        }
         this._appliedFilters.forEach(filter => {
           if (filter.field.id === 'application') {
             if (filter.value !== bc.labels['app']) {
