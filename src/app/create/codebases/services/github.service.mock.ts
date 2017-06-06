@@ -49,11 +49,6 @@ export const currentContext: Context = {
           "related": "https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87/iterations"
         }
       },
-      "collaborators": {
-        "links": {
-          "related": "http://example.com/api/spaces/1/iterations"
-        }
-      },
       "space-template": {
         "data": {
           "id": "",

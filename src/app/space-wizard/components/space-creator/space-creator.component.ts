@@ -21,7 +21,7 @@ import { AppGeneratorConfiguratorService } from '../../services/app-generator.se
   selector: 'create-space',
   templateUrl: './create-space.component.html',
   styleUrls: ['./create-space.component.scss'],
-  providers: [SpaceService, SpaceTemplateService]
+  //providers: [SpaceService, SpaceTemplateService]
 })
 export class SpaceCreatorComponent implements OnInit {
 

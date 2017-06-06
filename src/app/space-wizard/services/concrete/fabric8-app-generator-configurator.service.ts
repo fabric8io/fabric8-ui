@@ -260,11 +260,6 @@ export class AppGeneratorConfiguratorService {
           related: ''
         }
       },
-      collaborators: {
-        links: {
-          related: ''
-        }
-      },
       'space-template': {
         data: {id: '', type: 'spacetemplates'},
         links: {
