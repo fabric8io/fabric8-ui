@@ -35,7 +35,7 @@ export class ApiLocatorService {
   }
 
   get realm(): string {
-    return this.envVars.get('realm');
+    return this.envVars.get('realm') || "fabric8";
   }
 
   get witApiUrl(): string {
