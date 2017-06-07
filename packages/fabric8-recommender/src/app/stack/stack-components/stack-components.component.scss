@@ -18,7 +18,9 @@
         font-style: italic;
     }
     table {
+        table-layout: fixed;
         th {
+            vertical-align: middle;
             span.fa {
                 cursor: pointer;
             }
