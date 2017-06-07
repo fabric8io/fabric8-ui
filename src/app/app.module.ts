@@ -121,7 +121,9 @@ export type StoreType = {
   restoreInputValues: () => void,
   disposeOldHosts: () => void
 };
-
+import {
+  SpaceTemplateService,
+} from 'ngx-fabric8-wit';
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
@@ -204,6 +206,7 @@ export type StoreType = {
     ProfileService,
     SpacesService,
     SpaceService,
+    SpaceTemplateService,
     {
       provide: Spaces,
       useExisting: SpacesService

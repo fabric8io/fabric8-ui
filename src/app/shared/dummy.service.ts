@@ -5,7 +5,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import 'rxjs/add/operator/toPromise';
 import { Broadcaster } from 'ngx-base';
 import { User, Entity } from 'ngx-login-client';
-import { Team, Space, ProcessTemplate, Context, ContextType, ContextTypes } from 'ngx-fabric8-wit';
+import { Team, Space, Context, ContextType, ContextTypes } from 'ngx-fabric8-wit';
 import { Resources } from './../models/resources';
 import { Email } from './../models/email';
 
@@ -103,25 +103,6 @@ export class DummyService {
     ]
   ]);
 
-  readonly PROCESS_TEMPLATES: ProcessTemplate[] = [
-    {
-      name: 'Agile',
-      description: `Agile-based planning (more generic than Scrum)`
-    },
-    {
-      name: 'Scrum',
-      description: `An iterative and incremental agile software development framework for managing product development.`
-    },
-    {
-      name: 'Issue Tracking',
-      description: `A very simple development methodology focused on the tracking of Issues and the Tasks needed to be completed to resolve a particular Issue.`
-    },
-    {
-      name: 'Scenario Driven Planning',
-      description: `An agile development methodology focused on real-world problems, or Scenarios, described in the language and from the viewpoint of the user. Scenarios deliver particular Value Propositions and are realized via Experiences.`
-    }
-  ];
-
   constructor(
     private http: Http,
     private localStorageService: LocalStorageService,
@@ -131,10 +112,6 @@ export class DummyService {
 
   get resources(): Resources {
     return this.RESOURCES;
-  }
-
-  get processTemplates(): ProcessTemplate[] {
-    return this.PROCESS_TEMPLATES;
   }
 
   private makePseudoRandmonString(len: number): string {

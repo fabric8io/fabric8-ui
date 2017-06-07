@@ -49,6 +49,15 @@ export const currentContext: Context = {
           "related": "https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87/iterations"
         }
       },
+      "space-template": {
+        "data": {
+          "id": "",
+          "type": "spacetemplates"
+        },
+        "links": {
+          "related": "http://roro.com"
+        }
+      },
       "owned-by": {
         "data": {
           "id": "c21f2ece-21f0-4e7f-b9ab-b49b8dd0d752",
@@ -72,8 +81,7 @@ export class ContextsMock {
     this.current = Observable.of(currentContext);
   }
 }
-export const expectedGitHubRepo: GitHubRepo =
-{
+export const expectedGitHubRepo: GitHubRepo = {
   "id": 54260706,
   "name": "almighty-core",
   "full_name": "almighty/almighty-core",
@@ -163,24 +171,24 @@ export const expectedGitHubRepo: GitHubRepo =
   "default_branch": "master",
 }
 const owner = {
-    "login": "almighty",
-    "id": 17783151,
-    "avatar_url": "https://avatars2.githubusercontent.com/u/17783151?v=3",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/almighty",
-    "html_url": "https://github.com/almighty",
-    "followers_url": "https://api.github.com/users/almighty/followers",
-    "following_url": "https://api.github.com/users/almighty/following{/other_user}",
-    "gists_url": "https://api.github.com/users/almighty/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/almighty/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/almighty/subscriptions",
-    "organizations_url": "https://api.github.com/users/almighty/orgs",
-    "repos_url": "https://api.github.com/users/almighty/repos",
-    "events_url": "https://api.github.com/users/almighty/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/almighty/received_events",
-    "type": "Organization",
-    "site_admin": false
-  };
+  "login": "almighty",
+  "id": 17783151,
+  "avatar_url": "https://avatars2.githubusercontent.com/u/17783151?v=3",
+  "gravatar_id": "",
+  "url": "https://api.github.com/users/almighty",
+  "html_url": "https://github.com/almighty",
+  "followers_url": "https://api.github.com/users/almighty/followers",
+  "following_url": "https://api.github.com/users/almighty/following{/other_user}",
+  "gists_url": "https://api.github.com/users/almighty/gists{/gist_id}",
+  "starred_url": "https://api.github.com/users/almighty/starred{/owner}{/repo}",
+  "subscriptions_url": "https://api.github.com/users/almighty/subscriptions",
+  "organizations_url": "https://api.github.com/users/almighty/orgs",
+  "repos_url": "https://api.github.com/users/almighty/repos",
+  "events_url": "https://api.github.com/users/almighty/events{/privacy}",
+  "received_events_url": "https://api.github.com/users/almighty/received_events",
+  "type": "Organization",
+  "site_admin": false
+};
 export let expectedGitHubRepoDetails = cloneDeep(expectedGitHubRepo);
 (expectedGitHubRepoDetails as GitHubRepoDetails).parent = expectedGitHubRepo;
 (expectedGitHubRepoDetails as GitHubRepoDetails).source = expectedGitHubRepo;

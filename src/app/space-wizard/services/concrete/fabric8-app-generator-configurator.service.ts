@@ -249,7 +249,6 @@ export class AppGeneratorConfiguratorService {
     space.attributes.name = space.name;
     space.type = 'spaces';
     space.privateSpace = false;
-    space.process = { name: '', description: ''};
     space.relationships = {
       areas: {
         links: {
@@ -260,6 +259,13 @@ export class AppGeneratorConfiguratorService {
         links: {
           related: ''
         }
+      },
+      'space-template': {
+        data: {id: '', type: 'spacetemplates'},
+        links: {
+          related:''
+        }
+
       },
       ['owned-by']: {
         data: {
