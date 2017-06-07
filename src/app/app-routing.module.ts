@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, UrlSegment, UrlSegmentGroup, Route } from '@angular/router';
 
 import { trimEnd } from 'lodash';
 
@@ -10,6 +10,15 @@ import { ContextResolver } from './shared/context-resolver.service';
 
 export function removeAction(url: string) {
   return trimEnd(url.replace(/\(action:[a-z-]*\)/, ''), '/');
+}
+
+export function viewBoard(segments: UrlSegment[], group: UrlSegmentGroup, route: Route) {
+  if (segments.length > 0) {
+    let lastSegment = segments[segments.length - 1];
+    if (lastSegment.parameterMap.has('view') && 'board' === lastSegment.parameterMap.get('view')) {
+      return ({ consumed: segments });
+    }
+  }
 }
 
 export const routes: Routes = [
@@ -61,31 +70,26 @@ export const routes: Routes = [
     loadChildren: './settings/settings.module#SettingsModule'
   },
 
-  // Analyze
+  // Spaces
   {
     path: ':entity/:space',
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './analyze/analyze.module#AnalyzeModule'
-  },
+    children: [
+      {
+        matcher: viewBoard,
+        loadChildren: './plan/board/board.module#BoardModule'
+      }, {
+        path: 'plan',
+        loadChildren: './plan/plan.module#PlanModule'
+      },
+      {
+        path: '',
+        loadChildren: './analyze/analyze.module#AnalyzeModule'
 
-  // Plan
-  {
-    path: ':entity/:space/plan',
-    resolve: {
-      context: ContextResolver
-    },
-    loadChildren: './plan/plan.module#PlanModule'
-  },
-
-  // Plan board
-  {
-    path: ':entity/:space/plan/board',
-    resolve: {
-      context: ContextResolver
-    },
-    loadChildren: './plan/board/board.module#BoardModule'
+      }
+    ]
   },
 
   // Create
