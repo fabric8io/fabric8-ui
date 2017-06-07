@@ -1,4 +1,6 @@
 #!/usr/bin/groovy
+
+echo 'naina-verma was here'
 def ci (){
     stage('build'){
         sh 'npm install'
