@@ -5,7 +5,7 @@ def org = 'fabric8-ui'
 def repo = 'fabric8-recommender'
 fabric8UINode{
   ws {
-    git "https://github.com/${org}/${repo}.git"
+    checkout scm
     readTrusted 'release.groovy'
     sh "git remote set-url origin git@github.com:${org}/${repo}.git"
     def pipeline = load 'release.groovy'
