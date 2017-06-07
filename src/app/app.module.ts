@@ -30,7 +30,8 @@ import {
   PipelineModule,
   OnLogin,
   DevNamespaceScope,
-  NamespaceScope
+  NamespaceScope,
+  StatusListModule,
 }                             from 'fabric8-runtime-console';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { RestangularModule }  from 'ng2-restangular';
@@ -148,6 +149,7 @@ export type StoreType = {
     SpaceWizardModule,
     StackDetailsModule,
     WidgetsModule,
+    StatusListModule,
     // AppRoutingModule must appear last
     AppRoutingModule
   ],
