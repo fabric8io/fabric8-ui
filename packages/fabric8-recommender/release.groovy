@@ -1,13 +1,11 @@
 #!/usr/bin/groovy
-
-echo 'naina-verma was here'
 def ci (){
     stage('build'){
         sh 'npm install'
     }
-    // stage('functional test'){
-    //     sh './run_functional_tests.sh'
-    // }
+    stage('functional test'){
+        sh 'npm run test:unit'
+    }
 }
 
 def cd (b){
