@@ -1,7 +1,7 @@
 import { ExtProfile, ProfileService } from './../profile/profile.service';
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { cloneDeep } from 'lodash';
 import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
 import { User, UserService, Entity } from 'ngx-login-client';
 import {
@@ -25,6 +25,8 @@ import { DummyService } from './../shared/dummy.service';
 import { Navigation } from './../models/navigation';
 import { MenusService } from './../header/menus.service';
 
+import { EventService } from "./event.service";
+
 interface RawContext {
   user: any;
   space: any;
@@ -45,6 +47,7 @@ export class ContextService implements Contexts {
   private _default: ConnectableObservable<Context>;
   private _recent: ConnectableObservable<Context[]>;
   private _addRecent: Subject<Context>;
+  private _deleteFromRecent: Subject<Context>;
 
   constructor(
     private dummy: DummyService,
@@ -56,9 +59,29 @@ export class ContextService implements Contexts {
     private notifications: Notifications,
     private route: ActivatedRoute,
     private profileService: ProfileService,
-    private spaceNamePipe: SpaceNamePipe) {
+    private spaceNamePipe: SpaceNamePipe,
+    private eventService: EventService) {
 
     this._addRecent = new Subject<Context>();
+    this._deleteFromRecent = new Subject<Context>();
+    // subscribe to delete space event
+    this.eventService.deleteSpaceSubject
+      .map(val => {
+        if (val && val.id) {
+          return {
+            user: null,
+            space: val,
+            type: ContextTypes.BUILTIN.get('user'),
+            name: 'TO_DELETE',
+            path: null
+          } as Context;
+        } else {
+          return {} as Context;
+        }
+      })
+      .subscribe(val => {
+        this._deleteFromRecent.next(val);
+      });
     // Initialize the default context when the logged in user changes
     this._default = this.userService.loggedInUser
       // First use map to convert the broadcast event to just a username
@@ -113,19 +136,28 @@ export class ContextService implements Contexts {
       .multicast(() => new ReplaySubject(1));
 
     // Create the recent space list
-    this._recent = this._addRecent
+    this._recent = Observable.merge(this._addRecent, this._deleteFromRecent)
       // Map from the context being added to an array of recent contexts
       // The scan operator allows us to access the list of recent contexts and add ours
       .scan((recent, ctx) => {
-        // First, check if this context is already in the list
-        // If it is, remove it, so we don't get duplicates
-        for (let i = recent.length - 1; i >= 0; i--) {
-          if (recent[i].path === ctx.path) {
-            recent.splice(i, 1);
+        if (ctx.space && ctx.space.id && ctx.name == 'TO_DELETE') { // a space deletion
+          let indexForSpaceToDelete = recent.findIndex(x => x.space && x.space.id == ctx.space.id);
+          if (indexForSpaceToDelete > -1) { // the space deleted is in the recently visited array
+            let copyContext = cloneDeep(recent);
+            const deleted = copyContext.splice(indexForSpaceToDelete, 1);
+            recent = copyContext;
           }
+        } else { // a space addition
+          // First, check if this context is already in the list
+          // If it is, remove it, so we don't get duplicates
+          for (let i = recent.length - 1; i >= 0; i--) {
+            if (recent[i].path === ctx.path) {
+              recent.splice(i, 1);
+            }
+          }
+          // Then add this context to the top of the list
+          recent.unshift(ctx);
         }
-        // Then add this context to the top of the list
-        recent.unshift(ctx);
         return recent;
         // The final value to scan is the initial value, used when the app starts
       }, [])

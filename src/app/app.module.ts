@@ -110,6 +110,8 @@ import { ToggleService }             from './toggle/toggle.service';
 // About Modal
 import { AboutModalModule } from './about-modal/about-modal.module';
 
+import { EventService } from './shared/event.service';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -157,6 +159,7 @@ export type StoreType = {
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
     Broadcaster,
+    EventService,
     ENV_PROVIDERS,
     AboutService,
     AnalyticService,

@@ -1,18 +1,15 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-
 import { Logger } from 'ngx-base';
 import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 import { IModalHost } from '../../space-wizard/models/modal-host';
-
-
+import { EventService } from "../../shared/event.service";
 
 @Component({
   selector: 'alm-spaces',
   templateUrl: 'spaces.component.html',
   styleUrls: ['./spaces.component.scss'],
-  providers: [SpaceService]
 })
 export class SpacesComponent implements OnInit {
 
@@ -29,7 +26,8 @@ export class SpacesComponent implements OnInit {
     private router: Router,
     private spaceService: SpaceService,
     private logger: Logger,
-    private contexts: Contexts
+    private contexts: Contexts,
+    private eventService: EventService
   ) {
     this.contexts.current.subscribe(val => this.context = val);
   }
@@ -77,6 +75,9 @@ export class SpacesComponent implements OnInit {
     if (this.context && this.context.user && this.spaceToDelete) {
       let space = this.spaceToDelete;
       this.spaceService.deleteSpace(space)
+        .do(() => {
+          this.eventService.deleteSpaceSubject.next(space);
+        })
         .subscribe(spaces => {
           let index = this._spaces.indexOf(space);
           this._spaces.splice(index, 1);
