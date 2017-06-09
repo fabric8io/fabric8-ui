@@ -134,10 +134,10 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     /* TODO - Verify the workspace in Che - TODO - Create a page object modelk for the Che dashboard */
     browser.get("https://che-almusertest1-che.8a09.starter-us-east-2.openshiftapps.com/dashboard/#/");
 
-    browser.wait(until.elementToBeClickable(element(by.xpath(".//*[@id='dashboardPageContent']/dashboard-last-workspaces"))), constants.LONG_WAIT, 'Failed to find element Che dashboard');
-    element(by.xpath(".//*[@id='dashboardPageContent']/dashboard-last-workspaces")).getText().then(function(text){
-      console.log("Che workspaces = " + text);
-    });
+//    browser.wait(until.elementToBeClickable(element(by.xpath(".//*[@id='dashboardPageContent']/dashboard-last-workspaces"))), constants.LONG_WAIT, 'Failed to find element Che dashboard');
+//    element(by.xpath(".//*[@id='dashboardPageContent']/dashboard-last-workspaces")).getText().then(function(text){
+//      console.log("Che workspaces = " + text);
+//    });
 
     /* Verify that the pipeline was created */
 
