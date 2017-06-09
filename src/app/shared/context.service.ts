@@ -139,28 +139,7 @@ export class ContextService implements Contexts {
     this._recent = Observable.merge(this._addRecent, this._deleteFromRecent)
       // Map from the context being added to an array of recent contexts
       // The scan operator allows us to access the list of recent contexts and add ours
-      .scan((recent, ctx) => {
-        if (ctx.space && ctx.space.id && ctx.name == 'TO_DELETE') { // a space deletion
-          let indexForSpaceToDelete = recent.findIndex(x => x.space && x.space.id == ctx.space.id);
-          if (indexForSpaceToDelete > -1) { // the space deleted is in the recently visited array
-            let copyContext = cloneDeep(recent);
-            const deleted = copyContext.splice(indexForSpaceToDelete, 1);
-            recent = copyContext;
-          }
-        } else { // a space addition
-          // First, check if this context is already in the list
-          // If it is, remove it, so we don't get duplicates
-          for (let i = recent.length - 1; i >= 0; i--) {
-            if (recent[i].path === ctx.path) {
-              recent.splice(i, 1);
-            }
-          }
-          // Then add this context to the top of the list
-          recent.unshift(ctx);
-        }
-        return recent;
-        // The final value to scan is the initial value, used when the app starts
-      }, [])
+      .scan(this.updateRecentSpaceList, [])  // The final value to scan is the initial value, used when the app starts
       // Finally save the list of recent contexts
       .do(val => {
         // Truncate the number of recent contexts to the correct length
@@ -178,7 +157,12 @@ export class ContextService implements Contexts {
     // Finally, start broadcasting
     this._default.connect();
     this._recent.connect();
-    this.loadRecent().subscribe(val => val.forEach(space => this._addRecent.next(space)));
+    this.loadRecent().subscribe(
+      val => {
+        var toto = val;
+        val.forEach(space => this._addRecent.next(space))
+      }
+    );
   }
 
   get recent(): Observable<Context[]> {
@@ -191,6 +175,28 @@ export class ContextService implements Contexts {
 
   get default(): Observable<Context> {
     return this._default;
+  }
+
+  updateRecentSpaceList(contextList: Context[], ctx: Context): Context[] {
+    if (ctx.space && ctx.space.id && ctx.name == 'TO_DELETE') { // a space deletion
+      let indexForSpaceToDelete = contextList.findIndex(x => x.space && x.space.id == ctx.space.id);
+      if (indexForSpaceToDelete > -1) { // the space deleted is in the recently visited array
+        let copyContext = cloneDeep(contextList);
+        const deleted = copyContext.splice(indexForSpaceToDelete, 1);
+        contextList = copyContext;
+      }
+    } else { // a space addition
+      // First, check if this context is already in the list
+      // If it is, remove it, so we don't get duplicates
+      for (let i = contextList.length - 1; i >= 0; i--) {
+        if (contextList[i].path === ctx.path) {
+          contextList.splice(i, 1);
+        }
+      }
+      // Then add this context to the top of the list
+      contextList.unshift(ctx);
+    }
+    return contextList
   }
 
   changeContext(navigation: Observable<Navigation>): Observable<Context> {
