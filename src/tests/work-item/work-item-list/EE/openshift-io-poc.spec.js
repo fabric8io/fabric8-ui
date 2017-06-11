@@ -129,7 +129,7 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     browser.get("https://openshift.io/almusertest1/" + spaceTime + "/create");
     
     /* Locate the first codebase */
-    OpenShiftIoSpaceHomePage.clickFirstPipeline();
+//    OpenShiftIoSpaceHomePage.clickFirstPipeline();
 
     /* TODO - Verify the workspace in Che - TODO - Create a page object modelk for the Che dashboard */
     browser.get("https://che-almusertest1-che.8a09.starter-us-east-2.openshiftapps.com/dashboard/#/");
