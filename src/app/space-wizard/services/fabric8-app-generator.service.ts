@@ -336,7 +336,8 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
         return FieldWidgetClassificationOptions.SingleInput;
       }
       case 'uiselectone': {
-        return FieldWidgetClassificationOptions.SingleSelectionDropdown;
+        return FieldWidgetClassificationOptions.FilteredDropdown;
+        //return FieldWidgetClassificationOptions.SingleSelectionDropdown;
       }
       case 'uiselectmany': {
         return FieldWidgetClassificationOptions.MultipleSelection;

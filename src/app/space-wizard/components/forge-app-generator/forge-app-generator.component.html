@@ -69,6 +69,7 @@
             <div *ngIf="field.display.visible!==false" [class.col-sm-8]="field.display.showLabel!==false" [class.col-xs-12]="field.display.showLabel===false" [ngSwitch]="field.display.inputType ">
               <app-generator-single-input                   class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'singleInput'" ></app-generator-single-input>
               <app-generator-single-selection-dropdown      class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'singleSelectionDropdown'" ></app-generator-single-selection-dropdown>
+              <app-generator-filtered-dropdown              class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'filteredDropdown'" ></app-generator-filtered-dropdown>
               <app-generator-single-selection-list          class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'singleSelectionList'" ></app-generator-single-selection-list>
               <app-generator-multiple-selection-label-list  class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'multipleSelection'" ></app-generator-multiple-selection-label-list>
               <small class="form-text text-muted user-select-none" *ngIf="field.display.note"><span class="color-info fa fa-info-circle"></span> <i>{{field.display.note}}</i></small>
