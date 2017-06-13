@@ -31,7 +31,7 @@ import {
   OnLogin,
   DevNamespaceScope,
   NamespaceScope,
-  StatusListModule,
+§§  StatusListModule, SpaceNamespace,
 }                             from 'fabric8-runtime-console';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { RestangularModule }  from 'ng2-restangular';
@@ -112,6 +112,7 @@ import { ToggleService }             from './toggle/toggle.service';
 import { AboutModalModule } from './about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
+import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -217,6 +218,10 @@ export type StoreType = {
     {
       provide: DevNamespaceScope,
       useClass: SpaceNamespaceScope
+    },
+    {
+      provide: SpaceNamespace,
+      useClass: Fabric8UISpaceNamespace
     },
     ssoApiUrlProvider,
     ToggleService,
