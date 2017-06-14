@@ -27,7 +27,13 @@ interface MenuHiddenCallback {
 export class HeaderComponent implements OnInit, OnDestroy {
   title = 'Almighty';
   imgLoaded: Boolean = false;
+  statusListVisible = false;
 
+  onStatusListVisible = (flag: boolean) => {
+    this.statusListVisible = flag;
+  };
+
+  
   menuCallbacks = new Map<String, MenuHiddenCallback>([
     [
       '_settings', function (headerComponent) {
@@ -99,6 +105,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.eventListeners.forEach(e => e.unsubscribe());
   }
+
 
   listenToEvents() {
     this.eventListeners.push(
