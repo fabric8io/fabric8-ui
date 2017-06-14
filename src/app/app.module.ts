@@ -31,7 +31,7 @@ import {
   OnLogin,
   DevNamespaceScope,
   NamespaceScope,
-§§  StatusListModule, SpaceNamespace,
+  StatusListModule, SpaceNamespace,
 }                             from 'fabric8-runtime-console';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { RestangularModule }  from 'ng2-restangular';
