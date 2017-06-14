@@ -126,45 +126,14 @@
         </li>
       </ul>
       <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
-        <li id="header_status" dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok">
-          <a dropdown-open>
+        <li id="header_status" dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok" (onOpen)="onStatusListVisible(true)" (onClose)="onStatusListVisible(false)">
+          <a dropdown-open (onClose)="onStatusList(false)">
             <span class="pficon pficon-ok pficon-white"></span>
           </a>
-          <div class="dropdown-menu infotip bottom-right">
+          <div class="dropdown-menu infotip bottom-right" >
             <div class="arrow"></div>
-            <ul class="list-group">
-              <li id="header_platformStatus" class="list-group-item">
-              <span>
-                <span class="pficon pficon-ok"></span>
-                Platform
-              </span>
-              </li>
-              <li id="header_plannerStatus" class="list-group-item">
-              <span>
-                <span class="pficon pficon-ok"></span>
-                Planner
-              </span>
-              </li>
-              <li id="header_cheStatus" class="list-group-item">
-              <span>
-                <!--
-                    example of the error icon
-                    <span class="pficon pficon-error-circle-o"></span>
-                -->
-                <span class="pficon pficon-ok"></span>
-                Che
-              </span>
-              </li>
-              <li id="header_pipelineStatus" class="list-group-item">
-              <span>
-                <!--
-                    example of the warning icon
-                    <span class="pficon pficon-warning-triangle-o"></span>
-                -->
-                <span class="pficon pficon-ok"></span>
-                Pipeline
-              </span>
-              </li>
+            <ul class="list-group" *ngIf="statusListVisible">
+              <fabric8-status-list></fabric8-status-list>
             </ul>
           </div>
         </li>
