@@ -157,7 +157,8 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
          Source Repository: https://github.com/almightytest/testmay91494354476064.git
          No pipeline builds have run for testmay91494354476064.   */
 
-      expect(text).toContain("No pipeline builds have run for " + spaceTime);
+      // expect(text).toContain("No pipeline builds have run for " + spaceTime);
+      expect(text).not.toContain("No pipeline builds have run for " + spaceTime);
       expect(text).toContain("Source Repository: https://github.com/almightytest/" + spaceTime + ".git");
     });
 
