@@ -3,25 +3,24 @@
 [![Build Status](https://ci.centos.org/buildStatus/icon?job=devtools-fabric8-ui-npm-publish-build-master)](https://ci.centos.org/job/devtools-fabric8-ui-npm-publish-build-master)
 [![codecov](https://codecov.io/gh/fabric8io/fabric8-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/fabric8io/fabric8-ui)
 
-## Before you start
+## Before you start: Pointing to a cluster
 
-### Backend API
+You need to setup your shell to point to the right cluster so that it can talk to the required back end services like KeyCloak, WIT, Forge, OpenShift etc.
 
-Make sure you set the URL to the services. For UI development, we recommend connecting to the dev environment API server. 
+We provide various sample environments out of the box which make it easier to get started. They are all located as bash scripts in `environments`. 
 
-To connect to the dev environment instances: 
-* `export FABRIC8_WIT_API_URL="http://api.prod-preview.openshift.io/api/"`
-* `export FABRIC8_RECOMMENDER_API_URL="http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/"`
-* `export FABRIC8_FORGE_API_URL="https://forge.api.prod-preview.openshift.io"`
-* `export FABRIC8_REALM="fabric8"`
+The default one you should use when you want to develop on the console is to reuse openshift.io production cluster:
 
-> NOTE: if running against local api (set by FABRIC8_WIT_API_URL="http://localhost:8080/api/") and FABRIC8_REALM="fabric8-test"
+```bash
+source environments/openshift-prod-cluster.sh
+```
 
-to your `.bash_profile` and reload the shell.
+There are others too. For example to connect to a locally running minishift installation of fabric8 try:
 
-#### Note: When adding new environment variables for new api's that are needed in the code:
-You will need to update  /config/webpack.[dev|prod|...].js in order for the correct values to be picked up in the webpack build process.
- 
+```bash
+source environments/local-cluster.sh
+```
+
 
 ## VS Code
 
@@ -34,28 +33,6 @@ Run `npm install`. This will download all the required dependencies to be able t
 ## To start
 
 Run `npm start`. This will start the UI with livereload enabled. Then navigate to <http://localhost:3000>.
-
-### Proxying
-
-We also have built in support for proxying your requests to the OpenShift cluster - this is particularly
-useful if your OpenShift cluster doesn't support CORS. By default the console will access the proxy on the
-same protocl, host and port as the app is running. You can adjust this using environment variables, and the
-sample environments provide good examples of doing this.
-
-#### Sample environments
-
-We provide various sample environments out of the box which make it easier to get started.
-The environments are provided as bash scripts in `environments`. To use them run:
-
-```bash
-source environments/<environment-name>.sh
-```
-
-For example, to connect to devshift:
-
-```bash
-source environments/devshift-cluster.sh
-```
 
 ## CSS and SASS
 
