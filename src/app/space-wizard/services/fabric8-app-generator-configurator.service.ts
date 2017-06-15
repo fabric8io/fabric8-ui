@@ -570,9 +570,13 @@ export class AppGeneratorConfiguratorService {
   }
 
   private setFieldSelection(field: IField) {
-    let choice: IFieldChoice = field.display.choices.find( (c) => c.selected === true );
+    var choice: IFieldChoice = field.display.choices.find( (c) => c.selected === true );
     if (!choice) {
       choice = field.display.choices.find( (c) => c.isDefault === true );
+    }
+    if (!choice) {
+      console.log("Warning could not find choice for field", field);
+      choice = {} as IFieldChoice;
     }
     field.value = choice.id;
     field.display.text = choice.name;
