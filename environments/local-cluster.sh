@@ -29,16 +29,16 @@ export OAUTH_CLIENT_ID="fabric8"
 export K8S_API_SERVER_PROTOCOL="http"
 export K8S_API_SERVER_BASE_PATH="/_p/oso"
 export WS_K8S_API_SERVER=${PROXIED_K8S_API_SERVER}
-export FABRIC8_PIPELINES_NAMESPACE="-development"
+export FABRIC8_PIPELINES_NAMESPACE=""
 export FABRIC8_REALM="fabric8"
 
 export NAMESPACE=`oc project -q`
 
 echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_SERVER}/ with namespace ${NAMESPACE}"
 
-export FABRIC8_SSO_API_URL=`minishift openshift service keycloak -n ${NAMESPACE} --url`
-export FABRIC8_WIT_API_URL="`minishift openshift service wit -n ${NAMESPACE} --url`/api/"
-export FABRIC8_FORGE_API_URL=`minishift openshift service forge -n ${NAMESPACE} --url`
+export FABRIC8_SSO_API_URL="https://`oc get route keycloak --template={{.spec.host}}`/"
+export FABRIC8_WIT_API_URL="https://`oc get route wit --template={{.spec.host}}`/api/"
+export FABRIC8_FORGE_API_URL="https://`oc get route forge --template={{.spec.host}}`/"
 
 echo ""
 echo "WS_K8S_API_SERVER:             ${WS_K8S_API_SERVER}"

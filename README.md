@@ -15,7 +15,7 @@ The default one you should use when you want to develop on the console is to reu
 source environments/openshift-prod-cluster.sh
 ```
 
-There are others too. For example to connect to a locally running minishift installation of fabric8 try:
+There are others too. For example if you want to try [run fabric8 locally on minishift](https://github.com/fabric8io/fabric8-platform#v-4x-pre-release-development) and connect fabric8-ui to it then try:
 
 ```bash
 source environments/local-cluster.sh
