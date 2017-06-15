@@ -8,6 +8,8 @@ oc delete build --all -n almusertest1-test
 oc delete build --all -n almusertest1-stage
 oc delete build --all -n almusertest1-run
 oc delete build --all -n almusertest1-jenkins
+oc delete bc --all -n almusertest1-jenkins
+oc delete imagestream --all -n almusertest1-jenkins
 
 ## Delete/cleanup Jenkins jobs - commented out for now - until test can run more reliably
 ##

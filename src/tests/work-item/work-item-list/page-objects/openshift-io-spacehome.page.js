@@ -62,13 +62,13 @@ class OpenShiftIoSpaceHomePage {
     return;
   }
 
-  get firstPipeline () {
+  get firstCodebase () {
     return element(by.xpath(".//codebases-item-workspaces[1]"));
   }
-  clickFirstPipeline () {
-    browser.wait(until.elementToBeClickable(this.firstPipeline), constants.LONG_WAIT, 'Failed to find element firstPipeline');
-    this.firstPipeline.click().then(function(){
-      console.log("OpenShiftIoSpaceHomePage - clicked element: firstPipeline");
+  clickFirstCodebase () {
+    browser.wait(until.elementToBeClickable(this.firstCodebase), constants.LONG_WAIT, 'Failed to find element firstCodebase');
+    this.firstCodebase.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: firstCodebase");
     });
     return;
   }
@@ -431,7 +431,6 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get quickStartFinishButton () {
-//    return element(by.xpath("//*[contains(text(), 'Quickstart')]/../../../../..//button[contains(text(),'Finish')]"));
     return element(by.id("forge-finish-button"));
   }
   clickQuickStartFinishButton () {
@@ -441,6 +440,18 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
     });
     return;
   }
+
+  get quickStartFinishButton2 () {
+    return element(by.xpath(".//forge-app-generator[contains (@class,'active')]/form/footer/div/div/*[@id='forge-finish-button']"));
+  }
+  clickQuickStartFinishButton2 () {
+      browser.wait(until.elementToBeClickable(this.quickStartFinishButton2), constants.LONG_WAIT, 'Failed to find element quickStartFinishButton2');
+      this.quickStartFinishButton2.click().then(function(){
+      console.log("OpenShiftIoSpaceHomePage - clicked element: quickStartFinishButton2");
+    });
+    return;
+  }
+
 
   get technologyStack () {
 //    return element(by.xpath(".//h3/strong[contains(text(),'technology stack')]"));
