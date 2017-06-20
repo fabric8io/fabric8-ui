@@ -30,17 +30,13 @@ fi
 if [ -z "${OAUTH_CLIENT_ID}" ]; then
   export OAUTH_CLIENT_ID="fabric8"
 fi
-if [ -z "${K8S_API_SERVER_PROTOCOL}" ]; then
-  export K8S_API_SERVER_PROTOCOL="http"
-fi
-if [ -z "${K8S_API_SERVER_BASE_PATH}" ]; then
-  export K8S_API_SERVER_BASE_PATH="/_p/oso"
-fi
 if [ -z "${FABRIC8_PIPELINES_NAMESPACE}" ]; then
   export FABRIC8_PIPELINES_NAMESPACE=""
 fi
 
 
+export K8S_API_SERVER_BASE_PATH=""
+export K8S_API_SERVER_PROTOCOL="https"
 export OAUTH_ISSUER="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
 export WS_K8S_API_SERVER="${PROXIED_K8S_API_SERVER}"
 
