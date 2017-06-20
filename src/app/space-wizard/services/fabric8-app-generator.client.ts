@@ -501,14 +501,6 @@ export class Fabric8AppGeneratorClient {
     if (results.length > 0) {
       let msg = ``;
       results = results.filter(r => r !== null);
-      // format the github URL
-      if (results.length > 0) {
-        for (let r of results) {
-          if (r.gitOwnerName && r.gitRepositoryNames && r.gitRepositoryNames.length > 0) {
-            r.gitUrl = `https://github.com/${r.gitOwnerName}/${r.gitRepositoryNames[0]}.git`;
-          }
-        }
-      }
       // format to display property label/value
       for (let response of results) {
         if (Array.isArray(response)) {

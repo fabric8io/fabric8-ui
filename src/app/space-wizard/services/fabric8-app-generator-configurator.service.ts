@@ -150,6 +150,18 @@ export class AppGeneratorConfiguratorService {
     let response = execution.response;
     this.augmentResponseStateSteps(context, execution);
     let validationFields = this.getValidationCommandFields(context, execution);
+
+    // For 'finish' we format result
+    let results = response.payload.results.filter(r => r !== null);
+    if (results.length == 1) {
+      let r = results[0];
+      // at the moment we import one repo
+      if (r.gitOwnerName && r.gitRepositoryNames && r.gitRepositoryNames.length > 0) {
+        r.gitUrl = `https://github.com/${r.gitOwnerName}/${r.gitRepositoryNames[0]}.git`;
+      }
+    }
+
+    // For each validation, we scrub returned fields to format the output
     for ( let field of response.payload.fields ) {
       // update validation messages to be more descriptive
       if ( field.display.message) {
