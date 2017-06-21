@@ -34,23 +34,20 @@ Run `npm install`. This will download all the required dependencies to be able t
 
 Run `npm start`. This will start the UI with livereload enabled. Then navigate to <http://localhost:3000>.
 
-## CSS and SASS
+## CSS and Less
 
-fabric8-planner uses SASS for it's stylesheets. It also uses the Angular emulation
+fabric8-ui uses Less for it's stylesheets. It also uses the Angular emulation
 of the shadow dom, so you will normally want to place your styles in the
-`.component.scss` file next to the html and the typescript.
+`.component.less` file next to the html and the typescript. We write our styles according to our [Code Guidelines](https://fabric8io.github.io/fabric8-ux/code-guidelines).
 
 If you find yourself wanting to create a shared style that multiple components will
 use, then we recommend adding it as a mixin to
-`src/assets/stylesheets/_planner-mixins.scss`. The mixins are imported in to every
-`.component.scss` file. You can then create a real class by doing something like
+`src/assets/stylesheets/_shared-mixins.less`. The mixins are imported in to every
+`.component.less` file. You can then create a real class by doing something like
 
     .my-class {
       @include my-class;
     }
-
-We use mixins to avoid polluting components with uncessary style classes, and to avoid
-an explosion of shared files.
 
 The `src/assets/stylesheets/` directory includes a `shared` directory. These are
 shared global styles that we will refactor out in to a shared library at some point.
