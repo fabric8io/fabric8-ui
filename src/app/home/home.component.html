@@ -1,65 +1,57 @@
-<div class="container-fluid home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
-  <div class="cards-pf">
+<div class="container-fluid container-cards-pf home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
+  <div class="row row-cards-pf">
     <div class="col-sm-12">
-      <section class="card-pf home-banner">
-        <aside class="col-sm-4 vert-center">
-          <div class="card-pf-view">
-            <div class="card-pf-body text-center">
-              <div class="col-sm-12">
-                <img src="../../assets/images/OpenShift-io_logo.png" class="home-logo"/>
-              </div>
-              <div class="col-sm-12 margin-top-15">
-                <p class="card-pf-info home-banner-title">A free, end-to-end, cloud-native development experience.</p>
-              </div>
+      <section class="card-pf card-pf-view home-banner">
+        <aside class="col-sm-12 col-lg-3 vert-center">
+          <div class="card-pf-body text-center">
+            <div class="col-sm-12">
+              <img src="../../assets/images/OpenShift-io_logo.png" class="home-logo"/>
+            </div>
+            <div class="col-sm-12 margin-top-15">
+              <p class="card-pf-info home-banner-title">A free, end-to-end, cloud-native development experience.</p>
             </div>
           </div>
         </aside>
-        <aside class="col-sm-8 vert-center">
+        <aside class="col-sm-12 col-lg-9 vert-center">
           <div class="col-sm-4 col-lg-4">
-            <div class="card-pf-view">
-              <div class="card-pf-body text-center">
-                <div class="card-pf-top-element">
-                  <span class="fa fa-search card-pf-icon-circle home-icon"></span>
-                </div>
-                <h2 class="card-pf-title home-title">
-                  OpenShift.io user guide
-                </h2>
-                <p class="card-pf-info">Learn more using our
-                  <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift.io/1/html-single/user_guide"
-                    target="_blank">documentation</a>.
-                </p>
+            <div class="card-pf-body text-center">
+              <div class="card-pf-top-element">
+                <span class="fa fa-search card-pf-icon-circle home-icon"></span>
               </div>
+              <h2 class="card-pf-title home-title">
+                OpenShift.io information
+              </h2>
+              <p class="card-pf-info">
+                <a href="https://openshift.io" target="_blank">Learn more</a>
+                about what OpenShift.io can do for you.
+              </p>
             </div>
           </div>
           <div class="col-sm-4 col-lg-4">
-            <div class="card-pf-view">
-              <div class="card-pf-body text-center">
-                <div class="card-pf-top-element">
-                  <span class="pficon pficon-user card-pf-icon-circle home-icon"></span>
-                </div>
-                <h2 class="card-pf-title home-title">
-                  Setup your profile
-                </h2>
-                <p class="card-pf-info">Let others know who you are by filling out
-                  <a [routerLink]="['/', loggedInUser.attributes.username]">your profile</a>.
-                </p>
+            <div class="card-pf-body text-center">
+              <div class="card-pf-top-element">
+                <span class="pficon pficon-user card-pf-icon-circle home-icon"></span>
               </div>
+              <h2 class="card-pf-title home-title">
+                Setup your profile
+              </h2>
+              <p class="card-pf-info">Let others know who you are by filling out
+                <a [routerLink]="['/', loggedInUser.attributes.username]">your profile</a>.
+              </p>
             </div>
           </div>
           <div class="col-sm-4 col-lg-4">
-            <div class="card-pf-view">
-              <div class="card-pf-body text-center">
-                <div class="card-pf-top-element">
-                  <span class="pficon pficon-cluster card-pf-icon-circle home-icon"></span>
-                </div>
-                <h2 class="card-pf-title home-title">
-                  Learn about OpenShift
-                </h2>
-                <p class="card-pf-info">See how
-                  <a href="https://www.openshift.com/container-platform" target="_blank">containerized development and
-                    deployment</a> can help you.
-                </p>
+            <div class="card-pf-body text-center">
+              <div class="card-pf-top-element">
+                <span class="pficon pficon-cluster card-pf-icon-circle home-icon"></span>
               </div>
+              <h2 class="card-pf-title home-title">
+                Learn about OpenShift
+              </h2>
+              <p class="card-pf-info">See how
+                <a href="https://www.openshift.com/container-platform" target="_blank">containerized development and
+                  deployment</a> can help you.
+              </p>
             </div>
           </div>
         </aside>
@@ -69,9 +61,9 @@
   <div class="cards-pf">
     <div class="row row-cards-pf">
       <div class="col-sm-4">
-        <div class="card-pf card-f8">
+        <div class="card-pf io-card">
           <div class="card-pf-heading">
-            <div class="card-pf-heading-details card-f8-heading-details" *ngIf="_spaces.length > 0">
+            <div class="card-pf-heading-details io-card-heading-details" *ngIf="_spaces.length > 0">
               <a class="btn btn-link" (click)="createSpace.open()">
                 <i class="pficon pficon-add-circle-o"></i>
               </a>
@@ -80,9 +72,9 @@
               <h2 class="card-pf-title">Recent spaces</h2>
             </h2>
           </div>
-          <div class="card-pf-body card-f8-body">
-            <div class="blank-slate-f8-card" *ngIf="_spaces.length === 0">
-              <div class="blank-slate-f8-icon">
+          <div class="card-pf-body io-card-body">
+            <div class="io-blank-slate-card" *ngIf="_spaces.length === 0">
+              <div class="io-blank-slate-icon">
                 <span class="pficon pficon-add-circle-o"></span>
               </div>
               <h3>Create a Space</h3>

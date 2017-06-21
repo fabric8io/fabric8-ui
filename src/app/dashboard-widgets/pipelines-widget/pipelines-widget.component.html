@@ -1,20 +1,20 @@
-<div id="spacehome-pipelines-card" class="pipelines-widget card-pf card-f8">
+<div id="spacehome-pipelines-card" class="pipelines-widget card-pf io-card">
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
       <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, 'create', 'pipelines']">Pipelines</a>
-      <span id="spacehome-pipelines-badge" class="badge card-f8-badge">{{buildConfigsCount | async}}</span>
+      <span id="spacehome-pipelines-badge" class="badge io-card-badge">{{buildConfigsCount | async}}</span>
     </h2>
   </div>
-  <div class="card-pf-body card-f8-body">
-    <div class="blank-slate-f8-card" *ngIf="!(buildConfigsCount | async)">
-      <div class="blank-slate-f8-icon">
+  <div class="card-pf-body io-card-body">
+    <div class="io-blank-slate-card" *ngIf="!(buildConfigsCount | async)">
+      <div class="io-blank-slate-icon">
         <span class="pficon pficon-info"></span>
       </div>
       <h3>No Pipelines have run</h3>
       <p>
         Pipelines run when you commit and build your code base.
       </p>
-      <div class="blank-slate-f8-main-action">
+      <div class="io-blank-slate-main-action">
         <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to Space</button>
       </div>
     </div>

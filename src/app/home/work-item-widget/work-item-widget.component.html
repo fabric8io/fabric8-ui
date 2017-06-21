@@ -1,9 +1,9 @@
-<div class="create-work-item-widget card-pf card-f8">
+<div class="create-work-item-widget card-pf io-card">
   <div class="card-pf-heading-bg">
     <div class="card-pf-heading">
       <h2 class="card-pf-title">My work items
       <span *ngIf="spaces.length !== 0">
-        <select class="combobox form-control"
+        <select class="col-xs-3 col-sm-6 combobox form-control"
             [disabled]="spaces.length === 0"
             [(ngModel)]="currentSpaceId"
             (ngModelChange)="fetchWorkItems()">
@@ -16,11 +16,11 @@
       </h2>
     </div>
   </div>
-  <div class="card-pf-body card-f8-body">
+  <div class="card-pf-body io-card-body">
     <div *ngIf="workItems.length !== 0; then showWorkItems else showBlankState"></div>
     <ng-template #showBlankState>
-      <div class="col-xs-12 blank-slate-f8-card blank-slate-workitem-card ">
-        <div class="blank-slate-f8-icon">
+      <div class="col-xs-12 io-blank-slate-card blank-slate-workitem-card ">
+        <div class="io-blank-slate-icon">
           <i class="pficon pficon-info"></i>
         </div>
         <p>Work items reflect the work to be done within a space.</p>
@@ -34,7 +34,7 @@
       </div>
     </ng-template>
     <ng-template #showWorkItems>
-      <div class="col-xs-12 card-f8-list">
+      <div class="col-xs-12 io-card-list">
         <ul class="list-group list-view-pf list-view-pf-view">
           <li class="list-group-item" *ngFor="let workItem of workItems | take: 6">
             <div class="list-view-pf-main-info">

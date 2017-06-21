@@ -1,13 +1,13 @@
-<div id="spacehome-environments-card" class="environment-widget card-pf card-f8">
+<div id="spacehome-environments-card" class="environment-widget card-pf io-card">
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
       <a id="spacehome-environments-title" [routerLink]="[contextPath | async, 'create', 'apps']">Applications</a>
-      <span id="spacehome-environments-badge" class="badge card-f8-badge">{{(apps | async).length}}</span>
+      <span id="spacehome-environments-badge" class="badge io-card-badge">{{(apps | async).length}}</span>
     </h2>
   </div>
-  <div class="card-pf-body card-f8-body">
-    <div class="blank-slate-f8-card" *ngIf="(apps | async).length === 0">
-      <div class="blank-slate-f8-icon">
+  <div class="card-pf-body io-card-body">
+    <div class="io-blank-slate-card" *ngIf="(apps | async).length === 0">
+      <div class="io-blank-slate-icon">
         <span class="pficon pficon-add-circle-o"></span>
       </div>
       <h3>This space has no applications</h3>

@@ -1,25 +1,25 @@
-<div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf card-f8">
+<div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf io-card">
   <div class="card-pf-heading">
-    <div class="card-pf-heading-details card-f8-heading-details">
+    <div class="card-pf-heading-details io-card-heading-details">
       <a id="spacehome-my-workitems-add-button" class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
         <i class="pficon pficon-add-circle-o"></i>
       </a>
     </div>
     <h2 class="card-pf-title">
       <a id="spacehome-my-workitems-title" [routerLink]="[contextPath | async, 'plan']">My Work Items</a>
-      <span id="spacehome-my-workitems-badge" class="badge card-f8-badge">{{myWorkItemsCount | async}}</span>
+      <span id="spacehome-my-workitems-badge" class="badge io-card-badge">{{myWorkItemsCount | async}}</span>
     </h2>
   </div>
-  <div class="card-pf-body card-f8-body">
-    <div class="blank-slate-f8-card" *ngIf="(myWorkItemsCount | async) === 0">
-      <div class="blank-slate-f8-icon">
+  <div class="card-pf-body io-card-body">
+    <div class="io-blank-slate-card" *ngIf="(myWorkItemsCount | async) === 0">
+      <div class="io-blank-slate-icon">
         <i class="pficon pficon-add-circle-o"></i>
       </div>
       <h3>You can view your recent work items</h3>
       <p>
         Planner will help you to create different types of work-items, allows you to assign team members and iterations.
       </p>
-      <div class="blank-slate-f8-main-action">
+      <div class="io-blank-slate-main-action">
         <button id="spacehome-my-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
       </div>
     </div>
