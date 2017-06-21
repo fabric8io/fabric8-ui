@@ -51,12 +51,15 @@ export class EnvironmentWidgetComponent extends AbstractWatchComponent  implemen
     this.contextSubscription = this.context.current.subscribe((context) => {
       this.currentContext = context;
       let pathRegex = new RegExp(/^\/(.+?)\//);
-      let id = pathRegex.exec(context.path)[1];
-      this.spaceStore.load(id);
+      let pathSections = pathRegex.exec(context.path);
+      if (pathSections && pathSections.length > 0) {
+        let id = pathSections[1];
+        this.spaceStore.load(id);
 
-      this.environmentCache.clear();
-      this.subscriberCache.clear();
-      this.listCache.clear();
+        this.environmentCache.clear();
+        this.subscriberCache.clear();
+        this.listCache.clear();
+      }
     });
 
     this.contextPath = this.context.current.map(context => context.path);
