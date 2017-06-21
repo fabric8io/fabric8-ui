@@ -1,160 +1,198 @@
 @import (reference) '../../assets/stylesheets/_base';
 .view-width-100 { width: 100vw !important; }
-.navbar-pf .navbar-primary {
-  li.context {
-    cursor: pointer;
-    > a {
-      background: none;
-      border-top: none;
-      border-bottom: none;
-      padding-bottom: 16px;
-      border-right: 1px solid;
-      border-right-color: @color-pf-black-600; // to match visual design
-      &:hover {
-        background-color: #1d1d1d; // no PatternFly color variables - copied from PatternFly CSS
-        background-image: linear-gradient(to bottom, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
-        background-image: -webkit-linear-gradient(top, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
-        background-image: -o-linear-gradient(top, #363636 0, #1d1d1d 100%);  // no PatternFly color variables - copied from PatternFly CSS
-        background-repeat: repeat-x;
-        border-top-color: #5c5c5c; // no PatternFly color variables - copied from PatternFly CSS
-        color: @color-pf-black-300;
-      }
-    }
-  }
-  &.persistent-secondary {
-    background: none;
-    > li {
-      &.active {
-        &.with-no-children { margin-bottom: 0; }
-      }
-      .recent-items-toggle {
-        width: 275px;
-        .recent-item-text {
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-        }
-        .caret {
-          position: absolute;
-          right: 0;
-          margin-right: 5px;
-          margin-top: 3px;
-        }
-      }
-    }
-    .recent-items-dropdown {
-      &.open {
-        .recent-items { width: 275px; }
-      }
-    }
-    .recent-item-text-dropdown {
-      &:extend(.recent-item-text);
-      margin-right: 2px;
+.container-fluid {
+  padding-right: 0;
+  padding-left: 0;
+}
+.nav {
+  .open {
+    & > a {
+      background-color: @color-pf-black-900;
+      border-color: @color-pf-black-600;
     }
   }
 }
-.navbar-nav {
-  .recent-items {
-    li {
-      a { padding-left: 20px; }
-    }
+.navbar {
+  margin-bottom: 0;
+  border-top: 3px solid;
+  border-top-color: @color-pf-red;
+  &-collapse {
+    padding-right: 0;
+    padding-left: 0;
   }
-  .nav-item-icon { margin-right: 5px; }
-  .pficon-settings { margin-top: -5px; }
-  .status-dropdown {
+  &-right { margin-right: 0; }
+  .context {
     &:hover { cursor: pointer; }
   }
-  &.navbar-right {
-    .infotip {
-      right: -20px;
-      .pficon { margin-right: 5px; }
-    }
-    .status-dropdown {
-      a {
-        padding-top: 12px;
-        padding-bottom: 12px;
-      }
-      .pficon-white { font-size: 18px;
-        &:before { color: @color-pf-white; }
-      }
-    }
-    .login-block {
-      border-left: 1px solid;
-      border-left-color: @color-pf-black-600;
-      a {
-        padding-top: 11px;
-        padding-bottom: 11px;
-        width: 200px;
-        .logged-out-user {
-          padding: 2px;
-          display: inline-block;
-          vertical-align: text-bottom;
-          border: 1px solid;
-          border-color: @color-pf-black-600;
-          i { color: @color-pf-black-500; }
-        }
-        &:hover { cursor: pointer; }
-      }
-    }
-    .user-icon {
-      display: inline-block;
-      vertical-align: text-bottom;
-      img {
-        width: 24px;
-        height: 23px;
-      }
-    }
+  .status-dropdown {
+    border-right: 1px solid;
+    border-right-color: @color-pf-black-600;
+  }
+  .user-dropdown-menu { height: 47px !important;
+    &:hover { cursor: pointer; }
     .user-dropdown {
-      padding: 10px 14px;
       width: 200px;
-      border-left: 1px solid;
-      border-left-color: @color-pf-black-600;
-      &:hover { cursor: pointer; }
-      .user-dropdown-items {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        margin-right: 5px;
-      }
-      .caret {
-        position: absolute;
-        right: 0;
-        margin-right: 5px;
-        margin-top: 8px;
-      }
+      height: 50px;
     }
-    .user-dropdown-menu{
-      .dropdown-menu {
-        li { width: 196px;
-          a {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
+  }
+}
+.navbar-pf {
+  .navbar-nav .open .dropdown-menu.infotip {
+    &.bottom-right {
+      .arrow { left: 90%; }
+    }
+  }
+  .navbar-primary {
+    > .active > a {
+      background-color: @color-pf-black-900;
+      background-image: linear-gradient(to bottom, @color-pf-black-700 0, @color-pf-black-900 100%);
+      border-bottom-color: @color-pf-black-900;
+    }
+    &.persistent-secondary {
+      background: none;
+      > li {
+        &.active {
+          &.with-no-children { margin-bottom: 0; }
+        }
+        .navbar-persistent {
+          border-bottom: 1px solid;
+          border-bottom-color: @color-pf-black;
+          background-color: @color-pf-black-900;
+          > li a {
+            color: @color-pf-white;
+            &:hover { color: @color-pf-black-300; }
           }
         }
       }
     }
   }
 }
-.navbar-pf .navbar-primary {
-  > .active > a {
-    background-color: @color-pf-black-900;
-    background-image: linear-gradient(to bottom, @color-pf-black-700 0, @color-pf-black-900 100%);
-    border-bottom-color: @color-pf-black-900;
+.recent-items-toggle {
+  width: 275px;
+  border-right: 1px solid;
+  border-right-color: @color-pf-black-600;
+  &-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    &-dropdown {
+      @extend:{.recent-items-toggle-text};
+      margin-right: 2px;
+    }
   }
-  &.persistent-secondary > li > .navbar-persistent {
-    background-color: @color-pf-black-900;
-    border-bottom: 1px solid;
-    border-bottom-color: @color-pf-black;
-    > li a {
-      color: @color-pf-white;
-      &:hover { color: @color-pf-black-300; }
+  .caret {
+    position: absolute;
+    right: 0;
+    margin-right: 5px;
+    margin-top: 3px;
+  }
+}
+.recent-items-dropdown {
+  &.open {
+    .recent-items { width: 275px;
+      &:hover { cursor: pointer; }
     }
   }
 }
-.openshift-logo {
-  height: 26px;
-  margin-bottom: 9px;
-  margin-left: 15px;
-  margin-top: 9px;
+
+.status-dropdown {
+  &:hover { cursor: pointer; }
+  a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .pficon-white { font-size: 1.3em;
+    &:before { color: @color-pf-white; }
+  }
+}
+.login-block {
+  border-left: 1px solid;
+  border-left-color: @color-pf-black-600;
+  a {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    width: 200px;
+    &-logged-out-user {
+      border: 1px solid;
+      border-color: @color-pf-black-600;
+      padding: 2px;
+      display: inline-block;
+      vertical-align: text-bottom;
+      i { color: @color-pf-black-500; }
+    }
+    &:hover { cursor: pointer; }
+  }
+}
+.user-icon {
+  display: inline-block;
+  vertical-align: text-bottom;
+  img {
+    width: 24px;
+    height: 23px;
+  }
+}
+.user-dropdown {
+  padding: 10px 14px;
+  width: 200px;
+  &:hover { cursor: pointer; }
+  &-items {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-right: 5px;
+  }
+  .caret {
+    position: absolute;
+    right: 0;
+    margin-right: 5px;
+    margin-top: 8px;
+  }
+  &-menu {
+    .dropdown-menu {
+      li { width: 196px;
+        a {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 768px) {
+  .navbar-pf {
+    .navbar-header {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+  .navbar-collapse.in {
+    margin-left: 0;
+    width: 100%;
+    display: grid;
+    .navbar-right {
+      padding-left: 0;
+      display: inline-flex;
+      .user-dropdown-menu.open { display: inline-table; }
+    }
+    .persistent-secondary {
+      margin-left: 0;
+      padding-left: 0;
+      li.active { display: grid;
+        .navbar-persistent { display: inline-flex; }
+      }
+    }
+  }
+  .arrow { display: none; }
+  .recent-items-dropdown {
+    &.open {
+      .recent-items { width: 100%; }
+    }
+  }
+  .recent-items-toggle {
+    width: 100%;
+    .recent-items { width: 100%;
+      &-toggle { width: 100%; }
+    }
+  }
 }

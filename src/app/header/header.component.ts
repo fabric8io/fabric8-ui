@@ -29,6 +29,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   imgLoaded: Boolean = false;
   statusListVisible = false;
 
+  isIn = false;   // store state
+  toggleState() { // click handler
+      let bool = this.isIn;
+      this.isIn = bool === false ? true : false; 
+  }
+
   onStatusListVisible = (flag: boolean) => {
     this.statusListVisible = flag;
   };
