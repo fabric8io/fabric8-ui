@@ -192,7 +192,7 @@ export class Fabric8AppGeneratorClient {
     this.execute()
       .then(
         (execution) => {
-          this.addCodebaseDelegate = this.getAddCodebaseDelegate(execution);
+          this.addCodebaseDelegate = this.getAddCodebaseDelegate();
         }
       )
       .catch(
@@ -435,20 +435,21 @@ export class Fabric8AppGeneratorClient {
    * Create a function that returns a promise inidicating the successful association
    * of a codebase to the current space
    */
-  private getAddCodebaseDelegate(execution: IAppGeneratorPair): IAddCodebaseDelegate {
+  getAddCodebaseDelegate(): IAddCodebaseDelegate {
     let delegate: IAddCodebaseDelegate = () => {
       return new Promise<object>((resolve, reject) => {
-        let createTransientCodeBase = (url) => {
+        let createTransientCodeBase = (result) => {
           return {
             attributes: {
               type: 'git',
-              url: url
+              url: result.gitUrl,
+              stackId: result.cheStackId
             },
             type: 'codebases'
           } as Codebase;
         };
         let space = this._configuratorService.currentSpace;
-        let codeBase = createTransientCodeBase(this.result.gitUrl);
+        let codeBase = createTransientCodeBase(this.result);
         this.log(`Adding codebase ${this.result.gitUrl} to space ${space.attributes.name} ...`, this.result, console.groupCollapsed);
         this._codebasesService.addCodebase( space.id, codeBase).subscribe(
           ( codebase ) => {
