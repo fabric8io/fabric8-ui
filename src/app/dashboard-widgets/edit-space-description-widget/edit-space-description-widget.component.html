@@ -11,7 +11,7 @@
               (keyup.enter)="onUpdateDescription(description.value)"
               (keydown.enter)="preventDef($event)"
               #description>{{space.attributes.description}}</textarea>
-    <div class="pull-right" *ngIf="isEditing">
+    <div *ngIf="isEditing">
       <button id="_btn_cancel"
               class="pull-right btn btn-default edit-space-description-btn"
               (click)="stopEditingDescription()">
@@ -19,7 +19,7 @@
       </button>
       <!--Save icon-->
       <button id="workItemTitle_btn_save"
-              class="pull-right btn btn-default edit-space-description-btn "
+              class="pull-right btn btn-primary edit-space-description-btn "
               (click)="saveDescription()" >
         <span class="fa fa-check"></span>
       </button>
