@@ -23,15 +23,16 @@
     border-left-style: none;
     border-top-style: none;
     border-bottom: solid 3px;
-    border-bottom-color: #efefef;
+    border-bottom-color: @color-pf-black-200;
   }
   .btn-right-multi-select-button {
     border-right-style: none;
     border-top-style: none;
     border-bottom: solid 3px;
-    border-bottom-color: #efefef;
+    border-bottom-color: @color-pf-black-200;
   }
   .form-control-filter-input {
+    margin-right: -2px;
     height: 2.8rem;
     border: none;
     border-bottom: solid 0;
@@ -40,7 +41,6 @@
     border-left-color: @color-pf-black-300;
     border-right: solid 0;
     border-right-color: @color-pf-black-300;
-    margin-right: -2px;
     box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.075);
   }
   .included-list {
@@ -74,16 +74,13 @@
     margin-bottom: 0;
     font-weight: bold;
   }
-  .busy-indicator {
-    min-width: 50px;
+  .busy-indicator { min-width: 50px;
     > div{
       margin: auto;
       padding: 0;
     }
   }
-  .busy-indicator-offset{
-    margin-left: -50px;
-  }
+  .busy-indicator-offset { margin-left: -50px; }
   .multiple-selection-box {
     border: solid 1px;
     border-color: @color-pf-black-400;
@@ -95,7 +92,7 @@
   .app-generator-message {
     @color-success: @color-pf-green;
     @color-success-border: @color-success;
-    @color-success-background: #EAF4EA;
+    @color-success-background: @color-pf-black-200;
     @color-error: @color-pf-red;
     @color-error-border: @color-error;
     @color-error-background: @color-pf-black-100;
@@ -112,8 +109,7 @@
     .message-title-container {
       padding: @standard-spacing;
       margin-bottom: @standard-spacing;
-      .message-title {
-        user-select: none;
+      .message-title { user-select: none;
         .message-title-icon {
           margin-right: @standard-spacing;
           vertical-align: middle;
@@ -148,8 +144,7 @@
         border: none;
         line-height: 3.0rem;
         font-size: 1.5rem;
-        .message-details {
-          overflow: visible;
+        .message-details { overflow: visible;
           &.hide { overflow: hidden; }
         }
         .message-status-success {
@@ -254,9 +249,7 @@
       border-top: solid 1px transparent;
       border-bottom: solid 1px transparent;
       padding-bottom: 1.0rem;
-      .item-name {
-        font-weight: 600;
-      }
+      .item-name { font-weight: 600; }
       &:hover {
         background-color: @color-pf-blue-100;
         border-top: solid 1px;

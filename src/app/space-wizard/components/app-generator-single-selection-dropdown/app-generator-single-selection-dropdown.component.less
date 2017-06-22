@@ -11,24 +11,24 @@
     }
   }
   .dropdown-menu {
-    display: block;
+    top: 26px;
     padding: 0;
     margin: 0;
-    border-width: 0;
-    overflow: auto;
     height: 0;
-    top: 26px;
+    border-width: 0;
+    display: block;
+    overflow: auto;
     &.open {
       border-width: 1px;
       height: 30vh;
     }
     .dropdown-menu-item {
       padding: 5px;
+      padding-bottom: 1.0rem;
       border-top: solid 1px;
       border-top-color: transparent;
       border-bottom: solid 1px;
       border-bottom-color: transparent;
-      padding-bottom: 1.0rem;
       .item-name { font-weight: 600; }
       &:hover {
         background-color: @color-pf-blue-100;

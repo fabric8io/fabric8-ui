@@ -83,7 +83,7 @@
   <footer class="container-fluid padding-top-standard-offset" [class.border-transparent]="appGenerator.hasProcessingMessage" >
     <div class="row">
       <div class="col-xs-12 wizard-step-tool-bar with-items-at-end">
-        <button title="Cancel" id="forge-cancel-button" type="button" class="btn btn-primary margin-right-5" *ngIf="!appGenerator.hasErrorMessage && !appGenerator.hasSuccessMessage && !appGenerator.hasProcessingMessage"
+        <button title="Cancel" id="forge-cancel-button" type="button" class="btn btn-default margin-right-5" *ngIf="!appGenerator.hasErrorMessage && !appGenerator.hasSuccessMessage && !appGenerator.hasProcessingMessage"
           (click)="appGenerator.cancel()">Cancel</button>
         <!--<button title="Back" type="button" class="btn btn-primary margin-right-5" *ngIf="!appGenerator.hasErrorMessage && !appGenerator.hasSuccessMessage !appGenerator.hasProcessingMessage" [disabled]="(!appGenerator.state.canMoveToPreviousStep)||(appGenerator.processing === true)"
             (click)="appGenerator.gotoPreviousStep()">Back</button>-->
@@ -91,8 +91,8 @@
           [disabled]="(!appGenerator.state.canMoveToNextStep)||(appGenerator.processing === true)" (click)="appGenerator.gotoNextStep()">Next</button>
         <button title="Finish" id="forge-finish-button" type="button" class="btn btn-primary" *ngIf="!appGenerator.hasErrorMessage && !appGenerator.hasSuccessMessage && !appGenerator.hasProcessingMessage"
           [disabled]="(!appGenerator.state.canExecute)||(appGenerator.processing === true)" (click)="appGenerator.finish()">Finish</button>
-        <button title="OK" id="forge-error-ok-button" type="button" class="btn btn-primary" *ngIf="appGenerator.hasErrorMessage" (click)="appGenerator.acknowledgeErrorMessage()">OK</button>
-        <button title="OK" id="forge-ok-button" type="button" class="btn btn-primary" *ngIf="appGenerator.hasSuccessMessage" (click)="appGenerator.acknowledgeSuccessMessage()">OK</button>
+        <button title="OK" id="forge-error-ok-button" type="button" class="btn btn-default" *ngIf="appGenerator.hasErrorMessage" (click)="appGenerator.acknowledgeErrorMessage()">OK</button>
+        <button title="OK" id="forge-ok-button" type="button" class="btn btn-default" *ngIf="appGenerator.hasSuccessMessage" (click)="appGenerator.acknowledgeSuccessMessage()">OK</button>
       </div>
     </div>
   </footer>

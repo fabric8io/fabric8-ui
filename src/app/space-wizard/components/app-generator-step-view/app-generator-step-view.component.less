@@ -1,65 +1,53 @@
 @import '../../../../assets/stylesheets/_base.less';
-
 :host {
-    &.hidden { display: none; }
-    // padding-left: 40px;
-    // padding-right: 40px;
-    // margin-bottom: 30px;
-    .steps {
-       border: solid 0;
-       border-color: @color-pf-black-300;
-       display: block;
-       padding: 2.0rem;
-       .step-seperator {
-           &:before {
-           border: solid 0;
-           border-color: @color-pf-black-300;
-           background-color :@color-pf-black-300;
-           height: 1px;
-           display: block;
-           padding: 0;
-           color: @color-pf-black-300;
-           }
-       }
-       .step {
-            border: solid 0;
-            border-color: @color-pf-black-300;
-            position: relative;
-            display: block;
-            color: @color-pf-black-300;
-            .step-text {
-                // position: absolute;
-                // top: 5rem;
-                // left: -5rem;
-                // border: 0 solid;
-                // border-color: @color-pf-red;
-                // width: 15rem;
-                text-align: center;
-                // font-size: smaller;
-                color: @color-pf-black-300;
-                &:active {
-                    color: @color-pf-black;
-                }
-            }
-            .step-graphic {
-                border: solid 1px;
-                border-color: @color-pf-black-300;
-                width: 4.0rem;
-                height: 4.0rem;
-                padding: 0.5rem;
-                margin: 0 auto;
-                border-radius: 50%;
-                display: block;
-                position: relative;
-                text-align: center;
-                &.active {
-                    border: solid 2px;
-                    border-color: @color-pf-blue-300;
-                    background-color: @color-pf-blue-300;
-                    color: @color-pf-white;
-                    font-weight: bold;
-                }
-           }
-       }
+  &.hidden { display: none; }
+  .steps {
+    padding: 2.0rem;
+    border: solid 0;
+    border-color: @color-pf-black-300;
+    display: block;
+    .step-seperator {
+      &:before {
+        padding: 0;
+        display: block;
+        height: 1px;
+        border: solid 0;
+        border-color: @color-pf-black-300;
+        background-color: @color-pf-black-300;
+        color: @color-pf-black-300;
+      }
     }
+    .step {
+      position: relative;
+      border: solid 0;
+      border-color: @color-pf-black-300;
+      display: block;
+      color: @color-pf-black-300;
+      .step-text {
+        text-align: center;
+        color: @color-pf-black-300;
+        &:active { color: @color-pf-black; }
+      }
+      .step-graphic {
+        position: relative;
+        width: 4.0rem;
+        height: 4.0rem;
+        padding: 0.5rem;
+        margin: 0 auto;
+        border: solid 1px;
+        border-color: @color-pf-black-300;
+        border-radius: 50%;
+        display: block;
+        text-align: center;
+        &.active {
+          border: solid 2px;
+          border-color: @color-pf-blue-300;
+          background-color: @color-pf-blue-300;
+          color: @color-pf-white;
+          font-weight: bold;
+        }
+      }
+    }
+  }
 }
+

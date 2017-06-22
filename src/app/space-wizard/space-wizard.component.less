@@ -1,26 +1,25 @@
 @import (reference) '../../assets/stylesheets/_base';
-// @import (reference) '../../assets/stylesheets/_icons';
 @icon-path: '../../assets/stylesheets/_icons';
 
-@debug-border: 0;
+// 0: 0;
 @debug-component-border: 0;
-@debug-component-spacing: 0;
+// 0: 0;
 
 @debug-root-component-border-color: navy;
 @debug-component-border-color: lighten( navy,20%);
-@debug-child-component-border-color:lighten(@debug-component-border-color,30%);
+@debug-child-component-border-color: lighten(@debug-component-border-color,30%);
 
-@debug-div-border-color:orange;
-@debug-aside-border-color:darken(orangered,20%);
+@debug-div-border-color: orange;
+@debug-aside-border-color: darken(orangered,20%);
 @debug-section-border-color: lighten(orangered,0%);
 
-@debug-header-border-color:darkgreen;
-@debug-main-border-color:lighten(@debug-header-border-color,10%);
-@debug-footer-border-color:lighten(@debug-header-border-color,20%);
+@debug-header-border-color: darkgreen;
+@debug-main-border-color: lighten(@debug-header-border-color,10%);
+@debug-footer-border-color: lighten(@debug-header-border-color,20%);
 
-@debug-bootstrap-container-color:darken(saddlebrown,10%);
-@debug-bootstrap-row-color:lighten(@debug-bootstrap-container-color,10%);
-@debug-bootstrap-column-color:lighten(@debug-bootstrap-container-color,20%);
+@debug-bootstrap-container-color: darken(saddlebrown,10%);
+@debug-bootstrap-row-color: lighten(@debug-bootstrap-container-color,10%);
+@debug-bootstrap-column-color: lighten(@debug-bootstrap-container-color,20%);
 
 // wizard
 @wizard-spacing: @grid-gutter-width/2;
@@ -28,7 +27,6 @@
 @wizard-header-divider-color: @color-pf-black-300;
 @wizard-footer-color: @color-pf-white;
 @wizard-footer-divider-color: @color-pf-black-300;
-//noinspection SassScssResolvedByNameOnly
 @wizard-padding: @grid-gutter-width / 2;
 
 @wizard-spacing: 0;
@@ -38,14 +36,10 @@
 @wizard-shadow-spread-radius: 3px;
 // makes shadows edge blury
 @wizard-shadow-blur-radius: 3px;
-//noinspection SassScssResolvedByNameOnly
 @wizard-section-column-background-color: @color-pf-white;// @btn-primary-bg;
 @wizard-layout-block-background-color: @color-pf-white;
-//noinspection SassScssResolvedByNameOnly
 @wizard-layout-block-header-border-color: @color-pf-black-100;// @color-pf-blue-300;
-//noinspection SassScssUnresolvedVariable,SassScssUnresolvedVariable
 @wizard-layout-block-shadow-color: darken(@navbar-default-bg, 10%);
-//noinspection SassScssUnresolvedVariable,SassScssUnresolvedVariable
 @wizard-block-header-color: @color-pf-white;
 
 // make styles apply to host element and all child elements , including child components
@@ -70,14 +64,14 @@
       position: relative;
       background-color: @wizard-header-color;
       &.container-fluid {
-          padding-left: @wizard-spacing + @debug-border ;
-          padding-right: @wizard-spacing + @debug-border ;
-          margin-left: 0;
-          margin-right: 0;
-          >.row {
-            margin-left: -(@wizard-spacing + @debug-border) ;
-            margin-right: -(@wizard-spacing + @debug-border);
-          }
+        padding-left: @wizard-spacing + 0 ;
+        padding-right: @wizard-spacing + 0 ;
+        margin-left: 0;
+        margin-right: 0;
+        >.row {
+          margin-left: -(@wizard-spacing + 0) ;
+          margin-right: -(@wizard-spacing + 0);
+        }
       }
       &.container { width: 100%; }
     }
@@ -95,20 +89,20 @@
           margin-left: 0;
           margin-right: 0;
         }
-        padding-left: @wizard-spacing  + @debug-border;
-        padding-right: @wizard-spacing + @debug-border;
+        padding-left: @wizard-spacing  + 0;
+        padding-right: @wizard-spacing + 0;
         position: relative;
         >.row {
           position: relative;
-          margin-left: -(@wizard-spacing + @debug-border) ;
-          margin-right: -(@wizard-spacing + @debug-border);
+          margin-left: -(@wizard-spacing + 0) ;
+          margin-right: -(@wizard-spacing + 0);
           padding: 0;
           width: auto;
         }
       }
       &.container {
-        padding-left: @wizard-spacing + @debug-border;
-        padding-right: @wizard-spacing + @debug-border;
+        padding-left: @wizard-spacing + 0;
+        padding-right: @wizard-spacing + 0;
         margin-left: 0;
         margin-right: 0;
         width: 100%;
@@ -123,18 +117,18 @@
       border-top-color: @wizard-footer-divider-color;
       background-color: @wizard-footer-color;
       &.container-fluid {
-        padding-left: @wizard-spacing + @debug-border ;
-        padding-right: @wizard-spacing + @debug-border ;
+        padding-left: @wizard-spacing + 0 ;
+        padding-right: @wizard-spacing + 0 ;
         margin-left: 0;
         margin-right: 0;
         >.row {
-          margin-left: -(@wizard-spacing + @debug-border) ;
-          margin-right: -(@wizard-spacing + @debug-border);
+          margin-left: -(@wizard-spacing + 0) ;
+          margin-right: -(@wizard-spacing + 0);
         }
       }
       &.container { width: 100%; }
     }
-  };
+  }
   .wizard {
     display: block;
     position: relative;
@@ -157,7 +151,7 @@
         @include: wizard-step-child-elements;
       }
       .wizard-step-title {
-        .text{ font-weight: 600; }
+        .text { font-weight: 600; }
       }
       .wizard-step-tool-bar {
         position: relative;

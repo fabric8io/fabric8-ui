@@ -1,147 +1,148 @@
 @import (reference) '../../../../assets/stylesheets/_base';
 .pipeline {
+  padding: 0.25rem;
+  border: solid 0;
+  border-color: @color-pf-black-400;
+  background-color: @color-pf-white;
+  display: inline-flex;
+  align-content: center;
+  align-items: center;
+  .stage {
+    margin: 0.25rem;
     padding: 0.25rem;
-    border: solid 0;
+    min-width: 125px;
+    max-width: 180px;
+    overflow: hidden;
+    border: dashed 0;
     border-color: @color-pf-black-400;
-    background-color: @color-pf-white;
-    display: inline-flex;
-    align-content: center;
-    align-items: center;
-    .stage {
-        margin: 0.25rem;
-        padding: 0.25rem;
-        min-width: 125px;
-        max-width: 180px;
-        overflow: hidden;
-        border: dashed 0;
-        border-color: @color-pf-black-400;
-        border-radius: .25rem;
-        color: @color-pf-black-400;
-        display: block;
-        &:before {
-            height: 1.0rem;
-            padding: 0 5px;
-            color: @color-pf-black-400;
-        }
-        &-text {
-            text-align: center;
-            font-size: smaller;
-            color: @color-pf-black-400;
-        }
-        &-graphic {
-            position:relative;
-            padding: 0.25rem;
-            border: solid 0;
-            border-color: @color-pf-black-400;
-            display: block;
-        }
-        &-graphic-icon {
-            height: 1.5rem;
-            line-height: 1.5rem;
-            font-size: 1.5rem;
-            text-align: center;
-            vertical-align: middle;
-            color: @color-pf-black-400;
-            &:after {
-                position: absolute;
-                top: 8px;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                margin: 0 auto;
-                height: 3px;
-                width: 95%;
-                content: "";
-                background-color: @color-pf-black-400;
-                z-index: 0;
-            }
-        }
-        &.success {
-            .stage-graphic-icon{
-                color: @color-pf-green !important;
-                z-index: 1;
-                &:before {
-                    position: absolute;
-                    left: 45%;
-                    content: "\f05d";
-                    font-family: FontAwesome;
-                    display: inline-block;
-                    color: @color-pf-green;
-                    background-color: @color-pf-white;
-                    z-index: 1;
-                }
-                &:after {
-                    position: absolute;
-                    top: 8px;
-                    right: 0;
-                    bottom: 0;
-                    left: 0;
-                    margin: 0 auto;
-                    height: 3px;
-                    width: 100%;
-                    content: "";
-                    background-color: @color-pf-green;
-                    z-index: 0;
-                }
-            }
-        }
-        &.error {
-            .stage-graphic-icon{
-                color: @color-pf-red !important;
-                z-index: 1;
-                &:before {
-                    position: absolute;
-                    left: 45%;
-                    content: "\f28d";
-                    font-family: FontAwesome;
-                    display: inline-block;
-                    color: @color-pf-red;
-                    background-color: @color-pf-white;
-                    z-index: 1;
-                }
-                &:after {
-                    position: absolute;
-                    top: 8px;
-                    right: 0;
-                    bottom: 0;
-                    left: 0;
-                    margin: 0 auto;
-                    height: 3px;
-                    width: 100%;
-                    content: "";
-                    background-color: @color-pf-red;
-                    z-index: 0;
-                }
-            }
-        }
-        &.warning {
-            .stage-graphic-icon{
-                color: @color-pf-orange !important;
-                z-index: 1;
-                &:before {
-                    position: absolute;
-                    left: 45%;
-                    content: "\f28b";
-                    font-family: FontAwesome;
-                    display: inline-block;
-                    color: @color-pf-orange;
-                    background-color: @color-pf-white;
-                    z-index: 1;
-                }
-                &:after {
-                    position: absolute;
-                    top: 8px;
-                    right: 0;
-                    bottom: 0;
-                    left: 0;
-                    margin: 0 auto;
-                    height: 3px;
-                    width: 100%;
-                    content: "";
-                    background-color: @color-pf-orange;
-                    z-index: 0;
-                }
-            }
-        }
+    border-radius: .25rem;
+    color: @color-pf-black-400;
+    display: block;
+    &:before {
+      height: 1.0rem;
+      padding: 0 5px;
+      color: @color-pf-black-400;
     }
+    &-text {
+      text-align: center;
+      font-size: smaller;
+      color: @color-pf-black-400;
+    }
+    &-graphic {
+      position: relative;
+      padding: 0.25rem;
+      border: solid 0;
+      border-color: @color-pf-black-400;
+      display: block;
+    }
+    &-graphic-icon {
+      height: 1.5rem;
+      line-height: 1.5rem;
+      font-size: 1.5rem;
+      text-align: center;
+      vertical-align: middle;
+      color: @color-pf-black-400;
+      &:after {
+        position: absolute;
+        top: 8px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: 0 auto;
+        height: 3px;
+        width: 95%;
+        content: "";
+        background-color: @color-pf-black-400;
+        z-index: 0;
+      }
+    }
+    &.success {
+      .stage-graphic-icon {
+        color: @color-pf-green !important;
+        z-index: 1;
+        &:before {
+          position: absolute;
+          left: 45%;
+          content: "\f05d";
+          font-family: FontAwesome;
+          display: inline-block;
+          color: @color-pf-green;
+          background-color: @color-pf-white;
+          z-index: 1;
+        }
+        &:after {
+          position: absolute;
+          top: 8px;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          margin: 0 auto;
+          height: 3px;
+          width: 100%;
+          content: "";
+          background-color: @color-pf-green;
+          z-index: 0;
+        }
+      }
+    }
+    &.error {
+      .stage-graphic-icon {
+        color: @color-pf-red !important;
+        z-index: 1;
+        &:before {
+          position: absolute;
+          left: 45%;
+          content: "\f28d";
+          font-family: FontAwesome;
+          display: inline-block;
+          color: @color-pf-red;
+          background-color: @color-pf-white;
+          z-index: 1;
+        }
+        &:after {
+          position: absolute;
+          top: 8px;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          margin: 0 auto;
+          height: 3px;
+          width: 100%;
+          content: "";
+          background-color: @color-pf-red;
+          z-index: 0;
+        }
+      }
+    }
+    &.warning {
+      .stage-graphic-icon {
+        color: @color-pf-orange !important;
+        z-index: 1;
+        &:before {
+          position: absolute;
+          left: 45%;
+          content: "\f28b";
+          font-family: FontAwesome;
+          display: inline-block;
+          color: @color-pf-orange;
+          background-color: @color-pf-white;
+          z-index: 1;
+        }
+        &:after {
+          position: absolute;
+          top: 8px;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          margin: 0 auto;
+          height: 3px;
+          width: 100%;
+          content: "";
+          background-color: @color-pf-orange;
+          z-index: 0;
+        }
+      }
+    }
+  }
 }
+
