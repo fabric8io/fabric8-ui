@@ -1,14 +1,14 @@
-<div id="recent-pipelines-card" class="pipelines-widget card-pf card-f8">
+<div id="recent-pipelines-card" class="pipelines-widget card-pf io-card">
   <div class="card-pf-heading">
     <h2 class="card-pf-title">
       Recent active pipelines
       <span id="recent-pipelines-badge" class="badge card-f8-badge">{{buildConfigsCount | async}}</span>
     </h2>
   </div>
-  <div class="card-pf-body card-f8-body">
-    <div class="blank-slate-f8-card" *ngIf="!(buildConfigsCount | async)">
-      <div class="blank-slate-f8-icon">
-        <span class="pficon pficon-info"></span>
+  <div class="card-pf-body io-card-body">
+    <div class="io-blank-slate-card blank-slate-recent-pipelines-card" *ngIf="!(buildConfigsCount | async)">
+      <div class="io-blank-slate-icon">
+        <i class="pficon pficon-info"></i>
       </div>
       <h3>No recent failed or active pipelines</h3>
       <p>
