@@ -1,2 +1,24 @@
 @import (reference) '../../../assets/stylesheets/_base';
 .pipeline-status-padding { padding-left: 10px; }
+.list-group-item-text {
+  &-column1 {
+    width: ~"calc(65% - 40px)";
+    .truncate;
+    // .pipeline-status-padding {
+    //   width: ~"calc(80% - 20px)";
+    //   .truncate;
+    //   &:last-child {
+    //     width: ~"calc(20% - 20px)";
+    //     .truncate;
+    //   }
+    // }
+  }
+  &-column2 {
+    width: ~"calc(60% - 40px)";
+    .truncate;
+  }
+  &-column3 {
+    width: ~"calc(30% - 40px)";
+    .truncate;
+  }
+}
