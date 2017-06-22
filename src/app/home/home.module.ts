@@ -8,18 +8,18 @@ import { SpaceWizardModule } from '../space-wizard/space-wizard.module';
 
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
-import { DeveloperPollModule } from './developer-poll/developer-poll.module';
 import { WorkItemWidgetModule } from './work-item-widget/work-item-widget.module';
+import { RecentPipelinesWidgetModule } from '../dashboard-widgets/recent-pipelines-widget/recent-pipelines-widget.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    DeveloperPollModule,
     HomeRoutingModule,
     ModalModule,
     SpaceWizardModule,
     Fabric8WitModule,
-    WorkItemWidgetModule
+    WorkItemWidgetModule,
+    RecentPipelinesWidgetModule
   ],
   declarations: [ HomeComponent ]
 })

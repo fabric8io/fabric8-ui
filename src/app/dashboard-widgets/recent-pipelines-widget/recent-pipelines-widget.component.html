@@ -1,0 +1,34 @@
+<div id="recent-pipelines-card" class="pipelines-widget card-pf card-f8">
+  <div class="card-pf-heading">
+    <h2 class="card-pf-title">
+      Recent active pipelines
+      <span id="recent-pipelines-badge" class="badge card-f8-badge">{{buildConfigsCount | async}}</span>
+    </h2>
+  </div>
+  <div class="card-pf-body card-f8-body">
+    <div class="blank-slate-f8-card" *ngIf="!(buildConfigsCount | async)">
+      <div class="blank-slate-f8-icon">
+        <span class="pficon pficon-info"></span>
+      </div>
+      <h3>No recent failed or active pipelines</h3>
+      <p>
+        Failed pipelines or active pipelines will display here when you commit and build your codebase.
+      </p>
+    </div>
+    <ul id= "recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">
+      <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async" >
+        <div>
+          <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
+          <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
+          <span class="recent-pipeline-name-padding"><a id="spacehome-pipelines-title" [routerLink]="['/', buildconfig.namespace, buildconfig.labels['space'], 'create', 'pipelines']">{{buildconfig.name}}</a></span>
+          <span>|</span>
+          <span class="recent-pipeline-status-padding"><a [href]="buildconfig.openShiftConsoleUrl" target="_blank">Build #{{buildconfig.lastVersion}}   <i class="fa fa-external-link" aria-hidden="true"></i></a></span>
+        </div>
+        <div>
+          <div>Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}</div>
+          <div>Status: <b>{{buildconfig.statusPhase || 'Unknown'}}</b></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
