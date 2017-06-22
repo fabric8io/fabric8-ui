@@ -1,31 +1,31 @@
 <div id="analyze-overview" class="container-fluid analyze-overview-wrapper">
-  <section class="margin-top-15">
-    <div class="col-md-10 padding-0">
+  <section class="row col-sm-12 margin-top-15">
+    <div class="col-sm-10 padding-0">
       <fabric8-edit-space-description-widget></fabric8-edit-space-description-widget>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-2">
       <button id="analyze-overview-add-to-space-button" class="btn btn-primary btn-lg pull-right width-100" (click)="openForgeWizard()">Add to space</button>
     </div>
   </section>
   <div class="cards-pf">
     <div class="row row-cards-pf">
-      <div class="col-md-4">
+      <div class="col-sm-4">
         <fabric8-add-codebase-widget (addToSpace)="openForgeWizard()"></fabric8-add-codebase-widget>
       </div>
-      <div class="col-md-8">
+      <div class="col-sm-8">
         <fabric8-analytical-report-widget></fabric8-analytical-report-widget>
       </div>
     </div>
   </div>
   <div class="cards-pf">
     <div class="row row-cards-pf padding-top-0">
-      <div class="col-md-4">
+      <div class="col-sm-4">
         <fabric8-create-work-item-widget></fabric8-create-work-item-widget>
       </div>
-      <div class="col-md-4">
+      <div class="col-sm-4">
         <fabric8-pipelines-widget (addToSpace)="openForgeWizard()"></fabric8-pipelines-widget>
       </div>
-      <div class="col-md-4">
+      <div class="col-sm-4">
         <fabric8-environment-widget></fabric8-environment-widget>
       </div>
     </div>

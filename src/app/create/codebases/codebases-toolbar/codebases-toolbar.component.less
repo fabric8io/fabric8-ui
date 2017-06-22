@@ -5,5 +5,11 @@
   border-color: @color-pf-black-300;
 }
 .toolbar-pf-action-right {
-  .pficon-add-circle-o { color: @color-pf-blue-400; }
+  .pficon-add-circle-o {
+    color: @color-pf-blue-400;
+    @media (max-width: 992px) {
+      position: absolute;
+      right: 20px;
+    }
+  }
 }
