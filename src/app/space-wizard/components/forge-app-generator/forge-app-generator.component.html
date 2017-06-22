@@ -53,7 +53,7 @@
       </div>
     </div>
     <div class="message-body-container">
-      <div [innerHTML]="appGenerator.successMessage.body" class="message-body">
+      <div [innerHTML]="appGenerator.successMessage.body" class="form-horizontal message-body">
       </div>
     </div>
   </section>
@@ -92,7 +92,7 @@
         <button title="Finish" id="forge-finish-button" type="button" class="btn btn-primary" *ngIf="!appGenerator.hasErrorMessage && !appGenerator.hasSuccessMessage && !appGenerator.hasProcessingMessage"
           [disabled]="(!appGenerator.state.canExecute)||(appGenerator.processing === true)" (click)="appGenerator.finish()">Finish</button>
         <button title="OK" id="forge-error-ok-button" type="button" class="btn btn-default" *ngIf="appGenerator.hasErrorMessage" (click)="appGenerator.acknowledgeErrorMessage()">OK</button>
-        <button title="OK" id="forge-ok-button" type="button" class="btn btn-default" *ngIf="appGenerator.hasSuccessMessage" (click)="appGenerator.acknowledgeSuccessMessage()">OK</button>
+        <button title="OK" id="forge-ok-button" type="button" class="btn btn-primary" *ngIf="appGenerator.hasSuccessMessage" (click)="appGenerator.acknowledgeSuccessMessage()">OK</button>
       </div>
     </div>
   </footer>

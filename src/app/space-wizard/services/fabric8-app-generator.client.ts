@@ -491,9 +491,9 @@ export class Fabric8AppGeneratorClient {
     let results = execution.response.payload.results || [];
     let buildHyperlink = (value) => {
       if ((value || '').toString().toLowerCase().startsWith('http')) {
-        return `<a class="property-value property-value-result property-value-link" target="_blank" href="${value}" >${value}</a></div>`;
+        return `<a class="col-sm-7 property-value property-value-result property-value-link" target="_blank" href="${value}" >${value}</a></div></div>`;
       } else {
-        return `<span class="property-value property-value-result" >${value}</span></div>`;
+        return `<span class="col-sm-7 property-value property-value-result">${value}</span></div></div>`;
       }
     };
     let result:any = {};
@@ -536,7 +536,7 @@ export class Fabric8AppGeneratorClient {
       // now build the message to be displayed
       successMessageProperties.forEach(property => {
         if (property.value) {
-          msg = `${msg}\n<span class="property-name property-name-result" >${property.label}</span>${buildHyperlink(property.value)}`;
+          msg = `${msg}\n<div class="form-group"><label class="col-sm-5 property-name property-name-result" >${property.label}</label>${buildHyperlink(property.value)}`;
         }
       });
       this.result = result;
