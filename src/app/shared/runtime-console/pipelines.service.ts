@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
+import { orderBy, take } from 'lodash';
+
 import {
   BuildConfig,
   BuildConfigs,
@@ -40,6 +42,21 @@ export class PipelinesService {
           combineBuildConfigAndBuildsAndFilterOnSpace))
       .map(filterPipelines);
   }
+
+  get recentPipelines(): Observable<BuildConfig[]> {
+    return this.fabric8RuntimeConsoleService
+      .loading()
+      .switchMap(() =>
+        Observable.combineLatest(
+          this.pipelinesStore
+            .loadAll()
+            .distinctUntilChanged(),
+          this.buildStore
+            .loadAll()
+            .distinctUntilChanged(),
+          filterByMostRecent))
+      .map(filterPipelines);
+  }
 }
 
 function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs, builds: Builds, context: Context): BuildConfigs {
@@ -59,4 +76,22 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
     }
   });
   return answer;
+}
+
+function filterByMostRecent(buildConfigs: BuildConfigs, builds: Builds): BuildConfigs {
+  let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
+  let sortedPipelines = orderBy(pipelines, (pipeline) => {
+    if(pipeline && pipeline.lastBuild) {
+      return new Date(pipeline.lastBuild.creationTimestamp);
+    }
+    return new Date(0);
+  }, ['desc']);
+
+  let answer = new BuildConfigs();
+  sortedPipelines.forEach(bc => {
+    if (bc.statusPhase !== "Complete" && bc.labels['space']) {
+      answer.push(bc);
+    }
+  });
+  return take(answer, 4;
 }
