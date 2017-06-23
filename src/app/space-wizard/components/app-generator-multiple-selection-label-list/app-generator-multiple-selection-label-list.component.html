@@ -18,7 +18,7 @@
 <ul title="{{field.description}}" >
   <li class="checkbox" [class.selected]="choice.selected" *ngFor="let choice of field.display.choices|visibleItems">
     <label>
-       <input type="checkbox" name="{{field.name}}" [(ngModel)]="choice.selected"  [checked]="choice.selected" ><span>{{choice.id}}</span>
+      <input type="checkbox" name="{{field.name}}" [(ngModel)]="choice.selected" (change)="selectChoice(choice)"  [checked]="choice.selected" ><span>{{choice.id}}</span>
        <!--<span class="fa" [class.fa-check-square-o]="choice.selected" [class.fa-square-o]="!choice.selected"></span>-->
     </label>
     <p title=''>{{choice.description}}</p>

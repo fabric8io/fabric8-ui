@@ -76,6 +76,11 @@ export class AppGeneratorMultipleSelectionLabelListComponent implements OnInit, 
     this.filterList(field, '');
   }
 
+  selectChoice(choice) {
+    //console.log("Selected choice", choice);
+    this.updateFieldValue(this.field);
+  }
+    
   updateFieldValue(field: IField): IField {
     if ( !field ) {
       return null;
