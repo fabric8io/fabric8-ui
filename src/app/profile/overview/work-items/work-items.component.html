@@ -1,4 +1,4 @@
-<div class="col-xs-6 margin-top-25" *ngIf="spaces.length !== 0">
+<div class="col-sm-6 margin-top-25" *ngIf="spaces.length !== 0">
   <select class="combobox form-control"
           [(ngModel)]="currentSpaceId"
           (ngModelChange)="fetchWorkItems()">
@@ -10,7 +10,7 @@
 </div>
 <div *ngIf="workItems.length === 0; then showBlankState else showWorkItems"></div>
 <ng-template #showBlankState>
-  <div class="col-xs-12 padding-none"
+  <div class="col-sm-12"
        [ngClass]="{'margin-top-15': spaces.length !== 0}">
     <div class="blank-slate-pf">
       <div class="blank-slate-f8-icon">
@@ -28,7 +28,7 @@
   </div>
 </ng-template>
 <ng-template #showWorkItems>
-  <div class="col-xs-12 padding-none">
+  <div class="col-sm-12">
     <ul class="list-group list-view-pf list-view-pf-view">
       <li class="list-group-item" *ngFor="let workItem of workItems | take: 10">
         <div class="list-view-pf-main-info">

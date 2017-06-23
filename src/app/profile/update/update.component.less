@@ -4,31 +4,33 @@
   margin-right: 5px;
   position: relative;
 }
-.fields-status-pf { margin-top: -5px; }
 .getting-started { padding-bottom: 20px; }
 .margin-top-40 { margin-top: 40px; }
 .padding-top-30 { padding-top: 30px; }
 .padding-top-40 { padding-top: 40px; }
+.padding-left-0 { padding-left: 0; }
 .profile-img,
 .profile-img-none {
-  height: 195px;
-  width: 195px;
+  width: 100%;
 }
-.preview-cont { display: flex; }
 .preview-btn {
-  margin-left: -21px;
-  margin-top: 99px;
-  > button { height: 29px; }
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-height: 29px;
+  white-space: normal;
+}
+.profile-wrapper {
+  &-email, &-url, &-bio, &-username { padding-left: 5px; }
 }
 .preview-field {
-  flex-grow: 1;
-  margin-top: auto;
-  padding-left: 5px;
+  position: absolute;
+  bottom: 0;
+  padding-left: 0;
 }
 .preview-img,
 .preview-img-none {
-  height: 100px;
-  width: 100px;
+  width: auto;
 }
 .profile-img-none,
 .preview-img-none {

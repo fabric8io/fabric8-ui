@@ -13,21 +13,20 @@
   color: @color-pf-black-500;
   cursor: pointer;
 }
-.profile-email-wrapper {
+.profile-wrapper-email {
   .pficon-edit {
     color: @color-pf-black-500;
     cursor: pointer;
   }
 }
-.profile-img,
-.profile-img-none {
-  height: 195px;
-  width: 195px;
+.profile-wrapper {
+  &-email, &-url, &-bio, &-username { padding-left: 5px; }
 }
+.profile-img,
+.profile-img-none { width: 100%; }
 .preview-img,
 .preview-img-none {
-  height: 100px;
-  width: 100px;
+  width: 100%;
 }
 .profile-img-none,
 .preview-img-none {
@@ -46,3 +45,4 @@
   white-space: nowrap;
 }
 .wrap { word-wrap: break-word; }
+.profile-update-button { white-space: normal; }
