@@ -93,5 +93,5 @@ function filterByMostRecent(buildConfigs: BuildConfigs, builds: Builds): BuildCo
       answer.push(bc);
     }
   });
-  return take(answer, 4;
+  return take(answer, 4);
 }
