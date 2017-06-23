@@ -9,6 +9,7 @@ import { ForgeAppGeneratorComponent } from './components/forge-app-generator/for
 import { AppGeneratorBuildPipelineViewComponent } from './components/app-generator-build-pipeline-view/app-generator-build-pipeline-view.component';
 import { AppGeneratorSingleSelectionListComponent } from './components/app-generator-single-selection-list/app-generator-single-selection-list.component';
 import { AppGeneratorSingleSelectionDropDownComponent } from './components/app-generator-single-selection-dropdown/app-generator-single-selection-dropdown.component';
+import { AppGeneratorFilteredDropDownComponent } from './components/app-generator-single-selection-dropdown/app-generator-filtered-dropdown.component';
 import { AppGeneratorSingleInputComponent } from './components/app-generator-single-input/app-generator-single-input.component';
 import { AppGeneratorStepViewComponent } from './components/app-generator-step-view/app-generator-step-view.component';
 import { AppGeneratorMultipleSelectionLabelListComponent } from './components/app-generator-multiple-selection-label-list/app-generator-multiple-selection-label-list.component';
@@ -37,6 +38,7 @@ import { CodebasesService } from '../create/codebases/services/codebases.service
     AppGeneratorStepViewComponent,
     AppGeneratorSingleInputComponent,
     AppGeneratorSingleSelectionListComponent,
+    AppGeneratorFilteredDropDownComponent,
     AppGeneratorSingleSelectionDropDownComponent,
     AppGeneratorMultipleSelectionLabelListComponent,
     AppGeneratorBuildPipelineViewComponent,

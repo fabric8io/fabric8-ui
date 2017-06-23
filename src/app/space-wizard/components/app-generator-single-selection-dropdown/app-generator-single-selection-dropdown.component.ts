@@ -42,6 +42,6 @@ export class AppGeneratorSingleSelectionDropDownComponent implements OnInit, OnD
     this.log(`ngOnDestroy ...`);
   }
   /** logger delegate delegates logging to a logger */
-  private log: ILoggerDelegate = () => {};
+  log: ILoggerDelegate = () => {};
 
 }
