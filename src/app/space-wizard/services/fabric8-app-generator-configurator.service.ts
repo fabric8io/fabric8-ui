@@ -59,13 +59,11 @@ export class AppGeneratorConfiguratorService {
     spaceCreator: 'space-creator-step',
     spaceConfigurator: 'space-configurator-step',
     forgeQuickStart: 'forge-quick-start-step',
-    forgeStarter: 'forge-starter-step',
     forgeImportGit: 'forge-import-git-step'
   };
 
   public forgeCommands = {
     forgeQuickStart: ForgeCommands.forgeQuickStart,
-    forgeStarter: ForgeCommands.forgeStarter,
     forgeImportGit: ForgeCommands.forgeImportGit
   };
 

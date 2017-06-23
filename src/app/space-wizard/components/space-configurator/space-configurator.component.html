@@ -15,27 +15,7 @@
   </div>
   <div class="row">
     <div class="col-sm-12 panel">
-      <div id="planSpaceButton" class="col-sm-3 panel-item">
-        <ul class="action-panel-list">
-          <li>
-            <h3><strong>Plan</strong> out my space</h3>
-          </li>
-          <li>
-            <i class="fa fa-3x fa-list"></i>
-          </li>
-        </ul>
-      </div>
-      <div id="forgeStarterButton" class="col-sm-3 panel-item" (click)="workflow.gotoNextStep({name:configurator.workflowSteps.forgeStarter})">
-        <ul class="action-panel-list">
-          <li>
-            <h3>Create a new <strong>Starter</strong> project</h3>
-          </li>
-          <li>
-            <i class="fa fa-3x fa-code"></i>
-          </li>
-        </ul>
-      </div>
-      <div id="importCodeButton" class="col-sm-3 panel-item" (click)="workflow.gotoNextStep({name:configurator.workflowSteps.forgeImportGit})">
+      <div id="importCodeButton" class="col-sm-6 panel-item" (click)="workflow.gotoNextStep({name:configurator.workflowSteps.forgeImportGit})">
         <ul class="action-panel-list">
           <li>
             <h3>Import existing <strong>code</strong></h3>
@@ -45,7 +25,7 @@
           </li>
         </ul>
       </div>
-      <div id="forgeQuickStartButton" class="col-sm-3 panel-item" (click)="workflow.gotoNextStep({name:configurator.workflowSteps.forgeQuickStart})">
+      <div id="forgeQuickStartButton" class="col-sm-6 panel-item" (click)="workflow.gotoNextStep({name:configurator.workflowSteps.forgeQuickStart})">
         <ul class="action-panel-list">
           <li>
             <h3>Create a new <strong>Quick Start</strong> project</h3>

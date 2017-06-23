@@ -69,7 +69,6 @@ export class SpaceWizardComponent implements OnInit {
           { name: this.configurator.workflowSteps.spaceCreator, index: 0, nextIndex: 1 },
           { name: this.configurator.workflowSteps.spaceConfigurator, index: 1, nextIndex: 1 },
           { name: this.configurator.workflowSteps.forgeQuickStart, index: 5, nextIndex: 1 },
-          { name: this.configurator.workflowSteps.forgeStarter, index: 6, nextIndex: 1 },
           { name: this.configurator.workflowSteps.forgeImportGit, index: 7, nextIndex: 1 }
         ];
       },
