@@ -1,24 +1,16 @@
 @import (reference) '../../../assets/stylesheets/_base';
-.recent-pipeline-name-padding {
-  padding-left: 10px;
-  padding-right: 7px;
+.io-card-pipeline-column {
+  &-name, &-build { padding-left: 10px; }
 }
-
-.recent-pipeline-status-padding {
-  padding-left: 7px;
-}
-
-.blank-slate-recent-pipelines-card {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  padding-left: 30px;
-  padding-right: 30px;
-  text-align: center;
-  p {
-    margin-bottom: 20px;
-    margin-top: 20px;
-    &:first-child { margin-top: -20px; }
-    &:last-child { margin-top: 40px; }
+.io-card__pipeline-column {
+  width: ~"calc(65% - 40px)";
+  .truncate;
+  &-start {
+    width: ~"calc(60% - 40px)";
+    .truncate;
+  }
+  &-status {
+    width: ~"calc(30% - 40px)";
+    .truncate;
   }
 }

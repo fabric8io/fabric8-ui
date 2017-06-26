@@ -23,14 +23,14 @@
         <div class="list-view-pf-main-info">
           <div class="list-view-pf-body">
             <div class="list-view-pf-description">
-              <div class="list-group-item-text list-group-item-text-column1">
+              <div class="list-group-item-text io-card__pipeline-column">
                 <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
                 <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
-                <span class="pipeline-status-padding">{{buildconfig.name}}</span>
-                <span class="pipeline-status-padding">Build #{{buildconfig.lastVersion}}</span>
+                <span class="io-card__pipeline-column-name">{{buildconfig.name}}</span>
+                <span class="io-card__pipeline-column-build">Build #{{buildconfig.lastVersion}}</span>
               </div>
-              <div class="list-group-item-text list-group-item-text-column2">Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}</div>
-              <div class="list-group-item-text list-group-item-text-column3">Status: <b>{{buildconfig.statusPhase || 'Unknown'}}</b></div>
+              <div class="list-group-item-text io-card__pipeline-column-start">Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}</div>
+              <div class="list-group-item-text io-card__pipeline-column-status">Status: <b>{{buildconfig.statusPhase || 'Unknown'}}</b></div>
             </div>
           </div>
         </div>
