@@ -5,12 +5,12 @@
 .forge-app-generator-component {
   >header {
     position: absolute;
-    top: -60px;
+    top: -53px;
     min-height: 60px;
     .busy-indicator {
       position: absolute;
       right: 0;
-      margin-top: 10px;
+      margin-top: 3px;
       margin-right: -25px;
     }
   }
@@ -273,6 +273,7 @@
         &:after {
           content: '*';
           padding: 3px;
+          color: @color-pf-red;
           vertical-align: center;
         }
       }
@@ -280,7 +281,10 @@
     &.has-danger {
       .control-label {
         &.required {
-          &:after { content: '*' }
+          &:after {
+            content: '*';
+            color: @color-pf-red;
+          }
         }
       }
       .form-control-danger {
