@@ -1,41 +1,34 @@
-<div class="flex-dialog">
-  <form role="form" #collaboratorsForm="ngForm" (ngSubmit)="addCollaborators()" novalidate>
-    <header class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12 add-dialog-header">
-          <h3><strong>Add collaborators</strong></h3>
-        </div>
-      </div>
-    </header>
-    <section>
-      <div class="form">
-        <fieldset class="add-fieldset">
+<form role="form" #collaboratorsForm="ngForm" (ngSubmit)="addCollaborators()" novalidate>
+  <header>
+    <h3 class="add-dialog-header">
+      <b>Add collaborators</b>
+    </h3>
+  </header>
+  <section>
+    <div class="form">
+      <fieldset class="add-fieldset">
         <div class="form-group">
           <label class="control-label">Collaborators</label>
-          <div>
-            <ss-multiselect-dropdown
-              #typeahead
-              class="user-select"
-              style="width: 300px;"
-              name="collaboratorsId"
-              (keyup)="changed($event)"
-              [options]="dropdownOptions"
-              [(ngModel)]="dropdownModel"
-              [settings]="dropdownSettings" required>
-            </ss-multiselect-dropdown>
-          </div>
+          <ss-multiselect-dropdown
+            #typeahead
+            class="user-select"
+            style="width: 300px;"
+            name="collaboratorsId"
+            (keyup)="changed($event)"
+            [options]="dropdownOptions"
+            [(ngModel)]="dropdownModel"
+            [settings]="dropdownSettings" required>
+          </ss-multiselect-dropdown>
         </div>
-        </fieldset>
+      </fieldset>
+    </div>
+  </section>
+  <footer>
+    <div class="add-footer">
+      <div>
+        <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
+        <button class="btn btn-primary" [disabled]="!collaboratorsForm.form.valid" type="submit">Add</button>
       </div>
-    </section>
-    <footer>
-      <div class="add-footer">
-        <div>
-          <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel
-          </button>
-          <button class="btn btn-primary" [disabled]="!collaboratorsForm.form.valid" type="submit">Add</button>
-        </div>
-      </div>
-    </footer>
-  </form>
-</div>
+    </div>
+  </footer>
+</form>

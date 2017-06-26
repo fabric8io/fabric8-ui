@@ -6,7 +6,7 @@ import { ContextService } from '../../../shared/context.service';
 
 @Component({
   host: {
-    'class': 'create-dialog flex-grow-1'
+    'class': 'create-dialog'
   },
   selector: 'create-area-dialog',
   templateUrl: './create-area-dialog.component.html',

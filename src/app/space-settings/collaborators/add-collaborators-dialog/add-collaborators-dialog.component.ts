@@ -8,7 +8,7 @@ import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-mul
 
 @Component({
   host: {
-    'class': 'add-dialog flex-grow-1'
+    'class': 'add-dialog'
   },
   selector: 'add-collaborators-dialog',
   templateUrl: './add-collaborators-dialog.component.html',

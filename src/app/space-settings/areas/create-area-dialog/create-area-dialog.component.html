@@ -1,42 +1,29 @@
-<div class="flex-dialog">
-  <form role="form" #areaForm="ngForm" (ngSubmit)="createArea()" novalidate>
-    <header class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12 create-dialog-header">
-          <h3><strong>Add New Area</strong></h3>
-        </div>
-      </div>
-    </header>
-    <section>
-      <div class="form">
-        <fieldset class="create-fieldset">
+<form role="form" #areaForm="ngForm" (ngSubmit)="createArea()" novalidate>
+  <header>
+    <h3 class="create-dialog-header">
+      <b>Add New Area</b>
+    </h3>
+  </header>
+  <section>
+    <div class="form">
+      <fieldset class="create-fieldset">
         <div class="form-group">
           <label for="name" class="control-label">Name</label>
-          <div>
-            <input id="name" name="name" type="text" class="form-control"
-                   placeholder="Enter a name for your area" [(ngModel)]="name" required/>
-          </div>
+          <input id="name" name="name" type="text" class="form-control" placeholder="Enter a name for your area" [(ngModel)]="name" required />
         </div>
         <div class="form-group">
           <label class="control-label">Parent area</label>
-          <div>
-            <select class="form-control" id="developmentProcess" [(ngModel)]="parentId"
-                    name="areaId" >
-              <option *ngFor="let p of areas" [ngValue]="p.id">{{itemPath(p.attributes)}}</option>
-            </select>
-          </div>
+          <select class="form-control" id="developmentProcess" [(ngModel)]="parentId" name="areaId">
+            <option *ngFor="let p of areas" [ngValue]="p.id">{{itemPath(p.attributes)}}</option>
+          </select>
         </div>
-        </fieldset>
-      </div>
-    </section>
-    <footer>
-      <div class="create-footer">
-        <div>
-          <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel
-          </button>
-          <button class="btn btn-primary" [disabled]="!areaForm.form.valid" type="submit">Create</button>
-        </div>
-      </div>
-    </footer>
-  </form>
-</div>
+      </fieldset>
+    </div>
+  </section>
+  <footer>
+    <div class="create-footer">
+      <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
+      <button class="btn btn-primary" [disabled]="!areaForm.form.valid" type="submit">Create</button>
+    </div>
+  </footer>
+</form>
