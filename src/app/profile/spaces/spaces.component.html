@@ -40,7 +40,7 @@
               <div class="space-item" *ngIf="s.relationalData && s.relationalData.creator && s.relationalData.creator.attributes">
                 <h2>
                   <a [routerLink]="['/', s.relationalData.creator.attributes.username, s.attributes.name]">{{s.attributes.name | spaceName}}</a>
-                  <i class="fa fa-trash" (click)="confirmDeleteSpace(s)"></i>
+                  <i class="fa fa-trash" (click)="confirmDeleteSpace(s)" *ngIf="canDeleteSpace(s.relationalData.creator.id)"></i>
                 </h2>
                 <p>{{s.description}}</p>
               </div>

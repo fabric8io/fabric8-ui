@@ -94,6 +94,10 @@ export class SpacesComponent implements OnInit {
     }
   }
 
+  canDeleteSpace(creatorId: string): boolean {
+    return creatorId === this.context.user.id;
+  }
+
   confirmDeleteSpace(space: Space): void {
     this.spaceToDelete = space;
     this.deleteSpace.open();
