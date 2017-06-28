@@ -34,6 +34,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   context: Context;
   email: string;
   emailInvalid: boolean = false;
+  isExperimental: boolean = false;
   gitHubLinked: boolean = false;
   imageUrl: string;
   imageUrlInvalid: boolean = false;
@@ -88,7 +89,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     } else if (this.getRequestParam('email') !== null) {
       this.setElementFocus(null, this.emailElement.nativeElement);
     } else if (this.getRequestParam('imageUrl') !== null) {
-        this.setElementFocus(null, this.imageUrlElement.nativeElement);
+      this.setElementFocus(null, this.imageUrlElement.nativeElement);
     } else if (this.getRequestParam('url') !== null) {
       this.setElementFocus(null, this.urlElement.nativeElement);
     }
@@ -307,6 +308,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     }
     if (this.url !== undefined && this.url.length > 0) {
       profile.url = this.url.trim();
+    }
+    if (this.isExperimental !== undefined && this.isExperimental !== null) {
+      profile.isExperimental = this.isExperimental;
     }
     return profile;
   }
