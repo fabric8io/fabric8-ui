@@ -111,7 +111,7 @@
     "angular2-tree-component": "2.7.0",
     "chunk-manifest-webpack2-plugin": "1.0.1",
     "core-js": "2.4.1",
-    "fabric8-planner": "0.24.26",
+    "fabric8-planner": "0.24.27",
     "fabric8-runtime-console": "0.17.18",
     "fabric8-stack-analysis-ui": "0.1.47",
     "http-server": "0.9.0",
