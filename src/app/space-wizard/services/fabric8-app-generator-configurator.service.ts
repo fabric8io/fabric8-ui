@@ -124,19 +124,6 @@ export class AppGeneratorConfiguratorService {
         }
         break;
       }
-      case 'gitorganisation': {
-        if ( !Array.isArray(input.value) ) {
-          let value: string = input.value || '';
-          if ( value ) {
-            // convert to lower case
-            value = value.trim().toLowerCase();
-            // remove white space
-            value = value.replace(/\s+/g, '');
-            input.value = value;
-          }
-        }
-        break;
-      }
       default: {
         break;
       }
