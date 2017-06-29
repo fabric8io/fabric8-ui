@@ -7,6 +7,12 @@
   <section>
     <div class="form">
       <fieldset class="create-fieldset">
+        <div *ngIf="errors" class="alert alert-danger">
+          <div [hidden]="!errors.unique">
+            <span class="pficon pficon-error-circle-o"></span>
+            <strong>Unique Name</strong> A unique name is required to add a new area.
+          </div>
+        </div>
         <div class="form-group">
           <label for="name" class="control-label">Name</label>
           <input id="name" name="name" type="text" class="form-control" placeholder="Enter a name for your area" [(ngModel)]="name" required />
