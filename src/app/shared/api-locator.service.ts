@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {Fabric8UIConfig} from "./config/fabric8-ui-config";
+
+import { Fabric8UIConfig } from "./config/fabric8-ui-config";
 
 @Injectable()
 export class ApiLocatorService {
@@ -10,6 +11,7 @@ export class ApiLocatorService {
       ['recommender', 'FABRIC8_RECOMMENDER_API_URL'],
       ['sso', 'FABRIC8_SSO_API_URL'],
       ['realm', 'FABRIC8_REALM'],
+      ['branding', 'BRANDING'],
       ['forge', 'FABRIC8_FORGE_API_URL']
 
     ]
@@ -36,6 +38,10 @@ export class ApiLocatorService {
 
   get realm(): string {
     return this.envVars.get('realm') || "fabric8";
+  }
+
+  get branding(): string {
+    return this.envVars.get('branding') || "fabric8";
   }
 
   get witApiUrl(): string {

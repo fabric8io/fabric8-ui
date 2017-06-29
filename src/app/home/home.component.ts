@@ -1,12 +1,13 @@
 import { Router } from '@angular/router';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 import { Space, Spaces, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
-
 import { Logger } from 'ngx-base';
+
+import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 @Component({
   selector: 'alm-home',
@@ -17,6 +18,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   loggedInUser: User;
   recent: Space[];
+  branding: string
   private _context: Context;
   private _defaultContext: Context;
   private _spaces: Space[] = [];
@@ -28,6 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private spaceService: SpaceService,
+    private fabric8UIConfig: Fabric8UIConfig,
     private router: Router,
     private contexts: Contexts,
     private spaces: Spaces,
@@ -45,6 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this._defaultContext = val;
       this.initSpaces();
     });
+    this.branding = Observable.of(this.fabric8UIConfig.branding);
   }
 
   ngOnDestroy() {
