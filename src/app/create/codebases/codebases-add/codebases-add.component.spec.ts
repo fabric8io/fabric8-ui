@@ -79,7 +79,7 @@ describe('Codebases Add Component', () => {
     codebase = {
       "attributes": {
         "type": "git",
-        "url": "https://github.com/fabric8-ui/fabric8-platform.git"
+        "url": "https://github.com/fabric8-ui/fabric8-ui.git"
       },
       "type": "codebases"
     } as Codebase;

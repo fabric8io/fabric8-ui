@@ -61,10 +61,10 @@ if [ $? -eq 0 ]; then
     TAG=$(echo $GIT_COMMIT | cut -c1-6)
 
     docker build -t fabric8-ui-deploy -f Dockerfile.deploy . && \
-    docker tag fabric8-ui-deploy registry.devshift.net/fabric8-ui/fabric8-platform:$TAG && \
-    docker push registry.devshift.net/fabric8-ui/fabric8-platform:$TAG && \
-    docker tag fabric8-ui-deploy registry.devshift.net/fabric8-ui/fabric8-platform:latest && \
-    docker push registry.devshift.net/fabric8-ui/fabric8-platform:latest
+    docker tag fabric8-ui-deploy registry.devshift.net/fabric8-ui/fabric8-ui:$TAG && \
+    docker push registry.devshift.net/fabric8-ui/fabric8-ui:$TAG && \
+    docker tag fabric8-ui-deploy registry.devshift.net/fabric8-ui/fabric8-ui:latest && \
+    docker push registry.devshift.net/fabric8-ui/fabric8-ui:latest
     if [ $? -eq 0 ]; then
       echo 'CICO: image pushed, npmjs published, ready to update deployed app'
       exit 0

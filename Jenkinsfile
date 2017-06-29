@@ -1,7 +1,7 @@
 @Library('github.com/fabric8io/fabric8-pipeline-library@master')
 def utils = new io.fabric8.Utils()
 def flow = new io.fabric8.Fabric8Commands()
-def project = 'fabric8-ui/fabric8-platform'
+def project = 'fabric8-ui/fabric8-ui'
 def ciDeploy = false
 def tempVersion
 def imageName
@@ -59,7 +59,7 @@ if (ciDeploy){
            route = deployOpenShiftSnapshot{
                mavenRepo = 'http://central.maven.org/maven2/io/fabric8/online/apps/fabric8-ui'
                githubRepo = 'fabric8-ui'
-               originalImageName = 'registry.devshift.net/fabric8-ui/fabric8-platform'
+               originalImageName = 'registry.devshift.net/fabric8-ui/fabric8-ui'
                newImageName = imageName
                openShiftProject = prj
            }
