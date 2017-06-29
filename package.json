@@ -21,7 +21,7 @@
       "email": "sudsen@redhat.com"
     }
   ],
-  "homepage": "https://github.com/fabric8io/fabric8-ui",
+  "homepage": "https://github.com/fabric8-ui/fabric8-platform",
   "license": "Apache-2.0",
   "scripts": {
     "ngc": "ngc -p tsconfig-aot.json",
@@ -230,10 +230,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fabric8io/fabric8-ui.git"
+    "url": "https://github.com/fabric8-ui/fabric8-platform.git"
   },
   "bugs": {
-    "url": "https://github.com/fabric8io/fabric8-ui/issues"
+    "url": "https://github.com/fabric8-ui/fabric8-platform/issues"
   },
   "engines": {
     "node": ">= 4.2.1",

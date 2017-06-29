@@ -38,7 +38,7 @@ def buildImage(imageName){
 
 def updateDownstreamProjects(v){
   pushPomPropertyChangePR {
-    propertyName = 'fabric8-ui.version'
+    propertyName = 'fabric8-platform.version'
     projects = [
             'fabric8io/fabric8-platform'
     ]

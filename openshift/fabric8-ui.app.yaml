@@ -32,7 +32,7 @@ objects:
           service: f8ui
       spec:
         containers:
-        - image: registry.devshift.net/fabric8io/fabric8-ui:${IMAGE_TAG}
+        - image: registry.devshift.net/fabric8-ui/fabric8-platform:${IMAGE_TAG}
           imagePullPolicy: Always
           name: f8ui
           ports:
