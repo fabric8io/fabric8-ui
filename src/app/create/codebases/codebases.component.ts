@@ -153,6 +153,13 @@ export class CodebasesComponent implements OnDestroy, OnInit {
 
   compare(codebase1: Codebase, codebase2: Codebase): number {
     var compValue = 0;
+
+    // this is necessary because the first item in the codebases array
+    // is an empty object that is needed to create the headers of the table
+    if (!Object.keys(codebase1).length || !Object.keys(codebase2).length) {
+      return compValue;
+    }
+
     if (this.currentSortField.id === 'name') {
       compValue = codebase1.name.localeCompare(codebase2.name);
     } else if (this.currentSortField.id === 'createdAt') {
