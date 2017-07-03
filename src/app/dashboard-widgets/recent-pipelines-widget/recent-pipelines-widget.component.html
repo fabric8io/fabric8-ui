@@ -17,24 +17,22 @@
     </div>
     <ul id="recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">
       <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async" >
-        <div class="list-view-pf-main-info">
-          <div class="list-view-pf-body">
-            <div class="list-view-pf-description">
-              <div class="list-group-item-text io-card__pipeline-column">
-                <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
-                <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
-                <a id="spacehome-pipelines-title" [routerLink]="['/', buildconfig.namespace, buildconfig.labels['space'], 'create', 'pipelines']" class="io-card__pipeline-column-name">{{buildconfig.name}}</a>
-                <span>|</span>
-                <a [href]="buildconfig.openShiftConsoleUrl" target="_blank" class="io-card__pipeline-column-build">Build #{{buildconfig.lastVersion}} <i class="fa fa-external-link" aria-hidden="true"></i></a>
-              </div>
-              <div class="list-group-item-text io-card__pipeline-column-start">
-                Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}
-              </div>
-              <div class="list-group-item-text io-card__pipeline-column-status">
-                Status: <b>{{buildconfig.statusPhase || 'Unknown'}}</b>
-              </div>
-            </div>
-          </div>
+        <div class="io-card__pipeline-column">
+          <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
+          <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
+          <a id="spacehome-pipelines-title" [routerLink]="['/', buildconfig.namespace, buildconfig.labels['space'], 'create', 'pipelines']" class="io-card__pipeline-column-name">
+            {{buildconfig.name}}
+          </a>
+          <span>|</span>
+          <a [href]="buildconfig.openShiftConsoleUrl" target="_blank" class="io-card__pipeline-column-build">
+            Build #{{buildconfig.lastVersion}} <i class="fa fa-external-link" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="io-card__pipeline-column-start">
+          Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}
+        </div>
+        <div class="io-card__pipeline-column-status">
+          Status: <b>{{buildconfig.statusPhase || 'Unknown'}}</b>
         </div>
       </li>
     </ul>
