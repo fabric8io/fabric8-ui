@@ -5,17 +5,20 @@
   transform: translate(@x, @y);
 }
 .card-pf {
-  &.analytical-report-widget { position: relative;
-    .fifty-shades-of-grey { color: @color-pf-black-500;
+  &.analytical-report-widget {
+    position: relative;
+    .fifty-shades-of-grey {
+      color: @color-pf-black-500;
     }
-    .fabric8-stack-analysis { position: relative;
+    .fabric8-stack-analysis {
+      position: relative;
       .recommender-overlay {
         position: absolute;
         top: 0;
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, .5);
         z-index: 99;
       }
       .recommendation-list {
@@ -30,8 +33,10 @@
             border: 1px solid @color-pf-black-150;
           }
         }
-        &.list-group-item { padding: 10px;
-          .list-view-pf-left { padding-right: 10px;
+        &.list-group-item {
+          padding: 10px;
+          .list-view-pf-left {
+            padding-right: 10px;
             .pficon { font-size: 15px; }
           }
         }

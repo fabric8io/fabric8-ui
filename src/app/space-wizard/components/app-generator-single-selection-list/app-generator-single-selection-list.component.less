@@ -11,8 +11,8 @@
     }
     li {
       >.selection-list-expander {
-        padding-right: 1.0rem;
-        padding-top: 0.3rem;
+        padding-right: 1rem;
+        padding-top: .3rem;
         width: 3.5rem;
         z-index: 100;
         width: 100%;
@@ -24,23 +24,24 @@
           background-color: transparent !important;
           margin-right: @grid-gutter-width/2;
           padding: @grid-gutter-width/4;
-          padding-top: 0.3rem;
+          padding-top: .3rem;
         }
         .list-item-view {
           border-top: 1px solid;
-          border-top-color:  @color-pf-black-200;
+          border-top-color: @color-pf-black-200;
           border-right: 1px solid;
-          border-right-color:  @color-pf-black-200;
+          border-right-color: @color-pf-black-200;
           border-bottom: 1px solid;
-          border-bottom-color:  @color-pf-black-200;
+          border-bottom-color: @color-pf-black-200;
           border-left: 1px solid;
-          border-left-color:  @color-pf-black-200;
+          border-left-color: @color-pf-black-200;
           &.collapsible { background-color: @color-pf-white; }
         }
         .list-item-content {
           flex-grow: 1;
           padding: 5px;
-          .list-item-label { font-weight: bold;
+          .list-item-label {
+            font-weight: bold;
             &-expander { width: 12px; }
           }
           .list-item-details {

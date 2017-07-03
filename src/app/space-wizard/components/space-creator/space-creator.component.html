@@ -27,7 +27,7 @@
             </div>
             <div [hidden]="!name.errors.unique">
               <span class="pficon pficon-error-circle-o"></span>
-              <strong>Duplicate Name</strong> '{{name.errors.unique?.requestedName}}'' is already in use as {{name.errors.unique?.existingSpace.relationalData.creator.attributes.username}}/{{name.errors.unique?.existingSpace.attributes.name}}.
+              <strong>Duplicate Name</strong> '{{name.errors.unique?.requestedName}}' is already in use as {{name.errors.unique?.existingSpace.relationalData.creator.attributes.username}}/{{name.errors.unique?.existingSpace.attributes.name}}.
             </div>
             <div [hidden]="!name.errors.invalid">
               <span class="pficon pficon-error-circle-o"></span>

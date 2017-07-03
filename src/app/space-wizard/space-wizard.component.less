@@ -1,46 +1,10 @@
 @import (reference) '../../assets/stylesheets/_base';
 @icon-path: '../../assets/stylesheets/_icons';
 
-// 0: 0;
-@debug-component-border: 0;
-// 0: 0;
-
-@debug-root-component-border-color: navy;
-@debug-component-border-color: lighten( navy,20%);
-@debug-child-component-border-color: lighten(@debug-component-border-color,30%);
-
-@debug-div-border-color: orange;
-@debug-aside-border-color: darken(orangered,20%);
-@debug-section-border-color: lighten(orangered,0%);
-
-@debug-header-border-color: darkgreen;
-@debug-main-border-color: lighten(@debug-header-border-color,10%);
-@debug-footer-border-color: lighten(@debug-header-border-color,20%);
-
-@debug-bootstrap-container-color: darken(saddlebrown,10%);
-@debug-bootstrap-row-color: lighten(@debug-bootstrap-container-color,10%);
-@debug-bootstrap-column-color: lighten(@debug-bootstrap-container-color,20%);
-
 // wizard
 @wizard-spacing: @grid-gutter-width/2;
-@wizard-header-color: @color-pf-black-100;
-@wizard-header-divider-color: @color-pf-black-300;
-@wizard-footer-color: @color-pf-white;
-@wizard-footer-divider-color: @color-pf-black-300;
-@wizard-padding: @grid-gutter-width / 2;
-
+@wizard-padding: @grid-gutter-width/2;
 @wizard-spacing: 0;
-// shadow distance from element
-@wizard-shadow-offset: 3px;
-// makes shadow bigger
-@wizard-shadow-spread-radius: 3px;
-// makes shadows edge blury
-@wizard-shadow-blur-radius: 3px;
-@wizard-section-column-background-color: @color-pf-white;// @btn-primary-bg;
-@wizard-layout-block-background-color: @color-pf-white;
-@wizard-layout-block-header-border-color: @color-pf-black-100;// @color-pf-blue-300;
-@wizard-layout-block-shadow-color: darken(@navbar-default-bg, 10%);
-@wizard-block-header-color: @color-pf-white;
 
 // make styles apply to host element and all child elements , including child components
 :host /deep/ {
@@ -48,12 +12,12 @@
   background-color: @color-pf-white;
   // ensure consistent padding on bootstrap rows
   // startswith col-
-  [class^="col-"] {
+  [class^='col-'] {
     padding-left: @grid-gutter-width/2;
     padding-right: @grid-gutter-width/2;
   }
   // contains col-
-  [class*=" col-"] {
+  [class*='col-'] {
     padding-left: @grid-gutter-width/2;
     padding-right: @grid-gutter-width/2;
   }
@@ -63,15 +27,15 @@
   .wizard-step-child-elements {
     >header {
       position: relative;
-      background-color: @wizard-header-color;
+      background-color: @color-pf-black-100;
       &.container-fluid {
-        padding-left: @wizard-spacing + 0 ;
-        padding-right: @wizard-spacing + 0 ;
+        padding-left: @wizard-spacing+0;
+        padding-right: @wizard-spacing+0;
         margin-left: 0;
         margin-right: 0;
         >.row {
-          margin-left: -(@wizard-spacing + 0) ;
-          margin-right: -(@wizard-spacing + 0);
+          margin-left: -(@wizard-spacing+0);
+          margin-right: -(@wizard-spacing+0);
         }
       }
       &.container { width: 100%; }
@@ -83,27 +47,27 @@
       width: auto;
       &.container-fluid {
         .form-horizontal {
-          margin-left: -(@grid-gutter-width / 2);
-          margin-right: -(@grid-gutter-width / 2);
+          margin-left: -(@grid-gutter-width/2);
+          margin-right: -(@grid-gutter-width/2);
         }
         .form-group {
           margin-left: 0;
           margin-right: 0;
         }
-        padding-left: @wizard-spacing  + 0;
-        padding-right: @wizard-spacing + 0;
+        padding-left: @wizard-spacing+0;
+        padding-right: @wizard-spacing+0;
         position: relative;
         >.row {
           position: relative;
-          margin-left: -(@wizard-spacing + 0) ;
-          margin-right: -(@wizard-spacing + 0);
+          margin-left: -(@wizard-spacing+0);
+          margin-right: -(@wizard-spacing+0);
           padding: 0;
           width: auto;
         }
       }
       &.container {
-        padding-left: @wizard-spacing + 0;
-        padding-right: @wizard-spacing + 0;
+        padding-left: @wizard-spacing+0;
+        padding-right: @wizard-spacing+0;
         margin-left: 0;
         margin-right: 0;
         width: 100%;
@@ -114,17 +78,17 @@
     }
     >footer {
       position: relative;
-      border-top: solid 1px;
-      border-top-color: @wizard-footer-divider-color;
-      background-color: @wizard-footer-color;
+      border-top: 1px solid;
+      border-top-color: @color-pf-black-300;
+      background-color: @color-pf-white;
       &.container-fluid {
-        padding-left: @wizard-spacing + 0 ;
-        padding-right: @wizard-spacing + 0 ;
+        padding-left: @wizard-spacing+0;
+        padding-right: @wizard-spacing+0;
         margin-left: 0;
         margin-right: 0;
         >.row {
-          margin-left: -(@wizard-spacing + 0) ;
-          margin-right: -(@wizard-spacing + 0);
+          margin-left: -(@wizard-spacing+0);
+          margin-right: -(@wizard-spacing+0);
         }
       }
       &.container { width: 100%; }

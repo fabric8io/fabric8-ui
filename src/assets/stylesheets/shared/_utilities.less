@@ -3,8 +3,11 @@
 */
 *,
 *:before,
-*:after { box-sizing: border-box; }
-.view-container { position: relative;
+*:after {
+  box-sizing: border-box;
+}
+.view-container {
+  position: relative;
   @content-padding: 0;
   >.view {
     &:extend(.fill-container);
@@ -63,7 +66,7 @@
 .padding-bottom-none { padding-bottom: 0 !important; }
 .padding-left-none { padding-left: 0 !important; }
 .padding-right-none { padding-right: 0 !important; }
-.border-transparent { border-color:transparent !important; }
+.border-transparent { border-color: transparent !important; }
 .border-none { border-width: 0 !important; }
 .border-top-none { border-top-width: 0 !important; }
 .border-bottom-none { border-bottom-width: 0 !important; }
@@ -92,8 +95,12 @@
     border: solid 0;
     border-color: lime;
     width: 100%;
-    .modal-header { display: none; /* suppress the ng-2 modal header */ }
-    .modal-footer { display:none; /* suppress the ng-2 modal footer */ }
+    .modal-header {
+      display: none; /* suppress the ng-2 modal header */
+    }
+    .modal-footer {
+      display: none; /* suppress the ng-2 modal footer */
+    }
     .modal-body {
       position: relative;
       padding: 0;

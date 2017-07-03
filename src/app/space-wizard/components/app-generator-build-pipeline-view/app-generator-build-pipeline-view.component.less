@@ -1,25 +1,25 @@
 @import (reference) '../../../../assets/stylesheets/_base';
 .pipeline {
   padding: 0.25rem;
-  border: solid 0;
+  border: 0 solid;
   border-color: @color-pf-black-400;
   background-color: @color-pf-white;
   display: inline-flex;
   align-content: center;
   align-items: center;
   .stage {
-    margin: 0.25rem;
-    padding: 0.25rem;
+    margin: .25rem;
+    padding: .25rem;
     min-width: 125px;
     max-width: 180px;
     overflow: hidden;
-    border: dashed 0;
+    border: 0 dashed;
     border-color: @color-pf-black-400;
     border-radius: .25rem;
     color: @color-pf-black-400;
     display: block;
     &:before {
-      height: 1.0rem;
+      height: 1rem;
       padding: 0 5px;
       color: @color-pf-black-400;
     }
@@ -30,8 +30,8 @@
     }
     &-graphic {
       position: relative;
-      padding: 0.25rem;
-      border: solid 0;
+      padding: .25rem;
+      border: 0 solid;
       border-color: @color-pf-black-400;
       display: block;
     }
@@ -51,7 +51,7 @@
         margin: 0 auto;
         height: 3px;
         width: 95%;
-        content: "";
+        content: '';
         background-color: @color-pf-black-400;
         z-index: 0;
       }
@@ -63,7 +63,7 @@
         &:before {
           position: absolute;
           left: 45%;
-          content: "\f05d";
+          content: '\f05d';
           font-family: FontAwesome;
           display: inline-block;
           color: @color-pf-green;
@@ -79,7 +79,7 @@
           margin: 0 auto;
           height: 3px;
           width: 100%;
-          content: "";
+          content: '';
           background-color: @color-pf-green;
           z-index: 0;
         }
@@ -92,7 +92,7 @@
         &:before {
           position: absolute;
           left: 45%;
-          content: "\f28d";
+          content: '\f28d';
           font-family: FontAwesome;
           display: inline-block;
           color: @color-pf-red;
@@ -108,7 +108,7 @@
           margin: 0 auto;
           height: 3px;
           width: 100%;
-          content: "";
+          content: '';
           background-color: @color-pf-red;
           z-index: 0;
         }
@@ -121,7 +121,7 @@
         &:before {
           position: absolute;
           left: 45%;
-          content: "\f28b";
+          content: '\f28b';
           font-family: FontAwesome;
           display: inline-block;
           color: @color-pf-orange;
@@ -137,7 +137,7 @@
           margin: 0 auto;
           height: 3px;
           width: 100%;
-          content: "";
+          content: '';
           background-color: @color-pf-orange;
           z-index: 0;
         }
@@ -145,4 +145,3 @@
     }
   }
 }
-

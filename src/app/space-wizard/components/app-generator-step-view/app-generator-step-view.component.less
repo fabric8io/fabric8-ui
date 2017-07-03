@@ -2,8 +2,8 @@
 :host {
   &.hidden { display: none; }
   .steps {
-    padding: 2.0rem;
-    border: solid 0;
+    padding: 2rem;
+    border: 0 solid;
     border-color: @color-pf-black-300;
     display: block;
     .step-seperator {
@@ -11,7 +11,7 @@
         padding: 0;
         display: block;
         height: 1px;
-        border: solid 0;
+        border: 0 solid;
         border-color: @color-pf-black-300;
         background-color: @color-pf-black-300;
         color: @color-pf-black-300;
@@ -19,7 +19,7 @@
     }
     .step {
       position: relative;
-      border: solid 0;
+      border: 0 solid;
       border-color: @color-pf-black-300;
       display: block;
       color: @color-pf-black-300;
@@ -30,17 +30,17 @@
       }
       .step-graphic {
         position: relative;
-        width: 4.0rem;
-        height: 4.0rem;
-        padding: 0.5rem;
+        width: 4rem;
+        height: 4rem;
+        padding: .5rem;
         margin: 0 auto;
-        border: solid 1px;
+        border: 1px solid;
         border-color: @color-pf-black-300;
         border-radius: 50%;
         display: block;
         text-align: center;
         &.active {
-          border: solid 2px;
+          border: 2px solid;
           border-color: @color-pf-blue-300;
           background-color: @color-pf-blue-300;
           color: @color-pf-white;
@@ -50,4 +50,3 @@
     }
   }
 }
-

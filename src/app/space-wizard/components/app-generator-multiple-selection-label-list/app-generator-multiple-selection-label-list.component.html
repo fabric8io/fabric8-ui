@@ -1,26 +1,25 @@
 <!--label list -->
-<div [class.with-filter]="showFilter===true"  class="label-list">
-  <span title="{{choice.description}}"  class="label label-primary"  *ngFor="let choice of field.display.choices|selectedItems">
+<div [class.with-filter]="showFilter===true" class="label-list">
+  <span title="{{choice.description}}" class="label label-primary" *ngFor="let choice of field.display.choices|selectedItems">
     <span>{{choice.id}}</span>
   </span>
-  <div title="Show filter for {{field.display.label}}" [hidden]="showFilter===true" (click)="showFilter=true"  class="filter-toggle"><span style class="fa fa-filter"></span></div>
+  <div title="Show filter for {{field.display.label}}" [hidden]="showFilter===true" (click)="showFilter=true" class="filter-toggle"><span style class="fa fa-filter"></span></div>
 </div>
 <!--input-->
 <div [class.hidden]="showFilter===false" class="input-group width-100">
   <!--<span (click)="toggleSelectAll(field)" class="input-group-addon">
     <span [ngClass]="{'fa-check-square-o' : allOptionsSelected(field),'fa-square-o' : !allOptionsSelected(field)}" class="fa"></span>
   </span>-->
-  <input #choiceFilter placeholder="Enter the text to filter for {{field.display.label}} ..." [class.form-control-danger]="!field.display.valid" id="{{field.name}}" name="{{field.name}}" class="form-control"
-    title="{{field.display.label}}" (keyup)="filterList(field,choiceFilter.value)" />
-  <span title="Close the filter for {{field.display.label}}"  class="input-group-addon"><span (click)="choiceFilter.value='';clearFilter(field)"  class="fa fa-close"></span></span>
+  <input #choiceFilter placeholder="Enter the text to filter for {{field.display.label}} ..." [class.form-control-danger]="!field.display.valid" id="{{field.name}}" name="{{field.name}}" class="form-control" title="{{field.display.label}}" (keyup)="filterList(field,choiceFilter.value)" />
+  <span title="Close the filter for {{field.display.label}}" class="input-group-addon"><span (click)="choiceFilter.value='';clearFilter(field)" class="fa fa-close"></span></span>
 </div>
 <!--options list (click)="toggleOption(field,choice)" -->
-<ul title="{{field.description}}" >
+<ul title="{{field.description}}">
   <li class="checkbox" [class.selected]="choice.selected" *ngFor="let choice of field.display.choices|visibleItems">
     <label>
-      <input type="checkbox" name="{{field.name}}" [(ngModel)]="choice.selected" (change)="selectChoice(choice)"  [checked]="choice.selected" ><span>{{choice.id}}</span>
+      <input type="checkbox" name="{{field.name}}" [(ngModel)]="choice.selected" (change)="selectChoice(choice)" [checked]="choice.selected" ><span>{{choice.id}}</span>
        <!--<span class="fa" [class.fa-check-square-o]="choice.selected" [class.fa-square-o]="!choice.selected"></span>-->
     </label>
-    <p title=''>{{choice.description}}</p>
+    <p>{{choice.description}}</p>
   </li>
 </ul>

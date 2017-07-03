@@ -5,26 +5,21 @@
   list-style: none;
   li { text-align: center; }
 }
-.wizard-step-tool-bar { margin-top: 15px; }
+.wizard-step-tool-bar {
+  margin-top: 15px;
+}
 header {
   position: absolute;
   top: -53px;
   min-height: 60px;
 }
 :host {
-  @panel-item-shadow-offset: 3px;
-  @panel-item-spacing: 0;
-  @panel-item-shadow-blur-radius: 3px;
-  @panel-item-shadow-spread-radius: 3px;
-  @panel-item-border-color: @color-pf-black-200;
-  @panel-item-layout-block-shadow-color: darken(@color-pf-black-200, 10%);
-  @panel-item-section-column-background-color: @color-pf-white;
-  @panel-item-padding: @grid-gutter-width / 2;
+  @panel-item-padding: @grid-gutter-width/2;
   &.forge-header {
     .row {
       &:first-of-type {
         background-color: @color-pf-white !important;
-        border-bottom: solid 1px;
+        border-bottom: 1px solid;
         border-bottom-color: @color-pf-black-300;
       }
     }
@@ -38,10 +33,10 @@ header {
       padding: 0;
       margin-top: 10px;
       margin-bottom: 10px;
-      border: solid 2px;
+      border: 2px solid;
       border-color: @color-pf-black-200;
       box-shadow: 1px 1px 4px @color-pf-black-200;
-      background-color: @panel-item-section-column-background-color;
+      background-color: @color-pf-white;
       > header {
         padding-top: 10px;
         text-align: center;
@@ -74,20 +69,20 @@ header {
           margin-bottom: -1px;
         }
         > section {
-          padding-top: @panel-item-padding + 1px;
+          padding-top: @panel-item-padding+1px;
           margin-bottom: -1px;
         }
         > div {
-          padding-top: @panel-item-padding + 1px;
+          padding-top: @panel-item-padding+1px;
           margin-bottom: -1px;
         }
         > footer {
           padding-top: 1px;
           margin-bottom: -1px;
         }
-        border: solid 2px;
+        border: 2px solid;
         border-color: @color-pf-blue-400;
-        box-shadow: @panel-item-shadow-offset @panel-item-shadow-blur-radius @panel-item-shadow-spread-radius darken(@panel-item-layout-block-shadow-color, 20%);
+        box-shadow: 3px 3px 3px (darken(@color-pf-black-200, 10%));
       }
     }
   }
