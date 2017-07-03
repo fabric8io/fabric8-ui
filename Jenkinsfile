@@ -38,7 +38,7 @@ fabric8UITemplate{
                         pipeline.ci()
                     }
                     def v = getNewVersion {}
-                    imageName = "fabric8/fabric8-ui:v${v}"
+                    imageName = "fabric8/fabric8-ui:${v}"
                     container('docker'){
                         pipeline.buildImage(imageName)
                     }
