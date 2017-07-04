@@ -59,16 +59,16 @@ export class AppGeneratorMultipleSelectionLabelListComponent implements OnInit, 
 
   selectOption(field: IField, choice: IFieldChoice) {
     choice.selected = true;
-    this.updateFieldValue(field);
+    this.updateFieldValue();
   }
   toggleOption(field: IField, choice: IFieldChoice) {
     choice.selected = !choice.selected;
-    this.updateFieldValue(field);
+    this.updateFieldValue();
   }
 
   deselectOption(field: IField, choice: IFieldChoice) {
     choice.selected = false;
-    this.updateFieldValue(field);
+    this.updateFieldValue();
   }
 
   clearFilter(field: IField) {
@@ -77,25 +77,24 @@ export class AppGeneratorMultipleSelectionLabelListComponent implements OnInit, 
   }
 
   selectChoice(choice) {
-    //console.log("Selected choice", choice);
-    this.updateFieldValue(this.field);
+    this.updateFieldValue();
   }
-    
-  updateFieldValue(field: IField): IField {
-    if ( !field ) {
+
+  updateFieldValue() {
+    if ( !this.field ) {
       return null;
     }
-    switch (field.display.inputType) {
+    switch (this.field.display.inputType) {
       case FieldWidgetClassificationOptions.MultipleSelection:
       {
-        if ( field.display.hasChoices ) {
-          field.value = field.display.choices
+        if ( this.field.display.hasChoices ) {
+          this.field.value = this.field.display.choices
           .filter((o) => o.selected)
           .map((o) => o.id);
         } else {
-          field.value = [];
+          this.field.value = [];
         }
-        if (field.display.required === true) {
+        if (this.field.display.required === true) {
           this.appGenerator.validate();
         }
         break;
@@ -104,7 +103,6 @@ export class AppGeneratorMultipleSelectionLabelListComponent implements OnInit, 
         break;
       }
     }
-    return field;
   }
 
   deselectAllOptions(field: IField) {
@@ -187,7 +185,7 @@ export class AppGeneratorMultipleSelectionLabelListComponent implements OnInit, 
         o.selected = false;
       }
     }
-    this.updateFieldValue(field);
+    this.updateFieldValue();
   }
 
   /** logger delegate delegates logging to a logger */

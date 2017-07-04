@@ -6,7 +6,7 @@ import { Codebase } from '../../create/codebases/services/codebase';
 
 import { ILoggerDelegate, LoggerFactory } from '../common/logger';
 import { IWorkflow } from '../models/workflow';
-import { formatJson } from '../common/utilities';
+import { formatJson, mergeArraysDistinctByKey } from '../common/utilities';
 import * as _ from 'lodash';
 import {
   IAppGeneratorCommand,
@@ -22,9 +22,9 @@ import {
 } from '../services/app-generator.service';
 
 interface IAddCodebaseResult {
-    codebase: Codebase;
-    forgeResult: any;
-    space: Space;
+  codebase: Codebase;
+  forgeResult: any;
+  space: Space;
 }
 
 interface IAddCodebaseDelegate {
@@ -37,12 +37,12 @@ export class Fabric8AppGeneratorClient {
    * make allowance for non-singleton d-i semantics
    */
   public static factoryProvider = {
-      provide: Fabric8AppGeneratorClient,
-      useFactory: (appGeneratorService, codebasesService, configuratorService, notifications, broadcaster, loggerFactory) => {
-        let tmp = new Fabric8AppGeneratorClient(appGeneratorService, codebasesService, configuratorService, notifications, broadcaster, loggerFactory);
-        return tmp;
-      },
-      deps: [IAppGeneratorServiceProvider.InjectToken, CodebasesService, AppGeneratorConfiguratorService, Notifications, Broadcaster, LoggerFactory]
+    provide: Fabric8AppGeneratorClient,
+    useFactory: (appGeneratorService, codebasesService, configuratorService, notifications, broadcaster, loggerFactory) => {
+      let tmp = new Fabric8AppGeneratorClient(appGeneratorService, codebasesService, configuratorService, notifications, broadcaster, loggerFactory);
+      return tmp;
+    },
+    deps: [IAppGeneratorServiceProvider.InjectToken, CodebasesService, AppGeneratorConfiguratorService, Notifications, Broadcaster, LoggerFactory]
   };
 
   static instanceCount: number = 1;
@@ -64,7 +64,7 @@ export class Fabric8AppGeneratorClient {
 
   private _fields: IFieldCollection;
   private _responseHistory: Array<IAppGeneratorResponse>;
-  private _currentResponse: IAppGeneratorResponse;
+  public _currentResponse: IAppGeneratorResponse|any;
   private _onCommandPipelineBeginStep: boolean = false;
   private _onCommandPipelineExecuteStep: boolean = false;
   private _onCommandPipelineNextStep: boolean = false;
@@ -76,7 +76,7 @@ export class Fabric8AppGeneratorClient {
     private _notifications: Notifications,
     private _broadcaster: Broadcaster,
     loggerFactory: LoggerFactory
-    ) {
+  ) {
 
     this.log = loggerFactory.createLoggerDelegate(this.constructor.name, Fabric8AppGeneratorClient.instanceCount++);
     this.log(`New instance ...`);
@@ -163,7 +163,7 @@ export class Fabric8AppGeneratorClient {
     }
   }
   // TODO: revisit primary action and ux interaction model for long for errors and information ???
-  public showCodebaseAddedNotification( addCodeBaseResult: IAddCodebaseResult) {
+  public showCodebaseAddedNotification(addCodeBaseResult: IAddCodebaseResult) {
     // const notifcationAction : NotificationAction = {
     //    name: `CodebaseDetails`,
     //    title: `View Details`,
@@ -181,7 +181,7 @@ export class Fabric8AppGeneratorClient {
 
 
   public acknowledgeSuccessMessage() {
-    if ( !this.invokeAddCodebaseDelegate()) {
+    if (!this.invokeAddCodebaseDelegate()) {
       // go back to the forge wizard selector
       this.reset();
       this.workflow.gotoPreviousStep();
@@ -191,13 +191,13 @@ export class Fabric8AppGeneratorClient {
   public finish() {
     this.execute()
       .then(
-        (execution) => {
-          this.addCodebaseDelegate = this.getAddCodebaseDelegate();
-        }
+      (execution) => {
+        this.addCodebaseDelegate = this.getAddCodebaseDelegate();
+      }
       )
       .catch(
-        (ex) => {
-          this.log({ origin : 'finish', message: 'App generator finish error', error: true }, ex);
+      (ex) => {
+        this.log({ origin: 'finish', message: 'App generator finish error', error: true }, ex);
       });
   }
 
@@ -233,16 +233,16 @@ export class Fabric8AppGeneratorClient {
         // do an initial validate
         title = this.state.title;
         this.processingMessage.title = `Validating ...`;
-        this.validate({showProcessingIndicator: false}).then((validation) => {
+        this.validate({ showProcessingIndicator: false }).then((validation) => {
           this.state.title = title;
           this.clearProcessingMessageView();
         }, (error) => {
           this.state.title = title;
-          this.displayErrorMessageView({error: error});
+          this.displayErrorMessageView({ error: error });
         });
       }, (error) => {
         this.state.title = title;
-        this.displayErrorMessageView({error: error});
+        this.displayErrorMessageView({ error: error });
       });
   }
 
@@ -257,47 +257,35 @@ export class Fabric8AppGeneratorClient {
     this.onCommandPipelineNextStep = true;
     this.processing = false;
     this.displayProcessingMessageView('Validating ...');
-    this.validate({showProcessingIndicator: false }).then((validated) => {
+    this.validate({ showProcessingIndicator: false }).then((validated) => {
       if (validated.response.payload.state.valid) {
-        // if validation succeeded
-        // this.processing = true;
+        // 1. set next cmd
         let nextCommand: IAppGeneratorCommand = this._currentResponse.context.nextCommand;
         nextCommand.parameters.fields = this.fields;
-        // pass along the validated data and fields
+
+        // 2. pass along the validated data and fields
         nextCommand.parameters.validatedData = validated.request.command.parameters.data;
+
+        // 3. add the accumulated validation fields to the next command
+        let validationCommand: IAppGeneratorCommand = this._currentResponse.context.validationCommand;
+        mergeArraysDistinctByKey(nextCommand.parameters.fields, validationCommand.parameters.fields, 'name');
+        mergeArraysDistinctByKey(nextCommand.parameters.data.inputs, validationCommand.parameters.data.inputs, 'name');
+
+        let cmdInfo = `${nextCommand.name} :: ${nextCommand.parameters.pipeline.step.name} :: ${nextCommand.parameters.pipeline.step.index}`;
         let request: IAppGeneratorRequest = {
           command: nextCommand
         };
-        // add the accumulated validation fields to the 'next' command
-        let validationCommand: IAppGeneratorCommand = this._currentResponse.context.validationCommand;
-        for (let field of validationCommand.parameters.fields) {
-          let requestField = nextCommand.parameters.fields.find((f) => f.name === field.name);
-          if (!requestField) {
-            nextCommand.parameters.fields.push(field);
-            let input = validationCommand.parameters.data.inputs.find(i => i.name === field.name);
-            if (input) {
-              nextCommand.parameters.data.inputs.push(input);
-            }
-          } else {
-            let input = validationCommand.parameters.data.inputs.find(i => i.name === field.name);
-            if (input) {
-              nextCommand.parameters.data.inputs.push(input);
-            }
-          }
-        }
-        //
-        let cmdInfo = `${nextCommand.name} :: ${nextCommand.parameters.pipeline.step.name} :: ${nextCommand.parameters.pipeline.step.index}`;
         this.log(`Next request for command ${cmdInfo}.`, request, console.groupCollapsed);
         this.displayProcessingMessageView('Loading the next step ...');
         this._appGeneratorService.getFields(request)
           .subscribe((response) => {
-            this.log(`Next response for command ${cmdInfo}.`, request , console.groupEnd);
+            this.log(`Next response for command ${cmdInfo}.`, request, console.groupEnd);
             this.applyTheNextCommandResponse({ request, response });
             this.clearProcessingMessageView();
             this.processing = false;
           }, (error) => {
             this.processing = false;
-            this.displayErrorMessageView({error: error});
+            this.displayErrorMessageView({ error: error });
           });
 
       } else {
@@ -307,7 +295,7 @@ export class Fabric8AppGeneratorClient {
 
     }).catch(error => {
       this.processing = false;
-      this.displayErrorMessageView({error: error});
+      this.displayErrorMessageView({ error: error });
       this.log({ origin: 'gotoNextStep', message: error.message, warning: true });
     });
 
@@ -321,30 +309,22 @@ export class Fabric8AppGeneratorClient {
 
       this.displayProcessingMessageView('Validating ...');
 
-      this.validate({ showProcessingIndicator: false }).then( (validated) => {
+      this.validate({ showProcessingIndicator: false }).then((validated) => {
         if (validated.response.payload.state.valid) {
           let executeCommand: IAppGeneratorCommand = validated.response.context.executeCommand;
           // pass along the validated data and fields
           let request: IAppGeneratorRequest = {
             command: executeCommand
           };
-          // add the accumulated validation fields to the 'next' command
+
+          // 2. pass along the validated data and fields
+          executeCommand.parameters.validatedData = validated.request.command.parameters.data;
+
+          // 3. add the accumulated validation fields to the 'next' command
           let validationCommand: IAppGeneratorCommand = this._currentResponse.context.validationCommand;
-          for (let field of validationCommand.parameters.fields) {
-            let requestField = executeCommand.parameters.fields.find((f) => f.name === field.name);
-            if (!requestField) {
-              executeCommand.parameters.fields.push(field);
-              let input = validationCommand.parameters.data.inputs.find(i => i.name === field.name);
-              if (input) {
-                executeCommand.parameters.data.inputs.push(input);
-              }
-            } else {
-              let input = validationCommand.parameters.data.inputs.find(i => i.name === field.name);
-              if (input) {
-                executeCommand.parameters.data.inputs.push(input);
-              }
-            }
-          }
+
+          mergeArraysDistinctByKey(executeCommand.parameters.fields, validationCommand.parameters.fields, 'name');
+          mergeArraysDistinctByKey(executeCommand.parameters.data.inputs, validationCommand.parameters.data.inputs, 'name');
 
           let cmdInfo = `${executeCommand.name}:${executeCommand.parameters.pipeline.step.name}:${executeCommand.parameters.pipeline.step.index}`;
           this.displayProcessingMessageView('Generating ...');
@@ -358,7 +338,7 @@ export class Fabric8AppGeneratorClient {
               resolve({ request, response });
               this.clearProcessingMessageView();
             }, (error) => {
-              this.displayErrorMessageView({error: error});
+              this.displayErrorMessageView({ error: error });
               reject(error);
             });
         } else {
@@ -367,21 +347,37 @@ export class Fabric8AppGeneratorClient {
       }, (validationError => {
         reject(validationError);
       })).catch(error => {
-        this.displayErrorMessageView({error: error});
+        this.displayErrorMessageView({ error: error });
         this.log({ origin: 'execute', message: error.message, warning: true });
         reject(error);
       });
     });
   }
 
-  public validate(options = { showProcessingIndicator: true}) {
+  public validate(options = { showProcessingIndicator: true }) {
     return new Promise<IAppGeneratorPair>((resolve, reject) => {
-      // update the values to be validated
+      let response = this._currentResponse;
+      // update the values (prameters.fields, parameters.data.inputs) to be validated
       let cmd: IAppGeneratorCommand = this._currentResponse.context.validationCommand;
+
+      // Replace fields with the validated data from previous step - for execute all input should be specified
+      for (let field of cmd.parameters.fields) {
+        let foundValidatedItem = cmd.parameters.validatedData.inputs.find((f) => f.name === field.name);
+        if (foundValidatedItem) {
+          field.value = foundValidatedItem.value;
+        }
+      }
+
+      // Add new fields (from current screen) to be validated
       for (let field of this.fields) {
         let requestField = cmd.parameters.fields.find((f) => f.name === field.name);
-        if ( requestField ) {
+        if (requestField) {
           requestField.value = field.value;
+        }
+
+        let foundInput = cmd.parameters.data.inputs.find((f) => f.name === field.name);
+        if (foundInput) {
+          foundInput.value = field.value;
         }
       }
 
@@ -407,15 +403,6 @@ export class Fabric8AppGeneratorClient {
           this.state.valid = validationState.valid;
           this.state.steps = validationState.steps;
 
-          // update any fields with the same name
-
-          for (let field of this.fields) {
-            let found = response.payload.fields.find((f) => f.name === field.name);
-            if ( found ) {
-              field.display = found.display;
-              field.value = found.value;
-            }
-          }
           resolve({ request, response });
           this.processing = false;
 
@@ -451,18 +438,18 @@ export class Fabric8AppGeneratorClient {
         let space = this._configuratorService.currentSpace;
         let codeBase = createTransientCodeBase(this.result);
         this.log(`Adding codebase ${this.result.gitUrl} to space ${space.attributes.name} ...`, this.result, console.groupCollapsed);
-        this._codebasesService.addCodebase( space.id, codeBase).subscribe(
-          ( codebase ) => {
+        this._codebasesService.addCodebase(space.id, codeBase).subscribe(
+          (codebase) => {
             this.log(`Successfully added codebase ${this.result.gitUrl} to space ${space.attributes.name} ...`, this.result, console.groupEnd);
             this._broadcaster.broadcast('codebaseAdded', codebase);
-            resolve( <IAddCodebaseResult>{
+            resolve(<IAddCodebaseResult>{
               codebase: codebase,
               forgeResult: this.result,
               space: space
             });
           },
-          ( addCodebaseError ) => {
-            reject( addCodebaseError );
+          (addCodebaseError) => {
+            reject(addCodebaseError);
           }
         );
 
@@ -473,8 +460,6 @@ export class Fabric8AppGeneratorClient {
 
   private applyTheNextCommandResponse(next: IAppGeneratorPair) {
 
-    let cmd: IAppGeneratorCommand = next.response.context.currentCommand;
-
     this.state = next.response.payload.state;
     let previousResponse = this._currentResponse;
     if (previousResponse) {
@@ -484,6 +469,7 @@ export class Fabric8AppGeneratorClient {
 
     }
     this._currentResponse = next.response;
+
     this.fields = next.response.payload.fields;
   }
 
@@ -496,7 +482,7 @@ export class Fabric8AppGeneratorClient {
         return `<span class="col-sm-7 property-value property-value-result">${value}</span></div></div>`;
       }
     };
-    let result:any = {};
+    let result: any = {};
     // build an array of result name/value/labels that can be sorted and augmented for readability and display
     let successMessageProperties = [];
     if (results.length > 0) {
@@ -513,9 +499,9 @@ export class Fabric8AppGeneratorClient {
           }
           if (response.hasOwnProperty(key)) {
             if (!result[key]) {
-              successMessageProperties.push( {
+              successMessageProperties.push({
                 name: key,
-                label: _.replace(_.capitalize( _.kebabCase(key)), /\-/g, ' '),
+                label: _.replace(_.capitalize(_.kebabCase(key)), /\-/g, ' '),
                 value: response[key]
               });
               result[key] = response[key];
@@ -614,7 +600,7 @@ export class Fabric8AppGeneratorClient {
   }
 
   private displaySuccessMessageView(messageTitle: string, messageBody: string) {
-    this.log({ message: messageTitle});
+    this.log({ message: messageTitle });
     this.successMessage = {
       title: messageTitle,
       body: messageBody
@@ -663,21 +649,22 @@ export class Fabric8AppGeneratorClient {
 
   /** return true if delegate invoked , else return false */
   private invokeAddCodebaseDelegate() {
-    if ( this.addCodebaseDelegate ) {
+    if (this.addCodebaseDelegate) {
       this.addCodebaseDelegate().then(
         (addCodebaseResult: IAddCodebaseResult) => {
           this.log({
-                     origin : 'acknowledgeSuccessMessage',
-                     message: 'Add codebase completed',
-                     info: true }, addCodebaseResult);
+            origin: 'acknowledgeSuccessMessage',
+            message: 'Add codebase completed',
+            info: true
+          }, addCodebaseResult);
           this.showCodebaseAddedNotification(addCodebaseResult);
           this.reset();
           // invoke the workflow complete handler that navigates to the current space
           this.workflow.finish();
         })
-      .catch((ex) => {
-        this.log({ origin : 'acknowledgeSuccessMessage', message: 'Add codebase error', error: true }, ex);
-      });
+        .catch((ex) => {
+          this.log({ origin: 'acknowledgeSuccessMessage', message: 'Add codebase error', error: true }, ex);
+        });
       return true;
     }
     return false;

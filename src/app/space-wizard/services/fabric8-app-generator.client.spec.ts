@@ -23,6 +23,7 @@ import { Broadcaster, Notifications } from 'ngx-base';
 import { cloneDeep } from 'lodash';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
+import { importWizardStep1_GitOrganisation_Validate, validate_Response , importWizardStep3_Jenkins_Validate } from './fabric8-app-generator.client.mock';
 
 describe('Fabric8AppGeneratorClient:', () => {
   let mockAppGeneratorService: any;
@@ -35,7 +36,7 @@ describe('Fabric8AppGeneratorClient:', () => {
   let space = {} as Space;
 
   beforeEach(() => {
-    mockAppGeneratorService = jasmine.createSpy('Fabric8AppGeneratorService');
+    mockAppGeneratorService = jasmine.createSpyObj('Fabric8AppGeneratorService', ['getFields']);
     mockCodebasesService = jasmine.createSpyObj('CodebasesService', ['addCodebase']);
     mockAppGeneratorConfigurationService = {};
     mockNotification = jasmine.createSpy('Notifications');
@@ -69,7 +70,7 @@ describe('Fabric8AppGeneratorClient:', () => {
     };
   });
 
-it('Add codebase delegate and run it', () => {
+  it('Add codebase delegate and run it', () => {
     // given
     const log = () => { };
     const codebaseReturned = {
@@ -118,12 +119,55 @@ it('Add codebase delegate and run it', () => {
     delegate().then(result => {
       // then
       console.log(`Result is: ${result}`);
-      expect(result.codebase.attributes.stackId).toEqual("vert.x")
+      expect(result.codebase.attributes.stackId).toEqual("vert.x");
     },
       err => {
         fail("AddCodebaseDelegate fails" + err);
       })
 
   });
+
+  it('When validate is successfully called on first step of import repository wizard', (done) => {
+    // given
+    mockLog.createLoggerDelegate.and.returnValue(() => { });
+    mockAppGeneratorService.getFields.and.returnValue(Observable.of(validate_Response ));
+    fabric8AppGeneratorClient = new Fabric8AppGeneratorClient(mockAppGeneratorService, mockCodebasesService, mockAppGeneratorConfigurationService, mockNotification, mockBroadcaster, mockLog);
+    fabric8AppGeneratorClient._currentResponse = importWizardStep1_GitOrganisation_Validate;
+
+    // when
+    fabric8AppGeneratorClient.validate({ showProcessingIndicator: true }).then(() => {
+      // then
+      // no new fields added as this is the first validation call
+      expect(fabric8AppGeneratorClient._currentResponse.context.validationCommand.parameters.fields.length)
+        .toEqual(importWizardStep1_GitOrganisation_Validate.context.validationCommand.parameters.fields.length);
+      // no merged fields
+      expect(fabric8AppGeneratorClient._currentResponse.context.validationCommand.parameters.fields)
+        .toEqual(importWizardStep1_GitOrganisation_Validate.context.validationCommand.parameters.fields);
+      expect(fabric8AppGeneratorClient.processing).toBeFalsy();
+      done();
+    })
+  });
+
+  // Each validation should send all the fields since the beginning of the wizard flow.
+  it('When validate is successfully called on last step of import repository wizard', (done) => {
+    // given
+    mockLog.createLoggerDelegate.and.returnValue(() => { });
+    mockAppGeneratorService.getFields.and.returnValue(Observable.of(validate_Response ));
+    fabric8AppGeneratorClient = new Fabric8AppGeneratorClient(mockAppGeneratorService, mockCodebasesService, mockAppGeneratorConfigurationService, mockNotification, mockBroadcaster, mockLog);
+    fabric8AppGeneratorClient._currentResponse = cloneDeep(importWizardStep3_Jenkins_Validate);
+
+    // when
+    fabric8AppGeneratorClient.validate({ showProcessingIndicator: true }).then(() => {
+      // then
+      // no new fields added as this is the first validation call
+      expect(fabric8AppGeneratorClient._currentResponse.context.validationCommand.parameters.fields.length)
+        .toEqual(importWizardStep3_Jenkins_Validate.context.validationCommand.parameters.fields.length);
+      // validatedData got merged into fields
+      expect(fabric8AppGeneratorClient._currentResponse.context.validationCommand.parameters.fields[1].value)
+        .not.toEqual(importWizardStep3_Jenkins_Validate.context.validationCommand.parameters.fields[1].value as any);
+      expect(fabric8AppGeneratorClient.processing).toBeFalsy();
+      done();
+    })
+  })
 
 });
