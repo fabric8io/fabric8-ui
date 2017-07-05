@@ -11,7 +11,7 @@
            target="_blank">in the documentation</a>
       </p>
       <div class="blank-slate-pf-main-action">
-        <button class="btn btn-primary btn-lg" (click)="createSpace.open()">Create a Space</button>
+        <button class="btn btn-primary btn-lg" (click)="createSpace.open()">Create</button>
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
 </ng-template>
 
 <!-- Create Space modal -->
-<modal #createSpace title="Create new space">
+<modal #createSpace>
   <modal-content>
     <space-wizard [host]="createSpace"></space-wizard>
   </modal-content>
