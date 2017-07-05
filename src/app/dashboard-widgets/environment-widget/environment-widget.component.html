@@ -17,7 +17,7 @@
     </div>
     <ul id="spacehome-environments-list" class="list-group" *ngIf="(apps | async).length > 0">
       <li class="list-group-item" *ngFor="let app of apps | async">
-        <h3>{{app.name}}</h3>
+        <h5>{{app.name}}</h5>
         <div *ngFor="let envInfo of app.environmentDetails">
           <span *ngIf="envInfo && envInfo.deployment">
             <a [href]="envInfo.exposeUrl" title="View the app in this environment" target="app" class="app-version-link" *ngIf="envInfo.exposeUrl">

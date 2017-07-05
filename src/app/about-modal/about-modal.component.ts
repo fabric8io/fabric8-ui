@@ -7,10 +7,12 @@ import {
   AfterViewInit,
   ElementRef,
   EventEmitter,
-  Input } from '@angular/core';
+  Input,
+  ViewEncapsulation } from '@angular/core';
 import { AboutService } from '../shared/about.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'fab-about-modal',
   templateUrl: './about-modal.component.html',
   styleUrls: ['./about-modal.component.less']

@@ -1,6 +1,7 @@
 import {
   Component,
-  OnDestroy
+  OnDestroy,
+  ViewEncapsulation
 } from '@angular/core';
 
 import 'rxjs/add/operator/map';
@@ -9,6 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ErrorService } from './error.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'f8-error',
   templateUrl: './error.component.html',
   styleUrls: ['./error.component.less']

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Modal } from 'ngx-modal';
 import { Context, AreaService, Area, AreaAttributes } from 'ngx-fabric8-wit';
@@ -8,6 +8,7 @@ import { ContextService } from '../../../shared/context.service';
   host: {
     'class': 'create-dialog'
   },
+  encapsulation: ViewEncapsulation.None,
   selector: 'create-area-dialog',
   templateUrl: './create-area-dialog.component.html',
   styleUrls: ['./create-area-dialog.component.less']

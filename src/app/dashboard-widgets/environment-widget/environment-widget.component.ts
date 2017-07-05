@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Observable, Subscription, ConnectableObservable, Subscriber, Subject, BehaviorSubject } from 'rxjs/Rx';
@@ -19,6 +19,7 @@ import { DeploymentConfigService } from "fabric8-runtime-console/src/app/kuberne
 import { RouteService } from "fabric8-runtime-console/src/app/kubernetes/service/route.service";
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-environment-widget',
   templateUrl: './environment-widget.component.html',
   styleUrls: ['./environment-widget.component.less']

@@ -7,6 +7,7 @@
 .nav {
   .open {
     & > a {
+      height: 43px;
       background-color: @color-pf-black-900;
       border-color: @color-pf-black-600;
     }
@@ -22,21 +23,24 @@
   }
   &-right { margin-right: 0; }
   .context {
-    &:hover { cursor: pointer; }
+    &:hover { .pointer; }
   }
   .status-dropdown {
     border-right: 1px solid;
     border-right-color: @color-pf-black-600;
   }
-  .user-dropdown-menu { height: 47px !important;
-    &:hover { cursor: pointer; }
+  .user-dropdown-menu {
+    height: 43px;
+    &:hover { .pointer; }
     .user-dropdown {
       width: 200px;
-      height: 50px;
+      height: 43px;
     }
   }
 }
 .navbar-pf {
+  min-height: 48px;
+  border-color: @color-pf-red-100;
   .navbar-nav .open .dropdown-menu.infotip {
     &.bottom-right {
       .arrow { left: 90%; }
@@ -67,11 +71,16 @@
     }
   }
 }
-.recent-items-toggle {
+.io-recent-items-active {
+  height: 43px;
   width: 275px;
   border-right: 1px solid;
   border-right-color: @color-pf-black-600;
+}
+.recent-items-toggle {
+  width: 273px;
   &-text {
+    height: 20px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -90,13 +99,13 @@
 .recent-items-dropdown {
   &.open {
     .recent-items { width: 275px;
-      &:hover { cursor: pointer; }
+      &:hover { .pointer; }
     }
   }
 }
 
 .status-dropdown {
-  &:hover { cursor: pointer; }
+  &:hover { .pointer; }
   a {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -120,7 +129,7 @@
       vertical-align: text-bottom;
       i { color: @color-pf-black-500; }
     }
-    &:hover { cursor: pointer; }
+    &:hover { .pointer; }
   }
 }
 .user-icon {
@@ -134,7 +143,7 @@
 .user-dropdown {
   padding: 10px 14px;
   width: 200px;
-  &:hover { cursor: pointer; }
+  &:hover { .pointer; }
   &-items {
     text-overflow: ellipsis;
     overflow: hidden;

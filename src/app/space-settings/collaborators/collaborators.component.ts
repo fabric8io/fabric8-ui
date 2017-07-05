@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IModalHost } from '../../space-wizard/models/modal-host';
 
@@ -11,6 +11,7 @@ import { ContextService } from '../../shared/context.service';
 import { find } from 'lodash';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-collaborators',
   templateUrl: 'collaborators.component.html',
   styleUrls: ['./collaborators.component.less']

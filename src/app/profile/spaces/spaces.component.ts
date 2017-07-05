@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Logger } from 'ngx-base';
@@ -7,6 +7,7 @@ import { IModalHost } from '../../space-wizard/models/modal-host';
 import { EventService } from "../../shared/event.service";
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-spaces',
   templateUrl: 'spaces.component.html',
   styleUrls: ['./spaces.component.less'],

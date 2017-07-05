@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router }            from '@angular/router';
-
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-settingsOverview',
   templateUrl: 'settings-overview.component.html',
   styleUrls: ['./settings-overview.component.less']

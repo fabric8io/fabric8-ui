@@ -22,7 +22,7 @@
     margin-bottom: 0;
   }
   .devProcessList {
-    width: calc(100%-40px);
+    width: ~'calc(100% - 40px)';
     position: absolute;
     list-style: none;
     padding: 0;
@@ -33,14 +33,14 @@
       width: 100%;
       float: left;
       padding: em(2);
-      cursor: pointer;
+      .pointer;
     }
   }
   .teamMembershipInputBlock {
     >div {
       padding: 0;
       label {
-        width: calc(100%-10%);
+        width: ~'calc(100% - 10%)';
         padding-left: em(20);
         font-weight: 500;
         span {

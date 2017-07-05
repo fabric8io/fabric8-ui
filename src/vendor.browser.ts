@@ -22,6 +22,7 @@ import 'rxjs';
 
 import 'ng2-bootstrap';
 //import 'ng2-dnd';
+//
 
 // import PatternFly CSS
 import '../node_modules/patternfly/dist/css/patternfly.min.css';

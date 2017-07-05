@@ -1,6 +1,6 @@
 import { PipelinesService } from './../../shared/runtime-console/pipelines.service';
 import { Observable, Subscription } from 'rxjs/Rx';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
@@ -15,6 +15,7 @@ import {
 import { StackAnalysesService, getStackRecommendations } from 'fabric8-stack-analysis-ui';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-analytical-report-widget',
   templateUrl: './analytical-report-widget.component.html',
   styleUrls: ['./analytical-report-widget.component.less'],

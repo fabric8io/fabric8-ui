@@ -19,6 +19,7 @@ import { LoginService } from './shared/login.service';
  * Top Level Component
  */
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'f8-app',
   styleUrls: ['./app.component.less'],
   templateUrl: './app.component.html'

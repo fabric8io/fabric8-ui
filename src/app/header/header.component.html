@@ -18,7 +18,7 @@
       <div class="collapse navbar-collapse" [ngClass]="{ 'in' : isIn }">
         <ul class="nav navbar-nav">
           <li class="context dropdown recent-items-dropdown" dropdown *ngIf="loggedInUser">
-            <a class="recent-items-toggle" dropdown-open data-toggle="tooltip" title="{{context.name}}">
+            <a class="recent-items-toggle io-recent-items-active" dropdown-open data-toggle="tooltip" title="{{context.name}}">
               <div id="header_dropdownToggle" class="recent-items-toggle-text">
               <span class="nav-item-icon">
                 <span class=" {{context.type?.icon}}"></span>

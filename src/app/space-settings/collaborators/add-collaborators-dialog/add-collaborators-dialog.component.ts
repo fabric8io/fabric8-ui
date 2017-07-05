@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Modal } from 'ngx-modal';
 import { Context, CollaboratorService } from 'ngx-fabric8-wit';
@@ -10,6 +10,7 @@ import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-mul
   host: {
     'class': 'add-dialog'
   },
+  encapsulation: ViewEncapsulation.None,
   selector: 'add-collaborators-dialog',
   templateUrl: './add-collaborators-dialog.component.html',
   styleUrls: ['./add-collaborators-dialog.component.less']

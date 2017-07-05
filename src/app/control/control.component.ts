@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-control',
   templateUrl: './control.component.html',
   styleUrls: ['./control.component.less']

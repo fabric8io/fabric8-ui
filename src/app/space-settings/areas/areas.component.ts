@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IModalHost } from '../../space-wizard/models/modal-host';
 
@@ -8,6 +8,7 @@ import { ListViewConfig, EmptyStateConfig } from 'ngx-widgets';
 import { ContextService } from '../../shared/context.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-areas',
   templateUrl: 'areas.component.html',
   styleUrls: ['./areas.component.less']

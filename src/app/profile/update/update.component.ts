@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -14,6 +14,7 @@ import { ProviderService } from '../../getting-started/services/provider.service
 import { TenentService } from '../services/tenent.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-update',
   templateUrl: 'update.component.html',
   styleUrls: ['./update.component.less'],

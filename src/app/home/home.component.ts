@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -15,6 +15,7 @@ import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']

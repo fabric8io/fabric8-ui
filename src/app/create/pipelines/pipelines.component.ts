@@ -1,5 +1,5 @@
 import { Fabric8UIConfig } from './../../shared/config/fabric8-ui-config';
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
@@ -27,6 +27,7 @@ import { SpaceWizardComponent } from './../../space-wizard/space-wizard.componen
 import { Context, Contexts } from 'ngx-fabric8-wit';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-pipelines',
   templateUrl: 'pipelines.component.html',
   styleUrls: ['./pipelines.component.less']
