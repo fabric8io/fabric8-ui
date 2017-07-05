@@ -46,7 +46,7 @@ describe('Codebases Item Component', () => {
         "last_used_workspace": "",
         "stackId": "",
         "type": "git",
-        "url": "https://github.com/almighty/almighty-core.git"
+        "url": "https://github.com/fabric8-services/fabric8-wit.git"
       },
       "id": "6f5b6738-170e-490e-b3bb-d10f56b587c8",
       "links": {
@@ -65,8 +65,8 @@ describe('Codebases Item Component', () => {
         }
       },
       "type": "codebases",
-      "name": "https://github.com/almighty/almighty-core",
-      "url": "https///github.com/almighty/almighty-core"
+      "name": "https://github.com/fabric8-services/fabric8-wit",
+      "url": "https///github.com/fabric8-services/fabric8-wit"
     };
     gitHubServiceMock.getRepoDetailsByUrl.and.returnValue(Observable.of(expectedGitHubRepoDetails));
     fixture = TestBed.createComponent(CodebasesItemComponent);

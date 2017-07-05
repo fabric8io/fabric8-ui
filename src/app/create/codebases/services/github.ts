@@ -138,7 +138,7 @@ export class GitHubRepo {
 }
 
 // Repo details
-// https://api.github.com/repos/almighty/almighty-core
+// https://api.github.com/repos/fabric8-services/fabric8-wit
 export class GitHubRepoDetails extends GitHubRepo {
   "parent": GitHubRepo;
   "source": GitHubRepo;
@@ -148,7 +148,7 @@ export class GitHubRepoDetails extends GitHubRepo {
 }
 
 // License
-// https://api.github.com/repos/almighty/almighty-core/license
+// https://api.github.com/repos/fabric8-services/fabric8-wit/license
 export class GitHubRepoLicense {
   "name": string;
   "path": string;
@@ -176,7 +176,7 @@ export class GitHubRepoLicense {
 }
 
 // Last commit
-// https://api.github.com/repos/almighty/almighty-core/git/refs/heads/master
+// https://api.github.com/repos/fabric8-services/fabric8-wit/git/refs/heads/master
 export class GitHubRepoLastCommit {
   "ref": string;
   "url": string;
@@ -188,7 +188,7 @@ export class GitHubRepoLastCommit {
 }
 
 // Commit
-// https://api.github.com/repos/almighty/almighty-core/commits{/sha}
+// https://api.github.com/repos/fabric8-services/fabric8-wit/commits{/sha}
 export class GitHubRepoCommit {
   "sha": string;
   "commit": {

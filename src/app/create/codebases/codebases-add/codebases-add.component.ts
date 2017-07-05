@@ -184,7 +184,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
    * Get GitHub full name
    *
    * @param repoUrl The GitHub repo URL
-   * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
+   * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getGitHubRepoFullName(repoUrl: string): string {
     let url = repoUrl.trim();
@@ -206,8 +206,8 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
   /**
    * Get GitHub full name from browser URL
    *
-   * @param url The GitHub browser URL (e.g., https://github.com/almighty/almighty-core)
-   * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
+   * @param url The GitHub browser URL (e.g., https://github.com/fabric8-services/fabric8-wit)
+   * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getGitHubRepoFullNameFromBrowserUrl(url: string): string {
     let prefix = "https://github.com/";
@@ -220,8 +220,8 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
   /**
    * Get GitHub full name from HTTPS URL
    *
-   * @param url The GitHub HTTPS URL (e.g., https://github.com/almighty/almighty-core.git)
-   * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
+   * @param url The GitHub HTTPS URL (e.g., https://github.com/fabric8-services/fabric8-wit.git)
+   * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getGitHubRepoFullNameFromHttpsUrl(url: string): string {
     let prefix = "https://github.com/";
@@ -235,8 +235,8 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
   /**
    * Get GitHub full name from SSH URL
    *
-   * @param url The GitHub clone URL (e.g., git@github.com:almighty/almighty-core.git)
-   * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
+   * @param url The GitHub clone URL (e.g., git@github.com:fabric8-services/fabric8-wit.git)
+   * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getGitHubRepoFullNameFromSshUrl(url: string): string {
     let prefix = "git@github.com:";
@@ -248,7 +248,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   /**
-   * Validate GitHub repo full name (e.g., almighty/almighty-core)
+   * Validate GitHub repo full name (e.g., fabric8-services/fabric8-wit)
    *
    * @returns {boolean}
    */
