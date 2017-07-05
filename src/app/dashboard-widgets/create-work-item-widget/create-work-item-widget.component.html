@@ -31,7 +31,7 @@
               <div class="list-group-item-text">
                 <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
                 <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
-                <span>{{workItem.id}}</span>
+                <span>{{workItem.attributes['system.number']}}</span>
                 <span class="work-item-title" *ngIf="workItem.attributes">
                   <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="create-work-item-link">
                     {{workItem.attributes['system.title']}}
