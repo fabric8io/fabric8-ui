@@ -1,4 +1,3 @@
-//
 import { Broadcaster, Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
 import { CodebasesService } from '../../create/codebases/services/codebases.service';
 import { Space } from 'ngx-fabric8-wit';
@@ -20,6 +19,7 @@ import {
   IAppGeneratorMessage,
   AppGeneratorConfiguratorService
 } from '../services/app-generator.service';
+import { cloneDeep } from 'lodash';
 
 interface IAddCodebaseResult {
   codebase: Codebase;
@@ -64,7 +64,7 @@ export class Fabric8AppGeneratorClient {
 
   private _fields: IFieldCollection;
   private _responseHistory: Array<IAppGeneratorResponse>;
-  public _currentResponse: IAppGeneratorResponse|any;
+  public _currentResponse: IAppGeneratorResponse | any;
   private _onCommandPipelineBeginStep: boolean = false;
   private _onCommandPipelineExecuteStep: boolean = false;
   private _onCommandPipelineNextStep: boolean = false;
@@ -425,34 +425,46 @@ export class Fabric8AppGeneratorClient {
   getAddCodebaseDelegate(): IAddCodebaseDelegate {
     let delegate: IAddCodebaseDelegate = () => {
       return new Promise<object>((resolve, reject) => {
-        let createTransientCodeBase = (result) => {
+        let createTransientCodeBase = (repo, stack) => {
           return {
             attributes: {
               type: 'git',
-              url: result.gitUrl,
-              stackId: result.cheStackId
+              url: repo,
+              stackId: stack
             },
             type: 'codebases'
           } as Codebase;
         };
         let space = this._configuratorService.currentSpace;
-        let codeBase = createTransientCodeBase(this.result);
-        this.log(`Adding codebase ${this.result.gitUrl} to space ${space.attributes.name} ...`, this.result, console.groupCollapsed);
-        this._codebasesService.addCodebase(space.id, codeBase).subscribe(
-          (codebase) => {
-            this.log(`Successfully added codebase ${this.result.gitUrl} to space ${space.attributes.name} ...`, this.result, console.groupEnd);
-            this._broadcaster.broadcast('codebaseAdded', codebase);
-            resolve(<IAddCodebaseResult>{
-              codebase: codebase,
-              forgeResult: this.result,
-              space: space
-            });
-          },
-          (addCodebaseError) => {
-            reject(addCodebaseError);
-          }
-        );
-
+        let result = this.result;
+        let codebases: Codebase[] = [];
+        // Quickstart wizard to create one codebase
+        if (this.result.gitUrl) {
+          let codeBase = createTransientCodeBase(this.result.gitUrl, this.result.cheStackId);
+          codebases.push(codeBase);
+        }
+        // Import repo wizard should create (several) codebases
+        for (let key in this.result.gitRepositoryNames) {
+          const repo = this.result.gitRepositoryNames[key];
+          let codeBase = createTransientCodeBase(`https://github.com/${this.result.gitOwnerName}/${repo}.git`, this.result.cheStackId);
+          codebases.push(codeBase);
+        }
+        for (let key in codebases) {
+          this._codebasesService.addCodebase(space.id, codebases[key]).subscribe(
+            (codebase) => {
+              this.log(`Successfully added codebase ${codebase.attributes.url} to space ${space.attributes.name} ...`, this.result, console.groupEnd);
+              this._broadcaster.broadcast('codebaseAdded', codebase);
+              resolve(<IAddCodebaseResult>{
+                codebase: codebase,
+                forgeResult: this.result,
+                space: space
+              });
+            },
+            (addCodebaseError) => {
+              reject(addCodebaseError);
+            }
+          );
+        }
       });
     };
     return delegate;
@@ -473,59 +485,59 @@ export class Fabric8AppGeneratorClient {
     this.fields = next.response.payload.fields;
   }
 
+  public formatForDisplay(result: any): string {
+    let msg = ``;
+    let successMessageProperties = [];
+    for (let key in result) {
+      successMessageProperties.push({
+        name: key,
+        label: _.replace(_.capitalize(_.kebabCase(key)), /\-/g, ' '),
+        value: Array.isArray(result[key]) ? result[key].join('&') : result[key]
+      });
+    }
+    let buildHyperlink = (value) => {
+      let values = value.split('&');
+      let msg = '';
+      for (let key in values) {
+        if ((values[key] || '').toString().toLowerCase().startsWith('http')) {
+          msg = `${msg}<a class="col-sm-7 property-value property-value-result property-value-link" target="_blank" href="${values[key]}" >${values[key]}</a>`;
+        } else {
+          msg = `${msg}<span class="col-sm-7 property-value property-value-result">${values[key]}</span>`;
+        }
+      }
+      return msg + '</div>';
+    };
+    // sort the labels alphabetically
+    successMessageProperties.sort((a, b) => {
+      if (a.label < b.label) {
+        return -1;
+      }
+      if (a.label > b.label) {
+        return 1;
+      }
+      return 0;
+    });
+    // now build the message to be displayed
+    successMessageProperties.forEach(property => {
+      if (property.value) {
+        msg = `${msg}\n<div class="form-group"><label class="col-sm-5 property-name property-name-result" >${property.label}</label>${buildHyperlink(property.value)}`;
+      }
+    });
+    return msg;
+  }
+
   private applyTheExecuteCommandResponse(execution: IAppGeneratorPair) {
     let results = execution.response.payload.results || [];
-    let buildHyperlink = (value) => {
-      if ((value || '').toString().toLowerCase().startsWith('http')) {
-        return `<a class="col-sm-7 property-value property-value-result property-value-link" target="_blank" href="${value}" >${value}</a></div></div>`;
-      } else {
-        return `<span class="col-sm-7 property-value property-value-result">${value}</span></div></div>`;
-      }
-    };
-    let result: any = {};
-    // build an array of result name/value/labels that can be sorted and augmented for readability and display
-    let successMessageProperties = [];
     if (results.length > 0) {
-      let msg = ``;
       results = results.filter(r => r !== null);
-      // format to display property label/value
-      for (let response of results) {
-        if (Array.isArray(response)) {
-          continue;
-        }
-        for (let key in response) {
-          if (Array.isArray(response[key])) {
-            continue;
-          }
-          if (response.hasOwnProperty(key)) {
-            if (!result[key]) {
-              successMessageProperties.push({
-                name: key,
-                label: _.replace(_.capitalize(_.kebabCase(key)), /\-/g, ' '),
-                value: response[key]
-              });
-              result[key] = response[key];
-            }
-          }
+      this.result = results[0]; // for now only one result populated is returned from forge backend
+      let resultDisplay = cloneDeep(this.result);
+      for (let key in resultDisplay.gitRepositoryNames) {
+        if (this.result.gitOwnerName) {
+          resultDisplay.gitRepositoryNames[key] = `https://github.com/${resultDisplay.gitOwnerName}/${resultDisplay.gitRepositoryNames[key]}.git`;
         }
       }
-      // sort the labels alphabetically
-      successMessageProperties.sort((a, b) => {
-        if (a.label < b.label) {
-          return -1;
-        }
-        if (a.label > b.label) {
-          return 1;
-        }
-        return 0;
-      });
-      // now build the message to be displayed
-      successMessageProperties.forEach(property => {
-        if (property.value) {
-          msg = `${msg}\n<div class="form-group"><label class="col-sm-5 property-name property-name-result" >${property.label}</label>${buildHyperlink(property.value)}`;
-        }
-      });
-      this.result = result;
+      let msg = this.formatForDisplay(resultDisplay);
       this.displaySuccessMessageView(`A starter application was created.`, msg);
     }
   }
