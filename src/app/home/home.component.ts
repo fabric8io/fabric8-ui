@@ -50,6 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.initSpaces();
     });
 
+    this.brandInformation = new BrandInformation();
     if (this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === "fabric8") {
       this.brandInformation.logo = "../../assets/images/fabric8_logo.svg";
       // replace background image with fabric8 background once available
