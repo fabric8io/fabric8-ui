@@ -11,7 +11,7 @@ import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 import { DummyService } from '../../../shared/dummy.service';
 import { SpaceNamespaceService } from '../../../shared/runtime-console/space-namespace.service';
-
+import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
 import { IWorkflow } from '../../models/workflow';
 import { AppGeneratorConfiguratorService } from '../../services/app-generator.service';
@@ -27,6 +27,8 @@ export class SpaceCreatorComponent implements OnInit {
   static instanceCount: number = 1;
 
   @Input() workflow: IWorkflow = null;
+  spaceTemplates: ProcessTemplate[];
+  selectedTemplate: ProcessTemplate;
 
   constructor(
     private router: Router,
@@ -45,11 +47,16 @@ export class SpaceCreatorComponent implements OnInit {
       this.log = logger;
     }
     this.log(`New instance ...`);
-
+    this.spaceTemplates = dummy.processTemplates;
   }
 
   ngOnInit() {
+
     this.log(`ngInit ...`);
+    const srumTemplates = this.spaceTemplates.filter(template => template.name == "Scenario Driven Planning")
+    if (srumTemplates && srumTemplates.length > 0) {
+      this.selectedTemplate = srumTemplates[0];
+    }
   }
 
   /*
