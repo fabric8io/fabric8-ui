@@ -447,7 +447,10 @@ export class Fabric8AppGeneratorClient {
         for (let key in this.result.gitRepositoryNames) {
           const repo = this.result.gitRepositoryNames[key];
           let codeBase = createTransientCodeBase(`https://github.com/${this.result.gitOwnerName}/${repo}.git`, this.result.cheStackId);
-          codebases.push(codeBase);
+          const foundCodebase = codebases.find(code => code.attributes.url == codeBase.attributes.url);
+          if (!foundCodebase) {
+            codebases.push(codeBase);
+          }
         }
         for (let key in codebases) {
           this._codebasesService.addCodebase(space.id, codebases[key]).subscribe(
@@ -530,7 +533,7 @@ export class Fabric8AppGeneratorClient {
     let results = execution.response.payload.results || [];
     if (results.length > 0) {
       results = results.filter(r => r !== null);
-      this.result = results[0]; // for now only one result populated is returned from forge backend
+      this.result = results[results.length - 1]; // for now only one result populated is returned from forge backend
       let resultDisplay = cloneDeep(this.result);
       for (let key in resultDisplay.gitRepositoryNames) {
         if (this.result.gitOwnerName) {
