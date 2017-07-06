@@ -72,7 +72,7 @@ Page layout as of April 24, 2017 - UI elements for Nav bar are in: openshift-io-
   }
 
   get createSpaceButton () {
-    return element(by.buttonText('Create Space'));
+    return element(by.id('createSpaceButton'));
   }
   clickCreateSpaceButton () {
     browser.wait(until.elementToBeClickable(this.createSpaceButton), constants.LONG_WAIT, 'Failed to find element createSpaceButton');
