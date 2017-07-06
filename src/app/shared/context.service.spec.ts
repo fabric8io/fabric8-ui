@@ -18,7 +18,6 @@ import {
   SpaceNamePipe
 } from 'ngx-fabric8-wit';
 import { ProfileService } from './../profile/profile.service';
-import { DummyService } from './../shared/dummy.service';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { EventService } from "./event.service";
 import { Observable } from 'rxjs';
@@ -87,7 +86,6 @@ describe('Context Service:', () => {
         {
           provide: SpaceNamePipe, useValue: mockSpaceNamePipe
         },
-        DummyService,
         EventService,
         ContextService
       ]

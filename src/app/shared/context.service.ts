@@ -19,9 +19,6 @@ import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { Observable } from 'rxjs';
 
 import { LocalStorageService } from 'angular-2-local-storage';
-
-
-import { DummyService } from './../shared/dummy.service';
 import { Navigation } from './../models/navigation';
 import { MenusService } from './../header/menus.service';
 
@@ -42,7 +39,7 @@ interface RawContext {
 export class ContextService implements Contexts {
 
   readonly RECENT_CONTEXT_LENGTH = 8;
-
+  readonly RESERVED_WORDS: string[] = [];
   private _current: Subject<Context> = new ReplaySubject<Context>(1);
   private _default: ConnectableObservable<Context>;
   private _recent: ConnectableObservable<Context[]>;
@@ -50,7 +47,6 @@ export class ContextService implements Contexts {
   private _deleteFromRecent: Subject<Context>;
 
   constructor(
-    private dummy: DummyService,
     private router: Router,
     private broadcaster: Broadcaster,
     private menus: MenusService,
@@ -378,7 +374,7 @@ export class ContextService implements Contexts {
       if (arg.startsWith('_')) {
         return true;
       }
-      for (let r of this.dummy.RESERVED_WORDS) {
+      for (let r of this.RESERVED_WORDS) {
         if (arg === r) {
           return true;
         }
