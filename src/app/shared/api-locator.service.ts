@@ -41,7 +41,7 @@ export class ApiLocatorService {
   }
 
   get branding(): string {
-    return this.envVars.get('branding') || "fabric8";
+    return this.envVars.get('branding') || "openshiftio";
   }
 
   get witApiUrl(): string {

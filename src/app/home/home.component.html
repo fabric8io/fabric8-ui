@@ -1,14 +1,14 @@
 <div class="container-fluid container-cards-pf home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
   <div class="row row-cards-pf">
     <div class="col-sm-12">
-      <section class="card-pf card-pf-view home-banner">
+      <section class="card-pf card-pf-view home-banner {{brandInformation.backgroundClass}}">
         <aside class="col-sm-12 col-lg-3 vert-center">
           <div class="card-pf-body text-center">
             <div class="col-sm-12">
-              <img src="../../assets/images/OpenShift-io_logo.png" class="home-logo"/>
+              <img [src]="brandInformation.logo" class="home-logo"/>
             </div>
             <div class="col-sm-12 margin-top-15">
-              <p class="card-pf-info home-banner-title">A free, end-to-end, cloud-native development experience.</p>
+              <p class="card-pf-info home-banner-title">{{brandInformation.description}}</p>
             </div>
           </div>
         </aside>
@@ -19,11 +19,11 @@
                 <span class="fa fa-search card-pf-icon-circle home-icon"></span>
               </div>
               <h2 class="card-pf-title home-title">
-                OpenShift.io information
+                {{brandInformation.name}} information
               </h2>
               <p class="card-pf-info">
-                <a href="https://openshift.io" target="_blank">Learn more</a>
-                about what OpenShift.io can do for you.
+                <a [href]="brandInformation.moreInfoLink" target="_blank">Learn more</a>
+                about what {{brandInformation.name}} can do for you.
               </p>
             </div>
           </div>
