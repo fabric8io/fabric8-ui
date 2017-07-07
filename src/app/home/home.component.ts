@@ -10,6 +10,10 @@ import { Logger } from 'ngx-base';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 import { BrandInformation } from '../models/brand-information';
 
+// use url-loader for images
+import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
+import fabric8Logo from '../../assets/images/fabric8_logo.png';
+
 @Component({
   selector: 'alm-home',
   templateUrl: './home.component.html',
@@ -52,7 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.brandInformation = new BrandInformation();
     if (this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === "fabric8") {
-      this.brandInformation.logo = "../../assets/images/fabric8_logo.svg";
+      this.brandInformation.logo = fabric8Logo;
       // replace background image with fabric8 background once available
       this.brandInformation.backgroundClass = "home-fabric8-background-image";
       this.brandInformation.description = "A free, end-to-end, cloud-native development experience.";
@@ -60,7 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.brandInformation.moreInfoLink = "https://fabric8.io/";
     } else {
       // default openshift.io branding
-      this.brandInformation.logo = "../../assets/images/OpenShift-io_logo.png";
+      this.brandInformation.logo = openshiftLogo;
       this.brandInformation.backgroundClass = "home-header-background-image";
       this.brandInformation.description = "A free, end-to-end, cloud-native development experience.";
       this.brandInformation.name = "OpenShift.io";
