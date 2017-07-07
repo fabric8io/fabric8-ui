@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       // replace background image with fabric8 background once available
       this.brandInformation.backgroundClass = "home-fabric8-background-image";
       this.brandInformation.description = "A free, end-to-end, cloud-native development experience.";
-      this.brandInformation.name = "Fabric8.io";
+      this.brandInformation.name = "fabric8.io";
       this.brandInformation.moreInfoLink = "https://fabric8.io/";
     } else {
       // default openshift.io branding
