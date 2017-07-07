@@ -1,4 +1,4 @@
-<div id="spacehome-analytical-report-card" class="analytical-report-widget card-pf io-card card-pf-utilization">
+<div id="spacehome-analytical-report-card" class="analytical-report-widget card-pf f8-card card-pf-utilization">
   <div class="card-pf-heading">
     <h2 id="spacehome-analytical-report-title" class="card-pf-title">
       Stack Report Recommendations
@@ -45,9 +45,9 @@
         </ul>
       </div>
     </div>
-    <div *ngIf="(buildConfigsCount | async) === 0" class="card-pf-body io-card-body pipelines-absent">
-      <div class="io-blank-slate-card">
-        <div class="io-blank-slate-icon">
+    <div *ngIf="(buildConfigsCount | async) === 0" class="card-pf-body f8-card-body pipelines-absent">
+      <div class="f8-blank-slate-card">
+        <div class="f8-blank-slate-icon">
           <i class="pficon pficon-info"></i>
         </div>
         <h3>No results found</h3>
@@ -60,7 +60,7 @@
       <div class="row">
         <div class="col-md-12 col-sm-12">
           <span class="report-time fifty-shades-of-grey">
-            {{stackAnalysisInformation['finishedTime'] && 
+            {{stackAnalysisInformation['finishedTime'] &&
             stackAnalysisInformation['finishedTime']}}
           </span>
           <stack-details class="report-link" [displayName]="'View full report'" [repoInfo]="currentBuild.repositoryInformation" [stack]="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']"

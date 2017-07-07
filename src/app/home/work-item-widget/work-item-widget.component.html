@@ -1,4 +1,4 @@
-<div class="create-work-item-widget card-pf io-card">
+<div class="create-work-item-widget card-pf f8-card">
   <div class="card-pf-heading-bg">
     <div class="card-pf-heading">
       <h2 class="card-pf-title">My work items
@@ -16,11 +16,11 @@
       </h2>
     </div>
   </div>
-  <div class="card-pf-body io-card-body">
+  <div class="card-pf-body f8-card-body">
     <div *ngIf="workItems.length !== 0; then showWorkItems else showBlankState"></div>
     <ng-template #showBlankState>
-      <div class="col-xs-12 io-blank-slate-card blank-slate-workitem-card ">
-        <div class="io-blank-slate-icon">
+      <div class="col-xs-12 f8-blank-slate-card blank-slate-workitem-card ">
+        <div class="f8-blank-slate-icon">
           <i class="pficon pficon-info"></i>
         </div>
         <p>Work items reflect the work to be done within a space.</p>
@@ -34,7 +34,7 @@
       </div>
     </ng-template>
     <ng-template #showWorkItems>
-      <div class="col-xs-12 io-card-list">
+      <div class="col-xs-12 f8-card-list">
         <ul class="list-group list-view-pf list-view-pf-view">
           <li class="list-group-item" *ngFor="let workItem of workItems | take: 6">
             <div class="list-view-pf-main-info">

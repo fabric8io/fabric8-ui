@@ -1,25 +1,25 @@
-<div id="spacehome-codebases-card" class="add-codebase-widget card-pf io-card">
+<div id="spacehome-codebases-card" class="add-codebase-widget card-pf f8-card">
   <div class="card-pf-heading">
-      <div class="card-pf-heading-details io-card-heading-details">
+      <div class="card-pf-heading-details f8-card-heading-details">
         <a id="spacehome-codebases-add-button" class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
           <i class="pficon pficon-add-circle-o"></i>
         </a>
       </div>
       <h2 class="card-pf-title">
         <a id="spacehome-codebases-title" href="#" [routerLink]="[contextPath | async, 'create']">Codebases</a>
-        <span id="spacehome-codebases-badge" class="badge io-card-badge">{{codebaseCount | async}}</span>
+        <span id="spacehome-codebases-badge" class="badge f8-card-badge">{{codebaseCount | async}}</span>
       </h2>
   </div>
-  <div class="card-pf-body io-card-body">
-    <div class="io-blank-slate-card" *ngIf="(codebaseCount | async) === 0">
-      <div class="io-blank-slate-icon">
+  <div class="card-pf-body f8-card-body">
+    <div class="f8-blank-slate-card" *ngIf="(codebaseCount | async) === 0">
+      <div class="f8-blank-slate-icon">
         <i class="pficon pficon-add-circle-o"></i>
       </div>
       <h3>This Space has no Codebases</h3>
-      <div class="io-blank-slate-main-action">
+      <div class="f8-blank-slate-main-action">
         <button id="spacehome-my-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
       </div>
-      <div class="io-blank-slate-main-action">
+      <div class="f8-blank-slate-main-action">
         <button id="spacehome-my-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
       </div>
     </div>
