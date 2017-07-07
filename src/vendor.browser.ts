@@ -23,7 +23,9 @@ import 'rxjs';
 import 'ng2-bootstrap';
 //import 'ng2-dnd';
 
-import '../node_modules/patternfly/src/less/patternfly.less';
+// import PatternFly CSS
+import '../node_modules/patternfly/dist/css/patternfly.min.css';
+import '../node_modules/patternfly/dist/css/patternfly-additions.min.css';
 
 if ('production' === ENV) {
   // Production

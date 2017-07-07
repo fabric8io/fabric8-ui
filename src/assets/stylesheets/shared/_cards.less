@@ -1,0 +1,26 @@
+// -- Cards --
+.io {
+  &-card {height: 440px; }
+  &-card-body {
+    margin-top: 0;
+    height: 355px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    .list-view-pf-view { margin-top: -1px; }
+  }
+  &-card-heading { margin-bottom: 0; }
+  &-card-list { padding: 0; }
+  &-card-footer { height: 70px; }
+  &-card__pipeline-column {
+    .truncate;
+    &-name,
+    &-build {
+      padding-left: 10px;
+    }
+    &-start { .truncate; }
+    &-status { .truncate; }
+  }
+  &-blank-slate-card { .text-center; }
+  &-blank-slate-icon { font-size: 1.5em; }
+  &-blank-slate-main-action { margin-top: 20px; }
+}

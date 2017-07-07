@@ -1,30 +1,14 @@
-@import (reference) '_custom-variables.less';
-
-.navbar-pf { border-color: @color-pf-red-100; }
-.toolbar-pf { box-shadow: none !important; }
+@font-size-base: 14px;
+.toolbar-pf {
+  box-shadow: none !important;
+  margin-top: 35px;
+}
 .form-control,
 .btn,
 .dropdown-menu,
 .badge,
-.filter-select { font-size: @font-size-base; }
+.filter-select,
+.filter-pf.filter-fields .btn-default {
+  font-size: @font-size-base !important;
+}
 .form-control { height: 29px; }
-h1 {
-  font-size: 2em;
-  line-height: 1.3em;
-}
-h2 {
-  font-size: 1.5em;
-  line-height: 1.3em;
-}
-h3 {
-  font-size: 1.3em;
-  line-height: 1.3em;
-}
-h4 {
-  font-size: 1.2em;
-  line-height: 1.3em;
-}
-h5 {
-  font-size: 1.1em;
-  line-height: 1.3em;
-}

@@ -1,15 +1,6 @@
 @import (reference) '../../../../node_modules/patternfly/node_modules/bootstrap/less/mixins.less';
-@import (reference) '../../../../node_modules/patternfly/src/less/patternfly.less';
-// functions
-//convert px to em/rem
 .em(@px) { @em: (@px/@em-base-font-size)*1em; }
 .rem(@px) { @rem: ((@x/@rem-base-font-size)*1rem); }
-//custom mixins
-.truncate() {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 .transform(@transform) {
   -webkit-transform: @transform;
      -moz-transform: @transform;
@@ -44,7 +35,12 @@
           border-color: @borderColor;
           border-style: @borderStyle;
 }
-//multiline truncate
+// truncation
+.truncate() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .multiline-truncate(@line-height, @line-count, @bg-color) {
   position: relative;
   overflow: hidden;
@@ -68,15 +64,4 @@
     background: @bg-color;
     content: '';
   }
-}
-.dib { display: inline-block; }
-.fill-container {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-width: 0;
 }
