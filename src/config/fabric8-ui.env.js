@@ -1,4 +1,5 @@
 window.Fabric8UIEnv = {
+  "kubernetesMode": "{{ .Env.KUBERNETES_MODE }}",
   "analyticsWriteKey": "{{ .Env.ANALYTICS_WRITE_KEY }}",
   "branding": "{{ .Env.BRANDING }}",
   "forgeApiUrl": "{{ .Env.FABRIC8_FORGE_API_URL }}",
