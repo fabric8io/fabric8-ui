@@ -3,7 +3,6 @@ def utils = new io.fabric8.Utils()
 def flow = new io.fabric8.Fabric8Commands()
 def project = 'fabric8-ui/fabric8-ui'
 def ciDeploy = false
-def tempVersion
 def imageName
 node{
     properties([
@@ -22,10 +21,10 @@ fabric8UITemplate{
                 if (utils.isCI()){
 
                     container('ui'){
-                        tempVersion = pipeline.ci()
+                        pipeline.ci()
                     }
 
-                    imageName = "fabric8/fabric8-ui:${tempVersion}"
+                    imageName = "fabric8/fabric8-ui:SNAPSHOT-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
                     container('docker'){
                         pipeline.buildImage(imageName)
                     }
@@ -73,7 +72,7 @@ if (ciDeploy){
            if (!pr){
                error "no pull request number found so cannot comment on PR"
            }
-           def message = "@${changeAuthor} snapshot fabric8-ui is deployed and available for testing at https://${route}"
+           def message = "@${changeAuthor} ${imageName} fabric8-ui is deployed and available for testing at https://${route}"
            container('clients'){
                flow.addCommentToPullRequest(message, pr, project)
            }
