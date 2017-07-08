@@ -7,11 +7,13 @@ import { Spaces } from 'ngx-fabric8-wit';
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { AboutService } from './shared/about.service';
 import { NotificationsService } from './shared/notifications.service';
 import { LoginService } from './shared/login.service';
+import { BrandingService } from './shared/branding.service';
 
 
 /*
@@ -37,7 +39,9 @@ export class AppComponent {
     private onLogin: OnLogin,
     private authService: AuthenticationService,
     private broadcaster: Broadcaster,
-    private router: Router
+    private router: Router,
+    private titleService: Title,
+    private brandingService: BrandingService
   ) {
   }
 
@@ -48,6 +52,20 @@ export class AppComponent {
     this.activatedRoute.params.subscribe(() => {
       this.loginService.login();
     });
+
+    this.router.events
+      .filter(event => event instanceof NavigationEnd)
+      .map(() => this.activatedRoute)
+      .map(route => {
+        while (route.firstChild) route = route.firstChild;
+        return route;
+      })
+      .filter(route => route.outlet === 'primary')
+      .mergeMap(route => route.data)
+      .subscribe((event) => {
+        let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
+        this.titleService.setTitle(title);
+      });
   }
 
   handleAction($event: any): void {

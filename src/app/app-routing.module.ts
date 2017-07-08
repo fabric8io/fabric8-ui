@@ -29,19 +29,28 @@ export const routes: Routes = [
   // Home
   {
     path: '_home',
-    loadChildren: './home/home.module#HomeModule'
+    loadChildren: './home/home.module#HomeModule',
+    data: {
+      title: 'Home'
+    }
   },
 
   // Getting started
   {
     path: '_gettingstarted',
-    loadChildren: './getting-started/getting-started.module#GettingStartedModule'
+    loadChildren: './getting-started/getting-started.module#GettingStartedModule',
+    data: {
+      title: 'Getting Started'
+    }
   },
 
   // Error Pages
   {
     path: '_error',
-    loadChildren: './error/error.module#ErrorModule'
+    loadChildren: './error/error.module#ErrorModule',
+    data: {
+      title: 'Error'
+    }
   },
   // Profile
   {
@@ -49,7 +58,10 @@ export const routes: Routes = [
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './profile/profile.module#ProfileModule'
+    loadChildren: './profile/profile.module#ProfileModule',
+    data: {
+      title: 'Profile'
+    }
   },
 
   // Settings
@@ -58,7 +70,10 @@ export const routes: Routes = [
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './settings/settings.module#SettingsModule'
+    loadChildren: './settings/settings.module#SettingsModule',
+    data: {
+      title: 'Settings'
+    }
   },
 
   // Analyze
@@ -67,7 +82,10 @@ export const routes: Routes = [
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './analyze/analyze.module#AnalyzeModule'
+    loadChildren: './analyze/analyze.module#AnalyzeModule',
+    data: {
+      title: 'Analyze'
+    }
   },
 
   // Plan
@@ -76,7 +94,10 @@ export const routes: Routes = [
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './plan/plan.module#PlanModule'
+    loadChildren: './plan/plan.module#PlanModule',
+    data: {
+      title: 'Plan: Backlog'
+    }
   },
 
   // Plan board
@@ -85,7 +106,10 @@ export const routes: Routes = [
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './plan/board/board.module#BoardModule'
+    loadChildren: './plan/board/board.module#BoardModule',
+    data: {
+      title: 'Plan: Board'
+    }
   },
 
   // Create
@@ -94,7 +118,10 @@ export const routes: Routes = [
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './create/create.module#CreateModule'
+    loadChildren: './create/create.module#CreateModule',
+    data: {
+      title: 'Create'
+    }
   },
 
   // Space-settings
@@ -103,7 +130,10 @@ export const routes: Routes = [
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './space-settings/space-settings.module#SpaceSettingsModule'
+    loadChildren: './space-settings/space-settings.module#SpaceSettingsModule',
+    data: {
+      title: 'Areas'
+    }
   },
   {
     path: '**',

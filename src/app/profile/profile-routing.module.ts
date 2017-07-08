@@ -10,8 +10,20 @@ const routes: Routes = [
     component: ProfileComponent,
     children: [
       { path: '', component: OverviewComponent },
-      { path: '_spaces', loadChildren: './spaces/spaces.module#SpacesModule' },
-      { path: '_update', loadChildren: './update/update.module#UpdateModule' }
+      {
+        path: '_spaces',
+        loadChildren: './spaces/spaces.module#SpacesModule',
+        data: {
+          title: 'Spaces'
+        }
+      },
+      {
+        path: '_update',
+        loadChildren: './update/update.module#UpdateModule',
+        data: {
+          title: 'Profile'
+        }
+      }
     ]
   }
 ];

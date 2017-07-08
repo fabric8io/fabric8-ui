@@ -78,6 +78,7 @@ import { AnalyticService }               from './shared/analytics.service';
 import { ApiLocatorService }             from './shared/api-locator.service';
 import { AuthGuard }                     from './shared/auth-guard.service';
 import { authApiUrlProvider }            from './shared/auth-api.provider';
+import { BrandingService }               from './shared/branding.service';
 import { fabric8UIConfigProvider }       from './shared/config/fabric8-ui-config.service';
 import { AuthUserResolve }               from './shared/common.resolver';
 import { ContextService }                from './shared/context.service';
@@ -173,6 +174,7 @@ export type StoreType = {
     AuthenticationService,
     AuthGuard,
     AuthUserResolve,
+    BrandingService,
     CollaboratorService,
     ConfigStore,
     ContextCurrentUserGuard,

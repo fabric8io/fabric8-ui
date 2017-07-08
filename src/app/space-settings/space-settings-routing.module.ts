@@ -18,8 +18,20 @@ const routes: Routes = [
       // { path: 'alerts', loadChildren: './alerts/alerts.module#AlertsModule' },
       // { path: 'security', loadChildren: './security/security.module#SecurityModule' },
       // { path: 'work', loadChildren: './work/work.module#WorkModule' },
-      { path: 'areas', loadChildren: './areas/areas.module#AreasModule' },
-      { path: 'collaborators', loadChildren: './collaborators/collaborators.module#CollaboratorsModule' }
+      {
+        path: 'areas',
+        loadChildren: './areas/areas.module#AreasModule',
+        data: {
+          title: 'Areas'
+        }
+      },
+      {
+        path: 'collaborators',
+        loadChildren: './collaborators/collaborators.module#CollaboratorsModule',
+        data: {
+          title: 'Collaborators'
+        }
+      }
     ]
   }
 ];

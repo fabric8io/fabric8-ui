@@ -17,7 +17,13 @@ const routes: Routes = [
     },
     children: [
       { path: '', component: ProfileComponent },
-      { path: 'tokens', loadChildren: './tokens/tokens.module#TokensModule' },
+      {
+        path: 'tokens',
+        loadChildren: './tokens/tokens.module#TokensModule',
+        data: {
+          title: 'Tokens'
+        }
+      },
     ]
   }
 ];
