@@ -309,9 +309,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (this.url !== undefined && this.url.length > 0) {
       profile.url = this.url.trim();
     }
-    if (this.isExperimental !== undefined && this.isExperimental !== null) {
-      profile.isExperimental = this.isExperimental;
-    }
     return profile;
   }
 
