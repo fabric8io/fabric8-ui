@@ -37,7 +37,7 @@
               <div class="list-group-item-text">
                 <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
                 <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
-                <span>{{workItem.id}}</span>
+                <span>{{workItem.attributes['system.number']}}</span>
                 <span class="work-item-title" *ngIf="workItem.attributes">
                       <a [routerLink]="['/', loggedInUser.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.id]">
                         {{workItem.attributes['system.title']}}</a>
