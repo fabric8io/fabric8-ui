@@ -1,30 +1,26 @@
-<div class="container content height-100">
-  <div class="exp-feature-PageWrapper">
-    <div class="col-md-12">
-      <div class="row">
-        <div class="col-md-3 col-sm-3 col-xs-3">
-          <img src="../../assets/images/profile-user.png" class="width-100"/>
+<div class="experimental-bar">
+  This feature is experimental. You can manage experimental features on your <button class="btn btn-link-experimental" (click)="routeToUpdateProfile()">profile</button> page. <button class="btn btn-link-experimental">Got it!</button>
+  <button class="pull-right experimental-more-info btn btn-link-experimental">
+    More info<i class="fa fa-flask"></i>
+  </button>
+</div>
+<div class="container-fluid content padding-top-15 experimental-page experimental-border">
+  <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 experimental-content">
+    <div class="col-md-9 col-sm-9 col-xs-9">
+      <i class="fa fa-flask fa-5x"></i>
+      <h2>Experimental Features</h2>
+      <p>
+        This is where the legal notice text would go that a user would have to read before they acknowledge (and accept) the terms of service below for using the Experimental Features.
+      </p>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <input type="checkbox" name="accept" id="accept">
+          <label for="accept" class="control-label">
+            I agree to the terms of this feature, as written above.
+          </label>
         </div>
-        <div class="col-md-9 col-sm-9 col-xs-9">
-          <div class="exp-feature-page-text">
-            <h2 class="padding-bottom-15">Experimental Features</h2>
-            <p class="padding-bottom-10">
-              this is some nice text that explains what Experimental is
-            </p>
-            <div class="col-sm-1 col-lg-1 padding-left-0 padding-right-0">
-              <input type="checkbox" name="accept" id="accept">
-            </div>
-            <div class="col-sm-10 col-lg-10 padding-left-0">
-              <label for="accept" class="control-label">
-                I agree to use unfinished stuff
-              </label>
-            </div>
-            <button class="btn btn-default margin-bottom-15 margin-right-10">
-              Activate All Experimental Features
-            </button>
-          </div>
-        </div>
-      </div>
+      </form>
+      <button ngModel="button" ngDisabled="!checked" class="btn btn-lg btn-experimental" disabled>Active All Experimental Features</button>
     </div>
   </div>
 </div>
