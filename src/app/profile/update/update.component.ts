@@ -217,6 +217,15 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   updateProfile(): void {
     let profile = this.getTransientProfile();
+    if (!profile.contextInformation) {
+      profile.contextInformation = {};
+    }
+
+    if (!profile.contextInformation.experimentalFeatures) {
+      profile.contextInformation.experimentalFeatures = {};
+    }
+    profile.contextInformation.experimentalFeatures["enabled"] = this.isExperimental;
+
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.setUserProperties(user);
       this.notifications.message({
@@ -365,6 +374,11 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.imageUrl = user.attributes.imageURL;
     this.url = user.attributes.url;
     this.username = user.attributes.username;
+
+    let contextInformation = user.attributes["contextInformation"];
+    if (contextInformation && contextInformation.experimentalFeatures ) {
+      this.isExperimental =  contextInformation.experimentalFeatures["enabled"];
+    }
   }
 
   private handleError(error: string, type: NotificationType) {
