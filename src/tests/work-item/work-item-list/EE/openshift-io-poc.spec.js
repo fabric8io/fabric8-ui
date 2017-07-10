@@ -94,9 +94,9 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
     OpenShiftIoSpaceHomePage = OpenShiftIoDashboardPage.clickNoThanksButton();
 
     /* Step - in the space home page, verify URL and end the test */
-    browser.wait(until.urlContains('https://openshift.io/osiotest314/'+ spaceTime), constants.WAIT);
-    browser.wait(until.urlIs('https://openshift.io/osiotest314/'+ spaceTime), constants.WAIT); 
-    expect(browser.getCurrentUrl()).toEqual('https://openshift.io/osiotest314/'+ spaceTime);
+    browser.wait(until.urlContains('https://openshift.io/' + browser.params.login.user + '/'+ spaceTime), constants.WAIT);
+    browser.wait(until.urlIs('https://openshift.io/' + browser.params.login.user + '/'+ spaceTime), constants.WAIT); 
+    expect(browser.getCurrentUrl()).toEqual('https://openshift.io/' + browser.params.login.user + '/'+ spaceTime);
 
     browser.getCurrentUrl().then(function (text) { 
        console.log ('EE POC test - new space URL = ' + text);
@@ -120,18 +120,18 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
      //OpenShiftIoSpaceHomePage.clickHeaderAnalyze();
 
     /* Go to the Create page - https://openshift.io/osiotest314/testmay91494369460731/create  */
-    browser.get("https://openshift.io/osiotest314/" + spaceTime + "/create");
+    browser.get("https://openshift.io/" + browser.params.login.user + "/" + spaceTime + "/create");
     
     /* Locate the first codebase */
     OpenShiftIoSpaceHomePage.clickFirstCodebase();
 
     /* TODO - Verify the workspace in Che - TODO - Create a page object modelk for the Che dashboard */
-    browser.get("https://che-osiotest314-che.8a09.starter-us-east-2.openshiftapps.com/dashboard/#/");
+    browser.get("https://che-" + browser.params.login.user + "-che.8a09.starter-us-east-2.openshiftapps.com/dashboard/#/");
 
     /* Navigating thru the Plan/Create/Analyze tabs is not working in the UI - due to 
        Angular bug with Protractor? Navigate directly to the URL instead */
     // OpenShiftIoSpaceHomePage.clickHeaderAnalyze();
-    browser.get("https://openshift.io/osiotest314/" + spaceTime);
+    browser.get("https://openshift.io/" + browser.params.login.user + "/" + spaceTime);
 
     OpenShiftIoSpaceHomePage.clickPipelinesSectionTitle();
     OpenShiftIoSpaceHomePage.pipelinesPage.getText().then(function(text){
@@ -145,7 +145,7 @@ describe('openshift.io End-to-End POC test - Scenario - Existing user: ', functi
          -or- 
          No pipeline builds have run for testmay91494354476064.   */
 //      expect(text).toContain("No pipeline builds have run for " + spaceTime);
-      expect(text).toContain("Source Repository: https://github.com/almightytest/" + spaceTime + ".git");
+      expect(text).toContain("Source Repository: https://github.com/" + browser.params.login.user + "/" + spaceTime + ".git");
     });
 
     /* Step 5 - log out */
