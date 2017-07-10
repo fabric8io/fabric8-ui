@@ -12,6 +12,7 @@
 .profile-img-none {
   width: 100%;
 }
+.preview-cont { margin-bottom: 15px; }
 .preview-btn {
   position: absolute;
   right: 0;
@@ -47,6 +48,9 @@
   border-right: solid 1px;
   border-right-color: @color-pf-black-300;
 }
+textarea {
+  resize: none;
+}
 .token-body { word-wrap: break-word; }
 .token-heading {
   overflow: hidden;
@@ -54,3 +58,12 @@
   white-space: nowrap;
 }
 .token-heading-cont { display: flex; }
+.btn {
+  &-update,
+  &-cancel {
+    width: 200px;
+  }
+  &-cancel {
+    margin-left: 1em;
+  }
+}
