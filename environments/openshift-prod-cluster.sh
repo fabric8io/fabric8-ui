@@ -40,6 +40,8 @@ export K8S_API_SERVER_BASE_PATH=""
 export K8S_API_SERVER_PROTOCOL="https"
 export OAUTH_ISSUER="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
 export WS_K8S_API_SERVER="${PROXIED_K8S_API_SERVER}"
+export WS_K8S_API_SERVER_PROTOCOL="wss"
+export WS_K8S_API_SERVER_BASE_PATH=""
 
 export FABRIC8_SSO_API_URL=https://sso.openshift.io/
 export FABRIC8_WIT_API_URL=https://api.openshift.io/api/
