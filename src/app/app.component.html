@@ -8,6 +8,12 @@
 <main class="">
   <div class="">
     <router-outlet name="action"></router-outlet>
-    <router-outlet></router-outlet>
+    <div *ngIf="disableRoute">
+      <f8-exp-feature-page>
+      </f8-exp-feature-page>
+    </div>
+    <div [hidden]="disableRoute" >
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </main>

@@ -85,6 +85,7 @@ import { ContextService }                from './shared/context.service';
 import { ContextCurrentUserGuard }       from './shared/context-current-user-guard.service';
 import { ContextResolver }               from './shared/context-resolver.service';
 import { DummyService }                  from './shared/dummy.service';
+import { ExperimentalFeatureResolver }   from './shared/experimental-feature.resolver';
 import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
 import { LoginService }                  from './shared/login.service';
@@ -114,6 +115,7 @@ import { AboutModalModule } from './about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
 import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";
+import { ExpFeaturePageComponent } from './exp-feature-page/exp-feature-page.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -158,7 +160,8 @@ export type StoreType = {
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    ExpFeaturePageComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
@@ -186,6 +189,7 @@ export type StoreType = {
     },
     DummyService,
     ErrorService,
+    ExperimentalFeatureResolver,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
     {

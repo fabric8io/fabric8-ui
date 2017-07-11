@@ -6,6 +6,8 @@ import { trimEnd } from 'lodash';
 import { LoginComponent } from './login/login.component';
 import { SigninComponent } from './signin/signin.component';
 import { ContextResolver } from './shared/context-resolver.service';
+import { ExperimentalFeatureGuard } from './shared/experimental-feature.guard';
+import { ExperimentalFeatureResolver } from './shared/experimental-feature.resolver';
 
 
 export function removeAction(url: string) {
@@ -92,11 +94,13 @@ export const routes: Routes = [
   {
     path: ':entity/:space/plan',
     resolve: {
-      context: ContextResolver
+      context: ContextResolver,
+      featureFlagConfig: ExperimentalFeatureResolver
     },
     loadChildren: './plan/plan.module#PlanModule',
     data: {
-      title: 'Plan: Backlog'
+      title: 'Plan: Backlog',
+      featureName: 'Planner'
     }
   },
 
@@ -104,11 +108,13 @@ export const routes: Routes = [
   {
     path: ':entity/:space/plan/board',
     resolve: {
-      context: ContextResolver
+      context: ContextResolver,
+      featureFlagConfig: ExperimentalFeatureResolver
     },
     loadChildren: './plan/board/board.module#BoardModule',
     data: {
-      title: 'Plan: Board'
+      title: 'Plan: Board',
+      featureName: 'Planner'
     }
   },
 

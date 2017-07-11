@@ -6,7 +6,7 @@ import {
 import 'rxjs/add/operator/map';
 import { Subscription } from 'rxjs/Subscription';
 
-import { ExpFeaturePageService } from './exp-feature-page.service';
+//import { ExpFeaturePageService } from './exp-feature-page.service';
 
 @Component({
   selector: 'f8-exp-feature-page',
@@ -16,16 +16,16 @@ import { ExpFeaturePageService } from './exp-feature-page.service';
 export class ExpFeaturePageComponent implements OnDestroy {
 
   message: string = '';
-  subscription: Subscription;
+  //subscription: Subscription;
 
-  constructor(private expFeaturePageService: ExpFeaturePageService) {
-    this.subscription = this.expFeaturePageService.update$.subscribe(
-      message => {
-        this.message = message;
-      });
+  constructor() {
+    // this.subscription = this.expFeaturePageService.update$.subscribe(
+    //   message => {
+    //     this.message = message;
+    //   });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    //this.subscription.unsubscribe();
   }
 }
