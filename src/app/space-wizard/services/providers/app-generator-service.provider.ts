@@ -7,7 +7,7 @@ import { AppGeneratorService, IAppGeneratorServiceToken } from '../contracts/app
 
 import { IForgeService, IForgeServiceProvider } from '../forge.service';
 import { MockAppGeneratorService } from '../mocks/mock-app-generator.service';
-
+import { ApiLocatorService } from '../../../shared/api-locator.service';
 /**
  * When using this provider and you take a dependency on the interface type
  * it will be necessary to use the @inject(IAppGeneratorServiceProvider.InjectToken)
@@ -19,10 +19,10 @@ export class IAppGeneratorServiceProvider {
   static get FactoryProvider(): FactoryProvider {
     return {
       provide: IAppGeneratorServiceToken,
-      useFactory: (forge: IForgeService, loggerFactory, appGeneratorConfiguratorService) => {
-        return new Fabric8AppGeneratorService(forge, loggerFactory, appGeneratorConfiguratorService);
+      useFactory: (forge: IForgeService, loggerFactory, appGeneratorConfiguratorService, apiLocator) => {
+        return new Fabric8AppGeneratorService(forge, loggerFactory, appGeneratorConfiguratorService, apiLocator);
       },
-      deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfiguratorService ]
+      deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfiguratorService, ApiLocatorService ]
     };
   }
 
@@ -68,10 +68,10 @@ export class FieldSetServiceProvider {
   static get FactoryProvider(): FactoryProvider {
     return {
       provide: AppGeneratorService,
-      useFactory: (forge: IForgeService, loggerFactory, appGeneratorConfigurationService) => {
-        return new Fabric8AppGeneratorService(forge, loggerFactory, appGeneratorConfigurationService);
+      useFactory: (forge: IForgeService, loggerFactory, appGeneratorConfigurationService, apiLocator) => {
+        return new Fabric8AppGeneratorService(forge, loggerFactory, appGeneratorConfigurationService, apiLocator);
       },
-      deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfiguratorService ],
+      deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfiguratorService, ApiLocatorService ],
       multi: false
     };
   }
