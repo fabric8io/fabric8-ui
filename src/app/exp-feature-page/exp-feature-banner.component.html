@@ -1,7 +1,7 @@
 <div class="experimental-bar" *ngIf="loggedInUser" [class.experimental-bar-minimal]="hideBanner">
   This feature is experimental. You can manage experimental features on your <a class="btn btn-link-experimental" [routerLink]="['/', loggedInUser?.attributes?.username, '_update']">profile</a> page. <button class="btn btn-link-experimental" (click)="acknowledgeWarning()">Got it!</button>
   <!-- functionality to add additional information for the feature flag should be hooked up here -->
-  <!--<button class="pull-right experimental-more-info btn btn-link-experimental">-->
-    <!--More info<i class="fa fa-flask"></i>-->
-  <!--</button>-->
+  <button class="pull-right experimental-more-info btn">
+    <i class="fa fa-flask"></i>
+  </button>
 </div>

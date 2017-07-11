@@ -2,11 +2,11 @@
   &-border {
     border-top: 0;
     border-right: 3px solid;
-    border-right-color: @color-pf-light-green-500;
+    border-right-color: @color-pf-light-green-400;
     border-bottom: 3px solid;
-    border-bottom-color: @color-pf-light-green-500;
+    border-bottom-color: @color-pf-light-green-400;
     border-left: 3px solid;
-    border-left-color: @color-pf-light-green-500;
+    border-left-color: @color-pf-light-green-400;
   }
   &-bar {
     height: 25px;
@@ -15,11 +15,6 @@
     &-minimal {
       height: 5px;
       background-color: @color-pf-light-green-400;
-    }
-  }
-  &-more-info {
-    i {
-      margin-left: 10px;
     }
   }
   &-page {
@@ -34,13 +29,20 @@
       }
     }
   }
+  &-more-info {
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 25px;
+    background-color: @color-pf-light-green-400;
+    border-width: 0;
+    color: @color-pf-black;
+    vertical-align: baseline;
+  }
 }
+
 .btn-link-experimental {
   &:extend(.btn-link);
-  padding-top: 0;
-  padding-right: 10px;
-  padding-bottom: 0;
-  padding-left: 10px;
+  padding: 0;
   height: 25px;
   background-color: @color-pf-light-green-400;
   border-width: 0;
@@ -50,7 +52,7 @@
 }
 .btn-experimental {
   &:extend(.btn-default);
-  border-color: @color-pf-light-green-500;
+  border-color: @color-pf-light-green-400;
   background-color: @color-pf-light-green-400;
-  background-image: linear-gradient(to bottom, @color-pf-light-green-400 0, @color-pf-light-green-500 100%);
+  background-image: linear-gradient(to bottom, @color-pf-light-green-400 0, @color-pf-light-green-400 100%);
 }
