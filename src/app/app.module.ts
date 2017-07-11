@@ -23,6 +23,7 @@ import {
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule }       from 'angular2-moment';
 import { PlannerModule }      from 'fabric8-planner';
+import { RouterModule }       from '@angular/router';
 import {
   // Base functionality for the runtime console
   KubernetesStoreModule,
@@ -71,6 +72,8 @@ import { AppState, InternalStateType } from './app.service';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { MenusService }    from './header/menus.service';
+import { ExpFeaturePageComponent } from './exp-feature-page/exp-feature-page.component';
+import { ExpFeatureBannerComponent } from './exp-feature-page/exp-feature-banner.component';
 
 // Shared Services
 import { AboutService }                  from './shared/about.service';
@@ -115,7 +118,6 @@ import { AboutModalModule } from './about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
 import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";
-import { ExpFeaturePageComponent } from './exp-feature-page/exp-feature-page.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -150,6 +152,7 @@ export type StoreType = {
     MomentModule,
     ReactiveFormsModule,
     RestangularModule,
+    RouterModule,
     SpaceWizardModule,
     StackDetailsModule,
     WidgetsModule,
@@ -161,7 +164,8 @@ export type StoreType = {
     AppComponent,
     FooterComponent,
     HeaderComponent,
-    ExpFeaturePageComponent
+    ExpFeaturePageComponent,
+    ExpFeatureBannerComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first

@@ -28,8 +28,8 @@ import { FeatureFlagConfig } from './models/feature-flag-config';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  public disableRoute: boolean;
-
+  public experimentalFeatureEnabled: boolean;
+  public isExperimentalFeature: boolean;
 
   constructor(
     private about: AboutService,
@@ -60,16 +60,20 @@ export class AppComponent {
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
       .map(route => {
+        //reset all experimental feature flag properties
+        this.experimentalFeatureEnabled = false;
+        this.isExperimentalFeature = false;
+
         while (route.firstChild) route = route.firstChild;
         return route;
       })
       .filter(route => route.outlet === 'primary')
       .mergeMap(route => route.data)
       .subscribe((event) => {
-        this.disableRoute = false;
         if (event['featureFlagConfig']) {
           let featureFlagConfig = event['featureFlagConfig'] as FeatureFlagConfig;
-          this.disableRoute = !featureFlagConfig.enabled;
+          this.experimentalFeatureEnabled = featureFlagConfig.enabled;
+          this.isExperimentalFeature = true;
         }
         let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
         this.titleService.setTitle(title);

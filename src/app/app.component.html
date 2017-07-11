@@ -8,11 +8,15 @@
 <main class="">
   <div class="">
     <router-outlet name="action"></router-outlet>
-    <div *ngIf="disableRoute">
-      <f8-exp-feature-page>
-      </f8-exp-feature-page>
+    <div [hidden]="!isExperimentalFeature">
+      <f8-exp-feature-banner>
+      </f8-exp-feature-banner>
+      <div [hidden]="experimentalFeatureEnabled">
+        <f8-exp-feature-page>
+        </f8-exp-feature-page>
+      </div>
     </div>
-    <div [hidden]="disableRoute" >
+    <div [hidden]="isExperimentalFeature && !experimentalFeatureEnabled" [class.experimental-border]="isExperimentalFeature">
       <router-outlet></router-outlet>
     </div>
   </div>
