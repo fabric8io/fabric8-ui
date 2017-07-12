@@ -18,6 +18,7 @@ export class ApiLocatorService {
   );
 
   readonly DEFAULT_API_PREFIXES = new Map<string, string>([
+    ['wit', 'api'],
     ['recommender', 'recommender'],
     ['sso', 'sso'],
     ['forge', 'forge.api']

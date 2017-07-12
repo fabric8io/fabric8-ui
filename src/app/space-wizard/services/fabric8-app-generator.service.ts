@@ -31,6 +31,7 @@ import {
 import {
  AppGeneratorConfiguratorService
 } from './fabric8-app-generator-configurator.service';
+import { ApiLocatorService } from '../../shared/api-locator.service';
 
 @Injectable()
 export class Fabric8AppGeneratorService extends AppGeneratorService {
@@ -39,16 +40,21 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
   getFields(options: IAppGeneratorRequest): Observable<IAppGeneratorResponse> {
     return this.executeForgeCommand(options);
   }
+  private _ssoApiUrl: string;
+  private _realm: string;
 
   constructor(
     @Inject(IForgeServiceProvider.InjectToken) private forgeService: IForgeService,
     loggerFactory: LoggerFactory,
-    private _configuratorService: AppGeneratorConfiguratorService) {
+    private _configuratorService: AppGeneratorConfiguratorService,
+    apiLocator: ApiLocatorService) {
     super();
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, Fabric8AppGeneratorService.instanceCount++);
     if ( logger ) {
       this.log = logger;
     }
+    this._ssoApiUrl = apiLocator.ssoApiUrl;
+    this._realm = apiLocator.realm;
     this.log(`New instance...`);
   }
 
@@ -135,12 +141,21 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
         observer.next(response);
         observer.complete();
       }, (err: Error|any) => {
-         let error = {
+          let error = {
            origin: 'Fabric8AppGeneratorService',
            name: 'ExecuteForgeCommandError' ,
            message: `The ${cmdDescription} command failed or only partially succeeded`,
            inner: err
          };
+        if (err.message == "io.fabric8.forge.generator.keycloak.KeyCloakFailureException") {
+          error = {
+           origin: 'KeyCloak SSO error',
+           name: 'KeyCloakFailureException',
+           message: `Please visit <a class="property-value property-value-result property-value-link" target="_blank" href="${this._ssoApiUrl}auth/realms/${this._realm}/account/identity" >${this._ssoApiUrl}auth/realms/${this._realm}/account/identity</a> to unlink your SSO account`,
+           inner: err
+         };
+        }
+
          this.log({ message: error.message , error: true }, err);
          return observer.error(error);
       });
