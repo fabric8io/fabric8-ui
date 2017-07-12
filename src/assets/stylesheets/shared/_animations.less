@@ -1,0 +1,72 @@
+/*
+** link animation
+*/
+a {
+  color: @color-pf-blue-400;
+  transition: all .3s;
+  &:hover {
+    color: @color-pf-blue-500;
+  }
+}
+/*
+**tab animation - changes on click
+*/
+.nav-tabs>li {
+  &>a {
+    border: 1px solid transparent;
+    border-bottom-color: transparent;
+    color: @color-pf-black-700;
+    transition: all .3s;
+  }
+  &.active>a {
+    color: @color-pf-blue-400;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+  }
+}
+/*
+** header navigation animation
+** dropdown menus
+** hover effect on list items
+*/
+.navbar-pf {
+  .navbar-primary>li {
+    background-color: #000;
+    transition: all .3s;
+    &:hover {
+      background-color: #1d1d1d;
+    }
+    &>a {
+      background-color: #000;
+      transition: all .3s;
+    }
+    &>a:hover {
+      background-color: #1d1d1d;
+    }
+  }
+}
+.dropdown-menu {
+  -webkit-transform-origin: top;
+  transform-origin: top;
+  -webkit-animation-fill-mode: fowards;
+  animation-fill-mode: forwards;
+  -webkit-transform: scale(1, 0);
+  display: block;
+
+  transition: all .2s ease-out;
+  -webkit-transition: all .2s ease-out;
+  &>li {
+    &>a {
+      background-color: @color-pf-white;
+      transition: all .3s;
+      &:hover {
+        border-color: @color-pf-blue-100;
+        background-color: @color-pf-blue-50;
+      }
+    }
+  }
+}
+.dropup .dropdown-menu {
+  -webkit-transform-origin: bottom;
+  transform-origin: bottom;
+}

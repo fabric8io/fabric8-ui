@@ -6,6 +6,9 @@
 }
 .nav {
   .open {
+    > .dropdown-menu {
+      transform: scale(1, 1);
+    }
     & > a {
       height: 43px;
       background-color: @color-pf-black-900;
@@ -31,6 +34,7 @@
   }
   .user-dropdown-menu {
     height: 43px;
+    transition: height 4s;
     &:hover { .pointer; }
     .user-dropdown {
       width: 200px;
@@ -41,9 +45,9 @@
 .navbar-pf {
   min-height: 48px;
   border-color: @color-pf-red-100;
-  .navbar-nav .open .dropdown-menu.infotip {
+  .infotip {
     &.bottom-right {
-      .arrow { left: 90%; }
+      .arrow { left: 88%; }
     }
   }
   .navbar-primary {
@@ -158,7 +162,8 @@
   }
   &-menu {
     .dropdown-menu {
-      li { width: 196px;
+      li {
+        width: 198px;
         a {
           text-overflow: ellipsis;
           overflow: hidden;
