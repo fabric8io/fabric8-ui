@@ -13,7 +13,7 @@
   position: absolute;
   right: 0;
   bottom: 0;
-  min-height: 29px;
+  max-height: 29px;
   white-space: normal;
 }
 .profile-wrapper {
@@ -51,11 +51,34 @@ textarea {
 }
 .token-heading-cont { display: flex; }
 .btn {
-  &-update,
-  &-cancel {
-    width: 200px;
-  }
   &-cancel {
     margin-left: 1em;
+  }
+}
+.feature-toggle-text {
+  &-body {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-style: italic;
+    color: @color-pf-black-500;
+  }
+}
+.profile {
+  &-edit {
+    margin-bottom: 75px;
+  }
+  &-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    border-top: 1px solid;
+    border-top-color: @color-pf-black-300;
+    background-color: @color-pf-black-200;
+  }
+  &-bar-buttons {
+    margin-top: 9px;
+    text-align: center;
   }
 }
