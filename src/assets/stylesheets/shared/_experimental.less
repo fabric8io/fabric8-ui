@@ -10,21 +10,24 @@
   }
   &-bar {
     height: 25px;
+    @media (max-width: 768px) { height: 48px; }
     background-color: @color-pf-light-green-400;
     text-align: center;
     transition: ease all .3s;
     &-minimal {
       height: 5px;
       background-color: @color-pf-light-green-400;
+      .experimental-text {
+        display: none;
+      }
     }
   }
   &-page {
     height: 100vh;
     background-color: @color-pf-black-200;
     text-align: center;
-    vertical-align: middle;
     .experimental-content {
-      margin-top: 10%;
+      margin-top: 5%;
       i {
         color: @color-pf-light-green-400;
       }
