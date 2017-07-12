@@ -1,6 +1,7 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 import { ModalModule } from 'ngx-modal';
 
@@ -15,6 +16,7 @@ import { StackDetailsComponent } from './stack-details.component';
     CommonModule,
     HttpModule,
     ModalModule,
+    FormsModule,
     RecommenderModule,
     StackComponentsModule,
     OverviewModule

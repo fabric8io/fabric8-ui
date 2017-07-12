@@ -76,9 +76,12 @@ export class StackDetailsComponent implements OnInit {
 
   modalHeader: string = null;
 
+  private stackReport = {};
   private recommendations: Array<any> = [];
   private dependencies: Array<any> = [];
   private stackOverviewData: any = {};
+  private paths: Array<string> = [];
+  private currentManifestPath: string = '';
 
   constructor(
     private stackAnalysesService: StackAnalysesService,
@@ -110,6 +113,7 @@ export class StackDetailsComponent implements OnInit {
   }
 
   private resetFields(): void {
+    this.stackReport = {};
     this.recommendations = [];
     this.stackOverviewData = [];
     this.dependencies = [];
@@ -146,16 +150,16 @@ export class StackDetailsComponent implements OnInit {
    * This function gets the missing packages information and version mismatch information
    * Displays the information accordingly on screen
    */
-  private setRecommendations(responseRecommendations: any): void {
-    let missing: Array<any> = responseRecommendations['missing'] || [];
-    let version: Array<any> = responseRecommendations['version'] || [];
-    let stackName: string = responseRecommendations['stackName'] || 'An existing stack';
-    let fileName: string = responseRecommendations['fileName'];
-    this.recommendations = [];
+  private setRecommendations(path: string, recommendation: any): void {
+    let missing: Array<any> = recommendation['missing'] || [];
+    let version: Array<any> = recommendation['version'] || [];
+    let stackName: string = recommendation['stackName'] || 'An existing stack';
+    let fileName: string = this.stackReport[path]['fileName'];
+    let recommendations = [];
     for (let i in missing) {
       if (missing.hasOwnProperty(i)) {
         let key: any = Object.keys(missing[i]);
-        this.recommendations.push({
+        recommendations.push({
           suggestion: 'Recommended',
           action: 'Add',
           message: key[0] + ' : ' + missing[i][key[0]],
@@ -163,7 +167,9 @@ export class StackDetailsComponent implements OnInit {
           key: key[0],
           workItem: {
             action: 'Add ' + key[0] + ' with version ' + missing[i][key[0]],
-            message: 'Stack analytics has identified a potentially missing library. It\'s recommended that you add "' + key[0] + '" with version ' + missing[i][key[0]] + ' to your application as many other Vert.x OpenShift applications have it included',
+            message: 'Stack analytics has identified a potentially missing library. It\'s ' +
+            'recommended that you add "' + key[0] + '" with version ' + missing[i][key[0]] +
+            ' to your application as many other Vert.x OpenShift applications have it included',
             codebase: {
               'repository': 'Test_Repo',
               'branch': 'task-1234',
@@ -179,14 +185,16 @@ export class StackDetailsComponent implements OnInit {
     for (let i in version) {
       if (version.hasOwnProperty(i)) {
         let key: any = Object.keys(version[i]);
-        this.recommendations.push({
+        recommendations.push({
           suggestion: 'Recommended',
           action: 'Update',
           message: key[0] + ' : ' + version[i][key[0]],
           subMessage: stackName + ' has a different version of dependency',
           workItem: {
             action: 'Update ' + key[0] + ' with version ' + version[i][key[0]],
-            message: 'Stack analytics has identified a potentially version upgrade. It\'s recommended that you upgrade "' + key[0] + '" with version ' + version[i][key[0]] + ' to your application as many other Vert.x OpenShift applications have it included',
+            message: 'Stack analytics has identified a potentially version upgrade. It\'s ' +
+            'recommended that you upgrade "' + key[0] + '" with version ' + version[i][key[0]] +
+            ' to your application as many other Vert.x OpenShift applications have it included',
             codebase: {
               'repository': 'Exciting',
               'branch': 'task-101',
@@ -198,13 +206,16 @@ export class StackDetailsComponent implements OnInit {
         });
       }
     }
+
+    this.stackReport[path]['recommendations'] = recommendations;
   }
 
-  private setDependencies(components: Array<any>): void {
-    this.dependencies = components;
+  private setDependencies(path: string, stackData: any): void {
+    this.stackReport[path]['dependencies'] = stackData['components'];
   }
 
-  private setOverviewData(components: Array<any>): void {
+  private setOverviewData(path: string, stackData: any): void {
+    let components = stackData['components'];
     // set the default values - start
     let noOfComponents: number = components ? components.length : 0;
     let totalCycloComplexity: number = 0;
@@ -241,13 +252,14 @@ export class StackDetailsComponent implements OnInit {
       avgCycloComplexity =
         Math.round(totalCycloComplexity / validComponentsWithCycloValue * 1000) / 1000;
     }
-    this.stackOverviewData = {
+    this.stackReport[path]['stackOverviewData'] = {
       noOfComponents: noOfComponents,
       totalNoOfFiles: totalNoOfFiles,
       totalNoOfLines: totalNoOfLines,
       avgCycloComplexity: avgCycloComplexity,
       cvss: cvssObj,
-      licenseList: licenseList
+      licenseList: licenseList,
+      fileName: stackData['manifest']
     };
   }
 
@@ -268,44 +280,77 @@ export class StackDetailsComponent implements OnInit {
         this.clearLoader();
         this.modalHeader = 'Updated just now';
         if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
-          stackAnalysesData = data;
           let result: any;
           let components: Array<any> = [];
 
           /**
            * Get Result Information from utils
            */
-          let resultInformationObservable: Observable<any> = getResultInformation(data);
-          if (resultInformationObservable) {
-            resultInformationObservable.subscribe((response) => {
-              if (response) {
-                if (response.hasOwnProperty('components')) {
-                  // Call the stack-components with the components information so that
-                  // It can parse the necessary information and show relevant things.
-                  this.setDependencies(response.components);
+          let stackDataDoneObservable: Observable<any> = Observable.create((observer) => {
+            let stackDataObservable: Observable<any> = getResultInformation(data);
+            if (stackDataObservable) {
+              stackDataObservable.subscribe((stackDatas) => {
+                if (stackDatas) {
+                  for (let path in stackDatas) {
+                    if (stackDatas.hasOwnProperty(path)) {
+                      this.stackReport[path] = {};
+                      // Call the stack-components with the components information so that
+                      // It can parse the necessary information and show relevant things.
+                      this.setDependencies(path, stackDatas[path]);
 
-                  // set the overview data :-
-                  this.setOverviewData(response.components);
+                      // set the overview data
+                      this.setOverviewData(path, stackDatas[path]);
+                    }
+                  }
                 }
-              }
-            });
-          }
+              });
+              observer.next(this.stackReport);
+            }
+            observer.complete();
+          });
           // Ends Result Information
 
           /**
            * Get Recommendations from utils
            */
-          let recObservable: Observable<any> = getStackRecommendations(data);
-          if (recObservable) {
-            recObservable.subscribe((recommendations) => {
-              if (recommendations) {
-                // Call the recommendations with the recommendations response object
-                this.setRecommendations(recommendations);
-              }
-            });
-          }
+          let stackRecDataDoneObservable: Observable<any> = Observable.create((observer) => {
+            let recObservable: Observable<any> = getStackRecommendations(data);
+            if (recObservable) {
+              recObservable.subscribe((recommendations) => {
+                if (recommendations) {
+                  for (let path in recommendations) {
+                    if (recommendations.hasOwnProperty(path)) {
+                      // Call the recommendations with the recommendations response object
+                      this.setRecommendations(path, recommendations[path]);
+                    }
+                  }
+                }
+              });
+              observer.next(this.stackReport);
+            }
+            observer.complete();
+          });
           // Ends Recommendations
 
+          Observable
+            .zip(
+            stackDataDoneObservable, stackRecDataDoneObservable
+            )
+            .subscribe(([stackReport1, stackReport2]) => {
+              for (let path in this.stackReport) {
+                if (this.stackReport.hasOwnProperty(path)) {
+                  // Call the recommendations with the recommendations response object
+                  this.stackReport[path]['recommendations'].forEach(item => {
+                    item['workItem']['codebase']['filename'] =
+                      stackReport1[path]['stackOverviewData']['fileName'];
+                  });
+                }
+              }
+              this.paths = Object.keys(this.stackReport);
+              this.currentManifestPath = this.paths[0];
+              this.selectedManifestPath();
+              console.log('Final stack Report object', this.stackReport);
+            });
         } else {
           // Set an error if the data is invalid or not proper.
           this.errorMessage.message = `This could take a while. Return to pipeline to keep
@@ -325,6 +370,12 @@ export class StackDetailsComponent implements OnInit {
 
   private clearLoader(): void {
     this.isLoading = false;
+  }
+
+  private selectedManifestPath(): void {
+    this.dependencies = this.stackReport[this.currentManifestPath]['dependencies'];
+    this.stackOverviewData = this.stackReport[this.currentManifestPath]['stackOverviewData'];
+    this.recommendations = this.stackReport[this.currentManifestPath]['recommendations'];
   }
 
 }

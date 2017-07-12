@@ -1,4 +1,4 @@
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 function stackApiUtils(data: any, target: string): Observable<any> {
     let observable: Observable<any> = null;
@@ -42,58 +42,49 @@ function stackApiUtils(data: any, target: string): Observable<any> {
  * Ouput: Observable of type 'any'
  */
 export function getStackRecommendations(data: any): Observable<any> {
-    let recommendationsObservable: Observable<any> = stackApiUtils(data, 'ALL');
+    let recommendationsObservable: Observable<any> = stackApiUtils(data, 'RECOM');
     let resultObservable: Observable<any> = null;
     if (recommendationsObservable) {
-        recommendationsObservable.subscribe((result) => {
-            let resultData: Array<any> = result.result;
-            let fileName: string = '';
+        recommendationsObservable.subscribe((information) => {
+            let finishedTime = information['finishedTime'];
+            let requestId = information['requestId'];
+            let schema = information['schema'];
+            let startedTime = information['startedTime'];
 
-            let finishedTime = result['finishedTime'];
-            let requestId = result['requestId'];
-            let schema = result['schema'];
-            let startedTime = result['startedTime'];
-
-            if (resultData && resultData.length > 0) {
-                fileName = resultData[0].manifest_name;
-            }
-            let recommendations: any = result.recommendation;
-            if (recommendations && recommendations.hasOwnProperty('recommendations')) {
-                let recommendation: any = recommendations.recommendations;
-                if (recommendation) {
-                    let similarStacks = recommendation.similar_stacks;
+            let recommendation: any = information.recommendation;
+            if (recommendation &&
+                recommendation.hasOwnProperty('recommendations') &&
+                recommendation['recommendations'] &&
+                recommendation['recommendations'].length) {
+                let resultObj: any = {};
+                let recommendations: Array<any> = recommendation['recommendations'];
+                recommendations.forEach(recommendationItem => {
+                    let recommendationObj = {};
+                    let similarStacks = recommendationItem.similar_stacks;
                     similarStacks = similarStacks.length > 0 ? similarStacks[0] : null;
-                    let resultObject: any = {};
                     if (similarStacks) {
                         const analysis: any = similarStacks.analysis;
-                        let missingPackages: Array<any> = analysis.missing_packages;
-                        let versionMismatch: Array<any> = analysis.version_mismatch;
-                        let similarity: number = similarStacks.similarity;
-                        let source: string = similarStacks.source;
-                        let stackId: string = similarStacks.stack_id;
-                        let stackName: string = similarStacks.stack_name;
-                        let usage: number = similarStacks.usage;
-                        resultObject = {
-                            missing: missingPackages,
-                            version: versionMismatch,
-                            similarity: similarity,
-                            source: source,
-                            stackId: stackId,
-                            stackName: stackName,
-                            usage: usage,
-                            fileName: fileName,
+                        recommendationObj = {
+                            missing: analysis.missing_packages,
+                            version: analysis.version_mismatch,
+                            similarity: similarStacks.similarity,
+                            source: similarStacks.source,
+                            stackId: similarStacks.stack_id,
+                            stackName: similarStacks.stack_name,
+                            usage: similarStacks.usage,
                             finishedTime: finishedTime,
                             requestId: requestId,
                             schema: schema,
                             startedTime: startedTime
                         };
-
-                        resultObservable = Observable.create((observer) => {
-                            observer.next(resultObject);
-                            observer.complete();
-                        });
                     }
-                }
+                    let path = recommendationItem['manifest_file_path'];
+                    resultObj[path] = recommendationObj;
+                });
+                resultObservable = Observable.create((observer) => {
+                    observer.next(resultObj);
+                    observer.complete();
+                });
             }
         });
     }
@@ -101,7 +92,7 @@ export function getStackRecommendations(data: any): Observable<any> {
 }
 
 /**
- * getResultInformation - A function that gets the data from the stack analysis API
+ * getStackData - A function that gets the data from the stack analysis API
  * parses accordingly to get only result information.
  *
  * This function can be reused across as it returns an observable.
@@ -110,26 +101,35 @@ export function getStackRecommendations(data: any): Observable<any> {
  * Ouput: Observable of type 'any'
  */
 export function getResultInformation(data: any): Observable<any> {
-    let resultObservable: Observable<any> = stackApiUtils(data, 'RESULT');
-    let resultInfo: Observable<any> = null;
-    if (resultObservable) {
-        resultObservable.subscribe((information) => {
-            if (information && information.hasOwnProperty('result') && information.result.length > 0) {
-                let stackResult: Array<any> = information.result;
-                let result: any = {
-                    components: stackResult[0].components,
-                    distinctLicenses: stackResult[0].distinct_licenses,
-                    popularity: stackResult[0].popularity,
-                    ecosystem: stackResult[0].ecosystem,
-                    manifest: stackResult[0].manifest_name,
-                    totalLicenses: stackResult[0].total_licenses
-                };
-                resultInfo = Observable.create((observer) => {
-                    observer.next(result);
+    let stackObservable: Observable<any> = stackApiUtils(data, 'RESULT');
+    let resultObservable: Observable<any> = null;
+    if (stackObservable) {
+        stackObservable.subscribe((information) => {
+            if (information && information.hasOwnProperty('result') &&
+                information.result.length &&
+                information.result[0].stack_data &&
+                information.result[0].stack_data.length) {
+                let stackItems: Array<any> = information.result[0].stack_data;
+                let resultObj: any = {};
+                stackItems.forEach(stackItem => {
+                    let stackObj = {};
+                    stackObj = {
+                        components: stackItem.components,
+                        distinctLicenses: stackItem.distinct_licenses,
+                        popularity: stackItem.popularity,
+                        ecosystem: stackItem.ecosystem,
+                        manifest: stackItem.manifest_name,
+                        totalLicenses: stackItem.total_licenses
+                    };
+                    let path = stackItem['manifest_file_path'];
+                    resultObj[path] = stackObj;
+                });
+                resultObservable = Observable.create((observer) => {
+                    observer.next(resultObj);
                     observer.complete();
                 });
             }
         });
     }
-    return resultInfo;
+    return resultObservable;
 }

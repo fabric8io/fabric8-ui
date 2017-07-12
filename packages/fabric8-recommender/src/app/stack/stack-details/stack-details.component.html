@@ -10,6 +10,11 @@
             <div class="pre-loader-spinner spinner spinner-lg"></div>
           </div>
           <div [hidden]="errorMessage.message">
+            <!-- Dropdown-->
+            <span>Path to manifest file: </span>
+            <select name="manifestSelect" [(ngModel)]="currentManifestPath" (change)="selectedManifestPath()" class="combobox form-control">
+              <option *ngFor="let path of paths" [ngValue]="path">{{ path }}</option>
+            </select>
             <!-- Recommender -->
             <div>
               <f8-recommender [data]="repoInfo && repoInfo" [recommendations]="recommendations"></f8-recommender>
