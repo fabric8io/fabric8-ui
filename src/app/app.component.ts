@@ -89,6 +89,12 @@ export class AppComponent {
       });
   }
 
+  updateFeatureEnabled($event: boolean) {
+    if($event) {
+      this.experimentalFeatureEnabled = $event;
+    }
+  }
+
   handleAction($event: any): void {
     this.notifications.actionSubject.next($event.action);
   }

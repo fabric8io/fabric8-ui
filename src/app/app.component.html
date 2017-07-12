@@ -12,7 +12,7 @@
       <f8-exp-feature-banner>
       </f8-exp-feature-banner>
       <div [hidden]="experimentalFeatureEnabled">
-        <f8-exp-feature-page>
+        <f8-exp-feature-page (onExperimentalFeaturesEnabled)="updateFeatureEnabled($event)">
         </f8-exp-feature-page>
       </div>
     </div>

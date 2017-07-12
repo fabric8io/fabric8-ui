@@ -118,6 +118,7 @@ import { AboutModalModule } from './about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
 import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";
+import { GettingStartedService } from './getting-started/services/getting-started.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -206,6 +207,7 @@ export type StoreType = {
       useClass: Fabric8UIOnLogin
     },
     forgeApiUrlProvider,
+    GettingStartedService,
     HttpService,
     Logger,
     LoginService,

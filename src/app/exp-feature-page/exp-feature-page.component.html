@@ -6,15 +6,15 @@
       <p>Experimental features are areas of the product that we’re trying out and would like your feedback on.</p>
       <p>Experimental features are provided for use with no guarantee of service, data longevity, or support.  You agree to use these at your own risk with the acknowledgement that the features may not operate correctly and may be substantially modified.  These features are provided “AS IS” without warranty of any kind.  In no event shall Red Hat be liable for any damage whatsoever arising out of the use or inability to use these features. You can opt out of these experimental features at any point in time by unchecking the box below.</p>
       <p>These terms and conditions do not replace the terms and conditions you agreed to when you signed up for the OpenShift.io service.</p>
-      <!--<form class="form-horizontal">-->
-        <!--<div class="form-group">-->
-          <!--<input type="checkbox" name="accept" id="accept">-->
-          <!--<label for="accept" class="control-label">-->
-            <!--I agree to the terms of this feature, as written above.-->
-          <!--</label>-->
-        <!--</div>-->
-      <!--</form>-->
-      <!--<button class="btn btn-lg btn-experimental" disabled>Active All Experimental Features</button>-->
+      <form class="form-horizontal">
+        <div class="form-group">
+          <input type="checkbox" name="accept" id="accept" [(ngModel)]="enableFeatures">
+          <label for="accept" class="control-label">
+            I agree to the terms of this feature, as written above.
+          </label>
+        </div>
+      </form>
+      <button class="btn btn-lg btn-experimental" [disabled]="!enableFeatures" (click)="activateExperimentalFeatures()">Activate All Experimental Features</button>
     </div>
   </div>
 </div>
