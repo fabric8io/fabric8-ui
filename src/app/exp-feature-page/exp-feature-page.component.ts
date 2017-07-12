@@ -48,7 +48,7 @@ export class ExpFeaturePageComponent implements OnInit, OnDestroy {
       this.enableFeatures = false;
       this.onExperimentalFeaturesEnabled.emit(true);
       this.notifications.message({
-        message: `Profile updated!`,
+        message: `Experimental features enabled!`,
         type: NotificationType.SUCCESS
       } as Notification);
     }, error => {
