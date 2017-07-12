@@ -7,13 +7,14 @@ import { Spaces } from 'ngx-fabric8-wit';
  * Angular 2 decorators and services
  */
 import { Component, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { AboutService } from './shared/about.service';
 import { NotificationsService } from './shared/notifications.service';
 import { LoginService } from './shared/login.service';
 import { BrandingService } from './shared/branding.service';
+import { FeatureFlagConfig } from './models/feature-flag-config';
 
 
 /*
@@ -27,7 +28,8 @@ import { BrandingService } from './shared/branding.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-
+  public experimentalFeatureEnabled: boolean;
+  public isExperimentalFeature: boolean;
 
   constructor(
     private about: AboutService,
@@ -58,12 +60,21 @@ export class AppComponent {
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
       .map(route => {
+        //reset all experimental feature flag properties
+        this.experimentalFeatureEnabled = false;
+        this.isExperimentalFeature = false;
+
         while (route.firstChild) route = route.firstChild;
         return route;
       })
       .filter(route => route.outlet === 'primary')
       .mergeMap(route => route.data)
       .subscribe((event) => {
+        if (event['featureFlagConfig']) {
+          let featureFlagConfig = event['featureFlagConfig'] as FeatureFlagConfig;
+          this.experimentalFeatureEnabled = featureFlagConfig.enabled;
+          this.isExperimentalFeature = true;
+        }
         let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
         this.titleService.setTitle(title);
       });

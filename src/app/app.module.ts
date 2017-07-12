@@ -23,6 +23,7 @@ import {
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule }       from 'angular2-moment';
 import { PlannerModule }      from 'fabric8-planner';
+import { RouterModule }       from '@angular/router';
 import {
   // Base functionality for the runtime console
   KubernetesStoreModule,
@@ -71,6 +72,8 @@ import { AppState, InternalStateType } from './app.service';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { MenusService }    from './header/menus.service';
+import { ExpFeaturePageComponent } from './exp-feature-page/exp-feature-page.component';
+import { ExpFeatureBannerComponent } from './exp-feature-page/exp-feature-banner.component';
 
 // Shared Services
 import { AboutService }                  from './shared/about.service';
@@ -85,6 +88,7 @@ import { ContextService }                from './shared/context.service';
 import { ContextCurrentUserGuard }       from './shared/context-current-user-guard.service';
 import { ContextResolver }               from './shared/context-resolver.service';
 import { DummyService }                  from './shared/dummy.service';
+import { ExperimentalFeatureResolver }   from './shared/experimental-feature.resolver';
 import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
 import { LoginService }                  from './shared/login.service';
@@ -148,6 +152,7 @@ export type StoreType = {
     MomentModule,
     ReactiveFormsModule,
     RestangularModule,
+    RouterModule,
     SpaceWizardModule,
     StackDetailsModule,
     WidgetsModule,
@@ -158,7 +163,9 @@ export type StoreType = {
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    ExpFeaturePageComponent,
+    ExpFeatureBannerComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
@@ -186,6 +193,7 @@ export type StoreType = {
     },
     DummyService,
     ErrorService,
+    ExperimentalFeatureResolver,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
     {

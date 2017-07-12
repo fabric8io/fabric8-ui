@@ -1,26 +1,20 @@
-<div class="experimental-bar">
-  This feature is experimental. You can manage experimental features on your <button class="btn btn-link-experimental" (click)="routeToUpdateProfile()">profile</button> page. <button class="btn btn-link-experimental">Got it!</button>
-  <button class="pull-right experimental-more-info btn btn-link-experimental">
-    More info<i class="fa fa-flask"></i>
-  </button>
-</div>
 <div class="container-fluid content padding-top-15 experimental-page experimental-border">
   <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 experimental-content">
     <div class="col-md-9 col-sm-9 col-xs-9">
       <i class="fa fa-flask fa-5x"></i>
       <h2>Experimental Features</h2>
-      <p>
-        This is where the legal notice text would go that a user would have to read before they acknowledge (and accept) the terms of service below for using the Experimental Features.
-      </p>
-      <form class="form-horizontal">
-        <div class="form-group">
-          <input type="checkbox" name="accept" id="accept">
-          <label for="accept" class="control-label">
-            I agree to the terms of this feature, as written above.
-          </label>
-        </div>
-      </form>
-      <button ngModel="button" ngDisabled="!checked" class="btn btn-lg btn-experimental" disabled>Active All Experimental Features</button>
+      <p>Experimental features are areas of the product that we’re trying out and would like your feedback on.</p>
+      <p>Experimental features are provided for use with no guarantee of service, data longevity, or support.  You agree to use these at your own risk with the acknowledgement that the features may not operate correctly and may be substantially modified.  These features are provided “AS IS” without warranty of any kind.  In no event shall Red Hat be liable for any damage whatsoever arising out of the use or inability to use these features. You can opt out of these experimental features at any point in time by unchecking the box below.</p>
+      <p>These terms and conditions do not replace the terms and conditions you agreed to when you signed up for the OpenShift.io service.</p>
+      <!--<form class="form-horizontal">-->
+        <!--<div class="form-group">-->
+          <!--<input type="checkbox" name="accept" id="accept">-->
+          <!--<label for="accept" class="control-label">-->
+            <!--I agree to the terms of this feature, as written above.-->
+          <!--</label>-->
+        <!--</div>-->
+      <!--</form>-->
+      <!--<button class="btn btn-lg btn-experimental" disabled>Active All Experimental Features</button>-->
     </div>
   </div>
 </div>
