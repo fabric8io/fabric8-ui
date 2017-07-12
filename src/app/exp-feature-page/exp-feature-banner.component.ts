@@ -7,7 +7,7 @@ import {
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
-import { UserService, User } from 'ngx-login-client';
+import { UserService, User, AuthenticationService } from 'ngx-login-client';
 
 @Component({
   selector: 'f8-exp-feature-banner',
@@ -15,18 +15,23 @@ import { UserService, User } from 'ngx-login-client';
 })
 export class ExpFeatureBannerComponent implements OnInit, OnDestroy {
 
-  public loggedInUser: User;
   public hideBanner: boolean;
+  public profileLink: string;
   private userSubscription: Subscription;
 
   constructor(public router: Router,
-              userService: UserService) {
+              userService: UserService,
+              authService: AuthenticationService) {
 
-    this.userSubscription = userService.loggedInUser.subscribe(val => {
-      if (val.id) {
-        this.loggedInUser = val;
-      }
-    });
+    if(authService.isLoggedIn()) {
+      this.userSubscription = userService.loggedInUser.subscribe(val => {
+        if (val.id) {
+          this.profileLink = '/' + val.attributes.username + '/_update';
+        }
+      });
+    } else {
+      this.profileLink = '/_home';
+    }
   }
 
   ngOnInit() {
@@ -34,7 +39,9 @@ export class ExpFeatureBannerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.userSubscription.unsubscribe();
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
   acknowledgeWarning() {
