@@ -1,6 +1,6 @@
 import { Navigation } from './../models/navigation';
 import { Observable, ConnectableObservable, Subject, BehaviorSubject } from 'rxjs';
-import { UserService, User } from 'ngx-login-client';
+import { AuthenticationService, UserService, User } from 'ngx-login-client';
 import { Injectable } from '@angular/core';
 import {
   Resolve,
@@ -16,10 +16,12 @@ export class ExperimentalFeatureResolver implements Resolve<FeatureFlagConfig> {
 
   private _loggedInUser: User;
 
-  constructor(private router: Router, private userService: UserService) {
-    userService.loggedInUser.subscribe((user) => {
-      this._loggedInUser = user;
-    });
+  constructor(private router: Router, private userService: UserService, private authService: AuthenticationService) {
+    if(authService.isLoggedIn()) {
+      userService.loggedInUser.subscribe((user) => {
+        this._loggedInUser = user;
+      });
+    }
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<FeatureFlagConfig> {
@@ -32,6 +34,12 @@ export class ExperimentalFeatureResolver implements Resolve<FeatureFlagConfig> {
         experimentalFeaturesEnabled =  contextInformation.experimentalFeatures["enabled"];
       }
     }
+
+    if (!this.authService.isLoggedIn()) {
+      // enable experimental features for all non-logged in users
+      experimentalFeaturesEnabled = true;
+    }
+
     return Observable.of({
       name: featureName,
       showBanner: true,

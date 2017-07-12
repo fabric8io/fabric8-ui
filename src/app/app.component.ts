@@ -63,15 +63,24 @@ export class AppComponent {
         //reset all experimental feature flag properties
         this.experimentalFeatureEnabled = false;
         this.isExperimentalFeature = false;
-
         while (route.firstChild) route = route.firstChild;
         return route;
       })
       .filter(route => route.outlet === 'primary')
       .mergeMap(route => route.data)
       .subscribe((event) => {
-        if (event['featureFlagConfig']) {
-          let featureFlagConfig = event['featureFlagConfig'] as FeatureFlagConfig;
+        let routeTree = this.activatedRoute.snapshot;
+        let featureFlagsInTree;
+
+        while (routeTree.firstChild) {
+          if(routeTree.data && routeTree.data['featureFlagConfig']) {
+            featureFlagsInTree = routeTree.data['featureFlagConfig'];
+          }
+          routeTree = routeTree.firstChild;
+        }
+
+        if (event['featureFlagConfig'] || featureFlagsInTree) {
+          let featureFlagConfig = event['featureFlagConfig'] as FeatureFlagConfig || featureFlagsInTree;
           this.experimentalFeatureEnabled = featureFlagConfig.enabled;
           this.isExperimentalFeature = true;
         }
