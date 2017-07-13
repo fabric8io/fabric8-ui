@@ -44,29 +44,29 @@ a {
       background-color: #1d1d1d;
     }
   }
-}
-.dropdown-menu {
-  -webkit-transform-origin: top;
-  transform-origin: top;
-  -webkit-animation-fill-mode: fowards;
-  animation-fill-mode: forwards;
-  -webkit-transform: scale(1, 0);
-  display: block;
+  .dropdown-menu {
+    -webkit-transform-origin: top;
+    transform-origin: top;
+    -webkit-animation-fill-mode: fowards;
+    animation-fill-mode: forwards;
+    -webkit-transform: scale(1, 0);
+    display: block;
 
-  transition: all .2s ease-out;
-  -webkit-transition: all .2s ease-out;
-  &>li {
-    &>a {
-      background-color: @color-pf-white;
-      transition: all .3s;
-      &:hover {
-        border-color: @color-pf-blue-100;
-        background-color: @color-pf-blue-50;
+    transition: all .2s ease-out;
+    -webkit-transition: all .2s ease-out;
+    &>li {
+      &>a {
+        background-color: @color-pf-white;
+        transition: all .3s;
+        &:hover {
+          border-color: @color-pf-blue-100;
+          background-color: @color-pf-blue-50;
+        }
       }
     }
   }
-}
-.dropup .dropdown-menu {
-  -webkit-transform-origin: bottom;
-  transform-origin: bottom;
+  .dropup .dropdown-menu {
+    -webkit-transform-origin: bottom;
+    transform-origin: bottom;
+  }
 }
