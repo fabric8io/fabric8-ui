@@ -32,9 +32,8 @@
                       {{space.attributes.name | spaceName}}
                     </a>
                   </div>
-                  <button class="col-xs-2 btn btn-danger f8-button__delete">
-                    <i class="fa fa-trash" (click)="confirmDeleteSpace(space)"></i>
-                    {{space.description}}TEST
+                  <button class="col-xs-2 btn btn-danger f8-button__delete" (click)="confirmDeleteSpace(space)">
+                    Delete
                   </button>
                 </div>
               </div>

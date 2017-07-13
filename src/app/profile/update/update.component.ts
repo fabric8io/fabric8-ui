@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -26,6 +27,8 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   @ViewChild('_imageUrl') imageUrlElement: ElementRef;
   @ViewChild('remainingCountElement') remainingCountElement: ElementRef;
   @ViewChild('_url') urlElement: ElementRef;
+  @ViewChild('profileForm') profileForm: NgForm;
+  @ViewChild('advancedForm') advancedForm: NgForm;
 
   authGitHub: boolean = false;
   authOpenShift: boolean = false;
@@ -129,7 +132,8 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   }
 
   get isUpdateProfileDisabled(): boolean {
-    return (this.emailInvalid || this.imageUrlInvalid || this.urlInvalid);
+    return ((!this.profileForm.dirty && !this.advancedForm.dirty) ||
+            (this.emailInvalid || this.imageUrlInvalid || this.urlInvalid));
   }
 
   // Actions
@@ -169,12 +173,14 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * @param $event The new bio
    */
   handleBioChange($event: string): void {
+    this.profileForm.form.markAsDirty();
     this.bio = $event;
   }
 
   linkImageUrl(): void {
     this.subscriptions.push(this.gitHubService.getUser().subscribe(user => {
       if (user.avatar_url !== undefined && user.avatar_url.length > 0) {
+        this.profileForm.form.markAsDirty();
         this.imageUrl = user.avatar_url;
       } else {
         this.handleError("No image found", NotificationType.INFO);

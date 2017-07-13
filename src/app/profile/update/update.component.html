@@ -3,7 +3,7 @@
     <!-- left column -->
     <div class="col-xs-12 col-sm-5 col-sm-offset-1">
       <h1>Edit Profile</h1>
-      <form role="form">
+      <form role="form" #profileForm="ngForm">
         <div class="form-group">
           <p class="help-block">The fields marked with <span class="required-pf">*</span> are required.</p>
         </div>
@@ -74,7 +74,7 @@
     </div>
     <!-- right column -->
     <div class="col-xs-12 col-sm-4 col-sm-offset-1">
-      <form>
+      <form #advancedForm="ngForm">
         <div class="form-group padding-top-40">
           <div class="feature-toggle-text">
             <div class="feature-toggle-text-header">
