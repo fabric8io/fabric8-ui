@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { CreateComponent } from './create.component';
 import { CodebasesComponent } from './codebases/codebases.component';
+import { ExperimentalFeatureResolver } from '../shared/experimental-feature.resolver';
 
 const routes: Routes = [
   {
@@ -22,15 +23,23 @@ const routes: Routes = [
       {
         path: 'environments',
         loadChildren: './environments/create-environments.module#CreateEnvironmentsModule',
+        resolve: {
+          featureFlagConfig: ExperimentalFeatureResolver
+        },
         data: {
-          title: 'Environments'
+          title: 'Environments',
+          featureName: 'Environments'
         }
       },
       {
         path: 'apps',
         loadChildren: './apps/create-apps.module#CreateAppsModule',
+        resolve: {
+          featureFlagConfig: ExperimentalFeatureResolver
+        },
         data: {
-          title: 'Applications'
+          title: 'Applications',
+          featureName: 'Applications'
         }
       },
     ]
