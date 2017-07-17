@@ -42,7 +42,7 @@ function stackApiUtils(data: any, target: string): Observable<any> {
  * Ouput: Observable of type 'any'
  */
 export function getStackRecommendations(data: any): Observable<any> {
-    let recommendationsObservable: Observable<any> = stackApiUtils(data, 'RECOM');
+    let recommendationsObservable: Observable<any> = stackApiUtils(data, 'ALL');
     let resultObservable: Observable<any> = null;
     if (recommendationsObservable) {
         recommendationsObservable.subscribe((information) => {
