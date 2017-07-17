@@ -154,7 +154,7 @@ export class StackDetailsComponent implements OnInit {
     let missing: Array<any> = recommendation['missing'] || [];
     let version: Array<any> = recommendation['version'] || [];
     let stackName: string = recommendation['stackName'] || 'An existing stack';
-    let fileName: string = this.stackReport[path]['fileName'];
+    let fileName: string = this.stackReport[path]['stackOverviewData']['fileName'];
     let recommendations = [];
     for (let i in missing) {
       if (missing.hasOwnProperty(i)) {
@@ -283,67 +283,33 @@ export class StackDetailsComponent implements OnInit {
           let result: any;
           let components: Array<any> = [];
 
-          /**
-           * Get Result Information from utils
-           */
-          let stackDataDoneObservable: Observable<any> = Observable.create((observer) => {
-            let stackDataObservable: Observable<any> = getResultInformation(data);
-            if (stackDataObservable) {
-              stackDataObservable.subscribe((stackDatas) => {
-                if (stackDatas) {
-                  for (let path in stackDatas) {
-                    if (stackDatas.hasOwnProperty(path)) {
-                      this.stackReport[path] = {};
-                      // Call the stack-components with the components information so that
-                      // It can parse the necessary information and show relevant things.
-                      this.setDependencies(path, stackDatas[path]);
-
-                      // set the overview data
-                      this.setOverviewData(path, stackDatas[path]);
-                    }
-                  }
-                }
-              });
-              observer.next(this.stackReport);
-            }
-            observer.complete();
-          });
-          // Ends Result Information
-
-          /**
-           * Get Recommendations from utils
-           */
-          let stackRecDataDoneObservable: Observable<any> = Observable.create((observer) => {
-            let recObservable: Observable<any> = getStackRecommendations(data);
-            if (recObservable) {
-              recObservable.subscribe((recommendations) => {
-                if (recommendations) {
-                  for (let path in recommendations) {
-                    if (recommendations.hasOwnProperty(path)) {
-                      // Call the recommendations with the recommendations response object
-                      this.setRecommendations(path, recommendations[path]);
-                    }
-                  }
-                }
-              });
-              observer.next(this.stackReport);
-            }
-            observer.complete();
-          });
-          // Ends Recommendations
-
+          let stackDataObservable: Observable<any> = getResultInformation(data);
+          let recObservable: Observable<any> = getStackRecommendations(data);
           Observable
             .zip(
-            stackDataDoneObservable, stackRecDataDoneObservable
+            stackDataObservable, recObservable
             )
-            .subscribe(([stackReport1, stackReport2]) => {
-              for (let path in this.stackReport) {
-                if (this.stackReport.hasOwnProperty(path)) {
-                  // Call the recommendations with the recommendations response object
-                  this.stackReport[path]['recommendations'].forEach(item => {
-                    item['workItem']['codebase']['filename'] =
-                      stackReport1[path]['stackOverviewData']['fileName'];
-                  });
+            .subscribe(([stackDatas, recommendations]) => {
+              if (stackDatas) {
+                for (let path in stackDatas) {
+                  if (path && stackDatas.hasOwnProperty(path)) {
+                    this.stackReport[path] = {};
+                    // Call the stack-components with the components information so that
+                    // It can parse the necessary information and show relevant things.
+                    this.setDependencies(path, stackDatas[path]);
+
+                    // set the overview data
+                    this.setOverviewData(path, stackDatas[path]);
+                  }
+                }
+              }
+              if (recommendations) {
+                for (let path in recommendations) {
+                  if (path && path !== 'undefined' && path !== 'widget_data'
+                  && recommendations.hasOwnProperty(path)) {
+                    // Call the recommendations with the recommendations response object
+                    this.setRecommendations(path, recommendations[path]);
+                  }
                 }
               }
               this.paths = Object.keys(this.stackReport);
