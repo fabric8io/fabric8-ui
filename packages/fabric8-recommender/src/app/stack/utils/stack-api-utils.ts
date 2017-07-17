@@ -57,6 +57,7 @@ export function getStackRecommendations(data: any): Observable<any> {
                 recommendation['recommendations'] &&
                 recommendation['recommendations'].length) {
                 let resultObj: any = {};
+                resultObj['widget_data'] = [];
                 let recommendations: Array<any> = recommendation['recommendations'];
                 recommendations.forEach(recommendationItem => {
                     let recommendationObj = {};
@@ -77,6 +78,12 @@ export function getStackRecommendations(data: any): Observable<any> {
                             schema: schema,
                             startedTime: startedTime
                         };
+                        let widgetData = {
+                            'missing': analysis.missing_packages,
+                            'version': analysis.version_mismatch,
+                            'stackName': similarStacks.stack_name
+                        };
+                        resultObj['widget_data'].push(widgetData);
                     }
                     let path = recommendationItem['manifest_file_path'];
                     resultObj[path] = recommendationObj;
