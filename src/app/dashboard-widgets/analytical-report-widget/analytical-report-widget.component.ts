@@ -127,33 +127,36 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
           if (recommendationsObservable) {
             let recommendations: Array<any> = [];
             recommendationsObservable.subscribe((result) => {
-              let missing: Array<any> = result.missing || [];
-              let version: Array<any> = result.version || [];
+              result = result['widget_data'] || [];
+              result.forEach(item => {
+                let missing: Array<any> = item.missing || [];
+                let version: Array<any> = item.version || [];
+                let stackName: string = item['stackName'] || 'An existing stack';
 
-              let stackName: string = result['stackName'] || 'An existing stack';
+                for (let i in missing) {
+                  if (missing.hasOwnProperty(i)) {
+                    let keys: Array<string> = Object.keys(missing[i]);
+                    recommendations.push({
+                      suggestion: 'Recommendation',
+                      action: 'Add',
+                      message: keys[0] + ' : ' + missing[i][keys[0]],
+                      subMessage: stackName + ' has this dependency included'
+                    });
+                  }
+                }
 
-              for (let i in missing) {
-                if (missing.hasOwnProperty(i)) {
-                  let keys: Array<string> = Object.keys(missing[i]);
-                  recommendations.push({
-                    suggestion: 'Recommendation',
-                    action: 'Add',
-                    message: keys[0] + ' : ' + missing[i][keys[0]],
-                    subMessage: stackName + ' has this dependency included'
-                  });
+                for (let i in version) {
+                  if (version.hasOwnProperty(i)) {
+                    let keys: Array<string> = Object.keys(version[i]);
+                    recommendations.push({
+                      suggestion: 'Recommendation',
+                      action: 'Update',
+                      message: keys[0] + ' : ' + version[i][keys[0]],
+                      subMessage: stackName + ' has a different version of dependency'
+                    });
+                  }
                 }
-              }
-              for (let i in version) {
-                if (version.hasOwnProperty(i)) {
-                  let keys: Array<string> = Object.keys(version[i]);
-                  recommendations.push({
-                    suggestion: 'Recommendation',
-                    action: 'Update',
-                    message: keys[0] + ' : ' + version[i][keys[0]],
-                    subMessage: stackName + ' has a different version of dependency'
-                  });
-                }
-              }
+              });
 
               this.stackAnalysisInformation['recommendations'] = recommendations;
               // Restrict the recommendations to a particular limit as specified in UX
