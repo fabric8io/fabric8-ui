@@ -95,6 +95,7 @@ export function getStackRecommendations(data: any): Observable<any> {
             }
         });
     }
+
     return resultObservable;
 }
 
