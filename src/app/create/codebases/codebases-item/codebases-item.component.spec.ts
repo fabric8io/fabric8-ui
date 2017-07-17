@@ -80,7 +80,7 @@ describe('Codebases Item Component', () => {
     fixture.detectChanges();
     let spanDisplayedInformation = debug.queryAll(By.css('.list-pf-title'));
     fixture.whenStable().then(() => {
-      expect(spanDisplayedInformation.length).toEqual(3)
+      expect(spanDisplayedInformation.length).toEqual(1)
     });
   }));
 });
