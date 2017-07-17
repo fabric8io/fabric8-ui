@@ -1,32 +1,27 @@
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
+
+import { ToolbarModule } from 'patternfly-ng';
+
 import { CodebasesToolbarComponent } from './codebases-toolbar.component';
-
-import {
-  ComponentLoaderFactory,
-  DropdownConfig,
-  DropdownModule,
-  PositioningService,
-  TooltipConfig
-} from 'ng2-bootstrap';
-
-import { ToolbarModule } from 'ngx-widgets';
 
 @NgModule({
   imports: [
-    RouterModule,
+    BsDropdownModule.forRoot(),
     CommonModule,
-    DropdownModule,
-    ToolbarModule
+    RouterModule,
+    ToolbarModule,
+    TooltipModule.forRoot()
   ],
   declarations: [
     CodebasesToolbarComponent
   ],
   providers: [
-    ComponentLoaderFactory,
-    DropdownConfig,
-    PositioningService,
+    BsDropdownConfig,
     TooltipConfig
   ],
   exports: [CodebasesToolbarComponent]

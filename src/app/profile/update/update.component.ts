@@ -25,7 +25,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   @ViewChild('_email') emailElement: ElementRef;
   @ViewChild('_bio') bioElement: RemainingCharsComponent;
   @ViewChild('_imageUrl') imageUrlElement: ElementRef;
-  @ViewChild('remainingCountElement') remainingCountElement: ElementRef;
   @ViewChild('_url') urlElement: ElementRef;
   @ViewChild('profileForm') profileForm: NgForm;
   @ViewChild('advancedForm') advancedForm: NgForm;
@@ -47,7 +46,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   fullNameInvalid: boolean = false;
   openShiftLinked: boolean = false;
   registrationCompleted: boolean = true;
-  remainingCharsConfig: RemainingCharsConfig;
   showActivity: boolean = true;
   showFullName: boolean = true;
   showEmail: boolean = true;
@@ -101,18 +99,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.token = this.auth.getToken();
-    this.remainingCharsConfig = {
-      blockInputAtMaxLimit: true,
-      charsMaxLimit: 255,
-      charsRemainingElement: this.remainingCountElement,
-      charsRemainingWarning: 5,
-      id: "bio",
-      inputType: "textarea",
-      name: "bio",
-      placeholder: "Enter your bio",
-      rows: 5,
-      value: this.bio
-    } as RemainingCharsConfig;
   }
 
   ngOnDestroy(): void {

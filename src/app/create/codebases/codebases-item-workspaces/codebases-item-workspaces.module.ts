@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DropdownModule } from 'ng2-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
+
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+
 import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
 import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.component';
 
 @NgModule({
   imports: [
+    BsDropdownModule.forRoot(),
     CommonModule,
-    DropdownModule,
     FormsModule
   ],
   declarations: [ CodebasesItemWorkspacesComponent ],
   exports: [ CodebasesItemWorkspacesComponent ],
-  providers: [WindowService, WorkspacesService]
+  providers: [ BsDropdownConfig, WindowService, WorkspacesService ]
 })
 export class CodebasesItemWorkspacesModule {
   constructor(http: Http) {}

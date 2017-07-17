@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { IModalHost } from '../../space-wizard/models/modal-host';
 
 import { Context, AreaService, Area, AreaAttributes } from 'ngx-fabric8-wit';
-import { ListViewConfig, EmptyStateConfig } from 'ngx-widgets';
+import { ListConfig, EmptyStateConfig } from 'patternfly-ng';
 
 import { ContextService } from '../../shared/context.service';
 
@@ -17,7 +17,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   private context: Context;
   private areas: Area[];
   private emptyStateConfig: EmptyStateConfig;
-  private listViewConfig: ListViewConfig;
+  private listConfig: ListConfig;
   private areaSubscription: Subscription;
   private selectedAreaId: string;
   @ViewChild('createArea') createArea: IModalHost;
@@ -29,15 +29,15 @@ export class AreasComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.listViewConfig = {
+    this.listConfig = {
       dblClick: false,
       dragEnabled: false,
       emptyStateConfig: this.emptyStateConfig,
       multiSelect: false,
       selectItems: false,
-      showSelectBox: false,
-      useExpandingRows: false
-    } as ListViewConfig;
+      showCheckbox: false,
+      useExpandItems: false
+    } as ListConfig;
 
     this.areaSubscription = this.areaService.getAllBySpaceId(this.context.space.id).subscribe(areas => {
       this.selectedAreaId = this.context.space.id;

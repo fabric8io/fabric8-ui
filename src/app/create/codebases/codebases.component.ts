@@ -12,13 +12,14 @@ import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-
 import { cloneDeep } from 'lodash';
 
 import {
+  ActionConfig,
   EmptyStateConfig,
   Filter,
   FilterEvent,
-  ListViewConfig,
+  ListConfig,
   SortEvent,
   SortField
-} from 'ngx-widgets';
+} from 'patternfly-ng';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -28,10 +29,6 @@ import {
   providers: [CodebasesService, DatePipe, GitHubService]
 })
 export class CodebasesComponent implements OnDestroy, OnInit {
-  @ContentChild('actionTemplate') actionTemplate: TemplateRef<any>;
-  @ContentChild('itemTemplate') itemTemplate: TemplateRef<any>;
-  @ContentChild('itemExpandedTemplate') itemExpandedTemplate: TemplateRef<any>;
-
   allCodebases: Codebase[];
   appliedFilters: Filter[];
   codebases: Codebase[];
@@ -39,7 +36,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   currentSortField: SortField;
   emptyStateConfig: EmptyStateConfig;
   isAscendingSort: boolean = true;
-  listViewConfig: ListViewConfig;
+  listConfig: ListConfig;
   resultsCount: number = 0;
   subscriptions: Subscription[] = [];
 
@@ -70,28 +67,42 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.updateCodebases();
 
     this.emptyStateConfig = {
-      actions: [{
-        id: 'action1',
-        name: 'Add a Codebase',
-        title: 'Add a Codebase',
-        type: 'main'
-      }],
-      icon: 'pficon-add-circle-o',
+      actions: {
+        primaryActions: [{
+          id: 'action1',
+          title: 'Add a Codebase',
+          tooltip: 'Add a Codebase'
+        }],
+        moreActions: [{
+          id: 'action2',
+          title: 'Secondary Action 1',
+          tooltip: 'Do the first thing'
+        }, {
+          id: 'action3',
+          title: 'Secondary Action 2',
+          tooltip: 'Do something else'
+        }, {
+          id: 'action4',
+          title: 'Secondary Action 3',
+          tooltip: 'Do something special'
+        }]
+      } as ActionConfig,
+      iconStyleClass: 'pficon-add-circle-o',
       title: 'Add a Codebase',
       info: "Start by importing your code repository."
     } as EmptyStateConfig;
 
-    this.listViewConfig = {
+    this.listConfig = {
       dblClick: false,
-      dragEnabled: false,
       emptyStateConfig: this.emptyStateConfig,
       headingRow: true,
       multiSelect: false,
       selectItems: false,
       //selectionMatchProp: 'name',
-      showSelectBox: false,
-      useExpandingRows: true
-    } as ListViewConfig;
+      showCheckbox: false,
+      useExpandItems: true,
+      useHeading: true
+    } as ListConfig;
   }
 
   // Actions

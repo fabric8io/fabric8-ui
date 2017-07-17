@@ -5,12 +5,12 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <alm-listview
+      <pfng-list
           [actionTemplate]="actionTemplate"
-          [config]="listViewConfig"
+          [config]="listConfig"
           [items]="codebases"
           [itemTemplate]="itemTemplate"
-          [itemExpandedTemplate]="itemExpandedTemplate"
+          [expandTemplate]="expandTemplate"
           (onActionSelect)="openAddCodebasePanel()">
         <ng-template #itemTemplate let-item="item" let-index="index">
           <codebases-item [codebase]="item" [index]="index" class="codebase-item"></codebases-item>
@@ -18,10 +18,10 @@
         <ng-template #actionTemplate let-item="item" let-index="index">
           <codebases-item-actions [codebase]="item" [index]="index"></codebases-item-actions>
         </ng-template>
-        <ng-template #itemExpandedTemplate let-item="item" let-index="index">
+        <ng-template #expandTemplate let-item="item" let-index="index">
           <codebases-item-details [codebase]="item"></codebases-item-details>
         </ng-template>
-      </alm-listview>
+      </pfng-list>
     </div>
   </div>
 </div>

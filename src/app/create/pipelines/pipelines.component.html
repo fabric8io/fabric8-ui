@@ -1,18 +1,18 @@
 <div id="pipelines" class="">
   <div class="toolbar-header">
-    <alm-toolbar [config]="toolbarConfig"
-                 [viewsTemplate]="addOpenShiftConsoleLink"
-                 (onFilterChange)="filterChange($event)"
-                 (onSortChange)="sortChange($event)">
+    <pfng-toolbar [config]="toolbarConfig"
+                  [viewsTemplate]="addOpenShiftConsoleLink"
+                  (onFilterChange)="filterChange($event)"
+                  (onSortChange)="sortChange($event)">
       <ng-template #addOpenShiftConsoleLink>
         <div class="openshift-links" placement="bottom">
-          <div class='pull-right dropdown-kebab-pf' dropdown>
-            <button class='btn btn-link pull-right' type='button'
+          <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
+            <button class='btn btn-link pull-right dropdown-toggle' type='button'
                     aria-haspopup='true' aria-expanded='true' dropdownToggle>
               <span class='fa fa-ellipsis-v'></span>
             </button>
 
-            <ul class='dropdown-menu-right' aria-labelledby='dropdownKebabRight9' role="menu" dropdownMenu>
+            <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
               <li>
                 <a (click)="openForgeWizard()">Add to Space</a>
               </li>
@@ -26,7 +26,7 @@
           </div>
         </div>
       </ng-template>
-    </alm-toolbar>
+    </pfng-toolbar>
   </div>
 
   <div class="container-fluid pipeline-list-container">

@@ -41,7 +41,7 @@ import {
   Logger,
   Notifications
 }                             from 'ngx-base';
-import { DropdownModule }     from 'ngx-dropdown';
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import {
   AreaService,
   Contexts,
@@ -140,8 +140,8 @@ export type StoreType = {
     AboutModalModule,
     BrowserAnimationsModule,
     BrowserModule,
+    BsDropdownModule.forRoot(),
     DeleteAccountDialogModule,
-    DropdownModule,
     FormsModule,
     HttpModule,
     KubernetesRestangularModule,
@@ -171,6 +171,7 @@ export type StoreType = {
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
     Broadcaster,
+    BsDropdownConfig,
     EventService,
     ENV_PROVIDERS,
     AboutService,

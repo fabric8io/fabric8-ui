@@ -11,17 +11,15 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <alm-listview
+      <pfng-list
         [config]="listViewConfig"
         [itemTemplate]="itemTemplate"
         [actionTemplate]="actionTemplate"
         [items]="areas" >
         <template #itemTemplate let-item="item" let-index="index">
-          <div class="list-view-pf-body areas-display">
-            <div class="list-view-pf-description">
-              <div class="list-group-item-heading">
-                {{itemPath(item.attributes)}}
-              </div>
+          <div class="list-pf-content-wrapper">
+            <div class="list-pf-main-content">
+              <div class="list-pf-title">{{itemPath(item.attributes)}}</div>
             </div>
           </div>
         </template>
@@ -30,12 +28,12 @@
             <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
               <span class="fa fa-ellipsis-v"></span>
             </button>
-            <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" dropdownMenu>
+            <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
               <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="addChildArea(item.id)">Add Child Area</a></li>
             </ul>
           </span>
         </template>
-      </alm-listview>
+      </pfng-list>
     </div>
   </div>
 </div>

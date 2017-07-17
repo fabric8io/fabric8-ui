@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DropdownModule } from 'ng2-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
-import { ListViewModule } from 'ngx-widgets';
+
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
+
+import { ListModule } from 'patternfly-ng';
 
 import { CodebasesAddModule } from './codebases-add/codebases-add.module';
 import { CodebasesComponent } from './codebases.component';
@@ -16,6 +19,7 @@ import { CodebasesRoutingModule } from './codebases-routing.module';
 
 @NgModule({
   imports: [
+    BsDropdownModule.forRoot(),
     CodebasesAddModule,
     CodebasesItemModule,
     CodebasesItemActionsModule,
@@ -24,12 +28,13 @@ import { CodebasesRoutingModule } from './codebases-routing.module';
     CodebasesToolbarModule,
     CodebasesRoutingModule,
     CommonModule,
-    DropdownModule,
     FormsModule,
-    ListViewModule
+    ListModule,
+    TooltipModule.forRoot()
   ],
-  declarations: [CodebasesComponent],
-  exports: [CodebasesComponent]
+  declarations: [ CodebasesComponent ],
+  exports: [ CodebasesComponent ],
+  providers: [ BsDropdownConfig, TooltipConfig ]
 })
 export class CodebasesModule {
   constructor(http: Http) { }

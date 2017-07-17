@@ -18,7 +18,7 @@
       <div class="collapse navbar-collapse" [ngClass]="{ 'in' : isIn }">
         <ul class="nav navbar-nav">
           <li class="context dropdown recent-items-dropdown" dropdown *ngIf="loggedInUser">
-            <a class="recent-items-toggle io-recent-items-active" dropdown-open data-toggle="tooltip" title="{{context.name}}">
+            <a class="recent-items-toggle io-recent-items-active dropdown-toggle" dropdownToggle data-toggle="tooltip" title="{{context.name}}">
               <div id="header_dropdownToggle" class="recent-items-toggle-text">
               <span class="nav-item-icon">
                 <span class=" {{context.type?.icon}}"></span>
@@ -30,7 +30,7 @@
               </div>
             </a>
             <!-- current Space and recent items dropdown -->
-            <ul class="dropdown-menu recent-items">
+            <ul class="dropdown-menu recent-items" *dropdownMenu>
               <li class="recent-items-toggle" *ngFor="let m of recent">
                 <a class="recent-items-text-dropdown"
                   [routerLink]="[m.path]"
@@ -79,11 +79,11 @@
         </ul>
         <!-- user profile dropdown -->
         <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
-          <li id="header_status" dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok" (onOpen)="onStatusListVisible(true)" (onClose)="onStatusListVisible(false)">
-            <a dropdown-open (onClose)="onStatusList(false)">
+          <li id="header_status" dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok" (onShown)="onStatusListVisible(true)" (onClose)="onStatusListVisible(false)">
+            <a (onHidden)="onStatusList(false)" class="dropdown-toggle" dropdownToggle>
               <span class="pficon pficon-ok pficon-white"></span>
             </a>
-            <div class="dropdown-menu infotip bottom-right" >
+            <div class="dropdown-menu infotip bottom-right" *dropdownMenu>
               <div class="arrow"></div>
               <ul class="list-group" *ngIf="statusListVisible">
                 <fabric8-status-list></fabric8-status-list>
@@ -99,7 +99,7 @@
             </a>
           </li>
           <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
-            <a dropdown-open class="user-dropdown" title="{{loggedInUser.attributes.fullName}}">
+            <a class="user-dropdown dropdown-toggle" title="{{loggedInUser.attributes.fullName}}" dropdownToggle>
               <div *ngIf="loggedInUser" id="header_dropdownToggle2" class="user-dropdown-items">
               <span class="user-icon">
                 <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
@@ -109,7 +109,7 @@
               <span class="caret"></span>
             </div>
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" *dropdownMenu>
               <li id="header_loggedinProfile">
                 <a [routerLink]="[loggedInUser.attributes.username]">
                   Profile

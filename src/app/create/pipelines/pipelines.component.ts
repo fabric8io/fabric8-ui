@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 
 import { AuthenticationService, UserService } from 'ngx-login-client';
-import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEvent, SortField } from 'ngx-widgets';
+import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEvent, SortField } from 'patternfly-ng';
 
 
 import { SwitchableNamespaceScope } from './switchable-namepsace.scope';

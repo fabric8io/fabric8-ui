@@ -5,7 +5,7 @@ import { IModalHost } from '../../space-wizard/models/modal-host';
 import { Context, CollaboratorService } from 'ngx-fabric8-wit';
 
 import { User } from 'ngx-login-client';
-import { ListViewConfig, EmptyStateConfig } from 'ngx-widgets';
+import { ListConfig, EmptyStateConfig } from 'patternfly-ng';
 
 import { ContextService } from '../../shared/context.service';
 import { find } from 'lodash';
@@ -20,7 +20,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   private context: Context;
   private collaborators: User[];
   private emptyStateConfig: EmptyStateConfig;
-  private listViewConfig: ListViewConfig;
+  private listConfig: ListConfig;
   private contextSubscription: Subscription;
   private collaboratorSubscription: Subscription;
   private userToRemove: User;
@@ -36,15 +36,15 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.listViewConfig = {
+    this.listConfig = {
       dblClick: false,
       dragEnabled: false,
       emptyStateConfig: this.emptyStateConfig,
       multiSelect: false,
       selectItems: false,
-      showSelectBox: false,
-      useExpandingRows: false
-    } as ListViewConfig;
+      showCheckbox: false,
+      useExpandItems: false
+    } as ListConfig;
     this.collaborators = [];
   }
 
