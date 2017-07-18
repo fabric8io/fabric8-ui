@@ -149,14 +149,14 @@ of the shadow dom, so you will normally want to place your styles in the
 
 
 We use mixins to avoid polluting components with uncessary style classes, and to avoid
-an explosion of shared files.
+an explosion of shared files.  
 
 The `src/assets/stylesheets/` directory includes a `shared` directory. These are
 shared global styles that we will refactor out in to a shared library at some point.
 Only update these styles if you are making a truly global style, and are going to
-synchronise your changes across all the various UI projects.
+synchronise your changes across all the various UI projects.  
 
 == Contributing to the app
 
 The development guide is part of the link:./CONTRIBUTING.adoc[contributors'
-instructions]. Please check it out in order to contribute to this project.
+instructions]. Please check it out in order to contribute to this project.  
