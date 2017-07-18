@@ -1,6 +1,6 @@
 <div class="create-work-item-widget card-pf f8-card">
   <div class="card-pf-heading-bg">
-    <div class="card-pf-heading io-card-heading">
+    <div class="card-pf-heading f8-card-heading">
       <h2 class="card-pf-title">My work items
       <span *ngIf="spaces.length !== 0">
         <select class="col-xs-3 col-sm-6 combobox form-control"
@@ -19,7 +19,7 @@
   <div class="card-pf-body f8-card-body">
     <div *ngIf="workItems.length !== 0; then showWorkItems else showBlankState"></div>
     <ng-template #showBlankState>
-      <div class="col-xs-12 f8-blank-slate-card blank-slate-workitem-card ">
+      <div class="col-xs-12 f8-blank-slate-card">
         <div class="f8-blank-slate-icon">
           <i class="pficon pficon-info"></i>
         </div>
@@ -35,11 +35,11 @@
               <div class="list-view-pf-body">
                 <div class="list-view-pf-description">
                   <div class="list-group-item-text">
-                    <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
-                    <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
+                    <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left f8-list-group-item-icon"></span>
+                    <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} f8-list-group-item-icon"></span>
                     <span>{{workItem.attributes['system.number']}}</span>
                     <span class="work-item-title" *ngIf="workItem.attributes">
-                      <a [routerLink]="['/', loggedInUser.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.id]">
+                      <a [routerLink]="['/', loggedInUser.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.id]" class="f8-list-group-item-link">
                         {{workItem.attributes['system.title']}}
                       </a>
                     </span>

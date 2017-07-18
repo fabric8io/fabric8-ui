@@ -1,7 +1,7 @@
 <div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf f8-card">
-  <div class="card-pf-heading">
+  <div class="card-pf-heading f8-card-heading">
     <div class="card-pf-heading-details f8-card-heading-details">
-      <a id="spacehome-my-workitems-add-button" class="btn btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
+      <a id="spacehome-my-workitems-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
         <i class="pficon pficon-add-circle-o"></i>
       </a>
     </div>
@@ -29,11 +29,11 @@
           <div class="list-view-pf-body">
             <div class="list-view-pf-description">
               <div class="list-group-item-text">
-                <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left create-work-item-icon"></span>
-                <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} create-work-item-icon"></span>
+                <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left f8-list-group-item-icon"></span>
+                <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} f8-list-group-item-icon"></span>
                 <span>{{workItem.attributes['system.number']}}</span>
                 <span class="work-item-title" *ngIf="workItem.attributes">
-                  <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="create-work-item-link">
+                  <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="f8-list-group-item-link">
                     {{workItem.attributes['system.title']}}
                   </a>
                 </span>
