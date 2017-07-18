@@ -29,7 +29,7 @@ service docker start
 cp /tmp/jenkins-env .
 docker build -t fabric8-ui-builder -f Dockerfile.builder .
 # User root is required to run webdriver-manager update. This shouldn't be a problem for CI containers
-mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder --user=root --cap-add=SYS_ADMIN -e EE_TEST_USERNAME=$EE_TEST_USERNAME -e EE_TEST_PASSWORD=$EE_TEST_PASSWORD -e "API_URL=http://api.prod-preview.openshift.io/api/" -e "CI=true" -t -v $(pwd)/dist:/dist:Z fabric8-ui-builder
+mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder --user=root --cap-add=SYS_ADMIN -e EE_TEST_USERNAME=$EE_TEST_USERNAME -e EE_TEST_PASSWORD=$EE_TEST_PASSWORD -e "API_URL=http://api.prod-preview.openshift.io/api/" -e "CI=true" -t -v $(pwd)/dist:/dist:Z -v $(pwd)/target:/home/fabric8/fabric8-ui/target:rw fabric8-ui-builder
 
 # Build
 docker exec fabric8-ui-builder npm install
@@ -48,6 +48,9 @@ docker exec fabric8-ui-builder npm install
 ##docker exec fabric8-ui-builder openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit/oc delete build --all -n almusertest1-stage
 ##docker exec fabric8-ui-builder openshift-origin-client-tools-v1.5.0-031cbe4-linux-64bit/oc delete build --all -n almusertest1-run
 
+## Test results to archive
+mkdir -p target
+
 ## Delete/cleanup Jenkins jobs - commented out for now - until test can run more reliably
 ##
 ## export TOKEN=`docker exec fabric8-ui-builder cat ../.kube/config | grep token | sed -e 's/token://g' |  sed -e 's/ //g'`
@@ -62,4 +65,3 @@ docker exec fabric8-ui-builder ./run_EE_tests.sh $1
 # Test results to archive
 docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/target/ .
 docker cp fabric8-ui-builder:/home/fabric8/fabric8-ui/functional_tests.log target
-

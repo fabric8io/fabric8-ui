@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 LOGFILE=$(pwd)/functional_tests.log
-echo Using logfile $LOGFILE 
+echo Using logfile $LOGFILE
 
 # Download dependencies
 echo -n Updating Webdriver and Selenium...
@@ -18,7 +18,7 @@ echo Running tests...
 node_modules/protractor/bin/protractor protractorEE.config.js --params.login.user=$1 --params.login.password=$2 --params.target.url=$3
 TEST_RESULT=$?
 
-# cat log file to stdout 
+# cat log file to stdout
 # cat $LOGFILE
 
 # Cleanup webdriver-manager and web app processes
@@ -33,4 +33,3 @@ else
   echo 'Functional tests FAIL'
   exit 1
 fi
-
