@@ -2,7 +2,6 @@ import { Broadcaster, Notification, NotificationAction, Notifications, Notificat
 import { CodebasesService } from '../../create/codebases/services/codebases.service';
 import { Space } from 'ngx-fabric8-wit';
 import { Codebase } from '../../create/codebases/services/codebase';
-
 import { ILoggerDelegate, LoggerFactory } from '../common/logger';
 import { IWorkflow } from '../models/workflow';
 import { formatJson, mergeArraysDistinctByKey } from '../common/utilities';
@@ -402,7 +401,8 @@ export class Fabric8AppGeneratorClient {
           this.state.canMovePreviousStep = validationState.canMovePreviousStep;
           this.state.valid = validationState.valid;
           this.state.steps = validationState.steps;
-
+          // Update fields to display eventual validation errors
+          this.fields = response.payload.fields;
           resolve({ request, response });
           this.processing = false;
 
@@ -535,10 +535,16 @@ export class Fabric8AppGeneratorClient {
       results = results.filter(r => r !== null);
       this.result = results[results.length - 1]; // for now only one result populated is returned from forge backend
       let resultDisplay = cloneDeep(this.result);
-      for (let key in resultDisplay.gitRepositoryNames) {
-        if (this.result.gitOwnerName) {
-          resultDisplay.gitRepositoryNames[key] = `https://github.com/${resultDisplay.gitOwnerName}/${resultDisplay.gitRepositoryNames[key]}.git`;
+      // for "forge import repo" wizard flow, fabric8-generator addon return the list of repo names and gitUrl is null
+      // we need to format gitRepositoryNames to display final Url
+      if (!this.result.gitUrl) {
+        for (let key in resultDisplay.gitRepositoryNames) {
+          if (this.result.gitOwnerName) {
+            resultDisplay.gitRepositoryNames[key] = `https://github.com/${resultDisplay.gitOwnerName}/${resultDisplay.gitRepositoryNames[key]}.git`;
+          }
         }
+      } else { // whereas for "forge quickstart" wizard flow, both git names and gitUrl are returned, we can use gitUrl and ignore repo names
+        resultDisplay.gitRepositoryNames = [];
       }
       let msg = this.formatForDisplay(resultDisplay);
       this.displaySuccessMessageView(`A starter application was created.`, msg);
