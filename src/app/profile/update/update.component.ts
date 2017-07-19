@@ -359,13 +359,17 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * @param user
    */
   private setUserProperties(user: User): void {
-    this.bio = user.attributes.bio;
-    this.company = user.attributes.company;
-    this.email = user.attributes.email;
-    this.fullName = user.attributes.fullName;
-    this.imageUrl = user.attributes.imageURL;
-    this.url = user.attributes.url;
-    this.username = user.attributes.username;
+    if (user.attributes === undefined) {
+      return;
+    }
+
+    this.bio = (user.attributes.bio !== undefined) ? user.attributes.bio : '';
+    this.company = (user.attributes.company !== undefined) ? user.attributes.company : '';
+    this.email = (user.attributes.email !== undefined) ? user.attributes.email : '';
+    this.fullName = (user.attributes.fullName !== undefined) ? user.attributes.fullName : '';
+    this.imageUrl = (user.attributes.imageURL !== undefined) ? user.attributes.imageURL : '';
+    this.url = (user.attributes.url !== undefined) ? user.attributes.url : '';
+    this.username = (user.attributes.username !== undefined) ? user.attributes.username : '';
 
     let contextInformation = user.attributes["contextInformation"];
     if (contextInformation && contextInformation.experimentalFeatures ) {

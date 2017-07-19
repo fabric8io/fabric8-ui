@@ -69,8 +69,6 @@
                     [charsMaxLimit]="255"
                     [charsRemainingElement]="remainingCountElement"
                     [charsRemainingWarning]="5"
-                    (onOverCharsMaxLimit)="handleOverCharsMaxLimit($event, 'example1')"
-                    (onUnderCharsMaxLimit)="handleUnderCharsMaxLimit($event, 'example1')"
                     [(ngModel)]="bio"
                     pfng-remaining-chars-count>
           </textarea>
