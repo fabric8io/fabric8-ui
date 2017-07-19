@@ -71,7 +71,7 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
   let answer = new BuildConfigs();
   pipelines.forEach(bc => {
     let bcSpace = bc.labels['space'];
-    if (!bcSpace || bcSpace === spaceId) {
+    if (bcSpace === spaceId) {
       answer.push(bc);
     }
   });
