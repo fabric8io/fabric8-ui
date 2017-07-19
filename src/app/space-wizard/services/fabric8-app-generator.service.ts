@@ -122,7 +122,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
    * After the api is called, the response is transformed back into form fields again, but preserving
    * the original forge fields in response context.
    */
-  private executeForgeCommand( request: IAppGeneratorRequest ): Observable<IAppGeneratorResponse> {
+  executeForgeCommand( request: IAppGeneratorRequest ): Observable<IAppGeneratorResponse> {
     let cmd = this.updateForgeInputsWithFieldValues(this.initializeCommand(request.command));
     let cmdDescription = `${cmd.name} :: ${cmd.parameters.pipeline.step.name} :: ${cmd.parameters.pipeline.step.index}`;
     this.log(`AppGenerator executing the '${cmdDescription}' command ...`, cmd);
@@ -147,6 +147,16 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
            message: `The ${cmdDescription} command failed or only partially succeeded`,
            inner: err
          };
+        // Find Forge root cause
+        if (err.inner._body) {
+          const body = JSON.parse(err.inner._body);
+          if (body && body.results) {
+            const result = body.results.filter(result => result.status === "FAILED");
+            if (result && result.length > 0) {
+              error.inner = result[0];
+            }
+          }
+        }
         if (err.message == "io.fabric8.forge.generator.keycloak.KeyCloakFailureException") {
           error = {
            origin: 'KeyCloak SSO error',

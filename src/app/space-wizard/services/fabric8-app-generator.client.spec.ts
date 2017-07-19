@@ -159,7 +159,7 @@ describe('Fabric8AppGeneratorClient:', () => {
     fabric8AppGeneratorClient = new Fabric8AppGeneratorClient(mockAppGeneratorService, mockCodebasesService, mockAppGeneratorConfigurationService, mockNotification, mockBroadcaster, mockLog);
     mockAppGeneratorConfigurationService.currentSpace = space;
     mockCodebasesService.addCodebase.and.returnValue(Observable.of(codebaseReturned))
-    fabric8AppGeneratorClient.result =  {
+    fabric8AppGeneratorClient.result = {
       "namespace": null,
       "buildConfigName": "",
       "gitUrl": null,
@@ -225,9 +225,9 @@ describe('Fabric8AppGeneratorClient:', () => {
       expect(fabric8AppGeneratorClient.processing).toBeFalsy();
       done();
     })
-  })
+  });
 
-  it('Format the returned result from Formge', () => {
+  it('Format the returned result from Forge', () => {
     // given
     mockLog.createLoggerDelegate.and.returnValue(() => { });
     let result = {
