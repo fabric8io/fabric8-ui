@@ -94,9 +94,7 @@ export class AppGeneratorMultipleSelectionLabelListComponent implements OnInit, 
         } else {
           this.field.value = [];
         }
-        if (this.field.display.required === true) {
-          this.appGenerator.validate();
-        }
+        this.appGenerator.state.canMoveToNextStep = true;
         break;
       }
       default: {
