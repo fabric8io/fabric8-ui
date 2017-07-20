@@ -16,7 +16,7 @@
 <ng-template #showCreateWorkspace>
   <a href="javascript:void(0)" (click)="createAndOpenWorkspace()" *ngIf="!workspaceBusy">
     <i class="pficon pficon-add-circle-o margin-right-10"></i>Create workspace</a>
-  <a href="javascript:void(0)" *ngIf="workspaceBusy"
+  <a class="workspace-busy disabled" href="javascript:void(0)" *ngIf="workspaceBusy"
      tooltip="Waiting for Che..." disabled>
     <i class="pficon pficon-add-circle-o margin-right-10"></i>Create workspace</a>
 </ng-template>
