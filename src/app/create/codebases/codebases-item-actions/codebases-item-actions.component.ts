@@ -17,6 +17,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   @Input() index: number = -1;
 
   subscriptions: Subscription[] = [];
+  workspaceBusy: boolean = false;
 
   constructor(
       private broadcaster: Broadcaster,
@@ -40,8 +41,10 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * Create workspace and open in editor
    */
   createAndOpenWorkspace(): void {
+    this.workspaceBusy = true;
     this.subscriptions.push(this.workspacesService.createWorkspace(this.codebase.id)
       .subscribe(workspaceLinks => {
+        this.workspaceBusy = false;
         if (workspaceLinks != null) {
           let name = this.getWorkspaceName(workspaceLinks.links.open);
           this.windowService.open(workspaceLinks.links.open, name);
@@ -58,6 +61,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
           });
         }
       }, error => {
+        this.workspaceBusy = false;
         this.handleError("Failed to create workspace", NotificationType.DANGER);
       }));
   }

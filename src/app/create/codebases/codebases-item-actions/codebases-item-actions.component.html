@@ -9,9 +9,12 @@
       <span class="fa fa-ellipsis-v"></span>
     </button>
     <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
-      <li [attr.role]="menuitem">
-        <a href="javascript:void(0)" class="dropdown-item secondary-action"
+      <li [ngClass]="{'disabled': workspaceBusy}"
+          [attr.role]="menuitem">
+        <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!workspaceBusy"
            (click)="createAndOpenWorkspace()">Create workspace</a>
+        <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="workspaceBusy"
+           tooltip="Please wait..." disabled>Create workspace</a>
       </li>
       <li class="disabled">
         <a href="javascript:void(0)" class="dropdown-item secondary-action"
