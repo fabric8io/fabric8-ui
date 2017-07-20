@@ -35,6 +35,7 @@ export class WorkspacesService {
     let url = `${this.workspacesUrl}/${codebaseId}/create`;
     return this.http
       .post(url, null, { headers: this.headers })
+      .timeout(60000) // 30 sec is not enough for che-server to start
       .map(response => {
         return response.json() as WorkspaceLinks;
       })
@@ -70,6 +71,7 @@ export class WorkspacesService {
   openWorkspace(url: string): Observable<WorkspaceLinks> {
     return this.http
       .post(url, null, { headers: this.headers })
+      .timeout(60000) // 30 sec is not enough for che-server to start
       .map(response => {
         return response.json() as WorkspaceLinks;
       })
