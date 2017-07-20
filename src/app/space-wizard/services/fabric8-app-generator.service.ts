@@ -148,13 +148,15 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
            inner: err
          };
         // Find Forge root cause
-        if (err.inner._body) {
+        if (err && err.inner && err.inner._body) {
           const body = JSON.parse(err.inner._body);
-          if (body && body.results) {
+          if (body && body.results) { // Forge returns an error with Results.fail
             const result = body.results.filter(result => result.status === "FAILED");
             if (result && result.length > 0) {
               error.inner = result[0];
             }
+          } else { // Forge returns an Exception with throw RuntimeException
+            error.inner = body
           }
         }
         if (err.message == "io.fabric8.forge.generator.keycloak.KeyCloakFailureException") {

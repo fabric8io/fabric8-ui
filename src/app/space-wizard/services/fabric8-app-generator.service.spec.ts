@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Logger } from 'ngx-base';
 import { Fabric8AppGeneratorService } from './fabric8-app-generator.service';
-import { errorForExecuteForgeCommandError, expectedErr, mockService } from './fabric8-app-generator.service.mock'
+import { expectedForgeError, mockServiceForError, mockServiceForgeException, expectedForException } from './fabric8-app-generator.service.mock'
 
 describe('Fabric8AppGeneratorService:', () => {
   let mockAppGeneratorService: any;
@@ -20,7 +20,7 @@ describe('Fabric8AppGeneratorService:', () => {
     };
   });
 
-  it('Execute returns with a Forge error', () => {
+  it('Execute returns with a Forge returning an error', () => {
     // given
     mockLog.createLoggerDelegate.and.returnValue(() => { });
     let request = {
@@ -28,13 +28,34 @@ describe('Fabric8AppGeneratorService:', () => {
         "name": "forge-quick-start"
       }
     };
-    fabric8AppGeneratorService = new Fabric8AppGeneratorService(mockService, mockLog, mockAppGeneratorConfigurationService, mockApiLocator);
+    fabric8AppGeneratorService = new Fabric8AppGeneratorService(mockServiceForError, mockLog, mockAppGeneratorConfigurationService, mockApiLocator);
 
     // when
     fabric8AppGeneratorService.executeForgeCommand(request).subscribe(() => {
+      fail("Execute returns with a Forge trowing an exception");
     }, err => {
       // then
-      expect(err).toEqual(expectedErr);
+      expect(err).toEqual(expectedForgeError);
+    })
+  });
+
+
+  it('Execute returns with a Forge returning an error', () => {
+    // given
+    mockLog.createLoggerDelegate.and.returnValue(() => { });
+    let request = {
+      "command": {
+        "name": "forge-quick-start"
+      }
+    };
+    fabric8AppGeneratorService = new Fabric8AppGeneratorService(mockServiceForgeException, mockLog, mockAppGeneratorConfigurationService, mockApiLocator);
+
+    // when
+    fabric8AppGeneratorService.executeForgeCommand(request).subscribe(() => {
+      fail("Execute returns with a Forge trowing an exception");
+    }, err => {
+      // then
+      expect(err).toEqual(expectedForException);
     })
   });
 
