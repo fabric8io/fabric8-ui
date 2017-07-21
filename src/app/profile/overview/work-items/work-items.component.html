@@ -1,5 +1,5 @@
 <div class="col-sm-6 margin-top-25" *ngIf="spaces.length !== 0">
-  <select class="combobox form-control"
+  <select class="form-control"
           [(ngModel)]="currentSpaceId"
           (ngModelChange)="fetchWorkItems()">
     <option value="default">Select a space to work with...</option>

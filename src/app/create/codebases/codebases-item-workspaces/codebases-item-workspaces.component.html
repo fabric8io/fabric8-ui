@@ -1,6 +1,6 @@
 <div *ngIf="workspacesAvailable; then showOpenWorkspace else showCreateWorkspace"></div>
 <ng-template #showOpenWorkspace>
-  <select class="combobox form-control workspace-select"
+  <select class="form-control workspace-select"
           [disabled]="!workspacesAvailable || workspaceBusy"
           [(ngModel)]="workspaceUrl"
           (ngModelChange)="setWorkspaceSelected()">
