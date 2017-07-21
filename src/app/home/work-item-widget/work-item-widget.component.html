@@ -3,7 +3,7 @@
     <div class="card-pf-heading f8-card-heading">
       <h2 class="card-pf-title">My work items
       <span *ngIf="spaces.length !== 0">
-        <select class="col-xs-3 col-sm-6 combobox form-control"
+        <select class="col-xs-3 col-sm-6 form-control work-item-combobox combobox"
             [disabled]="spaces.length === 0"
             [(ngModel)]="currentSpaceId"
             (ngModelChange)="fetchWorkItems()">

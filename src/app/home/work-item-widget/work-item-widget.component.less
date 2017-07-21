@@ -1,9 +1,12 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
-.combobox {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  width: 50%;
+// Setting the specificity of .combobox so it won't effect the codebases page
+.work-item-combobox {
+  &.combobox {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    width: 50%;
+  }
 }
 .work-item-title {
   position: absolute;
