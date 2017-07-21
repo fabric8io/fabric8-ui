@@ -1,7 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { Logger } from 'ngx-base';
 import { Fabric8AppGeneratorService } from './fabric8-app-generator.service';
-import { expectedForgeError, mockServiceForError, mockServiceForgeException, expectedForException } from './fabric8-app-generator.service.mock'
+import {
+  expectedForgeError,
+  mockServiceForError,
+  mockServiceForgeException,
+  expectedForException
+ } from './fabric8-app-generator.service.mock'
 
 describe('Fabric8AppGeneratorService:', () => {
   let mockAppGeneratorService: any;
@@ -38,7 +43,6 @@ describe('Fabric8AppGeneratorService:', () => {
       expect(err).toEqual(expectedForgeError);
     })
   });
-
 
   it('Execute returns with a Forge returning an error', () => {
     // given

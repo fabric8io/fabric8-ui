@@ -29,7 +29,7 @@ import {
 } from './forge.service';
 
 import {
- AppGeneratorConfiguratorService
+  AppGeneratorConfiguratorService
 } from './fabric8-app-generator-configurator.service';
 import { ApiLocatorService } from '../../shared/api-locator.service';
 
@@ -50,7 +50,7 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     apiLocator: ApiLocatorService) {
     super();
     let logger = loggerFactory.createLoggerDelegate(this.constructor.name, Fabric8AppGeneratorService.instanceCount++);
-    if ( logger ) {
+    if (logger) {
       this.log = logger;
     }
     this._ssoApiUrl = apiLocator.ssoApiUrl;
@@ -62,24 +62,24 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
    * update the values that will be transmitted to forge with the form
    * field values transmitted from the application.
    */
-  private updateForgeInputsWithFieldValues( command: IAppGeneratorCommand ): IAppGeneratorCommand {
-    if ( command.parameters && command.parameters.fields ) {
-      for ( let field of <IFieldCollection>command.parameters.fields ) {
+  private updateForgeInputsWithFieldValues(command: IAppGeneratorCommand): IAppGeneratorCommand {
+    if (command.parameters && command.parameters.fields) {
+      for (let field of <IFieldCollection>command.parameters.fields) {
         let inputs: Array<IForgeInput> = command.parameters.data.inputs;
-        let input: IForgeInput = inputs.find( i => i.name === field.name );
-        if ( input ) {
+        let input: IForgeInput = inputs.find(i => i.name === field.name);
+        if (input) {
           input.value = field.value;
           this._configuratorService.scrubAppGeneratorRequest(command, input, field);
         }
       }
-      if ( command.parameters.pipeline && command.parameters.pipeline.step && (command.parameters.pipeline.step.name || '').toLowerCase() === 'execute' ) {
+      if (command.parameters.pipeline && command.parameters.pipeline.step && (command.parameters.pipeline.step.name || '').toLowerCase() === 'execute') {
         this._configuratorService.appendAppGeneratorRequestMissingFields(command);
       }
     }
     return command;
   }
   /** Initializes the command with default values */
-  private initializeCommand( command: Partial<IAppGeneratorCommand> ): IAppGeneratorCommand {
+  private initializeCommand(command: Partial<IAppGeneratorCommand>): IAppGeneratorCommand {
     let emptyCommand: IAppGeneratorCommand = {
       name: '',
       parameters: {
@@ -122,61 +122,63 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
    * After the api is called, the response is transformed back into form fields again, but preserving
    * the original forge fields in response context.
    */
-  executeForgeCommand( request: IAppGeneratorRequest ): Observable<IAppGeneratorResponse> {
+  executeForgeCommand(request: IAppGeneratorRequest): Observable<IAppGeneratorResponse> {
     let cmd = this.updateForgeInputsWithFieldValues(this.initializeCommand(request.command));
     let cmdDescription = `${cmd.name} :: ${cmd.parameters.pipeline.step.name} :: ${cmd.parameters.pipeline.step.index}`;
     this.log(`AppGenerator executing the '${cmdDescription}' command ...`, cmd);
-    return Observable.create( (observer: Observer<IAppGeneratorResponse>) => {
+    return Observable.create((observer: Observer<IAppGeneratorResponse>) => {
 
       let commandRequest: IForgeCommandRequest = {
         payload: {
           command: request.command
         }
       };
-      this.forgeService.executeCommand( commandRequest )
-      .map( (forgeResponse) => this.transformForgeResponseIntoAnAppGeneratorResponse(request, forgeResponse) )
-      .map( (response) => this._configuratorService.scrubAppGeneratorResponse({ request, response }) )
-      .subscribe( (response: IAppGeneratorResponse) => {
-        this.log(`AppGenerator '${cmdDescription}' command completed`, response);
-        observer.next(response);
-        observer.complete();
-      }, (err: Error|any) => {
+      this.forgeService.executeCommand(commandRequest)
+        .map((forgeResponse) => this.transformForgeResponseIntoAnAppGeneratorResponse(request, forgeResponse))
+        .map((response) => this._configuratorService.scrubAppGeneratorResponse({ request, response }))
+        .subscribe((response: IAppGeneratorResponse) => {
+          this.log(`AppGenerator '${cmdDescription}' command completed`, response);
+          observer.next(response);
+          observer.complete();
+        }, (err: Error | any) => {
           let error = {
-           origin: 'Fabric8AppGeneratorService',
-           name: 'ExecuteForgeCommandError' ,
-           message: `The ${cmdDescription} command failed or only partially succeeded`,
-           inner: err
-         };
-        // Find Forge root cause
-        if (err && err.inner && err.inner._body) {
-          const body = JSON.parse(err.inner._body);
-          if (body && body.results) { // Forge returns an error with Results.fail
-            const result = body.results.filter(result => result.status === "FAILED");
-            if (result && result.length > 0) {
-              error.inner = result[0];
+            origin: 'Fabric8AppGeneratorService',
+            name: 'ExecuteForgeCommandError',
+            message: `The ${cmdDescription} command failed or only partially succeeded`,
+            inner: new Error("An issue occurs with Forge backend. Please check the service is running.")
+          };
+          // Find Forge root cause
+          if (err && err.inner && err.inner._body) {
+            if (typeof err.inner._body === 'string' || err.inner._body instanceof String) {
+              const body = JSON.parse(err.inner._body);
+              if (body && body.results) { // Forge returns an error with Results.fail
+                const result = body.results.filter(result => result.status === "FAILED");
+                if (result && result.length > 0) {
+                  error.inner = result[0];
+                }
+              } else { // Forge returns an Exception with throw RuntimeException
+                error.inner = body
+              }
             }
-          } else { // Forge returns an Exception with throw RuntimeException
-            error.inner = body
           }
-        }
-        if (err.message == "io.fabric8.forge.generator.keycloak.KeyCloakFailureException") {
-          error = {
-           origin: 'KeyCloak SSO error',
-           name: 'KeyCloakFailureException',
-           message: `Please visit <a class="property-value property-value-result property-value-link" target="_blank" href="${this._ssoApiUrl}auth/realms/${this._realm}/account/identity" >${this._ssoApiUrl}auth/realms/${this._realm}/account/identity</a> to unlink your SSO account`,
-           inner: err
-         };
-        }
+          if (err.message == "io.fabric8.forge.generator.keycloak.KeyCloakFailureException") {
+            error = {
+              origin: 'KeyCloak SSO error',
+              name: 'KeyCloakFailureException',
+              message: `Please visit <a class="property-value property-value-result property-value-link" target="_blank" href="${this._ssoApiUrl}auth/realms/${this._realm}/account/identity" >${this._ssoApiUrl}auth/realms/${this._realm}/account/identity</a> to unlink your SSO account`,
+              inner: err
+            };
+          }
 
-         this.log({ message: error.message , error: true }, err);
-         return observer.error(error);
-      });
+          this.log({ message: error.message, error: true }, err);
+          return observer.error(error);
+        });
     });
   }
-  private transformForgeDataToFields( source: IForgeCommandData   ): IFieldCollection {
+  private transformForgeDataToFields(source: IForgeCommandData): IFieldCollection {
     let fields = new FieldCollection();
     source.inputs = source.inputs || [];
-    for ( let sourceInput of <IForgeInput[]>source.inputs ) {
+    for (let sourceInput of <IForgeInput[]>source.inputs) {
       let targetField: IField = {
         name: sourceInput.name,
         value: sourceInput.value,
@@ -199,18 +201,18 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
           index: 0
         }
       };
-      if ( targetField.display.hasChoices
-        && targetField.display.inputType === FieldWidgetClassificationOptions.MultipleSelection ) {
+      if (targetField.display.hasChoices
+        && targetField.display.inputType === FieldWidgetClassificationOptions.MultipleSelection) {
         // change to an array for binding purposes
         targetField.value = [];
       }
       // add dynamic fields that vary with payload
-      if ( sourceInput.note ) {
+      if (sourceInput.note) {
         targetField.display.note = sourceInput.note;
       }
-      if ( source.messages ) {
-        for ( let message of source.messages ) {
-          if ( message.input === sourceInput.name ) {
+      if (source.messages) {
+        for (let message of source.messages) {
+          if (message.input === sourceInput.name) {
             // if the field has a message then it means that something is not valid
             targetField.display.message = message;
             targetField.display.valid = false;
@@ -221,18 +223,18 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     }
     return fields;
   }
-  private transformDataToFieldsFields( command: IAppGeneratorCommand ) {
-    if (command && command.parameters ) {
+  private transformDataToFieldsFields(command: IAppGeneratorCommand) {
+    if (command && command.parameters) {
       command.parameters.fields = this.transformForgeDataToFields(
-        command.parameters.data || { inputs: []} as IForgeCommandData);
+        command.parameters.data || { inputs: [] } as IForgeCommandData);
     }
   }
   private transformForgeResponseIntoAnAppGeneratorResponse(
     request: IAppGeneratorRequest,
-    response: IForgeCommandResponse ) {
+    response: IForgeCommandResponse) {
     let forgeResponseData: IForgeCommandData = response.payload.data;
     forgeResponseData.metadata = forgeResponseData.metadata || {} as IForgeMetadata;
-    let fields = this.transformForgeDataToFields( forgeResponseData );
+    let fields = this.transformForgeDataToFields(forgeResponseData);
 
     let appGeneratorResponse = {
       payload: {
@@ -245,14 +247,14 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     } as IAppGeneratorResponse;
     // now update commands with field data from forge data
 
-    this.transformDataToFieldsFields( appGeneratorResponse.context.validationCommand );
-    this.transformDataToFieldsFields( appGeneratorResponse.context.nextCommand );
+    this.transformDataToFieldsFields(appGeneratorResponse.context.validationCommand);
+    this.transformDataToFieldsFields(appGeneratorResponse.context.nextCommand);
     return appGeneratorResponse;
 
   }
 
   private transformState(request: IAppGeneratorRequest,
-    response: IForgeCommandResponse ): IAppGeneratorState {
+    response: IForgeCommandResponse): IAppGeneratorState {
     let forgeResponseData: IForgeCommandData = response.payload.data;
     let forgeState: IForgeState = forgeResponseData.state;
     let state = <IAppGeneratorState>{
@@ -269,45 +271,44 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     return state;
   }
 
-  private transformSteps(steps: Array<string>= []): Array<any> {
+  private transformSteps(steps: Array<string> = []): Array<any> {
     let index = 0;
     let transformedSteps: Array<any> = steps.map(s => {
-       return {
-         id: (s || '').trim().toLowerCase(),
-         name: '',
-         title: '',
-         active: false,
-         index: index ++
-        };
+      return {
+        id: (s || '').trim().toLowerCase(),
+        name: '',
+        title: '',
+        active: false,
+        index: index++
+      };
     });
     return transformedSteps;
   }
 
-  private mapValueHasOptions( source: IForgeInput ): boolean {
-    if ( source.valueChoices ) {
+  private mapValueHasOptions(source: IForgeInput): boolean {
+    if (source.valueChoices) {
       return source.valueChoices.length > 0;
     }
     return false;
   }
 
-  private mapValueChoices( source: IForgeInput ): Array<IFieldChoice> {
+  private mapValueChoices(source: IForgeInput): Array<IFieldChoice> {
     let items: Array<IFieldChoice> = [];
-    if ( source.valueChoices ) {
+    if (source.valueChoices) {
       //
       let selection: string[] = [];
       if (!Array.isArray(source.value)) {
-        selection.push(source.value  as string);
+        selection.push(source.value as string);
       } else {
         selection = source.value || [];
       }
       let hash: any = {};
-      for (let item of selection)
-      {
+      for (let item of selection) {
         hash[item] = true;
       }
       let index: number = 0;
-      for ( let choice of source.valueChoices ) {
-        if ( choice.description ) {
+      for (let choice of source.valueChoices) {
+        if (choice.description) {
           items.push({
             index: index,
             id: choice.id,
@@ -328,17 +329,17 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
             selected: hash[choice.id] === true
           });
         }
-        index ++;
+        index++;
       }
     }
     return items;
   }
 
-  private mapFieldValueDataType( source: IForgeInput ): string {
-    if ( !source.valueType ) {
+  private mapFieldValueDataType(source: IForgeInput): string {
+    if (!source.valueType) {
       return 'string';
     }
-    switch ( (source.valueType || '').toLowerCase() ) {
+    switch ((source.valueType || '').toLowerCase()) {
       case 'java.lang.string': {
         return 'string';
       }
@@ -357,8 +358,8 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     }
   }
 
-  private mapWidgetClassification( source: IForgeInput ): FieldWidgetClassification {
-    switch ( (source.class || '').toLowerCase() ) {
+  private mapWidgetClassification(source: IForgeInput): FieldWidgetClassification {
+    switch ((source.class || '').toLowerCase()) {
       case 'uiinput': {
         return FieldWidgetClassificationOptions.SingleInput;
       }
@@ -374,11 +375,11 @@ export class Fabric8AppGeneratorService extends AppGeneratorService {
     }
   }
 
-  private mapFieldSetToRequest( source: IFieldCollection ): IForgeCommandRequest {
+  private mapFieldSetToRequest(source: IFieldCollection): IForgeCommandRequest {
     return { payload: { command: { name: '' } } };
   }
 
   // default logger does nothing when called
-  private log: ILoggerDelegate = () => {};
+  private log: ILoggerDelegate = () => { };
 
 }

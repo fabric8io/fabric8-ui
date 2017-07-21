@@ -574,9 +574,9 @@ export class Fabric8AppGeneratorClient {
     if (source.hasOwnProperty('message')) {
       target.message = '';
     }
-    if (source.hasOwnProperty('stack')) {
-      target.stack = '';
-    }
+    // if (source.hasOwnProperty('stack')) {
+    //   target.stack = '';
+    // }
     if (source.hasOwnProperty('inner')) {
       target.inner = '';
     }
@@ -587,7 +587,10 @@ export class Fabric8AppGeneratorClient {
       if (p.startsWith('localizedMessage')) {
         continue;
       }
-      if (p.startsWith('stackTrace')) {
+      if (p.startsWith('stack')) {
+        continue;
+      }
+      if (p.startsWith('originalStack') || p.startsWith('zoneAwareStack')) {
         continue;
       }
       if (Array.isArray(source[p]) === true) {

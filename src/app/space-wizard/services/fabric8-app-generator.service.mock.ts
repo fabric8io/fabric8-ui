@@ -66,7 +66,8 @@ export const mockServiceForgeException = {
       observer.complete();
     })
   }
-}
+};
+
 export const expectedForException = {
   "origin": "Fabric8AppGeneratorService",
   "name": "ExecuteForgeCommandError",
