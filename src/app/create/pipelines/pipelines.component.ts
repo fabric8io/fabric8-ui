@@ -148,6 +148,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         let spaceId = '';
         if (this._context) {
           spaceId = this._context.name;
+          let paths = this._context.path.split('/');
+          if (paths[paths.length - 1]) {
+            spaceId = paths[paths.length - 1];
+          }
         }
         if (spaceId) {
           let bcSpace = bc.labels['space'];
