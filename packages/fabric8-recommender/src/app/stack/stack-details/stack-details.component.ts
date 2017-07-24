@@ -167,7 +167,7 @@ export class StackDetailsComponent implements OnInit {
           key: key[0],
           workItem: {
             action: 'Add ' + key[0] + ' with version ' + missing[i][key[0]],
-            message: 'Stack analytics has identified a potentially missing library. It\'s ' +
+            message: 'Stack analytics has identified a potential missing library. It\'s ' +
             'recommended that you add "' + key[0] + '" with version ' + missing[i][key[0]] +
             ' to your application as many other Vert.x OpenShift applications have it included',
             codebase: {

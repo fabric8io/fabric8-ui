@@ -78,12 +78,7 @@ export function getStackRecommendations(data: any): Observable<any> {
                             schema: schema,
                             startedTime: startedTime
                         };
-                        let widgetData = {
-                            'missing': analysis.missing_packages,
-                            'version': analysis.version_mismatch,
-                            'stackName': similarStacks.stack_name
-                        };
-                        resultObj['widget_data'].push(widgetData);
+                        resultObj['widget_data'].push(recommendationObj);
                     }
                     let path = recommendationItem['manifest_file_path'];
                     resultObj[path] = recommendationObj;

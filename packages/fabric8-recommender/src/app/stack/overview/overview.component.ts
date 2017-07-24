@@ -105,6 +105,7 @@ export class OverviewComponent implements OnChanges {
           break;
         default:
       }
+      item.numeric = item.numeric < 0 || (!item.numeric && item.numeric !== 0) ? 'NA' : item.numeric;
     });
     this.codeMetricsInfo = codeMetrics;
   }
