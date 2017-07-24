@@ -12,7 +12,7 @@
     </div>
   </header>
 
-  <app-generator-step-view  [class.hide]="appGenerator.hasProcessingMessage||appGenerator.hasSuccessMessage" [state]="appGenerator.state"  ></app-generator-step-view>
+  <app-generator-step-view [class.hide]="appGenerator.hasProcessingMessage||appGenerator.hasSuccessMessage" [state]="appGenerator.state"  ></app-generator-step-view>
 
   <section  [class.hide]="!appGenerator.hasProcessingMessage" class="app-generator-message app-generator-message-processing">
     <div class="message-title-container">
@@ -64,11 +64,22 @@
             <label title="{{field.display.label}}" [class.required]="field.display.required===true" for="{{field.name}}" *ngIf="(field.display.showLabel!==false && field.display.visible!==false)||field.display.showVerticalLabel === true"
             [class.margin-bottom-standard-offset]="field.display.showVerticalLabel === true" [class.margin-left-5]="field.display.showVerticalLabel === true" [class.padding-left-standard-offset]="field.display.showVerticalLabel === true" [class.col-xs-12]="field.display.showVerticalLabel === true" [class.col-xs-12]="field.display.showLabel!==false" [class.col-sm-4]="field.display.showLabel!==false" class="user-select-none control-label">{{field.display.label}}</label>
             <div *ngIf="field.display.visible!==false" [class.col-sm-8]="field.display.showLabel!==false" [class.col-xs-12]="field.display.showLabel===false" [ngSwitch]="field.display.inputType ">
-              <app-generator-single-input                   class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'singleInput'" ></app-generator-single-input>
-              <app-generator-single-selection-dropdown      class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'singleSelectionDropdown'" ></app-generator-single-selection-dropdown>
-              <app-generator-single-selection-list          class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'singleSelectionList'" ></app-generator-single-selection-list>
-              <app-generator-multiple-selection-label-list  class="input-group width-100" [appGenerator]="appGenerator" [field]="field"  *ngSwitchCase="'multipleSelection'" ></app-generator-multiple-selection-label-list>
-              <small class="form-text text-muted user-select-none" *ngIf="field.display.note"><span class="color-info fa fa-info-circle"></span> <i>{{field.display.note}}</i></small>
+              <app-generator-single-input
+                class="input-group width-100" [appGenerator]="appGenerator" [field]="field" *ngSwitchCase="'singleInput'">
+              </app-generator-single-input>
+              <app-generator-single-selection-dropdown
+                class="input-group width-100" [appGenerator]="appGenerator" [field]="field" *ngSwitchCase="'singleSelectionDropdown'">
+              </app-generator-single-selection-dropdown>
+              <app-generator-single-selection-list
+                class="input-group width-100" [appGenerator]="appGenerator" [field]="field" *ngSwitchCase="'singleSelectionList'">
+              </app-generator-single-selection-list>
+              <app-generator-multiple-selection-label-list
+                class="input-group width-100" [appGenerator]="appGenerator" [field]="field" *ngSwitchCase="'multipleSelection'">
+              </app-generator-multiple-selection-label-list>
+              <small class="form-text text-muted user-select-none" *ngIf="field.display.note">
+                <span class="color-info fa fa-info-circle"></span>
+                <i>{{field.display.note}}</i>
+              </small>
               <div *ngIf="!field.display.valid" style="position:relative;height:auto;display:block;" class="form-control-feedback user-select-none">
                 {{field.display.message.description}}
               </div>
@@ -79,7 +90,7 @@
     </div>
   </section>
 
-  <footer class="container-fluid padding-top-standard-offset" [class.border-transparent]="appGenerator.hasProcessingMessage" >
+  <footer class="container-fluid padding-top-standard-offset" [class.border-transparent]="appGenerator.hasProcessingMessage">
     <div class="row">
       <div class="col-xs-12 wizard-step-tool-bar with-items-at-end">
         <button title="Cancel Quickstart Project" id="forge-cancel-button" type="button" class="btn btn-default margin-right-5" *ngIf="!appGenerator.hasErrorMessage && !appGenerator.hasSuccessMessage && !appGenerator.hasProcessingMessage"

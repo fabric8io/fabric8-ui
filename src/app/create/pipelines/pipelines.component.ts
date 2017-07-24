@@ -1,11 +1,11 @@
 import { Fabric8UIConfig } from './../../shared/config/fabric8-ui-config';
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
 
 import { AuthenticationService, UserService } from 'ngx-login-client';
-import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEvent, SortField } from 'ngx-widgets';
+import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEvent, SortField } from 'patternfly-ng';
 
 
 import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
@@ -27,6 +27,7 @@ import { SpaceWizardComponent } from './../../space-wizard/space-wizard.componen
 import { Context, Contexts } from 'ngx-fabric8-wit';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-pipelines',
   templateUrl: 'pipelines.component.html',
   styleUrls: ['./pipelines.component.less']
@@ -147,6 +148,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         let spaceId = '';
         if (this._context) {
           spaceId = this._context.name;
+          let paths = this._context.path.split('/');
+          if (paths[paths.length - 1]) {
+            spaceId = paths[paths.length - 1];
+          }
         }
         if (spaceId) {
           let bcSpace = bc.labels['space'];

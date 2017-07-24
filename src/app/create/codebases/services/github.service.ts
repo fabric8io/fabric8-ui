@@ -89,7 +89,7 @@ export class GitHubService implements OnDestroy {
   /**
    * Get GitHub repo status for given URL and commit
    *
-   * @param cloneUrl The GitHub URL (e.g., https://github.com/almighty/almighty-core.git)
+   * @param cloneUrl The GitHub URL (e.g., https://github.com/fabric8-services/fabric8-wit.git)
    * @param sha The commit number to retrieve status for
    * @returns {Observable<GitHubRepoDetails>}
    */
@@ -118,7 +118,7 @@ export class GitHubService implements OnDestroy {
   /**
    * Get GitHub repo details for given full name
    *
-   * @param fullName The GitHub full name (e.g., almighty/almighty-core)
+   * @param fullName The GitHub full name (e.g., fabric8-services/fabric8-wit)
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoDetailsByFullName(fullName: string): Observable<GitHubRepoDetails> {
@@ -145,7 +145,7 @@ export class GitHubService implements OnDestroy {
   /**
    * Get GitHub repo details for given URL
    *
-   * @param cloneUrl The GitHub URL (e.g., https://github.com/almighty/almighty-core.git)
+   * @param cloneUrl The GitHub URL (e.g., https://github.com/fabric8-services/fabric8-wit.git)
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoDetailsByUrl(cloneUrl: string): Observable<GitHubRepoDetails> {
@@ -156,7 +156,7 @@ export class GitHubService implements OnDestroy {
   /**
    * Get GitHub repo last commit for given URL
    *
-   * @param cloneUrl The GitHub URL (e.g., https://github.com/almighty/almighty-core.git)
+   * @param cloneUrl The GitHub URL (e.g., https://github.com/fabric8-services/fabric8-wit.git)
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoLastCommitByUrl(cloneUrl: string): Observable<GitHubRepoLastCommit> {
@@ -184,7 +184,7 @@ export class GitHubService implements OnDestroy {
   /**
    * Get GitHub repo license for given full name
    *
-   * @param @param fullName The GitHub full name (e.g., almighty/almighty-core)
+   * @param @param fullName The GitHub full name (e.g., fabric8-services/fabric8-wit)
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoLicenseByName(fullName: string): Observable<GitHubRepoLicense> {
@@ -211,7 +211,7 @@ export class GitHubService implements OnDestroy {
   /**
    * Get GitHub repo license for given URL
    *
-   * @param cloneUrl The GitHub URL (e.g., https://github.com/almighty/almighty-core.git)
+   * @param cloneUrl The GitHub URL (e.g., https://github.com/fabric8-services/fabric8-wit.git)
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoLicenseByUrl(cloneUrl: string): Observable<GitHubRepoLicense> {
@@ -277,8 +277,8 @@ export class GitHubService implements OnDestroy {
   /**
    * Get GitHub full name from clone URL
    *
-   * @param cloneUrl The GitHub clone URL (e.g., https://github.com/almighty/almighty-core.git)
-   * @returns {string} The GitHub full name (e.g., almighty/almighty-core)
+   * @param cloneUrl The GitHub clone URL (e.g., https://github.com/fabric8-services/fabric8-wit.git)
+   * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getFullName(cloneUrl: string): string {
     let prefix = "https://github.com/";

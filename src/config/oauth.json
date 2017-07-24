@@ -4,6 +4,8 @@
   "proxy_api_server": "{{ .Env.PROXIED_K8S_API_SERVER }}",
   "api_server_base_path": "{{ .Env.K8S_API_SERVER_BASE_PATH }}",
   "ws_api_server": "{{ .Env.WS_K8S_API_SERVER }}",
+  "ws_api_server_base_path": "{{ .Env.WS_K8S_API_SERVER_BASE_PATH }}",
+  "ws_api_server_protocol": "{{ .Env.WS_K8S_API_SERVER_PROTOCOL }}",
   "openshift_console_url": "{{ .Env.OPENSHIFT_CONSOLE_URL }}",
   "oauth": {
     "oauth_authorize_uri": "{{ .Env.OAUTH_AUTHORIZE_URI }}",

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -16,6 +16,7 @@ import { WorkItemType } from 'fabric8-planner/app/models/work-item-type';
 import { WorkItemDetailAddTypeSelectorWidgetComponent } from 'fabric8-planner/app/components/work-item-create/work-item-create-selector/work-item-create-selector.component';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-create-work-item-overlay',
   templateUrl: './create-work-item-overlay.component.html',
   styleUrls: ['./create-work-item-overlay.component.less']

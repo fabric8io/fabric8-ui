@@ -189,7 +189,7 @@ module.exports = function (options) {
             }, {
               loader: 'css-loader',
               options: {
-                minimize: isProd,
+                minimize: true,
                 sourceMap: true,
                 context: '/'
               }
@@ -204,7 +204,7 @@ module.exports = function (options) {
               {
                 loader: 'css-loader',
                 options: {
-                  minimize: isProd,
+                  minimize: true,
                   sourceMap: true,
                   context: '/'
                 }
@@ -228,7 +228,7 @@ module.exports = function (options) {
             }, {
               loader: 'css-loader',
               options: {
-                minimize: isProd,
+                minimize: true,
                 sourceMap: true,
                 context: '/'
               }
@@ -246,7 +246,7 @@ module.exports = function (options) {
         },
 
         /**
-         * Fil e loader for supporting fonts, for example, in CSS files.
+         * File loader for supporting fonts, for example, in CSS files.
          */
         {
           test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
@@ -321,6 +321,9 @@ module.exports = function (options) {
        * Copies project static assets.
        *
        * See: https://www.npmjs.com/package/copy-webpack-plugin
+       */
+       /*
+       * this needs to be redirected to reside in the _assets/ directory
        */
       new CopyWebpackPlugin([
         {

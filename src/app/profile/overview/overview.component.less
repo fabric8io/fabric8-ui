@@ -1,4 +1,4 @@
-@import (reference) '../../../assets/stylesheets/_base';
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
 //tabs content area
 .overview-nav-tab-content { padding: 20px 0; }
 .edit-profile-img {
@@ -6,38 +6,41 @@
   right: 5px;
   top: 5px;
   color: @color-pf-black-300;
-  cursor: pointer;
+  .pointer;
 }
 .edit-profile-name-icon {
   margin-top: 25px;
   color: @color-pf-black-500;
-  cursor: pointer;
+  .pointer;
 }
 .profile-wrapper-email {
   .pficon-edit {
     color: @color-pf-black-500;
-    cursor: pointer;
+    .pointer;
   }
 }
 .profile-wrapper {
-  &-email, &-url, &-bio, &-username { padding-left: 5px; }
+  &-email,
+  &-url,
+  &-bio,
+  &-username {
+    padding-left: 5px;
+  }
 }
 .profile-img,
-.profile-img-none { width: 100%; }
-.preview-img,
-.preview-img-none {
-  width: 100%;
+.profile-img-none {
+  margin: 0 auto;
 }
 .profile-img-none,
 .preview-img-none {
   border-top: solid 2px;
-  border-top-color: @color-pf-black-250;
+  border-top-color: @color-pf-black-300;
   border-right: solid 1px;
-  border-right-color: @color-pf-black-250;
+  border-right-color: @color-pf-black-300;
   border-bottom: solid 1px;
-  border-bottom-color: @color-pf-black-250;
+  border-bottom-color: @color-pf-black-300;
   border-left: solid 2px;
-  border-left-color: @color-pf-black-250;
+  border-left-color: @color-pf-black-300;
 }
 .truncate {
   overflow: hidden;

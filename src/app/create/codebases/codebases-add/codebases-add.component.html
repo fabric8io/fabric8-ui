@@ -12,7 +12,7 @@
       <div class="col-sm-9"
            [ngClass]="{'has-error': gitHubRepoInvalid === true || gitHubRepoDuplicated === true}">
         <input type="text" class="form-control" id="gitHubRepo" name="gitHubRepo"
-               placeholder="almighty/almighty-core"
+               placeholder="fabric8-services/fabric8-wit"
                [(ngModel)]="gitHubRepo" (ngModelChange)="resetFetch()">
         <span class="help-block" *ngIf="gitHubRepoInvalid === true">Invalid GitHub repository</span>
         <span class="help-block" *ngIf="gitHubRepoDuplicated === true">Duplicated GitHub repository</span>

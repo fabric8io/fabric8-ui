@@ -2,14 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Http } from '@angular/http';
 
-import { ToolbarModule, ToolbarConfig } from 'ngx-widgets';
-import {
-  ComponentLoaderFactory,
-  DropdownConfig,
-  DropdownModule,
-  PositioningService,
-  TooltipConfig
-} from 'ng2-bootstrap';
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
+
+import { ToolbarModule } from 'patternfly-ng';
 
 import {
   PipelineModule
@@ -24,19 +20,18 @@ import {ModalModule} from "ngx-modal";
 
 @NgModule({
   imports: [
+    BsDropdownModule.forRoot(),
     CommonModule,
     PipelinesRoutingModule,
     PipelineModule,
     ToolbarModule,
-    DropdownModule,
     ModalModule,
-    SpaceWizardModule
+    SpaceWizardModule,
+    TooltipModule.forRoot()
   ],
   declarations: [PipelinesComponent],
   providers: [
-    ComponentLoaderFactory,
-    DropdownConfig,
-    PositioningService,
+    BsDropdownConfig,
     TooltipConfig,
   ]
 })

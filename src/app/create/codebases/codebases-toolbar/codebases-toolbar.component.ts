@@ -16,7 +16,7 @@ import {
   SortConfig,
   SortEvent,
   ToolbarConfig
-} from 'ngx-widgets';
+} from 'patternfly-ng';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

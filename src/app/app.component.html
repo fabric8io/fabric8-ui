@@ -1,7 +1,6 @@
 <header>
   <alm-app-header></alm-app-header>
 </header>
-
 <alm-toast-notification-list
     [notifications]="notifications.current"
     (onActionSelect)="handleAction($event)">
@@ -9,6 +8,16 @@
 <main class="">
   <div class="">
     <router-outlet name="action"></router-outlet>
-    <router-outlet></router-outlet>
+    <div [hidden]="!isExperimentalFeature">
+      <f8-exp-feature-banner>
+      </f8-exp-feature-banner>
+      <div [hidden]="experimentalFeatureEnabled">
+        <f8-exp-feature-page (onExperimentalFeaturesEnabled)="updateFeatureEnabled($event)">
+        </f8-exp-feature-page>
+      </div>
+    </div>
+    <div [hidden]="isExperimentalFeature && !experimentalFeatureEnabled" [class.experimental-border]="isExperimentalFeature">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </main>

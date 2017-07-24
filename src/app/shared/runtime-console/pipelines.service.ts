@@ -63,7 +63,10 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
   let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
   let spaceId = "";
   if (context) {
-    spaceId = context.name;
+    let paths = context.path.split('/');
+    if (paths[paths.length-1]) {
+      spaceId = paths[paths.length-1];
+    }
   }
   if (!spaceId) {
     return pipelines;
@@ -71,7 +74,7 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
   let answer = new BuildConfigs();
   pipelines.forEach(bc => {
     let bcSpace = bc.labels['space'];
-    if (!bcSpace || bcSpace === spaceId) {
+    if (bcSpace === spaceId) {
       answer.push(bc);
     }
   });

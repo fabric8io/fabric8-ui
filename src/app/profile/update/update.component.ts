@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -14,6 +15,7 @@ import { ProviderService } from '../../getting-started/services/provider.service
 import { TenentService } from '../services/tenent.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-update',
   templateUrl: 'update.component.html',
   styleUrls: ['./update.component.less'],
@@ -23,8 +25,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   @ViewChild('_email') emailElement: ElementRef;
   @ViewChild('_bio') bioElement: RemainingCharsComponent;
   @ViewChild('_imageUrl') imageUrlElement: ElementRef;
-  @ViewChild('remainingCountElement') remainingCountElement: ElementRef;
   @ViewChild('_url') urlElement: ElementRef;
+  @ViewChild('profileForm') profileForm: NgForm;
+  @ViewChild('advancedForm') advancedForm: NgForm;
 
   authGitHub: boolean = false;
   authOpenShift: boolean = false;
@@ -34,6 +37,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   context: Context;
   email: string;
   emailInvalid: boolean = false;
+  isExperimental: boolean = false;
   gitHubLinked: boolean = false;
   imageUrl: string;
   imageUrlInvalid: boolean = false;
@@ -42,7 +46,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   fullNameInvalid: boolean = false;
   openShiftLinked: boolean = false;
   registrationCompleted: boolean = true;
-  remainingCharsConfig: RemainingCharsConfig;
   showActivity: boolean = true;
   showFullName: boolean = true;
   showEmail: boolean = true;
@@ -88,7 +91,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     } else if (this.getRequestParam('email') !== null) {
       this.setElementFocus(null, this.emailElement.nativeElement);
     } else if (this.getRequestParam('imageUrl') !== null) {
-        this.setElementFocus(null, this.imageUrlElement.nativeElement);
+      this.setElementFocus(null, this.imageUrlElement.nativeElement);
     } else if (this.getRequestParam('url') !== null) {
       this.setElementFocus(null, this.urlElement.nativeElement);
     }
@@ -96,18 +99,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     this.token = this.auth.getToken();
-    this.remainingCharsConfig = {
-      blockInputAtMaxLimit: true,
-      charsMaxLimit: 255,
-      charsRemainingElement: this.remainingCountElement,
-      charsRemainingWarning: 5,
-      id: "bio",
-      inputType: "textarea",
-      name: "bio",
-      placeholder: "Enter your bio",
-      rows: 5,
-      value: this.bio
-    } as RemainingCharsConfig;
   }
 
   ngOnDestroy(): void {
@@ -127,7 +118,8 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   }
 
   get isUpdateProfileDisabled(): boolean {
-    return (this.emailInvalid || this.imageUrlInvalid || this.urlInvalid);
+    return ((!this.profileForm.dirty && !this.advancedForm.dirty) ||
+            (this.emailInvalid || this.imageUrlInvalid || this.urlInvalid));
   }
 
   // Actions
@@ -167,12 +159,14 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * @param $event The new bio
    */
   handleBioChange($event: string): void {
+    this.profileForm.form.markAsDirty();
     this.bio = $event;
   }
 
   linkImageUrl(): void {
     this.subscriptions.push(this.gitHubService.getUser().subscribe(user => {
       if (user.avatar_url !== undefined && user.avatar_url.length > 0) {
+        this.profileForm.form.markAsDirty();
         this.imageUrl = user.avatar_url;
       } else {
         this.handleError("No image found", NotificationType.INFO);
@@ -215,6 +209,15 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   updateProfile(): void {
     let profile = this.getTransientProfile();
+    if (!profile.contextInformation) {
+      profile.contextInformation = {};
+    }
+
+    if (!profile.contextInformation.experimentalFeatures) {
+      profile.contextInformation.experimentalFeatures = {};
+    }
+    profile.contextInformation.experimentalFeatures["enabled"] = this.isExperimental;
+
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.setUserProperties(user);
       this.notifications.message({
@@ -356,13 +359,22 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * @param user
    */
   private setUserProperties(user: User): void {
-    this.bio = user.attributes.bio;
-    this.company = user.attributes.company;
-    this.email = user.attributes.email;
-    this.fullName = user.attributes.fullName;
-    this.imageUrl = user.attributes.imageURL;
-    this.url = user.attributes.url;
-    this.username = user.attributes.username;
+    if (user.attributes === undefined) {
+      return;
+    }
+
+    this.bio = (user.attributes.bio !== undefined) ? user.attributes.bio : '';
+    this.company = (user.attributes.company !== undefined) ? user.attributes.company : '';
+    this.email = (user.attributes.email !== undefined) ? user.attributes.email : '';
+    this.fullName = (user.attributes.fullName !== undefined) ? user.attributes.fullName : '';
+    this.imageUrl = (user.attributes.imageURL !== undefined) ? user.attributes.imageURL : '';
+    this.url = (user.attributes.url !== undefined) ? user.attributes.url : '';
+    this.username = (user.attributes.username !== undefined) ? user.attributes.username : '';
+
+    let contextInformation = user.attributes["contextInformation"];
+    if (contextInformation && contextInformation.experimentalFeatures ) {
+      this.isExperimental =  contextInformation.experimentalFeatures["enabled"];
+    }
   }
 
   private handleError(error: string, type: NotificationType) {

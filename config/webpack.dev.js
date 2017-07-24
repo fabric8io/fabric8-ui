@@ -42,6 +42,7 @@ const OSO_CORS_PROXY = {
   pathRewrite: { '^/_p/oso': '' },
   // Disable cert checks for dev only
   secure: false,
+  ws: true,
   //changeOrigin: true,
   logLevel: "debug",
     onProxyRes: function (proxyRes, req, res) {

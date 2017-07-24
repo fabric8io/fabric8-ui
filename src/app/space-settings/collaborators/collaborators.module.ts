@@ -3,9 +3,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Http } from '@angular/http';
 
-import { DropdownModule } from 'ng2-bootstrap';
-import { ListViewModule, InfiniteScrollModule } from 'ngx-widgets';
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { InfiniteScrollModule } from 'ngx-widgets';
 import { ModalModule } from 'ngx-modal';
+
+import { ListModule } from 'patternfly-ng';
 
 import { CollaboratorsComponent } from './collaborators.component';
 import { CollaboratorsRoutingModule } from './collaborators-routing.module';
@@ -14,10 +16,10 @@ import { AddCollaboratorsDialogModule } from './add-collaborators-dialog/add-col
 
 @NgModule({
   imports: [
+    BsDropdownModule.forRoot(),
     CommonModule,
     CollaboratorsRoutingModule,
-    ListViewModule,
-    DropdownModule,
+    ListModule,
     InfiniteScrollModule,
     AddCollaboratorsDialogModule,
     ModalModule,
@@ -25,7 +27,10 @@ import { AddCollaboratorsDialogModule } from './add-collaborators-dialog/add-col
   ],
   declarations: [
     CollaboratorsComponent
-    ],
+  ],
+  providers: [
+    BsDropdownConfig
+  ]
 })
 export class CollaboratorsModule {
   constructor(http: Http) { }

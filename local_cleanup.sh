@@ -7,6 +7,7 @@ oc delete build --all -n almusertest1
 oc delete build --all -n almusertest1-test
 oc delete build --all -n almusertest1-stage
 oc delete service --all -n almusertest1-stage
+oc delete dc --all -n almusertest1-stage
 oc delete build --all -n almusertest1-run
 oc delete build --all -n almusertest1-jenkins
 oc delete bc --all -n almusertest1-jenkins

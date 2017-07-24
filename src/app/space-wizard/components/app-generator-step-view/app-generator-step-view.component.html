@@ -1,6 +1,6 @@
 <div class="col-sm-12 col-sm-offset-1 steps user-select-none">
   <ng-template ngFor let-step [ngForOf] ="sequence.steps" let-c="count" let-i="index">
-    <div title="Step {{step.name}} : {{step.title}}"  class="col-sm-2 step">
+    <div title="Step {{step.name}} : {{step.title}}" class="col-sm-2 step">
       <div [class.active]="step.active === true" class="step-graphic" >{{step.name}}
       </div>
       <div [class.text-muted]="step.active === false" [class.active]="step.active === true" class="step-text" >{{step.title}}</div>

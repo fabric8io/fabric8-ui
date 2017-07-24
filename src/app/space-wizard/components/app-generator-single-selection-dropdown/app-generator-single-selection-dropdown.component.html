@@ -2,11 +2,11 @@
   <input type="hidden" name value>
   <div [class.width-100]="field.display.enabled===false" class="input-group">
     <input type="text" title="{{field.display.label}}" [class.form-control-danger]="!field.display.valid" id="{{field.name}}"
-      name="{{field.name}}" class="user-select-none combobox form-control" readonly="true" (change)="appGenerator.validate()"
+      name="{{field.name}}" class="user-select-none combobox form-control" readonly="true" (change)="appGenerator.state.canMoveToNextStep = true"
       [disabled]="field.display.enabled===false" (click)="field.display.open =!field.display.open" [(ngModel)]="field.display.text"
       placeholder="select an option">
     <ul class="dropdown-menu" [class.open]="field.display.open">
-      <li class="choice-container" (click)="field.display.text=choice.name;field.display.note=choice.description;field.value=choice.id;field.display.open=false;appGenerator.validate();"
+      <li class="choice-container" (click)="field.display.text=choice.name;field.display.note=choice.description;field.value=choice.id;field.display.open=false;appGenerator.state.canMoveToNextStep = true"
         *ngFor="let choice of field.display.choices">
         <div [class.selected]="field.value === choice.id" class="dropdown-menu-item user-select-none cursor-pointer">
           <div [class.vertical-layout]="choice.verticalLayout===true" class="choice-item">

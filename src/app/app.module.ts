@@ -23,6 +23,7 @@ import {
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule }       from 'angular2-moment';
 import { PlannerModule }      from 'fabric8-planner';
+import { RouterModule }       from '@angular/router';
 import {
   // Base functionality for the runtime console
   KubernetesStoreModule,
@@ -40,7 +41,7 @@ import {
   Logger,
   Notifications
 }                             from 'ngx-base';
-import { DropdownModule }     from 'ngx-dropdown';
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import {
   AreaService,
   Contexts,
@@ -71,6 +72,8 @@ import { AppState, InternalStateType } from './app.service';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { MenusService }    from './header/menus.service';
+import { ExpFeaturePageComponent } from './exp-feature-page/exp-feature-page.component';
+import { ExpFeatureBannerComponent } from './exp-feature-page/exp-feature-banner.component';
 
 // Shared Services
 import { AboutService }                  from './shared/about.service';
@@ -78,12 +81,14 @@ import { AnalyticService }               from './shared/analytics.service';
 import { ApiLocatorService }             from './shared/api-locator.service';
 import { AuthGuard }                     from './shared/auth-guard.service';
 import { authApiUrlProvider }            from './shared/auth-api.provider';
+import { BrandingService }               from './shared/branding.service';
 import { fabric8UIConfigProvider }       from './shared/config/fabric8-ui-config.service';
 import { AuthUserResolve }               from './shared/common.resolver';
 import { ContextService }                from './shared/context.service';
 import { ContextCurrentUserGuard }       from './shared/context-current-user-guard.service';
 import { ContextResolver }               from './shared/context-resolver.service';
 import { DummyService }                  from './shared/dummy.service';
+import { ExperimentalFeatureResolver }   from './shared/experimental-feature.resolver';
 import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
 import { LoginService }                  from './shared/login.service';
@@ -113,6 +118,7 @@ import { AboutModalModule } from './about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
 import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";
+import { GettingStartedService } from './getting-started/services/getting-started.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -134,8 +140,8 @@ export type StoreType = {
     AboutModalModule,
     BrowserAnimationsModule,
     BrowserModule,
+    BsDropdownModule.forRoot(),
     DeleteAccountDialogModule,
-    DropdownModule,
     FormsModule,
     HttpModule,
     KubernetesRestangularModule,
@@ -147,6 +153,7 @@ export type StoreType = {
     MomentModule,
     ReactiveFormsModule,
     RestangularModule,
+    RouterModule,
     SpaceWizardModule,
     StackDetailsModule,
     WidgetsModule,
@@ -157,11 +164,14 @@ export type StoreType = {
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    ExpFeaturePageComponent,
+    ExpFeatureBannerComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
     Broadcaster,
+    BsDropdownConfig,
     EventService,
     ENV_PROVIDERS,
     AboutService,
@@ -173,6 +183,7 @@ export type StoreType = {
     AuthenticationService,
     AuthGuard,
     AuthUserResolve,
+    BrandingService,
     CollaboratorService,
     ConfigStore,
     ContextCurrentUserGuard,
@@ -184,6 +195,7 @@ export type StoreType = {
     },
     DummyService,
     ErrorService,
+    ExperimentalFeatureResolver,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
     {
@@ -196,6 +208,7 @@ export type StoreType = {
       useClass: Fabric8UIOnLogin
     },
     forgeApiUrlProvider,
+    GettingStartedService,
     HttpService,
     Logger,
     LoginService,

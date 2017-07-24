@@ -32,14 +32,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isIn = false;   // store state
   toggleState() { // click handler
       let bool = this.isIn;
-      this.isIn = bool === false ? true : false; 
+      this.isIn = bool === false ? true : false;
   }
 
   onStatusListVisible = (flag: boolean) => {
     this.statusListVisible = flag;
   };
 
-  
+
   menuCallbacks = new Map<String, MenuHiddenCallback>([
     [
       '_settings', function (headerComponent) {

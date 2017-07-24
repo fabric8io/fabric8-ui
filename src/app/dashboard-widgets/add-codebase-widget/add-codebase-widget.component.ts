@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
@@ -11,6 +11,7 @@ import { Codebase } from './../../create/codebases/services/codebase';
 import { DummyService } from './../shared/dummy.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-add-codebase-widget',
   templateUrl: './add-codebase-widget.component.html',
   styleUrls: ['./add-codebase-widget.component.less']

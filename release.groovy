@@ -20,10 +20,6 @@ def ci (){
     // stage('functional test'){
     //     sh './run_functional_tests.sh'
     // }
-
-    def shortCommitSha = getNewVersion {}
-    def tempVersion= 'SNAPSHOT.' + shortCommitSha + env.BUILD_NUMBER
-    return tempVersion
 }
 
 def buildImage(imageName){

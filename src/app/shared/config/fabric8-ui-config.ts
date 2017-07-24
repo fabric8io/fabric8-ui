@@ -1,12 +1,14 @@
 export class Fabric8UIConfig {
 
-  pipelinesNamespace: string;
   analyticsWriteKey: string;
-  openshiftConsoleUrl: string;
-  witApiUrl: string;
-  ssoApiUrl: string;
+  branding: string;
   forgeApiUrl: string;
+  openshiftConsoleUrl: string;
+  pipelinesNamespace: string;
   recommenderApiUrl: string;
+  ssoApiUrl: string;
   statusApiUrl: string;
+  witApiUrl: string;
+  kubernetesMode: string;
 
 }

@@ -1,9 +1,10 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { AuthenticationService } from 'ngx-login-client';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'f8-settings-tokens',
   templateUrl: 'tokens.component.html',
   styleUrls: ['./tokens.component.less']

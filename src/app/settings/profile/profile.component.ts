@@ -1,5 +1,5 @@
 import { Profile } from 'ngx-login-client';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
@@ -7,6 +7,7 @@ import { Broadcaster } from 'ngx-base';
 import { ProfileService } from './../../profile/profile.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'alm-profile',
   templateUrl: 'profile.component.html',
   styleUrls: ['./profile.component.less']

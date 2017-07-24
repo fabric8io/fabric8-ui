@@ -1,5 +1,5 @@
 import { UserService } from 'ngx-login-client';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, ConnectableObservable } from 'rxjs';
@@ -15,10 +15,10 @@ class WorkItemFilter {
   paramKey: string;
   value: string;
   active: boolean;
-
 }
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-create-work-item-widget',
   templateUrl: './create-work-item-widget.component.html',
   styleUrls: ['./create-work-item-widget.component.less']

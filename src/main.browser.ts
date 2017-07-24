@@ -19,7 +19,7 @@ import {AppModule} from './app';
 /*
  * Import application wide styles
  */
-import './assets/stylesheets/shared/main.less';
+import './assets/stylesheets/shared/osio.less';
 import './assets/stylesheets/fabric8-ui-global-overrides.less';
 
 /*

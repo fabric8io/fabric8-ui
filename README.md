@@ -7,7 +7,7 @@
 
 You need to setup your shell to point to the right cluster so that it can talk to the required back end services like KeyCloak, WIT, Forge, OpenShift etc.
 
-We provide various sample environments out of the box which make it easier to get started. They are all located as bash scripts in `environments`. 
+We provide various sample environments out of the box which make it easier to get started. They are all located as bash scripts in `environments`.
 
 The default one you should use when you want to develop on the console is to reuse openshift.io production cluster:
 
@@ -32,31 +32,22 @@ Run `npm install`. This will download all the required dependencies to be able t
 
 ## To start
 
-Run `npm start`. This will start the UI with livereload enabled. Then navigate to <http://localhost:3000>.
+Run `npm start`. This will start the UI with live reload enabled. Then navigate to <http://localhost:3000>.
 
 ## CSS and Less
 
-fabric8-ui uses Less for it's stylesheets. It also uses the Angular emulation
-of the shadow dom, so you will normally want to place your styles in the
-`.component.less` file next to the html and the typescript. We write our styles according to our [Code Guidelines](https://fabric8io.github.io/fabric8-ux/code-guidelines).
+fabric8-ui uses Less for it's stylesheets. We write our styles according to our [Code Guidelines](https://fabric8io.github.io/fabric8-ux/code-guidelines).
 
 If you find yourself wanting to create a shared style that multiple components will
-use, then we recommend adding it as a mixin to
-`src/assets/stylesheets/_shared-mixins.less`. The mixins are imported in to every
-`.component.less` file. You can then create a real class by doing something like
+use, then we recommend adding it to an existing `.less` file in the `src/assets/stylesheets/shared/` directory. Only update these styles if you are making a truly global style, and are going to synchronize your changes across all the various UI projects.
 
-    .my-class {
-      @include my-class;
-    }
+If you only want to make a change to a specific component, do so in that component's `.less` file, according to Angular best practices.
 
-The `src/assets/stylesheets/` directory includes a `shared` directory. These are
-shared global styles that we will refactor out in to a shared library at some point.
-Only update these styles if you are making a truly global style, and are going to
-synchronise your changes across all the various UI projects.
+The file `osio.less` is imported into every component Less file using `@import (reference)`, so all files inside of the `/shared` directory will be used by each component.
 
 ## Integrations
 
-fabric8-ui uses rxjs to provide loose coupling between modules (both those in the code base and those integrated via NPM). 
+fabric8-ui uses rxjs to provide loose coupling between modules (both those in the code base and those integrated via NPM).
 To do this, fabric8-ui makes extensive use of the [Broadcaster](https://github.com/fabric8-ui/ngx-base/blob/master/src/app/broadcaster.service.ts).
 
 ### Context
@@ -76,15 +67,15 @@ service, and call the `message()` method, passing in a [Notification](https://gi
 the result of `message()` to observe any [NotificationAction](https://github.com/fabric8-ui/ngx-base/blob/master/src/app/notifications/notification-action.ts)s that result
 from the notification.
 
-## Continuous Delivery & Semantic Relases
+## Continuous Delivery & Semantic Releases
 
 In ngx-fabric8-wit we use the
 [semantic-release
 plugin](https://github.com/semantic-release/semantic-release). That means that all you have to do is use the AngularJS Commit
 Message Conventions (documented below). Once the PR is merged, a new
 release will be automatically published to npmjs.com and a release tag
-created on github. The version will be updated following semantic
-versionning rules.
+created on GitHub. The version will be updated following semantic
+versioning rules.
 
 ### Commit Message Format
 
@@ -147,13 +138,13 @@ Based on https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commi
 
 ### Examples
 
-Appears under "Features" header, pencil subheader:
+Appears under "Features" header, pencil sub-header:
 
 ```
 feat(pencil): add 'graphiteWidth' option
 ```
 
-Appears under "Bug Fixes" header, graphite subheader, with a link to issue #28:
+Appears under "Bug Fixes" header, graphite sub-header, with a link to issue #28:
 
 ```
 fix(graphite): stop graphite breaking when width < 0.1
@@ -180,4 +171,3 @@ This reverts commit 667ecc1654a317a13331b17617d973392f415f02.
 ### Commitizen - craft valid commit messages
 
 Commitizen helps you craft correct commit messages. Install it using `npm install commitizen -g`. Then run `git cz` rather than `git commit`.
-

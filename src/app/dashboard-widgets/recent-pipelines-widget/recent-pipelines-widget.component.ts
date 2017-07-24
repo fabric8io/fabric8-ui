@@ -1,6 +1,6 @@
 import { PipelinesService } from './../../shared/runtime-console/pipelines.service';
 import { Observable } from 'rxjs/Rx';
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
@@ -16,6 +16,7 @@ import {
 } from 'fabric8-runtime-console';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-recent-pipelines-widget',
   templateUrl: './recent-pipelines-widget.component.html',
   styleUrls: ['./recent-pipelines-widget.component.less']

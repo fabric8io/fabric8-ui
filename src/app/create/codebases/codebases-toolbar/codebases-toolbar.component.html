@@ -1,7 +1,7 @@
 <div class="toolbar-header">
-  <alm-toolbar
+  <pfng-toolbar
       [config]="toolbarConfig"
-      [viewsTemplate]="addCodebaseTemplate"
+      [viewTemplate]="addCodebaseTemplate"
       (onFilterChange)="filterChange($event)"
       (onSortChange)="sortChange($event)">
     <ng-template #addCodebaseTemplate>
@@ -10,5 +10,5 @@
         <i class="pficon pficon-add-circle-o margin-top-4"></i>
       </div>
     </ng-template>
-  </alm-toolbar>
+  </pfng-toolbar>
 </div>

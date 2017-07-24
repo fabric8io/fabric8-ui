@@ -117,7 +117,7 @@ describe('Codebase: CodebasesService', () => {
   it('List codebases', () => {
     // given
     const githubData2 = cloneDeep(githubData);
-    githubData2.attributes.url = "git@github.com:almighty/almighty-core.git";
+    githubData2.attributes.url = "git@github.com:fabric8-services/fabric8-wit.git";
     const githubData3 = cloneDeep(githubData);
     githubData3.attributes.type = "whatever";
     githubData3.attributes.url = "http://something.com"
@@ -138,8 +138,8 @@ describe('Codebase: CodebasesService', () => {
       // formatting is also done in component CodebasesAddComponent
       expect(data[0].name).toEqual("https://github.com/airbnb/enzyme");
       expect(data[0].url).toEqual("https///github.com/airbnb/enzyme");
-      expect(data[1].name).toEqual("almighty/almighty-core");
-      expect(data[1].url).toEqual("https://github.com/almighty/almighty-core");
+      expect(data[1].name).toEqual("fabric8-services/fabric8-wit");
+      expect(data[1].url).toEqual("https://github.com/fabric8-services/fabric8-wit");
       expect(data[2].name).toEqual("http://something.com");
       expect(data[2].url).toEqual("http://something.com");
     });
