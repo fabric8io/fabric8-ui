@@ -1,13 +1,19 @@
 <div id="overview" class="container content margin-top-80" *ngIf="showGettingStarted">
   <div class="row">
-    <div class="col-md-8 padding-left-none">
+    <div class="col-md-8 padding-left-none" *ngIf="!kubeMode">
       <h1 class="getting-started-title">Getting started in OpenShift.io</h1>
       <p class="getting-started-subtitle">
         Welcome to OpenShift.io! To get started you will need to connect
-        your GitHub and OpenShift.com accounts.
+        your GitHub and OpenShift accounts.
       </p>
       <p class="padding-bottom-15 padding-top-15">
         The fields marked with <span class="required-pf">*</span> are required.
+      </p>
+    </div>
+    <div class="col-md-8 padding-left-none" *ngIf="kubeMode">
+      <h1 class="getting-started-title">Getting started in OpenShift.io</h1>
+      <p class="getting-started-subtitle">
+        Welcome to OpenShift.io!
       </p>
     </div>
     <div class="col-md-4">
@@ -60,7 +66,7 @@
         </div>
       </div>
 -->
-      <div class="row">
+      <div class="row" *ngIf="!kubeMode">
         <div class="col-md-1">
           <h2 class="circle">1</h2>
         </div>
@@ -115,6 +121,20 @@
                     [disabled]="isConnectAccountsDisabled"
                     (click)="connectAccounts()">Connect accounts</button>
           </div>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="kubeMode">
+        <div class="col-md-1">
+          <h2 class="circle">1</h2>
+        </div>
+        <div class="col-md-11 padding-left-0" *ngIf="!openShiftLinked">
+          <h2>Waiting for your tenant services to startup</h2>
+
+          <p>{{kubePollMessage}}</p>
+        </div>
+        <div class="col-md-11 padding-left-0" *ngIf="openShiftLinked">
+          <h2>You tenant services are running!</h2>
         </div>
       </div>
       <div class="row" *ngIf="isSuccess">

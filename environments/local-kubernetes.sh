@@ -22,11 +22,12 @@ export OAUTH_LOGOUT_URI=""
 export K8S_API_SERVER="localhost:3000"
 export PROXIED_K8S_API_SERVER="localhost:3000"
 #export WS_K8S_API_SERVER=${PROXIED_K8S_API_SERVER}
-export WS_K8S_API_SERVER="localhost:3000"
-
 export K8S_API_SERVER_BASE_PATH="/_p/oso"
-export WS_K8S_API_SERVER_BASE_PATH="/_p/oso"
 export K8S_API_SERVER_PROTOCOL="http"
+
+export WS_K8S_API_SERVER="${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
+export WS_K8S_API_SERVER_BASE_PATH=""
+export WS_K8S_API_SERVER_PROTOCOL="wss"
 
 export OAUTH_ISSUER=""
 export OAUTH_SCOPE="user:full"
@@ -42,13 +43,15 @@ echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_S
 
 export FABRIC8_SSO_API_URL="http://sso.fabric8.${VM_IP}.nip.io/"
 export FABRIC8_WIT_API_URL="http://wit.fabric8.${VM_IP}.nip.io/api/"
-export FABRIC8_FORGE_API_URL="http://forge.fabric8.${VM_IP}.nip.io//"
+export FABRIC8_FORGE_API_URL="http://forge.fabric8.${VM_IP}.nip.io/"
+export FABRIC8_TENANT_API_URL="http://f8tenant.fabric8.${VM_IP}.nip.io/"
 
 
 echo ""
 echo "WS_K8S_API_SERVER:             ${WS_K8S_API_SERVER}"
 echo "WS_K8S_API_SERVER_BASE_PATH:   ${WS_K8S_API_SERVER_BASE_PATH}"
 echo ""
+echo "K8S_API_SERVER:                ${K8S_API_SERVER}"
 echo "K8S_API_SERVER_PROTOCOL:       ${K8S_API_SERVER_PROTOCOL}"
 echo "K8S_API_SERVER_BASE_PATH:      ${K8S_API_SERVER_BASE_PATH}"
 echo "OAUTH_ISSUER:                  ${OAUTH_ISSUER}"
@@ -60,5 +63,6 @@ echo "FABRIC8_PIPELINES_NAMESPACE    ${FABRIC8_PIPELINES_NAMESPACE}"
 echo "FABRIC8_SSO_API_URL            ${FABRIC8_SSO_API_URL}"
 echo "FABRIC8_WIT_API_URL            ${FABRIC8_WIT_API_URL}"
 echo "FABRIC8_FORGE_API_URL          ${FABRIC8_FORGE_API_URL}"
+echo "FABRIC8_TENANT_API_URL         ${FABRIC8_TENANT_API_URL}"
 echo "FABRIC8_REALM                  ${FABRIC8_REALM}"
 echo ""

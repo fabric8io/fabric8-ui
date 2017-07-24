@@ -7,6 +7,10 @@ import { AuthenticationService, UserService, User } from 'ngx-login-client';
 
 import { ExtUser, GettingStartedService } from './services/getting-started.service';
 import { ProviderService } from './services/provider.service';
+import {Fabric8UIConfig} from "../shared/config/fabric8-ui-config";
+import {Observable} from "rxjs/Observable";
+import {Http, Headers, RequestOptions, RequestOptionsArgs, Response} from "@angular/http";
+import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -28,18 +32,41 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   username: string;
   usernameInvalid: boolean = false;
 
+  // handle startup on kubernetes
+  kubeMode: boolean = false;
+  kubePollTimer: Observable<number>;
+  kubePollSubscription: Subscription;
+  kubePollMessage: string = "";
+
   constructor(
       private auth: AuthenticationService,
       private gettingStartedService: GettingStartedService,
       private logger: Logger,
+      private fabric8UIConfig: Fabric8UIConfig,
+      private http: Http,
       private providerService: ProviderService,
       private notifications: Notifications,
       private router: Router,
       private userService: UserService) {
-    // Still need to retrieve OpenShift token for checkbox, in case the GitHub token cannot be obtained below.
-    this.subscriptions.push(auth.openShiftToken.subscribe(token => {
-      this.openShiftLinked = (token !== undefined && token.length !== 0);
-    }));
+
+    if (fabric8UIConfig) {
+      let flag = fabric8UIConfig["kubernetesMode"];
+      if (flag === "true") {
+        this.kubeMode = true;
+      }
+    }
+
+    if (!this.kubeMode) {
+      // Still need to retrieve OpenShift token for checkbox, in case the GitHub token cannot be obtained below.
+      this.subscriptions.push(auth.openShiftToken.subscribe(token => {
+        this.openShiftLinked = (token !== undefined && token.length !== 0);
+      }));
+    } else {
+      // lets poll for the kube tenant connected when the lazily created Jenkins endpoint
+      // can be registered into KeyCloak
+      this.kubePollTimer = Observable.timer(2000, 5000);
+      this.kubePollSubscription = this.kubePollTimer.subscribe(t=> this.kubeTenantConnectPoll())}
+      this.kubeTenantConnectPoll();
   }
 
   ngOnDestroy(): void {
@@ -67,7 +94,9 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       })
       .switchMap(() => this.auth.openShiftToken)
       .map(token => {
-        this.openShiftLinked = (token !== undefined && token.length !== 0);
+        if (!this.kubeMode) {
+          this.openShiftLinked = (token !== undefined && token.length !== 0);
+        }
       })
       .do(() => {
         this.routeToHomeIfCompleted();
@@ -232,4 +261,78 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       type: type
     } as Notification);
   }
+
+  /**
+   * Lets poll the fabric8-tenant service to see if the kubernetes tenant has connected the
+   * services such as Jenkins into KeyCloak which is typically lazy after the tenant
+   * starts to be created
+   */
+  private kubeTenantConnectPoll() {
+    let bearerToken = this.authBearerToken();
+    if (!bearerToken) {
+      this.kubePollMessage = "Not logged in!";
+      return;
+    }
+
+    var url = this.fabric8UIConfig.tenantApiUrl;
+    if (!url) {
+      this.kubePollMessage = "No tenant service configured!";
+      return;
+    }
+    url = pathJoin(url, "/api/tenant/kubeconnect");
+
+    let options = new RequestOptions({
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Authorization': bearerToken
+      })
+    });
+    this.http.get(url, options). //.catch((err) => this.handleConnectPollError(err)).
+      subscribe((response: Response) => {
+        this.parseKubeConnectResponse(response, "Waiting...");
+        let status = response.status;
+        if (status == 200) {
+          console.log("Successfully polled the kubernetes tenant connection!");
+          this.openShiftLinked = true;
+          if (this.kubePollSubscription) {
+            this.kubePollSubscription.unsubscribe();
+            this.kubePollSubscription = null;
+          }
+        }
+      }, (err => {
+        this.handleConnectPollError(err)
+      }));
+  }
+
+  private parseKubeConnectResponse(response: Response, defaultMessage: string) {
+    this.kubePollMessage = "";
+    try {
+      let body = response.json();
+      if (body) {
+        let data = body['data'] || {};
+        let attributes = data['attributes'] || {};
+        this.kubePollMessage = attributes["message"] || "";
+      }
+      if (!this.kubePollMessage) {
+        this.kubePollMessage = defaultMessage;
+      }
+    } catch (e) {
+      this.kubePollMessage = "Failed to parse response: " + e;
+    }
+  }
+
+  private handleConnectPollError(err: Response) {
+    this.parseKubeConnectResponse(err, "Cannot find tenant connected status due to " + err);
+  }
+
+  private authBearerToken(): string {
+    if (this.auth.isLoggedIn()) {
+      let token = this.auth.getToken();
+      if (token) {
+        return `Bearer ${token}`;
+      }
+    }
+    return null;
+  }
+
 }

@@ -9,6 +9,7 @@ export class Fabric8UIConfig {
   ssoApiUrl: string;
   statusApiUrl: string;
   witApiUrl: string;
+  tenantApiUrl: string;
   kubernetesMode: string;
 
 }

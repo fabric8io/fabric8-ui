@@ -9,5 +9,6 @@ window.Fabric8UIEnv = {
   "recommenderApiUrl": "{{ .Env.FABRIC8_RECOMMENDER_API_URL }}",
   "ssoApiUrl": "{{ .Env.FABRIC8_SSO_API_URL }}",
   "statusApiUrl": "{{ .Env.FABRIC8_STATUS_API_URL }}",
-  "witApiUrl": "{{ .Env.FABRIC8_WIT_API_URL }}"
+  "witApiUrl": "{{ .Env.FABRIC8_WIT_API_URL }}",
+  "tenantApiUrl": "{{ .Env.FABRIC8_TENANT_API_URL }}"
 };
