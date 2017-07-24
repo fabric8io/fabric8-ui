@@ -73,10 +73,14 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
   }
 
   handleError(error: any) {
-    if (error.errors[0].detail.indexOf('unique') > -1) {
-      this.errors = {
-        unique: true
-      };
+    if (error.errors.length) {
+      error.errors.forEach(error => {
+        if (error.status === '409') {
+          this.errors = {
+            unique: true
+          };
+        }
+      });
     }
   }
 }
