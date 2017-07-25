@@ -3,10 +3,7 @@ import { Subscription } from 'rxjs';
 import { Modal } from 'ngx-modal';
 import { Context, AreaService, Area, AreaAttributes } from 'ngx-fabric8-wit';
 import { ContextService } from '../../../shared/context.service';
-
-interface Errors {
-  unique: boolean
-}
+import { AreaError } from '../../../models/area-error';
 
 @Component({
   host: {
@@ -27,7 +24,7 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
   private context: Context;
   private openSubscription: Subscription;
   private name: string;
-  private errors: Errors;
+  private errors: AreaError;
 
   constructor(
     private contexts: ContextService,
@@ -77,7 +74,7 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
       error.errors.forEach(error => {
         if (error.status === '409') {
           this.errors = {
-            unique: true
+            uniqueValidationFailure: true
           };
         }
       });

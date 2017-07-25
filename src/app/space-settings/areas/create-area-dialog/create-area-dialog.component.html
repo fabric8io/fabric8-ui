@@ -8,7 +8,7 @@
     <div class="form">
       <fieldset class="create-fieldset">
         <div *ngIf="errors" class="alert alert-danger">
-          <div [hidden]="!errors.unique">
+          <div [hidden]="!errors.uniqueValidationFailure">
             <span class="pficon pficon-error-circle-o"></span>
             <b>Unique Name</b> A unique name is required to add a new area.
           </div>
