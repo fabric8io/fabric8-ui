@@ -34,12 +34,16 @@ Run `npm install`. This will download all the required dependencies to be able t
 
 Run `npm start`. This will start the UI with live reload enabled. Then navigate to <http://localhost:3000>.
 
-## CSS and Less
+## HTML, CSS and Less
+| [Code Guidelines](https://fabric8-ui.github.io/fabric8-ux/code-guidelines)
 
-fabric8-ui uses Less for it's stylesheets. We write our styles according to our [Code Guidelines](https://fabric8io.github.io/fabric8-ux/code-guidelines).
+fabric8-ui uses HTML5 elements where appropriate, and practices
+**practicality over purity**. Use the least amount of markup with the fewest intricacies as possible.
 
-If you find yourself wanting to create a shared style that multiple components will
-use, then we recommend adding it to an existing `.less` file in the `src/assets/stylesheets/shared/` directory. Only update these styles if you are making a truly global style, and are going to synchronize your changes across all the various UI projects.
+Attribution order, syntax definitions and declaration order are an important aspect of the fabric8-ui code and should be followed according the the guidelines.
+
+fabric8-ui uses Less for it's stylesheets. If you find yourself wanting to create a shared style that multiple components will
+use, then we recommend adding it to an existing `.less` file in the `src/assets/stylesheets/shared/` directory. Only update these styles if you are making a truly global style, and are going to synchronize your changes across all of the various UI projects.
 
 If you only want to make a change to a specific component, do so in that component's `.less` file, according to Angular best practices.
 
