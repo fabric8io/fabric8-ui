@@ -6,12 +6,12 @@
         </a>
       </div>
       <h2 class="card-pf-title">
-        <a id="spacehome-codebases-title" href="#" [routerLink]="[contextPath | async, 'create']">Codebases</a>
-        <span id="spacehome-codebases-badge" class="badge f8-card-badge">{{codebaseCount | async}}</span>
+        <a id="spacehome-codebases-title" href="#" [routerLink]="[contextPath, 'create']">Codebases</a>
+        <span id="spacehome-codebases-badge" class="badge f8-card-badge">{{codebaseCount}}</span>
       </h2>
   </div>
   <div class="card-pf-body f8-card-body">
-    <div class="f8-blank-slate-card" *ngIf="(codebaseCount | async) === 0">
+    <div class="f8-blank-slate-card" *ngIf="codebaseCount === 0">
       <div class="f8-blank-slate-icon">
         <i class="pficon pficon-add-circle-o"></i>
       </div>
@@ -23,8 +23,8 @@
         <button id="spacehome-my-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
       </div>
     </div>
-    <ul id="spacehome-codebases-list" class="list-group list-view-pf list-view-pf-view" *ngIf="(codebaseCount | async) > 0">
-      <li class="list-group-item" *ngFor="let codebase of codebases | async">
+    <ul id="spacehome-codebases-list" class="list-group list-view-pf list-view-pf-view" *ngIf="codebaseCount > 0">
+      <li class="list-group-item" *ngFor="let codebase of codebases">
         <div class="list-view-pf-main-info">
           <div class="list-view-pf-body">
             <div class="list-view-pf-description">
