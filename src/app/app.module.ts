@@ -24,6 +24,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule }       from 'angular2-moment';
 import { PlannerModule }      from 'fabric8-planner';
 import { RouterModule }       from '@angular/router';
+import { ModalModule } from 'ngx-modal';
 import {
   // Base functionality for the runtime console
   KubernetesStoreModule,
@@ -107,11 +108,9 @@ import { realmProvider }                 from './shared/realm-token.provider';
 
 // Component Services
 import { ConfigStore }               from './base/config.store';
-import { DeleteAccountDialogModule } from './delete-account-dialog/delete-account-dialog.module';
 import { ErrorService }              from './error/error.service';
 import { ProfileService }            from './profile/profile.service';
 import { SpaceWizardModule }         from './space-wizard/space-wizard.module';
-import { ToggleService }             from './toggle/toggle.service';
 
 // About Modal
 import { AboutModalModule } from './about-modal/about-modal.module';
@@ -141,7 +140,6 @@ export type StoreType = {
     BrowserAnimationsModule,
     BrowserModule,
     BsDropdownModule.forRoot(),
-    DeleteAccountDialogModule,
     FormsModule,
     HttpModule,
     KubernetesRestangularModule,
@@ -150,6 +148,7 @@ export type StoreType = {
       prefix: 'fabric8',
       storageType: 'localStorage'
     }),
+    ModalModule,
     MomentModule,
     ReactiveFormsModule,
     RestangularModule,
@@ -237,7 +236,6 @@ export type StoreType = {
       useClass: Fabric8UISpaceNamespace
     },
     ssoApiUrlProvider,
-    ToggleService,
     UserService,
     witApiUrlProvider,
     realmProvider

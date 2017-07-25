@@ -22,11 +22,6 @@ export const routes: Routes = [
     loadChildren: './landing-page/landing-page.module#LandingPageModule',
     pathMatch: 'full'
   },
-  // Temporary page to control the app
-  {
-    path: '_control',
-    loadChildren: './control/control.module#ControlModule'
-  },
 
   // Home
   {
@@ -63,18 +58,6 @@ export const routes: Routes = [
     loadChildren: './profile/profile.module#ProfileModule',
     data: {
       title: 'Profile'
-    }
-  },
-
-  // Settings
-  {
-    path: ':entity/_settings',
-    resolve: {
-      context: ContextResolver
-    },
-    loadChildren: './settings/settings.module#SettingsModule',
-    data: {
-      title: 'Settings'
     }
   },
 
