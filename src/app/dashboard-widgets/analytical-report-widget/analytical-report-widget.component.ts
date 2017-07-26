@@ -161,7 +161,7 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
               this.stackAnalysisInformation['recommendations'] = recommendations;
               // Restrict the recommendations to a particular limit as specified in UX
               this.stackAnalysisInformation['recommendations'].splice(this.stackAnalysisInformation['recommendationsLimit']);
-              let finishedTime: string = result.finishedTime;
+              let finishedTime: string = result && result[0] ? result[0].finishedTime : 'NA';
               if (finishedTime) {
                 let date = null;
                 try {
