@@ -8,7 +8,7 @@ import { ContextService } from './context.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
 import { User, UserService, Entity } from 'ngx-login-client';
-import { MenusService } from './../header/menus.service';
+import { MenusService } from '../layout/header/menus.service';
 import {
   Space,
   Context,

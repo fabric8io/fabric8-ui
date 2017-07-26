@@ -10,7 +10,7 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { ContextService } from './context.service';
 import { Navigation } from './../models/navigation';
-import { ErrorService } from '../error/error.service';
+import { ErrorService } from '../layout/error/error.service';
 
 
 @Injectable()

@@ -44,7 +44,7 @@ export const routes: Routes = [
   // Error Pages
   {
     path: '_error',
-    loadChildren: './error/error.module#ErrorModule',
+    loadChildren: './layout/error/error.module#ErrorModule',
     data: {
       title: 'Error'
     }

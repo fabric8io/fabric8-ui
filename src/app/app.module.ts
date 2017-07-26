@@ -70,9 +70,9 @@ import { APP_RESOLVER_PROVIDERS }      from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
 // Footer & Header
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header/header.component';
-import { MenusService }    from './header/menus.service';
+import { FooterComponent } from './layout/footer/footer.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { MenusService }    from './layout/header/menus.service';
 import { ExpFeaturePageComponent } from './exp-feature-page/exp-feature-page.component';
 import { ExpFeatureBannerComponent } from './exp-feature-page/exp-feature-banner.component';
 
@@ -108,12 +108,12 @@ import { realmProvider }                 from './shared/realm-token.provider';
 
 // Component Services
 import { ConfigStore }               from './base/config.store';
-import { ErrorService }              from './error/error.service';
+import { ErrorService }              from './layout/error/error.service';
 import { ProfileService }            from './profile/profile.service';
 import { SpaceWizardModule }         from './space-wizard/space-wizard.module';
 
 // About Modal
-import { AboutModalModule } from './about-modal/about-modal.module';
+import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
 import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";

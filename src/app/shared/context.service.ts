@@ -20,7 +20,7 @@ import { Observable } from 'rxjs';
 
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Navigation } from './../models/navigation';
-import { MenusService } from './../header/menus.service';
+import { MenusService } from '../layout/header/menus.service';
 
 import { EventService } from "./event.service";
 
