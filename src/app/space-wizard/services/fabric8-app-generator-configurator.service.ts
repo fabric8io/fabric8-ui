@@ -97,11 +97,23 @@ export class AppGeneratorConfiguratorService {
       let inputs: Array<IForgeInput> = command.parameters.data.inputs || [];
 
       let field = inputs.find(i => i.name.toLowerCase() === 'labelspace');
+      let space = this.currentSpace;
+      var spaceName = "";
+      if (space && space.attributes) {
+        spaceName = space.attributes.name;
+      }
+      if (!spaceName) {
+        spaceName = this.context.extractSpace();
+        console.log("No space name yet! so extracted", spaceName);
+        if (!spaceName) {
+          console.log("ERROR: no space name!!!");
+        }
+      }
       if (!field) {
-        inputs.push(<IForgeInput>{ name: 'labelSpace', value: this.currentSpace.attributes.name });
+        inputs.push(<IForgeInput>{ name: 'labelSpace', value: spaceName });
       } else {
         if (!field.value) {
-          field.value = this.currentSpace.attributes.name;
+          field.value = spaceName;
         }
       }
     }

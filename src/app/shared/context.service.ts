@@ -339,7 +339,7 @@ export class ContextService implements Contexts {
       });
   }
 
-  private extractSpace(): string {
+  public extractSpace(): string {
     let params = this.getRouteParams();
     if (params && params['space']) {
       return decodeURIComponent(params['space']);
