@@ -192,7 +192,7 @@ export class StackDetailsComponent implements OnInit {
           subMessage: stackName + ' has a different version of dependency',
           workItem: {
             action: 'Update ' + key[0] + ' with version ' + version[i][key[0]],
-            message: 'Stack analytics has identified a potentially version upgrade. It\'s ' +
+            message: 'Stack analytics has identified a potential version upgrade. It\'s ' +
             'recommended that you upgrade "' + key[0] + '" with version ' + version[i][key[0]] +
             ' to your application as many other Vert.x OpenShift applications have it included',
             codebase: {
