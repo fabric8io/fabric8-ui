@@ -32,7 +32,7 @@ export class ExpFeaturePageComponent implements OnInit, OnDestroy {
       visibility: 'visible'
     });
 
-    let targetObject = document.getElementsByTagName('circle');
+    let targetObject = document.getElementsByClassName('flask-circle');
     let tl = new TimelineMax();
     tl.staggerTo(targetObject, 3, {
       attr: {
