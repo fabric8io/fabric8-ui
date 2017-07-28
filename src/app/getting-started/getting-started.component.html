@@ -1,22 +1,22 @@
 <div id="overview" class="container content margin-top-80" *ngIf="showGettingStarted">
   <div class="row">
-    <div class="col-md-8 padding-left-none" *ngIf="!kubeMode">
+    <div class="col-sm-8 padding-left-none" *ngIf="!kubeMode">
       <h1 class="getting-started-title">Getting started in OpenShift.io</h1>
       <p class="getting-started-subtitle">
-        Welcome to OpenShift.io! To get started you will need to connect
-        your GitHub and OpenShift accounts.
+        Welcome to OpenShift.io! To get started, you will need to connect
+        your GitHub and OpenShift.com accounts.
       </p>
       <p class="padding-bottom-15 padding-top-15">
         The fields marked with <span class="required-pf">*</span> are required.
       </p>
     </div>
-    <div class="col-md-8 padding-left-none" *ngIf="kubeMode">
+    <div class="col-sm-8 padding-left-none" *ngIf="kubeMode">
       <h1 class="getting-started-title">Getting started in OpenShift.io</h1>
       <p class="getting-started-subtitle">
         Welcome to OpenShift.io!
       </p>
     </div>
-    <div class="col-md-4">
+    <div class="col-sm-4">
       <img src="../../assets/images/Logotype_RH_OpenShift-io_RGB_RedGray.png" class="home-logo"/>
     </div>
   </div>
@@ -24,10 +24,10 @@
     <form role="form">
 <!--
       <div class="row">
-        <div class="col-md-1">
+        <div class="col-sm-1">
           <h2 class="circle">1</h2>
         </div>
-        <div class="col-md-11 padding-left-0">
+        <div class="col-sm-11 padding-left-0">
           <h2>Select a username</h2>
           <p class="getting-started-subtitle">Pick a username to identify yourself in OpenShift.io. Choose wisely, this
             cannot be changed once you leave the Getting Started page.
@@ -45,11 +45,11 @@
             <ng-template #showUsernameInput>
               <label for="username" class="control-label required-pf">Username</label>
               <div [ngClass]="{'has-error': usernameInvalid}">
-                <div class="col-md-5 padding-left-0">
+                <div class="col-sm-5 padding-left-0">
                   <input type="text" class="form-control" id="username" name="username" maxlength="62" required
                          [(ngModel)]="username">
                 </div>
-                <div class="col-md-7 padding-left-0">
+                <div class="col-sm-7 padding-left-0">
                   <span class="help-block padding-0">
                     Username must be less than 63 characters and can't begin with a dash or underscore. They may contain
                     lowercase letters, numbers, dashes, or underscores.
@@ -67,10 +67,13 @@
       </div>
 -->
       <div class="row" *ngIf="!kubeMode">
-        <div class="col-md-1">
-          <h2 class="circle">1</h2>
+        <div class="col-sm-1">
+          <span class="fa-stack fa-2x stack-circle-border-blue">
+            <i class="fa fa-circle-thin fa-stack-2x"></i>
+            <i class="fa-stack-1x stack-circle-number">1</i>
+          </span>
         </div>
-        <div class="col-md-11 padding-left-0">
+        <div class="col-sm-11 padding-left-none">
           <h2>Connected accounts</h2>
           <p class="getting-started-subtitle">
             Please connect your GitHub and OpenShift accounts to OpenShift.io.
@@ -123,22 +126,20 @@
           </div>
         </div>
       </div>
-
       <div class="row" *ngIf="kubeMode">
-        <div class="col-md-1">
+        <div class="col-sm-1">
           <h2 class="circle">1</h2>
         </div>
-        <div class="col-md-11 padding-left-0" *ngIf="!openShiftLinked">
+        <div class="col-sm-11 padding-left-0" *ngIf="!openShiftLinked">
           <h2>Waiting for your tenant services to startup</h2>
-
           <p>{{kubePollMessage}}</p>
         </div>
-        <div class="col-md-11 padding-left-0" *ngIf="openShiftLinked">
-          <h2>You tenant services are running!</h2>
+        <div class="col-sm-11 padding-left-0" *ngIf="openShiftLinked">
+          <h2>Your tenant services are running!</h2>
         </div>
       </div>
       <div class="row" *ngIf="isSuccess">
-        <div class="col-md-12">
+        <div class="col-sm-12">
           <div class="success-border">
             <h2 class="success-title">Success! You're ready to start in OpenShift.io.</h2>
             <p>You can now proceed to your home page to plan work, code, and deploy your applications.</p>
