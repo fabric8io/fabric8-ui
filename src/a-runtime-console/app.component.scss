@@ -1,0 +1,10 @@
+@import '../assets/stylesheets/base';
+// Overrides for environment view
+// TODO HACK Temp hack as we will switch to the compound list view soon
+.environment-listing {
+  .toggle-children-placeholder { display: none; }
+  .list-group {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}

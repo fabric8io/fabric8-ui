@@ -1,0 +1,86 @@
+<div class='kube-resource-list'>
+
+  <fabric8-loading [loading]="loading">
+    <div class="pipelines-page" *ngIf="pipeline">
+      <div class='pipeline-list animate-repeat'>
+        <div class="row">
+          <div class="col-12">
+            <h3>
+              <span class="{{pipeline.iconStyle}}" title="{{pipeline.statusPhase}}"></span>
+              <a [routerLink]="[pipeline.id]" class="card-title" title="view pipeline">{{ pipeline.name }}</a>
+
+              <small>created {{pipeline.creationTimestamp | amTimeAgo}}</small>
+
+              <small *ngIf="pipeline.buildsBuildsAverageDuration" class="average-duration pull-right text-muted">
+                Average Duration: {{pipeline.buildsBuildsAverageDuration | amDuration: 'seconds'}}
+              </small>
+            </h3>
+
+            <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
+              <button class='btn btn-link dropdown-toggle' type='button' id='dropdownKebabRight9'
+                      aria-haspopup='true' aria-expanded='true' dropdownToggle>
+                <span class='fa fa-ellipsis-v'></span>
+              </button>
+              <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
+                <li *ngIf="pipeline.lastBuildPath">
+                  <a routerLink="{{pipeline.lastBuildPath}}" title="view last build">
+                    View last build
+                  </a>
+                </li>
+                <li class="divider" *ngIf="pipeline.serviceUrls.length"></li>
+                <li *ngFor='let service of pipeline.serviceUrls'>
+                  <a [href]="service.url"
+                     title="open the {{service.name}} service in the {{service.environmentName}} environment"
+                     target="deployment"
+                     class="external-service">
+                    {{service.label}}
+                  </a>
+                </li>
+                <li class="divider" *ngIf="pipeline.serviceUrls.length"></li>
+                <li class="divider" *ngIf="pipeline.gitUrl"></li>
+                <li *ngIf="pipeline.openInDEAUrl">
+                  <a [href]="pipeline.openInDEAUrl | safeUrl" title="open this project in IDEA IntelliJ">
+                    Open in IDEA
+                  </a>
+                </li>
+                <li *ngIf="pipeline.jenkinsJobUrl">
+                  <a href="{{pipeline.jenkinsJobUrl}}" title="open the Jenksin Job for this build" target="jenkins">
+                    Open Jenkins Job
+                  </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a [routerLink]="[pipeline.id, 'edit']">Edit</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <a (click)="openDeleteDialog(deletePipelineModal, pipeline)" title="Delete this Pipeline">Delete</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div *ngIf="!(pipeline.builds && pipeline.builds.length)">
+            <em>
+              No pipeline builds have run for {{ pipeline.name }}.
+            </em>
+          </div>
+
+          <div *ngIf="pipeline.builds && pipeline.builds.length">
+            <div *ngFor='let build of pipeline.builds' class="animate-repeat">
+              <build-stage-view [build]="build"></build-stage-view>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fabric8-loading>
+</div>
+
+<modal #deleteBuildConfigModal title="Delete Pipeline">
+  <modal-content>
+    <delete-buildconfig-dialog></delete-buildconfig-dialog>
+  </modal-content>
+</modal>
+
+

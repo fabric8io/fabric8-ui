@@ -1,0 +1,68 @@
+<div class='kube-resource-list'>
+
+  <fabric8-loading [loading]="loading">
+    <div class='list-group-item space' *ngFor='let space of spaces'>
+      <div class='list-view-pf-checkbox' *ngIf="!hideCheckbox">
+        <input type='checkbox'>
+      </div>
+      <div class='list-view-pf-actions'>
+        <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
+          <button class='btn btn-link dropdown-toggle' type='button' id='dropdownKebabRight9' aria-haspopup='true' aria-expanded='true' dropdownToggle>
+              <span class='fa fa-ellipsis-v'></span>
+            </button>
+          <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
+            <li>
+              <a [routerLink]="[space.id]">View Details</a>
+            </li>
+            <li>
+              <a [routerLink]="[space.id, 'edit']">Edit</a>
+            </li>
+            <li>
+              <a (click)="openDeleteDialog(deleteSpaceModal, space)" title="Delete this Space">Delete</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class='list-view-pf-main-info'>
+        <div class='list-view-pf-left'>
+          <span *ngIf="!space.icon" class="pficon-project"></span>
+          <img *ngIf="space.icon" class='list-view-pf-icon-sm' src="{{space.icon}}" height="30" width="30"/>
+        </div>
+        <div class='list-view-pf-body'>
+          <div class='list-view-pf-description'>
+            <div class='list-group-item-heading'>
+              <a [routerLink]="['/run/space', space.id, 'namespaces', space.firstEnvironmentNamespace, 'buildconfigs']" class="card-title" title="view the deployments in this space">{{ space.name }}</a>
+            </div>
+            <div class='list-group-item-text'>
+              <span class="" *ngFor='let image of space.images' title="docker image">
+                   {{image}}
+               </span>
+            </div>
+          </div>
+          <div class='list-view-pf-additional-info'>
+<!--
+            <div class='list-view-pf-additional-info-item' title="number of available pods and the replicas">
+              {{space.availableReplicas}} / {{space.replicas}}
+            </div>
+-->
+            <div class='list-view-pf-additional-info-item' title="created time">
+              {{space.creationTimestamp | amTimeAgo}}
+            </div>
+            <div class='list-view-pf-additional-info-item'>
+              <k8s-labels [labels]="space.labels"></k8s-labels>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fabric8-loading>
+</div>
+
+<modal #deleteSpaceModal title="Delete Space">
+  <modal-content>
+    <delete-space-dialog></delete-space-dialog>
+  </modal-content>
+</modal>
+
+

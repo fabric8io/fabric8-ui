@@ -1,0 +1,95 @@
+@import 'bootstrap/mixins';
+@import 'patternfly/mixins';
+@import 'patternfly/mixin_overrides';
+
+// functions
+//convert px to em/rem
+@function em($px) {
+  @return ($px / $em-base-font-size) * 1em;
+}
+
+@function rem($px) {
+  @return ($px / $rem-base-font-size) * 1rem;
+}
+
+//custom mixins
+@mixin truncate() {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin transform($transform) {
+  -webkit-transform: $transform;
+     -moz-transform: $transform;
+      -ms-transform: $transform;
+       -o-transform: $transform;
+          transform: $transform;
+}
+
+@mixin transition($transition) {
+  -webkit-transition: $transition;
+     -moz-transition: $transition;
+      -ms-transition: $transition;
+       -o-transition: $transition;
+          transition: $transition;
+}
+
+@mixin borderRadius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+       -o-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin Border($borderwidth, $borderStyle, $borderColor) {
+  -webkit-border-width: $borderwidth;
+     -moz-border-width: $borderwidth;
+       -o-border-width: $borderwidth;
+          border-width: $borderwidth;
+  -webkit-border-color: $borderColor;
+     -moz-border-color: $borderColor;
+       -o-border-color: $borderColor;
+          border-color: $borderColor;
+  -webkit-border-style: $borderStyle;
+     -moz-border-style: $borderStyle;
+       -o-border-style: $borderStyle;
+          border-style: $borderStyle;
+}
+
+//multiline truncate
+@mixin multiline-truncate($line-height, $line-count, $bg-color) {
+  overflow: hidden;
+  position: relative;
+  max-height: $line-height * $line-count;
+  margin-right: -1em;
+  padding-right: 1em;
+  text-align: justify;
+  line-height: $line-height;
+  &:before {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    content: '\2026';
+  }
+  &:after {
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 3em;
+    margin-top: 1em;
+    background: $bg-color;
+    content: '';
+  }
+}
+@mixin dib { display: inline-block; }
+@mixin fill-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  border-width: 0;
+}

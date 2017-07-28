@@ -1,0 +1,5 @@
+<span *ngIf="info">
+  <span [class]="info.iconCss"></span>&nbsp;
+  <ng-content></ng-content>
+  <span *ngIf="info.version" title="release version of this service">: {{info.version}}</span>
+</span>
