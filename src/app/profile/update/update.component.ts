@@ -10,7 +10,7 @@ import { RemainingCharsComponent, RemainingCharsConfig } from 'ngx-widgets';
 
 import { CopyService } from '../services/copy.service';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { GitHubService } from "../../create/codebases/services/github.service";
+import { GitHubService } from "../../space/create/codebases/services/github.service";
 import { ProviderService } from '../../getting-started/services/provider.service';
 import { TenentService } from '../services/tenent.service';
 

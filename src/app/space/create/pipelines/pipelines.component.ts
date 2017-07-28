@@ -1,4 +1,4 @@
-import { Fabric8UIConfig } from './../../shared/config/fabric8-ui-config';
+import { Fabric8UIConfig } from './../../../shared/config/fabric8-ui-config';
 import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -9,8 +9,8 @@ import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEven
 
 
 import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
-import { PipelinesService } from './../../shared/runtime-console/pipelines.service';
-import { Fabric8RuntimeConsoleService } from './../../shared/runtime-console/fabric8-runtime-console.service';
+import { PipelinesService } from './../../../shared/runtime-console/pipelines.service';
+import { Fabric8RuntimeConsoleService } from './../../../shared/runtime-console/fabric8-runtime-console.service';
 
 import {
   BuildConfig,
@@ -22,8 +22,8 @@ import {
 } from 'fabric8-runtime-console';
 
 import { pathJoin } from 'fabric8-runtime-console/src/app/kubernetes/model/utils';
-import { IModalHost } from '../../space-wizard/models/modal-host';
-import { SpaceWizardComponent } from './../../space-wizard/space-wizard.component';
+import { IModalHost } from '../../../space-wizard/models/modal-host';
+import { SpaceWizardComponent } from './../../../space-wizard/space-wizard.component';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 
 @Component({

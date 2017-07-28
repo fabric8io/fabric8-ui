@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IModalHost } from '../../space-wizard/models/modal-host';
+import { IModalHost } from '../../../space-wizard/models/modal-host';
 
 import { Context, AreaService, Area, AreaAttributes } from 'ngx-fabric8-wit';
 import { ListConfig, EmptyStateConfig } from 'patternfly-ng';
 
-import { ContextService } from '../../shared/context.service';
+import { ContextService } from '../../../shared/context.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

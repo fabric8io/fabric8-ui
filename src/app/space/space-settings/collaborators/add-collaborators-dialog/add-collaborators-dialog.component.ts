@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Modal } from 'ngx-modal';
 import { Context, CollaboratorService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { ContextService } from '../../../shared/context.service';
+import { ContextService } from '../../../../shared/context.service';
 import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
 
 @Component({

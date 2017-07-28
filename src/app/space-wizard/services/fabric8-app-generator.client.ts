@@ -1,7 +1,7 @@
 import { Broadcaster, Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
-import { CodebasesService } from '../../create/codebases/services/codebases.service';
+import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { Space } from 'ngx-fabric8-wit';
-import { Codebase } from '../../create/codebases/services/codebase';
+import { Codebase } from '../../space/create/codebases/services/codebase';
 import { ILoggerDelegate, LoggerFactory } from '../common/logger';
 import { IWorkflow } from '../models/workflow';
 import { formatJson, mergeArraysDistinctByKey } from '../common/utilities';

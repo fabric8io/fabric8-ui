@@ -1,7 +1,7 @@
 import { NgModule }  from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { codebasesAddRoutes } from './../../create/codebases/codebases-add/codebases-add-routing.module';
+import { codebasesAddRoutes } from '../../space/create/codebases/codebases-add/codebases-add-routing.module';
 
 @NgModule({
   imports: [ RouterModule.forChild(codebasesAddRoutes) ],

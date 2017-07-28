@@ -1,5 +1,5 @@
 import { AddCodebaseWidgetRoutingModule } from './add-codebase-widget-routing.module';
-import { CodebasesAddModule } from './../../create/codebases/codebases-add/codebases-add.module';
+import { CodebasesAddModule } from '../../space/create/codebases/codebases-add/codebases-add.module';
 import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

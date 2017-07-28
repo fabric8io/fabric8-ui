@@ -6,7 +6,7 @@ import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { Fabric8AppGeneratorClient } from './fabric8-app-generator.client';
 import { Fabric8AppGeneratorService } from './fabric8-app-generator.service';
-import { CodebasesService } from '../../create/codebases/services/codebases.service';
+import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import {
   IAppGeneratorCommand,
   IAppGeneratorPair,

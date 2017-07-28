@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CreateComponent } from './create.component';
 import { CodebasesComponent } from './codebases/codebases.component';
-import { ExperimentalFeatureResolver } from '../shared/experimental-feature.resolver';
+import { ExperimentalFeatureResolver } from '../../shared/experimental-feature.resolver';
 
 const routes: Routes = [
   {

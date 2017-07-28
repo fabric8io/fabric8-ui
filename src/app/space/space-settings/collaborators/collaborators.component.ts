@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IModalHost } from '../../space-wizard/models/modal-host';
+import { IModalHost } from '../../../space-wizard/models/modal-host';
 
 import { Context, CollaboratorService } from 'ngx-fabric8-wit';
 
 import { User } from 'ngx-login-client';
 import { ListConfig, EmptyStateConfig } from 'patternfly-ng';
 
-import { ContextService } from '../../shared/context.service';
+import { ContextService } from '../../../shared/context.service';
 import { find } from 'lodash';
 
 @Component({

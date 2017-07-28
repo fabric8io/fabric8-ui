@@ -4,8 +4,8 @@ import { Contexts } from 'ngx-fabric8-wit';
 
 import { Subscription } from 'rxjs';
 
-import { CodebasesService } from './../../create/codebases/services/codebases.service';
-import { Codebase } from './../../create/codebases/services/codebase';
+import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
+import { Codebase } from '../../space/create/codebases/services/codebase';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
