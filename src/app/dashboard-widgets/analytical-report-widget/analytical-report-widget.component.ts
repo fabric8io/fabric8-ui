@@ -150,7 +150,7 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
                     let keys: Array<string> = Object.keys(version[i]);
                     recommendations.push({
                       suggestion: 'Recommendation',
-                      action: 'Update',
+                      action: 'Change',
                       message: keys[0] + ' : ' + version[i][keys[0]],
                       subMessage: stackName + ' has a different version of dependency'
                     });
