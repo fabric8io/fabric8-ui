@@ -5,7 +5,7 @@
 
 ## Before you start: Pointing to a cluster
 
-You need to setup your shell to point to the right cluster so that it can talk to the required back end services like KeyCloak, WIT, Forge, OpenShift etc.
+You need to setup your shell to point to the right cluster so that it can talk to the required back end services like KeyCloak, WIT, Forge, OpenShift etc.  
 
 We provide various sample environments out of the box which make it easier to get started. They are all located as bash scripts in `environments`.
 
