@@ -56,7 +56,7 @@ import {
   UserService
 }                             from 'ngx-login-client';
 import { WidgetsModule }      from 'ngx-widgets';
-
+import { PatternFlyNgModule } from 'patternfly-ng';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -156,6 +156,7 @@ export type StoreType = {
     SpaceWizardModule,
     StackDetailsModule,
     WidgetsModule,
+    PatternFlyNgModule,
     StatusListModule,
     // AppRoutingModule must appear last
     AppRoutingModule
