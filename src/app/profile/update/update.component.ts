@@ -6,7 +6,6 @@ import { Subscription } from 'rxjs';
 import { Notification, NotificationType, Notifications } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService, User } from 'ngx-login-client';
-import { RemainingCharsComponent, RemainingCharsConfig } from 'ngx-widgets';
 
 import { CopyService } from '../services/copy.service';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
@@ -23,7 +22,7 @@ import { TenentService } from '../services/tenent.service';
 })
 export class UpdateComponent implements AfterViewInit, OnInit {
   @ViewChild('_email') emailElement: ElementRef;
-  @ViewChild('_bio') bioElement: RemainingCharsComponent;
+  @ViewChild('_bio') bioElement: HTMLElement;
   @ViewChild('_imageUrl') imageUrlElement: ElementRef;
   @ViewChild('_url') urlElement: ElementRef;
   @ViewChild('profileForm') profileForm: NgForm;
@@ -192,8 +191,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   setElementFocus($event: MouseEvent, element: any) {
     if (element instanceof HTMLElement) {
       (element as HTMLElement).focus();
-    } else if (element instanceof RemainingCharsComponent) {
-      (element as RemainingCharsComponent).focus();
     }
   }
 
