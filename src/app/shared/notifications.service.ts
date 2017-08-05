@@ -1,4 +1,4 @@
-import { NotificationService } from 'ngx-widgets';
+import { NotificationService } from 'patternfly-ng';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Notifications, Notification, NotificationAction } from 'ngx-base';
