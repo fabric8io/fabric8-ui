@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IModalHost } from '../../space-wizard/models/modal-host';
+import { IModalHost } from '../../wizard/models/modal-host';
 
 import { Context, CollaboratorService } from 'ngx-fabric8-wit';
 

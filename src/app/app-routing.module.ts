@@ -119,7 +119,7 @@ export const routes: Routes = [
     resolve: {
       context: ContextResolver
     },
-    loadChildren: './space/space-settings/space-settings.module#SpaceSettingsModule',
+    loadChildren: './space/settings/space-settings.module#SpaceSettingsModule',
     data: {
       title: 'Areas'
     }

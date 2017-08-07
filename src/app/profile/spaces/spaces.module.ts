@@ -8,7 +8,7 @@ import { Fabric8WitModule } from 'ngx-fabric8-wit';
 
 import { SpacesComponent }     from './spaces.component';
 import { SpacesRoutingModule } from './spaces-routing.module';
-import { SpaceWizardModule } from '../../space/space-wizard/space-wizard.module';
+import { SpaceWizardModule } from '../../space/wizard/space-wizard.module';
 
 @NgModule({
   imports:      [ CommonModule, SpacesRoutingModule, ModalModule, SpaceWizardModule, InfiniteScrollModule, Fabric8WitModule ],

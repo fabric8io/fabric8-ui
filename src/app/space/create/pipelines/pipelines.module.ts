@@ -13,7 +13,7 @@ import {
 
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesRoutingModule } from './pipelines-routing.module';
-import {SpaceWizardModule} from "../../space-wizard/space-wizard.module";
+import {SpaceWizardModule} from "../../wizard/space-wizard.module";
 import {ModalModule} from "ngx-modal";
 
 

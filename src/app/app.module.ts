@@ -110,7 +110,7 @@ import { realmProvider }                 from './shared/realm-token.provider';
 import { ConfigStore }               from './base/config.store';
 import { ErrorService }              from './layout/error/error.service';
 import { ProfileService }            from './profile/profile.service';
-import { SpaceWizardModule }         from './space/space-wizard/space-wizard.module';
+import { SpaceWizardModule }         from './space/wizard/space-wizard.module';
 
 // About Modal
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
