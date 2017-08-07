@@ -1,10 +1,10 @@
 <header>
   <alm-app-header></alm-app-header>
 </header>
-<alm-toast-notification-list
+<pfng-toast-notification-list
     [notifications]="notifications.current"
     (onActionSelect)="handleAction($event)">
-</alm-toast-notification-list>
+</pfng-toast-notification-list>
 <main class="">
   <div class="">
     <router-outlet name="action"></router-outlet>
