@@ -1,0 +1,129 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+@icon-path: '../../../assets/stylesheets/shared/_icons.less';
+
+// wizard
+@wizard-spacing: @grid-gutter-width/2;
+@wizard-padding: @grid-gutter-width/2;
+@wizard-spacing: 0;
+
+// make styles apply to host element and all child elements , including child components
+:host /deep/ {
+  min-height: 450px;
+  background-color: @color-pf-white;
+  // ensure consistent padding on bootstrap rows
+  // startswith col-
+  [class^='col-'] {
+    padding-left: @grid-gutter-width/2;
+    padding-right: @grid-gutter-width/2;
+  }
+  // contains col-
+  [class*='col-'] {
+    padding-left: @grid-gutter-width/2;
+    padding-right: @grid-gutter-width/2;
+  }
+  position: relative;
+  display: block;
+  width: 100%;
+  .wizard-step-child-elements {
+    >header {
+      position: relative;
+      background-color: @color-pf-black-100;
+      &.container-fluid {
+        padding-left: @wizard-spacing+0;
+        padding-right: @wizard-spacing+0;
+        margin-left: 0;
+        margin-right: 0;
+        >.row {
+          margin-left: -(@wizard-spacing+0);
+          margin-right: -(@wizard-spacing+0);
+        }
+      }
+      &.container { width: 100%; }
+    }
+    >section {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      width: auto;
+      &.container-fluid {
+        .form-horizontal {
+          margin-left: -(@grid-gutter-width/2);
+          margin-right: -(@grid-gutter-width/2);
+        }
+        .form-group {
+          margin-left: 0;
+          margin-right: 0;
+        }
+        padding-left: @wizard-spacing+0;
+        padding-right: @wizard-spacing+0;
+        position: relative;
+        >.row {
+          position: relative;
+          margin-left: -(@wizard-spacing+0);
+          margin-right: -(@wizard-spacing+0);
+          padding: 0;
+          width: auto;
+        }
+      }
+      &.container {
+        padding-left: @wizard-spacing+0;
+        padding-right: @wizard-spacing+0;
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+      }
+      &.forge-section {
+        background-color: @color-pf-black-200;
+      }
+    }
+    >footer {
+      position: relative;
+      border-top: 1px solid;
+      border-top-color: @color-pf-black-300;
+      background-color: @color-pf-white;
+      &.container-fluid {
+        padding-left: @wizard-spacing+0;
+        padding-right: @wizard-spacing+0;
+        margin-left: 0;
+        margin-right: 0;
+        >.row {
+          margin-left: -(@wizard-spacing+0);
+          margin-right: -(@wizard-spacing+0);
+        }
+      }
+      &.container { width: 100%; }
+    }
+  }
+  .wizard {
+    display: block;
+    position: relative;
+    width: 100%;
+    .row { padding-top: 0; }
+    .btn { min-width: 90px; }
+    .wizard-step {
+      position: relative;
+      width: 100%;
+      display: none;
+      &.active {
+        display: block;
+        width: 100% !important;
+      }
+      @include: wizard-step-child-elements;
+      >form {
+        position: relative;
+        display: block;
+        width: 100%;
+        @include: wizard-step-child-elements;
+      }
+      .wizard-step-title {
+        .text { font-weight: 600; }
+      }
+      .wizard-step-tool-bar {
+        position: relative;
+        display: block;
+        padding-top: @wizard-spacing;
+        padding-bottom: @wizard-spacing;
+      }
+    }
+  }
+}

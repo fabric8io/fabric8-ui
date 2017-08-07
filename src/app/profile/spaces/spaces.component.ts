@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Logger } from 'ngx-base';
 import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
-import { IModalHost } from '../../space-wizard/models/modal-host';
+import { IModalHost } from '../../space/space-wizard/models/modal-host';
 import { EventService } from "../../shared/event.service";
 
 @Component({

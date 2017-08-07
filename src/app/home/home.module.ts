@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { ModalModule } from 'ngx-modal';
-import { SpaceWizardModule } from '../space-wizard/space-wizard.module';
+import { SpaceWizardModule } from '../space/space-wizard/space-wizard.module';
 
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';

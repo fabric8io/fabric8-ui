@@ -22,8 +22,8 @@ import {
 } from 'fabric8-runtime-console';
 
 import { pathJoin } from 'fabric8-runtime-console/src/app/kubernetes/model/utils';
-import { IModalHost } from '../../../space-wizard/models/modal-host';
-import { SpaceWizardComponent } from './../../../space-wizard/space-wizard.component';
+import { IModalHost } from '../../space-wizard/models/modal-host';
+import { SpaceWizardComponent } from '../../space-wizard/space-wizard.component';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 
 @Component({
