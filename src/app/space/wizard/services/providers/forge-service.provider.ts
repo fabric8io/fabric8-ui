@@ -8,7 +8,6 @@ import { LoggerFactory } from '../../common/logger';
 import { Fabric8ForgeService } from '../fabric8-forge.service';
 
 import { ForgeService, IForgeServiceToken } from '../contracts/forge-service';
-import { MockForgeService } from '../mocks/mock-forge.service';
 
 /**
  * When using this provider and you take a dependency on the interface type
@@ -26,17 +25,6 @@ export class IForgeServiceProvider {
         return new Fabric8ForgeService(http, loggerFactory, apiLocator, authenticationService);
       },
       deps: [ LoggerFactory, Http, ApiLocatorService, AuthenticationService ]
-    };
-  }
-
-  static get MockFactoryProvider(): FactoryProvider {
-    return {
-      provide: IForgeServiceToken,
-      useFactory: (loggerFactory) => {
-        return new MockForgeService(loggerFactory);
-      },
-      deps: [ LoggerFactory ]
-
     };
   }
 
@@ -60,14 +48,6 @@ export class ForgeServiceProvider {
       useClass: Fabric8ForgeService
     };
   }
-
-  static get MockClassProvider(): ClassProvider {
-    return {
-      provide: ForgeService,
-      useClass: MockForgeService
-    };
-  }
-
   static get FactoryProvider(): FactoryProvider {
     return {
       provide: ForgeService,
@@ -75,17 +55,6 @@ export class ForgeServiceProvider {
         return new Fabric8ForgeService(http, loggerFactory, apiLocator, authenticationService);
       },
       deps: [ LoggerFactory, Http, ApiLocatorService, AuthenticationService ],
-      multi: false
-    };
-  }
-
-  static get MockFactoryProvider(): FactoryProvider {
-    return {
-      provide: ForgeService,
-      useFactory: (loggerFactory) => {
-        return new MockForgeService(loggerFactory);
-      },
-      deps: [ LoggerFactory ],
       multi: false
     };
   }

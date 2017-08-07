@@ -6,7 +6,6 @@ import { AppGeneratorConfiguratorService } from '../fabric8-app-generator-config
 import { AppGeneratorService, IAppGeneratorServiceToken } from '../contracts/app-generator-service';
 
 import { IForgeService, IForgeServiceProvider } from '../forge.service';
-import { MockAppGeneratorService } from '../mocks/mock-app-generator.service';
 import { ApiLocatorService } from '../../../../shared/api-locator.service';
 /**
  * When using this provider and you take a dependency on the interface type
@@ -25,18 +24,6 @@ export class IAppGeneratorServiceProvider {
       deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfiguratorService, ApiLocatorService ]
     };
   }
-
-  static get MockFactoryProvider(): FactoryProvider {
-    return {
-      provide: IAppGeneratorServiceToken,
-      useFactory: (loggerFactory) => {
-        return new MockAppGeneratorService(loggerFactory);
-      },
-      deps: [ LoggerFactory ]
-
-    };
-  }
-
   static get InjectToken(): OpaqueToken {
     return IAppGeneratorServiceToken;
   }
@@ -57,14 +44,6 @@ export class FieldSetServiceProvider {
       useClass: Fabric8AppGeneratorService
     };
   }
-
-  static get MockClassProvider(): ClassProvider {
-    return {
-      provide: AppGeneratorService,
-      useClass: MockAppGeneratorService
-    };
-  }
-
   static get FactoryProvider(): FactoryProvider {
     return {
       provide: AppGeneratorService,
@@ -72,17 +51,6 @@ export class FieldSetServiceProvider {
         return new Fabric8AppGeneratorService(forge, loggerFactory, appGeneratorConfigurationService, apiLocator);
       },
       deps: [ IForgeServiceProvider.InjectToken, LoggerFactory, AppGeneratorConfiguratorService, ApiLocatorService ],
-      multi: false
-    };
-  }
-
-  static get MockFactoryProvider(): FactoryProvider {
-    return {
-      provide: AppGeneratorService,
-      useFactory: (loggerFactory) => {
-        return new MockAppGeneratorService(loggerFactory);
-      },
-      deps: [ LoggerFactory ],
       multi: false
     };
   }
