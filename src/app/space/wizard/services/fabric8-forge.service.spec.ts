@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { Http, Response, ResponseOptions, XHRBackend, HttpModule } from '@angular/http';
+import { Response, ResponseOptions, XHRBackend, HttpModule } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 import { AuthenticationService } from 'ngx-login-client';
 import { Fabric8ForgeService } from './fabric8-forge.service';
 import { ApiLocatorService } from '../../../shared/api-locator.service';
-import { ILoggerDelegate, LoggerFactory } from '../common/logger';
+import { LoggerFactory } from '../common/logger';
 import { expectedResponse, expectedError } from './fabric8-forge.service.mock';
 
 describe('Fabric8ForgeService:', () => {

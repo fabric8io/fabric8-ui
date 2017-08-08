@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { Observable } from 'rxjs';
-
 import { ILoggerDelegate, LoggerFactory } from './common/logger';
 import { IModalHost } from './models/modal-host';
 import { IWorkflow, WorkflowFactory } from './models/workflow';

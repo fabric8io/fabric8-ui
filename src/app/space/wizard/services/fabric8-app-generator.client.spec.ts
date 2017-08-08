@@ -1,24 +1,7 @@
-import { TestBed } from '@angular/core/testing';
-import { Http, Response, ResponseOptions, XHRBackend, HttpModule } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
-import { AuthenticationService, UserService, AUTH_API_URL } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { Fabric8AppGeneratorClient } from './fabric8-app-generator.client';
 import { Fabric8AppGeneratorService } from './fabric8-app-generator.service';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
-import {
-  IAppGeneratorCommand,
-  IAppGeneratorPair,
-  IAppGeneratorRequest,
-  IAppGeneratorResponse,
-  IAppGeneratorService,
-  IAppGeneratorServiceProvider,
-  IAppGeneratorState,
-  IFieldCollection,
-  IAppGeneratorMessage,
-  AppGeneratorConfiguratorService
-} from './app-generator.service';
 import { Broadcaster, Notifications } from 'ngx-base';
 import { cloneDeep } from 'lodash';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';

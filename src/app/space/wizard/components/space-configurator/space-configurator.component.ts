@@ -1,16 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 //
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
-
 import { IWorkflow } from '../../models/workflow';
-
 import { ForgeAppGenerator } from './forge-app-generator';
-
 import { AppGeneratorConfiguratorService } from '../../services/app-generator.service';
-
-import {
-  IAppGeneratorState
-} from '../../services/app-generator.service';
 
 @Component({
   selector: 'space-configurator',

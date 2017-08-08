@@ -1,4 +1,3 @@
-import { TestBed } from '@angular/core/testing';
 import { Logger } from 'ngx-base';
 import { AppGeneratorConfiguratorService } from './app-generator.service';
 import { Observable } from 'rxjs';

@@ -2,16 +2,8 @@ import { ViewEncapsulation, Component, Inject, Input, OnChanges, OnDestroy, OnIn
 //
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
 import { INotifyPropertyChanged } from '../../core/component';
-
-import { IWorkflow, IWorkflowTransition, WorkflowTransitionAction } from '../../models/workflow';
-
-import {
-  IField,
-  IFieldChoice
-} from '../../services/app-generator.service';
-
+import { IWorkflow, WorkflowTransitionAction } from '../../models/workflow';
 import { Fabric8AppGeneratorClient } from '../../services/fabric8-app-generator.client';
-import { FieldWidgetClassificationOptions } from '../../models/contracts/field-classification';
 
 @Component({
   host: {

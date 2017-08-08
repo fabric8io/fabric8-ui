@@ -1,4 +1,3 @@
-import { IAppGeneratorResponse } from "..//models/contracts/app-generator-response";
 export const importWizardStep1_GitOrganisation_Validate = {
   "payload": {
     "fields": [

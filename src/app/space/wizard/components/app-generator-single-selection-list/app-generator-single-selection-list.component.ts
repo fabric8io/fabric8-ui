@@ -5,12 +5,10 @@ import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
 import { ForgeAppGenerator } from './forge-app-generator';
 
 import {
-  IField,
-  IFieldChoice
+  IField
 } from '../../services/app-generator.service';
 
 import { Fabric8AppGeneratorClient } from '../../services/fabric8-app-generator.client';
-import { FieldWidgetClassificationOptions } from '../../models/contracts/field-classification';
 
 @Component({
   selector: 'app-generator-single-selection-list',
