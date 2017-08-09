@@ -61,11 +61,7 @@ if [ $? -eq 0 ]; then
     TAG=$(echo $GIT_COMMIT | cut -c1-6)
     REGISTRY="push.registry.devshift.net"
 
-    if [ -n "${DEVSHIFT_USERNAME}" -a -n "${DEVSHIFT_PASSWORD}" ]; then
-      docker login -u ${DEVSHIFT_USERNAME} -p ${DEVSHIFT_PASSWORD} ${REGISTRY}
-    else
-      echo "Could not login, missing credentials for the registry"
-    fi
+    docker login -u ${DEVSHIFT_USERNAME} -p ${DEVSHIFT_PASSWORD} ${REGISTRY}
 
     docker build -t fabric8-ui-deploy -f Dockerfile.deploy . && \
     docker tag fabric8-ui-deploy ${REGISTRY}/fabric8-ui/fabric8-ui:$TAG && \
