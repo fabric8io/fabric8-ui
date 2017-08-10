@@ -10,7 +10,7 @@ import { ProviderService } from './services/provider.service';
 import {Fabric8UIConfig} from "../shared/config/fabric8-ui-config";
 import {Observable} from "rxjs/Observable";
 import {Http, Headers, RequestOptions, RequestOptionsArgs, Response} from "@angular/http";
-import {pathJoin} from "fabric8-runtime-console/src/app/kubernetes/model/utils";
+import { pathJoin } from "../../a-runtime-console/kubernetes/model/utils";
 
 @Component({
   encapsulation: ViewEncapsulation.None,

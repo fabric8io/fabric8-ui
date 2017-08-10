@@ -13,7 +13,7 @@ import {
   filterPipelines,
   BuildConfigStore,
   BuildStore
-} from 'fabric8-runtime-console';
+} from '../../../a-runtime-console/index';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

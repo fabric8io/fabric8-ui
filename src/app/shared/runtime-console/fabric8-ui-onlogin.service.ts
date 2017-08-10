@@ -1,5 +1,5 @@
 import { LoginService } from './../login.service';
-import { OnLogin } from 'fabric8-runtime-console';
+import { OnLogin } from '../../../a-runtime-console/index';
 import { Injectable } from '@angular/core';
 
 @Injectable()

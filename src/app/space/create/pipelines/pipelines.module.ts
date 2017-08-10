@@ -9,7 +9,7 @@ import { ToolbarModule } from 'patternfly-ng';
 
 import {
   PipelineModule
-} from 'fabric8-runtime-console';
+} from '../../../../a-runtime-console/index';
 
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesRoutingModule } from './pipelines-routing.module';

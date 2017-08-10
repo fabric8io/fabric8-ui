@@ -19,9 +19,9 @@ import {
   filterPipelines,
   BuildConfigStore,
   BuildStore
-} from 'fabric8-runtime-console';
+} from '../../../../a-runtime-console/index';
 
-import { pathJoin } from 'fabric8-runtime-console/src/app/kubernetes/model/utils';
+import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
 import { IModalHost } from '../../wizard/models/modal-host';
 import { SpaceWizardComponent } from '../../wizard/space-wizard.component';
 import { Context, Contexts } from 'ngx-fabric8-wit';

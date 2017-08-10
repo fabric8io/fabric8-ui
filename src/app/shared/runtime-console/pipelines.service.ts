@@ -11,7 +11,7 @@ import {
   filterPipelines,
   BuildConfigStore,
   BuildStore, Builds
-} from 'fabric8-runtime-console';
+} from '../../../a-runtime-console/index';
 
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 import { Context, Contexts } from 'ngx-fabric8-wit';

@@ -11,6 +11,11 @@
     "strictNullChecks": false,
     "noUnusedLocals": false,
     "baseUrl": "./src",
+//    "paths": {
+//      "fabric8-runtime-console": [
+//        "a-runtime-console"
+//      ]
+//    },
     "lib": [
       "dom",
       "es6"

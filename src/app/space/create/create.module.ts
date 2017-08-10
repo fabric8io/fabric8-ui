@@ -8,7 +8,7 @@ import {
   // Base functionality for the runtime console
   KubernetesStoreModule,
   KubernetesRestangularModule
-} from 'fabric8-runtime-console';
+} from '../../../a-runtime-console/index';
 
 import { CreateComponent } from './create.component';
 import { CreateRoutingModule } from './create-routing.module';
