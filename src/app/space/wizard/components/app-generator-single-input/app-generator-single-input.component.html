@@ -1,12 +1,12 @@
 <div [ngSwitch]="field.valueType" >
-  <input *ngSwitchCase="'string'" id="{{field.name}}" title="{{field.display.label}}" name="{{field.name}}" (keyup)="appGenerator.state.canMoveToNextStep = true"
+  <input *ngSwitchCase="'string'" id="{{field.name}}" title="{{field.display.label}}" name="{{field.name}}" (keyup)="appGenerator.state.canMoveToNextStep = true;field.display.valid = true"
     [(ngModel)]="field.value" type="text" [class.form-control-danger]="!field.display.valid"
     class="form-control" placeholder="{{field.description}}"  [disabled]="field.display.enabled===false"
     [required]="field.display.required" />
-  <input *ngSwitchCase="'boolean'" style="box-shadow:none;" title="{{field.display.label}}" [class.form-control-danger]="!field.display.valid" (change)="appGenerator.state.canMoveToNextStep = true"
+  <input *ngSwitchCase="'boolean'" style="box-shadow:none;" title="{{field.display.label}}" [class.form-control-danger]="!field.display.valid" (change)="appGenerator.state.canMoveToNextStep = true;field.display.valid = true"
     type="checkbox" name="{{field.name}}" [(ngModel)]="field.value" class="form-control"
     [required]="field.display.required" [disabled]="field.display.enabled===false">
-  <input *ngSwitchCase="'number'" [class.form-control-danger]="!field.display.valid" title="{{field.display.label}}" type="number" (change)="appGenerator.state.canMoveToNextStep = true"
+  <input *ngSwitchCase="'number'" [class.form-control-danger]="!field.display.valid" title="{{field.display.label}}" type="number" (change)="appGenerator.state.canMoveToNextStep = true;field.display.valid = true"
     name="{{field.name}}" [(ngModel)]="field.value" class="form-control" [required]="field.display.required"
     [disabled]="field.display.enabled===false">
 </div>
