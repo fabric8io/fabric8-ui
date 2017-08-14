@@ -535,16 +535,12 @@ export class Fabric8AppGeneratorClient {
       results = results.filter(r => r !== null);
       this.result = results[results.length - 1]; // for now only one result populated is returned from forge backend
       let resultDisplay = cloneDeep(this.result);
-      // for "forge import repo" wizard flow, fabric8-generator addon return the list of repo names and gitUrl is null
-      // we need to format gitRepositoryNames to display final Url
-      if (!this.result.gitUrl) {
-        for (let key in resultDisplay.gitRepositoryNames) {
-          if (this.result.gitOwnerName) {
-            resultDisplay.gitRepositoryNames[key] = `https://github.com/${resultDisplay.gitOwnerName}/${resultDisplay.gitRepositoryNames[key]}.git`;
-          }
-        }
-      } else { // whereas for "forge quickstart" wizard flow, both git names and gitUrl are returned, we can use gitUrl and ignore repo names
-        resultDisplay.gitRepositoryNames = [];
+      // Do not display duplicate information returned by forge add-on API
+      resultDisplay.gitRepositoryNames = [];
+      resultDisplay.gitUrl = null;
+      // Format git URL
+      for (let repo in this.result.gitRepositories) {
+        resultDisplay.gitRepositories[repo] = this.result.gitRepositories[repo].url;
       }
       let msg = this.formatForDisplay(resultDisplay);
       this.displaySuccessMessageView(`A starter application was created.`, msg);

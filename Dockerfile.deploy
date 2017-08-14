@@ -1,4 +1,4 @@
-FROM registry.centos.org/fabric8/openshift-nginx:latest
+FROM fabric8/fabric8-openshift-nginx:latest
 MAINTAINER "Pete Muir <pmuir@bleepbleep.org.uk>"
 
 USER root
