@@ -6,7 +6,7 @@ import { ReplicaSetScaleDialog } from "../scale-dialog/scale-dialog.replicaset.c
 @Component({
   selector: 'fabric8-replicasets-list',
   templateUrl: './list.replicaset.component.html',
-  styleUrls: ['./list.replicaset.component.scss'],
+  styleUrls: ['./list.replicaset.component.less'],
 })
 export class ReplicaSetsListComponent {
 

@@ -7,7 +7,7 @@ import {Build} from "../../../model/build.model";
 @Component({
   selector: 'fabric8-build-edit-toolbar',
   templateUrl: './edit-toolbar.build.component.html',
-  styleUrls: ['./edit-toolbar.build.component.scss'],
+  styleUrls: ['./edit-toolbar.build.component.less'],
 })
 export class BuildEditToolbarComponent {
 

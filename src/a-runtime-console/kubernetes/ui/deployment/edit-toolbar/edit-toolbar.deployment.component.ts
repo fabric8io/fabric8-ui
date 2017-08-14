@@ -7,7 +7,7 @@ import {Deployment} from "../../../model/deployment.model";
 @Component({
   selector: 'fabric8-deployment-edit-toolbar',
   templateUrl: './edit-toolbar.deployment.component.html',
-  styleUrls: ['./edit-toolbar.deployment.component.scss'],
+  styleUrls: ['./edit-toolbar.deployment.component.less'],
 })
 export class DeploymentEditToolbarComponent {
 

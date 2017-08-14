@@ -6,7 +6,6 @@ import {PodStore} from "../../../store/pod.store";
 @Component({
   selector: 'fabric8-pod-edit-page',
   templateUrl: './edit-page.pod.component.html',
-  styleUrls: ['./edit-page.pod.component.scss'],
 })
 export class PodEditPage implements OnDestroy {
   private idSubscription: Subscription;

@@ -14,7 +14,7 @@ import {LoginService} from './shared/login.service';
   selector: 'f8-app',
   encapsulation: ViewEncapsulation.None,
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 

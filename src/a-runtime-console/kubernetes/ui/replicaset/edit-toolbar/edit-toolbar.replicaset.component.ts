@@ -7,7 +7,7 @@ import {ReplicaSet} from "../../../model/replicaset.model";
 @Component({
   selector: 'fabric8-replicaset-edit-toolbar',
   templateUrl: './edit-toolbar.replicaset.component.html',
-  styleUrls: ['./edit-toolbar.replicaset.component.scss'],
+  styleUrls: ['./edit-toolbar.replicaset.component.less'],
 })
 export class ReplicaSetEditToolbarComponent {
 

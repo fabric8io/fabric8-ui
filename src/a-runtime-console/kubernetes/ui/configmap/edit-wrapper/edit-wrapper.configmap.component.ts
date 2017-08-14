@@ -7,7 +7,6 @@ import {YamlEditor} from "../../../view/yaml.editor";
 @Component({
   selector: 'fabric8-configmap-edit-wrapper',
   templateUrl: './edit-wrapper.configmap.component.html',
-  styleUrls: ['./edit-wrapper.configmap.component.scss'],
 })
 export class ConfigMapEditWrapperComponent implements OnInit {
   configmap: Observable<ConfigMap>;

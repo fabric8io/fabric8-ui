@@ -6,7 +6,6 @@ import {CompositeReplicaSetStore} from "../../../store/compositedreplicaset.stor
 @Component({
   selector: 'fabric8-replicaset-view-page',
   templateUrl: './view-page.replicaset.component.html',
-  styleUrls: ['./view-page.replicaset.component.scss'],
 })
 export class ReplicaSetViewPage implements OnDestroy {
   private idSubscription: Subscription;

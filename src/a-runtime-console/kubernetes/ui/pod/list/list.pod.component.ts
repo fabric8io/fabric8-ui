@@ -7,7 +7,7 @@ import {openShiftBrowseResourceUrl} from "../../../model/helpers";
 @Component({
   selector: 'fabric8-pods-list',
   templateUrl: './list.pod.component.html',
-  styleUrls: ['./list.pod.component.scss'],
+  styleUrls: ['./list.pod.component.less'],
 })
 export class PodsListComponent {
 

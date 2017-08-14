@@ -21,7 +21,7 @@ import { LoginService } from '../shared/login.service';
 @Component({
   selector: 'alm-app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrls: ['./header.component.less'],
   // providers: [ToggleService]
 })
 

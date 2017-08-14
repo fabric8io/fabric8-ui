@@ -6,7 +6,6 @@ import {CompositeDeploymentStore} from "../../../store/compositedeployment.store
 @Component({
   selector: 'fabric8-deployment-view-page',
   templateUrl: './view-page.deployment.component.html',
-  styleUrls: ['./view-page.deployment.component.scss'],
 })
 export class DeploymentViewPage implements OnDestroy {
   private idSubscription: Subscription;

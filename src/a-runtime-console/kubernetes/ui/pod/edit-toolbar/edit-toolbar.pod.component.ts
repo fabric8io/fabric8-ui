@@ -7,7 +7,7 @@ import {Pod} from "../../../model/pod.model";
 @Component({
   selector: 'fabric8-pod-edit-toolbar',
   templateUrl: './edit-toolbar.pod.component.html',
-  styleUrls: ['./edit-toolbar.pod.component.scss'],
+  styleUrls: ['./edit-toolbar.pod.component.less'],
 })
 export class PodEditToolbarComponent {
 

@@ -8,7 +8,6 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'fabric8-namespace-view-wrapper',
   templateUrl: './view-wrapper.namespace.component.html',
-  styleUrls: ['./view-wrapper.namespace.component.scss'],
 })
 export class NamespaceViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   namespace: Observable<Namespace>;

@@ -8,7 +8,6 @@ import {ReplicationController} from "../../../model/replicationcontroller.model"
 @Component({
   selector: 'scale-replicaset-dialog',
   templateUrl: './scale-dialog.replicaset.component.html',
-  styleUrls: ['./scale-dialog.replicaset.component.scss'],
 })
 export class ReplicaSetScaleDialog {
   replicaset: ReplicaSet = new ReplicaSet();

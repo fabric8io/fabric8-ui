@@ -6,7 +6,6 @@ import {ServiceService} from "../../../service/service.service";
 @Component({
   selector: 'delete-service-dialog',
   templateUrl: './delete-dialog.service.component.html',
-  styleUrls: ['./delete-dialog.service.component.scss'],
 })
 export class ServiceDeleteDialog {
   service: Service = new Service();

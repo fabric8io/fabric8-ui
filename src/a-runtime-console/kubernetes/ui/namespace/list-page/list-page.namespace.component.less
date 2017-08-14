@@ -1,0 +1,42 @@
+@import (reference) '../../../../../assets/stylesheets/shared/osio.less';
+@debug-pf-border: 0;
+@content-offset: 15px;
+@debug-pf-color: purple;
+@debug-pf-row-color: lighten(@debug-pf-color, 25%);
+@debug-pf-column-color: lighten(@debug-pf-color, 50%);
+.container-cards-pf {
+  position: relative;
+  border: solid @debug-pf-border;
+  border-color: @debug-pf-color;
+  width: 100%;
+  margin-top: 0;
+  overflow: auto;
+}
+.row {
+  padding-top: @content-offset/2;
+  position: relative;
+  border: solid @debug-pf-border;
+  border-color: @debug-pf-row-color;
+}
+div[class*='col-'] {
+  position: relative;
+  border: solid @debug-pf-border;
+  border-color: @debug-pf-column-color;
+  padding-left: @content-offset;
+  padding-right: @content-offset;
+  .card-pf {
+    padding: 0 @content-offset;
+    min-height: 250px;
+    .card-pf-title {
+      margin-left: -@content-offset;
+      margin-right: -@content-offset;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-bottom: @content-offset;
+      padding-left: @content-offset;
+      padding-right: @content-offset;
+      padding-top: 5px;
+      background-color: @navbar-default-bg;
+    }
+  }
+}

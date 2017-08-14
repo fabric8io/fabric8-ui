@@ -4,7 +4,7 @@ import {ConfigMap} from "../../../model/configmap.model";
 @Component({
   selector: 'fabric8-configmap-view-toolbar',
   templateUrl: './view-toolbar.configmap.component.html',
-  styleUrls: ['./view-toolbar.configmap.component.scss'],
+  styleUrls: ['./view-toolbar.configmap.component.less'],
 })
 export class ConfigMapViewToolbarComponent {
 

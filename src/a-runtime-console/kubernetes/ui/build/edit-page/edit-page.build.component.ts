@@ -6,7 +6,6 @@ import {BuildStore} from "../../../store/build.store";
 @Component({
   selector: 'fabric8-build-edit-page',
   templateUrl: './edit-page.build.component.html',
-  styleUrls: ['./edit-page.build.component.scss'],
 })
 export class BuildEditPage implements OnDestroy {
   private idSubscription: Subscription;

@@ -6,7 +6,6 @@ import {DeploymentStore} from "../../../store/deployment.store";
 @Component({
   selector: 'fabric8-deployment-edit-page',
   templateUrl: './edit-page.deployment.component.html',
-  styleUrls: ['./edit-page.deployment.component.scss'],
 })
 export class DeploymentEditPage implements OnDestroy {
   private idSubscription: Subscription;

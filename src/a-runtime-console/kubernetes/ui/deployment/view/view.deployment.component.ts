@@ -5,7 +5,6 @@ import {DeploymentScaleDialog} from "../scale-dialog/scale-dialog.deployment.com
 @Component({
   selector: 'fabric8-deployment-view',
   templateUrl: './view.deployment.component.html',
-  styleUrls: ['./view.deployment.component.scss'],
 })
 export class DeploymentViewComponent {
 

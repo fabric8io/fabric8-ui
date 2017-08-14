@@ -6,7 +6,6 @@ import {ServiceStore} from "../../../store/service.store";
 @Component({
   selector: 'fabric8-service-view-page',
   templateUrl: './view-page.service.component.html',
-  styleUrls: ['./view-page.service.component.scss'],
 })
 export class ServiceViewPage implements OnDestroy {
   private idSubscription: Subscription;

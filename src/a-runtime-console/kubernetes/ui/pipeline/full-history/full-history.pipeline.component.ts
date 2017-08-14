@@ -5,7 +5,7 @@ import {BuildConfigDeleteDialog} from "../../buildconfig/delete-dialog/delete-di
 @Component({
   selector: 'fabric8-pipelines-full-history',
   templateUrl: './full-history.pipeline.component.html',
-  styleUrls: ['./full-history.pipeline.component.scss'],
+  styleUrls: ['./full-history.pipeline.component.less'],
 })
 export class PipelinesFullHistoryComponent {
 

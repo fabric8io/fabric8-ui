@@ -9,7 +9,7 @@ import { FABRIC8_FORGE_API_URL } from '../../../../shared/fabric8-forge-api'
 @Component({
   selector: 'input-action-dialog',
   templateUrl: './input-action-dialog.component.html',
-  styleUrls: ['./input-action-dialog.component.scss']
+  styleUrls: ['./input-action-dialog.component.less']
 })
 export class InputActionDialog {
   build: Build = new Build();

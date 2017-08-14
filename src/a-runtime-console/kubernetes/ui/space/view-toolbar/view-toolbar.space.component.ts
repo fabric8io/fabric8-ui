@@ -4,7 +4,7 @@ import {Space} from "../../../model/space.model";
 @Component({
   selector: 'fabric8-space-view-toolbar',
   templateUrl: './view-toolbar.space.component.html',
-  styleUrls: ['./view-toolbar.space.component.scss'],
+  styleUrls: ['./view-toolbar.space.component.less'],
 })
 export class SpaceViewToolbarComponent {
 

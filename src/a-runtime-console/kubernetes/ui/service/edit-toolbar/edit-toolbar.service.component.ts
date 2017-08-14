@@ -7,7 +7,7 @@ import {Service} from "../../../model/service.model";
 @Component({
   selector: 'fabric8-service-edit-toolbar',
   templateUrl: './edit-toolbar.service.component.html',
-  styleUrls: ['./edit-toolbar.service.component.scss'],
+  styleUrls: ['./edit-toolbar.service.component.less'],
 })
 export class ServiceEditToolbarComponent {
 

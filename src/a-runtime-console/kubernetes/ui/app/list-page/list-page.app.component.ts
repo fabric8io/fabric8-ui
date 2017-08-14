@@ -19,7 +19,6 @@ import {Subscription} from "rxjs/Subscription";
 @Component({
   selector: 'fabric8-apps-list-page',
   templateUrl: './list-page.app.component.html',
-  styleUrls: ['./list-page.app.component.scss'],
 })
 export class AppListPageComponent extends AbstractWatchComponent implements OnInit, OnDestroy {
 

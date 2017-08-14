@@ -5,7 +5,7 @@ import { Services } from "../../../model/service.model";
 @Component({
   selector: 'fabric8-services-list',
   templateUrl: './list.service.component.html',
-  styleUrls: ['./list.service.component.scss'],
+  styleUrls: ['./list.service.component.less'],
 })
 export class ServicesListComponent {
 

@@ -126,7 +126,6 @@ export class KindNode {
   },
   selector: 'fabric8-environments-list-page',
   templateUrl: './list-page.environment.component.html',
-  styleUrls: ['./list-page.environment.component.scss'],
 })
 export class EnvironmentListPageComponent extends AbstractWatchComponent implements OnInit, OnDestroy {
 

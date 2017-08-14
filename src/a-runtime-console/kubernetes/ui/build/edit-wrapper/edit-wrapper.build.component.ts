@@ -7,7 +7,6 @@ import {YamlEditor} from "../../../view/yaml.editor";
 @Component({
   selector: 'fabric8-build-edit-wrapper',
   templateUrl: './edit-wrapper.build.component.html',
-  styleUrls: ['./edit-wrapper.build.component.scss'],
 })
 export class BuildEditWrapperComponent implements OnInit {
   build: Observable<Build>;

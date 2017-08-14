@@ -10,7 +10,6 @@ import {RouteServiceStore} from "../../../store/route.service.store";
 @Component({
   selector: 'fabric8-deployments-list-page',
   templateUrl: './list-page.deployment.component.html',
-  styleUrls: ['./list-page.deployment.component.scss'],
 })
 export class DeploymentsListPage implements OnInit {
   private readonly deployments: Observable<Deployments>;

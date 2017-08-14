@@ -6,7 +6,6 @@ import {SpaceStore} from "../../../store/space.store";
 @Component({
   selector: 'fabric8-space-edit-page',
   templateUrl: './edit-page.space.component.html',
-  styleUrls: ['./edit-page.space.component.scss'],
 })
 export class SpaceEditPage implements OnDestroy {
   private idSubscription: Subscription;

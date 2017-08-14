@@ -8,7 +8,6 @@ import {DeploymentConfig} from "../../../model/deploymentconfig.model";
 @Component({
   selector: 'delete-deployment-dialog',
   templateUrl: './delete-dialog.deployment.component.html',
-  styleUrls: ['./delete-dialog.deployment.component.scss'],
 })
 export class DeploymentDeleteDialog {
   deployment: Deployment = new Deployment();

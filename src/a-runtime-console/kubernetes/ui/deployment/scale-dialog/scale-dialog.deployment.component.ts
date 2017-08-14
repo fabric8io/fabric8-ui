@@ -9,7 +9,6 @@ import {DeploymentConfig} from "../../../model/deploymentconfig.model";
 @Component({
   selector: 'scale-deployment-dialog',
   templateUrl: './scale-dialog.deployment.component.html',
-  styleUrls: ['./scale-dialog.deployment.component.scss'],
 })
 export class DeploymentScaleDialog {
   deployment: Deployment = new Deployment();

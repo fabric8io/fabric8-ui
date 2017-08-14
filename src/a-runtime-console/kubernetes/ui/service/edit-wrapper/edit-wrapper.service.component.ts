@@ -7,7 +7,6 @@ import {YamlEditor} from "../../../view/yaml.editor";
 @Component({
   selector: 'fabric8-service-edit-wrapper',
   templateUrl: './edit-wrapper.service.component.html',
-  styleUrls: ['./edit-wrapper.service.component.scss'],
 })
 export class ServiceEditWrapperComponent implements OnInit {
   service: Observable<Service>;

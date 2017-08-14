@@ -6,7 +6,6 @@ import {NamespaceService} from "../../../service/namespace.service";
 @Component({
   selector: 'delete-namespace-dialog',
   templateUrl: './delete-dialog.namespace.component.html',
-  styleUrls: ['./delete-dialog.namespace.component.scss'],
 })
 export class NamespaceDeleteDialog {
   namespace: Namespace = new Namespace();

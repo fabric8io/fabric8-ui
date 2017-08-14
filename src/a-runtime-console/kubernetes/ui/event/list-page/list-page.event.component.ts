@@ -8,7 +8,6 @@ import {ServiceStore} from "../../../store/service.store";
 @Component({
   selector: 'fabric8-events-list-page',
   templateUrl: './list-page.event.component.html',
-  styleUrls: ['./list-page.event.component.scss'],
 })
 export class EventsListPage implements OnInit {
   private readonly events: Observable<Events>;

@@ -6,7 +6,6 @@ import {ConfigMapService} from "../../../service/configmap.service";
 @Component({
   selector: 'delete-configmap-dialog',
   templateUrl: './delete-dialog.configmap.component.html',
-  styleUrls: ['./delete-dialog.configmap.component.scss'],
 })
 export class ConfigMapDeleteDialog {
   configmap: ConfigMap = new ConfigMap();

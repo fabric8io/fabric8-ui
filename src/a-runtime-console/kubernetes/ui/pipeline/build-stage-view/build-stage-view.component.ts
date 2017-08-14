@@ -7,7 +7,7 @@ import { InputActionDialog } from "../input-action-dialog/input-action-dialog.co
 @Component({
   selector: 'build-stage-view',
   templateUrl: './build-stage-view.component.html',
-  styleUrls: ['./build-stage-view.component.scss'],
+  styleUrls: ['./build-stage-view.component.less'],
 })
 export class BuildStageViewComponent implements OnDestroy {
 

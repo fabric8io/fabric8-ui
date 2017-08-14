@@ -8,7 +8,6 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'fabric8-configmap-view-wrapper',
   templateUrl: './view-wrapper.configmap.component.html',
-  styleUrls: ['./view-wrapper.configmap.component.scss'],
 })
 export class ConfigMapViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   configmap: Observable<ConfigMap>;

@@ -9,7 +9,6 @@ import {SpaceStore} from "../../../store/space.store";
   },
   selector: 'fabric8-spaces-list-page',
   templateUrl: './list-page.space.component.html',
-  styleUrls: ['./list-page.space.component.scss'],
 })
 export class SpacesListPage implements OnInit {
   private readonly spaces: Observable<Spaces>;

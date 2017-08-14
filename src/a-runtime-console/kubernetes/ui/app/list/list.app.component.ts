@@ -9,7 +9,7 @@ import {DeploymentScaleDialog} from "../../deployment/scale-dialog/scale-dialog.
 @Component({
   selector: 'fabric8-apps-list',
   templateUrl: './list.app.component.html',
-  styleUrls: ['./list.app.component.scss'],
+  styleUrls: ['./list.app.component.less'],
 })
 export class AppListComponent {
   parentLink: string;

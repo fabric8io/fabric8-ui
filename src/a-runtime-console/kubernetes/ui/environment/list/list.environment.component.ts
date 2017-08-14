@@ -30,7 +30,7 @@ import {KindNode} from "../list-page/list-page.environment.component";
 @Component({
   selector: 'fabric8-environments-list',
   templateUrl: './list.environment.component.html',
-  styleUrls: ['./list.environment.component.scss'],
+  styleUrls: ['./list.environment.component.less'],
 })
 export class EnvironmentListComponent {
 

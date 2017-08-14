@@ -7,7 +7,7 @@ import {SpaceStore} from "../../../store/space.store";
 @Component({
   selector: 'fabric8-space-edit-toolbar',
   templateUrl: './edit-toolbar.space.component.html',
-  styleUrls: ['./edit-toolbar.space.component.scss'],
+  styleUrls: ['./edit-toolbar.space.component.less'],
 })
 export class SpaceEditToolbarComponent {
 

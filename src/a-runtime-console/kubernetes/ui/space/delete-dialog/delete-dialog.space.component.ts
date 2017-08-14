@@ -5,7 +5,6 @@ import {SpaceStore} from "../../../store/space.store";
 @Component({
   selector: 'delete-space-dialog',
   templateUrl: './delete-dialog.space.component.html',
-  styleUrls: ['./delete-dialog.space.component.scss'],
 })
 export class SpaceDeleteDialog {
   space: Space = createEmptySpace();

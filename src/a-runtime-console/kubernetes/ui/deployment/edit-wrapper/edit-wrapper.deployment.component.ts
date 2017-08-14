@@ -7,7 +7,6 @@ import {YamlEditor} from "../../../view/yaml.editor";
 @Component({
   selector: 'fabric8-deployment-edit-wrapper',
   templateUrl: './edit-wrapper.deployment.component.html',
-  styleUrls: ['./edit-wrapper.deployment.component.scss'],
 })
 export class DeploymentEditWrapperComponent implements OnInit {
   deployment: Observable<Deployment>;

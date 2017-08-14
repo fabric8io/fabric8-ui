@@ -6,7 +6,6 @@ import {PodService} from "../../../service/pod.service";
 @Component({
   selector: 'delete-pod-dialog',
   templateUrl: './delete-dialog.pod.component.html',
-  styleUrls: ['./delete-dialog.pod.component.scss'],
 })
 export class PodDeleteDialog {
   pod: Pod = new Pod();

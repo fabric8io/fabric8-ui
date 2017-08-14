@@ -8,7 +8,6 @@ import {CompositeReplicaSetStore} from "../../../store/compositedreplicaset.stor
 @Component({
   selector: 'delete-replicaset-dialog',
   templateUrl: './delete-dialog.replicaset.component.html',
-  styleUrls: ['./delete-dialog.replicaset.component.scss'],
 })
 export class ReplicaSetDeleteDialog {
   replicaset: ReplicaSet = new ReplicaSet();

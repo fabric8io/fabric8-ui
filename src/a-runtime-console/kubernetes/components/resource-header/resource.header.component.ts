@@ -36,7 +36,7 @@ export const resourceMenus = [
   },
   selector: 'kube-resource-header',
   templateUrl: './resource.header.component.html',
-  styleUrls: ['./resource.header.component.scss'],
+  styleUrls: ['./resource.header.component.less'],
 })
 export class ResourceHeaderComponent implements OnInit {
   menus: MenuItem[];

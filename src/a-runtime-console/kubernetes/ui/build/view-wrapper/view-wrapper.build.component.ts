@@ -8,7 +8,6 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'fabric8-build-view-wrapper',
   templateUrl: './view-wrapper.build.component.html',
-  styleUrls: ['./view-wrapper.build.component.scss'],
 })
 export class BuildViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   build: Observable<Build>;

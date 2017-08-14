@@ -6,7 +6,6 @@ import {BuildService} from "../../../service/build.service";
 @Component({
   selector: 'delete-build-dialog',
   templateUrl: './delete-dialog.build.component.html',
-  styleUrls: ['./delete-dialog.build.component.scss'],
 })
 export class BuildDeleteDialog {
   build: Build = new Build();

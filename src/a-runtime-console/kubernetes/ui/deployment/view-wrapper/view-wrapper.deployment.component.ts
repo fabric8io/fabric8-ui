@@ -8,7 +8,6 @@ import {AbstractViewWrapperComponent} from "../../../support/abstract-viewwrappe
 @Component({
   selector: 'fabric8-deployment-view-wrapper',
   templateUrl: './view-wrapper.deployment.component.html',
-  styleUrls: ['./view-wrapper.deployment.component.scss'],
 })
 export class DeploymentViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   deployment: Observable<Deployment>;

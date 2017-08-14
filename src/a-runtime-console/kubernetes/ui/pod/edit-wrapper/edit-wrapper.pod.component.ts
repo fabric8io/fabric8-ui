@@ -7,7 +7,6 @@ import {YamlEditor} from "../../../view/yaml.editor";
 @Component({
   selector: 'fabric8-pod-edit-wrapper',
   templateUrl: './edit-wrapper.pod.component.html',
-  styleUrls: ['./edit-wrapper.pod.component.scss'],
 })
 export class PodEditWrapperComponent implements OnInit {
   pod: Observable<Pod>;

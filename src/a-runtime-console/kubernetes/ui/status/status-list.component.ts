@@ -70,7 +70,7 @@ export class StatusWatcher {
 @Component({
   selector: 'fabric8-status-list',
   templateUrl: './status-list.component.html',
-  styleUrls: ['./status-list.component.scss'],
+  styleUrls: ['./status-list.component.less'],
 })
 export class StatusListComponent extends AbstractWatchComponent implements OnInit, OnDestroy {
   space: ConnectableObservable<Space>;

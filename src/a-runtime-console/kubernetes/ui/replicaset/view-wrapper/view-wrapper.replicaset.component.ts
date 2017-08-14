@@ -8,7 +8,6 @@ import {CompositeReplicaSetStore} from "../../../store/compositedreplicaset.stor
 @Component({
   selector: 'fabric8-replicaset-view-wrapper',
   templateUrl: './view-wrapper.replicaset.component.html',
-  styleUrls: ['./view-wrapper.replicaset.component.scss'],
 })
 export class ReplicaSetViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   replicaset: Observable<ReplicaSet>;

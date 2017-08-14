@@ -8,7 +8,6 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'fabric8-event-view-wrapper',
   templateUrl: './view-wrapper.event.component.html',
-  styleUrls: ['./view-wrapper.event.component.scss'],
 })
 export class EventViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   event: Observable<Event>;

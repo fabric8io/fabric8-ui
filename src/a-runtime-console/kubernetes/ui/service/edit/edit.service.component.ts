@@ -5,7 +5,6 @@ import {YamlEditor} from "../../../view/yaml.editor";
 @Component({
   selector: 'fabric8-service-edit',
   templateUrl: './edit.service.component.html',
-  styleUrls: ['./edit.service.component.scss'],
 })
 export class ServiceEditComponent {
 
@@ -14,4 +13,3 @@ export class ServiceEditComponent {
   @Input() yamlEditor: YamlEditor;
 
 }
-

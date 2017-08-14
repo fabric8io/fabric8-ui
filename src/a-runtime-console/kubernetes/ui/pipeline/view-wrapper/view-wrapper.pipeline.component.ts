@@ -8,7 +8,6 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'fabric8-pipeline-view-wrapper',
   templateUrl: './view-wrapper.pipeline.component.html',
-  styleUrls: ['./view-wrapper.pipeline.component.scss'],
 })
 export class PipelineViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   pipeline: Observable<BuildConfig>;

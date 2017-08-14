@@ -7,7 +7,6 @@ import {YamlEditor} from "../../../view/yaml.editor";
 @Component({
   selector: 'fabric8-replicaset-edit-wrapper',
   templateUrl: './edit-wrapper.replicaset.component.html',
-  styleUrls: ['./edit-wrapper.replicaset.component.scss'],
 })
 export class ReplicaSetEditWrapperComponent implements OnInit {
   replicaset: Observable<ReplicaSet>;

@@ -5,7 +5,6 @@ import {YamlEditor} from "../../../view/yaml.editor";
 @Component({
   selector: 'fabric8-replicaset-edit',
   templateUrl: './edit.replicaset.component.html',
-  styleUrls: ['./edit.replicaset.component.scss'],
 })
 export class ReplicaSetEditComponent {
 
@@ -14,4 +13,3 @@ export class ReplicaSetEditComponent {
   @Input() yamlEditor: YamlEditor;
 
 }
-

@@ -6,7 +6,6 @@ import {ConfigMapStore} from "../../../store/configmap.store";
 @Component({
   selector: 'fabric8-configmap-edit-page',
   templateUrl: './edit-page.configmap.component.html',
-  styleUrls: ['./edit-page.configmap.component.scss'],
 })
 export class ConfigMapEditPage implements OnDestroy {
   private idSubscription: Subscription;

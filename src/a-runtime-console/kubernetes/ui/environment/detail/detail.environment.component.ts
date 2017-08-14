@@ -8,7 +8,6 @@ import { trimEnd } from 'lodash';
 @Component({
   selector: 'fabric8-environments-detail',
   templateUrl: './detail.environment.component.html',
-  styleUrls: ['./detail.environment.component.scss'],
 })
 export class EnvironmentDetailComponent implements OnInit, AfterViewInit {
 

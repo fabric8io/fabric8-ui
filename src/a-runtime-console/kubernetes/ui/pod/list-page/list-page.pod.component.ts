@@ -7,7 +7,6 @@ import {PodStore} from "../../../store/pod.store";
 @Component({
   selector: 'fabric8-pods-list-page',
   templateUrl: './list-page.pod.component.html',
-  styleUrls: ['./list-page.pod.component.scss'],
 })
 export class PodsListPage implements OnInit {
   private readonly pods: Observable<Pods>;

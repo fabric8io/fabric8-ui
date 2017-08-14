@@ -6,7 +6,6 @@ import {BuildConfigStore} from "../../../store/buildconfig.store";
 @Component({
   selector: 'fabric8-pipeline-view-page',
   templateUrl: './view-page.pipeline.component.html',
-  styleUrls: ['./view-page.pipeline.component.scss'],
 })
 export class PipelineViewPage implements OnDestroy {
   private idSubscription: Subscription;

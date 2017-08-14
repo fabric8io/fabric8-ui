@@ -6,7 +6,6 @@ import {NamespaceStore} from "../../../store/namespace.store";
 @Component({
   selector: 'fabric8-namespace-edit-page',
   templateUrl: './edit-page.namespace.component.html',
-  styleUrls: ['./edit-page.namespace.component.scss'],
 })
 export class NamespaceEditPage implements OnDestroy {
   private idSubscription: Subscription;
