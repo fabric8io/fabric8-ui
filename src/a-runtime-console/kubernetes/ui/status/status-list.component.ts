@@ -17,12 +17,12 @@ export class StatusKind {
   }
 }
 
-const statusCssUnknown = new StatusKind("Loading data", "pficon pficon-warning-triangle-o");
+const statusCssUnknown = new StatusKind("Loading data", "pficon pficon-in-progress");
 const statusCssError = new StatusKind("Error", "pficon pficon-error-circle-o");
 const statusCssOK = new StatusKind("OK", "pficon pficon-ok");
-const statusCssPending = new StatusKind("Pending", "fa fa-hourglass-o");
-const statusCssContainerCreating = new StatusKind("Creating", "fa fa-cog fa-spin fa-fw");
-const statusCssNoResource = new StatusKind("Off", "fa fa-power-off");
+const statusCssPending = new StatusKind("Pending", "pficon pficon-pending");
+const statusCssContainerCreating = new StatusKind("Creating", "pficon pficon-on-running fa-spin fa-fw");
+const statusCssNoResource = new StatusKind("Off", "pficon pficon-off");
 
 export class StatusInfo {
   hasResource = false;
