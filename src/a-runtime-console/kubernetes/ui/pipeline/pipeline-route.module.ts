@@ -2,7 +2,7 @@ import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {PipelinesListPage} from "./list-page/list-page.pipeline.component";
 import {PipelinesListToolbarComponent} from "./list-toolbar/list-toolbar.pipeline.component";
 import {PipelinesListComponent} from "./list/list.pipeline.component";

@@ -4,7 +4,7 @@ import {CommonModule} from "@angular/common";
 import {BsDropdownConfig, BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {PipelinesListPage} from "./list-page/list-page.pipeline.component";
 import {PipelinesListToolbarComponent} from "./list-toolbar/list-toolbar.pipeline.component";
 import {PipelinesListComponent} from "./list/list.pipeline.component";

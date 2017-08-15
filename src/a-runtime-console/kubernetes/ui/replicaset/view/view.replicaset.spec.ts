@@ -5,7 +5,7 @@ import {ReplicaSetViewComponent} from "./view.replicaset.component";
 import {MomentModule} from "angular2-moment";
 import {ReplicaSetScaleDialog} from "../scale-dialog/scale-dialog.replicaset.component";
 import {ReplicaSetDeleteDialog} from "../delete-dialog/delete-dialog.replicaset.component";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {RequestOptions, BaseRequestOptions, Http} from "@angular/http";

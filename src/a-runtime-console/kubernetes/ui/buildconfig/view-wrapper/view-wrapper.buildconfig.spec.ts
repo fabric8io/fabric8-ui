@@ -10,7 +10,7 @@ import {BuildConfigViewToolbarComponent} from "../view-toolbar/view-toolbar.buil
 import {BuildConfigViewComponent} from "../view/view.buildconfig.component";
 import {MomentModule} from "angular2-moment";
 import {BuildConfigDeleteDialog} from "../delete-dialog/delete-dialog.buildconfig.component";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {Fabric8CommonModule} from "../../../../common/common.module";

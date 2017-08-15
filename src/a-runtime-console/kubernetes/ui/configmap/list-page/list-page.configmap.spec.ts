@@ -10,7 +10,7 @@ import {ConfigMapsListComponent} from "../list/list.configmap.component";
 import {ConfigMapsListToolbarComponent} from "../list-toolbar/list-toolbar.configmap.component";
 import {Fabric8CommonModule} from "../../../../common/common.module";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {MomentModule} from "angular2-moment";
 import {ConfigMapDeleteDialog} from "../delete-dialog/delete-dialog.configmap.component";
 import {FormsModule} from "@angular/forms";

@@ -3,7 +3,7 @@ import {CommonModule} from "@angular/common";
 import {BsDropdownConfig, BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {ServicesListPage} from "./list-page/list-page.service.component";
 import {ServicesListToolbarComponent} from "./list-toolbar/list-toolbar.service.component";
 import {ServicesListComponent} from "./list/list.service.component";

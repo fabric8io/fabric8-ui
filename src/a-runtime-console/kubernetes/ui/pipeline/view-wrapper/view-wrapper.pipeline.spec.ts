@@ -10,7 +10,7 @@ import {PipelineViewWrapperComponent} from "./view-wrapper.pipeline.component";
 import {PipelineViewToolbarComponent} from "../view-toolbar/view-toolbar.pipeline.component";
 import {PipelineViewComponent} from "../view/view.pipeline.component";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {Fabric8CommonModule} from "../../../../common/common.module";

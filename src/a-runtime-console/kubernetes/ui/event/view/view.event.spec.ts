@@ -3,7 +3,7 @@ import { TestAppModule } from './../../../../app.test.module';
 import {async, TestBed, ComponentFixture} from "@angular/core/testing";
 import {EventViewComponent} from "./view.event.component";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {RequestOptions, BaseRequestOptions, Http} from "@angular/http";

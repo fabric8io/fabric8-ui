@@ -10,7 +10,7 @@ import {ServiceViewWrapperComponent} from "../view-wrapper/view-wrapper.service.
 import {ServiceViewToolbarComponent} from "../view-toolbar/view-toolbar.service.component";
 import {ServiceViewComponent} from "../view/view.service.component";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {Fabric8CommonModule} from "../../../../common/common.module";

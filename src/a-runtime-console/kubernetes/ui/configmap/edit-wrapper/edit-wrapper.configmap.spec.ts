@@ -10,7 +10,7 @@ import {ConfigMapEditToolbarComponent} from "../edit-toolbar/edit-toolbar.config
 import {ConfigMapEditComponent} from "../edit/edit.configmap.component";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 
 describe('ConfigMapEditWrapperComponent', () => {

@@ -10,7 +10,7 @@ import {ServiceEditToolbarComponent} from "../edit-toolbar/edit-toolbar.service.
 import {ServiceEditComponent} from "../edit/edit.service.component";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 
 describe('ServiceEditWrapperComponent', () => {

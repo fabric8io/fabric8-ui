@@ -3,7 +3,7 @@ import {CommonModule} from "@angular/common";
 import {BsDropdownConfig, BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {EventsListPage} from "./list-page/list-page.event.component";
 import {EventsListToolbarComponent} from "./list-toolbar/list-toolbar.event.component";
 import {EventsListComponent} from "./list/list.event.component";

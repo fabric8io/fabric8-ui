@@ -10,7 +10,7 @@ import {PodsListComponent} from "../list/list.pod.component";
 import {PodsListToolbarComponent} from "../list-toolbar/list-toolbar.pod.component";
 import {Fabric8CommonModule} from "../../../../common/common.module";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {MomentModule} from "angular2-moment";
 import {PodDeleteDialog} from "../delete-dialog/delete-dialog.pod.component";
 import {FormsModule} from "@angular/forms";

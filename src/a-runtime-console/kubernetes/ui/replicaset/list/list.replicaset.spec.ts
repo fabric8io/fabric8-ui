@@ -7,7 +7,7 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {MomentModule} from "angular2-moment";
 import {ReplicaSetDeleteDialog} from "../delete-dialog/delete-dialog.replicaset.component";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {ReplicaSetScaleDialog} from "../scale-dialog/scale-dialog.replicaset.component";
 import {FormsModule} from "@angular/forms";
 import {RequestOptions, BaseRequestOptions, Http} from "@angular/http";

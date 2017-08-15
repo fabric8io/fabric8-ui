@@ -10,7 +10,7 @@ import {PodEditToolbarComponent} from "../edit-toolbar/edit-toolbar.pod.componen
 import {PodEditComponent} from "../edit/edit.pod.component";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 
 describe('PodEditWrapperComponent', () => {

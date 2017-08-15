@@ -2,7 +2,7 @@ import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {DeploymentsListPage} from "./list-page/list-page.deployment.component";
 import {DeploymentsListToolbarComponent} from "./list-toolbar/list-toolbar.deployment.component";
 import {DeploymentsListComponent} from "./list/list.deployment.component";

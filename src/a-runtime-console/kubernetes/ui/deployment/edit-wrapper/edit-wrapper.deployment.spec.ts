@@ -10,7 +10,7 @@ import {DeploymentEditToolbarComponent} from "../edit-toolbar/edit-toolbar.deplo
 import {DeploymentEditComponent} from "../edit/edit.deployment.component";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 
 describe('DeploymentEditWrapperComponent', () => {

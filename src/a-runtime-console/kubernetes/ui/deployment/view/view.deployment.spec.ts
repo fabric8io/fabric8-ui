@@ -5,7 +5,7 @@ import {DeploymentViewComponent} from "./view.deployment.component";
 import {MomentModule} from "angular2-moment";
 import {DeploymentScaleDialog} from "../scale-dialog/scale-dialog.deployment.component";
 import {DeploymentDeleteDialog} from "../delete-dialog/delete-dialog.deployment.component";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {RequestOptions, BaseRequestOptions, Http} from "@angular/http";

@@ -10,7 +10,7 @@ import {ConfigMapViewWrapperComponent} from "../view-wrapper/view-wrapper.config
 import {ConfigMapViewToolbarComponent} from "../view-toolbar/view-toolbar.configmap.component";
 import {ConfigMapViewComponent} from "../view/view.configmap.component";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {Fabric8CommonModule} from "../../../../common/common.module";

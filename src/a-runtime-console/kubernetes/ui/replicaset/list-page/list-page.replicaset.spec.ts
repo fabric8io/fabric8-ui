@@ -10,7 +10,7 @@ import {ReplicaSetsListComponent} from "../list/list.replicaset.component";
 import {ReplicaSetsListToolbarComponent} from "../list-toolbar/list-toolbar.replicaset.component";
 import {Fabric8CommonModule} from "../../../../common/common.module";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {MomentModule} from "angular2-moment";
 import {ReplicaSetDeleteDialog} from "../delete-dialog/delete-dialog.replicaset.component";
 import {ReplicaSetScaleDialog} from "../scale-dialog/scale-dialog.replicaset.component";

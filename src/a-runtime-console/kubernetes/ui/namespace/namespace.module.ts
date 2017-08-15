@@ -3,7 +3,7 @@ import {CommonModule} from "@angular/common";
 import {BsDropdownConfig, BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {NamespacesListPage} from "./list-page/list-page.namespace.component";
 import {NamespacesListComponent} from "./list/list.namespace.component";
 import {NamespaceViewWrapperComponent} from "./view-wrapper/view-wrapper.namespace.component";

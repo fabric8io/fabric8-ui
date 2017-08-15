@@ -16,7 +16,7 @@ import {TabsModule} from 'ng2-bootstrap';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
-import {ModalModule} from 'ng2-modal';
+import {ModalModule} from 'ngx-modal';
 import { TreeListModule, SlideOutPanelModule } from 'ngx-widgets';
 import { TreeModule } from 'angular2-tree-component';
 import {Fabric8CommonModule} from '../../../common/common.module';

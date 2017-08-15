@@ -10,7 +10,7 @@ import {NamespaceEditToolbarComponent} from "../edit-toolbar/edit-toolbar.namesp
 import {NamespaceEditComponent} from "../edit/edit.namespace.component";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 
 describe('NamespaceEditWrapperComponent', () => {

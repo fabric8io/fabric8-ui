@@ -12,7 +12,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { ModalModule } from 'ng2-modal';
+import { ModalModule } from 'ngx-modal';
 import { TreeModule } from 'angular2-tree-component';
 import { Fabric8CommonModule } from '../../../common/common.module';
 import { MomentModule } from 'angular2-moment';

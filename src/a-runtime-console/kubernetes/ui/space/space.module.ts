@@ -3,7 +3,7 @@ import {BsDropdownConfig, BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {CommonModule} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {SpacesListPage} from "./list-page/list-page.space.component";
 import {SpacesListComponent} from "./list/list.space.component";
 import {SpaceViewWrapperComponent} from "./view-wrapper/view-wrapper.space.component";

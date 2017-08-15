@@ -12,7 +12,7 @@ import { PipelinesListComponent } from "../list/list.pipeline.component";
 import { PipelinesListToolbarComponent } from "../list-toolbar/list-toolbar.pipeline.component";
 import { Fabric8CommonModule } from "../../../../common/common.module";
 import { KubernetesStoreModule } from "../../../kubernetes.store.module";
-import { ModalModule } from "ng2-modal";
+import { ModalModule } from "ngx-modal";
 import { MomentModule } from "angular2-moment";
 import { FormsModule } from "@angular/forms";
 import { BuildConfigDialogsModule } from "../../buildconfig/delete-dialog/buildconfig.dialogs.module";

@@ -10,7 +10,7 @@ import {NamespaceViewToolbarComponent} from "../view-toolbar/view-toolbar.namesp
 import {NamespaceViewComponent} from "../view/view.namespace.component";
 import {MomentModule} from "angular2-moment";
 import {NamespaceDeleteDialog} from "../delete-dialog/delete-dialog.namespace.component";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {Fabric8CommonModule} from "../../../../common/common.module";

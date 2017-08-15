@@ -10,7 +10,7 @@ import {BuildConfigEditToolbarComponent} from "../edit-toolbar/edit-toolbar.buil
 import {BuildConfigEditComponent} from "../edit/edit.buildconfig.component";
 import {KubernetesStoreModule} from "../../../kubernetes.store.module";
 import {MomentModule} from "angular2-moment";
-import {ModalModule} from "ng2-modal";
+import {ModalModule} from "ngx-modal";
 import {FormsModule} from "@angular/forms";
 
 describe('BuildConfigEditWrapperComponent', () => {
