@@ -10,7 +10,7 @@ import {
   BuildConfig,
   BuildConfigs,
   Build
-} from 'fabric8-runtime-console';
+} from '../../../a-runtime-console/index';
 
 import { StackAnalysesService, getStackRecommendations } from 'fabric8-stack-analysis-ui';
 

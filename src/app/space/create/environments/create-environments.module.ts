@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {Http} from "@angular/http";
-import {EnvironmentModule} from "fabric8-runtime-console";
+import {EnvironmentModule} from "../../../../a-runtime-console/index";
 
 
 @NgModule({

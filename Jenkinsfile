@@ -66,15 +66,20 @@ if (ciDeploy){
        stage('notify'){
            def changeAuthor = env.CHANGE_AUTHOR
            if (!changeAuthor){
-               error "no commit author found so cannot comment on PR"
+               echo "no commit author found so cannot comment on PR"
            }
            def pr = env.CHANGE_ID
            if (!pr){
-               error "no pull request number found so cannot comment on PR"
+               echo "no pull request number found so cannot comment on PR"
            }
            def message = "@${changeAuthor} ${imageName} fabric8-ui is deployed and available for testing at https://${route}"
-           container('clients'){
-               flow.addCommentToPullRequest(message, pr, project)
+
+           if (!pr){
+                echo message
+           } else {
+                container('clients'){
+                    flow.addCommentToPullRequest(message, pr, project)
+                }
            }
        }
    }

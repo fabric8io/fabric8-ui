@@ -1,0 +1,4 @@
+<div class='spaces detail' *ngIf='space'>
+  <fabric8-space-edit-toolbar [space]="space | async" [yamlEditor]="yamlEditor"></fabric8-space-edit-toolbar>
+  <fabric8-space-edit [space]="space | async" [yamlEditor]="yamlEditor"></fabric8-space-edit>
+</div>

@@ -1,0 +1,4 @@
+<div class='builds detail' *ngIf='build'>
+  <fabric8-build-edit-toolbar [build]="build | async" [yamlEditor]="yamlEditor"></fabric8-build-edit-toolbar>
+  <fabric8-build-edit [build]="build | async" [yamlEditor]="yamlEditor"></fabric8-build-edit>
+</div>

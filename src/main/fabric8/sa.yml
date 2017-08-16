@@ -1,0 +1,5 @@
+metadata:
+  name: fabric8-runtime-console
+  annotations:
+    serviceaccounts.openshift.io/oauth-redirectreference.fabric8-runtime-console: "{\"kind\":\"OAuthRedirectReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"Route\",\"name\":\"fabric8-runtime-console\"}}"
+

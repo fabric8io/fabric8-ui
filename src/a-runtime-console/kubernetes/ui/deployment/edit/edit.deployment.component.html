@@ -1,0 +1,17 @@
+<div class="row row-cards-pf center" *ngIf="deployment">
+  <div class="col-xs-12">
+    <div class="card-pf">
+      <h2 class="card-pf-title">Edit deployment {{deployment.name}}</h2>
+      <div class="card-pf-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <textarea data-id="sourceInput" name="sourceInput" class="form-control" [(ngModel)]="yamlEditor.yaml"
+                        rows="50"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

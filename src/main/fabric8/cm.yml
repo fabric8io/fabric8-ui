@@ -1,0 +1,12 @@
+metadata:
+  annotations:
+    expose.config.fabric8.io/oauth-authorize-url-key: oauth-authorize-uri
+    expose.config.fabric8.io/apiserver-key: api-server
+    fabric8.io/iconUrl: "https://cdn.rawgit.com/fabric8io/fabric8-console/f619a352/img/fabric8_icon.svg"
+data:
+  oauth-client-id: "fabric8"
+  oauth-scope: "user:full"
+  oauth-authorize-uri: ""
+  oauth-issuer: ""
+  oauth-logout-uri: ""
+  api-server: ""

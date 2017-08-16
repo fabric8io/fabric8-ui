@@ -1,0 +1,71 @@
+<div class='kube-resource-list'>
+
+  <fabric8-loading [loading]="loading">
+    <div class='list-group-item build' *ngFor='let build of builds'>
+      <div class='list-view-pf-checkbox' *ngIf="!hideCheckbox">
+        <input type='checkbox'>
+      </div>
+      <div class='list-view-pf-actions'>
+        <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
+          <button class='btn btn-link dropdown-toggle' type='button' id='dropdownKebabRight9' aria-haspopup='true' aria-expanded='true' dropdownToggle>
+              <span class='fa fa-ellipsis-v'></span>
+            </button>
+          <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
+            <li *ngIf="build.openShiftConsoleUrl">
+              <a [href]="build.openShiftConsoleUrl" target="openshift"
+                 title="View this Build in the OpenShift Console">OpenShift Console</a>
+            </li>
+            <li>
+              <a [routerLink]="[build.id, 'edit']">Edit</a>
+            </li>
+
+            <li>
+              <a (click)="openDeleteDialog(deleteBuildModal, build)" title="Delete this Build">Delete</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class='list-view-pf-main-info'>
+        <div class='list-view-pf-left'>
+          <span class="{{build.iconStyle}}" title="{{build.statusPhase}}"></span>
+        </div>
+        <div class='list-view-pf-body'>
+          <div class='list-view-pf-description'>
+            <div class='list-group-item-heading'>
+              <a [routerLink]="[build.id]" class="card-title" title="view build {{ build.name }}">{{ build.name }}</a>
+            </div>
+            <div class='list-group-item-text'>
+              <span class="" *ngFor='let image of build.images' title="docker image">
+                   {{image}}
+               </span>
+            </div>
+          </div>
+          <div class='list-view-pf-additional-info'>
+            <div class='list-view-pf-additional-info-item' title="build duration">
+              <span *ngIf="build.duration">
+                {{build.duration | amDuration: 'second'}}
+              </span>
+            </div>
+            <div class='list-view-pf-additional-info-item' title="created time">
+              <span *ngIf="build.creationTimestamp">
+                {{build.creationTimestamp | amTimeAgo}}
+              </span>
+            </div>
+            <!--<div class='list-view-pf-additional-info-item' title="labels" *ngFor='let entry of build.labels | entries'>
+              {{entry.key}}: {{entry.value}}
+            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </fabric8-loading>
+</div>
+
+<modal #deleteBuildModal title="Delete Build">
+  <modal-content>
+    <delete-build-dialog></delete-build-dialog>
+  </modal-content>
+</modal>
+
+

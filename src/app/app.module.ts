@@ -34,7 +34,7 @@ import {
   DevNamespaceScope,
   NamespaceScope,
   StatusListModule, SpaceNamespace,
-}                             from 'fabric8-runtime-console';
+}                             from '../a-runtime-console/index';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { RestangularModule }  from 'ng2-restangular';
 import {
