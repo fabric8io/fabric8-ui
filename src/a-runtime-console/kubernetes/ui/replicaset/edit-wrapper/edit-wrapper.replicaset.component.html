@@ -1,0 +1,4 @@
+<div class='replicasets detail' *ngIf='replicaset'>
+  <fabric8-replicaset-edit-toolbar [replicaset]="replicaset | async" [yamlEditor]="yamlEditor"></fabric8-replicaset-edit-toolbar>
+  <fabric8-replicaset-edit [replicaset]="replicaset | async" [yamlEditor]="yamlEditor"></fabric8-replicaset-edit>
+</div>

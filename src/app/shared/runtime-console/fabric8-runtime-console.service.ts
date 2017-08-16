@@ -6,7 +6,7 @@ import { AuthenticationService } from 'ngx-login-client';
 
 
 
-import { OAuthConfigStore } from 'fabric8-runtime-console';
+import { OAuthConfigStore } from '../../../a-runtime-console/index';
 
 import { LoginService } from './../login.service';
 

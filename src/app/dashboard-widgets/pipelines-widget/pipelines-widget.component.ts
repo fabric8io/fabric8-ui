@@ -13,7 +13,7 @@ import {
   filterPipelines,
   BuildConfigStore,
   BuildStore
-} from 'fabric8-runtime-console';
+} from '../../../a-runtime-console/index';
 
 import { Fabric8RuntimeConsoleService } from './../../shared/runtime-console/fabric8-runtime-console.service';
 

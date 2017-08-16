@@ -1,0 +1,4 @@
+<div class='namespaces detail' *ngIf='namespace'>
+  <fabric8-namespace-edit-toolbar [namespace]="namespace | async" [yamlEditor]="yamlEditor"></fabric8-namespace-edit-toolbar>
+  <fabric8-namespace-edit [namespace]="namespace | async" [yamlEditor]="yamlEditor"></fabric8-namespace-edit>
+</div>

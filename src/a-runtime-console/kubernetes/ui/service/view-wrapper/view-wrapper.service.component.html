@@ -1,0 +1,6 @@
+<div class='services detail' *ngIf='service'>
+  <div *ngIf="showToolbar">
+    <fabric8-service-view-toolbar [service]="service | async"></fabric8-service-view-toolbar>
+  </div>
+  <fabric8-service-view [service]="service | async"></fabric8-service-view>
+</div>

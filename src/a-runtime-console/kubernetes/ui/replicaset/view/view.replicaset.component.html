@@ -1,0 +1,117 @@
+<div class="row row-cards-pf center" *ngIf="replicaset">
+
+  <div class="col-xs-12">
+    <span class="name">
+      <span class="pull-right">created {{replicaset.creationTimestamp | amTimeAgo}}</span>
+      <h2 class="card-pf-title">
+        <img src="{{replicaset.icon}}" width="30" height="30"/>&nbsp; {{replicaset.name}}
+        &nbsp;
+        <a *ngIf="replicaset.openShiftConsoleUrl" [href]="replicaset.openShiftConsoleUrl" target="openshift" title="Open in the OpenShift console">
+          <i class="fa fa-external-link" aria-hidden="true"></i>
+        </a>
+      </h2>
+    </span>
+  </div>
+
+  <div class="col-xs-12">
+    <h3>Configuration</h3>
+
+    <dl class="dl-horizontal left">
+      <dt>Selectors:</dt>
+      <dd title="selector" *ngFor='let entry of replicaset?.spec?.selector?.matchLabels | entries'>
+        {{entry.key}}: {{entry.value}}
+      </dd>
+      <dt>Replicas:</dt>
+      <dd>
+        {{replicaset.replicas}}&nbsp;
+        <a class="btn btn-default" (click)="openScaleDialog(scaleReplicaSetModal, replicaset)"
+           title="Scale the number of pods">Scale</a>
+      </dd>
+
+      <!-- ngIf: replicasetConfig.spec.strategy.type -->
+      <div *ngIf="replicaset?.spec?.strategy?.type">
+        <dt>Strategy:</dt>
+        <dd>{{replicaset.spec.strategy.type}}</dd>
+      </div>
+
+      <!--
+          TODO for ReplicaSetConfig
+            <dt>Update Period:</dt>
+            <dd>1 sec</dd>
+            <dt>Interval:</dt>
+            <dd>1 sec</dd>
+            <dt>Timeout:</dt>
+            <dd>600 sec</dd>
+      -->
+
+      <div *ngIf="replicaset?.spec?.strategy?.rollingUpdate?.maxUnavailable">
+        <dt>Max Unavailable:</dt>
+        <dd>{{replicaset?.spec?.strategy?.rollingUpdate.maxUnavailable}}</dd>
+      </div>
+
+      <div *ngIf="replicaset?.spec?.strategy?.rollingUpdate?.maxSurge">
+        <dt>Max Surge:</dt>
+        <dd>{{replicaset?.spec?.strategy?.rollingUpdate.maxSurge}}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div *ngIf="replicaset?.spec?.template?.spec?.containers">
+    <h3>Containers</h3>
+
+    <div class="pod-template-container" *ngFor="let container of replicaset.spec.template.spec.containers">
+      <div class="col-xs-6">
+        <dl class="dl-horizontal left">
+          <dt class="component-label"><i class="fa fa-comment" aria-hidden="true"></i> Name:</dt>
+          <dd>{{container.name}}</dd>
+
+          <div *ngIf="container.image" [title]="container.image">
+            <dt><span class="pficon pficon-image" aria-hidden="true"></span> Image:</dt>
+            <dd>{{container.image | truncate:40}}</dd>
+          </div>
+          
+          <!--  <div>
+            <span class="fa fa-refresh" aria-hidden="true"></span>
+            </div>
+            <div flex="" class="word-break">
+            <span class="pod-template-key">Build:</span>
+
+            &lt;!&ndash; ngIf: build | configURLForResource &ndash;&gt;<span ng-if="build | configURLForResource" class="ng-scope">
+            <a ng-href="project/demo1/browse/builds/demo1" href="project/demo1/browse/builds/demo1">demo1</a>,
+            </span>&lt;!&ndash; end ngIf: build | configURLForResource &ndash;&gt;
+            <a ng-href="project/demo1/browse/builds/demo1/demo1-1" href="project/demo1/browse/builds/demo1/demo1-1">
+            &lt;!&ndash; ngIf: (build | annotation : 'buildNumber') &ndash;&gt;<span ng-if="(build | annotation : 'buildNumber')" class="ng-binding ng-scope">#1</span>&lt;!&ndash; end -->
+
+          <div *ngIf="container.ports">
+            <dt class="pod-template-key"><i class="fa fa-plug" aria-hidden="true"></i>
+              Ports:
+            </dt>
+            <!--
+                    <span *ngFor="let port of container.ports | orderBy: 'containerPort'">
+            -->
+            <dd *ngFor="let port of container.ports">
+              <span class="nowrap" title="{{port.name}}">{{port.containerPort}}/{{port.protocol}} {{port.name}}</span>
+            </dd>
+          </div>
+        </dl>
+      </div>
+      <div class="col-xs-6" *ngIf="replicaset?.spec?.template?.spec?.containers">
+        <div *ngIf="container.env">
+          <h4>Environment</h4>
+
+          <dl *ngFor="let env of container.env">
+            <dt>{{env.name}}:</dt>
+            <dd *ngIf="env.value">{{env.value}}</dd>
+            <dd *ngIf="env.valueFrom?.configMapKeyRef?.key">config map key <b>{{env.valueFrom.configMapKeyRef.key}}</b>
+              and name <b>{{env.valueFrom.configMapKeyRef.name</b></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <modal #scaleReplicaSetModal title="Scale ReplicaSet">
+    <modal-content>
+      <scale-replicaset-dialog></scale-replicaset-dialog>
+    </modal-content>
+  </modal>

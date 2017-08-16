@@ -1,0 +1,4 @@
+<div class='deployments detail' *ngIf='deployment'>
+  <fabric8-deployment-edit-toolbar [deployment]="deployment | async" [yamlEditor]="yamlEditor"></fabric8-deployment-edit-toolbar>
+  <fabric8-deployment-edit [deployment]="deployment | async" [yamlEditor]="yamlEditor"></fabric8-deployment-edit>
+</div>
