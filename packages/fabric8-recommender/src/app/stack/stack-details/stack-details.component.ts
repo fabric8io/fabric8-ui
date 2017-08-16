@@ -287,6 +287,13 @@ export class StackDetailsComponent implements OnInit {
 
           let stackDataObservable: Observable<any> = getResultInformation(data);
           let recObservable: Observable<any> = getStackRecommendations(data);
+
+          if (!recObservable) {
+            recObservable = Observable.create((observer) => {
+              observer.next(null);
+              observer.complete();
+            });
+          }
           Observable
             .zip(
             stackDataObservable, recObservable
