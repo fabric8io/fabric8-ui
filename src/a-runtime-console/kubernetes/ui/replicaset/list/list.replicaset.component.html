@@ -1,0 +1,88 @@
+<div class='kube-resource-list'>
+
+  <fabric8-loading [loading]="loading">
+    <div class='list-group-item replicaset' *ngFor='let replicaset of runtimeReplicaSets'>
+      <div class='list-view-pf-checkbox' *ngIf="!hideCheckbox">
+        <input type='checkbox'>
+      </div>
+      <div class='list-view-pf-actions'>
+        <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
+          <button class='btn btn-link dropdown-toggle' type='button' id='dropdownKebabRight9' aria-haspopup='true' aria-expanded='true' dropdownToggle>
+              <span class='fa fa-ellipsis-v'></span>
+            </button>
+          <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
+            <li *ngIf="replicaset.exposeUrl">
+              <a target="replicaset" [href]="replicaset.exposeUrl"
+                 title="Open this replicaset in a separate browser tab">
+                Open
+              </a>
+            </li>
+            <li>
+              <a (click)="openScaleDialog(scaleReplicaSetModal, replicaset.replicaset)" title="Scale the number of pods">Scale</a>
+            </li>
+            <li>
+              <a [routerLink]="[prefixPath(replicaset.id), 'edit']">Edit</a>
+            </li>
+
+            <li>
+              <a (click)="openDeleteDialog(deleteReplicaSetModal, replicaset.replicaset)" title="Delete this ReplicaSet">Delete</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class='list-view-pf-main-info'>
+        <div class='list-view-pf-left'>
+          <img class='list-view-pf-icon-sm' src="{{replicaset.icon}}" height="30" width="30"/>
+        </div>
+        <div class='list-view-pf-body'>
+          <div class='list-view-pf-description'>
+            <div class='list-group-item-heading'>
+              <a [routerLink]="[prefixPath(replicaset.id)]" class="card-title" title="view replicaset">{{ replicaset.name }}</a>
+
+              <span class='open-service-icon'>
+                <a target="replicaset"
+                   *ngIf="replicaset.exposeUrl"
+                   [href]="replicaset.exposeUrl"
+                   title="Open this replicaset's service in a separate browser tab">
+                  <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+              </span>
+            </div>
+            <div class='list-group-item-text'>
+              <span class="" *ngFor='let image of replicaset.images'
+                    title="docker image: {{image}}">
+                {{image | truncate:40}}
+               </span>
+            </div>
+          </div>
+          <div class='list-view-pf-additional-info'>
+
+            <div class='list-view-pf-additional-info-item' title="number of available pods and the replicas">
+              {{replicaset.availableReplicas}} / {{replicaset.replicas}}
+            </div>
+            <div class='list-view-pf-additional-info-item' title="created time">
+              {{replicaset.creationTimestamp | amTimeAgo}}
+            </div>
+            <div class='list-view-pf-additional-info-item'>
+              <k8s-labels [labels]="replicaset.labels"></k8s-labels>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fabric8-loading>
+</div>
+
+<modal #deleteReplicaSetModal title="Delete ReplicaSet">
+  <modal-content>
+    <delete-replicaset-dialog></delete-replicaset-dialog>
+  </modal-content>
+</modal>
+
+<modal #scaleReplicaSetModal title="Scale ReplicaSet">
+  <modal-content>
+    <scale-replicaset-dialog></scale-replicaset-dialog>
+  </modal-content>
+</modal>
+

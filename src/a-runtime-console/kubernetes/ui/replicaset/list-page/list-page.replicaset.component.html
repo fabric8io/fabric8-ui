@@ -1,0 +1,7 @@
+<div class='replicasets list'>
+  <fabric8-replicasets-list-toolbar></fabric8-replicasets-list-toolbar>
+  <div class="list-group list-view-pf list-view-pf-view">
+    <fabric8-replicasets-list [runtimeReplicaSets]="runtimeReplicaSets | async"
+                              [loading]="loading | async"></fabric8-replicasets-list>
+  </div>
+</div>

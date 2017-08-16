@@ -1,0 +1,27 @@
+<div class="row toolbar-pf">
+  <div class="col-sm-12">
+    <div class="toolbar-pf-actions">
+      <div class="form-group">
+        <ol class="breadcrumb">
+          <li>
+            <a [routerLink]=" ['/home'] ">Home</a>
+          </li>
+          <li>
+            <a [routerLink]=" ['../..'] ">BuildConfigs</a>
+          </li>
+          <li class='active'><strong>BuildConfig Details</strong></li>
+        </ol>
+      </div>
+      <div class="toolbar-pf-action-right" *ngIf="buildconfig">
+        <div class="form-group">
+          <button type='button' class='btn btn-primary' title="Save changes" (click)="save()">
+            Save
+          </button>
+          <button type='button' class='btn btn-danger' title="Revert changes" [routerLink]="['..']">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,16 +7,16 @@ import { Contexts, Context } from 'ngx-fabric8-wit';
 
 import {
   SpaceStore, Space, Environment
-} from 'fabric8-runtime-console';
+} from '../../../a-runtime-console/index';
 
 // non-exported classes from runtime that need to be refactored
-import { DeploymentView, DeploymentViews } from 'fabric8-runtime-console/src/app/kubernetes/view/deployment.view';
-import { AppEnvironmentDetails, AppDeployments, EnvironmentDeployments } from 'fabric8-runtime-console/src/app/kubernetes/ui/app/list-page/list-page.app.component';
-import { AbstractWatchComponent } from 'fabric8-runtime-console/src/app/kubernetes/support/abstract-watch.component';
-import { DeploymentService } from "fabric8-runtime-console/src/app/kubernetes/service/deployment.service";
-import { ServiceService } from "fabric8-runtime-console/src/app/kubernetes/service/service.service";
-import { DeploymentConfigService } from "fabric8-runtime-console/src/app/kubernetes/service/deploymentconfig.service";
-import { RouteService } from "fabric8-runtime-console/src/app/kubernetes/service/route.service";
+import { DeploymentView, DeploymentViews } from '../../../a-runtime-console/index';
+import { AppEnvironmentDetails, AppDeployments, EnvironmentDeployments } from '../../../a-runtime-console/index';
+import { AbstractWatchComponent } from '../../../a-runtime-console/index';
+import { DeploymentService } from "../../../a-runtime-console/index";
+import { ServiceService } from "../../../a-runtime-console/index";
+import { DeploymentConfigService } from "../../../a-runtime-console/index";
+import { RouteService } from "../../../a-runtime-console/index";
 
 @Component({
   encapsulation: ViewEncapsulation.None,

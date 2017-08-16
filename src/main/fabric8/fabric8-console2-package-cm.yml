@@ -1,0 +1,14 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: fabric8-console2-package
+  labels:
+    fabric8.io/kind: package
+    provider: fabric8.io
+    version: ${project.version}
+  annotations:
+    fabric8.io/iconUrl: "https://cdn.rawgit.com/fabric8io/fabric8-console/f619a352/img/fabric8_icon.svg"
+data:
+  metadata-url: http://central.maven.org/maven2/io/fabric8/platform/console2/fabric8-runtime-console/maven-metadata.xml
+  package-url-prefix: http://central.maven.org/maven2/io/fabric8/platform/console2/fabric8-runtime-console/%[1]s/fabric8-runtime-console-%[1]s-
+

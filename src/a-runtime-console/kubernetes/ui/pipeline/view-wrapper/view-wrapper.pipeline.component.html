@@ -1,0 +1,6 @@
+<div class='pipelines detail' *ngIf='pipeline'>
+  <div *ngIf="showToolbar">
+    <fabric8-pipeline-view-toolbar [pipeline]="pipeline | async"></fabric8-pipeline-view-toolbar>
+  </div>
+  <fabric8-pipeline-view [pipeline]="pipeline | async"></fabric8-pipeline-view>
+</div>

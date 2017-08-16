@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { UserService } from 'ngx-login-client';
 
-import { DevNamespaceScope } from 'fabric8-runtime-console';
+import { DevNamespaceScope } from '../../../a-runtime-console/index';
 import { SpaceNamespaceService } from './space-namespace.service';
 
 import { StaticNamespaceScope } from './static-namespace.scope';

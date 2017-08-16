@@ -1,0 +1,6 @@
+<div class='pods detail' *ngIf='pod'>
+  <div *ngIf="showToolbar">
+    <fabric8-pod-view-toolbar [pod]="pod | async"></fabric8-pod-view-toolbar>
+  </div>
+  <fabric8-pod-view [pod]="pod | async"></fabric8-pod-view>
+</div>

@@ -27,6 +27,7 @@ const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplaceme
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+// const TsConfigPathsPlugin = require('awesome-typescript-loader');
 
 /*
  * Webpack Constants
@@ -108,6 +109,13 @@ module.exports = function (options) {
         // Todo: fabric8-stack-analysis-ui/src/app/stack/overview/chart-component.js cannot locate c3
         helpers.root("node_modules/patternfly/node_modules/c3"),
         helpers.root("node_modules/patternfly/node_modules/d3")
+      // ],
+      //
+      // plugins: [
+      //   new TsConfigPathsPlugin( {
+      //     baseUrl: helpers.root('src'),
+      //     configFileName: 'tsconfig.json'
+      //   })
       ]
     },
 
@@ -328,10 +336,6 @@ module.exports = function (options) {
       new CopyWebpackPlugin([
         {
           from: 'src/meta'
-        },
-        {
-          from: 'node_modules/fabric8-runtime-console/src/img',
-          to: 'img'
         }
       ]),
 

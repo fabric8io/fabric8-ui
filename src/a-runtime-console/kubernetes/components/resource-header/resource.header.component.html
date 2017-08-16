@@ -1,0 +1,18 @@
+<div class='context dropdown' dropdown>
+  <button type='button' class='btn btn-default dropdown-toggle' aria-haspopup='true' aria-expanded='false' dropdownToggle>
+    {{current?.name}}
+    <span class='caret'></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" *dropdownMenu>
+    <li *ngFor="let m of menus">
+      <a [routerLink]="[m.fullPath || m.path]" *ngIf="m.path !== null && m != current?.path">
+        <span class="{{m.icon}}"></span> {{m.name}}
+      </a>
+      <span *ngIf="m.path === null"><span class="{{m.icon}}"></span> {{m.name}}</span>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a [routerLink]="['/run/spaces']">Browse all namespaces</a>
+    </li>
+  </ul>
+</div>

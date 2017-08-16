@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Spaces, Space } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
 import { UserService } from 'ngx-login-client';
-import { ConfigMapService, ConfigMap } from 'fabric8-runtime-console';
+import { ConfigMapService, ConfigMap } from '../../../a-runtime-console/index';
 import { Notifications, NotificationType } from 'ngx-base';
 
 import * as yaml from 'js-yaml';

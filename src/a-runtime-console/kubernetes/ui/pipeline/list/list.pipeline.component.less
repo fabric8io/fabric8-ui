@@ -1,0 +1,254 @@
+@import (reference) '../../../../../assets/stylesheets/shared/osio.less';
+.list-view-pf-view {
+  margin-top: 15px;
+}
+
+.pipeline-list {
+  background-color: white;
+  padding-left: 40px;
+  padding-bottom: 20px;
+}
+
+h4 {
+  font-size: 14px;
+}
+
+.average-duration {
+  padding-right: 30px;
+}
+
+@media (max-width: 767px) {
+  .pipelines-page h2 small {
+    display: block;
+    margin-top: 3px;
+  }
+}
+
+@keyframes flexGrow {
+  to {
+    -webkit-flex-grow: 1;
+    -moz-flex-grow: 1;
+    -ms-flex-grow: 1;
+    flex-grow: 1;
+    -webkit-flex-shrink: 1;
+    -moz-flex-shrink: 1;
+    -ms-flex-shrink: 1;
+    flex-shrink: 1;
+    -webkit-flex-basis: auto;
+    -moz-flex-basis: auto;
+    -ms-flex-basis: auto;
+    flex-basis: auto;
+  }
+}
+
+@keyframes flexShrink {
+  to {
+    -webkit-flex-basis: 1;
+    -moz-flex-basis: 1;
+    -ms-flex-basis: 1;
+    flex-basis: 1;
+    -webkit-flex-grow: .000001;
+    -moz-flex-grow: .000001;
+    -ms-flex-grow: .000001;
+    flex-grow: .000001;
+    -webkit-flex-shrink: 1;
+    -moz-flex-shrink: 1;
+    -ms-flex-shrink: 1;
+    flex-shrink: 1;
+  }
+}
+
+@keyframes progress-line {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes progress-rail {
+  to {
+    transform: translateX(400%);
+  }
+}
+
+@keyframes progress {
+  from {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+
+  to {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    background-color: #d1d1d1;
+  }
+
+  to {
+    background-color: transparent;
+  }
+}
+
+@keyframes fadeInSuccess {
+  to {
+    background-color: #3f9c35;
+  }
+}
+
+@keyframes fadeInFailed {
+  to {
+    background-color: #c00;
+  }
+}
+
+@keyframes fadeInProgress {
+  to {
+    background-color: #0088ce;
+  }
+}
+
+@keyframes fadeInAborted {
+  to {
+    background-color: #d1d1d1;
+  }
+}
+
+@keyframes fadeInNotExecuted {
+  to {
+    background-color: #d1d1d1;
+  }
+}
+
+.build-pipeline {
+  border: 1px solid #d1d1d1;
+  border-top-width: 2px;
+}
+
+.build-pipeline:first-child {
+  border-top-width: 1px;
+}
+
+.pipeline {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: -ms-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  height: 100%;
+  padding: 0 5px;
+}
+
+.pipeline .pipeline-stage {
+  -webkit-flex: 0 0 auto;
+  -moz-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  min-height: 96px;
+  padding: 15px 10px 30px;
+  position: relative;
+  width: 100%;
+}
+
+.pipeline .pipeline-stage:before {
+  bottom: 0;
+  color: #c4c4c4;
+  content: '\2193';
+  font-size: 22px;
+  left: 0;
+  line-height: 1;
+  position: absolute;
+  right: 0;
+  text-align: center;
+}
+
+.pipeline .pipeline-stage:last-child:before {
+  display: none;
+}
+
+.pipeline-stage-name {
+  font-size: 12px;
+  text-align: center;
+}
+
+.pipeline-stage-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: initial;
+  margin-bottom: 15px;
+}
+
+.build-name {
+  padding: 0 10px;
+}
+
+.stage {
+  text-align: center;
+}
+
+@media (min-width: 400px) {
+  .pipeline .pipeline-stage {
+    padding-right: 52px;
+    padding-bottom: 15px;
+    width: 50%;
+  }
+
+  .pipeline .pipeline-stage:before {
+    bottom: auto;
+    content: '\2192';
+    left: auto;
+    right: 10px;
+    top: 37%;
+  }
+}
+
+@media (min-width: 600px) {
+  .build-pipeline {
+    -webkit-flex-direction: row;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: -ms-flex;
+    display: flex;
+  }
+
+  .build-pipeline .build-name {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 992px) {
+  .pipeline .pipeline-stage {
+    width: 33.333333%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .pipeline .pipeline-stage {
+    width: 25%;
+  }
+}

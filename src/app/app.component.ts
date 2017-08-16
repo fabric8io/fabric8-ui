@@ -1,6 +1,6 @@
 import { Broadcaster } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
-import { OnLogin } from 'fabric8-runtime-console';
+import { OnLogin } from '../a-runtime-console/index';
 import { AnalyticService } from './shared/analytics.service';
 import { Spaces } from 'ngx-fabric8-wit';
 /*
