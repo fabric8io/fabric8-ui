@@ -51,6 +51,8 @@ export class StackDetailsComponent implements OnInit {
   @Input() stack;
   @Input() displayName;
   @Input() repoInfo;
+  @Input() buildNumber;
+  @Input() appName;
 
   @ViewChild('stackModule') modalStackModule: any;
   public messages: any;

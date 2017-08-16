@@ -1,7 +1,7 @@
 <div class="container stack-details">
   <div class="row">
     <a class="stack-reports-btn" (click)="showStackModal($event)">{{displayName}}</a>
-    <modal #stackModule title="Report title on Application, Build #{{buildId}}" modalClass="modal-lg modal-fullscreen" (onClose)="handleModalClose();" (onOpen)="getStackAnalyses(stack);">
+    <modal #stackModule title="Report title on Application - {{appName}}, Build #{{buildNumber}}" modalClass="modal-lg modal-fullscreen" (onClose)="handleModalClose();" (onOpen)="getStackAnalyses(stack);">
       <modal-header>
           {{modalHeader}}
       </modal-header>
