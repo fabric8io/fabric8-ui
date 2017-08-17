@@ -48,7 +48,7 @@
           </div>
             <!-- Fabric-stack-analysis-ui -->
             <div *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl'] && stage.name === 'Build Release' && stage.status === 'SUCCESS'" class="col-xs-12">
-              <stack-details [repoInfo]="build.repositoryInformation" [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
+              <stack-details [buildNumber]="build.buildNumber" [appName]="build.buildConfigName" [repoInfo]="build.repositoryInformation" [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"></stack-details>
             </div>
             <!-- Fabric-stack-analysis-ui -->
         </div>

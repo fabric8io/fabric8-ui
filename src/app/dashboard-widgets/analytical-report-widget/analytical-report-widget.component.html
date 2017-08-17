@@ -63,7 +63,7 @@
             {{stackAnalysisInformation['finishedTime'] &&
             stackAnalysisInformation['finishedTime']}}
           </span>
-          <stack-details class="report-link" [displayName]="'View full report'" [repoInfo]="currentBuild.repositoryInformation" [stack]="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']"
+          <stack-details class="report-link" [buildNumber]="currentBuild.buildNumber" [appName]="currentBuild.buildConfigName" [displayName]="'View full report'" [repoInfo]="currentBuild.repositoryInformation" [stack]="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']"
             *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">
           </stack-details>
         </div>
