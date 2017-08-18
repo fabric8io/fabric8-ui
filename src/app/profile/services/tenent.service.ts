@@ -42,6 +42,22 @@ export class TenentService {
       });
   }
 
+  /**
+   * Cleanup tenant
+   * @returns {Observable<T>}
+   */
+  cleanupTenant(): Observable<any> {
+    let url = `${this.userUrl}/services`;
+    return this.http
+      .delete(url, { headers: this.headers })
+      .map(response => {
+        return response;
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+  }
+
   // Private
 
   private handleError(error: any) {
