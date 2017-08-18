@@ -1,0 +1,92 @@
+<div class="stack-level-information">
+    <div class="user-stack">
+        <div class="col-xs-3 block-section">
+            <div class="heading">Total packages in stack: {{userStack?.dependencies && userStack?.dependencies.length}}</div>
+            <div class="stack-info-section row">
+                <div *ngIf="userStack?.dependencies.length !== userStack?.analyzed_dependencies_count" class="col-xs-12">Out of <b>{{userStack?.dependencies && userStack?.dependencies.length}}</b> components in the user's stack, we could analyze only <b>{{userStack?.analyzed_dependencies_count}}</b></div>
+                <div *ngIf="userStack?.dependencies.length === userStack?.analyzed_dependencies_count" class="col-xs-12">We analyzed all <b>{{userStack?.dependencies && userStack?.dependencies.length}}</b> components in the user's stack</div>
+                <div class="col-xs-6 component-info">
+                    <p>Unknown Components</p>
+                    <i class="unknown component-count-icon fa fa-question-circle-o" aria-hidden="true"></i>
+                    <span>{{userStack && userStack.unknown_dependencies_count}}</span>
+                </div>
+                <div class="col-xs-6 component-info">
+                    <p>Analyzed Components</p>
+                    <i class="analyzed component-count-icon fa fa-check-circle-o" aria-hidden="true"></i>
+                    <span>{{userStack && userStack.analyzed_dependencies_count}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3 block-section security-information">
+            <div class="heading">Security issues</div>
+            <div class="stack-info-section row">
+                <div *ngIf="securityInfo.cve" class="col-xs-12">
+                    <div class="cvss-id">
+                        {{securityInfo.cve && securityInfo.cve.CVE}}
+                        <i class="{{securityInfo.iconClass}}" 
+                        data-toggle="tooltip" data-placement="top" 
+                        title="CVSS: Score to measure the impact of security vulnerability. In a scale from 0.0-10.0, vulnerabilities less than 7.0 are considered medium impact and more than or equal to 7.0 are considered high impact ones."></i>
+                    </div>
+                    <div class="cve-message">
+                        Associated package: <b>{{securityInfo && securityInfo?.name}}</b>
+                    </div>
+                    <div class="row cvss-data">
+                        <div class="col-xs-12">
+                            <span class="cvss-score">{{securityInfo.cve && securityInfo.cve.CVSS}}</span>
+                            <span class="cvss-score-label"><span class="label-1">CVSS Score</span></span>
+                            <span class="cvss-indication"><b>{{securityInfo.cve && securityInfo.cve.CVSS}} out of</b> 10</span>
+                        </div>
+                    </div>
+                    <div class="progress">
+                        <!--added inline style here to handle the dynamic value of cvss score for the progress bar-->
+                        <div class="progress-bar" role="progressbar"
+                        [ngStyle]="{'width': securityInfo.percentage +'%'}"
+                        [ngClass]="securityInfo.displayClass"
+                        data-toggle="tooltip" data-placement="top" 
+                        title="{{securityInfo.cve && securityInfo.cve.CVSS}} out of 10">
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="!securityInfo.cve">No CVEs</div>
+            </div>
+        </div>
+        <div class="col-xs-3 block-section">
+            <div class="heading">Findings</div>
+            <div class="stack-info-section statistics-info">
+                <div *ngIf="outliers && outliers.usage">
+                    <span class="stat-title">
+                        <i class="fa outlier-icon fa-exclamation-triangle" aria-hidden="true"></i>
+                        Usage Outliers: </span> 
+                    <ul class="usage-outlier">
+                        <li *ngFor="let usageOutlier of outliers.usage">{{usageOutlier.package_name}}</li>
+                    </ul>
+                    are rarely used together in this kind of application
+                </div>
+                <div *ngIf="!outliers || !outliers.usage">
+                    <i class="fa no-outlier fa-check-circle" aria-hidden="true"></i>
+                    No usage outliers are found
+                </div>
+                <!--<trigger-filter (filter)="handleFilter($event)" [filterBy]="'isUsageOutlier'" [message]="'Filter by Usage outlier'"></trigger-filter>-->
+            </div>
+        </div>
+        <div class="col-xs-3 block-section">
+            <div class="heading">Licenses</div>
+            <div class="stack-info-section licenses-info row">
+                <div class="col-xs-12">
+                    <span *ngIf="userStack && userStack.license_analysis && userStack.license_analysis.status && userStack.license_analysis.status.toLowerCase() === 'successful'">
+                        We suggest <b>{{userStack.license_analysis.f8a_stack_licenses && userStack.license_analysis.f8a_stack_licenses.length && userStack.license_analysis.f8a_stack_licenses.join(', ')}}</b> as possible stack license(s)
+                    </span>
+                    <span class="conflict-license" *ngIf="userStack && userStack.license_analysis && userStack.license_analysis.status && userStack.license_analysis.status.toLowerCase() === 'stacklicenseconflict'">
+                        <b>Could not calculate the stack license</b><br />
+                        because one or more dependencies have conflicting licenses
+                    </span>
+                    <span class="conflict-license" *ngIf="userStack && userStack.license_analysis && userStack.license_analysis.status && userStack.license_analysis.status.toLowerCase() === 'componentlicenseconflict'">
+                        <b>Could not calculate the stack license</b><br />
+                        because one or more dependencies have conflicting licenses
+                    </span>
+                </div>
+                <f8-chart [data]="licenseInfo['data']" [chartOptions]="licenseInfo['chartOptions']" [configs]="licenseInfo['configs']"></f8-chart>
+            </div>
+        </div>
+    </div>
+</div>

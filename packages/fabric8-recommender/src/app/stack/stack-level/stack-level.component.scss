@@ -1,0 +1,141 @@
+.stack-level-information {
+    .user-stack {
+        display: flex;
+        .block-section {
+            padding: 15px 30px 15px 30px;
+            border-right: 1px solid #ededed;
+            border-bottom: 1px solid #ededed;
+            min-height: 250px;
+            .heading {
+                font-weight: bold;
+                font-size: 15px;
+                color: #000;
+            }
+            .licenses-info {
+                margin-top: 20px;
+            }
+
+            .component-info {
+                margin-top: 20px;
+                p {
+                    font-size: 15px;
+                    color: #999;
+                    font-weight: 100;
+                    margin: 0;
+                }
+                .component-count-icon {
+                    font-size: 25px;
+                    &.unknown {
+                        color: #cc0000;
+                    }
+                    &.analyzed {
+                        color: GREEN;
+                    }
+                }
+                span {
+                    display: inline-block;
+                    font-size: 30px;
+                    margin-left: 5px;
+                }
+            }
+            f8-chart {
+                margin-top: -10px;
+                text-align: center;
+
+                .c3-chart-arcs-title {
+                    font-size: 24pt;
+                    font-weight: 100;
+                }
+            }
+            &.security-information {
+                .cve-message {
+                    font-size: 15px;
+                    color: #777;
+                    font-weight: 100;
+                }
+                .cvss-id {
+                    font-size: 20px;
+                    font-weight: 100;
+                    margin-top: 5px;
+
+                    i {
+                        font-size: 25px;
+                        cursor: pointer;
+                        color: #ff7f0e;
+
+                        &.warning-red-color::before {
+                            color: #cc0000;
+                        }
+                    }
+                }
+
+                .cvss-data {
+                    height: 50px;
+                    margin-top: 10px;
+
+                    & > div {
+                        height: 100%;
+                        position: relative;
+
+                        .cvss-score {
+                            font-size: 30px;
+                            font-weight: 100;
+                        }
+
+                        .cvss-score-label {
+                            font-size: 15px;
+                            font-weight: 100;
+                            bottom: 6px;
+
+                            .label-1 {
+                                font-size: 18px;
+                            }
+                        }
+
+                        .cvss-indication {
+                            position: absolute;
+                            right: 20px;
+                            bottom: 6px;
+                        }
+                    }
+                }
+
+                .progress-bar {
+                    cursor: pointer;
+                }
+            }
+            .statistics-info {
+                .stat-title {
+                    font-weight: 100;
+                    font-size: 15px;
+                }
+                .outlier-icon {
+                    color: #ff7f0e;
+                }
+                .usage-outlier {
+                    padding: 0;
+                    li {
+                        display: block;
+                        list-style-type: none;
+                        margin-right: 5px;
+                        font-weight: bold;
+                        &:after {
+                            content: ', ';  
+                        }
+                        &:last-child:after {
+                            content: '';
+                        }
+                    }
+                }
+                .no-outlier {
+                    color: GREEN;
+                }
+            }
+        }
+        .conflict-license {
+            color: #cc0000;
+            margin-top: -20px;
+            display: block;
+        }
+    }
+}

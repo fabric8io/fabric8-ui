@@ -85,6 +85,15 @@ export class ChartComponent {
         this.element.className += ' ng2-c3';
     }
 
+    // Checks for the changes made in the data and re-renders the charts accordingly
+    public ngOnChanges(): void {
+        try {
+            this.__render(this.data, this.chartOptions, this.configs);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     private __render(inputData: any, chartOptionsData: any, chartConfigsData: any): void {
         let _this: ChartComponent = this;
         if (this.isValid(inputData)) {
@@ -149,15 +158,6 @@ export class ChartComponent {
                     outputMap[key] = inputMap[key];
                 }
             }
-        }
-    }
-
-    // Checks for the changes made in the data and re-renders the charts accordingly
-    public ngOnChanges(): void {
-        try {
-            this.__render(this.data, this.chartOptions, this.configs);
-        } catch (err) {
-            console.log(err);
         }
     }
 }

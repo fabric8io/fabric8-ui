@@ -4,25 +4,34 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { ModalModule } from 'ngx-modal';
+import {TabsModule} from 'ng2-bootstrap';
 
 import { GlobalConstants } from '../constants/constants.service';
-import { OverviewModule } from '../overview/overview.module';
-import { RecommenderModule } from '../recommender/recommender.module';
-import { StackComponentsModule } from '../stack-components/stack-components.module';
 import { StackDetailsComponent } from './stack-details.component';
+
+/** New UX */
+import {StackLevelModule} from '../stack-level/stack-level.module';
+import {ComponentLevelModule} from '../component-level/component-level.module';
+import {FeedbackModule} from '../feedback/feedback.module';
+/** New UX */
 
 @NgModule({
   imports: [
     CommonModule,
     HttpModule,
-    ModalModule,
     FormsModule,
-    RecommenderModule,
-    StackComponentsModule,
-    OverviewModule
+    ModalModule,
+    StackLevelModule,
+    ComponentLevelModule,
+    FeedbackModule,
+    TabsModule.forRoot()
   ],
-  declarations: [ StackDetailsComponent ],
-  exports: [ StackDetailsComponent ],
+  declarations: [
+    StackDetailsComponent
+  ],
+  exports: [
+    StackDetailsComponent
+  ],
   providers: [ GlobalConstants ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

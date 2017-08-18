@@ -20,12 +20,17 @@ import { Pipe, PipeTransform, Injectable } from '@angular/core';
 
 @Injectable()
 export class TableFilter implements PipeTransform {
-    public transform(items: Array<any>, field: string, value: string): Array<any> {
+    public transform(items: Array<any>, field: string): Array<any> {
         if (!items) {
             return [];
-        } if (!field || !value) {
+        } if (!field) {
             return items;
         }
-        return items.filter(item => item[field].includes(value));
+        if (field === 'reset') {
+            return items;
+        }
+        return items.filter(item => {
+            return item[field] === true;
+        });
     }
 }

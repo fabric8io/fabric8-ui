@@ -1,0 +1,11 @@
+.sentiment {
+    width: 20px;
+    height: 20px;
+    margin: 0 auto;
+    &:after {
+        content: '';
+        display: block;
+        float: none;
+        clear: both;
+    }
+}

@@ -1,0 +1,82 @@
+<div class="component-information">
+    <h2>{{header}}</h2>
+    <p>{{subHeader}}</p>
+    <div *ngIf="dependencies" class="table-responsive">
+        <!-- Toolbar -->
+    <div *ngIf="!isCompanion" class="stack-components-toolbar toolbar-pf table-view-pf-toolbar">
+        <div class="col-sm-12">
+            <form class="row toolbar-pf-actions">
+            <div class="form-group toolbar-pf-filter">
+                <label class="sr-only" for="filter">Name</label>
+                <div class="input-group">
+                <div (click)="handleDropDownClick(fieldContainer)" #fieldContainer class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" id="filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{currentFilter}} <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                    <li (click)="handleFilterFieldClick(fieldContainer, filter, $event)" *ngFor="let filter of filters">
+                        <a href="#">
+                            <i *ngIf="filter.class" [className]="filter.class" aria-hidden="true"></i>
+                            {{filter.name}}
+                        </a>
+                    </li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        </div>
+        <!-- Table HTML -->
+        <table class="table table-striped table-bordered table-hover children-break-word" id="dependenciesTable">
+        <thead>
+            <tr>
+            <th [ngClass]="{'small-width': header.class === 'small', 'medium-width': header.class === 'medium', 'large-width': header.class === 'large'}" (click)="handleTableOrderClick(header)" *ngFor="let header of headers">
+                {{header.name}}
+                <!--<span *ngIf="header.isSortable" class="fa {{header.sortDirectionClass || sortDirectionClass}}"></span>-->
+            </th>
+            </tr>
+        </thead>
+        <tbody (click)="handleCollapseClick($event)" (hover)="handleHoverState($event)">
+            <tr class="{{dependency['parent-reference'] ? dependency['parent-reference'] : null}}" [ngClass]="{'parent-class': dependency.isParent, 'child-class': dependency.isChild}" *ngFor="let dependency of (dependenciesList | filter: fieldName)">
+                <td ellipsis data-id="{{dependency.compId}}">
+                    <span>
+                        <i [ngClass]="{'fa': true, 'fa-reply relation-icon': dependency.isChild, 'fa-database': dependency.isParent || isCompanion === true, 'parent-icon': dependency.isParent, 'companion': isCompanion === true}" aria-hidden="true" *ngIf="dependency.isChild || dependency.isParent || isCompanion === true"></i>
+                    </span>
+                    <span>
+                        <i [ngClass]="{'fa': true, 'fa-database child-icon': dependency.isChild, 'usage-outlier outlier-icon': dependency.isUsageOutlier}" aria-hidden="true" *ngIf="dependency.isChild || (!dependency.isChild && dependency.isUsageOutlier)"></i>
+                    </span>
+                    {{dependency.name}}
+                </td>
+                <td ellipsis [ngClass]="{'text-center': true, 'different-version': dependency.latest_version !== dependency.current_version}">{{dependency.current_version}}</td>
+                <td ellipsis *ngIf="!isCompanion" class="text-center">{{dependency.recommended_version}}</td>
+                <td ellipsis class="text-center">{{dependency.latest_version}}</td>
+                <td class="text-center">
+                    <i title="{{dependency.has_issue ? 'CVE Score: ' + dependency.security_issue: null}}" [ngClass]="{'fa': true, 'insecure fa-ban': dependency.has_issue === true, 'secure fa-check-circle-o': dependency.has_issue === false}" aria-hidden="true"></i>
+                </td>
+                <td ellipsis>
+                    <i *ngIf="dependency.license_analysis && dependency.license_analysis.status && dependency.license_analysis.status.toLowerCase() === 'unknown'" [ngClass]="{'fa outlier-icon': true, 'unknown-license': dependency.license_analysis.status.toLowerCase() === 'unknown', 'conflict-license': dependency.license_analysis.status.toLowerCase() === 'conflict'}"></i>
+                    {{dependency.license}}
+                </td>
+                <!--<td class="text-center">
+                    <sentiment *ngIf="dependency.sentiment_score" [score]="dependency.sentiment_score"></sentiment>
+                </td>-->
+                <td class="text-center">{{dependency.osio_user_count}}</td>
+                <td ellipsis class="github-stats">
+                    <span *ngIf="dependency.github_user_count > -1">Usage Count: {{dependency.github_user_count}},</span>
+                    <span *ngIf="dependency.watchers > -1">Watchers: {{dependency.watchers}},</span>
+                    <span *ngIf="dependency.stargazers_count > -1">Stars: {{dependency.stargazers_count}},</span>
+                    <span *ngIf="dependency.forks_count > -1">Forks: {{dependency.forks_count}},</span>
+                    <span *ngIf="dependency.contributors > -1">Contributors: {{dependency.contributors}}</span>
+                    <span *ngIf="!dependency.git_stat">-</span>
+                </td>
+                <td ellipsis class="top-dependencies">
+                    <span class="used-by" *ngFor="let used_by of dependency.used_by">
+                        <span ellipsis>{{used_by.name}}</span> <i class="fa fa-star used-by-icon" aria-hidden="true"></i>{{used_by.stars}}
+                    </span>
+                </td>
+                <td ellipsis>{{dependency.categories}}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+    <div *ngIf="!dependencies">No data to show</div>
+</div>

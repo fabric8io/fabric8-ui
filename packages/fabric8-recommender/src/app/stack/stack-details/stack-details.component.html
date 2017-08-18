@@ -1,66 +1,38 @@
-<div class="container stack-details">
-  <div class="row">
-    <a class="stack-reports-btn" (click)="showStackModal($event)">{{displayName}}</a>
-    <modal #stackModule title="Report title on Application - {{appName}}, Build #{{buildNumber}}" modalClass="modal-lg modal-fullscreen" (onClose)="handleModalClose();" (onOpen)="getStackAnalyses(stack);">
+<div class="stack-report">
+  <modal #stackModule title="Report title on Application - {{appName}}, Build #{{buildNumber}}" modalClass="modal-lg modal-fullscreen modal-width-class" (onClose)="handleModalClose();" (onOpen)="init(stack);">
       <modal-header>
           {{modalHeader}}
       </modal-header>
       <modal-content>
-          <div *ngIf="isLoading" class="pre-loader">
-            <div class="pre-loader-spinner spinner spinner-lg"></div>
-          </div>
-          <div [hidden]="errorMessage.message">
-            <!-- Dropdown-->
-            <span>Path to manifest file: </span>
-            <select name="manifestSelect" [(ngModel)]="currentManifestPath" (change)="selectedManifestPath()" class="combobox form-control">
-              <option *ngFor="let path of paths" [ngValue]="path">{{ path }}</option>
-            </select>
-            <!-- Recommender -->
-            <div>
-              <f8-recommender [data]="repoInfo && repoInfo" [recommendations]="recommendations"></f8-recommender>
-            </div>
-            <!-- Stack Overview -->
-            <div>
-              <overview-stack [stackOverviewData]="stackOverviewData"></overview-stack>
-            </div>
-            <div>
-              <f8-stack-components [dependencies]="dependencies && dependencies"></f8-stack-components>
-            </div>
-          </div>
-          <div class="error-msg blank-slate-pf" [hidden]="!errorMessage.message">
-            <div [hidden]="!errorMessage.status">
-              <div class="warning-icon blank-slate-pf-icon">
-                <i class="pficon-warning-triangle-o"></i>
-              </div>
-              <h1>
-                {{messages && messages['report_failure']}}
-                <span *ngIf="errorMessage.status">{{messages && messages['error_code']}} {{errorMessage.status}}</span>
-              </h1>
-              <p>
-                {{messages && messages['error_text']}}{{errorMessage.message}}
-              </p>
-            </div>
-            <div [hidden]="errorMessage.status">
-              <div class="container-progress progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-                  <span>50%</span>
-                </div>
-              </div>
-              <h3>
-                {{messages && messages['report_loading']}}
-              </h3>
-              <p>{{errorMessage.message}}</p>
-            </div>
-            <div [hidden]="errorMessage.status" class="blank-slate-pf-secondary-action">
-              <button class="btn btn-default" (click)="stackModule.close()">{{messages && messages['cancel']}}</button>
-              <button class="btn btn-primary" (click)="stackModule.close()">{{messages && messages['load_and_return_to_pipeline']}}</button>
-            </div>
-            <div [hidden]="!errorMessage.status" class="blank-slate-pf-secondary-action">
-              <button class="btn btn-primary" (click)="stackModule.close()">{{messages && messages['return_to_pipeline']}}</button>
-            </div>
-          </div>
-      </modal-content>
-    </modal>
+  <div *ngIf="!error" (click)="$event.preventDefault()">
+    <tabset *ngIf="dataLoaded">
+        <tab *ngFor="let tabz of tabs"
+            [heading]="tabz.title"
+            [active]="tabz.active"
+            (select)="tabSelection(tabz)"
+            (deselect)="tabz.active = false"
+            [disabled]="tabz.disabled"
+            [removable]="tabz.removable"
+            (removed)="removeTabHandler(tabz)"
+            [customClass]="tabz.customClass">
+            <stack-level-information (changeFilter)="handleChangeFilter($event)" [outliers]="stackLevelOutliers" [userStack]="tabz && tabz.content && tabz.content.user_stack_info"></stack-level-information>
+            <component-level-information [filterBy]="componentFilterBy" [header]="componentLevel.header" [subHeader]="componentLevel.subHeader" [component]="componentLevelInformation"></component-level-information>
+            <component-level-information [header]="companionLevel.header" [subHeader]="companionLevel.subHeader" [isCompanion]="true" [component]="companionLevelRecommendation"></component-level-information>
+        </tab>
+    </tabset>
+    <feedback *ngIf="dataLoaded" [config]="feedbackConfig && feedbackConfig"></feedback>
   </div>
+  <div class="error-wrapper" *ngIf="error">
+    <div class="error-container">
+      <div class="col-xs-4 error-image">
+        <i [ngClass]="{'fa display-icon': true, 'fa-exclamation-triangle warning-class': error.code === 500, 'fa-times not-found-class': error.code === 404, 'fa-spinner progress-class': error.code === 200 || error.code === 202}" aria-hidden="true"></i>
+      </div>
+      <div class="col-xs-8 error-content">
+        <h2>{{error.title}}</h2>
+        <p>{{error.message}}</p>
+      </div>
+    </div>
+  </div>
+  </modal-content>
+</modal>
 </div>
-

@@ -1,49 +1,28 @@
-@import '../../../assets/stylesheets/base';
-
-.error-msg{
-    text-align: center;
-    background: #fff;
-    border: none;
-    .warning-icon{
-        font-size: 6em;
-        
-        i:before {
-            color: #8b8d8f;
-        }
+.stack-report {
+    .modal-width-class {
+        width: 95%;
     }
-    .container-progress{
+    .error-wrapper {
+        position: relative;
+        height: 80%;
         width: 50%;
-        margin: 0 auto;
-    }
-}
-.stack-details {
-    .stack-reports-btn {
-        cursor: pointer;
-    }
-    .modal-header {
-        padding: 15px 20px;
-    }
-    .modal-body {
-        padding: 0 20px 30px 20px;
-    }
-    .modal-fullscreen {
-        width: 90%;
-        height: 90%;
-    }
-    .make-center {
-        text-align: center;
-    }
-
-    .pre-loader {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: rgba(255, 255, 255, 0.5);
-        z-index: 99;
-        .pre-loader-spinner {
-            top: 50%;
+        margin: 5% auto;
+        .error-image {
+            .display-icon {
+                font-size: 10vw;
+            }
+            .not-found-class {
+                color: #ff1f1c;
+            }
+            .warning-class {
+                color: #fb8c00;
+            }
+            .progress-class {
+                color: #3b5998;
+            }
+        }
+        .error-container {
+            position: relative;
         }
     }
 }
