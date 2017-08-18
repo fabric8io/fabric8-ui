@@ -64,6 +64,10 @@
         }
         .list-view-pf-main-info {
             display: flex;
+
+            .list-group-item-text {
+                width: 100% !important;
+            }
         }
         .pficon-info {
             font-size: 16pt;
