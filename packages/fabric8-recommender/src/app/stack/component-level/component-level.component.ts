@@ -1,11 +1,17 @@
 import {Component, Input, OnChanges} from '@angular/core';
 
+
+import { Observable } from 'rxjs/Observable';
+import { Space, Contexts } from 'ngx-fabric8-wit';
+
 import {ComponentInformationModel, RecommendationsModel, OutlierInformationModel} from '../models/stack-report.model';
+import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 
 @Component({
     selector: 'component-level-information',
     templateUrl: './component-level.component.html',
-    styleUrls: ['component-level.component.scss']
+    styleUrls: ['component-level.component.scss'],
+    providers: [AddWorkFlowService]
 })
 
 export class ComponentLevelComponent implements OnChanges {
@@ -20,6 +26,7 @@ export class ComponentLevelComponent implements OnChanges {
 
     @Input() data;
 
+    public workItemResponse: Array<any> = [];
     public dependencies: Array<ComponentInformationModel> = [];
     public recommendations: RecommendationsModel;
     public messages: any;
@@ -41,10 +48,24 @@ export class ComponentLevelComponent implements OnChanges {
     private angleUp: string = 'fa-angle-up';
     private angleDown: string = 'fa-angle-down';
 
+    private spaceName: string;
+    private userName: string;
+
     public sortDirectionClass: string = this.angleDown;
 
 
-    constructor() {
+    constructor(
+        private addWorkFlowService: AddWorkFlowService,
+        private context: Contexts
+    ) {
+        if (this.context && this.context.current) {
+            this.context.current.subscribe(val => {
+                console.log('Inside', val);
+                this.spaceName = val.name;
+                this.userName = val.user.attributes.username;
+            });
+        }
+
         this.keys = {
             name: 'name',
             currentVersion: 'curret_version',
@@ -228,7 +249,11 @@ export class ComponentLevelComponent implements OnChanges {
                     name: 'Categories',
                     class: 'medium',
                     order: 10
-                }
+                },{
+                     name: 'Action',
+                     identifier: this.keys['noOfFiles'],
+                     isSortable: true
+                 }
             ];
 
             if (this.isCompanion) {
@@ -287,6 +312,7 @@ export class ComponentLevelComponent implements OnChanges {
         output['used_by'] = github['used_by'];
         output['categories'] = input['topic_list'];
         output['categories'] = (output['categories'] && output['categories'].length > 0 && output['categories'].join(', ')) || '';
+        output['action'] = canCreateWorkItem ? 'Create Work Item' : '';
         return output;
     }
 
@@ -318,6 +344,7 @@ export class ComponentLevelComponent implements OnChanges {
      *  Creates work items in specified format to be consumed for POST request 
      */
     public handleCreateWIclick(recommender: any, event: Event): void {
+        debugger;
         let workItems = [];
         let message: string = '';
         let codebaseobj: any = { codebase: {
@@ -348,14 +375,120 @@ export class ComponentLevelComponent implements OnChanges {
                     description += '<br /> Branch: ' + codebase['branch'];
                     description += '<br /> Filename: ' + codebase['filename'];
                     description += '<br /> Line Number: ' + codebase['linenumber'];
-                    // let item: any = {
-                    //     title: recommender['workItem']['action'],
-                    //     description: description,
-                    //     codebase: codebase,
-                    //     key: recommender['key']
-                    // };
+                    let item: any = {
+                        title: recommender['action'],
+                        description: description,
+                        codebase: codebase,
+                        key: recommender['key']
+                    };
+
+                    workItems.push(item);
+
+                    if (workItems.length > 0) {
+                        this.addWorkItems(workItems[0]);
+                    } else {
+                        console.log('Work items are empty and cannot be added');
+                    }
 
 
     }
+
+     /*
+     *  getWorkItemData - Takes nothing, returns Object
+     *  It returns the predefined JSON structure to be sent as an input
+     *  for work item creation request.
+     */
+    private getWorkItemData(): any {
+        let workItemData = {
+            'data': {
+                'attributes': {
+                    'system.state': 'open',
+                    'system.title': '',
+                    'system.codebase': ''
+                },
+                'type': 'workitems',
+                'relationships': {
+                    'baseType': {
+                        'data': {
+                            'id': '26787039-b68f-4e28-8814-c2f93be1ef4e',
+                            'type': 'workitemtypes'
+                        }
+                    }
+                }
+            }
+        };
+        return workItemData;
+    }
+
+    /*
+     *  addWorkItems - takes workitems array, return nothing
+     *  A generic function that recieves workitems in a predefined format
+     *  Creates work items based on the data
+     *  Handles single as well as multiple work items 
+     */
+    private addWorkItems(workItem: Array<any>): void {
+        //let length: number = workItems.length;
+        let newItem: any; //, workItem: any;
+        newItem = this.getWorkItemData();
+        //for (let i: number = 0; i < length; ++i) {
+            //if (workItems[i]) {
+                //workItem = workItems[i];
+                // TODO: Handle the case of sending multiple work items concurrently
+                // once the API Payload is properly set at the receiving end.
+                if (newItem) {
+                    newItem.data.attributes['system.title'] = workItem['title'];
+                    newItem.data.attributes['system.description'] = workItem['description'];
+                    newItem.data.attributes['system.codebase'] = workItem['codebase'];
+                    newItem.key = workItem['key'];
+                }
+           // }
+        //}
+
+        let workFlow: Observable<any> = this.addWorkFlowService.addWorkFlow(newItem);
+        console.log(this.userName, this.spaceName);
+        workFlow.subscribe((data) => {
+            if (data) {
+                let inputUrlArr: Array<string> = [];
+                if (data.links && data.links.self && data.links.self.length) {
+                    inputUrlArr = data.links.self.split('/api/');
+                    let hostString = inputUrlArr[0] ? inputUrlArr[0].replace('api.', '') : '';
+                    let baseUrl: string = hostString +
+                        `/${this.userName}/${this.spaceName}/plan/detail/` + data.data.id;
+                    //this.displayWorkItemResponse(baseUrl, data.data.id);
+                    newItem.url = baseUrl;
+                    //TODO :: toggle Worke item link
+                    //this.toggleWorkItemButton(newItem);
+                }
+            }
+        });
+    }
+
+     /**
+     * displayWorkItemResponse - takes a message string and returns nothing
+     * Displays the response received from the creation of work items
+     */
+    private displayWorkItemResponse(url: string, id: any): void {
+        let notification = {
+            iconClass: '',
+            alertClass: '',
+            text: null,
+            link: null,
+            linkText: this.messages.view_work_item
+        };
+        if (id) {
+            notification.iconClass = 'pficon-ok';
+            notification.alertClass = 'alert-success';
+            notification.text = this.messages.toastDisplay.text1 +
+                id + this.messages.toastDisplay.text2;
+            notification.link = url;
+        } else {
+            notification.iconClass = 'pficon-error-circle-o';
+            notification.alertClass = 'alert-danger';
+            notification.text = this.messages.create_work_item_error;
+        }
+        this.workItemResponse.push(notification);
+    }
+
+
 
 }

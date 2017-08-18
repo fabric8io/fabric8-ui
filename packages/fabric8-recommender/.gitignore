@@ -62,6 +62,7 @@ npm-debug.log
 .idea/
 *.swp
 .vscode/
+dist-watch/
 
 # NPM #
 

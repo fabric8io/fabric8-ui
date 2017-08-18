@@ -74,6 +74,7 @@
                     </span>
                 </td>
                 <td ellipsis>{{dependency.categories}}</td>
+                <td class="action" (click)="dependency.action && handleCreateWIclick(dependency, $event)">{{dependency.action}}</td>
             </tr>
         </tbody>
         </table>
