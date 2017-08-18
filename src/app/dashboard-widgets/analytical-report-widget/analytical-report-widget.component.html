@@ -14,35 +14,9 @@
   <div class="card-pf-body">
     <div *ngIf="buildConfigsCount > 0">
       <div class="fabric8-stack-analysis">
-        <ul id="spacehome-analytical-report-list" class="list-group list-view-pf list-view-pf-view" *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl'] && stackAnalysisInformation['recommendations']">
-          <div *ngIf="stackAnalysisInformation['showLoader']" class="recommender-overlay">
-            <div class="spinner spinner-lg"></div>
-          </div>
-          <li class="list-group-item" *ngFor="let recommendation of stackAnalysisInformation['recommendations']">
-            <div class="list-view-pf-main-info">
-              <div class="list-view-pf-body">
-                <div class="list-view-pf-description">
-                  <div class="list-group-item-text">
-                    <span class="pficon pficon-info"></span>
-                    <b>{{recommendation.suggestion}}: {{recommendation.action}} {{recommendation.message}}</b> &nbsp; {{recommendation.subMessage}}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item" *ngIf="!stackAnalysisInformation['recommendations'] || stackAnalysisInformation['recommendations'].length === 0">
-            <div class="list-view-pf-main-info">
-              <div class="list-view-pf-body">
-                <div class="list-view-pf-description">
-                  <div class="list-group-item-text">
-                    <span class="pficon pficon-info"></span>
-                    <b>No recommendations</b>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <div *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">
+          <stack-report-inshort *ngIf="stackUrl !== ''" [buildNumber]="currentBuild.buildNumber" [appName]="currentBuild.buildConfigName" [repoInfo]="currentBuild && currentBuild.repositoryInformation" [stackUrl]="stackUrl && stackUrl"></stack-report-inshort>
+        </div>
       </div>
     </div>
     <div *ngIf="buildConfigsCount === 0" class="card-pf-body f8-card-body pipelines-absent">
@@ -54,19 +28,6 @@
         <p>
           When you run a build, a stack analysis is run that will provide recommendations around your technology stack.
         </p>
-      </div>
-    </div>
-    <div *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']" class="always-at-bottom">
-      <div class="row">
-        <div class="col-md-12 col-sm-12">
-          <span class="report-time fifty-shades-of-grey">
-            {{stackAnalysisInformation['finishedTime'] &&
-            stackAnalysisInformation['finishedTime']}}
-          </span>
-          <stack-details class="report-link" [buildNumber]="currentBuild.buildNumber" [appName]="currentBuild.buildConfigName" [displayName]="'View full report'" [repoInfo]="currentBuild.repositoryInformation" [stack]="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']"
-            *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">
-          </stack-details>
-        </div>
       </div>
     </div>
   </div>
