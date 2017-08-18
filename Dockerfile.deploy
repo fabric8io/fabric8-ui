@@ -1,4 +1,4 @@
-FROM fabric8/fabric8-openshift-nginx:latest
+FROM fabric8/fabric8-openshift-nginx:vd83b3a1
 MAINTAINER "Pete Muir <pmuir@bleepbleep.org.uk>"
 
 USER root
