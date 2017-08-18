@@ -19,13 +19,14 @@ import { MockAuthenticationService } from './shared/mock-auth.service';
 
 // Imports stackdetailsmodule
 import { StackDetailsModule } from './stack/stack-details/stack-details.module';
+import {StackReportInShortModule} from './stack/stack-report-inshort/stack-report-inshort.module';
 
 @NgModule({
   imports: [
     BrowserModule,
     StackDetailsModule,
     FormsModule,
-    AppRoutingModule
+    StackReportInShortModule
   ],
   declarations: [ AppComponent ],
   providers: [

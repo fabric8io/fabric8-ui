@@ -1,3 +1,6 @@
-<router-outlet>
-    <stack-details *ngIf="label" [stack]="stackUrl && stackUrl !== '' && label && stackUrl" style="text-align: left;"></stack-details>
-</router-outlet>
+<!--<router-outlet>
+    <stack-details *ngIf="label" [stack]="stackUrl && stackUrl !== '' && label && stackUrl" style="text-align: left;"></stack-details>-->
+    <!--<stack-report-inshort></stack-report-inshort>
+</router-outlet>-->
+
+<stack-report-inshort [stackUrl]="'https://recommender.api.openshift.io/api/v1/stack-analyses-v2/e52506bf521e4d92bd587de07a6d1385'"></stack-report-inshort>

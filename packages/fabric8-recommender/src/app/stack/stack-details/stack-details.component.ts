@@ -15,6 +15,11 @@ import {StackReportModel, ResultInformationModel, UserStackInfoModel, ComponentI
 
 export class StackDetailsComponent implements OnChanges {
     @Input() stack: string;
+    @Input() displayName;
+    @Input() repoInfo;
+    @Input() buildNumber;
+    @Input() appName;
+    @Input() stackResponse;
 
     @ViewChild('stackModule') modalStackModule: any;
 
@@ -42,11 +47,23 @@ export class StackDetailsComponent implements OnChanges {
 
     private stackId: string;
 
+    public showStackModal(event: Event): void {
+        event.preventDefault();
+        this.modalStackModule.open();
+    }
+
+    /**
+     * Gets triggered on close of modal,
+     * Clears the existing states to make it proper on open
+     */
+    public handleModalClose(): void {
+        this.resetFields();
+    }
+
     public tabSelection(tab: any): void {
         tab['active'] = true;
         let currentIndex: number = tab['index'];
         let recommendations: RecommendationsModel = this.recommendationsArray[currentIndex];
-        debugger;
         this.stackLevelOutliers = {
             'usage': recommendations.usage_outliers
         };
@@ -110,57 +127,68 @@ export class StackDetailsComponent implements OnChanges {
         // this.dataLoaded = false;
     }
 
-    private init(url: string): void {
-        this.stackAnalysisService
-            .getStackAnalyses(url)
-            .subscribe((data) => {
-                this.error = null;
-                if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
-                    let resultInformation: Observable<StackReportModel> = getStackReportModel(data);
-                    resultInformation.subscribe((response) => {
-                        console.log(response);
-                        debugger;
-                        let result: Array<ResultInformationModel> = response.result;
-                        this.totalManifests = result.length;
-                        this.userStackInformationArray = result.map((r) => r.user_stack_info);
-                        result.forEach((r, index) => {
-                            console.log('HEre');
-                            this.tabs.push({
-                                title: r.manifest_file_path,
-                                content: r,
-                                index: index
-                            });
-                            this.recommendationsArray.push(r.recommendations); //Change if the API key changes
-                        });
-
-                        this.dataLoaded = true;
-                        this.tabSelection(this.tabs[0]);
+    private handleResponse(data: any): void {
+        this.error = null;
+        if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
+            let resultInformation: Observable<StackReportModel> = getStackReportModel(data);
+            resultInformation.subscribe((response) => {
+                console.log(response);
+                let result: Array<ResultInformationModel> = response.result;
+                this.totalManifests = result.length;
+                this.userStackInformationArray = result.map((r) => r.user_stack_info);
+                result.forEach((r, index) => {
+                    console.log('HEre');
+                    this.tabs.push({
+                        title: r.manifest_file_path,
+                        content: r,
+                        index: index
                     });
-                } else {
-                    this.handleError({
-                        message: data.error,
-                        code: data.statusCode,
-                        title: 'Please, wait a while more'
-                    });
-                }
-            },
-            error => {
-                // this.handleError(error);
-                console.log(error);
-                let title: string = '';
-                if (error.status >= 500) {
-                    title = 'Something unexpected happened';
-                } else if (error.status === 404) {
-                    title = 'You are looking for something which isn\'t there';
-                } else if (error.status === 401) {
-                    title = 'You don\'t seem to have sufficient privileges to access this';
-                }
-                this.handleError({
-                    message: error.statusText,
-                    code: error.status,
-                    title: title
+                    this.recommendationsArray.push(r.recommendations); //Change if the API key changes
                 });
-                console.log(this.error);
+
+                this.dataLoaded = true;
+                this.tabSelection(this.tabs[0]);
             });
+        } else {
+            this.handleError({
+                message: data.error,
+                code: data.statusCode,
+                title: 'Please, wait a while more'
+            });
+        }
+    }
+
+    private init(): void {
+        if (this.stackResponse) {
+            setTimeout(() => {
+                this.handleResponse(this.stackResponse);
+            }, 1000);
+        } else {
+            if (this.stack && this.stack !== '') {
+                this.stackAnalysisService
+                    .getStackAnalyses(this.stack)
+                    .subscribe((data) => {
+                        this.handleResponse(data);
+                    },
+                    error => {
+                        // this.handleError(error);
+                        console.log(error);
+                        let title: string = '';
+                        if (error.status >= 500) {
+                            title = 'Something unexpected happened';
+                        } else if (error.status === 404) {
+                            title = 'You are looking for something which isn\'t there';
+                        } else if (error.status === 401) {
+                            title = 'You don\'t seem to have sufficient privileges to access this';
+                        }
+                        this.handleError({
+                            message: error.statusText,
+                            code: error.status,
+                            title: title
+                        });
+                        console.log(this.error);
+                    });
+            }
+        }
     }
 }

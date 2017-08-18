@@ -26,16 +26,16 @@ export class AppComponent implements OnInit {
     public routerLink: string;
     // d6819b27a4ba4e8fa6f6bf63bb7764ee;
     changeLabel() {
-        console.log(this.label);
-        if (this.label && this.label.trim() !== '') {
-            this.routerLink = '/analyze/' + this.label;
-            this.stackUrl = 'https://recommender.api.openshift.io/api/v1/stack-analyses-v2/' + this.label;
-        }
+        // console.log(this.label);
+        // if (this.label && this.label.trim() !== '') {
+        //     this.routerLink = '/analyze/' + this.label;
+        //     this.stackUrl = 'https://recommender.api.openshift.io/api/v1/stack-analyses-v2/' + this.label;
+        // }
     }
 
     ngOnInit(): void {
         console.log('Inside ngInit');
-        this.changeLabel();
+        // this.changeLabel();
     }
 
 
