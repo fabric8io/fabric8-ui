@@ -245,6 +245,13 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   }
 
   /**
+   * Cleanup tenant
+   */
+  cleanupTenant(): void {
+    this.router.navigate(['/', this.context.user.attributes.username, '_cleanup']);
+  }
+
+  /**
    * Validate email
    */
   validateEmail(): void {
