@@ -23,6 +23,13 @@ const routes: Routes = [
         data: {
           title: 'Profile'
         }
+      },
+      {
+        path: '_cleanup',
+        loadChildren: './cleanup/cleanup.module#CleanupModule',
+        data: {
+          title: 'Cleanup'
+        }
       }
     ]
   }

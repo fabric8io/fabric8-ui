@@ -6,10 +6,11 @@ import { ProfileComponent }     from './profile.component';
 import { ProfileRoutingModule } from './profile-routing.module';
 
 import { OverviewModule } from './overview/overview.module';
+import { CleanupModule } from './cleanup/cleanup.module';
 
 
 @NgModule({
-  imports:      [ CommonModule, OverviewModule, ProfileRoutingModule ],
+  imports:      [ CommonModule, OverviewModule, ProfileRoutingModule, CleanupModule ],
   declarations: [ ProfileComponent ],
 })
 export class ProfileModule {

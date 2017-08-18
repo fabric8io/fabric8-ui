@@ -1,0 +1,114 @@
+<div id="overview" class="container-fluid content padding-top-15">
+  <div class="row">
+    <div class="col-xs-8 col-sm-8 col-sm-offset-1">
+      <div *ngIf="showNotification" class="alert {{notificationClass}}">
+        <span class="pficon {{notificationIcon}}"></span>
+        <strong>{{notificationTitle}}</strong> {{notificationText}}
+      </div>
+      <p *ngIf="cleanupStatus === 'notstarted'"><strong>You are about to erase all of your OpenShift.io spaces</strong>, reverting your OpenShift.io environment to it's default state.
+        This action will not affect your Github account or repositories associated with OpenShift.io.</p>
+      <p *ngIf="cleanupStatus === 'notstarted'">The following spaces will be removed and your account will be reset.</p>
+      <p *ngIf="cleanupStatus !== 'notstarted'">Results</p>
+      <div class="cleanup-list-results">
+        <div class="row cleanup-row">
+          <p class="cleanup-row-header"><b>Your Account</b></p>
+          <div class="list-group list-view-pf list-view-pf-view">
+            <div class="list-group-item">
+              <div class="list-group-item-header">
+                <!-- todo - conditionally show expansion if there are errors -->
+                <div class="list-view-pf-expand" *ngIf="tenantError">
+                  <span class="fa fa-angle-right" (click)="toggleTenantError()"
+                        [ngClass]="{'fa-angle-down': tenantErrorExpanded}"></span>
+                </div>
+                <div class="list-view-pf-main-info">
+                  <div class="list-view-pf-left">
+                    <div class="{{tenantIcon}} list-view-pf-icon-sm"></div>
+                  </div>
+                  <div class="list-view-pf-body">
+                    <div class="list-view-pf-description">
+                      <div class="list-group-item-heading">
+                        {{contextUserName}}
+                      </div>
+                      <div class="pull-right">{{tenantResult}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-pf-expansion collapse in"
+                     *ngIf="tenantErrorExpanded">
+                  <div class="list-pf-container" tabindex="0">
+                    <div class="list-pf-content">
+                      {{tenantError}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row cleanup-row">
+          <p class="cleanup-row-header"><b>Spaces</b></p>
+          <pfng-list
+            [config]="listConfig"
+            [itemTemplate]="itemTemplate"
+            [items]="spaces" >
+            <template #itemTemplate let-item="item" let-index="index">
+              <div class="list-pf-content-wrapper">
+                <div class="list-pf-main-content">
+                  <span class="cleanup-status-icon {{item.statusIcon}}"></span>
+                  <div class="list-pf-title">{{item.attributes.name}}</div>
+                  <div class="pull-right">{{item.progress}}</div>
+                </div>
+              </div>
+            </template>
+          </pfng-list>
+        </div>
+      </div>
+      <div>
+        <p class="cleanup-action-confirm" *ngIf="cleanupStatus !== 'completedwitherrors' && cleanupStatus !== 'completed'">
+          By clicking on 'Erase my OpenShift.io environment', you are telling us that you no longer wish to use your current environment, and that you wish to start all over again.  There is no going back - we cannot save what is lost.
+        </p>
+        <p class="cleanup-action-confirm" *ngIf="cleanupStatus === 'completedwitherrors'">
+          There was an error erasing some of your spaces from OpenShift.io.  You can either erase these manually, or try again using the button below.
+        </p>
+        <p class="cleanup-action-confirm" *ngIf="cleanupStatus === 'completed'">
+          You have successfully erased your OpenShift.io environment.  You can now return to your user dashboard.
+        </p>
+
+        <button class="btn btn-danger btn-lg" (click)="confirmErase()" *ngIf="cleanupStatus !== 'completed'">Erase My OpenShift.io Environment</button>
+        <div *ngIf="cleanupStatus === 'completedwitherrors' || cleanupStatus === 'completed'" class="cleanup-home-action">
+          <button class="btn btn-default btn-lg" (click)="goHome()">Take me to my Dashboard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<modal #confirmCleanup title="Are you sure?">
+  <modal-content>
+    <section>
+      <p class="clean-modal-warning">Erasing your OpenShift.io environment is an action that CANNOT be undone.</p>
+      <p>This will permanently erase all spaces, codebase links, applications, environments and pipelines.</p>
+      <p>Please verify this action by typing in your OpenShift.io username.</p>
+      <div class="form">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label class="col-md-4 control-label">OpenShift.io Username</label>
+            <div class="col-md-8">
+              <input
+                #username
+                class="form-control"
+                name="username"
+                [(ngModel)]="userName" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+    <footer>
+      <div class="col-md-offset-4 col-md-8">
+        <button class="btn" [ngClass]="{ 'btn-danger': userNameMatches() }" type="button" (click)="confirm()" [disabled]="!userNameMatches()" type="submit"> I understand my actions - erase my environment</button>
+      </div>
+    </footer>
+  </modal-content>
+</modal>
