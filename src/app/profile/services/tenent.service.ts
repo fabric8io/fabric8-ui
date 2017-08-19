@@ -28,7 +28,7 @@ export class TenentService {
   /**
    * Update tenent
    *
-   * @returns {Observable<Codebase>}
+   * @returns {Observable<any>}
    */
   updateTenent(): Observable<any> {
     let url = `${this.userUrl}/services`;
@@ -44,7 +44,7 @@ export class TenentService {
 
   /**
    * Cleanup tenant
-   * @returns {Observable<T>}
+   * @returns {Observable<any>}
    */
   cleanupTenant(): Observable<any> {
     let url = `${this.userUrl}/services`;

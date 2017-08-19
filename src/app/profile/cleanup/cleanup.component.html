@@ -107,7 +107,7 @@
     </section>
     <footer>
       <div class="col-md-offset-4 col-md-8">
-        <button class="btn" [ngClass]="{ 'btn-danger': userNameMatches() }" type="button" (click)="confirm()" [disabled]="!userNameMatches()" type="submit"> I understand my actions - erase my environment</button>
+        <button class="btn" [ngClass]="{ 'btn-danger': userNameMatches() }" (click)="confirm()" [disabled]="!userNameMatches()"> I understand my actions - erase my environment</button>
       </div>
     </footer>
   </modal-content>
