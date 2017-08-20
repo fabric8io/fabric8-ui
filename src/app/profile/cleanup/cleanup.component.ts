@@ -98,10 +98,10 @@ export class CleanupComponent implements OnInit, OnDestroy {
         let spaceObservable = this.spaceService.deleteSpace(space).map((result) => {
           this.eventService.deleteSpaceSubject.next(space);
           space['erased'] = true;
-          space['progress'] = "Space successfully erased!";
-          space['statusIcon'] = "pficon pficon-ok ";
+          space['progress'] = "Space successfully erased";
+          space['statusIcon'] = "pficon pficon-ok";
         }).catch((error) => {
-          space['progress'] = "Error: Unable to erase.";
+          space['progress'] = "Error: Unable to erase";
           space['statusIcon'] = "pficon pficon-warning-triangle-o";
           this.showWarningNotification();
           return Observable.of(error);
@@ -110,11 +110,11 @@ export class CleanupComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.tenantResult = "Cleaning up tenant.";
+    this.tenantResult = "Cleaning up tenant";
     let tenantServiceCleanup = this.tenantService.cleanupTenant()
       .catch((error) => {
         tenantCleanError = true;
-        this.tenantResult = "Tenant cleanup failed.";
+        this.tenantResult = "Tenant cleanup failed";
         this.tenantError = error;
         this.tenantIcon = "pficon pficon-warning-triangle-o cleanup-row-account-icon";
         return Observable.of(error);
@@ -131,7 +131,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
           this.tenantResult = "Tenant reset successful";
         }, (error) => {
           this.tenantIcon = "pficon pficon-warning-triangle-o cleanup-row-account-icon";
-          this.tenantResult = "Tenant update failed.";
+          this.tenantResult = "Tenant update failed";
           this.tenantError = error;
           this.showWarningNotification();
         });

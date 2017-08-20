@@ -1,17 +1,21 @@
 <div id="overview" class="container-fluid content padding-top-15">
   <div class="row">
-    <div class="col-xs-8 col-sm-8 col-sm-offset-1">
+    <div class="col-sm-8 col-sm-offset-2">
       <div *ngIf="showNotification" class="alert {{notificationClass}}">
         <span class="pficon {{notificationIcon}}"></span>
         <strong>{{notificationTitle}}</strong> {{notificationText}}
       </div>
-      <p *ngIf="cleanupStatus === 'notstarted'"><strong>You are about to erase all of your OpenShift.io spaces</strong>, reverting your OpenShift.io environment to it's default state.
-        This action will not affect your Github account or repositories associated with OpenShift.io.</p>
-      <p *ngIf="cleanupStatus === 'notstarted'">The following spaces will be removed and your account will be reset.</p>
-      <p *ngIf="cleanupStatus !== 'notstarted'">Results</p>
+      <h3 *ngIf="cleanupStatus === 'notstarted'">
+        <strong>You are about to erase all of your OpenShift.io spaces</strong>, reverting your OpenShift.io environment to it's default state.
+        This action will not affect your GitHub account or repositories associated with OpenShift.io.
+      </h3>
+      <h3 *ngIf="cleanupStatus === 'notstarted'">The following spaces will be removed and your account will be reset.</h3>
+      <h3 *ngIf="cleanupStatus !== 'notstarted'">Results</h3>
       <div class="cleanup-list-results">
         <div class="row cleanup-row">
-          <p class="cleanup-row-header"><b>Your Account</b></p>
+          <p class="cleanup-row-header">
+            <b>Your Account</b>
+          </p>
           <div class="list-group list-view-pf list-view-pf-view">
             <div class="list-group-item">
               <div class="list-group-item-header">
@@ -27,7 +31,7 @@
                   <div class="list-view-pf-body">
                     <div class="list-view-pf-description">
                       <div class="list-group-item-heading">
-                        {{contextUserName}}
+                        <b>{{contextUserName}}</b>
                       </div>
                       <div class="pull-right">{{tenantResult}}</div>
                     </div>
@@ -56,7 +60,7 @@
                 <div class="list-pf-main-content">
                   <span class="cleanup-status-icon {{item.statusIcon}}"></span>
                   <div class="list-pf-title">{{item.attributes.name}}</div>
-                  <div class="pull-right">{{item.progress}}</div>
+                  <div class="list-pf-progress-results">{{item.progress}}</div>
                 </div>
               </div>
             </template>
@@ -73,16 +77,14 @@
         <p class="cleanup-action-confirm" *ngIf="cleanupStatus === 'completed'">
           You have successfully erased your OpenShift.io environment.  You can now return to your user dashboard.
         </p>
-
         <button class="btn btn-danger btn-lg" (click)="confirmErase()" *ngIf="cleanupStatus !== 'completed'">Erase My OpenShift.io Environment</button>
         <div *ngIf="cleanupStatus === 'completedwitherrors' || cleanupStatus === 'completed'" class="cleanup-home-action">
-          <button class="btn btn-default btn-lg" (click)="goHome()">Take me to my Dashboard</button>
+          <button class="btn btn-primary btn-lg" (click)="goHome()">Take me to my Dashboard</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 <modal #confirmCleanup title="Are you sure?">
   <modal-content>
@@ -90,25 +92,24 @@
       <p class="clean-modal-warning">Erasing your OpenShift.io environment is an action that CANNOT be undone.</p>
       <p>This will permanently erase all spaces, codebase links, applications, environments and pipelines.</p>
       <p>Please verify this action by typing in your OpenShift.io username.</p>
-      <div class="form">
-        <form class="form-horizontal">
-          <div class="form-group">
-            <label class="col-md-4 control-label">OpenShift.io Username</label>
-            <div class="col-md-8">
-              <input
-                #username
-                class="form-control"
-                name="username"
-                [(ngModel)]="userName" />
-            </div>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="col-sm-4 control-label">OpenShift.io Username</label>
+          <div class="col-sm-8">
+            <input
+              #username
+              class="form-control"
+              name="username"
+              [(ngModel)]="userName"
+              type="text" />
           </div>
-        </form>
-      </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-8 col-sm-offset-4">
+            <button class="col-sm-12 btn" [ngClass]="{ 'btn-danger': userNameMatches() }" (click)="confirm()" [disabled]="!userNameMatches()" type="submit">I understand my actions - erase my environment</button>
+          </div>
+        </div>
+      </form>
     </section>
-    <footer>
-      <div class="col-md-offset-4 col-md-8">
-        <button class="btn" [ngClass]="{ 'btn-danger': userNameMatches() }" (click)="confirm()" [disabled]="!userNameMatches()"> I understand my actions - erase my environment</button>
-      </div>
-    </footer>
   </modal-content>
 </modal>

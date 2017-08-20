@@ -1,41 +1,57 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 
-.cleanup-list-results {
-  background-color: @color-pf-black-200;
-  padding: 30px;
-}
-
-.cleanup-action-confirm {
-  padding-top: 30px;
-}
-
-.cleanup-row {
-  .list-view-pf-view {
-    margin-top: 5px;
-  }
-  background-color: white;
-  margin-bottom: 30px;
-  &-header {
-    padding-top: 5px;
-    padding-left: 10px;
-  }
-
-  &-account-icon {
-    font-size: 1.5em;
-    border-color: @color-pf-black-200 !important;
+.cleanup {
+  &-list-results {
     background-color: @color-pf-black-200;
+    padding: 30px;
+    .list-group-item-header {
+      &:hover {
+        cursor: default;
+      }
+    }
+    .list-view-pf-body {
+      padding-left: 15px;
+    }
+    .list-group-item-heading {
+      font-size: @font-size-base;
+    }
+  }
+  &-action-confirm {
+    padding-top: 30px;
+  }
+  &-row {
+    background-color: white;
+    margin-bottom: 30px;
+    &-header {
+      padding-top: 5px;
+      padding-left: 10px;
+    }
+    &-account-icon {
+      font-size: 1.5em;
+      border-color: @color-pf-black-200 !important;
+      background-color: @color-pf-black-200;
+    }
+    .list-view-pf-view {
+      margin-top: 5px;
+    }
+    .list-pf-container {
+      padding-right: 0;
+      .list-pf-title {
+        flex-basis: 70%;
+      }
+      .list-pf-progress-results {
+        margin-right: -25px;
+      }
+    }
+  }
+  &-home-action {
+    margin-top: 20px;
+  }
+  &-status-icon {
+    font-size: 1.5em;
+    color: @color-pf-black-400;
   }
 }
-
-.cleanup-home-action {
-  margin-top: 20px;
-}
-
 .clean-modal-warning {
   margin: 0;
-}
-
-.cleanup-status-icon {
-  font-size: 1.5em;
-  color: @color-pf-black-400;
 }
