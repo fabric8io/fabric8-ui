@@ -32,7 +32,7 @@ class SpaceConfigWatcher {
     let resourceOperation = messageEventToResourceOperation(msg);
     if (resourceOperation) {
       if (resourceOperation.operation == Operation.DELETED) {
-        this.spaceConfig = null;
+        this.spaceConfig['action'] === 'delete'
         this.notify(this.spaceConfig);
       } else {
         let resource = resourceOperation.resource;
@@ -157,7 +157,7 @@ export class SpaceStore {
 
   protected spaceConfigUpdated(spaceConfig: SpaceConfig) {
     let name = spaceConfig.namespace;
-    if (spaceConfig == null) {
+    if (spaceConfig['action'] === 'delete') {
       this.spaceConfigs.delete(name);
     } else {
       this.spaceConfigs.set(name, spaceConfig);

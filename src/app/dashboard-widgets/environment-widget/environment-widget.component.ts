@@ -37,6 +37,7 @@ export class EnvironmentWidgetComponent extends AbstractWatchComponent  implemen
   protected subscriberCache: Map<string, Subscription> = new Map<string, Subscription>();
   protected appsSubject: Subject<AppDeployments[]> = new BehaviorSubject([]);
   private listCache: Map<string, Observable<any[]>> = new Map<string, Observable<any[]>>();
+  newSubscription: Subscription;
 
   constructor(private context: Contexts,
               private spaceStore: SpaceStore,
@@ -76,7 +77,7 @@ export class EnvironmentWidgetComponent extends AbstractWatchComponent  implemen
       })
       .publish();
 
-    this.space.subscribe(space => {
+    this.newSubscription = this.space.subscribe(space => {
       if (space && space.environments) {
         space.environments.forEach(env => {
           this.subscribeToDeployments(space, env);
@@ -92,6 +93,7 @@ export class EnvironmentWidgetComponent extends AbstractWatchComponent  implemen
     super.ngOnDestroy();
 
     this.contextSubscription.unsubscribe();
+    this.newSubscription.unsubscribe();
 
     this.subscriberCache.forEach((subscriber) => {
       if (subscriber) {

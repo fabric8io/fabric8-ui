@@ -7,6 +7,7 @@ import { Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { IModalHost } from '../../space/wizard/models/modal-host';
 import { TenentService } from '../services/tenent.service';
 import { ListConfig } from 'patternfly-ng';
+import { EventService } from '../../shared/event.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -35,7 +36,11 @@ export class CleanupComponent implements OnInit, OnDestroy {
 
   @ViewChild('confirmCleanup') confirmCleanup: IModalHost;
 
-  constructor( private contexts: Contexts, private spaceService: SpaceService, private tenantService: TenentService, private router: Router ) {
+  constructor( private contexts: Contexts,
+               private spaceService: SpaceService,
+               private tenantService: TenentService,
+               private eventService: EventService,
+               private router: Router ) {
   }
 
   ngOnInit() {
@@ -91,6 +96,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
         space['progress'] = "Erasing space";
         space['statusIcon'] = "spinner spinner-lg";
         let spaceObservable = this.spaceService.deleteSpace(space).map((result) => {
+          this.eventService.deleteSpaceSubject.next(space);
           space['erased'] = true;
           space['progress'] = "Space successfully erased!";
           space['statusIcon'] = "pficon pficon-ok ";
