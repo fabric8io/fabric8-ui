@@ -48,7 +48,6 @@ export class CleanupComponent implements OnInit, OnDestroy {
     this.notificationIcon = "pficon-error-circle-o";
     this.notificationTitle = "Warning!";
     this.notificationText = "This action is not reversible!";
-    this.tenantIcon = "fa fa-circle-o cleanup-row-account-icon";
 
     this.listConfig = {
       dblClick: false,
@@ -66,9 +65,6 @@ export class CleanupComponent implements OnInit, OnDestroy {
         .getSpacesByUser(val.user.attributes.username, 100)
         .subscribe(spaces => {
           this.spaces = spaces;
-          this.spaces.forEach((space) => {
-            space['statusIcon'] = "fa fa-2x fa-circle-o";
-          });
         });
     });
   }

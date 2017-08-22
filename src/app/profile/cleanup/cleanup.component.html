@@ -9,7 +9,7 @@
         <strong>You are about to erase all of your OpenShift.io spaces</strong>, reverting your OpenShift.io environment to it's default state.
         This action will not affect your GitHub account or repositories associated with OpenShift.io.
       </h3>
-      <h3 *ngIf="cleanupStatus === 'notstarted'">The following spaces will be removed and your account will be reset.</h3>
+      <h3 *ngIf="cleanupStatus === 'notstarted'">Your account will be reset and the following spaces will be removed.</h3>
       <h3 *ngIf="cleanupStatus !== 'notstarted'">Results</h3>
       <div class="cleanup-list-results">
         <div class="row cleanup-row">
@@ -25,10 +25,10 @@
                         [ngClass]="{'fa-angle-down': tenantErrorExpanded}"></span>
                 </div>
                 <div class="list-view-pf-main-info">
-                  <div class="list-view-pf-left">
+                  <div class="list-view-pf-left" *ngIf="tenantIcon">
                     <div class="{{tenantIcon}} list-view-pf-icon-sm"></div>
                   </div>
-                  <div class="list-view-pf-body">
+                  <div class="list-view-pf-body" [class.cleanup-tenant-description]="!tenantIcon">
                     <div class="list-view-pf-description">
                       <div class="list-group-item-heading">
                         <b>{{contextUserName}}</b>
@@ -58,7 +58,7 @@
             <template #itemTemplate let-item="item" let-index="index">
               <div class="list-pf-content-wrapper">
                 <div class="list-pf-main-content">
-                  <span class="cleanup-status-icon {{item.statusIcon}}"></span>
+                  <span *ngIf="item.statusIcon" class="cleanup-status-icon {{item.statusIcon}}"></span>
                   <div class="list-pf-title">{{item.attributes.name}}</div>
                   <div class="list-pf-progress-results">{{item.progress}}</div>
                 </div>
