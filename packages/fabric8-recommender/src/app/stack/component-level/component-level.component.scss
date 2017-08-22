@@ -10,6 +10,7 @@
         td {
             vertical-align: middle;
             padding: 10px;
+            background: #fff;
         }
         .child-class, .parent-class {
             td {
@@ -39,6 +40,9 @@
             }
             .github-stats {
                 font-weight: normal;
+            }
+            td {
+                background: #dcf98a;
             }
         }
         td:first-child {

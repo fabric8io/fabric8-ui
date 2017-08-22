@@ -15,7 +15,10 @@ export class StackLevelComponent {
     @Output() changeFilter: EventEmitter<any> = new EventEmitter();
 
     public licenseInfo: any = {};
+    public licenseOutliers: number = 0;
     public securityInfo: any = {};
+    public recommendations: any;
+    public stackLevelOutliers: any;
 
     constructor() {}
 
@@ -34,7 +37,7 @@ export class StackLevelComponent {
     }
 
     private handleStatistics(outliers: any): void {
-        
+        this.stackLevelOutliers = outliers;
     }
 
     private sortChartColumnData(array: Array<Array<any>>): Array<Array<any>> {
@@ -94,6 +97,7 @@ export class StackLevelComponent {
     private handleLicenseInformation(tab: UserStackInfoModel): void {
         
         let licenses: any = {};
+        this.licenseOutliers = 0;
         let columnData: Array<Array<any>> = [];
         let columnDataLength: number = 0;
         let otherLicensesArray: Array<string> = [];
@@ -109,6 +113,9 @@ export class StackLevelComponent {
                     ++ licenses[license];
                 }
             });
+            if (t.license_analysis && t.license_analysis.status && t.license_analysis.status.toLowerCase() === 'unknown') {
+                ++ this.licenseOutliers;
+            }
         });
         for (let i in licenses) {
             if (licenses.hasOwnProperty(i)) {

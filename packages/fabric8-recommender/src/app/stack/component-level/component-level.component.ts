@@ -10,8 +10,8 @@ import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 @Component({
     selector: 'component-level-information',
     templateUrl: './component-level.component.html',
-    styleUrls: ['component-level.component.scss'],
-    providers: [AddWorkFlowService]
+    styleUrls: ['./component-level.component.scss'],
+    providers: [AddWorkFlowService],
 })
 
 export class ComponentLevelComponent implements OnChanges {
@@ -96,6 +96,10 @@ export class ComponentLevelComponent implements OnChanges {
         }, {
             name: 'Alternate Components',
             identifier: 'isChild',
+            class: 'fa fa-database child-icon alternate-component-icon'
+        }, {
+            name: 'Grouped Components',
+            identifier: 'isGrouped',
             class: 'fa fa-database child-icon alternate-component-icon'
         }];
 
@@ -275,6 +279,7 @@ export class ComponentLevelComponent implements OnChanges {
                     this.checkAlternate(eachOne['name'], eachOne['version'], this.dependenciesList, dependency['compId']);
                     if (tempLen !== this.dependenciesList.length) {
                         dependency['isParent'] = true;
+                        dependency['isGrouped'] = true;
                     }
                 }
             }
@@ -327,6 +332,7 @@ export class ComponentLevelComponent implements OnChanges {
                 let obj: any = this.setParams(r, true);
                 obj['isChild'] = true;
                 obj['parent-reference'] = parentId;
+                obj['isGrouped'] = true;
                 list.push(obj);
             });
         }

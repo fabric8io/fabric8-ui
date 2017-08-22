@@ -19,7 +19,29 @@
                                     <span>Security Alert</span>
                                 </h3>
                                 <div class="stat-content">
-
+                                    <div *ngIf="securityInfo.cve" class="col-xs-12">
+                                        <div class="cvss-id">
+                                            {{securityInfo.cve && securityInfo.cve.CVE}}
+                                            <i class="{{securityInfo.iconClass}}" 
+                                            data-toggle="tooltip" data-placement="top" 
+                                            title="CVSS: Score to measure the impact of security vulnerability. In a scale from 0.0-10.0, vulnerabilities less than 7.0 are considered medium impact and more than or equal to 7.0 are considered high impact ones."></i>
+                                        </div>
+                                        <div class="cvss-data">
+                                            <div>
+                                                <span class="cvss-indication"><b>{{securityInfo.cve && securityInfo.cve.CVSS}} out of</b> 10</span>
+                                            </div>
+                                        </div>
+                                        <div class="progress">
+                                            <!--added inline style here to handle the dynamic value of cvss score for the progress bar-->
+                                            <div class="progress-bar" role="progressbar"
+                                            [ngStyle]="{'width': securityInfo.percentage +'%'}"
+                                            [ngClass]="securityInfo.displayClass"
+                                            data-toggle="tooltip" data-placement="top" 
+                                            title="{{securityInfo.cve && securityInfo.cve.CVSS}} out of 10">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="!securityInfo.cve">No CVEs</div>
                                 </div>
                             </div>
                         </div>
@@ -28,12 +50,14 @@
                                 <h3>
                                     <span>Usage</span>
                                 </h3>
-                                <div class="stat-content">
-                                    <div class="metric-desc">
-                                        Components that aren't commonly used in your stack
-                                    </div>
-                                    <div class="metric">
-                                        <span>03</span>
+                                <div class="stat-content usage-outlier">
+                                    <div class="metric-container">
+                                        <div class="metric-desc">
+                                            Components that aren't commonly used in your stack
+                                        </div>
+                                        <div class="metric">
+                                            <span>{{stackLevelOutliers && stackLevelOutliers.usage && stackLevelOutliers.usage.length}}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -44,7 +68,7 @@
                                     <span>Licenses</span>
                                 </h3>
                                 <div class="stat-content chart-area">
-                                    <div class="col-md-3">
+                                    <div class="outlier-license flex-2">
                                         <div class="metric-desc">
                                             Out of date
                                         </div>
@@ -52,7 +76,7 @@
                                             <span>03</span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="conflict-license flex-2">
                                         <div class="metric-desc">
                                             Conflicts
                                         </div>
@@ -62,10 +86,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="metric-desc">
-                                            All Licenses
-                                        </div>
+                                    <div class="all-license flex-2">
                                         <div class="metric">
                                             <f8-chart [data]="licenseInfo['data']" [chartOptions]="licenseInfo['chartOptions']" [configs]="licenseInfo['configs']"></f8-chart>
                                         </div>
@@ -87,6 +108,8 @@
     
         </tab>
     </tabset>
-    <stack-details *ngIf="result" class="report-link" [displayName]="'Show complete stack report'" [stackResponse]="result && result"></stack-details>
+    <div class="show-full-report">
+        <stack-details *ngIf="result" class="report-link" [displayName]="'Show complete stack report'" [stackResponse]="result && result"></stack-details>
+    </div>
 </div>
 </div>

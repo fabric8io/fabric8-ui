@@ -6,13 +6,16 @@
         }
         .summary-inshort {
             display: flex;
-            height: 200px;
             .stat-box {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
                 h3 {
                     background: #ededed;
                     margin: 0;
                     height: 40px;
                     padding: 5px;
+                    flex: 1;
                     display: flex;
                     align-items: center;
                     span {
@@ -25,10 +28,27 @@
                     }
                 }
                 .stat-content {
+                    align-items: center;
+                    display: flex;
+                    flex: 4;
+                    .flex-1 {
+                        flex: 1;
+                    }
+                    .flex-2 {
+                        flex: 2;
+                    }
+                    &.usage-outlier {
+                        flex: 4;
+                        justify-content: center;
+                    }
                     &.chart-area {
                         text-align: center;
+                        flex: 4;
                         .c3-chart-arcs-title {
                             font-size: 10px;
+                        }
+                        f8-chart  {
+                            margin: 0 auto;
                         }
                     }
                     .metric {
@@ -71,6 +91,56 @@
                 &.stack-license-stat {
                     flex: 3;
                 }
+                &.security-issues-stat {
+
+                    .cve-message {
+                        font-size: 12px;
+                        color: #777;
+                        font-weight: 100;
+                    }
+                    .cvss-id {
+                        font-size: 10px;
+                        font-weight: 100;
+                        margin-top: 5px;
+
+                        i {
+                            font-size: 12px;
+                            cursor: pointer;
+                            color: #ff7f0e;
+
+                            &.warning-red-color::before {
+                                color: #cc0000;
+                            }
+                        }
+                    }
+
+                    .cvss-data {
+                        margin-top: 10px;
+
+                        & > div {
+                            position: relative;
+
+                            .cvss-score {
+                                font-size: 12px;
+                                font-weight: 100;
+                            }
+
+                            .cvss-score-label {
+                                font-size: 12px;
+                                font-weight: 100;
+                                bottom: 6px;
+
+                                .label-1 {
+                                    font-size: 12px;
+                                }
+                            }
+                        }
+                    }
+
+                    .progress-bar {
+                        cursor: pointer;
+                    }
+                }
                 align-items: stretch;
             }
         }
@@ -86,5 +156,8 @@
                 }
             }
         }
+    }
+    .show-full-report {
+        margin: 10px 0 10px 10px;
     }
 }

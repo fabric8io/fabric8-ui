@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ModalModule } from 'ngx-modal';
 import {TabsModule} from 'ng2-bootstrap';
+import {AccordionModule} from 'ng2-bootstrap';
 
 import { GlobalConstants } from '../constants/constants.service';
 import { StackDetailsComponent } from './stack-details.component';
@@ -23,7 +24,7 @@ import {FeedbackModule} from '../feedback/feedback.module';
     ModalModule,
     StackLevelModule,
     ComponentLevelModule,
-    FeedbackModule,
+    AccordionModule.forRoot(),
     TabsModule.forRoot()
   ],
   declarations: [

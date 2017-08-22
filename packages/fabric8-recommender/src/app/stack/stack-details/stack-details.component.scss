@@ -2,6 +2,55 @@
     .modal-width-class {
         width: 95%;
     }
+
+    .pre-loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.5);
+        z-index: 99;
+        .pre-loader-spinner {
+            top: 50%;
+        }
+    }
+
+    .error-msg{
+        text-align: center;
+        background: #fff;
+        border: none;
+        .warning-icon{
+            font-size: 6em;
+            
+            i:before {
+                color: #8b8d8f;
+            }
+        }
+        .container-progress{
+            width: 50%;
+            margin: 0 auto;
+        }
+    }
+
+    .card.customClass .card-header {
+        background: #6fc0f9;
+        color: #fff;
+
+        .accordion-heading {
+            float: left;
+        }
+        .accordion-sub-heading {
+            float: right;
+        }
+        &:after {
+            content: '';
+            clear: both;
+            float: none;
+            display: block;
+        }
+    }
+
     .error-wrapper {
         position: relative;
         height: 80%;

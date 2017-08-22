@@ -23,7 +23,8 @@ export class StackDetailsComponent implements OnChanges {
 
     @ViewChild('stackModule') modalStackModule: any;
 
-    public error: any = {};
+    public errorMessage: any = {};
+    public modalHeader: string = null;
     public userStackInformation: UserStackInfoModel;
     public componentLevelInformation: any = {};
     public userComponentInformation: Array<ComponentInformationModel> = [];
@@ -36,6 +37,8 @@ export class StackDetailsComponent implements OnChanges {
     public componentLevel: any = {};
 
     public componentFilterBy: string = '';
+    public customClass: string = 'customClass';
+    public analysis: any = {};
 
 
     public feedbackConfig: any = {};
@@ -64,16 +67,36 @@ export class StackDetailsComponent implements OnChanges {
         tab['active'] = true;
         let currentIndex: number = tab['index'];
         let recommendations: RecommendationsModel = this.recommendationsArray[currentIndex];
-        this.stackLevelOutliers = {
-            'usage': recommendations.usage_outliers
+        if (recommendations) {
+            this.stackLevelOutliers = {
+                'usage': recommendations.usage_outliers
+            };
+            this.companionLevelRecommendation = {
+                dependencies: recommendations.companion
+            };
+        }
+        let total: number = 0;
+        let analyzed: number = 0;
+        let unknown: number = 0;
+
+        if (tab.content && tab.content.user_stack_info) {
+            let userStackInfo: UserStackInfoModel = tab.content.user_stack_info;
+            if (userStackInfo.dependencies) {
+                total = tab.content.user_stack_info.dependencies.length;
+            }
+            analyzed = userStackInfo.analyzed_dependencies_count;
+            unknown = userStackInfo.unknown_dependencies_count;
+        }
+
+        this.analysis = {
+            stackLevel: `Total: {{total}} | Analyzed: {{analyzed}} | Unknown: {{unknown}}`,
+            alternate: '[12 alternate components match your stack composition and may be more appropriate]',
+            companion: '[6 additional components are often used by similar stacks]'
         };
         this.componentLevelInformation = {
             recommendations: recommendations,
             dependencies: tab.content.user_stack_info.dependencies,
             manifestinfo: tab.content.manifest_name
-        };
-        this.companionLevelRecommendation = {
-            dependencies: recommendations.companion
         };
     }
 
@@ -100,7 +123,8 @@ export class StackDetailsComponent implements OnChanges {
     constructor(private stackAnalysisService: StackAnalysesService) {}
 
     private handleError(error: any): void {
-        this.error = error;
+        this.errorMessage = error;
+        this.modalHeader = error.title;
     }
 
     private initFeedback(): void {
@@ -122,13 +146,21 @@ export class StackDetailsComponent implements OnChanges {
     }
 
     private resetFields(): void {
-        this.tabs = [];
+        console.log('Reset');
+        console.log(this.tabs);
+        this.tabs.length = 0;
+        this.dataLoaded = false;
+        this.errorMessage = null;
         this.recommendationsArray = [];
+        this.stackLevelOutliers = {};
+        this.componentLevelInformation = {};
+        this.companionLevelRecommendation = {};
         // this.dataLoaded = false;
     }
 
     private handleResponse(data: any): void {
-        this.error = null;
+        this.errorMessage = null;
+        this.tabs = [];
         if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
             let resultInformation: Observable<StackReportModel> = getStackReportModel(data);
             resultInformation.subscribe((response) => {
@@ -143,9 +175,9 @@ export class StackDetailsComponent implements OnChanges {
                         content: r,
                         index: index
                     });
-                    this.recommendationsArray.push(r.recommendations); //Change if the API key changes
+                    this.recommendationsArray.push(r.recommendation);
                 });
-
+                this.modalHeader = 'Updated just now';
                 this.dataLoaded = true;
                 this.tabSelection(this.tabs[0]);
             });
@@ -153,13 +185,14 @@ export class StackDetailsComponent implements OnChanges {
             this.handleError({
                 message: data.error,
                 code: data.statusCode,
-                title: 'Please, wait a while more'
+                title: 'Updating ...'
             });
         }
     }
 
     private init(): void {
         if (this.stackResponse) {
+            // Change this to some other logic
             setTimeout(() => {
                 this.handleResponse(this.stackResponse);
             }, 1000);
@@ -181,12 +214,13 @@ export class StackDetailsComponent implements OnChanges {
                         } else if (error.status === 401) {
                             title = 'You don\'t seem to have sufficient privileges to access this';
                         }
+                        title = 'Report failed ...'; // Check if just this message is enough.
                         this.handleError({
                             message: error.statusText,
-                            code: error.status,
+                            status: error.status,
                             title: title
                         });
-                        console.log(this.error);
+                        console.log(this.errorMessage);
                     });
             }
         }

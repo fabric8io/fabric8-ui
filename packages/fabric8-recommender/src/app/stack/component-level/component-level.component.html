@@ -6,22 +6,22 @@
     <div *ngIf="!isCompanion" class="stack-components-toolbar toolbar-pf table-view-pf-toolbar">
         <div class="col-sm-12">
             <form class="row toolbar-pf-actions">
-            <div class="form-group toolbar-pf-filter">
-                <label class="sr-only" for="filter">Name</label>
-                <div class="input-group">
-                <div (click)="handleDropDownClick(fieldContainer)" #fieldContainer class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" id="filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{currentFilter}} <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                    <li (click)="handleFilterFieldClick(fieldContainer, filter, $event)" *ngFor="let filter of filters">
-                        <a href="#">
-                            <i *ngIf="filter.class" [className]="filter.class" aria-hidden="true"></i>
-                            {{filter.name}}
-                        </a>
-                    </li>
-                    </ul>
+                <div class="form-group toolbar-pf-filter">
+                    <label class="sr-only" for="filter">Name</label>
+                    <div class="input-group">
+                        <div (click)="handleDropDownClick(fieldContainer)" #fieldContainer class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" id="filter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{currentFilter}} <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li (click)="handleFilterFieldClick(fieldContainer, filter, $event)" *ngFor="let filter of filters">
+                                    <a href="#">
+                                        <i *ngIf="filter.class" [className]="filter.class" aria-hidden="true"></i>
+                                        {{filter.name}}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                </div>
-            </div>
             </form>
         </div>
         </div>

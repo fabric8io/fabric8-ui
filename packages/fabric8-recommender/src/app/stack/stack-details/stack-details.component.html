@@ -9,31 +9,90 @@
     <tabset *ngIf="dataLoaded">
         <tab *ngFor="let tabz of tabs"
             [heading]="tabz.title"
-            [active]="tabz.active"
             (select)="tabSelection(tabz)"
-            (deselect)="tabz.active = false"
-            [disabled]="tabz.disabled"
-            [removable]="tabz.removable"
             (removed)="removeTabHandler(tabz)"
             [customClass]="tabz.customClass">
-            <stack-level-information (changeFilter)="handleChangeFilter($event)" [outliers]="stackLevelOutliers" [userStack]="tabz && tabz.content && tabz.content.user_stack_info"></stack-level-information>
-            <component-level-information [filterBy]="componentFilterBy" [header]="componentLevel.header" [subHeader]="componentLevel.subHeader" [component]="componentLevelInformation"></component-level-information>
-            <component-level-information [header]="companionLevel.header" [subHeader]="companionLevel.subHeader" [isCompanion]="true" [component]="companionLevelRecommendation"></component-level-information>
+            <accordion>
+              <accordion-group
+                   [isOpen]="true"
+                   [panelClass]="customClass"
+                   [isDisabled]="false">
+                    <div accordion-heading>
+                      <div class="accordion-heading" accordion-heading>
+                        Stack report
+                      </div>
+                      <div class="accordion-sub-heading">
+                        [Components: <b>{{analysis && analysis.stackLevel}}</b>]
+                      </div>
+                    </div>
+                    <stack-level-information (changeFilter)="handleChangeFilter($event)" [outliers]="stackLevelOutliers" [userStack]="tabz && tabz.content && tabz.content.user_stack_info"></stack-level-information>
+              </accordion-group>
+              <accordion-group #group [isOpen]="true" [panelClass]="customClass">
+                <div class="accordion-heading" accordion-heading>
+                  <div class="accordion-heading" accordion-heading>
+                    Detail analysis of your stack components
+                  </div>
+                  <div class="accordion-sub-heading">
+                    <b>{{analysis && analysis.alternate}}</b>
+                  </div>
+                  <i class="pull-right float-xs-right glyphicon"
+                    [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
+                </div>
+                <component-level-information [filterBy]="componentFilterBy" [header]="componentLevel.header" [subHeader]="componentLevel.subHeader" [component]="componentLevelInformation"></component-level-information>
+              </accordion-group>
+              <accordion-group #group [panelClass]="customClass">
+                <div class="accordion-heading" accordion-heading>
+                  <div class="accordion-heading" accordion-heading>
+                    Additional components recommended by Openshift IO
+                  </div>
+                  <div class="accordion-sub-heading">
+                    <b>{{analysis && analysis.companion}}</b>
+                  </div>
+                  <i class="pull-right float-xs-right glyphicon"
+                    [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
+                </div>
+                <component-level-information [header]="companionLevel.header" [subHeader]="companionLevel.subHeader" [isCompanion]="true" [component]="companionLevelRecommendation"></component-level-information>
+              </accordion-group>
+            </accordion>
         </tab>
     </tabset>
     <feedback *ngIf="dataLoaded" [config]="feedbackConfig && feedbackConfig"></feedback>
   </div>
-  <div class="error-wrapper" *ngIf="error">
-    <div class="error-container">
-      <div class="col-xs-4 error-image">
-        <i [ngClass]="{'fa display-icon': true, 'fa-exclamation-triangle warning-class': error.code === 500, 'fa-times not-found-class': error.code === 404, 'fa-spinner progress-class': error.code === 200 || error.code === 202}" aria-hidden="true"></i>
+  <div *ngIf="!dataLoaded" class="pre-loader">
+    <div class="pre-loader-spinner spinner spinner-lg"></div>
+  </div>
+  <div class="error-msg blank-slate-pf" *ngIf="errorMessage">
+      <div [hidden]="!errorMessage.status">
+        <div class="warning-icon blank-slate-pf-icon">
+          <i class="pficon-warning-triangle-o"></i>
+        </div>
+        <h1>
+          {{messages && messages['report_failure']}}
+          <span *ngIf="errorMessage.status">{{messages && messages['error_code']}} {{errorMessage.status}}</span>
+        </h1>
+        <p>
+          {{messages && messages['error_text']}}{{errorMessage.message}}
+        </p>
       </div>
-      <div class="col-xs-8 error-content">
-        <h2>{{error.title}}</h2>
-        <p>{{error.message}}</p>
+      <div [hidden]="errorMessage.status">
+        <div class="container-progress progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
+            <span>50%</span>
+          </div>
+        </div>
+        <h3>
+          {{messages && messages['report_loading']}}
+        </h3>
+        <p>{{errorMessage.message}}</p>
+      </div>
+      <div [hidden]="errorMessage.status" class="blank-slate-pf-secondary-action">
+        <button class="btn btn-default" (click)="stackModule.close()">{{messages && messages['cancel']}}</button>
+        <button class="btn btn-primary" (click)="stackModule.close()">{{messages && messages['load_and_return_to_pipeline']}}</button>
+      </div>
+      <div [hidden]="!errorMessage.status" class="blank-slate-pf-secondary-action">
+        <button class="btn btn-primary" (click)="stackModule.close()">{{messages && messages['return_to_pipeline']}}</button>
       </div>
     </div>
-  </div>
   </modal-content>
 </modal>
 </div>
