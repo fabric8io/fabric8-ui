@@ -4,7 +4,7 @@
   <span class="margin-right-5"></span>
 </ng-template>
 <ng-template #showCol>
-  <span class="dropdown dropdown-kebab-pf" dropdown>
+  <span class="dropdown dropdown-kebab-pf" dropdown *ngIf="cheRunning">
     <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
       <span class="fa fa-ellipsis-v"></span>
     </button>

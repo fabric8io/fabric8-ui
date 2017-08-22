@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { Che } from '../services/che';
 import { Codebase } from '../services/codebase';
-import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from "../services/github.service";
-import { Notification, NotificationType, Notifications } from 'ngx-base';
+import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
+import { NotificationType as NotificationTypes } from 'patternfly-ng';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -16,15 +17,40 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;
   @Input() index: number = -1;
 
+  cheErrorMessage: string = "Your Workspaces failed to load";
+  cheStarting: boolean = false;
+  cheStartingMessage: string = "Your Workspaces are loading...";
+  cheRunning: boolean = false;
+  cheRunningMessage: string = "Your Workspaces have loaded successfully";
   createdDate: string;
   fullName: string;
   lastCommitDate: string;
   htmlUrl: string;
+  notificationMessage: string;
+  notificationType: string;
   subscriptions: Subscription[] = [];
 
   constructor(
-    private gitHubService: GitHubService,
-    private notifications: Notifications) {
+      private broadcaster: Broadcaster,
+      private gitHubService: GitHubService,
+      private notifications: Notifications) {
+    this.subscriptions.push(this.broadcaster
+      .on('cheStateChange')
+      .subscribe((che: Che) => {
+        if (che === undefined) {
+          this.notificationMessage = this.cheErrorMessage;
+          this.notificationType = NotificationTypes.DANGER;
+          this.cheStarting = true;
+        } else if (che.running === true) {
+          this.notificationMessage = this.cheRunningMessage;
+          this.notificationType = NotificationTypes.SUCCESS;
+          this.cheRunning = true;
+        } else if (che.running === false) {
+          this.notificationMessage = this.cheStartingMessage;
+          this.notificationType = NotificationTypes.INFO;
+          this.cheStarting = true;
+        }
+      }));
   }
 
   ngOnDestroy(): void {

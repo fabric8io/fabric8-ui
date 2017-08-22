@@ -1,8 +1,9 @@
-import { Component, ContentChild, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
+import { CheService } from './services/che.service';
 import { Codebase } from './services/codebase';
 import { CodebasesService } from './services/codebases.service';
 import { Context, Contexts } from 'ngx-fabric8-wit';
@@ -26,11 +27,13 @@ import {
   selector: 'codebases',
   templateUrl: './codebases.component.html',
   styleUrls: ['./codebases.component.less'],
-  providers: [CodebasesService, DatePipe, GitHubService]
+  providers: [CheService, CodebasesService, DatePipe, GitHubService]
 })
 export class CodebasesComponent implements OnDestroy, OnInit {
   allCodebases: Codebase[];
   appliedFilters: Filter[];
+  chePollSubscription: Subscription;
+  chePollTimer: Observable<any>;
   codebases: Codebase[];
   context: Context;
   currentSortField: SortField;
@@ -42,6 +45,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
 
   constructor(
       private broadcaster: Broadcaster,
+      private cheService: CheService,
       private codebasesService: CodebasesService,
       private contexts: Contexts,
       private datePipe: DatePipe,
@@ -65,6 +69,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.updateCodebases();
+    this.startIdleChe();
 
     this.emptyStateConfig = {
       actions: {
@@ -205,6 +210,61 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     }
     this.allCodebases.push(codebase);
     this.applyFilters(this.appliedFilters);
+  }
+
+  /**
+   * Helper to poll Che state
+   */
+  private cheStatePoll(): void {
+    // Ensure only one timer is polling
+    if (this.chePollSubscription !== undefined && !this.chePollSubscription.closed) {
+      this.chePollSubscription.unsubscribe();
+    }
+    this.chePollTimer = Observable.timer(2000, 20000).take(30);
+    this.chePollSubscription = this.chePollTimer
+      .switchMap(() => this.cheService.getState())
+      .map(che => {
+        if (che != undefined && che.running === true) {
+          this.chePollSubscription.unsubscribe();
+          this.broadcaster.broadcast('cheStateChange', che);
+        }
+      })
+      .publish()
+      .connect();
+    this.subscriptions.push(this.chePollSubscription);
+  }
+
+  /**
+   * Start the Che server
+   */
+  private startChe(): void {
+    // Get state for Che server
+    this.subscriptions.push(this.cheService.start()
+      .subscribe(che => {
+        this.broadcaster.broadcast('cheStateChange', che);
+        if (che == undefined || che.running !== true) {
+          this.cheStatePoll();
+        }
+      }, error => {
+        this.broadcaster.broadcast('cheStateChange');
+      }));
+  }
+
+  /**
+   * Test the Che server state and start if necessary
+   */
+  private startIdleChe(): void {
+    // Get state for Che server
+    this.subscriptions.push(this.cheService.getState()
+      .subscribe(che => {
+        if (che != undefined && che.running === true) {
+          this.broadcaster.broadcast('cheStateChange', che);
+        } else {
+          this.startChe();
+        }
+      }, error => {
+        this.broadcaster.broadcast('cheStateChange');
+      }));
   }
 
   /**

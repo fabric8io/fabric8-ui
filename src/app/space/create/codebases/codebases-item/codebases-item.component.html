@@ -16,6 +16,12 @@
         <i class="pficon pficon-info margin-left-5"
            tooltip="Workspaces are web based development environments for your code and runtime needs"
            placement="top"></i>
+        <div class="workspaces-banner">
+          <f8-workspaces-notification *ngIf="cheStarting"
+                                  [dismiss]="cheRunning"
+                                  [message]="notificationMessage"
+                                  [type]="notificationType"></f8-workspaces-notification>
+        </div>
       </div>
     </div>
   </div>
@@ -34,7 +40,7 @@
       <div class="list-pf-description">{{lastCommitDate | date:'medium'}}</div>
     </div>
     <div class="list-pf-additional-content">
-      <codebases-item-workspaces [codebase]="codebase" [index]="index"></codebases-item-workspaces>
+      <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheRunning"></codebases-item-workspaces>
     </div>
   </div>
 </ng-template>

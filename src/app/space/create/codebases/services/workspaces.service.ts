@@ -54,6 +54,12 @@ export class WorkspacesService {
     let url = `${this.workspacesUrl}/${codebaseId}/edit`;
     return this.http
       .get(url, { headers: this.headers })
+      .retryWhen(attempts => {
+        let count = 0;
+        return attempts.flatMap(error => {
+          return ++count >= 10 ? Observable.throw(error) : Observable.timer(count * 3000); // Wait for Che to start
+        });
+      })
       .map(response => {
         return response.json().data as Workspace[];
       })

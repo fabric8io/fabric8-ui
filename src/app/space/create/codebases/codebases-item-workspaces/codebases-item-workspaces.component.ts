@@ -50,7 +50,6 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     }
     this.workspaces = [];
     this.updateWorkspaces();
-    this.workspacePollTimer = Observable.timer(3000, 30000).take(10);
     this.broadcaster.on('workspaceCreated')
       .subscribe((val) => {
         if ((val as WorkspaceCreatedEvent).codebase.id === this.codebase.id) {
@@ -164,7 +163,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
           this.setWorkspaceUrl(this.codebase.attributes.last_used_workspace);
         }
       }, error => {
-        // Do nothing
+        console.log("Failed to retrieve workspaces for codebase ID: " + this.codebase.id);
       }));
   }
 
@@ -181,6 +180,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     if (this.workspacePollSubscription !== undefined && !this.workspacePollSubscription.closed) {
       this.workspacePollSubscription.unsubscribe();
     }
+    this.workspacePollTimer = Observable.timer(2000, 20000).take(30);
     this.workspacePollSubscription = this.workspacePollTimer
       .switchMap(() => this.workspacesService.getWorkspaces(this.codebase.id))
       .map(workspaces => {

@@ -1,0 +1,38 @@
+@import (reference) '../../../../../assets/stylesheets/shared/osio.less';
+
+.workspaces-notification {
+  position: absolute;
+  vertical-align: middle;
+  z-index: 1;
+  &-bar {
+    color: @color-pf-white;
+    margin: 0;
+    padding-bottom: 2px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 0;
+    position: relative;
+    text-align: center;
+  }
+  &-danger {
+    background-color: @color-pf-red;
+    i { font-size: 1.2em; }
+  }
+  &-hide {
+    display: none;
+  }
+  &-info {
+    background-color: @color-pf-black-700;
+  }
+  &-message {
+    font-size: .8em;
+    padding-bottom: 5px;
+    padding-left: 5px;
+  }
+  &-success {
+    background-color: @color-pf-green-500;
+    i { font-size: 1.2em; }
+  }
+  i { vertical-align: middle; }
+}
+

@@ -1,0 +1,21 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Http } from '@angular/http';
+
+import { NotificationModule } from 'patternfly-ng';
+
+import { WorkspacesNotificationComponent } from './workspaces-notification.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    NotificationModule
+  ],
+  declarations: [ WorkspacesNotificationComponent ],
+  exports: [ WorkspacesNotificationComponent ]
+})
+export class WorkspacesNotificationModule {
+  constructor(http: Http) {}
+}
