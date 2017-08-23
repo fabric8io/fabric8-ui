@@ -25,15 +25,9 @@ export class PipelinesService {
     private pipelinesStore: BuildConfigStore,
     private buildStore: BuildStore,
     private fabric8RuntimeConsoleService: Fabric8RuntimeConsoleService
-  ) {
-
-    console.log("=========== PipelinesService");
-  }
+  ) { }
 
   get current(): Observable<BuildConfig[]> {
-    console.log("=========== PipelinesService::current()");
-
-
     return this.fabric8RuntimeConsoleService
       .loading()
       .switchMap(() =>
