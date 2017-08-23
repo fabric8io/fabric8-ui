@@ -3,7 +3,7 @@ import { Restangular } from "ng2-restangular";
 import { KubernetesService } from "./kubernetes.service";
 import { Subscription, Observable } from "rxjs";
 import { KubernetesResource } from "../model/kubernetesresource.model";
-import { NamespaceScope } from "./namespace.scope";
+import {INamespaceScope, NamespaceScope} from "./namespace.scope";
 import { Watcher } from "./watcher";
 import { pathJoin } from "../model/utils";
 
@@ -15,7 +15,7 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
 
   constructor(
     kubernetesRestangular: Restangular,
-    private namespaceScope: NamespaceScope,
+    private namespaceScope: INamespaceScope,
     private urlSuffix: string,
     watcherFactory: WatcherFactory,
     private urlPrefix: string = '/api/v1/namespaces/',

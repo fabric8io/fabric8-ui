@@ -10,6 +10,7 @@ import { Notifications, NotificationType } from 'ngx-base';
 import * as yaml from 'js-yaml';
 
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
+import {DevNamespaceScope} from "a-runtime-console/kubernetes/service/devnamespace.scope";
 
 interface ConfigMapWrapper {
   configMap?: ConfigMap;
@@ -29,6 +30,7 @@ export class SpaceNamespaceService {
     private configMapService: ConfigMapService,
     private spaces: Spaces,
     private notifications: Notifications,
+    private devNamespace: DevNamespaceScope,
     private fabric8RuntimeConsoleService: Fabric8RuntimeConsoleService
   ) { }
 
@@ -126,6 +128,10 @@ export class SpaceNamespaceService {
   }
 
   buildNamespace(): Observable<string> {
+    return this.devNamespace.namespace;
+/*
+    // TODO I don't grok why we were prepending user names in front of namespaces - kinda odd!
+
     return Observable.forkJoin(
       this.userService
         .loggedInUser
@@ -140,6 +146,7 @@ export class SpaceNamespaceService {
       (username: string, namespace: string) => ({ username, namespace })
     )
       .map(val => `${val.username}${val.namespace}`);
+*/
   }
 
 }

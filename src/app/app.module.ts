@@ -99,7 +99,6 @@ import { Fabric8UIOnLogin }              from './shared/runtime-console/fabric8-
 import { Fabric8RuntimeConsoleResolver } from './shared/runtime-console/oauth-config-store-guard.resolver';
 import { OAuthConfigStoreGuard }         from './shared/runtime-console/oauth-config-store-guard.service';
 import { PipelinesService }              from './shared/runtime-console/pipelines.service';
-import { SpaceNamespaceScope }           from './shared/runtime-console/space-namespace.scope';
 import { SpaceNamespaceService }         from './shared/runtime-console/space-namespace.service';
 import { SpacesService }                 from './shared/spaces.service';
 import { ssoApiUrlProvider }             from './shared/sso-api.provider';
@@ -228,10 +227,6 @@ export type StoreType = {
       useExisting: SpacesService
     },
     SpaceNamespaceService,
-    {
-      provide: DevNamespaceScope,
-      useClass: SpaceNamespaceScope
-    },
     {
       provide: SpaceNamespace,
       useClass: Fabric8UISpaceNamespace

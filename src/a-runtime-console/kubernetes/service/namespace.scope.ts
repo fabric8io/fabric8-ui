@@ -2,8 +2,14 @@ import {Injectable} from "@angular/core";
 import {ActivatedRoute, Router, NavigationEnd} from "@angular/router";
 import {Observable} from "rxjs";
 
+export interface INamespaceScope {
+  namespace: Observable<string>;
+
+  currentNamespace(): string;
+}
+
 @Injectable()
-export class NamespaceScope {
+export class NamespaceScope implements INamespaceScope {
   public namespace: Observable<string>;
 
   constructor(protected activatedRoute: ActivatedRoute, protected router: Router) {
