@@ -182,15 +182,11 @@ export class AppGeneratorConfiguratorService {
           break;
         }
         case 'jenkinsspace': {
+          // hack on import wizard to make sure UI select box is readonly
           field.display.enabled = false;
           break;
         }
-        case 'triggerbuild': {
-          field.display.enabled = true;
-          break;
-        }
         case 'addciwebhooks': {
-          field.display.enabled = true;
           field.display.label = 'Add continuous integration web hooks';
           break;
         }
@@ -220,7 +216,7 @@ export class AppGeneratorConfiguratorService {
           break;
         }
         case 'named': {
-          if (this.isFirstNonValidationStep(context, execution) === true) {
+          if (this.isQuickStartSpaceNameStep(context, execution) === true) {
             // for first non validation step set default name to be space name
             if (this.currentSpace && (this.currentSpace.attributes.name || '').length > 0) {
               let spaceName = this.currentSpace.attributes.name;
@@ -228,23 +224,6 @@ export class AppGeneratorConfiguratorService {
             }
           }
           field.display.label = 'Name';
-          if (field.display.message) {
-            if (!field.display.valid) {
-              field.display.message.description = field.display.message.description.replace(/project name/ig, 'Name');
-              field.display.message.description = field.display.message.description.replace(/the repository/ig, 'The GitHub repository');
-              field.display.message.description = field.display.message.description.replace(/-a-z0-9/ig, ' dashes, letters, numbers ');
-            }
-          }
-          if (field.display.note) {
-            field.display.note = field.display.note.replace(/Downloadable project zip and/ig, '');
-            field.display.note = field.display.note.replace(/project name/ig, 'name');
-            field.display.note = field.display.note.replace(/are based/ig, 'is based');
-            field.display.note = field.display.note.replace(/application/ig, 'Application');
-            field.display.note = field.display.note.replace(/application jar is/ig, 'Application generated assets are');
-
-          }
-
-
           break;
         }
         default: {
@@ -396,10 +375,10 @@ export class AppGeneratorConfiguratorService {
     return tmp;
   }
 
-  private isFirstNonValidationStep(context: string, execution: IAppGeneratorPair): boolean {
+  private isQuickStartSpaceNameStep(context: string, execution: IAppGeneratorPair): boolean {
     let hasProperty = this.has(execution, ['request', 'command', 'parameters', 'pipeline', 'step', 'index']);
     if (hasProperty && execution.request.command.parameters.pipeline.step.name !== 'validate') {
-      return execution.request.command.parameters.pipeline.step.index === 0;
+      return execution.request.command.parameters.pipeline.step.index === 2;
     }
     return false;
   }
@@ -470,7 +449,7 @@ export class AppGeneratorConfiguratorService {
       index++;
     }
     // set the default for the first non validation step
-    if (this.isFirstNonValidationStep(context, execution) === true) {
+    if (this.isQuickStartSpaceNameStep(context, execution) === true) {
       this.setFieldDefaults(field);
     } else {
       this.setFieldSelection(field);
@@ -583,7 +562,7 @@ export class AppGeneratorConfiguratorService {
       }
     }
     // set the default for the first non validation step
-    if (this.isFirstNonValidationStep(context, execution) === true) {
+    if (this.isQuickStartSpaceNameStep(context, execution) === true) {
       this.setFieldDefaults(field);
     } else {
       this.setFieldSelection(field);
