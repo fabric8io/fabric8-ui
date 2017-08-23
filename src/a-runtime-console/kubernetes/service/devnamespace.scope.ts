@@ -24,16 +24,10 @@ export class DevNamespaceScope implements INamespaceScope {
               private http: Http,
               @Inject(WIT_API_URL) apiUrl: string) {
 
-    console.log("========== DevNamespaceScope");
-
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
     this.userServicesUrl = pathJoin(apiUrl, '/user/services');
-
-    logger.log("========== WHOAH");
-    console.log("going to query the service URL", this.userServicesUrl);
-    console.log("using headers", this.headers);
 
     //  query the user namespace from WIT API
     this.namespace = this.http
@@ -59,7 +53,7 @@ export class DevNamespaceScope implements INamespaceScope {
     return Observable.throw(error.message || error);
   }
 
-  private extractUserNamespace(json): string {
+  private extractUserNamespace(json: string): string {
     if (json) {
       let data = json['data'];
       if (data) {

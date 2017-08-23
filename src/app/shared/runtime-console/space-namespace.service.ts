@@ -129,24 +129,6 @@ export class SpaceNamespaceService {
 
   buildNamespace(): Observable<string> {
     return this.devNamespace.namespace;
-/*
-    // TODO I don't grok why we were prepending user names in front of namespaces - kinda odd!
-
-    return Observable.forkJoin(
-      this.userService
-        .loggedInUser
-        .map(user => user.attributes.username)
-        // TODO Quick hack around the username problems
-        .map(username => {
-          let s = username.split(/@/gi);
-          return s ? s[0].replace('.', '-') : username;
-        })
-        .first(),
-      Observable.of(this.fabric8UIConfig.pipelinesNamespace),
-      (username: string, namespace: string) => ({ username, namespace })
-    )
-      .map(val => `${val.username}${val.namespace}`);
-*/
   }
 
 }
