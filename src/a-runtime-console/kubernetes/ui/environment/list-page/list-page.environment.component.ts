@@ -166,7 +166,7 @@ export class EnvironmentListPageComponent extends AbstractWatchComponent impleme
     this.environments = this.spaceNamespace.labelSpace
       .switchMap(label => this.space
         .skipWhile(space => !space)
-        .map(space => space.environments)
+        .map(space => space ? space.environments : [])
         .map(environments => environments.map(environment => new EnvironmentEntry(
           environment,
           environmentOpenShiftConoleUrl(environment),
