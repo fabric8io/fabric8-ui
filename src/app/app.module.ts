@@ -24,7 +24,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule }       from 'angular2-moment';
 import { PlannerModule }      from 'fabric8-planner';
 import { RouterModule }       from '@angular/router';
-import { ModalModule } from 'ngx-modal';
+import { ModalModule, ModalBackdropComponent } from 'ngx-bootstrap/modal';
 import {
   // Base functionality for the runtime console
   KubernetesStoreModule,
@@ -119,6 +119,9 @@ import { EventService } from './shared/event.service';
 import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -172,6 +175,7 @@ export type StoreType = {
     // Broadcaster must come first
     Broadcaster,
     BsDropdownConfig,
+    BsModalService,
     EventService,
     ENV_PROVIDERS,
     AboutService,
@@ -242,7 +246,8 @@ export type StoreType = {
     realmProvider
   ],
   schemas: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ModalBackdropComponent]
 })
 export class AppModule {
   constructor(public appRef: ApplicationRef, public appState: AppState) { }

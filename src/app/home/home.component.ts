@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, ViewChild, TemplateRef } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -13,6 +13,9 @@ import { BrandInformation } from '../models/brand-information';
 // use url-loader for images
 import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
+
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -32,8 +35,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _contextSubscription: Subscription;
   private _contextDefaultSubscription: Subscription;
   public brandInformation: BrandInformation;
+  @ViewChild('wizardTemplate') wizardTemplate: TemplateRef<any>;
+  modalRef: BsModalRef;
 
   constructor(
+    private modalService: BsModalService,
     private userService: UserService,
     private spaceService: SpaceService,
     private router: Router,
@@ -100,4 +106,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  openForgeWizard(template: TemplateRef<any>): void  {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg '});
+  }
+
+  cancel() {
+    this.modalRef.hide();
+  }
 }

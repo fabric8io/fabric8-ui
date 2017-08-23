@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
@@ -13,6 +13,8 @@ import { MenuedContextType } from './menued-context-type';
 import { Navigation } from './../../models/navigation';
 import { MenuItem } from './../../models/menu-item';
 import { DummyService } from './../../shared/dummy.service';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 interface MenuHiddenCallback {
   (headerComponent: HeaderComponent): Observable<boolean>;
@@ -28,6 +30,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   title = 'Almighty';
   imgLoaded: Boolean = false;
   statusListVisible = false;
+  @ViewChild('wizardTemplate') wizardTemplate: TemplateRef<any>;
+  modalRef: BsModalRef;
 
   isIn = false;   // store state
   toggleState() { // click handler
@@ -67,6 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private eventListeners: any[] = [];
 
   constructor(
+    private modalService: BsModalService,
     public router: Router,
     public route: ActivatedRoute,
     private userService: UserService,
@@ -224,4 +229,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
   }
 
+  openForgeWizard(template: TemplateRef<any>): void  {
+    //this.updateSpace.open(this.spaceWizard.steps.spaceConfigurator);
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg '});
+  }
+
+  cancel() {
+    this.modalRef.hide();
+  }
 }

@@ -1,5 +1,5 @@
 import { Fabric8UIConfig } from './../../../shared/config/fabric8-ui-config';
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewEncapsulation, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
@@ -25,6 +25,9 @@ import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
 import { IModalHost } from '../../wizard/models/modal-host';
 import { SpaceWizardComponent } from '../../wizard/space-wizard.component';
 import { Context, Contexts } from 'ngx-fabric8-wit';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { WizardEvent } from 'patternfly-ng';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -37,8 +40,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   toolbarConfig: ToolbarConfig;
   openshiftConsoleUrl: string;
 
-  @ViewChild('updateSpace') updateSpace: IModalHost;
+  //@ViewChild('updateSpace') updateSpace: IModalHost;
+  @ViewChild('wizardTemplate') wizardTemplate: TemplateRef<any>;
   @ViewChild('spaceWizard') spaceWizard: SpaceWizardComponent;
+  modalRef: BsModalRef;
 
   private _context: Context;
   private contextSubscription: Subscription;
@@ -59,6 +64,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
 
   constructor(
+    private modalService: BsModalService,
     private contexts: Contexts,
     private router: Router,
     private authService: AuthenticationService,
@@ -226,7 +232,13 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     return this._filteredPipelines;
   }
 
-  openForgeWizard() {
-    this.updateSpace.open(this.spaceWizard.steps.spaceConfigurator);
+  openForgeWizard(template: TemplateRef<any>): void  {
+    //this.updateSpace.open(this.spaceWizard.steps.spaceConfigurator);
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg '});
   }
+
+  cancel() {
+    this.modalRef.hide();
+  }
+
 }

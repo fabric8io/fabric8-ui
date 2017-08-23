@@ -1,10 +1,12 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Logger } from 'ngx-base';
 import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 import { IModalHost } from '../../space/wizard/models/modal-host';
 import { EventService } from "../../shared/event.service";
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -22,8 +24,11 @@ export class SpacesComponent implements OnInit {
   context: Context;
   spaceToDelete: Space;
   @ViewChild('deleteSpace') deleteSpace: IModalHost;
+  @ViewChild('wizardTemplate') wizardTemplate: TemplateRef<any>;
+  modalRef: BsModalRef;
 
   constructor(
+    private modalService: BsModalService,
     private router: Router,
     private spaceService: SpaceService,
     private logger: Logger,
@@ -110,5 +115,13 @@ export class SpacesComponent implements OnInit {
 
   searchSpaces(searchText: string) {
     this.searchTermStream.next(searchText);
+  }
+
+  openForgeWizard(template: TemplateRef<any>): void  {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg '});
+  }
+
+  cancel() {
+    this.modalRef.hide();
   }
 }

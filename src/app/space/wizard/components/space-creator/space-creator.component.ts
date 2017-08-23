@@ -13,8 +13,8 @@ import { DummyService } from '../../../../shared/dummy.service';
 import { SpaceNamespaceService } from '../../../../shared/runtime-console/space-namespace.service';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
-import { IWorkflow } from '../../models/workflow';
 import { AppGeneratorConfiguratorService } from '../../services/app-generator.service';
+import { WizardComponent } from "patternfly-ng";
 
 @Component({
   selector: 'space-creator',
@@ -26,7 +26,7 @@ export class SpaceCreatorComponent implements OnInit {
 
   static instanceCount: number = 1;
 
-  @Input() workflow: IWorkflow = null;
+  @Input() wizard: WizardComponent = null;
   spaceTemplates: ProcessTemplate[];
   selectedTemplate: ProcessTemplate;
 
@@ -99,9 +99,9 @@ export class SpaceCreatorComponent implements OnInit {
         .subscribe(action => {
           this.router.navigate([createdSpace.relationalData.creator.attributes.username,
           createdSpace.attributes.name]);
-          this.workflow.cancel();
+          this.wizard.onFinish.emit({});
         });
-        this.workflow.gotoNextStep();
+        this.wizard.goToNextStep();
       },
       err => {
         console.log('Error creating space', err);
@@ -109,7 +109,7 @@ export class SpaceCreatorComponent implements OnInit {
           message: `Failed to create "${space.name}"`,
           type: NotificationType.DANGER
         });
-        this.workflow.cancel();
+        this.wizard.onFinish.emit({});
       });
   }
 

@@ -11,7 +11,7 @@
            target="_blank">in the documentation</a>
       </p>
       <div class="blank-slate-pf-main-action">
-        <button class="btn btn-primary btn-lg" (click)="createSpace.open()">Create</button>
+        <button class="btn btn-primary btn-lg" (click)="openForgeWizard(wizardTemplate)">Create</button>
       </div>
     </div>
   </div>
@@ -46,11 +46,11 @@
 </ng-template>
 
 <!-- Create Space modal -->
-<modal #createSpace>
-  <modal-content>
-    <space-wizard [host]="createSpace"></space-wizard>
-  </modal-content>
-</modal>
+
+<ng-template #wizardTemplate>
+   <space-wizard (onCancel)="cancel()"></space-wizard>
+</ng-template>
+
 
 <!-- Delete Space modal -->
 <modal #deleteSpace title="Remove the space">

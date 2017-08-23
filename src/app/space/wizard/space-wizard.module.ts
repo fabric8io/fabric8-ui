@@ -24,12 +24,14 @@ import { SelectedItemsPipe } from './pipes/selected-items.pipe';
 import { VisibleItemsPipe } from './pipes/visible-items.pipe';
 import { TrustHtmlPipe, TrustStylePipe } from './pipes/safe-html.pipe';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
+import { WizardModule} from 'patternfly-ng';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    Fabric8WitModule
+    Fabric8WitModule,
+    WizardModule
   ],
   declarations: [
     SpaceWizardComponent,
@@ -51,6 +53,7 @@ import { CodebasesService } from '../create/codebases/services/codebases.service
   ],
   exports: [
     SpaceWizardComponent,
+    SpaceConfiguratorComponent,
     UniqueSpaceNameValidatorDirective
   ],
   providers: [

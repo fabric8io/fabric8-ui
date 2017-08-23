@@ -1,21 +1,26 @@
-<div class="wizard">
-
-  <space-creator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.spaceCreator})" [workflow]="workflow" ></space-creator>
-
-  <space-configurator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.spaceConfigurator})" [workflow]="workflow" > </space-configurator>
-
-
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeQuickStart})"
-    forgeCommandName="{{configurator.forgeCommands.forgeQuickStart}}" workflowStepName="{{configurator.workflowSteps.forgeQuickStart}}" [workflow]="workflow">
-  </forge-app-generator>
-
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeImportGit})"
-    forgeCommandName="{{configurator.forgeCommands.forgeImportGit}}" workflowStepName="{{configurator.workflowSteps.forgeImportGit}}" [workflow]="workflow">
-  </forge-app-generator>
-
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeStarter})"
-    forgeCommandName="{{configurator.forgeCommands.forgeStarter}}" workflowStepName="{{configurator.workflowSteps.forgeStarter}}" [workflow]="workflow">
-  </forge-app-generator>
-
-
-</div>
+<pfng-wizard #wizard
+             [config]="spaceWizardConfig">
+  <pfng-wizard-step [config]="step1SpaceCreation">
+    <space-creator
+    [wizard]="wizard">
+  </space-creator>
+  </pfng-wizard-step>
+  <pfng-wizard-step [config]="step2SpaceConfigurator">
+    <space-configurator
+    [wizard]="wizard"
+    (onCancel)="cancel()">
+  </space-configurator>
+  </pfng-wizard-step>
+  <pfng-wizard-step [config]="step3Quickstart">
+    <forge-app-generator title="Start from quickstart applications"
+      (onCancel)="cancel()"
+      forgeCommandName="{{configurator.forgeCommands.forgeQuickStart}}">
+    </forge-app-generator>
+  </pfng-wizard-step>
+  <pfng-wizard-step [config]="step3bisImportRepo">
+    <forge-app-generator title="Start from import repositories"
+      (onCancel)="cancel()"
+      forgeCommandName="{{configurator.forgeCommands.forgeImportGit}}">
+    </forge-app-generator>
+  </pfng-wizard-step>
+</pfng-wizard>

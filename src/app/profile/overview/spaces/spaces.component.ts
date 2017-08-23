@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild, TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
@@ -7,6 +7,8 @@ import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
 
 import { IModalHost } from '../../../space/wizard/models/modal-host';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -23,8 +25,11 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   spaceToDelete: Space;
   spaces: Space[] = [];
   @ViewChild('deleteSpace') deleteSpace: IModalHost;
+  @ViewChild('wizardTemplate') wizardTemplate: TemplateRef<any>;
+  modalRef: BsModalRef;
 
   constructor(
+      private modalService: BsModalService,
       private contexts: Contexts,
       private logger: Logger,
       private spaceService: SpaceService,
@@ -96,6 +101,12 @@ export class SpacesComponent implements OnDestroy, OnInit  {
     this.deleteSpace.open();
   }
 
-  // Private
+  openForgeWizard(template: TemplateRef<any>): void  {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg '});
+  }
+
+  cancel() {
+    this.modalRef.hide();
+  }
 
 }

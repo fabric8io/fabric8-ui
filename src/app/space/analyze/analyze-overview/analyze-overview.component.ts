@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, TemplateRef } from '@angular/core';
 import { IWorkflow } from './models/workflow';
-import { IModalHost } from '../../wizard/models/modal-host';
 import { SpaceWizardComponent } from '../../wizard/space-wizard.component';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import {Subscription } from 'rxjs';
 
 @Component({
@@ -13,13 +13,14 @@ import {Subscription } from 'rxjs';
   styleUrls: ['./analyze-overview.component.less']
 })
 export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
-
-  @ViewChild('updateSpace') updateSpace: IModalHost;
   @ViewChild('spaceWizard') spaceWizard: SpaceWizardComponent;
+  @ViewChild('wizardTemplate') wizardTemplate: TemplateRef<any>;
+  modalRef: BsModalRef;
   private _context: Context;
   private contextSubscription: Subscription;
 
   constructor(
+    private modalService: BsModalService,
     private contexts: Contexts
   ) {
 
@@ -34,8 +35,10 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     this.contextSubscription.unsubscribe();
   }
 
-  openForgeWizard() {
-    this.updateSpace.open(this.spaceWizard.steps.spaceConfigurator);
+  openForgeWizard(template: TemplateRef<any>): void  {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg '});
   }
-
+  cancel() {
+    this.modalRef.hide();
+  }
 }

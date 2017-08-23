@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="col-sm-2">
-              <button class="btn btn-primary" type="button" (click)="createSpace.open()">New</button>
+              <button class="btn btn-primary" type="button" (click)="openForgeWizard(wizardTemplate)">New</button>
             </div>
           </div>
         </form>
@@ -54,11 +54,11 @@
 </div>
 
 <!-- Create Space modal -->
-<modal #createSpace modalClass="modal-lg chromeless-modal">
-  <modal-content>
-    <space-wizard [host]="createSpace"></space-wizard>
-  </modal-content>
-</modal>
+
+<ng-template #wizardTemplate>
+   <space-wizard (onCancel)="cancel()"></space-wizard>
+</ng-template>
+
 
 <!-- Delete Space modal -->
 <modal #deleteSpace title="Remove the space">

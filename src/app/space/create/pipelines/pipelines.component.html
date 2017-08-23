@@ -14,7 +14,8 @@
 
             <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
               <li>
-                <a (click)="openForgeWizard()">Add to Space</a>
+                <a (click)="openForgeWizard(wizardTemplate)">Add to Space</a>
+
               </li>
               <li class="divider"></li>
               <li>
@@ -40,8 +41,7 @@
   </div>
 </div>
 
-<modal #updateSpace modalClass="modal-lg chromeless-modal">
-  <modal-content class="chromeless-modal-content">
-    <space-wizard #spaceWizard [host]="updateSpace"></space-wizard>
-  </modal-content>
-</modal>
+<ng-template #wizardTemplate>
+   <space-wizard stepIndex="space-configurator-step" (onCancel)="cancel()"></space-wizard>
+</ng-template>
+

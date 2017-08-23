@@ -50,7 +50,7 @@
               </li>
               <li class="divider"></li>
               <li id="header_createSpace">
-                <a (click)="spaceWizard.open()">
+                <a (click)="openForgeWizard(wizardTemplate)">
                 <span class="nav-item-icon">
                   <i class="pficon pficon-add-circle-o"></i>
                 </span>
@@ -152,11 +152,11 @@
       </div> <!-- .navbar-collapse -->
     </div> <!-- /.container-fluid -->
   </nav>
-  <modal #spaceWizard modalClass="modal-lg chromeless-modal" >
-    <modal-content class="chromeless-modal-content">
-      <space-wizard [host]="spaceWizard"></space-wizard>
-    </modal-content>
-  </modal>
-  <fab-about-modal #aboutModal>
+
+<ng-template #wizardTemplate>
+   <space-wizard (onCancel)="cancel()"></space-wizard>
+</ng-template>
+
+<fab-about-modal #aboutModal>
   </fab-about-modal>
 </ng-template>

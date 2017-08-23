@@ -84,7 +84,7 @@
                 </a>
               </p>
               <div class="blank-slate-pf-main-action">
-                <button class="btn btn-primary btn-lg" (click)="createSpace.open()"> Create a space </button>
+                <button class="btn btn-primary btn-lg" (click)="openForgeWizard(wizardTemplate)"> Create a space </button>
               </div>
             </div>
             <!-- A list of the 5 most recent Spaces will be displayed in place of the Blank Slate. Additional Spaces are viewed by using the 'See All' button in the Card footer -->
@@ -118,8 +118,8 @@
   </div>
 </div>
 <!-- Create Space modal -->
-<modal #createSpace modalClass="modal-lg chromeless-modal">
-  <modal-content class="chromeless-modal-content">
-    <space-wizard [host]="createSpace"></space-wizard>
-  </modal-content>
-</modal>
+
+<ng-template #wizardTemplate>
+   <space-wizard (onCancel)="cancel()"></space-wizard>
+</ng-template>
+

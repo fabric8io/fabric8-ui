@@ -4,7 +4,6 @@ import { Http } from '@angular/http';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-
 import { ToolbarModule } from 'patternfly-ng';
 
 import {
@@ -14,13 +13,14 @@ import {
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesRoutingModule } from './pipelines-routing.module';
 import {SpaceWizardModule} from "../../wizard/space-wizard.module";
-import {ModalModule} from "ngx-modal";
+import { ModalModule, ModalBackdropComponent } from 'ngx-bootstrap/modal';
 
 
 
 @NgModule({
   imports: [
     BsDropdownModule.forRoot(),
+    ModalModule.forRoot(),
     CommonModule,
     PipelinesRoutingModule,
     PipelineModule,
@@ -33,7 +33,8 @@ import {ModalModule} from "ngx-modal";
   providers: [
     BsDropdownConfig,
     TooltipConfig,
-  ]
+  ],
+  entryComponents: [ModalBackdropComponent]
 })
 export class PipelinesModule {
   constructor(http: Http) { }
