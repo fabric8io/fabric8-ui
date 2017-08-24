@@ -5,7 +5,7 @@ import {UserStackInfoModel, ComponentInformationModel} from '../models/stack-rep
 @Component({
     selector: 'stack-level-information',
     templateUrl: './stack-level.component.html',
-    styleUrls: ['stack-level.component.scss']
+    styleUrls: ['./stack-level.component.scss'],
 })
 
 export class StackLevelComponent {
@@ -16,7 +16,7 @@ export class StackLevelComponent {
 
     public licenseInfo: any = {};
     public licenseOutliers: number = 0;
-    public securityInfo: any = {};
+    public securityInfo: any;
     public recommendations: any;
     public stackLevelOutliers: any;
 

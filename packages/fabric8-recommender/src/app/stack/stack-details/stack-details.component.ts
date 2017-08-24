@@ -10,7 +10,7 @@ import {StackReportModel, ResultInformationModel, UserStackInfoModel, ComponentI
     templateUrl: './stack-details.component.html',
     providers: [StackAnalysesService],
     encapsulation: ViewEncapsulation.None,
-    styleUrls: ['stack-details.component.scss']
+    styleUrls: ['./stack-details.component.scss'],
 })
 
 export class StackDetailsComponent implements OnChanges {
@@ -67,6 +67,7 @@ export class StackDetailsComponent implements OnChanges {
         tab['active'] = true;
         let currentIndex: number = tab['index'];
         let recommendations: RecommendationsModel = this.recommendationsArray[currentIndex];
+        let alternate: number = 0, companion: number = 0;
         if (recommendations) {
             this.stackLevelOutliers = {
                 'usage': recommendations.usage_outliers
@@ -74,6 +75,8 @@ export class StackDetailsComponent implements OnChanges {
             this.companionLevelRecommendation = {
                 dependencies: recommendations.companion
             };
+            alternate = recommendations.alternate ? recommendations.alternate.length : 0;
+            companion = recommendations.companion ? recommendations.companion.length : 0;
         }
         let total: number = 0;
         let analyzed: number = 0;
@@ -82,16 +85,20 @@ export class StackDetailsComponent implements OnChanges {
         if (tab.content && tab.content.user_stack_info) {
             let userStackInfo: UserStackInfoModel = tab.content.user_stack_info;
             if (userStackInfo.dependencies) {
-                total = tab.content.user_stack_info.dependencies.length;
+                analyzed = tab.content.user_stack_info.dependencies.length;
             }
-            analyzed = userStackInfo.analyzed_dependencies_count;
-            unknown = userStackInfo.unknown_dependencies_count;
+            if (userStackInfo.analyzed_dependencies) {
+                total = userStackInfo.analyzed_dependencies.length;
+            }
+            if (userStackInfo.unknown_dependencies) {
+                unknown = userStackInfo.unknown_dependencies.length;
+            }
         }
 
         this.analysis = {
-            stackLevel: `Total: {{total}} | Analyzed: {{analyzed}} | Unknown: {{unknown}}`,
-            alternate: '[12 alternate components match your stack composition and may be more appropriate]',
-            companion: '[6 additional components are often used by similar stacks]'
+            stackLevel: 'Total: ' +  total + ' | Analyzed: ' + analyzed + ' | Unknown: ' + unknown,
+            alternate: '[' + alternate + ' alternate components match your stack composition and may be more appropriate]',
+            companion: '[' + companion + ' additional components are often used by similar stacks]'
         };
         this.componentLevelInformation = {
             recommendations: recommendations,
@@ -113,7 +120,7 @@ export class StackDetailsComponent implements OnChanges {
             header: 'Possible companion dependencies',
             subHeader: 'Consider theses additional dependencies'
         };
-        this.modalStackModule.open();
+        this.displayName = this.displayName || 'Stack Report';
     }
 
     public handleChangeFilter(filterBy: any): void {
@@ -125,6 +132,7 @@ export class StackDetailsComponent implements OnChanges {
     private handleError(error: any): void {
         this.errorMessage = error;
         this.modalHeader = error.title;
+        this.dataLoaded = true;
     }
 
     private initFeedback(): void {

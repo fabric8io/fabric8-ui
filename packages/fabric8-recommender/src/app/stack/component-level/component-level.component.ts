@@ -30,6 +30,8 @@ export class ComponentLevelComponent implements OnChanges {
     public dependencies: Array<ComponentInformationModel> = [];
     public recommendations: RecommendationsModel;
     public messages: any;
+    public angleDown: string = 'fa-angle-down';
+    public sortDirectionClass: string = this.angleDown;
 
     private dependenciesList: Array<any> = [];
     private headers: Array<any> = [];
@@ -46,12 +48,9 @@ export class ComponentLevelComponent implements OnChanges {
     private orderByName: string = '';
     private direction: string = '';
     private angleUp: string = 'fa-angle-up';
-    private angleDown: string = 'fa-angle-down';
 
     private spaceName: string;
     private userName: string;
-
-    public sortDirectionClass: string = this.angleDown;
 
 
     constructor(
@@ -162,21 +161,6 @@ export class ComponentLevelComponent implements OnChanges {
         }
     }
 
-    private toggleEntries(id: string, isCollapsed: boolean): void {
-        let rows = document.getElementsByClassName(id);
-        let len: number = rows.length;
-        if (isCollapsed) {
-            for (let i: number = 0; i < len; ++ i) {
-                if (rows[i].classList.contains('collapse'))
-                    rows[i].classList.remove('collapse');
-            }
-        } else {
-            for (let i: number = 0; i < len; ++ i) {
-                rows[i].classList.add('collapse');
-            }
-        }
-    }
-
     public handleFilterFieldClick(element: Element, field: any, event: Event): void {
         event.stopPropagation();
         this.currentFilter = field.name;
@@ -187,6 +171,59 @@ export class ComponentLevelComponent implements OnChanges {
             element.classList.add('open');
         }
         event.preventDefault();
+    }
+
+    /*
+     *  handleCreateWorkItemAction - takes recommendation and returns nothing
+     *  Creates work items in specified format to be consumed for POST request
+     */
+    public handleCreateWIclick(recommender: any, event: Event): void {
+        let workItems = [];
+        let message: string = '';
+        let codebaseobj: any = {
+            codebase: {
+              'repository': 'Test_Repo',
+              'branch': 'task-1234',
+              'filename': this.component["manifestinfo"],
+              'linenumber': 1
+            }
+        };
+
+        // TODO form data to be shared with recommender object
+        if (recommender && recommender.hasOwnProperty('isChild') && recommender['isChild']) {
+            message = `Stack analytics has identified a potential missing library. It's 
+            recommended that you change ${recommender.name} with version  ${recommender.recommended_version} 
+            to your application as many other Vert.x OpenShift applications have it included`;
+        } else {
+            message = `Stack analytics has identified a potential missing library. It's 
+            recommended that you add ${recommender.name} with version  ${recommender.recommended_version}
+            to your application as many other Vert.x OpenShift applications have it included`;
+        }
+        let description: string = message;
+        let codebase: any = codebaseobj;
+        if (this.data && this.data.git) {
+            codebase['repository'] = this.data.git.uri || '';
+            codebase['branch'] = this.data.git.ref || 'master';
+        }
+        description += '<br />';
+        description += 'Repository: ' + codebase['repository'];
+        description += '<br /> Branch: ' + codebase['branch'];
+        description += '<br /> Filename: ' + codebase['codebase']['filename'];
+        description += '<br /> Line Number: ' + codebase['codebase']['linenumber'];
+        let item: any = {
+            title: recommender['action'],
+            description: description,
+            codebase: codebase,
+            key: recommender['name']
+        };
+
+        workItems.push(item);
+
+        if (workItems.length > 0) {
+            this.addWorkItems(workItems[0]);
+        } else {
+            console.log('Work items are empty and cannot be added');
+        }
     }
 
     /**
@@ -224,6 +261,21 @@ export class ComponentLevelComponent implements OnChanges {
         if (this.filterBy) {
             this.fieldName = this.filterBy;
             this.currentFilter = this.filters.filter((f) => f.identifier === this.fieldName)[0].name;
+        }
+    }
+
+    private toggleEntries(id: string, isCollapsed: boolean): void {
+        let rows = document.getElementsByClassName(id);
+        let len: number = rows.length;
+        if (isCollapsed) {
+            for (let i: number = 0; i < len; ++ i) {
+                if (rows[i].classList.contains('collapse'))
+                    rows[i].classList.remove('collapse');
+            }
+        } else {
+            for (let i: number = 0; i < len; ++ i) {
+                rows[i].classList.add('collapse');
+            }
         }
     }
 
@@ -272,10 +324,9 @@ export class ComponentLevelComponent implements OnChanges {
                     name: 'Categories',
                     class: 'medium',
                     order: 10
-                },{
+                }, {
                      name: 'Action',
-                     identifier: this.keys['noOfFiles'],
-                     isSortable: true
+                     class: 'small'
                  }
             ];
 
@@ -362,60 +413,6 @@ export class ComponentLevelComponent implements OnChanges {
             let result: Array<OutlierInformationModel> = this.usageOutliers.filter(u => u.package_name === packageName);
             return result && result.length > 0;
         }
-    }
-
-    /*
-     *  handleCreateWorkItemAction - takes recommendation and returns nothing
-     *  Creates work items in specified format to be consumed for POST request 
-     */
-    public handleCreateWIclick(recommender: any, event: Event): void {
-        debugger;
-        let workItems = [];
-        let message: string = '';
-        let codebaseobj: any = { codebase: {
-              'repository': 'Test_Repo',
-              'branch': 'task-1234',
-              'filename': this.component["manifestinfo"],
-              'linenumber': 1
-            }
-        }
-        //TODO form data to be shared with recommender object
-        if(recommender && recommender.hasOwnProperty("isChild") && recommender["isChild"]){
-            message = `Stack analytics has identified a potential missing library. It's  
-            recommended that you change ${recommender.name} with version  ${recommender.recommended_version} 
-            to your application as many other Vert.x OpenShift applications have it included`;
-        } else {
-            message = `Stack analytics has identified a potential missing library. It's  
-            recommended that you add ${recommender.name} with version  ${recommender.recommended_version}
-            to your application as many other Vert.x OpenShift applications have it included`;
-        }
-        let description: string = message;
-                    let codebase: any = codebaseobj;
-                    if (this.data && this.data.git) {
-                        codebase['repository'] = this.data.git.uri || '';
-                        codebase['branch'] = this.data.git.ref || 'master';
-                    }
-                    description += '<br />';
-                    description += 'Repository: ' + codebase['repository'];
-                    description += '<br /> Branch: ' + codebase['branch'];
-                    description += '<br /> Filename: ' + codebase['codebase']['filename'];
-                    description += '<br /> Line Number: ' + codebase['codebase']['linenumber'];
-                    let item: any = {
-                        title: recommender['action'],
-                        description: description,
-                        codebase: codebase,
-                        key: recommender['name']
-                    };
-
-                    workItems.push(item);
-
-                    if (workItems.length > 0) {
-                        this.addWorkItems(workItems[0]);
-                    } else {
-                        console.log('Work items are empty and cannot be added');
-                    }
-
-
     }
 
      /*

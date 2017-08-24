@@ -1,5 +1,5 @@
 <div class="stack-report-inshort">
-<div (click)="$event.preventDefault()">
+<div *ngIf="!error">
     <tabset>
         <tab *ngFor="let tabz of tabs"
             [heading]="tabz.title"
@@ -10,7 +10,7 @@
             <!-- Stack Report Snippet -->
                 <div class="stack-report-snippet">
                     <div class="findings-inshort">
-                        Components [<b>Total: {{stackLevel && stackLevel.dependencies && stackLevel.dependencies.length}}</b> components | <b>Analyzed: {{stackLevel && stackLevel.analyzed_dependencies_count}}</b> | <b>Unknown: {{stackLevel && stackLevel.unknown_dependencies_count}}</b>]
+                        Components [<b>Total: {{stackLevel && stackLevel.analyzed_dependencies && stackLevel.analyzed_dependencies.length}}</b> components | <b>Analyzed: {{stackLevel && stackLevel.dependencies && stackLevel.dependencies.length}}</b> | <b>Unknown: {{stackLevel && stackLevel.unknown_dependencies && stackLevel.unknown_dependencies.length}}</b>]
                     </div>
                     <div class="summary-inshort">
                         <div class="stat-container security-issues-stat">
@@ -19,7 +19,7 @@
                                     <span>Security Alert</span>
                                 </h3>
                                 <div class="stat-content">
-                                    <div *ngIf="securityInfo.cve" class="col-xs-12">
+                                    <div *ngIf="securityInfo" class="col-xs-12">
                                         <div class="cvss-id">
                                             {{securityInfo.cve && securityInfo.cve.CVE}}
                                             <i class="{{securityInfo.iconClass}}" 
@@ -41,7 +41,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div *ngIf="!securityInfo.cve">No CVEs</div>
+                                    <div class="center-text" *ngIf="!securityInfo">No CVEs</div>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                                 <div class="stat-content usage-outlier">
                                     <div class="metric-container">
                                         <div class="metric-desc">
-                                            Components that aren't commonly used in your stack
+                                            Components that aren't common
                                         </div>
                                         <div class="metric">
                                             <span>{{stackLevelOutliers && stackLevelOutliers.usage && stackLevelOutliers.usage.length}}</span>
@@ -108,8 +108,14 @@
     
         </tab>
     </tabset>
-    <div class="show-full-report">
-        <stack-details *ngIf="result" class="report-link" [displayName]="'Show complete stack report'" [repoInfo]="repoInfo" [stackResponse]="result && result"></stack-details>
+    <div *ngIf="!dataLoaded" class="pre-loader">
+        <div class="pre-loader-spinner spinner spinner-lg"></div>
     </div>
+    <div class="show-full-report">
+        <stack-details *ngIf="result" class="report-link" [buildNumber]="buildNumber" [appName]="appName" [displayName]="'Show complete stack report'" [repoInfo]="repoInfo" [stackResponse]="result && result"></stack-details>
+    </div>
+</div>
+<div *ngIf="error" class="error-class">
+    {{error.title}}
 </div>
 </div>

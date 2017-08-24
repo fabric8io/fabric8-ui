@@ -3,7 +3,7 @@ import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 @Component({
     selector: 'trigger-filter',
     templateUrl: './trigger-filter.component.html',
-    styleUrls: ['trigger-filter.component.scss']
+    styleUrls: ['./trigger-filter.component.scss'],
 })
 export class TriggerFilterComponent implements OnChanges {
     @Input() message: string;

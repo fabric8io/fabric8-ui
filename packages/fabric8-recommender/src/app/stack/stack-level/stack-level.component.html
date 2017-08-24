@@ -6,7 +6,7 @@
                     <span>Security Alert</span>
                 </h3>
                 <div class="stat-content">
-                    <div *ngIf="securityInfo.cve" class="col-xs-12">
+                    <div *ngIf="securityInfo" class="col-xs-12">
                         <div class="cvss-id">
                             {{securityInfo.cve && securityInfo.cve.CVE}}
                             <i class="{{securityInfo.iconClass}}" 
@@ -33,7 +33,7 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="!securityInfo.cve">No CVEs</div>
+                    <div class="center-text" *ngIf="!securityInfo">No CVEs</div>
                 </div>
             </div>
         </div>

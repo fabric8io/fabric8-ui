@@ -16,6 +16,8 @@ import {StackReportModel, ResultInformationModel, UserStackInfoModel, Recommenda
 export class StackReportInShortComponent implements OnChanges {
     @Input() stackUrl;
     @Input() repoInfo;
+    @Input() buildNumber;
+    @Input() appName;
 
     public tabs: Array<any> = [];
     public result: StackReportModel;
@@ -24,11 +26,14 @@ export class StackReportInShortComponent implements OnChanges {
     public licenseInfo: any;
     public securityInfo: any;
     public stackLevelOutliers: any;
+    public dataLoaded: boolean = false;
+    public error: any;
 
     constructor(private stackAnalysisService: StackAnalysesService) {}
 
     ngOnChanges(): void {
         if (this.stackUrl) {
+            this.dataLoaded = false;
             this.stackAnalysisService
                 .getStackAnalyses(this.stackUrl)
                 .subscribe((data) => {
@@ -40,13 +45,24 @@ export class StackReportInShortComponent implements OnChanges {
                         });
                     } else {
                         // Handle Errors here 'API error'
+                        this.handleError({
+                            title: data.error
+                        });
                     }
                 }, error => {
                     // Handle server errors here
+                    this.handleError({
+                        title: 'Something unexpected happened'
+                    });
                 });
         } else {
 
         }
+    }
+
+    public handleError(error: any): void {
+        this.error = error;
+        this.dataLoaded = true;
     }
 
     public tabSelection(tab: any): void {
@@ -203,18 +219,15 @@ export class StackReportInShortComponent implements OnChanges {
         if (resultInformation && resultInformation.length > 0) {
             resultInformation.forEach((one: ResultInformationModel, index: number) => {
                 this.tabs.push({
-                    title: one.manifest_name,
+                    title: one.manifest_file_path,
                     content: one,
                     index: index
-                });
-                this.tabs.push({
-                    title: one.manifest_name,
-                    content: one,
-                    index: index + 1
                 });
             });
             if (this.tabs[0]) this.tabs[0]['active'] = true;
             this.tabSelection(this.tabs[0]);
+            this.dataLoaded = true;
+            this.error = null;
         }
     }
 }

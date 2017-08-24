@@ -6,7 +6,7 @@ import {EllipsisDirective} from '../utils/ellipsis.directive';
 // import {SentimentModule} from '../utils/sentiment/sentiment.module';
 
 import {TableFilter} from '../utils/table-filter.pipe';
-import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import {ToastNotificationComponent} from '../toast-notification/toast-notification.component';
 // import {TableOrderByPipe} from '../utils/table-orderby.pipe';
 
 @NgModule({

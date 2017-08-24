@@ -1,4 +1,7 @@
 .stack-report {
+    .stack-reports-btn {
+        cursor: pointer;
+    }
     .modal-width-class {
         width: 95%;
     }
@@ -42,6 +45,7 @@
         }
         .accordion-sub-heading {
             float: right;
+            color: #000;
         }
         &:after {
             content: '';
