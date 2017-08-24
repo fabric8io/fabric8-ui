@@ -38,7 +38,7 @@
                   <i class="pull-right float-xs-right glyphicon"
                     [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
                 </div>
-                <component-level-information [filterBy]="componentFilterBy" [header]="componentLevel.header" [subHeader]="componentLevel.subHeader" [component]="componentLevelInformation"></component-level-information>
+                <component-level-information [data]="repoInfo" [filterBy]="componentFilterBy" [header]="componentLevel.header" [subHeader]="componentLevel.subHeader" [component]="componentLevelInformation"></component-level-information>
               </accordion-group>
               <accordion-group #group [panelClass]="customClass">
                 <div class="accordion-heading" accordion-heading>
@@ -51,7 +51,7 @@
                   <i class="pull-right float-xs-right glyphicon"
                     [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
                 </div>
-                <component-level-information [header]="companionLevel.header" [subHeader]="companionLevel.subHeader" [isCompanion]="true" [component]="companionLevelRecommendation"></component-level-information>
+                <component-level-information [data]="repoInfo" [header]="companionLevel.header" [subHeader]="companionLevel.subHeader" [isCompanion]="true" [component]="companionLevelRecommendation"></component-level-information>
               </accordion-group>
             </accordion>
         </tab>

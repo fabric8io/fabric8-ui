@@ -58,6 +58,25 @@ export class ComponentLevelComponent implements OnChanges {
         private addWorkFlowService: AddWorkFlowService,
         private context: Contexts
     ) {
+        this.messages = {
+            'title': 'Recommendations',
+            'sub_title': {
+                'firstPart': 'Based on our analytics engine we found ',
+                'secondPart': ' recommendations to improve your application stack:'
+            },
+            'create_work_item': 'Create Work Item',
+            'create_work_items': 'Create Work Items',
+            'view_work_item': 'View Work Item',
+            'select_all_text': 'Select All',
+            'no_recommendations_text': 'No recommendations.',
+            'no_recommendations_suggestion': ' For your stack there are currently no recommendations. Below is some general information about it.',
+            'toastDisplay': {
+                'text1': 'Workitem with ID ',
+                'text2': ' has been added to the backlog.'
+            },
+            'create_work_item_error': 'There was a error while creating work item.',
+            'default_stack_name': 'An existing stack'
+        };
         if (this.context && this.context.current) {
             this.context.current.subscribe(val => {
                 console.log('Inside', val);
@@ -356,7 +375,7 @@ export class ComponentLevelComponent implements OnChanges {
         let codebaseobj: any = { codebase: {
               'repository': 'Test_Repo',
               'branch': 'task-1234',
-              'filename': this.component["manifest_name"],
+              'filename': this.component["manifestinfo"],
               'linenumber': 1
             }
         }
@@ -379,13 +398,13 @@ export class ComponentLevelComponent implements OnChanges {
                     description += '<br />';
                     description += 'Repository: ' + codebase['repository'];
                     description += '<br /> Branch: ' + codebase['branch'];
-                    description += '<br /> Filename: ' + codebase['filename'];
-                    description += '<br /> Line Number: ' + codebase['linenumber'];
+                    description += '<br /> Filename: ' + codebase['codebase']['filename'];
+                    description += '<br /> Line Number: ' + codebase['codebase']['linenumber'];
                     let item: any = {
                         title: recommender['action'],
                         description: description,
                         codebase: codebase,
-                        key: recommender['key']
+                        key: recommender['name']
                     };
 
                     workItems.push(item);
@@ -460,9 +479,9 @@ export class ComponentLevelComponent implements OnChanges {
                     let hostString = inputUrlArr[0] ? inputUrlArr[0].replace('api.', '') : '';
                     let baseUrl: string = hostString +
                         `/${this.userName}/${this.spaceName}/plan/detail/` + data.data.id;
-                    //this.displayWorkItemResponse(baseUrl, data.data.id);
+                    this.displayWorkItemResponse(baseUrl, data.data.id);
                     newItem.url = baseUrl;
-                    //TODO :: toggle Worke item link
+                    //TODO :: toggle Worke item link and toast notification
                     //this.toggleWorkItemButton(newItem);
                 }
             }
