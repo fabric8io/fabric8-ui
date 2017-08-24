@@ -6,6 +6,7 @@ import {pathJoin} from "../model/utils";
 import {AuthenticationService} from "ngx-login-client";
 import {WIT_API_URL} from "ngx-fabric8-wit";
 import {Logger} from "ngx-base";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 /**
  * Defaults to using the Dev Space rather than the runtime environment
@@ -73,5 +74,15 @@ export class DevNamespaceScope implements INamespaceScope {
       }
     }
     return null;
+  }
+}
+
+export class TestDevNamespaceScope implements INamespaceScope {
+  _currentNamespace = "mynamespace";
+
+  namespace: Observable<string> = new BehaviorSubject(this._currentNamespace).asObservable();
+
+  currentNamespace(): string {
+    return this._currentNamespace;
   }
 }
