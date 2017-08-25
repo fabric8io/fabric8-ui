@@ -61,6 +61,8 @@ export class TenantComponent implements AfterViewInit, OnInit {
   token: string;
   username: string;
   url: string;
+  
+  private modifiedFromRequestParam: boolean = false;
 
   constructor(
       private auth: AuthenticationService,
@@ -68,6 +70,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
       private contexts: Contexts,
       private notifications: Notifications,
       private router: Router,
+      private tenentService: TenentService,
       private userService: UserService) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
@@ -103,6 +106,9 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
 
   get isUpdateProfileDisabled(): boolean {
+    if (this.modifiedFromRequestParam) {
+      return false;
+    }
     return ((!this.profileForm.dirty && !(!this.loadedFormEmpty && this.formValuesEmpty())) ||
             (this.jenkinsVersionInvalid || this.cheVersionInvalid || this.teamVersionInvalid || this.mavenRepoInvalid ||
               this.boosterGitRefInvalid || this.boosterGitRepoInvalid));
@@ -132,6 +138,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
    */
 
   resetProfile(): void {
+    this.modifiedFromRequestParam = false;
     this.profileForm.reset();
     this.updateTenant = true;
   }
@@ -169,11 +176,19 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.setUserProperties(user);
-      this.notifications.message({
-        message: `Profile updated!`,
-        type: NotificationType.SUCCESS
-      } as Notification);
-      this.routeToProfile();
+
+      this.subscriptions.push(this.tenentService.updateTenent()
+        .subscribe(res => {
+          this.notifications.message({
+            message: `Tenant Updated!`,
+            type: NotificationType.SUCCESS
+          } as Notification);
+          this.routeToProfile();
+        }, error => {
+          this.handleError("Failed to update tenent", NotificationType.DANGER);
+        }));
+
+      
     }, error => {
       if (error.status === 409) {
         this.handleError("Email already exists", NotificationType.DANGER);
@@ -192,6 +207,31 @@ export class TenantComponent implements AfterViewInit, OnInit {
   }
 
   // Private
+
+  /**
+   * lets default values from request parameters
+   */
+  private defaultValuesFromRequestParams() {
+    this.modifiedFromRequestParam = false;
+    this.cheVersion = this.defaultRequestParam("cheVersion", this.cheVersion);
+    this.jenkinsVersion = this.defaultRequestParam("jenkinsVersion", this.jenkinsVersion);
+    this.teamVersion = this.defaultRequestParam("teamVersion", this.teamVersion);
+    this.mavenRepo = this.defaultRequestParam("mavenRepo", this.mavenRepo);
+
+    this.boosterGitRef = this.defaultRequestParam("boosterGitRef", this.boosterGitRef);
+    this.boosterGitRepo = this.defaultRequestParam("boosterGitRepo", this.boosterGitRepo);
+  }
+
+  private defaultRequestParam(paramName: string, defaultValue: string): string {
+    let answer = this.getRequestParam(paramName);
+    if (answer) {
+      this.modifiedFromRequestParam = true;
+      return answer;
+    } else {
+      return defaultValue;
+    }
+  }
+
 
   /**
    * Helper to retrieve request parameters
@@ -225,6 +265,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
    * @param user
    */
   private setUserProperties(user: User): void {
+    this.modifiedFromRequestParam = false;
     if (user.attributes === undefined) {
       return;
     }
@@ -251,6 +292,9 @@ export class TenantComponent implements AfterViewInit, OnInit {
     }
 
     this.loadedFormEmpty = this.formValuesEmpty();
+
+
+    this.defaultValuesFromRequestParams();
   }
 
   /**
@@ -280,4 +324,5 @@ export class TenantComponent implements AfterViewInit, OnInit {
     return !(this.boosterGitRef || this.boosterGitRepo ||
       this.jenkinsVersion || this.cheVersion || this.teamVersion || this.mavenRepo || !this.updateTenant);
   }
+
 }
