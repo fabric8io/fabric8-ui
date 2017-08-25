@@ -16,7 +16,7 @@
               <accordion-group
                    [isOpen]="true"
                    [panelClass]="customClass"
-                   [isDisabled]="false">
+                   [isDisabled]="true">
                     <div accordion-heading>
                       <div class="accordion-heading" accordion-heading>
                         Stack report
@@ -27,26 +27,26 @@
                     </div>
                     <stack-level-information (changeFilter)="handleChangeFilter($event)" [outliers]="stackLevelOutliers" [userStack]="tabz && tabz.content && tabz.content.user_stack_info"></stack-level-information>
               </accordion-group>
-              <accordion-group #group [isOpen]="true" [panelClass]="customClass">
+              <accordion-group #grouped [isOpen]="true" [panelClass]="customClass">
                 <div accordion-heading>
                   <div class="accordion-heading" accordion-heading>
                     Detail analysis of your stack components
                   </div>
-                  <i class="pull-right float-xs-right glyphicon"
-                    [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
+                  <i class="pull-right accordion-indicator float-xs-right glyphicon"
+                    [ngClass]="{'glyphicon-chevron-down': grouped?.isOpen, 'glyphicon-chevron-right': !grouped?.isOpen}"></i>
                   <div class="accordion-sub-heading">
                     <b>{{analysis && analysis.alternate}}</b>
                   </div>
                 </div>
                 <component-level-information [data]="repoInfo" [filterBy]="componentFilterBy" [header]="componentLevel.header" [subHeader]="componentLevel.subHeader" [component]="componentLevelInformation"></component-level-information>
               </accordion-group>
-              <accordion-group #group [panelClass]="customClass">
+              <accordion-group #companion [panelClass]="customClass">
                 <div accordion-heading>
                   <div class="accordion-heading" accordion-heading>
                     Additional components recommended by Openshift IO
                   </div>
-                  <i class="pull-right float-xs-right glyphicon"
-                    [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
+                  <i class="pull-right accordion-indicator float-xs-right glyphicon"
+                    [ngClass]="{'glyphicon-chevron-down': companion?.isOpen, 'glyphicon-chevron-right': !companion?.isOpen}"></i>
                   <div class="accordion-sub-heading">
                     <b>{{analysis && analysis.companion}}</b>
                   </div>

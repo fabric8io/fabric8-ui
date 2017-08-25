@@ -5,6 +5,10 @@
     .modal-width-class {
         width: 95%;
     }
+    .accordion-indicator {
+        top: unset;
+        margin-left: 10px;
+    }
 
     .pre-loader {
         position: absolute;
@@ -34,6 +38,10 @@
             width: 50%;
             margin: 0 auto;
         }
+    }
+
+    .customClass {
+        cursor: pointer;
     }
 
     .card.customClass .card-header {
