@@ -42,6 +42,14 @@
           </div>
         </div>
         <div class="form-group">
+          <label for="teamVersion" class="control-label">Team version</label>
+          <div [ngClass]="{'has-error': teamVersionInvalid}">
+            <input type="text" class="form-control" id="teamVersion" name="teamVersion"
+                   placeholder="Team version"
+                   [(ngModel)]="teamVersion">
+          </div>
+        </div>
+        <div class="form-group">
           <label for="mavenRepo" class="control-label">Maven Repo</label>
           <div [ngClass]="{'has-error': mavenRepoInvalid}">
             <input type="url" class="form-control" id="mavenRepo" name="mavenRepo"

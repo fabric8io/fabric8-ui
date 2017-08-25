@@ -23,6 +23,7 @@ import {TenentService} from '../services/tenent.service';
 export class TenantComponent implements AfterViewInit, OnInit {
   @ViewChild('_jenkinsVersion') jenkinsVersionElement: HTMLElement;
   @ViewChild('_cheVersion') cheVersionElement: HTMLElement;
+  @ViewChild('_teamVersion') teamVersionElement: HTMLElement;
   @ViewChild('_mavenRepo') mavenRepoElement: ElementRef;
   @ViewChild('_boosterGitRef') boosterGitRefElement: HTMLElement;
   @ViewChild('_boosterGitRepo') boosterGitRepoElement: HTMLElement;
@@ -31,6 +32,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
   jenkinsVersion: string;
   cheVersion: string;
+  teamVersion: string;
   mavenRepo: string;
   updateTenant: boolean = true;
 
@@ -41,6 +43,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
   jenkinsVersionInvalid: boolean = false;
   cheVersionInvalid: boolean = false;
+  teamVersionInvalid: boolean = false;
   mavenRepoInvalid: boolean = false;
 
   boosterGitRefInvalid: boolean = false;
@@ -101,7 +104,8 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
   get isUpdateProfileDisabled(): boolean {
     return ((!this.profileForm.dirty && !(!this.loadedFormEmpty && this.formValuesEmpty())) ||
-            (this.jenkinsVersionInvalid || this.cheVersionInvalid || this.mavenRepoInvalid || this.boosterGitRefInvalid || this.boosterGitRepoInvalid));
+            (this.jenkinsVersionInvalid || this.cheVersionInvalid || this.teamVersionInvalid || this.mavenRepoInvalid ||
+              this.boosterGitRefInvalid || this.boosterGitRepoInvalid));
   }
 
   /**
@@ -128,22 +132,6 @@ export class TenantComponent implements AfterViewInit, OnInit {
    */
 
   resetProfile(): void {
-/*
-    this.boosterGitRef = "";
-    this.boosterGitRepo = "";
-
-    this.jenkinsVersion = "";
-    this.cheVersion = "";
-    this.mavenRepo = "";
-    this.updateTenant = true;
-
-    this.boosterGitRepoValidate();
-    this.mavenRepoValidate();
-*/
-
-/*
-    this.profileForm.resetForm();
-*/
     this.profileForm.reset();
     this.updateTenant = true;
   }
@@ -174,6 +162,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
     }
     tenantConfig["jenkinsVersion"] = this.jenkinsVersion;
     tenantConfig["cheVersion"] = this.cheVersion;
+    tenantConfig["teamVersion"] = this.teamVersion;
     tenantConfig["mavenRepo"] = this.mavenRepo;
     tenantConfig["updateTenant"] = this.updateTenant;
 
@@ -256,6 +245,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
     if (tenantConfig) {
       this.jenkinsVersion = tenantConfig["jenkinsVersion"] || "";
       this.cheVersion = tenantConfig["cheVersion"] || "";
+      this.teamVersion = tenantConfig["teamVersion"] || "";
       this.mavenRepo = tenantConfig["mavenRepo"] || "";
       this.updateTenant = tenantConfig["updateTenant"] || false;
     }
@@ -288,6 +278,6 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
   private formValuesEmpty() {
     return !(this.boosterGitRef || this.boosterGitRepo ||
-      this.jenkinsVersion || this.cheVersion || this.mavenRepo || !this.updateTenant);
+      this.jenkinsVersion || this.cheVersion || this.teamVersion || this.mavenRepo || !this.updateTenant);
   }
 }
