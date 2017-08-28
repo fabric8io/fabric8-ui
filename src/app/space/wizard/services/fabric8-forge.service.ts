@@ -422,6 +422,13 @@ export class Fabric8ForgeService extends ForgeService {
         response.context.nextCommand = nextCommand;
         response.context.validationCommand = validationCommand;
 
+        // TODO remove hack once forge add-on fixed
+        // see issue: https://github.com/fabric8io/fabric8-generator/issues/51
+        if (currentPipeline.name == "fabric8-new-project" && currentPipeline.step.name == "next" && currentPipeline.step.index == 1) {
+          response.payload.data.state.valid = true;
+          response.payload.data.state.canMoveToNextStep = true;
+        }
+
         break;
       }
       case CommandPipelineStep.execute: {

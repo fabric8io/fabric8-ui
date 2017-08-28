@@ -221,6 +221,7 @@ export class AppGeneratorConfiguratorService {
             if (this.currentSpace && (this.currentSpace.attributes.name || '').length > 0) {
               let spaceName = this.currentSpace.attributes.name;
               field.value = spaceName;
+              field.display.text = spaceName;
             }
           }
           field.display.label = 'Name';
@@ -378,7 +379,7 @@ export class AppGeneratorConfiguratorService {
   private isQuickStartSpaceNameStep(context: string, execution: IAppGeneratorPair): boolean {
     let hasProperty = this.has(execution, ['request', 'command', 'parameters', 'pipeline', 'step', 'index']);
     if (hasProperty && execution.request.command.parameters.pipeline.step.name !== 'validate') {
-      return execution.request.command.parameters.pipeline.step.index === 2;
+      return execution.request.command.parameters.pipeline.step.index === 1;
     }
     return false;
   }
