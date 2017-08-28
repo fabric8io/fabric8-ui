@@ -5,7 +5,7 @@
           {{modalHeader}}
       </modal-header>
       <modal-content>
-  <div *ngIf="!error" (click)="$event.preventDefault()">
+  <div *ngIf="!error">
     <tabset *ngIf="dataLoaded">
         <tab *ngFor="let tabz of tabs"
             [heading]="tabz.title"
