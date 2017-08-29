@@ -8,6 +8,7 @@ import { SigninComponent } from './signin/signin.component';
 import { ContextResolver } from './shared/context-resolver.service';
 import { ExperimentalFeatureGuard } from './shared/experimental-feature.guard';
 import { ExperimentalFeatureResolver } from './shared/experimental-feature.resolver';
+import { ProfileResolver } from './shared/profile-resolver.service';
 
 
 export function removeAction(url: string) {
@@ -50,6 +51,14 @@ export const routes: Routes = [
     }
   },
   // Profile
+  {
+    path: '_profile',
+    resolve: {
+      profileNavigation: ProfileResolver
+    },
+    loadChildren: './home/home.module#HomeModule'
+  },
+
   {
     path: ':entity',
     resolve: {
