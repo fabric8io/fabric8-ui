@@ -12,8 +12,7 @@ import { UserService, User, AuthenticationService } from 'ngx-login-client';
   },
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-landing-page',
-  templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.less']
+  templateUrl: './landing-page.component.html'
 })
 export class LandingPageComponent implements OnInit {
 

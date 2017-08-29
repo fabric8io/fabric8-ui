@@ -5,8 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-alerts',
-  templateUrl: 'alerts.component.html',
-  styleUrls: ['./alerts.component.less']
+  templateUrl: 'alerts.component.html'
 })
 export class AlertsComponent implements OnInit {
 

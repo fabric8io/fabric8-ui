@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-analyze',
-  templateUrl: 'analyze.component.html',
-  styleUrls: ['./analyze.component.less']})
+  templateUrl: 'analyze.component.html'
+})
 export class AnalyzeComponent implements OnInit {
 
   constructor(

@@ -43,13 +43,19 @@
 textarea {
   resize: none;
 }
-.token-body { word-wrap: break-word; }
-.token-heading {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.token {
+  &-body {
+    word-wrap: break-word;
+  }
+  &-heading {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    &-cont {
+      display: flex;
+    }
+  }
 }
-.token-heading-cont { display: flex; }
 .btn {
   &-cancel {
     margin-left: 14px;

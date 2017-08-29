@@ -5,8 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-create',
-  templateUrl: 'create.component.html',
-  styleUrls: ['./create.component.less']
+  templateUrl: 'create.component.html'
 })
 export class CreateComponent implements OnInit {
 

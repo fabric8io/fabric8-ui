@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-security',
-  templateUrl: 'security.component.html',
-  styleUrls: ['./security.component.less']
+  templateUrl: 'security.component.html'
 })
 export class SecurityComponent implements OnInit {
 

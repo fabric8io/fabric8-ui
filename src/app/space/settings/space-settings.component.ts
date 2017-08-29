@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-code',
-  templateUrl: './space-settings.component.html',
-  styleUrls: ['./space-settings.component.less']
+  templateUrl: './space-settings.component.html'
 })
 export class SpaceSettingsComponent implements OnInit {
 

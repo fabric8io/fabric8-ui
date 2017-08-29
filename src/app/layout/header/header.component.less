@@ -93,7 +93,7 @@
     overflow: hidden;
     white-space: nowrap;
     &-dropdown {
-      @extend:{.recent-items-toggle-text};
+      @extend: {.recent-items-toggle-text};
       margin-right: 2px;
     }
   }
@@ -106,7 +106,8 @@
 }
 .recent-items-dropdown {
   &.open {
-    .recent-items { width: 275px;
+    .recent-items {
+      width: 275px;
       &:hover { .pointer; }
     }
   }
@@ -118,7 +119,8 @@
     padding-top: 12px;
     padding-bottom: 12px;
   }
-  .pficon-white { font-size: 1.3em;
+  .pficon-white {
+    font-size: 1.3em;
     &:before { color: @color-pf-white; }
   }
 }

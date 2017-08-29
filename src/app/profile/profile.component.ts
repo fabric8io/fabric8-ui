@@ -5,8 +5,7 @@ import { Router }            from '@angular/router';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-profile',
-  templateUrl: 'profile.component.html',
-  styleUrls: ['./profile.component.less']
+  templateUrl: 'profile.component.html'
 })
 export class ProfileComponent implements OnInit {
 

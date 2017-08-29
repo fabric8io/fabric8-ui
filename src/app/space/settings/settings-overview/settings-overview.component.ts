@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-settingsOverview',
-  templateUrl: 'settings-overview.component.html',
-  styleUrls: ['./settings-overview.component.less']
+  templateUrl: 'settings-overview.component.html'
 })
 export class SettingsOverviewComponent implements OnInit {
 

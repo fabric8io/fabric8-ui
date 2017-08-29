@@ -9,8 +9,7 @@ import { Logger } from 'ngx-base';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item-details',
-  templateUrl: './codebases-item-details.component.html',
-  styleUrls: ['./codebases-item-details.component.less']
+  templateUrl: './codebases-item-details.component.html'
 })
 export class CodebasesItemDetailsComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;

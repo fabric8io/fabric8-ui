@@ -4,8 +4,7 @@ import { AboutService } from '../../shared/about.service';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-app-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.less'],
+  templateUrl: './footer.component.html'
 })
 
 export class FooterComponent {
