@@ -24,6 +24,8 @@ export class StackDetailsComponent implements OnChanges {
     @ViewChild('stackModule') modalStackModule: any;
 
     public errorMessage: any = {};
+    public cache: string = '';
+    public cacheResponse: any;
     public modalHeader: string = null;
     public userStackInformation: UserStackInfoModel;
     public componentLevelInformation: any = {};
@@ -108,6 +110,8 @@ export class StackDetailsComponent implements OnChanges {
     }
 
     ngOnChanges(): void {
+        if (this.stack && this.stack !== this.cache) {
+            this.cache = this.stack;
         this.resetFields();
         this.stackId = this.stack && this.stack.split('/')[this.stack.split('/').length - 1];
         // this.init(this.stack);
@@ -121,6 +125,7 @@ export class StackDetailsComponent implements OnChanges {
             subHeader: 'Consider theses additional dependencies'
         };
         this.displayName = this.displayName || 'Stack Report';
+        }
     }
 
     public handleChangeFilter(filterBy: any): void {
@@ -199,7 +204,8 @@ export class StackDetailsComponent implements OnChanges {
     }
 
     private init(): void {
-        if (this.stackResponse) {
+        if (this.stackResponse && this.cacheResponse !== this.stackResponse) {
+            this.cacheResponse = this.stackResponse;
             // Change this to some other logic
             setTimeout(() => {
                 this.handleResponse(this.stackResponse);

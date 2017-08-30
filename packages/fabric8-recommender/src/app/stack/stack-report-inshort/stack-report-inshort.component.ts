@@ -29,10 +29,13 @@ export class StackReportInShortComponent implements OnChanges {
     public dataLoaded: boolean = false;
     public error: any;
 
+    private cache: string = '';
+
     constructor(private stackAnalysisService: StackAnalysesService) {}
 
     ngOnChanges(): void {
-        if (this.stackUrl) {
+        if (this.stackUrl && this.stackUrl !== this.cache) {
+            this.cache = this.stackUrl;
             this.dataLoaded = false;
             this.stackAnalysisService
                 .getStackAnalyses(this.stackUrl)
