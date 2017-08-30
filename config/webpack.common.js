@@ -27,6 +27,7 @@ const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplaceme
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 // const TsConfigPathsPlugin = require('awesome-typescript-loader');
 
 /*
@@ -157,6 +158,19 @@ module.exports = function (options) {
         {
           test: /\.json$/,
           use: ['json-loader']
+        },
+
+        /* HTML Linter
+         * Checks all files against .htmlhintrc
+        */
+        {
+          enforce: 'pre',
+          test: /\.html$/,
+          loader: 'htmlhint-loader',
+          exclude: [/node_modules/,/src\/a-runtime-console/,/src\/app\/space\/wizard/],
+          options: {
+            configFile: './.htmlhintrc'
+          }
         },
 
         /* Raw loader support for *.html
@@ -374,7 +388,19 @@ module.exports = function (options) {
 
       extractCSS,
 
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+      /*
+       * StyleLintPlugin
+      */
+      new StyleLintPlugin({
+        configFile: '.stylelintrc',
+        syntax: 'less',
+        context: 'src',
+        files: '**/*.less',
+        failOnError: true,
+        quiet: false,
+      })
     ],
 
     /*

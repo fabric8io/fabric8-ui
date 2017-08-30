@@ -36,9 +36,9 @@
         <div class="form-group">
           <label for="previewImg" class="control-label padding-left-none">Profile photo</label>
           <div class="col-xs-12 preview-cont padding-left-none">
-            <img id="previewImg" src="{{imageUrl}}" class="col-xs-2 preview-img padding-left-none"
+            <img src="{{imageUrl}}" class="col-xs-2 preview-img padding-left-none"
                 *ngIf="imageUrl !== undefined && imageUrl.length > 0">
-            <img id="previewImg" src="../../../assets/images/profile-user.png" class="col-xs-2 preview-img-none"
+            <img src="../../../assets/images/profile-user.png" class="col-xs-2 preview-img-none"
                 *ngIf="imageUrl === undefined || imageUrl.length === 0">
             <span class="col-xs-8 col-sm-7 preview-field" [ngClass]="{'has-error': imageUrlInvalid}">
               <input type="text" class="form-control" id="imageUrl" name="imageUrl" #_imageUrl

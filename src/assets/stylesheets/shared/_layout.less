@@ -4,8 +4,10 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Open Sans', sans-serif;
-  // font-size: @font-size-base !important;
-  font-size: @font-size-base;
+  /* stylelint-disable */
+  /* required to overwrite the default PatternFly font size */
+  font-size: @font-size-base !important;
+  /* stylelint-enable */
 }
 .fill-container {
   position: absolute;

@@ -1,10 +1,17 @@
+/* stylelint-disable */
+/* required in order to remove the default PatternFly box shadow */
 .toolbar-pf { box-shadow: none !important; }
+/* stylelint-enable */
+
 .form-control,
 .btn,
 .dropdown-menu,
 .badge,
 .filter-select,
 .filter-pf.filter-fields .btn-default {
+  /* stylelint-disable */
+  /* required to overwrite PatternFly buttons with new OSIO font size */
   font-size: @font-size-base !important;
+  /* stylelint-enable */
 }
 .form-control { height: 29px; }
