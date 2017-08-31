@@ -141,7 +141,7 @@ run `npm start`.
 **To hit stack analysis api in standalone mode**
 Put a token in the environment variable with key as 'STACK_API_TOKEN'
 
-== CSS and SASS 
+== CSS and SASS
 
 fabric8-stack-analysis-ui uses SASS for it's stylesheets. It also uses the Angular emulation
 of the shadow dom, so you will normally want to place your styles in the
