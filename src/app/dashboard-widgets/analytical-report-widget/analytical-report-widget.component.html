@@ -5,7 +5,7 @@
       <div *ngIf="buildConfigsCount > 0" class="pull-right">
         <select id="spacehome-analytical-report-combobox" name="pipeSelect" [(ngModel)]="currentPipeline" (change)="selectedPipeline()"
           class="form-control">
-          <option value="default">Select a pipeline...</option>
+          <option disabled value="default">Select a pipeline...</option>
           <option *ngFor="let build of pipelines | filter; let i = index;" [ngValue]="build.id">{{ build.name }}</option>
         </select>
       </div>
