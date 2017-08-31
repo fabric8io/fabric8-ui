@@ -28,6 +28,7 @@ export class StackReportInShortComponent implements OnChanges {
     public stackLevelOutliers: any;
     public dataLoaded: boolean = false;
     public error: any;
+    public licenseOutliers: number = 0;
 
     private cache: string = '';
 
@@ -147,7 +148,7 @@ export class StackReportInShortComponent implements OnChanges {
         let otherLicensesRatio: any = 0;
 
         let temp: Array<any> = [];
-
+        this.licenseOutliers = 0;
         tab.dependencies.forEach((t) => {
             t.licenses.forEach((license) => {
                 if (!licenses[license]) {
@@ -156,6 +157,9 @@ export class StackReportInShortComponent implements OnChanges {
                     ++ licenses[license];
                 }
             });
+            if (t.license_analysis && t.license_analysis.status && t.license_analysis.status.toLowerCase() === 'unknown') {
+                ++ this.licenseOutliers;
+            }
         });
         for (let i in licenses) {
             if (licenses.hasOwnProperty(i)) {
@@ -218,7 +222,14 @@ export class StackReportInShortComponent implements OnChanges {
         };
     }
 
+    private resetFields(): void {
+        this.securityInfo = null;
+        this.stackLevelOutliers = null;
+        this.stackLevel = null;
+    }
+
     private buildReportInShort(): void {
+        this.resetFields();
         let resultInformation: Array<ResultInformationModel> = this.result.result;
         if (resultInformation && resultInformation.length > 0) {
             resultInformation.forEach((one: ResultInformationModel, index: number) => {
