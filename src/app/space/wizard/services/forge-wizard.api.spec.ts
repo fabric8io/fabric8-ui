@@ -9,9 +9,9 @@ import {LoggerFactory} from "../common/logger";
 import {AuthenticationService} from "ngx-login-client";
 import {ApiLocatorService} from "../../../shared/api-locator.service";
 
-describe('Pact Server:', () => {
+describe('Forge API tests:', () => {
 
-  let provider = Pact({ consumer: 'Karma Jasmine', provider: 'Hello', web: true });
+  let provider = Pact({ consumer: 'AppGeneratorWizard', provider: 'ForgeGenerator', web: true });
   let mockLog: any;
   let fabric8ForgeService: Fabric8ForgeService;
   let mockAuthService: any;
@@ -64,7 +64,7 @@ describe('Pact Server:', () => {
     fabric8ForgeService = TestBed.get(Fabric8ForgeService);
   });
 
-  fit('Step1 - init - import wizard: GET command successfully', () => {
+  it('Step1 - init - import wizard: GET command successfully', () => {
     // given
     const log = () => { };
     mockLog.createLoggerDelegate.and.returnValue(log);
@@ -79,10 +79,6 @@ describe('Pact Server:', () => {
     });
 
   });
-  //
-  // fit('Step1 - init - Import wizard', async(() => {
-  //   console.log('TODO');
-  // }));
 
 });
 

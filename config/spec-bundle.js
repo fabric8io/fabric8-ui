@@ -17,7 +17,13 @@ Error.stackTraceLimit = Infinity;
 // https://github.com/angular/angular-cli/issues/1675
 require('intl');
 require('intl/locale-data/jsonp/en');
+
+// import pact (which internally import es6 promise) before zone.js
+// to remove this exception:
+// Unhandled promise rejection Error: Zone.js has detected that
+// ZoneAwarePromise(window|global)
 require('pact-web');
+
 require('core-js/es6');
 require('core-js/es7/reflect');
 

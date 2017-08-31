@@ -26,7 +26,7 @@ import 'core-js/es6/typed';
 import 'core-js/es6/reflect';
 // see issue https://github.com/AngularClass/angular2-webpack-starter/issues/709
 // import 'core-js/es6/promise';
-import 'pact-web';
+
 import 'core-js/es7/reflect';
 import 'zone.js/dist/zone';
 

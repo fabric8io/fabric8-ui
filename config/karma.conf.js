@@ -98,39 +98,25 @@ module.exports = function (config) {
           }
         },
     */
-    browsers: ['ChromeNoSandboxHeadless'],
+    browsers: ['PhantomJS_custom'],
     customLaunchers: {
-      ChromeNoSandboxHeadless: {
-        base: 'ChromeCanary',
-        flags: [
-          '--no-sandbox',
-          // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
-          '--headless',
-          '--disable-gpu',
-          // Without a remote debugging port, Google Chrome exits immediately.
-          ' --remote-debugging-port=9222'
-        ]
+      'PhantomJS_custom': {
+        base: 'PhantomJS',
+        options: {
+          windowName: 'alm-window',
+          settings: {
+            webSecurityEnabled: false
+          },
+        },
+        flags: ['--load-images=true'],
+        debug: true
       }
     },
-    // browsers: ['PhantomJS_custom'],
-    // customLaunchers: {
-    //   'PhantomJS_custom': {
-    //     base: 'PhantomJS',
-    //     options: {
-    //       windowName: 'alm-window',
-    //       settings: {
-    //         webSecurityEnabled: false
-    //       },
-    //     },
-    //     flags: ['--load-images=true'],
-    //     debug: true
-    //   }
-    // },
-    // phantomjsLauncher: {
-    //   // Have phantomjs exit if a ResourceError is encountered
-    //   // (useful if karma exits without killing phantom)
-    //   exitOnResourceError: true
-    // },
+    phantomjsLauncher: {
+      // Have phantomjs exit if a ResourceError is encountered
+      // (useful if karma exits without killing phantom)
+      exitOnResourceError: true
+    },
 
     /*
      * Continuous Integration mode
