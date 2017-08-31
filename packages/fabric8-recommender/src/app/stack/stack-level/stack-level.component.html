@@ -13,9 +13,6 @@
                             data-toggle="tooltip" data-placement="top" 
                             title="CVSS: Score to measure the impact of security vulnerability. In a scale from 0.0-10.0, vulnerabilities less than 7.0 are considered medium impact and more than or equal to 7.0 are considered high impact ones."></i>
                         </div>
-                        <div class="cve-message">
-                            Associated package: <b>{{securityInfo && securityInfo?.name}}</b>
-                        </div>
                         <div class="row cvss-data">
                             <div class="col-xs-12">
                                 <span class="cvss-score">{{securityInfo.cve && securityInfo.cve.CVSS}}</span>
