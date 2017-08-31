@@ -183,20 +183,18 @@ export class ComponentLevelComponent implements OnChanges {
             codebase: {
               'repository': 'Test_Repo',
               'branch': 'task-1234',
-              'filename': this.component["manifestinfo"],
+              'filename': this.component['manifestinfo'],
               'linenumber': 1
             }
         };
 
         // TODO form data to be shared with recommender object
         if (recommender && recommender.hasOwnProperty('isChild') && recommender['isChild']) {
-            message = `Stack analytics has identified a potential missing library. It's 
-            recommended that you change ${recommender.name} with version  ${recommender.recommended_version} 
-            to your application as many other Vert.x OpenShift applications have it included`;
+            message = `Stack analysis has identified alternate components for **${recommender.parentName}**.
+            You have chosen to replace **${recommender.parentName}** with **${recommender.name}** and version: **${recommender.recommended_version}** in your application stack`;
         } else {
-            message = `Stack analytics has identified a potential missing library. It's 
-            recommended that you add ${recommender.name} with version  ${recommender.recommended_version}
-            to your application as many other Vert.x OpenShift applications have it included`;
+            message = `Stack analysis has identified some additional components for your application stack.
+            You have chosen to add **${recommender.name}** with **${recommender.recommended_version}** to your application stack`;
         }
         let description: string = message;
         let codebase: any = codebaseobj;
@@ -204,14 +202,15 @@ export class ComponentLevelComponent implements OnChanges {
             codebase['repository'] = this.data.git.uri || '';
             codebase['branch'] = this.data.git.ref || 'master';
         }
-        description += '<br />';
-        description += 'Repository: ' + codebase['repository'];
-        description += '<br /> Branch: ' + codebase['branch'];
-        description += '<br /> Filename: ' + codebase['codebase']['filename'];
-        description += '<br /> Line Number: ' + codebase['codebase']['linenumber'];
+        description += ' \n\n ';
+        description += '\n\n **Repository:** ' + codebase['repository'];
+        description += '\n\n **Branch:** ' + codebase['branch'];
+        description += '\n\n **Filename:** ' + codebase['codebase']['filename'];
+        description += '\n\n **Line Number:**' + codebase['codebase']['linenumber'];
         let item: any = {
             title: recommender['action'],
             description: description,
+            markup: 'Markdown',
             codebase: codebase,
             key: recommender['name']
         };
@@ -227,7 +226,7 @@ export class ComponentLevelComponent implements OnChanges {
 
     /**
      * Handles the column header click.
-     * This changes the tables entries either to ascending order or 
+     * This changes the tables entries either to ascending order or
      * desending order in context to the field
      */
     public handleTableOrderClick(header: any): void {
@@ -344,7 +343,7 @@ export class ComponentLevelComponent implements OnChanges {
                 this.dependenciesList.push(dependency);
                 tempLen = this.dependenciesList.length;
                 if (this.alternate) {
-                    this.checkAlternate(eachOne['name'], eachOne['version'], this.dependenciesList, dependency['compId']);
+                    this.checkAlternate(eachOne['name'], eachOne['version'], this.dependenciesList, dependency['compId'], dependency['name']);
                     if (tempLen !== this.dependenciesList.length) {
                         dependency['isParent'] = true;
                         dependency['isGrouped'] = true;
@@ -393,7 +392,7 @@ export class ComponentLevelComponent implements OnChanges {
         return !count || count < 0 ? '-' : count;
     }
 
-    private checkAlternate (name: string, version: string, list: Array<any>, parentId: string) {
+    private checkAlternate (name: string, version: string, list: Array<any>, parentId: string, parentName: string) {
         if (this.alternate && this.alternate.length > 0) {
             let recom: Array<ComponentInformationModel> = this.alternate.filter((a) => a.replaces[0].name === name && a.replaces[0].version === version);
             recom.forEach(r => {
@@ -401,6 +400,7 @@ export class ComponentLevelComponent implements OnChanges {
                 obj['isChild'] = true;
                 obj['parent-reference'] = parentId;
                 obj['isGrouped'] = true;
+                obj['parentName'] = parentName;
                 list.push(obj);
             });
         }
@@ -459,6 +459,7 @@ export class ComponentLevelComponent implements OnChanges {
                     newItem.data.attributes['system.title'] = workItem['title'];
                     newItem.data.attributes['system.description'] = workItem['description'];
                     newItem.data.attributes['system.codebase'] = workItem['codebase'];
+                    newItem.data.attributes['system.description.markup'] = workItem['markup'];
                     newItem.key = workItem['key'];
                 }
            // }

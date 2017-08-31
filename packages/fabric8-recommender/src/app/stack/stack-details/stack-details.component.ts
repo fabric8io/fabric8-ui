@@ -75,7 +75,8 @@ export class StackDetailsComponent implements OnChanges {
                 'usage': recommendations.usage_outliers
             };
             this.companionLevelRecommendation = {
-                dependencies: recommendations.companion
+                dependencies: recommendations.companion,
+                manifestinfo: tab.content.manifest_name
             };
             alternate = recommendations.alternate ? recommendations.alternate.length : 0;
             companion = recommendations.companion ? recommendations.companion.length : 0;
