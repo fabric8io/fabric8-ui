@@ -1,0 +1,72 @@
+{
+  "consumer": {
+    "name": "AppGeneratorWizard"
+  },
+  "provider": {
+    "name": "ForgeGenerator"
+  },
+  "interactions": [
+    {
+      "description": "a request for forge step 1 - init",
+      "providerState": "It works",
+      "request": {
+        "method": "GET",
+        "path": "/forge/commands/fabric8-import-git"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "metadata": {
+            "deprecated": false,
+            "category": "Uncategorized",
+            "name": "io.fabric8.forge.generator.github.GithubImportPickOrganisationStep",
+            "description": "No Description"
+          },
+          "state": {
+            "valid": true,
+            "canExecute": false,
+            "wizard": true,
+            "canMoveToNextStep": true,
+            "canMoveToPreviousStep": false,
+            "steps": [
+              "io.fabric8.forge.generator.github.GithubImportPickOrganisationStep",
+              "io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep"
+            ]
+          },
+          "inputs": [
+            {
+              "name": "gitOrganisation",
+              "shortName": " ",
+              "valueType": "io.fabric8.forge.generator.git.GitOrganisationDTO",
+              "inputType": "org.jboss.forge.inputType.DEFAULT",
+              "enabled": true,
+              "required": true,
+              "deprecated": false,
+              "label": "Organisation",
+              "description": "The github organisation to import repositories from",
+              "valueChoices": [
+                {
+                  "id": "corinnekrych",
+                  "description": "My personal github account",
+                  "htmlUrl": "https://github.com/corinnekrych",
+                  "name": "corinnekrych",
+                  "valid": true
+                }
+              ],
+              "class": "UISelectOne",
+              "value": "corinnekrych"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
