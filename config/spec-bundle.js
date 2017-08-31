@@ -17,7 +17,7 @@ Error.stackTraceLimit = Infinity;
 // https://github.com/angular/angular-cli/issues/1675
 require('intl');
 require('intl/locale-data/jsonp/en');
-
+require('pact-web');
 require('core-js/es6');
 require('core-js/es7/reflect');
 
