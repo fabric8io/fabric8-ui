@@ -1,10 +1,11 @@
 <div class="stack-report-inshort">
 <div *ngIf="!error">
-    <tabset>
+    <tabset *ngIf="tabs && tabs.length > 0">
         <tab *ngFor="let tabz of tabs"
             [heading]="tabz.title"
             [active]="tabz.active"
             (select)="tabSelection(tabz)"
+            [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'"
             (deselect)="tabz.active = false">
 
             <!-- Stack Report Snippet -->

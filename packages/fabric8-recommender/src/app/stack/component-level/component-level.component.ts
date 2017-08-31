@@ -78,7 +78,6 @@ export class ComponentLevelComponent implements OnChanges {
         };
         if (this.context && this.context.current) {
             this.context.current.subscribe(val => {
-                console.log('Inside', val);
                 this.spaceName = val.name;
                 this.userName = val.user.attributes.username;
             });
@@ -247,7 +246,6 @@ export class ComponentLevelComponent implements OnChanges {
 
     ngOnChanges(): void {
         if (this.component) {
-            console.log(this.component);
             if (this.isCompanion === undefined) {
                 this.dependencies = this.component['dependencies'];
                 this.recommendations = this.component['recommendations'];
@@ -467,7 +465,6 @@ export class ComponentLevelComponent implements OnChanges {
         //}
 
         let workFlow: Observable<any> = this.addWorkFlowService.addWorkFlow(newItem);
-        console.log(this.userName, this.spaceName);
         workFlow.subscribe((data) => {
             if (data) {
                 let inputUrlArr: Array<string> = [];

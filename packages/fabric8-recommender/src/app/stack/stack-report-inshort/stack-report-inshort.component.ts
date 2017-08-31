@@ -42,10 +42,12 @@ export class StackReportInShortComponent implements OnChanges {
                 .subscribe((data) => {
                     if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
                         let resultInformation: Observable<StackReportModel> = getStackReportModel(data);
-                        resultInformation.subscribe((response) => {
-                            this.result = response;
-                            this.buildReportInShort();
-                        });
+                        if (resultInformation) {
+                            resultInformation.subscribe((response) => {
+                                this.result = response;
+                                this.buildReportInShort();
+                            });
+                        }
                     } else {
                         // Handle Errors here 'API error'
                         this.handleError({
@@ -73,12 +75,13 @@ export class StackReportInShortComponent implements OnChanges {
         let currentIndex: number = tab['index'];
         this.stackLevel = tab.content.user_stack_info;
         this.recommendations = tab.content.recommendation;
-        this.stackLevelOutliers = {
-            'usage': this.recommendations.usage_outliers
-        };
+        if (this.recommendations) {
+            this.stackLevelOutliers = {
+                'usage': this.recommendations.usage_outliers
+            };
+        }
         this.handleLicenseInformation(this.stackLevel);
         this.handleSecurityInformation(this.stackLevel);
-        console.log(tab);
     }
 
     private sortChartColumnData(array: Array<Array<any>>): Array<Array<any>> {
@@ -175,7 +178,6 @@ export class StackReportInShortComponent implements OnChanges {
             columnData[3][0] = 'Others';
             columnData[3][1] = otherLicensesRatio;
         }
-        console.log(columnData);
         this.licenseInfo = {
             data: {
                 columns: columnData,
@@ -214,18 +216,17 @@ export class StackReportInShortComponent implements OnChanges {
                 }
             }
         };
-        console.log (licenses);
     }
 
     private buildReportInShort(): void {
         let resultInformation: Array<ResultInformationModel> = this.result.result;
         if (resultInformation && resultInformation.length > 0) {
             resultInformation.forEach((one: ResultInformationModel, index: number) => {
-                this.tabs.push({
+                this.tabs[index] = {
                     title: one.manifest_file_path,
                     content: one,
                     index: index
-                });
+                };
             });
             if (this.tabs[0]) this.tabs[0]['active'] = true;
             this.tabSelection(this.tabs[0]);

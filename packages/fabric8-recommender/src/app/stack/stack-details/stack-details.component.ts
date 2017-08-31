@@ -39,7 +39,7 @@ export class StackDetailsComponent implements OnChanges {
     public componentLevel: any = {};
 
     public componentFilterBy: string = '';
-    public customClass: string = 'customClass';
+    public customClass: string = 'accordion-custom';
     public analysis: any = {};
 
 
@@ -159,8 +159,6 @@ export class StackDetailsComponent implements OnChanges {
     }
 
     private resetFields(): void {
-        console.log('Reset');
-        console.log(this.tabs);
         this.tabs.length = 0;
         this.dataLoaded = false;
         this.errorMessage = null;
@@ -168,6 +166,7 @@ export class StackDetailsComponent implements OnChanges {
         this.stackLevelOutliers = {};
         this.componentLevelInformation = {};
         this.companionLevelRecommendation = {};
+        this.cacheResponse = {};
         // this.dataLoaded = false;
     }
 
@@ -177,12 +176,10 @@ export class StackDetailsComponent implements OnChanges {
         if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
             let resultInformation: Observable<StackReportModel> = getStackReportModel(data);
             resultInformation.subscribe((response) => {
-                console.log(response);
                 let result: Array<ResultInformationModel> = response.result;
                 this.totalManifests = result.length;
                 this.userStackInformationArray = result.map((r) => r.user_stack_info);
                 result.forEach((r, index) => {
-                    console.log('HEre');
                     this.tabs.push({
                         title: r.manifest_file_path,
                         content: r,
@@ -218,8 +215,6 @@ export class StackDetailsComponent implements OnChanges {
                         this.handleResponse(data);
                     },
                     error => {
-                        // this.handleError(error);
-                        console.log(error);
                         let title: string = '';
                         if (error.status >= 500) {
                             title = 'Something unexpected happened';
@@ -234,7 +229,6 @@ export class StackDetailsComponent implements OnChanges {
                             status: error.status,
                             title: title
                         });
-                        console.log(this.errorMessage);
                     });
             }
         }

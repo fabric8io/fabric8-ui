@@ -6,8 +6,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { ModalModule } from 'ngx-modal';
-import {TabsModule} from 'ng2-bootstrap';
-import {AccordionModule} from 'ng2-bootstrap';
+import {TabsModule, AccordionModule} from 'ngx-bootstrap';
 
 import { GlobalConstants } from '../constants/constants.service';
 

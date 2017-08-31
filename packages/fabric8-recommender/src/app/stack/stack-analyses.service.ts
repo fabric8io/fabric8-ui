@@ -53,8 +53,6 @@ export class StackAnalysesService {
       .map(this.extractData)
       .map((data) => {
         stackReport = data;
-        console.log(typeof stackReport);
-        console.log(stackReport instanceof StackReportModel);
         return stackReport;
       })
       .catch(this.handleError);
@@ -81,7 +79,6 @@ export class StackAnalysesService {
     let body = res.json() || {};
     body['statusCode'] = res.status;
     body['statusText'] = res.statusText;
-    console.log(body as StackReportModel);
     return body as StackReportModel;
   }
 

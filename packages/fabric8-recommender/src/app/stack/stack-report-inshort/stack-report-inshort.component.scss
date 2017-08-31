@@ -7,6 +7,14 @@
     .center-text {
         margin: 0 auto;
     }
+    .active-menu-item {
+        .nav-link {
+            &.active {
+                color: #000;
+                font-weight: bold;
+            }
+        }
+    }
     .pre-loader {
         position: absolute;
         top: 0;

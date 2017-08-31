@@ -9,6 +9,14 @@
         top: unset;
         margin-left: 10px;
     }
+    .active-menu-item {
+        .nav-link {
+            &.active {
+                color: #000;
+                font-weight: bold;
+            }
+        }
+    }
 
     .pre-loader {
         position: absolute;
@@ -40,11 +48,11 @@
         }
     }
 
-    .customClass {
+    .accordion-custom {
         cursor: pointer;
     }
 
-    .card.customClass .card-header {
+    .card.accordion-custom .card-header {
         background: #6fc0f9;
         color: #fff;
         cursor: pointer;

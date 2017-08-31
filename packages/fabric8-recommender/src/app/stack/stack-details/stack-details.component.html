@@ -11,7 +11,7 @@
             [heading]="tabz.title"
             (select)="tabSelection(tabz)"
             (removed)="removeTabHandler(tabz)"
-            [customClass]="tabz.customClass">
+            [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
             <accordion>
               <accordion-group
                    [isOpen]="true"

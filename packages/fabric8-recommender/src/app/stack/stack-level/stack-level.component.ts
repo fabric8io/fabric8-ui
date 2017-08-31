@@ -138,7 +138,6 @@ export class StackLevelComponent {
             columnData[3][0] = 'Others';
             columnData[3][1] = otherLicensesRatio;
         }
-        console.log(columnData);
         this.licenseInfo = {
             data: {
                 columns: columnData,
@@ -177,6 +176,5 @@ export class StackLevelComponent {
                 }
             }
         };
-        console.log (licenses);
     }
 }

@@ -1,5 +1,5 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {TabsModule} from 'ng2-bootstrap';
+import {TabsModule} from 'ngx-bootstrap';
 import {StackReportInShortComponent} from './stack-report-inshort.component';
 import {ChartModule} from '../utils/chart/chart.module';
 import {StackDetailsModule} from '../stack-details/stack-details.module';
