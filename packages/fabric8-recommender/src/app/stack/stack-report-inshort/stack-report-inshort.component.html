@@ -97,10 +97,10 @@
                         </div>
                     </div>
                     <div class="recommendations-inshort">
-                        <div class="recommendation-components alternate-components">
+                        <div *ngIf="recommendations && recommendations.alternate" class="recommendation-components alternate-components">
                             <b>{{recommendations && recommendations.alternate && recommendations.alternate.length}} alternate components</b> match your stack composition and may be more appropriate.
                         </div>
-                        <div class="recommendation-components companion-components">
+                        <div *ngIf="recommendations && recommendations.companion" class="recommendation-components companion-components">
                             <b>{{recommendations && recommendations.companion && recommendations.companion.length}} additional components</b> are often used by similar stacks.
                         </div>
                     </div>

@@ -66,11 +66,11 @@
           <i class="pficon-warning-triangle-o"></i>
         </div>
         <h1>
-          {{messages && messages['report_failure']}}
-          <span *ngIf="errorMessage.status">{{messages && messages['error_code']}} {{errorMessage.status}}</span>
+          Report failed
+          <span *ngIf="errorMessage.status">{{errorMessage.status}}</span>
         </h1>
         <p>
-          {{messages && messages['error_text']}}{{errorMessage.message}}
+          Error text: {{errorMessage.message}}
         </p>
       </div>
       <div [hidden]="errorMessage.status">

@@ -66,66 +66,72 @@ export class StackDetailsComponent implements OnChanges {
     }
 
     public tabSelection(tab: any): void {
-        tab['active'] = true;
-        let currentIndex: number = tab['index'];
-        let recommendations: RecommendationsModel = this.recommendationsArray[currentIndex];
-        let alternate: number = 0, companion: number = 0;
-        if (recommendations) {
-            this.stackLevelOutliers = {
-                'usage': recommendations.usage_outliers
+        if (tab) {
+            tab['active'] = true;
+            let currentIndex: number = tab['index'];
+            let recommendations: RecommendationsModel = this.recommendationsArray[currentIndex];
+            let alternate: number = 0, companion: number = 0;
+            if (recommendations) {
+                this.stackLevelOutliers = {
+                    'usage': recommendations.usage_outliers
+                };
+                this.companionLevelRecommendation = {
+                    dependencies: recommendations.companion,
+                    manifestinfo: tab.content.manifest_name
+                };
+                alternate = recommendations.alternate ? recommendations.alternate.length : 0;
+                companion = recommendations.companion ? recommendations.companion.length : 0;
+            }
+            let total: number = 0;
+            let analyzed: number = 0;
+            let unknown: number = 0;
+
+            if (tab.content && tab.content.user_stack_info) {
+                let userStackInfo: UserStackInfoModel = tab.content.user_stack_info;
+                if (userStackInfo.dependencies) {
+                    analyzed = userStackInfo.dependencies.length;
+                }
+                if (userStackInfo.analyzed_dependencies) {
+                    total = userStackInfo.analyzed_dependencies.length;
+                }
+                if (userStackInfo.unknown_dependencies) {
+                    unknown = userStackInfo.unknown_dependencies.length;
+                }
+            }
+
+            this.analysis = {
+                stackLevel: 'Total: ' +  total + ' | Analyzed: ' + analyzed + ' | Unknown: ' + unknown,
+                alternate: '[' + alternate + ' alternate components match your stack composition and may be more appropriate]',
+                companion: '[' + companion + ' additional components are often used by similar stacks]'
             };
-            this.companionLevelRecommendation = {
-                dependencies: recommendations.companion,
+            this.componentLevelInformation = {
+                recommendations: recommendations,
+                dependencies: tab.content.user_stack_info.dependencies,
                 manifestinfo: tab.content.manifest_name
             };
-            alternate = recommendations.alternate ? recommendations.alternate.length : 0;
-            companion = recommendations.companion ? recommendations.companion.length : 0;
         }
-        let total: number = 0;
-        let analyzed: number = 0;
-        let unknown: number = 0;
-
-        if (tab.content && tab.content.user_stack_info) {
-            let userStackInfo: UserStackInfoModel = tab.content.user_stack_info;
-            if (userStackInfo.dependencies) {
-                analyzed = tab.content.user_stack_info.dependencies.length;
-            }
-            if (userStackInfo.analyzed_dependencies) {
-                total = userStackInfo.analyzed_dependencies.length;
-            }
-            if (userStackInfo.unknown_dependencies) {
-                unknown = userStackInfo.unknown_dependencies.length;
-            }
-        }
-
-        this.analysis = {
-            stackLevel: 'Total: ' +  total + ' | Analyzed: ' + analyzed + ' | Unknown: ' + unknown,
-            alternate: '[' + alternate + ' alternate components match your stack composition and may be more appropriate]',
-            companion: '[' + companion + ' additional components are often used by similar stacks]'
-        };
-        this.componentLevelInformation = {
-            recommendations: recommendations,
-            dependencies: tab.content.user_stack_info.dependencies,
-            manifestinfo: tab.content.manifest_name
-        };
     }
 
     ngOnChanges(): void {
         if (this.stack && this.stack !== this.cache) {
             this.cache = this.stack;
-        this.resetFields();
-        this.stackId = this.stack && this.stack.split('/')[this.stack.split('/').length - 1];
-        // this.init(this.stack);
-        this.initFeedback();
-        this.componentLevel = {
-            header: 'Analysis of your application stack',
-            subHeader: 'Recommended alternative dependencies'
-        };
-        this.companionLevel = {
-            header: 'Possible companion dependencies',
-            subHeader: 'Consider theses additional dependencies'
-        };
-        this.displayName = this.displayName || 'Stack Report';
+            this.resetFields();
+            if (this.stack && this.stack.split('/').length > 0) {
+                let chunks: Array<string> = this.stack.split('/');
+                let count: number = chunks.length;
+                this.stackId = chunks[count - 1];
+            }
+            // this.init(this.stack);
+            this.initFeedback();
+            this.componentLevel = {
+                header: 'Analysis of your application stack',
+                subHeader: 'Recommended alternative dependencies'
+            };
+            this.companionLevel = {
+                header: 'Possible companion dependencies',
+                subHeader: 'Consider theses additional dependencies'
+            };
+            this.displayName = this.displayName || 'Stack Report';
         }
     }
 
@@ -179,18 +185,20 @@ export class StackDetailsComponent implements OnChanges {
             resultInformation.subscribe((response) => {
                 let result: Array<ResultInformationModel> = response.result;
                 this.totalManifests = result.length;
-                this.userStackInformationArray = result.map((r) => r.user_stack_info);
-                result.forEach((r, index) => {
-                    this.tabs.push({
-                        title: r.manifest_file_path,
-                        content: r,
-                        index: index
+                if (this.totalManifests > 0) {
+                    this.userStackInformationArray = result.map((r) => r.user_stack_info);
+                    result.forEach((r, index) => {
+                        this.tabs.push({
+                            title: r.manifest_file_path,
+                            content: r,
+                            index: index
+                        });
+                        this.recommendationsArray.push(r.recommendation);
                     });
-                    this.recommendationsArray.push(r.recommendation);
-                });
-                this.modalHeader = 'Updated just now';
-                this.dataLoaded = true;
-                this.tabSelection(this.tabs[0]);
+                    this.modalHeader = 'Updated just now';
+                    this.dataLoaded = true;
+                    this.tabSelection(this.tabs[0]);
+                }
             });
         } else {
             this.handleError({

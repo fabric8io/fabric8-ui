@@ -248,8 +248,10 @@ export class ComponentLevelComponent implements OnChanges {
             if (this.isCompanion === undefined) {
                 this.dependencies = this.component['dependencies'];
                 this.recommendations = this.component['recommendations'];
-                this.alternate = this.recommendations.alternate;
-                this.usageOutliers = this.recommendations['usage_outliers'];
+                if (this.recommendations) {
+                    this.alternate = this.recommendations.alternate;
+                    this.usageOutliers = this.recommendations['usage_outliers'];
+                }
             } else {
                 this.dependencies = this.component['dependencies'];
             }
