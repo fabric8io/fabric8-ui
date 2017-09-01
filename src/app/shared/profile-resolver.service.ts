@@ -7,17 +7,32 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
-@Injectable()
-export class ProfileResolver implements Resolve<boolean> {
+import {
+  Context
+} from 'ngx-fabric8-wit';
+import { Navigation } from '../models/navigation';
+import { ContextService } from './context.service';
 
-  constructor(private userService: UserService, private router: Router) {
+@Injectable()
+export class ProfileResolver implements Resolve<Context> {
+
+  constructor(private userService: UserService, private contextService: ContextService, private router: Router) {
   }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Context> {
     // Resolve the context
-    return this.userService.loggedInUser.map((userName) => {
-      this.router.navigate(['/', userName.attributes.username]);
-      return false;
+    return this.userService.loggedInUser.switchMap((userName) => {
+      let url = state.url.replace(/_profile/, userName.attributes.username);
+      return this.contextService
+        .changeContext(Observable.of({
+          url: url,
+          user: userName.attributes.username,
+          space: null
+        } as Navigation)).first()
+        .catch((err: any, caught: Observable<Context>) => {
+          console.log(`Caught in resolver ${err}`);
+          return Observable.throw(err);
+        });
     }).take(1);
   }
 

@@ -54,9 +54,12 @@ export const routes: Routes = [
   {
     path: '_profile',
     resolve: {
-      profileNavigation: ProfileResolver
+      context: ProfileResolver
     },
-    loadChildren: './home/home.module#HomeModule'
+    loadChildren: './profile/profile.module#ProfileModule',
+    data: {
+      title: 'Profile'
+    }
   },
 
   {
