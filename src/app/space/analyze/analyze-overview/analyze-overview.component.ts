@@ -15,7 +15,6 @@ import {Subscription } from 'rxjs';
 export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
   @ViewChild('updateSpace') updateSpace: IModalHost;
-  @ViewChild('spaceWizard') spaceWizard: SpaceWizardComponent;
   private _context: Context;
   private contextSubscription: Subscription;
 
@@ -35,9 +34,9 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   }
 
   openForgeWizard() {
-    //this.updateSpace.open();
+    this.updateSpace.open();
     //TODO
-    alert("TODO::import wizard");
+    //alert("TODO::import wizard");
   }
 
 }
