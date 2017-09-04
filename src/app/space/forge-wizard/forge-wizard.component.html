@@ -1,0 +1,9 @@
+<pfng-wizard #wizard
+             [config]="config"
+             (onCancel)="cancel()"
+             (onNext)="nextClicked($event)"
+             (onStepChange)="stepChanged($event)">
+  <pfng-wizard-step [config]="step1">
+    TODO
+  </pfng-wizard-step>
+</pfng-wizard>

@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { AnalyzeOverviewComponent } from './analyze-overview.component';
 import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module';
 import { SpaceWizardModule } from '../../wizard/space-wizard.module';
+import { ForgeWizardModule } from "app/space/forge-wizard/forge-wizard.module";
 
 
 
@@ -29,7 +30,8 @@ import { SpaceWizardModule } from '../../wizard/space-wizard.module';
     AddCodebaseWidgetModule,
     PipelinesWidgetModule,
     EnvironmentWidgetModule,
-    SpaceWizardModule
+    //SpaceWizardModule
+    ForgeWizardModule
   ],
   declarations: [AnalyzeOverviewComponent]
 })

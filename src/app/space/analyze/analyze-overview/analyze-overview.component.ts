@@ -37,6 +37,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   openForgeWizard() {
     //this.updateSpace.open();
     //TODO
+    alert("TODO::import wizard");
   }
 
 }
