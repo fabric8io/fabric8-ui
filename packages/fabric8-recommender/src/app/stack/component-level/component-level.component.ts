@@ -471,12 +471,12 @@ export class ComponentLevelComponent implements OnChanges {
         workFlow.subscribe((data) => {
             if (data) {
                 let inputUrlArr: Array<string> = [];
-                if (data.links && data.links.self && data.links.self.length) {
+                if (data.links && data.links.self && data.links.self.length && data.data.attributes) {
                     inputUrlArr = data.links.self.split('/api/');
                     let hostString = inputUrlArr[0] ? inputUrlArr[0].replace('api.', '') : '';
                     let baseUrl: string = hostString +
-                        `/${this.userName}/${this.spaceName}/plan/detail/` + data.data.id;
-                    this.displayWorkItemResponse(baseUrl, data.data.id);
+                        `/${this.userName}/${this.spaceName}/plan/detail/` + data.data.attributes["system.number"];
+                    this.displayWorkItemResponse(baseUrl, data.data.attributes["system.number"]);
                     newItem.url = baseUrl;
                     //TODO :: toggle Worke item link and toast notification
                     //this.toggleWorkItemButton(newItem);
