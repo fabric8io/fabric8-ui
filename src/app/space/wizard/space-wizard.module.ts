@@ -13,7 +13,6 @@ import { AppGeneratorSingleInputComponent } from './components/app-generator-sin
 import { AppGeneratorStepViewComponent } from './components/app-generator-step-view/app-generator-step-view.component';
 import { AppGeneratorMultipleSelectionLabelListComponent } from './components/app-generator-multiple-selection-label-list/app-generator-multiple-selection-label-list.component';
 import { SpaceConfiguratorComponent } from './components/space-configurator/space-configurator.component';
-import { SpaceCreatorComponent } from './components/space-creator/space-creator.component';
 
 import { WorkflowFactory } from './models/workflow';
 
@@ -41,7 +40,6 @@ import { CodebasesService } from '../create/codebases/services/codebases.service
     AppGeneratorMultipleSelectionLabelListComponent,
     AppGeneratorBuildPipelineViewComponent,
     SpaceConfiguratorComponent,
-    SpaceCreatorComponent,
     UniqueSpaceNameValidatorDirective,
     ValidSpaceNameValidatorDirective,
     SelectedItemsPipe,
