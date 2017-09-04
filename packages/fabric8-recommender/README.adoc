@@ -139,7 +139,7 @@ NOTE: `fabric8-ui` is setup to do reloading and sourcemaps automatically when yo
 run `npm start`.
 
 **To hit stack analysis api in standalone mode**
-Put a token in the environment variable with key as 'STACK_API_TOKEN'
+Put a token in the environment variable with key as 'STACK_API_TOKEN'.
 
 == CSS and SASS
 
