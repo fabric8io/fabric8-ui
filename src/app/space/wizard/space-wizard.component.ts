@@ -1,4 +1,4 @@
-import { IModalHost } from './models/modal-host';
+//import { IModalHost } from './models/modal-host';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -15,7 +15,7 @@ import { IWorkflow } from '../../models/workflow';
 import { DummyService } from "app/shared/dummy.service";
 import { SpaceNamespaceService } from "app/shared/runtime-console/space-namespace.service";
 import { SpacesService } from "app/shared/spaces.service";
-import { AppGeneratorConfiguratorService } from "app/space/wizard/services/app-generator.service";
+//import { AppGeneratorConfiguratorService } from "app/space/wizard/services/app-generator.service";
 import {
   Space,
   SpaceAttributes
@@ -30,7 +30,7 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
 
   static instanceCount: number = 1;
 
-  @Input() host: IModalHost;
+  @Input() host: any;
 
   spaceTemplates: ProcessTemplate[];
   selectedTemplate: ProcessTemplate;

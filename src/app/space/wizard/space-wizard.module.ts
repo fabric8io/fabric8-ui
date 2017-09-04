@@ -12,7 +12,7 @@ import { AppGeneratorSingleSelectionDropDownComponent } from './components/app-g
 import { AppGeneratorSingleInputComponent } from './components/app-generator-single-input/app-generator-single-input.component';
 import { AppGeneratorStepViewComponent } from './components/app-generator-step-view/app-generator-step-view.component';
 import { AppGeneratorMultipleSelectionLabelListComponent } from './components/app-generator-multiple-selection-label-list/app-generator-multiple-selection-label-list.component';
-import { SpaceConfiguratorComponent } from './components/space-configurator/space-configurator.component';
+//import { SpaceConfiguratorComponent } from './components/space-configurator/space-configurator.component';
 
 import { WorkflowFactory } from './models/workflow';
 
@@ -32,14 +32,6 @@ import { CodebasesService } from '../create/codebases/services/codebases.service
   ],
   declarations: [
     SpaceWizardComponent,
-    ForgeAppGeneratorComponent,
-    AppGeneratorStepViewComponent,
-    AppGeneratorSingleInputComponent,
-    AppGeneratorSingleSelectionListComponent,
-    AppGeneratorSingleSelectionDropDownComponent,
-    AppGeneratorMultipleSelectionLabelListComponent,
-    AppGeneratorBuildPipelineViewComponent,
-    SpaceConfiguratorComponent,
     UniqueSpaceNameValidatorDirective,
     ValidSpaceNameValidatorDirective,
     SelectedItemsPipe,
@@ -52,11 +44,6 @@ import { CodebasesService } from '../create/codebases/services/codebases.service
     UniqueSpaceNameValidatorDirective
   ],
   providers: [
-    IForgeServiceProvider.FactoryProvider,
-    LoggerFactory,
-    WorkflowFactory,
-    IAppGeneratorServiceProvider.FactoryProvider,
-    AppGeneratorConfiguratorService,
     CodebasesService
   ]
 })
