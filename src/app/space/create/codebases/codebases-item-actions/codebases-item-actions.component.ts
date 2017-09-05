@@ -26,13 +26,6 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
       private notifications: Notifications,
       private windowService: WindowService,
       private workspacesService: WorkspacesService) {
-    this.subscriptions.push(this.broadcaster
-      .on('cheStateChange')
-      .subscribe((che: Che) => {
-        if (che != undefined && che.running === true) {
-          this.cheRunning = true;
-        }
-      }));
   }
 
   ngOnDestroy(): void {
@@ -42,6 +35,13 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.subscriptions.push(this.broadcaster
+      .on('cheStateChange')
+      .subscribe((che: Che) => {
+        if (che != undefined && che.running === true) {
+          this.cheRunning = true;
+        }
+      }));
   }
 
   // Actions

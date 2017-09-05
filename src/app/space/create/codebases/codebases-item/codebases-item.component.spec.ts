@@ -24,7 +24,7 @@ describe('Codebases Item Component', () => {
   let fixture, codebases, codebase;
 
   beforeEach(() => {
-    broadcasterMock = jasmine.createSpyObj('Broadcaster', ['broadcast']);
+    broadcasterMock = jasmine.createSpyObj('Broadcaster', ['on']);
     gitHubServiceMock = jasmine.createSpyObj('GitHubService', ['getRepoDetailsByUrl']);
     notificationMock = jasmine.createSpyObj('Notifications', ['message']);
 
@@ -77,20 +77,16 @@ describe('Codebases Item Component', () => {
     fixture = TestBed.createComponent(CodebasesItemComponent);
   });
 
-/*
-  Temporarily disabling until this error is resolved:
-  Error: No provider for Broadcaster! in config/spec-bundle.js (line 198839)
-
   it('Init component succesfully', async(() => {
     // given
     let comp = fixture.componentInstance;
     let debug = fixture.debugElement;
     comp.codebase = codebase;
+    broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
     fixture.detectChanges();
     let spanDisplayedInformation = debug.queryAll(By.css('.list-pf-title'));
     fixture.whenStable().then(() => {
       expect(spanDisplayedInformation.length).toEqual(1)
     });
   }));
-*/
 });

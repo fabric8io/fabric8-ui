@@ -18,22 +18,31 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
   @Input() index: number = -1;
 
   cheErrorMessage: string = "Your Workspaces failed to load";
-  cheStarting: boolean = false;
-  cheStartingMessage: string = "Your Workspaces are loading...";
   cheRunning: boolean = false;
   cheRunningMessage: string = "Your Workspaces have loaded successfully";
+  cheStarting: boolean = false;
+  cheStartingMessage: string = "Your Workspaces are loading...";
   createdDate: string;
   fullName: string;
   lastCommitDate: string;
   htmlUrl: string;
-  notificationMessage: string;
-  notificationType: string;
+  notificationMessage: string = this.cheStartingMessage;
+  notificationType: string = NotificationTypes.INFO;
   subscriptions: Subscription[] = [];
 
   constructor(
       private broadcaster: Broadcaster,
       private gitHubService: GitHubService,
       private notifications: Notifications) {
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
+  }
+
+  ngOnInit(): void {
     this.subscriptions.push(this.broadcaster
       .on('cheStateChange')
       .subscribe((che: Che) => {
@@ -51,15 +60,6 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
           this.cheStarting = true;
         }
       }));
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
-  }
-
-  ngOnInit(): void {
     if (this.codebase === undefined || this.codebase.attributes === undefined) {
       return;
     }
