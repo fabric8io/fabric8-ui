@@ -71,18 +71,19 @@
   <div class="profile-bar">
     <div class="profile-bar-buttons col-sm-12">
       <div class="center-block">
-          <button
-            class="btn btn-primary btn-update btn-lg col-auto ml-auto"
-            [disabled]="isUpdateProfileDisabled"
-            (click)="updateProfile()">Save and Update Tenant
-          </button>
-          <button
-            class="btn btn-default btn-update btn-lg col-auto md-auto"
-            (click)="resetProfile()">Clear Values
-          </button>
-          <button class="btn btn-default btn-lg col-auto mr-auto"
-                  (click)="routeToProfile()">Cancel
-          </button>
+        <button id="saveButton"
+                class="btn btn-primary btn-update btn-lg col-auto ml-auto"
+                [disabled]="isUpdateProfileDisabled"
+                (click)="updateProfile()">Save and Update Tenant
+        </button>
+        <button id="clearButton"
+                class="btn btn-default btn-update btn-lg col-auto md-auto"
+                (click)="resetProfile()">Clear Values
+        </button>
+        <button id="cancelButton"
+                class="btn btn-default btn-lg col-auto mr-auto"
+                (click)="routeToProfile()">Cancel
+        </button>
       </div>
     </div>
   </div>
