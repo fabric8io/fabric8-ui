@@ -1,6 +1,6 @@
 <div class="workspaces-notification" [class.workspaces-notification-hide]="hide">
   <div class="workspaces-notification-bar workspaces-notification-{{type}}">
-    <i class="pficon pficon-in-progress" *ngIf="type === 'info'"></i>
+    <i class="fa-spin pficon pficon-in-progress" *ngIf="type === 'info'"></i>
     <i class="fa fa-check-circle-o" *ngIf="type === 'success'"></i>
     <i class="fa fa-times-circle-o" *ngIf="type === 'danger'"></i>
     <span class="workspaces-notification-message">{{message}}</span>
