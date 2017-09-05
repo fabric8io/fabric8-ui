@@ -49,6 +49,38 @@ If you only want to make a change to a specific component, do so in that compone
 
 The file `osio.less` is imported into every component Less file using `@import (reference)`, so all files inside of the `/shared` directory will be used by each component.
 
+## Code Quality
+fabric8-ui utilizes [stylelint](https://github.com/stylelint/stylelint) and [htmlhint](https://github.com/yaniswang/HTMLHint) to check the `less` and `html` code. As part of each linter, we include three files: `.stylelintrc`, `.stylelintignore` and `.htmlhintrc`.
+
+The `.stylelintrc` configuration file controls our configuration for the stylelinter, which only checks folders and files that are not included in the `.stylelintignore` file. This allows us to exclude certain areas of the application, as needed.
+
+The `.htmlhintrc` configuration file controls our HTML verification configuration. In the creation of this configuration, we have taken into account the various Angular elements that will exist in the HTML pages.
+
+### Running the code quality checks
+
+Each linter is built into the build process, so running `npm run build` or `npm start` will display any errors, their location (file name and line number), and any error message(s). Whenever a file that is watched by the code quality checks is changed, the build (if started with `npm start`) will re-run, checking only the altered files.
+
+If you would like to run either of these checks individually, without kicking off a full build, you can do so by installing stylelint and htmlhint globally:
+
+```
+npm install stylelint -g
+npm install htmlhint -g
+```
+
+After installing stylelint and htmlhint globally, you can run the following commands:
+* `stylelint "**/*.less"`
+
+This will run stylelint against all `.less` files in fabric8-ui/src, using the `.stylelintrc` configuration file.
+
+* `htmlhint`
+
+This will run htmlhint against all `html` files in fabric8-ui/src, using the `.htmlhintrc` configuration file. This command **will not** ignore the files and folders dictated in the `webpack.common.js` file, leading to the possibility of errors being displayed that will not appear at build time.
+
+Alternatively, if you would like to check a subset of folders, or a specific file, you can do so by altering your htmlhint command:
+  ```
+    cat src/app/layout/header/header.component.html | htmlhint stdin
+  ```
+
 ## Integrations
 
 fabric8-ui uses rxjs to provide loose coupling between modules (both those in the code base and those integrated via NPM).
