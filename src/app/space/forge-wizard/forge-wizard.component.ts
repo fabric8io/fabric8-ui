@@ -13,10 +13,15 @@ export class ForgeWizardComponent implements OnInit {
   step1Config: WizardStepConfig;
   config: WizardConfig;
 
-  @Input() host: any;
+  description: string;
 
   constructor() {
-
+    this.description = "TEST";
+    this.step1Config = {
+      id: 'step1',
+      priority: 0,
+      title: 'First Step'
+    } as WizardStepConfig;
   }
 
   ngOnInit(): void {
@@ -33,5 +38,8 @@ export class ForgeWizardComponent implements OnInit {
       sidebarStyleClass: 'example-wizard-sidebar',
       stepStyleClass: 'example-wizard-step'
     } as WizardConfig;
+  }
+  cancel() {
+    //TODO
   }
 }
