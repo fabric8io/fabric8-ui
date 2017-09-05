@@ -102,11 +102,22 @@ export class SpaceWizardComponent implements OnInit {
 
   finish() {
     this.log(`finish ...`);
-    // navigate to the users space
-    this.router.navigate([
-      this.configurator.currentSpace.relationalData.creator.attributes.username,
-      this.configurator.currentSpace.attributes.name
-    ]);
+    // navigate to the users space if they aren't there already
+    if (
+      this.router &&
+      this.router.routerState &&
+      this.router.routerState.snapshot &&
+      this.router.routerState.snapshot.root &&
+      this.router.routerState.snapshot.root.firstChild &&
+      this.router.routerState.snapshot.root.firstChild.params['space']
+    ) {
+      this.log('Wizard complete and already in space context, no need to move.');
+    } else {
+      this.router.navigate([
+        this.configurator.currentSpace.relationalData.creator.attributes.username,
+        this.configurator.currentSpace.attributes.name
+      ]);
+    }
     if (this.host) {
       this.host.close();
     }
