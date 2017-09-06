@@ -1,6 +1,7 @@
 <pfng-wizard #wizard
     [config]="config"
-    (onCancel)="cancel()">"
+    (onCancel)="cancel()"
+    (onNext)="nextClicked($event)">
   <pfng-wizard-step [config]="step1Config">
     <form class="form-horizontal">
       <div class="form-group required">

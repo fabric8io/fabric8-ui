@@ -16,6 +16,8 @@ import { AppGeneratorMultipleSelectionLabelListComponent } from './components/ap
 
 import { WorkflowFactory } from './models/workflow';
 
+import { ForgeService } from '../forge-wizard/forge.service';
+
 import { IForgeServiceProvider } from './services/forge.service';
 import { AppGeneratorConfiguratorService, IAppGeneratorServiceProvider } from './services/app-generator.service';
 import { SpaceWizardComponent } from './space-wizard.component';
@@ -44,7 +46,8 @@ import { CodebasesService } from '../create/codebases/services/codebases.service
     UniqueSpaceNameValidatorDirective
   ],
   providers: [
-    CodebasesService
+    CodebasesService,
+    ForgeService
   ]
 })
 
