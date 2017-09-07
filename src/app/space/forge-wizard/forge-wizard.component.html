@@ -2,21 +2,29 @@
     [config]="config"
     (onCancel)="cancel()"
     (onNext)="nextClicked($event)">
-  <pfng-wizard-step [config]="step1Config">
-    <form class="form-horizontal">
-      <div class="form-group required">
-        <label class="col-sm-2 control-label required-pf" for="name">Name</label>
-        <div class="col-sm-10">
-          <input class="form-control" id="name" name="name" type="text" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-2 control-label" for="description">Description (Optional)</label>
-        <div class="col-sm-10">
 
-          <textarea class="form-control" id="description" name="description" rows="2">{{description}}</textarea>
-        </div>
-      </div>
-    </form>
+    <div class="wizard-pf-loading blank-slate-pf loading" *ngIf="!currentGui.inputs">
+        <div class="spinner spinner-lg blank-slate-pf-icon"></div>
+        <h3 class="blank-slate-pf-main-action">Loading Wizard</h3>
+        <p class="blank-slate-pf-secondary-action">
+          The wizard is loading the initial screen...
+        </p>
+    </div>
+
+  <pfng-wizard-step [config]="stepGithubImportPickOrganisation">
+    <organisation-step [gui]= "currentGui" *ngIf="currentGui.inputs"></organisation-step>
   </pfng-wizard-step>
+
+  <pfng-wizard-step [config]="stepGithubRepositories">
+      TODO stepGithubRepositories
+  </pfng-wizard-step>
+
+  <pfng-wizard-step [config]="stepConfigurePipeline">
+      TODO stepConfigurePipeline
+  </pfng-wizard-step>
+
+  <pfng-wizard-step [config]="stepCreateBuildConfig">
+      TODO stepCreateBuildConfig
+  </pfng-wizard-step>
+
 </pfng-wizard>

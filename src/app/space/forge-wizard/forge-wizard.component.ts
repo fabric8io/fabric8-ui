@@ -13,39 +13,51 @@ import { History } from "app/space/forge-wizard/history.component";
 })
 export class ForgeWizardComponent implements OnInit {
   @ViewChild('wizard') wizard: WizardComponent;
-  step1Config: WizardStepConfig;
+  stepGithubImportPickOrganisation: WizardStepConfig;
+  stepGithubRepositories: WizardStepConfig;
+  stepConfigurePipeline: WizardStepConfig;
+  stepCreateBuildConfig: WizardStepConfig;
   config: WizardConfig;
   history: History = new History();
 
-  description: string;
-
   constructor(private forgeService: ForgeService) {
-    this.description = "TEST";
-    this.step1Config = {
-      id: 'step1',
-      priority: 0,
-      title: 'First Step'
-    } as WizardStepConfig;
-  }
-
-  ngOnInit(): void {
     this.config = {
       title: 'Wizard Title',
       sidebarStyleClass: 'example-wizard-sidebar',
       stepStyleClass: 'example-wizard-step'
     } as WizardConfig;
 
+    this.stepGithubImportPickOrganisation = {
+      id: 'GithubImportPickOrganisationStep',
+      priority: 0,
+      title: 'Github Organisation'
+    } as WizardStepConfig;
+    this.stepGithubRepositories = {
+      id: 'GithubRepositoriesStep',
+      priority: 1,
+      title: 'Github Repositories'
+    } as WizardStepConfig;
+    this.stepConfigurePipeline = {
+      id: 'ConfigurePipeline',
+      priority: 3,
+      title: 'Configure Pipeline'
+    } as WizardStepConfig;
+    this.stepCreateBuildConfig = {
+      id: 'CreateBuildConfigStep',
+      priority: 3,
+      title: 'Build Config'
+    } as WizardStepConfig;
+  }
+
+  get currentGui(): Gui {
+    return this.history.currentGui;
+  }
+
+  ngOnInit(): void {
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
+      console.log(":::::::::LoadGUI" + JSON.stringify(gui));
       this.history.add(gui);
       this.history.done();
-
-      // Step 1
-      this.step1Config = {
-        id: this.history.currentGui.metadata.name,
-        priority: 0,
-        title: this.history.currentGui.metadata.name
-      } as WizardStepConfig;
-      // Wizard
     });
   }
   cancel() {

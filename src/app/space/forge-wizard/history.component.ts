@@ -15,21 +15,21 @@ export class History {
     this.ready = true;
   }
 
-  apply(state: string) {
-    if (state == null) return;
-    let submittableGui = JSON.parse(atob(state));
-    if (submittableGui.inputs) {
-      for (let input of submittableGui.inputs) {
-        for (let gui of this.state) {
-          for (let guiInput of gui.inputs) {
-            if (guiInput.name === input.name) {
-              guiInput.value = input.value;
-            }
-          }
-        }
-      }
-    }
-  }
+  // apply(state: string) {
+  //   if (state == null) return;
+  //   let submittableGui = JSON.parse(atob(state));
+  //   if (submittableGui.inputs) {
+  //     for (let input of submittableGui.inputs) {
+  //       for (let gui of this.state) {
+  //         for (let guiInput of gui.inputs) {
+  //           if (guiInput.name === input.name) {
+  //             guiInput.value = input.value;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   get(index: number): Gui {
     return this.state[index - 1];
