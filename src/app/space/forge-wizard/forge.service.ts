@@ -38,7 +38,7 @@ export class ForgeService {
     }
   }
 
-  private post(submittableGui: Gui, action: string): Promise<Gui> {
+  private post(submittableGui: Gui, action: string): Promise<any> {
     let options = new Headers({ 'Authorization': 'Bearer ' + this.auth.getToken() });
     return this.http.post(this.apiUrl + action, submittableGui, new RequestOptions({ headers: options }))
       .retryWhen(errors => errors.delay(3000).scan((acc, source, index) => {

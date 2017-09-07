@@ -10,15 +10,13 @@ import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
 import { WorkItemWidgetModule } from './work-item-widget/work-item-widget.module';
 import { RecentPipelinesWidgetModule } from '../dashboard-widgets/recent-pipelines-widget/recent-pipelines-widget.module';
-import { ForgeWizardModule } from "app/space/forge-wizard/forge-wizard.module";
 
 @NgModule({
   imports: [
     CommonModule,
     HomeRoutingModule,
     ModalModule,
-    //SpaceWizardModule,
-    ForgeWizardModule,
+    SpaceWizardModule,
     Fabric8WitModule,
     WorkItemWidgetModule,
     RecentPipelinesWidgetModule

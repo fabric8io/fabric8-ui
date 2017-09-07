@@ -15,7 +15,7 @@ import {Subscription } from 'rxjs';
 })
 export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
-  @ViewChild('assSpace') updateSpace: IModalHost;
+  //@ViewChild('aaddSpace') updateSpace: IModalHost;
   private _context: Context;
   private contextSubscription: Subscription;
   modalRef: BsModalRef;
