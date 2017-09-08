@@ -3,11 +3,11 @@
   <div [class.width-100]="field.enabled===false" class="input-group">
     <input type="text" title="{{field.label}}" [class.form-control-danger]="!field.valid" id="{{field.label}}"
       name="{{field.label}}" class="user-select-none combobox form-control" readonly="true"
-      (click)="field.display.open =!field.display.open" [(ngModel)]="field.value"
+      (click)="field.display.open =!field.display.open; display()" [(ngModel)]="field.value"
       placeholder="select an option">
     <div *ngFor="let input of field.inputs">
     <ul class="dropdown-menu" [class.open]="field.display.open">
-      <li class="choice-container" (click)="field.value=choice.id;field.display.open = false"
+      <li class="choice-container" (click)="field.value=choice.id;field.display.open = false;display()"
         *ngFor="let choice of input.valueChoices">
         <div [class.selected]="field.value === choice.id" class="dropdown-menu-item user-select-none cursor-pointer">
           <div [class.vertical-layout]="choice.verticalLayout===true" class="choice-item">

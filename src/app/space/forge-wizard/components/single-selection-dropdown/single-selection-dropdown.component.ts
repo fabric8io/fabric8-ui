@@ -1,5 +1,4 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { IField } from '../model';
 import { Input as GuiInput, Option } from "app/space/forge-wizard/gui.model";
 
 @Component({
@@ -20,6 +19,10 @@ export class SingleSelectionDropDownComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+  }
+
+  display() {
+    console.log(":::::SELECTED FIELD:::"+ this.field.value);
   }
 
 }

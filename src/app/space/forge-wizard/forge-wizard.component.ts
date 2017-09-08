@@ -22,9 +22,8 @@ export class ForgeWizardComponent implements OnInit {
 
   constructor(private forgeService: ForgeService) {
     this.config = {
-      title: 'Wizard Title',
-      sidebarStyleClass: 'example-wizard-sidebar',
-      stepStyleClass: 'example-wizard-step'
+      title: 'Import booster',
+      stepStyleClass: 'wizard'
     } as WizardConfig;
 
     this.stepGithubImportPickOrganisation = {
@@ -55,7 +54,6 @@ export class ForgeWizardComponent implements OnInit {
 
   ngOnInit(): void {
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
-      console.log(":::::::::LoadGUI" + JSON.stringify(gui));
       this.history.add(gui);
       this.history.done();
     });
