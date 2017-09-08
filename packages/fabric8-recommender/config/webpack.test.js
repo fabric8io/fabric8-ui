@@ -1,15 +1,16 @@
 /**
  * @author: @AngularClass
  */
-const sass = require('./sass');
+// const sass = require('./sass');
 const helpers = require('./helpers');
 const webpack = require('webpack');
-
+const path = require('path');
 /**
  * Webpack Plugins
  */
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 /**
  * Webpack Constants
@@ -112,21 +113,43 @@ module.exports = {
       },
 
       {
-        test: /\.scss$/,
-        loaders: [
+        // test: /\.scss$/,
+        // loaders: [
+        //   {
+        //     loader: 'to-string-loader'
+        //   }, {
+        //     loader: 'css-loader'
+        //   }, {
+        //     loader: 'sass-loader',
+        //     query: {
+        //       includePaths: sass.modules.map(val => {
+        //         return val.sassPath;
+        //       })
+        //     }
+        //   }
+        // ]
+        test: /\.component\.less$/,
+        use: [
           {
             loader: 'to-string-loader'
           }, {
-            loader: 'css-loader'
+            loader: 'css-loader',
+            options: {
+              minimize: true,
+              sourceMap: true,
+              context: '/'
+            }
           }, {
-            loader: 'sass-loader',
-            query: {
-              includePaths: sass.modules.map(val => {
-                return val.sassPath;
-              })
+            loader: 'less-loader',
+            options: {
+              paths: [
+                path.resolve(__dirname, "../node_modules/patternfly/src/less"),
+                path.resolve(__dirname, "../node_modules/patternfly/node_modules")
+              ],
+              sourceMap: true
             }
           }
-        ]
+        ],
       },
 
       /* File loader for supporting fonts, for example, in CSS files.
@@ -231,6 +254,17 @@ module.exports = {
         // legacy options go here
       }
     }),
+    /*
+     * StyleLintPlugin
+     */
+    new StyleLintPlugin({
+      configFile: '.stylelintrc',
+      syntax: 'less',
+      context: 'src',
+      files: '**/*.less',
+      failOnError: true,
+      quiet: false,
+    })
   ],
 
   /**
