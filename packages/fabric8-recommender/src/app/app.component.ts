@@ -3,8 +3,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
     selector: 'f8-app',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    templateUrl: './app.component.html'
 })
 
 export class AppComponent implements OnInit {

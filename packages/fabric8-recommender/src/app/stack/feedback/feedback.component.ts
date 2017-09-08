@@ -6,7 +6,7 @@ import {FeedbackService} from './feedback.service';
     selector: 'feedback',
     templateUrl: './feedback.component.html',
     providers: [FeedbackService],
-    styleUrls: ['feedback.component.scss']
+    styleUrls: ['feedback.component.less']
 })
 
 export class FeedbackComponent implements OnChanges {

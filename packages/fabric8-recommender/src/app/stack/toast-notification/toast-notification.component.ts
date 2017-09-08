@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 @Component({
   selector: 'fab-toast-notification',
   templateUrl: './toast-notification.component.html',
-  styleUrls: ['./toast-notification.component.scss']
+  styleUrls: ['./toast-notification.component.less']
 })
 export class ToastNotificationComponent {
 

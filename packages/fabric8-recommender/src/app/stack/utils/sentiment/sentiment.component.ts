@@ -3,7 +3,7 @@ import {Component, Input, OnChanges} from '@angular/core';
 @Component({
     selector: 'sentiment',
     templateUrl: './sentiment.component.html',
-    styleUrls: ['sentiment.component.scss']
+    styleUrls: ['sentiment.component.less']
 })
 export class SentimentComponent implements OnChanges {
     @Input() score: number;

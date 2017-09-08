@@ -10,7 +10,7 @@ import {StackReportModel, ResultInformationModel, UserStackInfoModel, ComponentI
     templateUrl: './stack-details.component.html',
     providers: [StackAnalysesService],
     encapsulation: ViewEncapsulation.None,
-    styleUrls: ['./stack-details.component.scss'],
+    styleUrls: ['./stack-details.component.less'],
 })
 
 export class StackDetailsComponent implements OnChanges {

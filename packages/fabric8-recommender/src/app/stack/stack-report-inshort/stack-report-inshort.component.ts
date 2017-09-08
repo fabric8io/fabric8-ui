@@ -10,7 +10,7 @@ import {StackReportModel, ResultInformationModel, UserStackInfoModel, Recommenda
     templateUrl: './stack-report-inshort.component.html',
     providers: [StackAnalysesService],
     encapsulation: ViewEncapsulation.None,
-    styleUrls: ['./stack-report-inshort.component.scss'],
+    styleUrls: ['./stack-report-inshort.component.less'],
 })
 
 export class StackReportInShortComponent implements OnChanges {

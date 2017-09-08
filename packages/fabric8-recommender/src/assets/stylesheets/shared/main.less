@@ -1,0 +1,53 @@
+/* ngx-widgets */
+
+// PatternFly References
+// @import (less, reference) '../../../node_modules/patternfly/dist/css/patternfly.css';
+// @import (less, reference) '../../../node_modules/patternfly/dist/css/patternfly-additions.css';
+// @import (reference) '../../../../node_modules/patternfly/src/less/patternfly.less';
+
+// Import all PatternFly files serarately, due to how Gulp handles paths
+// OpenSans
+@import (reference) '../../../../node_modules/patternfly/src/less/fonts.less';
+// Bootstrap
+@import (reference) '../../../../node_modules/patternfly/node_modules/bootstrap/less/bootstrap.less';
+// Font Awesome
+@import (reference) '../../../../node_modules/patternfly/node_modules/font-awesome/less/font-awesome.less';
+// PatternFly
+@import (reference) '../../../../node_modules/patternfly/src/less/variables.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/mixins.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/alerts.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/badges.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/breadcrumbs.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/buttons.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/dropdowns.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/forms.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/labels.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/list-group.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/modals.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/pager.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/pagination.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/panels.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/popovers.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/progress-bars.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/tables.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/tabs.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/tooltip.less';
+@import (reference) '../../../../node_modules/patternfly/src/less/type.less';
+
+/* recommender widgets */
+
+// formulas
+@import '_formulas.less';
+
+// site variables and PatternFly overrides
+@import '_utilities.less';
+@import '_variables.less';
+
+// custom mixins
+@import '_mixins.less';
+
+// New typography settings
+@import '_typography.less';
+
+// General layout information
+@import '_layout.less';

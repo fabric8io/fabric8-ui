@@ -1,0 +1,157 @@
+@import (reference) '../../../assets/stylesheets/shared/main.less';
+
+.component-information {
+  table {
+    font-size: 13px;
+    table-layout: fixed;
+    th {
+      text-align: center;
+      vertical-align: middle;
+      font-size: 11px;
+      word-wrap: break-word;
+    }
+    td {
+      vertical-align: middle;
+      padding: 10px;
+      background: @color-pf-white;
+    }
+    .child-class, .parent-class {
+      td {
+        background: #fcfbdd;
+      }
+    }
+    .github-stats {
+      span {
+        display: inline-block;
+        width: 99%;
+      }
+    }
+    .used-by {
+      display: inline-block;
+      width: 99%;
+      span {
+        width: 60%;
+      }
+      .used-by-icon {
+        color: #ff7f0e;
+      }
+    }
+    .child-class {
+      font-weight: bold;
+      td:first-child {
+        /* stylelint-disable */
+        padding-left: 35px !important;
+        /* stylelint-enable */
+      }
+      .github-stats {
+        font-weight: normal;
+      }
+      td {
+        background: #dcf98a;
+      }
+    }
+    td:first-child {
+      span {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+      }
+    }
+    .relation-icon {
+      transform: rotate(-180deg);
+      position: relative;
+      top: -10px;
+    }
+    .ellipsis {
+      max-width: 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      word-break: break-all;
+    }
+    .action {
+      font-size: 10px;
+      color: dodgerblue;
+      cursor: pointer;
+    }
+    .small-width {
+      width: 5%;
+    }
+    .medium-width {
+      width: 10%;
+    }
+    .large-width {
+      width: 15%;
+    }
+    .parent-icon {
+      color: #ed7b01;
+      cursor: pointer;
+    }
+    .secure {
+      color: #60b57e;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .companion {
+      color: #60b57e;
+    }
+  }
+  .stack-components-toolbar {
+    margin: 0;
+    padding: 10px 0 0px 10px;
+    border: 1px solid;
+    border-color: @color-pf-black-300;
+    &:after {
+      content: '';
+      clear: both;
+      float: none;
+      display: block;
+    }
+  }
+  .usage-outlier {
+    &:after {
+      content: 'U';
+    }
+  }
+  .license-outlier {
+    &:after {
+      content: 'L';
+    }
+  }
+  .insecure {
+    color: #ff1f1c;
+  }
+  .child-icon {
+    color: #000;
+  }
+  .outlier-icon, .filter-icon {
+    font-size: 10px;
+    display: inline-block;
+    border-radius: 50%;
+    padding: 3px;
+    color: @color-pf-white;
+    background: @color-pf-red-100;
+  }
+  .different-version {
+    color: #ed7b01;
+  }
+  .unknown-license {
+    /* stylelint-disable */
+    background: #ed7b01 !important;
+    color: @color-pf-white !important;
+    /* stylelint-enable */
+    &:after {
+      content: 'L';
+    }
+  }
+  .conflict-license {
+    /* stylelint-disable */
+    background: @color-pf-red-100 !important;
+    color: @color-pf-white !important;
+    /* stylelint-enable */
+    &:after {
+      content: 'L';
+    }
+  }
+}

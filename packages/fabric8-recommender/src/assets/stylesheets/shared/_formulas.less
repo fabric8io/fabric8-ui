@@ -1,0 +1,44 @@
+/* stylelint-disable */
+.padding-loop(@i) when (@i > 0) {
+  .padding-@{i} {
+    padding: (1px*@i) !important;
+  }
+  .padding-top-@{i} {
+    padding-top: (1px*@i) !important;
+  }
+  .padding-left-@{i} {
+    padding-left: (1px*@i) !important;
+  }
+  .padding-bottom-@{i} {
+    padding-bottom: (1px*@i) !important;
+  }
+  .padding-right-@{i} {
+    padding-right: (1px*@i) !important;
+  }
+  .padding-loop(@i - 1);
+}
+.padding-loop(15);
+
+.margin-loop(@i) when (@i > 0) {
+  .margin-v {
+    margin: (1px*@i) !important;
+  }
+  .margin-top-@{i} {
+    margin-top: (1px*@i) !important;
+  }
+  .margin-left-@{i} {
+    margin-left: (1px*@i) !important;
+  }
+  .margin-bottom-@{i} {
+    margin-bottom: (1px*@i) !important;
+  }
+  .margin-right-@{i} {
+    margin-right: (1px*@i) !important;
+  }
+  .margin-loop(@i - 1);
+}
+.margin-loop(15);
+
+@include: padding-x;
+@include: margin-x;
+/* stylelint-enable */

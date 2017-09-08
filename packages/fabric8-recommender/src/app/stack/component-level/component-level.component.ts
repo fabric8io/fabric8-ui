@@ -10,7 +10,7 @@ import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 @Component({
     selector: 'component-level-information',
     templateUrl: './component-level.component.html',
-    styleUrls: ['./component-level.component.scss'],
+    styleUrls: ['./component-level.component.less'],
     providers: [AddWorkFlowService],
 })
 
