@@ -1,5 +1,5 @@
 {
-  "tagname-lowercase": true,
+  "tagname-lowercase": false,
   "attr-value-not-empty": false,
   "attr-no-duplication": true,
   "doctype-first": false,
