@@ -83,6 +83,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
     this.showNotification = false;
     let observableArray: Observable<any>[] = [];
     let tenantCleanError: boolean = false;
+    let spaceDeleteError: boolean = false;
 
     this.tenantIcon = "spinner spinner-lg";
 
@@ -99,6 +100,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
         }).catch((error) => {
           space['progress'] = "Error: Unable to erase";
           space['statusIcon'] = "pficon pficon-warning-triangle-o";
+          spaceDeleteError = true;
           this.showWarningNotification();
           return Observable.of(error);
         });
@@ -122,7 +124,9 @@ export class CleanupComponent implements OnInit, OnDestroy {
     Observable.forkJoin(...observableArray).subscribe((result) => {
       if(!tenantCleanError) {
         this.tenantService.updateTenent().subscribe(() => {
-          this.showSuccessNotification();
+          if(!spaceDeleteError) {
+            this.showSuccessNotification();
+          }
           this.tenantIcon = "pficon pficon-ok cleanup-row-account-icon";
           this.tenantResult = "Tenant reset successful";
         }, (error) => {

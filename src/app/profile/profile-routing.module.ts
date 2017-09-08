@@ -28,7 +28,7 @@ const routes: Routes = [
         path: '_cleanup',
         loadChildren: './cleanup/cleanup.module#CleanupModule',
         data: {
-          title: 'Cleanup'
+          title: 'Reset Environment'
         }
       },
       {

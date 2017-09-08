@@ -19,7 +19,6 @@
           <div class="list-group list-view-pf list-view-pf-view">
             <div class="list-group-item">
               <div class="list-group-item-header">
-                <!-- todo - conditionally show expansion if there are errors -->
                 <div class="list-view-pf-expand" *ngIf="tenantError">
                   <span class="fa fa-angle-right" (click)="toggleTenantError()"
                         [ngClass]="{'fa-angle-down': tenantErrorExpanded}"></span>
