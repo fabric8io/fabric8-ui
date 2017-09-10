@@ -28,9 +28,7 @@ const precss = require('precss');
 const extractCSS = new ExtractTextPlugin({
   filename: '[name].[id]' + (helpers.isProd ? '.[contenthash]' : '') + '.css',
   allChunks: true
-}
-);
-
+});
 
 /*
  * Webpack Constants
@@ -126,50 +124,6 @@ module.exports = {
             }
           }
         ],
-        // test: /^(?!.*component).*\.scss$/,
-        // use: extractCSS.extract({
-        //   fallback: 'style-loader',
-        //   use: [
-        //     {
-        //       loader: 'css-loader',
-        //       options: {
-        //         minimize: helpers.isProd,
-        //         sourceMap: true,
-        //         context: '/'
-        //       }
-        //     }, {
-        //       loader: 'sass-loader',
-        //       options: {
-        //         includePaths: sass.modules.map(function (val) {
-        //           return val.sassPath;
-        //         }),
-        //         sourceMap: true
-        //       }
-        //     }
-        //   ],
-        // })
-      }, {
-        // test: /\.component\.scss$/,
-        // use: [
-        //   {
-        //     loader: 'to-string-loader'
-        //   }, {
-        //     loader: 'css-loader',
-        //     options: {
-        //       minimize: helpers.isProd,
-        //       sourceMap: true,
-        //       context: '/'
-        //     }
-        //   }, {
-        //     loader: 'sass-loader',
-        //     options: {
-        //       includePaths: sass.modules.map(function (val) {
-        //         return val.sassPath;
-        //       }),
-        //       sourceMap: true
-        //     }
-        //   }
-        // ],
         test: /\.component\.less$/,
         use: [
           {
@@ -241,18 +195,6 @@ module.exports = {
      */
     new CheckerPlugin(),
 
-
-    // new sassLintPlugin({
-    //   configFile: '.sass-lint.yml',
-    //   context: ['inherits from webpack'],
-    //   ignoreFiles: [],
-    //   ignorePlugins: [],
-    //   glob: '**/*.s?(a|c)ss',
-    //   quiet: false,
-    //   failOnWarning: false,
-    //   failOnError: false,
-    //   testing: false
-    // }),
     /**
      * Plugin: ContextReplacementPlugin
      * Description: Provides context to Angular's use of System.import

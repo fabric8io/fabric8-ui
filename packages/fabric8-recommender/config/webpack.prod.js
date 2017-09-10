@@ -16,7 +16,6 @@ const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const webpackMerge = require('webpack-merge');
-
 /**
  * Webpack Constants
  */

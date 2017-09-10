@@ -141,11 +141,11 @@ run `npm start`.
 **To hit stack analysis api in standalone mode**
 Put a token in the environment variable with key as 'STACK_API_TOKEN'.
 
-== CSS and SASS
+== CSS and LESS
 
-fabric8-stack-analysis-ui uses SASS for it's stylesheets. It also uses the Angular emulation
+fabric8-stack-analysis-ui uses LESS for it's stylesheets. It also uses the Angular emulation
 of the shadow dom, so you will normally want to place your styles in the
-`.component.scss` file next to the html and the typescript.
+`.component.LESS` file next to the html and the typescript.
 
 We use mixins to avoid polluting components with uncessary style classes, and to avoid
 an explosion of shared files.  
