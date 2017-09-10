@@ -4,7 +4,6 @@ var gulp = require('gulp'),
   autoprefixer = require('autoprefixer'),
   LessAutoprefix = require('less-plugin-autoprefix'),
   autoprefix = new LessAutoprefix({ browsers: ['last 2 versions'] }),
-  // sassCompiler = require('gulp-sass'),
   changed = require('gulp-changed'),
   cssmin = require('gulp-cssmin'),
   del = require('del'),
@@ -17,7 +16,6 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence'),
   sourcemaps = require('gulp-sourcemaps'),
   stylus = require('stylus');
-  // sass = require('./config/sass'),  
 
 var appSrc = 'src';
 var libraryDist = 'dist';
@@ -40,28 +38,6 @@ function updateWatchDist() {
     .pipe(changed(watchDist))
     .pipe(gulp.dest(watchDist));
 }
-
-// function transpileSASS(src, debug) {
-//   let opts = {
-//     outputStyle: 'compressed',
-//     includePaths: sass.modules.map(val => {
-//       return val.sassPath;
-//     })
-//   };
-
-//   if (debug) {
-//     opts.outputStyle = 'expanded';
-//     opts.sourceComments = true;
-//     console.log('Compiling', src,'in debug mode using SASS options:', opts );
-//   }
-//   return gulp.src(src)
-//     .pipe(sourcemaps.init())
-//     .pipe(sassCompiler(opts).on('error', sassCompiler.logError)) // this will prevent our future watch-task from crashing on sass-errors
-//     .pipe(sourcemaps.write())
-//     .pipe(gulp.dest(function (file) {
-//       return libraryDist + file.base.slice(__dirname.length); // save directly to dist
-//     }));
-// }
 
 function transpileLESS(src) {
   return gulp.src(src)
@@ -104,17 +80,6 @@ gulp.task('lint-less', function lintLessTask() {
   }));
 });
 
-// gulp.task('post-transpile', ['transpile'], function () {
-//   return gulp.src(['dist/src/app/**/*.js'])
-//     .pipe(replace(/templateUrl:\s/g, "template: require("))
-//     .pipe(replace(/\.html',/g, ".html'),"))
-//     .pipe(replace(/styleUrls: \[/g, "styles: [require("))
-//     .pipe(replace(/\.scss']/g, ".css').toString()]"))
-//     .pipe(gulp.dest(function (file) {
-//       return file.base; // because of Angular 2's encapsulation, it's natural to save the css where the scss-file was
-//     }));
-// });
-
 // require transpile to finish before the build starts the post-transpile task
 gulp.task('post-transpile', ['transpile'], function () {
   return gulp.src(['dist/src/app/**/*.js'])
@@ -128,30 +93,10 @@ gulp.task('post-transpile', ['transpile'], function () {
     }));
 });
 
-// //Sass compilation and minifiction
-// gulp.task('transpile-sass', function () {
-//   if (argv['sass-src']) {
-//     return transpileSASS(argv['sass-src'], true);
-//   } else {
-//     return transpileSASS(appSrc + '/app/**/*.scss');
-//   }
-// });
-
 // Less compilation - requires linting to complete before it will start
 gulp.task('transpile-less', ['lint-less'], function () {
   return transpileLESS(appSrc + '/**/*.less');
 });
-
-// // Put the SASS files back to normal
-// gulp.task('build-library',
-//   [
-//     'transpile',
-//     'post-transpile',
-//     'transpile-sass',
-//     'copy-html',
-//     'copy-images',
-//     'copy-static-assets'
-//   ]);
 
 // Put the LESS files back to normal
 gulp.task('build-library',
