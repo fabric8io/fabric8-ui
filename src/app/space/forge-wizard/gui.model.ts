@@ -63,6 +63,8 @@ export class Option {
   id: string;
   description: string;
   name: string;
+  selected: boolean; // Add for component multiple-select list
+  visible: boolean; // Add for multi-select list filtering
 }
 
 export class DownloadFile {

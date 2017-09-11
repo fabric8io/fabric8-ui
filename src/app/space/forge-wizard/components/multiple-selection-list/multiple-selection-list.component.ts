@@ -19,11 +19,13 @@ export class MultipleSelectionListComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log("::::::::::::::Multiple-Selection-list field ngInit"+JSON.stringify(this.field));
+    this.field.display.selected = false;
   }
 
   // behaviors
   allOptionsSelected(field: GuiInput): boolean {
-    return !field.display.choices.find((i) => i.selected === false);
+    return !field.valueChoices.find((i) => i.selected === false);
   }
 
   hasValue(field: GuiInput): boolean {
@@ -34,56 +36,15 @@ export class MultipleSelectionListComponent implements OnInit {
      return tmp;
   }
 
-  selectOption(field: GuiInput, choice: Option) {
-    choice.selected = true;
-    this.updateFieldValue();
-  }
-  toggleOption(field: GuiInput, choice: Option) {
-    choice.selected = !choice.selected;
-    this.updateFieldValue();
-  }
-
-  deselectOption(field: GuiInput, choice: Option) {
-    choice.selected = false;
-    //this.field.value.pop(field);
+  selectChoice(field: GuiInput, choice: Option) {
+    this.field.value = this.field.valueChoices
+      .filter((o) => o.selected)
+      .map((o) => o.id);
   }
 
   clearFilter(field: GuiInput) {
     this.showFilter = false;
     this.filterList(field, '');
-  }
-
-  selectChoice(choice) {
-    this.updateFieldValue();
-  }
-
-  // updateFieldValue() {
-  //   if ( !this.field ) {
-  //     return null;
-  //   }
-  //   switch (this.field.display.inputType) {
-  //     case FieldWidgetClassificationOptions.MultipleSelection:
-  //     {
-  //       if ( this.field.display.hasChoices ) {
-  //         this.field.value = this.field.display.choices
-  //         .filter((o) => o.selected)
-  //         .map((o) => o.id);
-  //       } else {
-  //         this.field.value = [];
-  //       }
-  //       this.appGenerator.state.canMoveToNextStep = true;
-  //       break;
-  //     }
-  //     default: {
-  //       break;
-  //     }
-  //   }
-  // }
-
-  deselectAllOptions(field: GuiInput) {
-    field.display.choices.forEach((o) => {
-      o.selected = false;
-    });
   }
 
   filterList(field: GuiInput, filter: string) {
@@ -109,7 +70,7 @@ export class MultipleSelectionListComponent implements OnInit {
     let filterRegularExpressions = filters.map( f => new RegExp(f || '', 'ig'));
 
 
-    field.display.choices.filter( (choice) => {
+    field.valueChoices.filter( (choice) => {
       // set everything to not visible,
       // except for selected when 'include selected' special filter is on
       choice.visible = false;
@@ -140,27 +101,27 @@ export class MultipleSelectionListComponent implements OnInit {
   }
 
   selectAllOptions(field: GuiInput) {
-    field.display.choices.forEach((o) => {
+    field.valueChoices.forEach((o) => {
       o.selected = true;
     });
   }
 
-  toggleSelectAll(field: GuiInput) {
-    if ( !field ) {
-      return;
-    }
-    // at least one not selected, then select all , else deselect all
-    let item = field.display.choices.find((i) => i.selected === false);
-    if ( item ) {
-      for ( let o of field.display.choices ) {
-        o.selected = true;
-      }
-    } else {
-      for ( let o of field.display.choices ) {
-        o.selected = false;
-      }
-    }
-    this.updateFieldValue();
-  }
+  // toggleSelectAll(field: GuiInput) {
+  //   if ( !field ) {
+  //     return;
+  //   }
+  //   // at least one not selected, then select all , else deselect all
+  //   let item = field.display.choices.find((i) => i.selected === false);
+  //   if ( item ) {
+  //     for ( let o of field.display.choices ) {
+  //       o.selected = true;
+  //     }
+  //   } else {
+  //     for ( let o of field.display.choices ) {
+  //       o.selected = false;
+  //     }
+  //   }
+  //   this.updateFieldValue();
+  // }
 
 }

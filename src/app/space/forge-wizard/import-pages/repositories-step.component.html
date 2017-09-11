@@ -1,0 +1,12 @@
+<section *ngIf="gui.inputs">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-horizontal">
+          <label title="organisation" required>Repository names</label>
+            <multiple-selection-list *ngIf="gui.inputs"
+              class="input-group width-100" [field]="gui.inputs[0]">
+            </multiple-selection-list>
+      </div>
+    </div>
+  </div>
+</section>
