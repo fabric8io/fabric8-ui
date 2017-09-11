@@ -69,4 +69,10 @@ export class ForgeWizardComponent implements OnInit {
       this.history.done();
     });
   }
+
+  previousClicked($event: WizardEvent): void {
+    let index = this.history.stepIndex - 1;
+    console.log("::::Previous " + index);
+    this.history.resetTo(index);
+  }
 }

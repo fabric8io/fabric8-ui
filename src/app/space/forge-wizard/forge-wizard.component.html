@@ -1,7 +1,8 @@
 <pfng-wizard #wizard
     [config]="config"
     (onCancel)="cancel()"
-    (onNext)="nextClicked($event)">
+    (onNext)="nextClicked($event)"
+    (onPrevious)="previousClicked($event)">
 
     <div class="wizard-pf-loading blank-slate-pf loading" *ngIf="!currentGui.inputs">
         <div class="spinner spinner-lg blank-slate-pf-icon"></div>
@@ -12,12 +13,10 @@
     </div>
 
   <pfng-wizard-step [config]="stepGithubImportPickOrganisation">
-    {{currentGui.metadata?.name}}
       <organisation-step [gui]= "currentGui"></organisation-step>
   </pfng-wizard-step>
 
   <pfng-wizard-step [config]="stepGithubRepositories">
-    {{currentGui.metadata?.name}}
       <repositories-step [gui]= "currentGui"></repositories-step>
   </pfng-wizard-step>
 
