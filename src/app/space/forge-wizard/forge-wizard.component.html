@@ -12,10 +12,12 @@
     </div>
 
   <pfng-wizard-step [config]="stepGithubImportPickOrganisation">
+    {{currentGui.metadata?.name}}
       <organisation-step [gui]= "currentGui"></organisation-step>
   </pfng-wizard-step>
 
   <pfng-wizard-step [config]="stepGithubRepositories">
+    {{currentGui.metadata?.name}}
       <repositories-step [gui]= "currentGui"></repositories-step>
   </pfng-wizard-step>
 

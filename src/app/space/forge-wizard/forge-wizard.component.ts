@@ -63,6 +63,10 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   nextClicked($event: WizardEvent): void {
-    this.forgeService.loadGui('fabric8-import-git', this.history);
+    this.history.resetTo(this.history.stepIndex);
+    this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
+      this.history.add(gui);
+      this.history.done();
+    });
   }
 }
