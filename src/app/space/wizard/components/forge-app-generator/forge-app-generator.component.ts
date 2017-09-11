@@ -24,7 +24,7 @@ export class ForgeAppGeneratorComponent implements OnInit, OnDestroy, OnChanges 
   // keep track of the number of instances
   static instanceCount: number = 1;
 
-  @Input() title: string = 'Forge Wizard';
+  @Input() title: string = 'Application Wizard';
   @Input() workflowStepName: string = '';
   @Input() forgeCommandName: string = 'none';
   @Input() workflow: IWorkflow;
