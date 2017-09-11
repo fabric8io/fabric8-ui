@@ -12,7 +12,7 @@
     </div>
 
   <pfng-wizard-step [config]="stepGithubImportPickOrganisation">
-    <organisation-step [gui]= "currentGui" *ngIf="currentGui.inputs"></organisation-step>
+      <organisation-step [gui]= "currentGui"></organisation-step>
   </pfng-wizard-step>
 
   <pfng-wizard-step [config]="stepGithubRepositories">

@@ -5,10 +5,9 @@
       name="{{field.label}}" class="user-select-none combobox form-control" readonly="true"
       (click)="field.display.open =!field.display.open; display()" [(ngModel)]="field.value"
       placeholder="select an option">
-    <div *ngFor="let input of field.inputs">
     <ul class="dropdown-menu" [class.open]="field.display.open">
       <li class="choice-container" (click)="field.value=choice.id;field.display.open = false;display()"
-        *ngFor="let choice of input.valueChoices">
+        *ngFor="let choice of field.valueChoices">
         <div [class.selected]="field.value === choice.id" class="dropdown-menu-item user-select-none cursor-pointer">
           <div [class.vertical-layout]="choice.verticalLayout===true" class="choice-item">
             <div *ngIf="choice.hasIcon===true" class="choice-icon margin-right-standard-offset">
@@ -22,7 +21,6 @@
         </div>
       </li>
     </ul>
-  </div>
     <span class="input-group-addon" (click)="field.display.open =!field.display.open">
       <span class="caret"></span>
       <span class="glyphicon glyphicon-remove"></span>
