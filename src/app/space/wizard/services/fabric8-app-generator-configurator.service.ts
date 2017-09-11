@@ -206,6 +206,10 @@ export class AppGeneratorConfiguratorService {
           this.augmentStackChoices(field, context, execution);
           break;
         }
+        case 'overridejenkinsfile': {
+          field.display.note = field.display.description;
+          break;
+        }
         case 'pipeline': {
           field.display.showVerticalLabel = true;
           field.display.showLabel = false;
