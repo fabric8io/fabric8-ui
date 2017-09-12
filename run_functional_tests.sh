@@ -13,14 +13,14 @@ node_modules/protractor/bin/webdriver-manager update --versions.chrome 2.30
 echo -n Starting Webdriver and Selenium...
 (node_modules/protractor/bin/webdriver-manager --versions.chrome 2.30 start >>$LOGFILE 2>&1 &)
 # Wait for port 4444 to be listening connections
-while ! (ncat -w 1 127.0.0.1 4444 </dev/null >/dev/null 2>&1); do sleep 1; done
+while ! (nc -w 1 127.0.0.1 4444 </dev/null >/dev/null 2>&1); do sleep 1; done
 echo done.
 
 # Start the web app
 echo -n Starting Almighty development server...
 (node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --progress --host 0.0.0.0 --port 8088 >>$LOGFILE 2>&1 &)
 # Wait for port 8088 to be listening connections
-while ! (ncat -w 1 127.0.0.1 8088 </dev/null >/dev/null 2>&1); do sleep 1; done
+while ! (nc -w 1 127.0.0.1 8088 </dev/null >/dev/null 2>&1); do sleep 1; done
 echo done.
 
 # Retrieve index.html to trigger webpack to build the source
