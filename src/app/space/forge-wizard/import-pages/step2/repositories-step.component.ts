@@ -1,11 +1,10 @@
 import {Component, OnInit, Input} from '@angular/core';
 
-import { Option, SubmittableInput, Input as GuiInput } from '../gui.model';
+import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
 
 @Component({
   selector: 'repositories-step',
-  templateUrl: './repositories-step.component.html',
-  styleUrls: ['./repositories-step.component.less']
+  templateUrl: './repositories-step.component.html'
 })
 export class RepositoriesComponent implements OnInit {
 
