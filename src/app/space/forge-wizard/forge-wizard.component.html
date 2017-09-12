@@ -1,6 +1,6 @@
 <pfng-wizard #wizard
     [config]="config"
-    (onCancel)="cancel()"
+    (onCancel)="cancel($event)"
     (onNext)="nextClicked($event)"
     (onPrevious)="previousClicked($event)">
 

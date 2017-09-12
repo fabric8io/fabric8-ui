@@ -5,6 +5,7 @@ import { WizardComponent, WizardConfig, WizardStepConfig, WizardEvent } from 'pa
 import { ForgeService } from "app/space/forge-wizard/forge.service";
 import { Gui, Input } from "app/space/forge-wizard/gui.model";
 import { History } from "app/space/forge-wizard/history.component";
+import { AnalyzeOverviewComponent } from "app/space/analyze/analyze-overview/analyze-overview.component";
 
 @Component({
   selector: 'forge-wizard',
@@ -20,7 +21,7 @@ export class ForgeWizardComponent implements OnInit {
   config: WizardConfig;
   history: History = new History();
 
-  constructor(private forgeService: ForgeService) {
+  constructor(private parent: AnalyzeOverviewComponent, private forgeService: ForgeService) {
     this.config = {
       title: 'Import booster',
       stepStyleClass: 'wizard'
@@ -53,17 +54,19 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
-      this.history.add(gui);
-      this.history.done();
-    });
+    this.loadUi();
   }
-  cancel() {
-    //TODO
+
+  cancel($event) {
+    this.parent.closeModal($event);
   }
 
   nextClicked($event: WizardEvent): void {
     this.history.resetTo(this.history.stepIndex);
+    this.loadUi();
+  }
+
+  private loadUi(): void {
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
       this.history.add(gui);
       this.history.done();
@@ -71,8 +74,7 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   previousClicked($event: WizardEvent): void {
-    let index = this.history.stepIndex - 1;
-    console.log("::::Previous " + index);
-    this.history.resetTo(index);
+    this.history.resetTo(this.history.stepIndex - 1);
+    this.history.done();
   }
 }
