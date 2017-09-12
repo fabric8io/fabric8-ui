@@ -10,7 +10,7 @@ export class PipelineStepComponent implements OnInit {
 
   @Input() gui: GuiInput;
   constructor() {
-    console.log("::::PipelineComponent Constructor" + JSON.stringify(this.gui));
+    //console.log("::::PipelineComponent Constructor" + JSON.stringify(this.gui));
   }
 
   ngOnInit(): void {

@@ -22,7 +22,7 @@
     </pfng-wizard-step>
 
   <pfng-wizard-step [config]="stepConfigurePipeline">
-      <pipeline-step [gui]="currentGui"></pipeline-step>
+      <pipeline-step [gui]="currentGui" *ngIf="currentGui.inputs && currentGui.inputs[0] && currentGui.inputs[0].name == 'pipeline'"></pipeline-step>
   </pfng-wizard-step>
 
     <pfng-wizard-step [config]="stepCreateBuildConfig">

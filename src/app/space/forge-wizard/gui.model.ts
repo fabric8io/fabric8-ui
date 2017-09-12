@@ -65,6 +65,9 @@ export class Option {
   name: string;
   selected: boolean; // Add for component multiple-select list
   visible: boolean; // Add for multi-select list filtering
+  descriptionMarkdown: string; // pipeline-view
+  display: any; //pipeline-view
+  stages: any; //pipeline-view
 }
 
 export class DownloadFile {
