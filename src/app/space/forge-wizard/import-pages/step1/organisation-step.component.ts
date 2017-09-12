@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 
-import { Option, SubmittableInput, Input as GuiInput } from '../gui.model';
+import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
 
 @Component({
   selector: 'organisation-step',

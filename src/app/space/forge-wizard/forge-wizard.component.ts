@@ -41,7 +41,7 @@ export class ForgeWizardComponent implements OnInit {
     } as WizardStepConfig;
     this.stepConfigurePipeline = {
       id: 'ConfigurePipeline',
-      priority: 3,
+      priority: 2,
       title: 'Configure Pipeline'
     } as WizardStepConfig;
     this.stepCreateBuildConfig = {
