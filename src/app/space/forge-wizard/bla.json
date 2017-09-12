@@ -1,0 +1,1920 @@
+{
+  "metadata": {
+    "deprecated": false,
+    "category": "Uncategorized",
+    "name": "io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep",
+    "description": "No Description"
+  },
+  "state": {
+    "valid": false,
+    "canExecute": false,
+    "wizard": true,
+    "canMoveToNextStep": false,
+    "canMoveToPreviousStep": true,
+    "steps": [
+      "io.fabric8.forge.generator.github.GithubImportPickOrganisationStep",
+      "io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep"
+    ]
+  },
+  "inputs": [
+    {
+      "name": "gitRepositoryPattern",
+      "shortName": " ",
+      "valueType": "io.fabric8.forge.generator.git.GitRepositoryDTO",
+      "inputType": "org.jboss.forge.inputType.DEFAULT",
+      "enabled": true,
+      "required": true,
+      "deprecated": false,
+      "label": "Repository name pattern",
+      "description": "The regex pattern to match repository names",
+      "valueChoices": [
+        {
+          "id": "A",
+          "description": "created at Mon Jan 12 10:11:16 UTC 2015",
+          "name": "A",
+          "valid": true
+        },
+        {
+          "id": "AFOAuth2Client",
+          "description": "AFNetworking Extension for OAuth 2 Authentication",
+          "name": "AFOAuth2Client",
+          "valid": true
+        },
+        {
+          "id": "AGSyncKit",
+          "description": "created at Tue Jan 28 09:42:43 UTC 2014",
+          "name": "AGSyncKit",
+          "valid": true
+        },
+        {
+          "id": "AGURLSessionStubs",
+          "description": "HTTP stubbing framework written in Swift",
+          "name": "AGURLSessionStubs",
+          "valid": true
+        },
+        {
+          "id": "ARGenericTableViewController",
+          "description": "created at Mon May 27 08:19:02 UTC 2013",
+          "name": "ARGenericTableViewController",
+          "valid": true
+        },
+        {
+          "id": "ARTasksTODO",
+          "description": "Sample using TableViews",
+          "name": "ARTasksTODO",
+          "valid": true
+        },
+        {
+          "id": "AeroGear-iOS-ahead",
+          "description": "created at Thu Jun 19 09:26:40 UTC 2014",
+          "name": "AeroGear-iOS-ahead",
+          "valid": true
+        },
+        {
+          "id": "AeroGearSyncClient",
+          "description": "created at Tue Jan 13 14:23:17 UTC 2015",
+          "name": "AeroGearSyncClient",
+          "valid": true
+        },
+        {
+          "id": "Alamofire",
+          "description": "Elegant HTTP Networking in Swift",
+          "name": "Alamofire",
+          "valid": true
+        },
+        {
+          "id": "Angular2Test",
+          "description": "Test project to get experience with Angular2",
+          "name": "Angular2Test",
+          "valid": true
+        },
+        {
+          "id": "Appforms-Template-v3",
+          "description": "Appforms Template App Generator To Be Used With Drag & Drop Apps",
+          "name": "Appforms-Template-v3",
+          "valid": true
+        },
+        {
+          "id": "AppleWatchDevoxx",
+          "description": "AppleWatch presentation for DevoxxFR 2016",
+          "name": "AppleWatchDevoxx",
+          "valid": true
+        },
+        {
+          "id": "B",
+          "description": "created at Mon Jan 12 10:12:38 UTC 2015",
+          "name": "B",
+          "valid": true
+        },
+        {
+          "id": "DevNexus2017",
+          "description": "? ? ? ? ? Trials and tribulations of a polyglot cross-platform mobile developer",
+          "name": "DevNexus2017",
+          "valid": true
+        },
+        {
+          "id": "DoItCoach",
+          "description": "Time management tool to make your work more efficient. Available on your Watch.",
+          "name": "DoItCoach",
+          "valid": true
+        },
+        {
+          "id": "DslPrez",
+          "description": "created at Tue May 29 22:02:23 UTC 2012",
+          "name": "DslPrez",
+          "valid": true
+        },
+        {
+          "id": "GR8ConfUS2013",
+          "description": "Slides and example code for GR8Conf US 2013",
+          "name": "GR8ConfUS2013",
+          "valid": true
+        },
+        {
+          "id": "GoogleDrive",
+          "description": "created at Thu Dec 19 22:56:03 UTC 2013",
+          "name": "GoogleDrive",
+          "valid": true
+        },
+        {
+          "id": "Gr8ConfUS",
+          "description": "KissingTurtles, a DSL for kids, designed by older kids :)",
+          "name": "Gr8ConfUS",
+          "valid": true
+        },
+        {
+          "id": "Gr8ConfUSMobile",
+          "description": "Presentation on 3musketeers Grails Plugin",
+          "name": "Gr8ConfUSMobile",
+          "valid": true
+        },
+        {
+          "id": "HelloWorld-Swift",
+          "description": "Swift client demo app for AeroGear UnifiedPush server notification. ",
+          "name": "HelloWorld-Swift",
+          "valid": true
+        },
+        {
+          "id": "HelloWorldSwift",
+          "description": "Swift client demo app for AeroGear UnifiedPush server notification.",
+          "name": "HelloWorldSwift",
+          "valid": true
+        },
+        {
+          "id": "Incognito",
+          "description": "RayWenderlich demo app for OAuth2 tutorial",
+          "name": "Incognito",
+          "valid": true
+        },
+        {
+          "id": "JSONTools",
+          "description": "JSON Patch, JSON Pointer, and JSON Schema Validation in Objective-C",
+          "name": "JSONTools",
+          "valid": true
+        },
+        {
+          "id": "JsonDiffPatch",
+          "description": "Diff & Patch for JavaScript object trees.",
+          "name": "JsonDiffPatch",
+          "valid": true
+        },
+        {
+          "id": "JuliaLearnsSwift",
+          "description": "Playground for mixit presentation",
+          "name": "JuliaLearnsSwift",
+          "valid": true
+        },
+        {
+          "id": "Keycahin-",
+          "description": "created at Fri Sep 12 09:40:25 UTC 2014",
+          "name": "Keycahin-",
+          "valid": true
+        },
+        {
+          "id": "KeychainTouchIDTest",
+          "description": "Free interpretation (translated in Swift) of Keychain touchID session hosted in WWDC 2014 (session 711)",
+          "name": "KeychainTouchIDTest",
+          "valid": true
+        },
+        {
+          "id": "KeycloakDemo",
+          "description": "AeroGear example to authorize with Keycloak",
+          "name": "KeycloakDemo",
+          "valid": true
+        },
+        {
+          "id": "KissingTurtles",
+          "description": "\"Kissing Turtles\", a Mobile Game to learn programming for kids using Groovy DSL to move the turtle. When starting a new game, little Franklin is lost in the maze, help him find his true love. We can replace true love by a salad leaf ;-)",
+          "name": "KissingTurtles",
+          "valid": true
+        },
+        {
+          "id": "KissingTurtlesGreach",
+          "description": "Step by steps tutorial to create KissingTurtles game. The session was held at Madrid Greach conference January 2013",
+          "name": "KissingTurtlesGreach",
+          "valid": true
+        },
+        {
+          "id": "KissingTurtlesRevisited",
+          "description": "created at Fri Mar 10 13:02:27 UTC 2017",
+          "name": "KissingTurtlesRevisited",
+          "valid": true
+        },
+        {
+          "id": "KiteJSONValidator",
+          "description": "A native Objective-C JSON schema validator",
+          "name": "KiteJSONValidator",
+          "valid": true
+        },
+        {
+          "id": "MBSwizzler",
+          "description": "Simple class for method swizzling in Swift",
+          "name": "MBSwizzler",
+          "valid": true
+        },
+        {
+          "id": "MultiPartIOSDemo",
+          "description": "an iOS app that exercises multipart functionality",
+          "name": "MultiPartIOSDemo",
+          "valid": true
+        },
+        {
+          "id": "MyHeadlessProject",
+          "description": "how to go headless",
+          "name": "MyHeadlessProject",
+          "valid": true
+        },
+        {
+          "id": "MyPlaygroundBookTest",
+          "description": "Playing with the new Apple Playground Book format",
+          "name": "MyPlaygroundBookTest",
+          "valid": true
+        },
+        {
+          "id": "OAuth2Devoxx",
+          "description": "OAuth2 Tools in Action Presentation for Devoxx 2014",
+          "name": "OAuth2Devoxx",
+          "valid": true
+        },
+        {
+          "id": "OAuth2_mdevcon",
+          "description": "AeroGear OAuth2 presentation for mdevcon 2015",
+          "name": "OAuth2_mdevcon",
+          "valid": true
+        },
+        {
+          "id": "OAuthSwift",
+          "description": "Swift based OAuth library for iOS",
+          "name": "OAuthSwift",
+          "valid": true
+        },
+        {
+          "id": "OHHTTPStubs",
+          "description": "Stub your network requests easily! Test your apps with fake network data and custom response time, response code and headers!",
+          "name": "OHHTTPStubs",
+          "valid": true
+        },
+        {
+          "id": "ObjectMapper",
+          "description": "JSON Object mapping written in Swift",
+          "name": "ObjectMapper",
+          "valid": true
+        },
+        {
+          "id": "ParseAlternatives",
+          "description": "A collaborative list of Parse alternative backend service providers.",
+          "name": "ParseAlternatives",
+          "valid": true
+        },
+        {
+          "id": "Perfect",
+          "description": "Server-side Swift. The Perfect library, application server, connectors and example apps.",
+          "name": "Perfect",
+          "valid": true
+        },
+        {
+          "id": "PhotoScroll",
+          "description": "App to demo usage of UIScrollView",
+          "name": "PhotoScroll",
+          "valid": true
+        },
+        {
+          "id": "PlayPoker",
+          "description": "Scrum pointing poker session made easy, thanks to PlayPoker.",
+          "name": "PlayPoker",
+          "valid": true
+        },
+        {
+          "id": "PointHenry10-cloud",
+          "description": "created at Thu Oct 13 12:24:38 UTC 2016",
+          "name": "PointHenry10-cloud",
+          "valid": true
+        },
+        {
+          "id": "PointingHenry",
+          "description": "Pointing poker app to story point your user story and have fun",
+          "name": "PointingHenry",
+          "valid": true
+        },
+        {
+          "id": "PointingHenry10",
+          "description": "created at Sun Oct 09 10:11:39 UTC 2016",
+          "name": "PointingHenry10",
+          "valid": true
+        },
+        {
+          "id": "PomCoach",
+          "description": "Time management tool to make your work more efficient. Available on your Watch.",
+          "name": "PomCoach",
+          "valid": true
+        },
+        {
+          "id": "SKTUtils",
+          "description": "Sprite Kit helper classes and functions. From the book iOS Games by Tutorials.",
+          "name": "SKTUtils",
+          "valid": true
+        },
+        {
+          "id": "SampleAeroGear",
+          "description": "Test iOS AeroGear client",
+          "name": "SampleAeroGear",
+          "valid": true
+        },
+        {
+          "id": "Swift-Swiftly",
+          "description": "Swift playground to build a toolbox. Associated blogposts http://corinnekrych.org. Contact me @corinnekrych",
+          "name": "Swift-Swiftly",
+          "valid": true
+        },
+        {
+          "id": "Swift3Tour",
+          "description": "A quick tour on how to migrate from Swift 2.3 to Swift 3.0",
+          "name": "Swift3Tour",
+          "valid": true
+        },
+        {
+          "id": "SwiftMapper",
+          "description": "JSON mapper written in Swift",
+          "name": "SwiftMapper",
+          "valid": true
+        },
+        {
+          "id": "SwiftyJSON",
+          "description": "The better way to deal with JSON data in Swift",
+          "name": "SwiftyJSON",
+          "valid": true
+        },
+        {
+          "id": "TODO",
+          "description": "created at Mon May 13 09:14:05 UTC 2013",
+          "name": "TODO",
+          "valid": true
+        },
+        {
+          "id": "TestCrash",
+          "description": "test osx build on BF",
+          "name": "TestCrash",
+          "valid": true
+        },
+        {
+          "id": "TheEvent",
+          "description": "This is a test project to decide ho we're going to generate code for scaffolding grails plugin",
+          "name": "TheEvent",
+          "valid": true
+        },
+        {
+          "id": "ToDoTaskList",
+          "description": "created at Fri May 31 15:30:10 UTC 2013",
+          "name": "ToDoTaskList",
+          "valid": true
+        },
+        {
+          "id": "ToXibOrNotToXib",
+          "description": "Link to blog entry",
+          "name": "ToXibOrNotToXib",
+          "valid": true
+        },
+        {
+          "id": "UXD",
+          "description": "Exercise UXD skills.",
+          "name": "UXD",
+          "valid": true
+        },
+        {
+          "id": "Visualize",
+          "description": "https://itunes.apple.com/us/course/coding-together-developing/id593208016",
+          "name": "Visualize",
+          "valid": true
+        },
+        {
+          "id": "Visualize2",
+          "description": "created at Tue May 21 21:59:43 UTC 2013",
+          "name": "Visualize2",
+          "valid": true
+        },
+        {
+          "id": "Visualize3",
+          "description": "Lecture 7 from CS193P",
+          "name": "Visualize3",
+          "valid": true
+        },
+        {
+          "id": "Watai",
+          "description": "Next-generation full-stack web testing",
+          "name": "Watai",
+          "valid": true
+        },
+        {
+          "id": "Weather",
+          "description": "created at Fri Jul 11 11:43:34 UTC 2014",
+          "name": "Weather",
+          "valid": true
+        },
+        {
+          "id": "ace",
+          "description": "Ajax.org Cloud9 Editor",
+          "name": "ace",
+          "valid": true
+        },
+        {
+          "id": "aerogear-aerodoc-backend",
+          "description": "created at Mon Jul 21 17:21:25 UTC 2014",
+          "name": "aerogear-aerodoc-backend",
+          "valid": true
+        },
+        {
+          "id": "aerogear-aerodoc-ios",
+          "description": "created at Tue Aug 13 13:13:58 UTC 2013",
+          "name": "aerogear-aerodoc-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-android-cookbook",
+          "description": "created at Wed Nov 09 16:53:03 UTC 2016",
+          "name": "aerogear-android-cookbook",
+          "valid": true
+        },
+        {
+          "id": "aerogear-android-core",
+          "description": "created at Thu Nov 06 14:52:06 UTC 2014",
+          "name": "aerogear-android-core",
+          "valid": true
+        },
+        {
+          "id": "aerogear-android-oauth2-demo",
+          "description": "created at Thu Apr 17 12:56:11 UTC 2014",
+          "name": "aerogear-android-oauth2-demo",
+          "valid": true
+        },
+        {
+          "id": "aerogear-backend-cookbook",
+          "description": "Backend for Android, iOS, Web and Cordova aerogear client sdk.",
+          "name": "aerogear-backend-cookbook",
+          "valid": true
+        },
+        {
+          "id": "aerogear-backend-cookbook-1",
+          "description": "created at Tue Nov 04 08:09:11 UTC 2014",
+          "name": "aerogear-backend-cookbook-1",
+          "valid": true
+        },
+        {
+          "id": "aerogear-cordova-cookbook-1",
+          "description": "created at Tue Dec 02 15:20:45 UTC 2014",
+          "name": "aerogear-cordova-cookbook-1",
+          "valid": true
+        },
+        {
+          "id": "aerogear-cordova-oauth2",
+          "description": "created at Thu Jan 28 15:40:13 UTC 2016",
+          "name": "aerogear-cordova-oauth2",
+          "valid": true
+        },
+        {
+          "id": "aerogear-crypto-ios",
+          "description": "created at Fri Jan 17 09:20:15 UTC 2014",
+          "name": "aerogear-crypto-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-crypto-ios-demo",
+          "description": "created at Tue Mar 18 10:02:31 UTC 2014",
+          "name": "aerogear-crypto-ios-demo",
+          "valid": true
+        },
+        {
+          "id": "aerogear-diff-patch-ios",
+          "description": "Diff patch NSDictionary/NSArray and all JSON serialiazabled class   ",
+          "name": "aerogear-diff-patch-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-diffmatchpatch-ios",
+          "description": "created at Mon Feb 01 16:46:00 UTC 2016",
+          "name": "aerogear-diffmatchpatch-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-geo-cordova",
+          "description": "created at Tue Aug 19 14:14:22 UTC 2014",
+          "name": "aerogear-geo-cordova",
+          "valid": true
+        },
+        {
+          "id": "aerogear-integration-tests-server",
+          "description": "created at Tue Apr 15 15:41:16 UTC 2014",
+          "name": "aerogear-integration-tests-server",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios",
+          "description": "iOS/Objective-C client library implementation for AeroGear",
+          "name": "aerogear-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-cookbook",
+          "description": "List of recipes to quick start your iOS AeroGear experience",
+          "name": "aerogear-ios-cookbook",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-cookbook-1",
+          "description": "created at Mon Apr 14 08:57:38 UTC 2014",
+          "name": "aerogear-ios-cookbook-1",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-encrypted-store",
+          "description": "created at Wed Jun 18 07:13:49 UTC 2014",
+          "name": "aerogear-ios-encrypted-store",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-geo",
+          "description": "created at Fri Jan 23 08:09:22 UTC 2015",
+          "name": "aerogear-ios-geo",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-http",
+          "description": "Lightweight lib around NSURLSession to ease HTTP calls with pluggable request and response Serializers.",
+          "name": "aerogear-ios-http",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-http-1",
+          "description": "created at Thu Aug 21 12:34:16 UTC 2014",
+          "name": "aerogear-ios-http-1",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-httpstub",
+          "description": "created at Tue Aug 19 16:26:57 UTC 2014",
+          "name": "aerogear-ios-httpstub",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-integration",
+          "description": "created at Tue Mar 04 08:34:40 UTC 2014",
+          "name": "aerogear-ios-integration",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-json-patch",
+          "description": "Json Patch Swift implementation of JSON Patch - RFC6902",
+          "name": "aerogear-ios-json-patch",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-jsonsz",
+          "description": "created at Wed Jan 07 18:53:52 UTC 2015",
+          "name": "aerogear-ios-jsonsz",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-oauth",
+          "description": "created at Tue Jun 17 19:47:54 UTC 2014",
+          "name": "aerogear-ios-oauth",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-oauth1",
+          "description": "OAuth1a Client based on aerogear-ios-http.",
+          "name": "aerogear-ios-oauth1",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-oauth2",
+          "description": "AeroGear extension for OAuth2 authentication based on aerogear-ios-http",
+          "name": "aerogear-ios-oauth2",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-oauth2-1",
+          "description": "created at Thu Sep 11 10:19:44 UTC 2014",
+          "name": "aerogear-ios-oauth2-1",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-pipe",
+          "description": "created at Tue Jun 17 14:22:38 UTC 2014",
+          "name": "aerogear-ios-pipe",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-push",
+          "description": "iOS Push Notification Registration for UnifiedPush Server",
+          "name": "aerogear-ios-push",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-store",
+          "description": "created at Tue Jun 17 11:54:12 UTC 2014",
+          "name": "aerogear-ios-store",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-sync",
+          "description": "created at Tue Jan 20 15:33:09 UTC 2015",
+          "name": "aerogear-ios-sync",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-sync-client",
+          "description": "created at Tue Jan 20 15:48:12 UTC 2015",
+          "name": "aerogear-ios-sync-client",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-sync-demo",
+          "description": "created at Tue Jan 20 15:47:15 UTC 2015",
+          "name": "aerogear-ios-sync-demo",
+          "valid": true
+        },
+        {
+          "id": "aerogear-ios-xcode-template",
+          "description": "created at Tue Oct 07 20:22:10 UTC 2014",
+          "name": "aerogear-ios-xcode-template",
+          "valid": true
+        },
+        {
+          "id": "aerogear-nodejs-sync-server",
+          "description": "created at Tue Nov 08 07:30:14 UTC 2016",
+          "name": "aerogear-nodejs-sync-server",
+          "valid": true
+        },
+        {
+          "id": "aerogear-oauth2-plugin",
+          "description": "created at Thu Nov 20 12:37:26 UTC 2014",
+          "name": "aerogear-oauth2-plugin",
+          "valid": true
+        },
+        {
+          "id": "aerogear-otp-ios",
+          "description": "created at Fri Jan 17 09:16:54 UTC 2014",
+          "name": "aerogear-otp-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-otp-ios-demo",
+          "description": "created at Tue Mar 18 10:17:03 UTC 2014",
+          "name": "aerogear-otp-ios-demo",
+          "valid": true
+        },
+        {
+          "id": "aerogear-prez",
+          "description": "created at Fri Jan 10 10:25:11 UTC 2014",
+          "name": "aerogear-prez",
+          "valid": true
+        },
+        {
+          "id": "aerogear-push-helloworld",
+          "description": "UnifiedPush Hello World Examples",
+          "name": "aerogear-push-helloworld",
+          "valid": true
+        },
+        {
+          "id": "aerogear-push-ios-demo",
+          "description": "created at Mon Apr 07 18:15:36 UTC 2014",
+          "name": "aerogear-push-ios-demo",
+          "valid": true
+        },
+        {
+          "id": "aerogear-push-ios-registration-swift",
+          "description": "Swift implementation of AeroGear's push-sdk",
+          "name": "aerogear-push-ios-registration-swift",
+          "valid": true
+        },
+        {
+          "id": "aerogear-push-quickstarts",
+          "description": "UnifiedPush Quickstart Examples",
+          "name": "aerogear-push-quickstarts",
+          "valid": true
+        },
+        {
+          "id": "aerogear-simplepush-server",
+          "description": "created at Wed Jun 05 07:29:08 UTC 2013",
+          "name": "aerogear-simplepush-server",
+          "valid": true
+        },
+        {
+          "id": "aerogear-store-ios",
+          "description": "created at Tue Aug 06 12:38:23 UTC 2013",
+          "name": "aerogear-store-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-sync-ios",
+          "description": "AeroGear Syncrhonization Pipes",
+          "name": "aerogear-sync-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-sync-server",
+          "description": "created at Wed Jan 29 10:40:21 UTC 2014",
+          "name": "aerogear-sync-server",
+          "valid": true
+        },
+        {
+          "id": "aerogear-todo-ios",
+          "description": "created at Mon May 13 09:12:23 UTC 2013",
+          "name": "aerogear-todo-ios",
+          "valid": true
+        },
+        {
+          "id": "aerogear-unified-push-server",
+          "description": "AeroGear Unified Push Server",
+          "name": "aerogear-unified-push-server",
+          "valid": true
+        },
+        {
+          "id": "aerogear-windows-oauth2",
+          "description": "created at Wed May 04 06:30:34 UTC 2016",
+          "name": "aerogear-windows-oauth2",
+          "valid": true
+        },
+        {
+          "id": "aerogear.org",
+          "description": "New Jekyll based project site repo for AeroGear.",
+          "name": "aerogear.org",
+          "valid": true
+        },
+        {
+          "id": "almighty-core",
+          "description": "created at Tue Jun 06 12:21:18 UTC 2017",
+          "name": "almighty-core",
+          "valid": true
+        },
+        {
+          "id": "angular-app",
+          "description": "Reference application for AngularJS",
+          "name": "angular-app",
+          "valid": true
+        },
+        {
+          "id": "angularjs-book",
+          "description": "Examples and Code snippets from the AngularJS O'Reilly book",
+          "name": "angularjs-book",
+          "valid": true
+        },
+        {
+          "id": "appforms-datasources-mongodb",
+          "description": "created at Tue Apr 11 15:21:59 UTC 2017",
+          "name": "appforms-datasources-mongodb",
+          "valid": true
+        },
+        {
+          "id": "august21bis",
+          "description": "created at Mon Aug 21 10:25:01 UTC 2017",
+          "name": "august21bis",
+          "valid": true
+        },
+        {
+          "id": "august21dsdsdsdsd",
+          "description": "created at Mon Aug 21 09:55:35 UTC 2017",
+          "name": "august21dsdsdsdsd",
+          "valid": true
+        },
+        {
+          "id": "august22bis",
+          "description": "created at Wed Aug 23 08:22:57 UTC 2017",
+          "name": "august22bis",
+          "valid": true
+        },
+        {
+          "id": "august22bis10",
+          "description": "created at Wed Aug 23 11:57:51 UTC 2017",
+          "name": "august22bis10",
+          "valid": true
+        },
+        {
+          "id": "august22bis11",
+          "description": "created at Wed Aug 23 12:01:19 UTC 2017",
+          "name": "august22bis11",
+          "valid": true
+        },
+        {
+          "id": "august22bis12",
+          "description": "created at Wed Aug 23 12:06:00 UTC 2017",
+          "name": "august22bis12",
+          "valid": true
+        },
+        {
+          "id": "august22bis15",
+          "description": "created at Wed Aug 23 12:39:16 UTC 2017",
+          "name": "august22bis15",
+          "valid": true
+        },
+        {
+          "id": "august22bis4",
+          "description": "created at Wed Aug 23 09:20:13 UTC 2017",
+          "name": "august22bis4",
+          "valid": true
+        },
+        {
+          "id": "august22bis5",
+          "description": "created at Wed Aug 23 09:45:05 UTC 2017",
+          "name": "august22bis5",
+          "valid": true
+        },
+        {
+          "id": "august22bis6",
+          "description": "created at Wed Aug 23 09:52:33 UTC 2017",
+          "name": "august22bis6",
+          "valid": true
+        },
+        {
+          "id": "august22bis7",
+          "description": "created at Wed Aug 23 11:37:31 UTC 2017",
+          "name": "august22bis7",
+          "valid": true
+        },
+        {
+          "id": "august22bis8",
+          "description": "created at Wed Aug 23 11:40:47 UTC 2017",
+          "name": "august22bis8",
+          "valid": true
+        },
+        {
+          "id": "august22bis9",
+          "description": "created at Wed Aug 23 11:46:11 UTC 2017",
+          "name": "august22bis9",
+          "valid": true
+        },
+        {
+          "id": "august22bisbis",
+          "description": "created at Wed Aug 23 08:25:54 UTC 2017",
+          "name": "august22bisbis",
+          "valid": true
+        },
+        {
+          "id": "august22bislkl",
+          "description": "created at Wed Aug 23 14:39:59 UTC 2017",
+          "name": "august22bislkl",
+          "valid": true
+        },
+        {
+          "id": "august22bister",
+          "description": "created at Wed Aug 23 08:46:21 UTC 2017",
+          "name": "august22bister",
+          "valid": true
+        },
+        {
+          "id": "august25bis",
+          "description": "created at Mon Aug 28 13:47:42 UTC 2017",
+          "name": "august25bis",
+          "valid": true
+        },
+        {
+          "id": "august25bis2",
+          "description": "created at Mon Aug 28 13:50:36 UTC 2017",
+          "name": "august25bis2",
+          "valid": true
+        },
+        {
+          "id": "august25ter",
+          "description": "created at Mon Aug 28 12:06:55 UTC 2017",
+          "name": "august25ter",
+          "valid": true
+        },
+        {
+          "id": "augustt23",
+          "description": "created at Thu Aug 24 15:02:26 UTC 2017",
+          "name": "augustt23",
+          "valid": true
+        },
+        {
+          "id": "barcode-reader-service",
+          "description": "Reads barcode information from searchupc.com",
+          "name": "barcode-reader-service",
+          "valid": true
+        },
+        {
+          "id": "bingo",
+          "description": "Do you know the bullshit bingo? It's crucial not to fall into sleep during corporate meeting. Also called Corporate Bingo for prude ears.",
+          "name": "bingo",
+          "valid": true
+        },
+        {
+          "id": "blank-cordova-app",
+          "description": "FeedHenry Advanced Hybrid Blank App",
+          "name": "blank-cordova-app",
+          "valid": true
+        },
+        {
+          "id": "blank-ios-app",
+          "description": "created at Tue Dec 15 14:52:58 UTC 2015",
+          "name": "blank-ios-app",
+          "valid": true
+        },
+        {
+          "id": "blank-ios-swift",
+          "description": "Native (Swift) blank sample app for iOS ",
+          "name": "blank-ios-swift",
+          "valid": true
+        },
+        {
+          "id": "blank-xamarin",
+          "description": "created at Fri Apr 29 08:43:28 UTC 2016",
+          "name": "blank-xamarin",
+          "valid": true
+        },
+        {
+          "id": "bootcrud",
+          "description": "created at Wed Apr 26 09:57:02 UTC 2017",
+          "name": "bootcrud",
+          "valid": true
+        },
+        {
+          "id": "brnached3",
+          "description": "created at Tue Sep 05 14:37:08 UTC 2017",
+          "name": "brnached3",
+          "valid": true
+        },
+        {
+          "id": "bullshitbingo",
+          "description": "Multi player game with event push. Geeks can have fun in meetings!",
+          "name": "bullshitbingo",
+          "valid": true
+        },
+        {
+          "id": "catIconSplashTest",
+          "description": "just a test app with cat icons and splash images",
+          "name": "catIconSplashTest",
+          "valid": true
+        },
+        {
+          "id": "cheese149",
+          "description": "created at Thu Aug 10 08:05:07 UTC 2017",
+          "name": "cheese149",
+          "valid": true
+        },
+        {
+          "id": "confess",
+          "description": "ConFESS worksphop slides",
+          "name": "confess",
+          "valid": true
+        },
+        {
+          "id": "cordova-plugin-media",
+          "description": "Mirror of Apache Cordova Plugin media",
+          "name": "cordova-plugin-media",
+          "valid": true
+        },
+        {
+          "id": "cordova-plugin-screen-orientation",
+          "description": "Mirror of Cordova Plugin Screen Orientation",
+          "name": "cordova-plugin-screen-orientation",
+          "valid": true
+        },
+        {
+          "id": "corinnekrych.github.com",
+          "description": "created at Wed Aug 29 18:45:51 UTC 2012",
+          "name": "corinnekrych.github.com",
+          "valid": true
+        },
+        {
+          "id": "cravat",
+          "description": "Stylish HTML5 photo booth for your website",
+          "name": "cravat",
+          "valid": true
+        },
+        {
+          "id": "css-playground",
+          "description": "Tips on CSS",
+          "name": "css-playground",
+          "valid": true
+        },
+        {
+          "id": "d3vf3st",
+          "description": "created at Wed Apr 23 19:43:20 UTC 2014",
+          "name": "d3vf3st",
+          "valid": true
+        },
+        {
+          "id": "demo",
+          "description": "created at Wed Apr 26 07:36:05 UTC 2017",
+          "name": "demo",
+          "valid": true
+        },
+        {
+          "id": "devfest",
+          "description": "Presentation for DevFestW the 11th March 2013",
+          "name": "devfest",
+          "valid": true
+        },
+        {
+          "id": "devfestw",
+          "description": "created at Fri Mar 08 13:30:35 UTC 2013",
+          "name": "devfestw",
+          "valid": true
+        },
+        {
+          "id": "dotSwift",
+          "description": "Presentation given at http://www.dotswift.io/",
+          "name": "dotSwift",
+          "valid": true
+        },
+        {
+          "id": "dotnet-training",
+          "description": "Short C# training using Xamarin Workbooks to run snippets of code.",
+          "name": "dotnet-training",
+          "valid": true
+        },
+        {
+          "id": "dsl",
+          "description": "groovy dsl standalone html page",
+          "name": "dsl",
+          "valid": true
+        },
+        {
+          "id": "eee",
+          "description": "created at Wed Apr 26 09:13:36 UTC 2017",
+          "name": "eee",
+          "valid": true
+        },
+        {
+          "id": "fabric8-generator",
+          "description": "a jboss forge add on for the fabric8 upstream and SaaS generator wizards",
+          "name": "fabric8-generator",
+          "valid": true
+        },
+        {
+          "id": "fabric8-planner",
+          "description": "created at Fri Apr 28 08:39:36 UTC 2017",
+          "name": "fabric8-planner",
+          "valid": true
+        },
+        {
+          "id": "fabric8-platform",
+          "description": "Generates the distribution of the fabric8 microservices platform",
+          "name": "fabric8-platform",
+          "valid": true
+        },
+        {
+          "id": "fabric8-recommender",
+          "description": "Analysis and recommendations for app dev",
+          "name": "fabric8-recommender",
+          "valid": true
+        },
+        {
+          "id": "fabric8-runtime-console",
+          "description": "the angular 2 runtime console for Builds, Pipelines, Environments and Runtime resources",
+          "name": "fabric8-runtime-console",
+          "valid": true
+        },
+        {
+          "id": "fabric8-test",
+          "description": "created at Fri Jul 07 12:37:44 UTC 2017",
+          "name": "fabric8-test",
+          "valid": true
+        },
+        {
+          "id": "fabric8-ui",
+          "description": "the angular 2 console for fabric8 online",
+          "name": "fabric8-ui",
+          "valid": true
+        },
+        {
+          "id": "fd",
+          "description": "created at Mon Oct 17 07:33:55 UTC 2016",
+          "name": "fd",
+          "valid": true
+        },
+        {
+          "id": "fh-advanced-webapp-blank-app",
+          "description": "FeedHenry Advanced Web App",
+          "name": "fh-advanced-webapp-blank-app",
+          "valid": true
+        },
+        {
+          "id": "fh-app-art",
+          "description": "created at Wed Mar 15 11:02:07 UTC 2017",
+          "name": "fh-app-art",
+          "valid": true
+        },
+        {
+          "id": "fh-connector-amazon-ses-cloud",
+          "description": "created at Fri Apr 14 13:12:48 UTC 2017",
+          "name": "fh-connector-amazon-ses-cloud",
+          "valid": true
+        },
+        {
+          "id": "fh-connector-stripe-cloud",
+          "description": "created at Fri Apr 14 13:12:59 UTC 2017",
+          "name": "fh-connector-stripe-cloud",
+          "valid": true
+        },
+        {
+          "id": "fh-cordova-plugin-ftputil",
+          "description": "FtpUtil plugin for Cordova 3+",
+          "name": "fh-cordova-plugin-ftputil",
+          "valid": true
+        },
+        {
+          "id": "fh-cordova-plugin-sms",
+          "description": "created at Mon Feb 13 08:43:08 UTC 2017",
+          "name": "fh-cordova-plugin-sms",
+          "valid": true
+        },
+        {
+          "id": "fh-dotnet-sdk",
+          "description": "FeedHenry C#/.Net Native SDK (WP and Xamarin)",
+          "name": "fh-dotnet-sdk",
+          "valid": true
+        },
+        {
+          "id": "fh-fhc",
+          "description": "FeedHenry CLI, the Command Line Interface to FeedHenry",
+          "name": "fh-fhc",
+          "valid": true
+        },
+        {
+          "id": "fh-health-monitor",
+          "description": "created at Fri Apr 14 13:10:28 UTC 2017",
+          "name": "fh-health-monitor",
+          "valid": true
+        },
+        {
+          "id": "fh-ios-sdk",
+          "description": "FeedHenry iOS SDK",
+          "name": "fh-ios-sdk",
+          "valid": true
+        },
+        {
+          "id": "fh-ios-sdk-blank-app",
+          "description": "FeedHenry Native iOS Blank App",
+          "name": "fh-ios-sdk-blank-app",
+          "valid": true
+        },
+        {
+          "id": "fh-ios-swift-sdk",
+          "description": "iOS sdk for FeedHenry platform",
+          "name": "fh-ios-swift-sdk",
+          "valid": true
+        },
+        {
+          "id": "fh-js-sdk",
+          "description": "FeedHenry Javascript SDK",
+          "name": "fh-js-sdk",
+          "valid": true
+        },
+        {
+          "id": "fh-mbaas-service",
+          "description": "Feedhenry service to support deployed Apps in an MBaaS e.g. OpenShift",
+          "name": "fh-mbaas-service",
+          "valid": true
+        },
+        {
+          "id": "fh-mobile-spec-app",
+          "description": "The Mobile Spec App",
+          "name": "fh-mobile-spec-app",
+          "valid": true
+        },
+        {
+          "id": "fh-template-apps",
+          "description": "Repo for configuration of project and app repo urls",
+          "name": "fh-template-apps",
+          "valid": true
+        },
+        {
+          "id": "foodme",
+          "description": "created at Mon May 06 12:55:12 UTC 2013",
+          "name": "foodme",
+          "valid": true
+        },
+        {
+          "id": "foursquare",
+          "description": "Test app for angular scaffolding",
+          "name": "foursquare",
+          "valid": true
+        },
+        {
+          "id": "fpinswift-beta",
+          "description": "Work in progress version of the objc.io book \"Functional Programming in Swift\"",
+          "name": "fpinswift-beta",
+          "valid": true
+        },
+        {
+          "id": "functionalkats",
+          "description": "Will Swift rules the world?",
+          "name": "functionalkats",
+          "valid": true
+        },
+        {
+          "id": "generator-backend",
+          "description": "The back-end for the Obsidian project generator",
+          "name": "generator-backend",
+          "valid": true
+        },
+        {
+          "id": "github-changelog-generator",
+          "description": "Automatically generate change log from your tags, issues, labels and pull requests on GitHub.",
+          "name": "github-changelog-generator",
+          "valid": true
+        },
+        {
+          "id": "gitignore",
+          "description": "A collection of useful .gitignore templates",
+          "name": "gitignore",
+          "valid": true
+        },
+        {
+          "id": "google-diff-match-patch-Objective-C",
+          "description": "Objective C port of the Diff, Match and Patch libraries",
+          "name": "google-diff-match-patch-Objective-C",
+          "valid": true
+        },
+        {
+          "id": "grails-angular-scaffolding",
+          "description": "A Grails plugin for scaffolding views using Angular.js",
+          "name": "grails-angular-scaffolding",
+          "valid": true
+        },
+        {
+          "id": "grails-fields",
+          "description": "a spiritual successor to the bean-fields plugin",
+          "name": "grails-fields",
+          "valid": true
+        },
+        {
+          "id": "grails-html-mobile-scaffolding",
+          "description": "Scaffolding static controller and view - HTML5 without GSP - for Mobile application using jQuerry mobile.",
+          "name": "grails-html-mobile-scaffolding",
+          "valid": true
+        },
+        {
+          "id": "grailsTodos",
+          "description": "Sample using Grails , CloudFoundry, RabbitMQ, BackboneJS, Coffeescript,  and the new 3 Events Bus plugins (platform-core, events-si and events-push)",
+          "name": "grailsTodos",
+          "valid": true
+        },
+        {
+          "id": "grapnel",
+          "description": "Configure your UI custom hooks",
+          "name": "grapnel",
+          "valid": true
+        },
+        {
+          "id": "greach-aerogear",
+          "description": "Mobile App in minutes, not days",
+          "name": "greach-aerogear",
+          "valid": true
+        },
+        {
+          "id": "grgr",
+          "description": "created at Thu Oct 06 16:15:01 UTC 2016",
+          "name": "grgr",
+          "valid": true
+        },
+        {
+          "id": "hashing-perf",
+          "description": "created at Mon Jan 30 08:38:56 UTC 2017",
+          "name": "hashing-perf",
+          "valid": true
+        },
+        {
+          "id": "hello-ios-swift",
+          "description": "Sample iOS app to demo how to use FHSDK in Swift project",
+          "name": "hello-ios-swift",
+          "valid": true
+        },
+        {
+          "id": "hello-push-cloud",
+          "description": "created at Thu Apr 13 08:51:24 UTC 2017",
+          "name": "hello-push-cloud",
+          "valid": true
+        },
+        {
+          "id": "hellonative",
+          "description": "Cordova plugin to display in a toast/alert view a \"Hello YourName\" for 3 seconds. The iOS platform is written in Swift3.",
+          "name": "hellonative",
+          "valid": true
+        },
+        {
+          "id": "hellowatch",
+          "description": "?Watch app with watchOS2 and input text remote notifications(iOS9 soecific)",
+          "name": "hellowatch",
+          "valid": true
+        },
+        {
+          "id": "helloworld-android-gradle",
+          "description": "Native Android Gradle Hello World Sample App ",
+          "name": "helloworld-android-gradle",
+          "valid": true
+        },
+        {
+          "id": "helloworld-app",
+          "description": "A basic 'Hello World' Hybrid App",
+          "name": "helloworld-app",
+          "valid": true
+        },
+        {
+          "id": "helloworld-cloud",
+          "description": "created at Tue Apr 04 11:47:49 UTC 2017",
+          "name": "helloworld-cloud",
+          "valid": true
+        },
+        {
+          "id": "helloworld-geo-ios",
+          "description": "created at Fri Jan 23 08:10:35 UTC 2015",
+          "name": "helloworld-geo-ios",
+          "valid": true
+        },
+        {
+          "id": "helloworld-ios",
+          "description": "Simple Native Hello World Sample App for iOS",
+          "name": "helloworld-ios",
+          "valid": true
+        },
+        {
+          "id": "helloworld-ios-swift",
+          "description": "Native iOS (Swift) hello word sample ",
+          "name": "helloworld-ios-swift",
+          "valid": true
+        },
+        {
+          "id": "helloworld-typescript",
+          "description": "A Ionic2/TypeScript implementation for the Hello World application template.",
+          "name": "helloworld-typescript",
+          "valid": true
+        },
+        {
+          "id": "helloworld-xamarin",
+          "description": "created at Fri Jun 10 09:54:33 UTC 2016",
+          "name": "helloworld-xamarin",
+          "valid": true
+        },
+        {
+          "id": "idev-recipes",
+          "description": "Open source code for the idevrecipes.com blog",
+          "name": "idev-recipes",
+          "valid": true
+        },
+        {
+          "id": "interactive-tutorials",
+          "description": "Interactive Tutorials",
+          "name": "interactive-tutorials",
+          "valid": true
+        },
+        {
+          "id": "java-apns",
+          "description": "Java Apple Push Notification Service Provider",
+          "name": "java-apns",
+          "valid": true
+        },
+        {
+          "id": "jsFiddleGithubDemo",
+          "description": "Demo of a jsFiddle Github integration",
+          "name": "jsFiddleGithubDemo",
+          "valid": true
+        },
+        {
+          "id": "json-dust",
+          "description": "Marshashinng json in expected dust format",
+          "name": "json-dust",
+          "valid": true
+        },
+        {
+          "id": "jsonp",
+          "description": "jsonp plugin; this grails plugin allow s rendering as jquery_callback(JSON)",
+          "name": "jsonp",
+          "valid": true
+        },
+        {
+          "id": "keycloak",
+          "description": "SSO SaaS",
+          "name": "keycloak",
+          "valid": true
+        },
+        {
+          "id": "keycloak-cloud",
+          "description": "created at Thu Dec 08 08:15:00 UTC 2016",
+          "name": "keycloak-cloud",
+          "valid": true
+        },
+        {
+          "id": "keycloak-cordova-client",
+          "description": "created at Mon Dec 05 15:11:28 UTC 2016",
+          "name": "keycloak-cordova-client",
+          "valid": true
+        },
+        {
+          "id": "launchpad-addon",
+          "description": "JBoss Forge addon to generate booster projects",
+          "name": "launchpad-addon",
+          "valid": true
+        },
+        {
+          "id": "layers",
+          "description": "Using Spring Integration with Grails for a pluggable messaging architecture",
+          "name": "layers",
+          "valid": true
+        },
+        {
+          "id": "mac_install",
+          "description": "A bash script to transform your laptop ? into a ? development machine.",
+          "name": "mac_install",
+          "valid": true
+        },
+        {
+          "id": "mathsync-demo",
+          "description": "created at Sat Feb 22 11:01:44 UTC 2014",
+          "name": "mathsync-demo",
+          "valid": true
+        },
+        {
+          "id": "myapp",
+          "description": "created at Thu Apr 20 14:27:51 UTC 2017",
+          "name": "myapp",
+          "valid": true
+        },
+        {
+          "id": "nationalparks-py",
+          "description": "Backend component to display national parks (Python).",
+          "name": "nationalparks-py",
+          "valid": true
+        },
+        {
+          "id": "ng2-restangular",
+          "description": "Restangular for Angular 2 and higher versions",
+          "name": "ng2-restangular",
+          "valid": true
+        },
+        {
+          "id": "ngx-fabric8-wit",
+          "description": "created at Fri Apr 21 10:11:27 UTC 2017",
+          "name": "ngx-fabric8-wit",
+          "valid": true
+        },
+        {
+          "id": "ngx-login-client",
+          "description": "Auth and User services for Angular v2 and up",
+          "name": "ngx-login-client",
+          "valid": true
+        },
+        {
+          "id": "ngxcomponet",
+          "description": "created at Fri Jun 09 12:58:37 UTC 2017",
+          "name": "ngxcomponet",
+          "valid": true
+        },
+        {
+          "id": "oauth-ios-app",
+          "description": "Basic OAuth2 secured app.",
+          "name": "oauth-ios-app",
+          "valid": true
+        },
+        {
+          "id": "oauth-ios-swift",
+          "description": "Native iOS (Swift) OAuth2 secured sample",
+          "name": "oauth-ios-swift",
+          "valid": true
+        },
+        {
+          "id": "objectiveflickr",
+          "description": "ObjectiveFlickr, a Flickr API framework for Objective-C",
+          "name": "objectiveflickr",
+          "valid": true
+        },
+        {
+          "id": "openshift-websocket",
+          "description": "Test OpenShift WebSocket node 6.7.0",
+          "name": "openshift-websocket",
+          "valid": true
+        },
+        {
+          "id": "patternfly-ng",
+          "description": "PatternFly for Angular 2+",
+          "name": "patternfly-ng",
+          "valid": true
+        },
+        {
+          "id": "pointing-cordova-app",
+          "description": "created at Sun Dec 11 19:11:57 UTC 2016",
+          "name": "pointing-cordova-app",
+          "valid": true
+        },
+        {
+          "id": "pointing-dotnet-app",
+          "description": "created at Mon Nov 14 20:57:11 UTC 2016",
+          "name": "pointing-dotnet-app",
+          "valid": true
+        },
+        {
+          "id": "preproCeSSor",
+          "description": "Let's talk about CSS preprocessors: SASS, Less & Stylus.",
+          "name": "preproCeSSor",
+          "valid": true
+        },
+        {
+          "id": "prism-for-blogspot",
+          "description": "Placeholder for prism CSS and JS files needed for code highlighting http://corinnekrych.org/ ",
+          "name": "prism-for-blogspot",
+          "valid": true
+        },
+        {
+          "id": "push-hello-world-ios-client",
+          "description": "created at Tue May 19 14:16:41 UTC 2015",
+          "name": "push-hello-world-ios-client",
+          "valid": true
+        },
+        {
+          "id": "pushee-integration-tests",
+          "description": "Integration tests for Unified Push Server",
+          "name": "pushee-integration-tests",
+          "valid": true
+        },
+        {
+          "id": "pushstarter-android-app",
+          "description": "created at Tue Jul 07 10:21:43 UTC 2015",
+          "name": "pushstarter-android-app",
+          "valid": true
+        },
+        {
+          "id": "pushstarter-cordova-app",
+          "description": "created at Fri Jul 22 06:58:40 UTC 2016",
+          "name": "pushstarter-cordova-app",
+          "valid": true
+        },
+        {
+          "id": "pushstarter-ios-app",
+          "description": "created at Wed Jun 17 14:19:43 UTC 2015",
+          "name": "pushstarter-ios-app",
+          "valid": true
+        },
+        {
+          "id": "pushstarter-ios-app-1",
+          "description": "Simple Native Push Starter project for iOS to receive push notifications.",
+          "name": "pushstarter-ios-app-1",
+          "valid": true
+        },
+        {
+          "id": "pushstarter-ios-swift",
+          "description": "Native iOS (Swift)  push starter sample to receive push notifications.",
+          "name": "pushstarter-ios-swift",
+          "valid": true
+        },
+        {
+          "id": "pushstarter-xamarin-app",
+          "description": "created at Tue Mar 15 14:27:19 UTC 2016",
+          "name": "pushstarter-xamarin-app",
+          "valid": true
+        },
+        {
+          "id": "quickstart-angular-app",
+          "description": "Starting point for the FeedHenry 3 Quickstart Guide using Angular.js",
+          "name": "quickstart-angular-app",
+          "valid": true
+        },
+        {
+          "id": "quickstart-backbone-app",
+          "description": "A Hello World Client App demonstrating the use of the Feedhenry JS-SDK using Backbone.",
+          "name": "quickstart-backbone-app",
+          "valid": true
+        },
+        {
+          "id": "quickstart-ionic-app",
+          "description": "Ionic Hello World App",
+          "name": "quickstart-ionic-app",
+          "valid": true
+        },
+        {
+          "id": "recipes-with-angular-js-examples",
+          "description": "Recipes with Angular.js",
+          "name": "recipes-with-angular-js-examples",
+          "valid": true
+        },
+        {
+          "id": "rest_client_ios",
+          "description": "Rest client / shopping app for iOS written in Swift",
+          "name": "rest_client_ios",
+          "valid": true
+        },
+        {
+          "id": "rxjs-websockets",
+          "description": "websocket rxjs streams provided by an injectable service",
+          "name": "rxjs-websockets",
+          "valid": true
+        },
+        {
+          "id": "saas",
+          "description": "created at Tue Jul 04 08:21:02 UTC 2017",
+          "name": "saas",
+          "valid": true
+        },
+        {
+          "id": "saml-cordova-app",
+          "description": "created at Tue Aug 23 14:06:58 UTC 2016",
+          "name": "saml-cordova-app",
+          "valid": true
+        },
+        {
+          "id": "saml-ios-app",
+          "description": "Simple native iOS app to work with SAML RHMAP Service connector.",
+          "name": "saml-ios-app",
+          "valid": true
+        },
+        {
+          "id": "saml-ios-swift",
+          "description": "Native iOS (Swift) sample to work with SAML RHMAP Service connector.",
+          "name": "saml-ios-swift",
+          "valid": true
+        },
+        {
+          "id": "saml-service",
+          "description": "created at Fri Apr 14 13:08:54 UTC 2017",
+          "name": "saml-service",
+          "valid": true
+        },
+        {
+          "id": "saml-windows-app",
+          "description": "created at Thu Sep 24 10:23:25 UTC 2015",
+          "name": "saml-windows-app",
+          "valid": true
+        },
+        {
+          "id": "secureruntime",
+          "description": "Brainstorm about runtime security for January hackengarten",
+          "name": "secureruntime",
+          "valid": true
+        },
+        {
+          "id": "send-sms-with-cordova-plugins",
+          "description": "Test on sending SMS with Cordova plugin",
+          "name": "send-sms-with-cordova-plugins",
+          "valid": true
+        },
+        {
+          "id": "sms-builder",
+          "description": "SMS Plugin for Phonegap",
+          "name": "sms-builder",
+          "valid": true
+        },
+        {
+          "id": "so-monitor",
+          "description": "created at Tue Feb 07 07:25:32 UTC 2017",
+          "name": "so-monitor",
+          "valid": true
+        },
+        {
+          "id": "spring-mobile-grails-plugin",
+          "description": "created at Thu Jul 12 14:50:37 UTC 2012",
+          "name": "spring-mobile-grails-plugin",
+          "valid": true
+        },
+        {
+          "id": "sprint135",
+          "description": "created at Tue Aug 08 07:52:49 UTC 2017",
+          "name": "sprint135",
+          "valid": true
+        },
+        {
+          "id": "sprint135bis",
+          "description": "created at Tue Aug 08 08:16:47 UTC 2017",
+          "name": "sprint135bis",
+          "valid": true
+        },
+        {
+          "id": "swift",
+          "description": "Tell me about Swift in a nutshell... Show me in playground",
+          "name": "swift",
+          "valid": true
+        },
+        {
+          "id": "swift-alarm",
+          "description": "iOS app written in Swift",
+          "name": "swift-alarm",
+          "valid": true
+        },
+        {
+          "id": "swift-mixit",
+          "description": "Presentation done at mixit2015",
+          "name": "swift-mixit",
+          "valid": true
+        },
+        {
+          "id": "swift-operators-pg",
+          "description": "Swift Operators Playground is a handy playground file that covers the syntax for all Swift operators along with different ways to use them",
+          "name": "swift-operators-pg",
+          "valid": true
+        },
+        {
+          "id": "swift-reference-pg",
+          "description": "Swift Reference is a handy playground file that can be used when you are starting to learn swift",
+          "name": "swift-reference-pg",
+          "valid": true
+        },
+        {
+          "id": "swift-rivieradev",
+          "description": "Switch to Swift presentation given at RivieraDEV 2015",
+          "name": "swift-rivieradev",
+          "valid": true
+        },
+        {
+          "id": "swift-rpm",
+          "description": "Swift RPM for Fedora",
+          "name": "swift-rpm",
+          "valid": true
+        },
+        {
+          "id": "swiftclock",
+          "description": "An iOS Clock icon in a swift playground",
+          "name": "swiftclock",
+          "valid": true
+        },
+        {
+          "id": "sync-android-app",
+          "description": "Sample app to demo android sync functions",
+          "name": "sync-android-app",
+          "valid": true
+        },
+        {
+          "id": "sync-app",
+          "description": "Client App For Data Sync Tutorial",
+          "name": "sync-app",
+          "valid": true
+        },
+        {
+          "id": "sync-cloud",
+          "description": "An example Project using our Sync framework",
+          "name": "sync-cloud",
+          "valid": true
+        },
+        {
+          "id": "sync-cordova-app",
+          "description": "created at Tue Aug 23 12:22:12 UTC 2016",
+          "name": "sync-cordova-app",
+          "valid": true
+        },
+        {
+          "id": "sync-ios-app",
+          "description": "iOS native demo app for sync APIs",
+          "name": "sync-ios-app",
+          "valid": true
+        },
+        {
+          "id": "sync-ios-swift",
+          "description": "Native iOS (Swift) sample for sync APIs",
+          "name": "sync-ios-swift",
+          "valid": true
+        },
+        {
+          "id": "sync-xamarin-app",
+          "description": "created at Thu Jun 09 10:42:23 UTC 2016",
+          "name": "sync-xamarin-app",
+          "valid": true
+        },
+        {
+          "id": "syntaxhighlighter.googlecode.com",
+          "description": "Objective-C syntax coloring working with ![syntaxhighlighter](https://code.google.com/p/syntaxhighlighter/)",
+          "name": "syntaxhighlighter.googlecode.com",
+          "valid": true
+        },
+        {
+          "id": "tagmyfriends",
+          "description": "created at Mon Oct 29 06:54:29 UTC 2012",
+          "name": "tagmyfriends",
+          "valid": true
+        },
+        {
+          "id": "test",
+          "description": "dd",
+          "name": "test",
+          "valid": true
+        },
+        {
+          "id": "test-client-wondows",
+          "description": "created at Wed Mar 08 14:13:14 UTC 2017",
+          "name": "test-client-wondows",
+          "valid": true
+        },
+        {
+          "id": "test-cloud",
+          "description": "created at Wed Mar 08 09:02:35 UTC 2017",
+          "name": "test-cloud",
+          "valid": true
+        },
+        {
+          "id": "test-cujo",
+          "description": "created at Thu Mar 13 23:46:35 UTC 2014",
+          "name": "test-cujo",
+          "valid": true
+        },
+        {
+          "id": "test-windows",
+          "description": "created at Wed Mar 08 14:08:41 UTC 2017",
+          "name": "test-windows",
+          "valid": true
+        },
+        {
+          "id": "tour-of-heroes-webpack",
+          "description": "Angular2 Tour-of-Heroes with webpack",
+          "name": "tour-of-heroes-webpack",
+          "valid": true
+        },
+        {
+          "id": "twitter-bootstrap-scaffolding",
+          "description": "Twitter Bootstrap powered Grails scaffolding templates",
+          "name": "twitter-bootstrap-scaffolding",
+          "valid": true
+        },
+        {
+          "id": "unified-geo-server",
+          "description": "created at Fri Jan 23 10:29:10 UTC 2015",
+          "name": "unified-geo-server",
+          "valid": true
+        },
+        {
+          "id": "unified-push-helloworld",
+          "description": "created at Tue Apr 14 12:48:43 UTC 2015",
+          "name": "unified-push-helloworld",
+          "valid": true
+        },
+        {
+          "id": "unified-push-quickstarts",
+          "description": "created at Tue Apr 14 14:20:57 UTC 2015",
+          "name": "unified-push-quickstarts",
+          "valid": true
+        },
+        {
+          "id": "vvvv-v",
+          "description": "created at Fri Apr 28 06:57:00 UTC 2017",
+          "name": "vvvv-v",
+          "valid": true
+        },
+        {
+          "id": "web5",
+          "description": "Presentation done in Bezier the 14th June 2013 for web-5 conf",
+          "name": "web5",
+          "valid": true
+        },
+        {
+          "id": "webpack-talk",
+          "description": "Example code for the talk on Webpack",
+          "name": "webpack-talk",
+          "valid": true
+        },
+        {
+          "id": "welcome-app",
+          "description": "created at Tue Aug 23 10:35:56 UTC 2016",
+          "name": "welcome-app",
+          "valid": true
+        },
+        {
+          "id": "welcome-ios",
+          "description": "created at Tue Feb 16 18:03:24 UTC 2016",
+          "name": "welcome-ios",
+          "valid": true
+        },
+        {
+          "id": "welcome-ios-1",
+          "description": "Native iOS (Objective-C) welcome showcase app",
+          "name": "welcome-ios-1",
+          "valid": true
+        },
+        {
+          "id": "welcome-ios-swift",
+          "description": "Native iOS (Swift) welcome showcase app ",
+          "name": "welcome-ios-swift",
+          "valid": true
+        },
+        {
+          "id": "welcome-ios-swift-trial",
+          "description": "Native iOS (Swift) welcome showcase app",
+          "name": "welcome-ios-swift-trial",
+          "valid": true
+        },
+        {
+          "id": "xcode-templates",
+          "description": "Create custom Xcode templates",
+          "name": "xcode-templates",
+          "valid": true
+        }
+      ],
+      "class": "UISelectMany",
+      "value": []
+    }
+  ]
+}

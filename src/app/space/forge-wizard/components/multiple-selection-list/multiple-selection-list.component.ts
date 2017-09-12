@@ -21,6 +21,7 @@ export class MultipleSelectionListComponent implements OnInit {
   ngOnInit() {
     console.log("::::::::::::::Multiple-Selection-list field ngInit"+JSON.stringify(this.field));
     this.field.display.selected = false;
+    this.field.valueChoices.forEach(val => val.visible = true);
   }
 
   // behaviors
@@ -59,18 +60,15 @@ export class MultipleSelectionListComponent implements OnInit {
     let specialFilterIncludeSelectedItems = filters.filter( f => f.toLowerCase() === '\\[x\\]').length > 0;
     if (filters.length === 0 ) {
         // if no filters ... everything is visible
-        field.display.choices.forEach(c => c.visible = true);
+        field.valueChoices.forEach(c => c.visible = true);
         return;
     }
     // remove the special 'show selected' filter
     filters = filters.filter( f => f.toLowerCase() !== '\\[x\\]');
 
-
-
     let filterRegularExpressions = filters.map( f => new RegExp(f || '', 'ig'));
 
-
-    field.valueChoices.filter( (choice) => {
+    let list = field.valueChoices.filter( (choice) => {
       // set everything to not visible,
       // except for selected when 'include selected' special filter is on
       choice.visible = false;
@@ -92,36 +90,12 @@ export class MultipleSelectionListComponent implements OnInit {
       }
       // there are no matches
       return false;
-    })
-    .forEach(choice => {
-      // each matching choice gets set to visible
-      choice.visible = true;
     });
-
+    if (list) {
+      list.forEach(choice => {
+        // each matching choice gets set to visible
+        choice.visible = true;
+      });
+    }
   }
-
-  selectAllOptions(field: GuiInput) {
-    field.valueChoices.forEach((o) => {
-      o.selected = true;
-    });
-  }
-
-  // toggleSelectAll(field: GuiInput) {
-  //   if ( !field ) {
-  //     return;
-  //   }
-  //   // at least one not selected, then select all , else deselect all
-  //   let item = field.display.choices.find((i) => i.selected === false);
-  //   if ( item ) {
-  //     for ( let o of field.display.choices ) {
-  //       o.selected = true;
-  //     }
-  //   } else {
-  //     for ( let o of field.display.choices ) {
-  //       o.selected = false;
-  //     }
-  //   }
-  //   this.updateFieldValue();
-  // }
-
 }
