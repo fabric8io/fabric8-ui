@@ -12,20 +12,21 @@
         </p>
     </div>
 
-  <pfng-wizard-step [config]="stepGithubImportPickOrganisation">
+  <form #form="ngForm">
+    <pfng-wizard-step [config]="stepGithubImportPickOrganisation">
       <organisation-step [gui]= "currentGui"></organisation-step>
-  </pfng-wizard-step>
+    </pfng-wizard-step>
 
-  <pfng-wizard-step [config]="stepGithubRepositories">
+    <pfng-wizard-step [config]="stepGithubRepositories">
       <repositories-step [gui]= "currentGui"></repositories-step>
-  </pfng-wizard-step>
+    </pfng-wizard-step>
 
-  <pfng-wizard-step [config]="stepConfigurePipeline">
+    <pfng-wizard-step [config]="stepConfigurePipeline">
       TODO stepConfigurePipeline
-  </pfng-wizard-step>
+    </pfng-wizard-step>
 
-  <pfng-wizard-step [config]="stepCreateBuildConfig">
+    <pfng-wizard-step [config]="stepCreateBuildConfig">
       TODO stepCreateBuildConfig
-  </pfng-wizard-step>
-
+    </pfng-wizard-step>
+  </form>
 </pfng-wizard>

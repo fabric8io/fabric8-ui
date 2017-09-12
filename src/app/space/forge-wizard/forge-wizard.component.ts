@@ -6,6 +6,7 @@ import { ForgeService } from "app/space/forge-wizard/forge.service";
 import { Gui, Input } from "app/space/forge-wizard/gui.model";
 import { History } from "app/space/forge-wizard/history.component";
 import { AnalyzeOverviewComponent } from "app/space/analyze/analyze-overview/analyze-overview.component";
+import { NgForm } from "@angular/forms";
 
 @Component({
   selector: 'forge-wizard',
@@ -14,6 +15,7 @@ import { AnalyzeOverviewComponent } from "app/space/analyze/analyze-overview/ana
 })
 export class ForgeWizardComponent implements OnInit {
   @ViewChild('wizard') wizard: WizardComponent;
+  @ViewChild('form') form: NgForm;
   stepGithubImportPickOrganisation: WizardStepConfig;
   stepGithubRepositories: WizardStepConfig;
   stepConfigurePipeline: WizardStepConfig;
@@ -62,8 +64,11 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   nextClicked($event: WizardEvent): void {
-    this.history.resetTo(this.history.stepIndex);
-    this.loadUi();
+    console.log("valid?", this.form.valid);
+    if (this.form.valid) {
+      this.history.resetTo(this.history.stepIndex);
+      this.loadUi();
+    }
   }
 
   private loadUi(): void {
