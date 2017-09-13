@@ -21,13 +21,10 @@ export class PipelineViewComponent implements OnInit {
   private addDisplay(field: GuiInput) {
     let index: number = 0;
     for (let choice of field.valueChoices) {
-      this.formatHtml(choice, field.valueChoices, index);
+      this.formatHtml(choice, index);
       index++;
     }
-    // set the default for the first non validation step
-    //TODO
-    // selected choices should have choice display render in non collapsed mode
-    //field.valueChoices.filter(c => c.selected === true).forEach(c => c.display.collapsed = false);
+    field.valueChoices.filter(c => field.value === c.id).forEach(c => c.display.collapsed = false);
   }
   private determineColor(value: string): string {
     if (value) {
@@ -65,32 +62,24 @@ export class PipelineViewComponent implements OnInit {
     return stages;
   };
 
-  private formatHtml(choice: Option, source: any, index: number) {
+  private formatHtml(choice: Option, index: number) {
     choice.display = {
       isDefault: true,
       hasIcon: false,
       icon: 'fa fa-check',
       view: 'image',
-      collapsed: false, //TODO only selected one should be collapsed
+      collapsed: true,
       collapsible: true,
       hasView: true,
       verticalLayout: true
-    }
+    };
     choice.name = choice.id;
-
-    if (choice.stages && choice.stages[0] && !choice.stages[0].name) { // deal with back button format ouput only once.
-      choice.stages = this.buildStages(choice)
-    }
     choice.description = choice.descriptionMarkdown;
     choice.description = choice.description.replace(/\n\n/g, '\n');
     let renderer = new marked.Renderer();
     choice.description = marked(choice.description, { renderer: renderer });
-    choice.display.index = index;
-
-    if (index === 0) {
-      choice.display.isDefault = true;
-      //choice.display.selected = true;
+    if (choice.stages && choice.stages[0] && !choice.stages[0].name) { // deal with back button format ouput only once.
+      choice.stages = this.buildStages(choice);
     }
-
   }
 }
