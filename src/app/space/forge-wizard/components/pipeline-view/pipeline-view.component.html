@@ -2,8 +2,8 @@
 
        <li title="{{choice.name}}" [class.selected]="field.value === choice.id" (click)="field.value=choice.id;" *ngFor="let choice of field.valueChoices">
 
-        <input class="selection-list-input user-select-none form-control" title="{{choice.name}}" [checked]="field.value === choice.id" [value]="choice.id"
-          type="radio" name="{{field.name}}" readonly="false" [disabled]="field.display.enabled===false">
+        <input class="selection-list-input user-select-none form-control" title="choice.name" [checked]="field.value === choice.id" [value]="choice.id"
+          type="radio" name="{{field.name}}" >
         <div class="selection-list-expander" *ngIf="choice.display.collapsible===true" title="{{choice.display.collapsed?'Show':'Hide'}} '{{choice.name}}' pipeline details ..."
           (click)="choice.display.collapsed=!choice.display.collapsed;$event.stopPropagation();">
           <div [class.collapsible]="choice.display.collapsible===true" class="selection-list-panel user-select-none cursor-pointer">
