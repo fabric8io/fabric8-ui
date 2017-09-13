@@ -31,22 +31,22 @@ export class ForgeWizardComponent implements OnInit {
 
     this.stepGithubImportPickOrganisation = {
       id: 'GithubImportPickOrganisationStep',
-      priority: 0,
+      priority: 1,
       title: 'Github Organisation'
     } as WizardStepConfig;
     this.stepGithubRepositories = {
       id: 'GithubRepositoriesStep',
-      priority: 1,
+      priority: 2,
       title: 'Github Repositories'
     } as WizardStepConfig;
     this.stepConfigurePipeline = {
       id: 'ConfigurePipeline',
-      priority: 2,
+      priority: 3,
       title: 'Configure Pipeline'
     } as WizardStepConfig;
     this.stepCreateBuildConfig = {
       id: 'CreateBuildConfigStep',
-      priority: 3,
+      priority: 4,
       title: 'Build Config'
     } as WizardStepConfig;
   }

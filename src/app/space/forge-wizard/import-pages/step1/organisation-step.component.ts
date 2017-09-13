@@ -11,13 +11,10 @@ export class OrganisationComponent implements OnInit {
 
 
   @Input() gui: GuiInput;
-  constructor() {
-    console.log("::::OrganisationComponent Constructor" + JSON.stringify(this.gui));
-  }
+  constructor() {}
 
   ngOnInit(): void {
-    console.log("::::OrganisationComponent ngOnInit" + JSON.stringify(this.gui));
-
+    // console.log("::::OrganisationComponent ngOnInit" + JSON.stringify(this.gui));
   }
 
 }

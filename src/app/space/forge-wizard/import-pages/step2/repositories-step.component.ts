@@ -9,13 +9,10 @@ import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
 export class RepositoriesComponent implements OnInit {
 
   @Input() gui: GuiInput;
-  constructor() {
-    console.log("::::RepositoriesComponent Constructor" + JSON.stringify(this.gui));
-  }
+  constructor() {}
 
   ngOnInit(): void {
-    console.log("::::RepositoriesComponent ngOnInit gui.inputs[0]" + JSON.stringify(this.gui));
-
+    // console.log("::::RepositoriesComponent ngOnInit gui.inputs[0]" + JSON.stringify(this.gui));
   }
 
 }

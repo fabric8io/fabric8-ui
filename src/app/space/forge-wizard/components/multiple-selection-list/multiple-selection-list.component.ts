@@ -8,9 +8,6 @@ import { Input as GuiInput, Option } from "app/space/forge-wizard/gui.model";
 })
 export class MultipleSelectionListComponent implements OnInit {
 
-  // keep track of the number of instances
-  static instanceCount: number = 1;
-
   @Input() field: GuiInput;
 
   public showFilter= false;
@@ -19,7 +16,6 @@ export class MultipleSelectionListComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("::::::::::::::Multiple-Selection-list field ngInit"+JSON.stringify(this.field));
     this.field.display.selected = false;
     this.field.valueChoices.forEach(val => val.visible = true);
   }
@@ -49,7 +45,6 @@ export class MultipleSelectionListComponent implements OnInit {
   }
 
   filterList(field: GuiInput, filter: string) {
-    // TODO: better validation of bad or illegal chars
     filter = filter.replace('*', '');
     filter = filter.replace('?', '');
     filter = filter.replace('/', '');

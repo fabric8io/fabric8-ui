@@ -1,14 +1,14 @@
 <!--label list -->
-<div [class.with-filter]="showFilter===true" class="label-list">
+<div [class.with-filter]="showFilter" class="label-list">
   <span title="{{choice.description}}" class="label label-primary" *ngFor="let choice of field.valueChoices|selectedItems">
     <span>{{choice.id}}</span>
   </span>
-  <div title="Show filter for {{field.label}}" [hidden]="showFilter===true" (click)="showFilter=true" class="filter-toggle">
+  <div title="Show filter for {{field.label}}" [hidden]="showFilter" (click)="showFilter=true" class="filter-toggle">
     <span style class="fa fa-filter"></span>
   </div>
 </div>
 
-<div [class.hidden]="showFilter===false" class="input-group width-100">
+<div [class.hidden]="!showFilter" class="input-group width-100">
   <input #choiceFilter placeholder="Enter the text to filter for {{field.label}} ..." [class.form-control-danger]="!field.valid" id="{{field.name}}"
     name="{{field.name}}" class="form-control" title="{{field.label}}" (keyup)="filterList(field,choiceFilter.value)" />
   <span title="Close the filter for {{field.label}}" class="input-group-addon">
