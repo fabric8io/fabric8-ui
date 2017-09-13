@@ -30,17 +30,21 @@ export class PipelineViewComponent implements OnInit {
     //field.valueChoices.filter(c => c.selected === true).forEach(c => c.display.collapsed = false);
   }
   private determineColor(value: string): string {
-    let found = (value || '').toLowerCase().includes('approve');
-    if (found) {
-      return 'warning';
+    if (value) {
+      const found = value.toLowerCase().includes('approve');
+      if (found) {
+        return 'warning';
+      }
     }
     return 'success';
   };
 
-  private determineIcon(value: string): string {
-    let found = (value || '').toLowerCase().includes('approve');
-    if (found) {
-      return 'fa-pause-circle';
+  private determineIcon(value: any|string): string {
+    if (value) {
+      const found = value.toLowerCase().includes('approve');
+      if (found) {
+        return 'fa-pause-circle';
+      }
     }
     return 'fa-check-circle';
   };
@@ -73,11 +77,10 @@ export class PipelineViewComponent implements OnInit {
       verticalLayout: true
     }
     choice.name = choice.id;
-    //let choiceSource = source.find(vc => vc.id === choice.id) || { environments: [], stages: [], color: 'success', icon: 'fa-check-circle' };
 
-    choice.stages = this.buildStages(choice)
-
-
+    if (choice.stages && choice.stages[0] && !choice.stages[0].name) { // deal with back button format ouput only once.
+      choice.stages = this.buildStages(choice)
+    }
     choice.description = choice.descriptionMarkdown;
     choice.description = choice.description.replace(/\n\n/g, '\n');
     let renderer = new marked.Renderer();
