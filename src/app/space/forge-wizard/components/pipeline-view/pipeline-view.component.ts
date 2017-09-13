@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Input as GuiInput, Option } from "app/space/forge-wizard/gui.model";
+import { Input as GuiInput, Option } from 'app/space/forge-wizard/gui.model';
 import * as marked from 'marked';
 
 @Component({
@@ -14,10 +14,9 @@ export class PipelineViewComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    console.log("PipelineView:::prior format" + JSON.stringify(this.field));
     this.addDisplay(this.field);
-    console.log("PipelineView:::post format" + JSON.stringify(this.field));
   }
+
   private addDisplay(field: GuiInput) {
     let index: number = 0;
     for (let choice of field.valueChoices) {
@@ -26,6 +25,7 @@ export class PipelineViewComponent implements OnInit {
     }
     field.valueChoices.filter(c => field.value === c.id).forEach(c => c.display.collapsed = false);
   }
+
   private determineColor(value: string): string {
     if (value) {
       const found = value.toLowerCase().includes('approve');
@@ -44,7 +44,8 @@ export class PipelineViewComponent implements OnInit {
       }
     }
     return 'fa-check-circle';
-  };
+  }
+
   private buildStages(value): Array<string> {
     let stages = [];
     let n: number = 0;
@@ -60,7 +61,7 @@ export class PipelineViewComponent implements OnInit {
 
     }
     return stages;
-  };
+  }
 
   private formatHtml(choice: Option, index: number) {
     choice.display = {

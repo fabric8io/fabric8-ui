@@ -26,7 +26,9 @@
   </pfng-wizard-step>
 
     <pfng-wizard-step [config]="stepCreateBuildConfig">
-      TODO stepCreateBuildConfig
+      <build-config-step [gui]="currentGui"
+                         *ngIf="currentGui.metadata && currentGui.metadata.name == 'io.fabric8.forge.generator.kubernetes.CreateBuildConfigStep'">
+      </build-config-step>
     </pfng-wizard-step>
   </form>
 </pfng-wizard>

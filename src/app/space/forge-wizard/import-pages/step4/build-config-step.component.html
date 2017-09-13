@@ -1,0 +1,15 @@
+<section *ngIf="gui.inputs">
+  <div style="min-height: 450px" class="row">
+    <div class="col-xs-12">
+      <div class="form-horizontal">
+        <!--<label title="organisation" required>Build configuration</label>-->
+        <single-input *ngIf="gui.inputs" class="input-group width-100" [field]="gui.inputs[0]">
+        </single-input>
+        <single-input *ngIf="gui.inputs" class="input-group width-100" [field]="gui.inputs[1]">
+        </single-input>
+        <single-input *ngIf="gui.inputs" class="input-group width-100" [field]="gui.inputs[2]">
+        </single-input>
+      </div>
+    </div>
+  </div>
+</section>

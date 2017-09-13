@@ -1,6 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-
-import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
+import { Input as GuiInput } from '../../gui.model';
 
 @Component({
   selector: 'pipeline-step',
@@ -9,12 +8,10 @@ import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
 export class PipelineStepComponent implements OnInit {
 
   @Input() gui: GuiInput;
-  constructor() {
-    //console.log("::::PipelineComponent Constructor" + JSON.stringify(this.gui));
-  }
+  constructor() {}
 
   ngOnInit(): void {
-    console.log("::::PipelineComponent ngOnInit gui.inputs[0]" + JSON.stringify(this.gui));
+    console.log(`::::PipelineComponent ngOnInit: ${JSON.stringify(this.gui)}`);
   }
 
 }
