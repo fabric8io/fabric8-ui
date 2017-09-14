@@ -1,6 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 
-import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
+import { Option, SubmittableInput, Gui } from '../../gui.model';
+import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'organisation-step',
@@ -9,12 +10,12 @@ import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
 })
 export class OrganisationComponent implements OnInit {
 
+  @Input() gui: Gui;
+  @Input() form: FormGroup;
 
-  @Input() gui: GuiInput;
   constructor() {}
 
   ngOnInit(): void {
     // console.log("::::OrganisationComponent ngOnInit" + JSON.stringify(this.gui));
   }
-
 }

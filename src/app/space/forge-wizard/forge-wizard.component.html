@@ -13,18 +13,18 @@
         </p>
     </div>
 
-  <form #form="ngForm">
+  <form [formGroup]="form">
     <pfng-wizard-step [config]="stepGithubImportPickOrganisation">
-      <organisation-step [gui]= "currentGui"></organisation-step>
+      <organisation-step [gui]="currentGui" [form]="form"></organisation-step>
     </pfng-wizard-step>
 
     <pfng-wizard-step [config]="stepGithubRepositories">
-      <repositories-step [gui]= "currentGui"></repositories-step>
+      <repositories-step [gui]= "currentGui" [form]="form"></repositories-step>
     </pfng-wizard-step>
 
-  <pfng-wizard-step [config]="stepConfigurePipeline">
+    <pfng-wizard-step [config]="stepConfigurePipeline">
       <pipeline-step [gui]="currentGui" *ngIf="currentGui.inputs && currentGui.inputs[0] && currentGui.inputs[0].name == 'pipeline'"></pipeline-step>
-  </pfng-wizard-step>
+    </pfng-wizard-step>
 
     <pfng-wizard-step [config]="stepCreateBuildConfig">
       <build-config-step [gui]="currentGui" *ngIf="currentGui.metadata && currentGui.metadata.name == 'io.fabric8.forge.generator.kubernetes.CreateBuildConfigStep'"></build-config-step>

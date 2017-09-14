@@ -1,12 +1,10 @@
-<div class="combobox-container" >
-  <input type="hidden" name value>
+<div class="combobox-container">
   <div [class.width-100]="!field.enabled" class="input-group">
-    <input type="text" title="{{field.label}}" [class.form-control-danger]="!field.valid" id="{{field.label}}"
-      name="{{field.label}}" class="user-select-none combobox form-control" readonly="true"
-      (click)="field.display.open =!field.display.open" [(ngModel)]="field.value"
-      placeholder="select an option">
-    <ul class="dropdown-menu" [class.open]="field.display.open">
-      <li class="choice-container" (click)="field.value=choice.id;field.display.open = false"
+    <input type="text" [title]="field.label" [class.form-control-danger]="!field.valid" [id]="field.label"
+      [name]="field.label" class="user-select-none combobox form-control" readonly="true" [value]="model"
+      (click)="toggleDropdown()" placeholder="select an option">
+    <ul class="dropdown-menu" [class.open]="showDropdown">
+      <li class="choice-container" (click)="setSelected(choice);toggleDropdown()"
         *ngFor="let choice of field.valueChoices">
         <div [class.selected]="field.value === choice.id" class="dropdown-menu-item user-select-none cursor-pointer">
           <div class="choice-item">
@@ -18,9 +16,9 @@
         </div>
       </li>
     </ul>
-    <span class="input-group-addon" (click)="field.display.open =!field.display.open">
+    <span class="input-group-addon" (click)="toggleDropdown()">
       <span class="caret"></span>
       <span class="glyphicon glyphicon-remove"></span>
     </span>
-  </div>
+  <!-- </div> -->
 </div>

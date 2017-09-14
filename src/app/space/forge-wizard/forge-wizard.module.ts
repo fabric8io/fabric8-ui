@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeWizardComponent } from 'app/space/forge-wizard/forge-wizard.component';
 import { WizardModule } from 'patternfly-ng';
 import { OrganisationComponent } from 'app/space/forge-wizard/import-pages/step1/organisation-step.component';
@@ -17,7 +17,7 @@ import { SingleInputComponent } from './components/single-input/single-input.com
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     WizardModule
   ],
   declarations: [

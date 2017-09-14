@@ -6,7 +6,7 @@ import { ForgeService } from "app/space/forge-wizard/forge.service";
 import { Gui, Input } from "app/space/forge-wizard/gui.model";
 import { History } from "app/space/forge-wizard/history.component";
 import { AnalyzeOverviewComponent } from "app/space/analyze/analyze-overview/analyze-overview.component";
-import { NgForm } from "@angular/forms";
+import { NgForm, FormControl, Validators, FormGroup, FormArray } from "@angular/forms";
 
 @Component({
   selector: 'forge-wizard',
@@ -15,7 +15,7 @@ import { NgForm } from "@angular/forms";
 })
 export class ForgeWizardComponent implements OnInit {
   @ViewChild('wizard') wizard: WizardComponent;
-  @ViewChild('form') form: NgForm;
+  form: FormGroup = new FormGroup({});
   stepGithubImportPickOrganisation: WizardStepConfig;
   stepGithubRepositories: WizardStepConfig;
   stepConfigurePipeline: WizardStepConfig;
@@ -55,6 +55,11 @@ export class ForgeWizardComponent implements OnInit {
     return this.history.currentGui;
   }
 
+  toggleDropdown(): void {
+    this.currentGui.inputs[0].name += "!";
+    console.log(this.currentGui.inputs[0].name);
+  }
+
   ngOnInit(): void {
     this.loadUi();
   }
@@ -74,6 +79,7 @@ export class ForgeWizardComponent implements OnInit {
   previousClicked($event: WizardEvent): void {
     this.history.resetTo(this.history.stepIndex - 1);
     this.history.done();
+    this.form = this.buildForm(this.currentGui);
   }
 
   stepChanged($event: WizardEvent) {
@@ -88,7 +94,31 @@ export class ForgeWizardComponent implements OnInit {
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
       this.history.add(gui);
       this.history.done();
+
+      this.form = this.buildForm(gui);
+
+      //don't know about this it would be better to use the form
+      //instead of history.convert or use the form for history.convert
+      this.form.valueChanges.subscribe(values => {
+        this.currentGui.inputs.forEach(input => {
+          Object.keys(values).forEach(key => {
+            if (input.name === key) {
+              input.value = values[key];
+            }
+          });
+        });
+      });
     });
   }
 
+  private buildForm(gui: Gui): FormGroup {
+    let group: any = {};
+    gui.inputs.forEach(sub => {
+      let input = sub as Input;
+      group[input.name] = input.required ? new FormControl(input.value || '', Validators.required)
+          : new FormControl(input.value || '');
+    });
+
+    return new FormGroup(group);
+  }
 }
