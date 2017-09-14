@@ -71,6 +71,19 @@ export class ForgeWizardComponent implements OnInit {
     }
   }
 
+  previousClicked($event: WizardEvent): void {
+    this.history.resetTo(this.history.stepIndex - 1);
+    this.history.done();
+  }
+
+  stepChanged($event: WizardEvent) {
+    // const stepName = $event.step.config.id;
+    // const stepIndex = $event.step.config.priority;
+    // console.log("::::step=" + stepName + " priority=" + stepIndex);
+    // this.history.resetTo(stepIndex);
+    // this.history.done();
+  }
+
   private loadUi(): void {
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
       this.history.add(gui);
@@ -78,8 +91,4 @@ export class ForgeWizardComponent implements OnInit {
     });
   }
 
-  previousClicked($event: WizardEvent): void {
-    this.history.resetTo(this.history.stepIndex - 1);
-    this.history.done();
-  }
 }

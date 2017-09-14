@@ -2,7 +2,8 @@
     [config]="config"
     (onCancel)="cancel($event)"
     (onNext)="nextClicked($event)"
-    (onPrevious)="previousClicked($event)">
+    (onPrevious)="previousClicked($event)"
+    (onStepChange)="stepChanged($event)">
 
     <div style="min-height: 450px" class="wizard-pf-loading blank-slate-pf loading" *ngIf="!currentGui.inputs">
         <div class="spinner spinner-lg blank-slate-pf-icon"></div>
