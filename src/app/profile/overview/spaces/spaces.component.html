@@ -1,70 +1,58 @@
-<div *ngIf="spaces.length === 0; then showBlankState else showSpaces"></div>
-<ng-template #showBlankState>
-  <div class="col-xs-12">
-    <div class="blank-slate-pf">
-      <div class="blank-slate-f8-icon">
-        <span class="pficon pficon-add-circle-o"></span>
-      </div>
-      <h3>Create a Space</h3>
-      <p>Learn how to get started
-        <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift.io/1/html-single/user_guide"
-           target="_blank">in the documentation</a>
-      </p>
-      <div class="blank-slate-pf-main-action">
-        <button class="btn btn-primary btn-lg" (click)="openForgeWizard(createSpace)">Create</button>
-      </div>
+<div class="card-pf f8-card">
+  <div class="card-pf-heading-bg">
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        My Spaces
+        <span id="spaces-badge" class="badge f8-card-badge">{{mySpacesCount | async}}</span>
+      </h2>
     </div>
   </div>
-</ng-template>
-<ng-template #showSpaces>
-  <h2 class="margin-left-15">{{context?.user?.attributes?.username}}'s spaces</h2>
-  <div class="col-xs-12">
-    <div class="spaces-list-scroll" almInfiniteScroll
-         (fetchMore)='fetchMoreSpaces($event)'>
-      <ul class="list-group list-view-pf list-view-pf-view">
-        <li class="list-group-item" *ngFor="let space of spaces">
-          <div class="list-view-pf-main-info">
-            <div class="list-view-pf-body">
-              <div class="list-view-pf-description">
-                <div class="list-group-item-text">
-                  <div class="col-xs-10">
-                    <a [routerLink]="['/', space.relationalData.creator.attributes.username, space.attributes.name]">
-                      {{space.attributes.name | spaceName}}
-                    </a>
+  <div class="card-pf-body f8-card-body">
+    <div *ngIf="spaces.length === 0; then showBlankState else showSpaces"></div>
+    <ng-template #showBlankState>
+      <div class="f8-blank-slate-card">
+        <div class="f8-blank-slate-icon">
+          <span class="pficon pficon-add-circle-o"></span>
+        </div>
+        <h3>Create a Space</h3>
+        <p>Learn how to get started
+          <a href="https://access.redhat.com/documentation/en-us/red_hat_openshift.io/1/html-single/user_guide"
+             target="_blank">in the documentation</a>
+        </p>
+        <div class="blank-slate-pf-main-action">
+          <button class="btn btn-primary btn-lg" (click)="openForgeWizard(spaceWizard)">Create a Space</button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #showSpaces>
+      <div class="col-xs-12 f8-card-list">
+        <div class="spaces-list-scroll" almInfiniteScroll
+             (fetchMore)='fetchMoreSpaces($event)'>
+          <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
+            <li class="list-group-item" *ngFor="let space of spaces">
+              <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                  <div class="list-view-pf-description">
+                    <div class="list-group-item-text">
+                      <a [routerLink]="['/', space.relationalData.creator.attributes.username, space.attributes.name]">
+                        {{space.attributes.name | spaceName}}
+                      </a>
+                    </div>
                   </div>
-                  <button class="col-xs-2 btn btn-danger f8-button__delete" (click)="confirmDeleteSpace(space, deleteSpace)">
-                    Delete
-                  </button>
                 </div>
               </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-template>
   </div>
-</ng-template>
+</div>
 
-<!-- Create Space modal -->
-<ng-template #createSpace>
+<!-- Launch Space Wizard -->
+<ng-template #spaceWizard>
   <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
   <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space" [style.display]="selectedFlow !== 'selectFlow' ? 'none': ''"></flow-selector>
   <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
   <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
-</ng-template>
-
-<!-- Delete Space modal -->
-<ng-template #deleteSpace title="Remove the space">
-  <div class="modal-header">
-    <button class="close" aria-label="Close" type="button"
-            (click)="cancel()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <dt class="modal-title">Remove Space</dt>
-  </div>
-  <div class="modal-body">
-    <h2>Are you sure you want to remove the space</h2>
-    <button class="btn btn-cancel" (click)="cancel()">Cancel</button>
-    <button class="btn btn-danger" (click)="removeSpace()">Remove</button>
-  </div>
 </ng-template>

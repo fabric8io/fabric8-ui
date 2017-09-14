@@ -19,7 +19,7 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   loggedInUser: User;
   pageSize: number = 20;
   subscriptions: Subscription[] = [];
-  spaceToDelete: Space;
+  // spaceToDelete: Space;
   spaces: Space[] = [];
   modalRef: BsModalRef;
   private selectedFlow: string;
@@ -76,30 +76,30 @@ export class SpacesComponent implements OnDestroy, OnInit  {
     }
   }
 
-  removeSpace(): void {
-    if (this.context && this.context.user && this.spaceToDelete) {
-      let space = this.spaceToDelete;
-      this.subscriptions.push(this.spaceService.deleteSpace(space)
-        .subscribe(spaces => {
-            let index = this.spaces.indexOf(space);
-            this.spaces.splice(index, 1);
-            this.spaceToDelete = undefined;
-            this.modalRef.hide();
-          },
-          err => {
-            this.logger.error(err);
-            this.spaceToDelete = undefined;
-            this.modalRef.hide();
-          }));
-    } else {
-      this.logger.error('Failed to retrieve list of spaces owned by user');
-    }
-  }
+  // removeSpace(): void {
+  //   if (this.context && this.context.user && this.spaceToDelete) {
+  //     let space = this.spaceToDelete;
+  //     this.subscriptions.push(this.spaceService.deleteSpace(space)
+  //     .subscribe(spaces => {
+  //           let index = this.spaces.indexOf(space);
+  //       this.spaces.splice(index, 1);
+  //       this.spaceToDelete = undefined;
+  //       this.modalRef.hide();
+  //     },
+  //     err => {
+  //     this.logger.error(err);
+  //     this.spaceToDelete = undefined;
+  //     this.modalRef.hide();
+  //     }));
+  //   } else {
+  //     this.logger.error('Failed to retrieve list of spaces owned by user');
+  //   }
+  // }
 
-  confirmDeleteSpace(space: Space, deleteSpace: TemplateRef<any>): void {
-    this.spaceToDelete = space;
-    this.modalRef = this.modalService.show(deleteSpace, {class: 'modal-lg'});
-  }
+  // confirmDeleteSpace(space: Space, deleteSpace: TemplateRef<any>): void {
+  //   this.spaceToDelete = space;
+  //   this.modalRef = this.modalService.show(deleteSpace, { class: 'modal-lg' });
+  // }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
     this.selectedFlow = 'start';
@@ -118,7 +118,5 @@ export class SpacesComponent implements OnDestroy, OnInit  {
     this.selectedFlow = $event.flow;
     this.space = $event.space;
   }
-
-  // Private
 
 }

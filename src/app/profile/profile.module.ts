@@ -11,7 +11,7 @@ import { CleanupModule } from './cleanup/cleanup.module';
 
 @NgModule({
   imports:      [ CommonModule, OverviewModule, ProfileRoutingModule, CleanupModule ],
-  declarations: [ ProfileComponent ],
+  declarations: [ ProfileComponent ]
 })
 export class ProfileModule {
   constructor(http: Http) {}
