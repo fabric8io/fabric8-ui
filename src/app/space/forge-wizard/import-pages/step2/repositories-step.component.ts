@@ -1,6 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 
-import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
+import { Option, SubmittableInput, Gui } from '../../gui.model';
+import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'repositories-step',
@@ -8,7 +9,8 @@ import { Option, SubmittableInput, Input as GuiInput } from '../../gui.model';
 })
 export class RepositoriesComponent implements OnInit {
 
-  @Input() gui: GuiInput;
+  @Input() gui: Gui;
+  @Input() form: FormGroup;
   constructor() {}
 
   ngOnInit(): void {

@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Input as GuiInput, Option } from "app/space/forge-wizard/gui.model";
+import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: './multiple-selection-list',
@@ -9,14 +10,14 @@ import { Input as GuiInput, Option } from "app/space/forge-wizard/gui.model";
 export class MultipleSelectionListComponent implements OnInit {
 
   @Input() field: GuiInput;
+  @Input() form: FormGroup;
 
-  public showFilter= false;
+  showFilter: boolean = false;
 
   constructor() {
   }
 
   ngOnInit() {
-    this.field.display.selected = false;
     this.field.valueChoices.forEach(val => val.visible = true);
   }
 
@@ -33,10 +34,11 @@ export class MultipleSelectionListComponent implements OnInit {
      return tmp;
   }
 
-  selectChoice(field: GuiInput, choice: Option) {
-    this.field.value = this.field.valueChoices
+  selectChoice(choice: Option) {
+    choice.selected = true;
+    this.form.controls[this.field.name].patchValue(this.field.valueChoices
       .filter((o) => o.selected)
-      .map((o) => o.id);
+      .map((o) => o.id));
   }
 
   clearFilter(field: GuiInput) {

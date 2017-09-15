@@ -1,10 +1,9 @@
  <section *ngIf="gui.inputs">
-      <div style="min-height: 450px" class="row">
+      <div style="min-height: 450px" class="row" [formGroup]="form">
         <div class="col-xs-12">
           <div class="form-horizontal">
               <label title="organisation" required>Organisation</label>
-                <single-selection-dropdown *ngIf="gui.inputs"
-                  class="input-group width-100" [field]="gui.inputs[0]">
+                <single-selection-dropdown [formControlName]="gui.inputs[0].name" class="input-group width-100" [field]="gui.inputs[0]">
                 </single-selection-dropdown>
           </div>
         </div>
