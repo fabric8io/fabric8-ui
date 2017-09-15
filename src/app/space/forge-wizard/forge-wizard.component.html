@@ -5,7 +5,7 @@
     (onPrevious)="previousClicked($event)"
     (onStepChange)="stepChanged($event)">
 
-    <div style="min-height: 450px" class="wizard-pf-loading blank-slate-pf loading" *ngIf="!currentGui.inputs">
+    <div style="min-height: 450px" class="wizard-pf-loading blank-slate-pf loading" *ngIf="isLoading">
         <div class="spinner spinner-lg blank-slate-pf-icon"></div>
         <h3 class="blank-slate-pf-main-action">Loading Wizard</h3>
         <p class="blank-slate-pf-secondary-action">

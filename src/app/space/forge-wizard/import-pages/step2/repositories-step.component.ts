@@ -14,7 +14,7 @@ export class RepositoriesComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // console.log("::::RepositoriesComponent ngOnInit gui.inputs[0]" + JSON.stringify(this.gui));
+    console.log("::::RepositoriesComponent ngOnInit gui.inputs[0]" + JSON.stringify(this.gui));
   }
 
 }

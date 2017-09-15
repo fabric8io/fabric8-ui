@@ -14,7 +14,7 @@ export class BuildConfigStepComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // console.log(`::::BuildConfigStepComponent ngOnInit: ${JSON.stringify(this.gui)}`);
+    console.log(`::::BuildConfigStepComponent ngOnInit: ${JSON.stringify(this.gui)}`);
   }
 
 }

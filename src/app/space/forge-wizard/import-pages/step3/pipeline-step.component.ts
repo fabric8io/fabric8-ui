@@ -11,7 +11,7 @@ export class PipelineStepComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    //console.log(`::::PipelineComponent ngOnInit: ${JSON.stringify(this.gui)}`);
+    console.log(`::::PipelineComponent ngOnInit: ${JSON.stringify(this.gui)}`);
   }
 
 }

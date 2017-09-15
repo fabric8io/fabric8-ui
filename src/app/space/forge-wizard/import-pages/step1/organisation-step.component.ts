@@ -16,6 +16,6 @@ export class OrganisationComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // console.log("::::OrganisationComponent ngOnInit" + JSON.stringify(this.gui));
+    console.log("::::OrganisationComponent ngOnInit" + JSON.stringify(this.gui));
   }
 }

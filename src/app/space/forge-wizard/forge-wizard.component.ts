@@ -21,6 +21,7 @@ export class ForgeWizardComponent implements OnInit {
   stepCreateBuildConfig: WizardStepConfig;
   config: WizardConfig;
   history: History = new History();
+  isLoading = true;
 
   constructor(private parent: AnalyzeOverviewComponent, private forgeService: ForgeService) {
     this.config = {
@@ -95,6 +96,7 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   private loadUi(): void {
+    this.isLoading = true;
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
       this.history.add(gui);
       let from = this.history.stepIndex;
@@ -102,6 +104,7 @@ export class ForgeWizardComponent implements OnInit {
         from = this.history.stepIndex - 1;
       }
       this.move(from, this.history.stepIndex);
+      this.isLoading = false;
 
       //don't know about this it would be better to use the form
       //instead of history.convert or use the form for history.convert
