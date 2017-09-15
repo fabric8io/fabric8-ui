@@ -34,8 +34,8 @@ export class MultipleSelectionListComponent implements OnInit {
      return tmp;
   }
 
-  selectChoice(choice: Option) {
-    choice.selected = true;
+  selectChoice(choice: Option, value: boolean) {
+    choice.selected = value;
     this.form.controls[this.field.name].patchValue(this.field.valueChoices
       .filter((o) => o.selected)
       .map((o) => o.id));
