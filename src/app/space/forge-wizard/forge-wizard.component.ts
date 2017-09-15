@@ -96,13 +96,8 @@ export class ForgeWizardComponent implements OnInit {
 
   private loadUi(): void {
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
-<<<<<<< HEAD
-
       this.history.add(gui);
       let from = this.history.stepIndex;
-=======
-      this.wizard.steps[this.history.stepIndex].config.nextEnabled = true;
->>>>>>> disable next on load
       if (this.history.stepIndex > 0) {
         from = this.history.stepIndex - 1;
       }
