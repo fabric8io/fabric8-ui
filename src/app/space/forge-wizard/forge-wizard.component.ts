@@ -72,18 +72,13 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   nextClicked($event: WizardEvent): void {
-    console.log("valid?", this.form.valid);
     if (this.form.valid) {
-      this.history.resetTo(this.history.stepIndex);
       this.loadUi();
     }
   }
 
   previousClicked($event: WizardEvent): void {
-    this.wizard.steps[this.history.stepIndex - 1].config.allowClickNav = false; // current state is navigable
-    this.history.resetTo(this.history.stepIndex - 1);
-    this.history.done();
-    this.form = this.buildForm(this.currentGui);
+    this.goToStep(this.history.stepIndex, this.history.stepIndex - 1);
   }
 
   stepChanged($event: WizardEvent) {
@@ -91,22 +86,19 @@ export class ForgeWizardComponent implements OnInit {
     const stepName = $event.step.config.id;
     const gotoStep = $event.step.config.priority;
     if (currentStep > gotoStep) {
-      this.history.resetTo(gotoStep);
-      this.history.done();
-      this.wizard.steps.filter(step => step.config.priority > gotoStep).map(step => step.config.allowClickNav = false);
-      this.form = this.buildForm(this.currentGui);
+      this.goToStep(currentStep, gotoStep);
     }
   }
 
   private loadUi(): void {
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
-      if (this.history.stepIndex > 0) {
-        this.wizard.steps[this.history.stepIndex - 1].config.allowClickNav = true; // step number icon is clickable
-      }
-      this.history.add(gui);
-      this.history.done();
 
-      this.form = this.buildForm(gui);
+      this.history.add(gui);
+      let from = this.history.stepIndex;
+      if (this.history.stepIndex > 0) {
+        from = this.history.stepIndex - 1;
+      }
+      this.goToStep(from, this.history.stepIndex);
 
       //don't know about this it would be better to use the form
       //instead of history.convert or use the form for history.convert
@@ -132,4 +124,16 @@ export class ForgeWizardComponent implements OnInit {
 
     return new FormGroup(group);
   }
+  
+  private goToStep(from: number, to: number) {
+    if (from > to ) { // moving backward, all steps aftershould not be naavigable
+      this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
+    } else { // moving forward (only one step at a time with next)
+      this.wizard.steps[from].config.allowClickNav = true;
+    }
+    this.history.resetTo(to);
+    this.history.done();
+    this.form = this.buildForm(this.currentGui);
+  }
+
 }
