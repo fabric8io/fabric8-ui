@@ -20,8 +20,8 @@ export class StatusKind {
 const statusCssUnknown = new StatusKind("Loading data", "pficon pficon-in-progress");
 const statusCssError = new StatusKind("Error", "pficon pficon-error-circle-o");
 const statusCssOK = new StatusKind("OK", "pficon pficon-ok");
-const statusCssPending = new StatusKind("Pending", "pficon pficon-pending");
-const statusCssContainerCreating = new StatusKind("Creating", "pficon pficon-on-running fa-spin fa-fw");
+const statusCssPending = new StatusKind("Pending", "status-icon-pending fa fa-clock-o");
+const statusCssContainerCreating = new StatusKind("Creating", "pficon pficon-on-running");
 const statusCssNoResource = new StatusKind("Off", "pficon pficon-off");
 
 export class StatusInfo {
