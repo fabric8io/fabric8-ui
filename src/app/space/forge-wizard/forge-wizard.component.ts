@@ -94,6 +94,7 @@ export class ForgeWizardComponent implements OnInit {
       this.history.resetTo(gotoStep);
       this.history.done();
       this.wizard.steps.filter(step => step.config.priority > gotoStep).map(step => step.config.allowClickNav = false);
+      this.form = this.buildForm(this.currentGui);
     }
   }
 
