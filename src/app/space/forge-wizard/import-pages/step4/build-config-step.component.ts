@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import { Input as GuiInput } from '../../gui.model';
+import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'build-config-step',
@@ -8,6 +9,8 @@ import { Input as GuiInput } from '../../gui.model';
 export class BuildConfigStepComponent implements OnInit {
 
   @Input() gui: GuiInput;
+  @Input() form: FormGroup;
+
   constructor() {}
 
   ngOnInit(): void {

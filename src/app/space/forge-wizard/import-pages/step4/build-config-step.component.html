@@ -2,11 +2,11 @@
   <div style="min-height: 450px" class="row">
     <div class="col-xs-12">
       <div class="form-horizontal">
-        <single-input *ngIf="gui.inputs" class="input-group width-100" [field]="gui.inputs[0]">
+        <single-input class="input-group width-100" [field]="gui.inputs[0]" [form]="form">
         </single-input>
-        <single-input *ngIf="gui.inputs" class="input-group width-100" [field]="gui.inputs[1]">
+        <single-input class="input-group width-100" [field]="gui.inputs[1]" [form]="form">
         </single-input>
-        <single-input *ngIf="gui.inputs" class="input-group width-100" [field]="gui.inputs[2]">
+        <single-input class="input-group width-100" [field]="gui.inputs[2]" [form]="form">
         </single-input>
       </div>
     </div>

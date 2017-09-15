@@ -34,7 +34,7 @@
 
     <pfng-wizard-step [config]="stepCreateBuildConfig">
       <span *ngSwitchCase="'io.fabric8.forge.generator.kubernetes.CreateBuildConfigStep'">
-        <build-config-step [gui]="currentGui"></build-config-step>
+        <build-config-step [gui]="currentGui" [form]="form"></build-config-step>
       </span>
     </pfng-wizard-step>
   </div>
