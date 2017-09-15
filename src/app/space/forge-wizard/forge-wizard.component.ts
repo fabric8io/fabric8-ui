@@ -78,7 +78,7 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   previousClicked($event: WizardEvent): void {
-    this.goToStep(this.history.stepIndex, this.history.stepIndex - 1);
+    this.move(this.history.stepIndex, this.history.stepIndex - 1);
   }
 
   stepChanged($event: WizardEvent) {
@@ -86,7 +86,7 @@ export class ForgeWizardComponent implements OnInit {
     const stepName = $event.step.config.id;
     const gotoStep = $event.step.config.priority;
     if (currentStep > gotoStep) {
-      this.goToStep(currentStep, gotoStep);
+      this.move(currentStep, gotoStep);
     }
   }
 
@@ -98,7 +98,7 @@ export class ForgeWizardComponent implements OnInit {
       if (this.history.stepIndex > 0) {
         from = this.history.stepIndex - 1;
       }
-      this.goToStep(from, this.history.stepIndex);
+      this.move(from, this.history.stepIndex);
 
       //don't know about this it would be better to use the form
       //instead of history.convert or use the form for history.convert
@@ -124,8 +124,8 @@ export class ForgeWizardComponent implements OnInit {
 
     return new FormGroup(group);
   }
-  
-  private goToStep(from: number, to: number) {
+
+  private move(from: number, to: number) {
     if (from > to ) { // moving backward, all steps aftershould not be naavigable
       this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
     } else { // moving forward (only one step at a time with next)
