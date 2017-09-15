@@ -78,7 +78,11 @@ export class ForgeWizardComponent implements OnInit {
 
   nextClicked($event: WizardEvent): void {
     if (this.form.valid) {
-      this.loadUi();
+      if (this.history.stepIndex === this.wizard.steps.length) { // execute
+        this.executeStep();
+      } else { // init or next
+        this.loadUi();
+      }
     }
   }
 
@@ -90,7 +94,7 @@ export class ForgeWizardComponent implements OnInit {
     const currentStep = this.history.stepIndex;
     const stepName = $event.step.config.id;
     const gotoStep = $event.step.config.priority;
-    if (currentStep > gotoStep) {
+    if (currentStep !== this.wizard.steps.length && currentStep > gotoStep) {
       this.move(currentStep, gotoStep);
     }
   }
@@ -121,6 +125,14 @@ export class ForgeWizardComponent implements OnInit {
     });
   }
 
+  private executeStep(): void {
+    this.isLoading = true;
+    this.forgeService.executeStep('fabric8-import-git', this.history).then((gui: Gui) => {
+      this.history.add(gui);
+      this.isLoading = false;
+    });
+  }
+
   private buildForm(gui: Gui): FormGroup {
     let group: any = {};
     gui.inputs.forEach(sub => {
@@ -137,6 +149,9 @@ export class ForgeWizardComponent implements OnInit {
       this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
     } else { // moving forward (only one step at a time with next)
       this.wizard.steps[from].config.allowClickNav = true;
+    }
+    if (to === this.wizard.steps.length) {
+      this.wizard.config.nextTitle = 'Finish';
     }
     this.wizard.steps[from].config.nextEnabled = this.form.valid;
     this.history.resetTo(to);

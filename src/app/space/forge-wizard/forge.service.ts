@@ -30,6 +30,10 @@ export class ForgeService {
     return this.post(history.convert(history.stepIndex), `/commands/${command}/next`);
   }
 
+  executeStep(command: string, history: History): Promise<Gui> {
+    return this.post(history.convert(history.stepIndex), `/commands/${command}/execute`);
+  }
+
   loadGui(command: string, history: History): Promise<Gui> {
     if (history.stepIndex === 0) {
       return this.commandInfo(command);
@@ -40,7 +44,7 @@ export class ForgeService {
 
   private post(submittableGui: Gui, action: string): Promise<Gui> {
     let options = new Headers({ 'Authorization': 'Bearer ' + this.auth.getToken() });
-    console.log(":::::::forge service POST:::input::" + JSON.stringify(submittableGui));
+
     return this.http.post(this.apiUrl + action, submittableGui, new RequestOptions({ headers: options }))
       .retryWhen(errors => errors.delay(3000).scan((acc, source, index) => {
         if (index) throw source;
