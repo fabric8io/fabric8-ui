@@ -106,6 +106,7 @@ export class ForgeWizardComponent implements OnInit {
       //don't know about this it would be better to use the form
       //instead of history.convert or use the form for history.convert
       this.form.valueChanges.subscribe(values => {
+        this.wizard.steps[from].config.nextEnabled = this.form.valid;
         this.currentGui.inputs.forEach(input => {
           Object.keys(values).forEach(key => {
             if (input.name === key) {
@@ -134,6 +135,7 @@ export class ForgeWizardComponent implements OnInit {
     } else { // moving forward (only one step at a time with next)
       this.wizard.steps[from].config.allowClickNav = true;
     }
+    this.wizard.steps[from].config.nextEnabled = this.form.valid;
     this.history.resetTo(to);
     this.history.done();
     this.form = this.buildForm(this.currentGui);
