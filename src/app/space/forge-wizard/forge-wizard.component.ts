@@ -32,25 +32,29 @@ export class ForgeWizardComponent implements OnInit {
       id: 'GithubImportPickOrganisationStep',
       priority: 1,
       title: 'Github Organisation',
-      allowClickNav: false
+      allowClickNav: false,
+      nextEnabled: false
     } as WizardStepConfig;
     this.stepGithubRepositories = {
       id: 'GithubRepositoriesStep',
       priority: 2,
       title: 'Github Repositories',
-      allowClickNav: false
+      allowClickNav: false,
+      nextEnabled: false
     } as WizardStepConfig;
     this.stepConfigurePipeline = {
       id: 'ConfigurePipeline',
       priority: 3,
       title: 'Configure Pipeline',
-      allowClickNav: false
+      allowClickNav: false,
+      nextEnabled: false
     } as WizardStepConfig;
     this.stepCreateBuildConfig = {
       id: 'CreateBuildConfigStep',
       priority: 4,
       title: 'Build Config',
-      allowClickNav: false
+      allowClickNav: false,
+      nextEnabled: false
     } as WizardStepConfig;
   }
 
@@ -92,9 +96,13 @@ export class ForgeWizardComponent implements OnInit {
 
   private loadUi(): void {
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
+<<<<<<< HEAD
 
       this.history.add(gui);
       let from = this.history.stepIndex;
+=======
+      this.wizard.steps[this.history.stepIndex].config.nextEnabled = true;
+>>>>>>> disable next on load
       if (this.history.stepIndex > 0) {
         from = this.history.stepIndex - 1;
       }
