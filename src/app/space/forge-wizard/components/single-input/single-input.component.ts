@@ -13,7 +13,9 @@ export class SingleInputComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(`::::SingleInputComponent ngOnInit: ${JSON.stringify(this.field)}`);
+  }
 
 }
 

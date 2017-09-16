@@ -13,6 +13,7 @@ import { VisibleItemsPipe } from 'app/space/forge-wizard/components/multiple-sel
 import { PipelineStepComponent } from 'app/space/forge-wizard/import-pages/step3/pipeline-step.component';
 import { BuildConfigStepComponent } from './import-pages/step4/build-config-step.component';
 import { SingleInputComponent } from './components/single-input/single-input.component';
+import { ReviewStepComponent } from './import-pages/step5/review-step.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { SingleInputComponent } from './components/single-input/single-input.com
     OrganisationComponent,
     RepositoriesComponent,
     BuildConfigStepComponent,
-    PipelineStepComponent
+    PipelineStepComponent,
+    ReviewStepComponent
   ],
   exports: [
     ForgeWizardComponent
