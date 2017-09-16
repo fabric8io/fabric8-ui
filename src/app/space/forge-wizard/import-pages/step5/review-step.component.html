@@ -1,8 +1,9 @@
 <section *ngIf="gui.inputs">
   <div style="min-height: 450px" class="row">
     <div class="col-xs-12">
-      <div class="form-horizontal">
-        <label name="gui.inputs[0].name">{{gui.inputs[0].label}}</label>
+      <div class="form-horizontal"
+        *ngFor="let input of gui.inputs">
+        <label name="gui.inputs[0].name">{{input.label}}</label>
         <!--<single-input class="input-group width-100" [field]="gui.inputs[0]">-->
         <!--</single-input>-->
       </div>
