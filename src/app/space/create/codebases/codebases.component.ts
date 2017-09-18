@@ -57,7 +57,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.broadcaster
       .on('codebaseAdded')
       .subscribe((codebase: Codebase) => {
-        this.addCodebase(codebase);
+        this.updateCodebases();
       }));
   }
 
@@ -278,6 +278,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           this.allCodebases = codebases;
           this.codebases = cloneDeep(codebases);
           this.codebases.unshift({} as Codebase); // Add empty object for row header
+          this.applyFilters(this.appliedFilters);
         }
       }, error => {
         this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
