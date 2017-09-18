@@ -187,8 +187,9 @@ export class ForgeWizardComponent implements OnInit {
     codebases.forEach(code => {
       if (!obs) {
         obs = this.addCodebaseDelegate(space.id, code);
+      } else {
+        obs = obs.concat(this.addCodebaseDelegate(space.id, code));
       }
-      obs = obs.concat(this.addCodebaseDelegate(space.id, code));
     });
     obs.subscribe(
       codebase => {
