@@ -11,7 +11,7 @@
   <section class="container-fluid padding-top-standard-offset">
     <div class="row">
       <div class="col-xs-12">
-        <form class="form-horizontal">
+        <div class="form-horizontal">
           <div *ngIf="name.errors && (name.dirty || name.touched)" class="alert alert-danger">
             <div [hidden]="!name.errors.required">
               <span class="pficon pficon-error-circle-o"></span>
@@ -61,14 +61,14 @@
               in creating the product.
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </section>
   <footer class="container-fluid padding-top-standard-offset padding-bottom-standard-offset">
     <div class="row">
       <div class="col-sm-12 wizard-step-tool-bar button-right">
-        <button id="createSpaceButton" class="btn btn-primary" [disabled]="name.errors || isSumitted" type="submit">Create</button>
+        <button id="createSpaceButton" class="btn btn-primary" [disabled]="!spaceForm.form.valid || isSumitted" type="submit">Create</button>
       </div>
     </div>
   </footer>
