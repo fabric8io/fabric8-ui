@@ -25,6 +25,7 @@ import { AppGeneratorConfiguratorService } from '../../services/app-generator.se
 export class SpaceCreatorComponent implements OnInit {
 
   static instanceCount: number = 1;
+  private isSumitted = false;
 
   @Input() workflow: IWorkflow = null;
   spaceTemplates: ProcessTemplate[];
@@ -65,6 +66,7 @@ export class SpaceCreatorComponent implements OnInit {
    */
   createSpace() {
     this.log(`createSpace ...`);
+    this.isSumitted = true;
     let space = this.configurator.transientSpace;
     console.log('Creating space', space);
     space.attributes.name = space.name.replace(/ /g, '_');
@@ -101,6 +103,7 @@ export class SpaceCreatorComponent implements OnInit {
           createdSpace.attributes.name]);
           this.workflow.cancel();
         });
+        this.isSumitted = false;
         this.workflow.gotoNextStep();
       },
       err => {
@@ -109,6 +112,7 @@ export class SpaceCreatorComponent implements OnInit {
           message: `Failed to create "${space.name}"`,
           type: NotificationType.DANGER
         });
+        this.isSumitted = false;
         this.workflow.cancel();
       });
   }

@@ -68,7 +68,7 @@
   <footer class="container-fluid padding-top-standard-offset padding-bottom-standard-offset">
     <div class="row">
       <div class="col-sm-12 wizard-step-tool-bar button-right">
-        <button id="createSpaceButton" class="btn btn-primary" [disabled]="!spaceForm.form.valid" type="submit">Create</button>
+        <button id="createSpaceButton" class="btn btn-primary" [disabled]="name.errors || isSumitted" type="submit">Create</button>
       </div>
     </div>
   </footer>
