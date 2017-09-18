@@ -37,5 +37,13 @@
         <build-config-step [gui]="currentGui" [form]="form"></build-config-step>
       </span>
     </pfng-wizard-step>
+
+    <pfng-wizard-step [config]="stepReviewConfig" >
+      <span *ngSwitchCase="'Review'">
+        <review-step [gui]="currentGui"></review-step>
+      </span>
+    </pfng-wizard-step>
   </div>
 </pfng-wizard>
+
+
