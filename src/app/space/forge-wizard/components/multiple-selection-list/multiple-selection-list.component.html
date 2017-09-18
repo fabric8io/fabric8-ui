@@ -26,3 +26,8 @@
     <p>{{choice.description}}</p>
   </li>
 </ul>
+
+<div class="error" *ngIf="!form.get(field.name).touched
+    && form.get(field.name).hasError('required')">
+  This field is required
+</div>
