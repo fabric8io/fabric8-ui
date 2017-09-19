@@ -1,4 +1,6 @@
 import { mergeArraysDistinctByKey } from './utilities';
+import { clone } from './utilities';
+import { getPropertyValue } from './utilities';
 
 describe('Utilities:', () => {
   beforeEach(() => {
@@ -25,6 +27,24 @@ describe('Utilities:', () => {
     mergeArraysDistinctByKey(array1, array2, 'name');
     // then
     expect(array1).toEqual(mergedArray);
+  });
+
+  it('Clones a string', () => {
+    // given
+    let s = "abcd";
+    // when
+    let s2 = clone(s);
+    // then
+    expect(s2).toEqual(s);
+  });
+
+  it('Clones an object', () => {
+    // given
+    let s = {abcd: "abcd", efgh: "efgh"};
+    // when
+    let s2 = clone(s);
+    // then
+    expect(s2).toEqual(s);
   });
 
 });
