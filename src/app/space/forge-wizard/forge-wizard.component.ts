@@ -134,6 +134,27 @@ export class ForgeWizardComponent implements OnInit {
     }
   }
 
+  move(from: number, to: number) {
+    if (from > to ) { // moving backward, all steps aftershould not be naavigable
+      this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
+      this.wizard.steps[to].config.nextEnabled = this.form.valid;
+    } else { // moving forward (only one step at a time with next)
+      this.wizard.steps[from].config.allowClickNav = true;
+      this.wizard.steps[from].config.nextEnabled = this.form.valid;
+    }
+    if (to === this.EXECUTE_STEP_INDEX) { // last forge step, change next to finsih
+      this.wizard.config.nextTitle = 'Finish';
+    }
+    if (from === this.EXECUTE_STEP_INDEX && from > to) { // moving from finish step to previous, set back next
+      this.wizard.config.nextTitle = '> Next';
+    }
+    if (to !== this.LAST_STEP) { // no form for last step
+      this.history.resetTo(to);
+      this.history.done();
+      this.form = this.buildForm(this.currentGui);
+    }
+  }
+
   private loadUi(): void {
     this.isLoading = true;
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
@@ -261,26 +282,4 @@ export class ForgeWizardComponent implements OnInit {
 
     return new FormGroup(group);
   }
-
-  private move(from: number, to: number) {
-    if (from > to ) { // moving backward, all steps aftershould not be naavigable
-      this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
-      this.wizard.steps[to].config.nextEnabled = this.form.valid;
-    } else { // moving forward (only one step at a time with next)
-        this.wizard.steps[from].config.allowClickNav = true;
-        this.wizard.steps[from].config.nextEnabled = this.form.valid;
-    }
-    if (to === this.EXECUTE_STEP_INDEX) { // last forge step, change next to finsih
-      this.wizard.config.nextTitle = 'Finish';
-    }
-    if (from === this.EXECUTE_STEP_INDEX && from > to) { // moving from finish step to previous, set back next
-      this.wizard.config.nextTitle = '> Next';
-    }
-    if (to !== this.LAST_STEP) { // no form for last step
-      this.history.resetTo(to);
-      this.history.done();
-      this.form = this.buildForm(this.currentGui);
-    }
-  }
-
 }

@@ -70,7 +70,7 @@ const options = [{
   'name': 'corinnekrych'
 }] as Option[];
 
-const gui = {
+export const gui = {
   'metadata': metadata,
   'state': state,
   'inputs': [{
