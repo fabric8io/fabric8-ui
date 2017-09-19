@@ -1,10 +1,10 @@
 export class Gui {
   metadata: MetaData;
   state: State = new State();
-  inputs: SubmittableInput[];
-  private _messages: Message[];
+  inputs: Input[];
   results: Result[];
   stepIndex: number;
+  private _messages: Message[];
 
   get messages(): Message[] {
     if (!this._messages) {
@@ -22,7 +22,7 @@ export class MetaData {
   name: string;
   description: string;
   deprecated: boolean;
-  intro: string;
+  intro?: string;
 }
 
 export class State {
@@ -56,8 +56,8 @@ export class Input extends SubmittableInput {
   required: boolean;
   deprecated: boolean;
   class: string;
-  gitRepositories: any[];
-  display: any; // Add a generic field for UI display
+  gitRepositories?: any[];
+  display?: any; // Add a generic field for UI display
 }
 
 export class Option {

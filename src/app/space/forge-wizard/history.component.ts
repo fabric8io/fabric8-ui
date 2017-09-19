@@ -3,8 +3,8 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class History {
-  private state: Gui[] = [];
-  private ready: boolean;
+  state: Gui[] = [];
+  ready: boolean;
 
   add(gui: Gui) {
     this.state.push(gui);
@@ -14,22 +14,6 @@ export class History {
   done() {
     this.ready = true;
   }
-
-  // apply(state: string) {
-  //   if (state == null) return;
-  //   let submittableGui = JSON.parse(atob(state));
-  //   if (submittableGui.inputs) {
-  //     for (let input of submittableGui.inputs) {
-  //       for (let gui of this.state) {
-  //         for (let guiInput of gui.inputs) {
-  //           if (guiInput.name === input.name) {
-  //             guiInput.value = input.value;
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
 
   get(index: number): Gui {
     return this.state[index - 1];
@@ -55,24 +39,25 @@ export class History {
     for (let gui of this.state) {
       let inputs = gui.inputs;
       if (inputs) {
-        let submittableInputs = History.convertToSubmittable(inputs as Input[]);
+        let submittableInputs = this.convertToSubmittable(inputs as Input[]);
         submittableGui.inputs = submittableGui.inputs.concat(submittableInputs);
       }
     }
     return submittableGui;
   }
 
-  private static convertToSubmittable(inputs: Input[]): SubmittableInput[] {
-    let array: SubmittableInput[] = [];
+  toString(): string {
+    return btoa(JSON.stringify(this.convert()));
+  }
+
+  private convertToSubmittable(inputs: Input[]): Input[] {
+    let array: Input[] = [];
     if (inputs) {
       for (let input of inputs) {
-        array.push(new SubmittableInput(input));
+        array.push(new Input(input));
       }
     }
     return array;
   }
 
-  toString(): string {
-    return btoa(JSON.stringify(this.convert()));
-  }
 }
