@@ -32,7 +32,7 @@
     </li>
   </ul>
 
-  <div *ngIf="form.get(field.name).touched
+  <div *ngIf="form.get(field.name).dirty
     && form.get(field.name).hasError('required')"
        style="position:relative;height:auto;display:block;"
        class="form-control-feedback user-select-none">
