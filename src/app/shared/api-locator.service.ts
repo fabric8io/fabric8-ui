@@ -12,8 +12,8 @@ export class ApiLocatorService {
       ['sso', 'FABRIC8_SSO_API_URL'],
       ['realm', 'FABRIC8_REALM'],
       ['branding', 'BRANDING'],
-      ['forge', 'FABRIC8_FORGE_API_URL']
-
+      ['forge', 'FABRIC8_FORGE_API_URL'],
+      ['auth','FABRIC8_AUTH_API_URL'],
     ]
   );
 
@@ -21,11 +21,14 @@ export class ApiLocatorService {
     ['wit', 'api'],
     ['recommender', 'recommender'],
     ['sso', 'sso'],
-    ['forge', 'forge.api']
+    ['forge', 'forge.api'],
+    ['auth','auth']
   ]);
 
   readonly DEFAULT_API_PATHS = new Map<string, string>([
-    ['wit', 'api/']
+    ['wit', 'api/'],
+    ['auth','api/']
+    
   ]);
 
   private envVars = new Map<string, string>();
@@ -54,6 +57,10 @@ export class ApiLocatorService {
 
   get ssoApiUrl(): string {
     return this.config.ssoApiUrl || this.buildApiUrl('sso');
+  }
+
+  get authApiUrl(): string {
+    return this.config.authApiUrl || this.buildApiUrl('auth')
   }
 
   get recommenderApiUrl(): string {
