@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 
-import { Option, SubmittableInput, Gui } from '../../gui.model';
+import { Gui } from '../../gui.model';
 import { FormGroup } from "@angular/forms";
 
 @Component({

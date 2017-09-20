@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 
-import { WizardComponent, WizardConfig, WizardStepConfig, WizardEvent } from 'patternfly-ng';
+import { WizardComponent, WizardConfig, WizardStepConfig, WizardEvent, WizardStep } from 'patternfly-ng';
 import { ForgeService } from 'app/space/forge-wizard/forge.service';
 import { Gui, Input, MetaData } from 'app/space/forge-wizard/gui.model';
 import { History } from 'app/space/forge-wizard/history.component';
@@ -135,23 +135,30 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   move(from: number, to: number) {
-    if (from > to ) { // moving backward, all steps aftershould not be naavigable
+    if (from > to ) { // moving backward, all steps after this one should not be navigable
       this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
-      this.wizard.steps[to].config.nextEnabled = this.form.valid;
+      //this.wizard.steps[to].config.nextEnabled = true;
+      if (to !== this.LAST_STEP) { // no form for last step
+        this.history.resetTo(to);
+        this.history.done();
+        this.form = this.buildForm(this.currentGui, this.wizard.steps[to]);
+        this.wizard.steps[to].config.nextEnabled = this.form.valid;
+      }
     } else { // moving forward (only one step at a time with next)
       this.wizard.steps[from].config.allowClickNav = true;
-      this.wizard.steps[from].config.nextEnabled = this.form.valid;
+      //this.wizard.steps[from].config.nextEnabled = true;//this.form.valid;
+      if (to !== this.LAST_STEP) { // no form for last step
+        this.history.resetTo(to);
+        this.history.done();
+        this.form = this.buildForm(this.currentGui, this.wizard.steps[from]);
+        this.wizard.steps[from].config.nextEnabled = this.form.valid;
+      }
     }
     if (to === this.EXECUTE_STEP_INDEX) { // last forge step, change next to finsih
       this.wizard.config.nextTitle = 'Finish';
     }
     if (from === this.EXECUTE_STEP_INDEX && from > to) { // moving from finish step to previous, set back next
       this.wizard.config.nextTitle = '> Next';
-    }
-    if (to !== this.LAST_STEP) { // no form for last step
-      this.history.resetTo(to);
-      this.history.done();
-      this.form = this.buildForm(this.currentGui);
     }
   }
 
@@ -272,12 +279,18 @@ export class ForgeWizardComponent implements OnInit {
     }
     return codebases;
   }
-  private buildForm(gui: Gui): FormGroup {
+  private buildForm(gui: Gui, to: WizardStep): FormGroup {
     let group: any = {};
     gui.inputs.forEach(sub => {
       let input = sub as Input;
-      group[input.name] = input.required ? new FormControl(input.value || '', Validators.required)
-          : new FormControl(input.value || '');
+      if (input.required) {
+        group[input.name] = new FormControl(input.value || '', Validators.required);
+        if (!input.value || input.value === '' || input.value.length === 0) { // is empty for single and multiple select input
+          to.config.nextEnabled = false;
+        }
+      } else {
+         group[input.name] = new FormControl(input.value || '');
+      }
     });
 
     return new FormGroup(group);
