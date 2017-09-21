@@ -56,6 +56,7 @@ export class Input extends SubmittableInput {
   required: boolean;
   deprecated: boolean;
   class: string;
+  description: string;
   gitRepositories?: any[];
   display?: any; // Add a generic field for UI display
 }

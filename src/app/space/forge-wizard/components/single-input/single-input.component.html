@@ -16,5 +16,9 @@
          class="form-control-feedback user-select-none">
       {{field.label}} is required
     </div>
+    <small class="form-text text-muted user-select-none" *ngIf="field.display && field.display.note">
+      <span class="color-info fa fa-info-circle"></span>
+      <i>{{field.display.note}}</i>
+    </small>
   </div>
 </div>

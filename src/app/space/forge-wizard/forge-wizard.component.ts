@@ -40,7 +40,7 @@ export class ForgeWizardComponent implements OnInit {
               private context: ContextService,
               private notifications: Notifications) {
     this.config = {
-      title: 'Import booster',
+      title: 'Application Wizard',
       stepStyleClass: 'wizard'
     } as WizardConfig;
 
