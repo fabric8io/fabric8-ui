@@ -1,6 +1,6 @@
-import { BaseEntity } from '../../store/entity/entity.model';
-import { openShiftBrowseResourceUrl } from "./helpers";
-import { currentOAuthConfig } from '../store/oauth-config-store';
+import {BaseEntity} from '../../store/entity/entity.model';
+import {openShiftBrowseResourceUrl} from "./helpers";
+import {currentOAuthConfig} from '../store/oauth-config-store';
 
 export class KubernetesResource implements BaseEntity {
   id: string;
@@ -61,10 +61,45 @@ export class KubernetesResource implements BaseEntity {
 
     this.icon = this.annotations['fabric8.io/iconUrl'] || templateAnnotations['fabric8.io/iconUrl'] || this.defaultIconUrl();
 
+    // lets fix up old image URIs
+    if (this.isFabric8Icon(this.icon, "camel")) {
+      this.icon = "/_assets/images/icon-stack-camel.png";
+    } else if (this.isFabric8Icon(this.icon, "funktion")) {
+      this.icon = "/_assets/images/icon-stack-funktion.png";
+    } else if (this.isFabric8Icon(this.icon, "go")) {
+      this.icon = "/_assets/images/icon-stack-go.png";
+    } else if (this.isFabric8Icon(this.icon, "java")) {
+      this.icon = "/_assets/images/icon-stack-java.png";
+    } else if (this.isFabric8Icon(this.icon, "maven")) {
+      this.icon = "/_assets/images/icon-stack-maven.png";
+    } else if (this.isFabric8Icon(this.icon, "microservice")) {
+      this.icon = "/_assets/images/icon-stack-microservice.png";
+    } else if (this.isFabric8Icon(this.icon, "nodejs")) {
+      this.icon = "/_assets/images/icon-stack-nodejs.png";
+    } else if (this.isFabric8Icon(this.icon, "python")) {
+      this.icon = "/_assets/images/icon-stack-python.png";
+    } else if (this.isFabric8Icon(this.icon, "rails")) {
+      this.icon = "/_assets/images/icon-stack-rails.png";
+    } else if (this.isFabric8Icon(this.icon, "spring")) {
+      this.icon = "/_assets/images/icon-stack-spring.png";
+    } else if (this.isFabric8Icon(this.icon, "swift")) {
+      this.icon = "/_assets/images/icon-stack-swift.png";
+    } else if (this.isFabric8Icon(this.icon, "vertx")) {
+      this.icon = "/_assets/images/icon-stack-vertx.png";
+    } else if (this.isFabric8Icon(this.icon, "wildfly")) {
+      this.icon = "/_assets/images/icon-stack-wildfly.png";
+    }
     // TODO any other annotations we should look for?
     this.description = this.annotations['description'] || templateAnnotations['description'] || '';
 
     this.openShiftConsoleUrl = openShiftBrowseResourceUrl(this, currentOAuthConfig());
+  }
+
+  isFabric8Icon(url, name) {
+    if (url && (url.startsWith("img/icons/") || url.startsWith("/img/icons/"))) {
+      return url.endsWith(name + ".svg") || url.endsWith(name + ".png") || url.endsWith(name + ".jpg");
+    }
+    return false;
   }
 
   defaultIconUrl() {

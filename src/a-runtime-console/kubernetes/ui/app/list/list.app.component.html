@@ -33,7 +33,8 @@
           <div class="col-md-2">
             <div class="card-pf card-pf-accented card-pf-aggregate-status">
               <h2 class="card-pf-title">
-                <i class="fa fa-cubes"></i>
+                <i *ngIf="!app.icon" class="fa fa-cubes"></i>
+                <img *ngIf="app.icon" class='app-icon' src="{{app.icon}}"/>
               </h2>
               <div class="card-pf-body">
                 <div class="card-pf-aggregate-status-notifications">
