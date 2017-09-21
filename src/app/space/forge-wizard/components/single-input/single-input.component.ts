@@ -4,7 +4,8 @@ import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'single-input',
-  templateUrl: './single-input.component.html'
+  templateUrl: './single-input.component.html',
+  styleUrls: ['./single-input.component.less']
 })
 export class SingleInputComponent implements OnInit {
 
@@ -14,6 +15,9 @@ export class SingleInputComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    if (!this.field.enabled) {
+      this.form.controls.jenkinsSpace.disable();
+    }
     console.log(`::::SingleInputComponent ngOnInit: ${JSON.stringify(this.field)}`);
   }
 

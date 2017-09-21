@@ -1,4 +1,5 @@
 <div class="combobox-container">
+  <label title="field.name" [class.field-required]="field.required">{{field.label}}</label>
   <div [class.width-100]="!field.enabled" class="input-group">
     <input type="text" [title]="field.label" [class.form-control-danger]="!field.valid" [id]="field.label"
       [name]="field.label" class="user-select-none combobox form-control" readonly="true" [value]="model"
@@ -20,5 +21,11 @@
       <span class="caret"></span>
       <span class="glyphicon glyphicon-remove"></span>
     </span>
+    <!--<div *ngIf="form.get(field.name).touched-->
+    <!--&& form.get(field.name).hasError('required')"-->
+         <!--style="position:relative;height:auto;display:block;"-->
+         <!--class="form-control-feedback user-select-none">-->
+      <!--{{field.label}} is required-->
+    <!--</div>-->
   </div>
 </div>

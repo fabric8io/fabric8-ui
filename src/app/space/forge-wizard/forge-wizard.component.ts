@@ -137,7 +137,6 @@ export class ForgeWizardComponent implements OnInit {
   move(from: number, to: number) {
     if (from > to ) { // moving backward, all steps after this one should not be navigable
       this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
-      //this.wizard.steps[to].config.nextEnabled = true;
       if (to !== this.LAST_STEP) { // no form for last step
         this.history.resetTo(to);
         this.history.done();
@@ -146,7 +145,6 @@ export class ForgeWizardComponent implements OnInit {
       }
     } else { // moving forward (only one step at a time with next)
       this.wizard.steps[from].config.allowClickNav = true;
-      //this.wizard.steps[from].config.nextEnabled = true;//this.form.valid;
       if (to !== this.LAST_STEP) { // no form for last step
         this.history.resetTo(to);
         this.history.done();

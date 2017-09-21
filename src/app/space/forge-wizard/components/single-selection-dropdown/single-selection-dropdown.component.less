@@ -48,4 +48,32 @@
       }
     }
   }
+  .field-required {
+    &:after {
+      content: '*';
+      padding: 3px;
+      color: @color-pf-red;
+      vertical-align: center;
+    }
+  }
+  .input-group {
+    &.has-danger {
+      .field-required {
+        &:after {
+          content: '*';
+          color: @color-pf-red;
+        }
+      }
+      .form-control-danger {
+        border-color: @color-pf-red !important;
+        box-shadow: inset 0 1px 1px rgba(255, 0, 0, .075);
+      }
+      .form-control-feedback {
+        color: @color-pf-red !important;
+        position: relative;
+        text-align: left;
+        width: 100%;
+      }
+    }
+  }
 }
