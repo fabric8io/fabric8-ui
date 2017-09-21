@@ -28,7 +28,7 @@
 
     <pfng-wizard-step [config]="stepConfigurePipeline">
       <span *ngSwitchCase="'Obsidian: Configure Pipeline'">
-        <pipeline-step [gui]="currentGui"></pipeline-step>
+        <pipeline-step [gui]="currentGui" [form]="form" [labelSpace]="currentSpace.attributes.name"></pipeline-step>
       </span>
     </pfng-wizard-step>
 

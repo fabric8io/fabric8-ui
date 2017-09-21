@@ -23,7 +23,7 @@ export class PipelineViewComponent implements OnInit {
       this.formatHtml(choice, index);
       index++;
     }
-    field.valueChoices.filter(c => field.value === c.id).forEach(c => c.display.collapsed = false);
+    // field.valueChoices.filter(c => field.value === c.id).forEach(c => c.display.collapsed = false);
   }
 
   private determineColor(value: string): string {

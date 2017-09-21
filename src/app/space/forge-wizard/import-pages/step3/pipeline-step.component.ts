@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
-import { Input as GuiInput } from '../../gui.model';
+import { Gui } from '../../gui.model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'pipeline-step',
@@ -7,10 +8,13 @@ import { Input as GuiInput } from '../../gui.model';
 })
 export class PipelineStepComponent implements OnInit {
 
-  @Input() gui: GuiInput;
+  @Input() gui: Gui;
+  @Input() form: FormGroup;
+  @Input() labelSpace: string;
   constructor() {}
 
   ngOnInit(): void {
+    this.gui.inputs[2].value = this.labelSpace;
     console.log(`::::PipelineComponent ngOnInit: ${JSON.stringify(this.gui)}`);
   }
 
