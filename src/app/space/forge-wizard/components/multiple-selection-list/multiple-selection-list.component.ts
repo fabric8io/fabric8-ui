@@ -36,9 +36,10 @@ export class MultipleSelectionListComponent implements OnInit {
 
   selectChoice(choice: Option, value: boolean) {
     choice.selected = value;
-    this.form.controls[this.field.name].setValue(this.field.valueChoices
+    this.form.controls[this.field.name].patchValue(this.field.valueChoices
       .filter((o) => o.selected)
       .map((o) => o.id));
+    this.form.controls[this.field.name].markAsDirty();
   }
 
   clearFilter(field: GuiInput) {
