@@ -2,6 +2,21 @@ import {BaseEntity} from '../../store/entity/entity.model';
 import {openShiftBrowseResourceUrl} from "./helpers";
 import {currentOAuthConfig} from '../store/oauth-config-store';
 
+import iconCamel from "../../../assets/images/icon-stack-camel.png";
+import iconFunktion from "../../../assets/images/icon-stack-funktion.png";
+import iconGo from "../../../assets/images/icon-stack-go.png";
+import iconJava from "../../../assets/images/icon-stack-java.png";
+import iconMaven from "../../../assets/images/icon-stack-maven.png";
+import iconMicroservice from "../../../assets/images/icon-stack-microservice.png";
+import iconNodeJS from "../../../assets/images/icon-stack-nodejs.png";
+import iconPython from "../../../assets/images/icon-stack-python.png";
+import iconRails from "../../../assets/images/icon-stack-rails.png";
+import iconSpring from "../../../assets/images/icon-stack-spring.png";
+import iconSwift from "../../../assets/images/icon-stack-swift.png";
+import iconVertx from "../../../assets/images/icon-stack-vertx.png";
+import iconWildfly from "../../../assets/images/icon-stack-wildfly.png";
+
+
 export class KubernetesResource implements BaseEntity {
   id: string;
   name: string;
@@ -63,31 +78,31 @@ export class KubernetesResource implements BaseEntity {
 
     // lets fix up old image URIs
     if (this.isFabric8Icon(this.icon, "camel")) {
-      this.icon = "/_assets/images/icon-stack-camel.png";
+      this.icon = iconCamel;
     } else if (this.isFabric8Icon(this.icon, "funktion")) {
-      this.icon = "/_assets/images/icon-stack-funktion.png";
+      this.icon = iconFunktion;
     } else if (this.isFabric8Icon(this.icon, "go")) {
-      this.icon = "/_assets/images/icon-stack-go.png";
+      this.icon = iconGo;
     } else if (this.isFabric8Icon(this.icon, "java")) {
-      this.icon = "/_assets/images/icon-stack-java.png";
+      this.icon = iconJava;
     } else if (this.isFabric8Icon(this.icon, "maven")) {
-      this.icon = "/_assets/images/icon-stack-maven.png";
+      this.icon = iconMaven;
     } else if (this.isFabric8Icon(this.icon, "microservice")) {
-      this.icon = "/_assets/images/icon-stack-microservice.png";
+      this.icon = iconMicroservice;
     } else if (this.isFabric8Icon(this.icon, "nodejs")) {
-      this.icon = "/_assets/images/icon-stack-nodejs.png";
+      this.icon = iconNodeJS;
     } else if (this.isFabric8Icon(this.icon, "python")) {
-      this.icon = "/_assets/images/icon-stack-python.png";
+      this.icon = iconPython;
     } else if (this.isFabric8Icon(this.icon, "rails")) {
-      this.icon = "/_assets/images/icon-stack-rails.png";
+      this.icon = iconRails;
     } else if (this.isFabric8Icon(this.icon, "spring")) {
-      this.icon = "/_assets/images/icon-stack-spring.png";
+      this.icon = iconSpring;
     } else if (this.isFabric8Icon(this.icon, "swift")) {
-      this.icon = "/_assets/images/icon-stack-swift.png";
+      this.icon = iconSwift;
     } else if (this.isFabric8Icon(this.icon, "vertx")) {
-      this.icon = "/_assets/images/icon-stack-vertx.png";
+      this.icon = iconVertx;
     } else if (this.isFabric8Icon(this.icon, "wildfly")) {
-      this.icon = "/_assets/images/icon-stack-wildfly.png";
+      this.icon = iconWildfly;
     }
     // TODO any other annotations we should look for?
     this.description = this.annotations['description'] || templateAnnotations['description'] || '';
