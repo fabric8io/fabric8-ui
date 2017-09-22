@@ -262,7 +262,14 @@ export class ForgeWizardComponent implements OnInit {
           name: repo.url,
           valueType: 'java.lang.String',
           enabled: false,
-          required: false
+          required: false,
+          display: {
+            namespace: (this.result as any).namespace,
+            buildConfigName: (this.result as any).buildConfigName,
+            cheStackId: (this.result as any).cheStackId
+            // TODO fix it che stack id should be returned per repo
+            // https://github.com/fabric8io/fabric8-generator/issues/54
+          }
         } as Input;
         newGui.inputs.push(input);
       });
