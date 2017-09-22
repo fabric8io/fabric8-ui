@@ -12,6 +12,7 @@ import { ContextService } from '../../shared/context.service';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Rx';
 import { NotificationType, Notification, Notifications } from 'ngx-base';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'forge-wizard',
@@ -128,52 +129,60 @@ export class ForgeWizardComponent implements OnInit {
 
   stepChanged($event: WizardEvent) {
     const currentStep = this.history.stepIndex;
-    const stepName = $event.step.config.id;
     const gotoStep = $event.step.config.priority;
     if (currentStep !== this.LAST_STEP + 1 && currentStep > gotoStep) {
       this.move(currentStep - 1, gotoStep - 1);
     }
   }
 
-  // zero-base index
-  // TODO align history, wizard.steps, wizard priority to be zero-based index
+  // to, from are zero-based index
   move(from: number, to: number) {
-    if (from > to ) { // moving backward, all steps after this one should not be navigable
-      this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
-      if (to !== this.LAST_STEP) { // no form for last step
-        this.history.resetTo(to + 1);
-        this.history.done();
-        this.form = this.buildForm(this.currentGui, this.wizard.steps[to - 1]);
-        this.wizard.steps[to].config.nextEnabled = this.form.valid;
-        this.convertHistoryToForm(to);
-      }
-    } else { // moving forward (only one step at a time with next)
-      this.wizard.steps[from].config.allowClickNav = true;
-      if (to !== this.LAST_STEP) { // no form for last step
-        this.history.resetTo(to + 1);
-        this.history.done();
-        this.form = this.buildForm(this.currentGui, this.wizard.steps[from - 1]);
-        this.wizard.steps[from].config.nextEnabled = this.form.valid;
-        this.convertHistoryToForm(from);
-      }
-    }
-    if (to === this.EXECUTE_STEP_INDEX) { // last forge step, change next to finsih
+    let serverSideErrors = null;
+    if (to === this.EXECUTE_STEP_INDEX) { // last forge step, change next to finish
       this.wizard.config.nextTitle = 'Finish';
     }
     if (from === this.EXECUTE_STEP_INDEX && from > to) { // moving from finish step to previous, set back next
       this.wizard.config.nextTitle = '> Next';
     }
+    if (to === this.LAST_STEP) {
+      return;
+    }
+    if (from > to ) {
+      // moving backward, all steps after this one should not be navigable
+      this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
+    } else {
+      // moving forward (only one step at a time with next)
+      this.wizard.steps[from].config.allowClickNav = true;
+      if (this.currentGui.messages && this.currentGui.messages.length > 0) {
+        // server-side error, go back to previous
+        serverSideErrors = this.currentGui.messages.filter(msg => msg.severity === 'ERROR');
+        if (!isNullOrUndefined(serverSideErrors)) {
+          to = from; // roll back to "from" step
+          this.wizard.goToPreviousStep();
+        }
+      }
+    }
+    this.history.resetTo(to + 1); // history is 1-based array
+    this.history.done();
+    if (!isNullOrUndefined(serverSideErrors)) {
+      this.currentGui.messages = serverSideErrors;
+    }
+    this.form = this.buildForm(this.currentGui, this.wizard.steps[to]); // wizard.steps is 0-based array
+    this.wizard.steps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
+    this.convertToForm(to);
   }
 
   private loadUi(): void {
     this.isLoading = true;
     this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
-      this.history.add(gui);
       let from = this.history.stepIndex;
+      this.history.add(gui);
       let to = this.history.stepIndex;
-      if (this.history.stepIndex > 0) {
-        from = this.history.stepIndex - 1;
-        to = this.history.stepIndex - 1;
+      if (to > 0) {
+        to = to - 1;
+      }
+      if (from > 0) {
+        from = from - 1;
       }
       this.move(from, to);
       this.isLoading = false;
@@ -181,9 +190,12 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   // TODO instead of storing an history of inputs, store an history of form fields.
-  private convertHistoryToForm(from: number) {
+  private convertToForm(index: number) {
     this.form.valueChanges.subscribe(values => {
-      this.wizard.steps[from].config.nextEnabled = this.form.valid;
+      if (!isNullOrUndefined(this.currentGui.messages)) {
+        this.currentGui.messages = null;
+      }
+      this.wizard.steps[index].config.nextEnabled = this.form.valid;
       this.currentGui.inputs.forEach(input => {
         Object.keys(values).forEach(key => {
           if (input.name === key) {

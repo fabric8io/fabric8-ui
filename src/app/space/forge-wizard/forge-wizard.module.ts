@@ -14,6 +14,7 @@ import { PipelineStepComponent } from 'app/space/forge-wizard/import-pages/step3
 import { BuildConfigStepComponent } from './import-pages/step4/build-config-step.component';
 import { SingleInputComponent } from './components/single-input/single-input.component';
 import { ReviewStepComponent } from './import-pages/step5/review-step.component';
+import { ForgeErrorsComponent } from './components/forge-errors/forge-errors.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { ReviewStepComponent } from './import-pages/step5/review-step.component'
     MultipleSelectionListComponent,
     PipelineViewComponent,
     SingleInputComponent,
+    ForgeErrorsComponent,
     SelectedItemsPipe,
     VisibleItemsPipe,
     OrganisationComponent,
