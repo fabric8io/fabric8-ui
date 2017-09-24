@@ -39,25 +39,28 @@ export class History {
     for (let gui of this.state) {
       let inputs = gui.inputs;
       if (inputs) {
-        let submittableInputs = this.convertToSubmittable(inputs as Input[]);
-        submittableGui.inputs = submittableGui.inputs.concat(submittableInputs);
+        submittableGui.inputs = submittableGui.inputs.concat(inputs);
       }
     }
     return submittableGui;
   }
 
+  updateFormValues(values: any, stepIndex = this.stepIndex - 1): void {
+    let gui = this.state[stepIndex];
+    gui.inputs.forEach(input => {
+      Object.keys(values).forEach(key => {
+        if (input.name === key) {
+          if (input instanceof SubmittableInput) {
+            input.value = values[key];
+          } else {
+            input = new Input({name: key, value: values[key]} as Input);
+          }
+        }
+      });
+    });
+  }
+
   toString(): string {
     return btoa(JSON.stringify(this.convert()));
   }
-
-  private convertToSubmittable(inputs: Input[]): Input[] {
-    let array: Input[] = [];
-    if (inputs) {
-      for (let input of inputs) {
-        array.push(new Input(input));
-      }
-    }
-    return array;
-  }
-
 }
