@@ -50,7 +50,8 @@ export class ForgeWizardComponent implements OnInit {
       priority: 1,
       title: 'Github Organisation',
       allowClickNav: false,
-      nextEnabled: false
+      nextEnabled: false,
+      disabled: false
     } as WizardStepConfig;
     this.stepGithubRepositories = {
       id: 'GithubRepositoriesStep',
@@ -90,7 +91,6 @@ export class ForgeWizardComponent implements OnInit {
         console.log(`ForgeWizardComponent::The current space has been updated to ${this.currentSpace.attributes.name}`);
       }
     });
-
   }
 
   get currentGui(): Gui {
@@ -98,7 +98,12 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadUi();
+    this.loadUi().then(gui => {
+      this.stepGithubImportPickOrganisation.disabled = gui.metadata.name
+        === 'io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep';
+      this.stepGithubImportPickOrganisation.nextEnabled = true;
+      this.wizard.goToStep(0, true);
+    });
   }
 
   cancel($event) {
@@ -167,9 +172,9 @@ export class ForgeWizardComponent implements OnInit {
     this.subscribeFormHistoryUpdate(to);
   }
 
-  private loadUi(): void {
+  private loadUi(): Promise<Gui> {
     this.isLoading = true;
-    this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
+    return this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
       let from = this.history.stepIndex;
       this.history.add(gui);
       let to = this.history.stepIndex;
@@ -181,6 +186,7 @@ export class ForgeWizardComponent implements OnInit {
       }
       this.move(from, to);
       this.isLoading = false;
+      return gui;
     });
   }
 
