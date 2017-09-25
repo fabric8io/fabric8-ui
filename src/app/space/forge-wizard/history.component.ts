@@ -1,5 +1,5 @@
-import { Gui, Input, SubmittableInput } from "./gui.model";
-import { Injectable } from "@angular/core";
+import { Gui, Input, SubmittableInput } from './gui.model';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class History {
@@ -39,7 +39,8 @@ export class History {
     for (let gui of this.state) {
       let inputs = gui.inputs;
       if (inputs) {
-        submittableGui.inputs = submittableGui.inputs.concat(inputs);
+        let submittableInputs = this.convertToSubmittable(inputs);
+        submittableGui.inputs = submittableGui.inputs.concat(submittableInputs);
       }
     }
     return submittableGui;
@@ -47,20 +48,26 @@ export class History {
 
   updateFormValues(values: any, stepIndex = this.stepIndex - 1): void {
     let gui = this.state[stepIndex];
-    gui.inputs.forEach(input => {
-      Object.keys(values).forEach(key => {
+    for (let input of gui.inputs) {
+      for (let key of Object.keys(values)) {
         if (input.name === key) {
-          if (input instanceof SubmittableInput) {
-            input.value = values[key];
-          } else {
-            input = new Input({name: key, value: values[key]} as Input);
-          }
+          input.value = values[key];
         }
-      });
-    });
+      }
+    }
   }
 
   toString(): string {
     return btoa(JSON.stringify(this.convert()));
+  }
+
+  private convertToSubmittable(inputs: Input[]): Input[] {
+    let array: SubmittableInput[] = [];
+    if (inputs) {
+      for (let input of inputs) {
+        array.push(new SubmittableInput(input));
+      }
+    }
+    return array as Input[];
   }
 }
