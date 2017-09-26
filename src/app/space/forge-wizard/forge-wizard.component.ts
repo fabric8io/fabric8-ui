@@ -69,7 +69,7 @@ export class ForgeWizardComponent implements OnInit {
       id: 'GithubImportPickOrganisationStep',
       priority: 1,
       title: 'Github Organisation',
-      allowClickNav: false
+      allowClickNav: false,
       disabled: false
     } as WizardStepConfig;
     this.stepGithubRepositories = {
@@ -183,7 +183,7 @@ export class ForgeWizardComponent implements OnInit {
       this.currentGui.messages = serverSideErrors;
     }
     this.form = this.buildForm(this.currentGui, wizardSteps[to]); // wizard.steps is 0-based array
-    //wizardSteps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
+    wizardSteps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
     this.subscribeFormHistoryUpdate(to, wizardSteps);
   }
 
@@ -223,6 +223,7 @@ export class ForgeWizardComponent implements OnInit {
     wizardSteps.map(step => step.config.allowClickNav = false);
     this.forgeService.executeStep('fabric8-import-git', this.history).then((gui: Gui) => {
       this.result = gui[6] as Input;
+      let newGui = this.augmentStep(gui);
       this.isLoading = false;
       wizardSteps[this.LAST_STEP].config.nextEnabled = true;
       console.log('Response from execute' + JSON.stringify(gui));
