@@ -52,60 +52,49 @@ export class ForgeWizardComponent implements OnInit {
     } as WizardConfig;
     this.stepCode = {
       id: 'stack',
-      priority: 1,
-      title: 'Stack and Code',
-      allowClickNav: false,
-      nextEnabled: true
+      priority: 0,
+      title: 'Stack and Code'
     } as WizardStepConfig;
     this.stepDeployment = {
       id: 'deployemnt',
       priority: 2,
-      title: 'Deployment',
-      allowClickNav: false,
-      nextEnabled: true
+      title: 'Deployment'
     } as WizardStepConfig;
     this.stepReview = {
       id: 'review',
       priority: 3,
-      title: 'Review',
-      allowClickNav: false,
-      nextEnabled: true
+      title: 'Review'
     } as WizardStepConfig;
     this.stepGithubImportPickOrganisation = {
       id: 'GithubImportPickOrganisationStep',
       priority: 1,
       title: 'Github Organisation',
-      allowClickNav: false,
-      nextEnabled: false,
+      allowClickNav: false
       disabled: false
     } as WizardStepConfig;
     this.stepGithubRepositories = {
       id: 'GithubRepositoriesStep',
       priority: 2,
       title: 'Github Repositories',
-      allowClickNav: false,
-      nextEnabled: false
+      allowClickNav: false
     } as WizardStepConfig;
     this.stepConfigurePipeline = {
       id: 'ConfigurePipeline',
       priority: 3,
       title: 'Configure Pipeline',
-      allowClickNav: false,
-      nextEnabled: false
+      allowClickNav: false
     } as WizardStepConfig;
     this.stepCreateBuildConfig = {
       id: 'CreateBuildConfigStep',
       priority: 4,
       title: 'Build Config',
-      allowClickNav: false,
-      nextEnabled: false
+      allowClickNav: false
     } as WizardStepConfig;
     this.stepReviewConfig = {
       id: 'Review',
       priority: 5,
       title: 'Review',
-      allowClickNav: false,
-      nextEnabled: false
+      allowClickNav: false
     } as WizardStepConfig;
 
     this.EXECUTE_STEP_INDEX = this.stepCreateBuildConfig.priority - 1;
@@ -194,9 +183,8 @@ export class ForgeWizardComponent implements OnInit {
       this.currentGui.messages = serverSideErrors;
     }
     this.form = this.buildForm(this.currentGui, wizardSteps[to]); // wizard.steps is 0-based array
-    wizardSteps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
-    // this.wizard.goToStep(to, true);
-    this.subscribeFormHistoryUpdate(to);
+    //wizardSteps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
+    this.subscribeFormHistoryUpdate(to, wizardSteps);
   }
 
   private loadUi(): Promise<Gui> {
