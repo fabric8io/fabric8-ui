@@ -1,5 +1,5 @@
-import { Gui, Input, SubmittableInput } from "./gui.model";
-import { Injectable } from "@angular/core";
+import { Gui, Input, SubmittableInput } from './gui.model';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class History {
@@ -39,11 +39,22 @@ export class History {
     for (let gui of this.state) {
       let inputs = gui.inputs;
       if (inputs) {
-        let submittableInputs = this.convertToSubmittable(inputs as Input[]);
+        let submittableInputs = this.convertToSubmittable(inputs);
         submittableGui.inputs = submittableGui.inputs.concat(submittableInputs);
       }
     }
     return submittableGui;
+  }
+
+  updateFormValues(values: any, stepIndex = this.stepIndex - 1): void {
+    let gui = this.state[stepIndex];
+    for (let input of gui.inputs) {
+      for (let key of Object.keys(values)) {
+        if (input.name === key) {
+          input.value = values[key];
+        }
+      }
+    }
   }
 
   toString(): string {
@@ -51,13 +62,12 @@ export class History {
   }
 
   private convertToSubmittable(inputs: Input[]): Input[] {
-    let array: Input[] = [];
+    let array: SubmittableInput[] = [];
     if (inputs) {
       for (let input of inputs) {
-        array.push(new Input(input));
+        array.push(new SubmittableInput(input));
       }
     }
-    return array;
+    return array as Input[];
   }
-
 }

@@ -76,7 +76,8 @@ export class ForgeWizardComponent implements OnInit {
       priority: 1,
       title: 'Github Organisation',
       allowClickNav: false,
-      nextEnabled: false
+      nextEnabled: false,
+      disabled: false
     } as WizardStepConfig;
     this.stepGithubRepositories = {
       id: 'GithubRepositoriesStep',
@@ -116,20 +117,19 @@ export class ForgeWizardComponent implements OnInit {
         console.log(`ForgeWizardComponent::The current space has been updated to ${this.currentSpace.attributes.name}`);
       }
     });
-
   }
 
   get currentGui(): Gui {
     return this.history.currentGui;
   }
 
-  toggleDropdown(): void {
-    this.currentGui.inputs[0].name += '!';
-    console.log(this.currentGui.inputs[0].name);
-  }
-
   ngOnInit(): void {
-    this.loadUi();
+    this.loadUi().then(gui => {
+      this.stepGithubImportPickOrganisation.disabled = gui.metadata.name
+        === 'io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep';
+      this.stepGithubImportPickOrganisation.nextEnabled = true;
+      this.wizard.goToStep(0, true);
+    });
   }
 
   cancel($event) {
@@ -196,12 +196,12 @@ export class ForgeWizardComponent implements OnInit {
     this.form = this.buildForm(this.currentGui, wizardSteps[to]); // wizard.steps is 0-based array
     wizardSteps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
     // this.wizard.goToStep(to, true);
-    this.convertToForm(to, wizardSteps);
+    this.subscribeFormHistoryUpdate(to);
   }
 
-  private loadUi(): void {
+  private loadUi(): Promise<Gui> {
     this.isLoading = true;
-    this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
+    return this.forgeService.loadGui('fabric8-import-git', this.history).then((gui: Gui) => {
       let from = this.history.stepIndex;
       this.history.add(gui);
       let to = this.history.stepIndex;
@@ -213,23 +213,17 @@ export class ForgeWizardComponent implements OnInit {
       }
       this.move(from, to, flattenWizardSteps(this.wizard));
       this.isLoading = false;
+      return gui;
     });
   }
 
-  // TODO instead of storing an history of inputs, store an history of form fields.
-  private convertToForm(index: number, wizardSteps = this.wizard.steps) {
+  private subscribeFormHistoryUpdate(index: number, wizardSteps = this.wizard.steps) {
     this.form.valueChanges.subscribe(values => {
+      wizardSteps[index].config.nextEnabled = this.form.valid;
       if (!isNullOrUndefined(this.currentGui.messages)) {
         this.currentGui.messages = null;
       }
-      wizardSteps[index].config.nextEnabled = this.form.valid;
-      this.currentGui.inputs.forEach(input => {
-        Object.keys(values).forEach(key => {
-          if (input.name === key) {
-            input.value = values[key];
-          }
-        });
-      });
+      this.history.updateFormValues(values);
     });
   }
 
@@ -241,7 +235,6 @@ export class ForgeWizardComponent implements OnInit {
     wizardSteps.map(step => step.config.allowClickNav = false);
     this.forgeService.executeStep('fabric8-import-git', this.history).then((gui: Gui) => {
       this.result = gui[6] as Input;
-      let newGui = this.augmentStep(gui);
       this.isLoading = false;
       wizardSteps[this.LAST_STEP].config.nextEnabled = true;
       console.log('Response from execute' + JSON.stringify(gui));
