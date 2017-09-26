@@ -34,5 +34,6 @@
 
 <!-- Forge wizard modal -->
 <ng-template #addSpace>
-    <forge-wizard></forge-wizard>
+    <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space.attributes.name" *ngIf="!isFlowSelected"></flow-selector>
+    <forge-wizard *ngIf="isFlowSelected"></forge-wizard>
 </ng-template>

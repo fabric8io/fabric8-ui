@@ -15,6 +15,7 @@ import { BuildConfigStepComponent } from './import-pages/step4/build-config-step
 import { SingleInputComponent } from './components/single-input/single-input.component';
 import { ReviewStepComponent } from './import-pages/step5/review-step.component';
 import { ForgeErrorsComponent } from './components/forge-errors/forge-errors.component';
+import { FlowSelectorComponent } from './components/flow-selector/flow-selector.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { ForgeErrorsComponent } from './components/forge-errors/forge-errors.com
     PipelineViewComponent,
     SingleInputComponent,
     ForgeErrorsComponent,
+    FlowSelectorComponent,
     SelectedItemsPipe,
     VisibleItemsPipe,
     OrganisationComponent,
@@ -38,7 +40,8 @@ import { ForgeErrorsComponent } from './components/forge-errors/forge-errors.com
     ReviewStepComponent
   ],
   exports: [
-    ForgeWizardComponent
+    ForgeWizardComponent,
+    FlowSelectorComponent
   ],
   providers: [
 

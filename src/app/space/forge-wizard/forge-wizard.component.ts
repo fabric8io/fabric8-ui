@@ -52,7 +52,7 @@ export class ForgeWizardComponent implements OnInit {
     } as WizardConfig;
     this.stepCode = {
       id: 'stack',
-      priority: 0,
+      priority: 1,
       title: 'Stack and Code'
     } as WizardStepConfig;
     this.stepDeployment = {

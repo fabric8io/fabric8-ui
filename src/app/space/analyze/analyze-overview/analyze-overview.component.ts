@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, TemplateRef } from '@angular/core';
 import { IWorkflow } from './models/workflow';
-import { IModalHost } from '../../wizard/models/modal-host';
-import { SpaceWizardComponent } from '../../wizard/space-wizard.component';
-import { Context, Contexts } from 'ngx-fabric8-wit';
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import {Subscription } from 'rxjs';
@@ -15,9 +13,10 @@ import {Subscription } from 'rxjs';
 })
 export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
-  //@ViewChild('aaddSpace') updateSpace: IModalHost;
   private _context: Context;
   private contextSubscription: Subscription;
+  private isFlowSelected = false;
+  private space: Space;
   modalRef: BsModalRef;
 
   constructor(private modalService: BsModalService,
@@ -28,6 +27,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.contextSubscription = this.contexts.current.subscribe(val => {
       this._context = val;
+      this.space = val.space;
     });
   }
 
@@ -36,11 +36,15 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
+    this.isFlowSelected = false;
     this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
   }
   closeModal($event: any): void {
     this.modalRef.hide();
   }
-
+  selectFlow($event) {
+    console.log(`Event is ${$event}`);
+    this.isFlowSelected = true;
+  }
 
 }
