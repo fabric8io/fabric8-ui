@@ -169,6 +169,7 @@ describe('Forge Service:', () => {
       'deprecated': false,
       'label': 'Organisation',
       'valueChoices': [],
+      'description': '',
       'class': 'UISelectOne',
       'value': 'corinnekrych'
     }];

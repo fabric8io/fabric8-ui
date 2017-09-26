@@ -1,6 +1,9 @@
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 
-import { WizardComponent, WizardConfig, WizardStepConfig, WizardEvent, WizardStep } from 'patternfly-ng';
+import {
+  WizardComponent, WizardConfig, WizardStepConfig, WizardEvent, WizardStep,
+  WizardStepComponent
+} from 'patternfly-ng';
 import { ForgeService } from 'app/space/forge-wizard/forge.service';
 import { Gui, Input, MetaData } from 'app/space/forge-wizard/gui.model';
 import { History } from 'app/space/forge-wizard/history.component';
@@ -22,6 +25,9 @@ import { isNullOrUndefined } from 'util';
 export class ForgeWizardComponent implements OnInit {
   @ViewChild('wizard') wizard: WizardComponent;
   form: FormGroup = new FormGroup({});
+  stepCode: WizardStepConfig;
+  stepDeployment: WizardStepConfig;
+  stepReview: WizardStepConfig;
   stepGithubImportPickOrganisation: WizardStepConfig;
   stepGithubRepositories: WizardStepConfig;
   stepConfigurePipeline: WizardStepConfig;
@@ -44,7 +50,27 @@ export class ForgeWizardComponent implements OnInit {
       title: 'Application Wizard',
       stepStyleClass: 'wizard'
     } as WizardConfig;
-
+    this.stepCode = {
+      id: 'stack',
+      priority: 1,
+      title: 'Stack and Code',
+      allowClickNav: false,
+      nextEnabled: true
+    } as WizardStepConfig;
+    this.stepDeployment = {
+      id: 'deployemnt',
+      priority: 2,
+      title: 'Deployment',
+      allowClickNav: false,
+      nextEnabled: true
+    } as WizardStepConfig;
+    this.stepReview = {
+      id: 'review',
+      priority: 3,
+      title: 'Review',
+      allowClickNav: false,
+      nextEnabled: true
+    } as WizardStepConfig;
     this.stepGithubImportPickOrganisation = {
       id: 'GithubImportPickOrganisationStep',
       priority: 1,
@@ -113,7 +139,7 @@ export class ForgeWizardComponent implements OnInit {
   nextClicked($event: WizardEvent): void {
     if (this.form.valid) {
       if (this.history.stepIndex === this.EXECUTE_STEP_INDEX + 1) { // execute
-        this.executeStep();
+        this.executeStep(flattenWizardSteps(this.wizard));
       } else if (this.history.stepIndex === this.LAST_STEP + 1) { // addcodebaseStep
         this.addCodebaseStep();
       } else { // init or next
@@ -124,19 +150,19 @@ export class ForgeWizardComponent implements OnInit {
 
   previousClicked($event: WizardEvent): void {
     // history step index starts at index 1
-    this.move(this.history.stepIndex - 1, this.history.stepIndex - 2);
+    this.move(this.history.stepIndex - 1, this.history.stepIndex - 2, flattenWizardSteps(this.wizard));
   }
 
   stepChanged($event: WizardEvent) {
     const currentStep = this.history.stepIndex;
     const gotoStep = $event.step.config.priority;
     if (currentStep !== this.LAST_STEP + 1 && currentStep > gotoStep) {
-      this.move(currentStep - 1, gotoStep - 1);
+      this.move(currentStep - 1, gotoStep - 1, flattenWizardSteps(this.wizard));
     }
   }
 
   // to, from are zero-based index
-  move(from: number, to: number) {
+  move(from: number, to: number, wizardSteps = this.wizard.steps) {
     let serverSideErrors = null;
     if (to === this.EXECUTE_STEP_INDEX) { // last forge step, change next to finish
       this.wizard.config.nextTitle = 'Finish';
@@ -149,10 +175,10 @@ export class ForgeWizardComponent implements OnInit {
     }
     if (from > to ) {
       // moving backward, all steps after this one should not be navigable
-      this.wizard.steps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
+      wizardSteps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
     } else {
       // moving forward (only one step at a time with next)
-      this.wizard.steps[from].config.allowClickNav = true;
+      wizardSteps[from].config.allowClickNav = true;
       if (this.currentGui.messages && this.currentGui.messages.length > 0) {
         // server-side error, go back to previous
         serverSideErrors = this.currentGui.messages.filter(msg => msg.severity === 'ERROR');
@@ -167,9 +193,10 @@ export class ForgeWizardComponent implements OnInit {
     if (!isNullOrUndefined(serverSideErrors)) {
       this.currentGui.messages = serverSideErrors;
     }
-    this.form = this.buildForm(this.currentGui, this.wizard.steps[to]); // wizard.steps is 0-based array
-    this.wizard.steps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
-    this.convertToForm(to);
+    this.form = this.buildForm(this.currentGui, wizardSteps[to]); // wizard.steps is 0-based array
+    wizardSteps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
+    // this.wizard.goToStep(to, true);
+    this.convertToForm(to, wizardSteps);
   }
 
   private loadUi(): void {
@@ -184,18 +211,18 @@ export class ForgeWizardComponent implements OnInit {
       if (from > 0) {
         from = from - 1;
       }
-      this.move(from, to);
+      this.move(from, to, flattenWizardSteps(this.wizard));
       this.isLoading = false;
     });
   }
 
   // TODO instead of storing an history of inputs, store an history of form fields.
-  private convertToForm(index: number) {
+  private convertToForm(index: number, wizardSteps = this.wizard.steps) {
     this.form.valueChanges.subscribe(values => {
       if (!isNullOrUndefined(this.currentGui.messages)) {
         this.currentGui.messages = null;
       }
-      this.wizard.steps[index].config.nextEnabled = this.form.valid;
+      wizardSteps[index].config.nextEnabled = this.form.valid;
       this.currentGui.inputs.forEach(input => {
         Object.keys(values).forEach(key => {
           if (input.name === key) {
@@ -206,17 +233,17 @@ export class ForgeWizardComponent implements OnInit {
     });
   }
 
-  private executeStep(): void {
+  private executeStep(wizardSteps = this.wizard.steps): void {
     this.isLoading = true;
     this.wizard.config.nextTitle = 'Ok';
-    this.wizard.steps[this.LAST_STEP].config.nextEnabled = false;
-    this.wizard.steps[this.LAST_STEP].config.previousEnabled = false;
-    this.wizard.steps.map(step => step.config.allowClickNav = false);
+    wizardSteps[this.LAST_STEP].config.nextEnabled = false;
+    wizardSteps[this.LAST_STEP].config.previousEnabled = false;
+    wizardSteps.map(step => step.config.allowClickNav = false);
     this.forgeService.executeStep('fabric8-import-git', this.history).then((gui: Gui) => {
       this.result = gui[6] as Input;
       let newGui = this.augmentStep(gui);
       this.isLoading = false;
-      this.wizard.steps[this.LAST_STEP].config.nextEnabled = true;
+      wizardSteps[this.LAST_STEP].config.nextEnabled = true;
       console.log('Response from execute' + JSON.stringify(gui));
     });
   }
@@ -322,4 +349,18 @@ export class ForgeWizardComponent implements OnInit {
 
     return new FormGroup(group);
   }
+}
+
+export function flattenWizardSteps(wizard: WizardComponent): WizardStep[] {
+  let flatWizard: WizardStep[] = [];
+  wizard.steps.forEach((step: WizardStepComponent) => {
+    if (step.hasSubsteps) {
+      step.steps.forEach(substep => {
+        flatWizard.push(substep);
+      });
+    } else {
+      flatWizard.push(step);
+    }
+  });
+  return flatWizard;
 }
