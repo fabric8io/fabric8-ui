@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import { Component, OnInit, Output, ViewChild, TemplateRef, EventEmitter } from '@angular/core';
 
 import {
   WizardComponent, WizardConfig, WizardStepConfig, WizardEvent, WizardStep,
@@ -7,7 +7,6 @@ import {
 import { ForgeService } from 'app/space/forge-wizard/forge.service';
 import { Gui, Input, MetaData } from 'app/space/forge-wizard/gui.model';
 import { History } from 'app/space/forge-wizard/history.component';
-import { AnalyzeOverviewComponent } from 'app/space/analyze/analyze-overview/analyze-overview.component';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
 import { Codebase } from '../create/codebases/services/codebase';
@@ -17,12 +16,15 @@ import { Observable } from 'rxjs/Rx';
 import { NotificationType, Notification, Notifications } from 'ngx-base';
 import { isNullOrUndefined } from 'util';
 
+
 @Component({
   selector: 'forge-wizard',
   templateUrl: './forge-wizard.component.html',
   styleUrls: ['./forge-wizard.component.less']
 })
 export class ForgeWizardComponent implements OnInit {
+
+  @Output('onCancel') onCancel = new EventEmitter();
   @ViewChild('wizard') wizard: WizardComponent;
   form: FormGroup = new FormGroup({});
   stepCode: WizardStepConfig;
@@ -41,8 +43,7 @@ export class ForgeWizardComponent implements OnInit {
   private result: Input;
   private currentSpace: Space;
 
-  constructor(private parent: AnalyzeOverviewComponent,
-              private forgeService: ForgeService,
+  constructor(private forgeService: ForgeService,
               private codebasesService: CodebasesService,
               private context: ContextService,
               private notifications: Notifications) {
@@ -122,7 +123,7 @@ export class ForgeWizardComponent implements OnInit {
   }
 
   cancel($event) {
-    this.parent.closeModal($event);
+    this.onCancel.emit($event);
   }
 
   nextClicked($event: WizardEvent): void {
@@ -261,8 +262,8 @@ export class ForgeWizardComponent implements OnInit {
       () => {
           console.log(`completed`);
           this.isLoading = false;
-          // TOOD Display error
-          this.parent.closeModal({});
+          // TODO Display error
+          this.onCancel.emit({});
         });
   }
 

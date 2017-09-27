@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, TemplateRef } from '@angular/core';
 import { IWorkflow } from './models/workflow';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -39,9 +39,11 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     this.isFlowSelected = false;
     this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
   }
+
   closeModal($event: any): void {
     this.modalRef.hide();
   }
+
   selectFlow($event) {
     console.log(`Event is ${$event}`);
     this.isFlowSelected = true;

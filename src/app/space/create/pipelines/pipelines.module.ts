@@ -13,10 +13,8 @@ import {
 
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesRoutingModule } from './pipelines-routing.module';
-import {SpaceWizardModule} from "../../wizard/space-wizard.module";
-import {ModalModule} from "ngx-modal";
-
-
+import { ForgeWizardModule } from '../../forge-wizard/forge-wizard.module';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   imports: [
@@ -25,14 +23,14 @@ import {ModalModule} from "ngx-modal";
     PipelinesRoutingModule,
     PipelineModule,
     ToolbarModule,
-    ModalModule,
-    SpaceWizardModule,
+    ForgeWizardModule,
+    ModalModule.forRoot(),
     TooltipModule.forRoot()
   ],
   declarations: [PipelinesComponent],
   providers: [
     BsDropdownConfig,
-    TooltipConfig,
+    TooltipConfig
   ]
 })
 export class PipelinesModule {
