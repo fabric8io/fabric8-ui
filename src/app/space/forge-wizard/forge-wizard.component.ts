@@ -6,7 +6,6 @@ import {
 } from 'patternfly-ng';
 import { ForgeService } from 'app/space/forge-wizard/forge.service';
 import { Gui, Input, MetaData } from 'app/space/forge-wizard/gui.model';
-import { History } from 'app/space/forge-wizard/history.component';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
 import { Codebase } from '../create/codebases/services/codebase';
@@ -15,6 +14,7 @@ import { Context, Space } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Rx';
 import { NotificationType, Notification, Notifications } from 'ngx-base';
 import { isNullOrUndefined } from 'util';
+import { AbstractWizard } from 'app/space/forge-wizard/abstract-wizard.component';
 
 
 @Component({
@@ -22,22 +22,9 @@ import { isNullOrUndefined } from 'util';
   templateUrl: './forge-wizard.component.html',
   styleUrls: ['./forge-wizard.component.less']
 })
-export class ForgeWizardComponent implements OnInit {
+export class ForgeWizardComponent extends AbstractWizard {
 
   @Output('onCancel') onCancel = new EventEmitter();
-  @ViewChild('wizard') wizard: WizardComponent;
-  form: FormGroup = new FormGroup({});
-  stepCode: WizardStepConfig;
-  stepDeployment: WizardStepConfig;
-  stepReview: WizardStepConfig;
-  stepGithubImportPickOrganisation: WizardStepConfig;
-  stepGithubRepositories: WizardStepConfig;
-  stepConfigurePipeline: WizardStepConfig;
-  stepCreateBuildConfig: WizardStepConfig;
-  stepReviewConfig: WizardStepConfig;
-  config: WizardConfig;
-  history: History = new History();
-  isLoading = true;
   private EXECUTE_STEP_INDEX: number;
   private LAST_STEP: number;
   private result: Input;
@@ -47,59 +34,60 @@ export class ForgeWizardComponent implements OnInit {
               private codebasesService: CodebasesService,
               private context: ContextService,
               private notifications: Notifications) {
+    super();
     this.config = {
       title: 'Application Wizard',
       stepStyleClass: 'wizard'
     } as WizardConfig;
-    this.stepCode = {
+    this.steps[0] = {
       id: 'stack',
       priority: 1,
       title: 'Stack and Code'
     } as WizardStepConfig;
-    this.stepDeployment = {
+    this.steps[1] = {
       id: 'deployemnt',
       priority: 2,
       title: 'Deployment'
     } as WizardStepConfig;
-    this.stepReview = {
+    this.steps[2] = {
       id: 'review',
       priority: 3,
       title: 'Review'
     } as WizardStepConfig;
-    this.stepGithubImportPickOrganisation = {
+    this.steps[3] = {
       id: 'GithubImportPickOrganisationStep',
       priority: 1,
       title: 'Github Organisation',
       allowClickNav: false,
       disabled: false
     } as WizardStepConfig;
-    this.stepGithubRepositories = {
+    this.steps[4] = {
       id: 'GithubRepositoriesStep',
       priority: 2,
       title: 'Github Repositories',
       allowClickNav: false
     } as WizardStepConfig;
-    this.stepConfigurePipeline = {
+    this.steps[5] = {
       id: 'ConfigurePipeline',
       priority: 3,
       title: 'Configure Pipeline',
       allowClickNav: false
     } as WizardStepConfig;
-    this.stepCreateBuildConfig = {
+    this.steps[6] = {
       id: 'CreateBuildConfigStep',
       priority: 4,
       title: 'Build Config',
       allowClickNav: false
     } as WizardStepConfig;
-    this.stepReviewConfig = {
+    this.steps[7] = {
       id: 'Review',
       priority: 5,
       title: 'Review',
       allowClickNav: false
     } as WizardStepConfig;
 
-    this.EXECUTE_STEP_INDEX = this.stepCreateBuildConfig.priority - 1;
-    this.LAST_STEP = this.stepReviewConfig.priority - 1;
+    this.EXECUTE_STEP_INDEX = this.steps[6].priority - 1;
+    this.LAST_STEP = this.steps[7].priority - 1;
 
     this.context.current.subscribe((ctx: Context) => {
       if (ctx.space) {
@@ -109,15 +97,11 @@ export class ForgeWizardComponent implements OnInit {
     });
   }
 
-  get currentGui(): Gui {
-    return this.history.currentGui;
-  }
-
   ngOnInit(): void {
     this.loadUi().then(gui => {
-      this.stepGithubImportPickOrganisation.disabled = gui.metadata.name
+      this.steps[3].disabled = gui.metadata.name
         === 'io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep';
-      this.stepGithubImportPickOrganisation.nextEnabled = true;
+      this.steps[3].nextEnabled = true;
       this.wizard.goToStep(0, true);
     });
   }
@@ -315,23 +299,7 @@ export class ForgeWizardComponent implements OnInit {
     }
     return codebases;
   }
-  private buildForm(gui: Gui, to: WizardStep): FormGroup {
-    let group: any = {};
-    gui.inputs.forEach(sub => {
-      let input = sub as Input;
-      if (input.required) {
-        group[input.name] = new FormControl(input.value || '', Validators.required);
-        if (!input.value || input.value === '' || input.value.length === 0) {
-          // is empty for single and multiple select input
-          to.config.nextEnabled = false;
-        }
-      } else {
-         group[input.name] = new FormControl(input.value || '');
-      }
-    });
 
-    return new FormGroup(group);
-  }
 }
 
 export function flattenWizardSteps(wizard: WizardComponent): WizardStep[] {

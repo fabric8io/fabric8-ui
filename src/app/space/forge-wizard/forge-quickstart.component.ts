@@ -1,20 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {WizardConfig, WizardStepConfig} from 'patternfly-ng';
 import {ForgeService} from './forge.service';
-import {History} from './history.component';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractWizard} from './abstract-wizard.component';
 
 @Component({
   selector: 'forge-quickstart',
   templateUrl: './forge-quickstart.component.html'
 })
-export class ForgeQuickstartComponent implements OnInit {
-  private config: WizardConfig;
-  private steps: WizardStepConfig[] = [];
-  private history: History = new History();
-  private form: FormGroup = new FormGroup({});
+export class ForgeQuickstartComponent extends AbstractWizard {
 
   constructor(private forgeService: ForgeService) {
+    super();
     this.config = {
       title: 'Quickstart Wizard',
       stepStyleClass: 'wizard'
@@ -24,15 +20,10 @@ export class ForgeQuickstartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let group: any = {};
     this.forgeService.loadGui('fabric8-new-project', this.history).then(gui => {
       this.history.add(gui);
-      gui.inputs.forEach(input => {
-        group[input.name] = input.required ? new FormControl(input.value || '', Validators.required) :
-          new FormControl(input.value || '');
-      });
 
-      this.form = new FormGroup(group);
+      this.form = this.buildForm(gui, this.wizard.steps[0]);
       this.history.done();
     });
   }
