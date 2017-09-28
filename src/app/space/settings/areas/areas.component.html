@@ -1,12 +1,12 @@
 <div class="container-fluid">
-  <h3 class="areas-header">Areas that make up the {{context.space.attributes.name | spaceName}} Space:</h3>
   <div class="row">
-    <div class="col-md-11">
-      Areas
+    <div class="col-md-10">
+      <h3 class="areas-header">Areas that make up the {{context.space.attributes.name | spaceName}} Space:</h3>
     </div>
-    <div class="table-action-heading" (click)="addChildArea()">
-      <i class="pficon pficon-add-circle-o margin-top-4">
-      </i>
+    <div class="col-md-2">
+      <div class="table-action-heading" (click)="addChildArea()">
+        <i class="pficon pficon-add-circle-o"></i> Add Areas
+      </div>
     </div>
   </div>
   <div class="row">
