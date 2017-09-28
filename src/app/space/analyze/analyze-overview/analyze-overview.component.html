@@ -34,6 +34,7 @@
 
 <!-- Forge wizard modal -->
 <ng-template #addSpace>
-    <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space.attributes.name" *ngIf="!isFlowSelected"></flow-selector>
-    <forge-wizard (onCancel)="closeModal()" *ngIf="isFlowSelected"></forge-wizard>
+    <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space.attributes.name" *ngIf="!selectedFlow"></flow-selector>
+    <forge-wizard (onCancel)="closeModal()" *ngIf="selectedFlow === 'import'"></forge-wizard>
+    <forge-quickstart *ngIf="selectedFlow === 'quickstart'"></forge-quickstart>
 </ng-template>

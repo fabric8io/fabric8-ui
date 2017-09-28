@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeWizardComponent } from 'app/space/forge-wizard/forge-wizard.component';
+import { ForgeQuickstartComponent } from 'app/space/forge-wizard/forge-quickstart.component';
 import { WizardModule } from 'patternfly-ng';
 import { OrganisationComponent } from 'app/space/forge-wizard/import-pages/step1/organisation-step.component';
 import { PipelineViewComponent } from 'app/space/forge-wizard/components/pipeline-view/pipeline-view.component';
@@ -16,6 +17,7 @@ import { SingleInputComponent } from './components/single-input/single-input.com
 import { ReviewStepComponent } from './import-pages/step5/review-step.component';
 import { ForgeErrorsComponent } from './components/forge-errors/forge-errors.component';
 import { FlowSelectorComponent } from './components/flow-selector/flow-selector.component';
+import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quickstart.component';
 
 @NgModule({
   imports: [
@@ -25,6 +27,7 @@ import { FlowSelectorComponent } from './components/flow-selector/flow-selector.
   ],
   declarations: [
     ForgeWizardComponent,
+    ForgeQuickstartComponent,
     SingleSelectionDropDownComponent,
     MultipleSelectionListComponent,
     PipelineViewComponent,
@@ -37,10 +40,12 @@ import { FlowSelectorComponent } from './components/flow-selector/flow-selector.
     RepositoriesComponent,
     BuildConfigStepComponent,
     PipelineStepComponent,
-    ReviewStepComponent
+    ReviewStepComponent,
+    ChooseQuickstartComponent
   ],
   exports: [
     ForgeWizardComponent,
+    ForgeQuickstartComponent,
     FlowSelectorComponent
   ],
   providers: [

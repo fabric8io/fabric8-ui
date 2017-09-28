@@ -15,7 +15,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
   private _context: Context;
   private contextSubscription: Subscription;
-  private isFlowSelected = false;
+  private selectedFlow: string;
   private space: Space;
   modalRef: BsModalRef;
 
@@ -36,7 +36,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.isFlowSelected = false;
+    this.selectedFlow = '';
     this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
   }
 
@@ -45,8 +45,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   }
 
   selectFlow($event) {
-    console.log(`Event is ${$event}`);
-    this.isFlowSelected = true;
+    this.selectedFlow = $event.flow;
   }
 
 }

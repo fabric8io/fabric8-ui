@@ -1,0 +1,12 @@
+<pfng-wizard #wizard
+             [config]="config">
+
+  <div [formGroup]="form" [ngSwitch]="history.currentGui.metadata?.name">
+    <pfng-wizard-step [config]="steps[0]">
+      <span *ngSwitchCase="'Quickstart'">
+        <quickstart [gui]="history.currentGui" [form]="form"></quickstart>
+      </span>
+    </pfng-wizard-step>
+  </div>
+
+</pfng-wizard>
