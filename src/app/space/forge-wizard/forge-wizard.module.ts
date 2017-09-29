@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ForgeWizardComponent } from 'app/space/forge-wizard/forge-wizard.component';
-import { ForgeQuickstartComponent } from 'app/space/forge-wizard/forge-quickstart.component';
+import { ForgeImportWizardComponent } from 'app/space/forge-wizard/import-wizard.component';
+import { ForgeQuickstartComponent } from 'app/space/forge-wizard/quickstart-wizard.component';
 import { WizardModule } from 'patternfly-ng';
 import { OrganisationComponent } from 'app/space/forge-wizard/import-pages/step1/organisation-step.component';
 import { PipelineViewComponent } from 'app/space/forge-wizard/components/pipeline-view/pipeline-view.component';
@@ -26,7 +26,7 @@ import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quick
     WizardModule
   ],
   declarations: [
-    ForgeWizardComponent,
+    ForgeImportWizardComponent,
     ForgeQuickstartComponent,
     SingleSelectionDropDownComponent,
     MultipleSelectionListComponent,
@@ -44,7 +44,7 @@ import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quick
     ChooseQuickstartComponent
   ],
   exports: [
-    ForgeWizardComponent,
+    ForgeImportWizardComponent,
     ForgeQuickstartComponent,
     FlowSelectorComponent
   ],

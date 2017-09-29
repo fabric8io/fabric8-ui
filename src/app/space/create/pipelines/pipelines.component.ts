@@ -56,7 +56,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   } as SortField;
   private _pipelinesSubscription: Subscription;
 
-  private isFlowSelected = false;
+  private selectedFlow: string;
   private space: Space;
   modalRef: BsModalRef;
 
@@ -230,14 +230,15 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.isFlowSelected = false;
+    this.selectedFlow = '';
     this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
   }
+
   closeModal($event: any): void {
     this.modalRef.hide();
   }
+
   selectFlow($event) {
-    console.log(`Event is ${$event}`);
-    this.isFlowSelected = true;
+    this.selectedFlow = $event.flow;
   }
 }

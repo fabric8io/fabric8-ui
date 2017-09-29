@@ -1,117 +1,50 @@
-import { Component, OnInit, Output, ViewChild, TemplateRef, EventEmitter } from '@angular/core';
-
-import {
-  WizardComponent, WizardConfig, WizardStepConfig, WizardEvent, WizardStep,
-  WizardStepComponent
-} from 'patternfly-ng';
+import { Component } from '@angular/core';
+import { WizardEvent } from 'patternfly-ng';
 import { ForgeService } from 'app/space/forge-wizard/forge.service';
 import { Gui, Input, MetaData } from 'app/space/forge-wizard/gui.model';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
 import { Codebase } from '../create/codebases/services/codebase';
 import { ContextService } from '../../shared/context.service';
-import { Context, Space } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Rx';
 import { NotificationType, Notification, Notifications } from 'ngx-base';
 import { isNullOrUndefined } from 'util';
-import { AbstractWizard } from 'app/space/forge-wizard/abstract-wizard.component';
+import { AbstractWizard, flattenWizardSteps } from 'app/space/forge-wizard/abstract-wizard.component';
+import { configureSteps } from './import-wizard.config';
 
 
 @Component({
-  selector: 'forge-wizard',
-  templateUrl: './forge-wizard.component.html',
-  styleUrls: ['./forge-wizard.component.less']
+  selector: 'import-wizard',
+  templateUrl: './import-wizard.component.html',
+  styleUrls: ['./import-wizard.component.less']
 })
-export class ForgeWizardComponent extends AbstractWizard {
+export class ForgeImportWizardComponent extends AbstractWizard {
 
-  @Output('onCancel') onCancel = new EventEmitter();
-  private EXECUTE_STEP_INDEX: number;
-  private LAST_STEP: number;
   private result: Input;
-  private currentSpace: Space;
 
   constructor(private forgeService: ForgeService,
               private codebasesService: CodebasesService,
-              private context: ContextService,
+              context: ContextService,
               private notifications: Notifications) {
-    super();
-    this.config = {
-      title: 'Application Wizard',
-      stepStyleClass: 'wizard'
-    } as WizardConfig;
-    this.steps[0] = {
-      id: 'stack',
-      priority: 1,
-      title: 'Stack and Code'
-    } as WizardStepConfig;
-    this.steps[1] = {
-      id: 'deployemnt',
-      priority: 2,
-      title: 'Deployment'
-    } as WizardStepConfig;
-    this.steps[2] = {
-      id: 'review',
-      priority: 3,
-      title: 'Review'
-    } as WizardStepConfig;
-    this.steps[3] = {
-      id: 'GithubImportPickOrganisationStep',
-      priority: 1,
-      title: 'Github Organisation',
-      allowClickNav: false,
-      disabled: false
-    } as WizardStepConfig;
-    this.steps[4] = {
-      id: 'GithubRepositoriesStep',
-      priority: 2,
-      title: 'Github Repositories',
-      allowClickNav: false
-    } as WizardStepConfig;
-    this.steps[5] = {
-      id: 'ConfigurePipeline',
-      priority: 3,
-      title: 'Configure Pipeline',
-      allowClickNav: false
-    } as WizardStepConfig;
-    this.steps[6] = {
-      id: 'CreateBuildConfigStep',
-      priority: 4,
-      title: 'Build Config',
-      allowClickNav: false
-    } as WizardStepConfig;
-    this.steps[7] = {
-      id: 'Review',
-      priority: 5,
-      title: 'Review',
-      allowClickNav: false
-    } as WizardStepConfig;
-
+    super(context);
+    this.steps = configureSteps();
+    this.isLoading = true;
     this.EXECUTE_STEP_INDEX = this.steps[6].priority - 1;
     this.LAST_STEP = this.steps[7].priority - 1;
-
-    this.context.current.subscribe((ctx: Context) => {
-      if (ctx.space) {
-        this.currentSpace = ctx.space;
-        console.log(`ForgeWizardComponent::The current space has been updated to ${this.currentSpace.attributes.name}`);
-      }
-    });
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.loadUi().then(gui => {
       this.steps[3].disabled = gui.metadata.name
         === 'io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep';
       this.steps[3].nextEnabled = true;
       this.wizard.goToStep(0, true);
+      this.isLoading = false;
     });
   }
 
-  cancel($event) {
-    this.onCancel.emit($event);
-  }
-
   nextClicked($event: WizardEvent): void {
-    if (this.form.valid) {
+    // if (this.form.valid) {
       if (this.history.stepIndex === this.EXECUTE_STEP_INDEX + 1) { // execute
         this.executeStep(flattenWizardSteps(this.wizard));
       } else if (this.history.stepIndex === this.LAST_STEP + 1) { // addcodebaseStep
@@ -119,7 +52,7 @@ export class ForgeWizardComponent extends AbstractWizard {
       } else { // init or next
         this.loadUi();
       }
-    }
+    // }
   }
 
   previousClicked($event: WizardEvent): void {
@@ -168,7 +101,9 @@ export class ForgeWizardComponent extends AbstractWizard {
       this.currentGui.messages = serverSideErrors;
     }
     this.form = this.buildForm(this.currentGui, wizardSteps[to]); // wizard.steps is 0-based array
-    wizardSteps[to].config.nextEnabled = this.form.valid && isNullOrUndefined(this.currentGui.messages);
+    // post processing catch server-side errors
+    wizardSteps[to].config.nextEnabled = this.form.valid
+      && isNullOrUndefined(this.currentGui.messages);
     this.subscribeFormHistoryUpdate(to, wizardSteps);
   }
 
@@ -282,6 +217,7 @@ export class ForgeWizardComponent extends AbstractWizard {
     }
     return newGui;
   }
+
   private convertResultToCodebases(result: Input): Codebase[] {
     let codebases: Codebase[] = [];
     if (this.result.gitRepositories) {
@@ -299,19 +235,5 @@ export class ForgeWizardComponent extends AbstractWizard {
     }
     return codebases;
   }
-
 }
 
-export function flattenWizardSteps(wizard: WizardComponent): WizardStep[] {
-  let flatWizard: WizardStep[] = [];
-  wizard.steps.forEach((step: WizardStepComponent) => {
-    if (step.hasSubsteps) {
-      step.steps.forEach(substep => {
-        flatWizard.push(substep);
-      });
-    } else {
-      flatWizard.push(step);
-    }
-  });
-  return flatWizard;
-}

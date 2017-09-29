@@ -6,7 +6,7 @@ import {
   async,
   TestBed
 } from '@angular/core/testing';
-import { flattenWizardSteps, ForgeWizardComponent } from './forge-wizard.component';
+import { flattenWizardSteps, ForgeImportWizardComponent } from './import-wizard.component';
 import { ContextsMock } from '../create/codebases/services/github.service.mock';
 import { ForgeService } from './forge.service';
 import { AnalyzeOverviewComponent } from '../analyze/analyze-overview/analyze-overview.component';
@@ -35,7 +35,7 @@ describe('Forge wizard component:', () => {
 
     TestBed.configureTestingModule({
       imports: [HttpModule],
-      declarations: [ForgeWizardComponent],
+      declarations: [ForgeImportWizardComponent],
       providers: [
         {
           provide: AnalyzeOverviewComponent, useValue: parentComponentMock
@@ -60,7 +60,7 @@ describe('Forge wizard component:', () => {
       resolve(gui);
     });
     forgeServiceMock.loadGui.and.returnValue(p);
-    fixture = TestBed.createComponent(ForgeWizardComponent);
+    fixture = TestBed.createComponent(ForgeImportWizardComponent);
   });
 
   it('Init component successfully', async(() => {

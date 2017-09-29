@@ -2,20 +2,16 @@ import {Component} from '@angular/core';
 import {WizardConfig, WizardStepConfig} from 'patternfly-ng';
 import {ForgeService} from './forge.service';
 import {AbstractWizard} from './abstract-wizard.component';
+import { ContextService } from '../../shared/context.service';
 
 @Component({
-  selector: 'forge-quickstart',
-  templateUrl: './forge-quickstart.component.html'
+  selector: 'quickstart-wizard',
+  templateUrl: './quickstart-wizard.component.html'
 })
 export class ForgeQuickstartComponent extends AbstractWizard {
 
-  constructor(private forgeService: ForgeService) {
-    super();
-    this.config = {
-      title: 'Quickstart Wizard',
-      stepStyleClass: 'wizard'
-    } as WizardConfig;
-
+  constructor(private forgeService: ForgeService, context: ContextService) {
+    super(context);
     this.steps[0] = {title: 'Choose a quickstart', priority: 0} as WizardStepConfig;
   }
 
