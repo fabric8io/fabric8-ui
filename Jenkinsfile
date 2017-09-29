@@ -1,8 +1,8 @@
-@Library('github.com/fabric8io/fabric8-pipeline-library@master')
+@Library('github.com/rawlingsj/fabric8-pipeline-library@collab')
 def utils = new io.fabric8.Utils()
 def flow = new io.fabric8.Fabric8Commands()
 def project = 'fabric8-ui/fabric8-ui'
-def ciDeploy = false
+def ciDeploy = true
 def imageName
 node{
     properties([
@@ -10,43 +10,43 @@ node{
         ])
 }
 
-fabric8UITemplate{
-    dockerNode{
-        timeout(time: 1, unit: 'HOURS') {
-            ws {
-                checkout scm
-                readTrusted 'release.groovy'
-                def pipeline = load 'release.groovy'
+// fabric8UITemplate{
+//     dockerNode{
+//         timeout(time: 1, unit: 'HOURS') {
+//             ws {
+//                 checkout scm
+//                 readTrusted 'release.groovy'
+//                 def pipeline = load 'release.groovy'
 
-                if (utils.isCI()){
+//                 if (utils.isCI()){
 
-                    container('ui'){
-                        pipeline.ci()
-                    }
+//                     container('ui'){
+//                         pipeline.ci()
+//                     }
 
-                    imageName = "fabric8/fabric8-ui:SNAPSHOT-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
-                    container('docker'){
-                        pipeline.buildImage(imageName)
-                    }
+//                     imageName = "fabric8/fabric8-ui:SNAPSHOT-${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+//                     container('docker'){
+//                         pipeline.buildImage(imageName)
+//                     }
 
-                    ciDeploy = true
+//                     ciDeploy = true
 
-                } else if (utils.isCD()){
+//                 } else if (utils.isCD()){
 
-                    container('ui'){
-                        pipeline.ci()
-                    }
-                    def v = getNewVersion {}
-                    imageName = "fabric8/fabric8-ui:${v}"
-                    container('docker'){
-                        pipeline.buildImage(imageName)
-                    }
-                    pipeline.updateDownstreamProjects(v)
-                }
-            }
-        }
-    }
-}
+//                     container('ui'){
+//                         pipeline.ci()
+//                     }
+//                     def v = getNewVersion {}
+//                     imageName = "fabric8/fabric8-ui:${v}"
+//                     container('docker'){
+//                         pipeline.buildImage(imageName)
+//                     }
+//                     pipeline.updateDownstreamProjects(v)
+//                 }
+//             }
+//         }
+//     }
+// }
 
 // deploy a snapshot fabric8-ui pod and notify pull request of details
 if (ciDeploy){
@@ -61,6 +61,7 @@ if (ciDeploy){
                originalImageName = 'registry.devshift.net/fabric8-ui/fabric8-ui'
                newImageName = imageName
                openShiftProject = prj
+               githubProject = project
            }
        }
        stage('notify'){
