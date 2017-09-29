@@ -2,6 +2,37 @@
 <ng-template #showGettingStartedHeader>
   <nav class="navbar navbar-default navbar-inverse" role="navigation">
     <img src="../../../assets/images/openshift-io_white.png" class="navbar-getting-started-logo" />
+     <!-- user profile dropdown -->
+        <ul id="getting_started_header_rightDropdown" class="nav navbar-nav navbar-right">          
+          <li class="login-block">
+            <a *ngIf="!loggedInUser" (click)="login();">
+            <span class="login-block-logged-out-user">
+              <i id="getting_started_header_login" class="pficon pficon-user"></i>
+            </span>
+              Log In
+            </a>
+          </li>
+          <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
+            <a class="user-dropdown dropdown-toggle" title="{{loggedInUser.attributes.fullName}}" dropdownToggle>
+              <div *ngIf="loggedInUser" id="getting_started_header_dropdownToggle2" class="user-dropdown-items">
+              <span class="user-icon">
+                <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
+                <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
+              </span>
+              <span>{{loggedInUser.attributes.fullName}}</span>
+              <span class="caret"></span>
+            </div>
+            </a>
+            <ul class="dropdown-menu" *dropdownMenu>             
+              <!--li class="divider"></li-->
+              <li id="getting_started_header_logout">
+                <a *ngIf="loggedInUser" (click)="logout();" class="pointer">
+                  Log Out
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
   </nav>
 </ng-template>
 <ng-template #showHeader>
