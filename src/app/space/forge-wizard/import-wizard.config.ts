@@ -28,7 +28,7 @@ export function configureSteps(): WizardStepConfig[] {
   steps.push({
     id: 'GithubImportPickOrganisationStep',
     priority: 1,
-    title: 'Github Organisation',
+    title: 'GitHub Organisation',
     allowClickNav: false,
     disabled: false,
     nextEnabled: false
@@ -36,7 +36,7 @@ export function configureSteps(): WizardStepConfig[] {
   steps.push({
     id: 'GithubRepositoriesStep',
     priority: 2,
-    title: 'Github Repositories',
+    title: 'GitHub Repositories',
     allowClickNav: false
   } as WizardStepConfig);
   steps.push({

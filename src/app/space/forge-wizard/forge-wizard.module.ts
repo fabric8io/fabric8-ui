@@ -18,6 +18,7 @@ import { ReviewStepComponent } from './import-pages/step5/review-step.component'
 import { ForgeErrorsComponent } from './components/forge-errors/forge-errors.component';
 import { FlowSelectorComponent } from './components/flow-selector/flow-selector.component';
 import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quickstart.component';
+import { ProjectInfoStepComponent } from './quickstart-pages/step2/project-info-step.component';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quick
     FlowSelectorComponent,
     SelectedItemsPipe,
     VisibleItemsPipe,
+    ProjectInfoStepComponent,
     OrganisationComponent,
     RepositoriesComponent,
     BuildConfigStepComponent,
