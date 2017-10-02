@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Input as GuiInput } from 'app/space/forge-wizard/gui.model';
-import { FormGroup } from "@angular/forms";
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'single-input',

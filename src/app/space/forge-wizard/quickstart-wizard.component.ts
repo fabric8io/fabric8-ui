@@ -1,10 +1,11 @@
 import {Component} from '@angular/core';
-import {WizardConfig, WizardStepConfig} from 'patternfly-ng';
 import {ForgeService} from './forge.service';
 import {AbstractWizard} from './abstract-wizard.component';
 import { ContextService } from '../../shared/context.service';
-import { Gui } from './gui.model';
+import { Gui, Input } from './gui.model';
 import { configureSteps } from './quickstart-wizard.config';
+import { Notifications } from 'ngx-base';
+import { CodebasesService } from '../create/codebases/services/codebases.service';
 
 @Component({
   selector: 'quickstart-wizard',
@@ -12,9 +13,12 @@ import { configureSteps } from './quickstart-wizard.config';
 })
 export class ForgeQuickstartComponent extends AbstractWizard {
 
-  constructor(forgeService: ForgeService, context: ContextService) {
-    super(forgeService, context);
-    this.endNextPoint = 'fabric8-new-project';
+  constructor(forgeService: ForgeService,
+              codebasesService: CodebasesService,
+              context: ContextService,
+              notifications: Notifications) {
+    super(forgeService, codebasesService, context, notifications);
+    this.endPoint = 'fabric8-new-project';
     this.steps = configureSteps();
     this.isLoading = true;
     this.EXECUTE_STEP_INDEX = this.steps[6].priority - 1;
@@ -35,16 +39,12 @@ export class ForgeQuickstartComponent extends AbstractWizard {
     wizardSteps[this.LAST_STEP].config.nextEnabled = false;
     wizardSteps[this.LAST_STEP].config.previousEnabled = false;
     wizardSteps.map(step => step.config.allowClickNav = false);
-    this.forgeService.executeStep('fabric8-import-git', this.history).then((gui: Gui) => {
-      // this.result = gui[6] as Input;
-      // let newGui = this.augmentStep(gui);
-      // this.isLoading = false;
-      // wizardSteps[this.LAST_STEP].config.nextEnabled = true;
+    this.forgeService.executeStep(this.endPoint, this.history).then((gui: Gui) => {
+      this.result = gui[5] as Input;
+      let newGui = this.augmentStep(gui);
+      this.isLoading = false;
+      wizardSteps[this.LAST_STEP].config.nextEnabled = true;
       console.log('ForgeQuickstartComponent::execute - response: ' + JSON.stringify(gui));
     });
-  }
-
-  reviewStep(): void {
-  // TODO
   }
 }

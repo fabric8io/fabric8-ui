@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { WizardEvent } from 'patternfly-ng';
 import { ForgeService } from 'app/space/forge-wizard/forge.service';
 import { Gui, Input, MetaData } from 'app/space/forge-wizard/gui.model';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
 import { Codebase } from '../create/codebases/services/codebase';
 import { ContextService } from '../../shared/context.service';
 import { Observable } from 'rxjs/Rx';
-import { NotificationType, Notification, Notifications } from 'ngx-base';
-import { AbstractWizard, flattenWizardSteps } from 'app/space/forge-wizard/abstract-wizard.component';
+import { Notifications } from 'ngx-base';
+import { AbstractWizard } from 'app/space/forge-wizard/abstract-wizard.component';
 import { configureSteps } from './import-wizard.config';
-import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'import-wizard',
@@ -18,14 +16,12 @@ import { isNullOrUndefined } from 'util';
 })
 export class ForgeImportWizardComponent extends AbstractWizard {
 
-  private result: Input;
-
   constructor(forgeService: ForgeService,
-              private codebasesService: CodebasesService,
+              codebasesService: CodebasesService,
               context: ContextService,
-              private notifications: Notifications) {
-    super(forgeService, context);
-    this.endNextPoint = 'fabric8-import-git';
+              notifications: Notifications) {
+    super(forgeService, codebasesService, context, notifications);
+    this.endPoint = 'fabric8-import-git';
     this.steps = configureSteps();
     this.isLoading = true;
     this.EXECUTE_STEP_INDEX = this.steps[6].priority - 1;
@@ -62,86 +58,37 @@ export class ForgeImportWizardComponent extends AbstractWizard {
     return this.codebasesService.addCodebase(spaceId, code);
   }
 
-  reviewStep(): void {
-    this.isLoading = true;
-    let space = this.currentSpace;
-    let codebases: Codebase[] = this.convertResultToCodebases(this.result);
-    let obs: Observable<Codebase>;
-    codebases.forEach(code => {
-      if (!obs) {
-        obs = this.addCodebaseDelegate(space.id, code);
-      } else {
-        obs = obs.concat(this.addCodebaseDelegate(space.id, code));
-      }
-    });
-    obs.subscribe(
-      codebase => {
-        console.log(`Successfully added codebase ${codebase.attributes.url}`);
-        // todo broadcast
-        // this._broadcaster.broadcast('codebaseAdded', codebase);
-        this.notifications.message(<Notification>{
-          message: `Your ${codebase.attributes.url} repository has been `
-            + `added to the ${this.currentSpace.attributes.name} space`,
-          type: NotificationType.SUCCESS
-        });
-      },
-      err => console.log(`Error adding codebase ${err}`),
-      () => {
-          console.log(`completed`);
-          this.isLoading = false;
-          // TODO Display error
-          this.onCancel.emit({});
-        });
-  }
+  // reviewStep(): void {
+  //   this.isLoading = true;
+  //   let space = this.currentSpace;
+  //   let codebases: Codebase[] = this.convertResultToCodebases(this.result);
+  //   let obs: Observable<Codebase>;
+  //   codebases.forEach(code => {
+  //     if (!obs) {
+  //       obs = this.addCodebaseDelegate(space.id, code);
+  //     } else {
+  //       obs = obs.concat(this.addCodebaseDelegate(space.id, code));
+  //     }
+  //   });
+  //   obs.subscribe(
+  //     codebase => {
+  //       console.log(`Successfully added codebase ${codebase.attributes.url}`);
+  //       // todo broadcast
+  //       // this._broadcaster.broadcast('codebaseAdded', codebase);
+  //       this.notifications.message(<Notification>{
+  //         message: `Your ${codebase.attributes.url} repository has been `
+  //           + `added to the ${this.currentSpace.attributes.name} space`,
+  //         type: NotificationType.SUCCESS
+  //       });
+  //     },
+  //     err => console.log(`Error adding codebase ${err}`),
+  //     () => {
+  //         console.log(`completed`);
+  //         this.isLoading = false;
+  //         // TODO Display error
+  //         this.onCancel.emit({});
+  //       });
+  // }
 
-  private augmentStep(gui: Gui) {
-    let newGui = this.convertResultToGui(this.result);
-    this.history.add(newGui);
-    return newGui;
-  }
-
-  private convertResultToGui(result: Input): Gui {
-    let newGui = new Gui();
-    newGui.metadata = {name: 'Review'} as MetaData;
-    newGui.inputs = [];
-    if (this.result.gitRepositories) {
-      this.result.gitRepositories.forEach(repo => {
-        let input = {
-          label: repo.url,
-          name: repo.url,
-          valueType: 'java.lang.String',
-          enabled: false,
-          required: false,
-          display: {
-            namespace: (this.result as any).namespace,
-            buildConfigName: (this.result as any).buildConfigName,
-            cheStackId: (this.result as any).cheStackId
-            // TODO fix it che stack id should be returned per repo
-            // https://github.com/fabric8io/fabric8-generator/issues/54
-          }
-        } as Input;
-        newGui.inputs.push(input);
-      });
-    }
-    return newGui;
-  }
-
-  private convertResultToCodebases(result: Input): Codebase[] {
-    let codebases: Codebase[] = [];
-    if (this.result.gitRepositories) {
-      this.result.gitRepositories.forEach(repo => {
-        let codebase = {
-          attributes: {
-            type: 'git',
-            url: repo.url,
-            stackId: repo.stackId
-          },
-          type: 'codebases'
-        } as Codebase;
-        codebases.push(codebase);
-      });
-    }
-    return codebases;
-  }
 }
 

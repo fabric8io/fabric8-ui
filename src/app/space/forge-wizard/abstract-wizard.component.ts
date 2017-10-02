@@ -6,28 +6,35 @@ import {
   WizardStepConfig
 } from 'patternfly-ng';
 import {History} from 'app/space/forge-wizard/history.component';
-import {Gui, Input} from './gui.model';
+import { Gui, Input, MetaData } from './gui.model';
 import { ContextService } from '../../shared/context.service';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { isNullOrUndefined } from 'util';
 import { ForgeService } from './forge.service';
+import { Codebase } from '../create/codebases/services/codebase';
+import { Observable } from 'rxjs';
+import { CodebasesService } from '../create/codebases/services/codebases.service';
+import { NotificationType, Notification, Notifications } from 'ngx-base';
 
 export abstract class AbstractWizard implements OnInit {
   @ViewChild('wizard') wizard: WizardComponent;
 
+  result: Input;
   form: FormGroup = new FormGroup({});
   history: History = new History();
   config: WizardConfig;
   steps: WizardStepConfig[];
   currentSpace: Space;
   isLoading = true;
-  endNextPoint: string;
+  endPoint: string;
   EXECUTE_STEP_INDEX: number;
   LAST_STEP: number;
   @Output('onCancel') onCancel = new EventEmitter();
 
   constructor(public forgeService: ForgeService,
-              public context: ContextService) {
+              public codebasesService: CodebasesService,
+              public context: ContextService,
+              public notifications: Notifications) {
     this.steps = [];
     this.config = {
       title: 'Application Wizard',
@@ -53,7 +60,38 @@ export abstract class AbstractWizard implements OnInit {
   }
 
   abstract executeStep(steps: WizardStep[]);
-  abstract reviewStep();
+
+  reviewStep(): void {
+    this.isLoading = true;
+    let space = this.currentSpace;
+    let codebases: Codebase[] = this.convertResultToCodebases(this.result);
+    let obs: Observable<Codebase>;
+    codebases.forEach(code => {
+      if (!obs) {
+        obs = this.addCodebaseDelegate(space.id, code);
+      } else {
+        obs = obs.concat(this.addCodebaseDelegate(space.id, code));
+      }
+    });
+    obs.subscribe(
+      codebase => {
+        console.log(`Successfully added codebase ${codebase.attributes.url}`);
+        // todo broadcast
+        // this._broadcaster.broadcast('codebaseAdded', codebase);
+        this.notifications.message(<Notification>{
+          message: `Your ${codebase.attributes.url} repository has been `
+          + `added to the ${this.currentSpace.attributes.name} space`,
+          type: NotificationType.SUCCESS
+        });
+      },
+      err => console.log(`Error adding codebase ${err}`),
+      () => {
+        console.log(`completed`);
+        this.isLoading = false;
+        // TODO Display error
+        this.onCancel.emit({});
+      });
+  }
 
   nextClicked($event: WizardEvent): void {
     if (this.history.stepIndex === this.EXECUTE_STEP_INDEX + 1) { // execute
@@ -119,7 +157,7 @@ export abstract class AbstractWizard implements OnInit {
 
   loadUi(): Promise<Gui> {
     this.isLoading = true;
-    return this.forgeService.loadGui(this.endNextPoint, this.history).then((gui: Gui) => {
+    return this.forgeService.loadGui(this.endPoint, this.history).then((gui: Gui) => {
       let from = this.history.stepIndex;
       this.history.add(gui);
       let to = this.history.stepIndex;
@@ -154,6 +192,59 @@ export abstract class AbstractWizard implements OnInit {
     return new FormGroup(group);
   }
 
+  protected augmentStep(gui: Gui) {
+    let newGui = this.convertResultToGui(this.result);
+    this.history.add(newGui);
+    return newGui;
+  }
+
+  protected convertResultToGui(result: Input): Gui {
+    let newGui = new Gui();
+    newGui.metadata = {name: 'Review'} as MetaData;
+    newGui.inputs = [];
+    if (this.result.gitRepositories) {
+      this.result.gitRepositories.forEach(repo => {
+        let input = {
+          label: repo.url,
+          name: repo.url,
+          valueType: 'java.lang.String',
+          enabled: false,
+          required: false,
+          display: {
+            namespace: (this.result as any).namespace,
+            buildConfigName: (this.result as any).buildConfigName,
+            cheStackId: (this.result as any).cheStackId
+            // TODO fix it che stack id should be returned per repo
+            // https://github.com/fabric8io/fabric8-generator/issues/54
+          }
+        } as Input;
+        newGui.inputs.push(input);
+      });
+    }
+    return newGui;
+  }
+
+  protected convertResultToCodebases(result: Input): Codebase[] {
+    let codebases: Codebase[] = [];
+    if (this.result.gitRepositories) {
+      this.result.gitRepositories.forEach(repo => {
+        let codebase = {
+          attributes: {
+            type: 'git',
+            url: repo.url,
+            stackId: repo.stackId
+          },
+          type: 'codebases'
+        } as Codebase;
+        codebases.push(codebase);
+      });
+    }
+    return codebases;
+  }
+  protected addCodebaseDelegate(spaceId: string, code: Codebase): Observable<Codebase> {
+    return this.codebasesService.addCodebase(spaceId, code);
+  }
+
   private subscribeFormHistoryUpdate(index: number, wizardSteps = this.wizard.steps) {
     this.form.valueChanges.subscribe(values => {
       wizardSteps[index].config.nextEnabled = this.form.valid;
@@ -163,6 +254,7 @@ export abstract class AbstractWizard implements OnInit {
       this.history.updateFormValues(values);
     });
   }
+
 
 }
 
