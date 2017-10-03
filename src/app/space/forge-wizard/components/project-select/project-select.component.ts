@@ -1,6 +1,6 @@
 import {Component, forwardRef, Input, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {DefaultValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Input as Field, Option} from '../../gui.model';
 
 const PROJECTSELECT_VALUE_ACCESSOR: any = {
@@ -15,25 +15,14 @@ const PROJECTSELECT_VALUE_ACCESSOR: any = {
   templateUrl: './project-select.component.html',
   styleUrls: ['./project-select.component.less']
 })
-export class ProjectSelect implements ControlValueAccessor {
+export class ProjectSelect extends DefaultValueAccessor {
   @Input() input: Field;
   model: string;
-
-  onModelChange: Function = (_: any) => {  };
-  onModelTouched: Function = () => {  };
 
   writeValue(value: any): void {
     if (value !== undefined) {
       this.model = value;
     }
-  }
-
-  registerOnChange(fn: Function): void {
-    this.onModelChange = fn;
-  }
-
-  registerOnTouched(fn: Function): void {
-    this.onModelTouched = fn;
   }
 
   className(option: Option) {
@@ -48,7 +37,7 @@ export class ProjectSelect implements ControlValueAccessor {
 
   setSelected(option: Option) {
     this.model = option.id;
-    this.onModelChange(this.model);
+    this.onChange(this.model);
   }
 
 }
