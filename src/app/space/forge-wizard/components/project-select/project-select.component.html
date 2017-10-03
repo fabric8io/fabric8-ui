@@ -2,7 +2,7 @@
   <div class="row row-cards-pf">
     <div class="col-xs-12 col-sm-4" *ngFor="let option of input.valueChoices">
       <div [attr.id]="option.id" [class.active]="isSelected(option)" (click)="setSelected(option)"
-        style="min-height:160px" class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select">
+        style="min-height:245px" class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select">
         <div class="ribbon ribbon-top-right" *ngIf="className(option) === 'Node'"><span>technology preview</span></div>
         <div class="card-pf-body">
           <div class="card-pf-top-element icon {{className(option)}}">

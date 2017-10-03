@@ -1,10 +1,8 @@
 @import (reference) '../../../../../assets/stylesheets/shared/osio.less';
-@icon-path: '../../../../../assets/stylesheets/shared/_icons.less';
-
+@icon-path: '/assets/icon';
 .icon {
   background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-position: center;
+  background: no-repeat center;
   margin: auto;
   width: 80px;
   height: 80px;
@@ -12,19 +10,24 @@
 
 .Node {
   .icon;
+  .icon-stack.icon-stack-nodejs;
   width: 120px;
 }
 
 .Spring {
   .icon;
+  .icon-stack.icon-stack-spring;
 }
 
 .WildFly {
   .icon;
+  .icon-stack.icon-stack-wildfly;
 }
 
-.Eclipse {
+.Vert-x {
   .icon;
+  .icon-stack.icon-stack-vertx;
+  background-position-y: center;
 }
 
 @red_berry: #8e0000;

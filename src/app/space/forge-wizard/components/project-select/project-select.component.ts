@@ -1,4 +1,4 @@
-import {Component, DoCheck, forwardRef, Input, NgModule} from '@angular/core';
+import {Component, forwardRef, Input, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Input as Field, Option} from '../../gui.model';
@@ -15,7 +15,7 @@ const PROJECTSELECT_VALUE_ACCESSOR: any = {
   templateUrl: './project-select.component.html',
   styleUrls: ['./project-select.component.less']
 })
-export class ProjectSelect implements DoCheck, ControlValueAccessor {
+export class ProjectSelect implements ControlValueAccessor {
   @Input() input: Field;
   model: string;
 
@@ -36,13 +36,10 @@ export class ProjectSelect implements DoCheck, ControlValueAccessor {
     this.onModelTouched = fn;
   }
 
-  ngDoCheck() {
-  }
-
   className(option: Option) {
     let index = option.id.indexOf(' ');
     index = index === -1 ? option.id.indexOf('.') : index;
-    return option.id.substr(0, index);
+    return option.id.substr(0, index).replace(/\./, '-');
   }
 
   isSelected(option: Option): boolean {
