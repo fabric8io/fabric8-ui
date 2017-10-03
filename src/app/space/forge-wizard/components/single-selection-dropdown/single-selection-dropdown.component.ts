@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Input as GuiInput, Option } from 'app/space/forge-wizard/gui.model';
+import { Input as GuiInput } from 'app/space/forge-wizard/gui.model';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -11,6 +11,7 @@ export class SingleSelectionDropDownComponent implements OnInit {
 
   @Input() field: GuiInput;
   @Input() form: FormGroup;
+  @Input() inline: boolean;
   ngOnInit() {
     console.log('::::::::::::::Single-Selection-Dropdown field ngInit' + JSON.stringify(this.field));
     this.field.display = {open: false};
