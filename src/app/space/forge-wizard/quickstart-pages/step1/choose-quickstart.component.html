@@ -2,20 +2,7 @@
   <div class="row" [formGroup]="form">
     <div class="col-xs-12">
       <div class="form-horizontal">
-        <div *ngFor="let input of gui.inputs">
-          <div *ngFor="let option of input.valueChoices">
-            <span>
-              <label>
-                <h3>
-                  <input [name]="input.name" type="radio" [formControlName]="input.name" [value]="option.id"/>
-                  {{option.id}}
-                </h3>
-              </label>
-            </span>
-            <div [innerHTML]="option.description" style="margin-left:18px"></div>
-          </div>
-        </div>
-
+        <ob-project-select [input]="gui.inputs[0]" [formControlName]="gui.inputs[0].name"></ob-project-select>
         <forge-errors [field]="gui"></forge-errors>
       </div>
     </div>

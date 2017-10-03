@@ -20,12 +20,14 @@ import { FlowSelectorComponent } from './components/flow-selector/flow-selector.
 import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quickstart.component';
 import { ProjectInfoStepComponent } from './quickstart-pages/step2/project-info-step.component';
 import { PipelineQuickstartStepComponent } from './quickstart-pages/step3/pipeline-quickstart-step.component';
+import { ProjectSelectModule } from './components/project-select/project-select';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    WizardModule
+    WizardModule,
+    ProjectSelectModule
   ],
   declarations: [
     ForgeImportWizardComponent,
