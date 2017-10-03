@@ -1,58 +1,23 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { Input as GuiInput, Option } from "app/space/forge-wizard/gui.model";
-import { FormGroup, ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { Component, Input, OnInit } from '@angular/core';
+import { Input as GuiInput, Option } from 'app/space/forge-wizard/gui.model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'single-selection-dropdown',
   templateUrl: './single-selection-dropdown.component.html',
-  styleUrls: [ './single-selection-dropdown.component.less' ],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SingleSelectionDropDownComponent),
-      multi: true
-    }
-  ]
+  styleUrls: [ './single-selection-dropdown.component.less' ]
 })
-export class SingleSelectionDropDownComponent implements ControlValueAccessor {
+export class SingleSelectionDropDownComponent implements OnInit {
 
   @Input() field: GuiInput;
-  model: string;
-  showDropdown: boolean = false;
-
-  onModelChange: Function = (_: any) => {
-  };
-
-  onModelTouched: Function = () => {
-  };
-
-  constructor() {}
-
-  writeValue(value: any): void {
-    if (value !== undefined) {
-      this.model = value;
-    }
+  @Input() form: FormGroup;
+  ngOnInit() {
+    console.log('::::::::::::::Single-Selection-Dropdown field ngInit' + JSON.stringify(this.field));
+    this.field.display = {open: false};
   }
-
-  registerOnChange(fn: any): void {
-    this.onModelChange = fn;
+  selected(choice) {
+    console.log('Selected ' + JSON.stringify(choice));
+    this.field.value = choice.id;
+    this.field.display.open = false;
   }
-
-  registerOnTouched(fn: any): void {
-    this.onModelTouched = fn;
-  }
-
-  setSelected(option: Option) {
-    this.model = option.id;
-    this.onModelChange(this.model);
-  }
-
-  isSelected(option: Option): boolean {
-    return this.model === option.id;
-  }
-
-  toggleDropdown(): void {
-    this.showDropdown = !this.showDropdown;
-  }
-
 }
