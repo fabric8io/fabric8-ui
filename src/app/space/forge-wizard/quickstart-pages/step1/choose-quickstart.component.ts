@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
-import {Gui, Option} from '../../gui.model';
+import {Gui, Input as ForgeInput, Option} from '../../gui.model';
 import {Filter, FilterConfig, FilterEvent} from 'patternfly-ng';
 
 @Component({
@@ -13,7 +13,7 @@ export class ChooseQuickstartComponent implements OnInit {
 
   filterConfig: FilterConfig;
   filtersText: string = '';
-  private allItems: Option[];
+  private filteredInput: ForgeInput;
 
   ngOnInit(): void {
     this.filterConfig = {
@@ -24,8 +24,8 @@ export class ChooseQuickstartComponent implements OnInit {
         type: 'text'
       }]
     };
-
-    this.allItems = this.valueChoices.slice(0);
+    this.filteredInput = new ForgeInput(this.gui.inputs[0]);
+    this.reset();
   }
 
   filterChanged($event: FilterEvent): void {
@@ -37,25 +37,17 @@ export class ChooseQuickstartComponent implements OnInit {
   }
 
   applyFilters(filters: Filter[]): void {
-    this.valueChoices = [];
+    this.filteredInput.valueChoices = [];
     if (filters && filters.length > 0) {
-      this.allItems.forEach((item) => {
+      this.gui.inputs[0].valueChoices.forEach((item) => {
         if (this.matchesFilters(item, filters)) {
-          this.valueChoices.push(item);
+          this.filteredInput.valueChoices.push(item);
         }
       });
     } else {
-      this.valueChoices = this.allItems;
+      this.reset();
     }
-    this.filterConfig.resultsCount = this.valueChoices.length;
-  }
-
-  get valueChoices(): Option[] {
-    return this.gui.inputs[0].valueChoices;
-  }
-
-  set valueChoices(valueChoices: Option[]) {
-    this.gui.inputs[0].valueChoices = valueChoices;
+    this.filterConfig.resultsCount = this.filteredInput.valueChoices.length;
   }
 
   matchesFilter(item: Option, filter: Filter): boolean {
@@ -75,6 +67,10 @@ export class ChooseQuickstartComponent implements OnInit {
       }
     });
     return matches;
+  }
+
+  private reset() {
+    this.filteredInput.valueChoices = this.gui.inputs[0].valueChoices.slice(0);
   }
 }
 
