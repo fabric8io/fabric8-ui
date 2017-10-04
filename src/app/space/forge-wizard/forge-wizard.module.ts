@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeImportWizardComponent } from 'app/space/forge-wizard/import-wizard.component';
 import { ForgeQuickstartComponent } from 'app/space/forge-wizard/quickstart-wizard.component';
-import { WizardModule } from 'patternfly-ng';
+import { WizardModule, FilterModule } from 'patternfly-ng';
 import { OrganisationComponent } from 'app/space/forge-wizard/import-pages/step1/organisation-step.component';
 import { PipelineViewComponent } from 'app/space/forge-wizard/components/pipeline-view/pipeline-view.component';
 import { SingleSelectionDropDownComponent } from 'app/space/forge-wizard/components/single-selection-dropdown/single-selection-dropdown.component';
@@ -27,6 +27,7 @@ import { ProjectSelectModule } from './components/project-select/project-select.
     CommonModule,
     ReactiveFormsModule,
     WizardModule,
+    FilterModule,
     ProjectSelectModule
   ],
   declarations: [
