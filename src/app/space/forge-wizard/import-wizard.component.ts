@@ -45,6 +45,8 @@ export class ForgeImportWizardComponent extends AbstractWizard {
     wizardSteps[this.LAST_STEP].config.nextEnabled = false;
     wizardSteps[this.LAST_STEP].config.previousEnabled = false;
     wizardSteps.map(step => step.config.allowClickNav = false);
+    // special case of last step, you can't navigate using step navigation
+    this.wizard.steps.map(step => step.config.allowClickNav = false);
     this.forgeService.executeStep('fabric8-import-git', this.history).then((gui: Gui) => {
       this.result = gui[6] as Input;
       let newGui = this.augmentStep(gui);
@@ -57,38 +59,6 @@ export class ForgeImportWizardComponent extends AbstractWizard {
   addCodebaseDelegate(spaceId: string, code: Codebase): Observable<Codebase> {
     return this.codebasesService.addCodebase(spaceId, code);
   }
-
-  // reviewStep(): void {
-  //   this.isLoading = true;
-  //   let space = this.currentSpace;
-  //   let codebases: Codebase[] = this.convertResultToCodebases(this.result);
-  //   let obs: Observable<Codebase>;
-  //   codebases.forEach(code => {
-  //     if (!obs) {
-  //       obs = this.addCodebaseDelegate(space.id, code);
-  //     } else {
-  //       obs = obs.concat(this.addCodebaseDelegate(space.id, code));
-  //     }
-  //   });
-  //   obs.subscribe(
-  //     codebase => {
-  //       console.log(`Successfully added codebase ${codebase.attributes.url}`);
-  //       // todo broadcast
-  //       // this._broadcaster.broadcast('codebaseAdded', codebase);
-  //       this.notifications.message(<Notification>{
-  //         message: `Your ${codebase.attributes.url} repository has been `
-  //           + `added to the ${this.currentSpace.attributes.name} space`,
-  //         type: NotificationType.SUCCESS
-  //       });
-  //     },
-  //     err => console.log(`Error adding codebase ${err}`),
-  //     () => {
-  //         console.log(`completed`);
-  //         this.isLoading = false;
-  //         // TODO Display error
-  //         this.onCancel.emit({});
-  //       });
-  // }
 
 }
 

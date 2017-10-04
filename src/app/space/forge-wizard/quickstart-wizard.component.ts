@@ -39,6 +39,8 @@ export class ForgeQuickstartComponent extends AbstractWizard {
     wizardSteps[this.LAST_STEP].config.nextEnabled = false;
     wizardSteps[this.LAST_STEP].config.previousEnabled = false;
     wizardSteps.map(step => step.config.allowClickNav = false);
+    // special case of last step, you can't navigate using step navigation
+    this.wizard.steps.map(step => step.config.allowClickNav = false);
     this.forgeService.executeStep(this.endPoint, this.history).then((gui: Gui) => {
       this.result = gui[5] as Input;
       let newGui = this.augmentStep(gui);

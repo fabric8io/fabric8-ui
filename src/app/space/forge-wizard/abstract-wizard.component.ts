@@ -3,7 +3,7 @@ import { EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   WizardComponent, WizardConfig, WizardEvent, WizardStep, WizardStepComponent,
-  WizardStepConfig
+  WizardStepConfig, WizardSubstepComponent
 } from 'patternfly-ng';
 import {History} from 'app/space/forge-wizard/history.component';
 import { Gui, Input, MetaData } from './gui.model';
@@ -129,14 +129,19 @@ export abstract class AbstractWizard implements OnInit {
       return;
     }
     if (from > to ) {
-      // moving backward, all steps after this one should not be navigable
-      wizardSteps.filter(step => step.config.priority > to).map(step => step.config.allowClickNav = false);
       wizardSteps.filter(step => step.config.priority > to).map(step => {
+        // moving backward, all steps after this one should not be navigable
+        step.config.allowClickNav = false;
+        let parentStep = getParentStep(this.wizard.steps, step);
+        parentStep.config.allowClickNav = false;
+        // next/previous button
         step.config.nextEnabled = false;
       });
     } else {
       // moving forward (only one step at a time with next)
       wizardSteps[from].config.allowClickNav = true;
+      let parentStep = getParentStep(this.wizard.steps, wizardSteps[from]);
+      parentStep.config.allowClickNav = true;
       if (this.currentGui.messages && this.currentGui.messages.length > 0) {
         // server-side error, go back to previous
         serverSideErrors = this.currentGui.messages.filter(msg => msg.severity === 'ERROR');
@@ -273,4 +278,20 @@ export function flattenWizardSteps(wizard: WizardComponent): WizardStep[] {
     }
   });
   return flatWizard;
+}
+
+export function getParentStep(wizardSteps: WizardStep[], subStep: WizardStep): WizardStep {
+  let found: WizardStep;
+  wizardSteps.forEach((step: WizardStepComponent) => {
+    if (step === subStep) {
+      found = step;
+    }
+    if (step.hasSubsteps) {
+      const elt = step.steps.find(sub => sub === subStep);
+      if (elt) {
+        found = step;
+      }
+    }
+  });
+  return found;
 }
