@@ -10,3 +10,6 @@ src/assets/stylesheets/shared/_formulas.less
 
 # Ignore the Space Wizard
 /src/app/space/wizard
+
+# Ignore the Forge Wizard
+/src/app/space/forge-wizard
