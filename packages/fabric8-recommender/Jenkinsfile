@@ -7,7 +7,6 @@ fabric8UINode{
   ws {
     checkout scm
     readTrusted 'release.groovy'
-    sh "git remote set-url origin git@github.com:${org}/${repo}.git"
     def pipeline = load 'release.groovy'
 
     if (utils.isCI()){
@@ -15,6 +14,9 @@ fabric8UINode{
         pipeline.ci()
       }
     } else if (utils.isCD()){
+      sh "git checkout master"
+      sh "git pull"
+      sh "git remote set-url origin git@github.com:${org}/${repo}.git"
       def branch
       container('ui'){
           branch = utils.getBranch()
