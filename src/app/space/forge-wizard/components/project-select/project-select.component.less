@@ -57,15 +57,15 @@
     background-color: @red_base;
     box-shadow: 0 5px 10px @black_10;
     color: @white;
-    font: 700 11px/1 'Overpass', sans-serif;
+    font: 700 11px/1 Overpass, sans-serif;
     text-shadow: 0 1px 1px @black_20;
     text-align: center;
   }
 }
-.ribbon::before {
+.ribbon:before {
   .ribbon-base;
 }
-.ribbon::after {
+.ribbon:after {
   .ribbon-base;
 }
 .ribbon-top-right {
@@ -76,13 +76,13 @@
     top: 30px;
     transform: rotate(45deg);
   }
-  &::before {
+  &:before {
     border-top-color: transparent;
     border-right-color: transparent;
     top: 0;
     left: 0;
   }
-  &::after {
+  &:after {
     border-top-color: transparent;
     border-right-color: transparent;
     bottom: 0;
