@@ -22,7 +22,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   constructor(private modalService: BsModalService,
     private contexts: Contexts
   ) {
-
+    this.selectedFlow = 'selectFlow';
   }
   ngOnInit() {
     this.contextSubscription = this.contexts.current.subscribe(val => {
@@ -36,7 +36,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.selectedFlow = '';
+    this.selectedFlow = 'selectFlow';
     this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
   }
 
