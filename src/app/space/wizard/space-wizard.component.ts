@@ -133,10 +133,12 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
     ) {
       console.log('Wizard complete and already in space context, no need to move.');
     } else {
-      this.router.navigate([
-        this.currentSpace.relationalData.creator.attributes.username,
-        this.currentSpace.attributes.name
-      ]);
+      if (this.currentSpace) {
+        this.router.navigate([
+          this.currentSpace.relationalData.creator.attributes.username,
+          this.currentSpace.attributes.name
+        ]);
+      }
     }
     if (this.host) {
       this.host.close();
