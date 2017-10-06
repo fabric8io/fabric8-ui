@@ -1,14 +1,12 @@
 <div class="wizard">
 <form class="wizard-step active" role="form" #spaceForm="ngForm" (ngSubmit)="createSpace()" novalidate>
-  <header class="container-fluid">
-    <div class="row">
-      <div class="col-xs-12 wizard-step-title">
-        <h3>
-          <strong>Create Space</strong>
-        </h3>
-      </div>
-    </div>
-  </header>
+  <div class="modal-header">
+    <button class="close" aria-label="Close" type="button"
+            (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <dt class="modal-title">Create Space</dt>
+  </div>
   <section class="container-fluid padding-top-standard-offset">
     <div class="row">
       <div class="col-xs-12">
@@ -74,22 +72,5 @@
     </div>
   </footer>
 </form>
-
-
-  <!-- <space-configurator class="wizard-step"> </space-configurator> -->
-
-<!--
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeQuickStart})"
-    forgeCommandName="{{configurator.forgeCommands.forgeQuickStart}}" workflowStepName="{{configurator.workflowSteps.forgeQuickStart}}" [workflow]="workflow">
-  </forge-app-generator>
-
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeImportGit})"
-    forgeCommandName="{{configurator.forgeCommands.forgeImportGit}}" workflowStepName="{{configurator.workflowSteps.forgeImportGit}}" [workflow]="workflow">
-  </forge-app-generator>
-
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeStarter})"
-    forgeCommandName="{{configurator.forgeCommands.forgeStarter}}" workflowStepName="{{configurator.workflowSteps.forgeStarter}}" [workflow]="workflow">
-  </forge-app-generator> -->
-
 
 </div>

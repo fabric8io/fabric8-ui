@@ -24,7 +24,8 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule }       from 'angular2-moment';
 import { PlannerModule }      from 'fabric8-planner';
 import { RouterModule }       from '@angular/router';
-import { ModalModule } from 'ngx-modal';
+// import { ModalModule } from 'ngx-modal';
+import { ModalModule} from 'ngx-bootstrap/modal';
 import {
   // Base functionality for the runtime console
   KubernetesStoreModule,
@@ -116,8 +117,9 @@ import { SpaceWizardModule }         from './space/wizard/space-wizard.module';
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
-import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";
+import { Fabric8UISpaceNamespace } from "./shared/runtime-console/fabric8-ui-space-namespace.service";
 import { GettingStartedService } from './getting-started/services/getting-started.service';
+import { ForgeWizardModule } from "./space/forge-wizard/forge-wizard.module";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -150,12 +152,13 @@ export type StoreType = {
       prefix: 'fabric8',
       storageType: 'localStorage'
     }),
-    ModalModule,
+    ModalModule.forRoot(),
     MomentModule,
     ReactiveFormsModule,
     RestangularModule,
     RouterModule,
     SpaceWizardModule,
+    ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,
     PatternFlyNgModule,

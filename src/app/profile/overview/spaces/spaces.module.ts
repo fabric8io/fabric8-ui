@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 
 import { InfiniteScrollModule, WidgetsModule } from 'ngx-widgets';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
-import { ModalModule } from 'ngx-modal';
+//import { ModalModule } from 'ngx-modal';
 import { NgArrayPipesModule } from 'angular-pipes';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SpaceWizardModule } from '../../../space/wizard/space-wizard.module';
 import { SpacesComponent } from './spaces.component';
+import {ForgeWizardModule} from '../../../space/forge-wizard/forge-wizard.module';
 
 @NgModule({
   imports: [
@@ -18,10 +19,11 @@ import { SpacesComponent } from './spaces.component';
     Fabric8WitModule,
     FormsModule,
     InfiniteScrollModule,
-    ModalModule,
+    ModalModule.forRoot(),
     WidgetsModule,
     NgArrayPipesModule,
-    SpaceWizardModule
+    SpaceWizardModule,
+    ForgeWizardModule
   ],
   declarations: [SpacesComponent],
   exports: [SpacesComponent],

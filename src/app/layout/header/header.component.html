@@ -3,7 +3,7 @@
   <nav class="navbar navbar-default navbar-inverse" role="navigation">
     <img src="../../../assets/images/openshift-io_white.png" class="navbar-getting-started-logo" />
      <!-- user profile dropdown -->
-        <ul id="getting_started_header_rightDropdown" class="nav navbar-nav navbar-right">          
+        <ul id="getting_started_header_rightDropdown" class="nav navbar-nav navbar-right">
           <li class="login-block">
             <a *ngIf="!loggedInUser" (click)="login();">
             <span class="login-block-logged-out-user">
@@ -23,7 +23,7 @@
               <span class="caret"></span>
             </div>
             </a>
-            <ul class="dropdown-menu" *dropdownMenu>             
+            <ul class="dropdown-menu" *dropdownMenu>
               <!--li class="divider"></li-->
               <li id="getting_started_header_logout">
                 <a *ngIf="loggedInUser" (click)="logout();" class="pointer">
@@ -81,7 +81,7 @@
               </li>
               <li class="divider"></li>
               <li id="header_createSpace">
-                <a (click)="spaceWizard.open()">
+                <a (click)="openForgeWizard(spaceWizard)">
                 <span class="nav-item-icon">
                   <i class="pficon pficon-add-circle-o"></i>
                 </span>
@@ -183,11 +183,12 @@
       </div> <!-- .navbar-collapse -->
     </div> <!-- /.container-fluid -->
   </nav>
-  <modal #spaceWizard modalClass="modal-lg chromeless-modal" >
-    <modal-content class="chromeless-modal-content">
-      <space-wizard [host]="spaceWizard"></space-wizard>
-    </modal-content>
-  </modal>
+  <ng-template #spaceWizard>
+    <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
+    <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space" [style.display]="selectedFlow !== 'selectFlow' ? 'none': ''"></flow-selector>
+    <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
+    <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
+  </ng-template>
   <fab-about-modal #aboutModal>
   </fab-about-modal>
 </ng-template>
