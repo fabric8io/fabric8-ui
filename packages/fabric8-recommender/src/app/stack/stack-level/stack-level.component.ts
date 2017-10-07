@@ -4,8 +4,8 @@ import {UserStackInfoModel, ComponentInformationModel} from '../models/stack-rep
 
 @Component({
     selector: 'stack-level-information',
-    templateUrl: './stack-level.component.html',
     styleUrls: ['./stack-level.component.less'],
+    templateUrl: './stack-level.component.html'
 })
 
 export class StackLevelComponent {

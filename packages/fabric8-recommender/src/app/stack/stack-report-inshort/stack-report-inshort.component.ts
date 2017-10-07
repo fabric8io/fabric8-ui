@@ -7,10 +7,10 @@ import {StackReportModel, ResultInformationModel, UserStackInfoModel, Recommenda
 
 @Component({
     selector: 'stack-report-inshort',
-    templateUrl: './stack-report-inshort.component.html',
     providers: [StackAnalysesService],
     encapsulation: ViewEncapsulation.None,
     styleUrls: ['./stack-report-inshort.component.less'],
+    templateUrl: './stack-report-inshort.component.html'
 })
 
 export class StackReportInShortComponent implements OnChanges {

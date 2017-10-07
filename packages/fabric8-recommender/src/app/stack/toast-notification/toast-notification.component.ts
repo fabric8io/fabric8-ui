@@ -2,8 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'fab-toast-notification',
-  templateUrl: './toast-notification.component.html',
-  styleUrls: ['./toast-notification.component.less']
+  styleUrls: ['./toast-notification.component.less'],
+  templateUrl: './toast-notification.component.html'
 })
 export class ToastNotificationComponent {
 

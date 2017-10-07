@@ -9,9 +9,9 @@ import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 
 @Component({
     selector: 'component-level-information',
-    templateUrl: './component-level.component.html',
     styleUrls: ['./component-level.component.less'],
     providers: [AddWorkFlowService],
+    templateUrl: './component-level.component.html'
 })
 
 export class ComponentLevelComponent implements OnChanges {
@@ -189,12 +189,15 @@ export class ComponentLevelComponent implements OnChanges {
         };
 
         // TODO form data to be shared with recommender object
+        let titleHdr: string = '';
         if (recommender && recommender.hasOwnProperty('isChild') && recommender['isChild']) {
             message = `Stack analysis has identified alternate components for **${recommender.parentName}**.
             You have chosen to replace **${recommender.parentName}** with **${recommender.name}** and version: **${recommender.recommended_version}** in your application stack`;
+            titleHdr = `Alternate components for ${recommender.parentName}`;
         } else {
             message = `Stack analysis has identified some additional components for your application stack.
             You have chosen to add **${recommender.name}** with **${recommender.recommended_version}** to your application stack`;
+            titleHdr = `Add ${recommender.name} to your application stack`;
         }
         let description: string = message;
         let codebase: any = codebaseobj;
@@ -208,7 +211,7 @@ export class ComponentLevelComponent implements OnChanges {
         description += '\n\n **Filename:** ' + codebase['codebase']['filename'];
         description += '\n\n **Line Number:**' + codebase['codebase']['linenumber'];
         let item: any = {
-            title: recommender['action'],
+            title: titleHdr,
             description: description,
             markup: 'Markdown',
             codebase: codebase,
