@@ -19,12 +19,12 @@
   <div [formGroup]="form" [ngSwitch]="currentGui.metadata?.name">
     <pfng-wizard-step [config]="steps[0]">
       <pfng-wizard-substep [config]="steps[3]">
-      <span *ngSwitchCase="'io.fabric8.forge.generator.github.GithubImportPickOrganisationStep'">
+      <span *ngSwitchCase="'io.fabric8.forge.generator.github.GitHubImportPickOrganisationStep'">
         <organisation-step [gui]="currentGui" [form]="form"></organisation-step>
       </span>
       </pfng-wizard-substep>
       <pfng-wizard-substep [config]="steps[4]">
-      <span *ngSwitchCase="'io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep'">
+      <span *ngSwitchCase="'io.fabric8.forge.generator.github.GitHubImportPickRepositoriesStep'">
         <repositories-step [gui]= "currentGui" [form]="form"></repositories-step>
       </span>
       </pfng-wizard-substep>
