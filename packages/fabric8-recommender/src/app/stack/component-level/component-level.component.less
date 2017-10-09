@@ -1,6 +1,9 @@
 @import (reference) '../../../assets/stylesheets/shared/main.less';
 
 .component-information {
+  & > .table-responsive {
+    overflow: visible;
+  }
   table {
     font-size: 13px;
     table-layout: fixed;
@@ -140,6 +143,9 @@
     /* stylelint-disable */
     background: #ed7b01 !important;
     color: @color-pf-white !important;
+    width: 10px;
+    display: inline-block;
+    text-align: center;
     /* stylelint-enable */
     &:after {
       content: 'L';
@@ -149,6 +155,9 @@
     /* stylelint-disable */
     background: @color-pf-red-100 !important;
     color: @color-pf-white !important;
+    width: 10px;
+    display: inline-block;
+    text-align: center;
     /* stylelint-enable */
     &:after {
       content: 'L';

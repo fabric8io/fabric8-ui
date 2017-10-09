@@ -1,13 +1,13 @@
 export class StackReportModel {
     finished_at: string;
+    release: string;
     request_id: string;
     result: Array<ResultInformationModel>;
     started_at: string;
+    version: string;
 }
 
 export class ResultInformationModel {
-    audit: AuditInformationModel;
-    release: string;
     manifest_name: string;
     manifest_file_path: string;
     recommendation: RecommendationsModel;
@@ -23,6 +23,8 @@ export class AuditInformationModel {
 export class RecommendationsModel {
     alternate: Array<ComponentInformationModel>;
     companion: Array<ComponentInformationModel>;
+    input_stack_topics: Array<any>;
+    manifest_file_path: string;
     usage_outliers: Array<OutlierInformationModel>;
 }
 
@@ -93,12 +95,47 @@ export class OutlierInformationModel {
     package_name: string;
 }
 
+export class ConflictPackageModel {
+    package1: string;
+    license1: string;
+    package2: string;
+    license2: string;
+}
+
+export class ReallyUnknownLicenseModel {
+    package: string;
+    license: string;
+}
+
+export class ComponentConflictLicenseModel {
+    license1: string;
+    license2: string;
+}
+
+export class ComponentConflictUnknownModel {
+    package: string;
+    conflict_licenses: Array<ComponentConflictLicenseModel>;
+}
+
+export class UnknownLicensesModel {
+    really_unknown: Array<ReallyUnknownLicenseModel> = [];
+    component_conflict: Array<ComponentConflictUnknownModel> = [];
+}
+
+export class StackLicenseAnalysisModel {
+    f8a_stack_licenses: Array<string> = [];
+    status: string;
+    conflict_packages: Array<ConflictPackageModel> = [];
+    unknown_licenses: UnknownLicensesModel;
+    outlier_packages: Array<ReallyUnknownLicenseModel> = [];
+}
 export class UserStackInfoModel {
     analyzed_dependencies: Array<any>;
     analyzed_dependencies_count: number;
     dependencies: Array<ComponentInformationModel>;
     distinct_licenses: Array<string>;
     ecosystem: string;
+    license_analysis: StackLicenseAnalysisModel;
     recommendation_ready: boolean;
     recommended_stack_licenses: Array<string>;
     stack_license_conflict: boolean;

@@ -4,7 +4,7 @@ import {Component, Input, OnChanges} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Space, Contexts } from 'ngx-fabric8-wit';
 
-import {ComponentInformationModel, RecommendationsModel, OutlierInformationModel} from '../models/stack-report.model';
+import { ComponentInformationModel, RecommendationsModel, OutlierInformationModel, StackLicenseAnalysisModel } from '../models/stack-report.model';
 import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 
 @Component({
@@ -32,6 +32,7 @@ export class ComponentLevelComponent implements OnChanges {
     public messages: any;
     public angleDown: string = 'fa-angle-down';
     public sortDirectionClass: string = this.angleDown;
+    public licenseAnalysis: StackLicenseAnalysisModel;
 
     private dependenciesList: Array<any> = [];
     private headers: Array<any> = [];
@@ -74,7 +75,11 @@ export class ComponentLevelComponent implements OnChanges {
                 'text2': ' has been added to the backlog.'
             },
             'create_work_item_error': 'There was a error while creating work item.',
-            'default_stack_name': 'An existing stack'
+            'default_stack_name': 'An existing stack',
+            'license': {
+                'really_unknown': 'Some licenses are unknown',
+                'license_conflict_in_component': 'Some licenses in this component are conflicting with each other'
+            }
         };
         if (this.context && this.context.current) {
             this.context.current.subscribe(val => {
@@ -118,6 +123,18 @@ export class ComponentLevelComponent implements OnChanges {
             name: 'Grouped Components',
             identifier: 'isGrouped',
             class: 'fa fa-database child-icon alternate-component-icon'
+        }, {
+            name: 'License Outliers',
+            identifier: 'isLicenseOutlier',
+            class: 'fa outlier-icon'
+        }, {
+            name: 'Unknown Licenses',
+            identifier: 'isUnknownLicense',
+            class: 'fa unknown-license'
+        }, {
+            name: 'License conflict in a Component',
+            identifier: 'isLicenseConflictInComponent',
+            class: 'fa conflict-license'
         }];
 
         this.currentFilter = this.filters[0].name;
@@ -258,6 +275,7 @@ export class ComponentLevelComponent implements OnChanges {
             } else {
                 this.dependencies = this.component['dependencies'];
             }
+            this.licenseAnalysis = this.component['licenseAnalysis'];
             this.handleDependencies(this.dependencies);
         }
         if (this.filterBy) {
@@ -345,6 +363,17 @@ export class ComponentLevelComponent implements OnChanges {
                 dependency = this.setParams(eachOne, this.isCompanion !== undefined);
                 dependency['isUsageOutlier'] = this.isUsageOutlier(dependency['name']);
                 dependency['compId'] = 'comp-' + i;
+                if (this.licenseAnalysis.status.toLowerCase() === 'successful' && this.licenseAnalysis.outlier_packages.length) {
+                    dependency = this.checkIfOutlierPackage(dependency);
+                }
+                if ((this.licenseAnalysis.status.toLowerCase() === 'unknown' || this.licenseAnalysis.status.toLowerCase() === 'componentconflict') && this.licenseAnalysis.unknown_licenses) {
+                    if (this.licenseAnalysis.unknown_licenses.really_unknown.length) {
+                        dependency = this.checkIfReallyUnknownLicense(dependency);
+                    }
+                    if (this.licenseAnalysis.unknown_licenses.component_conflict.length) {
+                        dependency = this.checkIfLicenseConflictInAComponent(dependency);
+                    }
+                }
                 this.dependenciesList.push(dependency);
                 tempLen = this.dependenciesList.length;
                 if (this.alternate) {
@@ -391,6 +420,48 @@ export class ComponentLevelComponent implements OnChanges {
         output['categories'] = (output['categories'] && output['categories'].length > 0 && output['categories'].join(', ')) || '';
         output['action'] = canCreateWorkItem ? 'Create Work Item' : '';
         return output;
+    }
+
+    private checkIfOutlierPackage(dependency: any): any {
+        dependency['isLicenseOutlier'] = false;
+        this.licenseAnalysis.outlier_packages.forEach((item, index) => {
+            if (dependency.name.toLocaleLowerCase() === item.package.toLocaleLowerCase()) {
+                dependency['isLicenseOutlier'] = true;
+                dependency['license_analysis'] = {
+                    'status': 'outlier',
+                    'outliedLicense': item.license
+                };
+            }
+        });
+        return dependency;
+    }
+
+    private checkIfReallyUnknownLicense(dependency: any): any {
+        dependency['isUnknownLicense'] = false;
+        this.licenseAnalysis.unknown_licenses.really_unknown.forEach((item, index) => {
+            if (item.package.toLocaleLowerCase() === dependency.name.toLocaleLowerCase()) {
+                dependency['isUnknownLicense'] = true;
+                dependency['license_analysis'] = {
+                    'status': 'reallyunknown',
+                    'unknownLicense': item.license
+                };
+            }
+        });
+        return dependency;
+    }
+
+    private checkIfLicenseConflictInAComponent(dependency: any): any {
+        dependency['isLicenseConflictInComponent'] = false;
+        this.licenseAnalysis.unknown_licenses.component_conflict.forEach((item, index) => {
+            if (item.package.toLocaleLowerCase() === dependency.name.toLocaleLowerCase()) {
+                dependency['isLicenseConflictInComponent'] = true;
+                dependency['license_analysis'] = {
+                    'status': 'licenseconflict',
+                    'conflictinglicenses': item.conflict_licenses
+                };
+            }
+        });
+        return dependency;
     }
 
     private putNA(count: any): any {

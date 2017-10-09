@@ -56,30 +56,110 @@
                 <h3>
                     <span>Licenses</span>
                 </h3>
-                <div class="stat-content chart-area">
-                    <div class="outlier-license flex-2">
+                <div class="stat-content chart-area" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() !== 'failure'">
+                    <div class="stack-license-text flex-3" *ngIf="licenseAnalysis.status.toLowerCase() === 'successful'">
+                        <div class="metric-desc">
+                            Possible Stack License
+                        </div>
+                        <div class="metric">
+                            <span>{{licenseAnalysis.stackLicenseText}}</span>
+                        </div>
+                    </div>
+                    <div class="outlier-license flex-3" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'successful'">
                         <div class="metric-desc">
                             Out of date
                         </div>
                         <div class="metric">
-                            <span>{{licenseOutliers}}</span>
+                            <span>{{licenseAnalysis.licenseOutliersCount}}</span>
                         </div>
                     </div>
-                    <div class="conflict-license flex-2">
+                    <div class="conflict-license flex-1" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'stackconflict'">
                         <div class="metric-desc">
-                            Conflicts
+                            Conflict <strong>between</strong> two Components
                         </div>
                         <div class="metric">
                             <span>
-                                {{stackLevel && stackLevel.license_analysis && stackLevel.license_analysis.status && stackLevel.license_analysis.status.toLowerCase() === 'stacklicenseconflict' ? 'YES' : 'NO'}}
+                                {{licenseAnalysis.licenseStackConflictsCount}}
                             </span>
                         </div>
                     </div>
-                    <div class="all-license flex-2">
+                    <div class="conflict-license-direction-icon flex-1" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'stackconflict'">
+                        <span class="fa fa-arrow-right"></span>
+                    </div>
+                    <div class="conflict-license-container flex-4" 
+                        *ngIf="licenseAnalysis.status.toLowerCase() === 'stackconflict'" [popover]="popLicenseTemplate" 
+                        popoverTitle="All Stack License Conflicts" 
+                        placement="left"
+                        containerClass="conflict-license-container"
+                        triggers="mouseenter:mouseleave">
+                        <div class="packages flex-2" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'conflict'">
+                            <div *ngFor="let conflict of licenseAnalysis.licenseConflictsPartial" class="conflict-group">
+                                <div><span>{{conflict.package1}}</span><span class="fa fa-arrow-right"></span></div>
+                                <div><span>{{conflict.package2}}</span><span class="fa fa-arrow-right"></span></div>
+                            </div>
+                            <div class="ellipsis-icon" *ngIf="licenseAnalysis && licenseAnalysis.licenseConflictsPartial.length > 1"><span class="fa fa-ellipsis-v"></span></div>
+                        </div>
+                        <div class="licenses flex-2" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'conflict'">
+                            <div *ngFor="let conflict of licenseAnalysis.licenseConflictsPartial" class="conflict-group">
+                                <div><span>{{conflict.license1}}</span></div>
+                                <div><span>{{conflict.license2}}</span></div>
+                            </div>
+                        </div>
+                        <ng-template #popLicenseTemplate>
+                            <div class="license-template flex-4" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'conflict'">
+                                <div class="packages flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'conflict'">
+                                    <div *ngFor="let conflict of licenseAnalysis.licenseConflictsFull" class="conflict-group">
+                                        <div><span>{{conflict.package1}}</span><span class="fa fa-arrow-right"></span></div>
+                                        <div><span>{{conflict.package2}}</span><span class="fa fa-arrow-right"></span></div>
+                                    </div>
+                                </div>
+                                <div class="licenses flex-2" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'conflict'">
+                                    <div *ngFor="let conflict of licenseAnalysis.licenseConflictsFull" class="conflict-group">
+                                        <div><span>{{conflict.license1}}</span></div>
+                                        <div><span>{{conflict.license2}}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <div class="unknown-license flex-2" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'unknown'">
+                        <div class="metric-desc">
+                            Status
+                        </div>
+                        <div class="metric">
+                            <span>
+                                {{licenseAnalysis.status}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="unknown-license flex-1" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'unknown'">
+                        <div class="metric-desc">
+                            Unknown
+                        </div>
+                        <div class="metric">
+                            <span>
+                                {{licenseAnalysis.licenseReallyUnknownCount}}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="unknown-license flex-3" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'unknown'">
+                        <div class="metric-desc">
+                            Conflict <strong>within</strong> a Component
+                        </div>
+                        <div class="metric">
+                            <span>
+                                {{licenseAnalysis.licenseComponentConflictsCount}}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- <div class="all-license flex-2">
                         <div class="metric">
                             <f8-chart [data]="licenseInfo['data']" [chartOptions]="licenseInfo['chartOptions']" [configs]="licenseInfo['configs']"></f8-chart>
                         </div>
-                    </div>
+                    </div> -->
+                </div>
+                <div class="stat-content center-text" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'failure'">
+                        Could not get license data for this stack. This may be due to some failure.
                 </div>
             </div>
         </div>

@@ -30,16 +30,18 @@
       .stat-content {
         align-items: center;
         display: flex;
-        flex: 4;
+        flex: 6;
         .flex-1 { flex: 1; }
         .flex-2 { flex: 2; }
+        .flex-3 { flex: 3; }
+        .flex-4 { flex: 4; }
         &.usage-outlier {
-          flex: 4;
+          flex: 6;
           justify-content: center;
         }
         &.chart-area {
           text-align: center;
-          flex: 4;
+          flex: 6;
           .c3-chart-arcs-title { font-size: 10px; }
           f8-chart { margin: 0 auto; }
         }
@@ -53,6 +55,54 @@
           span { margin: 0 auto; }
         }
         .metric-desc { font-size: 14px; }
+        .conflict-license-direction-icon {
+          color: @color-pf-black-500;
+          font-size: 35px;
+        }
+        .conflict-license-container {
+          display: flex;
+          flex-flow: row wrap;
+          .packages {
+            color: @color-pf-black-500;
+            font-size: 15px;
+            text-align: right;
+            .conflict-group {
+              border-bottom: @color-pf-black-500 1px solid;
+            }
+            span.fa {
+              margin: 0 0 0 10px;
+            }
+            .ellipsis-icon {
+              color: @color-pf-black-500;
+              font-size: 25px;
+              margin: 10px 4px 0 0;
+            }
+          }
+          .licenses {
+            color: @color-pf-black-500;
+            font-size: 15px;
+            text-align: left;
+            .conflict-group {
+              border-bottom: @color-pf-black-500 1px solid;
+              padding-left: 10px;
+              margin-right: 45px;
+            }
+          }
+          &.popover {
+            flex-flow: column;
+            max-width: 400px;
+            .license-template {
+              display: flex;
+              line-height: 25px;
+              width: 350px;
+              .licenses {
+                .conflict-group {
+                  margin-right: 0;
+                }
+              }
+            }
+          }
+        }
       }
     }
     &:after {

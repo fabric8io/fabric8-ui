@@ -2,6 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {StackLevelComponent} from './stack-level.component';
 import {TriggerFilterComponent} from '../utils/trigger-filter/trigger-filter.component';
 import {ChartModule} from '../utils/chart/chart.module';
+import { PopoverModule } from 'ngx-bootstrap';
 
 describe ('StackLevelComponent', () => {
     let component: StackLevelComponent;
@@ -10,7 +11,8 @@ describe ('StackLevelComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
-                ChartModule
+                ChartModule,
+                PopoverModule.forRoot()
             ],
             declarations: [
                 StackLevelComponent,

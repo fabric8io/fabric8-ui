@@ -28,10 +28,10 @@
         <table class="table table-striped table-bordered table-hover children-break-word" id="dependenciesTable">
             <thead>
                 <tr>
-                <th [ngClass]="{'small-width': header.class === 'small', 'medium-width': header.class === 'medium', 'large-width': header.class === 'large'}" (click)="handleTableOrderClick(header)" *ngFor="let header of headers">
-                    {{header.name}}
-                    <!--<span *ngIf="header.isSortable" class="fa {{header.sortDirectionClass || sortDirectionClass}}"></span>-->
-                </th>
+                    <th [ngClass]="{'small-width': header.class === 'small', 'medium-width': header.class === 'medium', 'large-width': header.class === 'large'}" (click)="handleTableOrderClick(header)" *ngFor="let header of headers">
+                        {{header.name}}
+                        <!--<span *ngIf="header.isSortable" class="fa {{header.sortDirectionClass || sortDirectionClass}}"></span>-->
+                    </th>
                 </tr>
             </thead>
             <tbody (click)="handleCollapseClick($event)" (hover)="handleHoverState($event)">
@@ -52,7 +52,9 @@
                         <i title="{{dependency.has_issue ? 'CVE Score: ' + dependency.security_issue: null}}" [ngClass]="{'fa': true, 'insecure fa-ban': dependency.has_issue === true, 'secure fa-check-circle-o': dependency.has_issue === false}" aria-hidden="true"></i>
                     </td>
                     <td ellipsis>
-                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.status && dependency.license_analysis.status.toLowerCase() === 'unknown'" [ngClass]="{'fa outlier-icon': true, 'unknown-license': dependency.license_analysis.status.toLowerCase() === 'unknown', 'conflict-license': dependency.license_analysis.status.toLowerCase() === 'conflict'}"></i>
+                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.status && dependency.license_analysis.status.toLowerCase() === 'outlier'" [ngClass]="{'fa outlier-icon': true}"></i>
+                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.status && dependency.license_analysis.status.toLowerCase() === 'reallyunknown'" [ngClass]="{'unknown-license': true}"></i>
+                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.status && dependency.license_analysis.status.toLowerCase() === 'licenseconflict'" [ngClass]="{'conflict-license': true}"></i>
                         {{dependency.license}}
                     </td>
                     <!--<td class="text-center">

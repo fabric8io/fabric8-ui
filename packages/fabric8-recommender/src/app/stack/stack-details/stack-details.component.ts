@@ -77,7 +77,8 @@ export class StackDetailsComponent implements OnChanges {
                 };
                 this.companionLevelRecommendation = {
                     dependencies: recommendations.companion,
-                    manifestinfo: tab.content.manifest_name
+                    manifestinfo: tab.content.manifest_name,
+                    licenseAnalysis: tab.content.user_stack_info.license_analysis
                 };
                 alternate = recommendations.alternate ? recommendations.alternate.length : 0;
                 companion = recommendations.companion ? recommendations.companion.length : 0;
@@ -107,7 +108,8 @@ export class StackDetailsComponent implements OnChanges {
             this.componentLevelInformation = {
                 recommendations: recommendations,
                 dependencies: tab.content.user_stack_info.dependencies,
-                manifestinfo: tab.content.manifest_name
+                manifestinfo: tab.content.manifest_name,
+                licenseAnalysis: tab.content.user_stack_info.license_analysis
             };
         }
     }
