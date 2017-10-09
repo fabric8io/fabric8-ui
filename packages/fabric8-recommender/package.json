@@ -6,7 +6,7 @@
   "module": "index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "build": "npm-run-all --serial remove-dist build:library",
+    "build": "npm run remove-dist && npm run build:library",
     "build:library": "gulp build-library",
     "build:prod": "webpack --config config/webpack.prod.js -p",
     "bundle": "webpack --config config/webpack.prod.js --progress --profile --bail",
