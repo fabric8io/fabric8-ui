@@ -12,7 +12,7 @@ export class ForgeExceptionComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    console.log(`::::ForgeExcetionComponent ngOnInit error= + ${JSON.stringify(this.error)}`);
+    console.log(`::::ForgeExceptionComponent ngOnInit error= ${JSON.stringify(this.error)}`);
   }
 
   cancel() {

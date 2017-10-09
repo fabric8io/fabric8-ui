@@ -5,7 +5,7 @@
   </button>
   <dt class="modal-title">Application wizard</dt>
 </div>
-<section [class.hide]="!error.type" class="app-generator-message app-generator-message-error">
+<section [class.hide]="!error" class="app-generator-message app-generator-message-error">
   <div class="message-title-container">
     <div class="message-title">
       <span class="message-title-icon fa-2x pficon pficon-error-circle-o"></span>
@@ -14,7 +14,8 @@
     </div>
   </div>
   <div class="message-body-container">
-    <div [innerHTML]="error.cause.localizedMessage" class="message-body"></div>
+    <div *ngIf="error?.cause?.localizedMessage" [innerHTML]="error.cause.localizedMessage" class="message-body"></div>
+    <div *ngIf="!error?.cause?.localizedMessage" [innerHTML]="error" class="message-body"></div>
   </div>
 </section>
 <div class="container-fluid">
