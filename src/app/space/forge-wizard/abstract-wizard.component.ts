@@ -20,6 +20,7 @@ export abstract class AbstractWizard implements OnInit {
   @ViewChild('wizard') wizard: WizardComponent;
 
   result: Input;
+  error: any;
   form: FormGroup = new FormGroup({});
   history: History = new History();
   config: WizardConfig;
@@ -99,7 +100,10 @@ export abstract class AbstractWizard implements OnInit {
     } else if (this.history.stepIndex === this.LAST_STEP + 1) { // addcodebaseStep
       this.reviewStep();
     } else { // init or next
-      this.loadUi();
+      this.loadUi().catch(error => {
+        this.isLoading = false;
+        this.error = error;
+      });
     }
   }
 

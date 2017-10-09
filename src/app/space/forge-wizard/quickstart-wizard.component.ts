@@ -30,6 +30,9 @@ export class ForgeQuickstartComponent extends AbstractWizard {
     this.loadUi().then(gui => {
       this.steps[3].nextEnabled = true;
       this.isLoading = false;
+    }).catch(error => {
+      this.isLoading = false;
+      this.error = error;
     });
   }
 
@@ -47,6 +50,9 @@ export class ForgeQuickstartComponent extends AbstractWizard {
       this.isLoading = false;
       wizardSteps[this.LAST_STEP].config.nextEnabled = true;
       console.log('ForgeQuickstartComponent::execute - response: ' + JSON.stringify(gui));
+    }).catch(error => {
+      this.isLoading = false;
+      this.error = error;
     });
   }
 }

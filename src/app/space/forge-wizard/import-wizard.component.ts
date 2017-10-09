@@ -36,9 +36,11 @@ export class ForgeImportWizardComponent extends AbstractWizard {
       this.steps[3].nextEnabled = true;
       this.wizard.goToStep(0, true);
       this.isLoading = false;
+    }).catch(error => {
+      this.isLoading = false;
+      this.error = error;
     });
   }
-
 
   executeStep(wizardSteps = this.wizard.steps): void {
     this.isLoading = true;
@@ -54,6 +56,9 @@ export class ForgeImportWizardComponent extends AbstractWizard {
       this.isLoading = false;
       wizardSteps[this.LAST_STEP].config.nextEnabled = true;
       console.log('Response from execute' + JSON.stringify(gui));
+    }).catch(error => {
+      this.isLoading = false;
+      this.error = error;
     });
   }
 

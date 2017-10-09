@@ -1,4 +1,7 @@
-<pfng-wizard #wizard
+<forge-exception *ngIf="error" [error]="error"
+                 (onCancel)="cancel($event)">
+</forge-exception>
+<pfng-wizard *ngIf="!error" #wizard
              [config]="config"
              (onCancel)="cancel($event)"
              (onNext)="nextClicked($event)"

@@ -21,6 +21,7 @@ import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quick
 import { ProjectInfoStepComponent } from './quickstart-pages/step2/project-info-step.component';
 import { PipelineQuickstartStepComponent } from './quickstart-pages/step3/pipeline-quickstart-step.component';
 import { ProjectSelectModule } from './components/project-select/project-select.component';
+import { ForgeExceptionComponent } from './components/forge-exception/forge-exception.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { ProjectSelectModule } from './components/project-select/project-select.
     PipelineStepComponent,
     PipelineQuickstartStepComponent,
     ReviewStepComponent,
-    ChooseQuickstartComponent
+    ChooseQuickstartComponent,
+    ForgeExceptionComponent
   ],
   exports: [
     ForgeImportWizardComponent,
