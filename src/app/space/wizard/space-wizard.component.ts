@@ -13,6 +13,7 @@ import { AppGeneratorConfiguratorService } from './services/app-generator.servic
 export class SpaceWizardComponent implements OnInit {
 
   static instanceCount: number = 1;
+  private modifyingExistingSpace: boolean = false;
 
   @Input() host: IModalHost;
 
@@ -103,14 +104,7 @@ export class SpaceWizardComponent implements OnInit {
   finish() {
     this.log(`finish ...`);
     // navigate to the users space if they aren't there already
-    if (
-      this.router &&
-      this.router.routerState &&
-      this.router.routerState.snapshot &&
-      this.router.routerState.snapshot.root &&
-      this.router.routerState.snapshot.root.firstChild &&
-      this.router.routerState.snapshot.root.firstChild.params['space']
-    ) {
+    if (this.modifyingExistingSpace === true) {
       this.log('Wizard complete and already in space context, no need to move.');
     } else {
       this.router.navigate([
@@ -151,6 +145,9 @@ export class SpaceWizardComponent implements OnInit {
       me.log(`Opening wizard modal dialog ...`, args);
       me.reset();
       if ( args.length > 0 && typeof args[0] === 'string' ) {
+        if (args[0] === 'space-configurator-step') {
+          me.modifyingExistingSpace = true;
+        }
         let step = args[0];
         me.workflow.gotoStep(step);
       }
