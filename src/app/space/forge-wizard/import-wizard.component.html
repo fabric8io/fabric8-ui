@@ -8,16 +8,9 @@
              (onPrevious)="previousClicked($event)"
              (onStepChange)="stepChanged($event)">
 
-  <div style="min-height: 450px" class="wizard-pf-loading blank-slate-pf loading" *ngIf="isLoading">
-    <div class="spinner spinner-lg blank-slate-pf-icon"></div>
-    <h3 class="blank-slate-pf-main-action">Loading Wizard</h3>
-    <p class="blank-slate-pf-secondary-action">
-      The wizard is loading...
-    </p>
-  </div>
-
   <div [formGroup]="form" [ngSwitch]="currentGui.metadata?.name">
     <pfng-wizard-step [config]="steps[0]">
+      <spinner [loading]="isLoading"></spinner>
       <pfng-wizard-substep [config]="steps[3]">
       <span *ngSwitchCase="'io.fabric8.forge.generator.github.GitHubImportPickOrganisationStep'">
         <organisation-step [gui]="currentGui" [form]="form"></organisation-step>
@@ -32,6 +25,7 @@
 
 
     <pfng-wizard-step [config]="steps[1]">
+      <spinner [loading]="isLoading"></spinner>
       <pfng-wizard-substep [config]="steps[5]">
       <span *ngSwitchCase="'Obsidian: Configure Pipeline'">
         <pipeline-step [gui]="currentGui" [form]="form" [labelSpace]="currentSpace.attributes.name"></pipeline-step>
@@ -46,6 +40,7 @@
     </pfng-wizard-step>
 
     <pfng-wizard-step [config]="steps[2]">
+      <spinner [loading]="isLoading"></spinner>
       <pfng-wizard-substep [config]="steps[7]">
       <span *ngSwitchCase="'Review'">
         <review-step [gui]="currentGui"></review-step>

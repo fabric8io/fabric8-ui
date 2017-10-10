@@ -18,6 +18,7 @@ import { SingleInputComponent } from './components/single-input/single-input.com
 import { ReviewStepComponent } from './import-pages/step5/review-step.component';
 import { ForgeErrorsComponent } from './components/forge-errors/forge-errors.component';
 import { FlowSelectorComponent } from './components/flow-selector/flow-selector.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quickstart.component';
 import { ProjectInfoStepComponent } from './quickstart-pages/step2/project-info-step.component';
 import { PipelineQuickstartStepComponent } from './quickstart-pages/step3/pipeline-quickstart-step.component';
@@ -42,6 +43,7 @@ import { ForgeExceptionComponent } from './components/forge-exception/forge-exce
     SingleInputComponent,
     ForgeErrorsComponent,
     FlowSelectorComponent,
+    SpinnerComponent,
     SelectedItemsPipe,
     VisibleItemsPipe,
     ProjectInfoStepComponent,
