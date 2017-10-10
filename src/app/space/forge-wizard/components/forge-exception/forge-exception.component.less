@@ -4,17 +4,13 @@
   text-align: right;
   margin-bottom: 2em;
 }
+
+@color-error: @color-pf-red;
+@color-error-border: @color-error;
+@color-error-background: @color-pf-black-100;
+@standard-spacing: @grid-gutter-width/2;
+
 .app-generator-message {
-  @color-success: @color-pf-green;
-  @color-success-border: @color-success;
-  @color-success-background: @color-pf-black-200;
-  @color-error: @color-pf-red;
-  @color-error-border: @color-error;
-  @color-error-background: @color-pf-black-100;
-  @color-warning: @color-pf-gold;
-  @color-warning-border: @color-warning;
-  @color-warning-background: @color-pf-black-100;
-  @standard-spacing: @grid-gutter-width/2;
   padding: @standard-spacing;
   position: relative;
   width: 100%;
@@ -43,104 +39,38 @@
       }
     }
   }
-  .message-body-container {
-    position: relative;
-    display: block;
+}
+
+.message-body-container {
+  position: relative;
+  display: block;
+  border: 1px solid;
+  border-color: @color-pf-black-300;
+  overflow: auto;
+}
+.message-body {
+  display: block;
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: @standard-spacing;
+  padding-top: 3px;
+  border: 0;
+  line-height: 3.0rem;
+  font-size: 1.5rem;
+}
+&.app-generator-message-error {
+  .message-title-container {
     border: 1px solid;
-    border-color: @color-pf-black-300;
-    overflow: auto;
-    .message-body {
-      display: block;
-      position: relative;
-      min-height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: @standard-spacing;
-      padding-top: 3px;
-      border: 0;
-      line-height: 3.0rem;
-      font-size: 1.5rem;
-      .message-details {
-        overflow: visible;
-        &.hide { overflow: hidden; }
-      }
-      .message-status-success {
-        white-space: pre-line;
-        color: @color-success;
-        font-weight: bold;
-      }
-      .message-status-failed {
-        white-space: pre-line;
-        color: @color-error;
-        font-weight: bold;
-      }
-      .message-status-warning {
-        white-space: pre-line;
-        color: @color-warning;
-        font-weight: bold;
-      }
-      .property-name {
-        white-space: pre-line;
-        color: @color-pf-blue;
-        display: block;
-        font-weight: bold;
-        &.property-name-result {
-          display: inline-block;
-          min-width: 220px;
-          text-align: left;
-          color: @color-pf-black;
-        }
-      }
-      .property-value {
-        color: @color-pf-black;
-        white-space: pre-line;
-        &.property-value-error {
-          color: @color-error;
-          font-weight: bold;
-          font-style: italic;
-        }
-        &.property-value-link { color: @color-pf-blue; }
-      }
-    }
-  }
-  &.app-generator-message-error {
-    .message-title-container {
-      border: 1px solid;
-      border-color: @color-error-border;
-      background-color: @color-error-background;
-      height: 90px;
-      .message-title {
-        position: absolute;
-        margin-top: 10px;
-        &-icon { color: @color-error; }
-        &-icon-label { color: @color-error; }
-      }
-    }
-  }
-  &.app-generator-message-success {
-    .message-title-container {
-      border: 1px solid;
-      border-color: @color-success-border;
-      background-color: @color-success-background;
-      height: 90px;
-      .message-title {
-        position: absolute;
-        margin-top: 10px;
-        &-icon { color: @color-success; }
-        &-icon-label { color: @color-success; }
-      }
-    }
-  }
-  &.app-generator-message-processing {
-    .message-title-container {
-      .message-title {
-        text-align: center;
-        &-text { font-size: 2rem; }
-      }
-    }
-    .message-body-container {
-      border: solid 1px transparent;
-      .message-body { text-align: center; }
+    border-color: @color-error-border;
+    background-color: @color-error-background;
+    height: 90px;
+    .message-title {
+      position: absolute;
+      margin-top: 10px;
+      &-icon { color: @color-error; }
+      &-icon-label { color: @color-error; }
     }
   }
 }
