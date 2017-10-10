@@ -117,9 +117,9 @@ import { SpaceWizardModule }         from './space/wizard/space-wizard.module';
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
-import { Fabric8UISpaceNamespace } from "./shared/runtime-console/fabric8-ui-space-namespace.service";
+import { Fabric8UISpaceNamespace } from './shared/runtime-console/fabric8-ui-space-namespace.service';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
-import { ForgeWizardModule } from "./space/forge-wizard/forge-wizard.module";
+import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -137,7 +137,9 @@ export type StoreType = {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  imports: [ // import (in alphabetical order) other modules with the components, directives and pipes needed by the components in this module
+  imports: [
+    // import (in alphabetical order) other modules with the components, directives and pipes
+    // needed by the components in this module
     AboutModalModule,
     ActionModule,
     BrowserAnimationsModule,
