@@ -46,7 +46,7 @@ export class ForgeQuickstartComponent extends AbstractWizard {
     this.wizard.steps.map(step => step.config.allowClickNav = false);
     this.forgeService.executeStep(this.endPoint, this.history).then((gui: Gui) => {
       this.result = gui[5] as Input;
-      let newGui = this.augmentStep(gui);
+      this.augmentStep(gui);
       this.isLoading = false;
       wizardSteps[this.LAST_STEP].config.nextEnabled = true;
     }).catch(error => {

@@ -6,7 +6,7 @@ import { Codebase } from '../create/codebases/services/codebase';
 import { ContextService } from '../../shared/context.service';
 import { Observable } from 'rxjs/Rx';
 import { Notifications } from 'ngx-base';
-import { AbstractWizard } from 'app/space/forge-wizard/abstract-wizard.component';
+import {AbstractWizard, flattenWizardSteps} from 'app/space/forge-wizard/abstract-wizard.component';
 import { configureSteps } from './import-wizard.config';
 
 @Component({
@@ -31,10 +31,16 @@ export class ForgeImportWizardComponent extends AbstractWizard {
   ngOnInit(): void {
     this.isLoading = true;
     this.loadUi().then(gui => {
-      this.steps[3].disabled = gui.metadata.name
+      const skipGitRepository = gui.metadata.name
         === 'io.fabric8.forge.generator.github.GitHubImportPickRepositoriesStep';
-      this.steps[3].nextEnabled = true;
-      this.wizard.goToStep(0, true);
+      this.steps[3].disabled =  skipGitRepository;
+      if (skipGitRepository) {
+        // remove one step
+        this.wizard.goToNextStep();
+        this.move(0, 0, flattenWizardSteps(this.wizard));
+        this.EXECUTE_STEP_INDEX--;
+        this.LAST_STEP--;
+      }
       this.isLoading = false;
     }).catch(error => {
       this.isLoading = false;
@@ -52,6 +58,7 @@ export class ForgeImportWizardComponent extends AbstractWizard {
     this.wizard.steps.map(step => step.config.allowClickNav = false);
     this.forgeService.executeStep('fabric8-import-git', this.history).then((gui: Gui) => {
       this.result = gui[6] as Input;
+      this.augmentStep(gui);
       this.isLoading = false;
       wizardSteps[this.LAST_STEP].config.nextEnabled = true;
     }).catch(error => {

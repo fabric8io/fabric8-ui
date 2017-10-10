@@ -271,7 +271,8 @@ export function flattenWizardSteps(wizard: WizardComponent): WizardStep[] {
   let flatWizard: WizardStep[] = [];
   wizard.steps.forEach((step: WizardStepComponent) => {
     if (step.hasSubsteps) {
-      step.steps.forEach(substep => {
+      step.steps.filter(s => !s.config.disabled)
+        .forEach(substep => {
         flatWizard.push(substep);
       });
     } else {
