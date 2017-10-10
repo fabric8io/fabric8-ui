@@ -1,6 +1,6 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Input as GuiInput, Option } from "app/space/forge-wizard/gui.model";
-import { FormGroup } from "@angular/forms";
+import { Component, Input, OnInit } from '@angular/core';
+import { Input as GuiInput, Option } from 'app/space/forge-wizard/gui.model';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: './multiple-selection-list',

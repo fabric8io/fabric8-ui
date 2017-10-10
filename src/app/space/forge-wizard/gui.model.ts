@@ -108,13 +108,13 @@ export class StatusMessage {
 }
 
 export class Message {
-  constructor(desciption: string) {
-    this.description = desciption;
-  }
   description: string;
   input: string;
   severity: string;
   showError: boolean;
+  constructor(desciption: string) {
+    this.description = desciption;
+  }
 }
 
 export class Version {

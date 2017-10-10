@@ -58,7 +58,8 @@ export class ForgeService {
     if (error.statusText) {
       return Promise.reject(error.json());
     }
-    return Promise.reject(error.message || 'Error calling service. Contact your operation team to check Forge backend is running.');
+    return Promise.reject(error.message ||
+      'Error calling service. Contact your operation team to check Forge backend is running.');
   }
 
 }

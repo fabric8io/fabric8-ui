@@ -23,7 +23,6 @@ export class PipelineViewComponent implements OnInit {
       this.formatHtml(choice, index);
       index++;
     }
-    // field.valueChoices.filter(c => field.value === c.id).forEach(c => c.display.collapsed = false);
   }
 
   private determineColor(value: string): string {
@@ -34,7 +33,7 @@ export class PipelineViewComponent implements OnInit {
       }
     }
     return 'success';
-  };
+  }
 
   private determineIcon(value: any|string): string {
     if (value) {

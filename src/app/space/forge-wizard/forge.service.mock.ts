@@ -241,7 +241,8 @@ export const executeInput = {
       'valueChoices': [{
         'id': 'Release',
         'builder': 'maven',
-        'descriptionMarkdown': 'Maven based pipeline which:\n\n* creates a new version then builds and deploys the project into the maven repository\n* runs an integration test in the **Test** environment\n',
+        'descriptionMarkdown': 'Maven based pipeline which:\n\n* creates a new version then builds and deploys the project ' +
+        'into the maven repository\n* runs an integration test in the **Test** environment\n',
         'environments': ['Test'],
         'label': 'Release',
         'stages': [{
@@ -262,11 +263,15 @@ export const executeInput = {
           'verticalLayout': true
         },
         'name': 'Release',
-        'description': '<p>Maven based pipeline which:</p>\n<ul>\n<li>creates a new version then builds and deploys the project into the maven repository</li>\n<li>runs an integration test in the <strong>Test</strong> environment</li>\n</ul>\n'
+        'description': '<p>Maven based pipeline which:</p>\n<ul>\n<li>creates a new version then builds and deploys the ' +
+        'project into the maven repository</li>\n<li>runs an integration test in the <strong>Test</strong> ' +
+        'environment</li>\n</ul>\n'
       }, {
         'id': 'Release and Stage',
         'builder': 'maven',
-        'descriptionMarkdown': 'Maven based pipeline which:\n\n* creates a new version then builds and deploys the project into the maven repository\n* runs an integration test in the **Test** environment\n* stages the new version into the **Stage** environment\n',
+        'descriptionMarkdown': 'Maven based pipeline which:\n\n* creates a new version then builds and deploys the project ' +
+        'into the maven repository\n* runs an integration test in the **Test** environment\n* stages the new version into ' +
+        'the **Stage** environment\n',
         'environments': ['Test', 'Stage'],
         'label': 'Release and Stage',
         'stages': [{
@@ -292,11 +297,15 @@ export const executeInput = {
           'verticalLayout': true
         },
         'name': 'Release and Stage',
-        'description': '<p>Maven based pipeline which:</p>\n<ul>\n<li>creates a new version then builds and deploys the project into the maven repository</li>\n<li>runs an integration test in the <strong>Test</strong> environment</li>\n<li>stages the new version into the <strong>Stage</strong> environment</li>\n</ul>\n'
+        'description': '<p>Maven based pipeline which:</p>\n<ul>\n<li>creates a new version then builds and deploys the ' +
+        'project into the maven repository</li>\n<li>runs an integration test in the <strong>Test</strong> environment</li>\n' +
+        '<li>stages the new version into the <strong>Stage</strong> environment</li>\n</ul>\n'
       }, {
         'id': 'Release, Stage, Approve and Promote',
         'builder': 'maven',
-        'descriptionMarkdown': 'Maven based pipeline which:\n\n* creates a new version then builds and deploys the project into the maven repository\n* runs an integration test in the **Test** environment\n* stages the new version into the **Stage** environment\n* waits for **Approval** to promote \n* promotes to the **Run** environment\n',
+        'descriptionMarkdown': 'Maven based pipeline which:\n\n* creates a new version then builds and deploys the project ' +
+        'into the maven repository\n* runs an integration test in the **Test** environment\n* stages the new version into ' +
+        'the **Stage** environment\n* waits for **Approval** to promote \n* promotes to the **Run** environment\n',
         'environments': ['Test', 'Stage', 'Run'],
         'label': 'Release, Stage, Approve and Promote',
         'stages': [{
@@ -327,7 +336,10 @@ export const executeInput = {
           'verticalLayout': true
         },
         'name': 'Release, Stage, Approve and Promote',
-        'description': '<p>Maven based pipeline which:</p>\n<ul>\n<li>creates a new version then builds and deploys the project into the maven repository</li>\n<li>runs an integration test in the <strong>Test</strong> environment</li>\n<li>stages the new version into the <strong>Stage</strong> environment</li>\n<li>waits for <strong>Approval</strong> to promote </li>\n<li>promotes to the <strong>Run</strong> environment</li>\n</ul>\n'
+        'description': '<p>Maven based pipeline which:</p>\n<ul>\n<li>creates a new version then builds and deploys the ' +
+        'project into the maven repository</li>\n<li>runs an integration test in the <strong>Test</strong> environment</li>' +
+        '\n<li>stages the new version into the <strong>Stage</strong> environment</li>\n<li>waits for ' +
+        '<strong>Approval</strong> to promote </li>\n<li>promotes to the <strong>Run</strong> environment</li>\n</ul>\n'
       }],
       'class': 'UISelectOne',
       'value': 'Release, Stage, Approve and Promote'
@@ -341,7 +353,8 @@ export const executeInput = {
       'deprecated': false,
       'label': 'Organisation',
       'description': 'The organisation',
-      'valueChoices': [{'id': 'ckrych'}, {'id': 'ckrych-che'}, {'id': 'ckrych-jenkins'}, {'id': 'ckrych-run'}, {'id': 'ckrych-stage'}],
+      'valueChoices': [{'id': 'ckrych'}, {'id': 'ckrych-che'}, {'id': 'ckrych-jenkins'},
+        {'id': 'ckrych-run'}, {'id': 'ckrych-stage'}],
       'class': 'UISelectOne',
       'value': 'ckrych'
     }, {
@@ -382,7 +395,9 @@ export const executeInput = {
       'wizard': true,
       'canMoveToNextStep': false,
       'canMoveToPreviousStep': true,
-      'steps': ['io.fabric8.forge.generator.github.GithubImportPickOrganisationStep', 'io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep', 'Obsidian: Configure Pipeline', 'io.fabric8.forge.generator.kubernetes.CreateBuildConfigStep']
+      'steps': ['io.fabric8.forge.generator.github.GithubImportPickOrganisationStep',
+        'io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep',
+        'Obsidian: Configure Pipeline', 'io.fabric8.forge.generator.kubernetes.CreateBuildConfigStep']
     },
     'inputs': [{
       'name': 'jenkinsSpace',
@@ -394,7 +409,10 @@ export const executeInput = {
       'deprecated': false,
       'label': 'Jenkins Space',
       'description': 'The space running Jenkins',
-      'valueChoices': [{'id': 'ckrych'}, {'id': 'ckrych-che'}, {'id': 'ckrych-jenkins'}, {'id': 'ckrych-run'}, {'id': 'ckrych-stage'}],
+      'valueChoices': [{'id': 'ckrych'}, {'id': 'ckrych-che'},
+        {'id': 'ckrych-jenkins'},
+        {'id': 'ckrych-run'},
+        {'id': 'ckrych-stage'}],
       'class': 'UISelectOne',
       'value': 'ckrych-jenkins'
     }, {
@@ -447,7 +465,7 @@ export const inputForPost = {
   'inputs': [
     {
       'name': 'gitOrganisation',
-      'value': 'corinnekrych',
+      'value': 'corinnekrych'
     }
   ]
 };

@@ -1,21 +1,17 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
-import { Option, SubmittableInput, Gui } from '../../gui.model';
-import { FormGroup } from "@angular/forms";
+import { Gui } from '../../gui.model';
 
 @Component({
   selector: 'organisation-step',
   templateUrl: './organisation-step.component.html',
   styleUrls: ['./organisation-step.component.less']
 })
-export class OrganisationComponent implements OnInit {
+export class OrganisationComponent {
 
   @Input() gui: Gui;
   @Input() form: FormGroup;
 
   constructor() {}
-
-  ngOnInit(): void {
-    console.log("::::OrganisationComponent ngOnInit" + JSON.stringify(this.gui));
-  }
 }
