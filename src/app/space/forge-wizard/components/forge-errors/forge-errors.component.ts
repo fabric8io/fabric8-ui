@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 import { Gui } from '../../gui.model';
 
@@ -7,13 +7,8 @@ import { Gui } from '../../gui.model';
   templateUrl: './forge-errors.component.html',
   styleUrls: ['./forge-errors.component.less']
 })
-export class ForgeErrorsComponent implements OnInit {
+export class ForgeErrorsComponent {
 
   @Input() field: Gui;
   constructor() {}
-
-  ngOnInit(): void {
-    console.log(`::::ForgeErrorsComponenet ngOnInit field= + ${JSON.stringify(this.field)}`);
-  }
-
 }

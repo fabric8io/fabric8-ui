@@ -3,7 +3,7 @@ import { EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {
   WizardComponent, WizardConfig, WizardEvent, WizardStep, WizardStepComponent,
-  WizardStepConfig, WizardSubstepComponent
+  WizardStepConfig
 } from 'patternfly-ng';
 import {History} from 'app/space/forge-wizard/history.component';
 import { Gui, Input, MetaData } from './gui.model';
@@ -44,7 +44,6 @@ export abstract class AbstractWizard implements OnInit {
     this.context.current.subscribe((ctx: Context) => {
       if (ctx.space) {
         this.currentSpace = ctx.space;
-        console.log(`ForgeWizardComponent::The current space has been updated to ${this.currentSpace.attributes.name}`);
       }
     });
   }
@@ -76,7 +75,6 @@ export abstract class AbstractWizard implements OnInit {
     });
     obs.subscribe(
       codebase => {
-        console.log(`Successfully added codebase ${codebase.attributes.url}`);
         // todo broadcast
         // this._broadcaster.broadcast('codebaseAdded', codebase);
         this.notifications.message(<Notification>{
@@ -87,7 +85,6 @@ export abstract class AbstractWizard implements OnInit {
       },
       err => console.log(`Error adding codebase ${err}`),
       () => {
-        console.log(`completed`);
         this.isLoading = false;
         // TODO Display error
         this.onCancel.emit({});

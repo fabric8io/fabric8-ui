@@ -14,13 +14,11 @@ export class BuildConfigStepComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // Override outpu from Forge Server
+    // Override output from Forge Server
     this.gui.inputs[0].enabled = false;
-    let controls = this.form.controls;
     this.gui.inputs[0].required = true;
     this.gui.inputs[1].label = 'Trigger build';
     this.gui.inputs[2].label = 'Add continuous integration web hooks';
-    console.log(`::::BuildConfigStepComponent ngOnInit: ${JSON.stringify(this.gui)}`);
   }
 
 }

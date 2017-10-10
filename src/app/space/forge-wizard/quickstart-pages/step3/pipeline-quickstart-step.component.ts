@@ -17,7 +17,6 @@ export class PipelineQuickstartStepComponent implements OnInit {
     // When creating pipeline we need to "tag" them the space label in OSO
     // so that OSiO can filtered by space
     this.gui.inputs[2].value = this.labelSpace;
-    console.log(`::::PipelineComponent ngOnInit: ${JSON.stringify(this.gui)}`);
   }
 
 }

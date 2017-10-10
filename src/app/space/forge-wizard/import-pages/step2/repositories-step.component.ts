@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 import { Gui } from '../../gui.model';
 import { FormGroup } from '@angular/forms';
@@ -7,14 +7,9 @@ import { FormGroup } from '@angular/forms';
   selector: 'repositories-step',
   templateUrl: './repositories-step.component.html'
 })
-export class RepositoriesComponent implements OnInit {
+export class RepositoriesComponent {
 
   @Input() gui: Gui;
   @Input() form: FormGroup;
   constructor() {}
-
-  ngOnInit(): void {
-    // console.log("::::RepositoriesComponent ngOnInit gui.inputs[0]" + JSON.stringify(this.gui));
-  }
-
 }

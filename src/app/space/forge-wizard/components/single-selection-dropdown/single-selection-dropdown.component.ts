@@ -12,12 +12,11 @@ export class SingleSelectionDropDownComponent implements OnInit {
   @Input() field: GuiInput;
   @Input() form: FormGroup;
   @Input() inline: boolean;
+
   ngOnInit() {
-    console.log('::::::::::::::Single-Selection-Dropdown field ngInit' + JSON.stringify(this.field));
     this.field.display = {open: false};
   }
   selected(choice) {
-    console.log('Selected ' + JSON.stringify(choice));
     this.field.value = choice.id;
     this.field.display.open = false;
   }

@@ -20,7 +20,6 @@ export class PipelineStepComponent implements OnInit {
     // Forge endpoint returns an information on the jenkins overrides reposiroties
     // let's display it as a note
     this.gui.inputs[3].display = {note: this.gui.inputs[3].description};
-    console.log(`::::PipelineComponent ngOnInit: ${JSON.stringify(this.gui)}`);
   }
 
 }

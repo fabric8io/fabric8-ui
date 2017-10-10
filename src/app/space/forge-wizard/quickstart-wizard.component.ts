@@ -49,7 +49,6 @@ export class ForgeQuickstartComponent extends AbstractWizard {
       let newGui = this.augmentStep(gui);
       this.isLoading = false;
       wizardSteps[this.LAST_STEP].config.nextEnabled = true;
-      console.log('ForgeQuickstartComponent::execute - response: ' + JSON.stringify(gui));
     }).catch(error => {
       this.isLoading = false;
       this.error = error;

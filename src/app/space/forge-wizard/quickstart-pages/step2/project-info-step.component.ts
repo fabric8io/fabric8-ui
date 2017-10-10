@@ -15,9 +15,8 @@ export class ProjectInfoStepComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // Default value for the project name to spce name
+    // Default value for the project name to space name
     this.form.controls.named.setValue(this.labelSpace.toLowerCase());
-    console.log(`::::ProjectInfoStepComponent ngOnInit: ${JSON.stringify(this.gui)}`);
   }
 
 }

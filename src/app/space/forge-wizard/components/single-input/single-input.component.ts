@@ -18,7 +18,6 @@ export class SingleInputComponent implements OnInit {
     if (!this.field.enabled) {
       this.form.controls.jenkinsSpace.disable();
     }
-    console.log(`::::SingleInputComponent ngOnInit: ${JSON.stringify(this.field)}`);
   }
 
 }

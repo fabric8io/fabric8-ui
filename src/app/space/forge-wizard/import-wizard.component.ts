@@ -52,10 +52,8 @@ export class ForgeImportWizardComponent extends AbstractWizard {
     this.wizard.steps.map(step => step.config.allowClickNav = false);
     this.forgeService.executeStep('fabric8-import-git', this.history).then((gui: Gui) => {
       this.result = gui[6] as Input;
-      let newGui = this.augmentStep(gui);
       this.isLoading = false;
       wizardSteps[this.LAST_STEP].config.nextEnabled = true;
-      console.log('Response from execute' + JSON.stringify(gui));
     }).catch(error => {
       this.isLoading = false;
       this.error = error;

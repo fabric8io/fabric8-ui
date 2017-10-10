@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 
 @Component({
@@ -6,15 +6,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   templateUrl: './flow-selector.component.html',
   styleUrls: ['./flow-selector.component.less']
 })
-export class FlowSelectorComponent implements OnInit {
+export class FlowSelectorComponent {
   @Input() space: string;
   @Output('onSelect') onSelect = new EventEmitter();
   @Output('onCancel') onCancel = new EventEmitter();
   constructor() {}
-
-  ngOnInit(): void {
-    console.log(`FlowSelectorComponent ngOnInit`);
-  }
 
   select(flow: string) {
     switch (flow) {
