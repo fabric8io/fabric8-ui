@@ -32,7 +32,7 @@ export class ForgeImportWizardComponent extends AbstractWizard {
     this.isLoading = true;
     this.loadUi().then(gui => {
       this.steps[3].disabled = gui.metadata.name
-        === 'io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep';
+        === 'io.fabric8.forge.generator.github.GitHubImportPickRepositoriesStep';
       this.steps[3].nextEnabled = true;
       this.wizard.goToStep(0, true);
       this.isLoading = false;
