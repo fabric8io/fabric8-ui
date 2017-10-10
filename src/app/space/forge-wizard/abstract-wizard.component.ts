@@ -124,7 +124,7 @@ export abstract class AbstractWizard implements OnInit {
       this.wizard.config.nextTitle = 'Finish';
     }
     if (from === this.EXECUTE_STEP_INDEX && from > to) { // moving from finish step to previous, set back next
-      this.wizard.config.nextTitle = '> Next';
+      this.wizard.config.nextTitle = 'Next >';
     }
     if (to === this.LAST_STEP) {
       return;

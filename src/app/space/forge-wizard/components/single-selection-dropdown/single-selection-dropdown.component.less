@@ -12,6 +12,29 @@
       }
     }
   }
+  .dropdown-menu-item {
+    padding: 5px;
+    padding-bottom: 1rem;
+    border-top: 1px solid;
+    border-top-color: transparent;
+    border-bottom: 1px solid;
+    border-bottom-color: transparent;
+    .item-name { font-weight: 600; }
+    &:hover {
+      background-color: @color-pf-blue-100;
+      border-top: 1px solid;
+      border-top-color: @color-pf-blue-200;
+      border-bottom: 1px solid;
+      border-bottom-color: @color-pf-blue-200;
+      .item-name { color: @color-pf-black; }
+      .item-description { color: @color-pf-black; }
+    }
+    &.selected {
+      background-color: @color-pf-blue-300;
+      .item-name { color: @color-pf-white; }
+      .item-description { color: @color-pf-white; }
+    }
+  }
   .dropdown-menu {
     top: 26px;
     padding: 0;
@@ -23,29 +46,6 @@
     &.open {
       border-width: 1px;
       height: 30vh;
-    }
-    .dropdown-menu-item {
-      padding: 5px;
-      padding-bottom: 1rem;
-      border-top: 1px solid;
-      border-top-color: transparent;
-      border-bottom: 1px solid;
-      border-bottom-color: transparent;
-      .item-name { font-weight: 600; }
-      &:hover {
-        background-color: @color-pf-blue-100;
-        border-top: 1px solid;
-        border-top-color: @color-pf-blue-200;
-        border-bottom: 1px solid;
-        border-bottom-color: @color-pf-blue-200;
-        .item-name { color: @color-pf-black; }
-        .item-description { color: @color-pf-black; }
-      }
-      &.selected {
-        background-color: @color-pf-blue-300;
-        .item-name { color: @color-pf-white; }
-        .item-description { color: @color-pf-white; }
-      }
     }
   }
   .field-required {
