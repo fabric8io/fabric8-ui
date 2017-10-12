@@ -149,7 +149,7 @@
     "ngc-webpack": "3.2.2",
     "npm-run-all": "4.0.2",
     "optimize-js-plugin": "0.0.4",
-    "patternfly": "3.27.6",
+    "patternfly": "^3.27.7",
     "phantomjs-prebuilt": "2.1.15",
     "precss": "2.0.0",
     "protractor": "5.1.2",
