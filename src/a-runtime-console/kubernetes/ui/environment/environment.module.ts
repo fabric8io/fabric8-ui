@@ -12,7 +12,7 @@ import { NamespaceStore } from './../../store/namespace.store';
 
 import {NgModule} from '@angular/core';
 import {BsDropdownConfig, BsDropdownModule} from 'ngx-bootstrap/dropdown';
-import {TabsModule} from 'ng2-bootstrap';
+import {TabsModule} from 'ngx-bootstrap';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';

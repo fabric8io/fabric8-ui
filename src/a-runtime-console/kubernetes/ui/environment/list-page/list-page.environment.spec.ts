@@ -29,7 +29,7 @@ import { ModalModule } from "ngx-modal";
 import { MomentModule } from "angular2-moment";
 import { FormsModule } from "@angular/forms";
 import { KubernetesComponentsModule } from "../../../components/components.module";
-import {TabsModule} from "ng2-bootstrap";
+import {TabsModule} from "ngx-bootstrap";
 
 describe('EnvironmentListPage', () => {
   let component: EnvironmentListPageComponent;
