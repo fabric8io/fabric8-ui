@@ -1,5 +1,6 @@
 
 import { Injectable, Inject } from '@angular/core';
+import { Location } from '@angular/common';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { FABRIC8_FORGE_API_URL } from 'a-runtime-console';
 import { State } from 'app/space/forge-wizard/state.component';
@@ -13,7 +14,7 @@ export class ForgeService {
   constructor(private http: Http,
     private auth: AuthenticationService,
     @Inject(FABRIC8_FORGE_API_URL) private apiUrl: string) {
-      this.apiUrl += '/forge';
+      this.apiUrl = Location.stripTrailingSlash(this.apiUrl || '') + '/forge';
   }
 
   commandInfo(command: string): Promise<Gui> {
