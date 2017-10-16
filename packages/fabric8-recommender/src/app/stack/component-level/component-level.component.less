@@ -143,9 +143,10 @@
     /* stylelint-disable */
     background: #ed7b01 !important;
     color: @color-pf-white !important;
-    width: 10px;
+    font-size: 10px;
     display: inline-block;
-    text-align: center;
+    border-radius: 50%;
+    padding: 3px;
     /* stylelint-enable */
     &:after {
       content: 'L';
@@ -155,12 +156,24 @@
     /* stylelint-disable */
     background: @color-pf-red-100 !important;
     color: @color-pf-white !important;
-    width: 10px;
+    font-size: 10px;
     display: inline-block;
-    text-align: center;
+    border-radius: 50%;
+    padding: 3px;
     /* stylelint-enable */
     &:after {
       content: 'L';
     }
+  }
+  .outlier-license-text {
+    font-weight: bold;
+  }
+  .unknown-license-text {
+    color: #ed7b01;
+    font-weight: bold;
+  }
+  .conflict-license-text {
+    color: @color-pf-red-100;
+    font-weight: bold;
   }
 }

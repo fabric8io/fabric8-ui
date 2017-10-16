@@ -263,6 +263,39 @@ export class ComponentLevelComponent implements OnChanges {
         }
     }
 
+    isNormalLicense(dependency) {
+        if (dependency.license_analysis &&
+            dependency.license_analysis.licensestatus &&
+            (dependency.license_analysis.licensestatus.toLowerCase() === 'outlier' ||
+            dependency.license_analysis.licensestatus.toLowerCase() === 'reallyunknown' ||
+            dependency.license_analysis.licensestatus.toLowerCase() === 'licenseconflict')) {
+            return false;
+        }
+        return true;
+    }
+
+    isOutliedLicense(dependency: any, licenseToCheck: string): boolean {
+        if (dependency.license_analysis.outliedLicense === licenseToCheck) {
+            return true;
+        }
+        return false;
+    }
+
+    isUnknownLicense(dependency: any, licenseToCheck: string): boolean {
+        if (dependency.license_analysis.unknownLicense === licenseToCheck) {
+            return true;
+        }
+        return false;
+    }
+
+    isConflictLicense(dependency: any, licenseToCheck: string): boolean {
+        if (dependency.license_analysis.conflictingLicenses[0]['license1'] === licenseToCheck ||
+            dependency.license_analysis.conflictingLicenses[0]['license2'] === licenseToCheck) {
+            return true;
+        }
+        return false;
+    }
+
     ngOnChanges(): void {
         if (this.component) {
             if (this.isCompanion === undefined) {
@@ -401,8 +434,10 @@ export class ComponentLevelComponent implements OnChanges {
         output['recommended_version'] = this.putNA(output['recommended_version']);
         output['current_version'] = this.putNA(output['current_version']);
         output['latest_version'] = this.putNA(input['latest_version']);
-        output['license'] = input['licenses'] && input['licenses'].join(', ') || '-';
-        output['license_analysis'] = input['license_analysis'] && input['license_analysis'];
+        output['licenses'] =
+            input['licenses'] && input['licenses'].length ? input['licenses'] : '-';
+        output['licenseCount'] = output['licenses'] ? output['licenses'].length : 0;
+        output['license_analysis'] = input['license_analysis'];
         output['sentiment_score'] = input['sentiment'] && input['sentiment']['overall_score'];
         output['github_user_count'] = input['github'] && input['github']['dependent_repos'];
         output['github_user_count'] = this.putNA(output['github_user_count']);
@@ -428,7 +463,7 @@ export class ComponentLevelComponent implements OnChanges {
             if (dependency.name.toLocaleLowerCase() === item.package.toLocaleLowerCase()) {
                 dependency['isLicenseOutlier'] = true;
                 dependency['license_analysis'] = {
-                    'status': 'outlier',
+                    'licensestatus': 'outlier',
                     'outliedLicense': item.license
                 };
             }
@@ -442,7 +477,7 @@ export class ComponentLevelComponent implements OnChanges {
             if (item.package.toLocaleLowerCase() === dependency.name.toLocaleLowerCase()) {
                 dependency['isUnknownLicense'] = true;
                 dependency['license_analysis'] = {
-                    'status': 'reallyunknown',
+                    'licensestatus': 'reallyunknown',
                     'unknownLicense': item.license
                 };
             }
@@ -456,8 +491,8 @@ export class ComponentLevelComponent implements OnChanges {
             if (item.package.toLocaleLowerCase() === dependency.name.toLocaleLowerCase()) {
                 dependency['isLicenseConflictInComponent'] = true;
                 dependency['license_analysis'] = {
-                    'status': 'licenseconflict',
-                    'conflictinglicenses': item.conflict_licenses
+                    'licensestatus': 'licenseconflict',
+                    'conflictingLicenses': item.conflict_licenses
                 };
             }
         });

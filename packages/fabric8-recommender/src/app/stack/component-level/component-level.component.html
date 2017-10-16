@@ -52,14 +52,31 @@
                         <i title="{{dependency.has_issue ? 'CVE Score: ' + dependency.security_issue: null}}" [ngClass]="{'fa': true, 'insecure fa-ban': dependency.has_issue === true, 'secure fa-check-circle-o': dependency.has_issue === false}" aria-hidden="true"></i>
                     </td>
                     <td ellipsis>
-                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.status && dependency.license_analysis.status.toLowerCase() === 'outlier'" [ngClass]="{'fa outlier-icon': true}"></i>
-                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.status && dependency.license_analysis.status.toLowerCase() === 'reallyunknown'" [ngClass]="{'unknown-license': true}"></i>
-                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.status && dependency.license_analysis.status.toLowerCase() === 'licenseconflict'" [ngClass]="{'conflict-license': true}"></i>
-                        {{dependency.license}}
+                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.licensestatus && dependency.license_analysis.licensestatus.toLowerCase() === 'outlier'" [ngClass]="{'fa outlier-icon': true}"></i>
+                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.licensestatus && dependency.license_analysis.licensestatus.toLowerCase() === 'reallyunknown'" [ngClass]="{'unknown-license': true}"></i>
+                        <i *ngIf="dependency.license_analysis && dependency.license_analysis.licensestatus && dependency.license_analysis.licensestatus.toLowerCase() === 'licenseconflict'" [ngClass]="{'conflict-license': true}"></i>
+                        <span *ngFor="let license of dependency.licenses; let i = index">
+                            <span 
+                                *ngIf="dependency.license_analysis && dependency.license_analysis.licensestatus && dependency.license_analysis.licensestatus.toLowerCase() === 'outlier'" 
+                                [ngClass]="{'outlier-license-text': isOutliedLicense(dependency, license)}">
+                                {{ license }}
+                            </span>
+                            <span 
+                                *ngIf="dependency.license_analysis && dependency.license_analysis.licensestatus && dependency.license_analysis.licensestatus.toLowerCase() === 'reallyunknown'" 
+                                [ngClass]="{'unknown-license-text': isUnknownLicense(dependency, license)}">
+                                {{ license }}
+                            </span>
+                            <span 
+                                *ngIf="dependency.license_analysis && dependency.license_analysis.licensestatus && dependency.license_analysis.licensestatus.toLowerCase() === 'licenseconflict'" 
+                                [ngClass]="{'conflict-license-text': isConflictLicense(dependency, license)}">
+                                {{ license }}
+                            </span>
+                            <span *ngIf="isNormalLicense(dependency)">
+                                {{ license }}
+                            </span>
+                            <span *ngIf="i < dependency.licenseCount - 1">, </span>
+                        </span>
                     </td>
-                    <!--<td class="text-center">
-                        <sentiment *ngIf="dependency.sentiment_score" [score]="dependency.sentiment_score"></sentiment>
-                    </td>-->
                     <td class="text-center">{{dependency.osio_user_count}}</td>
                     <td ellipsis class="github-stats">
                         <span *ngIf="dependency.github_user_count > -1">Usage Count: {{dependency.github_user_count}},</span>

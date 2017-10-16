@@ -140,110 +140,44 @@ export class StackReportInShortComponent implements OnChanges {
     }
 
     private handleLicenseInformation(tab: UserStackInfoModel): void {
-
-        // let licenses: any = {};
-        // let columnData: Array<Array<any>> = [];
-        // let columnDataLength: number = 0;
-        // let otherLicensesArray: Array<string> = [];
-        // let otherLicensesRatio: any = 0;
-        // let temp: Array<any> = [];
         this.licenseAnalysis = {
             licenseOutliersCount: 0,
             licenseStackConflictsCount: 0,
-            licenseReallyUnknownCount: 0,
-            licenseComponentConflictsCount: 0,
+            licenseUnknownCount: 0,
             stackLicenseText: '',
             status: ''
         };
 
         if (tab.license_analysis) {
-          this.licenseAnalysis.licenseOutliersCount = tab.license_analysis.outlier_packages ? tab.license_analysis.outlier_packages.length : 0;
-          this.licenseAnalysis.licenseStackConflictsCount = tab.license_analysis.conflict_packages ? tab.license_analysis.conflict_packages.length : 0;
+          this.licenseAnalysis.licenseOutliersCount =
+              tab.license_analysis.outlier_packages ?
+                  tab.license_analysis.outlier_packages.length : 0;
+          this.licenseAnalysis.licenseStackConflictsCount =
+              tab.license_analysis.conflict_packages ?
+                  tab.license_analysis.conflict_packages.length : 0;
           if (tab.license_analysis.unknown_licenses) {
-            this.licenseAnalysis.licenseReallyUnknownCount = tab.license_analysis.unknown_licenses.really_unknown ? tab.license_analysis.unknown_licenses.really_unknown.length : 0;
-            this.licenseAnalysis.licenseComponentConflictsCount = tab.license_analysis.unknown_licenses.component_conflict ? tab.license_analysis.unknown_licenses.component_conflict.length : 0;
+            let licenseReallyUnknownCount =
+                tab.license_analysis.unknown_licenses.really_unknown ?
+                    tab.license_analysis.unknown_licenses.really_unknown.length : 0;
+            let licenseComponentConflictsCount =
+                tab.license_analysis.unknown_licenses.component_conflict ?
+                    tab.license_analysis.unknown_licenses.component_conflict.length : 0;
+            this.licenseAnalysis.licenseUnknownCount =
+                licenseReallyUnknownCount + licenseComponentConflictsCount;
           }
           this.licenseAnalysis.stackLicenseText = tab.license_analysis.f8a_stack_licenses[0];
           if (tab.license_analysis.status) {
             this.licenseAnalysis.status = tab.license_analysis.status;
-            if (tab.license_analysis.status.toLowerCase() === 'componentconflict') {
-                this.licenseAnalysis.status = 'unknown';
+            if (this.licenseAnalysis.status.toLowerCase() === 'componentconflict') {
+                this.licenseAnalysis.status = 'Unknown';
+            }
+            if (this.licenseAnalysis.status.toLowerCase() === 'stackconflict') {
+                this.licenseAnalysis.status = 'Conflict';
             }
           } else {
-              this.licenseAnalysis.status = 'failure';
+              this.licenseAnalysis.status = 'Failure';
           }
         }
-
-
-        // tab.dependencies.forEach((t) => {
-        //     t.licenses.forEach((license) => {
-        //         if (!licenses[license]) {
-        //             licenses[license] = 1;
-        //         } else {
-        //             ++ licenses[license];
-        //         }
-        //     });
-        // });
-
-        // for (let i in licenses) {
-        //     if (licenses.hasOwnProperty(i)) {
-        //         // Push names and count to be in this structure ['Name', 20] for C3
-        //         temp = [];
-        //         temp.push(i);
-        //         temp.push(licenses[i]);
-        //         columnData.push(temp);
-        //     }
-        // }
-        // // sort the data array by license count
-        // columnData = this.sortChartColumnData(columnData);
-        // columnDataLength = columnData ? columnData.length : 0;
-        // if (columnDataLength > 4) {
-        //     for (let i = 3; i < columnDataLength; i++) {
-        //         otherLicensesArray.push(columnData[i][0]);
-        //         otherLicensesRatio += columnData[i][1];
-        //     }
-        //     columnData.splice(4);
-        //     columnData[3][0] = 'Others';
-        //     columnData[3][1] = otherLicensesRatio;
-        // }
-        // this.licenseInfo = {
-        //     data: {
-        //         columns: columnData,
-        //         type: 'donut',
-        //         labels: false
-        //     },
-        //     chartOptions: {
-        //         size: {
-        //             height: 100,
-        //             width: 100
-        //         },
-        //         donut: {
-        //             width: 13,
-        //             label: {
-        //                 show: false
-        //             },
-        //             title: columnDataLength + ' Licenses'
-        //         }
-        //     },
-        //     configs: {
-        //         legend: {
-        //             show: false
-        //         },
-        //         tooltip: {
-        //             format: {
-        //                 name: (name, ratio, id, index) => {
-        //                     if (name === 'Others') {
-        //                         return otherLicensesArray.toString();
-        //                     }
-        //                     return name;
-        //                 },
-        //                 value: (value, ratio, id, index) => {
-        //                     return (ratio * 100).toFixed(2) + '%';
-        //                 }
-        //             }
-        //         }
-        //     }
-        // };
     }
 
     private resetFields(): void {

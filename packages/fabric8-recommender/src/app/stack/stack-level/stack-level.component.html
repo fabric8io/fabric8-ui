@@ -56,7 +56,7 @@
                 <h3>
                     <span>Licenses</span>
                 </h3>
-                <div class="stat-content chart-area" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() !== 'failure'">
+                <div class="stat-content license-area" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() !== 'failure'">
                     <div class="stack-license-text flex-3" *ngIf="licenseAnalysis.status.toLowerCase() === 'successful'">
                         <div class="metric-desc">
                             Possible Stack License
@@ -73,7 +73,7 @@
                             <span>{{licenseAnalysis.licenseOutliersCount}}</span>
                         </div>
                     </div>
-                    <div class="conflict-license flex-1" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'stackconflict'">
+                    <div class="conflict-license flex-1" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'conflict'">
                         <div class="metric-desc">
                             Conflict <strong>between</strong> two Components
                         </div>
@@ -83,11 +83,11 @@
                             </span>
                         </div>
                     </div>
-                    <div class="conflict-license-direction-icon flex-1" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'stackconflict'">
+                    <div class="conflict-license-direction-icon flex-1" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'conflict'">
                         <span class="fa fa-arrow-right"></span>
                     </div>
                     <div class="conflict-license-container flex-4" 
-                        *ngIf="licenseAnalysis.status.toLowerCase() === 'stackconflict'" [popover]="popLicenseTemplate" 
+                        *ngIf="licenseAnalysis.status.toLowerCase() === 'conflict'" [popover]="popLicenseTemplate" 
                         popoverTitle="All Stack License Conflicts" 
                         placement="left"
                         containerClass="conflict-license-container"

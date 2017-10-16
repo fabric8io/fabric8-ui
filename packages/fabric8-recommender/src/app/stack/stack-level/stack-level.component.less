@@ -39,11 +39,60 @@
           flex: 6;
           justify-content: center;
         }
-        &.chart-area {
+        &.license-area {
           text-align: center;
           flex: 6;
-          .c3-chart-arcs-title { font-size: 10px; }
-          f8-chart { margin: 0 auto; }
+          .conflict-license {
+            padding-left: 5px;
+          }
+          .conflict-license-direction-icon {
+            color: @color-pf-black-500;
+            font-size: 35px;
+          }
+          .conflict-license-container {
+            display: flex;
+            flex-flow: row wrap;
+            .packages {
+              color: @color-pf-black-500;
+              font-size: 15px;
+              text-align: right;
+              .conflict-group {
+                border-bottom: @color-pf-black-500 1px solid;
+              }
+              span.fa {
+                margin: 0 0 0 10px;
+              }
+              .ellipsis-icon {
+                color: @color-pf-black-500;
+                font-size: 25px;
+                margin: 10px 4px 0 0;
+              }
+            }
+            .licenses {
+              color: @color-pf-black-500;
+              font-size: 15px;
+              text-align: left;
+              .conflict-group {
+                border-bottom: @color-pf-black-500 1px solid;
+                padding-left: 10px;
+                margin-right: 45px;
+              }
+            }
+            &.popover {
+              flex-flow: column;
+              max-width: 400px;
+              .license-template {
+                display: flex;
+                line-height: 25px;
+                width: 350px;
+                .licenses {
+                  .conflict-group {
+                    margin-right: 0;
+                  }
+                }
+              }
+            }
+          }
         }
         .metric {
           height: 40px;
@@ -55,54 +104,6 @@
           span { margin: 0 auto; }
         }
         .metric-desc { font-size: 14px; }
-        .conflict-license-direction-icon {
-          color: @color-pf-black-500;
-          font-size: 35px;
-        }
-        .conflict-license-container {
-          display: flex;
-          flex-flow: row wrap;
-          .packages {
-            color: @color-pf-black-500;
-            font-size: 15px;
-            text-align: right;
-            .conflict-group {
-              border-bottom: @color-pf-black-500 1px solid;
-            }
-            span.fa {
-              margin: 0 0 0 10px;
-            }
-            .ellipsis-icon {
-              color: @color-pf-black-500;
-              font-size: 25px;
-              margin: 10px 4px 0 0;
-            }
-          }
-          .licenses {
-            color: @color-pf-black-500;
-            font-size: 15px;
-            text-align: left;
-            .conflict-group {
-              border-bottom: @color-pf-black-500 1px solid;
-              padding-left: 10px;
-              margin-right: 45px;
-            }
-          }
-          &.popover {
-            flex-flow: column;
-            max-width: 400px;
-            .license-template {
-              display: flex;
-              line-height: 25px;
-              width: 350px;
-              .licenses {
-                .conflict-group {
-                  margin-right: 0;
-                }
-              }
-            }
-          }
-        }
       }
     }
     &:after {
@@ -116,10 +117,10 @@
     .stat-container {
       margin: 10px 5px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      border-radius: 2px;
       flex: 1;
       &.outlier-stat { flex: 2; }
-      &.stack-license-stat { flex: 3; }
+      &.stack-license-stat { flex: 2; }
       &.security-issues-stat {
         .cve-message {
           font-size: 12px;
