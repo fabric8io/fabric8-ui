@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, TemplateRef } from '@angular/core';
 import { IWorkflow } from './models/workflow';
-import { IModalHost } from '../../wizard/models/modal-host';
-import { SpaceWizardComponent } from '../../wizard/space-wizard.component';
-import { Context, Contexts } from 'ngx-fabric8-wit';
-
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import {Subscription } from 'rxjs';
 
 @Component({
@@ -14,12 +13,13 @@ import {Subscription } from 'rxjs';
 })
 export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
-  @ViewChild('updateSpace') updateSpace: IModalHost;
-  @ViewChild('spaceWizard') spaceWizard: SpaceWizardComponent;
   private _context: Context;
   private contextSubscription: Subscription;
+  private selectedFlow: string;
+  private space: Space;
+  modalRef: BsModalRef;
 
-  constructor(
+  constructor(private modalService: BsModalService,
     private contexts: Contexts
   ) {
 
@@ -27,6 +27,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.contextSubscription = this.contexts.current.subscribe(val => {
       this._context = val;
+      this.space = val.space;
     });
   }
 
@@ -34,8 +35,17 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     this.contextSubscription.unsubscribe();
   }
 
-  openForgeWizard() {
-    this.updateSpace.open(this.spaceWizard.steps.spaceConfigurator);
+  openForgeWizard(addSpace: TemplateRef<any>) {
+    this.selectedFlow = '';
+    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+  }
+
+  closeModal($event: any): void {
+    this.modalRef.hide();
+  }
+
+  selectFlow($event) {
+    this.selectedFlow = $event.flow;
   }
 
 }

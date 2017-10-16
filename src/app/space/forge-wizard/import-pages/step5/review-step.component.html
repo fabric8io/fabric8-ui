@@ -1,0 +1,42 @@
+<section *ngIf="gui.inputs">
+  <div style="min-height: 450px" class="row">
+    <div class="col-xs-12">
+      <label>Add to your codebases</label>
+      <div class="add-codebase-widget card-pf f8-card">
+        <div class="card-pf-body f8-card-body">
+          <ul class="list-group list-view-pf list-view-pf-view">
+            <li class="list-group-item" *ngFor="let input of gui.inputs">
+              <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                  <div class="list-view-pf-left">
+                    <span class="avatar fa fa-github list-view-pf-icon-sm"></span>
+                  </div>
+                  <div class="list-view-pf-description">
+                    <div class="list-group-item-text">
+                      <a href="{{input.label}}" target="_blank">{{input.label}}</a>
+                    </div>
+                  </div>
+                  <div class="list-view-pf-additional-info">
+                    <div class="list-view-pf-additional-info-item">
+                      <span class="pficon pficon-screen"></span>
+                      {{input.display.cheStackId}}
+                    </div>
+                    <div class="list-view-pf-additional-info-item">
+                      <span class="pficon pficon-settings"></span>
+                      {{input.display.buildConfigName}} build config
+                    </div>
+                    <div class="list-view-pf-additional-info-item">
+                      <span class="pficon pficon-build"></span>
+                      {{input.display.namespace}} jenkins
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

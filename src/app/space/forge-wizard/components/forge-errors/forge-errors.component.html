@@ -1,0 +1,7 @@
+<div *ngIf="field.messages" style="position:relative;height:auto;display:block;" class="form-control-feedback user-select-none">
+  <ul>
+    <li *ngFor="let message of field.messages">
+      {{message.description}}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,11 @@
+<section *ngIf="gui.inputs">
+  <div style="min-height: 450px" class="row">
+    <div class="col-xs-12">
+      <div class="form-horizontal">
+        <multiple-selection-list class="input-group width-100" [field]="gui.inputs[0]" [form]="form">
+        </multiple-selection-list>
+        <forge-errors [field]="gui"></forge-errors>
+    </div>
+    </div>
+  </div>
+</section>

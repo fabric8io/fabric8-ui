@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, TemplateRef } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private contexts: Contexts,
     private spaces: Spaces,
     private logger: Logger,
-    private fabric8UIConfig: Fabric8UIConfig,
+    private fabric8UIConfig: Fabric8UIConfig
   ) {
     this._spaceSubscription = spaces.recent.subscribe(val => this.recent = val);
   }

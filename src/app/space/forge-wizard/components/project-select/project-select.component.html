@@ -1,0 +1,17 @@
+<div class="container-fluid container-cards-pf">
+  <div class="row row-cards-pf">
+    <div class="col-xs-12 col-sm-6" *ngFor="let option of input.valueChoices">
+      <div [attr.id]="option.id" [class.active]="isSelected(option)" (click)="setSelected(option)"
+        class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select">
+        <div class="ribbon ribbon-top-right" *ngIf="className(option) === 'Node'"><span>technology preview</span></div>
+        <div class="card-pf-body">
+          <div class="card-pf-top-element icon {{className(option)}}">
+          </div>
+          <div class="card-pf-body text-center">
+            {{option.id}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<section *ngIf="gui.inputs">
+  <div style="min-height: 450px" class="row">
+    <div class="col-xs-12">
+      <div class="form-horizontal">
+        <label title="pipeline" required>Select a build pipeline strategy</label>
+        <pipeline-view
+          class="input-group width-100" [field]="gui.inputs[0]">
+        </pipeline-view>
+        <single-input class="input-group width-100" [field]="gui.inputs[3]" [form]="form">
+        </single-input>
+        <forge-errors [field]="gui"></forge-errors>
+      </div>
+    </div>
+  </div>
+</section>
+

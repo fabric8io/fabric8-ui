@@ -1,103 +1,121 @@
-import { Component, Input, OnInit } from '@angular/core';
+//import { IModalHost } from './models/modal-host';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ILoggerDelegate, LoggerFactory } from './common/logger';
-import { IModalHost } from './models/modal-host';
-import { IWorkflow, WorkflowFactory } from './models/workflow';
-import { AppGeneratorConfiguratorService } from './services/app-generator.service';
+
+import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
+import {
+  SpaceService,
+  SpaceNamePipe
+} from 'ngx-fabric8-wit';
+import { UserService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
+import { ProcessTemplate } from 'ngx-fabric8-wit';
+import { ILoggerDelegate, LoggerFactory } from '../../common/logger';
+import { IWorkflow } from '../../models/workflow';
+import { DummyService } from "app/shared/dummy.service";
+import { SpaceNamespaceService } from "app/shared/runtime-console/space-namespace.service";
+import { SpacesService } from "app/shared/spaces.service";
+//import { AppGeneratorConfiguratorService } from "app/space/wizard/services/app-generator.service";
+import {
+  Space,
+  SpaceAttributes
+} from 'ngx-fabric8-wit';
 
 @Component({
   selector: 'space-wizard',
   templateUrl: './space-wizard.component.html',
   styleUrls: ['./space-wizard.component.less']
 })
-export class SpaceWizardComponent implements OnInit {
+export class SpaceWizardComponent implements OnInit, OnDestroy {
 
   static instanceCount: number = 1;
 
-  @Input() host: IModalHost;
+  @Input() host: any;
 
-  /*
-   * facilitates specifying a specific starting step when opening the host dialog
-   */
-  public get steps() {
-    return this.configurator.workflowSteps;
-  }
-
-  private _workflow: IWorkflow = null;
-  @Input()
-  get workflow(): IWorkflow {
-    if (!this._workflow) {
-      this._workflow = this.workflowFactory.create();
-    }
-    return this._workflow;
-  }
-
-  set workflow(value: IWorkflow) {
-    this._workflow = value;
-  }
+  spaceTemplates: ProcessTemplate[];
+  selectedTemplate: ProcessTemplate;
+  space: Space;
 
   constructor(
     private router: Router,
-    private workflowFactory: WorkflowFactory,
-    loggerFactory: LoggerFactory,
-    public configurator: AppGeneratorConfiguratorService
+    public dummy: DummyService,
+    private spaceService: SpaceService,
+    private notifications: Notifications,
+    private userService: UserService,
+    private spaceNamespaceService: SpaceNamespaceService,
+    private spaceNamePipe: SpaceNamePipe,
+    private spacesService: SpacesService
   ) {
-    let logger = loggerFactory.createLoggerDelegate(this.constructor.name, SpaceWizardComponent.instanceCount++);
-    if (logger) {
-      this.log = logger;
-    }
-    this.log(`New instance ...`);
+    this.spaceTemplates = dummy.processTemplates;
+    this.space = this.createTransientSpace();
+  }
 
+ngOnDestroy() {
+  this.finish()
+}
+
+  /*
+   * Creates a persistent collaboration space
+   * by invoking the spaceService
+   */
+  createSpace() {
+    console.log('Creating space', this.space);
+    if (!this.space) {
+      this.space = this.createTransientSpace();
+    }
+    this.space.attributes.name = this.space.name.replace(/ /g, '_');
+    this.userService.getUser()
+      .switchMap(user => {
+        this.space.relationships['owned-by'].data.id = user.id;
+        return this.spaceService.create(this.space);
+      })
+      .do(createdSpace => {
+        this.spacesService.addRecent.next(createdSpace);
+      })
+      .switchMap(createdSpace => {
+        return this.spaceNamespaceService
+          .updateConfigMap(Observable.of(createdSpace))
+          .map(() => createdSpace)
+          // Ignore any errors coming out here, we've logged and notified them earlier
+          .catch(err => Observable.of(createdSpace));
+      })
+      .subscribe(createdSpace => {
+        //this.configurator.currentSpace = createdSpace;
+        const primaryAction: NotificationAction = {
+          name: `Open Space`,
+          title: `Open ${this.spaceNamePipe.transform(createdSpace.attributes.name)}`,
+          id: 'openSpace'
+        };
+        this.notifications.message(<Notification>{
+          message: `Your new space is created!`,
+          type: NotificationType.SUCCESS,
+          primaryAction: primaryAction
+        })
+        .filter(action => action.id === primaryAction.id)
+        .subscribe(action => {
+          this.router.navigate([createdSpace.relationalData.creator.attributes.username,
+          createdSpace.attributes.name]);
+          this.finish();
+        });
+        this.finish();
+      },
+      err => {
+        console.log('Error creating space', err);
+        this.notifications.message(<Notification>{
+          message: `Failed to create "${this.space.name}"`,
+          type: NotificationType.DANGER
+        });
+        this.finish();
+      });
   }
 
   ngOnInit() {
-    this.log(`ngInit ...`);
-    this.configureComponentHost();
-  }
-
-  /**
-   * Create and initializes a new workflow object.
-   */
-  createAndInitializeWorkflow(): IWorkflow {
-    let component = this;
-    return this.workflowFactory.create({
-      steps: () => {
-        return [
-          { name: this.configurator.workflowSteps.spaceCreator, index: 0, nextIndex: 1 },
-          { name: this.configurator.workflowSteps.spaceConfigurator, index: 1, nextIndex: 1 },
-          { name: this.configurator.workflowSteps.forgeQuickStart, index: 5, nextIndex: 1 },
-          { name: this.configurator.workflowSteps.forgeImportGit, index: 7, nextIndex: 1 }
-        ];
-      },
-      firstStep: () => {
-        return {
-          index: 0
-        };
-      },
-      cancel: (...args) => {
-        /*
-         * Ensure 'finish' has the correct 'this'.
-         * That is why apply is being used.
-         */
-        component.cancel.apply(component, args);
-      },
-      finish: (...args) => {
-        /*
-         * Ensure 'finish' has the correct 'this'.
-         * That is why apply is being used.
-         */
-        component.finish.apply(component, args);
-      }
-    });
-  }
-
-  /**
-   * Resets the configurator, space and workflow object
-   * into a default empty state.
-   */
-  reset() {
-    this.configurator.resetTransientSpace();
-    this.workflow = this.createAndInitializeWorkflow();
+    this.host.closeOnEscape = true;
+    this.host.closeOnOutsideClick = false;
+    const srumTemplates = this.spaceTemplates.filter(template => template.name == "Scenario Driven Planning")
+    if (srumTemplates && srumTemplates.length > 0) {
+      this.selectedTemplate = srumTemplates[0];
+    }
   }
 
   finish() {
@@ -123,59 +141,34 @@ export class SpaceWizardComponent implements OnInit {
     }
   }
 
-  cancel() {
-    this.log(`cancel...`);
-    // just close the host dialog
-    if (this.host) {
-      this.host.close();
-    }
-  }
 
-  /**
-   * Configures this component host dialog settings.
-   * host is an instance of the modal dialog object
-   * cast to IModalHost interface
-   */
-  configureComponentHost() {
-
-    this.host.closeOnEscape = true;
-    this.host.closeOnOutsideClick = false;
-
-    let me = this;
-
-    /**
-     * Configure the modal dialog open and close intercept handlers.
-     */
-    let originalOpenHandler = this.host.open;
-    this.host.open = function (...args) {
-      me.log(`Opening wizard modal dialog ...`, args);
-      me.reset();
-      if ( args.length > 0 && typeof args[0] === 'string' ) {
-        let step = args[0];
-        me.workflow.gotoStep(step);
+  private createTransientSpace(): Space {
+    let space = {} as Space;
+    space.name = '';
+    space.path = '';
+    space.attributes = new SpaceAttributes();
+    space.attributes.name = space.name;
+    space.type = 'spaces';
+    space.privateSpace = false;
+    space.process = { name: '', description: '' };
+    space.relationships = {
+      areas: {
+        links: {
+          related: ''
+        }
+      },
+      iterations: {
+        links: {
+          related: ''
+        }
+      },
+      ['owned-by']: {
+        data: {
+          id: '',
+          type: 'identities'
+        }
       }
-      /**
-       * note: 'this' in this context is not me ( i.e component)
-       * ... but an instance of Modal.
-       * That is why  => is not being used here
-       */
-      return originalOpenHandler.apply(this, args);
     };
-    let originalCloseHandler = this.host.close;
-    this.host.close = function (...args) {
-      me.log(`Closing wizard modal dialog ...`);
-      /**
-       * note: 'this' is not me ... but an instance of Modal.
-       * That is why  => is not being used here
-       */
-      return originalCloseHandler.apply(this, args);
-    };
+    return space;
   }
-
-  /**
-   * used to add a log entry to the logger
-   * The default one shown here does nothing.
-   */
-  log: ILoggerDelegate = () => { };
-
 }
