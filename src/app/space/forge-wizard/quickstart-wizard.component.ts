@@ -9,7 +9,8 @@ import { CodebasesService } from '../create/codebases/services/codebases.service
 
 @Component({
   selector: 'quickstart-wizard',
-  templateUrl: './quickstart-wizard.component.html'
+  templateUrl: './quickstart-wizard.component.html',
+  styleUrls: ['./quickstart-wizard.component.less']
 })
 export class ForgeQuickstartComponent extends AbstractWizard {
 
