@@ -32,7 +32,9 @@ fabric8UITemplate{
                     ciDeploy = true
 
                 } else if (utils.isCD()){
-
+                    sh "git checkout master"
+                    sh "git pull"
+                    sh "git remote set-url origin git@github.com:${project}.git"
                     container('ui'){
                         pipeline.ci()
                     }
