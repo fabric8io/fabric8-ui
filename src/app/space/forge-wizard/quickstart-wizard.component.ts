@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {ForgeService} from './forge.service';
-import {AbstractWizard} from './abstract-wizard.component';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { ForgeService } from './forge.service';
+import { AbstractWizard } from './abstract-wizard.component';
 import { ContextService } from '../../shared/context.service';
 import { Gui, Input } from './gui.model';
 import { configureSteps } from './quickstart-wizard.config';
@@ -8,8 +8,10 @@ import { Notifications } from 'ngx-base';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'quickstart-wizard',
-  templateUrl: './quickstart-wizard.component.html'
+  templateUrl: './quickstart-wizard.component.html',
+  styleUrls: ['./quickstart-wizard.component.less']
 })
 export class ForgeQuickstartComponent extends AbstractWizard {
 
