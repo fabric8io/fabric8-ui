@@ -213,7 +213,7 @@
     "patternfly": "3.28.1",
     "phantomjs-prebuilt": "2.1.15",
     "postcss": "6.0.13",
-    "protractor": "5.1.2",
+    "protractor": "5.2.0",
     "protractor-browser-logs": "1.0.351",
     "protractor-jasmine2-screenshot-reporter": "0.4.1",
     "raw-loader": "0.5.1",
