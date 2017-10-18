@@ -1,5 +1,8 @@
 import { Fabric8UIConfig } from './../../../shared/config/fabric8-ui-config';
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewEncapsulation,
+  TemplateRef
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
@@ -22,9 +25,8 @@ import {
 } from '../../../../a-runtime-console/index';
 
 import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
-import { IModalHost } from '../../wizard/models/modal-host';
-import { SpaceWizardComponent } from '../../wizard/space-wizard.component';
-import { Context, Contexts } from 'ngx-fabric8-wit';
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -36,9 +38,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   toolbarConfig: ToolbarConfig;
   openshiftConsoleUrl: string;
-
-  @ViewChild('updateSpace') updateSpace: IModalHost;
-  @ViewChild('spaceWizard') spaceWizard: SpaceWizardComponent;
 
   private _context: Context;
   private contextSubscription: Subscription;
@@ -57,8 +56,12 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   } as SortField;
   private _pipelinesSubscription: Subscription;
 
+  private selectedFlow: string;
+  private space: Space;
+  modalRef: BsModalRef;
 
   constructor(
+    private modalService: BsModalService,
     private contexts: Contexts,
     private router: Router,
     private authService: AuthenticationService,
@@ -178,7 +181,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     }
   }
 
-
   ngOnInit() {
     this._pipelinesSubscription = this.pipelinesService.current
       .do(val => {
@@ -202,6 +204,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
     this.contextSubscription = this.contexts.current.subscribe(val => {
       this._context = val;
+      this.space = val.space;
     });
   }
 
@@ -226,7 +229,16 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     return this._filteredPipelines;
   }
 
-  openForgeWizard() {
-    this.updateSpace.open(this.spaceWizard.steps.spaceConfigurator);
+  openForgeWizard(addSpace: TemplateRef<any>) {
+    this.selectedFlow = '';
+    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+  }
+
+  closeModal($event: any): void {
+    this.modalRef.hide();
+  }
+
+  selectFlow($event) {
+    this.selectedFlow = $event.flow;
   }
 }

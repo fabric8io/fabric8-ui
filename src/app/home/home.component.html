@@ -64,7 +64,7 @@
         <div class="card-pf f8-card">
           <div class="card-pf-heading f8-card-heading">
             <div class="card-pf-heading-details f8-card-heading-details" *ngIf="_spaces.length > 0">
-              <a class="btn btn-link f8-card-heading-btn-link" (click)="createSpace.open()">
+              <a class="btn btn-link f8-card-heading-btn-link" (click)="openForgeWizard(createSpace)">
                 <i class="pficon pficon-add-circle-o"></i>
               </a>
             </div>
@@ -84,7 +84,7 @@
                 </a>
               </p>
               <div class="blank-slate-pf-main-action">
-                <button class="btn btn-primary btn-lg" (click)="createSpace.open()"> Create a Space </button>
+                <button class="btn btn-primary btn-lg" (click)="openForgeWizard(createSpace)"> Create a Space </button>
               </div>
             </div>
             <!-- A list of the 5 most recent Spaces will be displayed in place of the Blank Slate. Additional Spaces are viewed by using the 'See All' button in the Card footer -->
@@ -118,8 +118,10 @@
   </div>
 </div>
 <!-- Create Space modal -->
-<modal #createSpace modalClass="modal-lg chromeless-modal">
-  <modal-content class="chromeless-modal-content">
-    <space-wizard [host]="createSpace"></space-wizard>
-  </modal-content>
-</modal>
+<ng-template #createSpace>
+  <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
+  <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space" [style.display]="selectedFlow !== 'selectFlow' ? 'none': ''"></flow-selector>
+  <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
+  <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
+</ng-template>
+

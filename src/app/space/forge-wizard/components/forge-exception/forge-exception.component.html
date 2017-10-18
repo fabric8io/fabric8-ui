@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <button class="close" aria-label="Close" type="button"
+          (click)="cancel()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <dt class="modal-title">Application wizard</dt>
+</div>
+<section [class.hide]="!error" class="app-generator-message app-generator-message-error">
+  <div class="message-title-container">
+    <div class="message-title">
+      <span class="message-title-icon fa-2x pficon pficon-error-circle-o"></span>
+      <span class="message-title-icon-label" >Error!</span><br/>
+      <span class="message-title-text" >Something went wrong while attempting to perform this operation ...</span>
+    </div>
+  </div>
+  <div class="message-body-container">
+    <div *ngIf="error?.cause?.localizedMessage" [innerHTML]="error.cause.localizedMessage" class="message-body"></div>
+    <div *ngIf="!error?.cause?.localizedMessage" [innerHTML]="error" class="message-body"></div>
+  </div>
+</section>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12 close-button">
+      <a id="okCloseError" class="btn btn-primary" (click)="cancel()">
+        Ok
+      </a>
+    </div>
+  </div>
+</div>

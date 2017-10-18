@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <button class="close" aria-label="Close" type="button"
+          (click)="cancel()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <dt class="modal-title">Welcome to your <strong>{{space}}</strong> space.</dt>
+</div>
+
+<section style="min-height: 450px" class="forge-section container-fluid">
+  <div class="row">
+    <div class="col-sm-12 wizard-step-sub-title">
+      <h1 class="textCenter">
+        <b>How would you like to get started?</b>
+      </h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 panel">
+      <div id="importCodeButton" class="col-sm-6 panel-item" (click)="select('import')">
+        <ul class="action-panel-list">
+          <li>
+            <h3>Import existing <b>code</b></h3>
+          </li>
+          <li>
+            <i class="pficon fa-3x pficon-import"></i>
+          </li>
+        </ul>
+      </div>
+      <div id="forgeQuickStartButton" class="col-sm-6 panel-item" (click)="select('quickstart')">
+        <ul class="action-panel-list">
+          <li>
+            <h3>Create a new <b>Quickstart</b> project</h3>
+          </li>
+          <li>
+            <i class="pficon fa-3x pficon-screen"></i>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 wizard-step-tool-bar">
+        <a id="noThanksButton" class="btn btn-primary" (click)="cancel()">
+          No thanks, take me to the {{space}} dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+

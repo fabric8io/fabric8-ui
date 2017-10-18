@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, TemplateRef } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
@@ -13,6 +13,7 @@ import { BrandInformation } from '../models/brand-information';
 // use url-loader for images
 import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
+import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -22,8 +23,10 @@ import fabric8Logo from '../../assets/images/fabric8_logo.png';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
+  brandInformation: BrandInformation;
   loggedInUser: User;
   recent: Space[];
+  modalRef: BsModalRef;
   private _context: Context;
   private _defaultContext: Context;
   private _spaces: Space[] = [];
@@ -31,7 +34,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _loggedInUserSubscription: Subscription;
   private _contextSubscription: Subscription;
   private _contextDefaultSubscription: Subscription;
-  public brandInformation: BrandInformation;
+  private selectedFlow: string;
+  private space: string;
 
   constructor(
     private userService: UserService,
@@ -41,7 +45,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     private spaces: Spaces,
     private logger: Logger,
     private fabric8UIConfig: Fabric8UIConfig,
+    private modalService: BsModalService
   ) {
+    this.space = '';
+    this.selectedFlow = 'start';
     this._spaceSubscription = spaces.recent.subscribe(val => this.recent = val);
   }
 
@@ -99,5 +106,19 @@ export class HomeComponent implements OnInit, OnDestroy {
       return this._context;
     }
   }
+  openForgeWizard(addSpace: TemplateRef<any>) {
+    this.selectedFlow = 'start';
+    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+  }
+
+  closeModal($event: any): void {
+    this.modalRef.hide();
+  }
+
+  selectFlow($event) {
+    this.selectedFlow = $event.flow;
+    this.space = $event.space;
+  }
+
 
 }

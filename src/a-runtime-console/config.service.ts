@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import * as _ from 'lodash';
 
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
 
 const defaults = Object.freeze({
   apiEndpoint: 'http://localhost:8080/v1',
@@ -24,15 +24,16 @@ export class ConfigService {
 
   constructor(private _http: Http) { }
 
-  load(configJson: string = defaultConfigJson): Promise<ConfigService> {
-    return this._http.get(configJson).map(res => res.json())
-      .toPromise()
-      .then((config) => {
+  load(configJson: string = defaultConfigJson): Observable<ConfigService> {
+    return this._http.get(configJson).map(res => {
+      let config = res.json();
+      // .toPromise()
+      // .then((config) => {
         this.settingsRepository = Object.freeze(_.merge({}, this.settingsRepository, config));
         return this;
-      })
-      .catch(() => {
-        console.log('Error: Configuration service unreachable!');
+      // })
+      // .catch((error: any) => {
+      //   console.log('Error: Configuration service unreachable!', error);
       });
   }
 

@@ -1,0 +1,24 @@
+<div class="form-group" [class.has-danger]="!form.valid" [ngSwitch]="field.valueType" [formGroup]="form">
+  <label title="{{field.label}}" [class.field-required]="field.required" [for]="field.name"
+         class="user-select-none col-xs-12 col-sm-4">{{field.label}}</label>
+  <div class="col-sm-8">
+    <input *ngSwitchCase="'java.lang.String'" id="{{field.name}}" title="{{field.label}}" name="{{field.name}}"
+      type="text" class="form-control col-xs-12 col-sm-8" placeholder="{{field.description}}"
+      [required]="field.required" [formControlName]="field.name"/>
+    <input *ngSwitchCase="'java.lang.Boolean'" style="box-shadow:none;" [title]="field.label"
+      type="checkbox" name="{{field.name}}" class="form-control" [formControlName]="field.name"
+      [required]="field.required">
+    <input *ngSwitchCase="'java.lang.Integer'" [title]="field.label" type="number" [formControlName]="field.name"
+      [name]="field.name" class="form-control" [required]="field.required">
+    <div *ngIf="form.get(field.name).dirty
+    && form.get(field.name).hasError('required')"
+         style="position:relative;height:auto;display:inline;"
+         class="form-control-feedback user-select-none">
+      {{field.label}} is required
+    </div>
+    <small class="form-text text-muted user-select-none" *ngIf="field.display && field.display.note">
+      <span class="color-info fa fa-info-circle"></span>
+      <i>{{field.display.note}}</i>
+    </small>
+  </div>
+</div>

@@ -35,17 +35,13 @@ const FABRIC8_BRANDING = 'fabric8';
 module.exports = function (options) {
   return {
 
-    entry: {
-      'app': './src/main.browser.ts'
-    },
-
     /**
      * Source map for Karma from the help of karma-sourcemap-loader &  karma-webpack
      *
      * Do not change, leave as is or it wont work.
      * See: https://github.com/webpack/karma-webpack#source-maps
      */
-    devtool: 'inline-source-map',
+    //devtool: 'inline-source-map',
 
     /**
      * Options affecting the resolving of modules.
@@ -60,7 +56,7 @@ module.exports = function (options) {
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
       extensions: ['.ts', '.js'],
-      
+
       modules: [helpers.root('src'), helpers.root('node_modules'),
         // Todo: fabric8-stack-analysis-ui/src/app/stack/overview/chart-component.js cannot locate c3
         helpers.root("node_modules/patternfly/node_modules/c3"),
@@ -91,20 +87,20 @@ module.exports = function (options) {
          *
          * See: https://github.com/webpack/source-map-loader
          */
-        {
-          test: /\.js$/,
-          use: ['source-map-loader'],
-          exclude: [
-            // these packages have problems with their sourcemaps
-            helpers.nodeModulePath("mydatepicker"),
-            helpers.nodeModulePath("ng2-completer"),
-            helpers.nodeModulePath("angular2-flash-messages"),
-            helpers.nodeModulePath("ngx-dropdown"),
-            helpers.nodeModulePath("ngx-modal"),
-            helpers.nodeModulePath("ngx-modal"),
-            helpers.nodeModulePath("ng2-dnd")
-          ]
-        },
+        // {
+        //   test: /\.js$/,
+        //   use: ['source-map-loader'],
+        //   exclude: [
+        //     // these packages have problems with their sourcemaps
+        //     helpers.nodeModulePath("mydatepicker"),
+        //     helpers.nodeModulePath("ng2-completer"),
+        //     helpers.nodeModulePath("angular2-flash-messages"),
+        //     helpers.nodeModulePath("ngx-dropdown"),
+        //     helpers.nodeModulePath("ngx-modal"),
+        //     helpers.nodeModulePath("ngx-modal"),
+        //     helpers.nodeModulePath("ng2-dnd")
+        //   ]
+        // },
 
         /**
          * Typescript loader support for .ts and Angular 2 async routes via .async.ts
@@ -114,8 +110,16 @@ module.exports = function (options) {
         {
           test: /\.ts$/,
           use: [
-            'awesome-typescript-loader',
-            'angular2-template-loader'
+            {
+              loader: "awesome-typescript-loader",
+              options: {
+                configFileName: 'tsconfig-test.json'
+              }
+            },
+            {
+              loader: "angular2-template-loader"
+            }
+
           ],
           exclude: [/\.e2e\.ts$/]
         },

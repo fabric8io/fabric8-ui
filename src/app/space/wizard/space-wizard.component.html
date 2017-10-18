@@ -1,21 +1,76 @@
 <div class="wizard">
-
-  <space-creator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.spaceCreator})" [workflow]="workflow" ></space-creator>
-
-  <space-configurator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.spaceConfigurator})" [workflow]="workflow" > </space-configurator>
-
-
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeQuickStart})"
-    forgeCommandName="{{configurator.forgeCommands.forgeQuickStart}}" workflowStepName="{{configurator.workflowSteps.forgeQuickStart}}" [workflow]="workflow">
-  </forge-app-generator>
-
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeImportGit})"
-    forgeCommandName="{{configurator.forgeCommands.forgeImportGit}}" workflowStepName="{{configurator.workflowSteps.forgeImportGit}}" [workflow]="workflow">
-  </forge-app-generator>
-
-  <forge-app-generator class="wizard-step" [class.active]="workflow.isStepActive({name:configurator.workflowSteps.forgeStarter})"
-    forgeCommandName="{{configurator.forgeCommands.forgeStarter}}" workflowStepName="{{configurator.workflowSteps.forgeStarter}}" [workflow]="workflow">
-  </forge-app-generator>
-
+<form class="wizard-step active" role="form" #spaceForm="ngForm" (ngSubmit)="createSpace()" novalidate>
+  <div class="modal-header">
+    <button class="close" aria-label="Close" type="button"
+            (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <dt class="modal-title">Create Space</dt>
+  </div>
+  <section class="container-fluid padding-top-standard-offset">
+    <div class="row">
+      <div class="col-xs-12">
+         <form class="form-horizontal">
+          <div *ngIf="name.errors && (name.dirty || name.touched)" class="alert alert-danger">
+            <div [hidden]="!name.errors.required">
+              <span class="pficon pficon-error-circle-o"></span>
+              <strong>Required Field</strong> Name is required to create a Space.
+            </div>
+            <div [hidden]="!name.errors.minLength">
+              <span class="pficon pficon-error-circle-o"></span>
+              <strong>Minimum Character Length</strong> Name must be at least {{name.errors.minLength?.min}} characters long.
+            </div>
+            <div [hidden]="!name.errors.maxLength">
+              <span class="pficon pficon-error-circle-o"></span>
+              <strong>Maximum Character Length</strong> Name cannot be more than {{name.errors.maxLength?.max}} characters long.
+            </div>
+            <div [hidden]="!name.errors.unique">
+              <span class="pficon pficon-error-circle-o"></span>
+              <strong>Duplicate Name</strong> '{{name.errors.unique?.requestedName}}' is already in use as {{name.errors.unique?.existingSpace.relationalData.creator.attributes.username}}/{{name.errors.unique?.existingSpace.attributes.name}}.
+            </div>
+            <div [hidden]="!name.errors.invalid">
+              <span class="pficon pficon-error-circle-o"></span>
+              <strong>Invalid Characters</strong> Name must contain only letters (upper case or lower case), numbers, spaces, underscores (_) or hyphens(-). It cannot start or end with a space, an underscore or a hyphen.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name" class="control-label col-sm-2">Name</label>
+            <div class="col-sm-10">
+              <input id="name" name="name" type="text" class="form-control" placeholder="Enter a unique name for your space" [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="developmentProcess" class="control-label col-sm-2">Template</label>
+            <div class="col-sm-10">
+              <select class="form-control" id="developmentProcess" [(ngModel)]="selectedTemplate" name="developmentProcess">
+                <option *ngFor="let p of spaceTemplates" [ngValue]="p">{{p.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div *ngIf="selectedTemplate?.description" class="padding-bottom-standard-offset col-sm-10 col-sm-offset-2">
+              <div class="row">
+                <div class="col-sm-12">
+                  <span class="pficon pficon-info "></span><span class="padding-left-5">{{selectedTemplate.description}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-10 col-sm-offset-2">
+              This space will be <strong>public</strong>, which means that anyone can access this code and participate
+              in creating the product.
+            </div>
+          </div>
+         </form>
+      </div>
+    </div>
+  </section>
+  <footer class="container-fluid padding-top-standard-offset padding-bottom-standard-offset">
+    <div class="row">
+      <div class="col-sm-12 wizard-step-tool-bar button-right">
+        <button id="createSpaceButton" class="btn btn-primary" [disabled]="!spaceForm.form.valid" type="submit">Create</button>
+      </div>
+    </div>
+  </footer>
+</form>
 
 </div>

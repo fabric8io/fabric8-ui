@@ -10,7 +10,7 @@ export NODE_ENV=inmemory
 echo -n Starting Webdriver and Selenium...
 (webdriver-manager start --versions.chrome 2.24 >>$LOGFILE 2>&1 &)
 # Wait for port 4444 to be listening connections
-while ! (ncat -w 1 127.0.0.1 4444 </dev/null >/dev/null 2>&1); do sleep 1; done
+while ! (nc -w 1 127.0.0.1 4444 </dev/null >/dev/null 2>&1); do sleep 1; done
 echo done.
 
 # Finally run protractor
@@ -37,4 +37,3 @@ else
   echo 'Functional tests FAIL'
   exit 1
 fi
-

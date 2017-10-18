@@ -1,0 +1,53 @@
+<forge-exception *ngIf="error" [error]="error"
+                 (onCancel)="cancel($event)">
+</forge-exception>
+<pfng-wizard *ngIf="!error" #wizard
+             [config]="config"
+             (onCancel)="cancel($event)"
+             (onNext)="nextClicked($event)"
+             (onPrevious)="previousClicked($event)"
+             (onStepChange)="stepChanged($event)">
+
+  <div [formGroup]="form" [ngSwitch]="currentGui.metadata?.name">
+    <pfng-wizard-step [config]="steps[0]">
+      <spinner [loading]="isLoading"></spinner>
+      <pfng-wizard-substep [config]="steps[3]">
+      <span *ngSwitchCase="'io.fabric8.forge.generator.github.GitHubImportPickOrganisationStep'">
+        <organisation-step [gui]="currentGui" [form]="form"></organisation-step>
+      </span>
+      </pfng-wizard-substep>
+      <pfng-wizard-substep [config]="steps[4]">
+      <span *ngSwitchCase="'io.fabric8.forge.generator.github.GitHubImportPickRepositoriesStep'">
+        <repositories-step [gui]= "currentGui" [form]="form"></repositories-step>
+      </span>
+      </pfng-wizard-substep>
+    </pfng-wizard-step>
+
+
+    <pfng-wizard-step [config]="steps[1]">
+      <spinner [loading]="isLoading"></spinner>
+      <pfng-wizard-substep [config]="steps[5]">
+      <span *ngSwitchCase="'Obsidian: Configure Pipeline'">
+        <pipeline-step [gui]="currentGui" [form]="form" [labelSpace]="currentSpace.attributes.name"></pipeline-step>
+      </span>
+      </pfng-wizard-substep>
+
+      <pfng-wizard-substep [config]="steps[6]">
+      <span *ngSwitchCase="'io.fabric8.forge.generator.kubernetes.CreateBuildConfigStep'">
+        <build-config-step [gui]="currentGui" [form]="form"></build-config-step>
+      </span>
+      </pfng-wizard-substep>
+    </pfng-wizard-step>
+
+    <pfng-wizard-step [config]="steps[2]">
+      <spinner [loading]="isLoading"></spinner>
+      <pfng-wizard-substep [config]="steps[7]">
+      <span *ngSwitchCase="'Review'">
+        <review-step [gui]="currentGui"></review-step>
+      </span>
+      </pfng-wizard-substep>
+    </pfng-wizard-step>
+  </div>
+</pfng-wizard>
+
+

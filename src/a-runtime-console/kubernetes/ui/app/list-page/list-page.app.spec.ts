@@ -7,7 +7,8 @@ import { EventModule } from './../../event/event.module';
 import { ConfigMapModule } from './../../configmap/configmap.module';
 import { DeploymentModule } from './../../deployment/deployment.module';
 import { TreeModule } from 'angular2-tree-component';
-import { TreeListModule, SlideOutPanelModule } from 'ngx-widgets';
+import { SlideOutPanelModule } from 'ngx-widgets';
+import { ActionModule } from 'patternfly-ng';
 import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
@@ -37,6 +38,7 @@ describe('AppListPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        ActionModule,
         Fabric8CommonModule,
         RouterTestingModule.withRoutes([]),
         RestangularModule.forRoot(),
@@ -46,7 +48,6 @@ describe('AppListPage', () => {
         KubernetesStoreModule,
         KubernetesComponentsModule,
         TestAppModule,
-        TreeListModule,
         TreeModule,
         EnvironmentRoutingModule,
         DeploymentModule,

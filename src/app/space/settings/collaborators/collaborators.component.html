@@ -1,12 +1,12 @@
 <div class="container-fluid">
-  <h3 class="collaborators-header">Collaborators of {{context.space.attributes.name | spaceName}} Space:</h3>
   <div class="row">
-    <div class="col-md-11">
-      Collaborator details:
+    <div class="col-xs-8 col-sm-8 col-md-9">
+      <h3 class="collaborators-header">Collaborators of {{context.space.attributes.name | spaceName}} Space:</h3>
     </div>
-    <div class="table-action-heading" (click)="launchAddCollaborators()">
-      <i class="pficon pficon-add-circle-o margin-top-4">
-      </i>
+    <div class="col-xs-4 col-sm-4 col-md-3">
+      <div class="table-action-heading" (click)="launchAddCollaborators()">
+        <a><i class="pficon pficon-add-circle-o"></i> Add Collaborators</a>
+      </div>
     </div>
   </div>
   <div class="row">

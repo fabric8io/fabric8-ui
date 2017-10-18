@@ -4,13 +4,13 @@
       <fabric8-edit-space-description-widget></fabric8-edit-space-description-widget>
     </div>
     <div class="col-sm-2">
-      <button id="analyze-overview-add-to-space-button" class="btn btn-primary btn-lg pull-right width-100" (click)="openForgeWizard()">Add to space</button>
+      <button id="analyze-overview-add-to-space-button" class="btn btn-primary btn-lg pull-right width-100" (click)="openForgeWizard(addSpace)">Add to space</button>
     </div>
   </section>
   <div class="cards-pf">
     <div class="row row-cards-pf">
       <div class="col-sm-4">
-        <fabric8-add-codebase-widget (addToSpace)="openForgeWizard()"></fabric8-add-codebase-widget>
+        <fabric8-add-codebase-widget (addToSpace)="openForgeWizard(addSpace)"></fabric8-add-codebase-widget>
       </div>
       <div class="col-sm-8">
         <fabric8-analytical-report-widget></fabric8-analytical-report-widget>
@@ -23,7 +23,7 @@
         <fabric8-create-work-item-widget></fabric8-create-work-item-widget>
       </div>
       <div class="col-sm-4">
-        <fabric8-pipelines-widget (addToSpace)="openForgeWizard()"></fabric8-pipelines-widget>
+        <fabric8-pipelines-widget (addToSpace)="openForgeWizard(addSpace)"></fabric8-pipelines-widget>
       </div>
       <div class="col-sm-4">
         <fabric8-environment-widget></fabric8-environment-widget>
@@ -33,8 +33,8 @@
 </div>
 
 <!-- Forge wizard modal -->
-<modal #updateSpace modalClass="modal-lg chromeless-modal">
-  <modal-content class="chromeless-modal-content">
-    <space-wizard #spaceWizard [host]="updateSpace"></space-wizard>
-  </modal-content>
-</modal>
+<ng-template #addSpace>
+    <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space.attributes.name" [style.display]="selectedFlow !== 'selectFlow' ? 'none': ''"></flow-selector>
+    <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
+    <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
+</ng-template>

@@ -34,7 +34,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   appliedFilters: Filter[];
   chePollSubscription: Subscription;
   chePollTimer: Observable<any>;
-  codebases: Codebase[];
+  codebases: Codebase[] = [];
   context: Context;
   currentSortField: SortField;
   emptyStateConfig: EmptyStateConfig;

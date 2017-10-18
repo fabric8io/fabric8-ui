@@ -1,0 +1,11 @@
+ <section *ngIf="gui.inputs">
+      <div style="min-height: 450px" class="row" [formGroup]="form">
+        <div class="col-xs-12">
+          <div class="form-horizontal">
+            <single-selection-dropdown class="input-group width-100" [field]="gui.inputs[0]" [form]="form">
+            </single-selection-dropdown>
+            <forge-errors [field]="gui"></forge-errors>
+          </div>
+        </div>
+      </div>
+  </section>

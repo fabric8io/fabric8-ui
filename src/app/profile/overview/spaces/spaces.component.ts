@@ -1,12 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation, TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Logger } from 'ngx-base';
 import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
-
-import { IModalHost } from '../../../space/wizard/models/modal-host';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -22,13 +21,19 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   subscriptions: Subscription[] = [];
   spaceToDelete: Space;
   spaces: Space[] = [];
-  @ViewChild('deleteSpace') deleteSpace: IModalHost;
+  modalRef: BsModalRef;
+  private selectedFlow: string;
+  private space: string;
 
   constructor(
       private contexts: Contexts,
       private logger: Logger,
       private spaceService: SpaceService,
-      private userService: UserService) {
+      private userService: UserService,
+      private modalService: BsModalService
+  ) {
+    this.space = '';
+    this.selectedFlow = 'start';
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
   }
 
@@ -53,7 +58,7 @@ export class SpacesComponent implements OnDestroy, OnInit  {
           this.spaces = spaces;
         }));
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 
@@ -67,7 +72,7 @@ export class SpacesComponent implements OnDestroy, OnInit  {
             this.logger.error(err);
           }));
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 
@@ -79,21 +84,39 @@ export class SpacesComponent implements OnDestroy, OnInit  {
             let index = this.spaces.indexOf(space);
             this.spaces.splice(index, 1);
             this.spaceToDelete = undefined;
-            this.deleteSpace.close();
+            this.modalRef.hide();
           },
           err => {
             this.logger.error(err);
             this.spaceToDelete = undefined;
-            this.deleteSpace.close();
+            this.modalRef.hide();
           }));
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 
-  confirmDeleteSpace(space: Space): void {
+  confirmDeleteSpace(space: Space, deleteSpace: TemplateRef<any>): void {
     this.spaceToDelete = space;
-    this.deleteSpace.open();
+    this.modalRef = this.modalService.show(deleteSpace, {class: 'modal-lg'});
+  }
+
+  openForgeWizard(addSpace: TemplateRef<any>) {
+    this.selectedFlow = 'start';
+    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+  }
+
+  closeModal($event: any): void {
+    this.modalRef.hide();
+  }
+
+  cancel() {
+    this.modalRef.hide();
+  }
+
+  selectFlow($event) {
+    this.selectedFlow = $event.flow;
+    this.space = $event.space;
   }
 
   // Private
