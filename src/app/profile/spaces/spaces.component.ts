@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {Component, Input, OnInit, TemplateRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Logger } from 'ngx-base';
 import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 import { IModalHost } from '../../space/wizard/models/modal-host';
 import { EventService } from "../../shared/event.service";
+import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -17,19 +18,24 @@ export class SpacesComponent implements OnInit {
   @Input() spaceId: string;
   contentItemHeight: number = 54;
   _spaces: Space[] = [];
+  modalRef: BsModalRef;
   pageSize: number = 20;
   searchTermStream = new Subject<string>();
   context: Context;
   spaceToDelete: Space;
-  @ViewChild('deleteSpace') deleteSpace: IModalHost;
+  private selectedFlow: string;
+  private space: string;
 
   constructor(
     private router: Router,
     private spaceService: SpaceService,
     private logger: Logger,
     private contexts: Contexts,
-    private eventService: EventService
+    private eventService: EventService,
+    private modalService: BsModalService
   ) {
+    this.space = '';
+    this.selectedFlow = 'start';
     this.contexts.current.subscribe(val => this.context = val);
   }
 
@@ -83,12 +89,12 @@ export class SpacesComponent implements OnInit {
           let index = this._spaces.indexOf(space);
           this._spaces.splice(index, 1);
           this.spaceToDelete = undefined;
-          this.deleteSpace.close();
+          this.modalRef.hide();
         },
         err => {
           this.logger.error(err);
           this.spaceToDelete = undefined;
-          this.deleteSpace.close();
+          this.modalRef.hide();
         });
     } else {
       this.logger.error("Failed to retrieve list of spaces owned by user");
@@ -99,9 +105,9 @@ export class SpacesComponent implements OnInit {
     return creatorId === this.context.user.id;
   }
 
-  confirmDeleteSpace(space: Space): void {
+  confirmDeleteSpace(space: Space, deleteSpace: TemplateRef<any>): void {
     this.spaceToDelete = space;
-    this.deleteSpace.open();
+    this.modalRef = this.modalService.show(deleteSpace, {class: 'modal-lg'});
   }
 
   get spaces(): Space[] {
@@ -110,5 +116,23 @@ export class SpacesComponent implements OnInit {
 
   searchSpaces(searchText: string) {
     this.searchTermStream.next(searchText);
+  }
+
+  openForgeWizard(addSpace: TemplateRef<any>) {
+    this.selectedFlow = 'start';
+    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+  }
+
+  closeModal($event: any): void {
+    this.modalRef.hide();
+  }
+
+  cancel() {
+    this.modalRef.hide();
+  }
+
+  selectFlow($event) {
+    this.selectedFlow = $event.flow;
+    this.space = $event.space;
   }
 }

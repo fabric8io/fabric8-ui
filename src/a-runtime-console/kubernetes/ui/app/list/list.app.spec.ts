@@ -7,7 +7,8 @@ import {EventModule} from "./../../event/event.module";
 import {ConfigMapModule} from "./../../configmap/configmap.module";
 import {DeploymentModule} from "./../../deployment/deployment.module";
 import {TreeModule} from "angular2-tree-component";
-import {SlideOutPanelModule, TreeListModule} from "ngx-widgets";
+import {SlideOutPanelModule} from "ngx-widgets";
+import {ActionModule} from "patternfly-ng";
 import {TestAppModule} from "./../../../../app.test.module";
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from "@angular/core/testing";
@@ -32,6 +33,7 @@ describe('AppListComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        ActionModule,
         Fabric8CommonModule,
         FormsModule,
         MomentModule,
@@ -41,7 +43,6 @@ describe('AppListComponent', () => {
         KubernetesStoreModule,
         KubernetesComponentsModule,
         TestAppModule,
-        TreeListModule,
         TreeModule,
         EnvironmentRoutingModule,
         DeploymentModule,

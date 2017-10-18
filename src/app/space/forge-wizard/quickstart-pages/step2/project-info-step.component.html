@@ -1,0 +1,17 @@
+<section *ngIf="gui.inputs">
+  <div style="min-height: 450px" class="row">
+    <div class="col-xs-12">
+      <div class="form-horizontal">
+        <single-selection-dropdown class="input-group width-100" *ngIf="organisation" [field]="organisation" [form]="form" inline="true">
+        </single-selection-dropdown>
+        <single-input class="input-group width-100" [field]="repoName" [form]="form">
+        </single-input>
+        <single-input class="input-group width-100" [field]="groupId" [form]="form">
+        </single-input>
+        <single-input class="input-group width-100" [field]="repoVersion" [form]="form">
+        </single-input>
+        <forge-errors [field]="gui"></forge-errors>
+      </div>
+    </div>
+  </div>
+</section>

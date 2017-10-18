@@ -1,7 +1,7 @@
 <div id="recent-pipelines-card" class="pipelines-widget card-pf f8-card">
   <div class="card-pf-heading f8-card-heading">
     <h2 class="card-pf-title">
-      Recent active pipelines
+      Recent Active Pipelines
       <span id="recent-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount | async}}</span>
     </h2>
   </div>
@@ -10,9 +10,9 @@
       <div class="f8-blank-slate-icon">
         <i class="pficon pficon-info"></i>
       </div>
-      <h3>No recent failed or active pipelines</h3>
+      <h3>Pipelines reflect integration and deployment stages that code goes through</h3>
       <p>
-        Failed pipelines or active pipelines will display here when you commit and build your codebase.
+        Pipelines display here when you commit and build your codebase.
       </p>
     </div>
     <ul id="recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">

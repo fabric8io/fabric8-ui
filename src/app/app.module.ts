@@ -24,7 +24,8 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule }       from 'angular2-moment';
 import { PlannerModule }      from 'fabric8-planner';
 import { RouterModule }       from '@angular/router';
-import { ModalModule } from 'ngx-modal';
+// import { ModalModule } from 'ngx-modal';
+import { ModalModule} from 'ngx-bootstrap/modal';
 import {
   // Base functionality for the runtime console
   KubernetesStoreModule,
@@ -33,7 +34,7 @@ import {
   OnLogin,
   DevNamespaceScope,
   NamespaceScope,
-  StatusListModule, SpaceNamespace,
+  StatusListModule, SpaceNamespace
 }                             from '../a-runtime-console/index';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { RestangularModule }  from 'ng2-restangular';
@@ -56,7 +57,7 @@ import {
   UserService
 }                             from 'ngx-login-client';
 import { WidgetsModule }      from 'ngx-widgets';
-import { PatternFlyNgModule } from 'patternfly-ng';
+import { ActionModule, ListModule, TreeListComponent, PatternFlyNgModule } from 'patternfly-ng';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -116,8 +117,9 @@ import { SpaceWizardModule }         from './space/wizard/space-wizard.module';
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
 import { EventService } from './shared/event.service';
-import {Fabric8UISpaceNamespace} from "./shared/runtime-console/fabric8-ui-space-namespace.service";
+import { Fabric8UISpaceNamespace } from './shared/runtime-console/fabric8-ui-space-namespace.service';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
+import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -135,8 +137,11 @@ export type StoreType = {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  imports: [ // import (in alphabetical order) other modules with the components, directives and pipes needed by the components in this module
+  imports: [
+    // import (in alphabetical order) other modules with the components, directives and pipes
+    // needed by the components in this module
     AboutModalModule,
+    ActionModule,
     BrowserAnimationsModule,
     BrowserModule,
     BsDropdownModule.forRoot(),
@@ -144,16 +149,18 @@ export type StoreType = {
     HttpModule,
     KubernetesRestangularModule,
     KubernetesStoreModule,
+    ListModule,
     LocalStorageModule.withConfig({
       prefix: 'fabric8',
       storageType: 'localStorage'
     }),
-    ModalModule,
+    ModalModule.forRoot(),
     MomentModule,
     ReactiveFormsModule,
     RestangularModule,
     RouterModule,
     SpaceWizardModule,
+    ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,
     PatternFlyNgModule,
@@ -234,6 +241,7 @@ export type StoreType = {
       useClass: Fabric8UISpaceNamespace
     },
     ssoApiUrlProvider,
+    TreeListComponent,
     UserService,
     witApiUrlProvider,
     realmProvider

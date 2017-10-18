@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, TemplateRef} from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
@@ -13,6 +13,7 @@ import { MenuedContextType } from './menued-context-type';
 import { Navigation } from './../../models/navigation';
 import { MenuItem } from './../../models/menu-item';
 import { DummyService } from './../../shared/dummy.service';
+import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 
 interface MenuHiddenCallback {
   (headerComponent: HeaderComponent): Observable<boolean>;
@@ -28,7 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   title = 'Almighty';
   imgLoaded: Boolean = false;
   statusListVisible = false;
-
+  modalRef: BsModalRef;
   isIn = false;   // store state
   toggleState() { // click handler
       let bool = this.isIn;
@@ -65,6 +66,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private _loggedInUserSubscription: Subscription;
   private plannerFollowQueryParams: Object = {};
   private eventListeners: any[] = [];
+  private selectedFlow: string;
+  private space: string;
 
   constructor(
     public router: Router,
@@ -74,8 +77,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public loginService: LoginService,
     private broadcaster: Broadcaster,
     public dummy: DummyService,
-    private contexts: Contexts
+    private contexts: Contexts,
+    private modalService: BsModalService
   ) {
+    this.space = '';
+    this.selectedFlow = 'start';
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         this.broadcaster.broadcast('navigate', { url: val.url } as Navigation);
@@ -140,6 +146,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   resetData(): void {
     this.imgLoaded = false;
+  }
+
+  openForgeWizard(addSpace: TemplateRef<any>) {
+    this.selectedFlow = 'start';
+    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+  }
+
+  closeModal($event: any): void {
+    this.modalRef.hide();
+  }
+
+  selectFlow($event) {
+    this.selectedFlow = $event.flow;
+    this.space = $event.space;
   }
 
   get context(): Context {

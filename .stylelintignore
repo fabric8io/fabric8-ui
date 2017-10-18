@@ -8,5 +8,3 @@ src/assets/stylesheets/shared/_formulas.less
 # Ignore the runtime console folder
 /src/a-runtime-console/
 
-# Ignore the Space Wizard
-/src/app/space/wizard

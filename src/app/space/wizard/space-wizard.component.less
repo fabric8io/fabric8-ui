@@ -106,7 +106,7 @@
       display: none;
       &.active {
         display: block;
-        width: 100% !important;
+        width: 100%;
       }
       @include: wizard-step-child-elements;
       >form {
@@ -127,3 +127,9 @@
     }
   }
 }
+header {
+  position: absolute;
+  top: -60px;
+}
+.button-right { text-align: right; }
+.alert { padding-left: 10px; }

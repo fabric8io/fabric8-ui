@@ -1,0 +1,42 @@
+<!--label list -->
+
+<div [class.has-danger]="!form.valid" class="form-group">
+
+  <label title="repositories" [class.field-required]="field.required">{{field.label}}</label>
+
+  <div [class.with-filter]="showFilter" class="label-list">
+  <span title="{{choice.description}}" class="label label-primary" *ngFor="let choice of field.valueChoices|selectedItems">
+    <span>{{choice.id}}</span>
+  </span>
+    <div title="Show filter for {{field.label}}" [hidden]="showFilter" (click)="showFilter=true" class="filter-toggle">
+      <span style class="fa fa-filter"></span>
+    </div>
+  </div>
+
+  <div [class.hidden]="!showFilter" class="input-group width-100">
+    <input #choiceFilter placeholder="Enter the text to filter for {{field.label}} ..." [class.form-control-danger]="!field.valid" id="{{field.name}}"
+           name="{{field.name}}" class="form-control" title="{{field.label}}" (keyup)="filterList(field,choiceFilter.value)" />
+    <span title="Close the filter for {{field.label}}" class="input-group-addon">
+    <span (click)="choiceFilter.value='';clearFilter(field)" class="fa fa-close"></span>
+  </span>
+  </div>
+
+  <ul title="{{field.description}}">
+    <li class="checkbox" [class.selected]="choice.selected" *ngFor="let choice of field.valueChoices|visibleItems">
+      <label>
+        <input type="checkbox" name="{{field.name}}" (change)="selectChoice(choice, checkbox.checked)" #checkbox
+               [checked]="choice.selected" [required]="field.required">
+        <span>{{choice.id}}</span>
+      </label>
+      <p>{{choice.description}}</p>
+    </li>
+  </ul>
+
+  <div *ngIf="form.get(field.name).dirty
+    && form.get(field.name).hasError('required')"
+       style="position:relative;height:auto;display:block;"
+       class="form-control-feedback user-select-none">
+    {{field.label}} is required
+  </div>
+
+</div>

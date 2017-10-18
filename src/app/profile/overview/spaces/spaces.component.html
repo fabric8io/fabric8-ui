@@ -11,7 +11,7 @@
            target="_blank">in the documentation</a>
       </p>
       <div class="blank-slate-pf-main-action">
-        <button class="btn btn-primary btn-lg" (click)="createSpace.open()">Create</button>
+        <button class="btn btn-primary btn-lg" (click)="openForgeWizard(createSpace)">Create</button>
       </div>
     </div>
   </div>
@@ -32,7 +32,7 @@
                       {{space.attributes.name | spaceName}}
                     </a>
                   </div>
-                  <button class="col-xs-2 btn btn-danger f8-button__delete" (click)="confirmDeleteSpace(space)">
+                  <button class="col-xs-2 btn btn-danger f8-button__delete" (click)="confirmDeleteSpace(space, deleteSpace)">
                     Delete
                   </button>
                 </div>
@@ -46,19 +46,25 @@
 </ng-template>
 
 <!-- Create Space modal -->
-<modal #createSpace>
-  <modal-content>
-    <space-wizard [host]="createSpace"></space-wizard>
-  </modal-content>
-</modal>
+<ng-template #createSpace>
+  <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
+  <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space" [style.display]="selectedFlow !== 'selectFlow' ? 'none': ''"></flow-selector>
+  <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
+  <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
+</ng-template>
 
 <!-- Delete Space modal -->
-<modal #deleteSpace title="Remove the space">
-  <modal-content>
+<ng-template #deleteSpace title="Remove the space">
+  <div class="modal-header">
+    <button class="close" aria-label="Close" type="button"
+            (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <dt class="modal-title">Remove Space</dt>
+  </div>
+  <div class="modal-body">
     <h2>Are you sure you want to remove the space</h2>
-    <div>
-      <button class="btn btn-cancel" (click)="deleteSpace.close()">Cancel</button>
-      <button class="btn btn-danger" (click)="removeSpace()">Remove</button>
-    </div>
-  </modal-content>
-</modal>
+    <button class="btn btn-cancel" (click)="cancel()">Cancel</button>
+    <button class="btn btn-danger" (click)="removeSpace()">Remove</button>
+  </div>
+</ng-template>

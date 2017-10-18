@@ -1,0 +1,42 @@
+<ul class="selection-list">
+  <li title="{{choice.name}}" [class.selected]="field.value === choice.id" (click)="field.value=choice.id;"
+      *ngFor="let choice of field.valueChoices">
+    <input class="selection-list-input user-select-none form-control" title="choice.name"
+           [checked]="field.value === choice.id" [value]="choice.id"
+           type="radio" name="{{field.name}}">
+    <div class="selection-list-expander" *ngIf="choice.display.collapsible===true"
+         title="{{choice.display.collapsed?'Show':'Hide'}} '{{choice.name}}' pipeline details ..."
+         (click)="choice.display.collapsed=!choice.display.collapsed;$event.stopPropagation();">
+      <div [class.collapsible]="choice.display.collapsible"
+           class="selection-list-panel user-select-none cursor-pointer">
+        <div class="list-item-panel" [class.vertical-layout]="choice.display.verticalLayout"
+             [class.selected]="field.value === choice.id">
+          <div class="list-item-icon" *ngIf="choice.display.hasIcon && choice.display.view==='image'">
+            <div [ngClass]="[choice.display.icon]"></div>
+          </div>
+          <div class="pipeline">
+            <ng-template ngFor let-stage [ngForOf]="choice.stages" let-c="count" let-i="index">
+              <div class="stage {{stage.color}}">
+                <div *ngIf="stage.name" class="stage-text">{{stage.name}}</div>
+                <div class="stage-graphic">
+                  <div class="stage-graphic-icon"></div>
+                </div>
+              </div>
+              <div *ngIf="i<c-1" class="stage-seperator"><span class="fa fa-long-arrow-right"></span></div>
+            </ng-template>
+          </div>
+          <div class="list-item-content">
+            <div class="list-item-label">
+              <span [class.fa-angle-right]="choice.display.collapsed"
+                    [class.fa-angle-down]="!choice.display.collapsed"
+                    class="fa fa-lg fa-angle-right list-item-label-expander"></span>
+              <label for="field.name">{{choice.name}}</label></div>
+            <div class="list-item-details"
+                 [hidden]="choice.display.collapsible && choice.display.collapsed"
+                 *ngIf="choice.description" [innerHTML]="choice.description"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+</ul>

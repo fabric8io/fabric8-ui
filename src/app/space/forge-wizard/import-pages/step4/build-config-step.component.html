@@ -1,0 +1,15 @@
+<section *ngIf="gui.inputs">
+  <div style="min-height: 450px" class="row">
+    <div class="col-xs-12">
+      <div class="form-horizontal">
+        <single-input class="input-group width-100" [field]="gui.inputs[0]" [form]="form">
+        </single-input>
+        <single-input class="input-group width-100" [field]="gui.inputs[1]" [form]="form">
+        </single-input>
+        <single-input class="input-group width-100" [field]="gui.inputs[2]" [form]="form">
+        </single-input>
+        <forge-errors [field]="gui"></forge-errors>
+      </div>
+    </div>
+  </div>
+</section>

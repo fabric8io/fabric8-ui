@@ -18,10 +18,10 @@ export class TokenResolver implements Resolve<string> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string> {
     // Make sure the openshift token is available
-    if(!this.loginService.useCustomAuth && this.authService.isLoggedIn()) {
+    if (!this.loginService.useCustomAuth && this.authService.isLoggedIn()) {
       return this.authService.getOpenShiftToken();
     }
-    return Observable.of("");
+    return Observable.of('');
   }
 
 }

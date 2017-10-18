@@ -1,7 +1,7 @@
 <div class="create-work-item-widget card-pf f8-card">
   <div class="card-pf-heading-bg">
     <div class="card-pf-heading f8-card-heading">
-      <h2 class="card-pf-title">My work items
+      <h2 class="card-pf-title">My Work Items
       <span *ngIf="spaces.length !== 0">
         <select class="col-xs-3 col-sm-6 form-control work-item-combobox"
             [disabled]="spaces.length === 0"
@@ -23,8 +23,8 @@
         <div class="f8-blank-slate-icon">
           <i class="pficon pficon-info"></i>
         </div>
-        <p>Work items reflect the work to be done within a space.</p>
-        <p>Once you create a space or join a space, your work items will begin displaying here.</p>
+        <h3>Work items reflect the work to be done within a space</h3>
+        <p>Once you create or join a space, work items that you create or are assigned to display here.</p>
       </div>
     </ng-template>
     <ng-template #showWorkItems>

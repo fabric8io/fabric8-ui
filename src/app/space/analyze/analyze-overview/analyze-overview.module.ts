@@ -7,21 +7,18 @@ import { EditSpaceDescriptionWidgetModule } from './../../../dashboard-widgets/e
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Http } from '@angular/http';
-import { ModalModule } from 'ngx-modal';
 import { FormsModule } from '@angular/forms';
-// import { Broadcaster } from 'ngx-login-client';
-
 import { AnalyzeOverviewComponent } from './analyze-overview.component';
 import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module';
-import { SpaceWizardModule } from '../../wizard/space-wizard.module';
-
+import { ForgeWizardModule } from 'app/space/forge-wizard/forge-wizard.module';
+import { ModalModule } from 'ngx-bootstrap/modal';
+//import { WizardModal } from '../../forge-wizard/forge-wizard.component';
 
 
 @NgModule({
   imports: [
     CommonModule,
     AnalyzeOverviewRoutingModule,
-    ModalModule,
     FormsModule,
     EditSpaceDescriptionWidgetModule,
     AnalyticalReportWidgetModule,
@@ -29,7 +26,8 @@ import { SpaceWizardModule } from '../../wizard/space-wizard.module';
     AddCodebaseWidgetModule,
     PipelinesWidgetModule,
     EnvironmentWidgetModule,
-    SpaceWizardModule
+    ForgeWizardModule,
+    ModalModule.forRoot()
   ],
   declarations: [AnalyzeOverviewComponent]
 })

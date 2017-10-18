@@ -167,7 +167,7 @@ module.exports = function (options) {
           enforce: 'pre',
           test: /\.html$/,
           loader: 'htmlhint-loader',
-          exclude: [/node_modules/,/src\/a-runtime-console/,/src\/app\/space\/wizard/],
+          exclude: [/node_modules/,/src\/a-runtime-console/],
           options: {
             configFile: './.htmlhintrc'
           }
