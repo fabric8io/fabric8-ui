@@ -237,11 +237,12 @@ export abstract class AbstractWizard implements OnInit {
     let codebases: Codebase[] = [];
     if (this.result.gitRepositories) {
       this.result.gitRepositories.forEach(repo => {
+        let cheStackId = repo.stackId ? repo.stackId : (this.result as any).cheStackId;
         let codebase = {
           attributes: {
             type: 'git',
             url: repo.url,
-            stackId: repo.stackId
+            stackId: cheStackId
           },
           type: 'codebases'
         } as Codebase;
