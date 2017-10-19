@@ -139,7 +139,7 @@
     "offline-plugin": "4.8.4",
     "patternfly-ng": "0.13.3",
     "pluralize": "7.0.0",
-    "rxjs": "^5.0.1",
+    "rxjs": "5.0.1 - 5.4.3",
     "uuid": "3.1.0",
     "zone.js": "0.8.18"
   },
