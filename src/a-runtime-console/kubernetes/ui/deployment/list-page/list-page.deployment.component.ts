@@ -6,6 +6,7 @@ import {CompositeDeploymentStore} from "../../../store/compositedeployment.store
 import {DeploymentViews, createDeploymentViews} from "../../../view/deployment.view";
 import {RouteServiceStore} from "../../../store/route.service.store";
 
+import 'rxjs/add/operator/combineLatest';
 
 @Component({
   selector: 'fabric8-deployments-list-page',

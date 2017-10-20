@@ -5,6 +5,7 @@ import {BuildConfigStore} from "../../../store/buildconfig.store";
 import {APIsStore} from "../../../store/apis.store";
 import {BuildStore} from "../../../store/build.store";
 
+import 'rxjs/add/operator/combineLatest';
 
 @Component({
   selector: 'fabric8-pipelines-list-page',

@@ -9,6 +9,7 @@ import {APIsStore} from "../../../store/apis.store";
 import {BuildStore} from "../../../store/build.store";
 import {ActivatedRoute} from "@angular/router";
 
+import 'rxjs/add/operator/combineLatest';
 
 @Component({
   selector: 'fabric8-pipelines-history-page',

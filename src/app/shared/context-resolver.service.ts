@@ -10,6 +10,9 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot
 } from '@angular/router';
+
+import 'rxjs/add/operator/first';
+
 @Injectable()
 export class ContextResolver implements Resolve<Context> {
 

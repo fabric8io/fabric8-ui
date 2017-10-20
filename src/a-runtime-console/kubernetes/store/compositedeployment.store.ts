@@ -6,6 +6,8 @@ import {combineDeployments, combineDeployment} from "../view/deployment.view";
 import {APIsStore} from "./apis.store";
 import {Deployments, Deployment} from "../model/deployment.model";
 
+import 'rxjs/add/operator/combineLatest';
+
 /**
  * Combines Deployments and DeploymentConfigs into a single logical store to simplify the UI logic
  */

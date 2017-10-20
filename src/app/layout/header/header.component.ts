@@ -15,6 +15,8 @@ import { MenuItem } from './../../models/menu-item';
 import { DummyService } from './../../shared/dummy.service';
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 
+import 'rxjs/add/operator/combineLatest';
+
 interface MenuHiddenCallback {
   (headerComponent: HeaderComponent): Observable<boolean>;
 }

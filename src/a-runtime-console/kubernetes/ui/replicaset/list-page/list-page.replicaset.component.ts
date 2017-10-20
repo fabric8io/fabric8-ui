@@ -6,6 +6,7 @@ import {ReplicaSetViews, createReplicaSetViews} from "../../../view/replicaset.v
 import {ServiceStore} from "../../../store/service.store";
 import {CompositeReplicaSetStore} from "../../../store/compositedreplicaset.store";
 
+import 'rxjs/add/operator/combineLatest';
 
 @Component({
   selector: 'fabric8-replicasets-list-page',

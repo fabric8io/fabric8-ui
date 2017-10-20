@@ -12,6 +12,8 @@ import * as yaml from 'js-yaml';
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 import {DevNamespaceScope} from "a-runtime-console/kubernetes/service/devnamespace.scope";
 
+import 'rxjs/add/operator/first';
+
 interface ConfigMapWrapper {
   configMap?: ConfigMap;
   configMaps?: ConfigMap[];

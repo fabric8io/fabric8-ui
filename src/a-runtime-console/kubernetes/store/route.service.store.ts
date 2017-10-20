@@ -4,6 +4,8 @@ import {ServiceStore} from "./service.store";
 import {Observable} from "rxjs";
 import {RouteStore} from "./route.store";
 
+import 'rxjs/add/operator/combineLatest';
+
 @Injectable()
 export class RouteServiceStore  {
   public readonly list: Observable<Services>;

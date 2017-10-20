@@ -16,6 +16,7 @@ import {
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 
+import 'rxjs/add/operator/combineLatest';
 
 @Injectable()
 export class PipelinesService {

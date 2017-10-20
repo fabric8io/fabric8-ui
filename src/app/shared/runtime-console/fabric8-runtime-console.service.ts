@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 
 import { AuthenticationService } from 'ngx-login-client';
 
-
-
 import { OAuthConfigStore } from '../../../a-runtime-console/index';
 
 import { LoginService } from './../login.service';
+
+import 'rxjs/add/operator/first';
 
 @Injectable()
 export class Fabric8RuntimeConsoleService {

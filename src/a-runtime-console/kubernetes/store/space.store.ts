@@ -11,6 +11,8 @@ import {messageEventToResourceOperation, Operation} from "../service/resource-op
 import {Watcher} from "../service/watcher";
 import {ConfigMapStore} from "./configmap.store";
 
+import "rxjs/add/observable/forkJoin";
+import 'rxjs/add/operator/combineLatest';
 
 const fabric8EnvironmentsName = "fabric8-environments";
 const fabric8SpacesName = "fabric8-spaces";

@@ -7,7 +7,6 @@ import {User} from "./../models/user";
 import {Team} from "./../models/team";
 import {Entity} from "./../models/entity";
 import {Injectable, OnInit} from "@angular/core";
-import "rxjs/add/operator/toPromise";
 import {Observable} from "rxjs";
 import {Spaces, Space, LabelSpace} from "../kubernetes/model/space.model";
 import {SpaceStore} from "../kubernetes/store/space.store";
@@ -18,6 +17,9 @@ import {MenuItem} from "../models/menu-item";
 import {resourceMenus} from "../kubernetes/components/resource-header/resource.header.component";
 import {pathJoin} from "../kubernetes/model/utils";
 import {Broadcaster} from 'ngx-base';
+
+import 'rxjs/add/operator/combineLatest';
+import "rxjs/add/operator/toPromise";
 
 // A service responsible for providing dummy data for the UI prototypes.
 

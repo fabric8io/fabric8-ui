@@ -4,6 +4,8 @@ import {ReplicaSets, ReplicaSet, combineReplicaSets, combineReplicaSet} from "..
 import {ReplicationControllerStore} from "./replicationcontroller.store";
 import {ReplicaSetStore} from "./replicaset.store";
 
+import 'rxjs/add/operator/combineLatest';
+
 /**
  * Combines ReplicaSets and ReplicationControllers into a single logical store to simplify the UI logic
  */

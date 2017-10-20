@@ -19,6 +19,8 @@ import {ReplicationController} from "../model/replicationcontroller.model";
 import {ReplicaSetService} from "../service/replicaset.service";
 import {messageEventToResourceOperation, Operation} from "../service/resource-operation";
 
+import 'rxjs/add/operator/combineLatest';
+
 /**
  * A base class for components which watch kubernetes resources which contains a number of helper functions
  * for watching various kinds of resources in kubernetes together with logic to help close up watches after the

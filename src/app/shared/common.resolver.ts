@@ -6,6 +6,8 @@ import {
   UserService
 } from 'ngx-login-client';
 
+import 'rxjs/add/operator/first';
+
 @Injectable()
 export class AuthUserResolve implements Resolve<any> {
   constructor(private userService: UserService) {}

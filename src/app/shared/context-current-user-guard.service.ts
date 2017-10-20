@@ -11,6 +11,9 @@ import {
   NavigationEnd
 } from '@angular/router';
 
+import 'rxjs/add/operator/combineLatest';
+import 'rxjs/add/operator/first';
+
 @Injectable()
 export class ContextCurrentUserGuard implements Resolve<any> {
 
