@@ -58,7 +58,7 @@ export class StackLevelComponent {
 
         dependencies.forEach((dependency) => {
             security = dependency.security;
-            if (security.length > 0) {
+            if (security && security.length > 0) {
                 let max: any = security.reduce((a, b) => {
                     return parseFloat(a['CVSS']) < parseFloat(b['CVSS']) ? b : a;
                 });

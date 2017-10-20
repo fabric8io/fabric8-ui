@@ -389,7 +389,7 @@ export class ComponentLevelComponent implements OnChanges {
 
     private setParams(input: any, canCreateWorkItem: boolean) {
         let output: any = {};
-        let github: any = input['github'];
+        let github: any = input['github'] || {};
         output['name'] = input['name'];
         output['current_version'] = input['version'];
         if (canCreateWorkItem) {

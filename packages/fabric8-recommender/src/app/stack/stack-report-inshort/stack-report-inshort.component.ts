@@ -95,13 +95,13 @@ export class StackReportInShortComponent implements OnChanges {
     }
 
     private handleSecurityInformation(tab: UserStackInfoModel): void {
-        let dependencies: Array<ComponentInformationModel> = tab.dependencies;
+        let dependencies: Array<ComponentInformationModel> = tab.analyzed_dependencies;
         let security: Array<any> = [];
         let temp: Array<any> = [];
 
         dependencies.forEach((dependency) => {
             security = dependency.security;
-            if (security.length > 0) {
+            if (security && security.length > 0) {
                 let max: any = security.reduce((a, b) => {
                     return parseFloat(a['CVSS']) < parseFloat(b['CVSS']) ? b : a;
                 });
