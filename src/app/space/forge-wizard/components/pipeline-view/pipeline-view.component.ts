@@ -76,7 +76,12 @@ export class PipelineViewComponent implements OnInit {
     choice.name = choice.id;
     choice.description = choice.descriptionMarkdown;
     choice.description = choice.description.replace(/\n\n/g, '\n');
-    choice.description = marked(choice.description, (err, parseResult) => { console.log(err); });
+    // choice.description = marked(choice.description, (err, parseResult) => { console.log(err); });
+    // if (choice.stages && choice.stages[0] && !choice.stages[0].name) { // deal with back button format ouput only once.
+    //   choice.stages = this.buildStages(choice);
+    // }
+    let renderer = new marked.Renderer();
+    choice.description = marked(choice.description, { renderer: renderer });
     if (choice.stages && choice.stages[0] && !choice.stages[0].name) { // deal with back button format ouput only once.
       choice.stages = this.buildStages(choice);
     }
