@@ -3,7 +3,7 @@
     <div class="col-xs-12">
       <pfng-filter [config]="filterConfig" (onChange)="filterChanged($event)"></pfng-filter>
       <div class="form-horizontal">
-        <ob-project-select [input]="filteredInput" [formControlName]="gui.inputs[0].name"></ob-project-select>
+        <ob-project-select [input]="filteredInput" [formControlName]="gui.inputs[0].name" [config]="config"></ob-project-select>
         <forge-errors [field]="gui"></forge-errors>
       </div>
     </div>

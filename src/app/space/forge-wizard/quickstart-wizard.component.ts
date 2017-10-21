@@ -1,8 +1,8 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { ForgeService } from './forge.service';
+import { ForgeService } from 'ngx-forge';
 import { AbstractWizard } from './abstract-wizard.component';
 import { ContextService } from '../../shared/context.service';
-import { Gui, Input } from './gui.model';
+import { Gui, Input } from 'ngx-forge';
 import { configureSteps } from './quickstart-wizard.config';
 import { Notifications } from 'ngx-base';
 import { CodebasesService } from '../create/codebases/services/codebases.service';

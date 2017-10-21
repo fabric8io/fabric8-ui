@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { Gui } from '../../gui.model';
+import { Gui } from 'ngx-forge';
 
 @Component({
   selector: 'organisation-step',

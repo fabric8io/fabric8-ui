@@ -1,5 +1,5 @@
-import {Component, OnInit, Input} from '@angular/core';
-import { Gui, Input as GuiInput } from '../../gui.model';
+import { Component, OnInit, Input } from '@angular/core';
+import { Gui, Input as GuiInput } from 'ngx-forge';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -20,7 +20,7 @@ export class ProjectInfoStepComponent implements OnInit {
 
   ngOnInit(): void {
     // Default value for the project name to space name
-    this.form.controls.named.setValue(this.labelSpace.toLowerCase());
+    this.form.controls['named'].setValue(this.labelSpace.toLowerCase());
     if (this.gui.inputs && this.gui.inputs.length > 3) {
       this.organisation = this.gui.inputs[0];
       this.repoName = this.gui.inputs[1];

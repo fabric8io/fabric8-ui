@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
-import { Gui } from '../../gui.model';
+import { Gui } from 'ngx-forge';
 
 @Component({
   selector: 'forge-errors',

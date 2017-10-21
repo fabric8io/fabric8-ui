@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Input as GuiInput } from 'app/space/forge-wizard/gui.model';
+import { Input as GuiInput } from 'ngx-forge';
 import { FormGroup } from '@angular/forms';
 
 @Component({

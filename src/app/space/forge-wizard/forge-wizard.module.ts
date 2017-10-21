@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ForgeImportWizardComponent } from './import-wizard.component';
 import { ForgeQuickstartComponent } from './quickstart-wizard.component';
@@ -22,9 +22,12 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quickstart.component';
 import { ProjectInfoStepComponent } from './quickstart-pages/step2/project-info-step.component';
 import { PipelineQuickstartStepComponent } from './quickstart-pages/step3/pipeline-quickstart-step.component';
-import { ProjectSelectModule } from './components/project-select/project-select.component';
+import { NgxForgeModule, Config } from 'ngx-forge';
 import { ForgeExceptionComponent } from './components/forge-exception/forge-exception.component';
-
+import { ForgeConfig } from './service/forge-config';
+import { TokenProvider } from 'ngx-forge';
+import { AuthenticationService } from 'ngx-login-client';
+import { KeycloakTokenProvider } from './service/token-provider';
 
 @NgModule({
   imports: [
@@ -32,7 +35,7 @@ import { ForgeExceptionComponent } from './components/forge-exception/forge-exce
     ReactiveFormsModule,
     WizardModule,
     FilterModule,
-    ProjectSelectModule
+    NgxForgeModule
   ],
   declarations: [
     ForgeImportWizardComponent,
@@ -62,7 +65,14 @@ import { ForgeExceptionComponent } from './components/forge-exception/forge-exce
     FlowSelectorComponent
   ],
   providers: [
-
+    {
+      provide: Config, useClass: ForgeConfig
+    },
+    {
+      provide: TokenProvider,
+      useFactory: (auth: AuthenticationService) => new KeycloakTokenProvider(auth),
+      deps: [AuthenticationService]
+    }
   ]
 })
 

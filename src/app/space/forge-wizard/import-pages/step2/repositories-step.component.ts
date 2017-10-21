@@ -1,6 +1,5 @@
-import {Component, Input} from '@angular/core';
-
-import { Gui } from '../../gui.model';
+import { Component, Input } from '@angular/core';
+import { Gui } from 'ngx-forge';
 import { FormGroup } from '@angular/forms';
 
 @Component({
