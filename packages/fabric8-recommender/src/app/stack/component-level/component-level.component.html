@@ -76,6 +76,7 @@
                             </span>
                             <span *ngIf="i < dependency.licenseCount - 1">, </span>
                         </span>
+                        <div class="text-center" *ngIf="dependency && dependency.licenses && dependency.licenses.length === 0">-</div>
                     </td>
                     <td class="text-center">{{dependency.osio_user_count}}</td>
                     <td ellipsis class="github-stats">

@@ -435,7 +435,7 @@ export class ComponentLevelComponent implements OnChanges {
         output['current_version'] = this.putNA(output['current_version']);
         output['latest_version'] = this.putNA(input['latest_version']);
         output['licenses'] =
-            input['licenses'] && input['licenses'].length ? input['licenses'] : '-';
+            input['licenses'] && input['licenses'].length ? input['licenses'] : [];
         output['licenseCount'] = output['licenses'] ? output['licenses'].length : 0;
         output['license_analysis'] = input['license_analysis'];
         output['sentiment_score'] = input['sentiment'] && input['sentiment']['overall_score'];
