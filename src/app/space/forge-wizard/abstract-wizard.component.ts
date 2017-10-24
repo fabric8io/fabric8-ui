@@ -39,7 +39,8 @@ export abstract class AbstractWizard implements OnInit {
     this.steps = [];
     this.config = {
       title: 'Application Wizard',
-      stepStyleClass: 'wizard'
+      sidebarStyleClass: 'wizard-sidebar',
+      stepStyleClass: 'wizard-step'
     } as WizardConfig;
     this.context.current.subscribe((ctx: Context) => {
       if (ctx.space) {

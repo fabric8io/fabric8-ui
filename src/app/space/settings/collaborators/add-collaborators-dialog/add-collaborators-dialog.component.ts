@@ -69,7 +69,7 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
   }
 
   changed(enteredValue: any) {
-    let searchValue = this.typeahead.searchFilterText;
+    let searchValue = this.typeahead.filterControl.value;
     this.userService.getUsersBySearchString(searchValue).subscribe((users) => {
       this.dropdownOptions = [];
       users.forEach(user => {

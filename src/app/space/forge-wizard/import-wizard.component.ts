@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ForgeService } from 'app/space/forge-wizard/forge.service';
 import { Gui, Input, MetaData } from 'app/space/forge-wizard/gui.model';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
@@ -10,6 +10,7 @@ import {AbstractWizard, flattenWizardSteps} from 'app/space/forge-wizard/abstrac
 import { configureSteps } from './import-wizard.config';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'import-wizard',
   templateUrl: './import-wizard.component.html',
   styleUrls: ['./import-wizard.component.less']
