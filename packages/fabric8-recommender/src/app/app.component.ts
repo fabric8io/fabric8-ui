@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
     console.log('Inside ngInit');
   }
 
-  // Request Ids for diff starter apps to test
+  // Request Ids for diff starter osio apps to test
   // vertex booster = aafb40f724804b919e0f2eca62a02c81
   // springboot health check = 7b97b7c12d774a1db54ece52f861621c
   // spring boot http = 7dfca1da25d7489796059754af8681ad
