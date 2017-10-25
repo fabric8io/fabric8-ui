@@ -21,3 +21,13 @@
  */
 .cards-pf { background-color: @color-pf-black-200; }
 .list-pf-item { background-color: @color-pf-white; }
+/* stylelint-disable */
+/* overwrite PatternFly so that the backgrounds do not clash */
+.blank-slate-pf {
+  background-color: @color-pf-black-200 !important;
+  border-color: @color-pf-black-200 !important;
+  .blank-slate-pf-icon {
+    color: @color-pf-light-green-400 !important;
+  }
+}
+/* stylelint-enable */
