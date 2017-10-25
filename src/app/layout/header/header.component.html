@@ -1,6 +1,6 @@
 <div *ngIf="isGettingStartedPage; then showGettingStartedHeader else showHeader"></div>
 <ng-template #showGettingStartedHeader>
-  <nav class="navbar navbar-default navbar-inverse" role="navigation">
+  <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
     <img src="../../../assets/images/openshift-io_white.png" class="navbar-getting-started-logo" />
      <!-- user profile dropdown -->
         <ul id="getting_started_header_rightDropdown" class="nav navbar-nav navbar-right">
@@ -36,7 +36,7 @@
   </nav>
 </ng-template>
 <ng-template #showHeader>
-  <nav class="navbar navbar-default navbar-inverse navbar-pf" role="navigation" *ngIf="context">
+  <nav class="navbar navbar-default navbar-inverse navbar-pf navbar-fixed-top" role="navigation" *ngIf="context">
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" (click)="toggleState()">
