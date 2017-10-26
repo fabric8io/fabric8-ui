@@ -27,7 +27,7 @@
             <div class="pipeline-stage-name {{build.statusPhase}}"
                  title="stage status: {{stage.status}}">
               {{stage.name}} &nbsp;
-              <span class='open-service-icon'*ngIf="stage.serviceUrl">
+              <span class="open-service-icon" *ngIf="stage.serviceUrl">
                 <a target="deployment"
                    class="external-service"
                    [href]="stage.serviceUrl"
