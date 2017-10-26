@@ -5,6 +5,3 @@
 # Ignore certain shared Less files
 src/assets/stylesheets/shared/_formulas.less
 
-# Ignore the runtime console folder
-/src/a-runtime-console/
-
