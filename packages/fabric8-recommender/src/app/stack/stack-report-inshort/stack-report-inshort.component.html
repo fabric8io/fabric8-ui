@@ -71,44 +71,76 @@
                                 <div class="stat-content license-area" *ngIf="licenseAnalysis.status.toLowerCase() !== 'failure' && licenseAnalysis.status.toLowerCase() !== 'nolicensedata'">
                                     <div class="stack-license-text flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'successful'">
                                         <div class="metric-desc">
-                                            Possible Stack License
+                                            Stack License
                                         </div>
-                                        <div class="metric">
+                                        <div class="metric metric-license-status">
                                             <span>{{licenseAnalysis.stackLicenseText}}</span>
                                         </div>
                                     </div>
                                     <div class="outlier-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'successful'">
                                         <div class="metric-desc">
-                                            Out of date
+                                            No. of outliers
                                         </div>
                                         <div class="metric">
                                             <span>{{licenseAnalysis.licenseOutliersCount}}</span>
                                         </div>
                                     </div>
                                     <div class="conflict-license flex-2"
-                                        *ngIf="licenseAnalysis.status.toLowerCase() === 'unknown' || licenseAnalysis.status.toLowerCase() === 'conflict'">
-                                            <div class="metric-desc">
-                                                Status
-                                            </div>
-                                            <div class="metric">
-                                                <span>
-                                                    {{licenseAnalysis.status}}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    <div class="conflict-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'conflict'">
+                                        *ngIf="licenseAnalysis.status.toLowerCase() === 'stackconflict'">
                                         <div class="metric-desc">
-                                            Conflict <strong>between</strong> two Components
+                                            Result
+                                        </div>
+                                        <div class="metric metric-license-status">
+                                            <span>
+                                                Stack Conflict
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="conflict-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'stackconflict'">
+                                        <div class="metric-desc">
+                                            No. of conflicts
                                         </div>
                                         <div class="metric">
                                             <span>
-                                                {{licenseAnalysis.licenseStackConflictsCount}}
+                                                {{licenseAnalysis.licenseStackConflictCount}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="conflict-license flex-2"
+                                        *ngIf="licenseAnalysis.status.toLowerCase() === 'componentconflict'">
+                                        <div class="metric-desc">
+                                            Result
+                                        </div>
+                                        <div class="metric metric-license-status">
+                                            <span>
+                                                Component Conflict
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="conflict-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'componentconflict'">
+                                        <div class="metric-desc">
+                                            No. of conflicts
+                                        </div>
+                                        <div class="metric">
+                                            <span>
+                                                {{licenseAnalysis.licenseComponentConflictCount}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="conflict-license flex-2"
+                                        *ngIf="licenseAnalysis.status.toLowerCase() === 'unknown'">
+                                        <div class="metric-desc">
+                                            Result
+                                        </div>
+                                        <div class="metric metric-license-status">
+                                            <span>
+                                                Unknown
                                             </span>
                                         </div>
                                     </div>
                                     <div class="unknown-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'unknown'">
                                         <div class="metric-desc">
-                                            Unknown
+                                            No. of unknowns
                                         </div>
                                         <div class="metric">
                                             <span>

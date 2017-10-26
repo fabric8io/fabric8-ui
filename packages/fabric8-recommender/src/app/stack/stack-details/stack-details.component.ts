@@ -1,9 +1,10 @@
-import {Component, Input, OnChanges, ViewChild, ViewEncapsulation} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Component, Input, OnChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
-import {StackAnalysesService} from '../stack-analyses.service';
-import {getStackReportModel} from '../utils/stack-api-utils';
-import {StackReportModel, ResultInformationModel, UserStackInfoModel, ComponentInformationModel, RecommendationsModel} from '../models/stack-report.model';
+import { StackAnalysesService } from '../stack-analyses.service';
+import { getStackReportModel } from '../utils/stack-api-utils';
+import { StackReportModel, ResultInformationModel, UserStackInfoModel,
+    ComponentInformationModel, RecommendationsModel } from '../models/stack-report.model';
 
 @Component({
     selector: 'stack-details',
@@ -102,9 +103,12 @@ export class StackDetailsComponent implements OnChanges {
             }
 
             this.analysis = {
-                stackLevel: 'Total: ' +  total + ' | Analyzed: ' + analyzed + ' | Unknown: ' + unknown,
-                alternate: '[' + alternate + ' alternate components match your stack composition and may be more appropriate]',
-                companion: '[' + companion + ' additional components are often used by similar stacks]'
+                stackLevel: 'Total: ' +  total + ' | Analyzed: ' + analyzed + ' | Unknown: ' +
+                unknown,
+                alternate: '[' + alternate + ' alternate components match your stack ' +
+                'composition and may be more appropriate]',
+                companion: '[' + companion + ' additional components are often used by ' +
+                'similar stacks]'
             };
             this.componentLevelInformation = {
                 recommendations: recommendations,

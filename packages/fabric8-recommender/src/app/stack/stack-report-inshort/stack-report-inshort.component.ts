@@ -1,9 +1,10 @@
-import {Component, Input, OnChanges, ViewEncapsulation} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {StackAnalysesService} from '../stack-analyses.service';
-import {getStackReportModel} from '../utils/stack-api-utils';
+import { Component, Input, OnChanges, ViewEncapsulation } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { StackAnalysesService } from '../stack-analyses.service';
+import { getStackReportModel } from '../utils/stack-api-utils';
 
-import {StackReportModel, ResultInformationModel, UserStackInfoModel, RecommendationsModel, ComponentInformationModel} from '../models/stack-report.model';
+import { StackReportModel, ResultInformationModel, UserStackInfoModel,
+    RecommendationsModel, ComponentInformationModel } from '../models/stack-report.model';
 
 @Component({
     selector: 'stack-report-inshort',
@@ -24,7 +25,6 @@ export class StackReportInShortComponent implements OnChanges {
     public result: StackReportModel;
     public stackLevel: UserStackInfoModel;
     public recommendations: RecommendationsModel;
-    // public licenseInfo: any;
     public securityInfo: any;
     public stackLevelOutliers: any;
     public dataLoaded: boolean = false;
@@ -144,7 +144,8 @@ export class StackReportInShortComponent implements OnChanges {
     private handleLicenseInformation(tab: UserStackInfoModel): void {
         this.licenseAnalysis = {
             licenseOutliersCount: 0,
-            licenseStackConflictsCount: 0,
+            licenseStackConflictCount: 0,
+            licenseComponentConflictCount: 0,
             licenseUnknownCount: 0,
             stackLicenseText: '',
             status: ''
@@ -154,30 +155,22 @@ export class StackReportInShortComponent implements OnChanges {
           this.licenseAnalysis.licenseOutliersCount =
               tab.license_analysis.outlier_packages ?
                   tab.license_analysis.outlier_packages.length : 0;
-          this.licenseAnalysis.licenseStackConflictsCount =
+          this.licenseAnalysis.licenseStackConflictCount =
               tab.license_analysis.conflict_packages ?
                   tab.license_analysis.conflict_packages.length : 0;
           if (tab.license_analysis.unknown_licenses) {
-            let licenseReallyUnknownCount =
+            this.licenseAnalysis.licenseUnknownCount =
                 tab.license_analysis.unknown_licenses.really_unknown ?
                     tab.license_analysis.unknown_licenses.really_unknown.length : 0;
-            let licenseComponentConflictsCount =
+            this.licenseAnalysis.licenseComponentConflictCount =
                 tab.license_analysis.unknown_licenses.component_conflict ?
                     tab.license_analysis.unknown_licenses.component_conflict.length : 0;
-            this.licenseAnalysis.licenseUnknownCount =
-                licenseReallyUnknownCount + licenseComponentConflictsCount;
           }
 
           this.licenseAnalysis.stackLicenseText = tab.license_analysis.f8a_stack_licenses[0];
 
           if (tab.license_analysis.status) {
             this.licenseAnalysis.status = tab.license_analysis.status;
-            if (this.licenseAnalysis.status.toLowerCase() === 'componentconflict') {
-                this.licenseAnalysis.status = 'Unknown';
-            }
-            if (this.licenseAnalysis.status.toLowerCase() === 'stackconflict') {
-                this.licenseAnalysis.status = 'Conflict';
-            }
           } else {
               this.licenseAnalysis.status = 'nolicensedata';
           }

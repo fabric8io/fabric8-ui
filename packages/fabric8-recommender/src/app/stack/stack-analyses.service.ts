@@ -7,7 +7,7 @@ import 'rxjs/operators/map';
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
-import {StackReportModel} from './models/stack-report.model';
+import { StackReportModel } from './models/stack-report.model';
 
 @Injectable()
 export class StackAnalysesService {
@@ -53,7 +53,6 @@ export class StackAnalysesService {
       options = new RequestOptions({ headers: this.headers });
     }
     return this.http.get(url, options)
-    // return this.http.get(url)
       .map(this.extractData)
       .map((data) => {
         stackReport = data;

@@ -1,10 +1,9 @@
-import {Component, Input, OnChanges} from '@angular/core';
-
-
+import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Space, Contexts } from 'ngx-fabric8-wit';
 
-import { ComponentInformationModel, RecommendationsModel, OutlierInformationModel, StackLicenseAnalysisModel } from '../models/stack-report.model';
+import { ComponentInformationModel, RecommendationsModel, OutlierInformationModel,
+        StackLicenseAnalysisModel } from '../models/stack-report.model';
 import { AddWorkFlowService } from '../stack-details/add-work-flow.service';
 
 @Component({
@@ -69,7 +68,9 @@ export class ComponentLevelComponent implements OnChanges {
             'view_work_item': 'View Work Item',
             'select_all_text': 'Select All',
             'no_recommendations_text': 'No recommendations.',
-            'no_recommendations_suggestion': ' For your stack there are currently no recommendations. Below is some general information about it.',
+            'no_recommendations_suggestion':
+                ' For your stack there are currently no recommendations. Below is some general ' +
+                'information about it.',
             'toastDisplay': {
                 'text1': 'Workitem with ID ',
                 'text2': ' has been added to the backlog.'
@@ -78,7 +79,8 @@ export class ComponentLevelComponent implements OnChanges {
             'default_stack_name': 'An existing stack',
             'license': {
                 'really_unknown': 'Some licenses are unknown',
-                'license_conflict_in_component': 'Some licenses in this component are conflicting with each other'
+                'license_conflict_in_component':
+                    'Some licenses in this component are conflicting with each other'
             }
         };
         if (this.context && this.context.current) {
@@ -132,7 +134,7 @@ export class ComponentLevelComponent implements OnChanges {
             identifier: 'isUnknownLicense',
             class: 'fa unknown-license'
         }, {
-            name: 'License conflict in a Component',
+            name: 'Component License Conflicts',
             identifier: 'isLicenseConflictInComponent',
             class: 'fa conflict-license'
         }];
@@ -142,7 +144,7 @@ export class ComponentLevelComponent implements OnChanges {
 
     /**
      * handleKeyUpEvent - takes an event and returns nothing
-     * 
+     *
      * Gets triggered everytime a value is typed in the filter box
      * Sets the received value to the fieldValue
      */
@@ -208,12 +210,15 @@ export class ComponentLevelComponent implements OnChanges {
         // TODO form data to be shared with recommender object
         let titleHdr: string = '';
         if (recommender && recommender.hasOwnProperty('isChild') && recommender['isChild']) {
-            message = `Stack analysis has identified alternate components for **${recommender.parentName}**.
-            You have chosen to replace **${recommender.parentName}** with **${recommender.name}** and version: **${recommender.recommended_version}** in your application stack`;
+            message = `Stack analysis has identified alternate components
+            for **${recommender.parentName}**.
+            You have chosen to replace **${recommender.parentName}** with **${recommender.name}**
+            and version: **${recommender.recommended_version}** in your application stack`;
             titleHdr = `Alternate components for ${recommender.parentName}`;
         } else {
-            message = `Stack analysis has identified some additional components for your application stack.
-            You have chosen to add **${recommender.name}** with **${recommender.recommended_version}** to your application stack`;
+            message = `Stack analysis has identified some additional components for your
+            application stack. You have chosen to add **${recommender.name}**
+            with **${recommender.recommended_version}** to your application stack`;
             titleHdr = `Add ${recommender.name} to your application stack`;
         }
         let description: string = message;
@@ -313,7 +318,9 @@ export class ComponentLevelComponent implements OnChanges {
         }
         if (this.filterBy) {
             this.fieldName = this.filterBy;
-            this.currentFilter = this.filters.filter((f) => f.identifier === this.fieldName)[0].name;
+            this.currentFilter = this.filters.filter(
+                (f) => f.identifier === this.fieldName
+            )[0].name;
         }
     }
 
@@ -408,14 +415,19 @@ export class ComponentLevelComponent implements OnChanges {
                     if (this.licenseAnalysis.unknown_licenses.really_unknown.length) {
                         dependency = this.checkIfReallyUnknownLicense(dependency);
                     }
-                    if (this.licenseAnalysis.unknown_licenses.component_conflict.length) {
+                }
+                if (this.licenseAnalysis.status.toLowerCase() === 'componentconflict' &&
+                    this.licenseAnalysis.unknown_licenses) {
+                    if (this.licenseAnalysis.unknown_licenses.component_conflict &&
+                        this.licenseAnalysis.unknown_licenses.component_conflict.length) {
                         dependency = this.checkIfLicenseConflictInAComponent(dependency);
                     }
                 }
                 this.dependenciesList.push(dependency);
                 tempLen = this.dependenciesList.length;
                 if (this.alternate) {
-                    this.checkAlternate(eachOne['name'], eachOne['version'], this.dependenciesList, dependency['compId'], dependency['name']);
+                    this.checkAlternate(eachOne['name'], eachOne['version'], this.dependenciesList,
+                        dependency['compId'], dependency['name']);
                     if (tempLen !== this.dependenciesList.length) {
                         dependency['isParent'] = true;
                         dependency['isGrouped'] = true;
@@ -452,13 +464,18 @@ export class ComponentLevelComponent implements OnChanges {
         output['total_releases'] = this.putNA(github['total_releases']);
         output['forks_count'] = this.putNA(github['forks_count']);
         output['contributors'] = this.putNA(github['contributors']);
-        output['git_stat'] = (output['github_user_count'] > -1 || output['watchers'] > -1 || output['stargazers_count'] > -1 || output['total_releases'] > -1 || output['forks_count'] > -1 || output['contributors'] > -1);
+        output['git_stat'] = (output['github_user_count'] > -1 ||
+            output['watchers'] > -1 || output['stargazers_count'] > -1 ||
+            output['total_releases'] > -1 || output['forks_count'] > -1 ||
+            output['contributors'] > -1);
         output['has_issue'] = input['security'].length > 0;
-        output['security_issue'] = output['has_issue'] ? Math.max.apply(Math, input['security'].map(d => d.CVSS)) : '';
+        output['security_issue'] = output['has_issue'] ?
+            Math.max.apply(Math, input['security'].map(d => d.CVSS)) : '';
         output['used_by'] = github['used_by'];
         output['reason'] = input['reason'] || null;
         output['categories'] = input['topic_list'];
-        output['categories'] = (output['categories'] && output['categories'].length > 0 && output['categories'].join(', ')) || '';
+        output['categories'] = (output['categories'] && output['categories'].length > 0 &&
+            output['categories'].join(', ')) || '';
         output['action'] = canCreateWorkItem ? 'Create Work Item' : '';
         return output;
     }
@@ -509,9 +526,12 @@ export class ComponentLevelComponent implements OnChanges {
         return !count || count < 0 ? '-' : count;
     }
 
-    private checkAlternate (name: string, version: string, list: Array<any>, parentId: string, parentName: string) {
+    private checkAlternate (name: string, version: string, list: Array<any>,
+        parentId: string, parentName: string) {
         if (this.alternate && this.alternate.length > 0) {
-            let recom: Array<ComponentInformationModel> = this.alternate.filter((a) => a.replaces[0].name === name && a.replaces[0].version === version);
+            let recom: Array<ComponentInformationModel> = this.alternate.filter(
+                (a) => a.replaces[0].name === name && a.replaces[0].version === version
+            );
             recom.forEach(r => {
                 let obj: any = this.setParams(r, true);
                 obj['isChild'] = true;
@@ -525,7 +545,9 @@ export class ComponentLevelComponent implements OnChanges {
 
     private isUsageOutlier(packageName: string): boolean {
         if (this.usageOutliers && this.usageOutliers.length > 0) {
-            let result: Array<OutlierInformationModel> = this.usageOutliers.filter(u => u.package_name === packageName);
+            let result: Array<OutlierInformationModel> = this.usageOutliers.filter(
+                u => u.package_name === packageName
+            );
             return result && result.length > 0;
         }
     }
@@ -564,12 +586,11 @@ export class ComponentLevelComponent implements OnChanges {
      *  Handles single as well as multiple work items 
      */
     private addWorkItems(workItem: Array<any>): void {
-        //let length: number = workItems.length;
-        let newItem: any; //, workItem: any;
+        let newItem: any; // , workItem: any;
         newItem = this.getWorkItemData();
-        //for (let i: number = 0; i < length; ++i) {
-            //if (workItems[i]) {
-                //workItem = workItems[i];
+        // for (let i: number = 0; i < length; ++i) {
+            // if (workItems[i]) {
+                // workItem = workItems[i];
                 // TODO: Handle the case of sending multiple work items concurrently
                 // once the API Payload is properly set at the receiving end.
                 if (newItem) {
@@ -580,27 +601,29 @@ export class ComponentLevelComponent implements OnChanges {
                     newItem.key = workItem['key'];
                 }
            // }
-        //}
+        // }
 
         let workFlow: Observable<any> = this.addWorkFlowService.addWorkFlow(newItem);
         workFlow.subscribe((data) => {
             if (data) {
                 let inputUrlArr: Array<string> = [];
-                if (data.links && data.links.self && data.links.self.length && data.data.attributes) {
+                if (data.links && data.links.self && data.links.self.length &&
+                    data.data.attributes) {
                     inputUrlArr = data.links.self.split('/api/');
                     let hostString = inputUrlArr[0] ? inputUrlArr[0].replace('api.', '') : '';
                     let baseUrl: string = hostString +
-                        `/${this.userName}/${this.spaceName}/plan/detail/` + data.data.attributes["system.number"];
-                    this.displayWorkItemResponse(baseUrl, data.data.attributes["system.number"]);
+                        `/${this.userName}/${this.spaceName}/plan/detail/` +
+                        data.data.attributes['system.number'];
+                    this.displayWorkItemResponse(baseUrl, data.data.attributes['system.number']);
                     newItem.url = baseUrl;
-                    //TODO :: toggle Worke item link and toast notification
-                    //this.toggleWorkItemButton(newItem);
+                    // TODO :: toggle Worke item link and toast notification
+                    // this.toggleWorkItemButton(newItem);
                 }
             }
         });
     }
 
-     /**
+    /**
      * displayWorkItemResponse - takes a message string and returns nothing
      * Displays the response received from the creation of work items
      */
@@ -625,7 +648,4 @@ export class ComponentLevelComponent implements OnChanges {
         }
         this.workItemResponse.push(notification);
     }
-
-
-
 }

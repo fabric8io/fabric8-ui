@@ -99,9 +99,9 @@ export class StackLevelComponent {
     private handleLicenseInformation(tab: UserStackInfoModel): void {
         this.licenseAnalysis = {
             licenseOutliersCount: 0,
-            licenseStackConflictsCount: 0,
-            licenseReallyUnknownCount: 0,
-            licenseComponentConflictsCount: 0,
+            licenseStackConflictCount: 0,
+            licenseUnknownCount: 0,
+            licenseComponentConflictCount: 0,
             licenseConflictsPartial: [],
             licenseConflictsFull: [],
             stackLicenseText: '',
@@ -112,14 +112,14 @@ export class StackLevelComponent {
             this.licenseAnalysis.licenseOutliersCount =
                 tab.license_analysis.outlier_packages ?
                     tab.license_analysis.outlier_packages.length : 0;
-            this.licenseAnalysis.licenseStackConflictsCount =
+            this.licenseAnalysis.licenseStackConflictCount =
                 tab.license_analysis.conflict_packages ?
                     tab.license_analysis.conflict_packages.length : 0;
             if (tab.license_analysis.unknown_licenses) {
-              this.licenseAnalysis.licenseReallyUnknownCount =
+              this.licenseAnalysis.licenseUnknownCount =
                   tab.license_analysis.unknown_licenses.really_unknown ?
                       tab.license_analysis.unknown_licenses.really_unknown.length : 0;
-              this.licenseAnalysis.licenseComponentConflictsCount =
+              this.licenseAnalysis.licenseComponentConflictCount =
                   tab.license_analysis.unknown_licenses.component_conflict ?
                       tab.license_analysis.unknown_licenses.component_conflict.length : 0;
             }
@@ -138,14 +138,14 @@ export class StackLevelComponent {
                 }
 
                 if (this.licenseAnalysis.status.toLowerCase() === 'componentconflict') {
-                    this.licenseAnalysis.status = 'Unknown';
+                    this.licenseAnalysis.status = tab.license_analysis.status;
                 }
 
                 if (this.licenseAnalysis.status.toLowerCase() === 'stackconflict') {
                     this.licenseAnalysis.status = 'Conflict';
                 }
             } else {
-                this.licenseAnalysis.status = 'nolicensedata';
+                this.licenseAnalysis.status = 'Failure';
             }
         }
     }
