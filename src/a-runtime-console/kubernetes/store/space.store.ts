@@ -5,12 +5,13 @@ import {NamespaceStore} from "./namespace.store";
 import {ConfigMapService} from "../service/configmap.service";
 import {Space, Spaces, asSpaces, SpaceConfig} from "../model/space.model";
 import {ConfigMap, ConfigMaps} from "../model/configmap.model";
-import "rxjs/add/observable/forkJoin";
 import {OnLogin} from "../../shared/onlogin.service";
 import {messageEventToResourceOperation, Operation} from "../service/resource-operation";
 import {Watcher} from "../service/watcher";
 import {ConfigMapStore} from "./configmap.store";
 
+import 'rxjs/add/operator/combineLatest';
+import "rxjs/add/observable/forkJoin";
 
 const fabric8EnvironmentsName = "fabric8-environments";
 const fabric8SpacesName = "fabric8-spaces";
