@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody (click)="handleCollapseClick($event)" (hover)="handleHoverState($event)">
-                <tr class="{{dependency['parent-reference'] ? dependency['parent-reference'] : null}}" [ngClass]="{'parent-class': dependency.isParent, 'child-class': dependency.isChild}" *ngFor="let dependency of (dependenciesList | filter: fieldName)">
+                <tr [tooltip]="dependency['reason'] ? dependency['reason'] : null" class="{{dependency['parent-reference'] ? dependency['parent-reference'] : null}}" [ngClass]="{'parent-class': dependency.isParent, 'child-class': dependency.isChild}" *ngFor="let dependency of (dependenciesList | filter: fieldName)">
                     <td ellipsis data-id="{{dependency.compId}}">
                         <span>
                             <i [ngClass]="{'fa': true, 'fa-reply relation-icon': dependency.isChild, 'fa-database': dependency.isParent || isCompanion === true, 'parent-icon': dependency.isParent, 'companion': isCompanion === true}" aria-hidden="true" *ngIf="dependency.isChild || dependency.isParent || isCompanion === true"></i>

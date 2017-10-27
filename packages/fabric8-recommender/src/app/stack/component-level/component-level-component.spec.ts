@@ -1,6 +1,7 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {Http, ConnectionBackend, RequestOptions, BaseRequestOptions} from '@angular/http';
 import {Contexts} from 'ngx-fabric8-wit';
+import {TooltipModule} from 'ngx-bootstrap';
 import {ToastNotificationComponent} from '../toast-notification/toast-notification.component';
 import {ComponentLevelComponent} from './component-level.component';
 import {EllipsisDirective} from '../utils/ellipsis.directive';
@@ -21,6 +22,9 @@ describe ('ComponentLevelComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [
+                TooltipModule
+            ],
             declarations: [
                 ComponentLevelComponent,
                 EllipsisDirective,

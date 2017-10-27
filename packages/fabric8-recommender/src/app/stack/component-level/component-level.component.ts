@@ -451,6 +451,7 @@ export class ComponentLevelComponent implements OnChanges {
         output['has_issue'] = input['security'].length > 0;
         output['security_issue'] = output['has_issue'] ? Math.max.apply(Math, input['security'].map(d => d.CVSS)) : '';
         output['used_by'] = github['used_by'];
+        output['reason'] = input['reason'] || null;
         output['categories'] = input['topic_list'];
         output['categories'] = (output['categories'] && output['categories'].length > 0 && output['categories'].join(', ')) || '';
         output['action'] = canCreateWorkItem ? 'Create Work Item' : '';

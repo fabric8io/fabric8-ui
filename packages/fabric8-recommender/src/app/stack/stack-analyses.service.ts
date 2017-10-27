@@ -47,7 +47,6 @@ export class StackAnalysesService {
   getStackAnalyses(url: string): Observable<any> {
     let options = new RequestOptions({ headers: this.headers });
     let stackReport: StackReportModel = null;
-    // url = 'https://gist.githubusercontent.com/jyasveer/36d3197964899eef0f1fcf5a18063b76/raw/7792af364d3d35dc72e766c907db2023e4247e60/stack-analyses-v2-response.json';
     return this.http.get(url, options)
     // return this.http.get(url)
       .map(this.extractData)
