@@ -1,10 +1,12 @@
-<div class="experimental-bar" [class.experimental-bar-minimal]="hideBanner">
-  <span class="experimental-text">
-    This feature is experimental. You can manage experimental features on your <a class="btn btn-link-experimental" [routerLink]="profileLink">profile</a> page.
-    <a class="btn btn-link-experimental" (click)="acknowledgeWarning()">Got it!</a>
-  </span>
-  <!-- functionality to add additional information for the feature flag should be hooked up here -->
-  <button class="pull-right experimental-more-info">
-    <i class="fa fa-flask"></i>
-  </button>
+<div class="experimental-pf">
+  <div class="experimental-pf-bar" [class.hide]="hideBanner">
+    <span class="experimental-pf-text">
+      This feature is experimental. You can manage experimental features on your <a class="btn-link-experimental-pf" [routerLink]="profileLink">profile</a> page.
+      <a class="btn-link-experimental-pf" (click)="acknowledgeWarning()">Got it!</a>
+    </span>
+    <!-- functionality to add additional information for the feature flag should be hooked up here -->
+    <button class="pull-right experimental-pf-more-info">
+      <i class="fa fa-flask"></i>
+    </button>
+  </div>
 </div>
