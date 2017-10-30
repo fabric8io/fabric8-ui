@@ -4,16 +4,16 @@
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flexbox;
-  display: -ms-flex
+  display: -ms-flex;
 }
 .pipeline-status-bar .clip1:before,
 .pipeline-status-bar .clip2:before,
 .pipeline-status-bar .pipeline-line:before {
-  background-color: #d1d1d1
+  background-color: #d1d1d1;
 }
 .pipeline-status-bar .inner-circle-fill {
   background-color: #fff;
-  opacity: 0
+  opacity: 0;
 }
 .pipeline-status-bar.SUCCESS .clip1:before,
 .pipeline-status-bar.SUCCESS .clip2:before,
@@ -22,10 +22,10 @@
 .pipeline-status-bar.SUCCESS .pipeline-line:before,
 .pipeline-status-bar.SUCCESS .pipeline-circle,
 .pipeline-status-bar.SUCCESS .pipeline-circle .inner-circle {
-  background-color: #3f9c35
+  background-color: #3f9c35;
 }
 .pipeline-status-bar.SUCCESS .pipeline-circle:after {
-  content: "\f00c";
+  content: '\f00c';
   opacity: 1;
 }
 .pipeline-status-bar.FAILED .clip1:before,
@@ -35,10 +35,10 @@
 .pipeline-status-bar.FAILED .pipeline-line:before,
 .pipeline-status-bar.FAILED .pipeline-circle,
 .pipeline-status-bar.FAILED .pipeline-circle .inner-circle {
-  background-color: #c00
+  background-color: #c00;
 }
 .pipeline-status-bar.FAILED .pipeline-circle:after {
-  content: "\f00d";
+  content: '\f00d';
   opacity: 1;
 }
 .pipeline-status-bar.NOT_EXECUTED .clip1:before,
@@ -48,10 +48,10 @@
 .pipeline-status-bar.NOT_EXECUTED .pipeline-line:before,
 .pipeline-status-bar.NOT_EXECUTED .pipeline-circle,
 .pipeline-status-bar.NOT_EXECUTED .pipeline-circle .inner-circle {
-  background-color: #d1d1d1
+  background-color: #d1d1d1;
 }
 .pipeline-status-bar.NOT_EXECUTED .pipeline-circle:after {
-  content: "";
+  content: '';
   opacity: 1;
 }
 .pipeline-status-bar.PAUSED_PENDING_INPUT .clip1:before,
@@ -61,10 +61,10 @@
 .pipeline-status-bar.PAUSED_PENDING_INPUT .pipeline-line:before,
 .pipeline-status-bar.PAUSED_PENDING_INPUT .pipeline-circle,
 .pipeline-status-bar.PAUSED_PENDING_INPUT .pipeline-circle .inner-circle {
-  background-color: #f0ab00
+  background-color: #f0ab00;
 }
 .pipeline-status-bar.PAUSED_PENDING_INPUT .pipeline-circle:after {
-  content: "\f04c";
+  content: '\f04c';
   font-size: 10px;
   opacity: 1;
 }
@@ -76,32 +76,32 @@
 .pipeline-status-bar.ABORTED .pipeline-line:before,
 .pipeline-status-bar.ABORTED .pipeline-circle,
 .pipeline-status-bar.ABORTED .pipeline-circle .inner-circle {
-  background-color: #d1d1d1
+  background-color: #d1d1d1;
 }
 .pipeline-status-bar.ABORTED .pipeline-circle:after {
-  content: "\f05e";
+  content: '\f05e';
   opacity: 1;
 }
 /** we have animations on in progress stages */
 .pipeline-status-bar.IN_PROGRESS .clip1:before,
 .pipeline-status-bar.IN_PROGRESS .clip2:before,
 .pipeline-status-bar.IN_PROGRESS .inner-circle-fill {
-  background-color: #0088ce
+  background-color: #0088ce;
 }
 .pipeline-status-bar.IN_PROGRESS .pipeline-circle {
-  animation: fadeInProgress 0s .7s linear forwards
+  animation: fadeInProgress 0s .7s linear forwards;
 }
 .pipeline-status-bar.IN_PROGRESS .pipeline-circle:after {
-  content: "\f021";
+  content: '\f021';
 }
 .pipeline-status-bar.IN_PROGRESS .pipeline-line {
-  overflow: hidden
+  overflow: hidden;
 }
 .pipeline-status-bar.IN_PROGRESS .pipeline-line:before {
   animation: progress-rail 5s .5s linear infinite;
   background-color: #0088ce;
   transform: translateX(-100%);
-  width: 25%
+  width: 25%;
 }
 .pipeline-status-bar {
   display: flex;
