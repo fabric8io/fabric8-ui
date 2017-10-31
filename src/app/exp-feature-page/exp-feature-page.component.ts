@@ -6,7 +6,7 @@ import {
   Output
 } from '@angular/core';
 
-import 'rxjs/add/operator/map';
+import 'rxjs/operators/map';
 import { Notifications, Notification, NotificationType } from 'ngx-base';
 import { GettingStartedService } from '../getting-started/services/getting-started.service';
 

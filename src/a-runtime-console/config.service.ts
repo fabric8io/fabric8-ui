@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 
 import * as _ from 'lodash';
 
-import 'rxjs/add/operator/map';
+import 'rxjs/operators/map';
 import { Observable } from 'rxjs/Observable';
 
 const defaults = Object.freeze({

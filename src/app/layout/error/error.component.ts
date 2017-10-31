@@ -4,7 +4,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import 'rxjs/add/operator/map';
+import 'rxjs/operators/map';
 import { Subscription } from 'rxjs/Subscription';
 import { Router } from '@angular/router';
 
