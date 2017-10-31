@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Input as GuiInput } from '../../gui.model';
+import { Input as GuiInput } from 'ngx-forge';
 
 @Component({
   selector: 'review-step',

@@ -1,5 +1,5 @@
-import {Component, OnInit, Input} from '@angular/core';
-import { Gui } from '../../gui.model';
+import { Component, OnInit, Input } from '@angular/core';
+import { Gui } from 'ngx-forge';
 import { FormGroup } from '@angular/forms';
 
 @Component({

@@ -1,29 +1,35 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {Gui, Input as ForgeInput, Option} from '../../gui.model';
-import {Filter, FilterConfig, FilterEvent} from 'patternfly-ng';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import {Gui, Input as ForgeInput, Option, ProjectSelectConfig} from 'ngx-forge';
+import { Filter, FilterConfig, FilterEvent, FilterField } from 'patternfly-ng';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'quickstart',
   templateUrl: './choose-quickstart.component.html'
 })
 export class ChooseQuickstartComponent implements OnInit {
   @Input() gui: Gui;
   @Input() form: FormGroup;
-
+  config: ProjectSelectConfig = {
+    classes: ['Node', 'Spring', 'WildFly', 'Vert'],
+    techPreview: ['Node'],
+    renderType: 'body'
+  };
   filterConfig: FilterConfig;
   filtersText: string = '';
   private filteredInput: ForgeInput;
 
   ngOnInit(): void {
+    let fields = [{
+      id: 'name',
+      title:  'Name',
+      placeholder: 'Filter by Name...',
+      type: 'text'
+    }] as FilterField[];
     this.filterConfig = {
-      fields: [{
-        id: 'name',
-        title:  'Name',
-        placeholder: 'Filter by Name...',
-        type: 'text'
-      }]
-    };
+      fields: fields
+    } as FilterConfig;
     this.filteredInput = new ForgeInput(this.gui.inputs[0]);
     this.reset();
   }

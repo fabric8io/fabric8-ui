@@ -80,6 +80,8 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
       })
       .subscribe(createdSpace => {
           const primaryAction: NotificationAction = {
+            isDisabled: false,
+            isSeparator: false,
             name: `Open Space`,
             title: `Open ${this.spaceNamePipe.transform(createdSpace.attributes.name)}`,
             id: 'openSpace'
@@ -151,7 +153,7 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
           related: ''
         }
       },
-      ['owned-by']: {
+      'owned-by': {
         data: {
           id: '',
           type: 'identities'

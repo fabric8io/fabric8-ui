@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Input as GuiInput } from 'app/space/forge-wizard/gui.model';
+import { Input as GuiInput } from 'ngx-forge';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -16,7 +16,7 @@ export class SingleInputComponent implements OnInit {
 
   ngOnInit() {
     if (!this.field.enabled) {
-      this.form.controls.jenkinsSpace.disable();
+      this.form.controls['jenkinsSpace'].disable();
     }
   }
 

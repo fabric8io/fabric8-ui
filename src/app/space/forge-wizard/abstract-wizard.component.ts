@@ -1,16 +1,23 @@
-
 import { EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
-  WizardComponent, WizardConfig, WizardEvent, WizardStep, WizardStepComponent,
+  WizardComponent,
+  WizardConfig,
+  WizardEvent,
+  WizardStep,
+  WizardStepComponent,
   WizardStepConfig
 } from 'patternfly-ng';
-import {History} from 'app/space/forge-wizard/history.component';
-import { Gui, Input, MetaData } from './gui.model';
 import { ContextService } from '../../shared/context.service';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { isNullOrUndefined } from 'util';
-import { ForgeService } from './forge.service';
+import {
+  ForgeService,
+  History,
+  Gui,
+  Input,
+  MetaData
+} from 'ngx-forge';
 import { Codebase } from '../create/codebases/services/codebase';
 import { Observable } from 'rxjs';
 import { CodebasesService } from '../create/codebases/services/codebases.service';

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Input as GuiInput, Option } from 'app/space/forge-wizard/gui.model';
+import { Input as GuiInput, Option } from 'ngx-forge';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -58,7 +58,7 @@ export class MultipleSelectionListComponent implements OnInit {
     let specialFilterIncludeSelectedItems = filters.filter( f => f.toLowerCase() === '\\[x\\]').length > 0;
     if (filters.length === 0 ) {
         // if no filters ... everything is visible
-        field.valueChoices.forEach(c => c.visible = true);
+      field.valueChoices.forEach(c => c.visible = true);
         return;
     }
     // remove the special 'show selected' filter
