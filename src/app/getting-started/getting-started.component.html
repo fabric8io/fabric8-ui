@@ -21,7 +21,7 @@
     </div>
   </div>
   <div class="row">
-    <form role="form">
+    <form [action]="linkingApiURL" method="POST" ngNoForm role="form">
 <!--
       <div class="row">
         <div class="col-sm-1">
@@ -89,6 +89,7 @@
               Select accounts to authorize
             </label>
           </ng-template>
+          
           <div class="form-group">
             <div *ngIf="gitHubLinked; then ghLinked else ghUnlinked"></div>
             <ng-template #ghLinked>
@@ -98,8 +99,8 @@
             </ng-template>
             <ng-template #ghUnlinked>
               <div class="checkbox">
-                <input type="checkbox" id="authGitHub" name="authGitHub"
-                       [(ngModel)]="authGitHub">
+                <input type="checkbox" id="authGitHub" name="for"
+                [(ngModel)]="authGitHub"   [value]="githubURL" >
                 <label for="authGitHub" class="required-pf">GitHub</label>
               </div>
             </ng-template>
@@ -113,16 +114,18 @@
             </ng-template>
             <ng-template #osoUnlinked>
               <div class="checkbox">
-                <input type="checkbox" id="authOpenShift" name="authOpenShift"
-                       [(ngModel)]="authOpenShift">
+                <input type="checkbox" id="authOpenShift"
+                       [(ngModel)]="authOpenShift" [value]="openShiftURL">
                 <label for="authOpenShift" class="required-pf">OpenShift.com</label>
               </div>
             </ng-template>
           </div>
           <div class="form-group">
-            <button class="btn btn-lg btn-default" id="connect"
-                    [disabled]="isConnectAccountsDisabled"
-                    (click)="connectAccounts()">Connect accounts</button>
+              <input type="hidden"  name="token" [(ngModel)]="accessToken"/>
+              <input type="hidden"  name="redirect" [(ngModel)]="redirect"/>
+            <button type="submit" class="btn btn-lg btn-default" id="connect"
+            [disabled]="isConnectAccountsDisabled"  
+            (click)="connectAccounts()" >Connect accounts</button>
           </div>
         </div>
       </div>
