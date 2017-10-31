@@ -149,7 +149,7 @@
     "@ngtools/webpack": "1.7.4",
     "@types/jasmine": "2.6.2",
     "@types/js-yaml": "3.9.1",
-    "@types/lodash": "4.14.77",
+    "@types/lodash": "4.14.80",
     "@types/node": "8.0.44",
     "@types/segment-analytics": "0.0.28",
     "@types/selenium-webdriver": "3.0.7",
