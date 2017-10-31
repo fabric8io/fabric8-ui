@@ -165,7 +165,9 @@ export class StackReportInShortComponent implements OnChanges {
             this.licenseAnalysis.licenseUnknownCount =
                 licenseReallyUnknownCount + licenseComponentConflictsCount;
           }
+
           this.licenseAnalysis.stackLicenseText = tab.license_analysis.f8a_stack_licenses[0];
+
           if (tab.license_analysis.status) {
             this.licenseAnalysis.status = tab.license_analysis.status;
             if (this.licenseAnalysis.status.toLowerCase() === 'componentconflict') {
@@ -175,7 +177,7 @@ export class StackReportInShortComponent implements OnChanges {
                 this.licenseAnalysis.status = 'Conflict';
             }
           } else {
-              this.licenseAnalysis.status = 'Failure';
+              this.licenseAnalysis.status = 'nolicensedata';
           }
         }
     }

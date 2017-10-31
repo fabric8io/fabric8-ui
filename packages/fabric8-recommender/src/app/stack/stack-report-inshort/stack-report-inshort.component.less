@@ -97,7 +97,12 @@
         border-radius: 2px;
         flex: 1;
         &.outlier-stat { flex: 2; }
-        &.stack-license-stat { flex: 2; }
+        &.stack-license-stat {
+          flex: 2;
+          .failure-text {
+            padding: 0 5px;
+          }
+        }
         &.security-issues-stat {
           flex: 1;
           .cve-message {

@@ -124,24 +124,29 @@ export class StackLevelComponent {
                       tab.license_analysis.unknown_licenses.component_conflict.length : 0;
             }
             this.licenseAnalysis.stackLicenseText = tab.license_analysis.f8a_stack_licenses[0];
-            if (tab.license_analysis.status.toLowerCase() === 'stackconflict' &&
-                tab.license_analysis.conflict_packages &&
-                    tab.license_analysis.conflict_packages.length) {
-                this.licenseAnalysis.licenseConflictsPartial =
-                    tab.license_analysis.conflict_packages.slice(0, 2);
-                this.licenseAnalysis.licenseConflictsFull = tab.license_analysis.conflict_packages;
-            }
+
             if (tab.license_analysis.status) {
                 this.licenseAnalysis.status = tab.license_analysis.status;
-                if (tab.license_analysis.status.toLowerCase() === 'componentconflict') {
+
+                if (this.licenseAnalysis.status.toLowerCase() === 'stackconflict' &&
+                    tab.license_analysis.conflict_packages &&
+                    tab.license_analysis.conflict_packages.length) {
+                    this.licenseAnalysis.licenseConflictsPartial =
+                        tab.license_analysis.conflict_packages.slice(0, 2);
+                    this.licenseAnalysis.licenseConflictsFull =
+                        tab.license_analysis.conflict_packages;
+                }
+
+                if (this.licenseAnalysis.status.toLowerCase() === 'componentconflict') {
                     this.licenseAnalysis.status = 'Unknown';
                 }
-                if (tab.license_analysis.status.toLowerCase() === 'stackconflict') {
+
+                if (this.licenseAnalysis.status.toLowerCase() === 'stackconflict') {
                     this.licenseAnalysis.status = 'Conflict';
                 }
             } else {
-                this.licenseAnalysis.status = 'failure';
+                this.licenseAnalysis.status = 'nolicensedata';
             }
-          }
+        }
     }
 }

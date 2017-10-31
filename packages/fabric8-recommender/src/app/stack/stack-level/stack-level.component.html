@@ -56,7 +56,7 @@
                 <h3>
                     <span>Licenses</span>
                 </h3>
-                <div class="stat-content license-area" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() !== 'failure'">
+                <div class="stat-content license-area" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() !== 'failure' && licenseAnalysis && licenseAnalysis.status.toLowerCase() !== 'nolicensedata'">
                     <div class="stack-license-text flex-3" *ngIf="licenseAnalysis.status.toLowerCase() === 'successful'">
                         <div class="metric-desc">
                             Possible Stack License
@@ -152,14 +152,12 @@
                             </span>
                         </div>
                     </div>
-                    <!-- <div class="all-license flex-2">
-                        <div class="metric">
-                            <f8-chart [data]="licenseInfo['data']" [chartOptions]="licenseInfo['chartOptions']" [configs]="licenseInfo['configs']"></f8-chart>
-                        </div>
-                    </div> -->
                 </div>
-                <div class="stat-content center-text" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'failure'">
+                <div class="stat-content center-text" *ngIf="licenseAnalysis && licenseAnalysis.status && licenseAnalysis.status.toLowerCase() === 'failure'">
                         Could not get license data for this stack. This may be due to some failure.
+                </div>
+                <div class="stat-content center-text" *ngIf="licenseAnalysis && licenseAnalysis.status && licenseAnalysis.status.toLowerCase() === 'nolicensedata'">
+                        No license data available.
                 </div>
             </div>
         </div>

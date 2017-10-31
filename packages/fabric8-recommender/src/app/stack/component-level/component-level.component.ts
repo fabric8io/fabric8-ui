@@ -396,10 +396,15 @@ export class ComponentLevelComponent implements OnChanges {
                 dependency = this.setParams(eachOne, this.isCompanion !== undefined);
                 dependency['isUsageOutlier'] = this.isUsageOutlier(dependency['name']);
                 dependency['compId'] = 'comp-' + i;
-                if (this.licenseAnalysis.status.toLowerCase() === 'successful' && this.licenseAnalysis.outlier_packages.length) {
+                if (this.licenseAnalysis.status &&
+                    this.licenseAnalysis.status.toLowerCase() === 'successful' &&
+                    this.licenseAnalysis.outlier_packages.length) {
                     dependency = this.checkIfOutlierPackage(dependency);
                 }
-                if ((this.licenseAnalysis.status.toLowerCase() === 'unknown' || this.licenseAnalysis.status.toLowerCase() === 'componentconflict') && this.licenseAnalysis.unknown_licenses) {
+                if (this.licenseAnalysis.status &&
+                    (this.licenseAnalysis.status.toLowerCase() === 'unknown' ||
+                    this.licenseAnalysis.status.toLowerCase() === 'componentconflict') &&
+                    this.licenseAnalysis.unknown_licenses) {
                     if (this.licenseAnalysis.unknown_licenses.really_unknown.length) {
                         dependency = this.checkIfReallyUnknownLicense(dependency);
                     }
