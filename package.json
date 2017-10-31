@@ -155,7 +155,6 @@
     "@types/selenium-webdriver": "3.0.8",
     "@types/source-map": "0.5.2",
     "@types/webpack": "3.0.14",
-    "@types/zone.js": "0.5.12",
     "angular-2-local-storage": "1.0.1",
     "angular2-router-loader": "0.3.5",
     "angular2-template-loader": "0.6.2",
