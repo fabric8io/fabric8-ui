@@ -210,7 +210,7 @@
     "mocha": "4.0.1",
     "ngc-webpack": "3.2.2",
     "npm-run-all": "4.1.1",
-    "patternfly": "3.28.1",
+    "patternfly": "3.29.11",
     "phantomjs-prebuilt": "2.1.15",
     "postcss": "6.0.13",
     "protractor": "5.2.0",
