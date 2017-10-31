@@ -165,7 +165,7 @@
     "change-case": "3.0.1",
     "child_process": "1.0.2",
     "codelyzer": "3.2.2",
-    "copy-webpack-plugin": "4.1.1",
+    "copy-webpack-plugin": "4.2.0",
     "copyfiles": "1.2.0",
     "css-loader": "0.28.7",
     "cz-conventional-changelog": "2.0.0",
