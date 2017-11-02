@@ -132,11 +132,11 @@
           <li *ngIf="loggedInUser" dropdown class="pull-right dropdown user-dropdown-menu">
             <a class="user-dropdown dropdown-toggle" title="{{loggedInUser.attributes.fullName}}" dropdownToggle>
               <div *ngIf="loggedInUser" id="header_dropdownToggle2" class="user-dropdown-items">
-              <span class="user-icon">
+              <span class="user-dropdown__user-icon">
                 <span *ngIf="!imgLoaded" class="pficon pficon-user"></span>
-                <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
+                <img (load)="onImgLoad()" src="{{ loggedInUser.attributes.imageURL }}" class="icon-user" [ngClass]="{'show' : imgLoaded,'img-icon' : imgLoaded, 'hide' : !imgLoaded}">
               </span>
-              <span>{{loggedInUser.attributes.fullName}}</span>
+              <span class="user-dropdown__username">{{loggedInUser.attributes.fullName}}</span>
               <span class="caret"></span>
             </div>
             </a>

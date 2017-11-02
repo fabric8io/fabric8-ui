@@ -7,7 +7,7 @@
         <div>
           <div *ngIf="(context.user.attributes.imageURL !== undefined && context.user.attributes.imageURL.length !== 0); then showImageURL else addImageURL"></div>
           <ng-template #showImageURL>
-            <img src="{{context.user.attributes.imageURL}}" class="img-responsive profile-img">
+              <img src="{{context.user.attributes.imageURL}}" class="img-responsive profile-img icon-user">
           </ng-template>
           <ng-template #addImageURL>
             <a href="javascript:void(0)"
