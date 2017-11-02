@@ -35,7 +35,7 @@
     "build:aot-min": "webpack --config config/webpack.min.aot.js  --progress --profile --bail",
     "build:dev": "webpack --config config/webpack.dev.js --progress --profile",
     "build:docker": "npm run build:prod && docker build -t angular2-webpack-start:latest .",
-    "build:prod": "BUILD_VERSION=$(./version_number.js) webpack --config config/webpack.prod.js  --profile --bail",
+    "build:prod": "BUILD_VERSION=$(npm view . version) webpack --config config/webpack.prod.js  --profile --bail",
     "build:prod-aot": "webpack --config config/webpack.prod.js  --progress --profile --bail --env.aot",
     "build": "npm run build:dev",
     "check-coverage": "istanbul check-coverage --statements 23 --branches 5 --functions 9 --lines 24",
