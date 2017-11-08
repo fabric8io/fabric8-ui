@@ -21,7 +21,7 @@ import { ExtUser, GettingStartedService } from '../../../getting-started/service
 export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   context: Context;
   subscriptions: Subscription[] = [];
-  contextSubscription: Subscription;
+  // contextSubscription: Subscription;
 
   authOpenShift: boolean = false;
   gitHubLinked: boolean = false;
@@ -52,7 +52,7 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.contextSubscription.unsubscribe();
+    // this.contextSubscription.unsubscribe();
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
