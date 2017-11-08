@@ -3,7 +3,8 @@
 [![Build Status](https://ci.centos.org/buildStatus/icon?job=devtools-fabric8-ui-npm-publish-build-master)](https://ci.centos.org/job/devtools-fabric8-ui-npm-publish-build-master)
 [![codecov](https://codecov.io/gh/fabric8io/fabric8-ui/branch/master/graph/badge.svg)](https://codecov.io/gh/fabric8io/fabric8-ui)
 
-## Before you start: Pointing to a cluster
+## Development environment
+### Run fabric8-ui with remote backends
 
 You need to setup your shell to point to the right cluster so that it can talk to the required back end services like KeyCloak, WIT, Forge, OpenShift etc.  
 
@@ -21,18 +22,20 @@ There are others too. For example if you want to try [run fabric8 locally on min
 source environments/local-cluster.sh
 ```
 
+> NOTE: If you want to target a local WIT backend, check your wiki [How To pages](https://github.com/fabric8-ui/fabric8-ui/wiki/How-to...#how-to-run-local-fabric8-ui-with-local-wit).
 
-## VS Code
+### Build and Run
 
-* Run `ext install EditorConfig` to read the .editorconfig file
+Run `npm install`. 
+This will download all the required dependencies to be able to start the UI.
 
-## Get dependencies
-
-Run `npm install`. This will download all the required dependencies to be able to start the UI.
-
-## To start
 
 Run `npm start`. This will start the UI with live reload enabled. Then navigate to <http://localhost:3000>.
+
+### VS Code
+
+Run `ext install EditorConfig` to read the .editorconfig file
+
 
 ## HTML, CSS and Less
 | [Code Guidelines](https://fabric8-ui.github.io/fabric8-ux/code-guidelines)
