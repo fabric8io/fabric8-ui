@@ -22,7 +22,7 @@ There are others too. For example if you want to try [run fabric8 locally on min
 source environments/local-cluster.sh
 ```
 
-> NOTE: If you want to target a local WIT backend, check your wiki [How To pages](https://github.com/fabric8-ui/fabric8-ui/wiki/How-to...#how-to-run-local-fabric8-ui-with-local-wit).
+> NOTE: If you want to target a local WIT backend, check our wiki [How To pages](https://github.com/fabric8-ui/fabric8-ui/wiki/How-to...#how-to-run-local-fabric8-ui-with-local-wit).
 
 ### Build and Run
 
