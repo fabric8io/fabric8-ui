@@ -44,9 +44,14 @@ export class StackAnalysesService {
       }
   }
 
-  getStackAnalyses(url: string): Observable<any> {
+  getStackAnalyses(url: string, params?: any): Observable<any> {
+    console.log('stack service', params);
     let options = new RequestOptions({ headers: this.headers });
     let stackReport: StackReportModel = null;
+    if (params && params['access_token']) {
+      this.headers.set('Authorization', 'Bearer ' + params['access_token']);
+      options = new RequestOptions({ headers: this.headers });
+    }
     return this.http.get(url, options)
     // return this.http.get(url)
       .map(this.extractData)

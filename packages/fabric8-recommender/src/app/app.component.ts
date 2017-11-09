@@ -7,17 +7,89 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 })
 
 export class AppComponent implements OnInit {
-  public stackUrl: string =
-    'https://recommender.api.openshift.io/api/v1/stack-analyses/3e13b237cade46c888aa3a1dba06696d';
+  public stackUrl: string;
+  public apiData: any;
+  public gateway: any = {};
+  public label: string;
+  public routerLink: string;
+  constructor(private route: ActivatedRoute) {
+    this.route.paramMap.subscribe((params) => {
+        this.label = params.get('id');
+    });
 
-  constructor() {}
-  ngOnInit(): void {
-    console.log('Inside ngInit');
+    window.onhashchange = () => {
+        let url: string = location.hash;
+        let id: string = url.replace('#/analyze/', '');
+        let splitParams: Array<string> = id.split('?');
+        this.label = splitParams[0];
+        this.onAppLoad();
+    };
   }
 
-  // Request Ids for diff starter osio apps to test
-  // vertex booster = aafb40f724804b919e0f2eca62a02c81
-  // springboot health check = 7b97b7c12d774a1db54ece52f861621c
-  // spring boot http = 3e13b237cade46c888aa3a1dba06696d
-  // spring boot crud = 826f7f7d0a184ea08b6838d59c557bca
+  onAppLoad(): void {
+      let url: string = location.hash;
+      let id: string = url.replace('#/analyze/', '');
+      let splitParams: Array<string> = id.split('?');
+      if (!this.label) {
+          this.label = splitParams[0];
+      }
+      if (splitParams && splitParams.length > 1) {
+          this.apiData = decodeURIComponent(splitParams[1].split('api_data=')[1]);
+          try {
+              this.apiData = JSON.parse(this.apiData);
+          } catch (err) {
+              console.log('Error parsing JSON');
+          }
+          if (this.apiData) {
+              this.changeLabel();
+          }
+      }
+  }
+
+  changeLabel(): void {
+      console.log(this.label);
+      if (this.label && this.label.trim() !== '') {
+          this.routerLink = '/analyze/' + this.label;
+          // this.gateway['user_key'] = this.apiData['user_key'];
+          this.gateway['access_token'] = this.apiData['access_token'];
+          this.gateway['config'] = this.apiData['route_config'];
+
+          // {
+          //     "route_config": {
+          //         "api_url": ""
+          //     }
+          // }
+          // In case of 3 scale
+          // {
+          //     "route_config": {
+          //         "api_url": "",
+          //         "user_key": ""
+          //     }
+          // }
+          if (this.gateway['config'] && this.gateway['config']['api_url']) {
+              let apiHost: string = this.gateway['config']['api_url'];
+              if (apiHost.charAt(apiHost.length - 1) !== '/') {
+                  apiHost += '/';
+                  this.gateway['config']['api_url'] = apiHost;
+              }
+              this.stackUrl = apiHost + 'api/v1/stack-analyses/' + this.label;
+              console.log('=========================');
+              console.log(this.gateway);
+              console.log(this.stackUrl);
+              console.log('=========================');
+          }
+      }
+  }
+
+  ngOnInit(): void {
+      this.onAppLoad();
+  }
 }
+
+// format of the url
+// http://localhost:8088/#/analyze/4460cedfec3e49b5b6cf5712ccf7750b?api_data={
+    // "access_token": "<ACCESS_TOKEN>",
+    // "route_config": {
+        // "api_url": "https://recommender.api.openshift.io/"
+    // }
+// }

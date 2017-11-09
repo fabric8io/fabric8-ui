@@ -14,6 +14,7 @@ import {StackReportModel, ResultInformationModel, UserStackInfoModel, Recommenda
 })
 
 export class StackReportInShortComponent implements OnChanges {
+    @Input() gatewayConfig: any;
     @Input() stackUrl;
     @Input() repoInfo;
     @Input() buildNumber;
@@ -38,8 +39,9 @@ export class StackReportInShortComponent implements OnChanges {
         if (this.stackUrl && this.stackUrl !== this.cache) {
             this.cache = this.stackUrl;
             this.dataLoaded = false;
+            console.log('inshort component', this.stackUrl, this.gatewayConfig);
             this.stackAnalysisService
-                .getStackAnalyses(this.stackUrl)
+                .getStackAnalyses(this.stackUrl, this.gatewayConfig)
                 .subscribe((data) => {
                     if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
                         let resultInformation: Observable<StackReportModel> = getStackReportModel(data);

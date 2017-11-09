@@ -8,8 +8,6 @@ import { AuthenticationService, AUTH_API_URL, SSO_API_URL } from 'ngx-login-clie
 import { AppComponent }  from './app.component';
 import { FormsModule }   from '@angular/forms';
 
-import {AppRoutingModule} from './app.routing';
-
 import { witApiUrlProvider } from './shared/wit-api.provider';
 import { ApiLocatorService } from './shared/api-locator.service';
 import { authApiUrlProvider } from './shared/auth-api.provider';
@@ -19,10 +17,13 @@ import { MockAuthenticationService } from './shared/mock-auth.service';
 
 // Imports stackdetailsmodule
 import { StackDetailsModule } from './stack/stack-details/stack-details.module';
-import {StackReportInShortModule} from './stack/stack-report-inshort/stack-report-inshort.module';
+import { StackReportInShortModule } from './stack/stack-report-inshort/stack-report-inshort.module';
+
+import { AppRoutingModule } from './app.routing';
 
 @NgModule({
   imports: [
+    AppRoutingModule,
     BrowserModule,
     StackDetailsModule,
     FormsModule,
