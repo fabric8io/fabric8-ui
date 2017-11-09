@@ -188,11 +188,14 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
         // code repition, but temporary.
         // Will soon migrate this to use the new way of 
         // linking using the auth service.
+        /*
         let url = `${this.oldLinkingServer}/link/session?`
           + "clientSession=" + parsedToken.client_session
           + "&sessionState=" + parsedToken.session_state
           + "&redirect=" + finalRedirect // brings us back to Getting Started.
           + "&provider=openshift-v3";
+        */
+        let url = this.providerService.getLegacyLinkingUrl(this.oldLinkingServer,finalRedirect)
         
         this.redirect = url; // triggeres OSO linking the old-fashioned way after github linking.
         return true;

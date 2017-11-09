@@ -65,6 +65,21 @@ export class ProviderService {
     this.redirectToAuth(url);
   }
 
+  /**
+   * 
+   * @param url 
+   */
+
+   getLegacyLinkingUrl(server: string, redirect: string): string{
+    let parsedToken = jwt_decode(this.auth.getToken());    
+    let url = server + `/link/session?`
+    + "clientSession=" + parsedToken.client_session
+    + "&sessionState=" + parsedToken.session_state
+    + "&redirect=" + redirect // brings us back to Getting Started.
+    + "&provider=openshift-v3";
+    return url
+   }
+
   // Private
 
   private redirectToAuth(url) {
