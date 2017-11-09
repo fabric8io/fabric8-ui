@@ -1,0 +1,9 @@
+# CODEOWNERS
+# https://github.com/blog/2392-introducing-code-owners
+# https://help.github.com/articles/about-codeowners/
+
+# When someone opens a pull requests against `.less` files,
+# requests for review will be sent to the UXD-CSS Team.
+# Only `.less` files inside of `app/` and `assets/` are checked.
+src/app/**/*.less @fabric8-ui/uxd-css
+src/assets/**/*.less @fabric8-ui/uxd-css
