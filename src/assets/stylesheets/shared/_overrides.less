@@ -21,3 +21,22 @@
  */
 .cards-pf { background-color: @color-pf-black-200; }
 .list-pf-item { background-color: @color-pf-white; }
+.blank-slate-pf {
+  /* stylelint-disable */
+  /* required to overwrite PatternFly blank slate to achieve new default white background */
+  background-color: @color-pf-white !important;
+  border: 0;
+  /* stylelint-enable */
+}
+
+/* creates an alternating row stripe for lists
+ * similar to how tables use the .table-striped class
+ */
+.list-view-pf-striped .list-group-item:nth-of-type(2n) {
+  background-color: @color-pf-black-150;
+  &:hover {
+    /* stylelint-disable */
+    background-color: @color-pf-black-200 !important;
+    /* stylelint-enable */
+  }
+}

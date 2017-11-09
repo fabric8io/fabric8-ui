@@ -41,6 +41,7 @@
     .user-dropdown {
       width: 200px;
       height: 43px;
+      padding-top: 10px;
     }
   }
   &-getting-started-logo {
@@ -144,14 +145,6 @@
     &:hover { .pointer; }
   }
 }
-.user-icon {
-  display: inline-block;
-  vertical-align: text-bottom;
-  img {
-    width: 24px;
-    height: 23px;
-  }
-}
 .user-dropdown {
   padding: 10px 14px;
   width: 200px;
@@ -161,6 +154,16 @@
     overflow: hidden;
     white-space: nowrap;
     margin-right: 5px;
+  }
+  &__username { vertical-align: sub; }
+  &__user-icon {
+    display: inline-block;
+    vertical-align: middle;
+    img {
+      width: 24px;
+      height: 23px;
+      margin-right: 5px;
+    }
   }
   .caret {
     position: absolute;

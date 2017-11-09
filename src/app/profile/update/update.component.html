@@ -36,7 +36,7 @@
         <div class="form-group">
           <label for="previewImg" class="control-label padding-left-none">Profile photo</label>
           <div class="col-xs-12 preview-cont padding-left-none">
-            <img src="{{imageUrl}}" class="col-xs-2 preview-img padding-left-none"
+            <img src="{{imageUrl}}" class="col-xs-2 preview-img icon-user padding-left-none padding-right-none margin-right-10"
                 *ngIf="imageUrl !== undefined && imageUrl.length > 0">
             <img src="../../../assets/images/profile-user.png" class="col-xs-2 preview-img-none"
                 *ngIf="imageUrl === undefined || imageUrl.length === 0">
@@ -122,12 +122,13 @@
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <button class="btn btn-lg btn-default"
-                  (click)="updateTenent()">Update Tenant</button>
-
-          <button class="btn btn-lg btn-default"
-                  (click)="cleanupTenant()">Reset Environment</button>
+        <div class="row padding-top-15">
+          <div class="col-sm-9 col-sm-offset-3">
+            <button class="btn btn-lg btn-default pull-right margin-left-15"
+                    (click)="cleanupTenant()">Reset Environment</button>
+            <button class="btn btn-lg btn-default pull-right"
+            (click)="updateTenent()">Update Tenant</button>
+          </div>
         </div>
       </form>
     </div>

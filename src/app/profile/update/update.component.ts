@@ -9,7 +9,7 @@ import { AuthenticationService, UserService, User } from 'ngx-login-client';
 
 import { CopyService } from '../services/copy.service';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { GitHubService } from "../../space/create/codebases/services/github.service";
+import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { ProviderService } from '../../getting-started/services/provider.service';
 import { TenentService } from '../services/tenent.service';
 
@@ -129,11 +129,11 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   connectAccounts(): void {
     // Todo: Still cannot refresh current page, so send user to getting started page
     if (this.authGitHub && !this.gitHubLinked && this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkAll(window.location.origin + "/_gettingstarted?wait=true");
+      this.providerService.linkAll(window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authGitHub && !this.gitHubLinked) {
-      this.providerService.linkGitHub(window.location.origin + "/_gettingstarted?wait=true");
+      this.providerService.linkGitHub(window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkOpenShift(window.location.origin + "/_gettingstarted?wait=true");
+      this.providerService.linkOpenShift(window.location.origin + '/_gettingstarted?wait=true');
     }
   }
 
@@ -148,7 +148,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
         type: NotificationType.SUCCESS
       } as Notification);
     } else {
-      this.handleError("Failed to copy token", NotificationType.DANGER);
+      this.handleError('Failed to copy token', NotificationType.DANGER);
     }
   }
 
@@ -168,10 +168,10 @@ export class UpdateComponent implements AfterViewInit, OnInit {
         this.profileForm.form.markAsDirty();
         this.imageUrl = user.avatar_url;
       } else {
-        this.handleError("No image found", NotificationType.INFO);
+        this.handleError('No image found', NotificationType.INFO);
       }
     }, error => {
-      this.handleError("Unable to link image", NotificationType.WARNING);
+      this.handleError('Unable to link image', NotificationType.WARNING);
     }));
   }
 
@@ -213,7 +213,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (!profile.contextInformation.experimentalFeatures) {
       profile.contextInformation.experimentalFeatures = {};
     }
-    profile.contextInformation.experimentalFeatures["enabled"] = this.isExperimental;
+    profile.contextInformation.experimentalFeatures['enabled'] = this.isExperimental;
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.setUserProperties(user);
@@ -224,9 +224,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
       this.routeToProfile();
     }, error => {
       if (error.status === 409) {
-        this.handleError("Email already exists", NotificationType.DANGER);
+        this.handleError('Email already exists', NotificationType.DANGER);
       } else {
-        this.handleError("Failed to update profile", NotificationType.DANGER);
+        this.handleError('Failed to update profile', NotificationType.DANGER);
       }
     }));
   }
@@ -238,9 +238,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.subscriptions.push(this.tenentService.updateTenent()
       .subscribe(res => {
         // Do nothing
-        let test = "";
+        let test = '';
       }, error => {
-        this.handleError("Failed to update tenent", NotificationType.DANGER);
+        this.handleError('Failed to update tenent', NotificationType.DANGER);
       }));
   }
 
@@ -325,7 +325,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   private isEmailValid(): boolean {
     if (this.email !== undefined && this.email.trim().length > 0)
-      return (this.email.trim().indexOf("@") !== -1);
+      return (this.email.trim().indexOf('@') !== -1);
     else {
       return (this.email.trim().length > 0);
     }
@@ -338,7 +338,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   private isImageUrlValid(): boolean {
     if (this.imageUrl !== undefined && this.imageUrl.trim().length > 0)
-      return (this.imageUrl.trim().indexOf("http") === 0);
+      return (this.imageUrl.trim().indexOf('http') === 0);
     else {
       return true;
     }
@@ -351,7 +351,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   private isUrlValid(): boolean {
     if (this.url !== undefined && this.url.trim().length > 0)
-      return (this.url.trim().indexOf("http") === 0);
+      return (this.url.trim().indexOf('http') === 0);
     else {
       return true;
     }
@@ -375,9 +375,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.url = (user.attributes.url !== undefined) ? user.attributes.url : '';
     this.username = (user.attributes.username !== undefined) ? user.attributes.username : '';
 
-    let contextInformation = user.attributes["contextInformation"];
+    let contextInformation = user.attributes['contextInformation'];
     if (contextInformation && contextInformation.experimentalFeatures ) {
-      this.isExperimental =  contextInformation.experimentalFeatures["enabled"];
+      this.isExperimental =  contextInformation.experimentalFeatures['enabled'];
     }
   }
 

@@ -1,0 +1,96 @@
+<div class="card-pf f8-card">
+  <div class="card-pf-heading-bg">
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        My Connected Accounts
+        <!-- <span id="connected-acounts-badge" class="badge f8-card-badge">2</span> -->
+      </h2>
+    </div>
+  </div>
+  <div class="card-pf-body f8-card-body">
+    <!-- <div *ngIf="features.length === 0; then showBlankState else showExpFeature"></div> -->
+    <!-- <ng-template #showBlankState> -->
+
+    <!-- </ng-template> -->
+    <!-- <ng-template #showExpFeature> -->
+      <div class="col-xs-12 f8-card-list">
+        <div class="spaces-list-scroll">
+          <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
+            <li class="list-group-item">
+              <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                  <div class="list-view-pf-description">
+                    <div class="list-group-item-text">
+                      <div *ngIf="gitHubLinked; then ghLinked else ghUnlinked"></div>
+                      <ng-template #ghLinked>
+                        <span>
+                          <b>GitHub</b>
+                        </span>
+                      </ng-template>
+                      <ng-template #ghUnlinked>
+                        <span>
+                          <b>GitHub</b>
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="list-view-pf-additional-info">
+                    <div class="list-view-pf-additional-info-item">
+                      <div *ngIf="gitHubLinked; then ghLinkedUsername else ghUnlinkedUsername"></div>
+                      <ng-template #ghLinkedUsername>
+                        <span>
+                          Connected
+                        </span>
+                      </ng-template>
+                      <ng-template #ghUnlinkedUsername>
+                        <span class="account-disconnected">
+                          Not Connected
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="list-view-pf-main-info">
+                <div class="list-view-pf-body">
+                  <div class="list-view-pf-description">
+                    <div class="list-group-item-text">
+                      <div *ngIf="openShiftLinked; then osoLinked else osoUnlinked"></div>
+                      <ng-template #osoLinked>
+                        <span>
+                          <b>OpenShift</b>
+                        </span>
+                      </ng-template>
+                      <ng-template #osoUnlinked>
+                        <span>
+                          <b>OpenShift</b>
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
+                  <div class="list-view-pf-additional-info">
+                    <div class="list-view-pf-additional-info-item">
+                      <div *ngIf="openShiftLinked; then osoLinkedUsername else osoUnlinkedUsername"></div>
+                      <ng-template #osoLinkedUsername>
+                        <span>
+                          {{contextUserName}}
+                        </span>
+                      </ng-template>
+                      <ng-template #osoUnlinkedUsername>
+                        <span class="account-disconnected">
+                          Not Connected
+                        </span>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    <!-- </ng-template> -->
+  </div>
+</div>

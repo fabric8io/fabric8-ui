@@ -25,6 +25,7 @@ const HMR = helpers.hasProcessFlag('hot');
 // if env is 'inmemory', the inmemory debug resource is used
 const FABRIC8_FORGE_API_URL = process.env.FABRIC8_FORGE_API_URL || 'https://forge.api.prod-preview.openshift.io';
 const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL || 'https://api.prod-preview.openshift.io/api/';
+const FABRIC8_AUTH_API_URL = process.env.FABRIC8_AUTH_API_URL || 'https://auth.prod-preview.openshift.io/api/';
 const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
 const FABRIC8_SSO_API_URL = process.env.FABRIC8_SSO_API_URL || 'https://sso.prod-preview.openshift.io/';
 const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'https://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
@@ -59,6 +60,7 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
   FABRIC8_REALM: FABRIC8_REALM,
   FABRIC8_SSO_API_URL: FABRIC8_SSO_API_URL,
+  FABRIC8_AUTH_API_URL : FABRIC8_AUTH_API_URL,
   FABRIC8_RECOMMENDER_API_URL: FABRIC8_RECOMMENDER_API_URL,
   FABRIC8_FORGE_URL: FABRIC8_FORGE_URL,
   FABRIC8_PIPELINES_NAMESPACE: FABRIC8_PIPELINES_NAMESPACE,
@@ -187,6 +189,7 @@ module.exports = function (options) {
           'FABRIC8_WIT_API_URL': JSON.stringify(METADATA.FABRIC8_WIT_API_URL),
           'FABRIC8_REALM': JSON.stringify(METADATA.FABRIC8_REALM),
           'FABRIC8_SSO_API_URL': JSON.stringify(METADATA.FABRIC8_SSO_API_URL),
+          'FABRIC8_AUTH_API_URL': JSON.stringify(METADATA.FABRIC8_AUTH_API_URL),
           'FABRIC8_RECOMMENDER_API_URL': JSON.stringify(METADATA.FABRIC8_RECOMMENDER_API_URL),
           'FABRIC8_FORGE_URL': JSON.stringify(METADATA.FABRIC8_FORGE_URL),
           'FABRIC8_PIPELINES_NAMESPACE': JSON.stringify(FABRIC8_PIPELINES_NAMESPACE),
