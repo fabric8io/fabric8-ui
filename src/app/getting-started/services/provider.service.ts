@@ -1,10 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { AuthenticationService } from 'ngx-login-client';
+import { AuthenticationService,AUTH_API_URL } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-
 import * as jwt_decode from 'jwt-decode';
 
 @Injectable()
@@ -14,8 +13,8 @@ export class ProviderService {
   constructor(
       private auth: AuthenticationService,
       private logger: Logger,
-      @Inject(WIT_API_URL) apiUrl: string) {
-    this.loginUrl = apiUrl + 'login';
+      @Inject(AUTH_API_URL) apiUrl: string) {
+    this.loginUrl = apiUrl + 'link';
   }
 
   /**
@@ -53,7 +52,8 @@ export class ProviderService {
    */
   link(provider: string, redirect: string): void {
     let parsedToken = jwt_decode(this.auth.getToken());
-    let url = `${this.loginUrl}/linksession?`
+    // the new url is /api/link/session 
+    let url = `${this.loginUrl}/session?`
       + "clientSession=" + parsedToken.client_session
       + "&sessionState=" + parsedToken.session_state
       + "&redirect=" + redirect;

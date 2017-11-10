@@ -18,6 +18,16 @@ import {
   ToolbarConfig
 } from 'patternfly-ng';
 
+import {
+  TooltipConfig
+} from 'ngx-bootstrap/tooltip';
+
+export function getAlertConfig(): TooltipConfig {
+  return Object.assign(new TooltipConfig(), {
+    placement: 'left'
+  });
+}
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-toolbar',
@@ -63,8 +73,7 @@ export class CodebasesToolbarComponent implements OnInit {
       appliedFilters: [],
       resultsCount: this.resultsCount,
       selectedCount: 0,
-      totalCount: 0,
-      tooltipPlacement: 'left'
+      totalCount: 0
     } as FilterConfig;
 
     this.sortConfig = {

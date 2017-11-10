@@ -5,8 +5,9 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { AuthenticationService, UserService } from 'ngx-login-client';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { AuthenticationService, UserService, AUTH_API_URL} from 'ngx-login-client';
+//import { WIT_API_URL } from 'ngx-fabric8-wit';
+
 
 import { ContextService } from './context.service';
 import { Navigation } from './../models/navigation';
@@ -30,7 +31,7 @@ export class LoginService {
   constructor(
     private router: Router,
     private localStorage: LocalStorageService,
-    @Inject(WIT_API_URL) private apiUrl: string,
+    @Inject(AUTH_API_URL) private apiUrl: string,
     private broadcaster: Broadcaster,
     private errorService: ErrorService,
     private authService: AuthenticationService,
@@ -39,7 +40,7 @@ export class LoginService {
     private userService: UserService
   ) {
     // Removed ?link=true in favor of getting started page
-    this.authUrl = apiUrl + 'login/authorize';
+    this.authUrl = apiUrl + 'login';
     this.broadcaster.on('authenticationError').subscribe(() => {
       this.authService.logout();
     });

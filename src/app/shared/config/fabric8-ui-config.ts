@@ -11,5 +11,6 @@ export class Fabric8UIConfig {
   witApiUrl: string;
   tenantApiUrl: string;
   kubernetesMode: string;
+  authApiUrl : string;
 
 }

@@ -46,6 +46,4 @@ export class OverviewComponent implements OnDestroy, OnInit {
   routeToUpdateProfile(): void {
     this.router.navigate(['/', this.context.user.attributes.username, '_update']);
   }
-
-  // Private
 }
