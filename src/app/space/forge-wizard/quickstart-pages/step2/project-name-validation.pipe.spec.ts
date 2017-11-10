@@ -28,14 +28,14 @@ describe('FormatNameValidationPipe: validation', () => {
     expect(pipe.transform(obj, null)).toBe('should contain at least 2 characters.');
   });
 
-  it('should contain at most 24 characters', () => {
+  it('should contain at most XX characters', () => {
     const obj = {
       maxlength: {
-        requiredLength: 24,
-        actualLength: 25
+        requiredLength: 63,
+        actualLength: 65
       }
     };
-    expect(pipe.transform(obj, null)).toBe('should contain at most 24 characters.');
+    expect(pipe.transform(obj, null)).toBe('should contain at most 63 characters.');
   });
 
   it('is required', () => {

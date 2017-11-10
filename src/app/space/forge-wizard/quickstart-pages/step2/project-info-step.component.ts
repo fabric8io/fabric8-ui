@@ -15,14 +15,16 @@ export class ProjectInfoStepComponent implements OnInit {
   repoName: GuiInput;
   groupId: GuiInput;
   repoVersion: GuiInput;
+  MAX_LENGTH = 63;
+  MIN_LENGTH = 2;
 
   constructor() {}
 
   ngOnInit(): void {
     // Add validation to fit server side validation
     this.form.controls['named'].setValidators([Validators.pattern(/^[a-z][a-z0-9\-]*$/),
-      Validators.minLength(2),
-      Validators.maxLength(24)]);
+      Validators.minLength(this.MIN_LENGTH),
+      Validators.maxLength(this.MAX_LENGTH)]);
 
     // Default value for the project name to space name
     this.form.controls['named'].setValue(this.getValidDefaultName(this.labelSpace));
@@ -41,8 +43,8 @@ export class ProjectInfoStepComponent implements OnInit {
 
   private getValidDefaultName(projectName: string): string {
     let defaultName = projectName.toLowerCase();
-    if (defaultName.length > 24) {
-      defaultName = defaultName.substring(0, 23);
+    if (defaultName.length > this.MAX_LENGTH) {
+      defaultName = defaultName.substring(0, this.MAX_LENGTH - 1);
     }
     defaultName = defaultName.replace(/_/g, '');
     return defaultName;

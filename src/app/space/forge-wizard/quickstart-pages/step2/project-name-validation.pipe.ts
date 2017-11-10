@@ -16,7 +16,7 @@ export class FormatNameValidationPipe implements PipeTransform {
       return 'should contain at least 2 characters.';
     }
     if (items['maxlength']) {
-      return 'should contain at most 24 characters.';
+      return 'should contain at most 63 characters.';
     }
     return items;
   }
