@@ -78,19 +78,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           title: 'Add a Codebase',
           tooltip: 'Add a Codebase'
         }],
-        moreActions: [{
-          id: 'action2',
-          title: 'Secondary Action 1',
-          tooltip: 'Do the first thing'
-        }, {
-          id: 'action3',
-          title: 'Secondary Action 2',
-          tooltip: 'Do something else'
-        }, {
-          id: 'action4',
-          title: 'Secondary Action 3',
-          tooltip: 'Do something special'
-        }]
+        moreActions: []
       } as ActionConfig,
       iconStyleClass: 'pficon-add-circle-o',
       title: 'Add a Codebase',
@@ -274,7 +262,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     // Get codebases
     this.subscriptions.push(this.codebasesService.getCodebases(this.context.space.id)
       .subscribe(codebases => {
-        if (codebases != null) {
+        if (codebases != null && codebases.length > 0) {
           this.allCodebases = codebases;
           this.codebases = cloneDeep(codebases);
           this.codebases.unshift({} as Codebase); // Add empty object for row header
