@@ -11,10 +11,10 @@
     <input *ngSwitchCase="'java.lang.Integer'" [title]="field.label" type="number" [formControlName]="field.name"
       [name]="field.name" class="form-control" [required]="field.required">
     <div *ngIf="form.get(field.name).dirty
-    && form.get(field.name).hasError('required')"
+    && form.get(field.name).invalid"
          style="position:relative;height:auto;display:inline;"
          class="form-control-feedback user-select-none">
-      {{field.label}} is required
+      {{field.label}} {{form.get(field.name).errors | formatNameError}}
     </div>
     <small class="form-text text-muted user-select-none" *ngIf="field.display && field.display.note">
       <span class="color-info fa fa-info-circle"></span>
