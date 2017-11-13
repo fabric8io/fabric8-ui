@@ -57,10 +57,10 @@ describe('Service: Provider Service',() => {
             broadcaster = broadcast;
         }
     ));
-    it('Get legacy linking url', () => {
+    fit('Get legacy linking url', () => {
         let val = providerService.getLegacyLinkingUrl('openshift-v3','testredirect');
         console.log(val)
-        expect(val).toEqual("https://auth.fabric8.io/api/link/session?clientSessionTESTSESSION&sessionState=TESTSESSIONSTATE&redirect=testredirect&provider=openshift-v3")
+        expect(val).toEqual("https://auth.fabric8.io/api/link/session?clientSession=TESTSESSION&sessionState=TESTSESSIONSTATE&redirect=testredirect&provider=openshift-v3")
     });
 });
 
