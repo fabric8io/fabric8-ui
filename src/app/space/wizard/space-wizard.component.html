@@ -1,5 +1,5 @@
 <div class="wizard">
-<form class="wizard-step active" role="form" #spaceForm="ngForm" (ngSubmit)="createSpace()" novalidate>
+<form class="wizard-step active" role="form" (ngSubmit)="createSpace()" novalidate>
   <div class="modal-header">
     <button class="close" aria-label="Close" type="button"
             (click)="cancel()">
@@ -10,7 +10,7 @@
   <section class="container-fluid padding-top-standard-offset">
     <div class="row">
       <div class="col-xs-12">
-         <form class="form-horizontal">
+         <form class="form-horizontal" #spaceForm="ngForm">
           <div *ngIf="name.errors && (name.dirty || name.touched)" class="alert alert-danger">
             <div [hidden]="!name.errors.required">
               <span class="pficon pficon-error-circle-o"></span>

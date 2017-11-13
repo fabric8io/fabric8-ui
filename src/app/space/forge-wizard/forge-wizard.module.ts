@@ -28,6 +28,7 @@ import { ForgeConfig } from './service/forge-config';
 import { TokenProvider } from 'ngx-forge';
 import { AuthenticationService } from 'ngx-login-client';
 import { KeycloakTokenProvider } from './service/token-provider';
+import { FormatNameValidationPipe } from './quickstart-pages/step2/project-name-validation.pipe';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { KeycloakTokenProvider } from './service/token-provider';
     SpinnerComponent,
     SelectedItemsPipe,
     VisibleItemsPipe,
+    FormatNameValidationPipe,
     ProjectInfoStepComponent,
     OrganisationComponent,
     RepositoriesComponent,

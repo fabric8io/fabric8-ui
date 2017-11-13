@@ -1,4 +1,3 @@
-import { CodebasesAddComponent } from './codebases-add.component';
 import { async } from '@angular/core/testing';
 import { WizardComponent, WizardConfig, WizardStep, WizardStepComponent, WizardStepConfig } from 'patternfly-ng';
 import { getParentStep, flattenWizardSteps } from './abstract-wizard.component';
