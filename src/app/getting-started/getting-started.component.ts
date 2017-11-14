@@ -106,7 +106,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
 
         // Probably should put it somewhere where the 
         // code would surely be executed if logged in.
-        this.accessToken = localStorage.getItem("auth_token");
+        this.accessToken = this.auth.getToken(); //localStorage.getItem("auth_token");
       
         // Todo: Remove after summit?
         if (!this.registrationCompleted) {
@@ -195,7 +195,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
           + "&redirect=" + finalRedirect // brings us back to Getting Started.
           + "&provider=openshift-v3";
         */
-        let url = this.providerService.getLegacyLinkingUrl(this.oldLinkingServer,finalRedirect)
+        let url = this.providerService.getLegacyLinkingUrl("openshift-v3",finalRedirect)
         
         this.redirect = url; // triggeres OSO linking the old-fashioned way after github linking.
         return true;
