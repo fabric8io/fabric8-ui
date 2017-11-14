@@ -2,14 +2,12 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs/Observable';
-import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService, User } from 'ngx-login-client';
 
 import { ProviderService } from '../../../getting-started/services/provider.service';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
-import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
-import { ExtUser, GettingStartedService } from '../../../getting-started/services/getting-started.service';
+import { Http } from '@angular/http';
+import { GettingStartedService } from '../../../getting-started/services/getting-started.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
