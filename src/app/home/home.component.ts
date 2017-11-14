@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.brandInformation.backgroundClass = "home-header-background-image";
       this.brandInformation.description = "A free, end-to-end, cloud-native development experience.";
       this.brandInformation.name = "OpenShift.io";
-      this.brandInformation.moreInfoLink = "https://openshift.io";
+      this.brandInformation.moreInfoLink = "https://openshift.io/features.html";
     }
   }
 
