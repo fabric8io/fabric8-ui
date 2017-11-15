@@ -1,13 +1,15 @@
 import { ConnectedAccountsComponent } from './connected-accounts.component';
 
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-
-import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
-
-import { async, ComponentFixture, ComponentFixtureAutoDetect, TestBed } from '@angular/core/testing';
 import { AuthenticationService } from 'ngx-login-client';
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Observable';
+import { Component } from '@angular/core';
+import { initContext, TestContext } from '../../../../testing/test-context';
+
+@Component({
+  template: `<alm-connected-accounts></alm-connected-accounts>`
+})
+class SampleTestComponent {}
 
 describe('Connected Accounts Component', () => {
 
@@ -20,57 +22,32 @@ describe('Connected Accounts Component', () => {
     }
   };
 
-  let fixture: ComponentFixture<ConnectedAccountsComponent>;
-  let el: HTMLElement;
-
-  let contextsMock: any;
-  let authMock: any;
-
-  beforeEach(async(() => {
-    contextsMock = jasmine.createSpy('Contexts');
-    authMock = jasmine.createSpy('AuthenticationService');
-
-    TestBed.configureTestingModule({
-      declarations: [ConnectedAccountsComponent],
-      providers: [
-        {
-          provide: AuthenticationService,
-          useValue: authMock
-        },
-        {
-          provide: Contexts,
-          useValue: contextsMock
-        },
-        {
-          provide: ComponentFixtureAutoDetect,
-          useValue: true
-        }
-      ]
-    }).compileComponents();
-  }));
-
-  afterEach(() => {
-    fixture.destroy();
-  });
+  type Context = TestContext<ConnectedAccountsComponent, SampleTestComponent>;
 
   describe('User has only GitHub account connected', () => {
 
-    beforeEach(() => {
+    let contextsMock: any = jasmine.createSpy('Contexts');
+    let authMock: any = jasmine.createSpy('AuthenticationService');
+
+    beforeAll(() => {
       authMock.gitHubToken = Observable.of('gh-test-user');
       authMock.openShiftToken = Observable.empty();
       contextsMock.current = Observable.empty();
-
-      fixture = TestBed.createComponent(ConnectedAccountsComponent);
-      el = fixture.debugElement.nativeElement;
     });
 
-    it('should have GitHub connection indicated', () => {
-      let actualText = trimCarriageReturns(el);
+    initContext(ConnectedAccountsComponent, SampleTestComponent,  {
+      providers: [ { provide: AuthenticationService, useValue: authMock },
+        { provide: Contexts, useValue: contextsMock }]
+    });
+
+    it('should have GitHub connection indicated', function (this: Context) {
+      let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('GitHub Connected');
+
     });
 
-    it('should have absence of OpenShift connection indicated', () => {
-      let actualText = trimCarriageReturns(el);
+    it('should have absence of OpenShift connection indicated', function (this: Context) {
+      let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('OpenShift Not Connected');
     });
 
@@ -78,22 +55,27 @@ describe('Connected Accounts Component', () => {
 
   describe('User has only OpenShift account connected', () => {
 
-    beforeEach(() => {
+    let contextsMock: any = jasmine.createSpy('Contexts');
+    let authMock: any = jasmine.createSpy('AuthenticationService');
+
+    beforeAll(() => {
       authMock.gitHubToken = Observable.empty();
       authMock.openShiftToken = Observable.of('oso-token');
       contextsMock.current = Observable.of(ctx);
-
-      fixture = TestBed.createComponent(ConnectedAccountsComponent);
-      el = fixture.debugElement.nativeElement;
     });
 
-    it('should have absence of GitHub connection indicated', () => {
-      let actualText = trimCarriageReturns(el);
+    initContext(ConnectedAccountsComponent, SampleTestComponent,  {
+      providers: [ { provide: AuthenticationService, useValue: authMock },
+        { provide: Contexts, useValue: contextsMock }]
+    });
+
+    it('should have absence of GitHub connection indicated', function (this: Context) {
+      let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('GitHub Not Connected');
     });
 
-    it('should have OpenShift connection indicated', () => {
-      let actualText = trimCarriageReturns(el);
+    it('should have OpenShift connection indicated', function (this: Context) {
+      let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('OpenShift ' + expectedOsoUser);
     });
 
@@ -101,29 +83,33 @@ describe('Connected Accounts Component', () => {
 
   describe('User has both Github and OpenShift accounts connected', () => {
 
-    beforeEach(() => {
+    let contextsMock: any = jasmine.createSpy('Contexts');
+    let authMock: any = jasmine.createSpy('AuthenticationService');
+
+    beforeAll(() => {
       authMock.gitHubToken = Observable.of('gh-test-user');
       authMock.openShiftToken = Observable.of('oso-token');
       contextsMock.current = Observable.of(ctx);
-
-      fixture = TestBed.createComponent(ConnectedAccountsComponent);
-      el = fixture.debugElement.nativeElement;
     });
 
-    it('should have GitHub connection indicated', () => {
-      let actualText = trimCarriageReturns(el);
+    initContext(ConnectedAccountsComponent, SampleTestComponent,  {
+      providers: [ { provide: AuthenticationService, useValue: authMock },
+        { provide: Contexts, useValue: contextsMock }]
+    });
+
+    it('should have GitHub connection indicated', function (this: Context) {
+      let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('GitHub Connected');
     });
 
-    it('should have OpenShift connection indicated', () => {
-      let actualText = trimCarriageReturns(el);
+    it('should have OpenShift connection indicated', function (this: Context) {
+      let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('OpenShift ' + expectedOsoUser);
     });
-
   });
 
 });
 
-function trimCarriageReturns(el: HTMLElement) {
-  return el.innerText.replace(/[\n\r]+/g, ' ');
+function trimCarriageReturns(str: string) {
+  return str.replace(/[\n\r]+/g, ' ');
 }
