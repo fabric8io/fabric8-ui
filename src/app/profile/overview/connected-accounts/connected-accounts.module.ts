@@ -19,6 +19,6 @@ import { ConnectedAccountsComponent } from './connected-accounts.component';
     Fabric8WitModule
   ],
   declarations: [ConnectedAccountsComponent],
-  exports: [ConnectedAccountsComponent],
+  exports: [ConnectedAccountsComponent]
 })
 export class ConnectedAccountsModule { }
