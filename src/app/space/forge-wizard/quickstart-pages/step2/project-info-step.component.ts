@@ -26,6 +26,8 @@ export class ProjectInfoStepComponent implements OnInit {
       Validators.minLength(this.MIN_LENGTH),
       Validators.maxLength(this.MAX_LENGTH)]);
 
+    this.form.controls['groupId'].setValidators(Validators.pattern(/^[a-z][a-z_0-9\.]*[a-z_0-9]$/));
+
     // Default value for the project name to space name
     this.form.controls['named'].setValue(this.getValidDefaultName(this.labelSpace));
 

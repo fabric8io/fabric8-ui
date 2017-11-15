@@ -23,7 +23,7 @@
         <button id="spacehome-my-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
       </div>
     </div>
-    <ul id="spacehome-codebases-list" class="list-group list-view-pf list-view-pf-view" *ngIf="codebaseCount > 0">
+    <ul id="spacehome-codebases-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped" *ngIf="codebaseCount > 0">
       <li class="list-group-item" *ngFor="let codebase of codebases">
         <div class="list-view-pf-main-info">
           <div class="list-view-pf-body">

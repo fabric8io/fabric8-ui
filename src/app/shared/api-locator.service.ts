@@ -2,41 +2,37 @@ import { Injectable } from '@angular/core';
 
 import { Fabric8UIConfig } from "./config/fabric8-ui-config";
 
-@Injectable()
-export class ApiLocatorService {
+const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(
+  [
+    ['wit', 'FABRIC8_WIT_API_URL'],
+    ['recommender', 'FABRIC8_RECOMMENDER_API_URL'],
+    ['sso', 'FABRIC8_SSO_API_URL'],
+    ['realm', 'FABRIC8_REALM'],
+    ['branding', 'BRANDING'],
+    ['forge', 'FABRIC8_FORGE_API_URL'],
+    ['auth', 'FABRIC8_AUTH_API_URL'],
+  ]
+);
 
-  readonly DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(
-    [
-      ['wit', 'FABRIC8_WIT_API_URL'],
-      ['recommender', 'FABRIC8_RECOMMENDER_API_URL'],
-      ['sso', 'FABRIC8_SSO_API_URL'],
-      ['realm', 'FABRIC8_REALM'],
-      ['branding', 'BRANDING'],
-      ['forge', 'FABRIC8_FORGE_API_URL'],
-      ['auth','FABRIC8_AUTH_API_URL'],
-    ]
-  );
+const DEFAULT_API_PREFIXES = new Map<string, string>([
+  ['wit', 'api'],
+  ['recommender', 'recommender'],
+  ['sso', 'sso'],
+  ['forge', 'forge.api'],
+  ['auth', 'auth']
+]);
 
-  readonly DEFAULT_API_PREFIXES = new Map<string, string>([
-    ['wit', 'api'],
-    ['recommender', 'recommender'],
-    ['sso', 'sso'],
-    ['forge', 'forge.api'],
-    ['auth','auth']
-  ]);
+const DEFAULT_API_PATHS = new Map<string, string>([
+  ['wit', 'api/'],
+  ['auth', 'api/']
 
-  readonly DEFAULT_API_PATHS = new Map<string, string>([
-    ['wit', 'api/'],
-    ['auth','api/']
-    
-  ]);
+]);
+
+export class BaseApiLocatorService {
 
   private envVars = new Map<string, string>();
 
-  constructor(private config: Fabric8UIConfig) {
-    this.DEFAULT_API_ENV_VAR_NAMES.forEach((value, key) => {
-      this.loadEnvVar(key);
-    });
+  constructor(private config: Fabric8UIConfig, private apiPrefixes: Map<String, String>, private apiPaths: Map<String, String>) {
   }
 
   get realm(): string {
@@ -67,11 +63,11 @@ export class ApiLocatorService {
     return this.config.recommenderApiUrl || this.buildApiUrl('recommender');
   }
 
-  private loadEnvVar(key: string): void {
-    this.envVars.set(key, process.env[this.DEFAULT_API_ENV_VAR_NAMES.get(key)]);
+  protected loadEnvVar(key: string): void {
+    this.envVars.set(key, process.env[DEFAULT_API_ENV_VAR_NAMES.get(key)]);
   }
 
-  private buildApiUrl(key: string): string {
+  protected buildApiUrl(key: string): string {
     // Return any environment specified URLs for this API
     if (this.envVars.get(key)) {
       return this.envVars.get(key);
@@ -85,15 +81,26 @@ export class ApiLocatorService {
     if (window.location.port) {
       url += ':' + window.location.port;
     }
-    if (this.DEFAULT_API_PREFIXES.has(key)) {
-      url = this.DEFAULT_API_PREFIXES.get(key) + '.' + url + '/';
+    url += '/'
+    if (this.apiPrefixes.has(key)) {
+      url = this.apiPrefixes.get(key) + '.' + url;
     }
-    if (this.DEFAULT_API_PATHS.has(key)) {
-      url += this.DEFAULT_API_PATHS.get(key);
+    if (this.apiPaths.has(key)) {
+      url += this.apiPaths.get(key);
     }
     url = window.location.protocol + '//' + url;
     return url;
   }
 
+}
 
+@Injectable()
+export class ApiLocatorService extends BaseApiLocatorService {
+
+  constructor(config: Fabric8UIConfig) {
+    super(config, DEFAULT_API_PREFIXES, DEFAULT_API_PATHS)
+    DEFAULT_API_ENV_VAR_NAMES.forEach((value, key) => {
+      this.loadEnvVar(key);
+    });
+  }
 }

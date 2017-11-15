@@ -14,8 +14,14 @@
     </div>
   </div>
   <div class="message-body-container">
+
     <div *ngIf="error?.cause?.localizedMessage" [innerHTML]="error.cause.localizedMessage" class="message-body"></div>
-    <div *ngIf="!error?.cause?.localizedMessage" [innerHTML]="error" class="message-body"></div>
+    <div *ngIf="error?.messages" class="message-body">
+      <li *ngFor="let message of error.messages">
+        {{message.description}}
+      </li>
+    </div>
+    <div *ngIf="!error?.cause?.localizedMessage && !error.messages" [innerHTML]="error" class="message-body"></div>
   </div>
 </section>
 <div class="container-fluid">

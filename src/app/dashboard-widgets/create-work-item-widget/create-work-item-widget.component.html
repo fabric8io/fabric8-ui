@@ -23,7 +23,7 @@
         <button id="spacehome-my-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
       </div>
     </div>
-    <ul id="spacehome-my-workitems-list" class="list-group list-view-pf list-view-pf-view" *ngIf="(myWorkItemsCount | async) > 0">
+    <ul id="spacehome-my-workitems-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped" *ngIf="(myWorkItemsCount | async) > 0">
       <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 6">
         <div class="list-view-pf-main-info">
           <div class="list-view-pf-body">
