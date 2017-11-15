@@ -59,6 +59,12 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       .subscribe((codebase: Codebase) => {
         this.updateCodebases();
       }));
+
+    this.subscriptions.push(this.broadcaster
+      .on('codebaseDeleted')
+      .subscribe((codebase: Codebase) => {
+        this.updateCodebases();
+      }));
   }
 
   ngOnDestroy(): void {
@@ -245,7 +251,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     // Get state for Che server
     this.subscriptions.push(this.cheService.getState()
       .subscribe(che => {
-        if (che != undefined && che.running === true) {
+        if (che !== undefined && che.running === true) {
           this.broadcaster.broadcast('cheStateChange', che);
         } else {
           this.startChe();
@@ -268,6 +274,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           this.codebases.unshift({} as Codebase); // Add empty object for row header
           this.applyFilters(this.appliedFilters);
         }
+        this.startIdleChe();
       }, error => {
         this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
       }));

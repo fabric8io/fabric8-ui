@@ -10,6 +10,7 @@ import { Codebase } from './codebase';
 @Injectable()
 export class CodebasesService {
   private headers = new Headers({ 'Content-Type': 'application/json' });
+  private codebasesUrl: string;
   private spacesUrl: string;
   private nextLink: string = null;
 
@@ -23,6 +24,7 @@ export class CodebasesService {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
     this.spacesUrl = apiUrl + 'spaces';
+    this.codebasesUrl = apiUrl + 'codebases';
   }
 
   /**
@@ -104,6 +106,24 @@ export class CodebasesService {
       .patch(url, payload, { headers: this.headers })
       .map(response => {
         return response.json().data as Codebase;
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+  }
+
+  /**
+   * Delete codebase
+   *
+   * @param {Codebase} codebase codebase to delete
+   * @returns {Observable<Codebase>}
+   */
+  delete(codebase: Codebase): Observable<Codebase> {
+    let url = `${this.codebasesUrl}/${codebase.id}`;
+    return this.http
+      .delete(url, { headers: this.headers })
+      .map(() => {
+        return codebase;
       })
       .catch((error) => {
         return this.handleError(error);

@@ -3,7 +3,9 @@ import { Subscription } from 'rxjs';
 
 import { Che } from '../services/che';
 import { Codebase } from '../services/codebase';
+import { CodebasesService } from '../services/codebases.service';
 import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
+import { Dialog } from 'ngx-widgets';
 import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
 
@@ -20,12 +22,15 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   cheRunning: boolean = false;
   subscriptions: Subscription[] = [];
   workspaceBusy: boolean = false;
+  dialog: Dialog;
+  showDialog = false;
 
   constructor(
       private broadcaster: Broadcaster,
       private notifications: Notifications,
       private windowService: WindowService,
-      private workspacesService: WorkspacesService) {
+      private workspacesService: WorkspacesService,
+      private codebasesService: CodebasesService) {
   }
 
   ngOnDestroy(): void {
@@ -38,7 +43,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.broadcaster
       .on('cheStateChange')
       .subscribe((che: Che) => {
-        if (che != undefined && che.running === true) {
+        if (che !== undefined && che.running === true) {
           this.cheRunning = true;
         }
       }));
@@ -76,10 +81,47 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   }
 
   /**
+   * Confirmation dialog for codebase removal.
+   *
+   * @param {MouseEvent} event mouse event
+   */
+  confirmDeleteCodebase(event: MouseEvent): void {
+    event.stopPropagation();
+    this.dialog = {
+      'title': 'Confirm codebase deletion',
+      'message': 'Are you sure you want to deleteCodebase codebase?',
+      'actionButtons': [
+        {'title': 'Confirm', 'value': 1, 'default': false},
+        {'title': 'Cancel', 'value': 0, 'default': true}
+      ]
+    } as Dialog;
+    this.showDialog = true;
+  }
+
+  /**
+   * Process the click on confirm dialog button.
+   *
+   * @param {number} value
+   */
+  onDialogButtonClick(value: number) {
+    // callback from the confirm deleteCodebase dialog
+    if (value === 1) {
+      this.deleteCodebase();
+    }
+    this.showDialog = false;
+  }
+
+  /**
    * Disassociate codebase from current space
    */
   deleteCodebase(): void {
-    // Todo: Not yet supported by API
+    this.subscriptions.push(this.codebasesService.delete(this.codebase).subscribe((codebase: Codebase) => {
+      this.broadcaster.broadcast('codebaseDeleted', {
+        codebase: codebase
+      });
+    }, (error: any) => {
+      this.handleError('Failed to deleteCodebase codebase ' + this.codebase.name, NotificationType.DANGER);
+    }));
   }
 
   // Private
