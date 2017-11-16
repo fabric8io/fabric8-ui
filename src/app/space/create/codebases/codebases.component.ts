@@ -62,7 +62,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
 
     this.subscriptions.push(this.broadcaster
       .on('codebaseDeleted')
-      .subscribe((codebase: Codebase) => {
+      .subscribe(() => {
         this.updateCodebases();
       }));
   }

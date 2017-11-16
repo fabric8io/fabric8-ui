@@ -118,7 +118,7 @@ export class CodebasesService {
    * @param {Codebase} codebase codebase to delete
    * @returns {Observable<Codebase>}
    */
-  delete(codebase: Codebase): Observable<Codebase> {
+  deleteCodebase(codebase: Codebase): Observable<Codebase> {
     let url = `${this.codebasesUrl}/${codebase.id}`;
     return this.http
       .delete(url, { headers: this.headers })

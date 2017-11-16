@@ -31,7 +31,7 @@ describe('Codebases Item Actions Component', () => {
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
     windowServiceMock = jasmine.createSpyObj('WindowService', ['open']);
     workspacesServiceMock = jasmine.createSpyObj('WorkspacesService', ['createWorkspace']);
-    codebasesServiceMock = jasmine.createSpyObj('CodebasesService', ['delete']);
+    codebasesServiceMock = jasmine.createSpyObj('CodebasesService', ['deleteCodebase']);
 
     TestBed.configureTestingModule({
       imports: [FormsModule, HttpModule],
@@ -108,7 +108,7 @@ describe('Codebases Item Actions Component', () => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
-    codebasesServiceMock.delete.and.returnValue(Observable.of(comp.codebase));
+    codebasesServiceMock.deleteCodebase.and.returnValue(Observable.of(comp.codebase));
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
   //  broadcasterMock.on.and.returnValue(Observable.of(code));
     fixture.detectChanges();
@@ -122,7 +122,7 @@ describe('Codebases Item Actions Component', () => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
-    codebasesServiceMock.delete.and.returnValue(Observable.throw('ERROR'));
+    codebasesServiceMock.deleteCodebase.and.returnValue(Observable.throw('ERROR'));
     const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));

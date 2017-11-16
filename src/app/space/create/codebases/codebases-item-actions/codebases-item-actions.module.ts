@@ -22,7 +22,7 @@ import { CodebasesService } from '../services/codebases.service';
   ],
   declarations: [ CodebasesItemActionsComponent ],
   exports: [ CodebasesItemActionsComponent ],
-  providers: [ BsDropdownConfig, TooltipConfig, WindowService, WorkspacesService, CodebasesService ]
+  providers: [ BsDropdownConfig, CodebasesService, TooltipConfig, WindowService, WorkspacesService ]
 })
 export class CodebasesItemActionsModule {
   constructor(http: Http) {}

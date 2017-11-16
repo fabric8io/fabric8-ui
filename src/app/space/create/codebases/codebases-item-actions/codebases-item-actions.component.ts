@@ -115,7 +115,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * Disassociate codebase from current space
    */
   deleteCodebase(): void {
-    this.subscriptions.push(this.codebasesService.delete(this.codebase).subscribe((codebase: Codebase) => {
+    this.subscriptions.push(this.codebasesService.deleteCodebase(this.codebase).subscribe((codebase: Codebase) => {
       this.broadcaster.broadcast('codebaseDeleted', {
         codebase: codebase
       });
