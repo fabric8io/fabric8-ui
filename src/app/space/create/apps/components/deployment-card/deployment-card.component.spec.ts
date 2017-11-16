@@ -12,6 +12,8 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentCardComponent } from './deployment-card.component';
 import { AppsService } from '../../services/apps.service';
+import { CpuStat } from '../../models/cpu-stat';
+import { MemoryStat } from '../../models/memory-stat';
 
 describe('DeploymentCardComponent', () => {
 
@@ -25,8 +27,8 @@ describe('DeploymentCardComponent', () => {
       getEnvironments: () => { throw 'Not Implemented'; },
       getPodCount: () => Observable.of(2),
       getVersion: () => Observable.of('1.2.3'),
-      getCpuStat: () => { throw 'Not Implemented'; },
-      getMemoryStat: () => { throw 'Not Implemented'; }
+      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
+      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat)
     };
 
     spyOn(mockSvc, 'getApplications').and.callThrough();

@@ -16,7 +16,10 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { AppsComponent } from './apps.component';
 import { AppsService } from './services/apps.service';
+import { CpuStat } from './models/cpu-stat';
 import { Environment } from './models/environment';
+import { MemoryStat } from './models/memory-stat';
+import { Stat } from './models/stat';
 
 import { Spaces } from 'ngx-fabric8-wit';
 
@@ -27,6 +30,15 @@ import { Spaces } from 'ngx-fabric8-wit';
 class FakeDeploymentCardComponent {
   @Input() applicationId: string;
   @Input() environment: Environment;
+}
+
+@Component({
+  selector: 'resource-card',
+  template: ''
+})
+class FakeResourceCardComponent {
+  @Input() resourceTitle: string;
+  @Input() stat: Observable<Stat>;
 }
 
 describe('AppsComponent', () => {
@@ -45,8 +57,8 @@ describe('AppsComponent', () => {
       ]),
       getPodCount: () => { throw 'Not Implemented'; },
       getVersion: () => { throw 'NotImplemented'; },
-      getCpuStat: () => { throw 'Not Implemented'; },
-      getMemoryStat: () => { throw 'Not Implemented'; }
+      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
+      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat)
     };
 
     spaces = {
@@ -61,7 +73,7 @@ describe('AppsComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
-      declarations: [ AppsComponent, FakeDeploymentCardComponent ],
+      declarations: [ AppsComponent, FakeDeploymentCardComponent, FakeResourceCardComponent ],
       providers: [
         { provide: AppsService, useValue: mockSvc },
         { provide: Spaces, useValue: spaces }
