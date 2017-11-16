@@ -10,6 +10,7 @@ import { AppModule as RuntimeConsoleModule } from '../../../../a-runtime-console
 
 import { AppsComponent } from './apps.component';
 import { AppCardComponent } from './components/app-card.component';
+import { ResourceUsageComponent } from './components/resource-usage/resource-usage.component';
 import { AppsRoutingModule } from './apps-routing.module';
 
 import { AppsService } from './services/apps.service';
@@ -28,7 +29,7 @@ const imports = USE_RUNTIME_CONSOLE ?
 
 const declarations = USE_RUNTIME_CONSOLE ?
   [] :
-  [AppsComponent, AppCardComponent];
+  [AppsComponent, AppCardComponent, ResourceUsageComponent];
 
 const providers = USE_RUNTIME_CONSOLE ?
   [] :
