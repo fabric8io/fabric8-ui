@@ -7,14 +7,14 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { AppsService } from '../services/apps.service';
-import { Environment } from '../models/environment';
+import { AppsService } from '../../services/apps.service';
+import { Environment } from '../../models/environment';
 
 @Component({
-  selector: 'app-card',
-  templateUrl: 'app-card.component.html'
+  selector: 'deployment-card',
+  templateUrl: 'deployment-card.component.html'
 })
-export class AppCardComponent implements OnDestroy, OnInit {
+export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   @Input() applicationId: string;
   @Input() environment: Environment;
