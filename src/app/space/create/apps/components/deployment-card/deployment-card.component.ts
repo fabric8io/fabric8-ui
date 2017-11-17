@@ -7,7 +7,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { AppsService } from '../../services/deployments.service';
+import { DeploymentsService } from '../../services/deployments.service';
 import { Environment } from '../../models/environment';
 
 @Component({
@@ -24,17 +24,17 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   version: Observable<string>;
 
   constructor(
-    private appsService: AppsService
+    private deploymentsService: DeploymentsService
   ) { }
 
   ngOnDestroy(): void { }
 
   ngOnInit(): void {
     this.podCount =
-      this.appsService.getPodCount(this.applicationId, this.environment.environmentId);
+      this.deploymentsService.getPodCount(this.applicationId, this.environment.environmentId);
 
     this.version =
-      this.appsService.getVersion(this.applicationId, this.environment.environmentId);
+      this.deploymentsService.getVersion(this.applicationId, this.environment.environmentId);
   }
 
 }

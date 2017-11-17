@@ -4,14 +4,14 @@ import {
   tick
 } from '@angular/core/testing';
 
-import { AppsService } from './deployments.service';
+import { DeploymentsService } from './deployments.service';
 
-describe('AppsService', () => {
+describe('DeploymentsService', () => {
 
-  let svc: AppsService;
+  let svc: DeploymentsService;
 
   beforeEach(() => {
-    svc = new AppsService();
+    svc = new DeploymentsService();
   });
 
   describe('#getApplications', () => {
@@ -20,7 +20,7 @@ describe('AppsService', () => {
         .subscribe(val => {
           expect(val).toEqual(['vertx-hello', 'vertx-paint', 'vertx-wiki']);
         });
-      tick(AppsService.POLL_RATE_MS + 10);
+      tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
   });
@@ -34,7 +34,7 @@ describe('AppsService', () => {
             { environmentId: 'envId-run', name: 'run' }
           ]);
         });
-      tick(AppsService.POLL_RATE_MS + 10);
+      tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
   });
@@ -46,7 +46,7 @@ describe('AppsService', () => {
           expect(val).toBeGreaterThanOrEqual(1);
           expect(val).toBeLessThanOrEqual(6);
         });
-      tick(AppsService.POLL_RATE_MS + 10);
+      tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
   });
@@ -56,7 +56,7 @@ describe('AppsService', () => {
       svc.getVersion('foo', 'bar').subscribe(val => {
         expect(val).toEqual('1.0.2');
       });
-      tick(AppsService.POLL_RATE_MS + 10);
+      tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
   });
@@ -67,7 +67,7 @@ describe('AppsService', () => {
         .subscribe(val => {
           expect(val.total).toBe(10);
         });
-      tick(AppsService.POLL_RATE_MS + 10);
+      tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
 
@@ -77,7 +77,7 @@ describe('AppsService', () => {
           expect(val.used).toBeGreaterThanOrEqual(1);
           expect(val.used).toBeLessThanOrEqual(10);
         });
-      tick(AppsService.POLL_RATE_MS + 10);
+      tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
   });
@@ -88,7 +88,7 @@ describe('AppsService', () => {
         .subscribe(val => {
           expect(val.total).toBe(256);
         });
-      tick(AppsService.POLL_RATE_MS + 10);
+      tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
 
@@ -98,7 +98,7 @@ describe('AppsService', () => {
           expect(val.used).toBeGreaterThanOrEqual(100);
           expect(val.used).toBeLessThanOrEqual(256);
         });
-      tick(AppsService.POLL_RATE_MS + 10);
+      tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
   });

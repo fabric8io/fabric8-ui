@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentCardComponent } from './deployment-card.component';
-import { AppsService } from '../../services/deployments.service';
+import { DeploymentsService } from '../../services/deployments.service';
 import { CpuStat } from '../../models/cpu-stat';
 import { MemoryStat } from '../../models/memory-stat';
 
@@ -19,7 +19,7 @@ describe('DeploymentCardComponent', () => {
 
   let component: DeploymentCardComponent;
   let fixture: ComponentFixture<DeploymentCardComponent>;
-  let mockSvc: AppsService;
+  let mockSvc: DeploymentsService;
 
   beforeEach(() => {
     mockSvc = {
@@ -41,7 +41,7 @@ describe('DeploymentCardComponent', () => {
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
       declarations: [ DeploymentCardComponent ],
-      providers: [ { provide: AppsService, useValue: mockSvc } ]
+      providers: [ { provide: DeploymentsService, useValue: mockSvc } ]
     });
 
     fixture = TestBed.createComponent(DeploymentCardComponent);

@@ -13,7 +13,7 @@ import { DeploymentCardComponent } from './components/deployment-card/deployment
 import { ResourceCardComponent } from './components/resource-card.component';
 import { AppsRoutingModule } from './apps-routing.module';
 
-import { AppsService } from './services/deployments.service';
+import { DeploymentsService } from './services/deployments.service';
 
 const USE_RUNTIME_CONSOLE = ENV !== 'development';
 
@@ -33,7 +33,7 @@ const declarations = USE_RUNTIME_CONSOLE ?
 
 const providers = USE_RUNTIME_CONSOLE ?
   [] :
-  [BsDropdownConfig, AppsService];
+  [BsDropdownConfig, DeploymentsService];
 
 @NgModule({
   imports: imports,

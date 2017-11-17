@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { Spaces } from 'ngx-fabric8-wit';
 
-import { AppsService } from './services/deployments.service';
+import { DeploymentsService } from './services/deployments.service';
 import { Environment } from './models/environment';
 
 @Component({
@@ -22,7 +22,7 @@ export class AppsComponent implements OnDestroy, OnInit {
 
   constructor(
     private spaces: Spaces,
-    private appsService: AppsService
+    private deploymentsService: DeploymentsService
   ) {
     this.spaceId = this.spaces.current.first().map(space => space.id);
    }
@@ -36,10 +36,10 @@ export class AppsComponent implements OnDestroy, OnInit {
   private updateResources(): void {
     this.spaceId.subscribe(spaceId => {
       this.environments =
-        this.appsService.getEnvironments(spaceId);
+        this.deploymentsService.getEnvironments(spaceId);
 
       this.applications =
-        this.appsService.getApplications(spaceId);
+        this.deploymentsService.getApplications(spaceId);
     });
   }
 
