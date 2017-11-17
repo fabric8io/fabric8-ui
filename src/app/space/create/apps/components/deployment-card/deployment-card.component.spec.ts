@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentCardComponent } from './deployment-card.component';
-import { AppsService } from '../services/apps.service';
+import { AppsService } from '../../services/apps.service';
 
 describe('DeploymentCardComponent', () => {
 

@@ -7,8 +7,8 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { AppsService } from '../services/apps.service';
-import { Environment } from '../models/environment';
+import { AppsService } from '../../services/apps.service';
+import { Environment } from '../../models/environment';
 
 @Component({
   selector: 'deployment-card',
