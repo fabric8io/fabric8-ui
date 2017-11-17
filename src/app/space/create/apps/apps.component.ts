@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { Spaces } from 'ngx-fabric8-wit';
 
-import { AppsService } from './services/apps.service';
+import { AppsService } from './services/deployments.service';
 import { Environment } from './models/environment';
 
 @Component({

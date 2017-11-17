@@ -5,7 +5,7 @@ import {
   OnInit
 } from '@angular/core';
 
-import { AppsService } from '../services/apps.service';
+import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
 import { Stat } from '../models/stat';
 

@@ -4,7 +4,7 @@ import {
   tick
 } from '@angular/core/testing';
 
-import { AppsService } from 'app/space/create/apps/services/apps.service';
+import { AppsService } from './deployments.service';
 
 describe('AppsService', () => {
 

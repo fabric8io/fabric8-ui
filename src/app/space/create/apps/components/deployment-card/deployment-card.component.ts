@@ -7,7 +7,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { AppsService } from '../../services/apps.service';
+import { AppsService } from '../../services/deployments.service';
 import { Environment } from '../../models/environment';
 
 @Component({

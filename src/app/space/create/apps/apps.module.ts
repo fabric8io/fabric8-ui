@@ -13,7 +13,7 @@ import { DeploymentCardComponent } from './components/deployment-card/deployment
 import { ResourceCardComponent } from './components/resource-card.component';
 import { AppsRoutingModule } from './apps-routing.module';
 
-import { AppsService } from './services/apps.service';
+import { AppsService } from './services/deployments.service';
 
 const USE_RUNTIME_CONSOLE = ENV !== 'development';
 
