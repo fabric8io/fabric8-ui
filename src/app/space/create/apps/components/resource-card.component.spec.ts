@@ -11,35 +11,17 @@ import { Observable } from 'rxjs';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { ResourceCardComponent } from './resource-card.component';
-import { AppsService } from '../services/apps.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 
 describe('ResourceCardComponent', () => {
   let component: ResourceCardComponent;
   let fixture: ComponentFixture<ResourceCardComponent>;
-  let mockSvc: AppsService;
 
   beforeEach(() => {
-    mockSvc = {
-      getApplications: () => { throw 'Not Implemented'; },
-      getEnvironments: () => { throw 'Not Implemented'; },
-      getPodCount: () => Observable.of(2),
-      getVersion: () => Observable.of('1.2.3'),
-      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
-      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat)
-    };
-
-    spyOn(mockSvc, 'getApplications').and.callThrough();
-    spyOn(mockSvc, 'getEnvironments').and.callThrough();
-    spyOn(mockSvc, 'getPodCount').and.callThrough();
-    spyOn(mockSvc, 'getCpuStat').and.callThrough();
-    spyOn(mockSvc, 'getMemoryStat').and.callThrough();
-
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
       declarations: [ ResourceCardComponent ],
-      providers: [ { provide: AppsService, useValue: mockSvc } ]
     });
 
     fixture = TestBed.createComponent(ResourceCardComponent);
