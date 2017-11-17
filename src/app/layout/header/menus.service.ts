@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { MenuItem } from './../../models/menu-item';
 import { ContextType, Contexts, ContextTypes, Context } from 'ngx-fabric8-wit';
 import { cloneDeep } from 'lodash';
+import { useRuntimeConsole } from '../../space/create/config/use-runtime-console';
 
 @Injectable()
 export class MenusService {
@@ -58,8 +59,8 @@ export class MenusService {
                 path: 'pipelines'
               },
               {
-                name: 'Applications',
-                path: 'apps'
+                name: useRuntimeConsole() ? 'Applications' : 'Deployments',
+                path: useRuntimeConsole() ? 'apps' : 'deployments'
               },
               {
                 name: 'Environments',
