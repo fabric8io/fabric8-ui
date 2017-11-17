@@ -168,7 +168,7 @@
     "bootstrap": "3.3.7",
     "change-case": "3.0.1",
     "child_process": "1.0.2",
-    "codelyzer": "3.2.2",
+    "codelyzer": "4.0.1",
     "copy-webpack-plugin": "4.2.0",
     "copyfiles": "1.2.0",
     "css-loader": "0.28.7",
