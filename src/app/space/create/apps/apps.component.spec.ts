@@ -21,10 +21,10 @@ import { Environment } from './models/environment';
 import { Spaces } from 'ngx-fabric8-wit';
 
 @Component({
-  selector: 'app-card',
+  selector: 'deployment-card',
   template: ''
 })
-class FakeAppCardComponent {
+class FakeDeploymentCardComponent {
   @Input() applicationId: string;
   @Input() environment: Environment;
 }
@@ -61,7 +61,7 @@ describe('AppsComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
-      declarations: [ AppsComponent, FakeAppCardComponent ],
+      declarations: [ AppsComponent, FakeDeploymentCardComponent ],
       providers: [
         { provide: AppsService, useValue: mockSvc },
         { provide: Spaces, useValue: spaces }

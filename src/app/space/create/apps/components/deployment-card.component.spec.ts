@@ -10,13 +10,13 @@ import { Observable } from 'rxjs';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
-import { AppCardComponent } from './deployment-card.component';
+import { DeploymentCardComponent } from './deployment-card.component';
 import { AppsService } from '../services/apps.service';
 
-describe('AppCardComponent', () => {
+describe('DeploymentCardComponent', () => {
 
-  let component: AppCardComponent;
-  let fixture: ComponentFixture<AppCardComponent>;
+  let component: DeploymentCardComponent;
+  let fixture: ComponentFixture<DeploymentCardComponent>;
   let mockSvc: AppsService;
 
   beforeEach(() => {
@@ -38,11 +38,11 @@ describe('AppCardComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
-      declarations: [ AppCardComponent ],
+      declarations: [ DeploymentCardComponent ],
       providers: [ { provide: AppsService, useValue: mockSvc } ]
     });
 
-    fixture = TestBed.createComponent(AppCardComponent);
+    fixture = TestBed.createComponent(DeploymentCardComponent);
     component = fixture.componentInstance;
 
     component.applicationId = 'mockAppId';
