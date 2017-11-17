@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
-import { AppCardComponent } from './app-card.component';
+import { AppCardComponent } from './deployment-card.component';
 import { AppsService } from '../services/apps.service';
 
 describe('AppCardComponent', () => {

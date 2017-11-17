@@ -9,7 +9,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { AppModule as RuntimeConsoleModule } from '../../../../a-runtime-console/index';
 
 import { AppsComponent } from './apps.component';
-import { AppCardComponent } from './components/app-card.component';
+import { AppCardComponent } from './components/deployment-card.component';
 import { AppsRoutingModule } from './apps-routing.module';
 
 import { AppsService } from './services/apps.service';

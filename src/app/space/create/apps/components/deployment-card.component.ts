@@ -12,7 +12,7 @@ import { Environment } from '../models/environment';
 
 @Component({
   selector: 'app-card',
-  templateUrl: 'app-card.component.html'
+  templateUrl: 'deployment-card.component.html'
 })
 export class AppCardComponent implements OnDestroy, OnInit {
 
