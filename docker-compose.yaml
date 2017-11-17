@@ -13,6 +13,7 @@ services:
       - default
   ui:
     build: .
+    dockerfile: Dockerfile.deploy
     entrypoint:
       - /usr/local/bin/wait-for-it.sh
       - core:8080
