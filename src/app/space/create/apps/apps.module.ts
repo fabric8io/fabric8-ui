@@ -6,6 +6,8 @@ import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
+import { useRuntimeConsole } from '../config/use-runtime-console';
+
 import { AppModule as RuntimeConsoleModule } from '../../../../a-runtime-console/index';
 
 import { AppsComponent } from './apps.component';
@@ -15,9 +17,7 @@ import { AppsRoutingModule } from './apps-routing.module';
 
 import { AppsService } from './services/apps.service';
 
-const USE_RUNTIME_CONSOLE = ENV !== 'development';
-
-const imports = USE_RUNTIME_CONSOLE ?
+const imports = useRuntimeConsole() ?
   [CommonModule, RuntimeConsoleModule] :
   [
     BsDropdownModule.forRoot(),
@@ -27,11 +27,11 @@ const imports = USE_RUNTIME_CONSOLE ?
     AppsRoutingModule
   ];
 
-const declarations = USE_RUNTIME_CONSOLE ?
+const declarations = useRuntimeConsole() ?
   [] :
   [AppsComponent, DeploymentCardComponent, ResourceCardComponent];
 
-const providers = USE_RUNTIME_CONSOLE ?
+const providers = useRuntimeConsole() ?
   [] :
   [BsDropdownConfig, AppsService];
 

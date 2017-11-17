@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CreateComponent } from './create.component';
 import { CodebasesComponent } from './codebases/codebases.component';
 import { ExperimentalFeatureResolver } from '../../shared/experimental-feature.resolver';
+import { useRuntimeConsole } from './config/use-runtime-console';
 
 const routes: Routes = [
   {
@@ -29,14 +30,14 @@ const routes: Routes = [
         }
       },
       {
-        path: 'apps',
+        path: useRuntimeConsole() ? 'apps' : 'deployments',
         loadChildren: './apps/apps.module#AppsModule',
         resolve: {
           featureFlagConfig: ExperimentalFeatureResolver
         },
         data: {
-          title: 'Applications',
-          featureName: 'Applications'
+          title: useRuntimeConsole() ? 'Applications' : 'Deployments',
+          featureName: useRuntimeConsole() ? 'Applications' : 'Deployments'
         }
       },
     ]
