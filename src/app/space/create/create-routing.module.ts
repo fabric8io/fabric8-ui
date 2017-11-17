@@ -30,7 +30,7 @@ const routes: Routes = [
       },
       {
         path: 'apps',
-        loadChildren: './apps/create-apps.module#CreateAppsModule',
+        loadChildren: './apps/apps.module#AppsModule',
         resolve: {
           featureFlagConfig: ExperimentalFeatureResolver
         },
