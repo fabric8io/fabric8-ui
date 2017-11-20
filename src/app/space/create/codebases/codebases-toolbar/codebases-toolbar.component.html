@@ -5,9 +5,12 @@
       (onFilterChange)="filterChange($event)"
       (onSortChange)="sortChange($event)">
     <ng-template #addCodebaseTemplate>
-      <div class="with-cursor-pointer" placement="left" tooltip="Add A Codebase"
+      <div class="with-cursor-pointer" placement="left" tooltip="Add a Codebase"
            [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
-        <i class="pficon pficon-add-circle-o margin-top-4"></i>
+        <span class="add-codebase-tooltip">
+          <i class="pficon pficon-add-circle-o margin-top-4"></i>
+          <span class="add-codebase-tooltip-text">Add Codebase</span>
+        </span>
       </div>
     </ng-template>
   </pfng-toolbar>

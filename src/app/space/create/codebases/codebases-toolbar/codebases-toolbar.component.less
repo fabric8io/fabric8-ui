@@ -3,12 +3,14 @@
   padding: 36px 20px;
 }
 .toolbar-pf-action-right {
-  .tooltip-left {
-    /* stylelint-disable */
-    left: 2050px !important;
-    /* stylelint-enable */
-  }
-  .pficon-add-circle-o {
+  .add-codebase-tooltip {
     color: @color-pf-blue-400;
+    &:hover {
+      cursor: pointer;
+    }
+    @media (max-width: 992px) {
+      position: absolute;
+      right: 20px;
+    }
   }
 }
