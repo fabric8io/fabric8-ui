@@ -15,7 +15,10 @@ import { Observable } from 'rxjs';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentsComponent } from './deployments.component';
-import { DeploymentsService } from './services/deployments.service';
+import {
+  DEPLOYMENTS_SERVICE,
+  IDeploymentsService
+} from './services/deployments.service';
 import { CpuStat } from './models/cpu-stat';
 import { Environment } from './models/environment';
 import { MemoryStat } from './models/memory-stat';
@@ -45,7 +48,7 @@ describe('AppsComponent', () => {
 
   let component: DeploymentsComponent;
   let fixture: ComponentFixture<DeploymentsComponent>;
-  let mockSvc: DeploymentsService;
+  let mockSvc: IDeploymentsService;
   let spaces: Spaces;
 
   beforeEach(() => {
@@ -75,7 +78,7 @@ describe('AppsComponent', () => {
       imports: [ CollapseModule.forRoot() ],
       declarations: [ DeploymentsComponent, FakeDeploymentCardComponent, FakeResourceCardComponent ],
       providers: [
-        { provide: DeploymentsService, useValue: mockSvc },
+        { provide: DEPLOYMENTS_SERVICE, useValue: mockSvc },
         { provide: Spaces, useValue: spaces }
       ]
     });
