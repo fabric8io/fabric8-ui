@@ -30,7 +30,7 @@ const routes: Routes = [
       },
       {
         path: 'apps',
-        loadChildren: './apps/apps.module#AppsModule',
+        loadChildren: './apps/create-apps.module#CreateAppsModule',
         resolve: {
           featureFlagConfig: ExperimentalFeatureResolver
         },
@@ -39,6 +39,17 @@ const routes: Routes = [
           featureName: 'Applications'
         }
       },
+      {
+        path: 'deployments',
+        loadChildren: './deployments/deployments.module#DeploymentsModule',
+        resolve: {
+          featureFlagConfig: ExperimentalFeatureResolver
+        },
+        data: {
+          title: 'Deployments',
+          featureName: 'Deployments'
+        }
+      }
     ]
   }
 ];

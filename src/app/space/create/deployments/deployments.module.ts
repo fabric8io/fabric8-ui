@@ -6,40 +6,31 @@ import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
-import { AppModule as RuntimeConsoleModule } from '../../../../a-runtime-console/index';
-
 import { DeploymentsComponent } from '../deployments/deployments.component';
 import { DeploymentCardComponent } from '../deployments/components/deployment-card/deployment-card.component';
 import { ResourceCardComponent } from '../deployments/components/resource-card.component';
-import { AppsRoutingModule } from './apps-routing.module';
+import { DeploymentsRoutingModule } from './deployments-routing.module';
 
 import { DeploymentsService } from '../deployments/services/deployments.service';
 
-const USE_RUNTIME_CONSOLE = ENV !== 'development';
-
-const imports = USE_RUNTIME_CONSOLE ?
-  [CommonModule, RuntimeConsoleModule] :
-  [
+@NgModule({
+  imports: [
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     AccordionModule.forRoot(),
     CommonModule,
-    AppsRoutingModule
-  ];
-
-const declarations = USE_RUNTIME_CONSOLE ?
-  [] :
-  [DeploymentsComponent, DeploymentCardComponent, ResourceCardComponent];
-
-const providers = USE_RUNTIME_CONSOLE ?
-  [] :
-  [BsDropdownConfig, DeploymentsService];
-
-@NgModule({
-  imports: imports,
-  declarations: declarations,
-  providers: providers
+    DeploymentsRoutingModule
+  ],
+  declarations: [
+    DeploymentsComponent,
+    DeploymentCardComponent,
+    ResourceCardComponent
+  ],
+  providers: [
+    BsDropdownConfig,
+    DeploymentsService
+  ]
 })
-export class AppsModule {
+export class DeploymentsModule {
   constructor(http: Http) { }
 }
