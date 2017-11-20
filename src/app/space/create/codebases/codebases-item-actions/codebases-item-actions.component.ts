@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Che } from '../services/che';
@@ -8,6 +8,7 @@ import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-
 import { Dialog } from 'ngx-widgets';
 import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
+import {IModalHost} from "../../../wizard/models/modal-host";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -18,12 +19,12 @@ import { WorkspacesService } from '../services/workspaces.service';
 export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   @Input() codebase: Codebase;
   @Input() index: number = -1;
+  @ViewChild('deleteCodebaseDialog') deleteCodebaseDialog: IModalHost;
 
   cheRunning: boolean = false;
   subscriptions: Subscription[] = [];
   workspaceBusy: boolean = false;
   dialog: Dialog;
-  showDialog = false;
 
   constructor(
       private broadcaster: Broadcaster,
@@ -86,29 +87,14 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * @param {MouseEvent} event mouse event
    */
   confirmDeleteCodebase(event: MouseEvent): void {
-    event.stopPropagation();
-    this.dialog = {
-      'title': 'Confirm codebase deletion',
-      'message': 'Are you sure you want to deleteCodebase codebase?',
-      'actionButtons': [
-        {'title': 'Confirm', 'value': 1, 'default': false},
-        {'title': 'Cancel', 'value': 0, 'default': true}
-      ]
-    } as Dialog;
-    this.showDialog = true;
+    this.deleteCodebaseDialog.open();
   }
 
   /**
    * Process the click on confirm dialog button.
-   *
-   * @param {number} value
    */
-  onDialogButtonClick(value: number) {
-    // callback from the confirm deleteCodebase dialog
-    if (value === 1) {
-      this.deleteCodebase();
-    }
-    this.showDialog = false;
+  onDeleteCodebase() {
+    this.deleteCodebase();
   }
 
   /**
@@ -116,10 +102,12 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    */
   deleteCodebase(): void {
     this.subscriptions.push(this.codebasesService.deleteCodebase(this.codebase).subscribe((codebase: Codebase) => {
+      this.deleteCodebaseDialog.close();
       this.broadcaster.broadcast('codebaseDeleted', {
         codebase: codebase
       });
     }, (error: any) => {
+      this.deleteCodebaseDialog.close();
       this.handleError('Failed to deleteCodebase codebase ' + this.codebase.name, NotificationType.DANGER);
     }));
   }

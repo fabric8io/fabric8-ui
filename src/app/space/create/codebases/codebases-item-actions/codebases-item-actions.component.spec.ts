@@ -17,6 +17,7 @@ import {
 } from '@angular/core/testing';
 
 describe('Codebases Item Actions Component', () => {
+  let dialogMock: any;
   let gitHubServiceMock: any;
   let notificationMock: any;
   let fixture;
@@ -27,6 +28,7 @@ describe('Codebases Item Actions Component', () => {
 
   beforeEach(() => {
     gitHubServiceMock = jasmine.createSpy('GitHubService');
+    dialogMock = jasmine.createSpyObj('IModalHost', ['open', 'close']);
     notificationMock = jasmine.createSpyObj('Notifications', ['message']);
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
     windowServiceMock = jasmine.createSpyObj('WindowService', ['open']);
@@ -108,6 +110,7 @@ describe('Codebases Item Actions Component', () => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
+    comp.deleteCodebaseDialog = dialogMock;
     codebasesServiceMock.deleteCodebase.and.returnValue(Observable.of(comp.codebase));
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
   //  broadcasterMock.on.and.returnValue(Observable.of(code));
@@ -122,6 +125,7 @@ describe('Codebases Item Actions Component', () => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
+    comp.deleteCodebaseDialog = dialogMock;
     codebasesServiceMock.deleteCodebase.and.returnValue(Observable.throw('ERROR'));
     const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));

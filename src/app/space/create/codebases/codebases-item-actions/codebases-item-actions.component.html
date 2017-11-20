@@ -23,9 +23,8 @@
     </ul>
   </span>
 </ng-template>
-<div *ngIf="showDialog" class="remove-codebase-dialog">
-  <alm-dialog
-    (pfDialogClick)="onDialogButtonClick($event)"
-    [dialog]='dialog'
-  ></alm-dialog>
-</div>
+<modal #deleteCodebaseDialog title="Remove codebase">
+  <modal-content>
+    <codebase-delete-dialog [host]="deleteCodebaseDialog" [codebase]="codebase" (onDelete)="onDeleteCodebase($event)"></codebase-delete-dialog>
+  </modal-content>
+</modal>

@@ -11,10 +11,12 @@ import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
 import { CodebasesItemActionsComponent } from './codebases-item-actions.component';
 import { CodebasesService } from '../services/codebases.service';
+import {CodebaseDeleteDialogModule} from '../codebases-delete/codebase-delete-dialog.module';
 
 @NgModule({
   imports: [
     BsDropdownModule.forRoot(),
+    CodebaseDeleteDialogModule,
     CommonModule,
     DialogModule,
     FormsModule,

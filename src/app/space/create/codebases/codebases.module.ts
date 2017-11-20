@@ -16,11 +16,13 @@ import { CodebasesItemDetailsModule } from './codebases-item-details/codebases-i
 import { CodebasesItemWorkspacesModule } from './codebases-item-workspaces/codebases-item-workspaces.module';
 import { CodebasesToolbarModule } from './codebases-toolbar/codebases-toolbar.module';
 import { CodebasesRoutingModule } from './codebases-routing.module';
+import { CodebaseDeleteDialogModule } from './codebases-delete/codebase-delete-dialog.module';
 
 @NgModule({
   imports: [
     BsDropdownModule.forRoot(),
     CodebasesAddModule,
+    CodebaseDeleteDialogModule,
     CodebasesItemModule,
     CodebasesItemActionsModule,
     CodebasesItemDetailsModule,

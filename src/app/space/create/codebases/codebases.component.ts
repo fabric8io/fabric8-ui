@@ -7,7 +7,7 @@ import { CheService } from './services/che.service';
 import { Codebase } from './services/codebase';
 import { CodebasesService } from './services/codebases.service';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { GitHubService } from "./services/github.service";
+import { GitHubService } from './services/github.service';
 import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
 
 import { cloneDeep } from 'lodash';
@@ -273,7 +273,12 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           this.codebases = cloneDeep(codebases);
           this.codebases.unshift({} as Codebase); // Add empty object for row header
           this.applyFilters(this.appliedFilters);
+        } else {
+          // clear the codebases list:
+          this.allCodebases = [];
+          this.codebases = [];
         }
+        // re-fetch Che state to have consistent information inside all related components:
         this.startIdleChe();
       }, error => {
         this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
