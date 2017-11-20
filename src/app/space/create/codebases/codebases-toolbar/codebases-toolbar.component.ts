@@ -63,8 +63,7 @@ export class CodebasesToolbarComponent implements OnInit {
       appliedFilters: [],
       resultsCount: this.resultsCount,
       selectedCount: 0,
-      totalCount: 0,
-      tooltipPlacement: 'left'
+      totalCount: 0
     } as FilterConfig;
 
     this.sortConfig = {
