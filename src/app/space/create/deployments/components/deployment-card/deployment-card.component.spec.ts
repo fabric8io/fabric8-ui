@@ -51,6 +51,14 @@ describe('DeploymentCardComponent', () => {
     component.environment = { environmentId: 'mockEnvironmentId', name: 'mockEnvironment'};
 
     fixture.detectChanges();
+
+    it('should generate a unique chartid for each DeploymentCardComponent instance', () => {
+      let depCard1 = new DeploymentCardComponent(null);
+      let depCard2 = new DeploymentCardComponent(null);
+      let depCard3 = new DeploymentCardComponent(null);
+
+      expect(depCard1.config.chartId !== depCard2.config.chartId !== depCard3.config.chartId);
+    });
   });
 
   describe('podCountLabel', () => {

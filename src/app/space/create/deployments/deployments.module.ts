@@ -13,12 +13,15 @@ import { DeploymentsRoutingModule } from './deployments-routing.module';
 
 import { DeploymentsService } from '../deployments/services/deployments.service';
 
+import { ChartModule } from 'patternfly-ng';
+
 @NgModule({
   imports: [
     BsDropdownModule.forRoot(),
     CollapseModule.forRoot(),
     AccordionModule.forRoot(),
     CommonModule,
+    ChartModule,
     DeploymentsRoutingModule
   ],
   declarations: [
