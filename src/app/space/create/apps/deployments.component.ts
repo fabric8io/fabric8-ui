@@ -11,8 +11,8 @@ import { Environment } from './models/environment';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-apps',
-  templateUrl: 'apps.component.html',
-  styleUrls: ['./apps.component.less']
+  templateUrl: 'deployments.component.html',
+  styleUrls: ['./deployments.component.less']
 })
 export class AppsComponent implements OnDestroy, OnInit {
 
