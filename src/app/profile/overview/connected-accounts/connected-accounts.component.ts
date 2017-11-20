@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Injectable, Inject } from '@angular/core';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Observable';
 import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { AuthenticationService, UserService, User } from 'ngx-login-client';
+import { AuthenticationService, UserService, User, AUTH_API_URL } from 'ngx-login-client';
 
 import { ProviderService } from '../../../getting-started/services/provider.service';
-import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
+import { Fabric8UIConfig } from '../../../shared/config/fabric8-ui-config';
 import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
 import { ExtUser, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 
@@ -26,8 +27,14 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   authOpenShift: boolean = false;
   gitHubLinked: boolean = false;
   openShiftLinked: boolean = false;
+  
+  loggedInUser: User;
+  username: string;
+  accessToken: string;
+  redirect: string;
+  linkingApiURL: string;
+  unlinkingApiURL: string;
 
-  userName: string;
   contextUserName: string;
   githubUserName: string;
 
@@ -37,7 +44,13 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     private gettingStartedService: GettingStartedService,
     private http: Http,
     private providerService: ProviderService,
+    private fabric8UIConfig: Fabric8UIConfig,
+    @Inject(AUTH_API_URL) apiUrl: string,
     private userService: UserService) {
+    
+    this.linkingApiURL = apiUrl + 'token/link';
+    this.unlinkingApiURL = apiUrl + 'token';
+    
     // for GitHub
     this.subscriptions.push(auth.gitHubToken.subscribe(token => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
@@ -59,6 +72,38 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.userName = '';
+    this.userService.loggedInUser
+      .map(user => {
+        this.loggedInUser = user;
+        this.username = this.loggedInUser.attributes.username;
+        this.accessToken = this.auth.getToken();
+        this.redirect = window.location.origin + "/" + this.username;
+      })
+      .publish().connect();
+  }
+  
+  connectGitHub(): boolean {
+    console.log("Connecting GitHub account");
+    this.auth.connectGitHub(window.location.origin + "/" + this.username);
+    return true;
+  }
+  
+  disconnectGitHub(): boolean {
+    console.log("Disconnecting GitHub account");
+    this.auth.disconnectGitHub();
+    return true;
+  }
+  
+  connectOpenShift(): boolean {
+    console.log("Connecting OpenShift account");
+    this.auth.connectOpenShift(window.location.origin + "/" + this.username);
+    //this.providerService.linkOpenShift(window.location.origin + "/" + this.username);
+    return false;
+  }
+  
+  disconnectOpenShift(): boolean {
+    console.log("Disconnecting OpenShift account");
+    this.auth.disconnectOpenShift(this.fabric8UIConfig.tenantApiUrl);
+    return true;
   }
 }

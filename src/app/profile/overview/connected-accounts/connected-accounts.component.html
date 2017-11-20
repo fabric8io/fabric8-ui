@@ -41,10 +41,20 @@
                         <span>
                           Connected
                         </span>
+                        <span>
+                          <button class="btn btn-lg btn-default" id="gh_relink"
+                          (click)="connectGitHub()">Reconnect</button>
+                          <button class="btn btn-lg btn-default" id="gh_unlink"
+                          (click)="disconnectGitHub()">Disconnect</button>
+                        </span>
                       </ng-template>
                       <ng-template #ghUnlinkedUsername>
                         <span class="account-disconnected">
-                          Not Connected
+                          Disconnected
+                        </span>
+                        <span>
+                          <button class="btn btn-lg btn-default" id="gh_link"
+                          (click)="connectGitHub()">Connect</button>
                         </span>
                       </ng-template>
                     </div>
@@ -77,10 +87,20 @@
                         <span>
                           {{contextUserName}}
                         </span>
+                        <span>
+                          <button class="btn btn-lg btn-default" id="oso_relink"
+                          (click)="connectOpenShift()">Reconnect</button>
+                          <button class="btn btn-lg btn-default" id="oso_unlink"
+                          (click)="disconnectOpenShift()">Disconnect</button>
+                        </span>
                       </ng-template>
                       <ng-template #osoUnlinkedUsername>
                         <span class="account-disconnected">
                           Not Connected
+                        </span>
+                        <span>
+                          <button class="btn btn-lg btn-default" id="oso_link"
+                          (click)="connectOpenShift()">Connect</button>
                         </span>
                       </ng-template>
                     </div>
