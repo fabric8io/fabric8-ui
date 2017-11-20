@@ -14,7 +14,7 @@ import { Environment } from './models/environment';
   templateUrl: 'deployments.component.html',
   styleUrls: ['./deployments.component.less']
 })
-export class AppsComponent implements OnDestroy, OnInit {
+export class DeploymentsComponent implements OnDestroy, OnInit {
 
   spaceId: Observable<string>;
   environments: Observable<Environment[]>;

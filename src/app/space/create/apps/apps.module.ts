@@ -8,7 +8,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { AppModule as RuntimeConsoleModule } from '../../../../a-runtime-console/index';
 
-import { AppsComponent } from './deployments.component';
+import { DeploymentsComponent } from './deployments.component';
 import { DeploymentCardComponent } from './components/deployment-card/deployment-card.component';
 import { ResourceCardComponent } from './components/resource-card.component';
 import { AppsRoutingModule } from './apps-routing.module';
@@ -29,7 +29,7 @@ const imports = USE_RUNTIME_CONSOLE ?
 
 const declarations = USE_RUNTIME_CONSOLE ?
   [] :
-  [AppsComponent, DeploymentCardComponent, ResourceCardComponent];
+  [DeploymentsComponent, DeploymentCardComponent, ResourceCardComponent];
 
 const providers = USE_RUNTIME_CONSOLE ?
   [] :

@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
-import { AppsComponent } from './deployments.component';
+import { DeploymentsComponent } from './deployments.component';
 import { DeploymentsService } from './services/deployments.service';
 import { CpuStat } from './models/cpu-stat';
 import { Environment } from './models/environment';
@@ -43,8 +43,8 @@ class FakeResourceCardComponent {
 
 describe('AppsComponent', () => {
 
-  let component: AppsComponent;
-  let fixture: ComponentFixture<AppsComponent>;
+  let component: DeploymentsComponent;
+  let fixture: ComponentFixture<DeploymentsComponent>;
   let mockSvc: DeploymentsService;
   let spaces: Spaces;
 
@@ -73,14 +73,14 @@ describe('AppsComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
-      declarations: [ AppsComponent, FakeDeploymentCardComponent, FakeResourceCardComponent ],
+      declarations: [ DeploymentsComponent, FakeDeploymentCardComponent, FakeResourceCardComponent ],
       providers: [
         { provide: DeploymentsService, useValue: mockSvc },
         { provide: Spaces, useValue: spaces }
       ]
     });
 
-    fixture = TestBed.createComponent(AppsComponent);
+    fixture = TestBed.createComponent(DeploymentsComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();

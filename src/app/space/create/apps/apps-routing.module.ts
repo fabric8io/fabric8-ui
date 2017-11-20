@@ -4,12 +4,12 @@ import { AuthGuard } from './../../shared/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AppsComponent } from './deployments.component';
+import { DeploymentsComponent } from './deployments.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: AppsComponent
+    component: DeploymentsComponent
   }
 ];
 
