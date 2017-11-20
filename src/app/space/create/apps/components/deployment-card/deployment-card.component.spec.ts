@@ -10,14 +10,16 @@ import { Observable } from 'rxjs';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
-import { AppCardComponent } from './app-card.component';
-import { AppsService } from '../services/apps.service';
+import { DeploymentCardComponent } from './deployment-card.component';
+import { DeploymentsService } from '../../services/deployments.service';
+import { CpuStat } from '../../models/cpu-stat';
+import { MemoryStat } from '../../models/memory-stat';
 
-describe('AppCardComponent', () => {
+describe('DeploymentCardComponent', () => {
 
-  let component: AppCardComponent;
-  let fixture: ComponentFixture<AppCardComponent>;
-  let mockSvc: AppsService;
+  let component: DeploymentCardComponent;
+  let fixture: ComponentFixture<DeploymentCardComponent>;
+  let mockSvc: DeploymentsService;
 
   beforeEach(() => {
     mockSvc = {
@@ -25,8 +27,8 @@ describe('AppCardComponent', () => {
       getEnvironments: () => { throw 'Not Implemented'; },
       getPodCount: () => Observable.of(2),
       getVersion: () => Observable.of('1.2.3'),
-      getCpuStat: () => { throw 'Not Implemented'; },
-      getMemoryStat: () => { throw 'Not Implemented'; }
+      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
+      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat)
     };
 
     spyOn(mockSvc, 'getApplications').and.callThrough();
@@ -38,11 +40,11 @@ describe('AppCardComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
-      declarations: [ AppCardComponent ],
-      providers: [ { provide: AppsService, useValue: mockSvc } ]
+      declarations: [ DeploymentCardComponent ],
+      providers: [ { provide: DeploymentsService, useValue: mockSvc } ]
     });
 
-    fixture = TestBed.createComponent(AppCardComponent);
+    fixture = TestBed.createComponent(DeploymentCardComponent);
     component = fixture.componentInstance;
 
     component.applicationId = 'mockAppId';

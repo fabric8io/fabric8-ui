@@ -9,10 +9,11 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { AppModule as RuntimeConsoleModule } from '../../../../a-runtime-console/index';
 
 import { AppsComponent } from './apps.component';
-import { AppCardComponent } from './components/app-card.component';
+import { DeploymentCardComponent } from './components/deployment-card/deployment-card.component';
+import { ResourceCardComponent } from './components/resource-card.component';
 import { AppsRoutingModule } from './apps-routing.module';
 
-import { AppsService } from './services/apps.service';
+import { DeploymentsService } from './services/deployments.service';
 
 const USE_RUNTIME_CONSOLE = ENV !== 'development';
 
@@ -28,11 +29,11 @@ const imports = USE_RUNTIME_CONSOLE ?
 
 const declarations = USE_RUNTIME_CONSOLE ?
   [] :
-  [AppsComponent, AppCardComponent];
+  [AppsComponent, DeploymentCardComponent, ResourceCardComponent];
 
 const providers = USE_RUNTIME_CONSOLE ?
   [] :
-  [BsDropdownConfig, AppsService];
+  [BsDropdownConfig, DeploymentsService];
 
 @NgModule({
   imports: imports,
