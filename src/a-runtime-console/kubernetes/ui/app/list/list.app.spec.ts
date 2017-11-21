@@ -1,4 +1,3 @@
-import {AppListToolbarComponent} from "./../list-toolbar/list-toolbar.app.component";
 import {AppListPageComponent} from "./../list-page/list-page.app.component";
 import {ServiceModule} from "./../../service/service.module";
 import {ReplicaSetModule} from "./../../replicaset/replicaset.module";
@@ -57,7 +56,6 @@ describe('AppListComponent', () => {
       declarations: [
         AppListComponent,
         AppListPageComponent,
-        AppListToolbarComponent,
       ],
       providers: [
         MockBackend,
