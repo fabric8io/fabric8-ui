@@ -57,8 +57,10 @@ describe('DeploymentCardComponent', () => {
       let depCard2 = new DeploymentCardComponent(null);
       let depCard3 = new DeploymentCardComponent(null);
 
-      expect(depCard1.config.chartId !== depCard2.config.chartId !== depCard3.config.chartId);
-    });
+      expect(depCard1.getChartIdNum()).not.toBe(depCard2.getChartIdNum());
+      expect(depCard1.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
+      expect(depCard2.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
+      });
   });
 
   describe('podCountLabel', () => {

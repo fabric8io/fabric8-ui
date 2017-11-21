@@ -44,6 +44,9 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     private deploymentsService: DeploymentsService
   ) { }
 
+  getChartIdNum(): number {
+    return DeploymentCardComponent.chartIdNum;
+  }
   ngOnDestroy(): void { }
 
   ngOnInit(): void {
