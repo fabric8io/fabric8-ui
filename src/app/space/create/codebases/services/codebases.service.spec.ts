@@ -7,7 +7,6 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { CodebasesService } from './codebases.service';
 import { Codebase } from './codebase';
 import { cloneDeep } from 'lodash';
-import {error} from "shelljs";
 
 describe('Codebase: CodebasesService', () => {
   let mockLog: any;

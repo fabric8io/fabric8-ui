@@ -229,6 +229,19 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   }
 
   /**
+   * Fetches the state of Che and propagates it to subscribers.
+   */
+  private fetchCheState(): void {
+    // Get state for Che server
+    this.subscriptions.push(this.cheService.getState()
+      .subscribe(che => {
+        this.broadcaster.broadcast('cheStateChange', che);
+      }, error => {
+        this.broadcaster.broadcast('cheStateChange');
+      }));
+  }
+
+  /**
    * Start the Che server
    */
   private startChe(): void {
@@ -279,7 +292,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           this.codebases = [];
         }
         // re-fetch Che state to have consistent information inside all related components:
-        this.startIdleChe();
+        this.fetchCheState();
       }, error => {
         this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
       }));
