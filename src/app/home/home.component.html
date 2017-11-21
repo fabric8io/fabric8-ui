@@ -22,7 +22,7 @@
                 {{brandInformation.name}} information
               </h2>
               <p class="card-pf-info">
-                <a [href]="brandInformation.moreInfoLink" target="_blank">Learn more</a>
+                <a [href]="brandInformation.moreInfoLink" class="home-banner-link" target="_blank">Learn more</a>
                 about what {{brandInformation.name}} can do for you.
               </p>
             </div>
@@ -36,7 +36,7 @@
                 Setup your profile
               </h2>
               <p class="card-pf-info">Let others know who you are by filling out
-                <a [routerLink]="['/', loggedInUser.attributes.username]">your profile</a>.
+                <a [routerLink]="['/', loggedInUser.attributes.username]" class="home-banner-link">your profile</a>.
               </p>
             </div>
           </div>
@@ -49,8 +49,7 @@
                 Learn about OpenShift
               </h2>
               <p class="card-pf-info">See how
-                <a href="https://www.openshift.com/container-platform" target="_blank">containerized development and
-                  deployment</a> can help you.
+                <a href="https://www.openshift.com/container-platform" class="home-banner-link" target="_blank">containerized development and deployment</a> can help you.
               </p>
             </div>
           </div>
