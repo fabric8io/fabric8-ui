@@ -8,16 +8,12 @@
     &-body {
       margin-top: 0;
       padding-bottom: 0;
-      // height: 375px;
-      // overflow-y: auto;
       overflow-x: hidden;
       .list-group { padding-bottom: 0; }
       .list-view-pf-view { margin-top: -1px; }
     }
     &-heading {
-      // margin-right: 0;
       margin-bottom: 0;
-      // margin-left: 0;
       &-btn {
         &-link {
           display: inline-flex;
@@ -39,6 +35,8 @@
     }
     &-list {
       padding: 0;
+      max-height: 375px;
+      overflow-y: scroll;
       .list-group-item {
         margin-left: -2px;
         &-heading {
