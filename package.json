@@ -55,7 +55,7 @@
     "github-deploy:prod": "webpack --config config/webpack.github-deploy.js --progress --profile --github-prod",
     "github-deploy": "npm run github-deploy:dev",
     "functests": "npm-run-all -p webdriver-start testserver-start protractor",
-    "lint": "find src -name '*.ts' | xargs tslint -p . -c tslint.json -t --force",
+    "lint": "find src -name '*.ts' | xargs tslint -p . -c tslint.json --force",
     "postversion": "git push && git push --tags",
     "prebuild:dev": "npm run clean:dist",
     "prebuild:prod": "npm run clean:dist",
