@@ -38,24 +38,20 @@
                     <div class="list-view-pf-additional-info-item">
                       <div *ngIf="gitHubLinked; then ghLinkedUsername else ghUnlinkedUsername"></div>
                       <ng-template #ghLinkedUsername>
-                        <span>
+                        <span class="margin-right-15">
                           Connected
                         </span>
-                        <span>
-                          <button class="btn btn-lg btn-default" id="gh_relink"
-                          (click)="connectGitHub()">Reconnect</button>
-                          <button class="btn btn-lg btn-default" id="gh_unlink"
-                          (click)="disconnectGitHub()">Disconnect</button>
-                        </span>
+                        <button class="btn btn-sm btn-primary margin-right-15" id="gh_relink"
+                        (click)="connectGitHub()">Reconnect</button>
+                        <button class="btn btn-sm btn-danger" id="gh_unlink"
+                        (click)="disconnectGitHub()">Disconnect</button>
                       </ng-template>
                       <ng-template #ghUnlinkedUsername>
-                        <span class="account-disconnected">
+                        <span class="account-disconnected margin-right-15">
                           Disconnected
                         </span>
-                        <span>
-                          <button class="btn btn-lg btn-default" id="gh_link"
-                          (click)="connectGitHub()">Connect</button>
-                        </span>
+                        <button class="btn btn-sm btn-primary" id="gh_link"
+                        (click)="connectGitHub()">Connect</button>
                       </ng-template>
                     </div>
                   </div>
@@ -84,24 +80,20 @@
                     <div class="list-view-pf-additional-info-item">
                       <div *ngIf="openShiftLinked; then osoLinkedUsername else osoUnlinkedUsername"></div>
                       <ng-template #osoLinkedUsername>
-                        <span>
+                        <span class="margin-right-15">
                           {{contextUserName}}
                         </span>
-                        <span>
-                          <button class="btn btn-lg btn-default" id="oso_relink"
-                          (click)="connectOpenShift()">Reconnect</button>
-                          <button class="btn btn-lg btn-default" id="oso_unlink"
-                          (click)="disconnectOpenShift()">Disconnect</button>
-                        </span>
+                        <button class="btn btn-sm btn-primary" id="oso_relink"
+                        (click)="connectOpenShift()">Reconnect</button>
+                        <button class="btn btn-sm btn-danger" id="oso_unlink"
+                        (click)="disconnectOpenShift()">Disconnect</button>
                       </ng-template>
                       <ng-template #osoUnlinkedUsername>
-                        <span class="account-disconnected">
-                          Not Connected
+                        <span class="account-disconnected margin-right-15">
+                          Disconnected
                         </span>
-                        <span>
-                          <button class="btn btn-lg btn-default" id="oso_link"
-                          (click)="connectOpenShift()">Connect</button>
-                        </span>
+                        <button class="btn btn-sm btn-primary" id="oso_link"
+                        (click)="connectOpenShift()">Connect</button>
                       </ng-template>
                     </div>
                   </div>
