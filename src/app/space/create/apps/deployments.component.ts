@@ -1,11 +1,20 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
 import { Spaces } from 'ngx-fabric8-wit';
 
-import { DeploymentsService } from './services/deployments.service';
+import {
+  DEPLOYMENTS_SERVICE,
+  IDeploymentsService
+} from './services/deployments.service';
 import { Environment } from './models/environment';
 
 @Component({
@@ -22,7 +31,7 @@ export class DeploymentsComponent implements OnDestroy, OnInit {
 
   constructor(
     private spaces: Spaces,
-    private deploymentsService: DeploymentsService
+    @Inject(DEPLOYMENTS_SERVICE) private deploymentsService: IDeploymentsService
   ) {
     this.spaceId = this.spaces.current.first().map(space => space.id);
    }

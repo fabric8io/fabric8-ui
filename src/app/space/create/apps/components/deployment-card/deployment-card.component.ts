@@ -1,5 +1,6 @@
 import {
   Component,
+  Inject,
   Input,
   OnDestroy,
   OnInit
@@ -7,7 +8,10 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { DeploymentsService } from '../../services/deployments.service';
+import {
+  DEPLOYMENTS_SERVICE,
+  IDeploymentsService
+} from '../../services/deployments.service';
 import { Environment } from '../../models/environment';
 
 @Component({
@@ -24,7 +28,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   version: Observable<string>;
 
   constructor(
-    private deploymentsService: DeploymentsService
+    @Inject(DEPLOYMENTS_SERVICE) private deploymentsService: IDeploymentsService
   ) { }
 
   ngOnDestroy(): void { }
