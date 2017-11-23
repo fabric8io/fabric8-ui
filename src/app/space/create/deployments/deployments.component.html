@@ -1,43 +1,4 @@
-<div id="apps" class="">
-
-  <div class="cards-pf">
-    <div class="row row-cards-pf">
-      <div class="col-xs-12 col-sm-4 col-md-2">
-        <h3>
-          <b>Applications</b>
-        </h3>
-      </div>
-      <div class="col-xs-12 col-sm-4 col-md-2">
-        <h3>
-          <b>Environments</b>
-        </h3>
-      </div>
-    </div>
-  </div>
-
-  <div class="cards-pf">
-    <div class="row row-cards-pf">
-      <div class="col-xs-12 col-sm-4 col-md-2"></div>
-      <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
-        <h4 class="env-card-title">
-          {{environment.name}}
-        </h4>
-      </div>
-    </div>
-  </div>
-
-  <div class="cards-pf" *ngFor="let application of applications | async">
-    <div class="container-fluid container-cards-pf">
-      <div class="row row-cards-pf">
-        <div class="col-xs-6 col-sm-4 col-md-2">
-          <h4>
-            {{application}}
-          </h4>
-        </div>
-        <deployment-card class="col-xs-6 col-sm-4 col-md-3" [applicationId]="application" [environment]="environment" *ngFor="let environment of environments | async"></deployment-card>
-      </div>
-    </div>
-  </div>
-
+<div id="apps">
+  <deployments-appenvs [environments]="environments" [applications]="applications"></deployments-appenvs>
   <deployments-resource-usage [environments]="environments"></deployments-resource-usage>
 </div>

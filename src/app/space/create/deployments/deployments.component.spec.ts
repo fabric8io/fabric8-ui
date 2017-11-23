@@ -24,20 +24,20 @@ import { Stat } from './models/stat';
 import { Spaces } from 'ngx-fabric8-wit';
 
 @Component({
-  selector: 'deployment-card',
-  template: ''
-})
-class FakeDeploymentCardComponent {
-  @Input() applicationId: string;
-  @Input() environment: Environment;
-}
-
-@Component({
   selector: 'deployments-resource-usage',
   template: ''
 })
 class FakeDeploymentsResourceUsageComponent {
   @Input() environments: Observable<Environment[]>;
+}
+
+@Component({
+  selector: 'deployments-appenvs',
+  template: ''
+})
+class FakeDeploymentAppEnvsComponent {
+  @Input() environments: Observable<Environment[]>;
+  @Input() applications: Observable<string[]>;
 }
 
 describe('DeploymentsComponent', () => {
@@ -46,6 +46,7 @@ describe('DeploymentsComponent', () => {
   let fixture: ComponentFixture<DeploymentsComponent>;
   let mockSvc: DeploymentsService;
   let spaces: Spaces;
+  let mockApplications = Observable.of(['foo-app', 'bar-app']);
   let mockEnvironments = Observable.of([
     { environmentId: 'a1', name: 'stage' },
     { environmentId: 'b2', name: 'prod' }
@@ -53,7 +54,7 @@ describe('DeploymentsComponent', () => {
 
   beforeEach(() => {
     mockSvc = {
-      getApplications: () => Observable.of(['foo-app', 'bar-app']),
+      getApplications: () => mockApplications,
       getEnvironments: () => mockEnvironments,
       getPodCount: () => { throw 'Not Implemented'; },
       getVersion: () => { throw 'NotImplemented'; },
@@ -76,7 +77,7 @@ describe('DeploymentsComponent', () => {
       imports: [ CollapseModule.forRoot() ],
       declarations: [
         DeploymentsComponent,
-        FakeDeploymentCardComponent,
+        FakeDeploymentAppEnvsComponent,
         FakeDeploymentsResourceUsageComponent
       ],
       providers: [
@@ -113,9 +114,14 @@ describe('DeploymentsComponent', () => {
   it('should pass values to children resource usage components', () => {
     let resourceUsageComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentsResourceUsageComponent));
     expect(resourceUsageComponents.length).toEqual(1);
-
     let resourceUsageComponent = resourceUsageComponents[0].componentInstance;
     expect(resourceUsageComponent.environments).toEqual(mockEnvironments);
+
+    let appEnvsComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentAppEnvsComponent));
+    expect(appEnvsComponents.length).toEqual(1);
+    let appEnvsComponent = appEnvsComponents[0].componentInstance;
+    expect(appEnvsComponent.environments).toEqual(mockEnvironments);
+    expect(appEnvsComponent.applications).toEqual(mockApplications);
   });
 
 });
