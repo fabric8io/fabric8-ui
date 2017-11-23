@@ -1,6 +1,6 @@
 <div class="card-pf" (click)="collapsed = !collapsed">
   <div class="card-pf-body">
-    <span class="pficon pficon-ok"></span>
+    <span class="pficon pficon-ok" tooltip="Everything looks okay" placement="top"></span>
     <span id="podCountLabel">{{ podCount | async }} Pods</span>
     <span id="versionLabel">{{ version | async }}</span>
     <div class="pull-right dropdown-kebab-pf dropdown" dropdown (click)="$event.stopPropagation()">
