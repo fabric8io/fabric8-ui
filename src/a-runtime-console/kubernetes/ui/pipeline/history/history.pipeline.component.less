@@ -22,34 +22,16 @@ h4 {
 
 @keyframes flexGrow {
   to {
-    -webkit-flex-grow: 1;
-    -moz-flex-grow: 1;
-    -ms-flex-grow: 1;
     flex-grow: 1;
-    -webkit-flex-shrink: 1;
-    -moz-flex-shrink: 1;
-    -ms-flex-shrink: 1;
     flex-shrink: 1;
-    -webkit-flex-basis: auto;
-    -moz-flex-basis: auto;
-    -ms-flex-basis: auto;
     flex-basis: auto;
   }
 }
 
 @keyframes flexShrink {
   to {
-    -webkit-flex-basis: 1;
-    -moz-flex-basis: 1;
-    -ms-flex-basis: 1;
     flex-basis: 1;
-    -webkit-flex-grow: .000001;
-    -moz-flex-grow: .000001;
-    -ms-flex-grow: .000001;
     flex-grow: .000001;
-    -webkit-flex-shrink: 1;
-    -moz-flex-shrink: 1;
-    -ms-flex-shrink: 1;
     flex-shrink: 1;
   }
 }
@@ -72,12 +54,10 @@ h4 {
 
 @keyframes progress {
   from {
-    -webkit-transform: rotate(0);
     transform: rotate(0);
   }
 
   to {
-    -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
   }
 }
@@ -142,23 +122,13 @@ h4 {
 }
 
 .pipeline {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -ms-flexbox;
-  display: -ms-flex;
   display: flex;
-  -webkit-flex-wrap: wrap;
-  -moz-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   height: 100%;
   padding: 0 5px;
 }
 
 .pipeline .pipeline-stage {
-  -webkit-flex: 0 0 auto;
-  -moz-flex: 0 0 auto;
-  -ms-flex: 0 0 auto;
   flex: 0 0 auto;
   min-height: 96px;
   padding: 15px 10px 30px;
@@ -221,14 +191,7 @@ h4 {
 
 @media (min-width: 600px) {
   .build-pipeline {
-    -webkit-flex-direction: row;
-    -moz-flex-direction: row;
-    -ms-flex-direction: row;
     flex-direction: row;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: -ms-flex;
     display: flex;
   }
 
