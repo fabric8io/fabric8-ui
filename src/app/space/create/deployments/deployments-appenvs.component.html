@@ -24,6 +24,6 @@
   </div>
 </div>
 
-<div class="cards-pf" *ngFor="let application of applications | async">
+<div *ngFor="let application of applications | async">
   <deployment-card-container [application]="application" [environments]="environments"></deployment-card-container>
 </div>
