@@ -127,7 +127,6 @@ export class StackLevelComponent {
 
             if (tab.license_analysis.status) {
                 this.licenseAnalysis.status = tab.license_analysis.status;
-
                 if (this.licenseAnalysis.status.toLowerCase() === 'stackconflict' &&
                     tab.license_analysis.conflict_packages &&
                     tab.license_analysis.conflict_packages.length) {

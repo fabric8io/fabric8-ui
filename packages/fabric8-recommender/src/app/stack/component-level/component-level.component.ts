@@ -345,7 +345,7 @@ export class ComponentLevelComponent implements OnChanges {
             let dependency: any, eachOne: ComponentInformationModel;
             this.headers = [
                 {
-                    name: 'Package name',
+                    name: 'Package Name',
                     class: 'medium',
                     order: 1
                 }, {
@@ -377,7 +377,7 @@ export class ComponentLevelComponent implements OnChanges {
                    class: 'small',
                    order: 8
                 }, {
-                    name: 'Github Dependants',
+                    name: 'Github Dependents',
                     class: 'large',
                     order: 9
                 }, {

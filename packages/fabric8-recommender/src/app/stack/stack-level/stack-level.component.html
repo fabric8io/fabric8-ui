@@ -3,7 +3,7 @@
         <div class="stat-container security-issues-stat">
             <div class="stat-box">
                 <h3>
-                    <span>Security Alert</span>
+                    <span>Security Issues</span>
                 </h3>
                 <div class="stat-content">
                     <div *ngIf="securityInfo" class="col-xs-12">
@@ -37,12 +37,12 @@
         <div class="stat-container outlier-stat">
             <div class="stat-box">
                 <h3>
-                    <span>Usage</span>
+                    <span>Usage Outliers</span>
                 </h3>
                 <div class="stat-content usage-outlier">
                     <div class="metric-container">
                         <div class="metric-desc">
-                            Components that aren't commonly used in your stack
+                            Components not used together
                         </div>
                         <div class="metric">
                             <span>{{stackLevelOutliers && stackLevelOutliers.usage && stackLevelOutliers.usage.length}}</span>
@@ -59,7 +59,7 @@
                 <div class="stat-content license-area" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() !== 'failure' && licenseAnalysis && licenseAnalysis.status.toLowerCase() !== 'nolicensedata'">
                     <div class="stack-license-text flex-3" *ngIf="licenseAnalysis.status.toLowerCase() === 'successful'">
                         <div class="metric-desc">
-                            Suggested Stack License
+                            Stack level license
                         </div>
                         <div class="metric metric-license-status">
                             <span>{{licenseAnalysis.stackLicenseText}}</span>
@@ -67,44 +67,46 @@
                     </div>
                     <div class="outlier-license flex-3" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'successful'">
                         <div class="metric-desc">
-                            No. of outliers
+                            Restrictive license(s)
                         </div>
                         <div class="metric">
                             <span>{{licenseAnalysis.licenseOutliersCount}}</span>
                         </div>
                     </div>
-                    <div class="conflict-license flex-3" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'stackconflict'">
+                    <div class="conflict-license flex-3" *ngIf="licenseAnalysis && (licenseAnalysis.status.toLowerCase() === 'stackconflict' || 
+                    licenseAnalysis.status.toLowerCase() === 'conflict')">
                         <div class="metric-desc">
-                            Result
+                            Stack level license
                         </div>
                         <div class="metric metric-license-status">
                             <span>
-                                Stack Conflict
+                                None
                             </span>
                         </div>
                     </div>
-                    <div 
+                    <!--<div 
                         class="conflict-license flex-3"
-                        *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'stackconflict' && licenseAnalysis.licenseStackConflictCount"
+                        *ngIf="licenseAnalysis && (licenseAnalysis.status.toLowerCase() === 'stackconflict' || licenseAnalysis.status.toLowerCase() === 'conflict') 
+                        && licenseAnalysis.licenseStackConflictCount"
                         [popover]="popLicenseTemplate"
                         popoverTitle="All Stack License Conflicts" 
                         placement="left"
                         containerClass="conflict-license-container"
                         triggers="mouseenter:mouseleave">
                         <div class="metric-desc">
-                            No. of conflicts
+                            License(s) can not be used together
                         </div>
                         <div class="metric">
                             <span>
                                 {{licenseAnalysis.licenseStackConflictCount}}
                             </span>
                         </div>
-                    </div>
+                    </div>-->
                     <div 
                         class="conflict-license flex-3"
-                        *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'stackconflict' && licenseAnalysis.licenseStackConflictCount === 0">
+                        *ngIf="licenseAnalysis && (licenseAnalysis.status.toLowerCase() === 'stackconflict' || licenseAnalysis.status.toLowerCase() === 'conflict')">
                         <div class="metric-desc">
-                            No. of conflicts
+                            Licenses that can't be used together
                         </div>
                         <div class="metric">
                             <span>
@@ -112,10 +114,10 @@
                             </span>
                         </div>
                     </div>
-                    <ng-template #popLicenseTemplate>
+                    <!--<ng-template #popLicenseTemplate>
                         <div 
                             class="license-template flex-4" 
-                            *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'stackconflict'">
+                            *ngIf="licenseAnalysis && (licenseAnalysis.status.toLowerCase() === 'stackconflict' || licenseAnalysis.status.toLowerCase() === 'conflict')">
                             <div class="packages flex-2">
                                 <div *ngFor="let conflict of licenseAnalysis.licenseConflictsFull" class="conflict-group">
                                     <div><span>{{conflict.package1}}</span><span class="fa fa-arrow-right"></span></div>
@@ -129,20 +131,20 @@
                                 </div>
                             </div>
                         </div>
-                    </ng-template>
+                    </ng-template>-->
                     <div class="conflict-license flex-3" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'componentconflict'">
                             <div class="metric-desc">
-                                Result
+                                Stack level license
                             </div>
                             <div class="metric metric-license-status">
                                 <span>
-                                    Component Conflict
+                                    None
                                 </span>
                             </div>
                         </div>
                     <div class="conflict-license flex-3" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'componentconflict'">
                         <div class="metric-desc">
-                            No. of conflicts
+                            Licenses that can't be used together
                         </div>
                         <div class="metric">
                             <span>
@@ -152,17 +154,17 @@
                     </div>
                     <div class="unknown-license flex-3" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'unknown'">
                         <div class="metric-desc">
-                            Result
+                            Stack level license
                         </div>
                         <div class="metric metric-license-status">
                             <span>
-                                Unknown
+                                None
                             </span>
                         </div>
                     </div>
                     <div class="unknown-license flex-3" *ngIf="licenseAnalysis && licenseAnalysis.status.toLowerCase() === 'unknown'">
                         <div class="metric-desc">
-                            No Of Unknowns
+                            Unknown license(s)
                         </div>
                         <div class="metric">
                             <span>
@@ -172,10 +174,10 @@
                     </div>
                 </div>
                 <div class="stat-content center-text" *ngIf="licenseAnalysis && licenseAnalysis.status && licenseAnalysis.status.toLowerCase() === 'failure'">
-                        Could not get license data for this stack. This may be due to some failure.
+                        Sorry! we were unable to get license data for this stack.
                 </div>
                 <div class="stat-content center-text" *ngIf="licenseAnalysis && licenseAnalysis.status && licenseAnalysis.status.toLowerCase() === 'nolicensedata'">
-                        No license data available.
+                        Sorry! we were unable to get license data for this stack.
                 </div>
             </div>
         </div>
