@@ -1,0 +1,15 @@
+<div class="progress-container progress-description-left progress-label-right">
+  <div class="progress-description">
+    {{ resourceTitle }}
+  </div>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="usedPercent" aria-valuemin="0" aria-valuemax="100"
+      [style.width]="usedPercent + '%'" data-toggle="tooltip" title="{{ usedPercent }}% Used">
+      <span><strong id="resourceCardLabel">{{ used }} of {{ total }}</strong></span>
+    </div>
+    <div class="progress-bar progress-bar-remaining" role="progressbar" [attr.aria-valuenow]="unusedPercent" aria-valuemin="0" aria-valuemax="100"
+      [style.width]="unusedPercent + '%'" data-toggle="tooltip" title="{{ unusedPercent }}% Available">
+      <span class="sr-only">{{ unusedPercent }}% Available</span>
+    </div>
+  </div>
+</div>
