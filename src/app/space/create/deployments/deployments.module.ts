@@ -10,6 +10,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { DeploymentsComponent } from '../deployments/deployments.component';
 import { DeploymentCardComponent } from '../deployments/components/deployment-card/deployment-card.component';
 import { ResourceCardComponent } from '../deployments/components/resource-card.component';
+import { UtilizationBarComponent } from '../deployments/components/utilization-bar.component';
 import { DeploymentsRoutingModule } from './deployments-routing.module';
 
 import { DeploymentsService } from '../deployments/services/deployments.service';
@@ -29,7 +30,8 @@ import { ChartModule } from 'patternfly-ng';
   declarations: [
     DeploymentsComponent,
     DeploymentCardComponent,
-    ResourceCardComponent
+    ResourceCardComponent,
+    UtilizationBarComponent
   ],
   providers: [
     BsDropdownConfig,

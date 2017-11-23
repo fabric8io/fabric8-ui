@@ -54,12 +54,7 @@
           </div>
           <div [collapse]="resourcesCollapsed">
             <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
-              <div class="card-pf">
-                <div class="card-pf-body resource-card-body">
-                  <resource-card [stat]="deploymentsService.getCpuStat(spaceId | async, environment.environmentId)" [resourceTitle]="'CPU (Cores)'"></resource-card>
-                  <resource-card [stat]="deploymentsService.getMemoryStat(spaceId | async, environment.environmentId)" [resourceTitle]="'Memory (MB)'"></resource-card>
-                </div>
-              </div>
+              <resource-card [spaceId]="spaceId | async" [environmentId]="environment.environmentId"></resource-card>
             </div>
           </div>
         </div>

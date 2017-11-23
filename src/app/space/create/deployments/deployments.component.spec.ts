@@ -37,11 +37,11 @@ class FakeDeploymentCardComponent {
   template: ''
 })
 class FakeResourceCardComponent {
-  @Input() resourceTitle: string;
-  @Input() stat: Observable<Stat>;
+  @Input() spaceId: string;
+  @Input() environmentId: string;
 }
 
-describe('AppsComponent', () => {
+describe('DeploymentsComponent', () => {
 
   let component: DeploymentsComponent;
   let fixture: ComponentFixture<DeploymentsComponent>;
@@ -68,6 +68,7 @@ describe('AppsComponent', () => {
     spyOn(mockSvc, 'getApplications').and.callThrough();
     spyOn(mockSvc, 'getEnvironments').and.callThrough();
     spyOn(mockSvc, 'getPodCount').and.callThrough();
+    spyOn(mockSvc, 'getVersion').and.callThrough();
     spyOn(mockSvc, 'getCpuStat').and.callThrough();
     spyOn(mockSvc, 'getMemoryStat').and.callThrough();
 
