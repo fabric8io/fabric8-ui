@@ -8,6 +8,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { DeploymentsComponent } from '../deployments/deployments.component';
+import { DeploymentsResourceUsageComponent } from './deployments-resource-usage.component';
 import { DeploymentCardComponent } from '../deployments/components/deployment-card/deployment-card.component';
 import { ResourceCardComponent } from '../deployments/components/resource-card.component';
 import { UtilizationBarComponent } from '../deployments/components/utilization-bar.component';
@@ -30,6 +31,7 @@ import { ChartModule } from 'patternfly-ng';
   declarations: [
     DeploymentsComponent,
     DeploymentCardComponent,
+    DeploymentsResourceUsageComponent,
     ResourceCardComponent,
     UtilizationBarComponent
   ],

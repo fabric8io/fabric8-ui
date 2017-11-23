@@ -33,12 +33,11 @@ class FakeDeploymentCardComponent {
 }
 
 @Component({
-  selector: 'resource-card',
+  selector: 'deployments-resource-usage',
   template: ''
 })
-class FakeResourceCardComponent {
-  @Input() spaceId: string;
-  @Input() environmentId: string;
+class FakeDeploymentsResourceUsageComponent {
+  @Input() environments: Observable<Environment[]>;
 }
 
 describe('DeploymentsComponent', () => {
@@ -47,14 +46,15 @@ describe('DeploymentsComponent', () => {
   let fixture: ComponentFixture<DeploymentsComponent>;
   let mockSvc: DeploymentsService;
   let spaces: Spaces;
+  let mockEnvironments = Observable.of([
+    { environmentId: 'a1', name: 'stage' },
+    { environmentId: 'b2', name: 'prod' }
+  ]);
 
   beforeEach(() => {
     mockSvc = {
       getApplications: () => Observable.of(['foo-app', 'bar-app']),
-      getEnvironments: () => Observable.of([
-        { environmentId: 'a1', name: 'stage' },
-        { environmentId: 'b2', name: 'prod' }
-      ]),
+      getEnvironments: () => mockEnvironments,
       getPodCount: () => { throw 'Not Implemented'; },
       getVersion: () => { throw 'NotImplemented'; },
       getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
@@ -74,7 +74,11 @@ describe('DeploymentsComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
-      declarations: [ DeploymentsComponent, FakeDeploymentCardComponent, FakeResourceCardComponent ],
+      declarations: [
+        DeploymentsComponent,
+        FakeDeploymentCardComponent,
+        FakeDeploymentsResourceUsageComponent
+      ],
       providers: [
         { provide: DeploymentsService, useValue: mockSvc },
         { provide: Spaces, useValue: spaces }
@@ -104,6 +108,14 @@ describe('DeploymentsComponent', () => {
       ]);
       done();
     });
+  });
+
+  it('should pass values to children resource usage components', () => {
+    let resourceUsageComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentsResourceUsageComponent));
+    expect(resourceUsageComponents.length).toEqual(1);
+
+    let resourceUsageComponent = resourceUsageComponents[0].componentInstance;
+    expect(resourceUsageComponent.environments).toEqual(mockEnvironments);
   });
 
 });
