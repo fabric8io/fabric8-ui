@@ -20,34 +20,31 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { Spaces } from 'ngx-fabric8-wit';
 
 @Component({
-  selector: 'deployment-card',
+  selector: 'deployment-card-container',
   template: ''
 })
-class FakeDeploymentCardComponent {
-  @Input() applicationId: string;
-  @Input() environment: Environment;
+class FakeDeploymentCardContainerComponent {
+  @Input() environments: Observable<Environment[]>;
+  @Input() application: string;
 }
 
 describe('DeploymentsAppEnvsComponent', () => {
 
   let component: DeploymentsAppEnvsComponent;
   let fixture: ComponentFixture<DeploymentsAppEnvsComponent>;
-  let mockEnvironments: Observable<Environment[]>;
-  let mockApplications: Observable<string[]>;
+  let mockApplicationData = ['first', 'second'];
+  let mockApplications = Observable.of(mockApplicationData);
+  let mockEnvironments = Observable.of([
+    { environmentId: "id1", name: "envId1"},
+    { environmentId: "id2", name: "envId2"}
+  ]);
 
   beforeEach(() => {
-    mockEnvironments = Observable.of([
-      { environmentId: "id1", name: "envId1"},
-      { environmentId: "id2", name: "envId2"}
-    ]);
-
-    mockApplications = Observable.of(['first', 'second']);
-
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
       declarations: [
         DeploymentsAppEnvsComponent,
-        FakeDeploymentCardComponent
+        FakeDeploymentCardContainerComponent
       ]
     });
 
@@ -60,24 +57,14 @@ describe('DeploymentsAppEnvsComponent', () => {
   });
 
   it('should created children components with proper objects', () => {
-    let arrayOfComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
-    expect(arrayOfComponents.length).toEqual(4);
+    let arrayOfComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
+    expect(arrayOfComponents.length).toEqual(mockApplicationData.length);
 
-    let firstCard = arrayOfComponents[0].componentInstance;
-    expect(firstCard.applicationId).toEqual('first');
-    expect(firstCard.environment.environmentId).toEqual('id1');
-
-    let secondCard = arrayOfComponents[1].componentInstance;
-    expect(secondCard.applicationId).toEqual('first');
-    expect(secondCard.environment.environmentId).toEqual('id2');
-
-    let thirdCard = arrayOfComponents[2].componentInstance;
-    expect(thirdCard.applicationId).toEqual('second');
-    expect(thirdCard.environment.environmentId).toEqual('id1');
-
-    let fourthCard = arrayOfComponents[3].componentInstance;
-    expect(fourthCard.applicationId).toEqual('second');
-    expect(fourthCard.environment.environmentId).toEqual('id2');
+    mockApplicationData.forEach((appName, index) => {
+      let container = arrayOfComponents[index].componentInstance;
+      expect(container.application).toEqual(appName);
+      expect(container.environments).toEqual(mockEnvironments);
+    });
   });
 
 });

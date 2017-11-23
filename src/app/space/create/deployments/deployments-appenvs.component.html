@@ -25,14 +25,5 @@
 </div>
 
 <div class="cards-pf" *ngFor="let application of applications | async">
-  <div class="container-fluid container-cards-pf">
-    <div class="row row-cards-pf">
-      <div class="col-xs-6 col-sm-4 col-md-2">
-        <h4>
-          {{application}}
-        </h4>
-      </div>
-      <deployment-card class="col-xs-6 col-sm-4 col-md-3" [applicationId]="application" [environment]="environment" *ngFor="let environment of environments | async"></deployment-card>
-    </div>
-  </div>
+  <deployment-card-container [application]="application" [environments]="environments"></deployment-card-container>
 </div>
