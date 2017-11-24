@@ -92,10 +92,10 @@ export class StackDetailsComponent implements OnChanges {
             if (tab.content && tab.content.user_stack_info) {
                 let userStackInfo: UserStackInfoModel = tab.content.user_stack_info;
                 if (userStackInfo.dependencies) {
-                    analyzed = userStackInfo.dependencies.length;
+                    analyzed = userStackInfo.analyzed_dependencies.length;
                 }
                 if (userStackInfo.analyzed_dependencies) {
-                    total = userStackInfo.analyzed_dependencies.length;
+                    total = userStackInfo.dependencies.length;
                 }
                 if (userStackInfo.unknown_dependencies) {
                     unknown = userStackInfo.unknown_dependencies.length;
@@ -207,7 +207,14 @@ export class StackDetailsComponent implements OnChanges {
                     this.tabSelection(this.tabs[0]);
                 }
             });
-        } else {
+        } else if(data && data.hasOwnProperty('error')){
+            this.handleError({
+                message: "Analysis for your stack is in progress...",
+                code: data.statusCode,
+                title: 'Updating ...'
+            });
+        }
+        else {
             this.handleError({
                 message: data.error,
                 code: data.statusCode,

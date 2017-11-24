@@ -51,7 +51,13 @@ export class StackReportInShortComponent implements OnChanges {
                                 this.buildReportInShort();
                             });
                         }
-                    } else {
+                    } else if(data && data.hasOwnProperty('error')) {
+                        // Handle Errors here 'API error'
+                        this.handleError({
+                            title: "Analysis for your stack is in progress..."
+                        });
+                    }
+                    else {
                         // Handle Errors here 'API error'
                         this.handleError({
                             title: data.error
