@@ -1,5 +1,5 @@
 <div class="combobox-container" [formGroup]="form" [class.form-group]="inline">
-  <label title="organisation" [class.field-required]="field.required" [class.col-xs-12]="inline" [class.col-sm-4]="inline">{{field.label}}</label>
+  <label title="organization" [class.field-required]="field.required" [class.col-xs-12]="inline" [class.col-sm-4]="inline">{{field.label}}</label>
   <div [class.width-100]="!field.enabled" class="input-group" [style.padding]="inline ? '0 20px' : ''">
     <input type="text" title="{{field.label}}" [class.form-control-danger]="!form.valid" id="{{field.name}}"
       name="{{field.name}}" class="user-select-none combobox form-control" [class.col-xs-12]="inline" [class.col-sm-8]="inline" readonly="true"
