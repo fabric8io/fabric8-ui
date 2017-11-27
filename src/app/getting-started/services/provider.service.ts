@@ -1,4 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
+import { Http, Response, Headers, RequestOptions, RequestOptionsArgs } from '@angular/http';
+
 import { Observable } from 'rxjs';
 
 import { AuthenticationService,AUTH_API_URL } from 'ngx-login-client';
@@ -32,7 +34,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   linkGitHub(redirect: string): void {
-    this.link("github", redirect);
+    this.link("https://github.com", redirect);
   }
 
   /**
@@ -62,6 +64,21 @@ export class ProviderService {
     }
     this.redirectToAuth(url);
   }
+
+  /**
+   * 
+   * @param url 
+   */
+
+   getLegacyLinkingUrl(provider: string, redirect: string): string{
+    let parsedToken = jwt_decode(this.auth.getToken());    
+    let url = this.loginUrl + `/session?`
+    + "clientSession=" + parsedToken.client_session
+    + "&sessionState=" + parsedToken.session_state
+    + "&redirect=" + redirect // brings us back to Getting Started.
+    + "&provider="+provider;
+    return url
+   }
 
   // Private
 

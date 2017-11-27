@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Logger, Notification, NotificationType, Notifications } from 'ngx-base';
-import { AuthenticationService, UserService, User } from 'ngx-login-client';
+import { AuthenticationService, UserService, User,AUTH_API_URL } from 'ngx-login-client';
 
 import { ExtUser, GettingStartedService } from './services/getting-started.service';
 import { ProviderService } from './services/provider.service';
@@ -11,6 +12,7 @@ import {Fabric8UIConfig} from "../shared/config/fabric8-ui-config";
 import {Observable} from "rxjs/Observable";
 import {Http, Headers, RequestOptions, RequestOptionsArgs, Response} from "@angular/http";
 import { pathJoin } from "../../a-runtime-console/kubernetes/model/utils";
+import * as jwt_decode from 'jwt-decode';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -31,6 +33,14 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   subscriptions: Subscription[] = [];
   username: string;
   usernameInvalid: boolean = false;
+  accessToken: string;
+  redirect: string;
+  linkingApiURL: string; 
+  formMethod: string = "POST";
+  githubURL: string = "https://github.com";
+  openShiftURL: string;
+  oldLinkingServer : string;
+
 
   // handle startup on kubernetes
   kubeMode: boolean = false;
@@ -47,9 +57,20 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       private providerService: ProviderService,
       private notifications: Notifications,
       private router: Router,
+      @Inject(AUTH_API_URL) apiUrl: string,
       private userService: UserService) {
 
+    // will be used to connect OpenShift Online.
+    this.oldLinkingServer = apiUrl;
+
+    // will be used in the non-angular html FORM's ACTION during the POST request
+    // to connect GitHub
+    this.linkingApiURL = apiUrl + 'token/link';
+
+    this.redirect = window.location.origin + "/_gettingstarted?wait=true";     
+
     if (fabric8UIConfig) {
+      this.openShiftURL = fabric8UIConfig.tenantApiUrl;
       let flag = fabric8UIConfig["kubernetesMode"];
       if (flag === "true") {
         this.kubeMode = true;
@@ -83,6 +104,10 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
         this.username = this.loggedInUser.attributes.username;
         this.registrationCompleted = (user as ExtUser).attributes.registrationCompleted;
 
+        // Probably should put it somewhere where the 
+        // code would surely be executed if logged in.
+        this.accessToken = this.auth.getToken(); //localStorage.getItem("auth_token");
+      
         // Todo: Remove after summit?
         if (!this.registrationCompleted) {
           this.saveUsername();
@@ -119,6 +144,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   get isConnectAccountsDisabled(): boolean {
     return !(this.authGitHub && !this.gitHubLinked || this.authOpenShift && !this.openShiftLinked)
       || (this.gitHubLinked && this.openShiftLinked);
+
   }
 
   /**
@@ -144,14 +170,47 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   /**
    * Link GitHub and/or OpenShift accounts
    */
-  connectAccounts(): void {
-    if (this.authGitHub && !this.gitHubLinked && this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkAll(window.location.origin + "/_gettingstarted?wait=true");
-    } else if (this.authGitHub && !this.gitHubLinked) {
-      this.providerService.linkGitHub(window.location.origin + "/_gettingstarted?wait=true");
-    } else if (this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkOpenShift(window.location.origin + "/_gettingstarted?wait=true");
+  connectAccounts(): boolean {
+
+    // This method is called on form submit.
+    // If Github Or Github+OSO is being linked, then form POST is done to /api/token/link.
+    // If only OSO is being linked, then form POST is prevented and a redirection is used.
+    
+  
+    if ( (this.authOpenShift && !this.openShiftLinked) && (this.authGitHub && !this.gitHubLinked) ){  
+
+        console.log("Both openshift and github to be linked");
+
+        let finalRedirect = window.location.origin + "/_gettingstarted?wait=true";     
+
+        let parsedToken = jwt_decode(this.auth.getToken());
+      
+        // code repition, but temporary.
+        // Will soon migrate this to use the new way of 
+        // linking using the auth service.
+        /*
+        let url = `${this.oldLinkingServer}/link/session?`
+          + "clientSession=" + parsedToken.client_session
+          + "&sessionState=" + parsedToken.session_state
+          + "&redirect=" + finalRedirect // brings us back to Getting Started.
+          + "&provider=openshift-v3";
+        */
+        let url = this.providerService.getLegacyLinkingUrl("openshift-v3",finalRedirect)
+        
+        this.redirect = url; // triggeres OSO linking the old-fashioned way after github linking.
+        return true;
+        
     }
+    if (this.authOpenShift && !this.openShiftLinked) {
+      console.log("only openshift to be linked")
+      this.providerService.linkOpenShift(window.location.origin + "/_gettingstarted?wait=true");
+
+      // disable FORM behaviour ( not really needed since browser would have been redirected 
+      // before this line is reached )
+      return false;
+    }
+    console.log("only github to be linked")    
+    return true;
   }
 
   /**
