@@ -6,6 +6,7 @@ import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2';
 
 import { RemainingCharsCountModule } from 'patternfly-ng';
 
+import { OwnerGuard } from '../../shared/owner-guard.service';
 import { UpdateComponent } from './update.component';
 import { UpdateRoutingModule } from './update-routing.module';
 
@@ -19,6 +20,7 @@ import { UpdateRoutingModule } from './update-routing.module';
     UpdateRoutingModule
   ],
   declarations: [ UpdateComponent ],
+  providers: [ OwnerGuard ]
 })
 export class UpdateModule {
   constructor(http: Http) {}
