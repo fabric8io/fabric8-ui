@@ -1,20 +1,25 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { Headers, Http} from '@angular/http';
 import { AuthenticationService,AUTH_API_URL } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import * as jwt_decode from 'jwt-decode';
+import { Link } from './link';
 
 @Injectable()
 export class ProviderService {
   private loginUrl: string;
+  private linkUrl: string;
 
   constructor(
+      private http: Http,  
       private auth: AuthenticationService,
       private logger: Logger,
       @Inject(AUTH_API_URL) apiUrl: string) {
     this.loginUrl = apiUrl + 'link';
+    this.linkUrl = apiUrl + 'token/link';
   }
 
   /**
@@ -31,8 +36,42 @@ export class ProviderService {
    *
    * @param redirect URL to be redirected to after successful account linking
    */
-  linkGitHub(redirect: string): void {
-    this.link("github", redirect);
+  linkGitHub(redirect: string): void{
+    let headers = new Headers();
+    let githubLinkURL = this.linkUrl + `redirect=` + redirect ;
+
+    this.http
+    .get(this.linkUrl, { headers: headers })
+    .map(response => {
+      let redirectInfo = response.json() as Link;
+      this.redirectToAuth(redirectInfo.redirect);
+    })
+    .catch((error) => {
+      return this.handleError(error);
+    });
+  }
+
+   /**
+   * Link a GitHub and OpenShift Online account to the user account
+   *
+   * @param redirect URL to be redirected to after successful account linking
+   */
+  linkGitHubAndOpenShift(redirect: string): void {
+
+    let parsedToken = jwt_decode(this.auth.getToken());
+    // the new url is /api/link/session 
+    let opensShiftLinkingRedirectUrl = this.getLegacyLinkingUrl("openshift-v3",redirect);
+    this.linkGitHub(opensShiftLinkingRedirectUrl);
+  }
+
+  getLegacyLinkingUrl(provider: string, redirect: string): string{
+    let parsedToken = jwt_decode(this.auth.getToken());    
+    let url = this.loginUrl + `/session?`
+    + "clientSession=" + parsedToken.client_session
+    + "&sessionState=" + parsedToken.session_state
+    + "&redirect=" + redirect // brings us back to Getting Started.
+    + "&provider="+provider;
+    return url
   }
 
   /**
