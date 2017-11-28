@@ -57,7 +57,12 @@ import {
   UserService
 }                             from 'ngx-login-client';
 import { WidgetsModule }      from 'ngx-widgets';
-import { ActionModule, ListModule, TreeListComponent, PatternFlyNgModule, ChartModule } from 'patternfly-ng';
+import {
+  ActionModule,
+  ChartModule,
+  ListModule,
+  TreeListComponent,
+  PatternFlyNgModule }        from 'patternfly-ng';
 
 /*
  * Platform and Environment providers/directives/pipes
