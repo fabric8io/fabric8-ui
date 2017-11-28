@@ -15,6 +15,10 @@ import { DeploymentsService } from '../../services/deployments.service';
 import { CpuStat } from '../../models/cpu-stat';
 import { MemoryStat } from '../../models/memory-stat';
 
+// Makes patternfly charts available
+import { ChartModule } from 'patternfly-ng';
+import 'patternfly/dist/js/patternfly-settings.js';
+
 describe('DeploymentCardComponent', () => {
 
   let component: DeploymentCardComponent;
@@ -39,7 +43,7 @@ describe('DeploymentCardComponent', () => {
     spyOn(mockSvc, 'getVersion').and.callThrough();
 
     TestBed.configureTestingModule({
-      imports: [ CollapseModule.forRoot() ],
+      imports: [ CollapseModule.forRoot(), ChartModule],
       declarations: [ DeploymentCardComponent ],
       providers: [ { provide: DeploymentsService, useValue: mockSvc } ]
     });
