@@ -34,6 +34,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   appliedFilters: Filter[];
   chePollSubscription: Subscription;
   chePollTimer: Observable<any>;
+  cheRunning: boolean = false;
   codebases: Codebase[] = [];
   context: Context;
   currentSortField: SortField;
@@ -220,6 +221,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       .map(che => {
         if (che != undefined && che.running === true) {
           this.chePollSubscription.unsubscribe();
+          this.cheRunning = true;
           this.broadcaster.broadcast('cheStateChange', che);
         }
       })
@@ -229,30 +231,19 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   }
 
   /**
-   * Fetches the state of Che and propagates it to subscribers.
-   */
-  private fetchCheState(): void {
-    // Get state for Che server
-    this.subscriptions.push(this.cheService.getState()
-      .subscribe(che => {
-        this.broadcaster.broadcast('cheStateChange', che);
-      }, error => {
-        this.broadcaster.broadcast('cheStateChange');
-      }));
-  }
-
-  /**
    * Start the Che server
    */
   private startChe(): void {
     // Get state for Che server
     this.subscriptions.push(this.cheService.start()
       .subscribe(che => {
+        this.cheRunning = che && che.running;
         this.broadcaster.broadcast('cheStateChange', che);
         if (che == undefined || che.running !== true) {
           this.cheStatePoll();
         }
       }, error => {
+        this.cheRunning = false;
         this.broadcaster.broadcast('cheStateChange');
       }));
   }
@@ -265,11 +256,13 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.cheService.getState()
       .subscribe(che => {
         if (che !== undefined && che.running === true) {
+          this.cheRunning = true;
           this.broadcaster.broadcast('cheStateChange', che);
         } else {
           this.startChe();
         }
       }, error => {
+        this.cheRunning = false;
         this.broadcaster.broadcast('cheStateChange');
       }));
   }
@@ -291,8 +284,6 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           this.allCodebases = [];
           this.codebases = [];
         }
-        // re-fetch Che state to have consistent information inside all related components:
-        this.fetchCheState();
       }, error => {
         this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
       }));

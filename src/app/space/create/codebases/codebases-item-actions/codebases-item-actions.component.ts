@@ -17,11 +17,11 @@ import {IModalHost} from "../../../wizard/models/modal-host";
   styleUrls: ['./codebases-item-actions.component.less']
 })
 export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
+  @Input() cheRunning: boolean;
   @Input() codebase: Codebase;
   @Input() index: number = -1;
   @ViewChild('deleteCodebaseDialog') deleteCodebaseDialog: IModalHost;
 
-  cheRunning: boolean = false;
   subscriptions: Subscription[] = [];
   workspaceBusy: boolean = false;
   dialog: Dialog;
@@ -41,13 +41,6 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(this.broadcaster
-      .on('cheStateChange')
-      .subscribe((che: Che) => {
-        if (che !== undefined && che.running === true) {
-          this.cheRunning = true;
-        }
-      }));
   }
 
   // Actions

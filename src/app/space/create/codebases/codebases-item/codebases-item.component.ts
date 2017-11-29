@@ -14,11 +14,11 @@ import { NotificationType as NotificationTypes } from 'patternfly-ng';
   styleUrls: ['./codebases-item.component.less']
 })
 export class CodebasesItemComponent implements OnDestroy, OnInit {
+  @Input() cheRunning: boolean;
   @Input() codebase: Codebase;
   @Input() index: number = -1;
 
   cheErrorMessage: string = "Your Workspaces failed to load";
-  cheRunning: boolean = false;
   cheRunningMessage: string = "Your Workspaces have loaded successfully";
   cheStarting: boolean = false;
   cheStartingMessage: string = "Your Workspaces are loading...";
@@ -53,7 +53,6 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
         } else if (che.running === true) {
           this.notificationMessage = this.cheRunningMessage;
           this.notificationType = NotificationTypes.SUCCESS;
-          this.cheRunning = true;
         } else if (che.running === false) {
           this.notificationMessage = this.cheStartingMessage;
           this.notificationType = NotificationTypes.INFO;
