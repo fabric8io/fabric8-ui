@@ -28,7 +28,10 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   linkAll(redirect: string): void {
-    this.link(null, redirect);
+        let openShiftLinkingRedirectUrl = this.getLegacyLinkingUrl("openshift-v3",redirect);
+        // after linking github, proceed with linking openshift-v3,
+        // hence passing openshift linking url as a callback.
+        this.linkGitHub(openShiftLinkingRedirectUrl);
   }
 
   /**
@@ -36,42 +39,32 @@ export class ProviderService {
    *
    * @param redirect URL to be redirected to after successful account linking
    */
-  linkGitHub(redirect: string): void{
-    let headers = new Headers();
-    let githubLinkURL = this.linkUrl + `redirect=` + redirect ;
-
+  linkGitHub(next: string): void{
+    let githubLinkURL = this.linkUrl + "?for=https://github.com&redirect=" +  encodeURIComponent(next) ;
+    console.log("attempting to connect github "+ githubLinkURL);
     this.http
-    .get(this.linkUrl, { headers: headers })
+    .get(githubLinkURL)
     .map(response => {
+      // TODO: what happens to this when the response is not a pure json
       let redirectInfo = response.json() as Link;
-      this.redirectToAuth(redirectInfo.redirect);
+      this.redirectToAuth(redirectInfo.redirect_location);
+      console.log(redirectInfo);
     })
     .catch((error) => {
+      console.log("error while linking github "+ githubLinkURL);
       return this.handleError(error);
-    });
+    }).subscribe();
   }
-
-   /**
-   * Link a GitHub and OpenShift Online account to the user account
-   *
-   * @param redirect URL to be redirected to after successful account linking
-   */
-  linkGitHubAndOpenShift(redirect: string): void {
-
-    let parsedToken = jwt_decode(this.auth.getToken());
-    // the new url is /api/link/session 
-    let opensShiftLinkingRedirectUrl = this.getLegacyLinkingUrl("openshift-v3",redirect);
-    this.linkGitHub(opensShiftLinkingRedirectUrl);
-  }
+  
 
   getLegacyLinkingUrl(provider: string, redirect: string): string{
     let parsedToken = jwt_decode(this.auth.getToken());    
-    let url = this.loginUrl + `/session?`
+    let url = this.loginUrl + "/session?"
     + "clientSession=" + parsedToken.client_session
     + "&sessionState=" + parsedToken.session_state
     + "&redirect=" + redirect // brings us back to Getting Started.
-    + "&provider="+provider;
-    return url
+    + "&provider=" + provider;
+    return url;
   }
 
   /**

@@ -1,4 +1,4 @@
 export class Link {
-    redirect: string;
+    redirect_location: string;
 }
   
