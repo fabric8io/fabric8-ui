@@ -53,6 +53,7 @@ set +e
 if [ $? -eq 0 ]; then
   echo 'CICO: functional tests OK'
   docker exec fabric8-ui-builder npm run semantic-release
+  docker exec -u root fabric8-ui-builder cp -r /home/fabric8/fabric8-ui/dist /
   ## All ok, deploy
   if [ $? -eq 0 ]; then
     echo 'CICO: build OK'
