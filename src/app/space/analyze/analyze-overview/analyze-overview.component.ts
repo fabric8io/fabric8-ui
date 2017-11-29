@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewEncapsulation, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { IWorkflow } from './models/workflow';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { BsModalService } from 'ngx-bootstrap/modal';
