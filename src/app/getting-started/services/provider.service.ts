@@ -30,7 +30,7 @@ export class ProviderService {
   linkAll(redirect: string): void {
         let openShiftLinkingRedirectUrl = this.getLegacyLinkingUrl("openshift-v3",redirect);
         // after linking github, proceed with linking openshift-v3,
-        // hence passing openshift linking url as a callback.
+        // hence passing openshift linking url as a redirect.
         this.linkGitHub(openShiftLinkingRedirectUrl);
   }
 
