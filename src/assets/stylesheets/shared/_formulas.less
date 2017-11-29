@@ -36,7 +36,10 @@
   }
   .margin-loop(@i - 1);
 }
-.margin-loop(15);
+/*
+ * maximum number that can be used in the padding-loop and margin-loop formulas
+  */
+.margin-loop(50);
 
 @include: padding-x;
 @include: margin-x;

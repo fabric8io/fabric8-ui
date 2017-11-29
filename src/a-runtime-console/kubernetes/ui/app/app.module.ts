@@ -20,7 +20,6 @@ import {NamespaceScope} from "../../service/namespace.scope";
 import {NamespaceService} from "../../service/namespace.service";
 import {AppListPageComponent} from "./list-page/list-page.app.component";
 import {AppListComponent} from "./list/list.app.component";
-import {AppListToolbarComponent} from "./list-toolbar/list-toolbar.app.component";
 import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
@@ -44,7 +43,6 @@ import {AppRoutingModule} from "./app-routing.module";
   ],
   declarations: [
     AppListPageComponent,
-    AppListToolbarComponent,
     AppListComponent,
   ],
   providers: [

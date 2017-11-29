@@ -18,7 +18,6 @@ import { RequestOptions, BaseRequestOptions, Http } from "@angular/http";
 import { RestangularModule } from "ng2-restangular";
 import { AppListPageComponent } from "./list-page.app.component";
 import { AppListComponent } from "../list/list.app.component";
-import { AppListToolbarComponent } from "../list-toolbar/list-toolbar.app.component";
 import { Fabric8CommonModule } from "../../../../common/common.module";
 import { KubernetesStoreModule } from "../../../kubernetes.store.module";
 import { ModalModule } from "ngx-modal";
@@ -62,7 +61,6 @@ describe('AppListPage', () => {
       declarations: [
         AppListPageComponent,
         AppListComponent,
-        AppListToolbarComponent,
       ],
       providers: [
         {

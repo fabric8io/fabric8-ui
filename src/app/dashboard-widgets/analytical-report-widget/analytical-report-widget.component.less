@@ -4,17 +4,21 @@
   -ms-transform: translate(@x, @y);
   transform: translate(@x, @y);
 }
+.recommender-selector {
+  @media (min-width: @screen-sm-min) { float: right; }
+  @media (max-width: @screen-xs-min) { clear: right; }
+}
 .card-pf {
   &.analytical-report-widget {
     position: relative;
-    overflow: auto;
     .fifty-shades-of-grey {
       color: @color-pf-black-500;
     }
     .fabric8-stack-analysis {
-      position: relative;
-      padding: 0 10px;
-      margin-top: 20px;
+      margin-top: 5px;
+      height: 370px;
+      @media (max-width: @screen-xs-min) { height: 335px; }
+      overflow-y: scroll;
       .recommender-overlay {
         position: absolute;
         top: 0;

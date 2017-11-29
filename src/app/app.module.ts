@@ -57,7 +57,12 @@ import {
   UserService
 }                             from 'ngx-login-client';
 import { WidgetsModule }      from 'ngx-widgets';
-import { ActionModule, ListModule, TreeListComponent, PatternFlyNgModule } from 'patternfly-ng';
+import {
+  ActionModule,
+  ChartModule,
+  ListModule,
+  TreeListComponent,
+  PatternFlyNgModule }        from 'patternfly-ng';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -145,6 +150,7 @@ export type StoreType = {
     BrowserAnimationsModule,
     BrowserModule,
     BsDropdownModule.forRoot(),
+    ChartModule,
     FormsModule,
     HttpModule,
     KubernetesRestangularModule,

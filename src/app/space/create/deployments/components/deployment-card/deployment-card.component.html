@@ -10,12 +10,23 @@
       </button>
       <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="kebab" role="menu" *dropdownMenu>
         <li>
-          <a>Action</a>
+          <a>View logs</a>
+        </li>
+        <li>
+          <a>View OpenShift Console</a>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <a>Open Application</a>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <a>Delete</a>
         </li>
       </ul>
     </div>
     <div [collapse]="collapsed">
-      Detailed Information Placeholder
+      <pfng-chart-sparkline [config]="config" [chartData]="data"></pfng-chart-sparkline>
     </div>
   </div>
 </div>

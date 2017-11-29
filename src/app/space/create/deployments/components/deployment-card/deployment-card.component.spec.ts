@@ -15,6 +15,10 @@ import { DeploymentsService } from '../../services/deployments.service';
 import { CpuStat } from '../../models/cpu-stat';
 import { MemoryStat } from '../../models/memory-stat';
 
+// Makes patternfly charts available
+import { ChartModule } from 'patternfly-ng';
+import 'patternfly/dist/js/patternfly-settings.js';
+
 describe('DeploymentCardComponent', () => {
 
   let component: DeploymentCardComponent;
@@ -39,7 +43,7 @@ describe('DeploymentCardComponent', () => {
     spyOn(mockSvc, 'getVersion').and.callThrough();
 
     TestBed.configureTestingModule({
-      imports: [ CollapseModule.forRoot() ],
+      imports: [ CollapseModule.forRoot(), ChartModule],
       declarations: [ DeploymentCardComponent ],
       providers: [ { provide: DeploymentsService, useValue: mockSvc } ]
     });
@@ -51,6 +55,16 @@ describe('DeploymentCardComponent', () => {
     component.environment = { environmentId: 'mockEnvironmentId', name: 'mockEnvironment'};
 
     fixture.detectChanges();
+
+    it('should generate a unique chartid for each DeploymentCardComponent instance', () => {
+      let depCard1 = new DeploymentCardComponent(null);
+      let depCard2 = new DeploymentCardComponent(null);
+      let depCard3 = new DeploymentCardComponent(null);
+
+      expect(depCard1.getChartIdNum()).not.toBe(depCard2.getChartIdNum());
+      expect(depCard1.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
+      expect(depCard2.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
+      });
   });
 
   describe('podCountLabel', () => {
