@@ -1,14 +1,13 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Che } from '../services/che';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
 import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
 import { Dialog } from 'ngx-widgets';
 import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
-import {IModalHost} from "../../../wizard/models/modal-host";
+import { IModalHost } from '../../../wizard/models/modal-host';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

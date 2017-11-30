@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
+import { Che } from './services/che';
 import { CheService } from './services/che.service';
 import { Codebase } from './services/codebase';
 import { CodebasesService } from './services/codebases.service';
@@ -21,7 +22,7 @@ import {
   SortEvent,
   SortField
 } from 'patternfly-ng';
-import {Che} from "./services/che";
+
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -91,7 +92,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       } as ActionConfig,
       iconStyleClass: 'pficon-add-circle-o',
       title: 'Add a Codebase',
-      info: "Start by importing your code repository."
+      info: 'Start by importing your code repository.'
     } as EmptyStateConfig;
 
     this.listConfig = {
@@ -143,7 +144,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     } else if (filter.field.id === 'createdAt') {
       let date = this.datePipe.transform(codebase.gitHubRepo.createdAt, 'medium');
       match = date.match(filter.value) !== null;
-    } else if (filter.field.id === "pushedAt") {
+    } else if (filter.field.id === 'pushedAt') {
       let date = this.datePipe.transform(codebase.gitHubRepo.pushedAt, 'medium');
       match = date.match(filter.value) !== null;
     }
@@ -282,7 +283,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           this.codebases = [];
         }
       }, error => {
-        this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
+        this.handleError('Failed to retrieve codebases', NotificationType.DANGER);
       }));
   }
 
