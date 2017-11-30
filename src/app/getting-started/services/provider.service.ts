@@ -62,8 +62,10 @@ export class ProviderService {
     let url = this.loginUrl + "/session?"
     + "clientSession=" + parsedToken.client_session
     + "&sessionState=" + parsedToken.session_state
-    + "&redirect=" + redirect // brings us back to Getting Started.
-    + "&provider=" + provider;
+    + "&redirect=" + redirect ;// brings us back to Getting Started.
+    if (provider != null) {
+      url += "&provider=" + provider;
+    }
     return url;
   }
 
@@ -83,15 +85,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   link(provider: string, redirect: string): void {
-    let parsedToken = jwt_decode(this.auth.getToken());
-    // the new url is /api/link/session 
-    let url = `${this.loginUrl}/session?`
-      + "clientSession=" + parsedToken.client_session
-      + "&sessionState=" + parsedToken.session_state
-      + "&redirect=" + redirect;
-    if (provider != null) {
-      url += "&provider=" + provider;
-    }
+    let url = this.getLegacyLinkingUrl(provider,redirect);
     this.redirectToAuth(url);
   }
 
