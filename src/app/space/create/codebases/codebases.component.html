@@ -13,10 +13,10 @@
           [expandTemplate]="expandTemplate"
           (onActionSelect)="openAddCodebasePanel()">
         <ng-template #itemTemplate let-item="item" let-index="index">
-          <codebases-item [cheRunning]="cheRunning" [codebase]="item" [index]="index" class="codebase-item"></codebases-item>
+          <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" class="codebase-item"></codebases-item>
         </ng-template>
         <ng-template #actionTemplate let-item="item" let-index="index">
-          <codebases-item-actions [cheRunning]="cheRunning" [codebase]="item" [index]="index"></codebases-item-actions>
+          <codebases-item-actions [cheRunning]="cheState && cheState.running" [codebase]="item" [index]="index"></codebases-item-actions>
         </ng-template>
         <ng-template #expandTemplate let-item="item" let-index="index">
           <codebases-item-details [codebase]="item"></codebases-item-details>

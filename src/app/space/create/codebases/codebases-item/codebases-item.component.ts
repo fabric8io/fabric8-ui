@@ -3,8 +3,8 @@ import { Subscription } from 'rxjs';
 
 import { Che } from '../services/che';
 import { Codebase } from '../services/codebase';
-import { GitHubService } from "../services/github.service";
-import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
+import { GitHubService } from '../services/github.service';
+import { Notification, NotificationType, Notifications } from 'ngx-base';
 import { NotificationType as NotificationTypes } from 'patternfly-ng';
 
 @Component({
@@ -14,24 +14,20 @@ import { NotificationType as NotificationTypes } from 'patternfly-ng';
   styleUrls: ['./codebases-item.component.less']
 })
 export class CodebasesItemComponent implements OnDestroy, OnInit {
-  @Input() cheRunning: boolean;
+  @Input() cheState: Che;
   @Input() codebase: Codebase;
   @Input() index: number = -1;
 
-  cheErrorMessage: string = "Your Workspaces failed to load";
-  cheRunningMessage: string = "Your Workspaces have loaded successfully";
-  cheStarting: boolean = false;
-  cheStartingMessage: string = "Your Workspaces are loading...";
+  cheErrorMessage: string = 'Your Workspaces failed to load';
+  cheRunningMessage: string = 'Your Workspaces have loaded successfully';
+  cheStartingMessage: string = 'Your Workspaces are loading...';
   createdDate: string;
   fullName: string;
   lastCommitDate: string;
   htmlUrl: string;
-  notificationMessage: string = this.cheStartingMessage;
-  notificationType: string = NotificationTypes.INFO;
   subscriptions: Subscription[] = [];
 
   constructor(
-      private broadcaster: Broadcaster,
       private gitHubService: GitHubService,
       private notifications: Notifications) {
   }
@@ -43,22 +39,6 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(this.broadcaster
-      .on('cheStateChange')
-      .subscribe((che: Che) => {
-        if (che === undefined) {
-          this.notificationMessage = this.cheErrorMessage;
-          this.notificationType = NotificationTypes.DANGER;
-          this.cheStarting = true;
-        } else if (che.running === true) {
-          this.notificationMessage = this.cheRunningMessage;
-          this.notificationType = NotificationTypes.SUCCESS;
-        } else if (che.running === false) {
-          this.notificationMessage = this.cheStartingMessage;
-          this.notificationType = NotificationTypes.INFO;
-          this.cheStarting = true;
-        }
-      }));
     if (this.codebase === undefined || this.codebase.attributes === undefined) {
       return;
     }
@@ -68,6 +48,32 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
       } else {
         this.handleError(`Invalid URL: ${this.codebase.attributes.url}`, NotificationType.WARNING);
       }
+    }
+  }
+
+  /**
+   * Returns the notification message based on state of Che.
+   *
+   * @returns {string}
+   */
+  getNotificationMessage(): string {
+    if (this.cheState) {
+      return this.cheState.running ? this.cheRunningMessage : this.cheStartingMessage;
+    } else {
+      return this.cheErrorMessage;
+    }
+  }
+
+  /**
+   * Returns the notification type based on the state of Che.
+   *
+   * @returns {string}
+   */
+  getNotificationType(): string {
+    if (this.cheState) {
+      return this.cheState.running ? NotificationTypes.SUCCESS : NotificationTypes.INFO;
+    } else {
+      return NotificationTypes.DANGER;
     }
   }
 

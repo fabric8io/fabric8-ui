@@ -21,6 +21,7 @@ import {
   SortEvent,
   SortField
 } from 'patternfly-ng';
+import {Che} from "./services/che";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -34,7 +35,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   appliedFilters: Filter[];
   chePollSubscription: Subscription;
   chePollTimer: Observable<any>;
-  cheRunning: boolean = false;
+  cheState: Che;
   codebases: Codebase[] = [];
   context: Context;
   currentSortField: SortField;
@@ -75,6 +76,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.cheState = {running: false};
     this.updateCodebases();
     this.startIdleChe();
 
@@ -219,10 +221,9 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.chePollSubscription = this.chePollTimer
       .switchMap(() => this.cheService.getState())
       .map(che => {
-        if (che != undefined && che.running === true) {
+        if (che !== undefined && che.running === true) {
           this.chePollSubscription.unsubscribe();
-          this.cheRunning = true;
-          this.broadcaster.broadcast('cheStateChange', che);
+          this.cheState = che;
         }
       })
       .publish()
@@ -237,14 +238,12 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     // Get state for Che server
     this.subscriptions.push(this.cheService.start()
       .subscribe(che => {
-        this.cheRunning = che && che.running;
-        this.broadcaster.broadcast('cheStateChange', che);
-        if (che == undefined || che.running !== true) {
+        this.cheState = che;
+        if (che === undefined || che.running !== true) {
           this.cheStatePoll();
         }
       }, error => {
-        this.cheRunning = false;
-        this.broadcaster.broadcast('cheStateChange');
+        this.cheState = null;
       }));
   }
 
@@ -256,14 +255,12 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.cheService.getState()
       .subscribe(che => {
         if (che !== undefined && che.running === true) {
-          this.cheRunning = true;
-          this.broadcaster.broadcast('cheStateChange', che);
+          this.cheState = che;
         } else {
           this.startChe();
         }
       }, error => {
-        this.cheRunning = false;
-        this.broadcaster.broadcast('cheStateChange');
+        this.cheState = null;
       }));
   }
 
