@@ -247,5 +247,34 @@ describe('Codebase: CodebasesService', () => {
     error => expect(error).toEqual('some error'));
   });
 
+  it('Delete codebase', () => {
+    // given
+    mockService.connections.subscribe((connection: any) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          status: 204
+        })
+      ));
+    });
+    // when
+    codebasesService.deleteCodebase(codebase).subscribe((data: any) => {
+      // then
+      expect(data).toEqual(codebase);
+    });
+  });
+
+  it('Delete codebase in error', () => {
+    let deleteError = 'delete error';
+    // given
+    mockService.connections.subscribe((connection: any) => {
+      connection.mockError(new Error(deleteError));
+    });
+    // when
+    codebasesService.deleteCodebase(codebase).subscribe((data: any) => {
+        fail('Delete codebase in error');
+      }, // then
+      error => expect(error).toEqual(deleteError));
+  });
+
 
 });

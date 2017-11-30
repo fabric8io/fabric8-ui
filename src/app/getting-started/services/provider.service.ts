@@ -1,20 +1,25 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { Headers, Http} from '@angular/http';
 import { AuthenticationService,AUTH_API_URL } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import * as jwt_decode from 'jwt-decode';
+import { Link } from './link';
 
 @Injectable()
 export class ProviderService {
   private loginUrl: string;
+  private linkUrl: string;
 
   constructor(
+      private http: Http,  
       private auth: AuthenticationService,
       private logger: Logger,
       @Inject(AUTH_API_URL) apiUrl: string) {
     this.loginUrl = apiUrl + 'link';
+    this.linkUrl = apiUrl + 'token/link';
   }
 
   /**
@@ -23,7 +28,10 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   linkAll(redirect: string): void {
-    this.link(null, redirect);
+        let openShiftLinkingRedirectUrl = this.getLegacyLinkingUrl("openshift-v3",redirect);
+        // after linking github, proceed with linking openshift-v3,
+        // hence passing openshift linking url as a redirect.
+        this.linkGitHub(openShiftLinkingRedirectUrl);
   }
 
   /**
@@ -31,8 +39,34 @@ export class ProviderService {
    *
    * @param redirect URL to be redirected to after successful account linking
    */
-  linkGitHub(redirect: string): void {
-    this.link("github", redirect);
+  linkGitHub(next: string): void{
+    let githubLinkURL = this.linkUrl + "?for=https://github.com&redirect=" +  encodeURIComponent(next) ;
+    console.log("attempting to connect github "+ githubLinkURL);
+    this.http
+    .get(githubLinkURL)
+    .map(response => {
+      // TODO: what happens to this when the response is not a pure json
+      let redirectInfo = response.json() as Link;
+      this.redirectToAuth(redirectInfo.redirect_location);
+      console.log(redirectInfo);
+    })
+    .catch((error) => {
+      console.log("error while linking github "+ githubLinkURL);
+      return this.handleError(error);
+    }).subscribe();
+  }
+  
+
+  getLegacyLinkingUrl(provider: string, redirect: string): string{
+    let parsedToken = jwt_decode(this.auth.getToken());    
+    let url = this.loginUrl + "/session?"
+    + "clientSession=" + parsedToken.client_session
+    + "&sessionState=" + parsedToken.session_state
+    + "&redirect=" + redirect ;// brings us back to Getting Started.
+    if (provider != null) {
+      url += "&provider=" + provider;
+    }
+    return url;
   }
 
   /**
@@ -51,15 +85,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   link(provider: string, redirect: string): void {
-    let parsedToken = jwt_decode(this.auth.getToken());
-    // the new url is /api/link/session 
-    let url = `${this.loginUrl}/session?`
-      + "clientSession=" + parsedToken.client_session
-      + "&sessionState=" + parsedToken.session_state
-      + "&redirect=" + redirect;
-    if (provider != null) {
-      url += "&provider=" + provider;
-    }
+    let url = this.getLegacyLinkingUrl(provider,redirect);
     this.redirectToAuth(url);
   }
 
