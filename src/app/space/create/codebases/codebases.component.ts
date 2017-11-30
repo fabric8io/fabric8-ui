@@ -77,7 +77,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.cheState = {running: false};
+    this.cheState = {running: false, multiTenant: false};
     this.updateCodebases();
     this.startIdleChe();
 

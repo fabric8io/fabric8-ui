@@ -21,6 +21,8 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
   cheErrorMessage: string = 'Your Workspaces failed to load';
   cheRunningMessage: string = 'Your Workspaces have loaded successfully';
   cheStartingMessage: string = 'Your Workspaces are loading...';
+  cheFinishedMultiTenantMigrationMessage: string = "Migration to the Multi-Tenant Che server has finished!";
+  chePerformingMultiTenantMigrationMessage: string = "Migrating workspaces to the Multi-Tenant Che server...";
   createdDate: string;
   fullName: string;
   lastCommitDate: string;
@@ -58,7 +60,11 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
    */
   getNotificationMessage(): string {
     if (this.cheState) {
-      return this.cheState.running ? this.cheRunningMessage : this.cheStartingMessage;
+      if (this.cheState.multiTenant) {
+        return this.cheState.running ? this.cheFinishedMultiTenantMigrationMessage : this.chePerformingMultiTenantMigrationMessage;
+      } else {
+        return this.cheState.running ? this.cheRunningMessage : this.cheStartingMessage;
+      }
     } else {
       return this.cheErrorMessage;
     }
