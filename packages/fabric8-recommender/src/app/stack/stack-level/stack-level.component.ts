@@ -52,7 +52,7 @@ export class StackLevelComponent {
     }
 
     private handleSecurityInformation(tab: UserStackInfoModel): void {
-        let dependencies: Array<ComponentInformationModel> = tab.dependencies;
+        let dependencies: Array<ComponentInformationModel> = tab.analyzed_dependencies;
         let security: Array<any> = [];
         let temp: Array<any> = [];
 
