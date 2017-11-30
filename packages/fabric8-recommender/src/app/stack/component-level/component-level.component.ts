@@ -346,7 +346,7 @@ export class ComponentLevelComponent implements OnChanges {
             this.headers = [
                 {
                     name: 'Package Name',
-                    class: 'medium',
+                    class: 'large',
                     order: 1
                 }, {
                     name: 'Current Version',
@@ -378,11 +378,11 @@ export class ComponentLevelComponent implements OnChanges {
                    order: 8
                 }, {
                     name: 'Github Dependents',
-                    class: 'large',
+                    class: 'medium',
                     order: 9
                 }, {
-                    name: 'Categories',
-                    class: 'medium',
+                    name: 'Tags',
+                    class: 'large',
                     order: 10
                 }, {
                      name: 'Action',
@@ -475,7 +475,7 @@ export class ComponentLevelComponent implements OnChanges {
         output['reason'] = input['reason'] || null;
         output['categories'] = input['topic_list'];
         output['categories'] = (output['categories'] && output['categories'].length > 0 &&
-            output['categories'].join(', ')) || '';
+            output['categories'].join(', <br/> ')) || '';
         output['action'] = canCreateWorkItem ? 'Create Work Item' : '';
         return output;
     }
