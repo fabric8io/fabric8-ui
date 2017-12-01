@@ -20,6 +20,7 @@ export class StackReportInShortComponent implements OnChanges {
     @Input() repoInfo;
     @Input() buildNumber;
     @Input() appName;
+    @Input() pipeline;
 
     public tabs: Array<any> = [];
     public result: StackReportModel;
@@ -29,6 +30,7 @@ export class StackReportInShortComponent implements OnChanges {
     public stackLevelOutliers: any;
     public dataLoaded: boolean = false;
     public error: any;
+    public progress: any;
     public licenseAnalysis: any;
 
     private cache: string = '';
@@ -44,29 +46,30 @@ export class StackReportInShortComponent implements OnChanges {
                 .getStackAnalyses(this.stackUrl, this.gatewayConfig)
                 .subscribe((data) => {
                     if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0)) {
-                        let resultInformation: Observable<StackReportModel> = getStackReportModel(data);
+                        let resultInformation: Observable<StackReportModel> =
+                            getStackReportModel(data);
                         if (resultInformation) {
                             resultInformation.subscribe((response) => {
                                 this.result = response;
                                 this.buildReportInShort();
                             });
                         }
-                    } else if(data && data.hasOwnProperty('error')) {
+                    } else if (data && data.hasOwnProperty('error')) {
                         // Handle Errors here 'API error'
-                        this.handleError({
-                            title: "Analysis for your stack is in progress..."
+                        this.handleProgress({
+                            title: 'Analysis for your stack is in progress...'
                         });
-                    }
-                    else {
+                    } else {
                         // Handle Errors here 'API error'
                         this.handleError({
-                            title: data.error
+                            title: 'We encountered an unexpected server error',
+                            detail: data.error
                         });
                     }
                 }, error => {
                     // Handle server errors here
                     this.handleError({
-                        title: 'Something unexpected happened'
+                        title: 'We encountered an unexpected server error'
                     });
                 });
         } else {
@@ -76,6 +79,11 @@ export class StackReportInShortComponent implements OnChanges {
 
     public handleError(error: any): void {
         this.error = error;
+        this.dataLoaded = true;
+    }
+
+    public handleProgress(data: any): void {
+        this.progress = data;
         this.dataLoaded = true;
     }
 
