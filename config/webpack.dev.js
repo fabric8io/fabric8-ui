@@ -250,7 +250,8 @@ module.exports = function (options) {
         disableDotRule: true,
       },
       watchOptions: {
-        aggregateTimeout: 2000
+        aggregateTimeout: 2000,
+        poll: 1000 //to allow watching in NFS and VirtualBox machines
       },
       proxy: {
         "/_p/oso/api/*": cloneDeep(OSO_CORS_PROXY),

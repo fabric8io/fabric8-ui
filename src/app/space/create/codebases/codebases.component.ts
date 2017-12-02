@@ -3,11 +3,12 @@ import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
+import { Che } from './services/che';
 import { CheService } from './services/che.service';
 import { Codebase } from './services/codebase';
 import { CodebasesService } from './services/codebases.service';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { GitHubService } from "./services/github.service";
+import { GitHubService } from './services/github.service';
 import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
 
 import { cloneDeep } from 'lodash';
@@ -22,6 +23,7 @@ import {
   SortField
 } from 'patternfly-ng';
 
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases',
@@ -34,6 +36,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   appliedFilters: Filter[];
   chePollSubscription: Subscription;
   chePollTimer: Observable<any>;
+  cheState: Che;
   codebases: Codebase[] = [];
   context: Context;
   currentSortField: SortField;
@@ -59,6 +62,12 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       .subscribe((codebase: Codebase) => {
         this.updateCodebases();
       }));
+
+    this.subscriptions.push(this.broadcaster
+      .on('codebaseDeleted')
+      .subscribe(() => {
+        this.updateCodebases();
+      }));
   }
 
   ngOnDestroy(): void {
@@ -68,6 +77,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.cheState = {running: false, multiTenant: false};
     this.updateCodebases();
     this.startIdleChe();
 
@@ -82,7 +92,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       } as ActionConfig,
       iconStyleClass: 'pficon-add-circle-o',
       title: 'Add a Codebase',
-      info: "Start by importing your code repository."
+      info: 'Start by importing your code repository.'
     } as EmptyStateConfig;
 
     this.listConfig = {
@@ -134,7 +144,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     } else if (filter.field.id === 'createdAt') {
       let date = this.datePipe.transform(codebase.gitHubRepo.createdAt, 'medium');
       match = date.match(filter.value) !== null;
-    } else if (filter.field.id === "pushedAt") {
+    } else if (filter.field.id === 'pushedAt') {
       let date = this.datePipe.transform(codebase.gitHubRepo.pushedAt, 'medium');
       match = date.match(filter.value) !== null;
     }
@@ -212,9 +222,9 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.chePollSubscription = this.chePollTimer
       .switchMap(() => this.cheService.getState())
       .map(che => {
-        if (che != undefined && che.running === true) {
+        if (che !== undefined && che.running === true) {
           this.chePollSubscription.unsubscribe();
-          this.broadcaster.broadcast('cheStateChange', che);
+          this.cheState = che;
         }
       })
       .publish()
@@ -229,12 +239,12 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     // Get state for Che server
     this.subscriptions.push(this.cheService.start()
       .subscribe(che => {
-        this.broadcaster.broadcast('cheStateChange', che);
-        if (che == undefined || che.running !== true) {
+        this.cheState = che;
+        if (che === undefined || che.running !== true) {
           this.cheStatePoll();
         }
       }, error => {
-        this.broadcaster.broadcast('cheStateChange');
+        this.cheState = null;
       }));
   }
 
@@ -245,13 +255,13 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     // Get state for Che server
     this.subscriptions.push(this.cheService.getState()
       .subscribe(che => {
-        if (che != undefined && che.running === true) {
-          this.broadcaster.broadcast('cheStateChange', che);
+        if (che !== undefined && che.running === true) {
+          this.cheState = che;
         } else {
           this.startChe();
         }
       }, error => {
-        this.broadcaster.broadcast('cheStateChange');
+        this.cheState = null;
       }));
   }
 
@@ -267,9 +277,13 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           this.codebases = cloneDeep(codebases);
           this.codebases.unshift({} as Codebase); // Add empty object for row header
           this.applyFilters(this.appliedFilters);
+        } else {
+          // clear the codebases list:
+          this.allCodebases = [];
+          this.codebases = [];
         }
       }, error => {
-        this.handleError("Failed to retrieve codebases", NotificationType.DANGER);
+        this.handleError('Failed to retrieve codebases', NotificationType.DANGER);
       }));
   }
 

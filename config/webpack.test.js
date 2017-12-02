@@ -168,8 +168,10 @@ module.exports = function (options) {
               loader: 'less-loader',
               options: {
                 paths: [
-                  path.resolve(__dirname, "../node_modules/patternfly/src/less"),
-                  path.resolve(__dirname, "../node_modules/patternfly/node_modules")
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
                 ],
                 sourceMap: true
               }
