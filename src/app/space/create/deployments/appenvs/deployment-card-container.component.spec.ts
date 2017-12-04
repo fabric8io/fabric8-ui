@@ -15,7 +15,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { Spaces } from 'ngx-fabric8-wit';
 
 import { DeploymentCardContainerComponent } from './deployment-card-container.component';
-import { Environment } from './models/environment';
+import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployment-card',

@@ -8,9 +8,9 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { DeploymentsComponent } from '../deployments/deployments.component';
-import { DeploymentsAppEnvsComponent } from '../deployments/deployments-appenvs.component';
-import { DeploymentsResourceUsageComponent } from './deployments-resource-usage.component';
-import { DeploymentCardContainerComponent } from '../deployments/deployment-card-container.component';
+import { DeploymentsAppEnvsComponent } from '../deployments/appenvs/deployments-appenvs.component';
+import { DeploymentsResourceUsageComponent } from '../deployments/resource-usage/deployments-resource-usage.component';
+import { DeploymentCardContainerComponent } from '../deployments/appenvs/deployment-card-container.component';
 import { DeploymentCardComponent } from '../deployments/components/deployment-card/deployment-card.component';
 import { ResourceCardComponent } from '../deployments/components/resource-card.component';
 import { UtilizationBarComponent } from '../deployments/components/utilization-bar.component';

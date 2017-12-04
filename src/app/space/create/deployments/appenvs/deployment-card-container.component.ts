@@ -3,9 +3,9 @@ import {
   Input,
 } from '@angular/core';
 
-import { Environment } from './models/environment';
-
 import { Observable } from 'rxjs';
+
+import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployment-card-container',

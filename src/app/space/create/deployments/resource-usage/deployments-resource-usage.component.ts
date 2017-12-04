@@ -3,7 +3,7 @@ import {
   Input,
 } from '@angular/core';
 
-import { Environment } from './models/environment';
+import { Environment } from '../models/environment';
 
 import { Observable } from 'rxjs';
 

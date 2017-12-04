@@ -15,8 +15,8 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { Spaces } from 'ngx-fabric8-wit';
 
 import { DeploymentsResourceUsageComponent } from './deployments-resource-usage.component';
-import { Environment } from './models/environment';
-import { Stat } from './models/stat';
+import { Environment } from '../models/environment';
+import { Stat } from '../models/stat';
 
 @Component({
   selector: 'resource-card',

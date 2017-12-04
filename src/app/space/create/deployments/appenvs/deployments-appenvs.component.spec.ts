@@ -13,7 +13,7 @@ import {
 import { Observable } from 'rxjs';
 
 import { DeploymentsAppEnvsComponent } from './deployments-appenvs.component';
-import { Environment } from './models/environment';
+import { Environment } from '../models/environment';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
