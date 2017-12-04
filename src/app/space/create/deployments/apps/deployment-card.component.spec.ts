@@ -11,6 +11,10 @@ import { Observable } from 'rxjs';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentCardComponent } from './deployment-card.component';
+import { DeploymentsDonutComponent } from '../deployments-donut/deployments-donut.component';
+import {
+  DeploymentsDonutChartComponent
+} from '../deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
 import { DeploymentsService } from '../services/deployments.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
@@ -43,16 +47,16 @@ describe('DeploymentCardComponent', () => {
     spyOn(mockSvc, 'getVersion').and.callThrough();
 
     TestBed.configureTestingModule({
-      imports: [ CollapseModule.forRoot(), ChartModule],
-      declarations: [ DeploymentCardComponent ],
-      providers: [ { provide: DeploymentsService, useValue: mockSvc } ]
+      imports: [CollapseModule.forRoot(), ChartModule],
+      declarations: [DeploymentCardComponent, DeploymentsDonutComponent, DeploymentsDonutChartComponent],
+      providers: [{ provide: DeploymentsService, useValue: mockSvc }]
     });
 
     fixture = TestBed.createComponent(DeploymentCardComponent);
     component = fixture.componentInstance;
 
     component.applicationId = 'mockAppId';
-    component.environment = { environmentId: 'mockEnvironmentId', name: 'mockEnvironment'};
+    component.environment = { environmentId: 'mockEnvironmentId', name: 'mockEnvironment' };
 
     fixture.detectChanges();
 
@@ -64,21 +68,6 @@ describe('DeploymentCardComponent', () => {
       expect(depCard1.getChartIdNum()).not.toBe(depCard2.getChartIdNum());
       expect(depCard1.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
       expect(depCard2.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
-      });
-  });
-
-  describe('podCountLabel', () => {
-    let de: DebugElement;
-    let el: HTMLElement;
-
-    beforeEach(() => {
-      de = fixture.debugElement.query(By.css('#podCountLabel'));
-      el = de.nativeElement;
-    });
-
-    it('should be set from mockSvc.getPodCount result', () => {
-      expect(mockSvc.getPodCount).toHaveBeenCalledWith('mockAppId', 'mockEnvironmentId');
-      expect(el.textContent).toEqual('2 Pods');
     });
   });
 
