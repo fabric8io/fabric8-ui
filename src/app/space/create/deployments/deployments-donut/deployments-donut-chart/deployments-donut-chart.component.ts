@@ -20,6 +20,7 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
   chartId = uniqueId('deployments-donut-chart');
   podStatusData: any;
   total: number;
+  debounceUpdate = debounce(this.updateChart, 350, { maxWait: 500 });
 
   private phases = [
     'Running',
@@ -36,8 +37,6 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
   private config: any;
   private chart: any;
 
-
-  private debounceUpdate = debounce(this.updateChart, 350, { maxWait: 500 });
   private prevPodPhaseCount: any;
 
   constructor() { }
