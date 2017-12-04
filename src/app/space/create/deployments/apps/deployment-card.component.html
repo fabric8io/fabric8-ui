@@ -4,8 +4,8 @@
     <deployments-donut [applicationId]="applicationId" [mini]="true" ></deployments-donut>
     <span id="versionLabel">{{ version | async }}</span>
     <div class="pull-right dropdown-kebab-pf dropdown" dropdown (click)="$event.stopPropagation()">
-      <button class="btn btn-link pull-right dropdown-toggle" id="kebab" type="button" aria-haspopup="true" aria-expanded="true"
-        data-toggle="dropdown" dropdownToggle>
+      <button class="btn btn-link pull-right dropdown-toggle" id="kebab" type="button" aria-haspopup="true"
+        aria-expanded="true" data-toggle="dropdown" dropdownToggle>
         <span class="fa fa-ellipsis-v"></span>
       </button>
       <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="kebab" role="menu" *dropdownMenu>

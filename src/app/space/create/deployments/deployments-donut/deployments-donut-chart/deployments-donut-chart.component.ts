@@ -1,6 +1,6 @@
 import { Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 
-import { debounce, get, isEmpty, isEqual, reject, size, uniqueId } from 'lodash';
+import { debounce, get, isEqual, reject, size, uniqueId } from 'lodash';
 
 import * as c3 from 'c3';
 import * as d3 from 'd3';
@@ -12,7 +12,7 @@ import * as d3 from 'd3';
 })
 export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChanges, OnDestroy {
 
-  @Input() pods: any;
+  @Input() pods: any[];
   @Input() mini: boolean;
   @Input() desiredReplicas: number;
   @Input() idled: boolean;
@@ -21,7 +21,8 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
   podStatusData: any;
   total: number;
 
-  private phases = ['Running',
+  private phases = [
+    'Running',
     'Not Ready',
     'Warning',
     'Error',
@@ -29,13 +30,14 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
     'Pending',
     'Succeeded',
     'Terminating',
-    'Unknown'];
+    'Unknown'
+  ];
 
   private config: any;
   private chart: any;
 
 
-  private debounceUpdate: (countByPhase: any) => void;
+  private debounceUpdate = debounce(this.updateChart, 350, { maxWait: 500 });
   private prevPodPhaseCount: any;
 
   constructor() { }
@@ -80,16 +82,16 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
         groups: [this.phases],
         order: null,
         colors: {
-          Empty: '#ffffff',
-          Running: '#00b9e4',
-          'Not Ready': '#beedf9',
-          Warning: '#f39d3c',
-          Error: '#d9534f',
-          Pulling: '#d1d1d1',
-          Pending: '#ededed',
-          Succeeded: '#3f9c35',
-          Terminating: '#00659c',
-          Unknown: '#f9d67a'
+          'Empty': '#ffffff', // black
+          'Running': '#00b9e4', // dark blue
+          'Not Ready': '#beedf9', // light blue
+          'Warning': '#f39d3c', // orange
+          'Error': '#d9534f', // red
+          'Pulling': '#d1d1d1', // grey
+          'Pending': '#ededed', // light grey
+          'Succeeded': '#3f9c35', // green
+          'Terminating': '#00659c', // dark blue
+          'Unknown': '#f9d67a' // light yellow
         },
         selection: {
           enabled: false
@@ -105,8 +107,6 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
         left: 0
       };
     }
-
-    this.debounceUpdate = debounce(this.updateChart, 350, { maxWait: 500 });
   }
 
   ngDoCheck(): void {
@@ -142,7 +142,7 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
     if (isNaN(this.desiredReplicas) || this.desiredReplicas === total) {
       smallText = (total === 1) ? 'pod' : 'pods';
     } else {
-      smallText = 'scaling to ' + this.desiredReplicas + '...';
+      smallText = `scaling to ${this.desiredReplicas}...`;
     }
 
     if (this.idled) {
@@ -152,17 +152,11 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
     }
   }
 
-  private updateChart(countByPhase): void {
+  private updateChart(countByPhase: any): void {
     let columns = [];
     this.phases.forEach((phase) => {
       columns.push([phase, countByPhase[phase] || 0]);
     });
-
-    if (isEmpty(countByPhase)) {
-      columns.push(['Empty', 1]);
-    } else {
-      // unload empty
-    }
 
     if (!this.chart) {
       this.config.data.columns = columns;
@@ -220,7 +214,7 @@ export class DeploymentsDonutChartComponent implements DoCheck, OnInit, OnChange
     return countByPhase;
   }
 
-  private updateCenterText(bigText: any, smallText?: any): void {
+  private updateCenterText(bigText: string | number, smallText?: string | number): void {
     let donutChartTitle;
 
     if (!this.chart) {

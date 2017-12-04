@@ -17,12 +17,11 @@ export class DeploymentsDonutComponent implements OnInit {
   desiredReplicas: number;
 
   private scaleRequestPending = false;
-  private debounceScale: () => void;
+  private debounceScale = debounce(this.scale, 650);
 
   constructor() { }
 
   ngOnInit(): void {
-    this.debounceScale = debounce(this.scale, 650);
     this.pods = this.getPods();
     this.desiredReplicas = this.getDesiredReplicas();
   }
@@ -43,7 +42,7 @@ export class DeploymentsDonutComponent implements OnInit {
       return;
     }
 
-    if (0 === this.getDesiredReplicas()) {
+    if (this.getDesiredReplicas() === 0) {
       return;
     }
 
@@ -66,7 +65,6 @@ export class DeploymentsDonutComponent implements OnInit {
 
   private scale(): void {
     // TODO: send service request to scale
-    console.log('scale call');
   }
 
   private getPods(): any {

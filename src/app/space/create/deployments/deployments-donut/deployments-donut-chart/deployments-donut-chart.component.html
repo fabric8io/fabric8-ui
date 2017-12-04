@@ -1,22 +1,22 @@
 <div #chartElement id="{{chartId}}" class="deployments-donut-chart" [ngClass]="{'mini': mini}"></div>
 <div *ngIf="mini" class="deployments-donut-chart-mini-text">
-  <span *ngIf="!idled">
+  <span *ngIf="!idled; else elseIdle">
     {{total}}
-    <span *ngIf="total === 1">pod</span>
-    <span *ngIf="total !== 1">pods</span>
+    <span>{{(total === 1) ? 'pod' : 'pods'}}</span>
   </span>
-  <span *ngIf="idled">
-    Idle
-  </span>
+  <ng-template #elseIdle>
+    <span>Idle</span>
+  </ng-template>
 </div>
 
 <div class="sr-only">
-  <div *ngIf="pods?.length === 0">No pods.</div>
-  <div *ngIf="pods?.length !== 0">
-    Pod status:
-    <li *ngFor="let column of podStatusData">
-      <span *ngIf="column[1]">{{column[1]}} {{column[0]}}</span>
-      <span *ngIf="!column[1]">0 {{column[0]}}</span>"
-    </li>
-  </div>
+  <div *ngIf="pods?.length === 0; else elsePods">No pods.</div>
+  <ng-template #elsePods>
+    <div>
+      Pod status:
+      <li *ngFor="let column of podStatusData">
+        <span>{{ column[1] ? column[1] + ' ' + column[0] : '0 ' +  column[0] }}</span>
+      </li>
+    </div>
+  </ng-template>
 </div>

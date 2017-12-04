@@ -13,8 +13,9 @@ import { DeploymentsResourceUsageComponent } from '../deployments/resource-usage
 import { DeploymentCardContainerComponent } from '../deployments/apps/deployment-card-container.component';
 import { DeploymentCardComponent } from '../deployments/apps/deployment-card.component';
 import { DeploymentsDonutComponent } from './deployments-donut/deployments-donut.component';
-import { DeploymentsDonutChartComponent }
-  from './deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
+import {
+  DeploymentsDonutChartComponent
+} from './deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
 import { ResourceCardComponent } from '../deployments/resource-usage/resource-card.component';
 import { UtilizationBarComponent } from '../deployments/resource-usage/utilization-bar.component';
 
