@@ -11,9 +11,9 @@ import { DeploymentsComponent } from '../deployments/deployments.component';
 import { DeploymentsAppEnvsComponent } from '../deployments/appenvs/deployments-appenvs.component';
 import { DeploymentsResourceUsageComponent } from '../deployments/resource-usage/deployments-resource-usage.component';
 import { DeploymentCardContainerComponent } from '../deployments/appenvs/deployment-card-container.component';
-import { DeploymentCardComponent } from '../deployments/components/deployment-card/deployment-card.component';
-import { ResourceCardComponent } from '../deployments/components/resource-card.component';
-import { UtilizationBarComponent } from '../deployments/components/utilization-bar.component';
+import { DeploymentCardComponent } from '../deployments/appenvs/deployment-card.component';
+import { ResourceCardComponent } from '../deployments/resource-usage/resource-card.component';
+import { UtilizationBarComponent } from '../deployments/resource-usage/utilization-bar.component';
 import { DeploymentsRoutingModule } from './deployments-routing.module';
 
 import { DeploymentsService } from '../deployments/services/deployments.service';

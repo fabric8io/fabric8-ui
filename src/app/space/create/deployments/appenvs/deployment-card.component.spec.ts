@@ -11,9 +11,9 @@ import { Observable } from 'rxjs';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentCardComponent } from './deployment-card.component';
-import { DeploymentsService } from '../../services/deployments.service';
-import { CpuStat } from '../../models/cpu-stat';
-import { MemoryStat } from '../../models/memory-stat';
+import { DeploymentsService } from '../services/deployments.service';
+import { CpuStat } from '../models/cpu-stat';
+import { MemoryStat } from '../models/memory-stat';
 
 // Makes patternfly charts available
 import { ChartModule } from 'patternfly-ng';
