@@ -1,0 +1,39 @@
+@import (reference) '../../../../../assets/stylesheets/shared/osio.less';
+
+.deployment-donut-scale-controls {
+  -webkit-box-pack: center;
+          justify-content: center;
+  font-size: 24px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.deployment-donut-scale-controls a {
+  color: #bbb;
+}
+.deployment-donut-scale-controls a:hover,
+.deployment-donut-scale-controls a:active {
+  color: #72767b;
+  text-decoration: none;
+}
+.deployment-donut-scale-controls a.disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+.deployment-donut-scale-controls a.disabled:hover {
+  color: #bbb;
+}
+
+.fade-inline.ng-hide {
+  opacity: 0;
+}
+.fade-inline.ng-show {
+  opacity: 1;
+}
+.fade-inline.ng-hide-remove,
+.fade-inline.ng-hide-add {
+  display: inline-block;
+}
+.fade-inline.ng-hide-remove,
+.fade-inline.ng-hide-add {
+  transition: opacity .2s ease .5s;
+}

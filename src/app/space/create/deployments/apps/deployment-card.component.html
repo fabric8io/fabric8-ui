@@ -1,11 +1,11 @@
 <div class="card-pf" (click)="collapsed = !collapsed">
   <div class="card-pf-body">
     <span class="pficon pficon-ok" tooltip="Everything looks okay" placement="top"></span>
-    <span id="podCountLabel">{{ podCount | async }} Pods</span>
+    <deployments-donut [applicationId]="applicationId" [mini]="true" ></deployments-donut>
     <span id="versionLabel">{{ version | async }}</span>
     <div class="pull-right dropdown-kebab-pf dropdown" dropdown (click)="$event.stopPropagation()">
-      <button class="btn btn-link pull-right dropdown-toggle" id="kebab" type="button" aria-haspopup="true"
-        aria-expanded="true" data-toggle="dropdown" dropdownToggle>
+      <button class="btn btn-link pull-right dropdown-toggle" id="kebab" type="button" aria-haspopup="true" aria-expanded="true"
+        data-toggle="dropdown" dropdownToggle>
         <span class="fa fa-ellipsis-v"></span>
       </button>
       <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="kebab" role="menu" *dropdownMenu>
@@ -26,6 +26,7 @@
       </ul>
     </div>
     <div [collapse]="collapsed">
+      <deployments-donut [applicationId]="applicationId" [mini]="false"></deployments-donut>
       <pfng-chart-sparkline [config]="config" [chartData]="data"></pfng-chart-sparkline>
     </div>
   </div>

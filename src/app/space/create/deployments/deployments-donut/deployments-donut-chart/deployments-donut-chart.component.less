@@ -1,0 +1,36 @@
+@import (reference) '../../../../../../assets/stylesheets/shared/osio.less';
+
+.deployments-donut-chart {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.deployments-donut-chart.mini {
+  display: inline-block;
+  margin: 0 0 0 -8px;
+  min-width: 45px;
+  min-height: 45px;
+  top: 3px;
+  vertical-align: middle;
+}
+.deployments-donut-chart .c3-defocused {
+  opacity: .5;
+}
+.deployments-donut-chart .c3-tooltip-container {
+  top: -27px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  white-space: nowrap;
+}
+.deployments-donut-chart path.c3-arc-Empty {
+  stroke: #d1d1d1;
+  cursor: inherit;
+}
+.deployments-donut-chart .c3-tooltip-name--Empty .name {
+  display: none;
+}
+.deployments-donut-chart-mini-text {
+  display: inline-block;
+  min-width: 50px;
+}
