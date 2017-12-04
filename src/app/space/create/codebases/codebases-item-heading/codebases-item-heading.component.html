@@ -1,0 +1,25 @@
+<div class="list-pf-left">
+  <!-- Place holder to match fa-github icon width below -->
+  <div class="margin-right-30"></div>
+</div>
+<div class="list-pf-content-wrapper">
+  <div class="list-pf-main-content">
+    <div class="list-pf-title">NAME</div>
+    <div class="list-pf-description">CREATED DATE</div>
+    <div class="list-pf-description">LAST COMMIT</div>
+  </div>
+  <div class="list-pf-additional-content">
+    <div>
+      WORKSPACES
+      <i class="pficon pficon-info margin-left-5"
+         tooltip="Workspaces are web based development environments for your code and runtime needs"
+         placement="top"></i>
+      <div class="workspaces-banner">
+        <f8-workspaces-notification [dismiss]="cheState && cheState.running"
+                                    [message]="getNotificationMessage()"
+                                    [type]="getNotificationType()"
+                                    *ngIf="!cheState || !cheState.running"></f8-workspaces-notification>
+      </div>
+    </div>
+  </div>
+</div>
