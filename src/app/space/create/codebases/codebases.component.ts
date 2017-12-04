@@ -23,7 +23,6 @@ import {
   SortField
 } from 'patternfly-ng';
 
-
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases',
@@ -129,7 +128,6 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       this.codebases = cloneDeep(this.allCodebases);
     }
     this.resultsCount = this.codebases.length;
-    this.codebases.unshift({} as Codebase); // Add empty object for row header
   }
 
   filterChange($event: FilterEvent): void {

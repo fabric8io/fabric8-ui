@@ -1,46 +1,16 @@
-<div *ngIf="index === 0; then showHeader else showCol"></div>
-<ng-template #showHeader>
-  <div class="list-pf-left">
-    <!-- Place holder to match fa-github icon width below -->
-    <div class="margin-right-30"></div>
-  </div>
-  <div class="list-pf-content-wrapper">
-    <div class="list-pf-main-content">
-      <div class="list-pf-title">NAME</div>
-      <div class="list-pf-description">CREATED DATE</div>
-      <div class="list-pf-description">LAST COMMIT</div>
-    </div>
-    <div class="list-pf-additional-content">
-      <div>
-        WORKSPACES
-        <i class="pficon pficon-info margin-left-5"
-           tooltip="Workspaces are web based development environments for your code and runtime needs"
-           placement="top"></i>
-        <div class="workspaces-banner">
-          <f8-workspaces-notification *ngIf="!cheState || !cheState.running"
-                                      [dismiss]="cheState && cheState.running"
-                                      [message]="getNotificationMessage()"
-                                      [type]="getNotificationType()"></f8-workspaces-notification>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
-<ng-template #showCol>
-  <div class="list-pf-left">
+<div class="list-pf-left">
     <span class="fa list-pf-icon list-pf-icon-bordered list-pf-icon-small"
           [ngClass]="{'fa-github': codebase?.attributes?.type === 'git'}"></span>
-  </div>
-  <div class="list-pf-content-wrapper">
-    <div class="list-pf-main-content">
-      <div class="list-pf-title">
-        <a [href]="htmlUrl" target="_blank">{{fullName}}</a>
-      </div>
-      <div class="list-pf-description">{{createdDate | date:'medium'}}</div>
-      <div class="list-pf-description">{{lastCommitDate | date:'medium'}}</div>
+</div>
+<div class="list-pf-content-wrapper">
+  <div class="list-pf-main-content">
+    <div class="list-pf-title">
+      <a [href]="htmlUrl" target="_blank">{{fullName}}</a>
     </div>
-    <div class="list-pf-additional-content">
-      <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running"></codebases-item-workspaces>
-    </div>
+    <div class="list-pf-description">{{createdDate | date:'medium'}}</div>
+    <div class="list-pf-description">{{lastCommitDate | date:'medium'}}</div>
   </div>
-</ng-template>
+  <div class="list-pf-additional-content">
+    <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running"></codebases-item-workspaces>
+  </div>
+</div>

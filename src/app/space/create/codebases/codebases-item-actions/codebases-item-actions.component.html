@@ -1,28 +1,21 @@
-<div *ngIf="index === 0; then showHeader else showCol"></div>
-<ng-template #showHeader>
-  <!-- Extra margin for kebab -->
-  <span class="margin-right-5"></span>
-</ng-template>
-<ng-template #showCol>
-  <span class="dropdown dropdown-kebab-pf" dropdown *ngIf="cheRunning">
-    <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
-      <span class="fa fa-ellipsis-v"></span>
-    </button>
-    <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
-      <li [ngClass]="{'disabled': workspaceBusy}"
-          [attr.role]="menuitem">
-        <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!workspaceBusy"
-           (click)="createAndOpenWorkspace()">Create workspace</a>
-        <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="workspaceBusy"
-           tooltip="Waiting for Che..." disabled>Create workspace</a>
-      </li>
-      <li [attr.role]="menuitem">
-        <a href="javascript:void(0)" class="dropdown-item secondary-action"
-           (click)="confirmDeleteCodebase($event)">Remove codebase</a>
-      </li>
-    </ul>
-  </span>
-</ng-template>
+<span class="dropdown dropdown-kebab-pf" dropdown *ngIf="cheRunning">
+  <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
+    <span class="fa fa-ellipsis-v"></span>
+  </button>
+  <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
+    <li [ngClass]="{'disabled': workspaceBusy}"
+        [attr.role]="menuitem">
+      <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!workspaceBusy"
+         (click)="createAndOpenWorkspace()">Create workspace</a>
+      <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="workspaceBusy"
+         tooltip="Waiting for Che..." disabled>Create workspace</a>
+    </li>
+    <li [attr.role]="menuitem">
+      <a href="javascript:void(0)" class="dropdown-item secondary-action"
+         (click)="confirmDeleteCodebase($event)">Remove codebase</a>
+    </li>
+  </ul>
+</span>
 <modal #deleteCodebaseDialog title="Remove codebase">
   <modal-content>
     <codebase-delete-dialog [host]="deleteCodebaseDialog" [codebase]="codebase" (onDelete)="onDeleteCodebase($event)"></codebase-delete-dialog>
