@@ -29,7 +29,11 @@
     </div>
     <div [collapse]="collapsed">
       <deployments-donut [applicationId]="applicationId" [environmentId]="environment.name" [spaceId]="spaceId" [mini]="false"></deployments-donut>
-      <pfng-chart-sparkline [config]="config" [chartData]="data"></pfng-chart-sparkline>
+      <p>CPU Usage</p>
+      <pfng-chart-sparkline [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>
+      <br>
+      <p>Memory Usage</p>
+      <pfng-chart-sparkline [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
     </div>
   </div>
 </div>
