@@ -238,3 +238,28 @@ export class GitHubRepoCommit {
     "patch": string;
   }]
 }
+
+export interface GitHubRepoComparison {
+  'url': string;
+  'html_url': string;
+  'permalink_url': string;
+  'diff_url': string;
+  'patch_url': string;
+  'base_commit': GitHubRepoCommit;
+  'merge_base_commit': GitHubRepoCommit;
+  'status': string;
+  'ahead_by': number;
+  'behind_by': number;
+  'total_commits': number;
+  'commits': GitHubRepoCommit[];
+}
+
+export interface GitHubRepoBranch {
+  'name': string;
+  'commit': {
+    'sha': string;
+    'url': string;
+  };
+  'protected': boolean;
+  'protection_url': string;
+}

@@ -1,18 +1,21 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import { Headers, Http, Response } from '@angular/http';
 import { AuthenticationService } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 import { cloneDeep } from 'lodash';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import {
   GitHubRepo,
+  GitHubRepoBranch,
   GitHubRepoCommit,
+  GitHubRepoComparison,
   GitHubRepoDetails,
   GitHubRepoLastCommit,
   GitHubRepoLicense,
-  GitHubUser,
+  GitHubUser
 } from './github';
 
 /**
@@ -154,6 +157,105 @@ export class GitHubService implements OnDestroy {
   }
 
   /**
+   * todo
+   *
+   * @param {string} fullName the repo full name
+   * @param {string} base the first branch name
+   * @param {string} head the second branch name
+   * @returns {Observable<any>}
+   */
+  getRepoBranchesComparisonByFullName(fullName: string, base: string, head: string): Observable<GitHubRepoComparison> {
+    const url = `${this.gitHubUrl}/repos/${fullName}/compare/${base}...${head}`;
+    if (this.cache.has(url)) {
+      return this.cache.get(url);
+    } else {
+      const res = this.getHeaders()
+        .switchMap(newHeaders => this.http
+          .get(url, { headers: newHeaders }))
+        .map(response => {
+          return response.json() as GitHubRepoComparison;
+        })
+        .publishReplay(1)
+        .refCount()
+        .catch(error => {
+          return this.handleError(error);
+        });
+      this.cache.set(url, res);
+      return res;
+    }
+  }
+
+  /**
+   * todo
+   *
+   * @param {string} url
+   * @param {string} base
+   * @param {string} head
+   * @returns {Observable<any>}
+   */
+  getRepoBranchesComparisonByUrl(url: string, base: string, head: string): Observable<GitHubRepoComparison> {
+    const fullName = this.getFullName(url);
+    return this.getRepoBranchesComparisonByFullName(fullName, base, head);
+  }
+
+  getRepoBranchesByFullName(fullName: string): Observable<GitHubRepoBranch[]> {
+    const firstPageUrl = `${this.gitHubUrl}/repos/${fullName}/branches?page=1`;
+    return this.getUrl(firstPageUrl)
+      // get last page number
+      .map(response => {
+        const links = response.headers.get('link'),
+          linkRE = /<[^>]+?page=(\d+)>;\srel="last"/;
+        if (!links || !links.length || !linkRE.test(links)) {
+          return 1;
+        } else {
+          const match = links.match(linkRE);
+          const lastPageNum = parseInt(match[1], 10);
+          return isNaN(lastPageNum) || lastPageNum < 1 ? 1 : lastPageNum;
+        }
+      })
+      // build array of pages
+      .flatMap(lastPageNum => Observable.range(1, lastPageNum))
+      .scan((pageNums: number[], num: number) => {
+        pageNums.push(num);
+        return pageNums;
+      }, [])
+      // get all pages in parallel
+      .flatMap(pageNums => {
+        return Observable.forkJoin(
+          pageNums.map(pageNum => {
+            const pageUrl = `${this.gitHubUrl}/repos/${fullName}/branches?page=${pageNum}`;
+            return this.getUrl(pageUrl);
+          })
+        );
+      })
+      // `last()` is necessary because `forkJoin` runs
+      // as any one of the subjects is completed
+      .last()
+      .map(responses => {
+        return responses.reduce((branchesAll: GitHubRepoBranch[], response: Response) => {
+          const branchesOnPage = response.json() as GitHubRepoBranch[];
+          return branchesAll.concat(branchesOnPage);
+        }, []);
+      });
+  }
+
+  timeoutObservable(sec: number): Observable<any> {
+    return Observable.create((observer) => {
+      console.log(`timeout for ${sec} seconds created`);
+      setTimeout(() => {
+        console.log(`timeout ${sec} seconds done.`);
+        observer.next(`${sec} seconds timeout.`);
+        observer.complete();
+      }, 1000 * sec);
+    });
+  }
+
+  getRepoBranchesByUrl(url: string): Observable<GitHubRepoBranch[]> {
+    const fullName = this.getFullName(url);
+    return this.getRepoBranchesByFullName(fullName);
+  }
+
+  /**
    * Get GitHub repo last commit for given URL
    *
    * @param cloneUrl The GitHub URL (e.g., https://github.com/fabric8-services/fabric8-wit.git)
@@ -285,6 +387,29 @@ export class GitHubService implements OnDestroy {
     let start = cloneUrl.indexOf(prefix);
     let end = cloneUrl.indexOf(".git");
     return (start !== -1 && end !== -1) ? cloneUrl.substring(prefix.length, end) : cloneUrl;
+  }
+
+  private getUrl(url: string): Observable<Response> {
+    if (this.cache.has(url)) {
+      return this.cache.get(url);
+    } else {
+      const res = this.getHeaders()
+        .switchMap(newHeaders => {
+          return this.http.get(url, {headers: newHeaders});
+        })
+        .publishReplay(1)
+        .refCount()
+        .catch(error => {
+          return this.handleError(error);
+        });
+
+      // in fact, response is not an `Observable` but `AnonymousSubject`
+      // so we have to complete it manually
+      (res as Subject<Response>).complete();
+
+      this.cache.set(url, res);
+      return res;
+    }
   }
 
   private handleError(error: any) {

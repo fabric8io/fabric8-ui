@@ -11,6 +11,13 @@ const routes: Routes = [
     children: [
       { path: '', component: CodebasesComponent },
       {
+        path: 'workspaces',
+        loadChildren: './workspaces/workspaces.module#WorkspacesModule',
+        data: {
+          title: 'Workspaces'
+        }
+      },
+      {
         path: 'pipelines',
         loadChildren: './pipelines/pipelines.module#PipelinesModule',
         data: {

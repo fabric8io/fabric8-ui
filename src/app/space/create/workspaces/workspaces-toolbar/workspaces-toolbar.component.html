@@ -1,0 +1,22 @@
+<div class="toolbar-header">
+  <pfng-toolbar #toolbar
+      [config]="toolbarConfig"
+      [viewTemplate]="createWorkspaceTemplate"
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)">
+    <ng-template #createWorkspaceTemplate>
+      <div class="create-workspace-action pointer"
+           (click)="openCreateWorkspaceModal()">
+        <i class="pficon pficon-add-circle-o"></i>
+
+        <strong>
+          <small>Create Workspace</small>
+        </strong>
+      </div>
+    </ng-template>
+  </pfng-toolbar>
+
+  <workspace-not-found *ngIf="workspacesCount > 0 && resultsCount === 0"
+                       (onClearAllFilters)="toolbar.clearFilter()"></workspace-not-found>
+
+</div>

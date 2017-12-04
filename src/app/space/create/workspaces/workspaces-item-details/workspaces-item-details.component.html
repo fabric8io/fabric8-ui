@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-sm-9">
+    <dl class="dl-horizontal" *ngIf="!repo">
+      <dt>Branch</dt>
+      <dd>Loading...</dd>
+    </dl>
+    <dl class="dl-horizontal" *ngIf="repo">
+      <dt>Branch</dt>
+      <dd>{{branchName}}</dd>
+      <dt>Created</dt>
+      <dd>{{repo.created_at | amTimeAgo}} ({{repo.created_at | date:'dd/MM/yyyy'}})</dd>
+      <dt>Related repositories</dt>
+      <dd>
+        <a href="javascript:void(0)" target="_blank"><b>{{repo.full_name}}</b></a>
+      </dd>
+      <dd *ngIf="repo.parent">
+        <a href="javascript:void(0)" target="_blank"><b>{{repo.parent.full_name}}</b></a>
+      </dd>
+    </dl>
+  </div>
+</div>
