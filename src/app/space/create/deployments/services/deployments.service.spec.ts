@@ -39,18 +39,6 @@ describe('DeploymentsService', () => {
     }));
   });
 
-  describe('#getPodCount', () => {
-    it('should return a number between 1 and 6', fakeAsync(() => {
-      svc.getPodCount('foo', 'bar')
-        .subscribe(val => {
-          expect(val).toBeGreaterThanOrEqual(1);
-          expect(val).toBeLessThanOrEqual(6);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-  });
-
   describe('#getVersion', () => {
     it('should return 1.0.2', fakeAsync(() => {
       svc.getVersion('foo', 'bar').subscribe(val => {

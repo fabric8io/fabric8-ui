@@ -22,15 +22,12 @@ export class DeploymentsService {
     ]);
   }
 
-  getPodCount(spaceId: string, environmentId: string): Observable<number> {
-    return Observable
-      .interval(DeploymentsService.POLL_RATE_MS)
-      .distinctUntilChanged()
-      .map(() => Math.floor(Math.random() * 5) + 1);
-  }
-
   getVersion(spaceId: string, environmentId: string): Observable<string> {
     return Observable.of('1.0.2');
+  }
+
+  getPods(spaceId: string, applicationId: string, environmentId: string): Observable<any> {
+    return Observable.of({ pods: [['Running', 2], ['Terminating', 1]], total: 3 });
   }
 
   getCpuStat(spaceId: string, environmentId: string): Observable<CpuStat> {

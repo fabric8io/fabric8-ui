@@ -21,6 +21,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   static chartIdNum = 1;
 
+  @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: Environment;
 
@@ -37,7 +38,6 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   };
 
   collapsed: boolean = true;
-  podCount: Observable<number>;
   version: Observable<string>;
 
   constructor(
@@ -52,9 +52,6 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
 
     this.config.chartHeight = 60;
-
-    this.podCount =
-      this.deploymentsService.getPodCount(this.applicationId, this.environment.environmentId);
 
     this.version =
       this.deploymentsService.getVersion(this.applicationId, this.environment.environmentId);

@@ -4,7 +4,11 @@ import {
 } from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement, Input } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  Input
+} from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -24,8 +28,10 @@ import 'patternfly/dist/js/patternfly-settings.js';
   template: ''
 })
 class FakeDeploymentsDonutComponent {
-  @Input() applicationId: string;
   @Input() mini: boolean;
+  @Input() spaceId: string;
+  @Input() applicationId: string;
+  @Input() environmentId: string;
 }
 
 describe('DeploymentCardComponent', () => {
@@ -38,7 +44,7 @@ describe('DeploymentCardComponent', () => {
     mockSvc = {
       getApplications: () => { throw 'Not Implemented'; },
       getEnvironments: () => { throw 'Not Implemented'; },
-      getPodCount: () => Observable.of(2),
+      getPods: (spaceId: string, applicationId: string, environmentId: string) => { throw 'NotImplemented'; },
       getVersion: () => Observable.of('1.2.3'),
       getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
       getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat)
@@ -46,7 +52,7 @@ describe('DeploymentCardComponent', () => {
 
     spyOn(mockSvc, 'getApplications').and.callThrough();
     spyOn(mockSvc, 'getEnvironments').and.callThrough();
-    spyOn(mockSvc, 'getPodCount').and.callThrough();
+    spyOn(mockSvc, 'getPods').and.callThrough();
     spyOn(mockSvc, 'getCpuStat').and.callThrough();
     spyOn(mockSvc, 'getMemoryStat').and.callThrough();
     spyOn(mockSvc, 'getVersion').and.callThrough();

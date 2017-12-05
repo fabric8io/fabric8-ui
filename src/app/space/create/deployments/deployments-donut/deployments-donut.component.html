@@ -1,4 +1,4 @@
-<deployments-donut-chart [mini]="mini" [pods]="pods" [desiredReplicas]="desiredReplicas" [idled]="isIdled">
+<deployments-donut-chart [mini]="mini" [pods]="pods | async" [desiredReplicas]="desiredReplicas" [idled]="isIdled">
 </deployments-donut-chart>
 
 <span column class="deployment-donut-scale-controls fade-inline" *ngIf="!isIdled && !mini">
