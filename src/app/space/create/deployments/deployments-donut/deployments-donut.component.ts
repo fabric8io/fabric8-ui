@@ -54,7 +54,7 @@ export class DeploymentsDonutComponent implements OnInit {
   }
 
   getDesiredReplicas(): number {
-    if (this.desiredReplicas) {
+    if (this.desiredReplicas !== undefined) {
       return this.desiredReplicas;
     }
 
