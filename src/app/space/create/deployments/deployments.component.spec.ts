@@ -27,6 +27,7 @@ import { Spaces } from 'ngx-fabric8-wit';
   selector: 'deployments-resource-usage',
   template: ''
 })
+
 class FakeDeploymentsResourceUsageComponent {
   @Input() environments: Observable<Environment[]>;
 }
@@ -56,7 +57,7 @@ describe('DeploymentsComponent', () => {
     mockSvc = {
       getApplications: () => mockApplications,
       getEnvironments: () => mockEnvironments,
-      getPodCount: () => { throw 'Not Implemented'; },
+      getPods: (spaceId: string, appId: string, envId: string) => { throw 'NotImplemented'; },
       getVersion: () => { throw 'NotImplemented'; },
       getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
       getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat)
@@ -68,7 +69,7 @@ describe('DeploymentsComponent', () => {
 
     spyOn(mockSvc, 'getApplications').and.callThrough();
     spyOn(mockSvc, 'getEnvironments').and.callThrough();
-    spyOn(mockSvc, 'getPodCount').and.callThrough();
+    spyOn(mockSvc, 'getPods').and.callThrough();
     spyOn(mockSvc, 'getVersion').and.callThrough();
     spyOn(mockSvc, 'getCpuStat').and.callThrough();
     spyOn(mockSvc, 'getMemoryStat').and.callThrough();
