@@ -11,6 +11,13 @@ const routes: Routes = [
     children: [
       { path: '', component: OverviewComponent },
       {
+        path: '_myspaces',
+        loadChildren: './my-spaces/my-spaces.module#MySpacesModule',
+        data: {
+          title: 'Spaces'
+        }
+      },
+      {
         path: '_spaces',
         loadChildren: './spaces/spaces.module#SpacesModule',
         data: {
