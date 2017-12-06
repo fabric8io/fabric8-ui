@@ -9,6 +9,7 @@ import {
   Observable,
   Subscription
 } from 'rxjs';
+import { uniqueId } from 'lodash';
 
 import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
@@ -46,13 +47,13 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   };
 
   public cpuConfig: any = {
-    // Seperate chart IDs must be unique, otherwise only one will appear
-    chartId: 'cpu-chart-' + DeploymentCardComponent.chartIdNum++ + '-'
+    // Seperate charts must have unique IDs, otherwise only one will appear
+    chartId: uniqueId('cpu-chart-') + '-'
   };
 
   public memConfig: any = {
-    // Seperate chart IDs must be unique, otherwise only one will appear
-    chartId: 'mem-chart-' + DeploymentCardComponent.chartIdNum++ + '-'
+    // Seperate charts must have unique IDs, otherwise only one will appear
+    chartId: uniqueId('mem-chart-') + '-'
   };
 
   collapsed: boolean = true;
