@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   selector: 'deployments-appenvs',
   templateUrl: 'deployments-appenvs.component.html'
 })
-export class DeploymentsAppEnvsComponent {
+export class DeploymentsAppsComponent {
 
   @Input() environments: Observable<Environment[]>;
   @Input() applications: Observable<string[]>;

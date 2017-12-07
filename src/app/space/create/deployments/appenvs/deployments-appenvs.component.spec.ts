@@ -12,7 +12,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { DeploymentsAppEnvsComponent } from './deployments-appenvs.component';
+import { DeploymentsAppsComponent } from './deployments-appenvs.component';
 import { Environment } from '../models/environment';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -30,8 +30,8 @@ class FakeDeploymentCardContainerComponent {
 
 describe('DeploymentsAppEnvsComponent', () => {
 
-  let component: DeploymentsAppEnvsComponent;
-  let fixture: ComponentFixture<DeploymentsAppEnvsComponent>;
+  let component: DeploymentsAppsComponent;
+  let fixture: ComponentFixture<DeploymentsAppsComponent>;
   let mockApplicationData = ['first', 'second'];
   let mockApplications = Observable.of(mockApplicationData);
   let mockEnvironments = Observable.of([
@@ -43,12 +43,12 @@ describe('DeploymentsAppEnvsComponent', () => {
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
       declarations: [
-        DeploymentsAppEnvsComponent,
+        DeploymentsAppsComponent,
         FakeDeploymentCardContainerComponent
       ]
     });
 
-    fixture = TestBed.createComponent(DeploymentsAppEnvsComponent);
+    fixture = TestBed.createComponent(DeploymentsAppsComponent);
     component = fixture.componentInstance;
     component.environments = mockEnvironments;
     component.applications = mockApplications;
