@@ -32,10 +32,10 @@ class FakeDeploymentsResourceUsageComponent {
 }
 
 @Component({
-  selector: 'deployments-appenvs',
+  selector: 'deployments-apps',
   template: ''
 })
-class FakeDeploymentAppEnvsComponent {
+class FakeDeploymentAppsComponent {
   @Input() environments: Observable<Environment[]>;
   @Input() applications: Observable<string[]>;
 }
@@ -77,7 +77,7 @@ describe('DeploymentsComponent', () => {
       imports: [ CollapseModule.forRoot() ],
       declarations: [
         DeploymentsComponent,
-        FakeDeploymentAppEnvsComponent,
+        FakeDeploymentAppsComponent,
         FakeDeploymentsResourceUsageComponent
       ],
       providers: [
@@ -117,11 +117,11 @@ describe('DeploymentsComponent', () => {
     let resourceUsageComponent = resourceUsageComponents[0].componentInstance;
     expect(resourceUsageComponent.environments).toEqual(mockEnvironments);
 
-    let appEnvsComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentAppEnvsComponent));
-    expect(appEnvsComponents.length).toEqual(1);
-    let appEnvsComponent = appEnvsComponents[0].componentInstance;
-    expect(appEnvsComponent.environments).toEqual(mockEnvironments);
-    expect(appEnvsComponent.applications).toEqual(mockApplications);
+    let appsComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentAppsComponent));
+    expect(appsComponents.length).toEqual(1);
+    let appsComponent = appsComponents[0].componentInstance;
+    expect(appsComponent.environments).toEqual(mockEnvironments);
+    expect(appsComponent.applications).toEqual(mockApplications);
   });
 
 });

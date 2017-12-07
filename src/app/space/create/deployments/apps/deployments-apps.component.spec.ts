@@ -12,7 +12,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { DeploymentsAppsComponent } from './deployments-appenvs.component';
+import { DeploymentsAppsComponent } from './deployments-apps.component';
 import { Environment } from '../models/environment';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -28,7 +28,7 @@ class FakeDeploymentCardContainerComponent {
   @Input() application: string;
 }
 
-describe('DeploymentsAppEnvsComponent', () => {
+describe('DeploymentsAppsComponent', () => {
 
   let component: DeploymentsAppsComponent;
   let fixture: ComponentFixture<DeploymentsAppsComponent>;

@@ -8,8 +8,8 @@ import { Environment } from '../models/environment';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'deployments-appenvs',
-  templateUrl: 'deployments-appenvs.component.html'
+  selector: 'deployments-apps',
+  templateUrl: 'deployments-apps.component.html'
 })
 export class DeploymentsAppsComponent {
 
