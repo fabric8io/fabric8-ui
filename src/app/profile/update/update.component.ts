@@ -237,10 +237,14 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   updateTenent(): void {
     this.subscriptions.push(this.tenentService.updateTenent()
       .subscribe(res => {
-        // Do nothing
-        let test = '';
+        if (res.status === 200) {
+          this.notifySuccess('Updated tenant successfully');
+          this.router.navigate(['/', '_home']);
+        } else {
+          this.handleError('Failed to update tenant', NotificationType.DANGER);
+        }
       }, error => {
-        this.handleError('Failed to update tenent', NotificationType.DANGER);
+        this.handleError('Failed to update tenant', NotificationType.DANGER);
       }));
   }
 
@@ -385,6 +389,13 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.notifications.message({
       message: error,
       type: type
+    } as Notification);
+  }
+
+  private notifySuccess(successMessage: string) {
+    this.notifications.message({
+      message: successMessage,
+      type: NotificationType.SUCCESS
     } as Notification);
   }
 }
