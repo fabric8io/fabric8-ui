@@ -37,6 +37,7 @@ class FakeDeploymentsResourceUsageComponent {
   template: ''
 })
 class FakeDeploymentAppsComponent {
+  @Input() spaceId: Observable<string>;
   @Input() environments: Observable<Environment[]>;
   @Input() applications: Observable<string[]>;
 }
@@ -60,7 +61,11 @@ describe('DeploymentsComponent', () => {
       getPods: (spaceId: string, appId: string, envId: string) => { throw 'NotImplemented'; },
       getVersion: () => { throw 'NotImplemented'; },
       getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
-      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat)
+      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat),
+      getLogsUrl: () => { throw 'Not Implemented'; },
+      getConsoleUrl: () => { throw 'Not Implemented'; },
+      getAppUrl: () => { throw 'Not Implemented'; },
+      deleteApplication: () => { throw 'Not Implemented'; }
     };
 
     spaces = {
@@ -73,6 +78,10 @@ describe('DeploymentsComponent', () => {
     spyOn(mockSvc, 'getVersion').and.callThrough();
     spyOn(mockSvc, 'getCpuStat').and.callThrough();
     spyOn(mockSvc, 'getMemoryStat').and.callThrough();
+    spyOn(mockSvc, 'getLogsUrl').and.callThrough();
+    spyOn(mockSvc, 'getConsoleUrl').and.callThrough();
+    spyOn(mockSvc, 'getAppUrl').and.callThrough();
+    spyOn(mockSvc, 'deleteApplication').and.callThrough();
 
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],

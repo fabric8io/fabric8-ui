@@ -46,4 +46,25 @@ export class DeploymentsService {
       .map(() => ({ used: Math.floor(Math.random() * 156) + 100, total: 256 } as MemoryStat))
       .startWith({ used: 200, total: 256 } as MemoryStat);
   }
+
+  getLogsUrl(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
+    return Observable.of('http://example.com/');
+  }
+
+  getConsoleUrl(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
+    return Observable.of('http://example.com/');
+  }
+
+  getAppUrl(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
+    if (Math.random() > 0.5) {
+      return Observable.of('http://example.com/');
+    } else {
+      return Observable.of('');
+    }
+  }
+
+  deleteApplication(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
+    return Observable.of(`Deleted ${applicationId} in ${spaceId} (${environmentId})`);
+  }
+
 }
