@@ -5,6 +5,11 @@
         {{application}}
       </h4>
     </div>
-    <deployment-card class="col-xs-6 col-sm-4 col-md-3" [applicationId]="application" [environment]="environment" *ngFor="let environment of environments | async"></deployment-card>
+    <deployment-card class="col-xs-6 col-sm-4 col-md-3"
+      *ngFor="let environment of environments | async"
+      [spaceId]="spaceId"
+      [applicationId]="application"
+      [environment]="environment"
+    ></deployment-card>
   </div>
 </div>

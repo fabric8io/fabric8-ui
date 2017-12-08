@@ -5,7 +5,10 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
 
 import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
@@ -21,6 +24,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   static chartIdNum = 1;
 
+  @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: Environment;
 
@@ -40,6 +44,12 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   podCount: Observable<number>;
   version: Observable<string>;
 
+  logsUrl: Observable<string>;
+  consoleUrl: Observable<string>;
+  appUrl: Observable<string>;
+
+  subscriptions: Array<Subscription> = [];
+
   constructor(
     private deploymentsService: DeploymentsService
   ) { }
@@ -47,10 +57,12 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   getChartIdNum(): number {
     return DeploymentCardComponent.chartIdNum;
   }
-  ngOnDestroy(): void { }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 
   ngOnInit(): void {
-
     this.config.chartHeight = 60;
 
     this.podCount =
@@ -58,6 +70,22 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
     this.version =
       this.deploymentsService.getVersion(this.applicationId, this.environment.environmentId);
+
+    this.logsUrl =
+      this.deploymentsService.getLogsUrl(this.spaceId, this.applicationId, this.environment.environmentId);
+
+    this.consoleUrl =
+      this.deploymentsService.getConsoleUrl(this.spaceId, this.applicationId, this.environment.environmentId);
+
+    this.appUrl =
+      this.deploymentsService.getAppUrl(this.spaceId, this.applicationId, this.environment.environmentId);
+  }
+
+  delete(): void {
+    this.subscriptions.push(
+      this.deploymentsService.deleteApplication(this.spaceId, this.applicationId, this.environment.environmentId)
+        .subscribe(alert)
+    );
   }
 
 }

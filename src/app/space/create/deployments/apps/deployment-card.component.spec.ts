@@ -41,7 +41,11 @@ describe('DeploymentCardComponent', () => {
       getPodCount: () => Observable.of(2),
       getVersion: () => Observable.of('1.2.3'),
       getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
-      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat)
+      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat),
+      getAppUrl: () => Observable.of('mockAppUrl'),
+      getConsoleUrl: () => Observable.of('mockConsoleUrl'),
+      getLogsUrl: () => Observable.of('mockLogsUrl'),
+      deleteApplication: () => Observable.of('mockDeletedMessage')
     };
 
     spyOn(mockSvc, 'getApplications').and.callThrough();
@@ -50,6 +54,10 @@ describe('DeploymentCardComponent', () => {
     spyOn(mockSvc, 'getCpuStat').and.callThrough();
     spyOn(mockSvc, 'getMemoryStat').and.callThrough();
     spyOn(mockSvc, 'getVersion').and.callThrough();
+    spyOn(mockSvc, 'getAppUrl').and.callThrough();
+    spyOn(mockSvc, 'getConsoleUrl').and.callThrough();
+    spyOn(mockSvc, 'getLogsUrl').and.callThrough();
+    spyOn(mockSvc, 'deleteApplication').and.callThrough();
 
     TestBed.configureTestingModule({
       imports: [CollapseModule.forRoot(), ChartModule],
