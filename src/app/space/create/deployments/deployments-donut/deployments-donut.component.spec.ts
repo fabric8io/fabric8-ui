@@ -3,10 +3,22 @@ import {
   TestBed
 } from '@angular/core/testing';
 
+import { Component, Input } from '@angular/core';
+
 import { isEqual } from 'lodash';
 
 import { DeploymentsDonutComponent } from './deployments-donut.component';
-import { DeploymentsDonutChartComponent } from './deployments-donut-chart/deployments-donut-chart.component';
+
+@Component({
+  selector: 'deployments-donut-chart',
+  template: ''
+})
+class FakeDeploymentsDonutChartComponent {
+  @Input() desiredReplicas: number;
+  @Input() idled: boolean;
+  @Input() mini: boolean;
+  @Input() pods: any[];
+}
 
 describe('DeploymentsDonutComponent', () => {
   let component: DeploymentsDonutComponent;
@@ -14,7 +26,7 @@ describe('DeploymentsDonutComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DeploymentsDonutComponent, DeploymentsDonutChartComponent]
+      declarations: [DeploymentsDonutComponent, FakeDeploymentsDonutChartComponent]
     });
 
     fixture = TestBed.createComponent(DeploymentsDonutComponent);

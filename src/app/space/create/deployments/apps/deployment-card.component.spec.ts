@@ -4,17 +4,13 @@ import {
 } from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { Component, DebugElement, Input } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentCardComponent } from './deployment-card.component';
-import { DeploymentsDonutComponent } from '../deployments-donut/deployments-donut.component';
-import {
-  DeploymentsDonutChartComponent
-} from '../deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
 import { DeploymentsService } from '../services/deployments.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
@@ -22,6 +18,15 @@ import { MemoryStat } from '../models/memory-stat';
 // Makes patternfly charts available
 import { ChartModule } from 'patternfly-ng';
 import 'patternfly/dist/js/patternfly-settings.js';
+
+@Component({
+  selector: 'deployments-donut',
+  template: ''
+})
+class FakeDeploymentsDonutComponent {
+  @Input() applicationId: string;
+  @Input() mini: boolean;
+}
 
 describe('DeploymentCardComponent', () => {
 
@@ -48,7 +53,7 @@ describe('DeploymentCardComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [CollapseModule.forRoot(), ChartModule],
-      declarations: [DeploymentCardComponent, DeploymentsDonutComponent, DeploymentsDonutChartComponent],
+      declarations: [DeploymentCardComponent, FakeDeploymentsDonutComponent],
       providers: [{ provide: DeploymentsService, useValue: mockSvc }]
     });
 
