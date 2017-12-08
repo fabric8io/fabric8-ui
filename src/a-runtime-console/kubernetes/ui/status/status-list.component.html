@@ -1,7 +1,8 @@
 <li class="list-group-item">
-  <status-info hidden [info]="cheStatusObserver | async">
+  <span>
+    <span class="pficon pficon-ok"></span>
     Che
-  </status-info>
+  </span>
 </li>
 <li class="list-group-item">
   <status-info [info]="pipelineStatusObserver | async">
