@@ -18,7 +18,8 @@ import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
   selector: 'deployment-card',
-  templateUrl: 'deployment-card.component.html'
+  templateUrl: 'deployment-card.component.html',
+  styleUrls: ['./deployment-card.component.less']
 })
 export class DeploymentCardComponent implements OnDestroy, OnInit {
 
