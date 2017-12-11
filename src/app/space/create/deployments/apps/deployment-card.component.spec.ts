@@ -1,4 +1,5 @@
 import {
+  async,
   ComponentFixture,
   TestBed
 } from '@angular/core/testing';
@@ -12,6 +13,11 @@ import {
 
 import { Observable } from 'rxjs';
 
+import {
+  BsDropdownConfig,
+  BsDropdownModule,
+  BsDropdownToggleDirective
+} from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentCardComponent } from './deployment-card.component';
@@ -66,14 +72,15 @@ describe('DeploymentCardComponent', () => {
     spyOn(mockSvc, 'deleteApplication').and.callThrough();
 
     TestBed.configureTestingModule({
-      imports: [CollapseModule.forRoot(), ChartModule],
-      declarations: [DeploymentCardComponent, FakeDeploymentsDonutComponent],
-      providers: [{ provide: DeploymentsService, useValue: mockSvc }]
+      imports: [ BsDropdownModule.forRoot(), CollapseModule.forRoot(), ChartModule ],
+      declarations: [ DeploymentCardComponent, FakeDeploymentsDonutComponent ],
+      providers: [ BsDropdownConfig, { provide: DeploymentsService, useValue: mockSvc } ]
     });
 
     fixture = TestBed.createComponent(DeploymentCardComponent);
     component = fixture.componentInstance;
 
+    component.spaceId = 'mockSpaceId';
     component.applicationId = 'mockAppId';
     component.environment = { environmentId: 'mockEnvironmentId', name: 'mockEnvironment' };
 
@@ -103,6 +110,81 @@ describe('DeploymentCardComponent', () => {
       expect(mockSvc.getVersion).toHaveBeenCalledWith('mockAppId', 'mockEnvironmentId');
       expect(el.textContent).toEqual('1.2.3');
     });
+  });
+
+  describe('dropdown menus', () => {
+    let menuItems: DebugElement[];
+
+    function getItemByLabel(label: string): DebugElement {
+      return menuItems
+        .filter(item => item.nativeElement.textContent.includes(label))[0];
+    }
+
+    beforeEach(async(() => {
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        fixture.detectChanges();
+        let de = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
+        de.triggerEventHandler('click', null);
+
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+          let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
+          menuItems = menu.queryAll(By.css('li'));
+        });
+      });
+    }));
+
+    it('should have menu items', () => {
+      expect(menuItems.length).toBeGreaterThan(0);
+    });
+
+    it('should link to fake logsUrl on \'View logs\'', () => {
+      let item = getItemByLabel('View logs');
+      expect(item).toBeTruthy();
+      let link = item.query(By.css('a'));
+      expect(link.attributes['target']).toEqual('_blank');
+      expect(link.attributes['href']).toEqual('mockLogsUrl');
+    });
+
+    it('should link to fake consoleUrl on \'View OpenShift Console\'', () => {
+      let item = getItemByLabel('View OpenShift Console');
+      expect(item).toBeTruthy();
+      let link = item.query(By.css('a'));
+      expect(link.attributes['target']).toEqual('_blank');
+      expect(link.attributes['href']).toEqual('mockConsoleUrl');
+    });
+
+    it('should link to fake appUrl on \'Open Application\'', () => {
+      let item = getItemByLabel('Open Application');
+      expect(item).toBeTruthy();
+      let link = item.query(By.css('a'));
+      expect(link.attributes['target']).toEqual('_blank');
+      expect(link.attributes['href']).toEqual('mockAppUrl');
+    });
+
+    it('should not display appUrl if none available', () => {
+      component.appUrl = Observable.of('');
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
+        menuItems = menu.queryAll(By.css('li'));
+        let item = getItemByLabel('Open Application');
+        expect(item).toBeFalsy();
+      });
+    });
+
+    it('should invoke service \'delete\' function on Delete item click', async(() => {
+      let item = getItemByLabel('Delete');
+      expect(item).toBeTruthy();
+      expect(mockSvc.deleteApplication).not.toHaveBeenCalled();
+      item.query(By.css('a')).triggerEventHandler('click', null);
+
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(mockSvc.deleteApplication).toHaveBeenCalled();
+      });
+    }));
   });
 
 });
