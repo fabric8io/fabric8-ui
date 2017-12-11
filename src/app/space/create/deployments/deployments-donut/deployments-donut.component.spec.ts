@@ -31,6 +31,7 @@ class FakeDeploymentsDonutChartComponent {
   @Input() idled: boolean;
   @Input() mini: boolean;
   @Input() pods: any[];
+  @Input() colors: any;
 }
 
 describe('DeploymentsDonutComponent', () => {

@@ -24,6 +24,18 @@ export class DeploymentsDonutComponent implements OnInit {
   desiredReplicas: number;
   debounceScale = debounce(this.scale, 650);
 
+  colors = {
+    'Empty': '#ffffff', // black
+    'Running': '#00b9e4', // dark blue
+    'Not Ready': '#beedf9', // light blue
+    'Warning': '#f39d3c', // orange
+    'Error': '#d9534f', // red
+    'Pulling': '#d1d1d1', // grey
+    'Pending': '#ededed', // light grey
+    'Succeeded': '#3f9c35', // green
+    'Terminating': '#00659c', // dark blue
+    'Unknown': '#f9d67a' // light yellow
+  };
 
   private replicas: number;
 

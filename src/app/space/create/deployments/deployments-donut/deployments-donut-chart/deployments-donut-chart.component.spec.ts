@@ -13,7 +13,12 @@ import { DeploymentsDonutChartComponent } from './deployments-donut-chart.compon
 describe('DeploymentsDonutChartComponent', () => {
   @Component({
     template: `
-    <deployments-donut-chart [mini]="mini" [pods]="pods | async" [desiredReplicas]="desiredReplicas" [idled]="isIdled">
+    <deployments-donut-chart
+    [colors]="colors"
+    [mini]="mini"
+    [pods]="pods | async"
+    [desiredReplicas]="desiredReplicas"
+    [idled]="isIdled">
     </deployments-donut-chart>
     `
   })
@@ -22,6 +27,18 @@ describe('DeploymentsDonutChartComponent', () => {
     pods = Observable.of({ pods: [['Running', 1], ['Terminating', 1]], total: 2 });
     desiredReplicas = 1;
     isIdled = false;
+    colors = {
+      'Empty': '#ffffff', // black
+      'Running': '#00b9e4', // dark blue
+      'Not Ready': '#beedf9', // light blue
+      'Warning': '#f39d3c', // orange
+      'Error': '#d9534f', // red
+      'Pulling': '#d1d1d1', // grey
+      'Pending': '#ededed', // light grey
+      'Succeeded': '#3f9c35', // green
+      'Terminating': '#00659c', // dark blue
+      'Unknown': '#f9d67a' // light yellow
+    };
 
     @ViewChild(DeploymentsDonutChartComponent)
     childComponent: DeploymentsDonutChartComponent;
