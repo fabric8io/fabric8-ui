@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 
 import { DeploymentsDonutComponent } from './deployments-donut.component';
 import { DeploymentsService } from '../services/deployments.service';
+import { Pods } from '../models/pods';
 
 @Component({
   selector: 'deployments-donut-chart',
@@ -37,7 +38,7 @@ describe('DeploymentsDonutComponent', () => {
       getPods: (spaceId: string, appId: string, envId: string) => Observable.of({
         pods: [['Running', 1], ['Terminating', 1]],
         total: 2
-      }),
+      } as Pods),
       getVersion: () => { throw 'NotImplemented'; },
       getCpuStat: (spaceId: string, envId: string) => { throw 'NotImplemented'; },
       getMemoryStat: (spaceId: string, envId: string) => { throw 'NotImplemented'; }

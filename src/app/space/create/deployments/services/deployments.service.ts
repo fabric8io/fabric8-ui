@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Environment } from '../models/environment';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { Pods } from '../models/pods';
 
 @Injectable()
 export class DeploymentsService {
@@ -26,8 +27,8 @@ export class DeploymentsService {
     return Observable.of('1.0.2');
   }
 
-  getPods(spaceId: string, applicationId: string, environmentId: string): Observable<any> {
-    return Observable.of({ pods: [['Running', 2], ['Terminating', 1]], total: 3 });
+  getPods(spaceId: string, applicationId: string, environmentId: string): Observable<Pods> {
+    return Observable.of({ pods: [['Running', 2], ['Terminating', 1]], total: 3 } as Pods);
   }
 
   getCpuStat(spaceId: string, environmentId: string): Observable<CpuStat> {
