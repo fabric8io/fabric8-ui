@@ -10,20 +10,20 @@
       </button>
       <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="kebab" role="menu" *dropdownMenu>
         <li>
-          <a [attr.href]="logsUrl | async" target="_blank">View logs</a>
+          <a class="menu-item" [attr.href]="logsUrl | async" target="_blank">View logs</a>
         </li>
         <li>
-          <a [attr.href]="consoleUrl | async" target="_blank">View OpenShift Console</a>
+          <a class="menu-item" [attr.href]="consoleUrl | async" target="_blank">View OpenShift Console</a>
         </li>
         <ng-container *ngIf="appUrl | async; let appUrl">
           <li role="separator" class="divider"></li>
           <li>
-            <a [attr.href]="appUrl" target="_blank">Open Application</a>
+            <a class="menu-item" [attr.href]="appUrl" target="_blank">Open Application</a>
           </li>
         </ng-container>
         <li role="separator" class="divider"></li>
         <li>
-          <a (click)="delete()">Delete</a>
+          <a class="menu-item" (click)="delete()">Delete</a>
         </li>
       </ul>
     </div>
