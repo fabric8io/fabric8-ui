@@ -55,6 +55,17 @@ class FakeDeploymentGraphLabelComponent {
   @Input() valueUpperBound: any;
 }
 
+@Component({
+  selector: 'collapsible-deployment-info',
+  template: ''
+})
+class CollapsibleDeploymentInfoComponent {
+  @Input() collapsed: boolean;
+  @Input() applicationId: string;
+  @Input() environment: Environment;
+  @Input() spaceId: string;
+}
+
 describe('DeploymentCardComponent', () => {
 
   let component: DeploymentCardComponent;
@@ -76,7 +87,12 @@ describe('DeploymentCardComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ BsDropdownModule.forRoot(), CollapseModule.forRoot(), ChartModule ],
-      declarations: [ DeploymentCardComponent, FakeDeploymentsDonutComponent, FakeDeploymentGraphLabelComponent ],
+      declarations: [
+        DeploymentCardComponent,
+        FakeDeploymentsDonutComponent,
+        FakeDeploymentGraphLabelComponent,
+        CollapsibleDeploymentInfoComponent
+      ],
       providers: [
         BsDropdownConfig,
         { provide: NotificationsService, useValue: notifications },
@@ -108,52 +124,6 @@ describe('DeploymentCardComponent', () => {
     it('should be set from mockSvc.getVersion result', () => {
       expect(mockSvc.getVersion).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
       expect(el.textContent).toEqual('1.2.3');
-    });
-  });
-
-  describe('cpu label', () => {
-    let de: DebugElement;
-
-    beforeEach(() => {
-      let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
-      let cpuChart = charts[0];
-      de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
-    });
-
-    it('should use units from service result', () => {
-      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
-      expect(de.componentInstance.dataMeasure).toEqual('Cores');
-    });
-
-    it('should use value from service result', () => {
-      expect(de.componentInstance.value).toEqual(1);
-    });
-
-    it('should use upper bound from service result', () => {
-      expect(de.componentInstance.valueUpperBound).toEqual(2);
-    });
-  });
-
-  describe('memory label', () => {
-    let de: DebugElement;
-
-    beforeEach(() => {
-      let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
-      let memoryChart = charts[1];
-      de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));
-    });
-
-    it('should use units from service result', () => {
-      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
-      expect(de.componentInstance.dataMeasure).toEqual('GB');
-    });
-
-    it('should use value from service result', () => {
-      expect(de.componentInstance.value).toEqual(3);
-    });
-
-    it('should use upper bound from service result', () => {
-      expect(de.componentInstance.valueUpperBound).toEqual(4);
     });
   });
 

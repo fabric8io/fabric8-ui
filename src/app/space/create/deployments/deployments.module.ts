@@ -9,6 +9,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { DeploymentsComponent } from '../deployments/deployments.component';
 import { DeploymentsAppsComponent } from '../deployments/apps/deployments-apps.component';
+import { CollapsibleDeploymentInfoComponent } from '../deployments/apps/collapsible-deployment-info.component';
 import { DeploymentsResourceUsageComponent } from '../deployments/resource-usage/deployments-resource-usage.component';
 import { DeploymentCardContainerComponent } from '../deployments/apps/deployment-card-container.component';
 import { DeploymentCardComponent } from '../deployments/apps/deployment-card.component';
@@ -42,6 +43,7 @@ import { ChartModule } from 'patternfly-ng';
     DeploymentCardComponent,
     DeploymentGraphLabelComponent,
     DeploymentsAppsComponent,
+    CollapsibleDeploymentInfoComponent,
     DeploymentsResourceUsageComponent,
     DeploymentsDonutComponent,
     DeploymentsDonutChartComponent,

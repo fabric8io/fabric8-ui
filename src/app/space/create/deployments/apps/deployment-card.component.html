@@ -37,26 +37,7 @@
         </div>
       </div>
     </div>
-    <div [collapse]="collapsed">
-      <hr>
-      <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="false"></deployments-donut>
-      <div class="deployment-chart">
-        <div class="chart-column">
-          <pfng-chart-sparkline class="chart-sparkline" [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>
-        </div>
-        <div class="chart-column">
-          <deployment-graph-label type="CPU" dataMeasure="Cores" [value]="cpuVal" [valueUpperBound]="cpuMax"></deployment-graph-label>
-        </div>
-      </div>
-
-      <div class="deployment-chart">
-        <div class="chart-column">
-          <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
-        </div>
-        <div class="chart-column chart-text">
-          <deployment-graph-label type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
-        </div>
-      </div>
-    </div>
+    <collapsible-deployment-info [collapsed]="collapsed" [applicationId]="applicationId"
+      [environment]="environment" [spaceId]="spaceId"></collapsible-deployment-info>
   </div>
 </div>
