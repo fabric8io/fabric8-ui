@@ -11,6 +11,8 @@ import {
 import { debounce, get, isEqual, reject, size, uniqueId } from 'lodash';
 import { Observable } from 'rxjs';
 
+import { Pods } from '../../models/pods';
+
 import * as c3 from 'c3';
 import * as d3 from 'd3';
 
@@ -21,7 +23,7 @@ import * as d3 from 'd3';
 })
 export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit {
 
-  @Input() pods: any;
+  @Input() pods: Pods;
   @Input() mini: boolean;
   @Input() desiredReplicas: number;
   @Input() idled: boolean;

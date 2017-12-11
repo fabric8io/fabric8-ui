@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import { Observable } from 'rxjs';
 
 import { DeploymentsService } from '../services/deployments.service';
+import { Pods } from '../models/pods';
 
 @Component({
   selector: 'deployments-donut',
@@ -18,7 +19,7 @@ export class DeploymentsDonutComponent implements OnInit {
 
   isIdled = false;
   scalable = true;
-  pods: Observable<any>;
+  pods: Observable<Pods>;
   desiredReplicas: number;
 
 
