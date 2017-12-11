@@ -62,6 +62,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   memStat: Observable<MemoryStat>;
   cpuTime: number;
   memTime: number;
+  cpuVal: number;
+  memVal: number;
 
   logsUrl: Observable<string>;
   consoleUrl: Observable<string>;
@@ -82,8 +84,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.cpuConfig.chartHeight = 60;
-    this.memConfig.chartHeight = 60;
+    this.cpuConfig.chartHeight = 100;
+    this.memConfig.chartHeight = 100;
     this.cpuTime = 1;
     this.memTime = 1;
 
@@ -106,11 +108,13 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
       this.deploymentsService.getMemoryStat(this.applicationId, this.environment.environmentId);
 
     this.cpuStat.subscribe(stat => {
+      this.cpuVal = stat.used;
       this.cpuData.yData.push(stat.used);
       this.cpuData.xData.push(this.cpuTime++);
     });
 
     this.memStat.subscribe(stat => {
+      this.memVal = stat.used;
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
     });
