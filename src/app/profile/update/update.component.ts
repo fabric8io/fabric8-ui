@@ -13,6 +13,13 @@ import { GitHubService } from '../../space/create/codebases/services/github.serv
 import { CopyService } from '../services/copy.service';
 import { TenentService } from '../services/tenent.service';
 
+export enum TenantUpdateStatus {
+  NoAction,
+  Updating,
+  Success,
+  Failure
+};
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-update',
@@ -21,6 +28,9 @@ import { TenentService } from '../services/tenent.service';
   providers: [CopyService, GettingStartedService, GitHubService, TenentService]
 })
 export class UpdateComponent implements AfterViewInit, OnInit {
+  // Required for usage of enums in the template.
+  TenantUpdateStatus = TenantUpdateStatus;
+
   @ViewChild('_email') emailElement: ElementRef;
   @ViewChild('_bio') bioElement: HTMLElement;
   @ViewChild('_imageUrl') imageUrlElement: ElementRef;
@@ -53,6 +63,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   subscriptions: Subscription[] = [];
   token: string;
   tokenPanelOpen: boolean = false;
+  updateTenantStatus: TenantUpdateStatus = TenantUpdateStatus.NoAction;
   username: string;
   usernameInvalid: boolean = false;
   url: string;
@@ -235,16 +246,25 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * Update tenent
    */
   updateTenent(): void {
+    this.updateTenantStatus = TenantUpdateStatus.Updating;
     this.subscriptions.push(this.tenentService.updateTenent()
       .subscribe(res => {
         if (res.status === 200) {
-          this.notifySuccess('Updated tenant successfully');
-          this.router.navigate(['/', '_home']);
+          this.updateTenantStatus = TenantUpdateStatus.Success;
+          this.notifications.message({
+            message: `Profile updated!`,
+            type: NotificationType.SUCCESS
+          } as Notification);
         } else {
-          this.handleError('Failed to update tenant', NotificationType.DANGER);
+          this.updateTenantStatus = TenantUpdateStatus.Failure;
+          this.notifications.message({
+            message: `Error updating tenant`,
+            type: NotificationType.DANGER
+          } as Notification);
         }
       }, error => {
-        this.handleError('Failed to update tenant', NotificationType.DANGER);
+        this.updateTenantStatus = TenantUpdateStatus.Failure;
+        this.handleError('Unexpected error updating tenant', NotificationType.DANGER);
       }));
   }
 

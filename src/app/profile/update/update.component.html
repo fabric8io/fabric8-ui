@@ -127,12 +127,29 @@
             </div>
           </div>
         </div>
-        <div class="row padding-top-15">
-          <div class="col-sm-9 col-sm-offset-3">
-            <button class="btn btn-lg btn-default pull-right margin-left-15"
-                    (click)="cleanupTenant()">Reset Environment</button>
-            <button class="btn btn-lg btn-default pull-right"
-            (click)="updateTenent()">Update Tenant</button>
+
+        <div class="container-fluid pull-right">
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-lg btn-default" (click)="updateTenent()" [disabled]="updateTenantStatus === TenantUpdateStatus.Updating">Update Tenant</button>
+              <button class="btn btn-lg btn-default" (click)="cleanupTenant()">Reset Environment</button>
+            </div>
+            <div class="update-tenant-status" *ngIf="updateTenantStatus !== TenantUpdateStatus.NoAction">
+              <div *ngIf="updateTenantStatus === TenantUpdateStatus.Updating">
+                <span class="spinner spinner-xs spinner-inline fa-spin"></span>
+                <span class="">Updating tenant</span>
+              </div>
+              <div *ngIf="updateTenantStatus === TenantUpdateStatus.Success">
+                <div class="text-success">
+                  <span class="fa fa-check update-icon-padding"></span>Updated tenant
+                </div>
+              </div>
+              <div *ngIf="updateTenantStatus === TenantUpdateStatus.Failure">
+                <div class="text-danger">
+                  <span class="pficon-close update-icon-padding"></span>Failed to update tenant
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </form>
