@@ -56,10 +56,10 @@ class FakeDeploymentGraphLabelComponent {
 }
 
 @Component({
-  selector: 'collapsible-deployment-info',
+  selector: 'deployment-details',
   template: ''
 })
-class CollapsibleDeploymentInfoComponent {
+class FakeDeploymentDetailsComponent {
   @Input() collapsed: boolean;
   @Input() applicationId: string;
   @Input() environment: Environment;
@@ -91,7 +91,7 @@ describe('DeploymentCardComponent', () => {
         DeploymentCardComponent,
         FakeDeploymentsDonutComponent,
         FakeDeploymentGraphLabelComponent,
-        CollapsibleDeploymentInfoComponent
+        FakeDeploymentDetailsComponent
       ],
       providers: [
         BsDropdownConfig,

@@ -21,11 +21,11 @@ import { DeploymentsService } from '../services/deployments.service';
 import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
-  selector: 'collapsible-deployment-info',
-  templateUrl: 'collapsible-deployment-info.component.html',
-  styleUrls: ['./collapsible-deployment-info.component.less']
+  selector: 'deployment-details',
+  templateUrl: 'deployment-details.component.html',
+  styleUrls: ['./deployment-details.component.less']
 })
-export class CollapsibleDeploymentInfoComponent implements OnDestroy, OnInit {
+export class DeploymentDetailsComponent {
 
   @Input() collapsed: boolean;
   @Input() applicationId: string;

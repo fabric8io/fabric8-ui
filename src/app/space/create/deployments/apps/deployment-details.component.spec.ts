@@ -13,7 +13,7 @@ import { createMock } from 'testing/mock';
 import { Environment } from '../models/environment';
 import { DeploymentsService } from '../services/deployments.service';
 
-import { CollapsibleDeploymentInfoComponent } from './collapsible-deployment-info.component';
+import { DeploymentDetailsComponent } from './deployment-details.component';
 
 // Makes patternfly charts available
 import { ChartModule } from 'patternfly-ng';
@@ -50,9 +50,9 @@ class FakePfngChartSparkline {
   @Input() chartData: any;
 }
 
-describe('CollapsibleDeploymentInfoComponent', () => {
-  let component: CollapsibleDeploymentInfoComponent;
-  let fixture: ComponentFixture<CollapsibleDeploymentInfoComponent>;
+describe('DeploymentDetailsComponent', () => {
+  let component: DeploymentDetailsComponent;
+  let fixture: ComponentFixture<DeploymentDetailsComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let mockEnvironment: Environment;
 
@@ -71,7 +71,7 @@ describe('CollapsibleDeploymentInfoComponent', () => {
     TestBed.configureTestingModule({
       imports: [CollapseModule.forRoot()],
       declarations: [
-        CollapsibleDeploymentInfoComponent,
+        DeploymentDetailsComponent,
         FakeDeploymentsDonutComponent,
         FakeDeploymentGraphLabelComponent,
         FakePfngChartSparkline
@@ -81,7 +81,7 @@ describe('CollapsibleDeploymentInfoComponent', () => {
       ]
     });
 
-    fixture = TestBed.createComponent(CollapsibleDeploymentInfoComponent);
+    fixture = TestBed.createComponent(DeploymentDetailsComponent);
     component = fixture.componentInstance;
 
     component.collapsed = false;
@@ -92,16 +92,16 @@ describe('CollapsibleDeploymentInfoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should generate unique chartIds for each CollapsibleDeploymentInfoComponent instance', () => {
-    const COLLAPSIBLE_COMPONENT_COUNT = 5;
-    const CHARTS_PER_COLLAPSIBLE_COMPONENT = 2;
+  it('should generate unique chartIds for each DeploymentDetailsComponent instance', () => {
+    const DETAILS_COMPONENT_COUNT = 5;
+    const CHARTS_PER_DETAILS_COMPONENT = 2;
     let uniqueIdSet = new Set();
-    times(COLLAPSIBLE_COMPONENT_COUNT, () => {
-      let collapsibleComponent = new CollapsibleDeploymentInfoComponent(mockSvc);
-      uniqueIdSet.add(collapsibleComponent.cpuConfig.chartId);
-      uniqueIdSet.add(collapsibleComponent.memConfig.chartId);
+    times(DETAILS_COMPONENT_COUNT, () => {
+      let detailsComponent = new DeploymentDetailsComponent(mockSvc);
+      uniqueIdSet.add(detailsComponent.cpuConfig.chartId);
+      uniqueIdSet.add(detailsComponent.memConfig.chartId);
     });
-    expect(uniqueIdSet.size).toBe(COLLAPSIBLE_COMPONENT_COUNT * CHARTS_PER_COLLAPSIBLE_COMPONENT);
+    expect(uniqueIdSet.size).toBe(DETAILS_COMPONENT_COUNT * CHARTS_PER_DETAILS_COMPONENT);
   });
 
   it('should create a child donut component with proper values', () => {
