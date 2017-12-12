@@ -33,19 +33,18 @@
         <div class="chart-column">
           <pfng-chart-sparkline class="chart-sparkline" [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>
         </div>
-        <div class="chart-column chart-text">
-          <p class="chart-info-header">CPU (Cores)</p>
-          <p>{{ cpuVal }} of 10</p>
+        <div class="chart-column">
+          <deployment-graph-label type="CPU" dataMeasure="Cores" [value]="cpuVal" valueUpperBound="10"></deployment-graph-label>
         </div>
       </div>
+
       <div class="deployment-chart">
-          <div class="chart-column">
-            <pfng-chart-sparkline [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
+        <div class="chart-column">
+            <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
           </div>
-          <div class="chart-column chart-text">
-            <p class="chart-info-header">Memory (GB)</p>
-            <p>{{ cpuVal }} of 500</p>
-          </div>
+        <div class="chart-column chart-text">
+            <deployment-graph-label type="Memory" dataMeasure="GB" [value]="memVal" valueUpperBound="500"></deployment-graph-label>
+        </div>
       </div>
     </div>
   </div>
