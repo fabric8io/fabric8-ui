@@ -27,8 +27,17 @@ export class DeploymentsService {
     return Observable.of('1.0.2');
   }
 
-  getPods(spaceId: string, applicationId: string, environmentId: string): Observable<Pods> {
+  getPods(spaceId: string, environmentId: string, applicationId: string): Observable<Pods> {
     return Observable.of({ pods: [['Running', 2], ['Terminating', 1]], total: 3 } as Pods);
+  }
+
+  scalePods(
+    spaceId: string,
+    environmentId: string,
+    applicationId: string,
+    desiredReplicas: number
+  ): Observable<string> {
+    return Observable.of(`Scaled ${applicationId} in ${spaceId}/${environmentId} to ${desiredReplicas} replicas`);
   }
 
   getCpuStat(spaceId: string, environmentId: string): Observable<CpuStat> {
