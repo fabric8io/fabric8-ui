@@ -20,13 +20,14 @@ describe('Spaces Service:', () => {
   let mockSpaceService: any;
   let mockProfileService: any;
   let spacesService: SpacesService;
+  let broadcaster: Broadcaster;
 
 	beforeEach(() => {
 		mockContexts = jasmine.createSpyObj('Contexts', ['current']);
 		mockContexts.current = Observable.of(context1);
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
 		mockSpaceService = jasmine.createSpyObj('mockSpaceService', ['getSpaceById']);
-		mockSpaceService.getSpaceById = (spaceId: string): Observable<Space> {
+		mockSpaceService.getSpaceById = (spaceId: string): Observable<Space> => {
 			let tmpspace = cloneDeep(space);
 			tmpspace.name = "space_" + spaceId;
 			tmpspace.id = spaceId;
@@ -58,6 +59,7 @@ describe('Spaces Service:', () => {
     });
 
     spacesService = TestBed.get(SpacesService);
+    broadcaster = TestBed.get(Broadcaster);
 
   });
 
@@ -75,7 +77,7 @@ it('Space updates, SpacesService updates the current space.', () => {
 		updatedSpace.id = new_space_to_update;
 		updatedSpace.attributes.name = "space_" + new_space_to_update;
 
-		spacesService.broadcaster.broadcast('spaceUpdated', updatedSpace);
+		broadcaster.broadcast('spaceUpdated', updatedSpace);
 
   });
 
