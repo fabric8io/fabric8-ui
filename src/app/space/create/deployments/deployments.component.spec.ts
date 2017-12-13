@@ -10,6 +10,8 @@ import {
   Input
 } from '@angular/core';
 
+import { createMock } from '../../../../testing/mock';
+
 import { Observable } from 'rxjs';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -46,7 +48,7 @@ describe('DeploymentsComponent', () => {
 
   let component: DeploymentsComponent;
   let fixture: ComponentFixture<DeploymentsComponent>;
-  let mockSvc: DeploymentsService;
+  let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let spaces: Spaces;
   let mockApplications = Observable.of(['foo-app', 'bar-app']);
   let mockEnvironments = Observable.of([
@@ -55,33 +57,13 @@ describe('DeploymentsComponent', () => {
   ]);
 
   beforeEach(() => {
-    mockSvc = {
-      getApplications: () => mockApplications,
-      getEnvironments: () => mockEnvironments,
-      getPods: (spaceId: string, appId: string, envId: string) => { throw 'NotImplemented'; },
-      getVersion: () => { throw 'NotImplemented'; },
-      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
-      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat),
-      getLogsUrl: () => { throw 'Not Implemented'; },
-      getConsoleUrl: () => { throw 'Not Implemented'; },
-      getAppUrl: () => { throw 'Not Implemented'; },
-      deleteApplication: () => { throw 'Not Implemented'; }
-    };
+    mockSvc = createMock(DeploymentsService);
+    mockSvc.getApplications.and.returnValue(mockApplications);
+    mockSvc.getEnvironments.and.returnValue(mockEnvironments);
 
     spaces = {
       current: Observable.of({ id: 'fake-spaceId' })
     } as Spaces;
-
-    spyOn(mockSvc, 'getApplications').and.callThrough();
-    spyOn(mockSvc, 'getEnvironments').and.callThrough();
-    spyOn(mockSvc, 'getPods').and.callThrough();
-    spyOn(mockSvc, 'getVersion').and.callThrough();
-    spyOn(mockSvc, 'getCpuStat').and.callThrough();
-    spyOn(mockSvc, 'getMemoryStat').and.callThrough();
-    spyOn(mockSvc, 'getLogsUrl').and.callThrough();
-    spyOn(mockSvc, 'getConsoleUrl').and.callThrough();
-    spyOn(mockSvc, 'getAppUrl').and.callThrough();
-    spyOn(mockSvc, 'deleteApplication').and.callThrough();
 
     TestBed.configureTestingModule({
       imports: [ CollapseModule.forRoot() ],
