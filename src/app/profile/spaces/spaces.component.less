@@ -1,7 +1,7 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 .spaces-page {
   position: relative;
-  margin-top: 20px;
+  margin-top: 15px;
   >main {
     .user-attributes {
       list-style: none;
@@ -14,7 +14,6 @@
     >section {
       position: relative;
       align-items: stretch;
-      height: 100vh;
       .row {
         margin-right: 0;
         margin-left: 0;
@@ -33,8 +32,7 @@
     width: 100%;
     margin-bottom: 0;
 
-    @media (min-width: @screen-lg-min) { height: 600px; }
-    @media (min-width: @screen-md-min) and (max-width: @screen-md-max) { height: 600px; }
+    height: 600px;
     @media (min-width: @screen-sm-min) and (max-width: @screen-sm-max) { height: 600px; }
     @media (max-width: @screen-xs-min) { height: 500px; }
 
