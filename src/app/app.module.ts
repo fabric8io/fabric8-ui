@@ -60,6 +60,7 @@ import { WidgetsModule }      from 'ngx-widgets';
 import {
   ActionModule,
   ChartModule,
+  EmptyStateModule,
   ListModule,
   TreeListComponent,
   PatternFlyNgModule }        from 'patternfly-ng';
@@ -125,6 +126,7 @@ import { EventService } from './shared/event.service';
 import { Fabric8UISpaceNamespace } from './shared/runtime-console/fabric8-ui-space-namespace.service';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
+import { ProviderService } from './shared/account/provider.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -151,6 +153,7 @@ export type StoreType = {
     BrowserModule,
     BsDropdownModule.forRoot(),
     ChartModule,
+    EmptyStateModule,
     FormsModule,
     HttpModule,
     KubernetesRestangularModule,
@@ -235,6 +238,7 @@ export type StoreType = {
     PipelinesService,
     ProfileResolver,
     ProfileService,
+    ProviderService,
     SpacesService,
     SpaceService,
     {

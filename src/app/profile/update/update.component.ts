@@ -10,15 +10,15 @@ import { AuthenticationService, UserService, User } from 'ngx-login-client';
 import { CopyService } from '../services/copy.service';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
-import { ProviderService } from '../../getting-started/services/provider.service';
 import { TenentService } from '../services/tenent.service';
+import { ProviderService } from '../../shared/account/provider.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-update',
   templateUrl: 'update.component.html',
   styleUrls: ['./update.component.less'],
-  providers: [CopyService, GettingStartedService, GitHubService, ProviderService, TenentService]
+  providers: [CopyService, GettingStartedService, GitHubService, TenentService]
 })
 export class UpdateComponent implements AfterViewInit, OnInit {
   @ViewChild('_email') emailElement: ElementRef;
