@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
+import { ContextService } from '../../shared/context.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -17,11 +18,13 @@ export class OverviewComponent implements OnDestroy, OnInit {
   loggedInUser: User;
   subscriptions: Subscription[] = [];
   spaces: Space[] = [];
+  viewingOwnAccount: boolean;
 
   constructor(
       private contexts: Contexts,
       private spaceService: SpaceService,
       private userService: UserService,
+      private contextService: ContextService,
       private router: Router) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
@@ -35,6 +38,7 @@ export class OverviewComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.viewingOwnAccount = this.contextService.viewingOwnContext();
   }
 
   ngOnDestroy(): void {
