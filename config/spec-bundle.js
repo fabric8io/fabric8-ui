@@ -18,6 +18,7 @@ Error.stackTraceLimit = Infinity;
 require('intl');
 require('intl/locale-data/jsonp/en');
 
+require('pact-web');
 require('core-js/es6');
 require('core-js/es7/reflect');
 
