@@ -17,72 +17,52 @@
         <div class="spaces-list-scroll">
           <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
             <li class="list-group-item">
+              <div class="list-view-pf-actions">
+                <button *ngIf="gitHubLinked" class="btn btn-default" (click)="disconnectGitHub()">Disconnect</button>
+                <button *ngIf="!gitHubLinked" class="btn btn-default" (click)="connectGitHub()">Connect</button>
+              </div>
               <div class="list-view-pf-main-info">
                 <div class="list-view-pf-body">
                   <div class="list-view-pf-description">
                     <div class="list-group-item-text">
-                      <div *ngIf="gitHubLinked; then ghLinked else ghUnlinked"></div>
-                      <ng-template #ghLinked>
+                      <div>
                         <span>
                           <b>GitHub</b>
                         </span>
-                      </ng-template>
-                      <ng-template #ghUnlinked>
-                        <span>
-                          <b>GitHub</b>
-                        </span>
-                      </ng-template>
+                      </div>
                     </div>
                   </div>
                   <div class="list-view-pf-additional-info">
                     <div class="list-view-pf-additional-info-item">
-                      <div *ngIf="gitHubLinked; then ghLinkedUsername else ghUnlinkedUsername"></div>
-                      <ng-template #ghLinkedUsername>
-                        <span>
-                          Connected
-                        </span>
-                      </ng-template>
-                      <ng-template #ghUnlinkedUsername>
-                        <span class="account-disconnected">
-                          Not Connected
-                        </span>
-                      </ng-template>
+                      <span *ngIf="gitHubLinked">Connected</span>
+                      <span *ngIf="!gitHubLinked" class="account-disconnected">Disconnected</span>
+                      <button class="btn btn-link" type="button" (click)="refreshGitHub()">
+                        <span class="fa fa-refresh"></span>
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </li>
             <li class="list-group-item">
+              <div class="list-view-pf-actions">
+                <!-- todo - add actions here  need formatting help to align openshift correctly-->
+              </div>
               <div class="list-view-pf-main-info">
                 <div class="list-view-pf-body">
                   <div class="list-view-pf-description">
                     <div class="list-group-item-text">
-                      <div *ngIf="openShiftLinked; then osoLinked else osoUnlinked"></div>
-                      <ng-template #osoLinked>
+                      <div>
                         <span>
                           <b>OpenShift</b>
                         </span>
-                      </ng-template>
-                      <ng-template #osoUnlinked>
-                        <span>
-                          <b>OpenShift</b>
-                        </span>
-                      </ng-template>
+                      </div>
                     </div>
                   </div>
                   <div class="list-view-pf-additional-info">
                     <div class="list-view-pf-additional-info-item">
-                      <div *ngIf="openShiftLinked; then osoLinkedUsername else osoUnlinkedUsername"></div>
-                      <ng-template #osoLinkedUsername>
-                        <span>
-                          {{contextUserName}}
-                        </span>
-                      </ng-template>
-                      <ng-template #osoUnlinkedUsername>
-                        <span class="account-disconnected">
-                          Not Connected
-                        </span>
-                      </ng-template>
+                      <span *ngIf="openShiftLinked">{{contextUserName}}</span>
+                      <span *ngIf="!openShiftLinked" class="account-disconnected">Not Connected</span>
                     </div>
                   </div>
                 </div>
