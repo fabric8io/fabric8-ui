@@ -26,17 +26,31 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
   total: number;
   usedPercent: number;
   unusedPercent: number;
+  color: string;
+
+  private colors = {
+    'Okay': '#39a5dc', // Light blue
+    'Warning': '#f39d3c' // Orange
+  };
 
   private statSubscription: Subscription;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.color = this.colors.Okay;
+
     this.statSubscription = this.stat.subscribe(val => {
       this.used = val.used;
       this.total = val.quota;
       this.usedPercent = (this.total !== 0) ? Math.floor(this.used / this.total * 100) : 0;
       this.unusedPercent = 100 - this.usedPercent;
+
+      if (this.usedPercent < 75) {
+        this.color = this.colors.Okay;
+      } else {
+        this.color = this.colors.Warning;
+      }
     });
   }
 
