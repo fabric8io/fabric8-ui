@@ -4,6 +4,8 @@ import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import {Subscription } from 'rxjs';
+import { Broadcaster } from 'ngx-base';
+import { AuthenticationService } from 'ngx-login-client';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -20,6 +22,8 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   modalRef: BsModalRef;
 
   constructor(private modalService: BsModalService,
+    private broadcaster: Broadcaster,
+    private authentication: AuthenticationService,
     private contexts: Contexts
   ) {
     this.selectedFlow = 'selectFlow';
@@ -36,8 +40,12 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.selectedFlow = 'selectFlow';
-    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    if (this.authentication.getGitHubToken()) {
+      this.selectedFlow = 'selectFlow';
+      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    } else {
+      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+    }
   }
 
   closeModal($event: any): void {

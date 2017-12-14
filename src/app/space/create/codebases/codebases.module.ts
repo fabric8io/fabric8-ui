@@ -6,7 +6,7 @@ import { Http } from '@angular/http';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 
-import { ListModule } from 'patternfly-ng';
+import { ActionModule, ListModule, EmptyStateModule } from 'patternfly-ng';
 
 import { CodebasesAddModule } from './codebases-add/codebases-add.module';
 import { CodebasesComponent } from './codebases.component';
@@ -21,6 +21,7 @@ import { CodebaseDeleteDialogModule } from './codebases-delete/codebase-delete-d
 
 @NgModule({
   imports: [
+    ActionModule,
     BsDropdownModule.forRoot(),
     CodebasesAddModule,
     CodebaseDeleteDialogModule,
@@ -32,6 +33,7 @@ import { CodebaseDeleteDialogModule } from './codebases-delete/codebase-delete-d
     CodebasesToolbarModule,
     CodebasesRoutingModule,
     CommonModule,
+    EmptyStateModule,
     FormsModule,
     ListModule,
     TooltipModule.forRoot()

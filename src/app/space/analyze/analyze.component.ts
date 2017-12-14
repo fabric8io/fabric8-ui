@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
-
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-analyze',
@@ -14,7 +13,6 @@ export class AnalyzeComponent implements OnInit {
   }
 
   ngOnInit() {
-
   }
 
 }
