@@ -10,8 +10,8 @@ import {AuthenticationService, User, UserService} from 'ngx-login-client';
 import {CopyService} from '../services/copy.service';
 import {ExtProfile, GettingStartedService} from '../../getting-started/services/getting-started.service';
 import {GitHubService} from "../../space/create/codebases/services/github.service";
-import {ProviderService} from '../../getting-started/services/provider.service';
 import {TenentService} from '../services/tenent.service';
+import { ProviderService } from '../../shared/account/provider.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -61,7 +61,6 @@ export class TenantComponent implements AfterViewInit, OnInit {
   token: string;
   username: string;
   url: string;
-  
   private modifiedFromRequestParam: boolean = false;
 
   constructor(
@@ -188,7 +187,6 @@ export class TenantComponent implements AfterViewInit, OnInit {
           this.handleError("Failed to update tenent", NotificationType.DANGER);
         }));
 
-      
     }, error => {
       if (error.status === 409) {
         this.handleError("Email already exists", NotificationType.DANGER);

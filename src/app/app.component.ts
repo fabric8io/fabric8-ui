@@ -6,7 +6,7 @@ import { Spaces } from 'ngx-fabric8-wit';
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
@@ -16,6 +16,9 @@ import { LoginService } from './shared/login.service';
 import { BrandingService } from './shared/branding.service';
 import { FeatureFlagConfig } from './models/feature-flag-config';
 
+import { EmptyStateConfig, ActionConfig } from 'patternfly-ng';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { ProviderService } from './shared/account/provider.service';
 
 /*
  * App Component
@@ -30,6 +33,9 @@ import { FeatureFlagConfig } from './models/feature-flag-config';
 export class AppComponent {
   public experimentalFeatureEnabled: boolean;
   public isExperimentalFeature: boolean;
+  public disconnectedStateConfig: EmptyStateConfig;
+  private lastPageToTryGitHub: string;
+  @ViewChild('connectToGithubModal') connectToGithubModal: TemplateRef<any>;
 
   constructor(
     private about: AboutService,
@@ -44,7 +50,9 @@ export class AppComponent {
     private broadcaster: Broadcaster,
     private router: Router,
     private titleService: Title,
-    private brandingService: BrandingService
+    private brandingService: BrandingService,
+    private modalService: BsModalService,
+    private providerService: ProviderService
   ) {
   }
 
@@ -87,6 +95,25 @@ export class AppComponent {
         let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
         this.titleService.setTitle(title);
       });
+
+    this.broadcaster.on('showDisconnectedFromGitHub').subscribe((event) => {
+      this.lastPageToTryGitHub = event['location'];
+      this.showGitHubConnectModal();
+    });
+
+    this.disconnectedStateConfig = {
+      actions: {
+        primaryActions: [{
+          id: 'connectAction',
+          title: 'Connect to GitHub',
+          tooltip: 'Connect to GitHub'
+        }],
+        moreActions: []
+      } as ActionConfig,
+      iconStyleClass: 'pficon-info',
+      title: 'GitHub Disconnected',
+      info: 'You must be connected to GitHub in order to add to or create a Space'
+    } as EmptyStateConfig;
   }
 
   updateFeatureEnabled($event: boolean) {
@@ -99,4 +126,11 @@ export class AppComponent {
     this.notifications.actionSubject.next($event.action);
   }
 
+  showGitHubConnectModal(): void {
+    this.modalService.show(this.connectToGithubModal, {class: 'modal-lg'});
+  }
+
+  connectToGithub(): void {
+    this.providerService.linkGitHub(this.lastPageToTryGitHub);
+  }
 }
