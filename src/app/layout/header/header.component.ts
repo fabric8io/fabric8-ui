@@ -4,7 +4,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 
 import { Broadcaster, Logger } from 'ngx-base';
-import { UserService, User } from 'ngx-login-client';
+import { UserService, User, AuthenticationService } from 'ngx-login-client';
 import { ContextType, Context, Contexts } from 'ngx-fabric8-wit';
 
 import { LoginService } from './../../shared/login.service';
@@ -78,7 +78,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private broadcaster: Broadcaster,
     public dummy: DummyService,
     private contexts: Contexts,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private authentication: AuthenticationService
   ) {
     this.space = '';
     this.selectedFlow = 'start';
@@ -149,8 +150,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.selectedFlow = 'start';
-    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    if (this.authentication.getGitHubToken()) {
+      this.selectedFlow = 'start';
+      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    } else {
+      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+    }
   }
 
   closeModal($event: any): void {

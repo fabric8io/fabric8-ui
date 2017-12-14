@@ -10,6 +10,7 @@ import { CodebasesService } from './services/codebases.service';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { GitHubService } from './services/github.service';
 import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
+import { AuthenticationService } from 'ngx-login-client';
 
 import { cloneDeep } from 'lodash';
 
@@ -22,6 +23,7 @@ import {
   SortEvent,
   SortField
 } from 'patternfly-ng';
+import { ProviderService } from '../../../shared/account/provider.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -44,6 +46,8 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   listConfig: ListConfig;
   resultsCount: number = 0;
   subscriptions: Subscription[] = [];
+  gitHubConnected: boolean;
+  disconnectedStateConfig: EmptyStateConfig;
 
   constructor(
       private broadcaster: Broadcaster,
@@ -53,7 +57,9 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       private datePipe: DatePipe,
       private gitHubService: GitHubService,
       private notifications: Notifications,
-      private router: Router) {
+      private authenticationService: AuthenticationService,
+      private router: Router,
+      private providerService: ProviderService) {
     this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
     this.gitHubService.clearCache();
     this.subscriptions.push(this.broadcaster
@@ -67,6 +73,14 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       .subscribe(() => {
         this.updateCodebases();
       }));
+
+    this.subscriptions.push(this.authenticationService.gitHubToken.subscribe((response) => {
+      if (response) {
+        this.gitHubConnected = true;
+      } else {
+        this.gitHubConnected = false;
+      }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -76,35 +90,51 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.cheState = {running: false, multiTenant: false};
-    this.updateCodebases();
-    this.startIdleChe();
+    if (this.gitHubConnected) {
+      this.cheState = {running: false, multiTenant: false};
+      this.updateCodebases();
+      this.startIdleChe();
 
-    this.emptyStateConfig = {
+      this.emptyStateConfig = {
+        actions: {
+          primaryActions: [{
+            id: 'action1',
+            title: 'Add a Codebase',
+            tooltip: 'Add a Codebase'
+          }],
+          moreActions: []
+        } as ActionConfig,
+        iconStyleClass: 'pficon-add-circle-o',
+        title: 'Add a Codebase',
+        info: 'Start by importing your code repository.'
+      } as EmptyStateConfig;
+
+      this.listConfig = {
+        dblClick: false,
+        emptyStateConfig: this.emptyStateConfig,
+        headingRow: true,
+        multiSelect: false,
+        selectItems: false,
+        //selectionMatchProp: 'name',
+        showCheckbox: false,
+        useExpandItems: true,
+        useHeading: true
+      } as ListConfig;
+    }
+
+    this.disconnectedStateConfig = {
       actions: {
         primaryActions: [{
-          id: 'action1',
-          title: 'Add a Codebase',
-          tooltip: 'Add a Codebase'
+          id: 'connectAction',
+          title: 'Connect to GitHub',
+          tooltip: 'Connect to GitHub'
         }],
         moreActions: []
       } as ActionConfig,
-      iconStyleClass: 'pficon-add-circle-o',
-      title: 'Add a Codebase',
-      info: 'Start by importing your code repository.'
+      iconStyleClass: 'pficon-info',
+      title: 'GitHub Disconnected',
+      info: 'You must be connected to GitHub in order to connect or create a Codebase'
     } as EmptyStateConfig;
-
-    this.listConfig = {
-      dblClick: false,
-      emptyStateConfig: this.emptyStateConfig,
-      headingRow: true,
-      multiSelect: false,
-      selectItems: false,
-      //selectionMatchProp: 'name',
-      showCheckbox: false,
-      useExpandItems: true,
-      useHeading: true
-    } as ListConfig;
   }
 
   // Actions
@@ -113,6 +143,9 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     this.router.navigate([`${this.context.path}/create`, { outlets: { action: 'add-codebase' }}]);
   }
 
+  connectToGithub(): void {
+    this.providerService.linkGitHub(window.location.href);
+  }
   // Filter
 
   applyFilters(filters: Filter[]): void {
