@@ -80,7 +80,7 @@ describe('ResourceCardComponent', () => {
     component = fixture.componentInstance;
 
     component.spaceId = 'spaceId';
-    component.environmentId = 'environmentId';
+    component.environment = { environmentId: 'environmentId', name: 'environmentName' };
 
     fixture.detectChanges();
   });

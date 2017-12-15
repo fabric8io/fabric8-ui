@@ -8,6 +8,8 @@ import { Observable } from 'rxjs';
 
 import { DeploymentsService } from '../services/deployments.service';
 
+import { Environment } from '../models/environment';
+
 @Component({
   selector: 'resource-card',
   templateUrl: 'resource-card.component.html'
@@ -15,7 +17,7 @@ import { DeploymentsService } from '../services/deployments.service';
 export class ResourceCardComponent implements OnInit {
 
   @Input() spaceId: string;
-  @Input() environmentId: string;
+  @Input() environment: Environment;
 
   memUnit: Observable<string>;
 
@@ -24,7 +26,7 @@ export class ResourceCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.memUnit = this.deploymentsService.getMemoryStat(this.spaceId, this.environmentId)
+    this.memUnit = this.deploymentsService.getMemoryStat(this.spaceId, this.environment.environmentId)
       .first()
       .map(stat => stat.units);
   }

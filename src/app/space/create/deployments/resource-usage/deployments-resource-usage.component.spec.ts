@@ -24,7 +24,7 @@ import { Stat } from '../models/stat';
 })
 class FakeResourceCardComponent {
   @Input() spaceId: string;
-  @Input() environmentId: string;
+  @Input() environment: Environment;
 }
 
 describe('DeploymentsResourceUsageComponent', () => {
@@ -33,8 +33,8 @@ describe('DeploymentsResourceUsageComponent', () => {
   let fixture: ComponentFixture<DeploymentsResourceUsageComponent>;
   let mockEnvironments: Observable<Environment[]>;
   let mockEnvironmentData = [
-    { environmentId: "id1", name: "envId1"},
-    { environmentId: "id2", name: "envId2"}
+    { environmentId: 'id1', name: 'envId1'},
+    { environmentId: 'id2', name: 'envId2'}
   ];
   let spaceIdObservable = Observable.of('spaceId');
 
@@ -60,7 +60,7 @@ describe('DeploymentsResourceUsageComponent', () => {
 
     mockEnvironmentData.forEach((envData, index) => {
       let cardComponent = arrayOfComponents[index].componentInstance;
-      expect(cardComponent.environmentId).toEqual(mockEnvironmentData[index].environmentId);
+      expect(cardComponent.environment).toEqual(mockEnvironmentData[index]);
       expect(cardComponent.spaceId).toEqual('spaceId');
     });
   });
