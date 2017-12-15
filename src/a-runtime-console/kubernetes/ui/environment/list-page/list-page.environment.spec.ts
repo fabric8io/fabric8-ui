@@ -31,7 +31,7 @@ import { FormsModule } from "@angular/forms";
 import { KubernetesComponentsModule } from "../../../components/components.module";
 import {TabsModule} from "ngx-bootstrap";
 
-describe('EnvironmentListPage', () => {
+xdescribe('EnvironmentListPage', () => {
   let component: EnvironmentListPageComponent;
   let fixture: ComponentFixture<EnvironmentListPageComponent>;
 
