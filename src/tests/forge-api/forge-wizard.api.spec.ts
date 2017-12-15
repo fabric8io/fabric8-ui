@@ -1,9 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
-import { LoggerFactory } from '../../app/space/wizard/common/logger';
 import { AuthenticationService } from 'ngx-login-client';
-import { ApiLocatorService } from '../../app/shared/api-locator.service';
-import { ForgeService } from 'ngx-forge';
+import { ForgeService, History, Gui, Config, TokenProvider } from 'ngx-forge';
 import { step_1_1_output } from './import-wizard/step_1_1_output';
 import { step_1_3_input } from './import-wizard/step_1_3_input';
 import { step_1_3_output } from 'tests/forge-api/import-wizard/step_1_3_output';
@@ -28,9 +26,8 @@ describe('Forge API tests:', () => {
   let mockLog: any;
   let fabric8ForgeService: ForgeService;
   let mockAuthService: any;
-  let mockApiLocatorService: any;
   let provider = pact({consumer: 'AppGeneratorWizard', provider: 'ForgeGenerator', web: true});
-  let stubForgeUrl = 'http://localhost:1234/forge/commands/';
+  let stubForgeUrl = 'http://localhost:1234';
 
   afterAll(done => {
     provider.finalize()
@@ -43,32 +40,24 @@ describe('Forge API tests:', () => {
   });
 
   beforeEach(function () {
-    mockLog = jasmine.createSpyObj('Logger', ['createLoggerDelegate']);
-    mockAuthService = jasmine.createSpyObj('AuthenticationService', ['getToken', 'isLoggedIn']);
-    mockApiLocatorService = jasmine.createSpyObj('ApiLocatorService', ['forgeApiUrl']);
+    mockAuthService = {
+      'token': Promise.resolve('SSO_TOKEN')
+    };
     TestBed.configureTestingModule({
       imports: [HttpModule],
       providers: [
         {
-          provide: LoggerFactory, useValue: mockLog
+          provide: Config,
+          useValue: { get(name: string) { return stubForgeUrl; }}
         },
         {
-          provide: AuthenticationService,
+          provide: TokenProvider,
           useValue: mockAuthService
-        },
-        {
-          provide: ApiLocatorService,
-          useValue: mockApiLocatorService
         },
         ForgeService
       ]
     });
     fabric8ForgeService = TestBed.get(ForgeService);
-    const log = () => {
-    };
-    mockLog.createLoggerDelegate.and.returnValue(log);
-    mockAuthService.getToken.and.returnValue('SSO_TOKEN');
-    mockAuthService.isLoggedIn.and.returnValue(true);
   });
 
   it('Step_1_1 - import wizard: init', done => {
@@ -78,7 +67,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step1.1',
       withRequest: {
         method: 'GET',
-        path: '/forge/commands/fabric8-import-git'
+        path: '/commands/fabric8-import-git'
       },
       willRespondWith: {
         status: 200,
@@ -87,9 +76,8 @@ describe('Forge API tests:', () => {
       }
     }).then(() => {
         // when
-        fabric8ForgeService.GetCommand(stubForgeUrl + 'fabric8-import-git').subscribe((data: any) => {
+        fabric8ForgeService.loadGui('fabric8-import-git', new History()).then((response: Gui) => {
           // then
-          const response = data.payload.data;
           expect(response.metadata.name).toEqual('io.fabric8.forge.generator.github.GithubImportPickOrganisationStep');
           expect(response.state.valid).toEqual(true);
           expect(response.state.canMoveToNextStep).toEqual(true);
@@ -113,7 +101,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step1.2',
       withRequest: {
         method: 'POST',
-        path: '/forge/commands/fabric8-import-git/validate',
+        path: '/commands/fabric8-import-git/validate',
         body: step_1_2_input
       },
       willRespondWith: {
@@ -122,11 +110,13 @@ describe('Forge API tests:', () => {
         body: step_1_2_output
       }
     }).then(() => {
+      let history = new History();
+      history.add(step_1_1_output as Gui);
+      history.done();
       // when
-      fabric8ForgeService.PostCommand(stubForgeUrl + 'fabric8-import-git/validate', step_1_2_input)
-        .subscribe((data: any) => {
+      fabric8ForgeService.validate('fabric8-import-git', history)
+        .then(response => {
           // then
-          const response = data.payload.data;
           expect(response.state.valid).toEqual(true);
           expect(response.state.canMoveToNextStep).toEqual(true);
           expect(response.state.canMoveToPreviousStep).toEqual(false);
@@ -149,7 +139,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step1.3',
       withRequest: {
         method: 'POST',
-        path: '/forge/commands/fabric8-import-git/next',
+        path: '/commands/fabric8-import-git/next',
         body: step_1_3_input
       },
       willRespondWith: {
@@ -159,10 +149,13 @@ describe('Forge API tests:', () => {
       }
     }).then(() => {
       // when
-      fabric8ForgeService.PostCommand(stubForgeUrl + 'fabric8-import-git/next', step_1_3_input)
-        .subscribe((data: any) => {
+      let history = new History();
+      history.add(step_1_2_output as Gui);
+      history.done();
+
+      fabric8ForgeService.loadGui('fabric8-import-git', history)
+        .then(response => {
           // then
-          const response = data.payload.data;
           expect(response.metadata.name).toEqual('io.fabric8.forge.generator.github.GithubImportPickRepositoriesStep');
           expect(response.state.valid).toEqual(false); // bug in the forge api
           expect(response.state.canMoveToNextStep).toEqual(false);
@@ -185,7 +178,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step2.1',
       withRequest: {
         method: 'POST',
-        path: '/forge/commands/fabric8-import-git/validate',
+        path: '/commands/fabric8-import-git/validate',
         body: step_2_1_input
       },
       willRespondWith: {
@@ -195,10 +188,13 @@ describe('Forge API tests:', () => {
       }
     }).then(() => {
       // when
-      fabric8ForgeService.PostCommand(stubForgeUrl + 'fabric8-import-git/validate', step_2_1_input)
-        .subscribe((data: any) => {
+      let history = new History();
+      history.add(step_1_3_output as Gui);
+      history.done();
+
+      fabric8ForgeService.validate('fabric8-import-git', history)
+        .then(response => {
           // then
-          const response = data.payload.data;
           expect(response.state.valid).toEqual(true);
           expect(response.state.canMoveToNextStep).toEqual(true);
           expect(response.state.canMoveToPreviousStep).toEqual(true);
@@ -223,7 +219,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step2.2',
       withRequest: {
         method: 'POST',
-        path: '/forge/commands/fabric8-import-git/next',
+        path: '/commands/fabric8-import-git/next',
         body: step_2_2_input
       },
       willRespondWith: {
@@ -233,10 +229,13 @@ describe('Forge API tests:', () => {
       }
     }).then(() => {
       // when
-      fabric8ForgeService.PostCommand(stubForgeUrl + 'fabric8-import-git/next', step_2_2_input)
-        .subscribe((data: any) => {
+      let history = new History();
+      history.add(step_2_1_output as Gui);
+      history.done();
+
+      fabric8ForgeService.loadGui('fabric8-import-git', history)
+        .then(response => {
           // then
-          const response = data.payload.data;
           expect(response.metadata.name).toEqual('Obsidian: Configure Pipeline');
           expect(response.state.valid).toEqual(true);
           expect(response.state.canMoveToNextStep).toEqual(true);
@@ -289,10 +288,13 @@ describe('Forge API tests:', () => {
       }
     }).then(() => {
       // when
-      fabric8ForgeService.PostCommand(stubForgeUrl + 'fabric8-import-git/validate', step_3_1_input)
-        .subscribe((data: any) => {
+      let history = new History();
+      history.add(step_2_2_output as Gui);
+      history.done();
+
+      fabric8ForgeService.validate('fabric8-import-git', history)
+        .then(response => {
           // then
-          const response = data.payload.data;
           expect(response.state.valid).toEqual(true);
           expect(response.state.canMoveToNextStep).toEqual(true);
           expect(response.state.canMoveToPreviousStep).toEqual(true);
@@ -326,10 +328,13 @@ describe('Forge API tests:', () => {
       }
     }).then(() => {
       // when
-      fabric8ForgeService.PostCommand(stubForgeUrl + 'fabric8-import-git/next', step_3_2_input)
-        .subscribe((data: any) => {
+      let history = new History();
+      history.add(step_3_1_output as Gui);
+      history.done();
+
+      fabric8ForgeService.loadGui('fabric8-import-git', history)
+        .then(response => {
           // then
-          const response = data.payload.data;
           expect(response.state.valid).toEqual(true);
           expect(response.state.canMoveToNextStep).toEqual(false);
           expect(response.state.canMoveToPreviousStep).toEqual(true);
@@ -383,10 +388,13 @@ describe('Forge API tests:', () => {
       }
     }).then(() => {
       // when
-      fabric8ForgeService.PostCommand(stubForgeUrl + 'fabric8-import-git/validate', step_4_1_input)
-        .subscribe((data: any) => {
+      let history = new History();
+      history.add(step_3_2_output as Gui);
+      history.done();
+
+      fabric8ForgeService.validate('fabric8-import-git', history)
+        .then(response => {
           // then
-          const response = data.payload.data;
           expect(response.state.valid).toEqual(true);
           expect(response.state.canMoveToNextStep).toEqual(false);
           expect(response.state.canMoveToPreviousStep).toEqual(true);
@@ -420,10 +428,13 @@ describe('Forge API tests:', () => {
       }
     }).then(() => {
       // when
-      fabric8ForgeService.PostCommand(stubForgeUrl + 'fabric8-import-git/next', step_4_2_input)
-        .subscribe((data: any) => {
+      let history = new History();
+      history.add(step_3_2_output as Gui);
+      history.done();
+
+      fabric8ForgeService.loadGui('fabric8-import-git', history)
+        .then(response => {
           // then
-          const response = data.payload.data.results;
           expect(response[4]).toEqual({warnings: []});
           expect(response[6].namespace).toEqual('ckrych');
           expect(response[6].gitRepositories.length).toEqual(2);
