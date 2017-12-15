@@ -6,16 +6,25 @@
   <div class="row">
     <div class="col-md-12">
       <pfng-list
+          [actionHeadingTemplate]="actionHeadingTemplate"
           [actionTemplate]="actionTemplate"
           [config]="listConfig"
           [items]="codebases"
+          [itemHeadingTemplate]="itemHeadingTemplate"
           [itemTemplate]="itemTemplate"
           [expandTemplate]="expandTemplate"
           (onActionSelect)="openAddCodebasePanel()">
+        <ng-template #itemHeadingTemplate let-item="item">
+          <codebases-item-heading [cheState]="cheState" class="codebase-item"></codebases-item-heading>
+        </ng-template>
         <ng-template #itemTemplate let-item="item" let-index="index">
           <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" class="codebase-item"></codebases-item>
         </ng-template>
-        <ng-template #actionTemplate let-item="item" let-index="index">
+        <ng-template #actionHeadingTemplate let-item="item">
+          <!-- Extra margin for kebab -->
+          <span class="margin-right-5"></span>
+        </ng-template>
+        <ng-template #actionTemplate let-item="item" let-index="index" class="codebase-item">
           <codebases-item-actions [cheRunning]="cheState && cheState.running" [codebase]="item" [index]="index"></codebases-item-actions>
         </ng-template>
         <ng-template #expandTemplate let-item="item" let-index="index">

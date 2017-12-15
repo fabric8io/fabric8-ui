@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { debounce } from 'lodash';
+import { Observable } from 'rxjs';
+
+import { DeploymentsService } from '../services/deployments.service';
+import { Pods } from '../models/pods';
 
 @Component({
   selector: 'deployments-donut',
@@ -9,20 +13,25 @@ import { debounce } from 'lodash';
 export class DeploymentsDonutComponent implements OnInit {
 
   @Input() mini: boolean;
+  @Input() spaceId: string;
   @Input() applicationId: string;
+  @Input() environmentId: string;
 
   isIdled = false;
   scalable = true;
-  pods: any;
+  pods: Observable<Pods>;
   desiredReplicas: number;
+
 
   private scaleRequestPending = false;
   private debounceScale = debounce(this.scale, 650);
 
-  constructor() { }
+  constructor(
+    private deploymentsService: DeploymentsService
+  ) { }
 
   ngOnInit(): void {
-    this.pods = this.getPods();
+    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environmentId);
     this.desiredReplicas = this.getDesiredReplicas();
   }
 
@@ -66,17 +75,4 @@ export class DeploymentsDonutComponent implements OnInit {
   private scale(): void {
     // TODO: send service request to scale
   }
-
-  private getPods(): any {
-    return [{
-      status: {
-        phase: 'Running'
-      }
-    }, {
-      status: {
-        phase: 'Terminating'
-      }
-    }];
-  }
-
 }

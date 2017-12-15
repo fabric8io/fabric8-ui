@@ -5,24 +5,17 @@ import { Che } from '../services/che';
 import { Codebase } from '../services/codebase';
 import { GitHubService } from '../services/github.service';
 import { Notification, NotificationType, Notifications } from 'ngx-base';
-import { NotificationType as NotificationTypes } from 'patternfly-ng';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item',
-  templateUrl: './codebases-item.component.html',
-  styleUrls: ['./codebases-item.component.less']
+  templateUrl: './codebases-item.component.html'
 })
 export class CodebasesItemComponent implements OnDestroy, OnInit {
   @Input() cheState: Che;
   @Input() codebase: Codebase;
   @Input() index: number = -1;
 
-  cheErrorMessage: string = 'Your Workspaces failed to load';
-  cheRunningMessage: string = 'Your Workspaces have loaded successfully';
-  cheStartingMessage: string = 'Your Workspaces are loading...';
-  cheFinishedMultiTenantMigrationMessage: string = "Migration to the Multi-Tenant Che server has finished!";
-  chePerformingMultiTenantMigrationMessage: string = "Migrating workspaces to the Multi-Tenant Che server...";
   createdDate: string;
   fullName: string;
   lastCommitDate: string;
@@ -53,36 +46,6 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
     }
   }
 
-  /**
-   * Returns the notification message based on state of Che.
-   *
-   * @returns {string}
-   */
-  getNotificationMessage(): string {
-    if (this.cheState) {
-      if (this.cheState.multiTenant) {
-        return this.cheState.running ? this.cheFinishedMultiTenantMigrationMessage : this.chePerformingMultiTenantMigrationMessage;
-      } else {
-        return this.cheState.running ? this.cheRunningMessage : this.cheStartingMessage;
-      }
-    } else {
-      return this.cheErrorMessage;
-    }
-  }
-
-  /**
-   * Returns the notification type based on the state of Che.
-   *
-   * @returns {string}
-   */
-  getNotificationType(): string {
-    if (this.cheState) {
-      return this.cheState.running ? NotificationTypes.SUCCESS : NotificationTypes.INFO;
-    } else {
-      return NotificationTypes.DANGER;
-    }
-  }
-
   // Private
 
   /**
@@ -92,9 +55,9 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
    */
   private isGitHubHtmlUrlInvalid(): boolean {
     return (this.codebase.attributes.url === undefined
-    || this.codebase.attributes.url.trim().length === 0
-    || this.codebase.attributes.url.indexOf("https://github.com") === -1
-    || this.codebase.attributes.url.indexOf(".git") === -1);
+      || this.codebase.attributes.url.trim().length === 0
+      || this.codebase.attributes.url.indexOf("https://github.com") === -1
+      || this.codebase.attributes.url.indexOf(".git") === -1);
   }
 
   /**

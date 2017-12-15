@@ -22,6 +22,7 @@ import { Environment } from '../models/environment';
   template: ''
 })
 class FakeDeploymentCardComponent {
+  @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: Environment;
 }
@@ -32,8 +33,8 @@ describe('DeploymentCardContainer', () => {
   let fixture: ComponentFixture<DeploymentCardContainerComponent>;
   let mockEnvironments: Observable<Environment[]>;
   let mockEnvironmentData = [
-    { environmentId: "id1", name: "envId1"},
-    { environmentId: "id2", name: "envId2"}
+    { environmentId: 'id1', name: 'envId1'},
+    { environmentId: 'id2', name: 'envId2'}
   ];
 
   beforeEach(() => {
