@@ -5,7 +5,7 @@
         <span class="pficon pficon-ok fa-lg" tooltip="Everything looks okay" placement="top"></span>
       </div>
       <div class="col-sm-7">
-        <deployments-donut [applicationId]="applicationId" [environmentId]="environment.name" [spaceId]="spaceId" [mini]="true"></deployments-donut>
+        <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="true"></deployments-donut>
       </div>
       <div class="col-sm-1">
         <span id="versionLabel">{{ version | async }}</span>
@@ -39,7 +39,7 @@
     </div>
     <div [collapse]="collapsed">
       <hr>
-      <deployments-donut [applicationId]="applicationId" [environmentId]="environment.name" [spaceId]="spaceId" [mini]="false"></deployments-donut>
+      <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="false"></deployments-donut>
       <div class="deployment-chart">
         <div class="chart-column">
           <pfng-chart-sparkline class="chart-sparkline" [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>

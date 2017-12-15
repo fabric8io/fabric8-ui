@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { DeploymentsService } from '../services/deployments.service';
 import { Pods } from '../models/pods';
+import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployments-donut',
@@ -15,7 +16,7 @@ export class DeploymentsDonutComponent implements OnInit {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environmentId: string;
+  @Input() environment: Environment;
 
   isIdled = false;
   scalable = true;
@@ -31,7 +32,7 @@ export class DeploymentsDonutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.pods = this.deploymentsService.getPods(this.spaceId, this.environmentId, this.applicationId);
+    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.environmentId);
     this.pods.subscribe(pods => this.replicas = pods.total);
 
     this.desiredReplicas = this.getDesiredReplicas();
@@ -75,6 +76,8 @@ export class DeploymentsDonutComponent implements OnInit {
   }
 
   private scale(): void {
-    this.deploymentsService.scalePods(this.spaceId, this.environmentId, this.applicationId, this.desiredReplicas);
+    this.deploymentsService.scalePods(
+      this.spaceId, this.environment.environmentId, this.applicationId, this.desiredReplicas
+    );
   }
 }

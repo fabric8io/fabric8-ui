@@ -26,6 +26,7 @@ import { DeploymentCardComponent } from './deployment-card.component';
 import { DeploymentsService } from '../services/deployments.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { Environment } from '../models/environment';
 
 // Makes patternfly charts available
 import { ChartModule } from 'patternfly-ng';
@@ -39,7 +40,7 @@ class FakeDeploymentsDonutComponent {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environmentId: string;
+  @Input() environment: Environment;
 }
 @Component({
   selector: 'deployment-graph-label',
