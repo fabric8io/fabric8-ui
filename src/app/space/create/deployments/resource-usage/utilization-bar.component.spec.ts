@@ -30,7 +30,7 @@ describe('UtilizationBarComponent', () => {
 
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = Observable.of({ used: 1, total: 4 } as Stat);
+      component.stat = Observable.of({ used: 1, quota: 4 } as Stat);
 
       fixture.detectChanges();
     });
@@ -72,7 +72,7 @@ describe('UtilizationBarComponent', () => {
 
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = Observable.of({ used: 2, total: 0 } as Stat);
+      component.stat = Observable.of({ used: 2, quota: 0 } as Stat);
 
       fixture.detectChanges();
     });

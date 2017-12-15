@@ -28,7 +28,7 @@ export class UtilizationBarComponent implements OnInit {
   ngOnInit(): void {
     this.stat.subscribe(val => {
       this.used = val.used;
-      this.total = val.total;
+      this.total = val.quota;
       this.usedPercent = (this.total !== 0) ? Math.floor(this.used / this.total * 100) : 0;
       this.unusedPercent = 100 - this.usedPercent;
     });

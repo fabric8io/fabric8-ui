@@ -44,16 +44,16 @@ export class DeploymentsService {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
-      .map(() => ({ used: Math.floor(Math.random() * 9) + 1, total: 10 } as CpuStat))
-      .startWith({ used: 3, total: 10 } as CpuStat);
+      .map(() => ({ used: Math.floor(Math.random() * 9) + 1, quota: 10 } as CpuStat))
+      .startWith({ used: 3, quota: 10 } as CpuStat);
   }
 
   getMemoryStat(spaceId: string, environmentName: string): Observable<MemoryStat> {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
-      .map(() => ({ used: Math.floor(Math.random() * 156) + 100, total: 256, units: 'MB' } as MemoryStat))
-      .startWith({ used: 200, total: 256, units: 'MB' } as MemoryStat);
+      .map(() => ({ used: Math.floor(Math.random() * 156) + 100, quota: 256, units: 'MB' } as MemoryStat))
+      .startWith({ used: 200, quota: 256, units: 'MB' } as MemoryStat);
   }
 
   getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {

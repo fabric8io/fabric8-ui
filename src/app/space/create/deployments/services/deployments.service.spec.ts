@@ -52,10 +52,10 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getCpuStat', () => {
-    it('should return a "total" value of 10', fakeAsync(() => {
+    it('should return a "quota" value of 10', fakeAsync(() => {
       svc.getCpuStat('foo', 'bar')
         .subscribe(val => {
-          expect(val.total).toBe(10);
+          expect(val.quota).toBe(10);
         });
       tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
@@ -73,10 +73,10 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getMemoryStat', () => {
-    it('should return a "total" value of 256', fakeAsync(() => {
+    it('should return a "quota" value of 256', fakeAsync(() => {
       svc.getMemoryStat('foo', 'bar')
         .subscribe(val => {
-          expect(val.total).toBe(256);
+          expect(val.quota).toBe(256);
         });
       tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();

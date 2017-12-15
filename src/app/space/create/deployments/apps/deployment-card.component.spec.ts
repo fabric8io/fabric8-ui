@@ -66,9 +66,9 @@ describe('DeploymentCardComponent', () => {
       getPods: (spaceId: string, applicationId: string, environmentName: string) => { throw 'NotImplemented'; },
       scalePods: (spaceId: string, appId: string, envId: string, desired: number) => { throw 'NotImplemented'; },
       getVersion: () => Observable.of('1.2.3'),
-      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
+      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, quota: 2 } as CpuStat),
       getMemoryStat: (spaceId: string, envId: string) =>
-        Observable.of({ used: 1, total: 2, units: 'GB' } as MemoryStat),
+        Observable.of({ used: 1, quota: 2, units: 'GB' } as MemoryStat),
       getAppUrl: () => Observable.of('mockAppUrl'),
       getConsoleUrl: () => Observable.of('mockConsoleUrl'),
       getLogsUrl: () => Observable.of('mockLogsUrl'),

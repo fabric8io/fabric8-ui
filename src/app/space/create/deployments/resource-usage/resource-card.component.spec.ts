@@ -37,8 +37,8 @@ describe('ResourceCardComponent', () => {
   let fixture: ComponentFixture<ResourceCardComponent>;
   let mockResourceTitle = 'resource title';
   let mockSvc: DeploymentsService;
-  let cpuStatMock = Observable.of({ used: 1, total: 2 } as CpuStat);
-  let memoryStatMock = Observable.of({ used: 3, total: 4, units: 'GB' } as MemoryStat);
+  let cpuStatMock = Observable.of({ used: 1, quota: 2 } as CpuStat);
+  let memoryStatMock = Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
 
   beforeEach(() => {
     mockSvc = {
