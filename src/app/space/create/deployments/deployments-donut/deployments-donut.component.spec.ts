@@ -19,6 +19,8 @@ import { DeploymentsDonutComponent } from './deployments-donut.component';
 import { DeploymentsService } from '../services/deployments.service';
 import { Pods } from '../models/pods';
 
+import { createMock } from '../../../../../testing/mock';
+
 @Component({
   selector: 'deployments-donut-chart',
   template: ''
@@ -33,36 +35,23 @@ class FakeDeploymentsDonutChartComponent {
 describe('DeploymentsDonutComponent', () => {
   let component: DeploymentsDonutComponent;
   let fixture: ComponentFixture<DeploymentsDonutComponent>;
-  let mockSvc: DeploymentsService;
+  let mockSvc: jasmine.SpyObj<DeploymentsService>;
 
   let de: DebugElement;
   let el: HTMLElement;
 
   beforeEach(() => {
-    mockSvc = {
-      getApplications: () => { throw 'NotImplemented'; },
-      getEnvironments: () => { throw 'NotImplemented'; },
-      getPods: (spaceId: string, appId: string, envId: string) => Observable.of({
-        pods: [['Running', 1], ['Terminating', 1]],
-        total: 2
-      } as Pods),
-      scalePods: (spaceId: string, appId: string, envId: string, desired: number) => {
-        return Observable.of(`Scaled ${appId} in ${spaceId}/${envId} to ${desired} replicas`);
-      },
-      getVersion: () => { throw 'NotImplemented'; },
-      getCpuStat: (spaceId: string, envId: string) => { throw 'NotImplemented'; },
-      getMemoryStat: (spaceId: string, envId: string) => { throw 'NotImplemented'; },
-      getLogsUrl: () => { throw 'Not Implemented'; },
-      getConsoleUrl: () => { throw 'Not Implemented'; },
-      getAppUrl: () => { throw 'Not Implemented'; },
-      deleteApplication: () => { throw 'Not Implemented'; }
-    };
-
-    spyOn(mockSvc, 'scalePods').and.callThrough();
+    mockSvc = createMock(DeploymentsService);
+    mockSvc.scalePods.and.returnValue(
+      Observable.of('scalePods')
+    );
+    mockSvc.getPods.and.returnValue(
+      Observable.of({ pods: [['Running', 1], ['Terminating', 1]], total: 2 } as Pods)
+    );
 
     TestBed.configureTestingModule({
       declarations: [DeploymentsDonutComponent, FakeDeploymentsDonutChartComponent],
-      providers: [{ provide: DeploymentsService, useValue: mockSvc }]
+      providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
     });
 
     fixture = TestBed.createComponent(DeploymentsDonutComponent);
