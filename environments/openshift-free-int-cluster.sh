@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-export KUBERNETES_SERVICE_HOST=api.free-int.openshift.com
+export KUBERNETES_SERVICE_HOST=api.free-stg.openshift.com
 export KUBERNETES_SERVICE_PORT=443
-export OPENSHIFT_CONSOLE_HOST=console.free-int.openshift.com
+export OPENSHIFT_CONSOLE_HOST=console.free-stg.openshift.com
 export OPENSHIFT_CONSOLE_PORT=443
 
 echo "Using Kubernetes Master: ${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"

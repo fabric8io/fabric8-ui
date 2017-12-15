@@ -21,3 +21,8 @@
     </div>
   </div>
 </main>
+
+<!-- Github connection warning modal -->
+<ng-template #connectToGithubModal>
+  <pfng-empty-state [config]="disconnectedStateConfig" (onActionSelect)="connectToGithub($event)"></pfng-empty-state>
+</ng-template>

@@ -120,7 +120,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   /**
    * Get the worksapce name from given URL
    *
-   * (e.g., https://che-<username>-che.d800.free-int.openshiftapps.com/che/quydcbib)
+   * (e.g., https://che-<username>-che.d800.free-stg.openshiftapps.com/che/quydcbib)
    *
    * @param url The URL used to open a workspace
    * @returns {string} The workspace name (e.g., quydcbib)

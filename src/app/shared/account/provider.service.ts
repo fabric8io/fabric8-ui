@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Headers, Http} from '@angular/http';
+import { Headers, Http, RequestOptions} from '@angular/http';
 import { AuthenticationService,AUTH_API_URL } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
@@ -14,10 +14,10 @@ export class ProviderService {
   private linkUrl: string;
 
   constructor(
-      private http: Http,  
+      private http: Http,
       private auth: AuthenticationService,
       private logger: Logger,
-      @Inject(AUTH_API_URL) apiUrl: string) {
+      @Inject(AUTH_API_URL) private apiUrl: string) {
     this.loginUrl = apiUrl + 'link';
     this.linkUrl = apiUrl + 'token/link';
   }
@@ -40,6 +40,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   linkGitHub(next: string): void{
+    // let tokenUrl = this.apiUrl + 'token/link?for=https://github.com&redirect=' + encodeURIComponent(redirectUrl);
     let githubLinkURL = this.linkUrl + "?for=https://github.com&redirect=" +  encodeURIComponent(next) ;
     console.log("attempting to connect github "+ githubLinkURL);
     this.http
@@ -48,6 +49,8 @@ export class ProviderService {
       // TODO: what happens to this when the response is not a pure json
       let redirectInfo = response.json() as Link;
       this.redirectToAuth(redirectInfo.redirect_location);
+
+      // todo - handle redirect info?
       console.log(redirectInfo);
     })
     .catch((error) => {
@@ -55,10 +58,33 @@ export class ProviderService {
       return this.handleError(error);
     }).subscribe();
   }
-  
+
+  disconnectGitHub(): Observable<any> {
+    let tokenUrl = this.apiUrl + 'token?for=https://github.com';
+    return this.http
+      .delete(tokenUrl)
+      .map((response) => {
+        this.auth.clearGitHubToken();
+        //localStorage.removeItem('github_token');
+        // clear token using auth service
+        console.log(response);
+      });
+
+    // xhr.setRequestHeader("Content-Type", "application/json");
+    // xhr.setRequestHeader("Authorization", "Bearer " + this.getToken());
+    // xhr.send();
+
+    // DOESN'T WORK
+    //return this.http
+    //  .delete (tokenUrl, { headers: this.headers })
+    //  .map( () => {})
+    //  .catch((error) => {
+    //    return this.handleError(error);
+    //  });
+  }
 
   getLegacyLinkingUrl(provider: string, redirect: string): string{
-    let parsedToken = jwt_decode(this.auth.getToken());    
+    let parsedToken = jwt_decode(this.auth.getToken());
     let url = this.loginUrl + "/session?"
     + "clientSession=" + parsedToken.client_session
     + "&sessionState=" + parsedToken.session_state

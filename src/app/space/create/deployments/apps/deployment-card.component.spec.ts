@@ -39,6 +39,16 @@ class FakeDeploymentsDonutComponent {
   @Input() applicationId: string;
   @Input() environmentId: string;
 }
+@Component({
+  selector: 'deployment-graph-label',
+  template: ''
+})
+class FakeDeploymentGraphLabelComponent {
+  @Input() type: any;
+  @Input() dataMeasure: any;
+  @Input() value: any;
+  @Input() valueUpperBound: any;
+}
 
 describe('DeploymentCardComponent', () => {
 
@@ -73,7 +83,7 @@ describe('DeploymentCardComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [ BsDropdownModule.forRoot(), CollapseModule.forRoot(), ChartModule ],
-      declarations: [ DeploymentCardComponent, FakeDeploymentsDonutComponent ],
+      declarations: [ DeploymentCardComponent, FakeDeploymentsDonutComponent, FakeDeploymentGraphLabelComponent ],
       providers: [ BsDropdownConfig, { provide: DeploymentsService, useValue: mockSvc } ]
     });
 

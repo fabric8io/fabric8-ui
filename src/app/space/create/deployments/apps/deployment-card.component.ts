@@ -9,9 +9,12 @@ import {
   Observable,
   Subscription
 } from 'rxjs';
+import { uniqueId } from 'lodash';
 
 import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
+import { CpuStat } from '../models/cpu-stat';
+import { MemoryStat } from '../models/memory-stat';
 
 // Makes patternfly charts available
 import 'patternfly/dist/js/patternfly-settings.js';
@@ -29,20 +32,38 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   @Input() applicationId: string;
   @Input() environment: Environment;
 
-  public data: any = {
+  public cpuData: any = {
     dataAvailable: true,
     total: 100,
-    xData: ['foo', 1, 2, 3, 4],
-    yData: ['used', 10, 20, 30, 40]
+    xData: ['time', 0],
+    yData: ['used', 1]
   };
 
-  public config: any = {
-    // Seperate chart IDs must be unique, otherwise only one will appear
-    chartId: 'chart-' + DeploymentCardComponent.chartIdNum++ + '-'
+  public memData: any = {
+    dataAvailable: true,
+    total: 100,
+    xData: ['time', 0],
+    yData: ['used', 1]
+  };
+
+  public cpuConfig: any = {
+    // Seperate charts must have unique IDs, otherwise only one will appear
+    chartId: uniqueId('cpu-chart-') + '-'
+  };
+
+  public memConfig: any = {
+    // Seperate charts must have unique IDs, otherwise only one will appear
+    chartId: uniqueId('mem-chart-') + '-'
   };
 
   collapsed: boolean = true;
   version: Observable<string>;
+  cpuStat: Observable<CpuStat>;
+  memStat: Observable<MemoryStat>;
+  cpuTime: number;
+  memTime: number;
+  cpuVal: number;
+  memVal: number;
 
   logsUrl: Observable<string>;
   consoleUrl: Observable<string>;
@@ -63,7 +84,10 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.config.chartHeight = 60;
+    this.cpuConfig.chartHeight = 100;
+    this.memConfig.chartHeight = 100;
+    this.cpuTime = 1;
+    this.memTime = 1;
 
     this.version =
       this.deploymentsService.getVersion(this.applicationId, this.environment.environmentId);
@@ -76,6 +100,24 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
     this.appUrl =
       this.deploymentsService.getAppUrl(this.spaceId, this.applicationId, this.environment.environmentId);
+
+    this.cpuStat =
+      this.deploymentsService.getCpuStat(this.applicationId, this.environment.environmentId);
+
+    this.memStat =
+      this.deploymentsService.getMemoryStat(this.applicationId, this.environment.environmentId);
+
+    this.cpuStat.subscribe(stat => {
+      this.cpuVal = stat.used;
+      this.cpuData.yData.push(stat.used);
+      this.cpuData.xData.push(this.cpuTime++);
+    });
+
+    this.memStat.subscribe(stat => {
+      this.memVal = stat.used;
+      this.memData.yData.push(stat.used);
+      this.memData.xData.push(this.cpuTime++);
+    });
   }
 
   delete(): void {
@@ -84,5 +126,4 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
         .subscribe(alert)
     );
   }
-
 }

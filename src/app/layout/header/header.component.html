@@ -88,6 +88,14 @@
                   Create space
                 </a>
               </li>
+              <li id="header_mySpaces">
+                <a [routerLink]="[loggedInUser.attributes.username,'_myspaces']">
+                  <span class="nav-item-icon">
+                    <i class="pficon pficon-user"></i>
+                  </span>
+                  My spaces
+                </a>
+              </li>
               <li id="header_viewAllSpaces">
                 <a [routerLink]="[loggedInUser.attributes.username,'_spaces']">
                 <span class="nav-item-icon">

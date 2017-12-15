@@ -1,0 +1,17 @@
+<div class="toolbar-header">
+  <pfng-toolbar class="padding-top-10"
+      [config]="toolbarConfig"
+      [viewTemplate]="addSpaceTemplate"
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)">
+    <ng-template #addSpaceTemplate>
+      <span class="with-cursor-pointer" placement="top" tooltip="Create Space"
+            (click)="createSpace($event)">
+        <span class="add-space-tooltip">
+          <i class="pficon pficon-add-circle-o margin-top-4"></i>
+          Create Space
+        </span>
+      </span>
+    </ng-template>
+  </pfng-toolbar>
+</div>
