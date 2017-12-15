@@ -124,7 +124,7 @@ describe('DeploymentCardComponent', () => {
     });
 
     it('should be set from mockSvc.getVersion result', () => {
-      expect(mockSvc.getVersion).toHaveBeenCalledWith('mockAppId', 'mockEnvironmentId');
+      expect(mockSvc.getVersion).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
       expect(el.textContent).toEqual('1.2.3');
     });
   });
@@ -139,7 +139,7 @@ describe('DeploymentCardComponent', () => {
     });
 
     it('should use units from service result', () => {
-      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironmentId');
+      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
       expect(de.componentInstance.dataMeasure).toEqual('GB');
     });
   });

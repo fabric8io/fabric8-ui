@@ -32,7 +32,7 @@ export class DeploymentsDonutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.environmentId);
+    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name);
     this.pods.subscribe(pods => this.replicas = pods.total);
 
     this.desiredReplicas = this.getDesiredReplicas();
@@ -77,7 +77,7 @@ export class DeploymentsDonutComponent implements OnInit {
 
   private scale(): void {
     this.deploymentsService.scalePods(
-      this.spaceId, this.environment.environmentId, this.applicationId, this.desiredReplicas
+      this.spaceId, this.environment.name, this.applicationId, this.desiredReplicas
     );
   }
 }

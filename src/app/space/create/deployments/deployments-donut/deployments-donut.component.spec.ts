@@ -116,7 +116,7 @@ describe('DeploymentsDonutComponent', () => {
 
     el.click();
     component.debounceScale.flush();
-    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentId', 'application', 3);
+    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
   });
 
   it('should call scalePods when scaling down', () => {
@@ -125,7 +125,7 @@ describe('DeploymentsDonutComponent', () => {
 
     el.click();
     component.debounceScale.flush();
-    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentId', 'application', 1);
+    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 1);
   });
 
   it('should not call scalePods when scaling below 0', () => {
@@ -134,11 +134,11 @@ describe('DeploymentsDonutComponent', () => {
 
     el.click();
     component.debounceScale.flush();
-    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentId', 'application', 1);
+    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 1);
 
     el.click();
     component.debounceScale.flush();
-    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentId', 'application', 0);
+    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 0);
 
 
     el.click();

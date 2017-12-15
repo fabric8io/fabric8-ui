@@ -23,24 +23,24 @@ export class DeploymentsService {
     ]);
   }
 
-  getVersion(spaceId: string, environmentId: string): Observable<string> {
+  getVersion(spaceId: string, environmentName: string): Observable<string> {
     return Observable.of('1.0.2');
-  }
-
-  getPods(spaceId: string, environmentId: string, applicationId: string): Observable<Pods> {
-    return Observable.of({ pods: [['Running', 2], ['Terminating', 1]], total: 3 } as Pods);
   }
 
   scalePods(
     spaceId: string,
-    environmentId: string,
+    environmentName: string,
     applicationId: string,
     desiredReplicas: number
   ): Observable<string> {
-    return Observable.of(`Scaled ${applicationId} in ${spaceId}/${environmentId} to ${desiredReplicas} replicas`);
+    return Observable.of(`Scaled ${applicationId} in ${spaceId}/${environmentName} to ${desiredReplicas} replicas`);
   }
 
-  getCpuStat(spaceId: string, environmentId: string): Observable<CpuStat> {
+  getPods(spaceId: string, applicationId: string, environmentName: string): Observable<Pods> {
+    return Observable.of({ pods: [['Running', 2], ['Terminating', 1]], total: 3 } as Pods);
+  }
+
+  getCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
@@ -48,7 +48,7 @@ export class DeploymentsService {
       .startWith({ used: 3, total: 10 } as CpuStat);
   }
 
-  getMemoryStat(spaceId: string, environmentId: string): Observable<MemoryStat> {
+  getMemoryStat(spaceId: string, environmentName: string): Observable<MemoryStat> {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
@@ -56,15 +56,15 @@ export class DeploymentsService {
       .startWith({ used: 200, total: 256, units: 'MB' } as MemoryStat);
   }
 
-  getLogsUrl(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
+  getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
     return Observable.of('http://example.com/');
   }
 
-  getConsoleUrl(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
+  getConsoleUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
     return Observable.of('http://example.com/');
   }
 
-  getAppUrl(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
+  getAppUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
     if (Math.random() > 0.5) {
       return Observable.of('http://example.com/');
     } else {
@@ -72,8 +72,8 @@ export class DeploymentsService {
     }
   }
 
-  deleteApplication(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
-    return Observable.of(`Deleted ${applicationId} in ${spaceId} (${environmentId})`);
+  deleteApplication(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
+    return Observable.of(`Deleted ${applicationId} in ${spaceId} (${environmentName})`);
   }
 
 }
