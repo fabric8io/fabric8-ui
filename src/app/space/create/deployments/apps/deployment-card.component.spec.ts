@@ -63,7 +63,7 @@ describe('DeploymentCardComponent', () => {
     mockSvc = {
       getApplications: () => { throw 'Not Implemented'; },
       getEnvironments: () => { throw 'Not Implemented'; },
-      getPods: (spaceId: string, applicationId: string, environmentId: string) => { throw 'NotImplemented'; },
+      getPods: (spaceId: string, applicationId: string, environmentName: string) => { throw 'NotImplemented'; },
       scalePods: (spaceId: string, appId: string, envId: string, desired: number) => { throw 'NotImplemented'; },
       getVersion: () => Observable.of('1.2.3'),
       getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
@@ -97,7 +97,7 @@ describe('DeploymentCardComponent', () => {
 
     component.spaceId = 'mockSpaceId';
     component.applicationId = 'mockAppId';
-    component.environment = { environmentId: 'mockEnvironmentId', name: 'mockEnvironment' };
+    component.environment = { name: 'mockEnvironment' } as Environment;
 
     fixture.detectChanges();
     flush();

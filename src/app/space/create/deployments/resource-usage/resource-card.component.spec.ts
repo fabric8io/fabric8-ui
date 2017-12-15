@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 
 import { DeploymentsService } from '../services/deployments.service';
 
+import { Environment } from '../models/environment';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { Stat } from '../models/stat';
@@ -43,8 +44,8 @@ describe('ResourceCardComponent', () => {
     mockSvc = {
       getApplications: () => Observable.of(['foo-app', 'bar-app']),
       getEnvironments: () => Observable.of([
-        { environmentId: 'a1', name: 'stage' },
-        { environmentId: 'b2', name: 'prod' }
+        { name: 'stage' } as Environment,
+        { name: 'prod' } as Environment
       ]),
       getPods: () => { throw 'NotImplemented'; },
       scalePods: (spaceId: string, envId: string, appId: string) => { throw 'Not Implemented'; },
@@ -80,7 +81,7 @@ describe('ResourceCardComponent', () => {
     component = fixture.componentInstance;
 
     component.spaceId = 'spaceId';
-    component.environment = { environmentId: 'environmentId', name: 'environmentName' };
+    component.environment = { name: 'stage' } as Environment;
 
     fixture.detectChanges();
   });

@@ -17,6 +17,7 @@ import { Observable } from 'rxjs';
 
 import { DeploymentsDonutComponent } from './deployments-donut.component';
 import { DeploymentsService } from '../services/deployments.service';
+import { Environment } from '../models/environment';
 import { Pods } from '../models/pods';
 
 import { createMock } from '../../../../../testing/mock';
@@ -60,7 +61,7 @@ describe('DeploymentsDonutComponent', () => {
     component.mini = false;
     component.spaceId = 'space';
     component.applicationId = 'application';
-    component.environment = { environmentId: 'environmentId', name: 'environmentName' };
+    component.environment = { name: 'environmentName' } as Environment;
 
     fixture.detectChanges();
   });

@@ -18,8 +18,8 @@ export class DeploymentsService {
 
   getEnvironments(spaceId: string): Observable<Environment[]> {
     return Observable.of([
-      { environmentId: 'envId-stage', name: 'stage' } as Environment,
-      { environmentId: 'envId-run', name: 'run' } as Environment
+      { name: 'stage' } as Environment,
+      { name: 'run' } as Environment
     ]);
   }
 

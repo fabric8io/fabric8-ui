@@ -4,6 +4,8 @@ import {
   tick
 } from '@angular/core/testing';
 
+import { Environment } from '../models/environment';
+
 import { DeploymentsService } from './deployments.service';
 
 describe('DeploymentsService', () => {
@@ -30,8 +32,8 @@ describe('DeploymentsService', () => {
       svc.getEnvironments('foo')
         .subscribe(val => {
           expect(val).toEqual([
-            { environmentId: 'envId-stage', name: 'stage' },
-            { environmentId: 'envId-run', name: 'run' }
+            { name: 'stage' } as Environment,
+            { name: 'run' } as Environment
           ]);
         });
       tick(DeploymentsService.POLL_RATE_MS + 10);
