@@ -108,18 +108,18 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.memStat =
       this.deploymentsService.getMemoryStat(this.applicationId, this.environment.environmentId);
 
-    this.cpuStat.subscribe(stat => {
+    this.subscriptions.push(this.cpuStat.subscribe(stat => {
       this.cpuVal = stat.used;
       this.cpuData.yData.push(stat.used);
       this.cpuData.xData.push(this.cpuTime++);
-    });
+    }));
 
-    this.memStat.subscribe(stat => {
+    this.subscriptions.push(this.memStat.subscribe(stat => {
       this.memVal = stat.used;
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
       this.memUnits = stat.units;
-    });
+    }));
   }
 
   delete(): void {
