@@ -51,10 +51,10 @@
 
       <div class="deployment-chart">
         <div class="chart-column">
-            <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
-          </div>
+          <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
+        </div>
         <div class="chart-column chart-text">
-            <deployment-graph-label type="Memory" dataMeasure="GB" [value]="memVal" valueUpperBound="500"></deployment-graph-label>
+          <deployment-graph-label type="Memory" [dataMeasure]="memUnits" [value]="memVal" valueUpperBound="500"></deployment-graph-label>
         </div>
       </div>
     </div>

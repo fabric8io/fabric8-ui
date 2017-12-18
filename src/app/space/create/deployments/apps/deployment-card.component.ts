@@ -64,6 +64,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   memTime: number;
   cpuVal: number;
   memVal: number;
+  memUnits: string;
 
   logsUrl: Observable<string>;
   consoleUrl: Observable<string>;
@@ -117,6 +118,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
       this.memVal = stat.used;
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
+      this.memUnits = stat.units;
     });
   }
 

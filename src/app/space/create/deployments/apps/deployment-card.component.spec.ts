@@ -64,7 +64,8 @@ describe('DeploymentCardComponent', () => {
       scalePods: (spaceId: string, appId: string, envId: string, desired: number) => { throw 'NotImplemented'; },
       getVersion: () => Observable.of('1.2.3'),
       getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
-      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat),
+      getMemoryStat: (spaceId: string, envId: string) =>
+        Observable.of({ used: 1, total: 2, units: 'GB' } as MemoryStat),
       getAppUrl: () => Observable.of('mockAppUrl'),
       getConsoleUrl: () => Observable.of('mockConsoleUrl'),
       getLogsUrl: () => Observable.of('mockLogsUrl'),
@@ -120,6 +121,21 @@ describe('DeploymentCardComponent', () => {
     it('should be set from mockSvc.getVersion result', () => {
       expect(mockSvc.getVersion).toHaveBeenCalledWith('mockAppId', 'mockEnvironmentId');
       expect(el.textContent).toEqual('1.2.3');
+    });
+  });
+
+  describe('memory label', () => {
+    let de: DebugElement;
+
+    beforeEach(() => {
+      let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
+      let memoryChart = charts[1];
+      de = charts[1].query(By.directive(FakeDeploymentGraphLabelComponent));
+    });
+
+    it('should use units from service result', () => {
+      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironmentId');
+      expect(de.componentInstance.dataMeasure).toEqual('GB');
     });
   });
 
