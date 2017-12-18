@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { Location } from '@angular/common';
 import { Config } from 'ngx-forge';
 import { FABRIC8_FORGE_API_URL } from '../../../../a-runtime-console/shared/fabric8-forge-api';
 
@@ -10,13 +11,8 @@ export class ForgeConfig extends Config {
     let settings = {backend_url: 'TO_BE_DEFINED'};
 
     if (apiUrl) {
-      settings['backend_url'] = apiUrl;
+      settings['backend_url'] = Location.stripTrailingSlash(apiUrl) + '/api/launchpad';
     }
-
-    if (settings['backend_url'] && settings['backend_url'][settings['backend_url'].length - 1] !== '/') {
-      settings['backend_url'] += '/';
-    }
-    settings['backend_url'] += 'forge';
 
     this.settings = settings;
   }
