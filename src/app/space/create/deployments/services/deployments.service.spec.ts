@@ -89,6 +89,15 @@ describe('DeploymentsService', () => {
       tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
     }));
+
+    it('should return a value in MB', fakeAsync(() => {
+      svc.getMemoryStat('foo', 'bar')
+        .subscribe(val => {
+          expect(val.units).toEqual('MB');
+        });
+        tick(DeploymentsService.POLL_RATE_MS + 10);
+        discardPeriodicTasks();
+    }));
   });
 
 });

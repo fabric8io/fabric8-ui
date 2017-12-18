@@ -52,8 +52,8 @@ export class DeploymentsService {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
-      .map(() => ({ used: Math.floor(Math.random() * 156) + 100, total: 256 } as MemoryStat))
-      .startWith({ used: 200, total: 256 } as MemoryStat);
+      .map(() => ({ used: Math.floor(Math.random() * 156) + 100, total: 256, units: 'MB' } as MemoryStat))
+      .startWith({ used: 200, total: 256, units: 'MB' } as MemoryStat);
   }
 
   getLogsUrl(spaceId: string, applicationId: string, environmentId: string): Observable<string> {
