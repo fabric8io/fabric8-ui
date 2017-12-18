@@ -11,6 +11,7 @@ import { WorkspacesComponent } from './workspaces.component';
 import { CreateWorkspacesDialogModule } from './create-workspaces-dialog/create-workspaces-dialog.module';
 import { WorkspacesItemModule } from './workspaces-item/workspaces-item.module';
 import { WorkspacesItemActionsModule } from './workspaces-item-actions/workspaces-item-actions.module';
+import { WorkspacesItemHeadingModule } from './workspaces-item-heading/workspaces-item-heading.module';
 import { WorkspacesRoutingModule } from './workspaces-routing.module';
 import { WorkspacesToolbarModule } from './workspaces-toolbar/workspaces-toolbar.module';
 import { CheService } from '../codebases/services/che.service';
@@ -26,6 +27,7 @@ import { WorkspacesService } from '../codebases/services/workspaces.service';
     ListModule,
     TooltipModule.forRoot(),
     WorkspacesItemActionsModule,
+    WorkspacesItemHeadingModule,
     WorkspacesItemModule,
     WorkspacesRoutingModule,
     WorkspacesToolbarModule

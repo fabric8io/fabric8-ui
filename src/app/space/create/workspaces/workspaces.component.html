@@ -12,13 +12,17 @@
         [actionTemplate]="actionTemplate"
         [config]="listConfig"
         [items]="filteredRows"
+        [itemHeadingTemplate]="itemHeadingTemplate"
         [itemTemplate]="itemTemplate"
         (onActionSelect)="createWorkspaceDialog.open($event)">
-        <ng-template #itemTemplate let-item="item" let-index="index">
-          <workspaces-item [workspace]="item.workspace" [repo]="getRepo(item.codebaseId)" [index]="index"></workspaces-item>
+        <ng-template #itemHeadingTemplate let-item="item">
+          <workspaces-item-heading [cheState]="cheState"></workspaces-item-heading>
         </ng-template>
-        <ng-template #actionTemplate let-item="item" let-index="index">
-          <workspaces-item-actions [workspace]="item.workspace" [index]="index"></workspaces-item-actions>
+        <ng-template #itemTemplate let-item="item">
+          <workspaces-item [workspace]="item.workspace" [repo]="getRepo(item.codebaseId)"></workspaces-item>
+        </ng-template>
+        <ng-template #actionTemplate let-item="item">
+          <workspaces-item-actions [workspace]="item.workspace"></workspaces-item-actions>
         </ng-template>
       </pfng-list>
     </div>
@@ -28,5 +32,4 @@
 <!-- Modal window: Create Workspace -->
 <create-workspaces-dialog #createWorkspaceDialog
                           [reposMap]="reposByCodebase"
-                          [repos]="getRepos()"
                           (onCreated)="createWorkspacesToParent($event)"></create-workspaces-dialog>

@@ -32,10 +32,9 @@ interface IRepositoryOption {
 })
 export class CreateWorkspacesDialogComponent implements OnInit, OnDestroy {
 
-  @Input() repos: GitHubRepoDetails[];
   @Input() reposMap: Map<string, GitHubRepoDetails>;
-  @Output() onCreated = new EventEmitter<any>();
-  @ViewChild('createWorkspace') createWorkspaceModal: IModalHost;
+  @Output('onCreated') onCreated = new EventEmitter();
+  @ViewChild('createWorkspaceModal') createWorkspaceModal: IModalHost;
   @ViewChild('typeahead') typeahead: any;
   @ViewChild('emptyOption') emptyOption: ElementRef;
   @ViewChild('branchNameModel') branchNameModel: NgModel;
@@ -111,18 +110,17 @@ export class CreateWorkspacesDialogComponent implements OnInit, OnDestroy {
   }
 
   createWorkspace(form: NgForm): void {
-    for (let controlName in form.controls) {
-      if (form.controls.hasOwnProperty(controlName)) {
-        form.controls[controlName].markAsDirty();
-      }
-    }
-
     if (form.invalid) {
+      for (let controlName in form.controls) {
+        if (form.controls.hasOwnProperty(controlName)) {
+          form.controls[controlName].markAsDirty();
+        }
+      }
       console.warn('Some necessary data are missed.');
       return;
     }
 
-    // todo submit new workspace creation
+    this.onCreated.emit();
   }
 
   changeTypeaheadLoading(e: boolean): void {

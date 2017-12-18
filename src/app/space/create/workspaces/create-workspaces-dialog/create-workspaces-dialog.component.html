@@ -1,5 +1,5 @@
 <form role="form" #form="ngForm" (ngSubmit)="createWorkspace(form)" class="form-horizontal">
-  <modal #createWorkspace
+  <modal #createWorkspaceModal
          title="Create Workspace"
          modalClass="create-workspaces-dialog">
     <modal-content class="chromeless-modal-content">
@@ -50,7 +50,7 @@
                      (typeaheadNoResults)="changeTypeaheadNoResults($event)"
                      (typeaheadOnSelect)="typeaheadOnSelect($event)"
                      [typeaheadOptionsLimit]="7"
-                     [disabled]="codebaseModel?.errors?.required"
+                     [attr.disabled]="codebaseModel?.errors?.required"
                      id="branchName"
                      name="branchName"
                      autocomplete="off"
@@ -71,7 +71,7 @@
     </modal-content>
     <modal-footer>
       <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
-      <button class="btn btn-primary" type="submit" [disabled]="form.invalid">Create</button>
+      <button class="btn btn-primary" type="submit" [attr.disabled]="form.invalid?true:null">Create</button>
     </modal-footer>
   </modal>
 </form>

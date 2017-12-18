@@ -10,7 +10,6 @@ import { Workspace } from '../../codebases/services/workspace';
 })
 export class WorkspacesItemActionsComponent {
   @Input() workspace: Workspace;
-  @Input() index: number = -1;
 
   stopWorkspace(): void {
     if (!this.isRunning()) {

@@ -24,7 +24,6 @@ import { Workspace } from '../../codebases/services/workspace';
 export class WorkspacesItemComponent implements OnDestroy, OnChanges, OnInit {
   @Input() workspace: Workspace;
   @Input() repo: GitHubRepoDetails;
-  @Input() index: number = -1;
   @HostBinding('class.workspace-item')
 
   subscriptions: Subscription[] = [];

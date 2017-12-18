@@ -9,7 +9,6 @@ import { GitHubRepoDetails } from '../../codebases/services/github';
 })
 export class WorkspacesItemDetailsComponent implements OnDestroy, OnInit {
   @Input() repo: GitHubRepoDetails;
-  @Input() index: number = -1;
 
   branchName: string;
 

@@ -24,6 +24,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { cloneDeep } from 'lodash';
 
+import { Che } from '../codebases/services/che';
 import { Codebase } from '../codebases/services/codebase';
 import { Workspace } from '../codebases/services/workspace';
 import { CheService } from '../codebases/services/che.service';
@@ -48,6 +49,7 @@ interface IWorkspacesListRow {
 export class WorkspacesComponent implements OnDestroy, OnInit {
 
   chePollSubscription: Subscription;
+  cheState: Che;
   chePollTimer: Observable<any>;
   subscriptions: Subscription[] = [];
   context: Context;
@@ -88,6 +90,7 @@ export class WorkspacesComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.cheState = null;
     this.updateCodebases();
     this.startIdleChe();
 
@@ -127,14 +130,6 @@ export class WorkspacesComponent implements OnDestroy, OnInit {
     return this.reposByCodebase.get(codebaseId);
   }
 
-  getRepos(): GitHubRepoDetails[] {
-    const repos = [];
-    this.reposById.forEach((repo: GitHubRepoDetails) => {
-      repos.push(repo);
-    });
-    return repos;
-  }
-
   sortChange($event: SortEvent): void {
     this.currentSortField = $event.field;
     this.isAscendingSort = $event.isAscending;
@@ -147,12 +142,6 @@ export class WorkspacesComponent implements OnDestroy, OnInit {
 
   compareRows(row1: IWorkspacesListRow, row2: IWorkspacesListRow): number {
     let compValue = 0;
-
-    // this is necessary because the first item in the rows array
-    // is an empty object that is needed to create the headers of the table
-    if (!Object.keys(row1).length || !Object.keys(row2).length) {
-      return compValue;
-    }
 
     // by default workspaces are sorted by name and last used is the first
     const isDefaultSearch = !this.currentSortField || !this.currentSortField.id;
@@ -198,18 +187,9 @@ export class WorkspacesComponent implements OnDestroy, OnInit {
     if (!filters || filters.length === 0) {
       this.filteredRows = cloneDeep(this.rows);
     } else {
-      this.filteredRows = this.rows.filter((row: IWorkspacesListRow, index: number) => {
-        if (index === 0) {
-          // pass header row
-          return true;
-        }
+      this.filteredRows = this.rows.filter((row: IWorkspacesListRow) => {
         return this.matchesFilters(row, filters);
       });
-    }
-
-    if (this.filteredRows.length === 1) {
-      // do not show heading row
-      this.filteredRows.length = 0;
     }
 
     this.resultsCount = this.filteredRows.length;
@@ -264,11 +244,6 @@ export class WorkspacesComponent implements OnDestroy, OnInit {
   private updateWorkspaces(codebase: Codebase): void {
     this.subscriptions.push(
       this.workspacesService.getWorkspaces(codebase.id)
-        .do(() => {
-          if (this.rows.length === 0) {
-            this.rows.push({} as IWorkspacesListRow);
-          }
-        })
         .subscribe((workspaces: Workspace[]) => {
           if (workspaces === null || workspaces.length === 0) {
             return;
@@ -329,7 +304,7 @@ export class WorkspacesComponent implements OnDestroy, OnInit {
       .map(che => {
         if (che !== undefined && che.running === true) {
           this.chePollSubscription.unsubscribe();
-          this.broadcaster.broadcast('cheStateChange', che);
+          this.cheState = che;
         }
       })
       .publish()
@@ -344,12 +319,12 @@ export class WorkspacesComponent implements OnDestroy, OnInit {
     // Get state for Che server
     this.subscriptions.push(this.cheService.start()
       .subscribe(che => {
-        this.broadcaster.broadcast('cheStateChange', che);
+        this.cheState = che;
         if (che === undefined || che.running !== true) {
           this.cheStatePoll();
         }
       }, error => {
-        this.broadcaster.broadcast('cheStateChange');
+        this.cheState = null;
       }));
   }
 
@@ -361,12 +336,12 @@ export class WorkspacesComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.cheService.getState()
       .subscribe(che => {
         if (che !== undefined && che.running === true) {
-          this.broadcaster.broadcast('cheStateChange', che);
+          this.cheState = che;
         } else {
           this.startChe();
         }
       }, error => {
-        this.broadcaster.broadcast('cheStateChange');
+        this.cheState = null;
       }));
   }
 
