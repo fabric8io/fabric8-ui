@@ -15,6 +15,7 @@ import { Observable } from 'rxjs';
 export class UtilizationBarComponent implements OnInit {
 
   @Input() resourceTitle: string;
+  @Input() resourceUnit: string;
   @Input() stat: Observable<Stat>;
 
   used: number;

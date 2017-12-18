@@ -26,6 +26,7 @@ import { ResourceCardComponent } from './resource-card.component';
 })
 class FakeUtilizationBarComponent {
   @Input() resourceTitle: string;
+  @Input() resourceUnit: string;
   @Input() stat: Observable<Stat>;
 }
 
@@ -36,7 +37,7 @@ describe('ResourceCardComponent', () => {
   let mockResourceTitle = 'resource title';
   let mockSvc: DeploymentsService;
   let cpuStatMock = Observable.of({ used: 1, total: 2 } as CpuStat);
-  let memoryStatMock = Observable.of({ used: 3, total: 4 } as MemoryStat);
+  let memoryStatMock = Observable.of({ used: 3, total: 4, units: 'GB' } as MemoryStat);
 
   beforeEach(() => {
     mockSvc = {
@@ -89,11 +90,13 @@ describe('ResourceCardComponent', () => {
     expect(arrayOfComponents.length).toEqual(2);
 
     let cpuUtilBar = arrayOfComponents[0].componentInstance;
-    expect(cpuUtilBar.resourceTitle).toEqual('CPU (Cores)');
+    expect(cpuUtilBar.resourceTitle).toEqual('CPU');
+    expect(cpuUtilBar.resourceUnit).toEqual('Cores');
     expect(cpuUtilBar.stat).toEqual(cpuStatMock);
 
     let memoryUtilBar = arrayOfComponents[1].componentInstance;
-    expect(memoryUtilBar.resourceTitle).toEqual('Memory (MB)');
+    expect(memoryUtilBar.resourceTitle).toEqual('Memory');
+    expect(memoryUtilBar.resourceUnit).toEqual('GB');
     expect(memoryUtilBar.stat).toEqual(memoryStatMock);
   });
 

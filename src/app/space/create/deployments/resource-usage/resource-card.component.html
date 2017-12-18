@@ -1,6 +1,6 @@
 <div class="card-pf">
   <div class="card-pf-body resource-card-body">
-    <utilization-bar [resourceTitle]="'CPU (Cores)'" [stat]="deploymentsService.getCpuStat(spaceId, environmentId)"></utilization-bar>
-    <utilization-bar [resourceTitle]="'Memory (MB)'" [stat]="deploymentsService.getMemoryStat(spaceId, environmentId)"></utilization-bar>
+    <utilization-bar [resourceTitle]="'CPU'" [resourceUnit]="'Cores'" [stat]="deploymentsService.getCpuStat(spaceId, environmentId)"></utilization-bar>
+    <utilization-bar [resourceTitle]="'Memory'" [resourceUnit]="memUnit | async" [stat]="deploymentsService.getMemoryStat(spaceId, environmentId)"></utilization-bar>
   </div>
 </div>
