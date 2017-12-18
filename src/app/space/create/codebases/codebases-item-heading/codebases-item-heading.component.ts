@@ -30,8 +30,8 @@ export class CodebasesItemHeadingComponent implements OnInit {
    * @returns {string}
    */
   getNotificationMessage(): string {
-    if (this.cheState !== undefined) {
-      if (this.cheState.multiTenant) {
+    if (this.cheState !== undefined && this.cheState !== null) {
+      if (this.cheState.multiTenant !== undefined && this.cheState.multiTenant === true) {
         return this.cheState.running
           ? this.cheFinishedMultiTenantMigrationMessage : this.chePerformingMultiTenantMigrationMessage;
       } else {
