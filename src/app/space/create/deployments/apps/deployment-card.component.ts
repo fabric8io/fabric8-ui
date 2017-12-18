@@ -63,8 +63,10 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   cpuTime: number;
   memTime: number;
   cpuVal: number;
+  cpuMax: number;
   memVal: number;
   memUnits: string;
+  memMax: number;
 
   logsUrl: Observable<string>;
   consoleUrl: Observable<string>;
@@ -110,12 +112,14 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
     this.cpuStat.subscribe(stat => {
       this.cpuVal = stat.used;
+      this.cpuMax = stat.total;
       this.cpuData.yData.push(stat.used);
       this.cpuData.xData.push(this.cpuTime++);
     });
 
     this.memStat.subscribe(stat => {
       this.memVal = stat.used;
+      this.memMax = stat.total;
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
       this.memUnits = stat.units;

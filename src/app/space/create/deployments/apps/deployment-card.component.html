@@ -45,7 +45,7 @@
           <pfng-chart-sparkline class="chart-sparkline" [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>
         </div>
         <div class="chart-column">
-          <deployment-graph-label type="CPU" dataMeasure="Cores" [value]="cpuVal" valueUpperBound="10"></deployment-graph-label>
+          <deployment-graph-label type="CPU" dataMeasure="Cores" [value]="cpuVal" [valueUpperBound]="cpuMax"></deployment-graph-label>
         </div>
       </div>
 
@@ -54,7 +54,7 @@
           <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
         </div>
         <div class="chart-column chart-text">
-          <deployment-graph-label type="Memory" [dataMeasure]="memUnits" [value]="memVal" valueUpperBound="500"></deployment-graph-label>
+          <deployment-graph-label type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
         </div>
       </div>
     </div>
