@@ -34,6 +34,7 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
   };
 
   private statSubscription: Subscription;
+  private readonly warningThreshold = 75;
 
   constructor() { }
 
@@ -46,7 +47,7 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
       this.usedPercent = (this.total !== 0) ? Math.floor(this.used / this.total * 100) : 0;
       this.unusedPercent = 100 - this.usedPercent;
 
-      if (this.usedPercent < 75) {
+      if (this.usedPercent < this.warningThreshold) {
         this.color = this.colors.Okay;
       } else {
         this.color = this.colors.Warning;
