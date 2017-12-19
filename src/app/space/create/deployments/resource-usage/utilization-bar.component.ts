@@ -14,7 +14,8 @@ import {
 
 @Component({
   selector: 'utilization-bar',
-  templateUrl: 'utilization-bar.component.html'
+  templateUrl: 'utilization-bar.component.html',
+  styleUrls: ['./utilization-bar.component.less']
 })
 export class UtilizationBarComponent implements OnDestroy, OnInit {
 
@@ -26,20 +27,22 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
   total: number;
   usedPercent: number;
   unusedPercent: number;
-  color: string;
 
-  private colors = {
-    'Okay': '#39a5dc', // Light blue
-    'Warning': '#f39d3c' // Orange
-  };
+  currentState: any;
 
   private statSubscription: Subscription;
   private readonly warningThreshold = 75;
 
+  private states = {
+    'Okay' : ['utilization-okay'],
+    'Warning' : ['utilization-warning']
+  };
+
+
   constructor() { }
 
   ngOnInit(): void {
-    this.color = this.colors.Okay;
+    this.currentState = this.states.Okay;
 
     this.statSubscription = this.stat.subscribe(val => {
       this.used = val.used;
@@ -48,15 +51,19 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
       this.unusedPercent = 100 - this.usedPercent;
 
       if (this.usedPercent < this.warningThreshold) {
-        this.color = this.colors.Okay;
+        this.currentState = this.states.Okay;
       } else {
-        this.color = this.colors.Warning;
+        this.currentState = this.states.Warning;
       }
     });
   }
 
   ngOnDestroy(): void {
     this.statSubscription.unsubscribe();
+  }
+
+  getUtilizationClasses() {
+    return this.currentState;
   }
 
 }

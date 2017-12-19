@@ -4,7 +4,8 @@
   </div>
   <div class="progress">
     <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="usedPercent" aria-valuemin="0" aria-valuemax="100"
-      [style.background]="color" [style.width]="usedPercent + '%'" data-toggle="tooltip" title="{{ usedPercent }}% Used">
+      [ngClass]="getUtilizationClasses()"
+      [style.width]="usedPercent + '%'" data-toggle="tooltip" title="{{ usedPercent }}% Used">
       <span><b id="resourceCardLabel">{{ used }} of {{ total }}</b></span>
     </div>
     <div class="progress-bar progress-bar-remaining" role="progressbar" [attr.aria-valuenow]="unusedPercent" aria-valuemin="0" aria-valuemax="100"

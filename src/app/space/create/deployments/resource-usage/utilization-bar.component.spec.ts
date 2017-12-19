@@ -54,8 +54,14 @@ describe('UtilizationBarComponent', () => {
       expect(el.textContent.trim()).toEqual('1 of 4');
     });
 
-    it('should set color to Okay when under 75% used', () => {
-      expect(component.color).toEqual('#39a5dc');
+    it('should set state to okay when under 75% used', () => {
+      expect(component.currentState).toEqual(['utilization-okay']);
+
+      let de = fixture.debugElement.query(By.css('.utilization-okay'));
+      expect(de).toBeTruthy();
+
+      let de2 = fixture.debugElement.query(By.css('.utilization-warning'));
+      expect(de2).toBeFalsy();
     });
   });
 
@@ -99,8 +105,14 @@ describe('UtilizationBarComponent', () => {
       expect(el.textContent.trim()).toEqual('3 of 4');
     });
 
-    it('should set color to Warning when 75% or higher used', () => {
-      expect(component.color).toEqual('#f39d3c');
+    it('should set state to warning to false when 75% or higher used', () => {
+      expect(component.currentState).toEqual(['utilization-warning']);
+
+      let de = fixture.debugElement.query(By.css('.utilization-okay'));
+      expect(de).toBeFalsy();
+
+      let de2 = fixture.debugElement.query(By.css('.utilization-warning'));
+      expect(de2).toBeTruthy();
     });
   });
 
