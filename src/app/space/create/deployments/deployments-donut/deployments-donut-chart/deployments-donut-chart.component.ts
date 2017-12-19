@@ -101,7 +101,10 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
         },
         selection: {
           enabled: false
-        }
+        },
+        columns: [
+          ['Empty', 0]
+        ]
       }
     };
 
@@ -116,19 +119,16 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
   }
 
   ngAfterViewInit(): void {
-    this.config.data.columns = this.pods.pods;
     this.chart = c3.generate(this.config);
-    this.updateCountText();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.pods && !isEqual(changes.pods.previousValue, changes.pods.currentValue)) {
+      this.debounceUpdateChart();
+    }
     if ((changes.desiredReplicas && !changes.desiredReplicas.firstChange) ||
       (changes.idled && !changes.idled.firstChange)) {
       this.updateCountText();
-    }
-
-    if (changes.pods && !changes.pods.firstChange && !isEqual(changes.pods.previousValue, changes.pods.currentValue)) {
-      this.debounceUpdateChart();
     }
   }
 
@@ -139,7 +139,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
   }
 
   private updateCountText(): void {
-    if (!this.mini) {
+    if (!this.mini && this.pods) {
       let smallText: string;
       if (isNaN(this.desiredReplicas) || this.desiredReplicas === this.pods.total) {
         smallText = (this.pods.total === 1) ? 'pod' : 'pods';
@@ -156,7 +156,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
   }
 
   private updateChart(): void {
-    if (this.chart) {
+    if (this.chart && this.pods) {
       this.config.data.columns = this.pods.pods;
       this.chart.load(this.config.data);
       this.updateCountText();
