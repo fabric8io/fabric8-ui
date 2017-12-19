@@ -79,24 +79,6 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
           .catch(err => Observable.of(createdSpace));
       })
       .subscribe(createdSpace => {
-          const primaryAction: NotificationAction = {
-            isDisabled: false,
-            isSeparator: false,
-            name: `Open Space`,
-            title: `Open ${this.spaceNamePipe.transform(createdSpace.attributes.name)}`,
-            id: 'openSpace'
-          };
-          this.notifications.message(<Notification>{
-            message: `Your new space is created!`,
-            type: NotificationType.SUCCESS,
-            primaryAction: primaryAction
-          })
-            .filter(action => action.id === primaryAction.id)
-            .subscribe(action => {
-              this.router.navigate([createdSpace.relationalData.creator.attributes.username,
-                createdSpace.attributes.name]);
-              this.finish();
-            });
           this.router.navigate([createdSpace.relationalData.creator.attributes.username,
             createdSpace.attributes.name]);
           this.finish();

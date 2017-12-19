@@ -5,6 +5,7 @@ import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
 import { initContext, TestContext } from '../../../../testing/test-context';
+import { ProviderService } from '../../../shared/account/provider.service';
 
 @Component({
   template: `<alm-connected-accounts></alm-connected-accounts>`
@@ -28,6 +29,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
+    let providersMock: any = jasmine.createSpy('ProviderService');
 
     beforeAll(() => {
       authMock.gitHubToken = Observable.of('gh-test-user');
@@ -37,7 +39,8 @@ describe('Connected Accounts Component', () => {
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
       providers: [ { provide: AuthenticationService, useValue: authMock },
-        { provide: Contexts, useValue: contextsMock }]
+        { provide: Contexts, useValue: contextsMock },
+        { provide: ProviderService, useValue: providersMock }]
     });
 
     it('should have GitHub connection indicated', function (this: Context) {
@@ -57,6 +60,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
+    let providersMock: any = jasmine.createSpy('ProviderService');
 
     beforeAll(() => {
       authMock.gitHubToken = Observable.empty();
@@ -66,12 +70,13 @@ describe('Connected Accounts Component', () => {
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
       providers: [ { provide: AuthenticationService, useValue: authMock },
-        { provide: Contexts, useValue: contextsMock }]
+        { provide: Contexts, useValue: contextsMock },
+        { provide: ProviderService, useValue: providersMock }]
     });
 
     it('should have absence of GitHub connection indicated', function (this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('GitHub Not Connected');
+      expect(actualText).toContain('GitHub Disconnected');
     });
 
     it('should have OpenShift connection indicated', function (this: Context) {
@@ -85,6 +90,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
+    let providersMock: any = jasmine.createSpy('ProviderService');
 
     beforeAll(() => {
       authMock.gitHubToken = Observable.of('gh-test-user');
@@ -94,7 +100,8 @@ describe('Connected Accounts Component', () => {
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
       providers: [ { provide: AuthenticationService, useValue: authMock },
-        { provide: Contexts, useValue: contextsMock }]
+        { provide: Contexts, useValue: contextsMock },
+        { provide: ProviderService, useValue: providersMock }]
     });
 
     it('should have GitHub connection indicated', function (this: Context) {

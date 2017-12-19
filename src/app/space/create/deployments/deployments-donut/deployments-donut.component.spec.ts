@@ -3,11 +3,17 @@ import {
   TestBed
 } from '@angular/core/testing';
 
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input
+} from '@angular/core';
 
 import { isEqual } from 'lodash';
+import { Observable } from 'rxjs';
 
 import { DeploymentsDonutComponent } from './deployments-donut.component';
+import { DeploymentsService } from '../services/deployments.service';
+import { Pods } from '../models/pods';
 
 @Component({
   selector: 'deployments-donut-chart',
@@ -23,10 +29,28 @@ class FakeDeploymentsDonutChartComponent {
 describe('DeploymentsDonutComponent', () => {
   let component: DeploymentsDonutComponent;
   let fixture: ComponentFixture<DeploymentsDonutComponent>;
+  let mockSvc: DeploymentsService;
 
   beforeEach(() => {
+    mockSvc = {
+      getApplications: () => { throw 'NotImplemented'; },
+      getEnvironments: () => { throw 'NotImplemented'; },
+      getPods: (spaceId: string, appId: string, envId: string) => Observable.of({
+        pods: [['Running', 1], ['Terminating', 1]],
+        total: 2
+      } as Pods),
+      getVersion: () => { throw 'NotImplemented'; },
+      getCpuStat: (spaceId: string, envId: string) => { throw 'NotImplemented'; },
+      getMemoryStat: (spaceId: string, envId: string) => { throw 'NotImplemented'; },
+      getLogsUrl: () => { throw 'Not Implemented'; },
+      getConsoleUrl: () => { throw 'Not Implemented'; },
+      getAppUrl: () => { throw 'Not Implemented'; },
+      deleteApplication: () => { throw 'Not Implemented'; }
+    };
+
     TestBed.configureTestingModule({
-      declarations: [DeploymentsDonutComponent, FakeDeploymentsDonutChartComponent]
+      declarations: [DeploymentsDonutComponent, FakeDeploymentsDonutChartComponent],
+      providers: [{ provide: DeploymentsService, useValue: mockSvc }]
     });
 
     fixture = TestBed.createComponent(DeploymentsDonutComponent);
@@ -73,18 +97,13 @@ describe('DeploymentsDonutComponent', () => {
     expect(component.desiredReplicas).toBe(0);
   });
 
-  it('should acquire pods data', () => {
-    let expectedPods = [
-      {
-        status: {
-          phase: 'Running'
-        }
-      }, {
-        status: {
-          phase: 'Terminating'
-        }
-      }
-    ];
-    expect(component.pods).toEqual(expectedPods);
+  it('should acquire pods data', (done: DoneFn) => {
+    component.pods.subscribe(pods => {
+      expect(pods).toEqual({
+        pods: [['Running', 1], ['Terminating', 1]],
+        total: 2
+      });
+      done();
+    });
   });
 });

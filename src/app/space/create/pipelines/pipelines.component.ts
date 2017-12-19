@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 
 import { AuthenticationService, UserService } from 'ngx-login-client';
+import { Broadcaster } from 'ngx-base';
 import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEvent, SortField } from 'patternfly-ng';
 
 
@@ -67,7 +68,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     private userService: UserService,
     private pipelinesService: PipelinesService,
-    private fabric8UIConfig: Fabric8UIConfig
+    private fabric8UIConfig: Fabric8UIConfig,
+    private broadcaster: Broadcaster
   ) {
 
     this.updateConsoleLink();
@@ -230,8 +232,12 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.selectedFlow = '';
-    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    if (this.authService.getGitHubToken()) {
+      this.selectedFlow = '';
+      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    } else {
+      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+    }
   }
 
   closeModal($event: any): void {

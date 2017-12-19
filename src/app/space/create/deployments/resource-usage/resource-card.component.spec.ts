@@ -45,18 +45,26 @@ describe('ResourceCardComponent', () => {
         { environmentId: 'a1', name: 'stage' },
         { environmentId: 'b2', name: 'prod' }
       ]),
-      getPodCount: () => { throw 'Not Implemented'; },
+      getPods: () => { throw 'Not Implemented'; },
       getVersion: () => { throw 'NotImplemented'; },
       getCpuStat: (spaceId: string, envId: string) => cpuStatMock,
-      getMemoryStat: (spaceId: string, envId: string) => memoryStatMock
+      getMemoryStat: (spaceId: string, envId: string) => memoryStatMock,
+      getLogsUrl: () => { throw 'Not Implemented'; },
+      getConsoleUrl: () => { throw 'Not Implemented'; },
+      getAppUrl: () => { throw 'Not Implemented'; },
+      deleteApplication: () => { throw 'Not Implemented'; }
     };
 
     spyOn(mockSvc, 'getApplications').and.callThrough();
     spyOn(mockSvc, 'getEnvironments').and.callThrough();
-    spyOn(mockSvc, 'getPodCount').and.callThrough();
+    spyOn(mockSvc, 'getPods').and.callThrough();
     spyOn(mockSvc, 'getVersion').and.callThrough();
     spyOn(mockSvc, 'getCpuStat').and.callThrough();
     spyOn(mockSvc, 'getMemoryStat').and.callThrough();
+    spyOn(mockSvc, 'getLogsUrl').and.callThrough();
+    spyOn(mockSvc, 'getConsoleUrl').and.callThrough();
+    spyOn(mockSvc, 'getAppUrl').and.callThrough();
+    spyOn(mockSvc, 'deleteApplication').and.callThrough();
 
     TestBed.configureTestingModule({
       declarations: [

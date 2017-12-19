@@ -24,6 +24,7 @@ import { Spaces } from 'ngx-fabric8-wit';
   template: ''
 })
 class FakeDeploymentCardContainerComponent {
+  @Input() spaceId: string;
   @Input() environments: Observable<Environment[]>;
   @Input() application: string;
 }
@@ -35,8 +36,8 @@ describe('DeploymentsAppsComponent', () => {
   let mockApplicationData = ['first', 'second'];
   let mockApplications = Observable.of(mockApplicationData);
   let mockEnvironments = Observable.of([
-    { environmentId: "id1", name: "envId1"},
-    { environmentId: "id2", name: "envId2"}
+    { environmentId: 'id1', name: 'envId1'},
+    { environmentId: 'id2', name: 'envId2'}
   ]);
 
   beforeEach(() => {

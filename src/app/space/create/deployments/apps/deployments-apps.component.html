@@ -25,5 +25,5 @@
 </div>
 
 <div *ngFor="let application of applications | async">
-  <deployment-card-container [application]="application" [environments]="environments"></deployment-card-container>
+  <deployment-card-container [spaceId]="spaceId | async" [application]="application" [environments]="environments"></deployment-card-container>
 </div>

@@ -1,0 +1,14 @@
+<div class="list-pf-content-wrapper" *ngIf="space?.relationalData?.creator?.attributes">
+  <div class="list-pf-main-content">
+    <div class="list-pf-title">
+      <a [routerLink]="['/', space?.relationalData?.creator?.attributes?.username, space?.attributes?.name]">
+        {{space?.attributes?.name | spaceName}}</a>
+      <span class="avatar">
+        <img src="{{space?.relationalData?.creator?.attributes?.imageURL}}">
+        <span class="margin-left-10">{{space?.relationalData?.creator?.attributes?.username}}</span>
+      </span>
+    </div>
+    <div class="list-pf-description margin-left-0">{{space?.attributes?.description}}</div>
+  </div>
+  <div class="list-pf-additional-content"></div>
+</div>

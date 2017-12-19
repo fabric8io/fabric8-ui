@@ -6,18 +6,18 @@ import { Logger, Notification, NotificationType, Notifications } from 'ngx-base'
 import { AuthenticationService, UserService, User } from 'ngx-login-client';
 
 import { ExtUser, GettingStartedService } from './services/getting-started.service';
-import { ProviderService } from './services/provider.service';
 import {Fabric8UIConfig} from "../shared/config/fabric8-ui-config";
 import {Observable} from "rxjs/Observable";
 import {Http, Headers, RequestOptions, RequestOptionsArgs, Response} from "@angular/http";
 import { pathJoin } from "../../a-runtime-console/kubernetes/model/utils";
+import { ProviderService } from '../shared/account/provider.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-getting-started',
   templateUrl: './getting-started.component.html',
   styleUrls: ['./getting-started.component.less'],
-  providers: [ GettingStartedService, ProviderService ]
+  providers: [ GettingStartedService ]
 })
 export class GettingStartedComponent implements OnDestroy, OnInit {
 

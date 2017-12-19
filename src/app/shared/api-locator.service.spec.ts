@@ -2,6 +2,7 @@ import { BaseApiLocatorService, ApiLocatorService } from './api-locator.service'
 import { Fabric8UIConfig } from './config/fabric8-ui-config'
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ProviderService } from './account/provider.service';
 
 @Component({
   selector: 'app-apilocatorservicecomp',
@@ -52,7 +53,7 @@ describe('API Locator Service', function () {
   it('Ensure APILocatorService is injectable', function () {
     TestBed.configureTestingModule({
       declarations: [TestAPILocatorServiceComponent],
-      providers: [ApiLocatorService, Fabric8UIConfig],
+      providers: [ApiLocatorService, Fabric8UIConfig, ProviderService],
     });
     var fixture = TestBed.createComponent(TestAPILocatorServiceComponent);
     var comp = fixture.componentInstance

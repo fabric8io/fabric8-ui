@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation, TemplateRef } from '@a
 import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Logger } from 'ngx-base';
+import { Logger, Broadcaster } from 'ngx-base';
 import { Space, SpaceService } from 'ngx-fabric8-wit';
-import { UserService, User } from 'ngx-login-client';
+import { UserService, User, AuthenticationService } from 'ngx-login-client';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -30,7 +30,9 @@ export class SpacesComponent implements OnDestroy, OnInit  {
       private logger: Logger,
       private spaceService: SpaceService,
       private userService: UserService,
-      private modalService: BsModalService
+      private modalService: BsModalService,
+      private authentication: AuthenticationService,
+      private broadcaster: Broadcaster
   ) {
     this.space = '';
     this.selectedFlow = 'start';
@@ -102,8 +104,12 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   // }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.selectedFlow = 'start';
-    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    if (this.authentication.getGitHubToken()) {
+      this.selectedFlow = 'start';
+      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    } else {
+      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+    }
   }
 
   closeModal($event: any): void {

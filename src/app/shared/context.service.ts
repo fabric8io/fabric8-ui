@@ -45,6 +45,7 @@ export class ContextService implements Contexts {
   private _recent: ConnectableObservable<Context[]>;
   private _addRecent: Subject<Context>;
   private _deleteFromRecent: Subject<Context>;
+  private _currentUser: string;
 
   constructor(
     private router: Router,
@@ -85,6 +86,7 @@ export class ContextService implements Contexts {
         if (!(val && val.id)) {
           // this is a logout event
         } else if (val.attributes.username) {
+          this._currentUser = val.attributes.username;
           return val.attributes.username;
         } else {
           this.notifications.message({
@@ -171,6 +173,10 @@ export class ContextService implements Contexts {
 
   get default(): Observable<Context> {
     return this._default;
+  }
+
+  get currentUser(): string {
+    return this._currentUser;
   }
 
   updateRecentSpaceList(contextList: Context[], ctx: Context): Context[] {
@@ -283,6 +289,10 @@ export class ContextService implements Contexts {
       .multicast(() => new Subject());
     res.connect();
     return res;
+  }
+
+  viewingOwnContext(): boolean {
+      return this.extractUser() === this._currentUser;
   }
 
   private buildContext(val: RawContext) {
