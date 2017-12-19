@@ -189,8 +189,10 @@ describe('Forge API tests:', () => {
     }).then(() => {
       // when
       let history = new History();
+      history.add(step_1_2_output as Gui);
       history.add(step_1_3_output as Gui);
       history.done();
+      history.get(2).inputs.find(input => input.name === 'gitRepositoryPattern').value = ['sprint135', 'sprint135bis'];
 
       fabric8ForgeService.validate('fabric8-import-git', history)
         .then(response => {
@@ -231,6 +233,7 @@ describe('Forge API tests:', () => {
       // when
       let history = new History();
       history.add(step_2_1_output as Gui);
+      history.add(step_1_2_output as Gui);
       history.done();
 
       fabric8ForgeService.loadGui('fabric8-import-git', history)
@@ -278,7 +281,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step3.1',
       withRequest: {
         method: 'POST',
-        path: '/forge/commands/fabric8-import-git/validate',
+        path: '/commands/fabric8-import-git/validate',
         body: step_3_1_input
       },
       willRespondWith: {
@@ -289,8 +292,11 @@ describe('Forge API tests:', () => {
     }).then(() => {
       // when
       let history = new History();
+      history.add(step_1_2_output as Gui);
+      history.add(step_2_1_output as Gui);
       history.add(step_2_2_output as Gui);
       history.done();
+      history.get(3).inputs.find(input => input.name === 'labelSpace').value = 'testwizard';
 
       fabric8ForgeService.validate('fabric8-import-git', history)
         .then(response => {
@@ -318,7 +324,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step3.2',
       withRequest: {
         method: 'POST',
-        path: '/forge/commands/fabric8-import-git/next',
+        path: '/commands/fabric8-import-git/next',
         body: step_3_2_input
       },
       willRespondWith: {
@@ -329,8 +335,11 @@ describe('Forge API tests:', () => {
     }).then(() => {
       // when
       let history = new History();
-      history.add(step_3_1_output as Gui);
+      history.add(step_2_2_output as Gui);
+      history.add(step_1_2_output as Gui);
+      history.add(step_2_1_output as Gui);
       history.done();
+      history.get(1).inputs.find(input => input.name === 'labelSpace').value = 'testwizard';
 
       fabric8ForgeService.loadGui('fabric8-import-git', history)
         .then(response => {
@@ -378,7 +387,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step4.1',
       withRequest: {
         method: 'POST',
-        path: '/forge/commands/fabric8-import-git/validate',
+        path: '/commands/fabric8-import-git/validate',
         body: step_4_1_input
       },
       willRespondWith: {
@@ -389,8 +398,12 @@ describe('Forge API tests:', () => {
     }).then(() => {
       // when
       let history = new History();
+      history.add(step_1_2_output as Gui);
+      history.add(step_2_1_output as Gui);
+      history.add(step_2_2_output as Gui);
       history.add(step_3_2_output as Gui);
       history.done();
+      history.get(3).inputs.find(input => input.name === 'labelSpace').value = 'testwizard';
 
       fabric8ForgeService.validate('fabric8-import-git', history)
         .then(response => {
@@ -418,7 +431,7 @@ describe('Forge API tests:', () => {
       uponReceiving: 'step4.2',
       withRequest: {
         method: 'POST',
-        path: '/forge/commands/fabric8-import-git/next',
+        path: '/commands/fabric8-import-git/next',
         body: step_4_2_input
       },
       willRespondWith: {
@@ -430,7 +443,11 @@ describe('Forge API tests:', () => {
       // when
       let history = new History();
       history.add(step_3_2_output as Gui);
+      history.add(step_1_2_output as Gui);
+      history.add(step_2_1_output as Gui);
+      history.add(step_2_2_output as Gui);
       history.done();
+      history.get(4).inputs.find(input => input.name === 'labelSpace').value = 'testwizard';
 
       fabric8ForgeService.loadGui('fabric8-import-git', history)
         .then(response => {
