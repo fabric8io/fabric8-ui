@@ -25,16 +25,16 @@ export class DeploymentsDonutComponent implements OnInit {
   debounceScale = debounce(this.scale, 650);
 
   colors = {
-    'Empty': '#ffffff', // black
-    'Running': '#00b9e4', // dark blue
-    'Not Ready': '#beedf9', // light blue
-    'Warning': '#f39d3c', // orange
-    'Error': '#d9534f', // red
-    'Pulling': '#d1d1d1', // grey
-    'Pending': '#ededed', // light grey
-    'Succeeded': '#3f9c35', // green
-    'Terminating': '#00659c', // dark blue
-    'Unknown': '#f9d67a' // light yellow
+    'Empty': '#030303', // pf-black
+    'Running': '#00b9e4', // pf-light-blue-400
+    'Not Ready': '#beedf9', // pf-light-blue-100
+    'Warning': '#f39d3c', // pf-orange-300
+    'Error': '#cc0000', // pf-red-100
+    'Pulling': '#d1d1d1', // pf-black-300
+    'Pending': '#ededed', // pf-black-200
+    'Succeeded': '#3f9c35', // pf-green-400
+    'Terminating': '#00659c', // pf-blue-500
+    'Unknown': '#f9d67a' // pf-gold-200
   };
 
   private replicas: number;
