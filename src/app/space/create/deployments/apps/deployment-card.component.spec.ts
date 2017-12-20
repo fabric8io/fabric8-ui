@@ -6,6 +6,8 @@ import {
   TestBed
 } from '@angular/core/testing';
 
+import { createMock } from 'testing/mock';
+
 import { By } from '@angular/platform-browser';
 import {
   Component,
@@ -24,8 +26,6 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { DeploymentCardComponent } from './deployment-card.component';
 import { DeploymentsService } from '../services/deployments.service';
-import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
 import { Environment } from '../models/environment';
 
 // Makes patternfly charts available
@@ -57,34 +57,17 @@ describe('DeploymentCardComponent', () => {
 
   let component: DeploymentCardComponent;
   let fixture: ComponentFixture<DeploymentCardComponent>;
-  let mockSvc: DeploymentsService;
+  let mockSvc: jasmine.SpyObj<DeploymentsService>;
 
   beforeEach(fakeAsync(() => {
-    mockSvc = {
-      getApplications: () => { throw 'Not Implemented'; },
-      getEnvironments: () => { throw 'Not Implemented'; },
-      getPods: (spaceId: string, applicationId: string, environmentName: string) => { throw 'NotImplemented'; },
-      scalePods: (spaceId: string, appId: string, envId: string, desired: number) => { throw 'NotImplemented'; },
-      getVersion: () => Observable.of('1.2.3'),
-      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, quota: 2 } as CpuStat),
-      getMemoryStat: (spaceId: string, envId: string) =>
-        Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat),
-      getAppUrl: () => Observable.of('mockAppUrl'),
-      getConsoleUrl: () => Observable.of('mockConsoleUrl'),
-      getLogsUrl: () => Observable.of('mockLogsUrl'),
-      deleteApplication: () => Observable.of('mockDeletedMessage')
-    };
-
-    spyOn(mockSvc, 'getApplications').and.callThrough();
-    spyOn(mockSvc, 'getEnvironments').and.callThrough();
-    spyOn(mockSvc, 'getPods').and.callThrough();
-    spyOn(mockSvc, 'getCpuStat').and.callThrough();
-    spyOn(mockSvc, 'getMemoryStat').and.callThrough();
-    spyOn(mockSvc, 'getVersion').and.callThrough();
-    spyOn(mockSvc, 'getAppUrl').and.callThrough();
-    spyOn(mockSvc, 'getConsoleUrl').and.callThrough();
-    spyOn(mockSvc, 'getLogsUrl').and.callThrough();
-    spyOn(mockSvc, 'deleteApplication').and.callThrough();
+    mockSvc = createMock(DeploymentsService);
+    mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
+    mockSvc.getCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
+    mockSvc.getMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' }));
+    mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
+    mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
+    mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
+    mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
 
     TestBed.configureTestingModule({
       imports: [ BsDropdownModule.forRoot(), CollapseModule.forRoot(), ChartModule ],
