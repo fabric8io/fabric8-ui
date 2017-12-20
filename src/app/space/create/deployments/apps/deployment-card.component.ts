@@ -112,14 +112,14 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
     this.subscriptions.push(this.cpuStat.subscribe(stat => {
       this.cpuVal = stat.used;
-      this.cpuMax = stat.total;
+      this.cpuMax = stat.quota;
       this.cpuData.yData.push(stat.used);
       this.cpuData.xData.push(this.cpuTime++);
     }));
 
     this.subscriptions.push(this.memStat.subscribe(stat => {
       this.memVal = stat.used;
-      this.memMax = stat.total;
+      this.memMax = stat.quota;
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
       this.memUnits = stat.units;
