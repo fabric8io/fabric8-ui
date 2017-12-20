@@ -24,6 +24,8 @@ import {
 } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
+import { NotificationsService } from 'app/shared/notifications.service';
+
 import { DeploymentCardComponent } from './deployment-card.component';
 import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
@@ -58,6 +60,7 @@ describe('DeploymentCardComponent', () => {
   let component: DeploymentCardComponent;
   let fixture: ComponentFixture<DeploymentCardComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
+  let notifications: any;
 
   beforeEach(fakeAsync(() => {
     mockSvc = createMock(DeploymentsService);
@@ -69,10 +72,16 @@ describe('DeploymentCardComponent', () => {
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
 
+    notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
+
     TestBed.configureTestingModule({
       imports: [ BsDropdownModule.forRoot(), CollapseModule.forRoot(), ChartModule ],
       declarations: [ DeploymentCardComponent, FakeDeploymentsDonutComponent, FakeDeploymentGraphLabelComponent ],
-      providers: [ BsDropdownConfig, { provide: DeploymentsService, useValue: mockSvc } ]
+      providers: [
+        BsDropdownConfig,
+        { provide: NotificationsService, useValue: notifications },
+        { provide: DeploymentsService, useValue: mockSvc }
+      ]
     });
 
     fixture = TestBed.createComponent(DeploymentCardComponent);
@@ -214,6 +223,7 @@ describe('DeploymentCardComponent', () => {
       fixture.detectChanges();
 
       expect(mockSvc.deleteApplication).toHaveBeenCalled();
+      expect(notifications.message).toHaveBeenCalled();
     }));
   });
 

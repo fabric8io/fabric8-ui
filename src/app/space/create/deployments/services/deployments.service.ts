@@ -73,7 +73,11 @@ export class DeploymentsService {
   }
 
   deleteApplication(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return Observable.of(`Deleted ${applicationId} in ${spaceId} (${environmentName})`);
+    if (Math.random() > 0.5) {
+      return Observable.of(`Deleted ${applicationId} in ${spaceId} (${environmentName})`);
+    } else {
+      return Observable.throw(`Failed to delete ${applicationId} in ${spaceId} (${environmentName})`);
+    }
   }
 
 }

@@ -11,6 +11,13 @@ import {
 } from 'rxjs';
 import { uniqueId } from 'lodash';
 
+import {
+  Notification,
+  NotificationType
+} from 'ngx-base';
+
+import { NotificationsService } from 'app/shared/notifications.service';
+
 import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
 import { CpuStat } from '../models/cpu-stat';
@@ -73,7 +80,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   subscriptions: Array<Subscription> = [];
 
   constructor(
-    private deploymentsService: DeploymentsService
+    private deploymentsService: DeploymentsService,
+    private notifications: NotificationsService
   ) { }
 
   ngOnDestroy(): void {
@@ -123,7 +131,20 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   delete(): void {
     this.subscriptions.push(
       this.deploymentsService.deleteApplication(this.spaceId, this.applicationId, this.environment.name)
-        .subscribe(alert)
+        .subscribe(
+          success => {
+            this.notifications.message({
+              type: NotificationType.SUCCESS,
+              message: success
+            });
+          },
+          error => {
+            this.notifications.message({
+              type: NotificationType.INFO,
+              message: error
+            });
+          }
+        )
     );
   }
 }
