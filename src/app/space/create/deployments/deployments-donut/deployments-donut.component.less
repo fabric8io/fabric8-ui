@@ -1,61 +1,63 @@
 @import (reference) '../../../../../assets/stylesheets/shared/osio.less';
+.deployments {
+  &-donut {
+    vertical-align: middle;
 
-.deployments-donut {
-  vertical-align: middle;
+    &-legend {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+
+    &-square {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+
+    &-scale-controls {
+      -webkit-box-pack: center;
+      justify-content: center;
+      font-size: 24px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+      margin-left: 10px;
+      a {
+        color: @color-pf-black-400;
+        &:hover,
+        &:active {
+          color: @color-pf-black-600;
+          text-decoration: none;
+        }
+        &.disabled {
+          opacity: .4;
+          cursor: not-allowed;
+          &:hover {
+            color: @color-pf-black-400;
+          }
+        }
+      }
+    }
+  }
 }
 
-.deployments-donut-legend {
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.deployments-donut-square {
-  width: 10px;
-  height: 10px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.deployment-donut-scale-controls {
-  -webkit-box-pack: center;
-          justify-content: center;
-  font-size: 24px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 10px;
-  margin-left: 10px;
-}
-.deployment-donut-scale-controls a {
-  color: #bbb;
-}
-.deployment-donut-scale-controls a:hover,
-.deployment-donut-scale-controls a:active {
-  color: #72767b;
-  text-decoration: none;
-}
-.deployment-donut-scale-controls a.disabled {
-  opacity: .4;
-  cursor: not-allowed;
-}
-.deployment-donut-scale-controls a.disabled:hover {
-  color: #bbb;
-}
-
-.fade-inline.ng-hide {
-  opacity: 0;
-}
-.fade-inline.ng-show {
-  opacity: 1;
-}
-.fade-inline.ng-hide-remove,
-.fade-inline.ng-hide-add {
-  display: inline-block;
-}
-.fade-inline.ng-hide-remove,
-.fade-inline.ng-hide-add {
-  transition: opacity .2s ease .5s;
+.fade-inline {
+  .ng-hide {
+    opacity: 0;
+  }
+  .ng-show {
+    opacity: 1;
+  }
+  .ng-hide {
+    &-remove,
+    &-add {
+      display: inline-block;
+      transition: opacity .2s ease .5s;
+    }
+  }
 }

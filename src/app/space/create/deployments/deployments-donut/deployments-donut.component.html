@@ -1,6 +1,6 @@
 <deployments-donut-chart [colors]="colors" [mini]="mini" [pods]="pods | async" [desiredReplicas]="desiredReplicas" [idled]="isIdled">
 </deployments-donut-chart>
-<div column class="deployment-donut-scale-controls fade-inline" *ngIf="!isIdled && !mini">
+<div column class="deployments-donut-scale-controls fade-inline" *ngIf="!isIdled && !mini">
   <div>
     <a id="scaleUp" (click)="$event.stopPropagation(); scaleUp()" [ngClass]="{ disabled: !scalable }" [attr.title]="!scalable ? undefined : 'Scale up'"
       [attr.aria-disabled]="!scalable ? 'true' : undefined" role="button">
