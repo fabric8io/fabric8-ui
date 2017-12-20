@@ -1,14 +1,14 @@
 import {
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
-
-import {
   Component,
   Input
 } from '@angular/core';
 
 import { By } from '@angular/platform-browser';
+
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 
 import { createMock } from 'testing/mock';
 
@@ -24,6 +24,11 @@ import { Stat } from '../models/stat';
 import { ResourceCardComponent } from './resource-card.component';
 
 @Component({
+  template: '<resource-card></resource-card>'
+})
+class HostComponent { }
+
+@Component({
   selector: 'utilization-bar',
   template: ''
 })
@@ -34,9 +39,8 @@ class FakeUtilizationBarComponent {
 }
 
 describe('ResourceCardComponent', () => {
+  type Context = TestContext<ResourceCardComponent, HostComponent>;
 
-  let component: ResourceCardComponent;
-  let fixture: ComponentFixture<ResourceCardComponent>;
   let mockResourceTitle = 'resource title';
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let cpuStatMock = Observable.of({ used: 1, quota: 2 } as CpuStat);
@@ -51,26 +55,19 @@ describe('ResourceCardComponent', () => {
     ]));
     mockSvc.getCpuStat.and.returnValue(cpuStatMock);
     mockSvc.getMemoryStat.and.returnValue(memoryStatMock);
-
-    TestBed.configureTestingModule({
-      declarations: [
-        ResourceCardComponent,
-        FakeUtilizationBarComponent
-      ],
-      providers: [{ provide: DeploymentsService, useValue: mockSvc }]
-    });
-
-    fixture = TestBed.createComponent(ResourceCardComponent);
-    component = fixture.componentInstance;
-
-    component.spaceId = 'spaceId';
-    component.environment = { name: 'stage' } as Environment;
-
-    fixture.detectChanges();
   });
 
-  it('should have its children passed the proper values', () => {
-    let arrayOfComponents = fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
+  initContext(ResourceCardComponent, HostComponent, {
+    declarations: [FakeUtilizationBarComponent],
+    providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
+  },
+    component => {
+      component.spaceId = 'spaceId';
+      component.environment = { name: 'stage' } as Environment;
+    });
+
+  it('should have its children passed the proper values', function (this: Context) {
+    let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
     expect(arrayOfComponents.length).toEqual(2);
 
     let cpuUtilBar = arrayOfComponents[0].componentInstance;
