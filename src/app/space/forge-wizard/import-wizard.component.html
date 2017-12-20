@@ -8,6 +8,9 @@
              (onPrevious)="previousClicked($event)"
              (onStepChange)="stepChanged($event)">
 
+  <div class="col-sm-offset-2 col-sm-10" style="position: absolute;margin-top: -2em; width: 50%" *ngIf="validation">
+    <span class="spinner spinner-xs spinner-inline"></span>Validating...
+  </div>
   <div [formGroup]="form" [ngSwitch]="currentGui.metadata?.name">
     <pfng-wizard-step [config]="steps[0]">
       <spinner [loading]="isLoading"></spinner>

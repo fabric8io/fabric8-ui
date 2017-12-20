@@ -16,7 +16,8 @@ import {
   History,
   Gui,
   Input,
-  MetaData
+  MetaData,
+  Message
 } from 'ngx-forge';
 import { Codebase } from '../create/codebases/services/codebase';
 import { Observable } from 'rxjs';
@@ -38,6 +39,7 @@ export abstract class AbstractWizard implements OnInit {
   EXECUTE_STEP_INDEX: number;
   LAST_STEP: number;
   @Output('onCancel') onCancel = new EventEmitter();
+  validation: Promise<boolean>;
 
   constructor(public forgeService: ForgeService,
               public codebasesService: CodebasesService,
@@ -190,12 +192,31 @@ export abstract class AbstractWizard implements OnInit {
     });
   }
 
+  validate() {
+    if (this.form.valid) {
+      this.validation = this.forgeService.validate(this.endPoint, this.history).then(gui => {
+        this.currentGui.messages = gui.messages;
+        this.validation = null;
+        flattenWizardSteps(this.wizard)[this.history.stepIndex - 1].config.nextEnabled = gui.messages.length === 0;
+        return gui.messages.length === 0;
+      }).catch(error => {
+        this.currentGui.messages.push(new Message(error));
+        return false;
+      });
+      flattenWizardSteps(this.wizard)[this.history.stepIndex - 1].config.nextEnabled = false;
+    }
+  }
+
   protected buildForm(gui: Gui, to: WizardStep): FormGroup {
     let group: any = {};
     gui.inputs.forEach(sub => {
       let input = sub as Input;
       if (input.required) {
         group[input.name] = new FormControl(input.value || '', Validators.required);
+        group[input.name].valueChanges.debounceTime(1000).distinctUntilChanged()
+        .flatMap((search) => {
+          return Observable.of(search).delay(500);
+        }).subscribe(() => this.validate());
         if (!input.value || input.value === '' || input.value.length === 0) {
           // is empty for single and multiple select input
           to.config.nextEnabled = false;
@@ -265,7 +286,6 @@ export abstract class AbstractWizard implements OnInit {
 
   private subscribeFormHistoryUpdate(index: number, wizardSteps = this.wizard.steps) {
     this.form.valueChanges.subscribe(values => {
-      wizardSteps[index].config.nextEnabled = this.form.valid;
       if (!isNullOrUndefined(this.currentGui.messages)) {
         this.currentGui.messages = null;
       }
