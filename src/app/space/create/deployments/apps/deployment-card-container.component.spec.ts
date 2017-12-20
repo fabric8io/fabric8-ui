@@ -32,18 +32,17 @@ class FakeDeploymentCardComponent {
 describe('DeploymentCardContainer', () => {
   type Context = TestContext<DeploymentCardContainerComponent, HostComponent>;
 
-  initContext(DeploymentCardContainerComponent, HostComponent, { declarations: [FakeDeploymentCardComponent] });
-
   const environments = [
     { name: 'envId1' },
     { name: 'envId2' }
   ];
 
-  beforeEach(function (this: Context) {
-    this.tested.componentInstance.environments = Observable.of(environments);
-    this.tested.componentInstance.application = 'app';
-    this.detectChanges();
-  });
+  initContext(DeploymentCardContainerComponent, HostComponent, { declarations: [FakeDeploymentCardComponent] },
+    component => {
+      component.spaceId = 'space';
+      component.environments = Observable.of(environments);
+      component.application = 'app';
+    });
 
   it('should created children components with proper objects', function (this: Context) {
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
