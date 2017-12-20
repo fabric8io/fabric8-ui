@@ -33,8 +33,8 @@ describe('DeploymentCardContainer', () => {
   let fixture: ComponentFixture<DeploymentCardContainerComponent>;
   let mockEnvironments: Observable<Environment[]>;
   let mockEnvironmentData = [
-    { environmentId: 'id1', name: 'envId1'},
-    { environmentId: 'id2', name: 'envId2'}
+    { name: 'envId1'} as Environment,
+    { name: 'envId2'} as Environment
   ];
 
   beforeEach(() => {

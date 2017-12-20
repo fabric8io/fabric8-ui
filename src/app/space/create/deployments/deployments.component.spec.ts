@@ -57,8 +57,8 @@ describe('DeploymentsComponent', () => {
   let spaces = { current: Observable.of({ id: 'fake-spaceId' }) };
   let mockApplications = Observable.of(['foo-app', 'bar-app']);
   let mockEnvironments = Observable.of([
-    { environmentId: 'a1', name: 'stage' },
-    { environmentId: 'b2', name: 'prod' }
+    { name: 'stage' } as Environment,
+    { name: 'prod' } as Environment
   ]);
 
   beforeAll(() => {
@@ -91,8 +91,8 @@ describe('DeploymentsComponent', () => {
     expect(mockSvc.getEnvironments).toHaveBeenCalledWith('fake-spaceId');
     this.testedDirective.environments.subscribe(environments => {
       expect(environments).toEqual([
-        { environmentId: 'a1', name: 'stage' },
-        { environmentId: 'b2', name: 'prod' }
+        { name: 'stage' } as Environment,
+        { name: 'prod' } as Environment
       ]);
       done();
     });

@@ -1,5 +1,5 @@
 <div #chartElement id="{{chartId}}" class="deployments-donut-chart" [ngClass]="{'mini': mini}"></div>
-<div *ngIf="mini" class="deployments-donut-chart-mini-text">
+<div *ngIf="mini && pods" class="deployments-donut-chart-mini-text">
   <span *ngIf="!idled; else elseIdle">
     {{ pods.total }} {{ (pods.total === 1) ? 'pod' : 'pods' }}
   </span>
@@ -9,13 +9,15 @@
 </div>
 
 <div class="sr-only">
-  <div *ngIf="pods?.total === 0; else elsePods">No pods.</div>
-  <ng-template #elsePods>
-    <div>
-      Pod status:
-      <li *ngFor="let column of pods.pods">
-        <span>{{ column[1] ? column[1] + ' ' + column[0] : '0 ' + column[0] }}</span>
-      </li>
-    </div>
-  </ng-template>
+  <ng-container *ngIf="pods">
+    <div *ngIf="pods.total === 0; else elsePods">No pods.</div>
+    <ng-template #elsePods>
+      <div>
+        Pod status:
+        <li *ngFor="let column of pods.pods">
+          <span>{{ column[1] ? column[1] + ' ' + column[0] : '0 ' + column[0] }}</span>
+        </li>
+      </div>
+    </ng-template>
+  </ng-container>
 </div>

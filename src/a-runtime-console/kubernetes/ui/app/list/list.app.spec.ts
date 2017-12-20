@@ -25,7 +25,7 @@ import {KubernetesComponentsModule} from "../../../components/components.module"
 import {EnvironmentRoutingModule} from "../../environment/environment-routing.module";
 import {EnvironmentModule} from "../../environment/environment.module";
 
-describe('AppListComponent', () => {
+xdescribe('AppListComponent', () => {
   let component: AppListComponent;
   let fixture: ComponentFixture<AppListComponent>;
 

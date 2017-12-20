@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 
 import { DeploymentsService } from '../services/deployments.service';
 
+import { Environment } from '../models/environment';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { Stat } from '../models/stat';
@@ -26,6 +27,7 @@ import { ResourceCardComponent } from './resource-card.component';
 })
 class FakeUtilizationBarComponent {
   @Input() resourceTitle: string;
+  @Input() resourceUnit: string;
   @Input() stat: Observable<Stat>;
 }
 
@@ -35,17 +37,18 @@ describe('ResourceCardComponent', () => {
   let fixture: ComponentFixture<ResourceCardComponent>;
   let mockResourceTitle = 'resource title';
   let mockSvc: DeploymentsService;
-  let cpuStatMock = Observable.of({ used: 1, total: 2 } as CpuStat);
-  let memoryStatMock = Observable.of({ used: 3, total: 4 } as MemoryStat);
+  let cpuStatMock = Observable.of({ used: 1, quota: 2 } as CpuStat);
+  let memoryStatMock = Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
 
   beforeEach(() => {
     mockSvc = {
       getApplications: () => Observable.of(['foo-app', 'bar-app']),
       getEnvironments: () => Observable.of([
-        { environmentId: 'a1', name: 'stage' },
-        { environmentId: 'b2', name: 'prod' }
+        { name: 'stage' } as Environment,
+        { name: 'prod' } as Environment
       ]),
-      getPods: () => { throw 'Not Implemented'; },
+      getPods: () => { throw 'NotImplemented'; },
+      scalePods: (spaceId: string, envId: string, appId: string) => { throw 'Not Implemented'; },
       getVersion: () => { throw 'NotImplemented'; },
       getCpuStat: (spaceId: string, envId: string) => cpuStatMock,
       getMemoryStat: (spaceId: string, envId: string) => memoryStatMock,
@@ -57,7 +60,7 @@ describe('ResourceCardComponent', () => {
 
     spyOn(mockSvc, 'getApplications').and.callThrough();
     spyOn(mockSvc, 'getEnvironments').and.callThrough();
-    spyOn(mockSvc, 'getPods').and.callThrough();
+    spyOn(mockSvc, 'scalePods').and.callThrough();
     spyOn(mockSvc, 'getVersion').and.callThrough();
     spyOn(mockSvc, 'getCpuStat').and.callThrough();
     spyOn(mockSvc, 'getMemoryStat').and.callThrough();
@@ -78,7 +81,7 @@ describe('ResourceCardComponent', () => {
     component = fixture.componentInstance;
 
     component.spaceId = 'spaceId';
-    component.environmentId = 'environmentId';
+    component.environment = { name: 'stage' } as Environment;
 
     fixture.detectChanges();
   });
@@ -88,11 +91,13 @@ describe('ResourceCardComponent', () => {
     expect(arrayOfComponents.length).toEqual(2);
 
     let cpuUtilBar = arrayOfComponents[0].componentInstance;
-    expect(cpuUtilBar.resourceTitle).toEqual('CPU (Cores)');
+    expect(cpuUtilBar.resourceTitle).toEqual('CPU');
+    expect(cpuUtilBar.resourceUnit).toEqual('Cores');
     expect(cpuUtilBar.stat).toEqual(cpuStatMock);
 
     let memoryUtilBar = arrayOfComponents[1].componentInstance;
-    expect(memoryUtilBar.resourceTitle).toEqual('Memory (MB)');
+    expect(memoryUtilBar.resourceTitle).toEqual('Memory');
+    expect(memoryUtilBar.resourceUnit).toEqual('GB');
     expect(memoryUtilBar.stat).toEqual(memoryStatMock);
   });
 

@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { debounce } from 'lodash';
+import { debounce, isNumber } from 'lodash';
 import { Observable } from 'rxjs';
 
 import { DeploymentsService } from '../services/deployments.service';
 import { Pods } from '../models/pods';
+import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployments-donut',
@@ -15,23 +16,25 @@ export class DeploymentsDonutComponent implements OnInit {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environmentId: string;
+  @Input() environment: Environment;
 
   isIdled = false;
   scalable = true;
   pods: Observable<Pods>;
   desiredReplicas: number;
+  debounceScale = debounce(this.scale, 650);
 
 
-  private scaleRequestPending = false;
-  private debounceScale = debounce(this.scale, 650);
+  private replicas: number;
 
   constructor(
     private deploymentsService: DeploymentsService
   ) { }
 
   ngOnInit(): void {
-    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environmentId);
+    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name);
+    this.pods.subscribe(pods => this.replicas = pods.total);
+
     this.desiredReplicas = this.getDesiredReplicas();
   }
 
@@ -42,7 +45,6 @@ export class DeploymentsDonutComponent implements OnInit {
     let desired = this.getDesiredReplicas();
     this.desiredReplicas = desired + 1;
 
-    this.scaleRequestPending = true;
     this.debounceScale();
   }
 
@@ -58,21 +60,24 @@ export class DeploymentsDonutComponent implements OnInit {
     let desired = this.getDesiredReplicas();
     this.desiredReplicas = desired - 1;
 
-    this.scaleRequestPending = true;
     this.debounceScale();
   }
 
   getDesiredReplicas(): number {
-    if (this.desiredReplicas !== undefined) {
+    if (isNumber(this.desiredReplicas)) {
       return this.desiredReplicas;
     }
 
-    // TODO: acquire replicas from service
+    if (this.replicas) {
+      return this.replicas;
+    }
 
     return 1;
   }
 
   private scale(): void {
-    // TODO: send service request to scale
+    this.deploymentsService.scalePods(
+      this.spaceId, this.environment.name, this.applicationId, this.desiredReplicas
+    );
   }
 }

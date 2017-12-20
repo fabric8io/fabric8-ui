@@ -1,6 +1,8 @@
 import {
-  async,
   ComponentFixture,
+  fakeAsync,
+  flush,
+  flushMicrotasks,
   TestBed
 } from '@angular/core/testing';
 
@@ -24,6 +26,7 @@ import { DeploymentCardComponent } from './deployment-card.component';
 import { DeploymentsService } from '../services/deployments.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { Environment } from '../models/environment';
 
 // Makes patternfly charts available
 import { ChartModule } from 'patternfly-ng';
@@ -37,7 +40,7 @@ class FakeDeploymentsDonutComponent {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environmentId: string;
+  @Input() environment: Environment;
 }
 @Component({
   selector: 'deployment-graph-label',
@@ -56,14 +59,16 @@ describe('DeploymentCardComponent', () => {
   let fixture: ComponentFixture<DeploymentCardComponent>;
   let mockSvc: DeploymentsService;
 
-  beforeEach(() => {
+  beforeEach(fakeAsync(() => {
     mockSvc = {
       getApplications: () => { throw 'Not Implemented'; },
       getEnvironments: () => { throw 'Not Implemented'; },
-      getPods: (spaceId: string, applicationId: string, environmentId: string) => { throw 'NotImplemented'; },
+      getPods: (spaceId: string, applicationId: string, environmentName: string) => { throw 'NotImplemented'; },
+      scalePods: (spaceId: string, appId: string, envId: string, desired: number) => { throw 'NotImplemented'; },
       getVersion: () => Observable.of('1.2.3'),
-      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as CpuStat),
-      getMemoryStat: (spaceId: string, envId: string) => Observable.of({ used: 1, total: 2 } as MemoryStat),
+      getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, quota: 2 } as CpuStat),
+      getMemoryStat: (spaceId: string, envId: string) =>
+        Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat),
       getAppUrl: () => Observable.of('mockAppUrl'),
       getConsoleUrl: () => Observable.of('mockConsoleUrl'),
       getLogsUrl: () => Observable.of('mockLogsUrl'),
@@ -92,9 +97,11 @@ describe('DeploymentCardComponent', () => {
 
     component.spaceId = 'mockSpaceId';
     component.applicationId = 'mockAppId';
-    component.environment = { environmentId: 'mockEnvironmentId', name: 'mockEnvironment' };
+    component.environment = { name: 'mockEnvironment' } as Environment;
 
     fixture.detectChanges();
+    flush();
+    flushMicrotasks();
 
     it('should generate a unique chartid for each DeploymentCardComponent instance', () => {
       let depCard1 = new DeploymentCardComponent(null);
@@ -105,7 +112,7 @@ describe('DeploymentCardComponent', () => {
       expect(depCard1.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
       expect(depCard2.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
     });
-  });
+  }));
 
   describe('versionLabel', () => {
     let de: DebugElement;
@@ -117,8 +124,54 @@ describe('DeploymentCardComponent', () => {
     });
 
     it('should be set from mockSvc.getVersion result', () => {
-      expect(mockSvc.getVersion).toHaveBeenCalledWith('mockAppId', 'mockEnvironmentId');
+      expect(mockSvc.getVersion).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
       expect(el.textContent).toEqual('1.2.3');
+    });
+  });
+
+  describe('cpu label', () => {
+    let de: DebugElement;
+
+    beforeEach(() => {
+      let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
+      let cpuChart = charts[0];
+      de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
+    });
+
+    it('should use units from service result', () => {
+      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
+      expect(de.componentInstance.dataMeasure).toEqual('Cores');
+    });
+
+    it('should use value from service result', () => {
+      expect(de.componentInstance.value).toEqual(1);
+    });
+
+    it('should use upper bound from service result', () => {
+      expect(de.componentInstance.valueUpperBound).toEqual(2);
+    });
+  });
+
+  describe('memory label', () => {
+    let de: DebugElement;
+
+    beforeEach(() => {
+      let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
+      let memoryChart = charts[1];
+      de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));
+    });
+
+    it('should use units from service result', () => {
+      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
+      expect(de.componentInstance.dataMeasure).toEqual('GB');
+    });
+
+    it('should use value from service result', () => {
+      expect(de.componentInstance.value).toEqual(3);
+    });
+
+    it('should use upper bound from service result', () => {
+      expect(de.componentInstance.valueUpperBound).toEqual(4);
     });
   });
 
@@ -130,19 +183,14 @@ describe('DeploymentCardComponent', () => {
         .filter(item => item.nativeElement.textContent.includes(label))[0];
     }
 
-    beforeEach(async(() => {
-      fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        fixture.detectChanges();
-        let de = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
-        de.triggerEventHandler('click', null);
+    beforeEach(fakeAsync(() => {
+      let de = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
+      de.triggerEventHandler('click', null);
 
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-          let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
-          menuItems = menu.queryAll(By.css('li'));
-        });
-      });
+      fixture.detectChanges();
+
+      let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
+      menuItems = menu.queryAll(By.css('li'));
     }));
 
     it('should have menu items', () => {
@@ -173,27 +221,26 @@ describe('DeploymentCardComponent', () => {
       expect(link.attributes['href']).toEqual('mockAppUrl');
     });
 
-    it('should not display appUrl if none available', () => {
+    it('should not display appUrl if none available', fakeAsync(() => {
       component.appUrl = Observable.of('');
-      fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
-        menuItems = menu.queryAll(By.css('li'));
-        let item = getItemByLabel('Open Application');
-        expect(item).toBeFalsy();
-      });
-    });
 
-    it('should invoke service \'delete\' function on Delete item click', async(() => {
+      fixture.detectChanges();
+
+      let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
+      menuItems = menu.queryAll(By.css('li'));
+      let item = getItemByLabel('Open Application');
+      expect(item).toBeFalsy();
+    }));
+
+    it('should invoke service \'delete\' function on Delete item click', fakeAsync(() => {
       let item = getItemByLabel('Delete');
       expect(item).toBeTruthy();
       expect(mockSvc.deleteApplication).not.toHaveBeenCalled();
       item.query(By.css('a')).triggerEventHandler('click', null);
 
       fixture.detectChanges();
-      fixture.whenStable().then(() => {
-        expect(mockSvc.deleteApplication).toHaveBeenCalled();
-      });
+
+      expect(mockSvc.deleteApplication).toHaveBeenCalled();
     }));
   });
 

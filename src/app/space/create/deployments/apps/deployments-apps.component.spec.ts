@@ -36,8 +36,8 @@ describe('DeploymentsAppsComponent', () => {
   let mockApplicationData = ['first', 'second'];
   let mockApplications = Observable.of(mockApplicationData);
   let mockEnvironments = Observable.of([
-    { environmentId: 'id1', name: 'envId1'},
-    { environmentId: 'id2', name: 'envId2'}
+    { name: 'envId1'} as Environment,
+    { name: 'envId2'} as Environment
   ]);
 
   beforeEach(() => {

@@ -30,7 +30,7 @@ import {EnvironmentDetailComponent} from "../../environment/detail/detail.enviro
 import {EnvironmentRoutingModule} from "../../environment/environment-routing.module";
 import {EnvironmentModule} from "../../environment/environment.module";
 
-describe('AppListPage', () => {
+xdescribe('AppListPage', () => {
   let component: AppListPageComponent;
   let fixture: ComponentFixture<AppListPageComponent>;
 

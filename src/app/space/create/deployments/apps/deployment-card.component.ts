@@ -63,7 +63,10 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   cpuTime: number;
   memTime: number;
   cpuVal: number;
+  cpuMax: number;
   memVal: number;
+  memUnits: string;
+  memMax: number;
 
   logsUrl: Observable<string>;
   consoleUrl: Observable<string>;
@@ -90,39 +93,42 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.memTime = 1;
 
     this.version =
-      this.deploymentsService.getVersion(this.applicationId, this.environment.environmentId);
+      this.deploymentsService.getVersion(this.applicationId, this.environment.name);
 
     this.logsUrl =
-      this.deploymentsService.getLogsUrl(this.spaceId, this.applicationId, this.environment.environmentId);
+      this.deploymentsService.getLogsUrl(this.spaceId, this.applicationId, this.environment.name);
 
     this.consoleUrl =
-      this.deploymentsService.getConsoleUrl(this.spaceId, this.applicationId, this.environment.environmentId);
+      this.deploymentsService.getConsoleUrl(this.spaceId, this.applicationId, this.environment.name);
 
     this.appUrl =
-      this.deploymentsService.getAppUrl(this.spaceId, this.applicationId, this.environment.environmentId);
+      this.deploymentsService.getAppUrl(this.spaceId, this.applicationId, this.environment.name);
 
     this.cpuStat =
-      this.deploymentsService.getCpuStat(this.applicationId, this.environment.environmentId);
+      this.deploymentsService.getCpuStat(this.applicationId, this.environment.name);
 
     this.memStat =
-      this.deploymentsService.getMemoryStat(this.applicationId, this.environment.environmentId);
+      this.deploymentsService.getMemoryStat(this.applicationId, this.environment.name);
 
-    this.cpuStat.subscribe(stat => {
+    this.subscriptions.push(this.cpuStat.subscribe(stat => {
       this.cpuVal = stat.used;
+      this.cpuMax = stat.quota;
       this.cpuData.yData.push(stat.used);
       this.cpuData.xData.push(this.cpuTime++);
-    });
+    }));
 
-    this.memStat.subscribe(stat => {
+    this.subscriptions.push(this.memStat.subscribe(stat => {
       this.memVal = stat.used;
+      this.memMax = stat.quota;
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
-    });
+      this.memUnits = stat.units;
+    }));
   }
 
   delete(): void {
     this.subscriptions.push(
-      this.deploymentsService.deleteApplication(this.spaceId, this.applicationId, this.environment.environmentId)
+      this.deploymentsService.deleteApplication(this.spaceId, this.applicationId, this.environment.name)
         .subscribe(alert)
     );
   }

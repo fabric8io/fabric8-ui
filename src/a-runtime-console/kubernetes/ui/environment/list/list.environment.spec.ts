@@ -27,7 +27,7 @@ import { MockBackend } from "@angular/http/testing";
 import { KubernetesComponentsModule } from "../../../components/components.module";
 import {TabsModule} from "ngx-bootstrap";
 
-describe('EnvironmentListComponent', () => {
+xdescribe('EnvironmentListComponent', () => {
   let component: EnvironmentListComponent;
   let fixture: ComponentFixture<EnvironmentListComponent>;
 
