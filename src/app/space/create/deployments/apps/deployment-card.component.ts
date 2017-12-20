@@ -26,8 +26,6 @@ import 'patternfly/dist/js/patternfly-settings.js';
 })
 export class DeploymentCardComponent implements OnDestroy, OnInit {
 
-  static chartIdNum = 1;
-
   @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: Environment;
@@ -77,10 +75,6 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   constructor(
     private deploymentsService: DeploymentsService
   ) { }
-
-  getChartIdNum(): number {
-    return DeploymentCardComponent.chartIdNum;
-  }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());

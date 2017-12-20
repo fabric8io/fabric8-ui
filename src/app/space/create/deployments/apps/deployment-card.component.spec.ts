@@ -85,16 +85,6 @@ describe('DeploymentCardComponent', () => {
     fixture.detectChanges();
     flush();
     flushMicrotasks();
-
-    it('should generate a unique chartid for each DeploymentCardComponent instance', () => {
-      let depCard1 = new DeploymentCardComponent(null);
-      let depCard2 = new DeploymentCardComponent(null);
-      let depCard3 = new DeploymentCardComponent(null);
-
-      expect(depCard1.getChartIdNum()).not.toBe(depCard2.getChartIdNum());
-      expect(depCard1.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
-      expect(depCard2.getChartIdNum()).not.toBe(depCard3.getChartIdNum());
-    });
   }));
 
   describe('versionLabel', () => {
