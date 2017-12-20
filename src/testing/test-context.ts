@@ -42,7 +42,8 @@ export class TestContext<T, H> {
 
 }
 
-export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, moduleMetadata: TestModuleMetadata = {}) {
+export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, moduleMetadata: TestModuleMetadata = {},
+  customizer?: (t: T) => void) {
   beforeEach(function() {
     /*
      * Jasmine creates plain objects and modifying their prototype is definitely a bad idea.
@@ -62,7 +63,6 @@ export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, module
 
   beforeEach(function(this: TestContext<T, H>) {
     this.fixture = TestBed.createComponent(hostType);
-    this.fixture.detectChanges();
     this.hostComponent = this.fixture.componentInstance;
     const testedDebugElement = this.fixture.debugElement.query(By.directive(testedType));
     if (!testedDebugElement) {
@@ -75,6 +75,11 @@ export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, module
     this.tested = testedDebugElement;
     this.testedDirective = testedDebugElement.injector.get(testedType);
     this.testedElement = testedDebugElement.nativeElement;
+
+    if (customizer) {
+      customizer(this.testedDirective);
+    }
+    this.fixture.detectChanges();
   });
 
   afterEach(function(this: TestContext<T, H>) {
