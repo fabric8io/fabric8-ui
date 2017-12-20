@@ -10,6 +10,8 @@ import {
 
 import { By } from '@angular/platform-browser';
 
+import { createMock } from 'testing/mock';
+
 import { Observable } from 'rxjs';
 
 import { DeploymentsService } from '../services/deployments.service';
@@ -36,38 +38,19 @@ describe('ResourceCardComponent', () => {
   let component: ResourceCardComponent;
   let fixture: ComponentFixture<ResourceCardComponent>;
   let mockResourceTitle = 'resource title';
-  let mockSvc: DeploymentsService;
+  let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let cpuStatMock = Observable.of({ used: 1, quota: 2 } as CpuStat);
   let memoryStatMock = Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
 
   beforeEach(() => {
-    mockSvc = {
-      getApplications: () => Observable.of(['foo-app', 'bar-app']),
-      getEnvironments: () => Observable.of([
-        { name: 'stage' } as Environment,
-        { name: 'prod' } as Environment
-      ]),
-      getPods: () => { throw 'NotImplemented'; },
-      scalePods: (spaceId: string, envId: string, appId: string) => { throw 'Not Implemented'; },
-      getVersion: () => { throw 'NotImplemented'; },
-      getCpuStat: (spaceId: string, envId: string) => cpuStatMock,
-      getMemoryStat: (spaceId: string, envId: string) => memoryStatMock,
-      getLogsUrl: () => { throw 'Not Implemented'; },
-      getConsoleUrl: () => { throw 'Not Implemented'; },
-      getAppUrl: () => { throw 'Not Implemented'; },
-      deleteApplication: () => { throw 'Not Implemented'; }
-    };
-
-    spyOn(mockSvc, 'getApplications').and.callThrough();
-    spyOn(mockSvc, 'getEnvironments').and.callThrough();
-    spyOn(mockSvc, 'scalePods').and.callThrough();
-    spyOn(mockSvc, 'getVersion').and.callThrough();
-    spyOn(mockSvc, 'getCpuStat').and.callThrough();
-    spyOn(mockSvc, 'getMemoryStat').and.callThrough();
-    spyOn(mockSvc, 'getLogsUrl').and.callThrough();
-    spyOn(mockSvc, 'getConsoleUrl').and.callThrough();
-    spyOn(mockSvc, 'getAppUrl').and.callThrough();
-    spyOn(mockSvc, 'deleteApplication').and.callThrough();
+    mockSvc = createMock(DeploymentsService);
+    mockSvc.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
+    mockSvc.getEnvironments.and.returnValue(Observable.of([
+      { name: 'stage' } as Environment,
+      { name: 'prod' } as Environment
+    ]));
+    mockSvc.getCpuStat.and.returnValue(cpuStatMock);
+    mockSvc.getMemoryStat.and.returnValue(memoryStatMock);
 
     TestBed.configureTestingModule({
       declarations: [
