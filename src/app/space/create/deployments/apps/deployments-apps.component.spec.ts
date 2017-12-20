@@ -1,12 +1,11 @@
 import {
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
+  initContext,
+  TestContext
+} from 'testing/test-context';
 
 import { By } from '@angular/platform-browser';
 import {
   Component,
-  DebugElement,
   Input
 } from '@angular/core';
 
@@ -15,9 +14,10 @@ import { Observable } from 'rxjs';
 import { DeploymentsAppsComponent } from './deployments-apps.component';
 import { Environment } from '../models/environment';
 
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-
-import { Spaces } from 'ngx-fabric8-wit';
+@Component({
+  template: '<deployments-apps></deployments-apps>'
+})
+class HostComponent { }
 
 @Component({
   selector: 'deployment-card-container',
@@ -30,38 +30,26 @@ class FakeDeploymentCardContainerComponent {
 }
 
 describe('DeploymentsAppsComponent', () => {
+  type Context = TestContext<DeploymentsAppsComponent, HostComponent>;
 
-  let component: DeploymentsAppsComponent;
-  let fixture: ComponentFixture<DeploymentsAppsComponent>;
-  let mockApplicationData = ['first', 'second'];
-  let mockApplications = Observable.of(mockApplicationData);
-  let mockEnvironments = Observable.of([
-    { name: 'envId1'} as Environment,
-    { name: 'envId2'} as Environment
-  ]);
+  let environments = [ { name: 'envId1' }, { name: 'envId2' } ];
+  let applications = ['first', 'second'];
+  let spaceId = Observable.of('spaceId');
+  let mockEnvironments = Observable.of(environments);
+  let mockApplications = Observable.of(applications);
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [ CollapseModule.forRoot() ],
-      declarations: [
-        DeploymentsAppsComponent,
-        FakeDeploymentCardContainerComponent
-      ]
+  initContext(DeploymentsAppsComponent, HostComponent, { declarations: [FakeDeploymentCardContainerComponent] },
+    component => {
+      component.spaceId = spaceId;
+      component.environments = mockEnvironments;
+      component.applications = mockApplications;
     });
 
-    fixture = TestBed.createComponent(DeploymentsAppsComponent);
-    component = fixture.componentInstance;
-    component.environments = mockEnvironments;
-    component.applications = mockApplications;
+  it('should created children components with proper objects', function (this: Context) {
+    let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
+    expect(arrayOfComponents.length).toEqual(applications.length);
 
-    fixture.detectChanges();
-  });
-
-  it('should created children components with proper objects', () => {
-    let arrayOfComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
-    expect(arrayOfComponents.length).toEqual(mockApplicationData.length);
-
-    mockApplicationData.forEach((appName, index) => {
+    applications.forEach((appName, index) => {
       let container = arrayOfComponents[index].componentInstance;
       expect(container.application).toEqual(appName);
       expect(container.environments).toEqual(mockEnvironments);
