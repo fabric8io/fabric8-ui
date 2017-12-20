@@ -65,22 +65,18 @@ export class ProviderService {
       .delete(tokenUrl)
       .map((response) => {
         this.auth.clearGitHubToken();
-        //localStorage.removeItem('github_token');
-        // clear token using auth service
         console.log(response);
       });
 
-    // xhr.setRequestHeader("Content-Type", "application/json");
-    // xhr.setRequestHeader("Authorization", "Bearer " + this.getToken());
-    // xhr.send();
+  }
 
-    // DOESN'T WORK
-    //return this.http
-    //  .delete (tokenUrl, { headers: this.headers })
-    //  .map( () => {})
-    //  .catch((error) => {
-    //    return this.handleError(error);
-    //  });
+  disconnectOpenShift(cluster: string): Observable<any> {
+    let tokenUrl = this.apiUrl + 'token?for=' + cluster;
+    return this.http
+      .delete(tokenUrl)
+      .map((response) => {
+        console.log(response);
+      });
   }
 
   getLegacyLinkingUrl(provider: string, redirect: string): string{
