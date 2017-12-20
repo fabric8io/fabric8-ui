@@ -1,21 +1,23 @@
-import {
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
   Component,
-  DebugElement,
   Input
 } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { Spaces } from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
 
 import { DeploymentCardContainerComponent } from './deployment-card-container.component';
 import { Environment } from '../models/environment';
+
+@Component({
+  template: '<deployment-card-container></deployment-card-container>'
+})
+class HostComponent { }
 
 @Component({
   selector: 'deployment-card',
@@ -28,47 +30,34 @@ class FakeDeploymentCardComponent {
 }
 
 describe('DeploymentCardContainer', () => {
+  type Context = TestContext<DeploymentCardContainerComponent, HostComponent>;
 
-  let component: DeploymentCardContainerComponent;
-  let fixture: ComponentFixture<DeploymentCardContainerComponent>;
-  let mockEnvironments: Observable<Environment[]>;
-  let mockEnvironmentData = [
-    { name: 'envId1'} as Environment,
-    { name: 'envId2'} as Environment
+  initContext(DeploymentCardContainerComponent, HostComponent, { declarations: [FakeDeploymentCardComponent] });
+
+  const environments = [
+    { name: 'envId1' },
+    { name: 'envId2' }
   ];
 
-  beforeEach(() => {
-    mockEnvironments = Observable.of(mockEnvironmentData);
-
-    TestBed.configureTestingModule({
-      imports: [ CollapseModule.forRoot() ],
-      declarations: [
-        DeploymentCardContainerComponent,
-        FakeDeploymentCardComponent
-      ]
-    });
-
-    fixture = TestBed.createComponent(DeploymentCardContainerComponent);
-    component = fixture.componentInstance;
-    component.environments = mockEnvironments;
-    component.application = 'app';
-
-    fixture.detectChanges();
+  beforeEach(function (this: Context) {
+    this.tested.componentInstance.environments = Observable.of(environments);
+    this.tested.componentInstance.application = 'app';
+    this.detectChanges();
   });
 
-  it('should created children components with proper objects', () => {
-    let arrayOfComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
-    expect(arrayOfComponents.length).toEqual(mockEnvironmentData.length);
+  it('should created children components with proper objects', function (this: Context) {
+    let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
+    expect(arrayOfComponents.length).toEqual(environments.length);
 
-    mockEnvironmentData.forEach((envData, index) => {
+    environments.forEach((envData, index) => {
       let cardComponent = arrayOfComponents[index].componentInstance;
       expect(cardComponent.applicationId).toEqual('app');
-      expect(cardComponent.environment).toEqual(mockEnvironmentData[index]);
+      expect(cardComponent.environment).toEqual(environments[index]);
     });
   });
 
-  it('should set the application title properly', () => {
-    let el = fixture.debugElement.query(By.css('#deploymentCardApplicationTitle')).nativeElement;
+  it('should set the application title properly', function (this: Context) {
+    let el = this.fixture.debugElement.query(By.css('#deploymentCardApplicationTitle')).nativeElement;
     expect(el.textContent.trim()).toEqual('app');
   });
 

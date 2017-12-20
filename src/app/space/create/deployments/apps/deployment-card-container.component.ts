@@ -1,6 +1,6 @@
 import {
   Component,
-  Input,
+  Input
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
