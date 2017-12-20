@@ -68,7 +68,7 @@ describe('DeploymentCardComponent', () => {
       getVersion: () => Observable.of('1.2.3'),
       getCpuStat: (spaceId: string, envId: string) => Observable.of({ used: 1, quota: 2 } as CpuStat),
       getMemoryStat: (spaceId: string, envId: string) =>
-        Observable.of({ used: 1, quota: 2, units: 'GB' } as MemoryStat),
+        Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat),
       getAppUrl: () => Observable.of('mockAppUrl'),
       getConsoleUrl: () => Observable.of('mockConsoleUrl'),
       getLogsUrl: () => Observable.of('mockLogsUrl'),
@@ -129,18 +129,49 @@ describe('DeploymentCardComponent', () => {
     });
   });
 
+  describe('cpu label', () => {
+    let de: DebugElement;
+
+    beforeEach(() => {
+      let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
+      let cpuChart = charts[0];
+      de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
+    });
+
+    it('should use units from service result', () => {
+      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
+      expect(de.componentInstance.dataMeasure).toEqual('Cores');
+    });
+
+    it('should use value from service result', () => {
+      expect(de.componentInstance.value).toEqual(1);
+    });
+
+    it('should use upper bound from service result', () => {
+      expect(de.componentInstance.valueUpperBound).toEqual(2);
+    });
+  });
+
   describe('memory label', () => {
     let de: DebugElement;
 
     beforeEach(() => {
       let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
       let memoryChart = charts[1];
-      de = charts[1].query(By.directive(FakeDeploymentGraphLabelComponent));
+      de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
 
     it('should use units from service result', () => {
       expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
       expect(de.componentInstance.dataMeasure).toEqual('GB');
+    });
+
+    it('should use value from service result', () => {
+      expect(de.componentInstance.value).toEqual(3);
+    });
+
+    it('should use upper bound from service result', () => {
+      expect(de.componentInstance.valueUpperBound).toEqual(4);
     });
   });
 
