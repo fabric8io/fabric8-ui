@@ -1,3 +1,6 @@
+<deployments-toolbar (onFilterChange)="filterChange($event)" (onSortChange)="sortChange($event)" [resultsCount]="resultsCount">
+</deployments-toolbar>
+
 <div class="cards-pf">
   <div class="row row-cards-pf">
     <div class="col-xs-12 col-sm-4 col-md-2">
@@ -24,6 +27,6 @@
   </div>
 </div>
 
-<div *ngFor="let application of applications | async">
+<div *ngFor="let application of filteredApplicationsList">
   <deployment-card-container [spaceId]="spaceId | async" [application]="application" [environments]="environments"></deployment-card-container>
 </div>

@@ -18,6 +18,7 @@ import { DeploymentsDonutComponent } from './deployments-donut/deployments-donut
 import {
   DeploymentsDonutChartComponent
 } from './deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
+import { DeploymentsToolbarComponent } from './deployments-toolbar/deployments-toolbar.component';
 import { ResourceCardComponent } from '../deployments/resource-usage/resource-card.component';
 import { UtilizationBarComponent } from '../deployments/resource-usage/utilization-bar.component';
 
@@ -25,7 +26,7 @@ import { DeploymentsRoutingModule } from './deployments-routing.module';
 
 import { DeploymentsService } from '../deployments/services/deployments.service';
 
-import { ChartModule } from 'patternfly-ng';
+import { ChartModule, ToolbarModule } from 'patternfly-ng';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { ChartModule } from 'patternfly-ng';
     TooltipModule.forRoot(),
     CommonModule,
     ChartModule,
-    DeploymentsRoutingModule
+    DeploymentsRoutingModule,
+    ToolbarModule
   ],
   declarations: [
     DeploymentsComponent,
@@ -47,6 +49,7 @@ import { ChartModule } from 'patternfly-ng';
     DeploymentsResourceUsageComponent,
     DeploymentsDonutComponent,
     DeploymentsDonutChartComponent,
+    DeploymentsToolbarComponent,
     ResourceCardComponent,
     UtilizationBarComponent
   ],

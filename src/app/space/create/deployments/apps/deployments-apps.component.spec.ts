@@ -6,8 +6,15 @@ import {
 import { By } from '@angular/platform-browser';
 import {
   Component,
-  Input
+  EventEmitter,
+  Input,
+  Output
 } from '@angular/core';
+
+import {
+  FilterEvent,
+  SortEvent
+} from 'patternfly-ng'
 
 import { Observable } from 'rxjs';
 
@@ -29,6 +36,16 @@ class FakeDeploymentCardContainerComponent {
   @Input() application: string;
 }
 
+@Component({
+  selector: 'deployments-toolbar',
+  template: ''
+})
+class FakeDeploymentsToolbarComponent {
+  @Output('onFilterChange') public onFilterChange: EventEmitter<FilterEvent> = new EventEmitter<FilterEvent>();
+  @Output('onSortChange') public onSortChange: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
+  @Input() public resultsCount: number;
+}
+
 describe('DeploymentsAppsComponent', () => {
   type Context = TestContext<DeploymentsAppsComponent, HostComponent>;
 
@@ -38,7 +55,8 @@ describe('DeploymentsAppsComponent', () => {
   let mockEnvironments = Observable.of(environments);
   let mockApplications = Observable.of(applications);
 
-  initContext(DeploymentsAppsComponent, HostComponent, { declarations: [FakeDeploymentCardContainerComponent] },
+  initContext(DeploymentsAppsComponent, HostComponent,
+    { declarations: [FakeDeploymentCardContainerComponent, FakeDeploymentsToolbarComponent] },
     component => {
       component.spaceId = spaceId;
       component.environments = mockEnvironments;
