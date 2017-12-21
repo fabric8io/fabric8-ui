@@ -140,7 +140,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
           },
           error => {
             this.notifications.message({
-              type: NotificationType.INFO,
+              type: NotificationType.WARNING,
               message: error
             });
           }
