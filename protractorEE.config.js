@@ -13,12 +13,25 @@ exports.config = {
     seleniumAddress: 'http://localhost:4444/wd/hub',
     specs: ['src/tests/**/EE/*poc*.spec.js'],
     jasmineNodeOpts: {
+        isVerbose: true,
+        showColors: true,
+        includeStackTrace: true,
         defaultTimeoutInterval: 60000
     },
+
+    troubleshoot: true,
+
     capabilities: {
       'browserName': 'chrome',
+      'maxInstances': 2,
+      'shardTestFiles': true,
+      'loggingPrefs': {
+      'driver': 'WARNING',
+      'server': 'WARNING',
+      'browser': 'INFO'
+      },
       'chromeOptions': {
-        'args': [ '--no-sandbox']
+      'args': [ '--no-sandbox', '--window-workspace=1']
       }
     },
 
