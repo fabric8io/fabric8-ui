@@ -77,7 +77,6 @@ describe('DeploymentDetailsComponent', () => {
   initContext(DeploymentDetailsComponent, HostComponent, {
     imports: [CollapseModule.forRoot()],
     declarations: [
-      DeploymentDetailsComponent,
       FakeDeploymentsDonutComponent,
       FakeDeploymentGraphLabelComponent,
       FakePfngChartSparkline
@@ -92,8 +91,8 @@ describe('DeploymentDetailsComponent', () => {
     component.spaceId = 'mockSpaceId';
   });
 
-  it('should generate unique chartIds for each DeploymentDetailsComponent instance', () => {
-    let detailsComponent = new DeploymentDetailsComponent(mockSvc);
+  it('should generate unique chartIds for each DeploymentDetailsComponent instance', function (this: Context) {
+    let detailsComponent = this.testedDirective;
     expect(detailsComponent.cpuConfig.chartId).not.toBe(detailsComponent.memConfig.chartId);
   });
 
