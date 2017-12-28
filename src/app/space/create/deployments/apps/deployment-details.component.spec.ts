@@ -1,14 +1,15 @@
 import { Component, DebugElement, Input } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
 
-import { times } from 'lodash';
-
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 
 import { Environment } from '../models/environment';
 import { DeploymentsService } from '../services/deployments.service';
@@ -18,6 +19,11 @@ import { DeploymentDetailsComponent } from './deployment-details.component';
 // Makes patternfly charts available
 import { ChartModule } from 'patternfly-ng';
 import 'patternfly/dist/js/patternfly-settings.js';
+
+@Component({
+  template: '<deployment-details></deployment-details>'
+})
+class HostComponent { }
 
 @Component({
   selector: 'deployments-donut',
@@ -51,8 +57,7 @@ class FakePfngChartSparkline {
 }
 
 describe('DeploymentDetailsComponent', () => {
-  let component: DeploymentDetailsComponent;
-  let fixture: ComponentFixture<DeploymentDetailsComponent>;
+  type Context =  TestContext<DeploymentDetailsComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let mockEnvironment: Environment;
 
@@ -67,45 +72,33 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
 
     mockEnvironment = { name: 'mockEnvironment' } as Environment;
+  });
 
-    TestBed.configureTestingModule({
-      imports: [CollapseModule.forRoot()],
-      declarations: [
-        DeploymentDetailsComponent,
-        FakeDeploymentsDonutComponent,
-        FakeDeploymentGraphLabelComponent,
-        FakePfngChartSparkline
-      ],
-      providers: [
-        { provide: DeploymentsService, useValue: mockSvc }
-      ]
-    });
-
-    fixture = TestBed.createComponent(DeploymentDetailsComponent);
-    component = fixture.componentInstance;
-
+  initContext(DeploymentDetailsComponent, HostComponent, {
+    imports: [CollapseModule.forRoot()],
+    declarations: [
+      DeploymentDetailsComponent,
+      FakeDeploymentsDonutComponent,
+      FakeDeploymentGraphLabelComponent,
+      FakePfngChartSparkline
+    ],
+    providers: [
+      { provide: DeploymentsService, useFactory: () => mockSvc }
+    ]
+  }, component => {
     component.collapsed = false;
     component.applicationId = 'mockAppId';
     component.environment = mockEnvironment;
     component.spaceId = 'mockSpaceId';
-
-    fixture.detectChanges();
   });
 
   it('should generate unique chartIds for each DeploymentDetailsComponent instance', () => {
-    const DETAILS_COMPONENT_COUNT = 5;
-    const CHARTS_PER_DETAILS_COMPONENT = 2;
-    let uniqueIdSet = new Set();
-    times(DETAILS_COMPONENT_COUNT, () => {
-      let detailsComponent = new DeploymentDetailsComponent(mockSvc);
-      uniqueIdSet.add(detailsComponent.cpuConfig.chartId);
-      uniqueIdSet.add(detailsComponent.memConfig.chartId);
-    });
-    expect(uniqueIdSet.size).toBe(DETAILS_COMPONENT_COUNT * CHARTS_PER_DETAILS_COMPONENT);
+    let detailsComponent = new DeploymentDetailsComponent(mockSvc);
+    expect(detailsComponent.cpuConfig.chartId).not.toBe(detailsComponent.memConfig.chartId);
   });
 
-  it('should create a child donut component with proper values', () => {
-    let arrayOfComponents = fixture.debugElement.queryAll(By.directive(FakeDeploymentsDonutComponent));
+  it('should create a child donut component with proper values', function (this: Context) {
+    let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentsDonutComponent));
     expect(arrayOfComponents.length).toEqual(1);
 
     let container = arrayOfComponents[0].componentInstance;
@@ -115,14 +108,17 @@ describe('DeploymentDetailsComponent', () => {
   describe('cpu label', () => {
     let de: DebugElement;
 
-    beforeEach(() => {
-      let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
+    beforeEach(function (this: Context) {
+      let charts = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       let cpuChart = charts[0];
       de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
 
-    it('should use units from service result', () => {
-      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
+    it('should be called with the proper arguments', () => {
+      expect(mockSvc.getCpuStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
+    });
+
+    it('should use the \'Cores\' label for its data measure', () => {
       expect(de.componentInstance.dataMeasure).toEqual('Cores');
     });
 
@@ -138,8 +134,8 @@ describe('DeploymentDetailsComponent', () => {
   describe('memory label', () => {
     let de: DebugElement;
 
-    beforeEach(() => {
-      let charts = fixture.debugElement.queryAll(By.css('.deployment-chart'));
+    beforeEach(function (this: Context) {
+      let charts = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       let memoryChart = charts[1];
       de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
