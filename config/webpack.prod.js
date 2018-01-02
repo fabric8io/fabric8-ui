@@ -308,8 +308,8 @@ module.exports = function (env) {
            * See: https://github.com/wbuchwalter/tslint-loader
            */
           tslint: {
-            emitErrors: true,
-            failOnHint: true,
+            emitErrors: false,
+            failOnHint: false,
             resourcePath: 'src'
           },
 
