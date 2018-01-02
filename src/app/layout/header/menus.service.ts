@@ -47,8 +47,32 @@ export class MenusService {
                 path: 'board'
               }
             ]
-          },
-          this.getCreateMenuItems()
+          }, {
+            name: 'Create',
+            path: 'create',
+            menus: [
+              {
+                name: 'Codebases',
+                path: ''
+              },
+              {
+                name: 'Pipelines',
+                path: 'pipelines'
+              },
+              {
+                name: 'Applications',
+                path: 'apps'
+              },
+              {
+                name: 'Environments',
+                path: 'environments'
+              },
+              {
+                name: 'Deployments',
+                path: 'deployments'
+              }
+            ]
+          }
         ]
       ]
     ]);
@@ -87,38 +111,5 @@ export class MenusService {
       res = res.replace(/\/*$/, '');
     }
     return res;
-  }
-
-  private getCreateMenuItems(): MenuItem {
-    const displayDeployments = (ENV === 'development');
-    let menus = [
-      {
-        name: 'Codebases',
-        path: ''
-      },
-      {
-        name: 'Pipelines',
-        path: 'pipelines'
-      },
-      {
-        name: 'Applications',
-        path: 'apps'
-      },
-      {
-        name: 'Environments',
-        path: 'environments'
-      }
-    ];
-    if (displayDeployments) {
-      menus.push({
-        name: 'Deployments',
-        path: 'deployments'
-      });
-    }
-    return {
-      name: 'Create',
-      path: 'create',
-      menus: menus
-    };
   }
 }
