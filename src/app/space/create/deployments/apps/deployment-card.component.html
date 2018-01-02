@@ -3,7 +3,7 @@
     <div class="card-pf-body">
       <div class="row mini-card-content">
         <div class="col-sm-2">
-          <span class="pficon pficon-ok fa-lg" tooltip="Everything looks okay" placement="top"></span>
+          <deployment-status-icon [cpuDataStream]='cpuStat'></deployment-status-icon>
         </div>
         <div class="col-sm-7">
           <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="true"></deployments-donut>

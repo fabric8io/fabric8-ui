@@ -33,6 +33,7 @@ import { NotificationsService } from 'app/shared/notifications.service';
 import { DeploymentCardComponent } from './deployment-card.component';
 import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
+import { CpuStat } from '../models/cpu-stat';
 
 // Makes patternfly charts available
 import { ChartModule } from 'patternfly-ng';
@@ -57,6 +58,14 @@ class FakeDeploymentGraphLabelComponent {
   @Input() dataMeasure: any;
   @Input() value: any;
   @Input() valueUpperBound: any;
+}
+
+@Component({
+  selector: 'deployment-status-icon',
+  template: ''
+})
+class FakeDeploymentStatusIconComponent {
+  @Input() cpuDataStream: Observable<CpuStat>;
 }
 
 @Component({
@@ -94,13 +103,14 @@ describe('DeploymentCardComponent', () => {
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     TestBed.configureTestingModule({
-      imports: [ BsDropdownModule.forRoot(), CollapseModule.forRoot(), ChartModule ],
       declarations: [
         DeploymentCardComponent,
         FakeDeploymentsDonutComponent,
         FakeDeploymentGraphLabelComponent,
-        FakeDeploymentDetailsComponent
+        FakeDeploymentDetailsComponent,
+        FakeDeploymentStatusIconComponent
       ],
+      imports: [ BsDropdownModule.forRoot(), CollapseModule.forRoot(), ChartModule ],
       providers: [
         BsDropdownConfig,
         { provide: NotificationsService, useValue: notifications },

@@ -14,6 +14,7 @@ import { DeploymentsResourceUsageComponent } from '../deployments/resource-usage
 import { DeploymentCardContainerComponent } from '../deployments/apps/deployment-card-container.component';
 import { DeploymentCardComponent } from '../deployments/apps/deployment-card.component';
 import { DeploymentGraphLabelComponent } from '../deployments/apps/deployment-graph-label.component';
+import { DeploymentStatusIconComponent } from '../deployments/apps/deployment-status-icon.component';
 import { DeploymentsDonutComponent } from './deployments-donut/deployments-donut.component';
 import {
   DeploymentsDonutChartComponent
@@ -44,6 +45,7 @@ import { ChartModule, ToolbarModule } from 'patternfly-ng';
     DeploymentCardContainerComponent,
     DeploymentCardComponent,
     DeploymentGraphLabelComponent,
+    DeploymentStatusIconComponent,
     DeploymentsAppsComponent,
     DeploymentDetailsComponent,
     DeploymentsResourceUsageComponent,
