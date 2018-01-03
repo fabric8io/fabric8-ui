@@ -1,22 +1,24 @@
 <div [collapse]="collapsed">
-  <hr>
-  <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="false"></deployments-donut>
+  <ng-container *ngIf="!collapsed">
+    <hr>
+    <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="false"></deployments-donut>
 
-  <div class="deployment-chart">
-    <div class="chart-column">
-      <pfng-chart-sparkline class="chart-sparkline" [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>
+    <div class="deployment-chart">
+      <div class="chart-column">
+        <pfng-chart-sparkline class="chart-sparkline" [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>
+      </div>
+      <div class="chart-column">
+        <deployment-graph-label type="CPU" dataMeasure="Cores" [value]="cpuVal" [valueUpperBound]="cpuMax"></deployment-graph-label>
+      </div>
     </div>
-    <div class="chart-column">
-      <deployment-graph-label type="CPU" dataMeasure="Cores" [value]="cpuVal" [valueUpperBound]="cpuMax"></deployment-graph-label>
-    </div>
-  </div>
 
-  <div class="deployment-chart">
-    <div class="chart-column">
-      <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
+    <div class="deployment-chart">
+      <div class="chart-column">
+        <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
+      </div>
+      <div class="chart-column">
+        <deployment-graph-label type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
+      </div>
     </div>
-    <div class="chart-column">
-      <deployment-graph-label type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
-    </div>
-  </div>
+  </ng-container>
 </div>
