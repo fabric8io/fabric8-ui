@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import 'patternfly/dist/js/patternfly-settings.js';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -13,6 +13,12 @@ import {
 import { Environment } from '../models/environment';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentDetailsComponent } from './deployment-details.component';
+
+import { times } from 'lodash';
+
+// Makes patternfly charts available
+import { ChartModule } from 'patternfly-ng';
+import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
   template: '<deployment-details></deployment-details>'
@@ -51,15 +57,20 @@ class FakePfngChartSparkline {
 }
 
 describe('DeploymentDetailsComponent', () => {
-  type Context =  TestContext<DeploymentDetailsComponent, HostComponent>;
+  type Context = TestContext<DeploymentDetailsComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let mockEnvironment: Environment;
+  let cpuStatObservable: BehaviorSubject<any>;
+  let memStatObservable: BehaviorSubject<any>;
 
   beforeEach(() => {
+    cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 });
+    memStatObservable = new BehaviorSubject({ used: 3, quota: 4, units: 'GB' });
+
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
-    mockSvc.getCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
-    mockSvc.getMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' }));
+    mockSvc.getCpuStat.and.returnValue(cpuStatObservable);
+    mockSvc.getMemoryStat.and.returnValue(memStatObservable);
     mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
     mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
@@ -146,4 +157,38 @@ describe('DeploymentDetailsComponent', () => {
       expect(de.componentInstance.valueUpperBound).toEqual(4);
     });
   });
+
+  describe('sparkline data', () => {
+    it('should by default be greater or equal to 1', function (this: Context) {
+      let detailsComponent = this.testedDirective;
+      expect(detailsComponent.getSparklineMaxElements()).toBeGreaterThan(0);
+    });
+
+    it('should not be able to be set to anything less than 1', function (this: Context) {
+      let detailsComponent = this.testedDirective;
+      [0, -5, -1873].forEach(n => {
+        detailsComponent.setSparklineMaxElements(n);
+        expect(detailsComponent.getSparklineMaxElements()).toBe(1);
+      })
+    });
+
+    it('should have its cpu data bounded when enough data has been emitted', function (this: Context) {
+      const MAX_CPU_SPARKLINE_ELEMENTS = 4;
+      let detailsComponent = this.testedDirective;
+      detailsComponent.setSparklineMaxElements(MAX_CPU_SPARKLINE_ELEMENTS);
+      times(MAX_CPU_SPARKLINE_ELEMENTS, () => cpuStatObservable.next({ used: 1, quota: 2 }));
+      expect(detailsComponent.cpuData.xData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS + 1);
+      expect(detailsComponent.cpuData.yData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS + 1);
+    });
+
+    it('should have its memory data bounded when enough data has been emitted', function (this: Context) {
+      const MAX_MEM_SPARKLINE_ELEMENTS = 6;
+      let detailsComponent = this.testedDirective;
+      detailsComponent.setSparklineMaxElements(MAX_MEM_SPARKLINE_ELEMENTS);
+      times(MAX_MEM_SPARKLINE_ELEMENTS, () => memStatObservable.next({ used: 3, quota: 4, units: 'GB' }));
+      expect(detailsComponent.memData.xData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS + 1);
+      expect(detailsComponent.memData.yData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS + 1);
+    });
+  });
+
 });

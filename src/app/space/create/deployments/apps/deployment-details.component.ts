@@ -16,6 +16,8 @@ import { DeploymentsService } from '../services/deployments.service';
 })
 export class DeploymentDetailsComponent {
 
+  static readonly DEFAULT_SPARKLINE_DATA_DURATION = 15 * 60 * 1000;
+
   @Input() collapsed: boolean;
   @Input() applicationId: string;
   @Input() environment: Environment;
@@ -57,9 +59,14 @@ export class DeploymentDetailsComponent {
   memUnits: string;
   memMax: number;
 
+  sparklineMaxElements: number;
+
   constructor(private deploymentsService: DeploymentsService) { }
 
   ngOnInit() {
+    this.setSparklineMaxElements(
+      DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
+
     this.cpuConfig.chartHeight = 100;
     this.memConfig.chartHeight = 100;
     this.cpuTime = 1;
@@ -76,6 +83,7 @@ export class DeploymentDetailsComponent {
       this.cpuMax = stat.quota;
       this.cpuData.yData.push(stat.used);
       this.cpuData.xData.push(this.cpuTime++);
+      this.shrinkChartDataIfNeeded(this.cpuData);
     }));
 
     this.subscriptions.push(this.memStat.subscribe(stat => {
@@ -84,10 +92,28 @@ export class DeploymentDetailsComponent {
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
       this.memUnits = stat.units;
+      this.shrinkChartDataIfNeeded(this.memData);
     }));
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  private shrinkChartDataIfNeeded(chartData: any): void {
+    // The first index does not count as it is not a data point. We also assume
+    // that xData and yData are the same length.
+    while (chartData.xData.length > this.sparklineMaxElements + 1) {
+      chartData.xData.splice(1, 1);
+      chartData.yData.splice(1, 1);
+    }
+  }
+
+  public getSparklineMaxElements(): number {
+    return this.sparklineMaxElements;
+  }
+
+  public setSparklineMaxElements(maxElements: number): void {
+    this.sparklineMaxElements = Math.max(1, maxElements);
   }
 }
