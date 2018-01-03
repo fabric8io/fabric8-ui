@@ -32,6 +32,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   @Input() applicationId: string;
   @Input() environment: Environment;
 
+  active: boolean = false;
   collapsed: boolean = true;
   version: Observable<string>;
   logsUrl: Observable<string>;
@@ -50,17 +51,27 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.version =
-      this.deploymentsService.getVersion(this.applicationId, this.environment.name);
+    this.subscriptions.push(
+      this.deploymentsService
+        .isApplicationDeployedInEnvironment(this.spaceId, this.applicationId, this.environment.name)
+        .subscribe((active: boolean) => {
+          this.active = active;
 
-    this.logsUrl =
-      this.deploymentsService.getLogsUrl(this.spaceId, this.applicationId, this.environment.name);
+          if (active) {
+            this.version =
+              this.deploymentsService.getVersion(this.applicationId, this.environment.name);
 
-    this.consoleUrl =
-      this.deploymentsService.getConsoleUrl(this.spaceId, this.applicationId, this.environment.name);
+            this.logsUrl =
+              this.deploymentsService.getLogsUrl(this.spaceId, this.applicationId, this.environment.name);
 
-    this.appUrl =
-      this.deploymentsService.getAppUrl(this.spaceId, this.applicationId, this.environment.name);
+            this.consoleUrl =
+              this.deploymentsService.getConsoleUrl(this.spaceId, this.applicationId, this.environment.name);
+
+            this.appUrl =
+              this.deploymentsService.getAppUrl(this.spaceId, this.applicationId, this.environment.name);
+          }
+        })
+    );
   }
 
   delete(): void {

@@ -41,6 +41,62 @@ describe('DeploymentsService', () => {
     }));
   });
 
+  describe('#isApplicationDeployedInEnvironment', () => {
+    it('should be true for vertx-hello in \'stage\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-hello', 'stage')
+        .subscribe((active: boolean) => {
+          expect(active).toBeTruthy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be true for vertx-hello in \'run\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-hello', 'run')
+        .subscribe((active: boolean) => {
+          expect(active).toBeTruthy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be true for vertx-paint in \'stage\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'stage')
+        .subscribe((active: boolean) => {
+          expect(active).toBeTruthy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be false for vertx-paint in \'run\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'run')
+        .subscribe((active: boolean) => {
+          expect(active).toBeFalsy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be true for vertx-wiki in \'run\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-wiki', 'run')
+        .subscribe((active: boolean) => {
+          expect(active).toBeTruthy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be false for vertx-wiki in \'stage\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-wiki', 'stage')
+        .subscribe((active: boolean) => {
+          expect(active).toBeFalsy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+  });
+
   describe('#getVersion', () => {
     it('should return 1.0.2', fakeAsync(() => {
       svc.getVersion('foo', 'bar').subscribe(val => {

@@ -15,7 +15,11 @@ import {
   Input
 } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject
+} from 'rxjs';
 
 import {
   BsDropdownConfig,
@@ -72,8 +76,11 @@ describe('DeploymentCardComponent', () => {
   let fixture: ComponentFixture<DeploymentCardComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let notifications: any;
+  let active: Subject<boolean>;
 
   beforeEach(fakeAsync(() => {
+    active = new BehaviorSubject<boolean>(true);
+
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
     mockSvc.getCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
@@ -82,6 +89,7 @@ describe('DeploymentCardComponent', () => {
     mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
+    mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
 
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
@@ -111,6 +119,10 @@ describe('DeploymentCardComponent', () => {
     flush();
     flushMicrotasks();
   }));
+
+  it('should be active', () => {
+    expect(component.active).toBeTruthy();
+  });
 
   describe('versionLabel', () => {
     let de: DebugElement;
@@ -197,4 +209,12 @@ describe('DeploymentCardComponent', () => {
     }));
   });
 
+  describe('inactive environment', () => {
+    it('should not display', fakeAsync(() => {
+      active.next(false);
+      fixture.detectChanges();
+
+      expect(component.active).toBeFalsy();
+    }));
+  });
 });

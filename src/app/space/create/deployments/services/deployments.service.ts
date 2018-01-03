@@ -23,6 +23,18 @@ export class DeploymentsService {
     ]);
   }
 
+  isApplicationDeployedInEnvironment(spaceId: string, applicationName: string, environmentName: string):
+    Observable<boolean> {
+    if (applicationName === 'vertx-paint') {
+      return environmentName === 'stage' ? Observable.of(true) : Observable.of(false);
+    }
+    if (applicationName === 'vertx-wiki') {
+      return environmentName === 'run' ? Observable.of(true) : Observable.of(false);
+    }
+
+    return Observable.of(true);
+  }
+
   getVersion(spaceId: string, environmentName: string): Observable<string> {
     return Observable.of('1.0.2');
   }

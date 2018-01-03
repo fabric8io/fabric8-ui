@@ -1,43 +1,45 @@
-<div class="card-pf" (click)="collapsed = !collapsed">
-  <div class="card-pf-body">
-    <div class="row mini-card-content">
-      <div class="col-sm-2">
-        <span class="pficon pficon-ok fa-lg" tooltip="Everything looks okay" placement="top"></span>
-      </div>
-      <div class="col-sm-7">
-        <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="true"></deployments-donut>
-      </div>
-      <div class="col-sm-1">
-        <span id="versionLabel">{{ version | async }}</span>
-      </div>
-      <div class="col-sm-2">
-        <div class="dropdown-kebab-pf dropdown" (click)="$event.stopPropagation()" dropdown>
-          <button class="btn btn-link pull-right dropdown-toggle" id="kebab" type="button" aria-haspopup="true" aria-expanded="true"
-            data-toggle="dropdown" dropdownToggle>
-            <span class="fa fa-ellipsis-v"></span>
-          </button>
-          <ul class="dropdown-menu-right dropdown-menu deployment-dropdown" aria-labelledby="kebab" role="menu" *dropdownMenu>
-            <li>
-              <a class="menu-item" [attr.href]="logsUrl | async" target="_blank">View logs</a>
-            </li>
-            <li>
-              <a class="menu-item" [attr.href]="consoleUrl | async" target="_blank">View OpenShift Console</a>
-            </li>
-            <ng-container *ngIf="appUrl | async; let appUrl">
+<ng-container *ngIf="active">
+  <div class="card-pf" (click)="collapsed = !collapsed">
+    <div class="card-pf-body">
+      <div class="row mini-card-content">
+        <div class="col-sm-2">
+          <span class="pficon pficon-ok fa-lg" tooltip="Everything looks okay" placement="top"></span>
+        </div>
+        <div class="col-sm-7">
+          <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="true"></deployments-donut>
+        </div>
+        <div class="col-sm-1">
+          <span id="versionLabel">{{ version | async }}</span>
+        </div>
+        <div class="col-sm-2">
+          <div class="dropdown-kebab-pf dropdown" (click)="$event.stopPropagation()" dropdown>
+            <button class="btn btn-link pull-right dropdown-toggle" id="kebab" type="button" aria-haspopup="true" aria-expanded="true"
+              data-toggle="dropdown" dropdownToggle>
+              <span class="fa fa-ellipsis-v"></span>
+            </button>
+            <ul class="dropdown-menu-right dropdown-menu deployment-dropdown" aria-labelledby="kebab" role="menu" *dropdownMenu>
+              <li>
+                <a class="menu-item" [attr.href]="logsUrl | async" target="_blank">View logs</a>
+              </li>
+              <li>
+                <a class="menu-item" [attr.href]="consoleUrl | async" target="_blank">View OpenShift Console</a>
+              </li>
+              <ng-container *ngIf="appUrl | async; let appUrl">
+                <li role="separator" class="divider"></li>
+                <li>
+                  <a class="menu-item" [attr.href]="appUrl" target="_blank">Open Application</a>
+                </li>
+              </ng-container>
               <li role="separator" class="divider"></li>
               <li>
-                <a class="menu-item" [attr.href]="appUrl" target="_blank">Open Application</a>
+                <a class="menu-item" (click)="delete()">Delete</a>
               </li>
-            </ng-container>
-            <li role="separator" class="divider"></li>
-            <li>
-              <a class="menu-item" (click)="delete()">Delete</a>
-            </li>
-          </ul>
+            </ul>
+          </div>
         </div>
       </div>
+      <deployment-details [collapsed]="collapsed" [applicationId]="applicationId"
+        [environment]="environment" [spaceId]="spaceId"></deployment-details>
     </div>
-    <deployment-details [collapsed]="collapsed" [applicationId]="applicationId"
-      [environment]="environment" [spaceId]="spaceId"></deployment-details>
   </div>
-</div>
+</ng-container>
