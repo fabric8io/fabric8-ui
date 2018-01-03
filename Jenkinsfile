@@ -85,5 +85,12 @@ if (ciDeploy){
                 }
            }
        }
+       stage('e2e test'){
+         fabric8EETest userSecret: "default-test-user", beforeTest: """
+export TARGET_URL="https://${route}"
+export TEST_PLATFORM="fabric8-openshift"
+export DISABLE_CHE="true"
+"""
+       }
    }
 }
