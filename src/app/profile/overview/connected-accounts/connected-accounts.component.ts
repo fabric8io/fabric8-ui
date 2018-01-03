@@ -6,6 +6,7 @@ import { AuthenticationService } from 'ngx-login-client';
 
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 import { ProviderService } from '../../../shared/account/provider.service';
+import { UserService, User } from 'ngx-login-client';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -22,9 +23,11 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
 
   userName: string;
   contextUserName: string;
+  cluster: string;
 
   constructor(private contexts: Contexts,
               private auth: AuthenticationService,
+              private userService: UserService,
               private providerService: ProviderService) {
     this.subscriptions.push(auth.gitHubToken.subscribe(token => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
@@ -34,6 +37,12 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     }));
     this.subscriptions.push(auth.openShiftToken.subscribe(token => {
       this.openShiftLinked = (token !== undefined && token.length !== 0);
+    }));
+
+    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
+      if (user.attributes) {
+        this.cluster = user.attributes['cluster'];
+      }
     }));
   }
 
@@ -55,9 +64,18 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     this.providerService.linkGitHub(window.location.href);
   }
 
+  public connectOpenShift(): void {
+    this.providerService.linkOpenShift(window.location.href);
+  }
+
   public refreshGitHub(): void {
-    this.providerService.disconnectGitHub().subscribe(() => {
-      this.connectGitHub();
+    // call linking api again to reconnect if a connection doesn't exist
+    this.connectGitHub();
+  }
+
+  public refreshOpenShift(): void {
+    this.providerService.disconnectOpenShift(this.cluster).subscribe(() => {
+      this.connectOpenShift();
     });
   }
 }

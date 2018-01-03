@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
 import { initContext, TestContext } from '../../../../testing/test-context';
 import { ProviderService } from '../../../shared/account/provider.service';
+import { UserService } from 'ngx-login-client';
 
 @Component({
   template: `<alm-connected-accounts></alm-connected-accounts>`
@@ -30,16 +31,19 @@ describe('Connected Accounts Component', () => {
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
     let providersMock: any = jasmine.createSpy('ProviderService');
+    let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
       authMock.gitHubToken = Observable.of('gh-test-user');
       authMock.openShiftToken = Observable.empty();
       contextsMock.current = Observable.empty();
+      userServiceMock.loggedInUser = Observable.empty();
     });
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
       providers: [ { provide: AuthenticationService, useValue: authMock },
         { provide: Contexts, useValue: contextsMock },
+        { provide: UserService, useValue: userServiceMock },
         { provide: ProviderService, useValue: providersMock }]
     });
 
@@ -61,16 +65,19 @@ describe('Connected Accounts Component', () => {
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
     let providersMock: any = jasmine.createSpy('ProviderService');
+    let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
       authMock.gitHubToken = Observable.empty();
       authMock.openShiftToken = Observable.of('oso-token');
       contextsMock.current = Observable.of(ctx);
+      userServiceMock.loggedInUser = Observable.empty();
     });
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
       providers: [ { provide: AuthenticationService, useValue: authMock },
         { provide: Contexts, useValue: contextsMock },
+        { provide: UserService, useValue: userServiceMock },
         { provide: ProviderService, useValue: providersMock }]
     });
 
@@ -91,16 +98,19 @@ describe('Connected Accounts Component', () => {
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
     let providersMock: any = jasmine.createSpy('ProviderService');
+    let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
       authMock.gitHubToken = Observable.of('gh-test-user');
       authMock.openShiftToken = Observable.of('oso-token');
       contextsMock.current = Observable.of(ctx);
+      userServiceMock.loggedInUser = Observable.empty();
     });
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
       providers: [ { provide: AuthenticationService, useValue: authMock },
         { provide: Contexts, useValue: contextsMock },
+        { provide: UserService, useValue: userServiceMock },
         { provide: ProviderService, useValue: providersMock }]
     });
 
