@@ -62,7 +62,7 @@ export class InputActionDialog {
       } else if (!jenkinsNamespace) {
         console.log("Warning no jenkinsNamespace on the Build!")
       } else {
-        url = pathJoin(forgeUrl, "/services/jenkins/", jenkinsNamespace, url);
+        url = pathJoin(forgeUrl, "/api/openshift/services/jenkins/", jenkinsNamespace, url);
         let token = this.onLogin.token;
         console.log("about to invoke " + url);
         let options = new RequestOptions();
