@@ -34,8 +34,8 @@
                   </div>
                   <div class="list-view-pf-additional-info">
                     <div class="list-view-pf-additional-info-item">
-                      <span *ngIf="gitHubLinked">Connected</span>
-                      <span *ngIf="!gitHubLinked" class="account-disconnected">Disconnected</span>
+                      <span *ngIf="gitHubLinked">{{gitHubUserName}}</span>
+                      <span *ngIf="!gitHubLinked" class="account-disconnected">{{gitHubError}}</span>
                       <button class="btn btn-link" type="button" (click)="refreshGitHub()">
                         <span class="fa fa-refresh"></span>
                       </button>

@@ -30,7 +30,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
-    let providersMock: any = jasmine.createSpy('ProviderService');
+    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus']);
     let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
@@ -38,6 +38,7 @@ describe('Connected Accounts Component', () => {
       authMock.openShiftToken = Observable.empty();
       contextsMock.current = Observable.empty();
       userServiceMock.loggedInUser = Observable.empty();
+      providersMock.getGitHubStatus.and.returnValue(Observable.of({'username': 'username'}));
     });
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
@@ -49,7 +50,7 @@ describe('Connected Accounts Component', () => {
 
     it('should have GitHub connection indicated', function (this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('GitHub Connected');
+      expect(actualText).toContain('username');
 
     });
 
@@ -64,7 +65,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
-    let providersMock: any = jasmine.createSpy('ProviderService');
+    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus']);
     let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
@@ -72,6 +73,7 @@ describe('Connected Accounts Component', () => {
       authMock.openShiftToken = Observable.of('oso-token');
       contextsMock.current = Observable.of(ctx);
       userServiceMock.loggedInUser = Observable.empty();
+      providersMock.getGitHubStatus.and.returnValue(Observable.throw('failure'));
     });
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
@@ -97,7 +99,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpy('AuthenticationService');
-    let providersMock: any = jasmine.createSpy('ProviderService');
+    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus']);
     let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
@@ -105,6 +107,7 @@ describe('Connected Accounts Component', () => {
       authMock.openShiftToken = Observable.of('oso-token');
       contextsMock.current = Observable.of(ctx);
       userServiceMock.loggedInUser = Observable.empty();
+      providersMock.getGitHubStatus.and.returnValue(Observable.of({'username': 'username'}));
     });
 
     initContext(ConnectedAccountsComponent, SampleTestComponent,  {
@@ -116,7 +119,7 @@ describe('Connected Accounts Component', () => {
 
     it('should have GitHub connection indicated', function (this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('GitHub Connected');
+      expect(actualText).toContain('username');
     });
 
     it('should have OpenShift connection indicated', function (this: Context) {

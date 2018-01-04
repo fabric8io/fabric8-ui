@@ -70,6 +70,14 @@ export class ProviderService {
 
   }
 
+  getGitHubStatus(): Observable<any> {
+    let tokenUrl = this.apiUrl + 'token?force_pull=true&for=https://github.com';
+    return this.http.get(tokenUrl)
+      .map((response) => {
+        return response.json();
+      });
+  }
+
   disconnectOpenShift(cluster: string): Observable<any> {
     let tokenUrl = this.apiUrl + 'token?for=' + cluster;
     return this.http
