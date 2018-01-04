@@ -10,9 +10,11 @@ import {
   Input
 } from '@angular/core';
 
+import { initContext, TestContext } from '../../../../../testing/test-context';
+
 import { Subject, Observable } from 'rxjs';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { CpuStat } from '../models/cpu-stat';
 
@@ -21,29 +23,27 @@ const ICON_WARN = 'pficon-warning-triangle-o';
 const ICON_ERR = 'pficon-error-circle-o';
 const MSG_OK = 'Everything is ok.';
 
+@Component({
+  template: '<deployment-status-icon></deployment-status-icon>'
+})
+class HostComponent { }
+
 describe('DeploymentStatusIconComponent', () => {
+  type Context = TestContext<DeploymentStatusIconComponent, HostComponent>;
 
   let component: DeploymentStatusIconComponent;
   let fixture: ComponentFixture<DeploymentStatusIconComponent>;
   let stat: CpuStat;
   let mockCpuData: Subject<CpuStat> = new BehaviorSubject({ used: 1, quota: 5 } as CpuStat);
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        DeploymentStatusIconComponent
-      ]
-    });
+  initContext(DeploymentStatusIconComponent, HostComponent,
+    { declarations: [DeploymentStatusIconComponent] },
+    (component) => {component.cpuDataStream = mockCpuData;}
+  );
 
-    fixture = TestBed.createComponent(DeploymentStatusIconComponent);
-    component = fixture.componentInstance;
-    component.cpuDataStream = mockCpuData;
-    fixture.detectChanges()
-  });
-
-  it('should set the button\'s initial value to ok', () => {
-    expect(component.icon).toBe('pficon-ok');
-    expect(component.toolTip).toBe('Everything is ok.');
+  it('should set the button\'s initial value to ok', function (this: Context) {
+    expect(this.testedDirective.iconClass).toBe('pficon-ok');
+    expect(this.testedDirective.toolTip).toBe('Everything is ok.');
   });
 
   it('should change the button\'s value to warning if capacity changes', function (this: Context) {

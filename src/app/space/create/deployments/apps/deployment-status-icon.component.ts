@@ -25,12 +25,12 @@ const STAT_THRESHOLD = .6;
 export class DeploymentStatusIconComponent implements OnDestroy, OnInit {
   @Input() cpuDataStream: Observable<CpuStat>;
 
-  icon: String;
+  iconClass: String;
   toolTip: String;
   subscriptions: Array<Subscription> = [];
 
   constructor() {
-    this.icon = ICON_OK;
+    this.iconClass = ICON_OK;
     this.toolTip = MSG_OK;
   }
 
@@ -45,7 +45,7 @@ export class DeploymentStatusIconComponent implements OnDestroy, OnInit {
   }
 
   changeStatus(stat: CpuStat) {
-    this.icon = ICON_OK;
+    this.iconClass = ICON_OK;
     this.toolTip = MSG_OK;
     if (stat.used / stat.quota > STAT_THRESHOLD) {
       this.iconClass = ICON_WARN;
