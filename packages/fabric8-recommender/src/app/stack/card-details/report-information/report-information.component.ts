@@ -37,16 +37,35 @@ export class ReportInformationComponent implements OnInit, OnChanges {
         }
     }
 
-    public handleAccordion(componentDetail: MComponentDetails): void {
-        this.closeAllButThis(componentDetail);
-        if (componentDetail.componentInformation) {
-            componentDetail.componentInformation.isOpen = !componentDetail.componentInformation.isOpen;
-        }
-        if (componentDetail.recommendationInformation) {
-            if (componentDetail.recommendationInformation.componentInformation) {
-                componentDetail.recommendationInformation.componentInformation.isOpen = !componentDetail.recommendationInformation.componentInformation.isOpen;
+    public handleAccordion(event: MouseEvent, componentDetail: MComponentDetails): void {
+        let elem: HTMLElement = (<HTMLElement>event.target);
+        if (this.checkIfClickable(elem)) {
+            this.closeAllButThis(componentDetail);
+            if (
+                (componentDetail.componentInformation && !componentDetail.componentInformation.needsExpansion) ||
+                (componentDetail.recommendationInformation && componentDetail.recommendationInformation.componentInformation &&
+                !componentDetail.recommendationInformation.componentInformation.needsExpansion)
+            ) {
+                return;
+            }
+
+            if (componentDetail.componentInformation) {
+                componentDetail.componentInformation.isOpen = !componentDetail.componentInformation.isOpen;
+            }
+            if (componentDetail.recommendationInformation) {
+                if (componentDetail.recommendationInformation.componentInformation) {
+                    componentDetail.recommendationInformation.componentInformation.isOpen = !componentDetail.recommendationInformation.componentInformation.isOpen;
+                }
             }
         }
+    }
+
+    private checkIfClickable(elem: HTMLElement): boolean {
+        if (elem && elem.classList && elem.classList.contains('toggler')) {
+            return true;
+        }
+        elem = <HTMLElement>elem.parentNode;
+        return (elem && elem.classList && elem.classList.contains('toggler'));
     }
 
     private paint(): void {

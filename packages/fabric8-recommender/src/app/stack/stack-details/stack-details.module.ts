@@ -13,6 +13,7 @@ import { StackDetailsComponent } from './stack-details.component';
 // import {StackLevelModule} from '../stack-level/stack-level.module';
 // import {ComponentLevelModule} from '../component-level/component-level.module';
 import { FeedbackModule } from '../feedback/feedback.module';
+import {PipelineInsightsModule} from '../pipeline-insights/pipeline-insights.module';
 /** New UX */
 
 
@@ -34,6 +35,7 @@ const revampImports = [
     ModalModule,
     // StackLevelModule,
     // ComponentLevelModule,
+    PipelineInsightsModule,
     AccordionModule.forRoot(),
     TabsModule.forRoot(),
     ...revampImports

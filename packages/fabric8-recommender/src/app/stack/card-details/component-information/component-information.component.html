@@ -13,7 +13,7 @@
                         <div *ngSwitchCase="'component'">
                             <!-- Component Names -->
                             <span [innerText]="comp?.name"></span>
-                            <p [tooltip]="component?.reason" *ngIf="component?.reason && type === 'recommendation' && comp?.name">Why this component?</p>
+                            <span class="recommendation-reason" [tooltip]="component?.reason" *ngIf="component?.reason && type === 'recommendation' && comp?.name">Why this component?</span>
                             <!--
                                 <reco-name [name]="comp?.name" [reason]="comp?.recommendation?.reason" *ngIf="comp?.recommendation && (comp?.recommendation?.type === 'companion')"></reco-name>
                             -->
@@ -48,7 +48,7 @@
                         <div *ngSwitchCase="'alternate'">
                             <!-- alternate -->
                             <span [innerText]="comp?.recommendation?.componentInformation?.name || '------'"></span>
-                            <p [tooltip]="comp?.recommendation?.reason" *ngIf="comp?.recommendation?.reason && comp?.recommendation?.componentInformation?.name">Why this component?</p>
+                            <span class="recommendation-reason" [tooltip]="comp?.recommendation?.reason" *ngIf="comp?.recommendation?.reason && comp?.recommendation?.componentInformation?.name">Why this component?</span>
                         </div>
                         <div *ngSwitchCase="'feedback'">
                             <!-- feedback -->

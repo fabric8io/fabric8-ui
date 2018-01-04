@@ -180,7 +180,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                         progress,
                         new MComponentInformation(
                             companion.name,
-                            companion.version,
+                            '-----',
                             companion.latest_version,
                             security,
                             security !== null,
@@ -267,55 +267,62 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                     ));
                 }
             });
-
-            let genericReport: MReportInformation = new MReportInformation(
-                null,
-                'component',
-                this.fillColumnHeaders(cardType, 1),
-                componentDetails
-            );
-
-            switch (cardType) {
-                case 'security':
-                    genericReport.name = 'securityTab';
-                    reportInformations.push(genericReport);
-                    break;
-                case 'insights':
-                    genericReport.name = 'Usage Outlier Details';
-                    reportInformations.push(genericReport);
-                    reportInformations.push(new MReportInformation(
-                        'Companion Component Details',
-                        'recommendation',
-                        this.fillColumnHeaders(cardType, 2),
-                        this.getCompanionComponentDetails()
-                    ));
-                    break;
-                case 'licenses':
-                    genericReport.name = 'Conflicting License(s) details';
-                    reportInformations.push(genericReport);
-                    reportInformations.push(new MReportInformation(
-                        'Unknown license(s) details',
-                        'component',
-                        this.fillColumnHeaders(cardType, 2),
-                        this.getUnknownLicenseComponentDetails()
-                    ));
-                    break;
-                case 'compDetails':
-                    genericReport.name = 'Analyzed component Details';
-                    reportInformations.push(genericReport);
-                    reportInformations.push(new MReportInformation(
-                        'Unknown Component details',
-                        'component',
-                        this.fillColumnHeaders(cardType, 2),
-                        this.getUnknownComponentDetails(cardType)
-                    ));
-                    break;
-                default:
-                    break;
-            }
-            return reportInformations;
         }
-        return null;
+
+        let genericReport: MReportInformation = new MReportInformation(
+            null,
+            null,
+            'component',
+            this.fillColumnHeaders(cardType, 1),
+            componentDetails
+        );
+
+        switch (cardType) {
+            case 'security':
+                genericReport.identifier = 'security';
+                genericReport.name = 'securityTab';
+                reportInformations.push(genericReport);
+                break;
+            case 'insights':
+                genericReport.identifier = 'ins-usage';
+                genericReport.name = 'Usage Outlier Details';
+                reportInformations.push(genericReport);
+                reportInformations.push(new MReportInformation(
+                    'ins-companion',
+                    'Companion Component Details',
+                    'recommendation',
+                    this.fillColumnHeaders(cardType, 2),
+                    this.getCompanionComponentDetails()
+                ));
+                break;
+            case 'licenses':
+                genericReport.identifier = 'lic-conflicts';
+                genericReport.name = 'Conflicting License(s) details';
+                reportInformations.push(genericReport);
+                reportInformations.push(new MReportInformation(
+                    'lic-unknown',
+                    'Unknown license(s) details',
+                    'component',
+                    this.fillColumnHeaders(cardType, 2),
+                    this.getUnknownLicenseComponentDetails()
+                ));
+                break;
+            case 'compDetails':
+                genericReport.identifier = 'comp-analyzed';
+                genericReport.name = 'Analyzed component Details';
+                reportInformations.push(genericReport);
+                reportInformations.push(new MReportInformation(
+                    'comp-unknown',
+                    'Unknown Component details',
+                    'component',
+                    this.fillColumnHeaders(cardType, 2),
+                    this.getUnknownComponentDetails(cardType)
+                ));
+                break;
+            default:
+                break;
+        }
+        return reportInformations;
     }
 
     private hasUnknownLicense(component: ComponentInformationModel): boolean {
@@ -363,9 +370,31 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     private getUnknownComponentDetails(cardType: string): Array<MComponentDetails> {
         let unknowns: Array<MComponentDetails> = [];
         let unknownComponents = (this.report && this.report.user_stack_info && this.report.user_stack_info.unknown_dependencies) || [];
-        // TODO: finish logic for unknown components
         unknownComponents.forEach((unknown) => {
-            
+            unknowns.push(new MComponentDetails(
+                new MComponentInformation(
+                    unknown.name,
+                    unknown.version,
+                    '',
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    false,
+                    null,
+                    false,
+                    null,
+                    null,
+                    null,
+                    null
+                ),
+                null
+            ));
         });
         return unknowns;
     }
@@ -636,7 +665,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 securityDetails.progressReport = new MProgressMeter(
                     Number(maxIssue.CVSS) + '/10',
                     Number(maxIssue.CVSS),
-                    Number(maxIssue.CVSS) >= 7 ? '#ff6162' : 'ORANGE',
+                    Number(maxIssue.CVSS) >= 7 ? '#d1011c' : 'ORANGE',
                     '',
                     Number(maxIssue.CVSS) * 10
                 );
@@ -779,11 +808,12 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                         'float-left small'
                     ));
                 } else if (tabNo === 2) {
-                    headers.push(new MComponentHeaderColumn(
-                        'helpUsKnownMore',
-                        'Help us Know more about this component',
-                        'float-left large'
-                    ));
+                    // headers.push(new MComponentHeaderColumn(
+                    //     'helpUsKnownMore',
+                    //     'Help us Know more about this component',
+                    //     'float-left large'
+                    // ));
+                    // Ignored for now
                 }
                 break;
             default:
@@ -811,14 +841,16 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             this.details.isMultiple = true;
             this.details.title = title;
             this.details.titleDescription = description;
-            reports.forEach((report: MReportInformation) => {
-                this.tabs.push(new MTab(
-                    report.name,
-                    report
-                ));
-            });
-            if (this.tabs[0]) {
-                this.tabs[0].active = true;
+            if (reports && reports.length > 0) {
+                reports.forEach((report: MReportInformation) => {
+                    this.tabs.push(new MTab(
+                        report.name,
+                        report
+                    ));
+                });
+                if (this.tabs[0]) {
+                    this.tabs[0].active = true;
+                }
             }
         }
     }

@@ -1,10 +1,24 @@
+.flexMixin() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
 .analytics-summary-report {
     background: #eff2f5;
     padding: 20px 10px 0;
+    .flexMixin();
+    align-items: stretch;
     &:after {
         content: '';
         display: block;
         float: none;
         clear: both;
+    }
+    analytics-summary-card {
+        .flexMixin();
+        align-items: stretch;
     }
 }

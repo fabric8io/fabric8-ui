@@ -22,6 +22,7 @@ import { ComponentFeedbackService } from './component-feedback.service';
 })
 export class ComponentFeedbackComponent implements OnChanges {
     @Input() feedback: MComponentFeedback;
+    feedbackMessages: Array<any> = [];
 
     constructor(private feedbackService: ComponentFeedbackService) {}
 
@@ -32,7 +33,10 @@ export class ComponentFeedbackComponent implements OnChanges {
             let subscription = this.feedbackService.postFeedback(this.feedback);
             if (subscription) {
                 subscription.subscribe((result) => {
-                    console.log(result);
+                    this.feedbackMessages.push({
+                        text: 'Feedback successfully submitted',
+                        iconClass: 'pficon-ok'
+                    });
                 });
             }
         }

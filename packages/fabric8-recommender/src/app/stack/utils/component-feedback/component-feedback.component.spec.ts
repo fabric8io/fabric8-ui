@@ -5,6 +5,7 @@ import { AuthenticationService, AUTH_API_URL, SSO_API_URL } from 'ngx-login-clie
 import { MockAuthenticationService } from '../../../shared/mock-auth.service';
 
 import { ComponentFeedbackComponent } from './component-feedback.component';
+import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
 
 describe ('ComponentFeedbackComponent', () => {
     let component: ComponentFeedbackComponent;
@@ -12,6 +13,9 @@ describe ('ComponentFeedbackComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [
+                ToastNotificationModule
+            ],
             declarations: [
                 ComponentFeedbackComponent
             ],

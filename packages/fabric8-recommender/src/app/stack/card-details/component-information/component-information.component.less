@@ -1,5 +1,16 @@
 @steelBlue: #2a9fd8;
 .analytics-component-information {
+    .recommendation-reason {
+        &:before {
+            content: '';
+            clear: both;
+            display: block;
+            float: none;
+        }
+        font-size: 10px;
+        color: #999;
+        cursor: pointer;
+    }
     .active-card {
         border: 1px solid @steelBlue;
     }
@@ -12,8 +23,9 @@
         padding: 2px 5px;
         font-size: 20px;
         text-align: center;
-        border: 1px solid #ededed;
+        border: 1px solid #ccc;
         border-radius: 50%;
+        line-height: 20px;
     }
     .float-left {
         float: left;

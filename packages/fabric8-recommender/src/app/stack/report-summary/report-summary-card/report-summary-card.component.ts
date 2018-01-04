@@ -4,7 +4,8 @@ import {
     Input,
     OnChanges,
     OnInit,
-    SimpleChanges
+    SimpleChanges,
+    AfterContentInit
 } from '@angular/core';
 /** Vendor imports Go HERE */
 
@@ -14,13 +15,14 @@ import {
     MReportSummaryInfoEntry,
     MReportSummaryTitle
 } from '../../models/ui.model';
+import { SaveState } from '../../utils/SaveState';
 
 @Component({
     selector: 'analytics-summary-card',
     styleUrls: ['./report-summary-card.component.less'],
     templateUrl: './report-summary-card.component.html'
 })
-export class ReportSummaryCardComponent {
+export class ReportSummaryCardComponent implements AfterContentInit {
 
     @Input() card: MReportSummaryCard;
 
@@ -38,6 +40,10 @@ export class ReportSummaryCardComponent {
             this.card = <MReportSummaryCard> summary.currentValue;
             this.repaintView();
         }
+    }
+
+    ngAfterContentInit() {
+        SaveState.ELEMENTS[0].click();
     }
 
     private updateCard(): void {

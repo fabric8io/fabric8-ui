@@ -11,23 +11,26 @@ import { ComponentInformationComponent } from '../component-information/componen
 import { ComponentDetailsComponent } from '../component-details/component-details.component';
 
 import { ReportInformationComponent } from './report-information.component';
-import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
 import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
 
+import { NoDataComponent } from './no-data/no-data.component';
+
 import { ReportInformationModule } from './report-information.module';
+import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
 
 const components = [
     ComponentSnippetComponent,
     ComponentInformationComponent,
     ComponentDetailsComponent,
     ReportInformationComponent,
-    ToastNotificationComponent
+    NoDataComponent
 ];
 
 const imports = [
     TooltipModule.forRoot(),
     ProgressMeterModule,
-    ComponentFeedbackModule
+    ComponentFeedbackModule,
+    ToastNotificationModule
 ];
 
 describe ('ReportInformationComponent', () => {

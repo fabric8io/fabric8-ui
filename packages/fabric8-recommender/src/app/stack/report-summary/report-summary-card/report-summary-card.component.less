@@ -1,5 +1,15 @@
+.flexMixin() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
 .analytics-summary-card {
     cursor: pointer;
+    .flexMixin();
+    align-items: stretch;
     .card-pf {
         min-height: 350px;
         padding: 10px 20px;

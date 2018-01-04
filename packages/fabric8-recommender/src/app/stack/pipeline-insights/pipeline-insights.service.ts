@@ -5,13 +5,15 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/operators/map';
 
-import { MComponentFeedback } from '../../models/ui.model';
+import { WIT_API_URL } from 'ngx-fabric8-wit';
+
+import { StackReportModel } from '../models/stack-report.model';
 
 @Injectable()
-export class ComponentFeedbackService {
+export class PipelineInsightsService {
 
   private headers: Headers = new Headers({'Content-Type': 'application/json'});
-  private FEEDBACK_URL: string = '';
+  private stackAnalysesUrl: string = '';
 
   constructor(
     private http: Http,
@@ -22,13 +24,20 @@ export class ComponentFeedbackService {
       }
   }
 
-  postFeedback(feedback: MComponentFeedback): Observable<any> {
+  getStackAnalyses(url: string, params?: any): Observable<any> {
+    console.log('stack service', params);
     let options = new RequestOptions({ headers: this.headers });
-    let body = JSON.stringify(feedback.feedbackTemplate);
-    this.FEEDBACK_URL = feedback.baseUrl + 'api/v1/submit-feedback';
-    console.log('Feedback Request: ', body);
-    return this.http.post(this.FEEDBACK_URL, body, options)
+    let stackReport: StackReportModel = null;
+    if (params && params['access_token']) {
+      this.headers.set('Authorization', 'Bearer ' + params['access_token']);
+      options = new RequestOptions({ headers: this.headers });
+    }
+    return this.http.get(url, options)
       .map(this.extractData)
+      .map((data) => {
+        stackReport = data;
+        return stackReport;
+      })
       .catch(this.handleError);
   }
 
@@ -36,7 +45,7 @@ export class ComponentFeedbackService {
     let body = res.json() || {};
     body['statusCode'] = res.status;
     body['statusText'] = res.statusText;
-    return body;
+    return body as StackReportModel;
   }
 
   private handleError(error: Response | any) {

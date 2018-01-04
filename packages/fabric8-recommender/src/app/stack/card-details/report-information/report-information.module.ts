@@ -12,21 +12,24 @@ import { ComponentInformationComponent } from '../component-information/componen
 import { ComponentDetailsComponent } from '../component-details/component-details.component';
 
 import { ReportInformationComponent } from './report-information.component';
-import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
+import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
 import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
+
+import { NoDataComponent } from './no-data/no-data.component';
 
 const components = [
     ComponentSnippetComponent,
     ComponentInformationComponent,
     ComponentDetailsComponent,
     ReportInformationComponent,
-    ToastNotificationComponent
+    NoDataComponent
 ];
 
 const imports = [
     TooltipModule.forRoot(),
     ProgressMeterModule,
-    ComponentFeedbackModule
+    ComponentFeedbackModule,
+    ToastNotificationModule
 ];
 
 @NgModule({

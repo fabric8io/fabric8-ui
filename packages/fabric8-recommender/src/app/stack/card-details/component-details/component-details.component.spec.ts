@@ -8,14 +8,15 @@ import { ComponentFeedbackModule } from '../../utils/component-feedback/componen
 
 import { ComponentSnippetComponent } from '../component-information/component-snippet/component-snippet.component';
 
-import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
+import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
 import { ComponentInformationComponent } from '../component-information/component-information.component';
 import { ComponentDetailsComponent } from './component-details.component';
 
 const imports = [
     TooltipModule,
     ProgressMeterModule,
-    ComponentFeedbackModule
+    ComponentFeedbackModule,
+    ToastNotificationModule
 ];
 
 describe ('ComponentDetailsComponent', () => {
@@ -29,7 +30,6 @@ describe ('ComponentDetailsComponent', () => {
             ],
             declarations: [
                 ComponentSnippetComponent,
-                ToastNotificationComponent,
                 ComponentInformationComponent,
                 ComponentDetailsComponent
             ],

@@ -20,14 +20,14 @@ export class MTab {
 }
 
 export class MReportSummaryInfoEntry {
-    infoText: string;
-    infoValue: any;
-    infoType: string = 'text'; // Defaults to text, can also have chart
-    config?: any; // Can be made as a class later. It can have chart type, values and other related configurations
+    public infoText: string;
+    public infoValue: any;
+    public infoType: string = 'text'; // Defaults to text, can also have chart
+    public config?: any; // Can be made as a class later. It can have chart type, values and other related configurations
 }
 
 export class MReportSummaryContent {
-    infoEntries: Array<MReportSummaryInfoEntry>;
+    public infoEntries: Array<MReportSummaryInfoEntry>;
 }
 
 export class MReportSummaryCard {
@@ -180,6 +180,7 @@ export class MComponentHeaderColumn {
 
 export class MReportInformation {
     constructor(
+        public identifier: string,
         public name: string,
         public type: string,
         public headers: Array<MComponentHeaderColumn>,

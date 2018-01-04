@@ -127,7 +127,8 @@ export class ReportSummaryUtils {
                     headerText: maxIssue.CVSS + ' / ' + 10,
                     value: Number(maxIssue.CVSS),
                     bgColor: Number(maxIssue.CVSS) >= 7 ? this.colors.security.warning : this.colors.security.moderate,
-                    footerText: 'No. of components with this CVSS Score: ' + totalComponentsWithMaxScore
+                    footerText: 'No. of components with this CVSS Score: ' + totalComponentsWithMaxScore,
+                    width: Number(maxIssue.CVSS) * 10
                 };
                 securityCard.reportSummaryContent.infoEntries.push(maxIssueEntry);
                 securityCard.reportSummaryTitle.notificationIcon = this.notification.warning.icon;
@@ -204,7 +205,7 @@ export class ReportSummaryUtils {
             licenseAnalysis = userStackInfo.license_analysis;
 
             let stackLicense: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
-            stackLicense.infoText = 'Stack Level License';
+            stackLicense.infoText = 'Stack License';
             let stackLicenses = licenseAnalysis.f8a_stack_licenses;
             if (stackLicenses) {
                 if (stackLicenses.length > 0) {
@@ -212,7 +213,7 @@ export class ReportSummaryUtils {
                 } else {
                     stackLicense.infoValue = 'None';
                     if (licenseAnalysis.status && licenseAnalysis.status.toLowerCase() === 'failure') {
-                        stackLicense.infoValue = 'Failure';
+                        stackLicense.infoValue = 'Unknown';
                     }
                 }
             } else {
