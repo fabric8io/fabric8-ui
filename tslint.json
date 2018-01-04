@@ -2,6 +2,12 @@
   "rulesDirectory": [
     "node_modules/codelyzer"
   ],
+  "linterOptions": {
+    "exclude": [
+      "src/a-runtime-console/*",
+      "node_modules/*"
+    ]
+  },
   "rules": {
     "adjacent-overload-signatures": true,
     "ban-types": [
