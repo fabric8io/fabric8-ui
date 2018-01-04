@@ -4,14 +4,31 @@ import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@an
 
 import { ReportSummaryCardComponent } from './report-summary-card.component';
 
+import { ReportSummaryTitleComponent } from './report-summary-title/report-summary-title.component';
+import { ReportSummaryDescriptionComponent } from './report-summary-description/report-summary-description.component';
+import { ReportSummaryContentModule } from './report-summary-content/report-summary-content.module';
+
+const dependencies = [
+    ReportSummaryTitleComponent,
+    ReportSummaryDescriptionComponent
+];
+
+const imports = [
+    ReportSummaryContentModule
+];
+
 describe ('ReportSummaryCardComponent', () => {
     let component: ReportSummaryCardComponent;
     let fixture: ComponentFixture<ReportSummaryCardComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
+            imports: [
+                ...imports
+            ],
             declarations: [
-                ReportSummaryCardComponent
+                ReportSummaryCardComponent,
+                ...dependencies
             ],
             providers: [
                 Http,

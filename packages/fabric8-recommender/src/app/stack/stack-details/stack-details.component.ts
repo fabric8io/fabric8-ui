@@ -207,14 +207,13 @@ export class StackDetailsComponent implements OnChanges {
                     this.tabSelection(this.tabs[0]);
                 }
             });
-        } else if(data && data.hasOwnProperty('error')){
+        } else if (data && data.hasOwnProperty('error')) {
             this.handleError({
-                message: "Analysis for your stack is in progress...",
+                message: 'Analysis for your stack is in progress ...',
                 code: data.statusCode,
                 title: 'Updating ...'
             });
-        }
-        else {
+        } else {
             this.handleError({
                 message: data.error,
                 code: data.statusCode,

@@ -1,0 +1,15 @@
+<div class="ana-summary-info">
+    <div *ngIf="entry?.infoType === 'text'" class="ana-normal">
+        <span class="info-key" [innerText]="entry?.infoText"></span>
+        <span class="info-value" [innerText]="entry?.infoValue"></span>
+    </div>
+    <div class="ana-custom" [ngSwitch]="entry?.infoType">
+        <!-- should handle for various infoTypes -->
+        <div *ngSwitchCase="'progress'">
+            <span class="info-key" [innerText]="entry?.infoText"></span>
+            <span class="info-value">
+                <ana-progress-meter [config]="entry?.config"></ana-progress-meter>
+            </span>
+        </div>
+    </div>
+</div>

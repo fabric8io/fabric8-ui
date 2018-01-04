@@ -1,0 +1,5 @@
+<div class="analytics-summary-content">
+    <div *ngIf="content?.infoEntries" class="ana-summary-metric">
+        <ana-summary-info *ngFor="let entry of content?.infoEntries" [entry]="entry" ></ana-summary-info>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="ana-progress-meter">
+    <span class="content-desc" [innerText]="config?.headerText && config?.headerText"></span>
+    <div class="ana-progress-bar" *ngIf="config?.value">
+        <div class="progress-meter" [ngStyle]="{'background-color': config?.bgColor, 'width': config?.value * 10 + '%'}"></div>
+    </div>
+    <span class="footer-desc" [innerText]="config?.footerText"></span>
+</div>

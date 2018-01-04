@@ -1,0 +1,9 @@
+<div class="analytics-summary-title">
+    <div class="card-pf-title">
+        <span [class]="title?.titleIcon" aria-hidden="true"></span>
+        {{title?.titleText}}
+    </div>
+    <span [ngStyle]="{'background-color': title?.notificationIconBgColor}" class="ana-notification-icon pull-right" *ngIf="title?.notificationIcon">
+        <i [class]="title?.notificationIcon" aria-hidden="true"></i>
+    </span>
+</div>

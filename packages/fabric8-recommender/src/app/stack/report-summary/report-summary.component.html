@@ -1,4 +1,3 @@
-<analytics-summary-card></analytics-summary-card>
-<analytics-summary-card></analytics-summary-card>
-<analytics-summary-card></analytics-summary-card>
-<analytics-summary-card></analytics-summary-card>
+<div class="analytics-summary-report">
+    <analytics-summary-card class="col-md-3" *ngFor="let card of reportSummaryCards" [card]="card"></analytics-summary-card>
+</div>
