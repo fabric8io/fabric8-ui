@@ -6,7 +6,7 @@
     </modal-header>
     <modal-content>
       <div *ngIf="!error">
-        <tabset *ngIf="dataLoaded">
+        <!--<tabset *ngIf="dataLoaded">
             <tab *ngFor="let tabz of tabs"
                 [heading]="tabz.title"
                 (select)="tabSelection(tabz)"
@@ -55,7 +55,21 @@
                   </accordion-group>
                 </accordion>
             </tab>
-        </tabset>
+        </tabset>-->
+
+
+
+
+
+
+
+
+        <!-- Stack Report Design Revamp - BEGIN -->
+        <analytics-report-summary></analytics-report-summary>
+        <!-- Stack Report Design Revamp - END -->
+
+
+
       </div>
       <div *ngIf="!dataLoaded" class="pre-loader">
         <div class="pre-loader-spinner spinner spinner-lg"></div>

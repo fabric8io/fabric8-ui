@@ -10,10 +10,19 @@ import { GlobalConstants } from '../constants/constants.service';
 import { StackDetailsComponent } from './stack-details.component';
 
 /** New UX */
-import {StackLevelModule} from '../stack-level/stack-level.module';
-import {ComponentLevelModule} from '../component-level/component-level.module';
+// import {StackLevelModule} from '../stack-level/stack-level.module';
+// import {ComponentLevelModule} from '../component-level/component-level.module';
 import {FeedbackModule} from '../feedback/feedback.module';
 /** New UX */
+
+
+/** Stack Report Revamp - Latest */
+import { ReportSummaryModule } from '../report-summary/report-summary.module';
+/** Stack Report Revamp - Latest */
+
+const revampImports = [
+  ReportSummaryModule
+];
 
 @NgModule({
   imports: [
@@ -21,10 +30,11 @@ import {FeedbackModule} from '../feedback/feedback.module';
     HttpModule,
     FormsModule,
     ModalModule,
-    StackLevelModule,
-    ComponentLevelModule,
+    // StackLevelModule,
+    // ComponentLevelModule,
     AccordionModule.forRoot(),
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+    ...revampImports
   ],
   declarations: [
     StackDetailsComponent

@@ -26,6 +26,15 @@ import { ssoApiUrlProvider } from '../../shared/sso-api.provider';
 import { realmProvider } from '../../shared/realm-token.provider';
 import { MockAuthenticationService } from '../../shared/mock-auth.service';
 
+
+/** Stack Report Revamp - Latest */
+import { ReportSummaryModule } from '../report-summary/report-summary.module';
+/** Stack Report Revamp - Latest */
+
+const revampImports = [
+  ReportSummaryModule
+];
+
 describe ('StackDetailsComponent', () => {
     let component: StackDetailsComponent;
     let fixture: ComponentFixture<StackDetailsComponent>;
@@ -41,7 +50,8 @@ describe ('StackDetailsComponent', () => {
                 ComponentLevelModule,
                 FeedbackModule,
                 AccordionModule.forRoot(),
-                TabsModule.forRoot()
+                TabsModule.forRoot(),
+                ...revampImports
             ],
             declarations: [
                 StackDetailsComponent
