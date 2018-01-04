@@ -2,8 +2,10 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewEncapsulation
@@ -24,7 +26,7 @@ import {
   templateUrl: './codebases-toolbar.component.html',
   styleUrls: ['./codebases-toolbar.component.less']
 })
-export class CodebasesToolbarComponent implements OnInit {
+export class CodebasesToolbarComponent implements OnChanges, OnInit {
   @Input() resultsCount: number = 0;
 
   @Output('onFilterChange') onFilterChange = new EventEmitter();
@@ -38,6 +40,12 @@ export class CodebasesToolbarComponent implements OnInit {
   toolbarConfig: ToolbarConfig;
 
   constructor() {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.resultsCount && this.filterConfig) {
+      this.filterConfig.resultsCount = changes.resultsCount.currentValue;
+    }
   }
 
   // Initialization
@@ -61,7 +69,7 @@ export class CodebasesToolbarComponent implements OnInit {
         type: 'text'
       }] as FilterField[],
       appliedFilters: [],
-      resultsCount: this.resultsCount,
+      resultsCount: 0,
       selectedCount: 0,
       totalCount: 0
     } as FilterConfig;
