@@ -10,7 +10,7 @@ export class WatcherFactory {
 
   constructor(
     private onLogin: OnLogin,
-    private pollerFactory: PollerFactory,
+    private pollerFactory: PollerFactory
   ) {}
 
   newInstance<L>(pathFn: () => String, queryParams: any, listFactory: () => Observable<L>) {

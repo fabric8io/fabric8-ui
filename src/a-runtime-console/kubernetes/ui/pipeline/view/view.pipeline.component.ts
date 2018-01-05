@@ -3,7 +3,7 @@ import { BuildConfig } from "../../../model/buildconfig.model";
 
 @Component({
   selector: 'fabric8-pipeline-view',
-  templateUrl: './view.pipeline.component.html',
+  templateUrl: './view.pipeline.component.html'
 })
 export class PipelineViewComponent {
 

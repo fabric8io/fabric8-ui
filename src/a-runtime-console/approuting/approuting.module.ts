@@ -10,15 +10,15 @@ const routes: Routes = [
   { path: 'run/space/:space/app/:app', resolve: { token: TokenResolver }, loadChildren: '../kubernetes/ui/ui.module#KubernetesUIModule' },
   { path: 'run/space/:space/label/:label/app/:app', resolve: { token: TokenResolver }, loadChildren: '../kubernetes/ui/ui.module#KubernetesUIModule' },
   { path: 'run/space/:space/label/:label', resolve: { token: TokenResolver }, loadChildren: '../kubernetes/ui/ui.module#KubernetesUIModule' },
-  { path: 'run/app/:app/space/:space', resolve: { token: TokenResolver }, loadChildren: '../kubernetes/ui/ui.module#KubernetesUIModule' },
+  { path: 'run/app/:app/space/:space', resolve: { token: TokenResolver }, loadChildren: '../kubernetes/ui/ui.module#KubernetesUIModule' }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [
-    RouterModule,
-  ],
+    RouterModule
+  ]
 })
 export class AppRoutingModule { }

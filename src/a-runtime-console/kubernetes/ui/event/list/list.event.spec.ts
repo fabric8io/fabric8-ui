@@ -31,7 +31,7 @@ describe('EventsListComponent', () => {
         TestAppModule
       ],
       declarations: [
-        EventsListComponent,
+        EventsListComponent
       ],
       providers: [
         MockBackend,
@@ -39,9 +39,9 @@ describe('EventsListComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

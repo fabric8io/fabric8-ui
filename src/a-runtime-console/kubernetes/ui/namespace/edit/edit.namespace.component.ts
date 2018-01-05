@@ -4,7 +4,7 @@ import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-namespace-edit',
-  templateUrl: './edit.namespace.component.html',
+  templateUrl: './edit.namespace.component.html'
 })
 export class NamespaceEditComponent {
 

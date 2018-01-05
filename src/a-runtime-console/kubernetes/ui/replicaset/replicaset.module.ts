@@ -24,7 +24,7 @@ import { KubernetesComponentsModule } from "../../components/components.module";
 export const replicaSetRoutes: Routes = [
   { path: '', component: ReplicaSetsListPage },
   { path: ':id', component: ReplicaSetViewPage },
-  { path: ':id/edit', component: ReplicaSetEditPage },
+  { path: ':id/edit', component: ReplicaSetEditPage }
 ];
 
 @NgModule({
@@ -36,7 +36,7 @@ export const replicaSetRoutes: Routes = [
     MomentModule,
     RouterModule.forChild(replicaSetRoutes),
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     ReplicaSetsListPage,
@@ -51,15 +51,15 @@ export const replicaSetRoutes: Routes = [
     ReplicaSetEditToolbarComponent,
     ReplicaSetEditComponent,
     ReplicaSetDeleteDialog,
-    ReplicaSetScaleDialog,
+    ReplicaSetScaleDialog
   ],
   entryComponents: [
     ReplicaSetDeleteDialog,
-    ReplicaSetEditPage,
+    ReplicaSetEditPage
   ],
   exports: [
     ModalModule,
-    ReplicaSetsListComponent,
+    ReplicaSetsListComponent
   ],
   providers: [
     BsDropdownConfig

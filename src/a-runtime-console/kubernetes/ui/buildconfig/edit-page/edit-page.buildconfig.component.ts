@@ -5,7 +5,7 @@ import { BuildConfigStore } from "../../../store/buildconfig.store";
 
 @Component({
   selector: 'fabric8-buildconfig-edit-page',
-  templateUrl: './edit-page.buildconfig.component.html',
+  templateUrl: './edit-page.buildconfig.component.html'
 })
 export class BuildConfigEditPage implements OnDestroy {
   private idSubscription: Subscription;

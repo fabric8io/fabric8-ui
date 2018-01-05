@@ -30,6 +30,6 @@ export function isSystemNamespace(namespace: Namespace) {
 const systemNamespaceNames = {
   'kube-system': 'kubernetes',
   'openshift': 'openshift',
-  'openshift-infra': 'openshift',
+  'openshift-infra': 'openshift'
 };
 

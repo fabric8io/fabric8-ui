@@ -7,7 +7,7 @@ import { Deployment } from "../../../model/deployment.model";
 @Component({
   selector: 'fabric8-deployment-edit-toolbar',
   templateUrl: './edit-toolbar.deployment.component.html',
-  styleUrls: ['./edit-toolbar.deployment.component.less'],
+  styleUrls: ['./edit-toolbar.deployment.component.less']
 })
 export class DeploymentEditToolbarComponent {
 
@@ -21,7 +21,7 @@ export class DeploymentEditToolbarComponent {
   save() {
     let resource = this.yamlEditor.parseYaml();
     this.deploymentService.updateResource(this.deployment, resource).subscribe(
-      () => this.router.navigate(['deployments']),
+      () => this.router.navigate(['deployments'])
     );
   }
 }

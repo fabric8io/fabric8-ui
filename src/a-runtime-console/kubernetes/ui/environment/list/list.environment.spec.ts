@@ -53,13 +53,13 @@ xdescribe('EnvironmentListComponent', () => {
         PodModule,
         ReplicaSetModule,
         ServiceModule,
-        SlideOutPanelModule,
+        SlideOutPanelModule
       ],
       declarations: [
         EnvironmentListComponent,
         EnvironmentListPageComponent,
         EnvironmentDetailComponent,
-        EnvironmentListToolbarComponent,
+        EnvironmentListToolbarComponent
       ],
       providers: [
         MockBackend,
@@ -67,9 +67,9 @@ xdescribe('EnvironmentListComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

@@ -5,7 +5,7 @@ import { ConfigMaps } from "../../../model/configmap.model";
 @Component({
   selector: 'fabric8-configmaps-list',
   templateUrl: './list.configmap.component.html',
-  styleUrls: ['./list.configmap.component.less'],
+  styleUrls: ['./list.configmap.component.less']
 })
 export class ConfigMapsListComponent {
 

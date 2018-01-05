@@ -29,7 +29,7 @@ import { NamespaceService } from '../../service/namespace.service';
 const routes: Routes = [
   { path: '', component: SpacesListPage},
   { path: ':id', component: SpaceViewPage },
-  { path: ':id/edit', component: SpaceEditPage },
+  { path: ':id/edit', component: SpaceEditPage }
 ];
 
 @NgModule({
@@ -42,7 +42,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     RouterModule,
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     SpacesListPage,
@@ -56,7 +56,7 @@ const routes: Routes = [
     SpaceEditWrapperComponent,
     SpaceEditToolbarComponent,
     SpaceEditComponent,
-    SpaceDeleteDialog,
+    SpaceDeleteDialog
   ],
   providers: [
     BsDropdownConfig,
@@ -69,11 +69,11 @@ const routes: Routes = [
   ],
   entryComponents: [
     SpaceDeleteDialog,
-    SpaceEditPage,
+    SpaceEditPage
   ],
   exports: [
-    SpacesListPage,
-  ],
+    SpacesListPage
+  ]
 })
 export class SpaceModule {
 }

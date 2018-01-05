@@ -11,9 +11,9 @@ describe('ReplicaSetViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [ReplicaSetViewToolbarComponent],
+          declarations: [ReplicaSetViewToolbarComponent]
         })
         .compileComponents();
   }));

@@ -49,7 +49,7 @@ export class AbstractWatchComponent implements OnDestroy {
     return Observable.combineLatest(
       this.listAndWatch(serviceService, namespace, Service),
       this.listAndWatch(routeService, namespace, Route),
-      enrichServiceWithRoute,
+      enrichServiceWithRoute
     );
   }
 
@@ -57,7 +57,7 @@ export class AbstractWatchComponent implements OnDestroy {
     return Observable.combineLatest(
       this.listAndWatch(deploymentService, namespace, Deployment),
       this.listAndWatch(deploymentConfigService, namespace, DeploymentConfig),
-      combineDeployments,
+      combineDeployments
     );
   }
 
@@ -68,7 +68,7 @@ export class AbstractWatchComponent implements OnDestroy {
     let runtimeDeployments = Observable.combineLatest(
       deployments,
       servicesObservable,
-      createDeploymentViews,
+      createDeploymentViews
     );
     return runtimeDeployments;
   }
@@ -79,12 +79,12 @@ export class AbstractWatchComponent implements OnDestroy {
     let replicas = Observable.combineLatest(
       this.listAndWatch(replicaSetService, namespace, ReplicaSet),
       this.listAndWatch(replicationControllerService, namespace, ReplicationController),
-      combineReplicaSets,
+      combineReplicaSets
     );
     let replicaViews = Observable.combineLatest(
       replicas,
       servicesObservable,
-      createReplicaSetViews,
+      createReplicaSetViews
     );
     return replicaViews;
   }
@@ -103,7 +103,7 @@ export class AbstractWatchComponent implements OnDestroy {
               // We just emit an empty item if the watch fails
               this.getOrCreateWatch(service, namespace, type)
                 .dataStream.catch(() => Observable.of(null)),
-              (list, msg) => this.combineListAndWatchEvent(list, msg, service, type, namespace),
+              (list, msg) => this.combineListAndWatchEvent(list, msg, service, type, namespace)
             )
     );
   }

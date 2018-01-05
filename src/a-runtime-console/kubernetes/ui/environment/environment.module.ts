@@ -57,7 +57,7 @@ import { EnvironmentListToolbarComponent } from './list-toolbar/list-toolbar.env
     EnvironmentListPageComponent,
     EnvironmentListToolbarComponent,
     EnvironmentListComponent,
-    EnvironmentDetailComponent,
+    EnvironmentDetailComponent
   ],
   providers: [
     BsDropdownConfig,
@@ -65,11 +65,11 @@ import { EnvironmentListToolbarComponent } from './list-toolbar/list-toolbar.env
     ConfigMapService,
     ConfigMapStore,
     NamespaceScope,
-    NamespaceService,
+    NamespaceService
   ],
   exports: [
-    EnvironmentListPageComponent,
-  ],
+    EnvironmentListPageComponent
+  ]
 })
 export class EnvironmentModule {
 }

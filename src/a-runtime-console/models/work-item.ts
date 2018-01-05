@@ -22,14 +22,14 @@ export class WorkItemRelations {
   assignees: {
     data: {
       id: string,
-      type: string,
-    }[],
+      type: string
+    }[]
   };
   baseType: {
     data: {
       id: string;
       type: string;
-    },
+    }
   };
   comments?: {
     links: {
@@ -40,8 +40,8 @@ export class WorkItemRelations {
   creator: {
     data: {
       id: string,
-      type: string,
-    },
+      type: string
+    }
   };
 }
 

@@ -7,7 +7,7 @@ import { Service } from "../../../model/service.model";
 @Component({
   selector: 'fabric8-service-edit-toolbar',
   templateUrl: './edit-toolbar.service.component.html',
-  styleUrls: ['./edit-toolbar.service.component.less'],
+  styleUrls: ['./edit-toolbar.service.component.less']
 })
 export class ServiceEditToolbarComponent {
 
@@ -21,7 +21,7 @@ export class ServiceEditToolbarComponent {
   save() {
     let resource = this.yamlEditor.parseYaml();
     this.serviceService.updateResource(this.service, resource).subscribe(
-      () => this.router.navigate(['services']),
+      () => this.router.navigate(['services'])
     );
   }
 }

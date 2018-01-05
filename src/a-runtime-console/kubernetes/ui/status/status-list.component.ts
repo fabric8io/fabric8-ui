@@ -70,7 +70,7 @@ export class StatusWatcher {
 @Component({
   selector: 'fabric8-status-list',
   templateUrl: './status-list.component.html',
-  styleUrls: ['./status-list.component.less'],
+  styleUrls: ['./status-list.component.less']
 })
 export class StatusListComponent extends AbstractWatchComponent implements OnInit, OnDestroy {
   space: ConnectableObservable<Space>;
@@ -87,7 +87,7 @@ export class StatusListComponent extends AbstractWatchComponent implements OnIni
               private spaceNamespace: SpaceNamespace,
               private spaceStore: SpaceStore,
               private podService: PodService,
-              private notifications: Notifications, ) {
+              private notifications: Notifications ) {
     super();
   }
 

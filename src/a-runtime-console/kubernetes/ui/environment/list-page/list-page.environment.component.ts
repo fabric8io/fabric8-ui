@@ -27,28 +27,28 @@ import { currentOAuthConfig } from "../../../store/oauth-config-store";
 export let KINDS: Kind[] = [
   {
     name: 'Deployment',
-    path: 'deployments',
+    path: 'deployments'
   },
   {
     name: 'Pod',
-    path: 'pods',
+    path: 'pods'
   },
   {
     name: 'Replica',
-    path: 'replicasets',
+    path: 'replicasets'
   },
   {
     name: 'Service',
-    path: 'services',
+    path: 'services'
   },
   {
     name: 'ConfigMap',
-    path: 'configmaps',
+    path: 'configmaps'
   },
   {
     name: 'Event',
-    path: 'events',
-  },
+    path: 'events'
+  }
 ];
 
 export class EnvironmentEntry {
@@ -125,7 +125,7 @@ export class KindNode {
     'class': 'app-component flex-container in-column-direction flex-grow-1'
   },
   selector: 'fabric8-environments-list-page',
-  templateUrl: './list-page.environment.component.html',
+  templateUrl: './list-page.environment.component.html'
 })
 export class EnvironmentListPageComponent extends AbstractWatchComponent implements OnInit, OnDestroy {
 
@@ -148,7 +148,7 @@ export class EnvironmentListPageComponent extends AbstractWatchComponent impleme
     private replicationControllerService: ReplicationControllerService,
     private replicaSetService: ReplicaSetService,
     private spaceNamespace: SpaceNamespace,
-    private notifications: Notifications,
+    private notifications: Notifications
   ) {
     super();
   }

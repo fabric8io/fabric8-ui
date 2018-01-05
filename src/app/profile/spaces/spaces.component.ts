@@ -12,7 +12,7 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-spaces',
   templateUrl: 'spaces.component.html',
-  styleUrls: ['./spaces.component.less'],
+  styleUrls: ['./spaces.component.less']
 })
 export class SpacesComponent implements OnInit {
 

@@ -11,7 +11,7 @@ import { WorkspacesService } from '../services/workspaces.service';
 import {
   async,
   ComponentFixture,
-  TestBed,
+  TestBed
 } from '@angular/core/testing';
 
 describe('Codebases Item Details Component', () => {

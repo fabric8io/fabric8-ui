@@ -32,7 +32,7 @@ describe('PodEditWrapperComponent', () => {
         declarations: [
           PodEditWrapperComponent,
           PodEditToolbarComponent,
-          PodEditComponent,
+          PodEditComponent
         ],
         providers: [
           MockBackend,
@@ -40,9 +40,9 @@ describe('PodEditWrapperComponent', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

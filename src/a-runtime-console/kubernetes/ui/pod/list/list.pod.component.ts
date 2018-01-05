@@ -7,7 +7,7 @@ import { openShiftBrowseResourceUrl } from "../../../model/helpers";
 @Component({
   selector: 'fabric8-pods-list',
   templateUrl: './list.pod.component.html',
-  styleUrls: ['./list.pod.component.less'],
+  styleUrls: ['./list.pod.component.less']
 })
 export class PodsListComponent {
 
@@ -22,7 +22,7 @@ export class PodsListComponent {
   @ViewChild(PodDeleteDialog) deleteDialog: PodDeleteDialog;
 
   constructor(
-    private oAuthConfigStore: OAuthConfigStore,
+    private oAuthConfigStore: OAuthConfigStore
   ) {}
 
   openDeleteDialog(deletePodModal, pod) {

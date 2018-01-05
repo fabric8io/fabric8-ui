@@ -31,7 +31,7 @@ describe('ServiceEditPage', () => {
           ServiceEditPage,
           ServiceEditWrapperComponent,
           ServiceEditToolbarComponent,
-          ServiceEditComponent,
+          ServiceEditComponent
         ],
         providers: [
           MockBackend,
@@ -39,9 +39,9 @@ describe('ServiceEditPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

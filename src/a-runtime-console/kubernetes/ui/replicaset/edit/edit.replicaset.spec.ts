@@ -10,11 +10,11 @@ describe('ReplicaSetEditComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FormsModule,
+        FormsModule
       ],
       declarations: [
-        ReplicaSetEditComponent,
-      ],
+        ReplicaSetEditComponent
+      ]
     })
       .compileComponents();
   }));

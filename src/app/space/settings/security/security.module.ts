@@ -7,7 +7,7 @@ import { SecurityRoutingModule } from './security-routing.module';
 
 @NgModule({
   imports:      [ CommonModule, SecurityRoutingModule ],
-  declarations: [ SecurityComponent ],
+  declarations: [ SecurityComponent ]
 })
 export class SecurityModule {
   constructor(http: Http) {}

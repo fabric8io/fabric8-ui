@@ -36,7 +36,7 @@ describe('BuildConfigViewPage', () => {
           BuildConfigViewPage,
           BuildConfigViewWrapperComponent,
           BuildConfigViewToolbarComponent,
-          BuildConfigViewComponent,
+          BuildConfigViewComponent
         ],
         providers: [
           MockBackend,
@@ -44,9 +44,9 @@ describe('BuildConfigViewPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

@@ -11,9 +11,9 @@ describe('ServiceViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [ServiceViewToolbarComponent],
+          declarations: [ServiceViewToolbarComponent]
         })
         .compileComponents();
   }));

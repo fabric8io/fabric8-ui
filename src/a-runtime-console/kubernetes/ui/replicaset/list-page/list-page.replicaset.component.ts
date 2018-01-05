@@ -9,7 +9,7 @@ import { CompositeReplicaSetStore } from "../../../store/compositedreplicaset.st
 
 @Component({
   selector: 'fabric8-replicasets-list-page',
-  templateUrl: './list-page.replicaset.component.html',
+  templateUrl: './list-page.replicaset.component.html'
 })
 export class ReplicaSetsListPage implements OnInit {
   private readonly replicasets: Observable<ReplicaSets>;

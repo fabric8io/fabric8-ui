@@ -13,7 +13,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import {
   async,
   ComponentFixture,
-  TestBed,
+  TestBed
 } from '@angular/core/testing';
 import { cloneDeep } from 'lodash';
 

@@ -17,7 +17,7 @@ import { CleanupRoutingModule } from './cleanup-routing.module';
     ListModule,
     CleanupRoutingModule
   ],
-  declarations: [ CleanupComponent ],
+  declarations: [ CleanupComponent ]
 })
 export class CleanupModule {
   constructor(http: Http) {}

@@ -31,7 +31,7 @@ describe('BuildsListComponent', () => {
       ],
       declarations: [
         BuildsListComponent,
-        BuildDeleteDialog,
+        BuildDeleteDialog
       ],
       providers: [
         MockBackend,
@@ -39,9 +39,9 @@ describe('BuildsListComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

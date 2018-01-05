@@ -8,7 +8,7 @@ import { DeploymentConfig } from "../../../model/deploymentconfig.model";
 
 @Component({
   selector: 'scale-deployment-dialog',
-  templateUrl: './scale-dialog.deployment.component.html',
+  templateUrl: './scale-dialog.deployment.component.html'
 })
 export class DeploymentScaleDialog {
   deployment: Deployment = new Deployment();
@@ -41,13 +41,13 @@ export class DeploymentScaleDialog {
         this.deploymentConfigService.update(deployment).subscribe(
           () => {
             this.deploymentStore.loadAll();
-          },
+          }
         );
       } else {
         this.deploymentService.update(deployment).subscribe(
           () => {
             this.deploymentStore.loadAll();
-          },
+          }
         );
       }
     }

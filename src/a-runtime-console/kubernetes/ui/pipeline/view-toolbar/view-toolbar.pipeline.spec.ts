@@ -11,9 +11,9 @@ describe('PipelineViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [PipelineViewToolbarComponent],
+          declarations: [PipelineViewToolbarComponent]
         })
         .compileComponents();
   }));

@@ -17,7 +17,7 @@ export abstract class NamespacedResourceStore<T extends KubernetesResource, L ex
           this.service.namespace = namespace;
           this.recreateWatcher();
           this.reload();
-        },
+        }
       );
     }
   }

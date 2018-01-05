@@ -29,7 +29,7 @@ import { InputActionDialog } from "./input-action-dialog/input-action-dialog.com
 
 const routes: Routes = [
   { path: ':id/history', component: PipelinesHistoryPage },
-  { path: ':buildConfig/builds', loadChildren: '../build/build.module#BuildModule' },
+  { path: ':buildConfig/builds', loadChildren: '../build/build.module#BuildModule' }
 ];
 
 @NgModule({
@@ -43,7 +43,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     Fabric8CommonModule,
     KubernetesComponentsModule,
-    BuildConfigDialogsModule,
+    BuildConfigDialogsModule
   ],
   declarations: [
     BuildStageViewComponent,
@@ -61,13 +61,13 @@ const routes: Routes = [
     PipelinesFullHistoryPage,
     PipelinesFullHistoryToolbarComponent,
     PipelinesFullHistoryComponent,
-    StageTimePipe,
+    StageTimePipe
   ],
   entryComponents: [
   ],
   exports: [
     PipelinesListComponent,
-    PipelinesListToolbarComponent,
+    PipelinesListToolbarComponent
   ],
   providers: [
     BsDropdownConfig

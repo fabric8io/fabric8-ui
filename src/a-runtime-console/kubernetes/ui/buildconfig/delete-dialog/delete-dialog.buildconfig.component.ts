@@ -5,7 +5,7 @@ import { BuildConfigService } from "../../../service/buildconfig.service";
 
 @Component({
   selector: 'delete-buildconfig-dialog',
-  templateUrl: './delete-dialog.buildconfig.component.html',
+  templateUrl: './delete-dialog.buildconfig.component.html'
 })
 export class BuildConfigDeleteDialog {
   buildconfig: BuildConfig = new BuildConfig();

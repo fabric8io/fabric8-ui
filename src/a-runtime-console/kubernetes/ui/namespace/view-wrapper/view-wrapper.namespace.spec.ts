@@ -36,7 +36,7 @@ describe('NamespaceViewWrapperComponent', () => {
           NamespaceViewWrapperComponent,
           NamespaceViewToolbarComponent,
           NamespaceViewComponent,
-          NamespaceDeleteDialog,
+          NamespaceDeleteDialog
         ],
         providers: [
           MockBackend,
@@ -44,9 +44,9 @@ describe('NamespaceViewWrapperComponent', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

@@ -5,7 +5,7 @@ import { ParentLinkFactory } from "../../../../common/parent-link-factory";
 
 @Component({
   selector: 'fabric8-namespaces-list',
-  templateUrl: './list.namespace.component.html',
+  templateUrl: './list.namespace.component.html'
 })
 export class NamespacesListComponent {
   parentLink: string;

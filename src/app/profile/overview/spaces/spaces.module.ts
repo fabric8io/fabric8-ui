@@ -26,6 +26,6 @@ import { ForgeWizardModule } from '../../../space/forge-wizard/forge-wizard.modu
     ForgeWizardModule
   ],
   declarations: [SpacesComponent],
-  exports: [SpacesComponent],
+  exports: [SpacesComponent]
 })
 export class SpacesModule { }

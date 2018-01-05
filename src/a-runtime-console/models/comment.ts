@@ -10,7 +10,7 @@ export class Comment {
               id: string;
               type: string;
             };
-        },
+        }
     };
     relationalData?: RelationalData;
 }

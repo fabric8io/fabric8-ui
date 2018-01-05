@@ -23,6 +23,6 @@ import { WorkItemsComponent } from './work-items.component';
     Fabric8WitModule
   ],
   declarations: [WorkItemsComponent],
-  exports: [WorkItemsComponent],
+  exports: [WorkItemsComponent]
 })
 export class WorkItemsModule { }

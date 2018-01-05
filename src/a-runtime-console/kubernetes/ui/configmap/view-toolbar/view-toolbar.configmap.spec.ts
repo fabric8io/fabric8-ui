@@ -11,9 +11,9 @@ describe('ConfigMapViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [ConfigMapViewToolbarComponent],
+          declarations: [ConfigMapViewToolbarComponent]
         })
         .compileComponents();
   }));

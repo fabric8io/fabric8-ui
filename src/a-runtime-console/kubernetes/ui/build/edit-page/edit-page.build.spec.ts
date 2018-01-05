@@ -25,13 +25,13 @@ describe('BuildEditPage', () => {
           RestangularModule.forRoot(),
           FormsModule,
           KubernetesStoreModule,
-          TestAppModule,
+          TestAppModule
         ],
         declarations: [
           BuildEditPage,
           BuildEditWrapperComponent,
           BuildEditToolbarComponent,
-          BuildEditComponent,
+          BuildEditComponent
         ],
         providers: [
           MockBackend,
@@ -39,9 +39,9 @@ describe('BuildEditPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

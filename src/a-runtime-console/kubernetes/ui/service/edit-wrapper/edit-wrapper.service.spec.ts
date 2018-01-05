@@ -32,7 +32,7 @@ describe('ServiceEditWrapperComponent', () => {
         declarations: [
           ServiceEditWrapperComponent,
           ServiceEditToolbarComponent,
-          ServiceEditComponent,
+          ServiceEditComponent
         ],
         providers: [
           MockBackend,
@@ -40,9 +40,9 @@ describe('ServiceEditWrapperComponent', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

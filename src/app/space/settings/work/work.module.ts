@@ -7,7 +7,7 @@ import { WorkRoutingModule } from './work-routing.module';
 
 @NgModule({
   imports:      [ CommonModule, WorkRoutingModule ],
-  declarations: [ WorkComponent ],
+  declarations: [ WorkComponent ]
 })
 export class WorkModule {
   constructor(http: Http) {}

@@ -29,13 +29,13 @@ describe('BuildsListPage', () => {
         MomentModule,
         ModalModule,
         KubernetesStoreModule,
-        TestAppModule,
+        TestAppModule
       ],
       declarations: [
         BuildsListPage,
         BuildsListComponent,
         BuildsListToolbarComponent,
-        BuildDeleteDialog,
+        BuildDeleteDialog
       ],
       providers: [
         MockBackend,
@@ -43,9 +43,9 @@ describe('BuildsListPage', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

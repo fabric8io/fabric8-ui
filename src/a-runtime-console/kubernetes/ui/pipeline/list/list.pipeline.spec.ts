@@ -35,13 +35,13 @@ describe('PipelinesListComponent', () => {
         BuildConfigDialogsModule,
         KubernetesComponentsModule,
         TestAppModule,
-        StackDetailsModule,
+        StackDetailsModule
       ],
       declarations: [
         BuildStageViewComponent,
         InputActionDialog,
         PipelinesListComponent,
-        StageTimePipe,
+        StageTimePipe
       ],
       providers: [
         MockBackend,
@@ -49,9 +49,9 @@ describe('PipelinesListComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

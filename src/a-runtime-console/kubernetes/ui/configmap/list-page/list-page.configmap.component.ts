@@ -6,7 +6,7 @@ import { ConfigMapStore } from "../../../store/configmap.store";
 
 @Component({
   selector: 'fabric8-configmaps-list-page',
-  templateUrl: './list-page.configmap.component.html',
+  templateUrl: './list-page.configmap.component.html'
 })
 export class ConfigMapsListPage implements OnInit {
   private readonly configmaps: Observable<ConfigMaps>;

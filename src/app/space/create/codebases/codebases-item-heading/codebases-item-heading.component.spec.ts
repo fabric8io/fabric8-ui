@@ -7,7 +7,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import {
   async,
-  TestBed,
+  TestBed
 } from '@angular/core/testing';
 
 describe('Codebases Item Heading Component', () => {

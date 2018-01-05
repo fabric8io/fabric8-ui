@@ -31,7 +31,7 @@ describe('BuildConfigViewComponent', () => {
         ],
         declarations: [
           BuildConfigViewComponent,
-          BuildConfigDeleteDialog,
+          BuildConfigDeleteDialog
         ],
       providers: [
         MockBackend,
@@ -39,10 +39,10 @@ describe('BuildConfigViewComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
-      },
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
+      }
     )
       .compileComponents();
   }));

@@ -10,11 +10,11 @@ describe('SpaceEditComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FormsModule,
+        FormsModule
       ],
       declarations: [
-        SpaceEditComponent,
-      ],
+        SpaceEditComponent
+      ]
     })
       .compileComponents();
   }));

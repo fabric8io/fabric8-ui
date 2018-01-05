@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: '', component: BuildConfigsListPage },
   { path: ':id', component: BuildConfigViewPage },
   { path: ':id/edit', component: BuildConfigEditPage },
-  { path: ':buildConfig/builds', loadChildren: '../build/build.module#BuildModule' },
+  { path: ':buildConfig/builds', loadChildren: '../build/build.module#BuildModule' }
 ];
 
 @NgModule({
@@ -37,7 +37,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     Fabric8CommonModule,
     KubernetesComponentsModule,
-    BuildConfigDialogsModule,
+    BuildConfigDialogsModule
   ],
   declarations: [
     BuildConfigsListPage,
@@ -50,10 +50,10 @@ const routes: Routes = [
     BuildConfigEditPage,
     BuildConfigEditWrapperComponent,
     BuildConfigEditToolbarComponent,
-    BuildConfigEditComponent,
+    BuildConfigEditComponent
   ],
   entryComponents: [
-    BuildConfigEditPage,
+    BuildConfigEditPage
   ],
   providers: [
     BsDropdownConfig

@@ -14,7 +14,7 @@ export class BrandingService {
   private _moreInfoLink: string;
 
   constructor(
-    private fabric8UIConfig: Fabric8UIConfig,
+    private fabric8UIConfig: Fabric8UIConfig
   ) {
     this.isFabric8 = this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === "fabric8";
 

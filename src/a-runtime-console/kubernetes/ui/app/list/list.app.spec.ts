@@ -51,11 +51,11 @@ xdescribe('AppListComponent', () => {
         ReplicaSetModule,
         ServiceModule,
         SlideOutPanelModule,
-        EnvironmentModule,
+        EnvironmentModule
       ],
       declarations: [
         AppListComponent,
-        AppListPageComponent,
+        AppListPageComponent
       ],
       providers: [
         MockBackend,
@@ -63,9 +63,9 @@ xdescribe('AppListComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

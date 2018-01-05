@@ -12,9 +12,9 @@ describe('ServicesListToolbarComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
-        Fabric8CommonModule,
+        Fabric8CommonModule
       ],
-      declarations: [ServicesListToolbarComponent],
+      declarations: [ServicesListToolbarComponent]
     })
       .compileComponents();
   }));

@@ -39,11 +39,11 @@ import { AppRoutingModule } from "./app-routing.module";
     EventModule,
     PodModule,
     ReplicaSetModule,
-    ServiceModule,
+    ServiceModule
   ],
   declarations: [
     AppListPageComponent,
-    AppListComponent,
+    AppListComponent
   ],
   providers: [
     BsDropdownConfig,
@@ -51,11 +51,11 @@ import { AppRoutingModule } from "./app-routing.module";
     ConfigMapService,
     ConfigMapStore,
     NamespaceScope,
-    NamespaceService,
+    NamespaceService
   ],
   exports: [
-    AppListPageComponent,
-  ],
+    AppListPageComponent
+  ]
 })
 export class AppModule {
 }

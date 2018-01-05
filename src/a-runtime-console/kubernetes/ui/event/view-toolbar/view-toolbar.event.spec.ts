@@ -11,9 +11,9 @@ describe('EventViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [EventViewToolbarComponent],
+          declarations: [EventViewToolbarComponent]
         })
         .compileComponents();
   }));

@@ -7,7 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-space-view-wrapper',
-  templateUrl: './view-wrapper.space.component.html',
+  templateUrl: './view-wrapper.space.component.html'
 })
 export class SpaceViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   space: Observable<Space>;

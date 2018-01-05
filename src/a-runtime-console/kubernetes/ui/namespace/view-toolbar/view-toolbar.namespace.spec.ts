@@ -11,9 +11,9 @@ describe('NamespaceViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [NamespaceViewToolbarComponent],
+          declarations: [NamespaceViewToolbarComponent]
         })
         .compileComponents();
   }));

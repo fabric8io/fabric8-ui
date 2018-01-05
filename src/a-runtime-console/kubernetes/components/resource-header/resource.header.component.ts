@@ -6,28 +6,28 @@ import { ParentLinkFactory } from "../../../common/parent-link-factory";
 export const resourceMenus = [
   {
     name: "ConfigMap",
-    path: "configmaps",
+    path: "configmaps"
   },
   {
     name: "Deployments",
-    path: "deployments",
+    path: "deployments"
   },
   {
     name: "Events",
-    path: "events",
+    path: "events"
   },
   {
     name: "Pods",
-    path: "pods",
+    path: "pods"
   },
   {
     name: "ReplicaSets",
-    path: "replicasets",
+    path: "replicasets"
   },
   {
     name: "Services",
-    path: "services",
-  },
+    path: "services"
+  }
 ];
 
 @Component({
@@ -36,7 +36,7 @@ export const resourceMenus = [
   },
   selector: 'kube-resource-header',
   templateUrl: './resource.header.component.html',
-  styleUrls: ['./resource.header.component.less'],
+  styleUrls: ['./resource.header.component.less']
 })
 export class ResourceHeaderComponent implements OnInit {
   menus: MenuItem[];

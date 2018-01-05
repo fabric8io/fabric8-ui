@@ -10,7 +10,7 @@ describe('EnvironmentListToolbarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],
-      declarations: [EnvironmentListToolbarComponent],
+      declarations: [EnvironmentListToolbarComponent]
     })
       .compileComponents();
   }));

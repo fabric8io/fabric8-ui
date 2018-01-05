@@ -12,7 +12,7 @@ import { Logger } from 'ngx-base';
 import {
   async,
   ComponentFixture,
-  TestBed,
+  TestBed
 } from '@angular/core/testing';
 
 describe('Codebases Item Details Component', () => {

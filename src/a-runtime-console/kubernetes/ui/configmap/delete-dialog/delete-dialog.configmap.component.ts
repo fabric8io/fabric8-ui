@@ -5,7 +5,7 @@ import { ConfigMapService } from "../../../service/configmap.service";
 
 @Component({
   selector: 'delete-configmap-dialog',
-  templateUrl: './delete-dialog.configmap.component.html',
+  templateUrl: './delete-dialog.configmap.component.html'
 })
 export class ConfigMapDeleteDialog {
   configmap: ConfigMap = new ConfigMap();
@@ -20,7 +20,7 @@ export class ConfigMapDeleteDialog {
     this.configmapService.delete(this.configmap).subscribe(
       () => {
         this.configmapStore.loadAll();
-      },
+      }
     );
   }
 

@@ -60,7 +60,7 @@ export const currentContext: Context = {
   },
   "type": {
     "name": "Space",
-    "icon": "fa fa-th-large",
+    "icon": "fa fa-th-large"
   },
   "name": "tototo",
   "path": "/coq/tototo"
@@ -160,7 +160,7 @@ export const expectedGitHubRepo: GitHubRepo =
   "forks": 44,
   "open_issues": 250,
   "watchers": 25,
-  "default_branch": "master",
+  "default_branch": "master"
 }
 const owner = {
     "login": "almighty",

@@ -37,7 +37,7 @@ describe('PodsListPage', () => {
         PodsListPage,
         PodsListComponent,
         PodsListToolbarComponent,
-        PodDeleteDialog,
+        PodDeleteDialog
       ],
       providers: [
         MockBackend,
@@ -45,9 +45,9 @@ describe('PodsListPage', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

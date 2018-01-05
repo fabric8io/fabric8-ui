@@ -5,7 +5,7 @@ import { ServiceService } from "../../../service/service.service";
 
 @Component({
   selector: 'delete-service-dialog',
-  templateUrl: './delete-dialog.service.component.html',
+  templateUrl: './delete-dialog.service.component.html'
 })
 export class ServiceDeleteDialog {
   service: Service = new Service();
@@ -20,7 +20,7 @@ export class ServiceDeleteDialog {
     this.serviceService.delete(this.service).subscribe(
       () => {
         this.serviceStore.loadAll();
-      },
+      }
     );
   }
 

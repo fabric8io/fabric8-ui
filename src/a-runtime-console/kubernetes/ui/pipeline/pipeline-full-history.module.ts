@@ -12,7 +12,7 @@ import { BuildConfigDialogsModule } from "../buildconfig/delete-dialog/buildconf
 import { PipelineModule } from "./pipeline.module";
 
 const routes: Routes = [
-  { path: '', component: PipelinesFullHistoryPage },
+  { path: '', component: PipelinesFullHistoryPage }
 ];
 
 @NgModule({
@@ -26,7 +26,7 @@ const routes: Routes = [
     Fabric8CommonModule,
     KubernetesComponentsModule,
     BuildConfigDialogsModule,
-    PipelineModule,
+    PipelineModule
   ],
   declarations: [
   ],

@@ -39,7 +39,7 @@ describe('DeploymentsListPage', () => {
         DeploymentsListComponent,
         DeploymentsListToolbarComponent,
         DeploymentDeleteDialog,
-        DeploymentScaleDialog,
+        DeploymentScaleDialog
       ],
       providers: [
         MockBackend,
@@ -47,9 +47,9 @@ describe('DeploymentsListPage', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

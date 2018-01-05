@@ -6,7 +6,7 @@ import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-namespace-edit-wrapper',
-  templateUrl: './edit-wrapper.namespace.component.html',
+  templateUrl: './edit-wrapper.namespace.component.html'
 })
 export class NamespaceEditWrapperComponent implements OnInit {
   namespace: Observable<Namespace>;

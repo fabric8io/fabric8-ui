@@ -7,7 +7,7 @@ import { ConfigMap } from "../../../model/configmap.model";
 @Component({
   selector: 'fabric8-configmap-edit-toolbar',
   templateUrl: './edit-toolbar.configmap.component.html',
-  styleUrls: ['./edit-toolbar.configmap.component.less'],
+  styleUrls: ['./edit-toolbar.configmap.component.less']
 })
 export class ConfigMapEditToolbarComponent {
 
@@ -21,7 +21,7 @@ export class ConfigMapEditToolbarComponent {
   save() {
     let resource = this.yamlEditor.parseYaml();
     this.configmapService.updateResource(this.configmap, resource).subscribe(
-      () => this.router.navigate(['configmaps']),
+      () => this.router.navigate(['configmaps'])
     );
   }
 }

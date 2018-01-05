@@ -23,7 +23,7 @@ import { KubernetesComponentsModule } from "../../components/components.module";
 export const configMapRoutes: Routes = [
   { path: '', component: ConfigMapsListPage },
   { path: ':id', component: ConfigMapViewPage },
-  { path: ':id/edit', component: ConfigMapEditPage },
+  { path: ':id/edit', component: ConfigMapEditPage }
 ];
 
 @NgModule({
@@ -35,7 +35,7 @@ export const configMapRoutes: Routes = [
     MomentModule,
     RouterModule.forChild(configMapRoutes),
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     ConfigMapsListPage,
@@ -49,15 +49,15 @@ export const configMapRoutes: Routes = [
     ConfigMapEditWrapperComponent,
     ConfigMapEditToolbarComponent,
     ConfigMapEditComponent,
-    ConfigMapDeleteDialog,
+    ConfigMapDeleteDialog
   ],
   entryComponents: [
     ConfigMapDeleteDialog,
-    ConfigMapEditPage,
+    ConfigMapEditPage
   ],
   exports: [
     ModalModule,
-    ConfigMapsListComponent,
+    ConfigMapsListComponent
   ],
   providers: [
     BsDropdownConfig

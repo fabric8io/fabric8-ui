@@ -12,9 +12,9 @@ describe('PodsListToolbarComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
-        Fabric8CommonModule,
+        Fabric8CommonModule
       ],
-      declarations: [PodsListToolbarComponent],
+      declarations: [PodsListToolbarComponent]
     })
       .compileComponents();
   }));

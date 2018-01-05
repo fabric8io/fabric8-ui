@@ -55,7 +55,7 @@ import {BrowserModule} from "@angular/platform-browser";
     LocalStorageModule.withConfig({
       prefix: 'fabric8',
       storageType: 'localStorage'
-    }),
+    })
   ],
   providers: [
     APIsStore,
@@ -98,8 +98,8 @@ import {BrowserModule} from "@angular/platform-browser";
     {
       provide: SpaceNamespace,
       useClass: SpaceNamespaceService
-    },
-  ],
+    }
+  ]
 })
 export class KubernetesStoreModule {
   constructor( @Optional() @SkipSelf() parentModule: KubernetesStoreModule) {

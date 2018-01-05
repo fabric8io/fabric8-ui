@@ -7,6 +7,6 @@ export class LinkCategory{
   attributes: {
     'name': string,
     'description': string
-    'version': Number,
+    'version': Number
   };
 }

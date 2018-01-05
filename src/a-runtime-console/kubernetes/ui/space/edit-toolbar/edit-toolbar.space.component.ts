@@ -7,7 +7,7 @@ import { SpaceStore } from "../../../store/space.store";
 @Component({
   selector: 'fabric8-space-edit-toolbar',
   templateUrl: './edit-toolbar.space.component.html',
-  styleUrls: ['./edit-toolbar.space.component.less'],
+  styleUrls: ['./edit-toolbar.space.component.less']
 })
 export class SpaceEditToolbarComponent {
 
@@ -21,7 +21,7 @@ export class SpaceEditToolbarComponent {
   save() {
     let resource = this.yamlEditor.parseYaml();
     this.spaceStore.updateResource(this.space, resource).subscribe(
-      () => this.router.navigate(['spaces']),
+      () => this.router.navigate(['spaces'])
     );
   }
 }

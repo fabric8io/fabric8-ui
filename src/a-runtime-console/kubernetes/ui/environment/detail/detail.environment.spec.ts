@@ -35,7 +35,7 @@ describe('EnvironmentDetailComponent', () => {
         BrowserAnimationsModule
       ],
       declarations: [
-        EnvironmentDetailComponent,
+        EnvironmentDetailComponent
       ],
       providers: [
         MockBackend,
@@ -43,9 +43,9 @@ describe('EnvironmentDetailComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

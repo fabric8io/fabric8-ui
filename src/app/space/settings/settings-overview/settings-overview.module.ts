@@ -7,7 +7,7 @@ import { SettingsOverviewRoutingModule } from './settings-overview-routing.modul
 
 @NgModule({
   imports:      [ CommonModule, SettingsOverviewRoutingModule ],
-  declarations: [ SettingsOverviewComponent ],
+  declarations: [ SettingsOverviewComponent ]
 })
 export class SettingsOverviewModule {
   constructor(http: Http) {}

@@ -35,7 +35,7 @@ describe('EventsListPage', () => {
       declarations: [
         EventsListPage,
         EventsListComponent,
-        EventsListToolbarComponent,
+        EventsListToolbarComponent
       ],
       providers: [
         MockBackend,
@@ -43,9 +43,9 @@ describe('EventsListPage', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

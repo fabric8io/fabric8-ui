@@ -8,7 +8,7 @@ import { BuildStore } from "../../../store/build.store";
 
 @Component({
   selector: 'fabric8-pipelines-full-history-page',
-  templateUrl: './full-history-page.pipeline.component.html',
+  templateUrl: './full-history-page.pipeline.component.html'
 })
 export class PipelinesFullHistoryPage implements OnInit {
   private readonly pipelines: Observable<BuildConfigs>;

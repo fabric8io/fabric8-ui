@@ -5,7 +5,7 @@ import { PodService } from "../../../service/pod.service";
 
 @Component({
   selector: 'delete-pod-dialog',
-  templateUrl: './delete-dialog.pod.component.html',
+  templateUrl: './delete-dialog.pod.component.html'
 })
 export class PodDeleteDialog {
   pod: Pod = new Pod();
@@ -20,7 +20,7 @@ export class PodDeleteDialog {
     this.podService.delete(this.pod).subscribe(
       () => {
         this.podStore.loadAll();
-      },
+      }
     );
   }
 

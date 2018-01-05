@@ -32,7 +32,7 @@ describe('DeploymentEditWrapperComponent', () => {
         declarations: [
           DeploymentEditWrapperComponent,
           DeploymentEditToolbarComponent,
-          DeploymentEditComponent,
+          DeploymentEditComponent
         ],
         providers: [
           MockBackend,
@@ -40,9 +40,9 @@ describe('DeploymentEditWrapperComponent', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

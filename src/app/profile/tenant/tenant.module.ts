@@ -18,7 +18,7 @@ import { TenantRoutingModule } from "./tenant-routing.module";
     RemainingCharsCountModule,
     TenantRoutingModule
   ],
-  declarations: [ TenantComponent ],
+  declarations: [ TenantComponent ]
 })
 export class TenantModule {
   constructor(http: Http) {}

@@ -12,7 +12,7 @@ import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-pipelines-history-page',
-  templateUrl: './history-page.pipeline.component.html',
+  templateUrl: './history-page.pipeline.component.html'
 })
 export class PipelinesHistoryPage implements OnInit {
   private readonly pipelines: Observable<BuildConfigs>;

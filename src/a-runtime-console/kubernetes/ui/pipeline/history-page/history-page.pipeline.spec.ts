@@ -38,7 +38,7 @@ describe('PipelinesHistoryPage', () => {
         KubernetesComponentsModule,
         BuildConfigDialogsModule,
         TestAppModule,
-        StackDetailsModule,
+        StackDetailsModule
       ],
       declarations: [
         BuildStageViewComponent,
@@ -54,9 +54,9 @@ describe('PipelinesHistoryPage', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

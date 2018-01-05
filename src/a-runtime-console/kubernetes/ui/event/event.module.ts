@@ -17,7 +17,7 @@ import { KubernetesComponentsModule } from "../../components/components.module";
 
 export const eventRoutes: Routes = [
   { path: '', component: EventsListPage },
-  { path: ':id', component: EventViewPage },
+  { path: ':id', component: EventViewPage }
 ];
 
 @NgModule({
@@ -29,7 +29,7 @@ export const eventRoutes: Routes = [
     MomentModule,
     RouterModule.forChild(eventRoutes),
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     EventsListPage,
@@ -38,11 +38,11 @@ export const eventRoutes: Routes = [
     EventViewPage,
     EventViewWrapperComponent,
     EventViewToolbarComponent,
-    EventViewComponent,
+    EventViewComponent
   ],
   exports: [
     ModalModule,
-    EventsListComponent,
+    EventsListComponent
   ],
   providers: [
     BsDropdownConfig

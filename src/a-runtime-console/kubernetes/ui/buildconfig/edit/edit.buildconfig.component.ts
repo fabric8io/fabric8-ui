@@ -4,7 +4,7 @@ import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-buildconfig-edit',
-  templateUrl: './edit.buildconfig.component.html',
+  templateUrl: './edit.buildconfig.component.html'
 })
 export class BuildConfigEditComponent {
 

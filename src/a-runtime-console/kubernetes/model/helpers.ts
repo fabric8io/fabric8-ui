@@ -16,13 +16,13 @@ export var resourceKindToCollectionName = {
   "ReplicationController": "replicationcontrollers",
   "ReplicaSet": "replicasets",
   "Route": "routes",
-  "Service": "services",
+  "Service": "services"
 };
 
 export var resourceKindToOpenShiftConsoleCollectionName = {
   "BuildConfig": "pipelines",
   "DeploymentConfig": "dc",
-  "ReplicationController": "rc",
+  "ReplicationController": "rc"
 };
 
 /**

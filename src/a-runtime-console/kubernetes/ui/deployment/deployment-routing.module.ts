@@ -23,16 +23,16 @@ import { DeploymentScaleDialog } from './scale-dialog/scale-dialog.deployment.co
 export const deploymentRoutes: Routes = [
   { path: '', component: DeploymentsListPage },
   { path: ':id', component: DeploymentViewPage },
-  { path: ':id/edit', component: DeploymentEditPage },
+  { path: ':id/edit', component: DeploymentEditPage }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(deploymentRoutes),
+    RouterModule.forChild(deploymentRoutes)
   ],
   exports: [
-    RouterModule,
-  ],
+    RouterModule
+  ]
 })
 export class DeploymentRoutingModule {
 }

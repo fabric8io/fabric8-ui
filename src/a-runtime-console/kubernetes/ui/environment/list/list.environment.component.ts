@@ -30,7 +30,7 @@ import { KindNode } from "../list-page/list-page.environment.component";
 @Component({
   selector: 'fabric8-environments-list',
   templateUrl: './list.environment.component.html',
-  styleUrls: ['./list.environment.component.less'],
+  styleUrls: ['./list.environment.component.less']
 })
 export class EnvironmentListComponent {
 
@@ -40,11 +40,11 @@ export class EnvironmentListComponent {
       mouse: {
         click: (tree, node, $event) => {
           TREE_ACTIONS.TOGGLE_EXPANDED(tree, node, $event);
-        },
-      },
+        }
+      }
     },
     allowDrag: false,
-    isExpandedField: 'expanded',
+    isExpandedField: 'expanded'
   };
 
   parentLink: string;
@@ -53,7 +53,7 @@ export class EnvironmentListComponent {
   @Input() environments: any;
 
   constructor(
-    parentLinkFactory: ParentLinkFactory,
+    parentLinkFactory: ParentLinkFactory
   ) {
     this.parentLink = parentLinkFactory.parentLink;
   }

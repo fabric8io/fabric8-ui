@@ -7,7 +7,7 @@ import { ReplicationController } from "../../../model/replicationcontroller.mode
 
 @Component({
   selector: 'scale-replicaset-dialog',
-  templateUrl: './scale-dialog.replicaset.component.html',
+  templateUrl: './scale-dialog.replicaset.component.html'
 })
 export class ReplicaSetScaleDialog {
   replicaset: ReplicaSet = new ReplicaSet();
@@ -36,13 +36,13 @@ export class ReplicaSetScaleDialog {
         this.replicationControllerService.update(replicaset).subscribe(
           () => {
             this.replicasetStore.loadAll();
-          },
+          }
         );
       } else {
         this.replicasetService.update(replicaset).subscribe(
           () => {
             this.replicasetStore.loadAll();
-          },
+          }
         );
       }
     }

@@ -5,7 +5,7 @@ import { BuildStore } from "../../../store/build.store";
 
 @Component({
   selector: 'fabric8-build-view-page',
-  templateUrl: './view-page.build.component.html',
+  templateUrl: './view-page.build.component.html'
 })
 export class BuildViewPage implements OnDestroy {
   private idSubscription: Subscription;

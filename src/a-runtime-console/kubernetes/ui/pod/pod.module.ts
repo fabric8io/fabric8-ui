@@ -23,7 +23,7 @@ import { KubernetesComponentsModule } from "../../components/components.module";
 export const podRoutes: Routes = [
   { path: '', component: PodsListPage },
   { path: ':id', component: PodViewPage },
-  { path: ':id/edit', component: PodEditPage },
+  { path: ':id/edit', component: PodEditPage }
 ];
 
 @NgModule({
@@ -35,7 +35,7 @@ export const podRoutes: Routes = [
     MomentModule,
     RouterModule.forChild(podRoutes),
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     PodsListPage,
@@ -49,15 +49,15 @@ export const podRoutes: Routes = [
     PodEditWrapperComponent,
     PodEditToolbarComponent,
     PodEditComponent,
-    PodDeleteDialog,
+    PodDeleteDialog
   ],
   entryComponents: [
     PodDeleteDialog,
-    PodEditPage,
+    PodEditPage
   ],
   exports: [
     ModalModule,
-    PodsListComponent,
+    PodsListComponent
   ],
   providers: [
     BsDropdownConfig

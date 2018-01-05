@@ -1,7 +1,7 @@
 import {
   async,
   ComponentFixture,
-  TestBed,
+  TestBed
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -96,7 +96,7 @@ describe('My Spaces Item Actions Component', () => {
         },
         {
           provide: SpaceNamePipe, useValue: mockSpaceNamePipe
-        },
+        }
       ],
       // Tells the compiler not to error on unknown elements and attributes
       schemas: [NO_ERRORS_SCHEMA]

@@ -22,7 +22,7 @@ export class SpaceNamespaceService implements SpaceNamespace {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {
     this.router.events
       // lets an additional event in case we miss events when reloading a page

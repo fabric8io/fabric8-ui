@@ -8,7 +8,7 @@ import { BuildStore } from "../../../store/build.store";
 
 @Component({
   selector: 'fabric8-pipelines-list-page',
-  templateUrl: './list-page.pipeline.component.html',
+  templateUrl: './list-page.pipeline.component.html'
 })
 export class PipelinesListPage implements OnInit {
   private readonly pipelines: Observable<BuildConfigs>;

@@ -5,7 +5,7 @@ import { EnvironmentModule } from "../../../../a-runtime-console/index";
 
 
 @NgModule({
-  imports: [CommonModule, EnvironmentModule],
+  imports: [CommonModule, EnvironmentModule]
 })
 export class CreateEnvironmentsModule {
   constructor(http: Http) { }

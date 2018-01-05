@@ -5,7 +5,7 @@ import { Builds } from "../../../model/build.model";
 @Component({
   selector: 'fabric8-builds-list',
   templateUrl: './list.build.component.html',
-  styleUrls: ['./list.build.component.less'],
+  styleUrls: ['./list.build.component.less']
 })
 export class BuildsListComponent {
 

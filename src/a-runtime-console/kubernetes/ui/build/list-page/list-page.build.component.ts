@@ -7,7 +7,7 @@ import { APIsStore } from "../../../store/apis.store";
 
 @Component({
   selector: 'fabric8-builds-list-page',
-  templateUrl: './list-page.build.component.html',
+  templateUrl: './list-page.build.component.html'
 })
 export class BuildsListPage implements OnInit {
   private readonly builds: Observable<Builds>;

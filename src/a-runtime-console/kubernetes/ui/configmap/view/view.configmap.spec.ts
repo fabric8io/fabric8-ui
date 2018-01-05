@@ -31,7 +31,7 @@ describe('ConfigMapViewComponent', () => {
         ],
         declarations: [
           ConfigMapViewComponent,
-          ConfigMapDeleteDialog,
+          ConfigMapDeleteDialog
         ],
       providers: [
         MockBackend,
@@ -39,10 +39,10 @@ describe('ConfigMapViewComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
-      },
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
+      }
     )
       .compileComponents();
   }));

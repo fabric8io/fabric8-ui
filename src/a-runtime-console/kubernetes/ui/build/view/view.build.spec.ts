@@ -27,11 +27,11 @@ describe('BuildViewComponent', () => {
           ModalModule,
           RestangularModule.forRoot(),
           KubernetesStoreModule,
-          TestAppModule,
+          TestAppModule
         ],
         declarations: [
           BuildViewComponent,
-          BuildDeleteDialog,
+          BuildDeleteDialog
         ],
       providers: [
         MockBackend,
@@ -39,10 +39,10 @@ describe('BuildViewComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
-      },
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
+      }
     )
       .compileComponents();
   }));

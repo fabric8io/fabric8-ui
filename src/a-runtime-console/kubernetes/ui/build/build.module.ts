@@ -23,7 +23,7 @@ import { KubernetesComponentsModule } from "../../components/components.module";
 const routes: Routes = [
   { path: '', component: BuildsListPage },
   { path: ':id', component: BuildViewPage },
-  { path: ':id/edit', component: BuildEditPage },
+  { path: ':id/edit', component: BuildEditPage }
 ];
 
 @NgModule({
@@ -35,7 +35,7 @@ const routes: Routes = [
     MomentModule,
     RouterModule.forChild(routes),
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     BuildsListPage,
@@ -49,14 +49,14 @@ const routes: Routes = [
     BuildEditWrapperComponent,
     BuildEditToolbarComponent,
     BuildEditComponent,
-    BuildDeleteDialog,
+    BuildDeleteDialog
   ],
   entryComponents: [
     BuildDeleteDialog,
-    BuildEditPage,
+    BuildEditPage
   ],
   exports: [
-    ModalModule,
+    ModalModule
   ],
   providers: [
     BsDropdownConfig

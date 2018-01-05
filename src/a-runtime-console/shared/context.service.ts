@@ -20,7 +20,7 @@ export class ContextService {
     private dummy: DummyService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private broadcaster: Broadcaster,
+    private broadcaster: Broadcaster
   ) {
     // Listen for any context refreshes requested by the app
     this.broadcaster.on<string>('refreshContext').subscribe(() => {

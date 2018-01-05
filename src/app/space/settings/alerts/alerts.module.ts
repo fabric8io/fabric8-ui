@@ -7,7 +7,7 @@ import { AlertsRoutingModule } from './alerts-routing.module';
 
 @NgModule({
   imports:      [ CommonModule, AlertsRoutingModule ],
-  declarations: [ AlertsComponent ],
+  declarations: [ AlertsComponent ]
 })
 export class AlertsModule {
   constructor(http: Http) {}

@@ -3,7 +3,7 @@ import { Space } from "../../../model/space.model";
 
 @Component({
   selector: 'fabric8-space-view',
-  templateUrl: './view.space.component.html',
+  templateUrl: './view.space.component.html'
 })
 export class SpaceViewComponent {
 

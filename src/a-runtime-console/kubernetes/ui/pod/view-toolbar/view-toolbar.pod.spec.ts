@@ -11,9 +11,9 @@ describe('PodViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [PodViewToolbarComponent],
+          declarations: [PodViewToolbarComponent]
         })
         .compileComponents();
   }));

@@ -19,7 +19,7 @@ import { ConnectedAccountsModule } from './connected-accounts/connected-accounts
     WorkItemsModule,
     ConnectedAccountsModule
   ],
-  declarations: [ OverviewComponent ],
+  declarations: [ OverviewComponent ]
 })
 export class OverviewModule {
   constructor(http: Http) {}

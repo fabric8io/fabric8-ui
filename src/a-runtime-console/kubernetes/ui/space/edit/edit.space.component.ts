@@ -4,7 +4,7 @@ import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-space-edit',
-  templateUrl: './edit.space.component.html',
+  templateUrl: './edit.space.component.html'
 })
 export class SpaceEditComponent {
 

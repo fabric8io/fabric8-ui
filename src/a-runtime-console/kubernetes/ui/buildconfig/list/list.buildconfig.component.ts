@@ -6,7 +6,7 @@ import { BuildConfigService } from "../../../service/buildconfig.service";
 @Component({
   selector: 'fabric8-buildconfigs-list',
   templateUrl: './list.buildconfig.component.html',
-  styleUrls: ['./list.buildconfig.component.less'],
+  styleUrls: ['./list.buildconfig.component.less']
 })
 export class BuildConfigsListComponent {
 

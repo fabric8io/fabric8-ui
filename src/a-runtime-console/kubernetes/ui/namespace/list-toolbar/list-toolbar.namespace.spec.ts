@@ -10,7 +10,7 @@ describe('NamespacesListToolbarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],
-      declarations: [NamespacesListToolbarComponent],
+      declarations: [NamespacesListToolbarComponent]
     })
       .compileComponents();
   }));

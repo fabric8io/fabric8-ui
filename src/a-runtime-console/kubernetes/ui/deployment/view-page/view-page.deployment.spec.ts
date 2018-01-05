@@ -38,7 +38,7 @@ describe('DeploymentViewPage', () => {
           DeploymentViewWrapperComponent,
           DeploymentViewToolbarComponent,
           DeploymentViewComponent,
-          DeploymentScaleDialog,
+          DeploymentScaleDialog
         ],
         providers: [
           MockBackend,
@@ -46,9 +46,9 @@ describe('DeploymentViewPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

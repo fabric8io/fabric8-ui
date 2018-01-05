@@ -8,7 +8,7 @@ import { BuildStore } from "../../../store/build.store";
 
 @Component({
   selector: 'fabric8-buildconfigs-list-page',
-  templateUrl: './list-page.buildconfig.component.html',
+  templateUrl: './list-page.buildconfig.component.html'
 })
 export class BuildConfigsListPage implements OnInit {
   private readonly buildconfigs: Observable<BuildConfigs>;

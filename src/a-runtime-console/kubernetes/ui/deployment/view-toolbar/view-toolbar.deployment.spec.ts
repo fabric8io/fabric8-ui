@@ -11,9 +11,9 @@ describe('DeploymentViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [DeploymentViewToolbarComponent],
+          declarations: [DeploymentViewToolbarComponent]
         })
         .compileComponents();
   }));

@@ -8,7 +8,7 @@ import { SpaceStore } from "../../../store/space.store";
       'class': "app-component flex-container in-column-direction flex-grow-1"
   },
   selector: 'fabric8-spaces-list-page',
-  templateUrl: './list-page.space.component.html',
+  templateUrl: './list-page.space.component.html'
 })
 export class SpacesListPage implements OnInit {
   private readonly spaces: Observable<Spaces>;

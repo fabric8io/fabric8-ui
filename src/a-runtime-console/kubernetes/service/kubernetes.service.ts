@@ -14,7 +14,7 @@ export abstract class KubernetesService<T extends KubernetesResource, L extends 
 
   constructor(
     kubernetesRestangular: Restangular,
-    public watcherFactory: WatcherFactory,
+    public watcherFactory: WatcherFactory
   ) {
     super(kubernetesRestangular);
   }

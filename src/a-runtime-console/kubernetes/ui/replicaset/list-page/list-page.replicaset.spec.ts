@@ -39,7 +39,7 @@ describe('ReplicaSetsListPage', () => {
         ReplicaSetsListComponent,
         ReplicaSetsListToolbarComponent,
         ReplicaSetDeleteDialog,
-        ReplicaSetScaleDialog,
+        ReplicaSetScaleDialog
       ],
       providers: [
         MockBackend,
@@ -47,9 +47,9 @@ describe('ReplicaSetsListPage', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

@@ -18,7 +18,7 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
     private namespaceScope: INamespaceScope,
     private urlSuffix: string,
     watcherFactory: WatcherFactory,
-    private urlPrefix: string = '/api/v1/namespaces/',
+    private urlPrefix: string = '/api/v1/namespaces/'
   ) {
     super(kubernetesRestangular, watcherFactory);
     this.namespace = namespaceScope.currentNamespace();
@@ -27,7 +27,7 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
       this.namespaceSubscription = this.namespaceScope.namespace.subscribe(
         namespace => {
           this.namespace = namespace;
-        },
+        }
       );
     }
   }

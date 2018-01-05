@@ -38,7 +38,7 @@ describe('PipelineViewPage', () => {
           PipelineViewWrapperComponent,
           PipelineViewToolbarComponent,
           PipelineViewComponent,
-          StageTimePipe,
+          StageTimePipe
         ],
         providers: [
           MockBackend,
@@ -46,9 +46,9 @@ describe('PipelineViewPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

@@ -18,7 +18,7 @@ if ('production' === ENV) {
   enableProdMode();
 
   PROVIDERS = [
-    ...PROVIDERS,
+    ...PROVIDERS
     // custom providers in production
   ];
 
@@ -37,7 +37,7 @@ if ('production' === ENV) {
 
   // Development
   PROVIDERS = [
-    ...PROVIDERS,
+    ...PROVIDERS
     // custom providers in development
   ];
 

@@ -12,9 +12,9 @@ describe('ReplicaSetsListToolbarComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
-        Fabric8CommonModule,
+        Fabric8CommonModule
       ],
-      declarations: [ReplicaSetsListToolbarComponent],
+      declarations: [ReplicaSetsListToolbarComponent]
     })
       .compileComponents();
   }));

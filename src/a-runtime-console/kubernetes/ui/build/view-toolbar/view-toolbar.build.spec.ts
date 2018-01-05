@@ -11,9 +11,9 @@ describe('BuildViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [BuildViewToolbarComponent],
+          declarations: [BuildViewToolbarComponent]
         })
         .compileComponents();
   }));

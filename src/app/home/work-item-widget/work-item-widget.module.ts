@@ -25,6 +25,6 @@ import { WorkItemWidgetRoutingModule } from './work-item-widget-routing.module';
     Fabric8WitModule
   ],
   declarations: [WorkItemWidgetComponent],
-  exports: [WorkItemWidgetComponent],
+  exports: [WorkItemWidgetComponent]
 })
 export class WorkItemWidgetModule { }

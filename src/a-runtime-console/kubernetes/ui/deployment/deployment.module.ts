@@ -31,7 +31,7 @@ import { DeploymentScaleDialog } from './scale-dialog/scale-dialog.deployment.co
     MomentModule,
     Fabric8CommonModule,
     KubernetesComponentsModule,
-    DeploymentRoutingModule,
+    DeploymentRoutingModule
   ],
   declarations: [
     DeploymentsListPage,
@@ -46,17 +46,17 @@ import { DeploymentScaleDialog } from './scale-dialog/scale-dialog.deployment.co
     DeploymentEditToolbarComponent,
     DeploymentEditComponent,
     DeploymentDeleteDialog,
-    DeploymentScaleDialog,
+    DeploymentScaleDialog
   ],
   entryComponents: [
     DeploymentDeleteDialog,
-    DeploymentEditPage,
+    DeploymentEditPage
   ],
   exports: [
     ModalModule,
     DeploymentsListComponent,
     DeploymentDeleteDialog,
-    DeploymentScaleDialog,
+    DeploymentScaleDialog
   ],
   providers: [
     BsDropdownConfig

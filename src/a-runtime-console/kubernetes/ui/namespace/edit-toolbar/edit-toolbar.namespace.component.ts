@@ -7,7 +7,7 @@ import { Namespace } from "../../../model/namespace.model";
 @Component({
   selector: 'fabric8-namespace-edit-toolbar',
   templateUrl: './edit-toolbar.namespace.component.html',
-  styleUrls: ['./edit-toolbar.namespace.component.less'],
+  styleUrls: ['./edit-toolbar.namespace.component.less']
 })
 export class NamespaceEditToolbarComponent {
 
@@ -21,7 +21,7 @@ export class NamespaceEditToolbarComponent {
   save() {
     let resource = this.yamlEditor.parseYaml();
     this.namespaceService.updateResource(this.namespace, resource).subscribe(
-      () => this.router.navigate(['namespaces']),
+      () => this.router.navigate(['namespaces'])
     );
   }
 }

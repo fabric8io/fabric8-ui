@@ -6,7 +6,7 @@ import { RouteServiceStore } from "../../../store/route.service.store";
 
 @Component({
   selector: 'fabric8-services-list-page',
-  templateUrl: './list-page.service.component.html',
+  templateUrl: './list-page.service.component.html'
 })
 export class ServicesListPage implements OnInit {
   private readonly services: Observable<Services>;

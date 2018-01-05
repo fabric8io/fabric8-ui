@@ -37,7 +37,7 @@ describe('ConfigMapsListPage', () => {
         ConfigMapsListPage,
         ConfigMapsListComponent,
         ConfigMapsListToolbarComponent,
-        ConfigMapDeleteDialog,
+        ConfigMapDeleteDialog
       ],
       providers: [
         MockBackend,
@@ -45,9 +45,9 @@ describe('ConfigMapsListPage', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

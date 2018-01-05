@@ -33,7 +33,7 @@ describe('DeploymentViewComponent', () => {
         declarations: [
           DeploymentViewComponent,
           DeploymentDeleteDialog,
-          DeploymentScaleDialog,
+          DeploymentScaleDialog
         ],
       providers: [
         MockBackend,
@@ -41,10 +41,10 @@ describe('DeploymentViewComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
-      },
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
+      }
     )
       .compileComponents();
   }));

@@ -31,7 +31,7 @@ describe('ReplicaSetEditPage', () => {
           ReplicaSetEditPage,
           ReplicaSetEditWrapperComponent,
           ReplicaSetEditToolbarComponent,
-          ReplicaSetEditComponent,
+          ReplicaSetEditComponent
         ],
         providers: [
           MockBackend,
@@ -39,9 +39,9 @@ describe('ReplicaSetEditPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

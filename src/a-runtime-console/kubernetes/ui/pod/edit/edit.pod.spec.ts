@@ -10,11 +10,11 @@ describe('PodEditComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FormsModule,
+        FormsModule
       ],
       declarations: [
-        PodEditComponent,
-      ],
+        PodEditComponent
+      ]
     })
       .compileComponents();
   }));

@@ -6,7 +6,7 @@ import { DeploymentViews } from '../../../view/deployment.view';
 @Component({
   selector: 'fabric8-deployments-list',
   templateUrl: './list.deployment.component.html',
-  styleUrls: ['./list.deployment.component.less'],
+  styleUrls: ['./list.deployment.component.less']
 })
 export class DeploymentsListComponent {
 

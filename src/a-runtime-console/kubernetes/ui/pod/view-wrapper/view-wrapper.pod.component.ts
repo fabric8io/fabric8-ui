@@ -7,7 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-pod-view-wrapper',
-  templateUrl: './view-wrapper.pod.component.html',
+  templateUrl: './view-wrapper.pod.component.html'
 })
 export class PodViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   pod: Observable<Pod>;

@@ -5,7 +5,7 @@ import { PodStore } from "../../../store/pod.store";
 
 @Component({
   selector: 'fabric8-pod-view-page',
-  templateUrl: './view-page.pod.component.html',
+  templateUrl: './view-page.pod.component.html'
 })
 export class PodViewPage implements OnDestroy {
   private idSubscription: Subscription;

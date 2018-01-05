@@ -36,7 +36,7 @@ describe('BuildConfigViewWrapperComponent', () => {
           BuildConfigViewWrapperComponent,
           BuildConfigViewToolbarComponent,
           BuildConfigViewComponent,
-          BuildConfigDeleteDialog,
+          BuildConfigDeleteDialog
         ],
         providers: [
           MockBackend,
@@ -44,9 +44,9 @@ describe('BuildConfigViewWrapperComponent', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

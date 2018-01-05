@@ -23,7 +23,7 @@ import { KubernetesComponentsModule } from "../../components/components.module";
 const routes: Routes = [
   { path: '', component: NamespacesListPage},
   { path: ':id', component: NamespaceViewPage },
-  { path: ':id/edit', component: NamespaceEditPage },
+  { path: ':id/edit', component: NamespaceEditPage }
 ];
 
 @NgModule({
@@ -36,7 +36,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     RouterModule,
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     NamespacesListPage,
@@ -50,14 +50,14 @@ const routes: Routes = [
     NamespaceEditWrapperComponent,
     NamespaceEditToolbarComponent,
     NamespaceEditComponent,
-    NamespaceDeleteDialog,
+    NamespaceDeleteDialog
   ],
   entryComponents: [
     NamespaceDeleteDialog,
-    NamespaceEditPage,
+    NamespaceEditPage
   ],
   exports: [
-    ModalModule,
+    ModalModule
   ],
   providers: [
     BsDropdownConfig

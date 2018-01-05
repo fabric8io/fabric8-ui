@@ -36,7 +36,7 @@ describe('BuildViewPage', () => {
           BuildViewPage,
           BuildViewWrapperComponent,
           BuildViewToolbarComponent,
-          BuildViewComponent,
+          BuildViewComponent
         ],
         providers: [
           MockBackend,
@@ -44,9 +44,9 @@ describe('BuildViewPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

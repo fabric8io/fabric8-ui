@@ -4,7 +4,7 @@ import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-pod-edit',
-  templateUrl: './edit.pod.component.html',
+  templateUrl: './edit.pod.component.html'
 })
 export class PodEditComponent {
 

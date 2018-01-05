@@ -34,7 +34,7 @@ describe('EventViewWrapperComponent', () => {
         declarations: [
           EventViewWrapperComponent,
           EventViewToolbarComponent,
-          EventViewComponent,
+          EventViewComponent
         ],
         providers: [
           MockBackend,
@@ -42,9 +42,9 @@ describe('EventViewWrapperComponent', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

@@ -23,7 +23,7 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
 
   constructor(
     private context: Contexts,
-    private codebaseService: CodebasesService,
+    private codebaseService: CodebasesService
   ) { }
 
   ngOnInit() {

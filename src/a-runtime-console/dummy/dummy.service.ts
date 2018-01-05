@@ -36,19 +36,19 @@ export class DummyService implements OnInit {
       {
         type: {
           name: 'Pipeline',
-          unit: 'minutes',
+          unit: 'minutes'
         },
         value: 124,
-        max: 200,
+        max: 200
       }, {
         type: {
           name: 'Environments',
-          unit: 'RAM-minutes',
+          unit: 'RAM-minutes'
         },
         value: 7185,
-        max: 18000,
-      },
-    ],
+        max: 18000
+      }
+    ]
   };
 
   readonly USERS: Map<string, User> = new Map<string, User>(
@@ -61,11 +61,11 @@ export class DummyService implements OnInit {
             imageURL: 'https://avatars2.githubusercontent.com/u/157761?v=3&s=460',
             email: 'pmuir@fabric8.io',
             username: 'pmuir',
-            bio: 'I like writing clever one-line bios about myself. See? I just did.',
+            bio: 'I like writing clever one-line bios about myself. See? I just did.'
           },
           id: '111',
-          type: '',
-        } as User,
+          type: ''
+        } as User
       ], [
       'qodfathr',
       {
@@ -74,22 +74,22 @@ export class DummyService implements OnInit {
           imageURL: 'https://avatars1.githubusercontent.com/u/16322190?v=3&s=460',
           email: 'tmancini@fabric8.io',
           bio: 'I like writing clever one-line bios about myself. But, I can\'t!',
-          username: 'qodfathr',
+          username: 'qodfathr'
         },
         id: '222',
-        type: '',
-      } as User,
-    ],
-    ],
+        type: ''
+      } as User
+    ]
+    ]
   );
 
   readonly ORGANIZATIONS: Map<string, Entity> = new Map<string, Entity>([
     [
       'redhat',
       {
-        id: 'redhat',
-      } as Entity,
-    ],
+        id: 'redhat'
+      } as Entity
+    ]
   ]);
 
   readonly CONTEXT_TYPES: Map<string, ContextType> = new Map<string, ContextType>([
@@ -101,8 +101,8 @@ export class DummyService implements OnInit {
         menus: [
           {
             name: 'Spaces',
-            path: '/run/spaces',
-          },
+            path: '/run/spaces'
+          }
           /*
            {
            name: 'Profile',
@@ -141,8 +141,8 @@ export class DummyService implements OnInit {
            ]
            },
            */
-        ],
-      } as ContextType,
+        ]
+      } as ContextType
     ],
     [
       'space',
@@ -191,7 +191,7 @@ export class DummyService implements OnInit {
            */
           {
             name: 'Run',
-            path: 'run',
+            path: 'run'
             /*
              menus: [
              {
@@ -215,7 +215,7 @@ export class DummyService implements OnInit {
           },
           {
             name: 'Build',
-            path: 'build',
+            path: 'build'
             /*            menus: [
              {
              name: 'Pipelines',
@@ -233,36 +233,36 @@ export class DummyService implements OnInit {
                 name: 'Overview',
                 path: '',
                 icon: '',
-                menus: [],
+                menus: []
               }, {
                 name: 'Work',
-                path: 'work',
+                path: 'work'
               }, {
                 name: 'Security',
-                path: 'security',
+                path: 'security'
               }, {
                 name: 'Alerts',
-                path: 'alerts',
-              },
-            ],
-          },
-        ],
-      } as ContextType,
+                path: 'alerts'
+              }
+            ]
+          }
+        ]
+      } as ContextType
     ],
     [
       'team',
       {
         name: 'Team',
-        icon: 'fa fa-users',
-      } as ContextType,
+        icon: 'fa fa-users'
+      } as ContextType
     ],
     [
       'organization',
       {
         name: 'Organization',
-        icon: 'fa fa-cubes',
-      } as ContextType,
-    ],
+        icon: 'fa fa-cubes'
+      } as ContextType
+    ]
   ]);
 
   readonly TEAMS: Map<string, Team> = new Map<string, Team>([
@@ -271,19 +271,19 @@ export class DummyService implements OnInit {
       {
         name: '',
         members: [
-          this.USERS.get('qodfathr'),
-        ],
-      } as Team,
+          this.USERS.get('qodfathr')
+        ]
+      } as Team
     ], [
       'balloonpopgame',
       {
         name: '',
         members: [
           this.USERS.get('pmuir'),
-          this.USERS.get('qodfathr'),
-        ],
-      } as Team,
-    ],
+          this.USERS.get('qodfathr')
+        ]
+      } as Team
+    ]
   ]);
 
   readonly SPACES: Map<string, DevSpace> = new Map<string, DevSpace>([
@@ -300,10 +300,10 @@ export class DummyService implements OnInit {
           name: 'Bobo',
           'created-at': '2017-01-01',
           'updated-at': '2017-01-02',
-          version: 1,
+          version: 1
         },
-        type: 'spaces',
-      } as DevSpace,
+        type: 'spaces'
+      } as DevSpace
     ], [
       'hysterix',
       {
@@ -317,10 +317,10 @@ export class DummyService implements OnInit {
           name: 'Hysterix',
           'created-at': '2017-01-01',
           'updated-at': '2017-01-02',
-          version: 1,
+          version: 1
         },
-        type: 'spaces',
-      } as DevSpace,
+        type: 'spaces'
+      } as DevSpace
     ], [
       'fabric8',
       {
@@ -334,10 +334,10 @@ export class DummyService implements OnInit {
           name: 'fabric8io',
           'created-at': '2017-01-01',
           'updated-at': '2017-01-02',
-          version: 1,
+          version: 1
         },
-        type: 'spaces',
-      } as DevSpace,
+        type: 'spaces'
+      } as DevSpace
     ], [
       'balloonpopgame',
       {
@@ -346,7 +346,7 @@ export class DummyService implements OnInit {
         description: '   Balloon popping fun for everyone!',
         teams: [
           this.TEAMS.get('balloonpopgame'),
-          this.TEAMS.get('balloonpopgame_ux'),
+          this.TEAMS.get('balloonpopgame_ux')
         ],
         defaultTeam: this.TEAMS.get('balloonpopgame'),
         id: '3',
@@ -354,11 +354,11 @@ export class DummyService implements OnInit {
           name: 'BalloonPopGame',
           'created-at': '2017-01-01',
           'updated-at': '2017-01-02',
-          version: 1,
+          version: 1
         },
-        type: 'spaces',
-      } as DevSpace,
-    ],
+        type: 'spaces'
+      } as DevSpace
+    ]
   ]);
 
   readonly CONTEXTS: Map<string, Context> = new Map<string, Context>([
@@ -368,8 +368,8 @@ export class DummyService implements OnInit {
         entity: this.USERS.get('pmuir'),
         type: this.CONTEXT_TYPES.get('user'),
         path: '/pmuir',
-        name: 'pmuir',
-      } as Context,
+        name: 'pmuir'
+      } as Context
     ], [
       'balloonpopgame',
       {
@@ -377,8 +377,8 @@ export class DummyService implements OnInit {
         space: this.SPACES.get('balloonpopgame'),
         type: this.CONTEXT_TYPES.get('space'),
         path: '/pmuir/BalloonPopGame',
-        name: 'BalloonPopGame',
-      } as Context,
+        name: 'BalloonPopGame'
+      } as Context
     ], [
       'ux',
       {
@@ -387,24 +387,24 @@ export class DummyService implements OnInit {
         team: this.TEAMS.get('balloonpopgame_ux'),
         type: this.CONTEXT_TYPES.get('team'),
         path: null,
-        name: 'BalloonPopGame / UX Team',
-      } as Context,
+        name: 'BalloonPopGame / UX Team'
+      } as Context
     ], [
       'redhat',
       {
         entity: this.ORGANIZATIONS.get('redhat'),
         type: this.CONTEXT_TYPES.get('organization'),
         path: null,
-        name: 'Red Hat Organization',
-      } as Context,
-    ],
+        name: 'Red Hat Organization'
+      } as Context
+    ]
   ]);
 
   readonly PROCESS_TEMPLATES: ProcessTemplate[] = [
     {name: 'Agile'},
     {name: 'Scrum'},
     {name: 'Issue Tracking'},
-    {name: 'Scenario Driven Planning'},
+    {name: 'Scenario Driven Planning'}
   ];
   private _devSpaces: DevSpace[];
   private _currentContext: Context;
@@ -426,7 +426,7 @@ export class DummyService implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private spaceStore: SpaceStore,
-              private buildConfigStore: BuildConfigStore, ) {
+              private buildConfigStore: BuildConfigStore ) {
     this._defaultContexts = this.initDummy('contexts', this.CONTEXTS);
     this._devSpaces = this.initDummy('spaces', this.SPACES);
     this._contexts = this._defaultContexts;
@@ -451,12 +451,12 @@ export class DummyService implements OnInit {
     this.broadcaster.on<User>('currentUserInit').subscribe(
       message => {
         this.addUser(message);
-      },
+      }
     );
     this.broadcaster.on<string>('logout').subscribe(
       () => {
         this._currentUser = null;
-      },
+      }
     );
     this.save();
 
@@ -670,7 +670,7 @@ export class DummyService implements OnInit {
       entity: space,
       type: this.createSpaceContextType(space, buildConfigPath, buildPath, pipelinePath, pipelineHistoryPath, runPath),
       path: buildConfigPath,
-      name: spaceName,
+      name: spaceName
     };
     return context;
   }
@@ -696,7 +696,7 @@ export class DummyService implements OnInit {
       entity: labelSpace,
       type: this.createSpaceContextType(space, buildConfigPath, buildPath, pipelinePath, pipelineHistoryPath, runPath),
       path: buildPath,
-      name: labelSpace.label,
+      name: labelSpace.label
     };
     return context;
   }
@@ -706,20 +706,20 @@ export class DummyService implements OnInit {
     var appMenus = [
       {
         name: "Codebases",
-        path: buildConfigPath,
+        path: buildConfigPath
       },
       {
         name: "Pipelines",
-        path: pipelinePath,
+        path: pipelinePath
       },
       {
         name: "History",
-        path: pipelineHistoryPath,
+        path: pipelineHistoryPath
       },
       {
         name: "Builds",
-        path: buildPath,
-      },
+        path: buildPath
+      }
     ]
     return {
       name: 'DevSpace',
@@ -766,7 +766,7 @@ export class DummyService implements OnInit {
          */
         {
           name: 'Create',
-          menus: appMenus,
+          menus: appMenus
         },
 /*
         {
@@ -786,12 +786,12 @@ export class DummyService implements OnInit {
           name: 'Run',
           path: runPath,
           menus: runMenus,
-          defaultActive: true,
+          defaultActive: true
         },
         {
           name: '',
           path: 'settings',
-          icon: 'pficon pficon-settings',
+          icon: 'pficon pficon-settings'
           /*          menus: [
            {
            name: 'Overview',
@@ -809,8 +809,8 @@ export class DummyService implements OnInit {
            path: 'alerts',
            },
            ],*/
-        },
-      ],
+        }
+      ]
     } as ContextType;
   }
 
@@ -826,12 +826,12 @@ export class DummyService implements OnInit {
       if (environments && environments.length) {
         runMenus.push({
           name: "Tools",
-          path: this.createUrlPrefix(space.name, space.name, label, app, false) + resourcePath,
+          path: this.createUrlPrefix(space.name, space.name, label, app, false) + resourcePath
         });
 
         runMenus.push({
           name: "Environments",
-          path: this.createUrlPrefix(space.name, space.name, label, app, true),
+          path: this.createUrlPrefix(space.name, space.name, label, app, true)
         });
 
         environments.forEach(env => {
@@ -840,7 +840,7 @@ export class DummyService implements OnInit {
           var path = prefix + resourcePath;
           runMenus.push({
             name: envName,
-            path: path,
+            path: path
           })
         });
       }
@@ -884,7 +884,7 @@ export class DummyService implements OnInit {
       entity: bc,
       type: this.createBuildConfigContextType(space, buildPath, runPath),
       path: buildPath,
-      name: bc.name,
+      name: bc.name
     };
     return context;
   }
@@ -945,18 +945,18 @@ export class DummyService implements OnInit {
            },
            ],
            */
-          menus: [],
+          menus: []
         },
         {
           name: 'Run',
           path: runPath,
           menus: runMenus,
-          defaultActive: true,
+          defaultActive: true
         },
         {
           name: '',
           path: 'settings',
-          icon: 'pficon pficon-settings',
+          icon: 'pficon pficon-settings'
           /*          menus: [
            {
            name: 'Overview',
@@ -974,8 +974,8 @@ export class DummyService implements OnInit {
            path: 'alerts',
            },
            ],*/
-        },
-      ],
+        }
+      ]
     } as ContextType;
   }
 

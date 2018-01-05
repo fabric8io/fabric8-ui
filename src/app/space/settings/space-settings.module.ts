@@ -10,7 +10,7 @@ import { AreasModule } from './areas/areas.module';
 
 @NgModule({
   imports:      [ CommonModule, SpaceSettingsRoutingModule, SettingsOverviewModule, AreasModule ],
-  declarations: [ SpaceSettingsComponent ],
+  declarations: [ SpaceSettingsComponent ]
 })
 export class SpaceSettingsModule {
   constructor(http: Http) {}

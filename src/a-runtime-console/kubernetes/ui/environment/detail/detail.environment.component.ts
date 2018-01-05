@@ -7,7 +7,7 @@ import { trimEnd } from 'lodash';
 
 @Component({
   selector: 'fabric8-environments-detail',
-  templateUrl: './detail.environment.component.html',
+  templateUrl: './detail.environment.component.html'
 })
 export class EnvironmentDetailComponent implements OnInit, AfterViewInit {
 
@@ -19,7 +19,7 @@ export class EnvironmentDetailComponent implements OnInit, AfterViewInit {
 
   constructor(
     parentLinkFactory: ParentLinkFactory,
-    private router: Router,
+    private router: Router
   ) {
     this.parentLink = parentLinkFactory.parentLink;
   }

@@ -10,11 +10,11 @@ describe('BuildConfigEditComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FormsModule,
+        FormsModule
       ],
       declarations: [
-        BuildConfigEditComponent,
-      ],
+        BuildConfigEditComponent
+      ]
     })
       .compileComponents();
   }));

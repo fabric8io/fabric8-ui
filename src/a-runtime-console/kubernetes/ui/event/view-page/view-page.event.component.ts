@@ -5,7 +5,7 @@ import { EventStore } from "../../../store/event.store";
 
 @Component({
   selector: 'fabric8-event-view-page',
-  templateUrl: './view-page.event.component.html',
+  templateUrl: './view-page.event.component.html'
 })
 export class EventViewPage implements OnDestroy {
   private idSubscription: Subscription;

@@ -31,7 +31,7 @@ describe('DeploymentEditPage', () => {
           DeploymentEditPage,
           DeploymentEditWrapperComponent,
           DeploymentEditToolbarComponent,
-          DeploymentEditComponent,
+          DeploymentEditComponent
         ],
         providers: [
           MockBackend,
@@ -39,9 +39,9 @@ describe('DeploymentEditPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

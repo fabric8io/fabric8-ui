@@ -27,12 +27,12 @@ describe('BuildEditWrapperComponent', () => {
           MomentModule,
           ModalModule,
           KubernetesStoreModule,
-          TestAppModule,
+          TestAppModule
         ],
         declarations: [
           BuildEditWrapperComponent,
           BuildEditToolbarComponent,
-          BuildEditComponent,
+          BuildEditComponent
         ],
         providers: [
           MockBackend,
@@ -40,9 +40,9 @@ describe('BuildEditWrapperComponent', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

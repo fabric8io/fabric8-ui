@@ -12,7 +12,7 @@ import {
   GitHubRepoDetails,
   GitHubRepoLastCommit,
   GitHubRepoLicense,
-  GitHubUser,
+  GitHubUser
 } from './github';
 
 /**

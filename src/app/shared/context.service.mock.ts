@@ -127,7 +127,7 @@ export const context1: Context = {
       areas: {
         links: {
           related: "http://localhost:8080/api/spaces/5444e0bc-f21e-4090-a3bc-1f0fe293a113/backlog"
-        },
+        }
       },
       iterations: {
         links: {

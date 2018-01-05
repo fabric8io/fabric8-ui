@@ -10,7 +10,7 @@ const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(
     ['realm', 'FABRIC8_REALM'],
     ['branding', 'BRANDING'],
     ['forge', 'FABRIC8_FORGE_API_URL'],
-    ['auth', 'FABRIC8_AUTH_API_URL'],
+    ['auth', 'FABRIC8_AUTH_API_URL']
   ]
 );
 

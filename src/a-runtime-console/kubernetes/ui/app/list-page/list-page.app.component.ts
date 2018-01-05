@@ -18,7 +18,7 @@ import { Subscription } from "rxjs/Subscription";
 
 @Component({
   selector: 'fabric8-apps-list-page',
-  templateUrl: './list-page.app.component.html',
+  templateUrl: './list-page.app.component.html'
 })
 export class AppListPageComponent extends AbstractWatchComponent implements OnInit, OnDestroy {
 
@@ -42,7 +42,7 @@ export class AppListPageComponent extends AbstractWatchComponent implements OnIn
               private deploymentService: DeploymentService,
               private spaceNamespace: SpaceNamespace,
               private notifications: Notifications,
-              private route: ActivatedRoute, ) {
+              private route: ActivatedRoute ) {
     super();
   }
 

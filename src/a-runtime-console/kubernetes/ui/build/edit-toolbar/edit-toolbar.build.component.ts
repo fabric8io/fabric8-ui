@@ -7,7 +7,7 @@ import { Build } from "../../../model/build.model";
 @Component({
   selector: 'fabric8-build-edit-toolbar',
   templateUrl: './edit-toolbar.build.component.html',
-  styleUrls: ['./edit-toolbar.build.component.less'],
+  styleUrls: ['./edit-toolbar.build.component.less']
 })
 export class BuildEditToolbarComponent {
 
@@ -21,7 +21,7 @@ export class BuildEditToolbarComponent {
   save() {
     let resource = this.yamlEditor.parseYaml();
     this.buildService.updateResource(this.build, resource).subscribe(
-      () => this.router.navigate(['builds']),
+      () => this.router.navigate(['builds'])
     );
   }
 }

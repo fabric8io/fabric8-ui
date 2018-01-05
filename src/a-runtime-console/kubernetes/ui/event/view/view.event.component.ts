@@ -5,7 +5,7 @@ import { resourceKindToCollectionName, isNamespacedKind } from "../../../model/h
 
 @Component({
   selector: 'fabric8-event-view',
-  templateUrl: './view.event.component.html',
+  templateUrl: './view.event.component.html'
 })
 export class EventViewComponent implements OnChanges {
   public involvedObjectPath: string;

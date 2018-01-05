@@ -9,7 +9,7 @@ import { NamespaceStore } from "../../../store/namespace.store";
   },
   selector: 'fabric8-namespaces-list-page',
   templateUrl: './list-page.namespace.component.html',
-  styleUrls: ['./list-page.namespace.component.less'],
+  styleUrls: ['./list-page.namespace.component.less']
 })
 export class NamespacesListPage implements OnInit {
   private readonly namespaces: Observable<Namespaces>;

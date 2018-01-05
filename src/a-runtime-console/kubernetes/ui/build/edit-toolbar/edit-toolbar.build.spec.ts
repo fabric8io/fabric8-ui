@@ -19,7 +19,7 @@ describe('BuildEditToolbarComponent', () => {
             RouterTestingModule.withRoutes([]),
             RestangularModule.forRoot(),
             KubernetesStoreModule,
-            TestAppModule,
+            TestAppModule
           ],
           declarations: [BuildEditToolbarComponent],
           providers: [
@@ -28,9 +28,9 @@ describe('BuildEditToolbarComponent', () => {
             {
               provide: Http, useFactory: (backend, options) => {
                 return new Http(backend, options);
-              }, deps: [MockBackend, RequestOptions],
-            },
-          ],
+              }, deps: [MockBackend, RequestOptions]
+            }
+          ]
         })
         .compileComponents();
   }));

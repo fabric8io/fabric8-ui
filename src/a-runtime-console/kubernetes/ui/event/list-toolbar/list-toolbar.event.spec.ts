@@ -12,9 +12,9 @@ describe('EventsListToolbarComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
-        Fabric8CommonModule,
+        Fabric8CommonModule
       ],
-      declarations: [EventsListToolbarComponent],
+      declarations: [EventsListToolbarComponent]
     })
       .compileComponents();
   }));

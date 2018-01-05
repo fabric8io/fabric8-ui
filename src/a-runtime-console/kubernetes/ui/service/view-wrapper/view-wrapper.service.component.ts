@@ -7,7 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-service-view-wrapper',
-  templateUrl: './view-wrapper.service.component.html',
+  templateUrl: './view-wrapper.service.component.html'
 })
 export class ServiceViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   service: Observable<Service>;

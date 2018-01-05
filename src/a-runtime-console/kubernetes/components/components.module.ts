@@ -9,7 +9,7 @@ import { BuildStatusIconComponent } from "./build-status-icon/build-status-icon.
 @NgModule({
   imports: [
     CommonModule,
-    Fabric8CommonModule,
+    Fabric8CommonModule
   ],
   declarations: [
     BuildStatusIconComponent,
@@ -22,7 +22,7 @@ import { BuildStatusIconComponent } from "./build-status-icon/build-status-icon.
     KubernetesLabelsComponent,
     PodPhaseIconComponent,
     PipelineStatusComponent
-  ],
+  ]
 })
 export class KubernetesComponentsModule {
 }

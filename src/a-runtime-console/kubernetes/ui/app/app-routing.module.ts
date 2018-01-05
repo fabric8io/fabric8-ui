@@ -8,17 +8,17 @@ const routes: Routes = [
     component: AppListPageComponent,
     // Can't use lazy loading here as we need to import in to another module, and that doesn't work yet
     children: [
-    ],
-  },
+    ]
+  }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(routes),
+    RouterModule.forChild(routes)
   ],
   exports: [
-    RouterModule,
-  ],
+    RouterModule
+  ]
 })
 export class AppRoutingModule {
 }

@@ -24,6 +24,6 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
     WorkItemDetailAddTypeSelectorModule
   ],
   declarations: [CreateWorkItemWidgetComponent, CreateWorkItemOverlayComponent],
-  exports: [CreateWorkItemWidgetComponent],
+  exports: [CreateWorkItemWidgetComponent]
 })
 export class CreateWorkItemWidgetModule { }

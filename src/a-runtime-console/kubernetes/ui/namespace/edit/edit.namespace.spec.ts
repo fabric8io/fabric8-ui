@@ -10,11 +10,11 @@ describe('NamespaceEditComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FormsModule,
+        FormsModule
       ],
       declarations: [
-        NamespaceEditComponent,
-      ],
+        NamespaceEditComponent
+      ]
     })
       .compileComponents();
   }));

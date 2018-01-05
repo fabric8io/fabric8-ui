@@ -53,7 +53,7 @@ describe('API Locator Service', function () {
   it('Ensure APILocatorService is injectable', function () {
     TestBed.configureTestingModule({
       declarations: [TestAPILocatorServiceComponent],
-      providers: [ApiLocatorService, Fabric8UIConfig, ProviderService],
+      providers: [ApiLocatorService, Fabric8UIConfig, ProviderService]
     });
     var fixture = TestBed.createComponent(TestAPILocatorServiceComponent);
     var comp = fixture.componentInstance

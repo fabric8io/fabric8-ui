@@ -9,7 +9,7 @@ import { DeploymentScaleDialog } from "../../deployment/scale-dialog/scale-dialo
 @Component({
   selector: 'fabric8-apps-list',
   templateUrl: './list.app.component.html',
-  styleUrls: ['./list.app.component.less'],
+  styleUrls: ['./list.app.component.less']
 })
 export class AppListComponent {
   parentLink: string;
@@ -23,7 +23,7 @@ export class AppListComponent {
   @ViewChild(DeploymentScaleDialog) scaleDialog: DeploymentScaleDialog;
 
   constructor(
-    parentLinkFactory: ParentLinkFactory,
+    parentLinkFactory: ParentLinkFactory
   ) {
     this.parentLink = parentLinkFactory.parentLink;
   }

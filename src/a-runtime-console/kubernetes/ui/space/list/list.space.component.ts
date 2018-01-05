@@ -5,7 +5,7 @@ import { ParentLinkFactory } from "../../../../common/parent-link-factory";
 
 @Component({
   selector: 'fabric8-spaces-list',
-  templateUrl: './list.space.component.html',
+  templateUrl: './list.space.component.html'
 })
 export class SpacesListComponent {
   parentLink: string;

@@ -36,7 +36,7 @@ describe('ServiceViewPage', () => {
           ServiceViewPage,
           ServiceViewWrapperComponent,
           ServiceViewToolbarComponent,
-          ServiceViewComponent,
+          ServiceViewComponent
         ],
         providers: [
           MockBackend,
@@ -44,9 +44,9 @@ describe('ServiceViewPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

@@ -5,7 +5,7 @@ import { ReplicaSetStore } from "../../../store/replicaset.store";
 
 @Component({
   selector: 'fabric8-replicaset-edit-page',
-  templateUrl: './edit-page.replicaset.component.html',
+  templateUrl: './edit-page.replicaset.component.html'
 })
 export class ReplicaSetEditPage implements OnDestroy {
   private idSubscription: Subscription;

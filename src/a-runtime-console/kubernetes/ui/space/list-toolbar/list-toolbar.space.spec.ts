@@ -10,7 +10,7 @@ describe('SpacesListToolbarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([])],
-      declarations: [SpacesListToolbarComponent],
+      declarations: [SpacesListToolbarComponent]
     })
       .compileComponents();
   }));

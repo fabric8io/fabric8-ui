@@ -4,7 +4,7 @@ import { SpaceStore } from "../../../store/space.store";
 
 @Component({
   selector: 'delete-space-dialog',
-  templateUrl: './delete-dialog.space.component.html',
+  templateUrl: './delete-dialog.space.component.html'
 })
 export class SpaceDeleteDialog {
   space: Space = createEmptySpace();
@@ -19,7 +19,7 @@ export class SpaceDeleteDialog {
     this.spaceStore.delete(this.space).subscribe(
       () => {
         this.spaceStore.loadAll();
-      },
+      }
     );
   }
 

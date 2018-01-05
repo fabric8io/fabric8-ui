@@ -23,7 +23,7 @@ import { KubernetesComponentsModule } from "../../components/components.module";
 export const serviceRoutes: Routes = [
   { path: '', component: ServicesListPage },
   { path: ':id', component: ServiceViewPage },
-  { path: ':id/edit', component: ServiceEditPage },
+  { path: ':id/edit', component: ServiceEditPage }
 ];
 
 @NgModule({
@@ -35,7 +35,7 @@ export const serviceRoutes: Routes = [
     MomentModule,
     RouterModule.forChild(serviceRoutes),
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     ServicesListPage,
@@ -49,15 +49,15 @@ export const serviceRoutes: Routes = [
     ServiceEditWrapperComponent,
     ServiceEditToolbarComponent,
     ServiceEditComponent,
-    ServiceDeleteDialog,
+    ServiceDeleteDialog
   ],
   entryComponents: [
     ServiceDeleteDialog,
-    ServiceEditPage,
+    ServiceEditPage
   ],
   exports: [
     ModalModule,
-    ServicesListComponent,
+    ServicesListComponent
   ],
   providers: [
     BsDropdownConfig

@@ -31,7 +31,7 @@ describe('ServiceViewComponent', () => {
         ],
         declarations: [
           ServiceViewComponent,
-          ServiceDeleteDialog,
+          ServiceDeleteDialog
         ],
       providers: [
         MockBackend,
@@ -39,10 +39,10 @@ describe('ServiceViewComponent', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
-      },
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
+      }
     )
       .compileComponents();
   }));

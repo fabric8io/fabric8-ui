@@ -5,7 +5,7 @@ import { NamespaceService } from "../../../service/namespace.service";
 
 @Component({
   selector: 'delete-namespace-dialog',
-  templateUrl: './delete-dialog.namespace.component.html',
+  templateUrl: './delete-dialog.namespace.component.html'
 })
 export class NamespaceDeleteDialog {
   namespace: Namespace = new Namespace();
@@ -20,7 +20,7 @@ export class NamespaceDeleteDialog {
     this.namespaceService.delete(this.namespace).subscribe(
       () => {
         this.namespaceStore.loadAll();
-      },
+      }
     );
   }
 

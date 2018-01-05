@@ -4,7 +4,7 @@ import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-service-edit',
-  templateUrl: './edit.service.component.html',
+  templateUrl: './edit.service.component.html'
 })
 export class ServiceEditComponent {
 

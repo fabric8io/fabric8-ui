@@ -34,7 +34,7 @@ import {
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-my-spaces',
   templateUrl: 'my-spaces.component.html',
-  styleUrls: ['./my-spaces.component.less'],
+  styleUrls: ['./my-spaces.component.less']
 })
 export class MySpacesComponent implements OnDestroy, OnInit {
   @ViewChild('createSpace') createSpaceTemplate: TemplateRef<any>;

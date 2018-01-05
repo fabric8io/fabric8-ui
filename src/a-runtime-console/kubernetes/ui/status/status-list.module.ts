@@ -22,21 +22,21 @@ import { StatusInfoComponent } from "./status-info-component";
     MomentModule,
     RouterModule,
     Fabric8CommonModule,
-    KubernetesComponentsModule,
+    KubernetesComponentsModule
   ],
   declarations: [
     StatusInfoComponent,
-    StatusListComponent,
+    StatusListComponent
   ],
   providers: [
     BsDropdownConfig,
     SpaceStore,
-    NamespaceStore,
+    NamespaceStore
   ],
   exports: [
     StatusInfoComponent,
-    StatusListComponent,
-  ],
+    StatusListComponent
+  ]
 })
 export class StatusListModule {
 }

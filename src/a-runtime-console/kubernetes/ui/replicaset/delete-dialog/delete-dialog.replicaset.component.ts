@@ -7,7 +7,7 @@ import { CompositeReplicaSetStore } from "../../../store/compositedreplicaset.st
 
 @Component({
   selector: 'delete-replicaset-dialog',
-  templateUrl: './delete-dialog.replicaset.component.html',
+  templateUrl: './delete-dialog.replicaset.component.html'
 })
 export class ReplicaSetDeleteDialog {
   replicaset: ReplicaSet = new ReplicaSet();
@@ -26,13 +26,13 @@ export class ReplicaSetDeleteDialog {
       this.replicationControllerService.delete(replicaset).subscribe(
         () => {
           this.replicasetStore.loadAll();
-        },
+        }
       );
     } else {
       this.replicasetService.delete(replicaset).subscribe(
         () => {
           this.replicasetStore.loadAll();
-        },
+        }
       );
     }
   }

@@ -11,9 +11,9 @@ describe('SpaceViewToolbarComponent', () => {
     TestBed
         .configureTestingModule({
           imports: [
-            RouterTestingModule.withRoutes([]),
+            RouterTestingModule.withRoutes([])
           ],
-          declarations: [SpaceViewToolbarComponent],
+          declarations: [SpaceViewToolbarComponent]
         })
         .compileComponents();
   }));

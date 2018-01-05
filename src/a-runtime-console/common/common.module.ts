@@ -24,7 +24,7 @@ import { SafeUrlPipe } from "./safeurl.pipe";
     TruncateWordsPipe,
     LoadingComponent,
     ResourceHeaderComponent,
-    SafeUrlPipe,
+    SafeUrlPipe
   ],
   exports: [
     EntriesPipe,
@@ -32,13 +32,13 @@ import { SafeUrlPipe } from "./safeurl.pipe";
     TruncateWordsPipe,
     LoadingComponent,
     ResourceHeaderComponent,
-    SafeUrlPipe,
+    SafeUrlPipe
   ],
   providers: [
     BsDropdownConfig,
     ParentLinkFactory,
     OAuthService,
-    OnLogin,
-  ],
+    OnLogin
+  ]
 })
 export class Fabric8CommonModule { }

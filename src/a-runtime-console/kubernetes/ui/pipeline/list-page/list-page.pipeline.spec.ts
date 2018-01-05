@@ -37,7 +37,7 @@ describe('PipelinesListPage', () => {
         KubernetesComponentsModule,
         BuildConfigDialogsModule,
         TestAppModule,
-        StackDetailsModule,
+        StackDetailsModule
       ],
       declarations: [
         BuildStageViewComponent,
@@ -45,7 +45,7 @@ describe('PipelinesListPage', () => {
         PipelinesListPage,
         PipelinesListComponent,
         PipelinesListToolbarComponent,
-        StageTimePipe,
+        StageTimePipe
       ],
       providers: [
         MockBackend,
@@ -53,9 +53,9 @@ describe('PipelinesListPage', () => {
         {
           provide: Http, useFactory: (backend, options) => {
             return new Http(backend, options);
-          }, deps: [MockBackend, RequestOptions],
-        },
-      ],
+          }, deps: [MockBackend, RequestOptions]
+        }
+      ]
     })
       .compileComponents();
   }));

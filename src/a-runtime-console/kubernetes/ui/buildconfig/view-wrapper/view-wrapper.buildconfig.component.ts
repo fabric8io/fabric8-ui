@@ -7,7 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-buildconfig-view-wrapper',
-  templateUrl: './view-wrapper.buildconfig.component.html',
+  templateUrl: './view-wrapper.buildconfig.component.html'
 })
 export class BuildConfigViewWrapperComponent extends AbstractViewWrapperComponent implements OnInit {
   buildconfig: Observable<BuildConfig>;

@@ -4,7 +4,7 @@ import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-configmap-edit',
-  templateUrl: './edit.configmap.component.html',
+  templateUrl: './edit.configmap.component.html'
 })
 export class ConfigMapEditComponent {
 

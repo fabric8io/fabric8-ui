@@ -48,7 +48,7 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
       showCheckAll: false,
       showUncheckAll: false,
       dynamicTitleMaxItems: 3,
-      maxHeight: '300px',
+      maxHeight: '300px'
     };
 
     this.openSubscription = this.host.onOpen.subscribe(() => {

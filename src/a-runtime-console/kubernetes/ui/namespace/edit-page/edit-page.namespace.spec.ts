@@ -31,7 +31,7 @@ describe('NamespaceEditPage', () => {
           NamespaceEditPage,
           NamespaceEditWrapperComponent,
           NamespaceEditToolbarComponent,
-          NamespaceEditComponent,
+          NamespaceEditComponent
         ],
         providers: [
           MockBackend,
@@ -39,9 +39,9 @@ describe('NamespaceEditPage', () => {
           {
             provide: Http, useFactory: (backend, options) => {
               return new Http(backend, options);
-            }, deps: [MockBackend, RequestOptions],
-          },
-        ],
+            }, deps: [MockBackend, RequestOptions]
+          }
+        ]
       })
       .compileComponents();
   }));

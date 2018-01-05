@@ -6,7 +6,7 @@ import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-space-edit-wrapper',
-  templateUrl: './edit-wrapper.space.component.html',
+  templateUrl: './edit-wrapper.space.component.html'
 })
 export class SpaceEditWrapperComponent implements OnInit {
   space: Observable<Space>;

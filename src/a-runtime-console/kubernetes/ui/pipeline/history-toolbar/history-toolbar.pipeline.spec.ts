@@ -12,9 +12,9 @@ describe('PipelinesHistoryToolbarComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
-        Fabric8CommonModule,
+        Fabric8CommonModule
       ],
-      declarations: [PipelinesHistoryToolbarComponent],
+      declarations: [PipelinesHistoryToolbarComponent]
     })
       .compileComponents();
   }));

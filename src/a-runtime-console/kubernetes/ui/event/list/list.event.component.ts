@@ -4,7 +4,7 @@ import { Events } from "../../../model/event.model";
 @Component({
   selector: 'fabric8-events-list',
   templateUrl: './list.event.component.html',
-  styleUrls: ['./list.event.component.less'],
+  styleUrls: ['./list.event.component.less']
 })
 export class EventsListComponent {
 

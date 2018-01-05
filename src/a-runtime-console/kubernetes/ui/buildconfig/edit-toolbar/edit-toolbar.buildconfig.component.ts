@@ -7,7 +7,7 @@ import { BuildConfig } from "../../../model/buildconfig.model";
 @Component({
   selector: 'fabric8-buildconfig-edit-toolbar',
   templateUrl: './edit-toolbar.buildconfig.component.html',
-  styleUrls: ['./edit-toolbar.buildconfig.component.less'],
+  styleUrls: ['./edit-toolbar.buildconfig.component.less']
 })
 export class BuildConfigEditToolbarComponent {
 
@@ -21,7 +21,7 @@ export class BuildConfigEditToolbarComponent {
   save() {
     let resource = this.yamlEditor.parseYaml();
     this.buildconfigService.updateResource(this.buildconfig, resource).subscribe(
-      () => this.router.navigate(['buildconfigs']),
+      () => this.router.navigate(['buildconfigs'])
     );
   }
 }

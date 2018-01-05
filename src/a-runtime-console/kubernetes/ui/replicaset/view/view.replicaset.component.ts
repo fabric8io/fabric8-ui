@@ -4,7 +4,7 @@ import { ReplicaSetScaleDialog } from "../scale-dialog/scale-dialog.replicaset.c
 
 @Component({
   selector: 'fabric8-replicaset-view',
-  templateUrl: './view.replicaset.component.html',
+  templateUrl: './view.replicaset.component.html'
 })
 export class ReplicaSetViewComponent {
 

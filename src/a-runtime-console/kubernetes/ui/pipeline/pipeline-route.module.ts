@@ -25,7 +25,7 @@ import { PipelineModule } from "./pipeline.module";
 
 const routes: Routes = [
   { path: '', component: PipelinesListPage },
-  { path: ':id', component: PipelineViewPage },
+  { path: ':id', component: PipelineViewPage }
 ];
 
 @NgModule({
@@ -37,14 +37,14 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     Fabric8CommonModule,
     KubernetesComponentsModule,
-    PipelineModule,
+    PipelineModule
   ],
   declarations: [
   ],
   entryComponents: [
   ],
   exports: [
-  ],
+  ]
 })
 export class PipelineRouteModule {
 }
