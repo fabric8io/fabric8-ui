@@ -80,7 +80,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
         }
       },
       transition: {
-        duration: 350
+        duration: 0
       },
       data: {
         type: 'donut',
@@ -122,7 +122,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
 
   ngOnDestroy(): void {
     if (this.chart) {
-      this.chart = this.chart.destroy();
+      this.chart.unload({ done: () => this.chart = this.chart.destroy() });
     }
   }
 
