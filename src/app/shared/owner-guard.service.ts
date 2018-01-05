@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
   CanActivate,
   CanActivateChild,
-  ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
 
 import { AuthenticationService } from 'ngx-login-client';
 
-import { LoginService } from './login.service';
 import { ContextService } from './context.service';
+import { LoginService } from './login.service';
 
 /**
  * A guard which checks that the owner of the resource is the same as the one

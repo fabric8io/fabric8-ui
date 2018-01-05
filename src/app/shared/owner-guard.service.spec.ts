@@ -1,5 +1,5 @@
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { AuthenticationService } from 'ngx-login-client';
 
@@ -45,69 +45,67 @@ describe('OwnerGuard', () => {
     });
   });
 
-  describe('should handle logged in users who are not viewing their own context', () => {
+  describe('should handle logged in users', () => {
     let ownerGuard: OwnerGuard;
     let mockAuthService = { isLoggedIn: () => { return true; } };
-    let mockContextService = { viewingOwnContext: () => { return false; } };
     let mockLoginService = { redirectToLogin: () => { } };
     let mockRoute = { } as ActivatedRouteSnapshot;
     let mockState = { } as RouterStateSnapshot;
 
-    beforeEach(() => {
-      spyOn(mockAuthService, 'isLoggedIn').and.callThrough();
+    describe('should handle logged in users who are not viewing their own context', () => {
+      let mockContextService = { viewingOwnContext: () => { return false; } };
 
-      TestBed.configureTestingModule({
-        providers: [
-          OwnerGuard,
-          { provide: AuthenticationService, useValue: mockAuthService },
-          { provide: ContextService, useValue: mockContextService },
-          { provide: LoginService, useValue: mockLoginService }
-        ]
+      beforeEach(() => {
+        spyOn(mockAuthService, 'isLoggedIn').and.callThrough();
+
+        TestBed.configureTestingModule({
+          providers: [
+            OwnerGuard,
+            { provide: AuthenticationService, useValue: mockAuthService },
+            { provide: ContextService, useValue: mockContextService },
+            { provide: LoginService, useValue: mockLoginService }
+          ]
+        });
+        ownerGuard = TestBed.get(OwnerGuard);
       });
-      ownerGuard = TestBed.get(OwnerGuard);
-    });
 
-    it('via root path', () => {
-      expect(ownerGuard.canActivate(mockRoute, mockState)).toBeFalsy();
-      expect(mockAuthService.isLoggedIn).toHaveBeenCalled();
-    });
-
-    it('via child path', () => {
-      expect(ownerGuard.canActivate(mockRoute, mockState)).toBeFalsy();
-      expect(mockAuthService.isLoggedIn).toHaveBeenCalled();
-    });
-  });
-
-  describe('should handle logged in users who are viewing their own context', () => {
-    let ownerGuard: OwnerGuard;
-    let mockAuthService = { isLoggedIn: () => { return true; } };
-    let mockContextService = { viewingOwnContext: () => { return true; } };
-    let mockLoginService = { redirectToLogin: () => { } };
-    let mockRoute = {} as ActivatedRouteSnapshot;
-    let mockState = {} as RouterStateSnapshot;
-
-    beforeEach(() => {
-      spyOn(mockAuthService, 'isLoggedIn').and.callThrough();
-
-      TestBed.configureTestingModule({
-        providers: [
-          OwnerGuard,
-          { provide: AuthenticationService, useValue: mockAuthService },
-          { provide: ContextService, useValue: mockContextService },
-          { provide: LoginService, useValue: mockLoginService }
-        ]
+      it('via root path', () => {
+        expect(ownerGuard.canActivate(mockRoute, mockState)).toBeFalsy();
+        expect(mockAuthService.isLoggedIn).toHaveBeenCalled();
       });
-      ownerGuard = TestBed.get(OwnerGuard);
+
+      it('via child path', () => {
+        expect(ownerGuard.canActivate(mockRoute, mockState)).toBeFalsy();
+        expect(mockAuthService.isLoggedIn).toHaveBeenCalled();
+      });
     });
 
-    it('via root path', () => {
-      expect(ownerGuard.canActivate(mockRoute, mockState)).toBeTruthy();
-      expect(mockAuthService.isLoggedIn).toHaveBeenCalled();
-    });
+    describe('should handle logged in users who are viewing their own context', () => {
+      let mockContextService = { viewingOwnContext: () => { return true; } };
 
-    it('via child path', () => {
-      expect(ownerGuard.canActivate(mockRoute, mockState)).toBeTruthy();
-      expect(mockAuthService.isLoggedIn).toHaveBeenCalled();
+      beforeEach(() => {
+        spyOn(mockAuthService, 'isLoggedIn').and.callThrough();
+
+        TestBed.configureTestingModule({
+          providers: [
+            OwnerGuard,
+            { provide: AuthenticationService, useValue: mockAuthService },
+            { provide: ContextService, useValue: mockContextService },
+            { provide: LoginService, useValue: mockLoginService }
+          ]
+        });
+        ownerGuard = TestBed.get(OwnerGuard);
+      });
+
+      it('via root path', () => {
+        expect(ownerGuard.canActivate(mockRoute, mockState)).toBeTruthy();
+        expect(mockAuthService.isLoggedIn).toHaveBeenCalled();
+      });
+
+      it('via child path', () => {
+        expect(ownerGuard.canActivate(mockRoute, mockState)).toBeTruthy();
+        expect(mockAuthService.isLoggedIn).toHaveBeenCalled();
+      });
     });
   });
 });
