@@ -16,7 +16,7 @@ import { DeploymentsService } from '../services/deployments.service';
 })
 export class DeploymentDetailsComponent {
 
-  private DEFAULT_SPARKLINE_DATA_DURATION: number = 15 * 60 * 1000;
+  readonly DEFAULT_SPARKLINE_DATA_DURATION: number = 15 * 60 * 1000;
 
   @Input() collapsed: boolean;
   @Input() applicationId: string;
@@ -101,11 +101,10 @@ export class DeploymentDetailsComponent {
   }
 
   private shrinkChartDataIfNeeded(chartData: any): void {
-    // The first index does not count as it is not a data point. We also assume
-    // that xData and yData are the same length.
-    while (chartData.xData.length > this.sparklineMaxElements + 1) {
-      chartData.xData.splice(1, 1);
-      chartData.yData.splice(1, 1);
+    if (chartData.xData.length > this.sparklineMaxElements) {
+      let elementsToRemoveCount = chartData.xData.length - this.sparklineMaxElements;
+      chartData.xData.splice(1, elementsToRemoveCount);
+      chartData.yData.splice(1, elementsToRemoveCount);
     }
   }
 

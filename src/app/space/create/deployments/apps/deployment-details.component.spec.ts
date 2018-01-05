@@ -159,9 +159,11 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   describe('sparkline data', () => {
-    it('should by default be greater or equal to 1', function (this: Context) {
+    it('by default should be the default data duration divided by the polling rate', function (this: Context) {
       let detailsComponent = this.testedDirective;
-      expect(detailsComponent.getSparklineMaxElements()).toBeGreaterThan(0);
+      let expectedDefaultElements =
+        (detailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
+      expect(detailsComponent.getSparklineMaxElements()).toBe(expectedDefaultElements);
     });
 
     it('should not be able to be set to anything less than 1', function (this: Context) {
@@ -176,18 +178,18 @@ describe('DeploymentDetailsComponent', () => {
       const MAX_CPU_SPARKLINE_ELEMENTS = 4;
       let detailsComponent = this.testedDirective;
       detailsComponent.setSparklineMaxElements(MAX_CPU_SPARKLINE_ELEMENTS);
-      times(MAX_CPU_SPARKLINE_ELEMENTS, () => cpuStatObservable.next({ used: 1, quota: 2 }));
-      expect(detailsComponent.cpuData.xData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS + 1);
-      expect(detailsComponent.cpuData.yData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS + 1);
+      times(MAX_CPU_SPARKLINE_ELEMENTS + 10, () => cpuStatObservable.next({ used: 1, quota: 2 }));
+      expect(detailsComponent.cpuData.xData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS);
+      expect(detailsComponent.cpuData.yData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS);
     });
 
     it('should have its memory data bounded when enough data has been emitted', function (this: Context) {
       const MAX_MEM_SPARKLINE_ELEMENTS = 6;
       let detailsComponent = this.testedDirective;
       detailsComponent.setSparklineMaxElements(MAX_MEM_SPARKLINE_ELEMENTS);
-      times(MAX_MEM_SPARKLINE_ELEMENTS, () => memStatObservable.next({ used: 3, quota: 4, units: 'GB' }));
-      expect(detailsComponent.memData.xData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS + 1);
-      expect(detailsComponent.memData.yData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS + 1);
+      times(MAX_MEM_SPARKLINE_ELEMENTS + 10, () => memStatObservable.next({ used: 3, quota: 4, units: 'GB' }));
+      expect(detailsComponent.memData.xData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
+      expect(detailsComponent.memData.yData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
     });
   });
 
