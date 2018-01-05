@@ -26,6 +26,8 @@ import {
 })
 export class DeploymentsToolbarComponent implements OnChanges, OnInit {
 
+  public static readonly APPLICATION_ID: string = 'applicationId';
+
   public filterConfig: FilterConfig;
   public isAscendingSort: boolean = true;
 
@@ -53,7 +55,7 @@ export class DeploymentsToolbarComponent implements OnChanges, OnInit {
     this.filterConfig = {
       appliedFilters: [],
       fields: [{
-        id: 'applicationId',
+        id: DeploymentsToolbarComponent.APPLICATION_ID,
         placeholder: 'Filter by Application Name...',
         title: 'Application Name',
         type: FilterType.TEXT
@@ -63,7 +65,7 @@ export class DeploymentsToolbarComponent implements OnChanges, OnInit {
 
     this.sortConfig = {
       fields: [{
-        id: 'applicationId',
+        id: DeploymentsToolbarComponent.APPLICATION_ID,
         sortType: 'alpha',
         title: 'Application Name'
       }],

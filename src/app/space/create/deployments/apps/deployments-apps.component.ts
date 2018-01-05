@@ -17,6 +17,8 @@ import {
   SortField
 } from 'patternfly-ng';
 
+import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
+
 @Component({
   selector: 'deployments-apps',
   templateUrl: 'deployments-apps.component.html'
@@ -96,7 +98,7 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
   matchesFilter(application: string, filter: Filter): boolean {
     let match: boolean = false;
-    if (filter.field.id === 'applicationId') {
+    if (filter.field.id === DeploymentsToolbarComponent.APPLICATION_ID) {
       match = application.match(filter.value) !== null;
     }
 
