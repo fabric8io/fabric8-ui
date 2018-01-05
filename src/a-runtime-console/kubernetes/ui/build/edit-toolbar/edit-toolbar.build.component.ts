@@ -1,8 +1,8 @@
-import {Component, Input} from "@angular/core";
-import {Router} from "@angular/router";
-import {BuildService} from "../../../service/build.service";
-import {YamlEditor} from "../../../view/yaml.editor";
-import {Build} from "../../../model/build.model";
+import { Component, Input } from "@angular/core";
+import { Router } from "@angular/router";
+import { BuildService } from "../../../service/build.service";
+import { YamlEditor } from "../../../view/yaml.editor";
+import { Build } from "../../../model/build.model";
 
 @Component({
   selector: 'fabric8-build-edit-toolbar',

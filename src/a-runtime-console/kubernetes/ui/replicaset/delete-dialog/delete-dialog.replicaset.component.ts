@@ -1,9 +1,9 @@
-import {Component} from "@angular/core";
-import {ReplicaSet} from "../../../model/replicaset.model";
-import {ReplicaSetService} from "../../../service/replicaset.service";
-import {ReplicationController} from "../../../model/replicationcontroller.model";
-import {ReplicationControllerService} from "../../../service/replicationcontroller.service";
-import {CompositeReplicaSetStore} from "../../../store/compositedreplicaset.store";
+import { Component } from "@angular/core";
+import { ReplicaSet } from "../../../model/replicaset.model";
+import { ReplicaSetService } from "../../../service/replicaset.service";
+import { ReplicationController } from "../../../model/replicationcontroller.model";
+import { ReplicationControllerService } from "../../../service/replicationcontroller.service";
+import { CompositeReplicaSetStore } from "../../../store/compositedreplicaset.store";
 
 @Component({
   selector: 'delete-replicaset-dialog',

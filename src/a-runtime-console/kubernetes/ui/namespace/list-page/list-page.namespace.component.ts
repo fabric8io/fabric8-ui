@@ -1,11 +1,11 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Namespaces} from "../../../model/namespace.model";
-import {NamespaceStore} from "../../../store/namespace.store";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Namespaces } from "../../../model/namespace.model";
+import { NamespaceStore } from "../../../store/namespace.store";
 
 @Component({
-  host:{
-      'class':"app-component flex-container in-column-direction flex-grow-1"
+  host: {
+      'class': "app-component flex-container in-column-direction flex-grow-1"
   },
   selector: 'fabric8-namespaces-list-page',
   templateUrl: './list-page.namespace.component.html',

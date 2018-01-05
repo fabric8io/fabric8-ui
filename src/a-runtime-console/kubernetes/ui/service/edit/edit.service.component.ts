@@ -1,6 +1,6 @@
-import {Input, Component} from "@angular/core";
-import {Service} from "../../../model/service.model";
-import {YamlEditor} from "../../../view/yaml.editor";
+import { Input, Component } from "@angular/core";
+import { Service } from "../../../model/service.model";
+import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-service-edit',

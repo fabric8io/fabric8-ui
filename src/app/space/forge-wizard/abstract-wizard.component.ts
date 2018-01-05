@@ -87,7 +87,7 @@ export abstract class AbstractWizard implements OnInit {
       codebase => {
         // todo broadcast
         // this._broadcaster.broadcast('codebaseAdded', codebase);
-        this.notifications.message(<Notification>{
+        this.notifications.message(<Notification> {
           message: `Your ${codebase.attributes.url} repository has been `
           + `added to the ${this.currentSpace.attributes.name} space`,
           type: NotificationType.SUCCESS

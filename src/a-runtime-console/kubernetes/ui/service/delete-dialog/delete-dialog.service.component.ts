@@ -1,7 +1,7 @@
-import {Component} from "@angular/core";
-import {Service} from "../../../model/service.model";
-import {ServiceStore} from "../../../store/service.store";
-import {ServiceService} from "../../../service/service.service";
+import { Component } from "@angular/core";
+import { Service } from "../../../model/service.model";
+import { ServiceStore } from "../../../store/service.store";
+import { ServiceService } from "../../../service/service.service";
 
 @Component({
   selector: 'delete-service-dialog',

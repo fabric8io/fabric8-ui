@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {ConfigMap} from "../../../model/configmap.model";
-import {ConfigMapStore} from "../../../store/configmap.store";
-import {YamlEditor} from "../../../view/yaml.editor";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { ConfigMap } from "../../../model/configmap.model";
+import { ConfigMapStore } from "../../../store/configmap.store";
+import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-configmap-edit-wrapper',

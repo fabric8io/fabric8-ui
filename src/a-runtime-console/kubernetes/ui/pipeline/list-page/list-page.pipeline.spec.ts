@@ -18,7 +18,7 @@ import { FormsModule } from "@angular/forms";
 import { BuildConfigDialogsModule } from "../../buildconfig/delete-dialog/buildconfig.dialogs.module";
 import { KubernetesComponentsModule } from "../../../components/components.module";
 import { BuildStageViewComponent } from "../build-stage-view/build-stage-view.component";
-import {InputActionDialog} from "../input-action-dialog/input-action-dialog.component";
+import { InputActionDialog } from "../input-action-dialog/input-action-dialog.component";
 
 describe('PipelinesListPage', () => {
   let component: PipelinesListPage;

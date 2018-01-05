@@ -1,6 +1,6 @@
-import {Input, Component, ViewChild} from "@angular/core";
-import {Deployment} from "../../../model/deployment.model";
-import {DeploymentScaleDialog} from "../scale-dialog/scale-dialog.deployment.component";
+import { Input, Component, ViewChild } from "@angular/core";
+import { Deployment } from "../../../model/deployment.model";
+import { DeploymentScaleDialog } from "../scale-dialog/scale-dialog.deployment.component";
 
 @Component({
   selector: 'fabric8-deployment-view',

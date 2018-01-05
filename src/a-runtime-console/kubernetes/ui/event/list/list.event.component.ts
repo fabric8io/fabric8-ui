@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {Events} from "../../../model/event.model";
+import { Component, Input } from "@angular/core";
+import { Events } from "../../../model/event.model";
 
 @Component({
   selector: 'fabric8-events-list',

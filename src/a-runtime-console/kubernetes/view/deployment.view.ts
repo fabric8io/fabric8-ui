@@ -1,6 +1,6 @@
-import {Service, Services} from "../model/service.model";
-import {Deployment, Deployments} from "../model/deployment.model";
-import {DeploymentConfigs, DeploymentConfig} from "../model/deploymentconfig.model";
+import { Service, Services } from "../model/service.model";
+import { Deployment, Deployments } from "../model/deployment.model";
+import { DeploymentConfigs, DeploymentConfig } from "../model/deploymentconfig.model";
 
 
 export class DeploymentView {
@@ -33,9 +33,9 @@ export class DeploymentView {
    * If there are no running, starting or terminating pods
    */
   public readonly emptyReplicas: boolean;
-  public readonly labels: Map<string,string>;
+  public readonly labels: Map<string, string>;
   public readonly images: Array<String>;
-  public readonly annotations: Map<string,string>;
+  public readonly annotations: Map<string, string>;
   public readonly creationTimestamp: any;
 
   constructor(deployment: Deployment, service: Service) {

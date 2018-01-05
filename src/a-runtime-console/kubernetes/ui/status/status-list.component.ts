@@ -1,16 +1,16 @@
-import {BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription} from "rxjs";
-import {Notifications} from "ngx-base";
-import {Pod, Pods} from "../../model/pod.model";
-import {Component, OnInit, OnDestroy} from "@angular/core";
-import {AbstractWatchComponent} from "../../support/abstract-watch.component";
-import {PodService} from "../../service/pod.service";
-import {SpaceStore} from "../../store/space.store";
-import {SpaceNamespace} from "../../model/space-namespace";
-import {Space} from "../../model/space.model";
-import {Namespace} from "../../model/namespace.model";
-import {DeploymentConfigService} from "../../service/deploymentconfig.service";
-import {DeploymentService} from "../../service/deployment.service";
-import {Deployments} from "../../model/deployment.model";
+import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from "rxjs";
+import { Notifications } from "ngx-base";
+import { Pod, Pods } from "../../model/pod.model";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { AbstractWatchComponent } from "../../support/abstract-watch.component";
+import { PodService } from "../../service/pod.service";
+import { SpaceStore } from "../../store/space.store";
+import { SpaceNamespace } from "../../model/space-namespace";
+import { Space } from "../../model/space.model";
+import { Namespace } from "../../model/namespace.model";
+import { DeploymentConfigService } from "../../service/deploymentconfig.service";
+import { DeploymentService } from "../../service/deployment.service";
+import { Deployments } from "../../model/deployment.model";
 
 export class StatusKind {
   constructor(public message: string, public iconCss: string) {
@@ -87,7 +87,7 @@ export class StatusListComponent extends AbstractWatchComponent implements OnIni
               private spaceNamespace: SpaceNamespace,
               private spaceStore: SpaceStore,
               private podService: PodService,
-              private notifications: Notifications,) {
+              private notifications: Notifications, ) {
     super();
   }
 

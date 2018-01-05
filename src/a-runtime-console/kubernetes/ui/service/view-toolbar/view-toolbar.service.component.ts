@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {Service} from "../../../model/service.model";
+import { Component, Input } from "@angular/core";
+import { Service } from "../../../model/service.model";
 
 @Component({
   selector: 'fabric8-service-view-toolbar',

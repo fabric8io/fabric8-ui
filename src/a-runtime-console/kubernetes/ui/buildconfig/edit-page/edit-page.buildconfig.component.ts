@@ -1,7 +1,7 @@
-import {Component, OnDestroy} from "@angular/core";
-import {ActivatedRoute, Params} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
-import {BuildConfigStore} from "../../../store/buildconfig.store";
+import { Component, OnDestroy } from "@angular/core";
+import { ActivatedRoute, Params } from "@angular/router";
+import { Subscription } from "rxjs/Subscription";
+import { BuildConfigStore } from "../../../store/buildconfig.store";
 
 @Component({
   selector: 'fabric8-buildconfig-edit-page',

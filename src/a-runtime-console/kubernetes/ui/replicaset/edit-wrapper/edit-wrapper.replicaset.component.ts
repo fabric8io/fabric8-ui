@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {ReplicaSet} from "../../../model/replicaset.model";
-import {ReplicaSetStore} from "../../../store/replicaset.store";
-import {YamlEditor} from "../../../view/yaml.editor";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { ReplicaSet } from "../../../model/replicaset.model";
+import { ReplicaSetStore } from "../../../store/replicaset.store";
+import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-replicaset-edit-wrapper',

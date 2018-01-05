@@ -1,7 +1,7 @@
-import {Component} from "@angular/core";
-import {BuildConfig} from "../../../model/buildconfig.model";
-import {BuildConfigStore} from "../../../store/buildconfig.store";
-import {BuildConfigService} from "../../../service/buildconfig.service";
+import { Component } from "@angular/core";
+import { BuildConfig } from "../../../model/buildconfig.model";
+import { BuildConfigStore } from "../../../store/buildconfig.store";
+import { BuildConfigService } from "../../../service/buildconfig.service";
 
 @Component({
   selector: 'delete-buildconfig-dialog',

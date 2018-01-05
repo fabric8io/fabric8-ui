@@ -40,7 +40,7 @@ export function formatJson(obj: any, indent: number = 0): string {
 }
 
 export function clone<T>(value: any): T {
-  return <T>JSON.parse(JSON.stringify(value || {}));
+  return <T> JSON.parse(JSON.stringify(value || {}));
 }
 
 

@@ -1,6 +1,6 @@
-import {BaseEntity} from '../../store/entity/entity.model';
-import {openShiftBrowseResourceUrl} from "./helpers";
-import {currentOAuthConfig} from '../store/oauth-config-store';
+import { BaseEntity } from '../../store/entity/entity.model';
+import { openShiftBrowseResourceUrl } from "./helpers";
+import { currentOAuthConfig } from '../store/oauth-config-store';
 
 import iconCamel from "../../../assets/images/icon-stack-camel.png";
 import iconFunktion from "../../../assets/images/icon-stack-funktion.png";

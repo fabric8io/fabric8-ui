@@ -1,4 +1,4 @@
-import {KubernetesSpecResource} from "./kuberentesspecresource.model";
+import { KubernetesSpecResource } from "./kuberentesspecresource.model";
 
 export class Pod extends KubernetesSpecResource {
   public images: Array<string>;

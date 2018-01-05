@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
-import {RouterTestingModule} from "@angular/router/testing";
-import {ServiceViewToolbarComponent} from "./view-toolbar.service.component";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { ServiceViewToolbarComponent } from "./view-toolbar.service.component";
 
 describe('ServiceViewToolbarComponent', () => {
   let service: ServiceViewToolbarComponent;

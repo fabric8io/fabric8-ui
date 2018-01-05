@@ -1,8 +1,8 @@
-import {Component, Input} from "@angular/core";
-import {Router} from "@angular/router";
-import {PodService} from "../../../service/pod.service";
-import {YamlEditor} from "../../../view/yaml.editor";
-import {Pod} from "../../../model/pod.model";
+import { Component, Input } from "@angular/core";
+import { Router } from "@angular/router";
+import { PodService } from "../../../service/pod.service";
+import { YamlEditor } from "../../../view/yaml.editor";
+import { Pod } from "../../../model/pod.model";
 
 @Component({
   selector: 'fabric8-pod-edit-toolbar',

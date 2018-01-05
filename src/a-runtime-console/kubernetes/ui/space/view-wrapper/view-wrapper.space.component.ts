@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Space} from "../../../model/space.model";
-import {SpaceStore} from "../../../store/space.store";
-import {AbstractViewWrapperComponent} from "../../../support/abstract-viewwrapper-component";
-import {ActivatedRoute} from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Space } from "../../../model/space.model";
+import { SpaceStore } from "../../../store/space.store";
+import { AbstractViewWrapperComponent } from "../../../support/abstract-viewwrapper-component";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-space-view-wrapper',

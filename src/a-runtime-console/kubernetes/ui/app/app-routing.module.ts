@@ -1,6 +1,6 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {AppListPageComponent} from "./list-page/list-page.app.component";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
+import { AppListPageComponent } from "./list-page/list-page.app.component";
 
 const routes: Routes = [
   {

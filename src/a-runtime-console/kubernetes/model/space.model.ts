@@ -1,10 +1,10 @@
 import * as jsyaml from 'js-yaml';
 
-import {Namespace, Namespaces, isSecretsNamespace, isSystemNamespace} from "./namespace.model";
-import {ConfigMap} from "./configmap.model";
-import {Entity} from "../../models/entity";
-import {openShiftBrowseResourceUrl} from "./helpers";
-import {currentOAuthConfig} from "../store/oauth-config-store";
+import { Namespace, Namespaces, isSecretsNamespace, isSystemNamespace } from "./namespace.model";
+import { ConfigMap } from "./configmap.model";
+import { Entity } from "../../models/entity";
+import { openShiftBrowseResourceUrl } from "./helpers";
+import { currentOAuthConfig } from "../store/oauth-config-store";
 
 
 export class SpaceConfig {
@@ -76,7 +76,7 @@ export class Space {
   /**
    * Returns the environment which contains the given key such as 'jenkins' or 'stage' or null if none can be found
    */
-  findEnvironment(key: string):Environment {
+  findEnvironment(key: string): Environment {
     let environments = this.environments;
     if (environments) {
       for (let env of environments) {
@@ -87,7 +87,7 @@ export class Space {
     }
     return null;
   }
-  
+
 
   protected loadEnvironments(configMap: ConfigMap, namespaceMap: Map<string, Namespace>): Environment[] {
     let answer = [];
@@ -114,7 +114,7 @@ export class Space {
     } else {
       console.log("No data for ConfigMap " + configMap.name + " in namespace " + configMap.namespace);
     }
-    
+
     answer.sort((a: Environment, b: Environment) => {
       if (a.order < b.order) {
         return -1;
@@ -209,7 +209,7 @@ export function createEmptySpace(): Space {
 export function asSpaces(spaces: Space[]): Spaces {
   var answer = new Spaces();
   if (spaces) {
-    var nsNameToEnvMap = new Map<string,Environment>();
+    var nsNameToEnvMap = new Map<string, Environment>();
     for (let space of spaces) {
       if (space && space.environments) {
         for (let env of space.environments) {

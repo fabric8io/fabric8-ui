@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {Space} from "../../../model/space.model";
+import { Component, Input } from "@angular/core";
+import { Space } from "../../../model/space.model";
 
 @Component({
   selector: 'fabric8-space-view-toolbar',

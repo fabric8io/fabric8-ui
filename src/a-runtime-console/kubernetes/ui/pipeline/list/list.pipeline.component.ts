@@ -1,7 +1,7 @@
-import {Component, Input, ViewChild} from "@angular/core";
-import {BuildConfigs} from "../../../model/buildconfig.model";
-import {BuildConfigDeleteDialog} from "../../buildconfig/delete-dialog/delete-dialog.buildconfig.component";
-import {BuildConfigService} from "../../../service/buildconfig.service";
+import { Component, Input, ViewChild } from "@angular/core";
+import { BuildConfigs } from "../../../model/buildconfig.model";
+import { BuildConfigDeleteDialog } from "../../buildconfig/delete-dialog/delete-dialog.buildconfig.component";
+import { BuildConfigService } from "../../../service/buildconfig.service";
 
 @Component({
   selector: 'fabric8-pipelines-list',

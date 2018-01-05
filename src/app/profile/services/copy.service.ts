@@ -33,7 +33,7 @@ export class CopyService {
 
     try {
       result = this.dom.execCommand('copy');
-    } catch(error) {
+    } catch (error) {
       this.handleError(error);
     } finally {
       if (textarea.parentNode !== undefined) {

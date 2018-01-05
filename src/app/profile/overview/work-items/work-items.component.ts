@@ -77,7 +77,7 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
             return spaces[i];
           }
         }
-        return <Space>{};
+        return <Space> {};
       });
   }
 

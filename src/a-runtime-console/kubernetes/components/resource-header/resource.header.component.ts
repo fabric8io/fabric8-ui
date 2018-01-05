@@ -1,7 +1,7 @@
-import {Component, OnInit} from "@angular/core";
-import {Router, NavigationEnd} from "@angular/router";
-import {MenuItem} from "../../../models/menu-item";
-import {ParentLinkFactory} from "../../../common/parent-link-factory";
+import { Component, OnInit } from "@angular/core";
+import { Router, NavigationEnd } from "@angular/router";
+import { MenuItem } from "../../../models/menu-item";
+import { ParentLinkFactory } from "../../../common/parent-link-factory";
 
 export const resourceMenus = [
   {
@@ -31,8 +31,8 @@ export const resourceMenus = [
 ];
 
 @Component({
-  host:{
-    'class':"kube-resource-header"
+  host: {
+    'class': "kube-resource-header"
   },
   selector: 'kube-resource-header',
   templateUrl: './resource.header.component.html',

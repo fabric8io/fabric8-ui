@@ -4,7 +4,7 @@ import { IWorkflow } from './models/workflow';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
-import {Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Broadcaster } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
 

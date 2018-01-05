@@ -1,13 +1,13 @@
-import {AbstractStore} from "../../store/entity/entity.store";
-import {KubernetesService} from "../service/kubernetes.service";
-import {KubernetesResource} from "../model/kubernetesresource.model";
-import {Observable, BehaviorSubject} from "rxjs";
-import {Watcher} from "../service/watcher";
-import {plural} from "pluralize";
-import {messageEventToResourceOperation, Operation} from "../service/resource-operation";
-import {isNewerResource} from "../service/poller";
+import { AbstractStore } from "../../store/entity/entity.store";
+import { KubernetesService } from "../service/kubernetes.service";
+import { KubernetesResource } from "../model/kubernetesresource.model";
+import { Observable, BehaviorSubject } from "rxjs";
+import { Watcher } from "../service/watcher";
+import { plural } from "pluralize";
+import { messageEventToResourceOperation, Operation } from "../service/resource-operation";
+import { isNewerResource } from "../service/poller";
 
-function nameOfResource(resource: any): string{
+function nameOfResource(resource: any): string {
   let obj = resource || {};
   let metadata = obj.metadata || {};
   return metadata.name || "";
@@ -16,7 +16,7 @@ function nameOfResource(resource: any): string{
 export abstract class KubernetesResourceStore<T extends KubernetesResource, L extends Array<T>, R extends KubernetesService<T, L>> extends AbstractStore<T, L, R> {
   protected watcher: Watcher<L>;
 
-  constructor(service: R, private initialList: L, initialCurrent: T, protected type: { new(): T;}) {
+  constructor(service: R, private initialList: L, initialCurrent: T, protected type: { new(): T; }) {
     super(service, initialList, initialCurrent);
   }
 

@@ -53,7 +53,7 @@ export class GettingStartedService implements OnDestroy {
         }
       })
       .publish().connect();
-    
+
     return profile.attributes;
   }
 

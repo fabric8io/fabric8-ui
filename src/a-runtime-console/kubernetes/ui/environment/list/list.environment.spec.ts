@@ -25,7 +25,7 @@ import { RequestOptions, BaseRequestOptions, Http } from "@angular/http";
 import { RestangularModule } from "ng2-restangular";
 import { MockBackend } from "@angular/http/testing";
 import { KubernetesComponentsModule } from "../../../components/components.module";
-import {TabsModule} from "ngx-bootstrap";
+import { TabsModule } from "ngx-bootstrap";
 
 xdescribe('EnvironmentListComponent', () => {
   let component: EnvironmentListComponent;

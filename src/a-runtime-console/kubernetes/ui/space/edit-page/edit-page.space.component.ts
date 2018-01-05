@@ -1,7 +1,7 @@
-import {Component, OnDestroy} from "@angular/core";
-import {ActivatedRoute, Params} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
-import {SpaceStore} from "../../../store/space.store";
+import { Component, OnDestroy } from "@angular/core";
+import { ActivatedRoute, Params } from "@angular/router";
+import { Subscription } from "rxjs/Subscription";
+import { SpaceStore } from "../../../store/space.store";
 
 @Component({
   selector: 'fabric8-space-edit-page',

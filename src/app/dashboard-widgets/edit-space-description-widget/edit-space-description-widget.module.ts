@@ -10,7 +10,7 @@ import { EditSpaceDescriptionWidgetComponent } from './edit-space-description-wi
 
 @NgModule({
   imports: [CommonModule, FormsModule, AlmIconModule,
-    AlmEditableModule,Fabric8WitModule],
+    AlmEditableModule, Fabric8WitModule],
   declarations: [EditSpaceDescriptionWidgetComponent],
   exports: [EditSpaceDescriptionWidgetComponent]
 })

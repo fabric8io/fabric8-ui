@@ -1,7 +1,7 @@
-import {Component, OnDestroy} from "@angular/core";
-import {ActivatedRoute, Params} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
-import {ReplicaSetStore} from "../../../store/replicaset.store";
+import { Component, OnDestroy } from "@angular/core";
+import { ActivatedRoute, Params } from "@angular/router";
+import { Subscription } from "rxjs/Subscription";
+import { ReplicaSetStore } from "../../../store/replicaset.store";
 
 @Component({
   selector: 'fabric8-replicaset-edit-page',

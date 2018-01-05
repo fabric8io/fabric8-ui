@@ -81,7 +81,7 @@ export class AppComponent {
         let featureFlagsInTree;
 
         while (routeTree.firstChild) {
-          if(routeTree.data && routeTree.data['featureFlagConfig']) {
+          if (routeTree.data && routeTree.data['featureFlagConfig']) {
             featureFlagsInTree = routeTree.data['featureFlagConfig'];
           }
           routeTree = routeTree.firstChild;
@@ -117,7 +117,7 @@ export class AppComponent {
   }
 
   updateFeatureEnabled($event: boolean) {
-    if($event) {
+    if ($event) {
       this.experimentalFeatureEnabled = $event;
     }
   }

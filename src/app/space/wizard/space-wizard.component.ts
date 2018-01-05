@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
@@ -85,7 +85,7 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
         },
         err => {
           console.log('Error creating space', err);
-          this.notifications.message(<Notification>{
+          this.notifications.message(<Notification> {
             message: `Failed to create "${this.space.name}"`,
             type: NotificationType.DANGER
           });

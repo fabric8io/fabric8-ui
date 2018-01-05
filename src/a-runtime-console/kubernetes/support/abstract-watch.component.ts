@@ -1,23 +1,23 @@
-import {OnDestroy} from "@angular/core";
-import {Observable, Subject, Subscriber, Subscription} from "rxjs";
-import {NamespacedResourceService} from "../service/namespaced.resource.service";
-import {KubernetesResource} from "../model/kubernetesresource.model";
-import {enrichServiceWithRoute, Service, Services} from "../model/service.model";
-import {Route} from "../model/route.model";
-import {RouteService} from "../service/route.service";
-import {ServiceService} from "../service/service.service";
-import {Watcher} from "../service/watcher";
-import {DeploymentService} from "../service/deployment.service";
-import {DeploymentConfigService} from "../service/deploymentconfig.service";
-import {DeploymentViews, combineDeployments, createDeploymentViews} from "../view/deployment.view";
-import {Deployment, Deployments} from "../model/deployment.model";
-import {DeploymentConfig} from "../model/deploymentconfig.model";
-import {ReplicationControllerService} from "../service/replicationcontroller.service";
-import {ReplicaSetViews, createReplicaSetViews} from "../view/replicaset.view";
-import {combineReplicaSets, ReplicaSet} from "../model/replicaset.model";
-import {ReplicationController} from "../model/replicationcontroller.model";
-import {ReplicaSetService} from "../service/replicaset.service";
-import {messageEventToResourceOperation, Operation} from "../service/resource-operation";
+import { OnDestroy } from "@angular/core";
+import { Observable, Subject, Subscriber, Subscription } from "rxjs";
+import { NamespacedResourceService } from "../service/namespaced.resource.service";
+import { KubernetesResource } from "../model/kubernetesresource.model";
+import { enrichServiceWithRoute, Service, Services } from "../model/service.model";
+import { Route } from "../model/route.model";
+import { RouteService } from "../service/route.service";
+import { ServiceService } from "../service/service.service";
+import { Watcher } from "../service/watcher";
+import { DeploymentService } from "../service/deployment.service";
+import { DeploymentConfigService } from "../service/deploymentconfig.service";
+import { DeploymentViews, combineDeployments, createDeploymentViews } from "../view/deployment.view";
+import { Deployment, Deployments } from "../model/deployment.model";
+import { DeploymentConfig } from "../model/deploymentconfig.model";
+import { ReplicationControllerService } from "../service/replicationcontroller.service";
+import { ReplicaSetViews, createReplicaSetViews } from "../view/replicaset.view";
+import { combineReplicaSets, ReplicaSet } from "../model/replicaset.model";
+import { ReplicationController } from "../model/replicationcontroller.model";
+import { ReplicaSetService } from "../service/replicaset.service";
+import { messageEventToResourceOperation, Operation } from "../service/resource-operation";
 
 /**
  * A base class for components which watch kubernetes resources which contains a number of helper functions
@@ -75,7 +75,7 @@ export class AbstractWatchComponent implements OnDestroy {
 
   listAndWatchReplicas(namespace: string, replicaSetService: ReplicaSetService, replicationControllerService: ReplicationControllerService, serviceService: ServiceService, routeService: RouteService): Observable<ReplicaSetViews> {
     const servicesObservable = this.listAndWatchServices(namespace, serviceService, routeService);
-    
+
     let replicas = Observable.combineLatest(
       this.listAndWatch(replicaSetService, namespace, ReplicaSet),
       this.listAndWatch(replicationControllerService, namespace, ReplicationController),

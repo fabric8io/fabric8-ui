@@ -7,7 +7,7 @@ import { NamespacedResourceService } from "./namespaced.resource.service";
 import { APIsStore } from "../store/apis.store";
 import { DevNamespaceScope } from "./devnamespace.scope";
 import { pathJoin } from "../model/utils";
-import {getOpenShiftBuildUriPrefix} from "./buildconfig.service";
+import { getOpenShiftBuildUriPrefix } from "./buildconfig.service";
 
 @Injectable()
 export class BuildService extends NamespacedResourceService<Build, Builds> {

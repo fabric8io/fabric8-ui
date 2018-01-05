@@ -1,10 +1,10 @@
-import {Component, Input, ViewChild} from "@angular/core";
-import {TREE_ACTIONS} from "angular2-tree-component";
-import {ParentLinkFactory} from "../../../../common/parent-link-factory";
-import {AppDeployments} from "../list-page/list-page.app.component";
-import {Space, createEmptySpace} from "../../../model/space.model";
-import {DeploymentDeleteDialog} from "../../deployment/delete-dialog/delete-dialog.deployment.component";
-import {DeploymentScaleDialog} from "../../deployment/scale-dialog/scale-dialog.deployment.component";
+import { Component, Input, ViewChild } from "@angular/core";
+import { TREE_ACTIONS } from "angular2-tree-component";
+import { ParentLinkFactory } from "../../../../common/parent-link-factory";
+import { AppDeployments } from "../list-page/list-page.app.component";
+import { Space, createEmptySpace } from "../../../model/space.model";
+import { DeploymentDeleteDialog } from "../../deployment/delete-dialog/delete-dialog.deployment.component";
+import { DeploymentScaleDialog } from "../../deployment/scale-dialog/scale-dialog.deployment.component";
 
 @Component({
   selector: 'fabric8-apps-list',

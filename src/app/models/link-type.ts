@@ -8,7 +8,7 @@ export class LinkType {
     'forward_name': string,
     'name': string,
     'reverse_name': string,
-    'topology': string, 
+    'topology': string,
     'version': number
   };
   relationships: {

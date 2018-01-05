@@ -1,4 +1,4 @@
-import {ScalableResource} from './scalableresource.model';
+import { ScalableResource } from './scalableresource.model';
 
 export class Deployment extends ScalableResource {
   defaultKind() {

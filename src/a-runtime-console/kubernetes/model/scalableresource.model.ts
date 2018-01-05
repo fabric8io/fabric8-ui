@@ -1,4 +1,4 @@
-import {KubernetesSpecResource} from './kuberentesspecresource.model';
+import { KubernetesSpecResource } from './kuberentesspecresource.model';
 
 export class ScalableResource extends KubernetesSpecResource {
   replicas: number;

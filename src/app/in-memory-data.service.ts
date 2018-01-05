@@ -397,7 +397,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'forward_name': 'story-story',
           'name': 'story-story',
           'reverse_name': 'story by',
-          'topology': 'network', 
+          'topology': 'network',
           'version': 0
         },
         // 'id': '40bbdd3d-8b5d-4fd6-ac90-7236b669af04',
@@ -430,7 +430,7 @@ export class InMemoryDataService implements InMemoryDbService {
           'forward_name': 'abc-abc',
           'name': 'abc-abc',
           'reverse_name': 'story by',
-          'topology': 'network', 
+          'topology': 'network',
           'version': 0
         },
         // 'id': '40bbdd3d-8b5d-4fd6-ac90-7236b669af04',

@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {ReplicaSet} from "../../../model/replicaset.model";
+import { Component, Input } from "@angular/core";
+import { ReplicaSet } from "../../../model/replicaset.model";
 
 @Component({
   selector: 'fabric8-replicaset-view-toolbar',

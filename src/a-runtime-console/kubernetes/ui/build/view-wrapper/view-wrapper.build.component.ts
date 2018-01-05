@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Build} from "../../../model/build.model";
-import {BuildStore} from "../../../store/build.store";
-import {AbstractViewWrapperComponent} from "../../../support/abstract-viewwrapper-component";
-import {ActivatedRoute} from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Build } from "../../../model/build.model";
+import { BuildStore } from "../../../store/build.store";
+import { AbstractViewWrapperComponent } from "../../../support/abstract-viewwrapper-component";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-build-view-wrapper',

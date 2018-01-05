@@ -1,7 +1,7 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Pods} from "../../../model/pod.model";
-import {PodStore} from "../../../store/pod.store";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Pods } from "../../../model/pod.model";
+import { PodStore } from "../../../store/pod.store";
 
 
 @Component({

@@ -1,4 +1,4 @@
-import {KubernetesResource} from './kubernetesresource.model';
+import { KubernetesResource } from './kubernetesresource.model';
 
 export class Event extends KubernetesResource {
 

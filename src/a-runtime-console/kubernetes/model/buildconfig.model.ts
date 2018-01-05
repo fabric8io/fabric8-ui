@@ -1,8 +1,8 @@
-import {KubernetesSpecResource} from "./kuberentesspecresource.model";
-import {Build, Builds, ServiceUrl, ServiceEnvironments, AppInfo} from "./build.model";
-import {Params} from "@angular/router";
-import {currentOAuthConfig} from "../store/oauth-config-store";
-import {pathJoin} from "./utils";
+import { KubernetesSpecResource } from "./kuberentesspecresource.model";
+import { Build, Builds, ServiceUrl, ServiceEnvironments, AppInfo } from "./build.model";
+import { Params } from "@angular/router";
+import { currentOAuthConfig } from "../store/oauth-config-store";
+import { pathJoin } from "./utils";
 
 export const defaultBuildIconStyle = "pficon-build";
 
@@ -118,10 +118,10 @@ export class BuildConfig extends KubernetesSpecResource {
     return build ? build.jenkinsTestReportUrl : "";
   }
 
-  get serviceEnvironmentMap(): Map<string,ServiceEnvironments> {
+  get serviceEnvironmentMap(): Map<string, ServiceEnvironments> {
     let build = this.lastBuild;
     if (!build) {
-      return new Map<string,ServiceEnvironments>();
+      return new Map<string, ServiceEnvironments>();
     }
     const answer = build.serviceEnvironmentMap;
     let builds = this.builds;
@@ -143,9 +143,9 @@ export class BuildConfig extends KubernetesSpecResource {
   /**
    * Returns a map indexed by the environment key of the app information
    */
-  get environmentApp(): Map<string,AppInfo> {
+  get environmentApp(): Map<string, AppInfo> {
     let map = this.serviceEnvironmentMap;
-    let answer = new Map<string,AppInfo>();
+    let answer = new Map<string, AppInfo>();
     let name = this.name;
     if (map && name) {
       for (let environmentKey in map) {
@@ -172,8 +172,8 @@ export class BuildConfig extends KubernetesSpecResource {
     let type = strategy.type || "";
 
     this.lastVersion = status.lastVersion || 0;
-    this.lastBuildName = this.lastVersion ? this.name + "-" +  this.lastVersion: "";
-    this.lastBuildPath = this.lastBuildName ? this.name + "/builds/" + this.lastBuildName: "";
+    this.lastBuildName = this.lastVersion ? this.name + "-" +  this.lastVersion : "";
+    this.lastBuildPath = this.lastBuildName ? this.name + "/builds/" + this.lastBuildName : "";
     this.iconStyle = defaultBuildIconStyle;
 
     this.type = type;
@@ -283,8 +283,8 @@ export function filterPipelines(buildConfigs: BuildConfigs): BuildConfigs {
 /**
  * returns a map of all the environments with the apps in each environment
  */
-export function appInfos(buildConfigs: BuildConfigs): Map<string,EnvironmentApps> {
-  let answer = new Map<string,EnvironmentApps>();
+export function appInfos(buildConfigs: BuildConfigs): Map<string, EnvironmentApps> {
+  let answer = new Map<string, EnvironmentApps>();
   buildConfigs.forEach(bc => {
     let appEnv = bc.environmentApp;
     for (let environmentKey in appEnv) {

@@ -1,5 +1,5 @@
-import {Service, Services} from '../model/service.model';
-import {ReplicaSet, ReplicaSets} from '../model/replicaset.model';
+import { Service, Services } from '../model/service.model';
+import { ReplicaSet, ReplicaSets } from '../model/replicaset.model';
 
 
 export class ReplicaSetView {
@@ -12,9 +12,9 @@ export class ReplicaSetView {
     public readonly exposeUrl: string;
     public readonly replicas: number;
     public readonly availableReplicas: number;
-    public readonly labels: Map<string,string>;
+    public readonly labels: Map<string, string>;
     public readonly images: Array<String>;
-    public readonly annotations: Map<string,string>;
+    public readonly annotations: Map<string, string>;
     public readonly creationTimestamp: any;
 
     constructor(replicaset: ReplicaSet, service: Service) {

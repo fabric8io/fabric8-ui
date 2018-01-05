@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {Deployment} from "../../../model/deployment.model";
+import { Component, Input } from "@angular/core";
+import { Deployment } from "../../../model/deployment.model";
 
 @Component({
   selector: 'fabric8-deployment-view-toolbar',

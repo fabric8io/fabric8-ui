@@ -6,9 +6,9 @@ import { Logger, Notification, NotificationType, Notifications } from 'ngx-base'
 import { AuthenticationService, UserService, User } from 'ngx-login-client';
 
 import { ExtUser, GettingStartedService } from './services/getting-started.service';
-import {Fabric8UIConfig} from "../shared/config/fabric8-ui-config";
-import {Observable} from "rxjs/Observable";
-import {Http, Headers, RequestOptions, RequestOptionsArgs, Response} from "@angular/http";
+import { Fabric8UIConfig } from "../shared/config/fabric8-ui-config";
+import { Observable } from "rxjs/Observable";
+import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from "@angular/http";
 import { pathJoin } from "../../a-runtime-console/kubernetes/model/utils";
 import { ProviderService } from '../shared/account/provider.service';
 
@@ -65,7 +65,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       // lets poll for the kube tenant connected when the lazily created Jenkins endpoint
       // can be registered into KeyCloak
       this.kubePollTimer = Observable.timer(2000, 5000);
-      this.kubePollSubscription = this.kubePollTimer.subscribe(t=> this.kubeTenantConnectPoll())}
+      this.kubePollSubscription = this.kubePollTimer.subscribe(t => this.kubeTenantConnectPoll())}
       this.kubeTenantConnectPoll();
   }
 

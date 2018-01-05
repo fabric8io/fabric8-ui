@@ -5,7 +5,7 @@ export class Workspace {
 }
 
 export class WorkspaceAttributes {
-  description? : string;
+  description?: string;
   name?: string;
 }
 

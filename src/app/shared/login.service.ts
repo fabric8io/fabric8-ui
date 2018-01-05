@@ -5,7 +5,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { AuthenticationService, UserService, AUTH_API_URL} from 'ngx-login-client';
+import { AuthenticationService, UserService, AUTH_API_URL } from 'ngx-login-client';
 //import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 

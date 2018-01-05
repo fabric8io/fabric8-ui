@@ -1,23 +1,23 @@
-import {Context} from "./../models/context";
-import {ContextType} from "./../models/context-type";
-import {DevSpace} from "./../models/space";
-import {Resources} from "./../models/resources";
-import {ProcessTemplate} from "./../models/process-template";
-import {User} from "./../models/user";
-import {Team} from "./../models/team";
-import {Entity} from "./../models/entity";
-import {Injectable, OnInit} from "@angular/core";
+import { Context } from "./../models/context";
+import { ContextType } from "./../models/context-type";
+import { DevSpace } from "./../models/space";
+import { Resources } from "./../models/resources";
+import { ProcessTemplate } from "./../models/process-template";
+import { User } from "./../models/user";
+import { Team } from "./../models/team";
+import { Entity } from "./../models/entity";
+import { Injectable, OnInit } from "@angular/core";
 import "rxjs/add/operator/toPromise";
-import {Observable} from "rxjs";
-import {Spaces, Space, LabelSpace} from "../kubernetes/model/space.model";
-import {SpaceStore} from "../kubernetes/store/space.store";
-import {Router, NavigationEnd, ActivatedRoute, Params} from "@angular/router";
-import {BuildConfigStore} from "../kubernetes/store/buildconfig.store";
-import {BuildConfigs, BuildConfig} from "../kubernetes/model/buildconfig.model";
-import {MenuItem} from "../models/menu-item";
-import {resourceMenus} from "../kubernetes/components/resource-header/resource.header.component";
-import {pathJoin} from "../kubernetes/model/utils";
-import {Broadcaster} from 'ngx-base';
+import { Observable } from "rxjs";
+import { Spaces, Space, LabelSpace } from "../kubernetes/model/space.model";
+import { SpaceStore } from "../kubernetes/store/space.store";
+import { Router, NavigationEnd, ActivatedRoute, Params } from "@angular/router";
+import { BuildConfigStore } from "../kubernetes/store/buildconfig.store";
+import { BuildConfigs, BuildConfig } from "../kubernetes/model/buildconfig.model";
+import { MenuItem } from "../models/menu-item";
+import { resourceMenus } from "../kubernetes/components/resource-header/resource.header.component";
+import { pathJoin } from "../kubernetes/model/utils";
+import { Broadcaster } from 'ngx-base';
 
 // A service responsible for providing dummy data for the UI prototypes.
 
@@ -343,7 +343,7 @@ export class DummyService implements OnInit {
       {
         name: 'BalloonPopGame',
         path: '/pmuir/BalloonPopGame',
-        description: 'Balloon popping fun for everyone!',
+        description: '   Balloon popping fun for everyone!',
         teams: [
           this.TEAMS.get('balloonpopgame'),
           this.TEAMS.get('balloonpopgame_ux'),
@@ -426,7 +426,7 @@ export class DummyService implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private spaceStore: SpaceStore,
-              private buildConfigStore: BuildConfigStore,) {
+              private buildConfigStore: BuildConfigStore, ) {
     this._defaultContexts = this.initDummy('contexts', this.CONTEXTS);
     this._devSpaces = this.initDummy('spaces', this.SPACES);
     this._contexts = this._defaultContexts;
@@ -766,7 +766,7 @@ export class DummyService implements OnInit {
          */
         {
           name: 'Create',
-          menus:appMenus,
+          menus: appMenus,
         },
 /*
         {

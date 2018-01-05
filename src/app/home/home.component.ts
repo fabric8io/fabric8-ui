@@ -14,7 +14,7 @@ import { BrandInformation } from '../models/brand-information';
 // use url-loader for images
 import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 
 @Component({
   encapsulation: ViewEncapsulation.None,

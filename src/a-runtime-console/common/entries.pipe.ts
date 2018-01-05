@@ -1,4 +1,4 @@
-import {PipeTransform, Pipe} from '@angular/core';
+import { PipeTransform, Pipe } from '@angular/core';
 
 export class Entry {
   constructor(public key: string, public value: string) {
@@ -8,7 +8,7 @@ export class Entry {
 /**
  * Creates an array of entries from the given map
  */
-export function createEntryArray(labels: Map<string,string>): Array<Entry> {
+export function createEntryArray(labels: Map<string, string>): Array<Entry> {
   let entries = new Array<Entry>();
   if (labels) {
     Object.keys(labels).forEach((k) => entries.push(new Entry(k, labels[k])));

@@ -10,7 +10,7 @@ import { NgArrayPipesModule } from 'angular-pipes';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SpaceWizardModule } from '../../../space/wizard/space-wizard.module';
 import { SpacesComponent } from './spaces.component';
-import {ForgeWizardModule} from '../../../space/forge-wizard/forge-wizard.module';
+import { ForgeWizardModule } from '../../../space/forge-wizard/forge-wizard.module';
 
 @NgModule({
   imports: [

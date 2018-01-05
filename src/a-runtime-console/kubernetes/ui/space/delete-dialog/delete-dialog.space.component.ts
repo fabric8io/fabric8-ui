@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {Space, createEmptySpace} from "../../../model/space.model";
-import {SpaceStore} from "../../../store/space.store";
+import { Component } from "@angular/core";
+import { Space, createEmptySpace } from "../../../model/space.model";
+import { SpaceStore } from "../../../store/space.store";
 
 @Component({
   selector: 'delete-space-dialog',

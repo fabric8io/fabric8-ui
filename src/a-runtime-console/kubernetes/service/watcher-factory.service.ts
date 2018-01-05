@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { OnLogin } from './../../shared/onlogin.service';
 import { Watcher } from './watcher';
-import {Observable} from "rxjs/Observable";
-import {PollerFactory} from "./poller-factory.service";
+import { Observable } from "rxjs/Observable";
+import { PollerFactory } from "./poller-factory.service";
 
 @Injectable()
 export class WatcherFactory {

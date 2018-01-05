@@ -67,7 +67,7 @@ export class GitHubService implements OnDestroy {
    * @param url
    * @returns {undefined|Observable<any>}
    */
-  getCache(url: string): Observable<any>{
+  getCache(url: string): Observable<any> {
     return this.cache.get(url);
   }
 

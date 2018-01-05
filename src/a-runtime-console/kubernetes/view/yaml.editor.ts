@@ -1,8 +1,8 @@
 /// <reference path="../../../../node_modules/retyped-js-yaml-tsd-ambient/js-yaml.d.ts"/>
 import * as jsyaml from 'js-yaml';
 
-import {Injectable} from '@angular/core';
-import {KubernetesResource} from '../model/kubernetesresource.model';
+import { Injectable } from '@angular/core';
+import { KubernetesResource } from '../model/kubernetesresource.model';
 
 @Injectable()
 export class YamlEditor {

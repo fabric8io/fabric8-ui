@@ -3,7 +3,7 @@ import { AnalyticalReportWidgetComponent } from './analytical-report-widget.comp
 import { NgModule, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {StackAnalysisPipe} from './stack-analysis-pipe.pipe';
+import { StackAnalysisPipe } from './stack-analysis-pipe.pipe';
 
 @NgModule({
   imports: [CommonModule, FormsModule, StackDetailsModule, StackReportInShortModule],

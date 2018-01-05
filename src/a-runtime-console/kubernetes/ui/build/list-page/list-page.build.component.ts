@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Builds} from "../../../model/build.model";
-import {BuildStore} from "../../../store/build.store";
-import {APIsStore} from "../../../store/apis.store";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Builds } from "../../../model/build.model";
+import { BuildStore } from "../../../store/build.store";
+import { APIsStore } from "../../../store/apis.store";
 
 
 @Component({

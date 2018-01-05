@@ -7,7 +7,7 @@ import { cloneDeep } from 'lodash';
 
 import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { Profile, User, UserService ,AUTH_API_URL } from 'ngx-login-client';
+import { Profile, User, UserService , AUTH_API_URL } from 'ngx-login-client';
 
 import { DummyService } from './../shared/dummy.service';
 
@@ -46,7 +46,7 @@ export class ProfileService {
       })
       .map(user => cloneDeep(user) as ExtUser)
       .do(user => {
-        if(user.attributes) {
+        if (user.attributes) {
           user.attributes.store = (user as any).attributes.contextInformation || {};
         } else {
           user.attributes = { "fullName": "", "imageURL": "", "username": "", "store": { } };

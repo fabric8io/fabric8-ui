@@ -6,12 +6,12 @@ import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/ht
 import { AuthenticationService, AUTH_API_URL } from 'ngx-login-client';
 
 
-describe('Service: Provider Service',() => {
-    
+describe('Service: Provider Service', () => {
+
     let mockService: MockBackend;
     let providerService: ProviderService;
     let broadcaster: Broadcaster;
-    let fakeAuthService : any; 
+    let fakeAuthService: any;
 
     beforeEach(() => {
         fakeAuthService = {
@@ -58,7 +58,7 @@ describe('Service: Provider Service',() => {
         }
     ));
     it('Get legacy linking url', () => {
-        let val = providerService.getLegacyLinkingUrl('openshift-v3','testredirect');
+        let val = providerService.getLegacyLinkingUrl('openshift-v3', 'testredirect');
         console.log(val)
         expect(val).toEqual("https://auth.fabric8.io/api/link/session?clientSession=TESTSESSION&sessionState=TESTSESSIONSTATE&redirect=testredirect&provider=openshift-v3")
     });

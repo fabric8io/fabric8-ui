@@ -1,8 +1,8 @@
-import {Component, Input} from "@angular/core";
-import {Router} from "@angular/router";
-import {ConfigMapService} from "../../../service/configmap.service";
-import {YamlEditor} from "../../../view/yaml.editor";
-import {ConfigMap} from "../../../model/configmap.model";
+import { Component, Input } from "@angular/core";
+import { Router } from "@angular/router";
+import { ConfigMapService } from "../../../service/configmap.service";
+import { YamlEditor } from "../../../view/yaml.editor";
+import { ConfigMap } from "../../../model/configmap.model";
 
 @Component({
   selector: 'fabric8-configmap-edit-toolbar',

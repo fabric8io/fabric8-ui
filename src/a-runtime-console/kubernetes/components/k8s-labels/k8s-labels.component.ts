@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
   selector: 'k8s-labels',
@@ -6,6 +6,6 @@ import {Component, Input} from "@angular/core";
 })
 export class KubernetesLabelsComponent {
 
-  @Input() labels: Map<String,String>;
+  @Input() labels: Map<String, String>;
 
 }

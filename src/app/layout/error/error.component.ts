@@ -35,7 +35,7 @@ export class ErrorComponent implements OnDestroy {
         this.message = message;
       });
 
-    if(authService.isLoggedIn()) {
+    if (authService.isLoggedIn()) {
       this.userSubscription = userService.loggedInUser.subscribe(val => {
         if (val.id) {
           this.spaceLink = '/' + val.attributes.username + '/_spaces';

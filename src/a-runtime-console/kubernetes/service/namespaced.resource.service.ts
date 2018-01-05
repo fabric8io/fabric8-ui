@@ -3,7 +3,7 @@ import { Restangular } from "ng2-restangular";
 import { KubernetesService } from "./kubernetes.service";
 import { Subscription, Observable } from "rxjs";
 import { KubernetesResource } from "../model/kubernetesresource.model";
-import {INamespaceScope, NamespaceScope} from "./namespace.scope";
+import { INamespaceScope, NamespaceScope } from "./namespace.scope";
 import { Watcher } from "./watcher";
 import { pathJoin } from "../model/utils";
 

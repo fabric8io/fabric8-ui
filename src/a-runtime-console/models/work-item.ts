@@ -12,7 +12,7 @@ export class WorkItem {
 export class WorkItemAttributes {
   'system.created_at': string;
   'system.description': string;
-  'system.remote_item_id': string;    
+  'system.remote_item_id': string;
   'system.state': string;
   'system.title': string;
   'version': number;

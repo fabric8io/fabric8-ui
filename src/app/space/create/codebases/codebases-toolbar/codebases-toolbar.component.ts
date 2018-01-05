@@ -57,12 +57,12 @@ export class CodebasesToolbarComponent implements OnChanges, OnInit {
         title: 'Name',
         placeholder: 'Filter by Name...',
         type: 'text'
-      },{
+      }, {
         id: 'createdAt',
         title: 'Created Date',
         placeholder: 'Filter by Created Date...',
         type: 'text'
-      },{
+      }, {
         id: 'pushedAt',
         title: 'Last Commit',
         placeholder: 'Filter by Last Commit Date...',
@@ -79,11 +79,11 @@ export class CodebasesToolbarComponent implements OnChanges, OnInit {
         id: 'name',
         title:  'Name',
         sortType: 'alpha'
-      },{
+      }, {
         id: 'createdAt',
         title:  'Created Date',
         sortType: 'numeric'
-      },{
+      }, {
         id: 'pushedAt',
         title:  'Last Commit',
         sortType: 'numeric'

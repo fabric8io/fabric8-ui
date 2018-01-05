@@ -1,11 +1,11 @@
-import {BehaviorSubject, Observable, Subscription} from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
-import {$WebSocket} from "angular2-websocket/angular2-websocket";
-import {currentOAuthConfig} from "../store/oauth-config-store";
-import {OnLogin} from "../../shared/onlogin.service";
-import {pathJoin} from "../model/utils";
-import {Poller} from "./poller";
-import {PollerFactory} from "./poller-factory.service";
+import { $WebSocket } from "angular2-websocket/angular2-websocket";
+import { currentOAuthConfig } from "../store/oauth-config-store";
+import { OnLogin } from "../../shared/onlogin.service";
+import { pathJoin } from "../model/utils";
+import { Poller } from "./poller";
+import { PollerFactory } from "./poller-factory.service";
 
 
 export class Watcher<L> {

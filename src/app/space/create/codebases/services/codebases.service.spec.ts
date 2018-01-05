@@ -11,7 +11,7 @@ import { cloneDeep } from 'lodash';
 describe('Codebase: CodebasesService', () => {
   let mockLog: any;
   let mockAuthService: any;
-  let mockUserService:  any;
+  let mockUserService: any;
   let mockService: MockBackend;
   let codebasesService: CodebasesService;
 
@@ -53,7 +53,7 @@ describe('Codebase: CodebasesService', () => {
         "type": "git",
         "url": "https://github.com/fabric8-ui/fabric8-ui.git"
       },
-      "type":"codebases"
+      "type": "codebases"
     } as Codebase;
     const githubData = {
       "attributes": {
@@ -66,7 +66,7 @@ describe('Codebase: CodebasesService', () => {
       "id": "c071bc6b-a241-41e4-8db1-83a3db12c4a1",
       "links": {
         "edit": "https://api.prod-preview.openshift.io/api/codebases/c071bc6b-a241-41e4-8db1-83a3db12c4a1/edit",
-        "self":"https://api.prod-preview.openshift.io/api/codebases/c071bc6b-a241-41e4-8db1-83a3db12c4a1"
+        "self": "https://api.prod-preview.openshift.io/api/codebases/c071bc6b-a241-41e4-8db1-83a3db12c4a1"
       },
       "relationships": {
         "space": {
@@ -75,11 +75,11 @@ describe('Codebase: CodebasesService', () => {
             "type": "spaces"
           },
           "links": {
-            "self":"https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87"
+            "self": "https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87"
           }
         }
       },
-      "type":"codebases"};
+      "type": "codebases"};
 
     it('Add codebase', () => {
       // given
@@ -178,7 +178,7 @@ describe('Codebase: CodebasesService', () => {
 
   it('List paginated codebases with next link', () => {
     // given
-    const expectedResponse = {"data": [githubData], "links": {"next":"https://morelinks.com"}};
+    const expectedResponse = {"data": [githubData], "links": {"next": "https://morelinks.com"}};
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
@@ -196,7 +196,7 @@ describe('Codebase: CodebasesService', () => {
 
   it('Get more paginated codebases with empty next link', () => {
     // given
-    const expectedResponse = {"data": [githubData], "links": {"next":"https://morelinks.com"}};
+    const expectedResponse = {"data": [githubData], "links": {"next": "https://morelinks.com"}};
 
     // when
     codebasesService.getMoreCodebases().subscribe((data: any) => {

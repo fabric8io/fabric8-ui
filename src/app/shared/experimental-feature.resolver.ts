@@ -20,7 +20,7 @@ export class ExperimentalFeatureResolver implements Resolve<FeatureFlagConfig> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<FeatureFlagConfig> {
     let featureName = route.data["featureName"];
     let experimentalFeaturesEnabled = true;
-    if(this.authService.isLoggedIn()) {
+    if (this.authService.isLoggedIn()) {
       return this.userService.loggedInUser.map((user) => {
         let loggedInUser = user;
         // Resolve the context

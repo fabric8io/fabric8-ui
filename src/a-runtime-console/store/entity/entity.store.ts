@@ -3,7 +3,7 @@ import { plural } from 'pluralize';
 
 import { RESTService } from './rest.service';
 import { BaseEntity } from './entity.model';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 export abstract class AbstractStore<T extends BaseEntity, L extends Array<T>,
   R extends RESTService<T, L>> {

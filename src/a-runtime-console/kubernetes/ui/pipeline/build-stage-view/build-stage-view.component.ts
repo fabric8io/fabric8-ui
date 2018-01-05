@@ -24,7 +24,7 @@ export class BuildStageViewComponent implements OnDestroy {
     this._timerSubscription = Observable
       .timer(0, 200)
       .subscribe(count => {
-        for (let i =0; i < this.build.pipelineStages.length; i++) {
+        for (let i = 0; i < this.build.pipelineStages.length; i++) {
           // First, update the displayed stage if needed
           if (!this.build.pipelineStages[i]) {
             // If the stage is null, do nothing

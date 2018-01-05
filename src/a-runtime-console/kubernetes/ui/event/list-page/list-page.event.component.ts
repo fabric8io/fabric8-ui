@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Events} from "../../../model/event.model";
-import {EventStore} from "../../../store/event.store";
-import {ServiceStore} from "../../../store/service.store";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Events } from "../../../model/event.model";
+import { EventStore } from "../../../store/event.store";
+import { ServiceStore } from "../../../store/service.store";
 
 
 @Component({

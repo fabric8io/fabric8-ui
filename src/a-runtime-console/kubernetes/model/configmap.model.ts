@@ -1,8 +1,8 @@
-import {KubernetesResource} from './kubernetesresource.model';
+import { KubernetesResource } from './kubernetesresource.model';
 //import {FunktionKindAnnotation} from "../service/kubernetes.restangular";
 
 export class ConfigMap extends KubernetesResource {
-  data: Map<string,string>;
+  data: Map<string, string>;
 
 
   updateResource(resource) {
@@ -27,7 +27,7 @@ export class ConfigMap extends KubernetesResource {
 
   updateValuesFromResource() {
     super.updateValuesFromResource();
-    this.data = this.resource.data || new Map<string,string>();
+    this.data = this.resource.data || new Map<string, string>();
   }
 
   defaultKind() {

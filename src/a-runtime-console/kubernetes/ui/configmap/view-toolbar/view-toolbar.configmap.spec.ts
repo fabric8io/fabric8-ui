@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed} from "@angular/core/testing";
-import {RouterTestingModule} from "@angular/router/testing";
-import {ConfigMapViewToolbarComponent} from "./view-toolbar.configmap.component";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { ConfigMapViewToolbarComponent } from "./view-toolbar.configmap.component";
 
 describe('ConfigMapViewToolbarComponent', () => {
   let configmap: ConfigMapViewToolbarComponent;

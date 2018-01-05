@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, TemplateRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, TemplateRef } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 
 import { Subscription, Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { MenuedContextType } from './menued-context-type';
 import { Navigation } from './../../models/navigation';
 import { MenuItem } from './../../models/menu-item';
 import { DummyService } from './../../shared/dummy.service';
-import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 
 interface MenuHiddenCallback {
   (headerComponent: HeaderComponent): Observable<boolean>;

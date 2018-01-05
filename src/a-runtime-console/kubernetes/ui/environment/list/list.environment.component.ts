@@ -25,7 +25,7 @@ import { DeploymentConfigService } from './../../../service/deploymentconfig.ser
 import { DeploymentConfigs } from './../../../model/deploymentconfig.model';
 import { DeploymentService } from './../../../service/deployment.service';
 import { Space, Environment } from './../../../model/space.model';
-import {KindNode} from "../list-page/list-page.environment.component";
+import { KindNode } from "../list-page/list-page.environment.component";
 
 @Component({
   selector: 'fabric8-environments-list',

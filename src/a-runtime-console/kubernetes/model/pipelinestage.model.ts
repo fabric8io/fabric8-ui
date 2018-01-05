@@ -1,5 +1,5 @@
-import {Build} from "./build.model";
-import {pathJoin} from "./utils";
+import { Build } from "./build.model";
+import { pathJoin } from "./utils";
 
 export class PipelineStage {
   id: string;
@@ -10,7 +10,7 @@ export class PipelineStage {
   durationMillis: number;
   pauseDurationMillis: number;
   stageFlowNodes: any[];
-  serviceUrlMap: Map<String,String>;
+  serviceUrlMap: Map<String, String>;
   serviceUrl: string;
   environmentName: string;
 

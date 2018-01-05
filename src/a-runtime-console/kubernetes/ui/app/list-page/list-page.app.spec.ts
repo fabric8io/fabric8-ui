@@ -24,11 +24,11 @@ import { ModalModule } from "ngx-modal";
 import { MomentModule } from "angular2-moment";
 import { FormsModule } from "@angular/forms";
 import { KubernetesComponentsModule } from "../../../components/components.module";
-import {SpaceNamespace} from "../../../model/space-namespace";
-import {SpaceNamespaceService} from "../../../service/space-namespace.service";
-import {EnvironmentDetailComponent} from "../../environment/detail/detail.environment.component";
-import {EnvironmentRoutingModule} from "../../environment/environment-routing.module";
-import {EnvironmentModule} from "../../environment/environment.module";
+import { SpaceNamespace } from "../../../model/space-namespace";
+import { SpaceNamespaceService } from "../../../service/space-namespace.service";
+import { EnvironmentDetailComponent } from "../../environment/detail/detail.environment.component";
+import { EnvironmentRoutingModule } from "../../environment/environment-routing.module";
+import { EnvironmentModule } from "../../environment/environment.module";
 
 xdescribe('AppListPage', () => {
   let component: AppListPageComponent;

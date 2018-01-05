@@ -12,7 +12,7 @@ export class AuthUserResolve implements Resolve<any> {
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<any>|Promise<any>|any {
+  ): Observable<any> | Promise<any> | any {
     return this.userService.getUser().first();
   }
 }

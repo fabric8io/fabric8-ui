@@ -1,8 +1,8 @@
 import { OAuthConfigStore } from './../../../store/oauth-config-store';
-import {Component, Input, ViewChild} from "@angular/core";
-import {PodDeleteDialog} from "../delete-dialog/delete-dialog.pod.component";
-import {Pods, Pod} from "../../../model/pod.model";
-import {openShiftBrowseResourceUrl} from "../../../model/helpers";
+import { Component, Input, ViewChild } from "@angular/core";
+import { PodDeleteDialog } from "../delete-dialog/delete-dialog.pod.component";
+import { Pods, Pod } from "../../../model/pod.model";
+import { openShiftBrowseResourceUrl } from "../../../model/helpers";
 
 @Component({
   selector: 'fabric8-pods-list',

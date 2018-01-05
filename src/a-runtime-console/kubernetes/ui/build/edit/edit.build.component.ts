@@ -1,6 +1,6 @@
-import {Input, Component} from "@angular/core";
-import {Build} from "../../../model/build.model";
-import {YamlEditor} from "../../../view/yaml.editor";
+import { Input, Component } from "@angular/core";
+import { Build } from "../../../model/build.model";
+import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-build-edit',

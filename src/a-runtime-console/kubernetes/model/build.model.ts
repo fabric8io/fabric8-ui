@@ -1,14 +1,14 @@
-import {KubernetesSpecResource} from "./kuberentesspecresource.model";
-import {defaultBuildIconStyle} from "./buildconfig.model";
-import {PipelineStage} from "./pipelinestage.model";
-import {pathJoin} from "./utils";
+import { KubernetesSpecResource } from "./kuberentesspecresource.model";
+import { defaultBuildIconStyle } from "./buildconfig.model";
+import { PipelineStage } from "./pipelinestage.model";
+import { pathJoin } from "./utils";
 import * as jsyaml from "js-yaml";
 
 
 const serviceEnvironmentsAnnotationPrefix = "environment.services.fabric8.io/";
 
 
-export function sortedKeys(map: Map<String,any>): string[] {
+export function sortedKeys(map: Map<String, any>): string[] {
   let answer = [];
   for (let key in map) {
     answer.push(key);
@@ -32,7 +32,7 @@ export class Build extends KubernetesSpecResource {
 
   private _pipelineStages: Array<PipelineStage>;
   private _serviceUrls: Array<ServiceUrl> = new Array<ServiceUrl>();
-  private _serviceEnvironmentsMap: Map<string,ServiceEnvironments> = new Map<string,ServiceEnvironments>();
+  private _serviceEnvironmentsMap: Map<string, ServiceEnvironments> = new Map<string, ServiceEnvironments>();
 
   get serviceUrls(): Array<ServiceUrl> {
     // lets force the lazy creation
@@ -40,7 +40,7 @@ export class Build extends KubernetesSpecResource {
     return this._serviceUrls;
   }
 
-  get serviceEnvironmentMap(): Map<string,ServiceEnvironments> {
+  get serviceEnvironmentMap(): Map<string, ServiceEnvironments> {
     let annotations = this.annotations;
     if (annotations) {
       for (let key in annotations) {
@@ -52,8 +52,8 @@ export class Build extends KubernetesSpecResource {
               let config = jsyaml.safeLoad(yamlText);
               if (config) {
                 let se = new ServiceEnvironments(config.environmentName as string,
-                  config.serviceUrls as Map<string,string>,
-                  config.deploymentVersions as Map<string,string>);
+                  config.serviceUrls as Map<string, string>,
+                  config.deploymentVersions as Map<string, string>);
                 this._serviceEnvironmentsMap[envKey] = se;
               }
             } catch (e) {
@@ -239,7 +239,7 @@ export class ServiceUrl {
 }
 
 export class ServiceEnvironments {
-  constructor(public environmentName: string, public serviceUrls: Map<string,string>, public deploymentVersions: Map<string,string>) {}
+  constructor(public environmentName: string, public serviceUrls: Map<string, string>, public deploymentVersions: Map<string, string>) {}
 
   toAppInfo(name: string): AppInfo {
     let deployUrl = this.serviceUrls[name] || "";

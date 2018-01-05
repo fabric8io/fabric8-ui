@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {PipelineStage} from "../../model/pipelinestage.model";
+import { Component, Input } from "@angular/core";
+import { PipelineStage } from "../../model/pipelinestage.model";
 
 @Component({
   selector: 'pipeline-status',

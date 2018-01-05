@@ -1,5 +1,5 @@
-import {KubernetesSpecResource} from './kuberentesspecresource.model';
-import {Route, Routes} from "./route.model";
+import { KubernetesSpecResource } from './kuberentesspecresource.model';
+import { Route, Routes } from "./route.model";
 
 export class Service extends KubernetesSpecResource {
   exposeUrl: string;

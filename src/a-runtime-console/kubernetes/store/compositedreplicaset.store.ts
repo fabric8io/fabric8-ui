@@ -1,8 +1,8 @@
-import {Injectable} from "@angular/core";
-import {Observable} from "rxjs";
-import {ReplicaSets, ReplicaSet, combineReplicaSets, combineReplicaSet} from "../model/replicaset.model";
-import {ReplicationControllerStore} from "./replicationcontroller.store";
-import {ReplicaSetStore} from "./replicaset.store";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { ReplicaSets, ReplicaSet, combineReplicaSets, combineReplicaSet } from "../model/replicaset.model";
+import { ReplicationControllerStore } from "./replicationcontroller.store";
+import { ReplicaSetStore } from "./replicaset.store";
 
 /**
  * Combines ReplicaSets and ReplicationControllers into a single logical store to simplify the UI logic

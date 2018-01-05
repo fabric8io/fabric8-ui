@@ -30,7 +30,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       private userService: UserService) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
-      if(user.attributes) {
+      if (user.attributes) {
         this.subscriptions.push(spaceService.getSpacesByUser(user.attributes.username, 10).subscribe(spaces => {
           this.spaces = spaces;
         }));
@@ -73,7 +73,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
             return spaces[i];
           }
         }
-        return <Space>{};
+        return <Space> {};
       });
   }
 

@@ -1,6 +1,6 @@
-import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable} from "rxjs";
-import {Http} from "@angular/http";
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+import { Http } from "@angular/http";
 
 
 export class OAuthConfig {

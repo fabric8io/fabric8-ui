@@ -22,7 +22,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { EventService } from "./event.service";
 import { Observable } from 'rxjs';
 import { cloneDeep } from 'lodash';
-import {loggedInUser, profile, context1, context2 } from './context.service.mock';
+import { loggedInUser, profile, context1, context2 } from './context.service.mock';
 
 describe('Context Service:', () => {
   let mockRouter: any;

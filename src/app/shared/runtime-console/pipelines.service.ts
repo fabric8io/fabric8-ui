@@ -64,8 +64,8 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
   let spaceId = "";
   if (context) {
     let paths = context.path.split('/');
-    if (paths[paths.length-1]) {
-      spaceId = paths[paths.length-1];
+    if (paths[paths.length - 1]) {
+      spaceId = paths[paths.length - 1];
     }
   }
   if (!spaceId) {
@@ -84,7 +84,7 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
 function filterByMostRecent(buildConfigs: BuildConfigs, builds: Builds): BuildConfigs {
   let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
   let sortedPipelines = orderBy(pipelines, (pipeline) => {
-    if(pipeline && pipeline.lastBuild) {
+    if (pipeline && pipeline.lastBuild) {
       return new Date(pipeline.lastBuild.creationTimestamp);
     }
     return new Date(0);

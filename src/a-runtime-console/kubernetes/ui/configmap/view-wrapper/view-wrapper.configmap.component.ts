@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {ConfigMap} from "../../../model/configmap.model";
-import {ConfigMapStore} from "../../../store/configmap.store";
-import {AbstractViewWrapperComponent} from "../../../support/abstract-viewwrapper-component";
-import {ActivatedRoute} from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { ConfigMap } from "../../../model/configmap.model";
+import { ConfigMapStore } from "../../../store/configmap.store";
+import { AbstractViewWrapperComponent } from "../../../support/abstract-viewwrapper-component";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-configmap-view-wrapper',

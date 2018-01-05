@@ -4,7 +4,7 @@ import { Pipe, PipeTransform, Injectable } from '@angular/core';
     name: 'filter'
 })
 
-/* 
+/*
  *  A generic filter that gives you the filtered output
  */
 

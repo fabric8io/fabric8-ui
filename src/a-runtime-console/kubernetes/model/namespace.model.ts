@@ -1,4 +1,4 @@
-import {KubernetesResource} from './kubernetesresource.model';
+import { KubernetesResource } from './kubernetesresource.model';
 
 export class Namespace extends KubernetesResource {
   environments: Map<string, Namespace>;

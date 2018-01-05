@@ -60,7 +60,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   fetchMoreCollaborators($event): void {
     this.collaboratorService.getNextCollaborators()
       .subscribe(collaborators => {
-        if(collaborators)
+        if (collaborators)
           this.collaborators = this.collaborators.concat(collaborators);
         }, err => {
         console.log(err);
@@ -94,7 +94,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
       let matchingUser = find(this.collaborators, (existing) => {
         return existing.id === user.id;
       });
-      if(!matchingUser) {
+      if (!matchingUser) {
         this.collaborators.push(user);
       }
     });

@@ -1,6 +1,6 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import {Gui, Input as ForgeInput, Option, ProjectSelectConfig} from 'ngx-forge';
+import { Gui, Input as ForgeInput, Option, ProjectSelectConfig } from 'ngx-forge';
 import { Filter, FilterConfig, FilterEvent, FilterField } from 'patternfly-ng';
 
 @Component({

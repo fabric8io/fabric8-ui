@@ -127,7 +127,7 @@ export class EnvironmentWidgetComponent extends AbstractWatchComponent  implemen
     if (!deployments) {
       return;
     }
-    let envNameToIndexMap = new Map<string,number>();
+    let envNameToIndexMap = new Map<string, number>();
     let count = 1;
     for (let env of space.environments) {
       envNameToIndexMap.set(env.key, count++);
@@ -194,7 +194,7 @@ export class EnvironmentWidgetComponent extends AbstractWatchComponent  implemen
     return answer;
   }
 
-  private addDeployment(appInfo: AppDeployments, envNameToIndexMap: Map<string,number>, environment: Environment, deployment: DeploymentView) {
+  private addDeployment(appInfo: AppDeployments, envNameToIndexMap: Map<string, number>, environment: Environment, deployment: DeploymentView) {
     if (!appInfo.name) {
       appInfo.name = deployment.name;
     }

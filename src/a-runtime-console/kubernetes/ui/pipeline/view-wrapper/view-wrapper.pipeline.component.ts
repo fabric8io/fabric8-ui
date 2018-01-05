@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {BuildConfig} from "../../../model/buildconfig.model";
-import {BuildConfigStore} from "../../../store/buildconfig.store";
-import {AbstractViewWrapperComponent} from "../../../support/abstract-viewwrapper-component";
-import {ActivatedRoute} from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { BuildConfig } from "../../../model/buildconfig.model";
+import { BuildConfigStore } from "../../../store/buildconfig.store";
+import { AbstractViewWrapperComponent } from "../../../support/abstract-viewwrapper-component";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'fabric8-pipeline-view-wrapper',

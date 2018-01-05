@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {BuildConfig} from "../../../model/buildconfig.model";
-import {BuildConfigStore} from "../../../store/buildconfig.store";
-import {YamlEditor} from "../../../view/yaml.editor";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { BuildConfig } from "../../../model/buildconfig.model";
+import { BuildConfigStore } from "../../../store/buildconfig.store";
+import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-buildconfig-edit-wrapper',

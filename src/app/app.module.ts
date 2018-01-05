@@ -25,7 +25,7 @@ import { MomentModule }       from 'angular2-moment';
 import { PlannerModule }      from 'fabric8-planner';
 import { RouterModule }       from '@angular/router';
 // import { ModalModule } from 'ngx-modal';
-import { ModalModule} from 'ngx-bootstrap/modal';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import {
   // Base functionality for the runtime console
   KubernetesStoreModule,

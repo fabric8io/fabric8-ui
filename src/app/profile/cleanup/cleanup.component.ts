@@ -73,7 +73,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
     this.contextSubscription.unsubscribe();
   }
 
-  confirmErase(): void{
+  confirmErase(): void {
     this.confirmCleanup.open();
   }
   confirm(): void {
@@ -122,9 +122,9 @@ export class CleanupComponent implements OnInit, OnDestroy {
 
     //join all space delete observables and wait for completion before running tenant cleanup
     Observable.forkJoin(...observableArray).subscribe((result) => {
-      if(!tenantCleanError) {
+      if (!tenantCleanError) {
         this.tenantService.updateTenent().subscribe(() => {
-          if(!spaceDeleteError) {
+          if (!spaceDeleteError) {
             this.showSuccessNotification();
           }
           this.tenantIcon = "pficon pficon-ok cleanup-row-account-icon";

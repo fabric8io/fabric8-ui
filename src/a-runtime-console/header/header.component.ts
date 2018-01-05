@@ -11,9 +11,9 @@ import { ToggleService } from '../toggle/toggle.service';
 import { Toggle } from '../toggle/toggle';
 import { ContextService } from '../shared/context.service';
 */
-import {User} from "../models/user";
-import {OAuthService} from "angular2-oauth2/oauth-service";
-import {OnLogin} from "../shared/onlogin.service";
+import { User } from "../models/user";
+import { OAuthService } from "angular2-oauth2/oauth-service";
+import { OnLogin } from "../shared/onlogin.service";
 import { Broadcaster } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
 import { LoginService } from '../shared/login.service';
@@ -86,7 +86,7 @@ export class HeaderComponent implements OnInit {
 */
 
   logout() {
-    if(this.loginService.useCustomAuth) {
+    if (this.loginService.useCustomAuth) {
       this.authService.logout();
     } else {
       this.oauthService.logOut();
@@ -98,8 +98,8 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if(!this.loginService.useCustomAuth) {
-      if(!this.authService.isLoggedIn()) {
+    if (!this.loginService.useCustomAuth) {
+      if (!this.authService.isLoggedIn()) {
         this.loginService.gitHubSignIn();
         return;
       } else {

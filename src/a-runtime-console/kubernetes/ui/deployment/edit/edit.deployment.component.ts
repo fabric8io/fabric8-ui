@@ -1,6 +1,6 @@
-import {Input, Component} from "@angular/core";
-import {Deployment} from "../../../model/deployment.model";
-import {YamlEditor} from "../../../view/yaml.editor";
+import { Input, Component } from "@angular/core";
+import { Deployment } from "../../../model/deployment.model";
+import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-deployment-edit',

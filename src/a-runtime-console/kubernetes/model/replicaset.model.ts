@@ -1,5 +1,5 @@
-import {ScalableResource} from "./scalableresource.model";
-import {ReplicationControllers, ReplicationController} from "./replicationcontroller.model";
+import { ScalableResource } from "./scalableresource.model";
+import { ReplicationControllers, ReplicationController } from "./replicationcontroller.model";
 
 export class ReplicaSet extends ScalableResource {
 
@@ -25,7 +25,7 @@ export function combineReplicaSets(replicasets: ReplicaSets, replicationControll
     replicasets.forEach(s => map[s.name] = s);
   }
   let answer = new ReplicaSets();
-  for(var key in map) {
+  for (var key in map) {
     answer.push(map[key]);
   }
 

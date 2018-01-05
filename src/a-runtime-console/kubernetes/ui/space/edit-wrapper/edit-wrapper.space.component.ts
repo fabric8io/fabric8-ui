@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Space} from "../../../model/space.model";
-import {SpaceStore} from "../../../store/space.store";
-import {YamlEditor} from "../../../view/yaml.editor";
+import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs/Observable";
+import { Space } from "../../../model/space.model";
+import { SpaceStore } from "../../../store/space.store";
+import { YamlEditor } from "../../../view/yaml.editor";
 
 @Component({
   selector: 'fabric8-space-edit-wrapper',

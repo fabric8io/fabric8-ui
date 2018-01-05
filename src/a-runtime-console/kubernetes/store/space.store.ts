@@ -1,15 +1,15 @@
-import {Injectable} from "@angular/core";
-import {Namespaces, Namespace, isSecretsNamespace, isSystemNamespace} from "../model/namespace.model";
-import {Observable, BehaviorSubject, Subscription} from "rxjs";
-import {NamespaceStore} from "./namespace.store";
-import {ConfigMapService} from "../service/configmap.service";
-import {Space, Spaces, asSpaces, SpaceConfig} from "../model/space.model";
-import {ConfigMap, ConfigMaps} from "../model/configmap.model";
+import { Injectable } from "@angular/core";
+import { Namespaces, Namespace, isSecretsNamespace, isSystemNamespace } from "../model/namespace.model";
+import { Observable, BehaviorSubject, Subscription } from "rxjs";
+import { NamespaceStore } from "./namespace.store";
+import { ConfigMapService } from "../service/configmap.service";
+import { Space, Spaces, asSpaces, SpaceConfig } from "../model/space.model";
+import { ConfigMap, ConfigMaps } from "../model/configmap.model";
 import "rxjs/add/observable/forkJoin";
-import {OnLogin} from "../../shared/onlogin.service";
-import {messageEventToResourceOperation, Operation} from "../service/resource-operation";
-import {Watcher} from "../service/watcher";
-import {ConfigMapStore} from "./configmap.store";
+import { OnLogin } from "../../shared/onlogin.service";
+import { messageEventToResourceOperation, Operation } from "../service/resource-operation";
+import { Watcher } from "../service/watcher";
+import { ConfigMapStore } from "./configmap.store";
 
 
 const fabric8EnvironmentsName = "fabric8-environments";
@@ -70,15 +70,15 @@ export class SpaceStore {
   private _idSubject: BehaviorSubject<string> = new BehaviorSubject("");
   protected _loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  private spaceConfigWatchers: Map<String,SpaceConfigWatcher>;
-  private spaceConfigs: Map<String,SpaceConfig>;
-  protected spaceConfigsSubject: BehaviorSubject<Map<String,SpaceConfig>>;
+  private spaceConfigWatchers: Map<String, SpaceConfigWatcher>;
+  private spaceConfigs: Map<String, SpaceConfig>;
+  protected spaceConfigsSubject: BehaviorSubject<Map<String, SpaceConfig>>;
 
   constructor(private namespaceStore: NamespaceStore, configMapService: ConfigMapService, configMapStore: ConfigMapStore, private onLogin: OnLogin) {
     let namespacesList = this.namespaceStore.list;
 
-    this.spaceConfigWatchers = new Map<String,SpaceConfigWatcher>();
-    this.spaceConfigs = new Map<String,SpaceConfig>();
+    this.spaceConfigWatchers = new Map<String, SpaceConfigWatcher>();
+    this.spaceConfigs = new Map<String, SpaceConfig>();
     this.spaceConfigsSubject = new BehaviorSubject(this.spaceConfigs);
 
     this.list = namespacesList.combineLatest(this.spaceConfigsSubject.asObservable(), this.combineNamespacesAndConfigMaps);
@@ -140,7 +140,7 @@ export class SpaceStore {
     });
   }
 
-  protected combineNamespacesAndConfigMaps(namespaces: Namespaces, spaceConfigs: Map<String,SpaceConfig>): Spaces {
+  protected combineNamespacesAndConfigMaps(namespaces: Namespaces, spaceConfigs: Map<String, SpaceConfig>): Spaces {
     var spaces = [];
     if (namespaces) {
       for (let namespace of namespaces) {

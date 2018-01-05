@@ -6,7 +6,7 @@ import { Codebase } from '../create/codebases/services/codebase';
 import { ContextService } from '../../shared/context.service';
 import { Observable } from 'rxjs/Rx';
 import { Notifications } from 'ngx-base';
-import { AbstractWizard, flattenWizardSteps} from 'app/space/forge-wizard/abstract-wizard.component';
+import { AbstractWizard, flattenWizardSteps } from 'app/space/forge-wizard/abstract-wizard.component';
 import { configureSteps } from './import-wizard.config';
 
 @Component({

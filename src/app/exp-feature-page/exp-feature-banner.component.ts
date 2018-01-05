@@ -23,7 +23,7 @@ export class ExpFeatureBannerComponent implements OnInit, OnDestroy {
               userService: UserService,
               authService: AuthenticationService) {
 
-    if(authService.isLoggedIn()) {
+    if (authService.isLoggedIn()) {
       this.userSubscription = userService.loggedInUser.subscribe(val => {
         if (val.id) {
           this.profileLink = '/' + val.attributes.username + '/_update';
