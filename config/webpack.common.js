@@ -160,7 +160,13 @@ module.exports = function (options) {
           test: /\.ts$/,
           enforce: 'pre',
           loader: 'tslint-loader',
-          // exclude: [/node_modules/,/src\/a-runtime-console/],
+          exclude: [
+            /node_modules/,
+            /src\/a-runtime-console/,
+            // /src\/main.browser.ts/,
+            // /src\/polyfills.browser.ts/,
+            // /src\/vendor.browser.ts/
+          ],
           options: {
           //   configuration: {
           //     rules: {
@@ -179,7 +185,7 @@ module.exports = function (options) {
             // tslint does not interrupt the compilation by default
             // if you want any file with tslint errors to fail
             // set failOnHint to true
-            failOnHint: true,
+            failOnHint: false,
 
             // enables type checked rules like 'for-in-array'
             // uses tsconfig.json from current working directory
