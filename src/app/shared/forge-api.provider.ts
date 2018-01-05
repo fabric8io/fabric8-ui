@@ -1,4 +1,4 @@
-import { OpaqueToken } from '@angular/core'
+import { OpaqueToken } from '@angular/core';
 
 import { ApiLocatorService } from './api-locator.service';
 

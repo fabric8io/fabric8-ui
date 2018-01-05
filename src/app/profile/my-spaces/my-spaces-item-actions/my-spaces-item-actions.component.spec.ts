@@ -144,7 +144,7 @@ describe('My Spaces Item Actions Component', () => {
     fixture.detectChanges();
     let element = debug.queryAll(By.css('.list-pf-actions'));
     fixture.whenStable().then(() => {
-      expect(element.length).toEqual(1)
+      expect(element.length).toEqual(1);
     });
   }));
 });

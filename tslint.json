@@ -204,7 +204,7 @@
 //      "avoid-escape"
 //    ],
 //    "return-undefined": true,
-//    "semicolon": [true, "always"],
+    "semicolon": [true, "always"],
     "space-before-function-paren": [true, {
       "anonymous": "never",
       "asyncArrow": "always",

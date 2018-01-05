@@ -32,7 +32,7 @@ class SpaceConfigWatcher {
     let resourceOperation = messageEventToResourceOperation(msg);
     if (resourceOperation) {
       if (resourceOperation.operation == Operation.DELETED) {
-        this.spaceConfig['action'] === 'delete'
+        this.spaceConfig['action'] === 'delete';
         this.notify(this.spaceConfig);
       } else {
         let resource = resourceOperation.resource;

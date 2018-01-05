@@ -103,7 +103,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
       .do(workItems => workItems.forEach(workItem => {
         try {
-          this.workItemService.resolveAreaForWorkItem(workItem)
+          this.workItemService.resolveAreaForWorkItem(workItem);
         } catch (error) { /* No space */ }
       }))
       .do(workItems => {
@@ -111,7 +111,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
           if (workItem.relationalData === undefined) {
             workItem.relationalData = {};
           }
-        })
+        });
       })
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveCreator(workItem)))
       .subscribe(workItems => {

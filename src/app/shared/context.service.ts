@@ -158,7 +158,7 @@ export class ContextService implements Contexts {
     this.loadRecent().subscribe(
       val => {
         var toto = val;
-        val.forEach(space => this._addRecent.next(space))
+        val.forEach(space => this._addRecent.next(space));
       }
     );
   }
@@ -198,7 +198,7 @@ export class ContextService implements Contexts {
       // Then add this context to the top of the list
       contextList.unshift(ctx);
     }
-    return contextList
+    return contextList;
   }
 
   changeContext(navigation: Observable<Navigation>): Observable<Context> {
@@ -411,7 +411,7 @@ export class ContextService implements Contexts {
                   return Observable.empty<Context>();
                 })
                 .map(val => {
-                  return this.buildContext({ user: val } as RawContext)
+                  return this.buildContext({ user: val } as RawContext);
                 });
             }
           }));

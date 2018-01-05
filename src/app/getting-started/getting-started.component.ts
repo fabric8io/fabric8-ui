@@ -65,7 +65,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       // lets poll for the kube tenant connected when the lazily created Jenkins endpoint
       // can be registered into KeyCloak
       this.kubePollTimer = Observable.timer(2000, 5000);
-      this.kubePollSubscription = this.kubePollTimer.subscribe(t => this.kubeTenantConnectPoll())}
+      this.kubePollSubscription = this.kubePollTimer.subscribe(t => this.kubeTenantConnectPoll()); }
       this.kubeTenantConnectPoll();
   }
 
@@ -300,7 +300,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
           }
         }
       }, (err => {
-        this.handleConnectPollError(err)
+        this.handleConnectPollError(err);
       }));
   }
 

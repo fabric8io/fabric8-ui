@@ -85,7 +85,7 @@ export class EnvironmentEntry {
     }
     console.log("Could not find kind `" + kind + "`!!!");
     // lets return an empty kind node for now
-    return new KindNode({ name: kind, path: kind }, this.environment, Observable.of(false), Observable.of(kind), () => { return null })
+    return new KindNode({ name: kind, path: kind }, this.environment, Observable.of(false), Observable.of(kind), () => { return null; });
   }
 }
 
@@ -159,7 +159,7 @@ export class EnvironmentListPageComponent extends AbstractWatchComponent impleme
     this.idSubscription = this.spaceNamespace.namespaceSpace
       .distinctUntilChanged().subscribe(id => {
         if (id) {
-          this.spaceStore.load(id)
+          this.spaceStore.load(id);
         }
       });
 
@@ -249,7 +249,7 @@ export function environmentOpenShiftConoleUrl(environment: Environment): string 
   }
   let namespace = environment.namespaceName;
   if (namespace) {
-    return pathJoin(openshiftConsoleUrl, "/project", namespace, "/overview")
+    return pathJoin(openshiftConsoleUrl, "/project", namespace, "/overview");
   }
   return openshiftConsoleUrl;
 }

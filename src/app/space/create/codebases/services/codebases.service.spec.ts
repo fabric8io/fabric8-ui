@@ -120,7 +120,7 @@ describe('Codebase: CodebasesService', () => {
     githubData2.attributes.url = "git@github.com:fabric8-services/fabric8-wit.git";
     const githubData3 = cloneDeep(githubData);
     githubData3.attributes.type = "whatever";
-    githubData3.attributes.url = "http://something.com"
+    githubData3.attributes.url = "http://something.com";
     const expectedResponse = {"data": [githubData, githubData2, githubData3], "metadata": {"totalCount": 3}};
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(

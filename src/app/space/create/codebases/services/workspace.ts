@@ -12,7 +12,7 @@ export class WorkspaceAttributes {
 export class WorkspaceLinks {
   links?: {
     open?: string;
-  }
+  };
 }
 
 export class WorkspaceOpenLinks {

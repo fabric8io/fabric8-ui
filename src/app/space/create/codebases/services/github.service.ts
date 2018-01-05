@@ -234,7 +234,7 @@ export class GitHubService implements OnDestroy {
         .switchMap(newHeaders => this.http
           .get(url, { headers: newHeaders }))
         .map(response => {
-          return response.json() as GitHubRepo[]
+          return response.json() as GitHubRepo[];
         })
         .publishReplay(1)
         .refCount()
@@ -260,7 +260,7 @@ export class GitHubService implements OnDestroy {
         .switchMap(newHeaders => this.http
           .get(url, { headers: newHeaders }))
         .map(response => {
-          return response.json() as GitHubUser
+          return response.json() as GitHubUser;
         })
         .publishReplay(1)
         .refCount()

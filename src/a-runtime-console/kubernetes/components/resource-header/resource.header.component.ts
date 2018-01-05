@@ -57,7 +57,7 @@ export class ResourceHeaderComponent implements OnInit {
 
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.onNavigate(event)
+        this.onNavigate(event);
       }
     });
   }

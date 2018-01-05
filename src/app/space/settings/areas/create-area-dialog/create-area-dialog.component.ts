@@ -36,7 +36,7 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
     this.openSubscription = this.host.onOpen.subscribe(() => {
       this.name = '';
       this.errors = null;
-    })
+    });
   }
 
   ngOnDestroy() {

@@ -48,7 +48,7 @@ export class BaseApiLocatorService {
   }
 
   get forgeApiUrl(): string {
-    return this.config.forgeApiUrl || this.buildApiUrl('forge')
+    return this.config.forgeApiUrl || this.buildApiUrl('forge');
   }
 
   get ssoApiUrl(): string {
@@ -56,7 +56,7 @@ export class BaseApiLocatorService {
   }
 
   get authApiUrl(): string {
-    return this.config.authApiUrl || this.buildApiUrl('auth')
+    return this.config.authApiUrl || this.buildApiUrl('auth');
   }
 
   get recommenderApiUrl(): string {
@@ -81,7 +81,7 @@ export class BaseApiLocatorService {
     if (window.location.port) {
       url += ':' + window.location.port;
     }
-    url += '/'
+    url += '/';
     if (this.apiPrefixes.has(key)) {
       url = this.apiPrefixes.get(key) + '.' + url;
     }
@@ -98,7 +98,7 @@ export class BaseApiLocatorService {
 export class ApiLocatorService extends BaseApiLocatorService {
 
   constructor(config: Fabric8UIConfig) {
-    super(config, DEFAULT_API_PREFIXES, DEFAULT_API_PATHS)
+    super(config, DEFAULT_API_PREFIXES, DEFAULT_API_PATHS);
     DEFAULT_API_ENV_VAR_NAMES.forEach((value, key) => {
       this.loadEnvVar(key);
     });

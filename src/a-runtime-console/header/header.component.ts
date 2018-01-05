@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit {
       } else {
         this.authService.getOpenShiftToken().subscribe(token => {
           this.dummy.ngOnInit();
-        })
+        });
       }
     } else {
       this.dummy.ngOnInit();

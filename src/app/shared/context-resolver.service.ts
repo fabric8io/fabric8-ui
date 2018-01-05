@@ -20,7 +20,7 @@ export class ContextResolver implements Resolve<Context> {
     this._lastRoute = '/_error';
     this.router.errorHandler = (err) => {
       this.router.navigateByUrl(this._lastRoute);
-    }
+    };
 
     // Store the last visited URL so we can navigate back if the context
     // cannot be resolved

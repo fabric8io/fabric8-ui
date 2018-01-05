@@ -1,5 +1,5 @@
-import { BaseApiLocatorService, ApiLocatorService } from './api-locator.service'
-import { Fabric8UIConfig } from './config/fabric8-ui-config'
+import { BaseApiLocatorService, ApiLocatorService } from './api-locator.service';
+import { Fabric8UIConfig } from './config/fabric8-ui-config';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProviderService } from './account/provider.service';
@@ -16,7 +16,7 @@ export class TestAPILocatorServiceComponent {
 
 class ApiLocatorServiceTest extends BaseApiLocatorService {
   get(type: string): string {
-    return this.buildApiUrl(type)
+    return this.buildApiUrl(type);
   }
 }
 
@@ -24,29 +24,29 @@ class ApiLocatorServiceTest extends BaseApiLocatorService {
 describe('API Locator Service', function() {
 
   var base = function() {
-    return window.location.hostname + ":" + window.location.port
-  }
+    return window.location.hostname + ":" + window.location.port;
+  };
   var url = function(base: string) {
-    return "http://" + base
-  }
+    return "http://" + base;
+  };
 
   it('Add prefix to configured service URL', function() {
-    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map([["random_test", "api"]]), new Map())
+    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map([["random_test", "api"]]), new Map());
     expect(loc.get("random_test")).toMatch(url("api." + base()));
   });
 
   it('Add suffix to configured service URL', function() {
-    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map(), new Map([["random_test", "api"]]))
+    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map(), new Map([["random_test", "api"]]));
     expect(loc.get("random_test")).toMatch(url(base() + "/api"));
   });
 
   it('Add prefix and suffix to configured service URL', function() {
-    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map([["random_test", "api"]]), new Map([["random_test", "api"]]))
+    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map([["random_test", "api"]]), new Map([["random_test", "api"]]));
     expect(loc.get("random_test")).toMatch(url("api." + base() + "/api"));
   });
 
   it('Do not change non configured service URL', function() {
-    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map(), new Map())
+    var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map(), new Map());
     expect(loc.get("random_test")).toMatch(url(base()));
   });
 
@@ -56,7 +56,7 @@ describe('API Locator Service', function() {
       providers: [ApiLocatorService, Fabric8UIConfig, ProviderService]
     });
     var fixture = TestBed.createComponent(TestAPILocatorServiceComponent);
-    var comp = fixture.componentInstance
-    expect(comp.apilocator).toBeTruthy()
+    var comp = fixture.componentInstance;
+    expect(comp.apilocator).toBeTruthy();
   });
 });

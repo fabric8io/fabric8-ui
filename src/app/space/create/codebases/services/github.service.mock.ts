@@ -161,7 +161,7 @@ export const expectedGitHubRepo: GitHubRepo =
   "open_issues": 250,
   "watchers": 25,
   "default_branch": "master"
-}
+};
 const owner = {
     "login": "almighty",
     "id": 17783151,

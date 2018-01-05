@@ -136,7 +136,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
       .subscribe(gitHubRepoLicense => {
         this.license = gitHubRepoLicense.license.name;
       }, error => {
-        this.license = "None"
+        this.license = "None";
       }));
   }
 

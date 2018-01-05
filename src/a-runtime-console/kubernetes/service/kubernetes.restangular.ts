@@ -163,7 +163,7 @@ export function KubernetesRestangularFactory(restangular: Restangular, oauthServ
          params: params,
          headers: headers,
          element: element
-       }
+       };
      });
   });
   return config;

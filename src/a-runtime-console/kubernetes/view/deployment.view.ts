@@ -106,7 +106,7 @@ export function combineDeployments(deployments: Deployments, deploymentConfigs: 
     deploymentConfigs.forEach((dc) => {
       var name = dc.name;
       if (name && !map[name]) {
-        answer.push(dc)
+        answer.push(dc);
       }
     });
   }

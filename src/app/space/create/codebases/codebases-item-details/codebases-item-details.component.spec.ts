@@ -56,7 +56,7 @@ describe('Codebases Item Details Component', () => {
         "type": "file",
         "url": "toto"
       }
-    }
+    };
     gitHubServiceMock.getRepoDetailsByUrl.and.returnValue(Observable.of(expectedGitHubRepoDetails));
     gitHubServiceMock.getRepoLastCommitByUrl.and.returnValue(Observable.of(expectedLastCommit));
     gitHubServiceMock.getRepoLicenseByUrl.and.returnValue(Observable.of(expectedGitHubRepoLicense));

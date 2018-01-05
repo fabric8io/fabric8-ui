@@ -136,12 +136,12 @@ export class AnalyticService {
             var e = Array.prototype.slice.call(arguments);
             e.unshift(t);
             analytics.push(e);
-            return analytics
-          }
+            return analytics;
+          };
         };
         for (var t = 0; t < analytics.methods.length; t++) {
           var e = analytics.methods[t];
-          analytics[e] = analytics.factory(e)
+          analytics[e] = analytics.factory(e);
         }
         analytics.load = function(t) {
           var e = document.createElement('script');
@@ -149,7 +149,7 @@ export class AnalyticService {
           e.async = !0;
           e.src = ('https:' === document.location.protocol ? 'https://' : 'http://') + 'cdn.segment.com/analytics.js/v1/' + t + '/analytics.min.js';
           var n = document.getElementsByTagName('script')[0];
-          n.parentNode.insertBefore(e, n)
+          n.parentNode.insertBefore(e, n);
         };
         analytics.SNIPPET_VERSION = '4.0.0';
         analytics.load(apiWriteKey);

@@ -63,7 +63,7 @@ export class AppListPageComponent extends AbstractWatchComponent implements OnIn
     this.idSubscription = this.spaceNamespace.namespaceSpace
       .distinctUntilChanged().subscribe(id => {
         if (id) {
-          this.spaceStore.load(id)
+          this.spaceStore.load(id);
         }
       });
   }

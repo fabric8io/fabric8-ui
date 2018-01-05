@@ -27,7 +27,7 @@ export class BuildConfigService extends NamespacedResourceService<BuildConfig, B
         // force recalculation of the URL
         this._serviceUrl = null;
       }
-    })
+    });
   }
 
   instantiate(buildConfig: BuildConfig) {

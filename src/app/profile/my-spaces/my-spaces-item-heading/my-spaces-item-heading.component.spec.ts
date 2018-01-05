@@ -30,7 +30,7 @@ describe('My Spaces Item Heading Component', () => {
     fixture.detectChanges();
     let element = debug.queryAll(By.css('.list-pf-title'));
     fixture.whenStable().then(() => {
-      expect(element.length).toEqual(1)
+      expect(element.length).toEqual(1);
     });
   }));
 });

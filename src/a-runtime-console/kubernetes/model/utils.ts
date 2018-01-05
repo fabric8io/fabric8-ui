@@ -25,7 +25,7 @@ export function pathJoin(...paths: string[]): string {
     }
   });
   var rc = tmp.join('/');
-  return rc
+  return rc;
 }
 
 

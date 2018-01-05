@@ -4,7 +4,7 @@ import { PipelineStage } from "../../../model/pipelinestage.model";
 import { Http, RequestOptions, Headers } from "@angular/http";
 import { OnLogin } from "../../../../shared/onlogin.service";
 import { pathJoin } from "../../../model/utils";
-import { FABRIC8_FORGE_API_URL } from '../../../../shared/fabric8-forge-api'
+import { FABRIC8_FORGE_API_URL } from '../../../../shared/fabric8-forge-api';
 
 @Component({
   selector: 'input-action-dialog',
@@ -58,9 +58,9 @@ export class InputActionDialog {
       let jenkinsNamespace = this.build.jenkinsNamespace;
       let forgeUrl = this.forgeApiUrl;
       if (!forgeUrl) {
-        console.log("Warning no $FABRIC8_FORGE_API_URL environment variable!")
+        console.log("Warning no $FABRIC8_FORGE_API_URL environment variable!");
       } else if (!jenkinsNamespace) {
-        console.log("Warning no jenkinsNamespace on the Build!")
+        console.log("Warning no jenkinsNamespace on the Build!");
       } else {
         url = pathJoin(forgeUrl, "/api/openshift/services/jenkins/", jenkinsNamespace, url);
         let token = this.onLogin.token;

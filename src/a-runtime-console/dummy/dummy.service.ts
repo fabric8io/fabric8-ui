@@ -720,7 +720,7 @@ export class DummyService implements OnInit {
         name: "Builds",
         path: buildPath
       }
-    ]
+    ];
     return {
       name: 'DevSpace',
       icon: 'pficon-project',
@@ -841,7 +841,7 @@ export class DummyService implements OnInit {
           runMenus.push({
             name: envName,
             path: path
-          })
+          });
         });
       }
     }

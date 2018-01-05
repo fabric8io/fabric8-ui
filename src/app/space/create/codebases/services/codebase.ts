@@ -31,7 +31,7 @@ export class CodebaseRelations {
 export class RelationGeneric {
   data?: GenericData;
   links?: GenericLinks;
-  meta?: any
+  meta?: any;
 }
 
 export class GenericData {

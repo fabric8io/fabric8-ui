@@ -53,7 +53,7 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
 
     this.openSubscription = this.host.onOpen.subscribe(() => {
       this.dropdownModel = [];
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -77,7 +77,7 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
           id: user,
           name: user.attributes.fullName
         });
-      })
+      });
     });
   }
 

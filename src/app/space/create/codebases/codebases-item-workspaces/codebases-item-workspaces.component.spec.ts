@@ -63,7 +63,7 @@ describe('Codebases Item Details Component', () => {
     const workspaceCreatedEvent = {
       codebase: { "id": "6f5b6738-170e-490e-b3bb-d10f56b587c8", attributes: { type: 'git', url: "toto/toto" } },
       workspaceName: "MyWorkspace"
-    }
+    };
     workspacesServiceMock.getWorkspaces.and.returnValue(Observable.of(expectedWorkspaces));
     broadcasterMock.on.and.returnValue(Observable.of(workspaceCreatedEvent));
     spyOn(comp, 'updateWorkspacesPoll');

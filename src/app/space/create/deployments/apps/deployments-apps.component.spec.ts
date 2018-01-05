@@ -14,7 +14,7 @@ import {
 import {
   FilterEvent,
   SortEvent
-} from 'patternfly-ng'
+} from 'patternfly-ng';
 
 import { Observable } from 'rxjs';
 

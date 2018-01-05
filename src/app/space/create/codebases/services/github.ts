@@ -40,7 +40,7 @@ export class GitHubUser {
     "space": number;
     "private_repos": number;
     "collaborators": number;
-  }
+  };
 }
 
 export class GitHubOwner {
@@ -236,5 +236,5 @@ export class GitHubRepoCommit {
     "raw_url": string;
     "contents_url": string;
     "patch": string;
-  }]
+  }];
 }

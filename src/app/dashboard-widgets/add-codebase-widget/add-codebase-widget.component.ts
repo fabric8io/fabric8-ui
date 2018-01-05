@@ -33,7 +33,7 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
         this.codebaseService.getCodebases(context.space.id).subscribe((codebases) => {
           this.codebases = codebases;
           this.codebaseCount = codebases.length;
-        })
+        });
       }
     });
   }

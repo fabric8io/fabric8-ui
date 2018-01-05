@@ -49,7 +49,7 @@ export function getPropertyValue<T>(obj1: T, dataToRetrieve: string) {
     .split('.') // split string based on `.`
     .reduce(function(o, k) {
       return o && o[k]; // get inner property if `o` is defined else get `o` and return
-    }, obj1) // set initial value as object
+    }, obj1); // set initial value as object
 }
 
 export function mergeArraysDistinctByKey<T>(destination: T[], origin: T[], key: string) {

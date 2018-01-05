@@ -25,7 +25,7 @@ export class BuildService extends NamespacedResourceService<Build, Builds> {
         // force recalculation of the URL
         this._serviceUrl = null;
       }
-    })
+    });
   }
 
   protected createServiceUrl(urlPrefix: string, namespace: string, urlSuffix: string): string {

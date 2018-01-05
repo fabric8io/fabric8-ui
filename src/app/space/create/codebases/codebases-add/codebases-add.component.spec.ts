@@ -93,12 +93,12 @@ describe('Codebases Add Component', () => {
     const comp = fixture.componentInstance;
     const debug = fixture.debugElement;
     const inputGitHubRepo = debug.query(By.css('#gitHubRepo'));
-    inputGitHubRepo.nativeElement.value = 'start'
+    inputGitHubRepo.nativeElement.value = 'start';
     inputGitHubRepo.nativeElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      expect(comp.codebases).toEqual(codebases)
+      expect(comp.codebases).toEqual(codebases);
     });
   }));
 

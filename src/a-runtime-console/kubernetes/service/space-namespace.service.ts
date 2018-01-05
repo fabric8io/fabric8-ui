@@ -42,7 +42,7 @@ export class SpaceNamespaceService implements SpaceNamespace {
 }
 
 function getParameter(route: ActivatedRoute, router: Router, name: string) {
-  return findParameter(route, name) || findRouteParameter(router, name)
+  return findParameter(route, name) || findRouteParameter(router, name);
 }
 
 function findRouteParameter(router: Router, name: string) {
