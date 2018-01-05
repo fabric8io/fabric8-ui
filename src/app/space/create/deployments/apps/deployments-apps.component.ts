@@ -1,13 +1,14 @@
 import {
   Component,
   Input,
+  OnDestroy,
   OnInit
 } from '@angular/core';
 
 import { Environment } from '../models/environment';
 
 import { cloneDeep } from 'lodash';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import {
   Filter,
@@ -20,7 +21,7 @@ import {
   selector: 'deployments-apps',
   templateUrl: 'deployments-apps.component.html'
 })
-export class DeploymentsAppsComponent implements OnInit {
+export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
   @Input() public applications: Observable<string[]>;
   @Input() public environments: Observable<Environment[]>;
@@ -33,14 +34,19 @@ export class DeploymentsAppsComponent implements OnInit {
   private currentFilters: Filter[];
   private currentSortField: SortField;
   private isAscendingSort: boolean = true;
+  private subscriptions: Subscription[] = [];
 
   public constructor() { }
 
   ngOnInit(): void {
-    this.applications.subscribe(applications => {
+    this.subscriptions.push(this.applications.subscribe(applications => {
       this.applicationsList = applications;
       this.applyFilters();
-    });
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
   }
 
   filterChange($event: FilterEvent): void {
