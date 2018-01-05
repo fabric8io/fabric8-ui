@@ -211,7 +211,7 @@
     "less-loader": "4.0.5",
     "less-plugin-autoprefix": "1.5.1",
     "lesshint": "4.3.0",
-    "marked": "0.3.6",
+    "marked": "0.3.9",
     "mocha": "4.0.1",
     "ngc-webpack": "3.2.2",
     "npm-run-all": "4.1.1",
