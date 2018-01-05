@@ -102,7 +102,7 @@ import {BrowserModule} from "@angular/platform-browser";
   ]
 })
 export class KubernetesStoreModule {
-  constructor( @Optional() @SkipSelf() parentModule: KubernetesStoreModule) {
+  constructor(@Optional() @SkipSelf() parentModule: KubernetesStoreModule) {
     if (parentModule) {
       throw new Error(
         'KubernetesStoreModule is already loaded. Import it in the AppModule only');

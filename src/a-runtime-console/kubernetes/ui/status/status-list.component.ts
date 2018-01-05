@@ -87,7 +87,7 @@ export class StatusListComponent extends AbstractWatchComponent implements OnIni
               private spaceNamespace: SpaceNamespace,
               private spaceStore: SpaceStore,
               private podService: PodService,
-              private notifications: Notifications ) {
+              private notifications: Notifications) {
     super();
   }
 

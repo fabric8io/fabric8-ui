@@ -36,6 +36,6 @@ export class AppState {
 
   private _clone(object: InternalStateType) {
     // simple object clone
-    return JSON.parse(JSON.stringify( object ));
+    return JSON.parse(JSON.stringify(object));
   }
 }

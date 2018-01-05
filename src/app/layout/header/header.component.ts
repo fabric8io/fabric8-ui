@@ -43,17 +43,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   menuCallbacks = new Map<String, MenuHiddenCallback>([
     [
-      '_settings', function (headerComponent) {
+      '_settings', function(headerComponent) {
         return headerComponent.checkContextUserEqualsLoggedInUser();
       }
     ],
     [
-      '_resources', function (headerComponent) {
+      '_resources', function(headerComponent) {
         return headerComponent.checkContextUserEqualsLoggedInUser();
       }
     ],
     [
-      'settings', function (headerComponent) {
+      'settings', function(headerComponent) {
         return headerComponent.checkContextUserEqualsLoggedInUser();
       }
     ]

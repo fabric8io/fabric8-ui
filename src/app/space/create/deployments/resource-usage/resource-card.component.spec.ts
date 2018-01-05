@@ -66,7 +66,7 @@ describe('ResourceCardComponent', () => {
       component.environment = { name: 'stage' } as Environment;
     });
 
-  it('should have its children passed the proper values', function (this: Context) {
+  it('should have its children passed the proper values', function(this: Context) {
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
     expect(arrayOfComponents.length).toEqual(2);
 

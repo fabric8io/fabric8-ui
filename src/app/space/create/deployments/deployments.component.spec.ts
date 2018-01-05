@@ -79,7 +79,7 @@ describe('DeploymentsComponent', () => {
     ]
   });
 
-  it('should set service result to applications property', function (this: Context, done: DoneFn) {
+  it('should set service result to applications property', function(this: Context, done: DoneFn) {
     expect(mockSvc.getApplications).toHaveBeenCalledWith('fake-spaceId');
     this.testedDirective.applications.subscribe(applications => {
       expect(applications).toEqual(['foo-app', 'bar-app']);
@@ -87,7 +87,7 @@ describe('DeploymentsComponent', () => {
     });
   });
 
-  it('should set service result to environments property', function (this: Context, done: DoneFn) {
+  it('should set service result to environments property', function(this: Context, done: DoneFn) {
     expect(mockSvc.getEnvironments).toHaveBeenCalledWith('fake-spaceId');
     this.testedDirective.environments.subscribe(environments => {
       expect(environments).toEqual([
@@ -98,7 +98,7 @@ describe('DeploymentsComponent', () => {
     });
   });
 
-  it('should pass values to children resource usage components', function (this: Context) {
+  it('should pass values to children resource usage components', function(this: Context) {
     let resourceUsageComponents = this.tested.queryAll(By.directive(FakeDeploymentsResourceUsageComponent));
     expect(resourceUsageComponents.length).toEqual(1);
     let resourceUsageComponent = resourceUsageComponents[0].componentInstance;

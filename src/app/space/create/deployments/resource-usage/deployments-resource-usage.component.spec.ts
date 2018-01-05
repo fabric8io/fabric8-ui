@@ -51,7 +51,7 @@ describe('DeploymentsResourceUsageComponent', () => {
       component.spaceId = spaceIdObservable;
     });
 
-  it('should create children components with proper environment objects', function (this: Context) {
+  it('should create children components with proper environment objects', function(this: Context) {
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeResourceCardComponent));
     expect(arrayOfComponents.length).toEqual(mockEnvironmentData.length);
 

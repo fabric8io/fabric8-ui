@@ -9,7 +9,7 @@ export class CopyService {
 
   constructor(
       private logger: Logger,
-      @Inject( DOCUMENT ) dom: Document) {
+      @Inject(DOCUMENT) dom: Document) {
     this.dom = dom;
   }
 
@@ -28,7 +28,7 @@ export class CopyService {
     textarea.style.width = "0px";
     textarea.value = value;
 
-    this.dom.body.appendChild( textarea );
+    this.dom.body.appendChild(textarea);
     textarea.select();
 
     try {

@@ -63,7 +63,7 @@ describe('DeploymentsAppsComponent', () => {
       component.applications = mockApplications;
     });
 
-  it('should created children components with proper objects', function (this: Context) {
+  it('should created children components with proper objects', function(this: Context) {
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
     expect(arrayOfComponents.length).toEqual(applications.length);
 

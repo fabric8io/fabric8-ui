@@ -21,36 +21,36 @@ class ApiLocatorServiceTest extends BaseApiLocatorService {
 }
 
 
-describe('API Locator Service', function () {
+describe('API Locator Service', function() {
 
-  var base = function () {
+  var base = function() {
     return window.location.hostname + ":" + window.location.port
   }
-  var url = function (base: string) {
+  var url = function(base: string) {
     return "http://" + base
   }
 
-  it('Add prefix to configured service URL', function () {
+  it('Add prefix to configured service URL', function() {
     var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map([["random_test", "api"]]), new Map())
     expect(loc.get("random_test")).toMatch(url("api." + base()));
   });
 
-  it('Add suffix to configured service URL', function () {
+  it('Add suffix to configured service URL', function() {
     var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map(), new Map([["random_test", "api"]]))
     expect(loc.get("random_test")).toMatch(url(base() + "/api"));
   });
 
-  it('Add prefix and suffix to configured service URL', function () {
+  it('Add prefix and suffix to configured service URL', function() {
     var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map([["random_test", "api"]]), new Map([["random_test", "api"]]))
     expect(loc.get("random_test")).toMatch(url("api." + base() + "/api"));
   });
 
-  it('Do not change non configured service URL', function () {
+  it('Do not change non configured service URL', function() {
     var loc = new ApiLocatorServiceTest(new Fabric8UIConfig(), new Map(), new Map())
     expect(loc.get("random_test")).toMatch(url(base()));
   });
 
-  it('Ensure APILocatorService is injectable', function () {
+  it('Ensure APILocatorService is injectable', function() {
     TestBed.configureTestingModule({
       declarations: [TestAPILocatorServiceComponent],
       providers: [ApiLocatorService, Fabric8UIConfig, ProviderService]

@@ -43,7 +43,7 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
     this.openSubscription.unsubscribe();
   }
 
-  createArea () {
+  createArea() {
     let area = {} as Area;
     area.attributes = new AreaAttributes();
     area.attributes.name = this.name;

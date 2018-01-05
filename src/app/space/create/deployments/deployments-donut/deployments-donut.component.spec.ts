@@ -62,11 +62,11 @@ describe('DeploymentsDonutComponent', () => {
       component.environment = { name: 'environmentName' } as Environment;
     });
 
-  it('should use pods data for initial desired replicas', function (this: Context) {
+  it('should use pods data for initial desired replicas', function(this: Context) {
     expect(this.testedDirective.desiredReplicas).toEqual(2);
   });
 
-  it('should increment desired replicas on scale up by one', function (this: Context) {
+  it('should increment desired replicas on scale up by one', function(this: Context) {
     let desired = 2;
     expect(this.testedDirective.desiredReplicas).toBe(desired);
 
@@ -75,7 +75,7 @@ describe('DeploymentsDonutComponent', () => {
     expect(this.testedDirective.desiredReplicas).toBe(desired + 1);
   });
 
-  it('should decrement desired replicas on scale down by one', function (this: Context) {
+  it('should decrement desired replicas on scale down by one', function(this: Context) {
     let desired = 2;
     expect(this.testedDirective.desiredReplicas).toBe(desired);
 
@@ -84,7 +84,7 @@ describe('DeploymentsDonutComponent', () => {
     expect(this.testedDirective.desiredReplicas).toBe(desired - 1);
   });
 
-  it('should not decrement desired replicas below zero when scaling down', function (this: Context) {
+  it('should not decrement desired replicas below zero when scaling down', function(this: Context) {
     let desired = 2;
     expect(this.testedDirective.desiredReplicas).toBe(desired);
 
@@ -101,7 +101,7 @@ describe('DeploymentsDonutComponent', () => {
     expect(this.testedDirective.desiredReplicas).toBe(0);
   });
 
-  it('should acquire pods data', function (this: Context, done: DoneFn) {
+  it('should acquire pods data', function(this: Context, done: DoneFn) {
     this.testedDirective.pods.subscribe(pods => {
       expect(pods).toEqual({
         pods: [['Running', 1], ['Terminating', 1]],
@@ -111,7 +111,7 @@ describe('DeploymentsDonutComponent', () => {
     });
   });
 
-  it('should call scalePods when scaling up', function (this: Context) {
+  it('should call scalePods when scaling up', function(this: Context) {
     let de = this.fixture.debugElement.query(By.css('#scaleUp'));
     let el = de.nativeElement;
 
@@ -120,7 +120,7 @@ describe('DeploymentsDonutComponent', () => {
     expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
   });
 
-  it('should call scalePods when scaling down', function (this: Context) {
+  it('should call scalePods when scaling down', function(this: Context) {
     let de = this.fixture.debugElement.query(By.css('#scaleDown'));
     let el = de.nativeElement;
 
@@ -129,7 +129,7 @@ describe('DeploymentsDonutComponent', () => {
     expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 1);
   });
 
-  it('should not call scalePods when scaling below 0', function (this: Context) {
+  it('should not call scalePods when scaling below 0', function(this: Context) {
     let de = this.fixture.debugElement.query(By.css('#scaleDown'));
     let el = de.nativeElement;
 

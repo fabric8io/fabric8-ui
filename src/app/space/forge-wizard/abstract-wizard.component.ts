@@ -139,7 +139,7 @@ export abstract class AbstractWizard implements OnInit {
     if (to === this.LAST_STEP) {
       return;
     }
-    if (from > to ) {
+    if (from > to) {
       wizardSteps.filter(step => step.config.priority > to).map(step => {
         // moving backward, all steps after this one should not be navigable
         step.config.allowClickNav = false;

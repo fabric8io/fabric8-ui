@@ -53,7 +53,7 @@ export class MenusService {
   }
 
   public attach(context: Context) {
-    if ( !(context.type instanceof MenuedContextType || (<MenuedContextType> context.type).menus ) ) {
+    if (!(context.type instanceof MenuedContextType || (<MenuedContextType> context.type).menus)) {
       // Take a copy of the context to attach menus to (not sure we need to do this)
       let res = cloneDeep(context.type) as MenuedContextType;
       // Take a copy of the menus and attach them

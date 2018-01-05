@@ -25,7 +25,7 @@ export class CodebaseDeleteDialogComponent implements OnInit, OnDestroy {
   /**
    * Confirm deletion of the codebase.
    */
-  confirmDelete () {
+  confirmDelete() {
     this.onDelete.emit(this.codebase);
   }
 

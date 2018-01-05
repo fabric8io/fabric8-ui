@@ -376,7 +376,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.username = (user.attributes.username !== undefined) ? user.attributes.username : '';
 
     let contextInformation = user.attributes['contextInformation'];
-    if (contextInformation && contextInformation.experimentalFeatures ) {
+    if (contextInformation && contextInformation.experimentalFeatures) {
       this.isExperimental =  contextInformation.experimentalFeatures['enabled'];
     }
   }

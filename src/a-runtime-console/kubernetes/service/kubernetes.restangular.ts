@@ -94,7 +94,7 @@ export function KubernetesRestangularFactory(restangular: Restangular, oauthServ
     RestangularConfigurer.setBaseUrl(baseUrl);
 
     //RestangularConfigurer.addResponseInterceptor(function (data, operation, what, url, response, deferred) {
-    RestangularConfigurer.addResponseInterceptor(function (data, operation) {
+    RestangularConfigurer.addResponseInterceptor(function(data, operation) {
       let kind = data ? data.kind : null;
       if (operation === 'getList') {
         if (data && data.constructor !== Array) {

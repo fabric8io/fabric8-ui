@@ -49,7 +49,7 @@ describe('DeploymentsToolbarComponent', () => {
     declarations: [FakePfngToolbarComponent]
   });
 
-  it('should update filterConfig resultsCount', function (this: Context) {
+  it('should update filterConfig resultsCount', function(this: Context) {
     const initialCount: number = 0;
     expect(this.testedDirective.filterConfig.resultsCount).toBe(initialCount);
 

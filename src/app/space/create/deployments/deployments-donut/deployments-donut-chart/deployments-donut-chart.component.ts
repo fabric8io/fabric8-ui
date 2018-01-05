@@ -69,7 +69,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
       },
       tooltip: {
         format: {
-          value: function (value, ratio, id) {
+          value: function(value, ratio, id) {
             if (!value) {
               return undefined;
             }

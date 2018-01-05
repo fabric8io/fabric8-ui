@@ -27,7 +27,7 @@ export class ExperimentalFeatureResolver implements Resolve<FeatureFlagConfig> {
         let experimentalFeaturesEnabled = false;
         if (loggedInUser && loggedInUser.attributes) {
           let contextInformation = loggedInUser.attributes["contextInformation"];
-          if (contextInformation && contextInformation.experimentalFeatures ) {
+          if (contextInformation && contextInformation.experimentalFeatures) {
             experimentalFeaturesEnabled =  contextInformation.experimentalFeatures["enabled"];
           }
         }

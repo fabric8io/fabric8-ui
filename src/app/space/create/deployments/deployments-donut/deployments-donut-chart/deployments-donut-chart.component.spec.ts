@@ -47,23 +47,23 @@ describe('DeploymentsDonutChartComponent', () => {
   type Context = TestContext<DeploymentsDonutChartComponent, TestHostComponent>;
   initContext(DeploymentsDonutChartComponent, TestHostComponent);
 
-  it('should set unique chartId', function (this: Context) {
+  it('should set unique chartId', function(this: Context) {
     expect(this.testedDirective.chartId).toMatch('deployments-donut-chart.*');
   });
 
-  it('should not show mini text', function (this: Context) {
+  it('should not show mini text', function(this: Context) {
     expect(this.testedDirective.mini).toBe(false);
     let text = this.fixture.debugElement.query(By.css('deployments-donut-chart-mini-text'));
     expect(text).toBeFalsy();
   });
 
   describe('Mini chart', () => {
-    beforeEach(function (this: Context) {
+    beforeEach(function(this: Context) {
       this.hostComponent.mini = true;
       this.detectChanges();
     });
 
-    it('should show mini text', function (this: Context) {
+    it('should show mini text', function(this: Context) {
       expect(this.testedDirective.mini).toBe(true);
       let text = this.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
       expect(text).toBeTruthy();
@@ -72,12 +72,12 @@ describe('DeploymentsDonutChartComponent', () => {
     });
 
     describe('Mini Idle chart', () => {
-      beforeEach(function (this: Context) {
+      beforeEach(function(this: Context) {
         this.hostComponent.isIdled = true;
         this.detectChanges();
       });
 
-      it('should show idled text', function (this: Context) {
+      it('should show idled text', function(this: Context) {
         expect(this.testedDirective.idled).toBe(true);
         let idle = this.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
         expect(idle).toBeTruthy();

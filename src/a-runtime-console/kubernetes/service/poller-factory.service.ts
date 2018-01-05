@@ -10,6 +10,6 @@ export class PollerFactory {
   ) {}
 
   newInstance<L>(pollListFactory: () => Observable<L>, dataStream: BehaviorSubject<any>) {
-    return new Poller( pollListFactory, dataStream);
+    return new Poller(pollListFactory, dataStream);
   }
 }

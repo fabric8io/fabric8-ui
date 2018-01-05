@@ -91,12 +91,12 @@ describe('DeploymentDetailsComponent', () => {
     component.spaceId = 'mockSpaceId';
   });
 
-  it('should generate unique chartIds for each DeploymentDetailsComponent instance', function (this: Context) {
+  it('should generate unique chartIds for each DeploymentDetailsComponent instance', function(this: Context) {
     let detailsComponent = this.testedDirective;
     expect(detailsComponent.cpuConfig.chartId).not.toBe(detailsComponent.memConfig.chartId);
   });
 
-  it('should create a child donut component with proper values', function (this: Context) {
+  it('should create a child donut component with proper values', function(this: Context) {
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentsDonutComponent));
     expect(arrayOfComponents.length).toEqual(1);
 
@@ -107,7 +107,7 @@ describe('DeploymentDetailsComponent', () => {
   describe('cpu label', () => {
     let de: DebugElement;
 
-    beforeEach(function (this: Context) {
+    beforeEach(function(this: Context) {
       let charts = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       let cpuChart = charts[0];
       de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
@@ -133,7 +133,7 @@ describe('DeploymentDetailsComponent', () => {
   describe('memory label', () => {
     let de: DebugElement;
 
-    beforeEach(function (this: Context) {
+    beforeEach(function(this: Context) {
       let charts = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       let memoryChart = charts[1];
       de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));

@@ -42,7 +42,7 @@ export class AppListPageComponent extends AbstractWatchComponent implements OnIn
               private deploymentService: DeploymentService,
               private spaceNamespace: SpaceNamespace,
               private notifications: Notifications,
-              private route: ActivatedRoute ) {
+              private route: ActivatedRoute) {
     super();
   }
 

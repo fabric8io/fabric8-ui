@@ -118,7 +118,7 @@
 //
 //    "cyclomatic-complexity": true,
 //    "eofline": true,
-//    "indent": [true, "spaces"],
+    "indent": [true, "spaces", 2],
 //    "linebreak-style": [true, "LF"],
 //    "max-classes-per-file": [true, 1],
 //    "max-file-line-count": [true, 1000],
@@ -205,14 +205,14 @@
 //    ],
 //    "return-undefined": true,
 //    "semicolon": [true, "always"],
-//    "space-before-function-paren": [true, {
-//      "anonymous": "never",
-//      "asyncArrow": "always",
-//      "constructor": "never",
-//      "method": "never",
-//      "named": "never"
-//    }],
-//    "space-within-parens": [true, 0],
+    "space-before-function-paren": [true, {
+      "anonymous": "never",
+      "asyncArrow": "always",
+      "constructor": "never",
+      "method": "never",
+      "named": "never"
+    }],
+    "space-within-parens": [true, 0],
 //    "switch-final-break": true,
 //    "type-literal-delimiter": true,
 //    "variable-name": [

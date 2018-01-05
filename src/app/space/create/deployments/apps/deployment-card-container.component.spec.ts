@@ -44,7 +44,7 @@ describe('DeploymentCardContainer', () => {
       component.application = 'app';
     });
 
-  it('should created children components with proper objects', function (this: Context) {
+  it('should created children components with proper objects', function(this: Context) {
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
     expect(arrayOfComponents.length).toEqual(environments.length);
 
@@ -55,7 +55,7 @@ describe('DeploymentCardContainer', () => {
     });
   });
 
-  it('should set the application title properly', function (this: Context) {
+  it('should set the application title properly', function(this: Context) {
     let el = this.fixture.debugElement.query(By.css('#deploymentCardApplicationTitle')).nativeElement;
     expect(el.textContent.trim()).toEqual('app');
   });

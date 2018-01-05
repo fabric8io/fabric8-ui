@@ -36,11 +36,11 @@ export class CleanupComponent implements OnInit, OnDestroy {
 
   @ViewChild('confirmCleanup') confirmCleanup: IModalHost;
 
-  constructor( private contexts: Contexts,
+  constructor(private contexts: Contexts,
                private spaceService: SpaceService,
                private tenantService: TenentService,
                private eventService: EventService,
-               private router: Router ) {
+               private router: Router) {
   }
 
   ngOnInit() {

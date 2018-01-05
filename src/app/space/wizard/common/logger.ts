@@ -47,7 +47,7 @@ export class LoggerFactory {
   constructor() {
     let fmt = formatConsole === true ? '%c' : '';
     let msg = `${fmt}${this.constructor.name} ${fmt}New instance ...`;
-    if ( fmt.length > 0 ) {
+    if (fmt.length > 0) {
       console.log(msg, this.styles.origin, this.styles.message);
     } else {
       console.log(msg);
@@ -59,13 +59,13 @@ export class LoggerFactory {
 
     function addLogEntry(entry: ILogEntry, ...args) {
       let method = 'log';
-      if ( entry.error === true ) {
+      if (entry.error === true) {
         method = 'error';
       }
-      if ( entry.warning === true ) {
+      if (entry.warning === true) {
         method = 'warn';
       }
-      if ( entry.info === true ) {
+      if (entry.info === true) {
         method = 'info';
       }
       let fmt = formatConsole === true ? '%c' : '';
@@ -73,10 +73,10 @@ export class LoggerFactory {
       let functionArgs = args.filter(a => typeof(a) === 'function');
       let otherArgs = args.filter(a => typeof(a) !== 'function');
       let newArgs = [msg, ...otherArgs];
-      if ( fmt.length > 0 ) {
+      if (fmt.length > 0) {
         newArgs = [msg, me.styles.origin, me.styles.instance, me.styles.message, ...otherArgs];
       }
-      if ( functionArgs.length > 0 ) {
+      if (functionArgs.length > 0) {
         functionArgs[0].apply(null, newArgs);
       } else {
         console[method].apply(null, newArgs);
@@ -85,7 +85,7 @@ export class LoggerFactory {
 
     function loggerDelegate(options: string | ILogEntry, ...args) {
       let entry = { message: '' };
-      if ( typeof options === 'string' ) {
+      if (typeof options === 'string') {
         entry.message = options || '';
       } else {
         Object.assign(entry, options);

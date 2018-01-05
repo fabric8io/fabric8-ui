@@ -131,8 +131,8 @@ export class AnalyticService {
           'off',
           'on'
         ];
-        analytics.factory = function (t) {
-          return function () {
+        analytics.factory = function(t) {
+          return function() {
             var e = Array.prototype.slice.call(arguments);
             e.unshift(t);
             analytics.push(e);
@@ -143,7 +143,7 @@ export class AnalyticService {
           var e = analytics.methods[t];
           analytics[e] = analytics.factory(e)
         }
-        analytics.load = function (t) {
+        analytics.load = function(t) {
           var e = document.createElement('script');
           e.type = 'text/javascript';
           e.async = !0;

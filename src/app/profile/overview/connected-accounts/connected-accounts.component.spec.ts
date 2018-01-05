@@ -48,13 +48,13 @@ describe('Connected Accounts Component', () => {
         { provide: ProviderService, useValue: providersMock }]
     });
 
-    it('should have GitHub connection indicated', function (this: Context) {
+    it('should have GitHub connection indicated', function(this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('username');
 
     });
 
-    it('should have absence of OpenShift connection indicated', function (this: Context) {
+    it('should have absence of OpenShift connection indicated', function(this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('OpenShift Not Connected');
     });
@@ -83,12 +83,12 @@ describe('Connected Accounts Component', () => {
         { provide: ProviderService, useValue: providersMock }]
     });
 
-    it('should have absence of GitHub connection indicated', function (this: Context) {
+    it('should have absence of GitHub connection indicated', function(this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('GitHub Disconnected');
     });
 
-    it('should have OpenShift connection indicated', function (this: Context) {
+    it('should have OpenShift connection indicated', function(this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('OpenShift ' + expectedOsoUser);
     });
@@ -117,12 +117,12 @@ describe('Connected Accounts Component', () => {
         { provide: ProviderService, useValue: providersMock }]
     });
 
-    it('should have GitHub connection indicated', function (this: Context) {
+    it('should have GitHub connection indicated', function(this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('username');
     });
 
-    it('should have OpenShift connection indicated', function (this: Context) {
+    it('should have OpenShift connection indicated', function(this: Context) {
       let actualText = trimCarriageReturns(this.testedElement.innerText);
       expect(actualText).toContain('OpenShift ' + expectedOsoUser);
     });

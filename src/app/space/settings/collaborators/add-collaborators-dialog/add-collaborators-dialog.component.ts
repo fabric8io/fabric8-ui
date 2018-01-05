@@ -60,7 +60,7 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
     this.openSubscription.unsubscribe();
   }
 
-  addCollaborators () {
+  addCollaborators() {
     this.host.close();
     this.collaboratorService.addCollaborators(this.spaceId, this.dropdownModel).subscribe(() => {
       this.onAdded.emit(this.dropdownModel as User[]);

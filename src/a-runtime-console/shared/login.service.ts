@@ -63,7 +63,7 @@ export class LoginService {
   public login() {
     let query = window.location.search.substr(1);
     let result: any = {};
-    query.split('&').forEach(function (part) {
+    query.split('&').forEach(function(part) {
       let item: any = part.split('=');
       result[item[0]] = decodeURIComponent(item[1]);
     });

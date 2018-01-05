@@ -426,7 +426,7 @@ export class DummyService implements OnInit {
               private router: Router,
               private activatedRoute: ActivatedRoute,
               private spaceStore: SpaceStore,
-              private buildConfigStore: BuildConfigStore ) {
+              private buildConfigStore: BuildConfigStore) {
     this._defaultContexts = this.initDummy('contexts', this.CONTEXTS);
     this._devSpaces = this.initDummy('spaces', this.SPACES);
     this._contexts = this._defaultContexts;
@@ -1075,7 +1075,7 @@ export class DummyService implements OnInit {
 
   private valuesAsArray<T>(m: Map<any, T>): T[] {
     let res: T[] = new Array<T>();
-    m.forEach(function (value) {
+    m.forEach(function(value) {
       res.push(value);
     });
     return res;
