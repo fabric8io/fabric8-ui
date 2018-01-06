@@ -67,15 +67,15 @@ describe('Codebases Item Actions Component', () => {
   it('Create And Open Workspace successfully', async(() => {
     // given
     let comp = fixture.componentInstance;
-    comp.codebase = { "id": "6f5b6738-170e-490e-b3bb-d10f56b587c8" };
+    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     const workspaceLinks = {
       links: {
-        open: "http://somehwere.com"
+        open: 'http://somehwere.com'
       }
     };
     workspacesServiceMock.createWorkspace.and.returnValue(Observable.of(workspaceLinks));
     windowServiceMock.open.and.returnValue(new WindowService());
-    const notificationAction = { name: "created" };
+    const notificationAction = { name: 'created' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     broadcasterMock.broadcast.and.returnValue();
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
@@ -92,9 +92,9 @@ describe('Codebases Item Actions Component', () => {
   it('Create And Open Workspace in error', async(() => {
     // given
     let comp = fixture.componentInstance;
-    comp.codebase = { "id": "6f5b6738-170e-490e-b3bb-d10f56b587c8" };
+    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     workspacesServiceMock.createWorkspace.and.returnValue(Observable.throw('ERROR'));
-    const notificationAction = { name: "ERROR" };
+    const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
     fixture.detectChanges();

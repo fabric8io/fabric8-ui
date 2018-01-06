@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { PipelineViewToolbarComponent } from "./view-toolbar.pipeline.component";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { PipelineViewToolbarComponent } from './view-toolbar.pipeline.component';
 
 describe('PipelineViewToolbarComponent', () => {
   let pipeline: PipelineViewToolbarComponent;

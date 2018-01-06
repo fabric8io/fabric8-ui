@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { SpaceViewToolbarComponent } from "./view-toolbar.space.component";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SpaceViewToolbarComponent } from './view-toolbar.space.component';
 
 describe('SpaceViewToolbarComponent', () => {
   let space: SpaceViewToolbarComponent;

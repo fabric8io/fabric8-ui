@@ -28,8 +28,8 @@ import { CodebasesToolbarComponent } from './codebases-toolbar.component';
 })
 class HostComponent {
   public resultsCount = 0;
-  public filterChange($event : FilterEvent) { }
-  public sortChange($event : SortEvent) { }
+  public filterChange($event: FilterEvent) { }
+  public sortChange($event: SortEvent) { }
 }
 
 @Component({
@@ -51,7 +51,7 @@ describe('CodebasesToolbarComponent', () => {
     imports: [RouterTestingModule]
   });
 
-  it('should update filterConfig resultsCount', function (this: Context) {
+  it('should update filterConfig resultsCount', function(this: Context) {
     let initialCount = 0;
     expect(this.testedDirective.filterConfig.resultsCount).toBe(initialCount);
 

@@ -1,7 +1,7 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import { ReplicaSetDeleteDialog } from "../delete-dialog/delete-dialog.replicaset.component";
-import { ReplicaSetViews } from "../../../view/replicaset.view";
-import { ReplicaSetScaleDialog } from "../scale-dialog/scale-dialog.replicaset.component";
+import { Component, Input, ViewChild } from '@angular/core';
+import { ReplicaSetDeleteDialog } from '../delete-dialog/delete-dialog.replicaset.component';
+import { ReplicaSetViews } from '../../../view/replicaset.view';
+import { ReplicaSetScaleDialog } from '../scale-dialog/scale-dialog.replicaset.component';
 
 @Component({
   selector: 'fabric8-replicasets-list',

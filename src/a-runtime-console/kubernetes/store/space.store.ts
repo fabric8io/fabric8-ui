@@ -1,19 +1,19 @@
-import { Injectable } from "@angular/core";
-import { Namespaces, Namespace, isSecretsNamespace, isSystemNamespace } from "../model/namespace.model";
-import { Observable, BehaviorSubject, Subscription } from "rxjs";
-import { NamespaceStore } from "./namespace.store";
-import { ConfigMapService } from "../service/configmap.service";
-import { Space, Spaces, asSpaces, SpaceConfig } from "../model/space.model";
-import { ConfigMap, ConfigMaps } from "../model/configmap.model";
-import "rxjs/add/observable/forkJoin";
-import { OnLogin } from "../../shared/onlogin.service";
-import { messageEventToResourceOperation, Operation } from "../service/resource-operation";
-import { Watcher } from "../service/watcher";
-import { ConfigMapStore } from "./configmap.store";
+import { Injectable } from '@angular/core';
+import { Namespaces, Namespace, isSecretsNamespace, isSystemNamespace } from '../model/namespace.model';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import { NamespaceStore } from './namespace.store';
+import { ConfigMapService } from '../service/configmap.service';
+import { Space, Spaces, asSpaces, SpaceConfig } from '../model/space.model';
+import { ConfigMap, ConfigMaps } from '../model/configmap.model';
+import 'rxjs/add/observable/forkJoin';
+import { OnLogin } from '../../shared/onlogin.service';
+import { messageEventToResourceOperation, Operation } from '../service/resource-operation';
+import { Watcher } from '../service/watcher';
+import { ConfigMapStore } from './configmap.store';
 
 
-const fabric8EnvironmentsName = "fabric8-environments";
-const fabric8SpacesName = "fabric8-spaces";
+const fabric8EnvironmentsName = 'fabric8-environments';
+const fabric8SpacesName = 'fabric8-spaces';
 
 
 class SpaceConfigWatcher {
@@ -67,7 +67,7 @@ class SpaceConfigWatcher {
 export class SpaceStore {
   public list: Observable<Spaces>;
   public resource: Observable<Space>;
-  private _idSubject: BehaviorSubject<string> = new BehaviorSubject("");
+  private _idSubject: BehaviorSubject<string> = new BehaviorSubject('');
   protected _loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   private spaceConfigWatchers: Map<String, SpaceConfigWatcher>;
@@ -106,13 +106,13 @@ export class SpaceStore {
             if (!springConfigWatcher) {
               //console.log("watching configmaps in namespace " + name);
               let watcher = configMapService.watchNamepace(name, {
-                labelSelector: "provider=fabric8"
+                labelSelector: 'provider=fabric8'
               });
               springConfigWatcher = new SpaceConfigWatcher(configMapStore, watcher, (spaceConfig) => this.spaceConfigUpdated(spaceConfig));
 
               // lets load the initial value
               configMapService.list(name, {
-                labelSelector: "provider=fabric8"
+                labelSelector: 'provider=fabric8'
               }).take(1).subscribe(cms => {
                 if (cms && cms.length) {
                   var environmentsConfigMap: ConfigMap = null;

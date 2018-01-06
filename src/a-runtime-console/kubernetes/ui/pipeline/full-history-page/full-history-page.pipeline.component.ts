@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { BuildConfigs, combineBuildConfigAndBuilds, filterPipelines } from "../../../model/buildconfig.model";
-import { BuildConfigStore } from "../../../store/buildconfig.store";
-import { APIsStore } from "../../../store/apis.store";
-import { BuildStore } from "../../../store/build.store";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { BuildConfigs, combineBuildConfigAndBuilds, filterPipelines } from '../../../model/buildconfig.model';
+import { BuildConfigStore } from '../../../store/buildconfig.store';
+import { APIsStore } from '../../../store/apis.store';
+import { BuildStore } from '../../../store/build.store';
 
 
 @Component({

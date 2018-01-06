@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
 import { WorkItemService, WorkItem } from 'fabric8-planner';
@@ -17,7 +17,7 @@ import { WorkItemService, WorkItem } from 'fabric8-planner';
 export class WorkItemsComponent implements OnDestroy, OnInit  {
   context: Context;
   currentSpace: Space;
-  currentSpaceId: string = "default";
+  currentSpaceId: string = 'default';
   loggedInUser: User;
   recentSpaces: Space[] = [];
   recentSpaceIndex: number = 0;

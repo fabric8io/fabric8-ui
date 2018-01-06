@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
-import { Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Observable } from 'rxjs';
 
 export interface INamespaceScope {
   namespace: Observable<string>;
@@ -59,6 +59,6 @@ export class NamespaceScope implements INamespaceScope {
   }
 
   currentNamespace() {
-    return this.findParamsFor(this.router.routerState.snapshot.root, "namespace");
+    return this.findParamsFor(this.router.routerState.snapshot.root, 'namespace');
   }
 }

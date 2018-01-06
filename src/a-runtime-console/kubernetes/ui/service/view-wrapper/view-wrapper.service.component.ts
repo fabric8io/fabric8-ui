@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Service } from "../../../model/service.model";
-import { ServiceStore } from "../../../store/service.store";
-import { AbstractViewWrapperComponent } from "../../../support/abstract-viewwrapper-component";
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Service } from '../../../model/service.model';
+import { ServiceStore } from '../../../store/service.store';
+import { AbstractViewWrapperComponent } from '../../../support/abstract-viewwrapper-component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'fabric8-service-view-wrapper',

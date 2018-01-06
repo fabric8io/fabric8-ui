@@ -16,22 +16,22 @@ export class BrandingService {
   constructor(
     private fabric8UIConfig: Fabric8UIConfig
   ) {
-    this.isFabric8 = this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === "fabric8";
+    this.isFabric8 = this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === 'fabric8';
 
     if (this.isFabric8) {
       this._logo = fabric8Logo;
       // replace background image with fabric8 background once available
-      this._backgroundClass = "home-fabric8-background-image";
-      this._description = "A free, end-to-end, cloud-native development experience.";
-      this._name = "fabric8.io";
-      this._moreInfoLink = "https://fabric8.io/";
+      this._backgroundClass = 'home-fabric8-background-image';
+      this._description = 'A free, end-to-end, cloud-native development experience.';
+      this._name = 'fabric8.io';
+      this._moreInfoLink = 'https://fabric8.io/';
     } else {
       // default openshift.io branding
       this._logo = openshiftLogo;
-      this._backgroundClass = "home-header-background-image";
-      this._description = "A free, end-to-end, cloud-native development experience.";
-      this._name = "OpenShift.io";
-      this._moreInfoLink = "https://openshift.io";
+      this._backgroundClass = 'home-header-background-image';
+      this._description = 'A free, end-to-end, cloud-native development experience.';
+      this._name = 'OpenShift.io';
+      this._moreInfoLink = 'https://openshift.io';
     }
   }
 

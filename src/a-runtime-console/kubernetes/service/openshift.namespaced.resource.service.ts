@@ -1,17 +1,17 @@
 import { WatcherFactory } from './watcher-factory.service';
-import { Restangular } from "ng2-restangular";
-import { KubernetesResource } from "../model/kubernetesresource.model";
-import { NamespaceScope } from "./namespace.scope";
-import { NamespacedResourceService } from "./namespaced.resource.service";
-import { Observable, BehaviorSubject } from "rxjs";
-import { isOpenShift } from "../store/apis.store";
-import { Watcher } from "./watcher";
+import { Restangular } from 'ng2-restangular';
+import { KubernetesResource } from '../model/kubernetesresource.model';
+import { NamespaceScope } from './namespace.scope';
+import { NamespacedResourceService } from './namespaced.resource.service';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { isOpenShift } from '../store/apis.store';
+import { Watcher } from './watcher';
 
 
 export abstract class OpenShiftNamespacedResourceService<T extends KubernetesResource, L extends Array<T>> extends NamespacedResourceService<T, L> {
   constructor(kubernetesRestangular: Restangular,
     namespaceScope: NamespaceScope,
-    urlSuffix: string, watcherFactory: WatcherFactory, urlPrefix: string = "/oapi/v1/namespaces") {
+    urlSuffix: string, watcherFactory: WatcherFactory, urlPrefix: string = '/oapi/v1/namespaces') {
     super(kubernetesRestangular, namespaceScope, urlSuffix, watcherFactory, urlPrefix);
   }
 
@@ -57,7 +57,7 @@ export abstract class OpenShiftNamespacedResourceService<T extends KubernetesRes
   }
 
   protected createUnsupportedResourceError() {
-    return new Error("Unsupported resource kind when not running on OpenShift");
+    return new Error('Unsupported resource kind when not running on OpenShift');
   }
 
 }

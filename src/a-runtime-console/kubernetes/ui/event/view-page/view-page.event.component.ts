@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
-import { Subscription } from "rxjs/Subscription";
-import { EventStore } from "../../../store/event.store";
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+import { EventStore } from '../../../store/event.store';
 
 @Component({
   selector: 'fabric8-event-view-page',

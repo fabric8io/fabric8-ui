@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
-import { Deployment } from "../../../model/deployment.model";
-import { DeploymentService } from "../../../service/deployment.service";
-import { DeploymentConfigService } from "../../../service/deploymentconfig.service";
-import { CompositeDeploymentStore } from "../../../store/compositedeployment.store";
-import { DeploymentConfig } from "../../../model/deploymentconfig.model";
+import { Component } from '@angular/core';
+import { Deployment } from '../../../model/deployment.model';
+import { DeploymentService } from '../../../service/deployment.service';
+import { DeploymentConfigService } from '../../../service/deploymentconfig.service';
+import { CompositeDeploymentStore } from '../../../store/compositedeployment.store';
+import { DeploymentConfig } from '../../../model/deploymentconfig.model';
 
 @Component({
   selector: 'delete-deployment-dialog',

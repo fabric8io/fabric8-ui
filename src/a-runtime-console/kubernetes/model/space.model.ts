@@ -1,10 +1,10 @@
 import * as jsyaml from 'js-yaml';
 
-import { Namespace, Namespaces, isSecretsNamespace, isSystemNamespace } from "./namespace.model";
-import { ConfigMap } from "./configmap.model";
-import { Entity } from "../../models/entity";
-import { openShiftBrowseResourceUrl } from "./helpers";
-import { currentOAuthConfig } from "../store/oauth-config-store";
+import { Namespace, Namespaces, isSecretsNamespace, isSystemNamespace } from './namespace.model';
+import { ConfigMap } from './configmap.model';
+import { Entity } from '../../models/entity';
+import { openShiftBrowseResourceUrl } from './helpers';
+import { currentOAuthConfig } from '../store/oauth-config-store';
 
 
 export class SpaceConfig {
@@ -50,9 +50,9 @@ export class Space {
         const nsName = ns.name;
         map[nsName] = ns;
 
-        if (nsName === this.name + "-jenkins") {
+        if (nsName === this.name + '-jenkins') {
           this.jenkinsNamespace = ns;
-        } else if (nsName === this.name + "-che") {
+        } else if (nsName === this.name + '-che') {
           this.cheNamespace = ns;
         }
       });
@@ -112,7 +112,7 @@ export class Space {
         }
       });
     } else {
-      console.log("No data for ConfigMap " + configMap.name + " in namespace " + configMap.namespace);
+      console.log('No data for ConfigMap ' + configMap.name + ' in namespace ' + configMap.namespace);
     }
 
     answer.sort((a: Environment, b: Environment) => {
@@ -140,8 +140,8 @@ export class Space {
         let yaml = data[key];
         if (yaml) {
           let config = jsyaml.safeLoad(yaml);
-          let label = config['name'] || "";
-          let description = config['description'] || "";
+          let label = config['name'] || '';
+          let description = config['description'] || '';
           var order = config.order;
           if (order === undefined) {
             order = 1000;
@@ -150,7 +150,7 @@ export class Space {
         }
       });
     } else {
-      console.log("No data for ConfigMap " + configMap.name + " in namespace " + configMap.namespace);
+      console.log('No data for ConfigMap ' + configMap.name + ' in namespace ' + configMap.namespace);
     }
     answer.sort((a: LabelSpace, b: LabelSpace) => {
       if (a.order < b.order) {
@@ -238,7 +238,7 @@ export function asSpaces(spaces: Space[]): Spaces {
       }
     }
   }
-  answer.sort((a, b) => (a.name || "").localeCompare(b.name));
+  answer.sort((a, b) => (a.name || '').localeCompare(b.name));
   return answer;
 }
 

@@ -19,7 +19,7 @@ import {
 } from 'ngx-fabric8-wit';
 import { ProfileService } from './../profile/profile.service';
 import { LocalStorageService } from 'angular-2-local-storage';
-import { EventService } from "./event.service";
+import { EventService } from './event.service';
 import { Observable } from 'rxjs';
 import { cloneDeep } from 'lodash';
 import { loggedInUser, profile, context1, context2 } from './context.service.mock';
@@ -96,11 +96,11 @@ describe('Context Service:', () => {
   it('URL change to a new space, recent space list get updated successfully', () => {
     // given
     const context3 = cloneDeep(context1);
-    context3.name = "space3";
-    context3.path =  "/ckrych@redhat.com/space3";
-    context3.space.id = "3";
-    context3.space.name = "space3";
-    context3.space.path =  "/ckrych@redhat.com/space3";
+    context3.name = 'space3';
+    context3.path =  '/ckrych@redhat.com/space3';
+    context3.space.id = '3';
+    context3.space.name = 'space3';
+    context3.space.path =  '/ckrych@redhat.com/space3';
 
     let recent = [context1, context2];
     // when
@@ -126,7 +126,7 @@ describe('Context Service:', () => {
   it('Space - which belong to recent list - has been deleted, recent space list get updated removing it', () => {
     // given
     const context3 = cloneDeep(context2);
-    context3.name = "TO_DELETE";
+    context3.name = 'TO_DELETE';
 
     let recent = [context1, context2];
     // when
@@ -140,8 +140,8 @@ describe('Context Service:', () => {
   it('Space - which does not belong to recent list - has been deleted, recent space list not changed', () => {
     // given
     const context3 = cloneDeep(context2);
-    context3.space.id = "3";
-    context3.name = "TO_DELETE";
+    context3.space.id = '3';
+    context3.name = 'TO_DELETE';
 
     let recent = [context1, context2];
     // when

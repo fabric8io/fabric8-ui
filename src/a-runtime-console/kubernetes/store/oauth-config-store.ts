@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { Http } from "@angular/http";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Http } from '@angular/http';
 
 
 export class OAuthConfig {
@@ -28,23 +28,23 @@ export class OAuthConfig {
     var oauth = config.oauth || {};
 
     this.loaded = data ? true : false;
-    this.apiServer = config.api_server || "";
-    this.proxyApiServer = config.proxy_api_server || "";
+    this.apiServer = config.api_server || '';
+    this.proxyApiServer = config.proxy_api_server || '';
     this.apiServerProtocol = config.api_server_protocol;
-    this.wsApiServerProtocol = config.ws_api_server_protocol || "";
+    this.wsApiServerProtocol = config.ws_api_server_protocol || '';
     this.apiServerBasePath = config.api_server_base_path;
     this.wsApiServerBasePath = config.ws_api_server_base_path;
     this.wsApiServer = config.ws_api_server;
-    this.authorizeUri = oauth.oauth_authorize_uri || "";
-    this.clientId = oauth.oauth_client_id || "fabric8";
-    this.issuer = oauth.oauth_issuer || "";
-    this.scope = oauth.oauth_scope || "user:full";
-    this.logoutUri = oauth.logout_uri || "";
-    this.openshiftConsoleUrl = config.openshift_console_url || "";
-    this.witApiUrl = config.wit_api_url || "";
-    this.ssoApiUrl = config.sso_api_url || "";
-    this.forgeApiUrl = config.forge_api_url || "";
-    this.recommenderApiUrl = config.recommender_api_url || "";
+    this.authorizeUri = oauth.oauth_authorize_uri || '';
+    this.clientId = oauth.oauth_client_id || 'fabric8';
+    this.issuer = oauth.oauth_issuer || '';
+    this.scope = oauth.oauth_scope || 'user:full';
+    this.logoutUri = oauth.logout_uri || '';
+    this.openshiftConsoleUrl = config.openshift_console_url || '';
+    this.witApiUrl = config.wit_api_url || '';
+    this.ssoApiUrl = config.sso_api_url || '';
+    this.forgeApiUrl = config.forge_api_url || '';
+    this.recommenderApiUrl = config.recommender_api_url || '';
 
     if (!this.issuer && this.authorizeUri) {
       // lets default the issuer from the authorize Uri
@@ -99,7 +99,7 @@ export class OAuthConfigStore {
   get config(): OAuthConfig {
     let answer = _latestOAuthConfig;
     if (!answer) {
-      console.log("WARNING: invoked the isOpenShift() method before the OAuthConfigStore has loaded!");
+      console.log('WARNING: invoked the isOpenShift() method before the OAuthConfigStore has loaded!');
     }
     return answer;
   }
@@ -110,15 +110,15 @@ export class OAuthConfigStore {
       return;
     }
     _startedLoadingOAuthConfig = true;
-    let configUri = "/_config/oauth.json";
+    let configUri = '/_config/oauth.json';
     this.http.get(configUri)
       .subscribe(
         (res) => {
           let data = res.json();
           for (let key in data) {
             let value = data[key];
-            if (value === "undefined") {
-              data[key] = "";
+            if (value === 'undefined') {
+              data[key] = '';
             }
           }
           _latestOAuthConfig = new OAuthConfig(data);

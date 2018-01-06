@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
-import { Context } from "./../models/context";
-import { DummyService } from "./../dummy/dummy.service";
+import { Injectable } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Context } from './../models/context';
+import { DummyService } from './../dummy/dummy.service';
 import { Broadcaster } from 'ngx-base';
 
 
@@ -91,7 +91,7 @@ export class ContextService {
         // Build the fullPath if not already done
         if (!n.fullPath) {
           var path = n.path;
-          if (path && path.startsWith("/")) {
+          if (path && path.startsWith('/')) {
             n.fullPath = path;
           } else {
             n.fullPath = this.buildPath(this.current.path, path);

@@ -1,11 +1,11 @@
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-import { $WebSocket } from "angular2-websocket/angular2-websocket";
-import { currentOAuthConfig } from "../store/oauth-config-store";
-import { OnLogin } from "../../shared/onlogin.service";
-import { pathJoin } from "../model/utils";
-import { Poller } from "./poller";
-import { PollerFactory } from "./poller-factory.service";
+import { $WebSocket } from 'angular2-websocket/angular2-websocket';
+import { currentOAuthConfig } from '../store/oauth-config-store';
+import { OnLogin } from '../../shared/onlogin.service';
+import { pathJoin } from '../model/utils';
+import { Poller } from './poller';
+import { PollerFactory } from './poller-factory.service';
 
 
 export class Watcher<L> {
@@ -56,7 +56,7 @@ export class Watcher<L> {
   }
 
   get info(): string {
-    return "watch for " + this.pathFn() + (this.queryParams ? " query:  " + this.queryParams : "");
+    return 'watch for ' + this.pathFn() + (this.queryParams ? ' query:  ' + this.queryParams : '');
   }
 
   close() {
@@ -111,15 +111,15 @@ export class Watcher<L> {
       let baseUrl = '';
       var webSocketProtocol = authConfig.wsApiServerProtocol;
       if (!webSocketProtocol) {
-        if (authConfig.apiServerProtocol === "http") {
-          webSocketProtocol = "ws";
+        if (authConfig.apiServerProtocol === 'http') {
+          webSocketProtocol = 'ws';
         }
       }
       if (!webSocketProtocol) {
-        webSocketProtocol = "wss";
+        webSocketProtocol = 'wss';
       }
       if (webSocketProtocol.indexOf(":'") < 0) {
-        webSocketProtocol = webSocketProtocol + "://";
+        webSocketProtocol = webSocketProtocol + '://';
       }
       if (wsApiServer) {
         baseUrl = webSocketProtocol + wsApiServer;
@@ -182,7 +182,7 @@ export class Watcher<L> {
       this.retries = this.retries + 1;
       this.recreate();
     } else {
-      console.log("WebSocket for " + this.pathFn() + " error, retry #" + this.retries + " so switching to polling mode");
+      console.log('WebSocket for ' + this.pathFn() + ' error, retry #' + this.retries + ' so switching to polling mode');
       this.closeWebSocket();
       this.lazyCreatePoller();
     }

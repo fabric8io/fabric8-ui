@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { ReplicaSetsListToolbarComponent } from "./list-toolbar.replicaset.component";
-import { Fabric8CommonModule } from "../../../../common/common.module";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReplicaSetsListToolbarComponent } from './list-toolbar.replicaset.component';
+import { Fabric8CommonModule } from '../../../../common/common.module';
 
 describe('ReplicaSetsListToolbarComponent', () => {
   let component: ReplicaSetsListToolbarComponent;

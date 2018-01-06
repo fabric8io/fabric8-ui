@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { PipelinesFullHistoryToolbarComponent } from "./full-history-toolbar.pipeline.component";
-import { Fabric8CommonModule } from "../../../../common/common.module";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { PipelinesFullHistoryToolbarComponent } from './full-history-toolbar.pipeline.component';
+import { Fabric8CommonModule } from '../../../../common/common.module';
 
 describe('PipelinesFullHistoryToolbarComponent', () => {
   let component: PipelinesFullHistoryToolbarComponent;

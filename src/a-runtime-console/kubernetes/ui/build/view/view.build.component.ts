@@ -1,5 +1,5 @@
-import { Input, Component } from "@angular/core";
-import { Build } from "../../../model/build.model";
+import { Input, Component } from '@angular/core';
+import { Build } from '../../../model/build.model';
 
 @Component({
   selector: 'fabric8-build-view',

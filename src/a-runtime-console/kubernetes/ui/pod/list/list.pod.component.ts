@@ -1,8 +1,8 @@
 import { OAuthConfigStore } from './../../../store/oauth-config-store';
-import { Component, Input, ViewChild } from "@angular/core";
-import { PodDeleteDialog } from "../delete-dialog/delete-dialog.pod.component";
-import { Pods, Pod } from "../../../model/pod.model";
-import { openShiftBrowseResourceUrl } from "../../../model/helpers";
+import { Component, Input, ViewChild } from '@angular/core';
+import { PodDeleteDialog } from '../delete-dialog/delete-dialog.pod.component';
+import { Pods, Pod } from '../../../model/pod.model';
+import { openShiftBrowseResourceUrl } from '../../../model/helpers';
 
 @Component({
   selector: 'fabric8-pods-list',
@@ -33,12 +33,12 @@ export class PodsListComponent {
 
   consoleLogsUrl(pod: Pod): string {
     let consoleUrl = this.consoleUrl(pod);
-    return consoleUrl ? consoleUrl + "?tab=logs" : "";
+    return consoleUrl ? consoleUrl + '?tab=logs' : '';
   }
 
   consoleTerminalUrl(pod: Pod): string {
     let consoleUrl = this.consoleUrl(pod);
-    return consoleUrl ? consoleUrl + "?tab=terminal" : "";
+    return consoleUrl ? consoleUrl + '?tab=terminal' : '';
   }
 
   consoleUrl(pod: Pod): string {

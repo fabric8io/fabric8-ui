@@ -1,7 +1,7 @@
 import { CodebasesItemHeadingComponent } from './codebases-item-heading.component';
 import { Che } from '../services/che';
 import { Broadcaster } from 'ngx-base';
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';

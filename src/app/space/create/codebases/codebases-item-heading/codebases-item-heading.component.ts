@@ -15,8 +15,8 @@ export class CodebasesItemHeadingComponent implements OnInit {
   cheErrorMessage: string = 'Your Workspaces failed to load';
   cheRunningMessage: string = 'Your Workspaces have loaded successfully';
   cheStartingMessage: string = 'Your Workspaces are loading...';
-  cheFinishedMultiTenantMigrationMessage: string = "Migration to the Multi-Tenant Che server has finished!";
-  chePerformingMultiTenantMigrationMessage: string = "Migrating workspaces to the Multi-Tenant Che server...";
+  cheFinishedMultiTenantMigrationMessage: string = 'Migration to the Multi-Tenant Che server has finished!';
+  chePerformingMultiTenantMigrationMessage: string = 'Migrating workspaces to the Multi-Tenant Che server...';
 
   constructor() {
   }

@@ -8,14 +8,14 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 import { Logger } from 'ngx-base';
 import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
 
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { EventService } from "../../shared/event.service";
+import { EventService } from '../../shared/event.service';
 
 import { cloneDeep, find, findIndex, has } from 'lodash';
 
@@ -82,9 +82,9 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.currentSortField = {
-      id: "name",
-      sortType: "alpha",
-      title: "Name"
+      id: 'name',
+      sortType: 'alpha',
+      title: 'Name'
     };
 
     this.emptyStateConfig = {
@@ -204,7 +204,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
           this.updateSpaces();
         });
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 
@@ -233,7 +233,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
           this.modalRef.hide();
         });
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 
@@ -322,7 +322,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       // Do nothing
     }, error => {
-      this.logger.error("Failed to save pinned items");
+      this.logger.error('Failed to save pinned items');
     }));
   }
 

@@ -5,7 +5,7 @@ import { Contexts } from 'ngx-fabric8-wit';
 import { Broadcaster, Notifications } from 'ngx-base';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Logger } from 'ngx-base';
 import { AuthenticationService, UserService } from 'ngx-login-client';
@@ -77,11 +77,11 @@ describe('Codebases Add Component', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
     codebase = {
-      "attributes": {
-        "type": "git",
-        "url": "https://github.com/fabric8-ui/fabric8-ui.git"
+      'attributes': {
+        'type': 'git',
+        'url': 'https://github.com/fabric8-ui/fabric8-ui.git'
       },
-      "type": "codebases"
+      'type': 'codebases'
     } as Codebase;
     codebases = [codebase];
     codebasesServiceMock.getCodebases.and.returnValue(Observable.of(codebases));
@@ -156,11 +156,11 @@ describe('Codebases Add Component', () => {
     gitHubServiceMock.getRepoLicenseByUrl.and.returnValue(Observable.of(expectedGitHubRepoLicense));
     codebasesServiceMock.addCodebase.and.returnValue(Observable.of(codebase));
     const notificationAction = {
-      id: "a",
+      id: 'a',
       isDisabled: false,
       isSeparator: false,
-      name: "created",
-      title: "code base created"
+      name: 'created',
+      title: 'code base created'
     };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     const debug = fixture.debugElement;

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Contexts } from 'ngx-fabric8-wit';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -47,14 +47,14 @@ describe('Codebases Item Details Component', () => {
   it('Init component', async(() => {
     // given
     let comp = fixture.componentInstance;
-    comp.codebase = { "id": "6f5b6738-170e-490e-b3bb-d10f56b587c8", attributes: { type: 'git', url: "toto/toto" } };
+    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8', attributes: { type: 'git', url: 'toto/toto' } };
     const expectedLastCommit = {
-      "ref": "",
-      "url": "toto/toto",
-      "object": {
-        "sha": "SHA-LALA-SHA-LALALA",
-        "type": "file",
-        "url": "toto"
+      'ref': '',
+      'url': 'toto/toto',
+      'object': {
+        'sha': 'SHA-LALA-SHA-LALALA',
+        'type': 'file',
+        'url': 'toto'
       }
     };
     gitHubServiceMock.getRepoDetailsByUrl.and.returnValue(Observable.of(expectedGitHubRepoDetails));

@@ -1,5 +1,5 @@
-import { Component, Input } from "@angular/core";
-import { ConfigMap } from "../../../model/configmap.model";
+import { Component, Input } from '@angular/core';
+import { ConfigMap } from '../../../model/configmap.model';
 
 @Component({
   selector: 'fabric8-configmap-view-toolbar',

@@ -9,9 +9,9 @@ describe('Utilities:', () => {
 
   it('Merge value id dupicate key', () => {
     // given
-    let array1 = [{name: "name1", description: "description1"}, {name: "name2", description: "description2"}];
-    let array2 = [{name: "name1", description: "description1"}, {name: "name3", description: "description3"}];
-    let mergedArray = [{name: "name1", description: "description1"}, {name: "name2", description: "description2"}, {name: "name3", description: "description3"}];
+    let array1 = [{name: 'name1', description: 'description1'}, {name: 'name2', description: 'description2'}];
+    let array2 = [{name: 'name1', description: 'description1'}, {name: 'name3', description: 'description3'}];
+    let mergedArray = [{name: 'name1', description: 'description1'}, {name: 'name2', description: 'description2'}, {name: 'name3', description: 'description3'}];
     // when
     mergeArraysDistinctByKey(array1, array2, 'name');
     // then
@@ -20,9 +20,9 @@ describe('Utilities:', () => {
 
   it('Add values for new items', () => {
     // given
-    let array1 = [{name: "name1", description: "description1"}, {name: "name2", description: "description2"}];
-    let array2 = [{name: "name3", description: "description3"}, {name: "name4", description: "description4"}];
-    let mergedArray = [{name: "name1", description: "description1"}, {name: "name2", description: "description2"}, {name: "name3", description: "description3"}, {name: "name4", description: "description4"}];
+    let array1 = [{name: 'name1', description: 'description1'}, {name: 'name2', description: 'description2'}];
+    let array2 = [{name: 'name3', description: 'description3'}, {name: 'name4', description: 'description4'}];
+    let mergedArray = [{name: 'name1', description: 'description1'}, {name: 'name2', description: 'description2'}, {name: 'name3', description: 'description3'}, {name: 'name4', description: 'description4'}];
     // when
     mergeArraysDistinctByKey(array1, array2, 'name');
     // then
@@ -31,7 +31,7 @@ describe('Utilities:', () => {
 
   it('Clones a string', () => {
     // given
-    let s = "abcd";
+    let s = 'abcd';
     // when
     let s2 = clone(s);
     // then
@@ -40,7 +40,7 @@ describe('Utilities:', () => {
 
   it('Clones an object', () => {
     // given
-    let s = {abcd: "abcd", efgh: "efgh"};
+    let s = {abcd: 'abcd', efgh: 'efgh'};
     // when
     let s2 = clone(s);
     // then

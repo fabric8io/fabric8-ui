@@ -6,10 +6,10 @@ import { Logger, Notification, NotificationType, Notifications } from 'ngx-base'
 import { AuthenticationService, UserService, User } from 'ngx-login-client';
 
 import { ExtUser, GettingStartedService } from './services/getting-started.service';
-import { Fabric8UIConfig } from "../shared/config/fabric8-ui-config";
-import { Observable } from "rxjs/Observable";
-import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from "@angular/http";
-import { pathJoin } from "../../a-runtime-console/kubernetes/model/utils";
+import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
+import { Observable } from 'rxjs/Observable';
+import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
+import { pathJoin } from '../../a-runtime-console/kubernetes/model/utils';
 import { ProviderService } from '../shared/account/provider.service';
 
 @Component({
@@ -36,7 +36,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   kubeMode: boolean = false;
   kubePollTimer: Observable<number>;
   kubePollSubscription: Subscription;
-  kubePollMessage: string = "";
+  kubePollMessage: string = '';
 
   constructor(
       private auth: AuthenticationService,
@@ -50,8 +50,8 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       private userService: UserService) {
 
     if (fabric8UIConfig) {
-      let flag = fabric8UIConfig["kubernetesMode"];
-      if (flag === "true") {
+      let flag = fabric8UIConfig['kubernetesMode'];
+      if (flag === 'true') {
         this.kubeMode = true;
       }
     }
@@ -146,11 +146,11 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    */
   connectAccounts(): void {
     if (this.authGitHub && !this.gitHubLinked && this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkAll(window.location.origin + "/_gettingstarted?wait=true");
+      this.providerService.linkAll(window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authGitHub && !this.gitHubLinked) {
-      this.providerService.linkGitHub(window.location.origin + "/_gettingstarted?wait=true");
+      this.providerService.linkGitHub(window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkOpenShift(window.location.origin + "/_gettingstarted?wait=true");
+      this.providerService.linkOpenShift(window.location.origin + '/_gettingstarted?wait=true');
     }
   }
 
@@ -186,11 +186,11 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
     }, error => {
       this.username = this.loggedInUser.attributes.username;
       if (error.status === 403) {
-        this.handleError("Username cannot be updated more than once", NotificationType.WARNING);
+        this.handleError('Username cannot be updated more than once', NotificationType.WARNING);
       } else if (error.status === 409) {
-        this.handleError("Username already exists", NotificationType.DANGER);
+        this.handleError('Username already exists', NotificationType.DANGER);
       } else {
-        this.handleError("Failed to update username", NotificationType.DANGER);
+        this.handleError('Failed to update username', NotificationType.DANGER);
       }
     }));
   }
@@ -217,7 +217,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    * @returns {boolean} True if the getting started page is shown
    */
   private isGettingStartedPage(): boolean {
-    return (this.router.url.indexOf("_gettingstarted") !== -1);
+    return (this.router.url.indexOf('_gettingstarted') !== -1);
   }
 
   /**
@@ -226,7 +226,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    * @returns {boolean}
    */
   private isUserGettingStarted(): boolean {
-    let wait = this.getRequestParam("wait");
+    let wait = this.getRequestParam('wait');
     return !(wait === null && this.registrationCompleted === true
       && this.gitHubLinked === true && this.openShiftLinked === true);
   }
@@ -241,8 +241,8 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
     return (this.username !== undefined
       && this.username.trim().length !== 0
       && this.username.trim().length < 63
-      && this.username.trim().indexOf("-") !== 0
-      && this.username.trim().indexOf("_") !== 0);
+      && this.username.trim().indexOf('-') !== 0
+      && this.username.trim().indexOf('_') !== 0);
   }
 
   /**
@@ -270,16 +270,16 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   private kubeTenantConnectPoll() {
     let bearerToken = this.authBearerToken();
     if (!bearerToken) {
-      this.kubePollMessage = "Not logged in!";
+      this.kubePollMessage = 'Not logged in!';
       return;
     }
 
     var url = this.fabric8UIConfig.tenantApiUrl;
     if (!url) {
-      this.kubePollMessage = "No tenant service configured!";
+      this.kubePollMessage = 'No tenant service configured!';
       return;
     }
-    url = pathJoin(url, "/api/tenant/kubeconnect");
+    url = pathJoin(url, '/api/tenant/kubeconnect');
 
     let options = new RequestOptions({
       headers: new Headers({
@@ -289,10 +289,10 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
     });
     this.http.get(url, options). //.catch((err) => this.handleConnectPollError(err)).
       subscribe((response: Response) => {
-        this.parseKubeConnectResponse(response, "Waiting...");
+        this.parseKubeConnectResponse(response, 'Waiting...');
         let status = response.status;
         if (status == 200) {
-          console.log("Successfully polled the kubernetes tenant connection!");
+          console.log('Successfully polled the kubernetes tenant connection!');
           this.openShiftLinked = true;
           if (this.kubePollSubscription) {
             this.kubePollSubscription.unsubscribe();
@@ -305,24 +305,24 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   }
 
   private parseKubeConnectResponse(response: Response, defaultMessage: string) {
-    this.kubePollMessage = "";
+    this.kubePollMessage = '';
     try {
       let body = response.json();
       if (body) {
         let data = body['data'] || {};
         let attributes = data['attributes'] || {};
-        this.kubePollMessage = attributes["message"] || "";
+        this.kubePollMessage = attributes['message'] || '';
       }
       if (!this.kubePollMessage) {
         this.kubePollMessage = defaultMessage;
       }
     } catch (e) {
-      this.kubePollMessage = "Failed to parse response: " + e;
+      this.kubePollMessage = 'Failed to parse response: ' + e;
     }
   }
 
   private handleConnectPollError(err: Response) {
-    this.parseKubeConnectResponse(err, "Cannot find tenant connected status due to " + err);
+    this.parseKubeConnectResponse(err, 'Cannot find tenant connected status due to ' + err);
   }
 
   private authBearerToken(): string {

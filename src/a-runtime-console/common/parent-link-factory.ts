@@ -1,5 +1,5 @@
-import { Router } from "@angular/router";
-import { Injectable } from "@angular/core";
+import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
 
 /**
  * Provides access to the parent link which works across
@@ -16,7 +16,7 @@ export class ParentLinkFactory {
       if (idx > 0) {
         urlPrefix = urlPrefix.substring(0, idx + 1);
       } else {
-        urlPrefix = "../";
+        urlPrefix = '../';
       }
     }
     this.parentLink = urlPrefix;

@@ -1,8 +1,8 @@
-import { Component, Input } from "@angular/core";
-import { Router } from "@angular/router";
-import { YamlEditor } from "../../../view/yaml.editor";
-import { Space } from "../../../model/space.model";
-import { SpaceStore } from "../../../store/space.store";
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { YamlEditor } from '../../../view/yaml.editor';
+import { Space } from '../../../model/space.model';
+import { SpaceStore } from '../../../store/space.store';
 
 @Component({
   selector: 'fabric8-space-edit-toolbar',

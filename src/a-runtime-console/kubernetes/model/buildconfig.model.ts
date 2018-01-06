@@ -1,10 +1,10 @@
-import { KubernetesSpecResource } from "./kuberentesspecresource.model";
-import { Build, Builds, ServiceUrl, ServiceEnvironments, AppInfo } from "./build.model";
-import { Params } from "@angular/router";
-import { currentOAuthConfig } from "../store/oauth-config-store";
-import { pathJoin } from "./utils";
+import { KubernetesSpecResource } from './kuberentesspecresource.model';
+import { Build, Builds, ServiceUrl, ServiceEnvironments, AppInfo } from './build.model';
+import { Params } from '@angular/router';
+import { currentOAuthConfig } from '../store/oauth-config-store';
+import { pathJoin } from './utils';
 
-export const defaultBuildIconStyle = "pficon-build";
+export const defaultBuildIconStyle = 'pficon-build';
 
 export class BuildConfig extends KubernetesSpecResource {
   gitUrl: string;
@@ -75,7 +75,7 @@ export class BuildConfig extends KubernetesSpecResource {
     }
 
     for (let build of builds) {
-      if ("Running" === build.statusPhase) {
+      if ('Running' === build.statusPhase) {
         answer.push(build);
       }
     }
@@ -84,13 +84,13 @@ export class BuildConfig extends KubernetesSpecResource {
       answer.push(build);
     }
 
-    this.statusPhase = build ? build.statusPhase : "";
+    this.statusPhase = build ? build.statusPhase : '';
     this.duration = build ? build.duration : 0;
     this.iconStyle = build ? build.iconStyle : defaultBuildIconStyle;
   }
 
   get isPipeline(): boolean {
-    return "JenkinsPipeline" === this.type;
+    return 'JenkinsPipeline' === this.type;
   }
 
   get interestingBuildsAverageDuration(): number {
@@ -115,7 +115,7 @@ export class BuildConfig extends KubernetesSpecResource {
    */
   get jenkinsTestReportUrl(): string {
     let build = this.lastBuild;
-    return build ? build.jenkinsTestReportUrl : "";
+    return build ? build.jenkinsTestReportUrl : '';
   }
 
   get serviceEnvironmentMap(): Map<string, ServiceEnvironments> {
@@ -169,22 +169,22 @@ export class BuildConfig extends KubernetesSpecResource {
     let source = spec.source || {};
     let git = source.git || {};
     let strategy = spec.strategy || {};
-    let type = strategy.type || "";
+    let type = strategy.type || '';
 
     this.lastVersion = status.lastVersion || 0;
-    this.lastBuildName = this.lastVersion ? this.name + "-" +  this.lastVersion : "";
-    this.lastBuildPath = this.lastBuildName ? this.name + "/builds/" + this.lastBuildName : "";
+    this.lastBuildName = this.lastVersion ? this.name + '-' +  this.lastVersion : '';
+    this.lastBuildPath = this.lastBuildName ? this.name + '/builds/' + this.lastBuildName : '';
     this.iconStyle = defaultBuildIconStyle;
 
     this.type = type;
-    var gitUrl = this.annotations["fabric8.io/git-clone-url"];
+    var gitUrl = this.annotations['fabric8.io/git-clone-url'];
     if (!gitUrl) {
-      gitUrl = git.uri || "";
+      gitUrl = git.uri || '';
     }
     this.gitUrl = gitUrl;
-    this.jenkinsJobUrl = this.annotations["fabric8.link.jenkins.job/url"] || "";
+    this.jenkinsJobUrl = this.annotations['fabric8.link.jenkins.job/url'] || '';
     if (gitUrl) {
-      this.openInDEAUrl = "jetbrains://idea/checkout/git?idea.required.plugins.id=Git4Idea&checkout.repo=" + gitUrl;
+      this.openInDEAUrl = 'jetbrains://idea/checkout/git?idea.required.plugins.id=Git4Idea&checkout.repo=' + gitUrl;
     }
     this.onBuildsUpdated();
 
@@ -194,7 +194,7 @@ export class BuildConfig extends KubernetesSpecResource {
     if (oauthConfig) {
       let openShiftConsoleUrl = oauthConfig.openshiftConsoleUrl;
       if (openShiftConsoleUrl && namespace && name) {
-        this.editPipelineUrl = pathJoin(openShiftConsoleUrl, "/project/", namespace, "/edit/pipelines/", name);
+        this.editPipelineUrl = pathJoin(openShiftConsoleUrl, '/project/', namespace, '/edit/pipelines/', name);
       }
     }
 
@@ -206,7 +206,7 @@ export class BuildConfig extends KubernetesSpecResource {
   }
 
   defaultIconUrl(): string {
-    return "";
+    return '';
   }
 }
 

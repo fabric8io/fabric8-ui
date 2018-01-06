@@ -7,7 +7,7 @@ import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2';
 import { RemainingCharsCountModule } from 'patternfly-ng';
 
 import { TenantComponent } from './tenant.component';
-import { TenantRoutingModule } from "./tenant-routing.module";
+import { TenantRoutingModule } from './tenant-routing.module';
 
 @NgModule({
   imports: [

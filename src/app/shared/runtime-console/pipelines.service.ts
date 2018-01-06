@@ -61,7 +61,7 @@ export class PipelinesService {
 
 function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs, builds: Builds, context: Context): BuildConfigs {
   let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
-  let spaceId = "";
+  let spaceId = '';
   if (context) {
     let paths = context.path.split('/');
     if (paths[paths.length - 1]) {
@@ -92,7 +92,7 @@ function filterByMostRecent(buildConfigs: BuildConfigs, builds: Builds): BuildCo
 
   let answer = new BuildConfigs();
   sortedPipelines.forEach(bc => {
-    if (bc.statusPhase !== "Complete" && bc.labels['space']) {
+    if (bc.statusPhase !== 'Complete' && bc.labels['space']) {
       answer.push(bc);
     }
   });

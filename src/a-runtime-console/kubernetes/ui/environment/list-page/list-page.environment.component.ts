@@ -1,27 +1,27 @@
-import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from "rxjs";
-import { Notifications, Notification, NotificationType } from "ngx-base";
-import { Deployment } from "./../../../model/deployment.model";
-import { DeploymentService } from "./../../../service/deployment.service";
-import { SpaceNamespace } from "../../../model/space-namespace";
-import { Service } from "./../../../model/service.model";
-import { Pod } from "./../../../model/pod.model";
-import { Event } from "./../../../model/event.model";
-import { ConfigMap } from "./../../../model/configmap.model";
-import { Environment, Space } from "./../../../model/space.model";
-import { ServiceService } from "./../../../service/service.service";
-import { ReplicaSetService } from "./../../../service/replicaset.service";
-import { PodService } from "./../../../service/pod.service";
-import { EventService } from "./../../../service/event.service";
-import { ConfigMapService } from "./../../../service/configmap.service";
-import { DeploymentConfigService } from "./../../../service/deploymentconfig.service";
-import { SpaceStore } from "./../../../store/space.store";
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { isOpenShift } from "../../../store/apis.store";
-import { pathJoin } from "../../../model/utils";
-import { ReplicationControllerService } from "../../../service/replicationcontroller.service";
-import { RouteService } from "../../../service/route.service";
-import { AbstractWatchComponent } from "../../../support/abstract-watch.component";
-import { currentOAuthConfig } from "../../../store/oauth-config-store";
+import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from 'rxjs';
+import { Notifications, Notification, NotificationType } from 'ngx-base';
+import { Deployment } from './../../../model/deployment.model';
+import { DeploymentService } from './../../../service/deployment.service';
+import { SpaceNamespace } from '../../../model/space-namespace';
+import { Service } from './../../../model/service.model';
+import { Pod } from './../../../model/pod.model';
+import { Event } from './../../../model/event.model';
+import { ConfigMap } from './../../../model/configmap.model';
+import { Environment, Space } from './../../../model/space.model';
+import { ServiceService } from './../../../service/service.service';
+import { ReplicaSetService } from './../../../service/replicaset.service';
+import { PodService } from './../../../service/pod.service';
+import { EventService } from './../../../service/event.service';
+import { ConfigMapService } from './../../../service/configmap.service';
+import { DeploymentConfigService } from './../../../service/deploymentconfig.service';
+import { SpaceStore } from './../../../store/space.store';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { isOpenShift } from '../../../store/apis.store';
+import { pathJoin } from '../../../model/utils';
+import { ReplicationControllerService } from '../../../service/replicationcontroller.service';
+import { RouteService } from '../../../service/route.service';
+import { AbstractWatchComponent } from '../../../support/abstract-watch.component';
+import { currentOAuthConfig } from '../../../store/oauth-config-store';
 
 
 export let KINDS: Kind[] = [
@@ -65,12 +65,12 @@ export class EnvironmentEntry {
               public  openshiftConsoleUrl: string,
               public kinds: KindNode[]) {
 
-    this.configmaps = this.findKind("configmaps");
-    this.deployments = this.findKind("deployments");
-    this.events = this.findKind("events");
-    this.pods = this.findKind("pods");
-    this.replicasets = this.findKind("replicasets");
-    this.services = this.findKind("services");
+    this.configmaps = this.findKind('configmaps');
+    this.deployments = this.findKind('deployments');
+    this.events = this.findKind('events');
+    this.pods = this.findKind('pods');
+    this.replicasets = this.findKind('replicasets');
+    this.services = this.findKind('services');
   }
 
   protected findKind(kind: string) {
@@ -83,7 +83,7 @@ export class EnvironmentEntry {
         }
       }
     }
-    console.log("Could not find kind `" + kind + "`!!!");
+    console.log('Could not find kind `' + kind + '`!!!');
     // lets return an empty kind node for now
     return new KindNode({ name: kind, path: kind }, this.environment, Observable.of(false), Observable.of(kind), () => { return null; });
   }
@@ -249,7 +249,7 @@ export function environmentOpenShiftConoleUrl(environment: Environment): string 
   }
   let namespace = environment.namespaceName;
   if (namespace) {
-    return pathJoin(openshiftConsoleUrl, "/project", namespace, "/overview");
+    return pathJoin(openshiftConsoleUrl, '/project', namespace, '/overview');
   }
   return openshiftConsoleUrl;
 }

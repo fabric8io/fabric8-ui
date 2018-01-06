@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { WorkItemService, WorkItem } from 'fabric8-planner';
 import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { UserService, User } from 'ngx-login-client';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -15,7 +15,7 @@ import { Observable } from "rxjs/Observable";
 })
 export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   currentSpace: Space;
-  currentSpaceId: string = "default";
+  currentSpaceId: string = 'default';
   loggedInUser: User;
   recentSpaces: Space[] = [];
   recentSpaceIndex: number = 0;

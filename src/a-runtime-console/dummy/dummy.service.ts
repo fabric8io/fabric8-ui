@@ -1,22 +1,22 @@
-import { Context } from "./../models/context";
-import { ContextType } from "./../models/context-type";
-import { DevSpace } from "./../models/space";
-import { Resources } from "./../models/resources";
-import { ProcessTemplate } from "./../models/process-template";
-import { User } from "./../models/user";
-import { Team } from "./../models/team";
-import { Entity } from "./../models/entity";
-import { Injectable, OnInit } from "@angular/core";
-import "rxjs/add/operator/toPromise";
-import { Observable } from "rxjs";
-import { Spaces, Space, LabelSpace } from "../kubernetes/model/space.model";
-import { SpaceStore } from "../kubernetes/store/space.store";
-import { Router, NavigationEnd, ActivatedRoute, Params } from "@angular/router";
-import { BuildConfigStore } from "../kubernetes/store/buildconfig.store";
-import { BuildConfigs, BuildConfig } from "../kubernetes/model/buildconfig.model";
-import { MenuItem } from "../models/menu-item";
-import { resourceMenus } from "../kubernetes/components/resource-header/resource.header.component";
-import { pathJoin } from "../kubernetes/model/utils";
+import { Context } from './../models/context';
+import { ContextType } from './../models/context-type';
+import { DevSpace } from './../models/space';
+import { Resources } from './../models/resources';
+import { ProcessTemplate } from './../models/process-template';
+import { User } from './../models/user';
+import { Team } from './../models/team';
+import { Entity } from './../models/entity';
+import { Injectable, OnInit } from '@angular/core';
+import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs';
+import { Spaces, Space, LabelSpace } from '../kubernetes/model/space.model';
+import { SpaceStore } from '../kubernetes/store/space.store';
+import { Router, NavigationEnd, ActivatedRoute, Params } from '@angular/router';
+import { BuildConfigStore } from '../kubernetes/store/buildconfig.store';
+import { BuildConfigs, BuildConfig } from '../kubernetes/model/buildconfig.model';
+import { MenuItem } from '../models/menu-item';
+import { resourceMenus } from '../kubernetes/components/resource-header/resource.header.component';
+import { pathJoin } from '../kubernetes/model/utils';
 import { Broadcaster } from 'ngx-base';
 
 // A service responsible for providing dummy data for the UI prototypes.
@@ -477,9 +477,9 @@ export class DummyService implements OnInit {
     let buildConfigs = appContext.buildConfigs;
 
     this._appContext = appContext;
-    var ns = params["namespace"];
-    var spaceName = params["space"] || ns;
-    var app = params["app"];
+    var ns = params['namespace'];
+    var spaceName = params['space'] || ns;
+    var app = params['app'];
     this._currentContext = null;
     this._parentContexts = [];
     if (spaceName) {
@@ -509,7 +509,7 @@ export class DummyService implements OnInit {
       this._currentContext = this._contexts[0];
     }
     // TODO hack - replace with OAuth stuff?
-    this._currentUser = this.USERS.get("pmuir");
+    this._currentUser = this.USERS.get('pmuir');
     this.updateActive();
     this.broadcaster.broadcast('refreshContext');
   }
@@ -517,28 +517,28 @@ export class DummyService implements OnInit {
 
   private createUrlPrefix(ns: string, spaceName: string, label: string, app: string, environments: boolean) {
     if (!ns) {
-      return "/run/spaces";
+      return '/run/spaces';
     }
     if (spaceName) {
       if (label) {
         if (environments) {
-          return pathJoin("/run/space", spaceName, "label", label, "environments");
+          return pathJoin('/run/space', spaceName, 'label', label, 'environments');
         } else if (app) {
-          return pathJoin("/run/space", spaceName, "label", label, "app", app, "namespaces", ns);
+          return pathJoin('/run/space', spaceName, 'label', label, 'app', app, 'namespaces', ns);
         } else {
-          return pathJoin("/run/space", spaceName, "label", label, "namespaces", ns);
+          return pathJoin('/run/space', spaceName, 'label', label, 'namespaces', ns);
         }
       } else {
         if (environments) {
-          return pathJoin("/run/space", spaceName, "environments");
+          return pathJoin('/run/space', spaceName, 'environments');
         } else if (app) {
-          return pathJoin("/run/space/", spaceName, "app", app, "/namespaces/", ns);
+          return pathJoin('/run/space/', spaceName, 'app', app, '/namespaces/', ns);
         } else {
-          return pathJoin("/run/space/", spaceName, "/namespaces/", ns);
+          return pathJoin('/run/space/', spaceName, '/namespaces/', ns);
         }
       }
     } else {
-      return pathJoin("/run/space/", ns);
+      return pathJoin('/run/space/', ns);
     }
   }
 
@@ -554,19 +554,19 @@ export class DummyService implements OnInit {
         map[path] = menu;
       }
     });
-    let url = this.router.url || "";
+    let url = this.router.url || '';
     if (url) {
-      let paths = url.split("/");
+      let paths = url.split('/');
       if (paths && paths.length) {
         for (var i = paths.length - 1; i >= 0; i--) {
           let path = paths[i];
           if (path && map[path]) {
-            return "/" + path;
+            return '/' + path;
           }
         }
       }
     }
-    return "/deployments";
+    return '/deployments';
   }
 
   private updateActive() {
@@ -577,7 +577,7 @@ export class DummyService implements OnInit {
         // Build the fullPath if not already done
         if (!n.fullPath) {
           var path = n.path;
-          if (path && path.startsWith("/")) {
+          if (path && path.startsWith('/')) {
             n.fullPath = path;
           } else {
             n.fullPath = this.buildPath(current.path, path);
@@ -652,13 +652,13 @@ export class DummyService implements OnInit {
   private createSpaceContext(space: Space) {
     var spaceName = space.name;
     let params = this._appContext.params || {};
-    var app = params["app"];
-    var label = params["label"];
-    var firstEnvNamespace = "";
+    var app = params['app'];
+    var label = params['label'];
+    var firstEnvNamespace = '';
     if (space.environments.length) {
       firstEnvNamespace = space.environments[0].namespaceName;
     }
-    var ns = params["namespace"] || firstEnvNamespace || spaceName;
+    var ns = params['namespace'] || firstEnvNamespace || spaceName;
     let prefix = this.createUrlPrefix(ns, spaceName, label, app, false);
 
     let runPath = prefix + this.currentRunResourcePath();
@@ -678,9 +678,9 @@ export class DummyService implements OnInit {
   private createLabelSpaceContext(space: Space, labelSpace: LabelSpace): Context {
     var appContext = this._appContext;
     let params = appContext.params;
-    var ns = params["namespace"];
-    var spaceName = params["space"];
-    var app = params["app"];
+    var ns = params['namespace'];
+    var spaceName = params['space'];
+    var app = params['app'];
     var label = labelSpace.name;
 
     let prefix = this.createUrlPrefix(ns, spaceName, label, app, false);
@@ -705,19 +705,19 @@ export class DummyService implements OnInit {
     var runMenus = this.createRunMenus(space);
     var appMenus = [
       {
-        name: "Codebases",
+        name: 'Codebases',
         path: buildConfigPath
       },
       {
-        name: "Pipelines",
+        name: 'Pipelines',
         path: pipelinePath
       },
       {
-        name: "History",
+        name: 'History',
         path: pipelineHistoryPath
       },
       {
-        name: "Builds",
+        name: 'Builds',
         path: buildPath
       }
     ];
@@ -819,18 +819,18 @@ export class DummyService implements OnInit {
     if (space) {
       var environments = space.environments;
       let params = this._appContext.params || {};
-      var app = params["app"];
-      var label = params["label"];
+      var app = params['app'];
+      var label = params['label'];
       let resourcePath = this.currentRunResourcePath();
 
       if (environments && environments.length) {
         runMenus.push({
-          name: "Tools",
+          name: 'Tools',
           path: this.createUrlPrefix(space.name, space.name, label, app, false) + resourcePath
         });
 
         runMenus.push({
-          name: "Environments",
+          name: 'Environments',
           path: this.createUrlPrefix(space.name, space.name, label, app, true)
         });
 
@@ -873,11 +873,11 @@ export class DummyService implements OnInit {
   private createBuildConfigContext(space: Space, bc: BuildConfig) {
     var appContext = this._appContext;
     let params = appContext.params;
-    var ns = params["namespace"];
-    var spaceName = params["space"];
+    var ns = params['namespace'];
+    var spaceName = params['space'];
     var app = bc.name;
 
-    var prefix = "/run/app/" + app + "/space/" + spaceName + "/namespaces/" + ns;
+    var prefix = '/run/app/' + app + '/space/' + spaceName + '/namespaces/' + ns;
     let runPath = prefix + this.currentRunResourcePath();
     let buildPath = prefix + '/builds';
     let context = {

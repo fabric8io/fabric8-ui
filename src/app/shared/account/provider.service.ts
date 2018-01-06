@@ -28,7 +28,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   linkAll(redirect: string): void {
-        let openShiftLinkingRedirectUrl = this.getLegacyLinkingUrl("openshift-v3", redirect);
+        let openShiftLinkingRedirectUrl = this.getLegacyLinkingUrl('openshift-v3', redirect);
         // after linking github, proceed with linking openshift-v3,
         // hence passing openshift linking url as a redirect.
         this.linkGitHub(openShiftLinkingRedirectUrl);
@@ -41,8 +41,8 @@ export class ProviderService {
    */
   linkGitHub(next: string): void {
     // let tokenUrl = this.apiUrl + 'token/link?for=https://github.com&redirect=' + encodeURIComponent(redirectUrl);
-    let githubLinkURL = this.linkUrl + "?for=https://github.com&redirect=" +  encodeURIComponent(next) ;
-    console.log("attempting to connect github " + githubLinkURL);
+    let githubLinkURL = this.linkUrl + '?for=https://github.com&redirect=' +  encodeURIComponent(next) ;
+    console.log('attempting to connect github ' + githubLinkURL);
     this.http
     .get(githubLinkURL)
     .map(response => {
@@ -54,7 +54,7 @@ export class ProviderService {
       console.log(redirectInfo);
     })
     .catch((error) => {
-      console.log("error while linking github " + githubLinkURL);
+      console.log('error while linking github ' + githubLinkURL);
       return this.handleError(error);
     }).subscribe();
   }
@@ -89,12 +89,12 @@ export class ProviderService {
 
   getLegacyLinkingUrl(provider: string, redirect: string): string {
     let parsedToken = jwt_decode(this.auth.getToken());
-    let url = this.loginUrl + "/session?"
-    + "clientSession=" + parsedToken.client_session
-    + "&sessionState=" + parsedToken.session_state
-    + "&redirect=" + redirect ; // brings us back to Getting Started.
+    let url = this.loginUrl + '/session?'
+    + 'clientSession=' + parsedToken.client_session
+    + '&sessionState=' + parsedToken.session_state
+    + '&redirect=' + redirect ; // brings us back to Getting Started.
     if (provider != null) {
-      url += "&provider=" + provider;
+      url += '&provider=' + provider;
     }
     return url;
   }
@@ -105,7 +105,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   linkOpenShift(redirect: string): void {
-    this.link("openshift-v3", redirect);
+    this.link('openshift-v3', redirect);
   }
 
   /**

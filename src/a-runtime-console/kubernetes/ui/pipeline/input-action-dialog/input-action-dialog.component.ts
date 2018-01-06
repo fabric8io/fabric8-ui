@@ -1,9 +1,9 @@
-import { Component, Inject, ViewChild } from "@angular/core";
-import { Build, PendingInputAction } from "../../../model/build.model";
-import { PipelineStage } from "../../../model/pipelinestage.model";
-import { Http, RequestOptions, Headers } from "@angular/http";
-import { OnLogin } from "../../../../shared/onlogin.service";
-import { pathJoin } from "../../../model/utils";
+import { Component, Inject, ViewChild } from '@angular/core';
+import { Build, PendingInputAction } from '../../../model/build.model';
+import { PipelineStage } from '../../../model/pipelinestage.model';
+import { Http, RequestOptions, Headers } from '@angular/http';
+import { OnLogin } from '../../../../shared/onlogin.service';
+import { pathJoin } from '../../../model/utils';
 import { FABRIC8_FORGE_API_URL } from '../../../../shared/fabric8-forge-api';
 
 @Component({
@@ -25,12 +25,12 @@ export class InputActionDialog {
   }
 
   get messageLines(): string[] {
-    let msg = this.inputAction.message || "";
-    return msg.split("\n");
+    let msg = this.inputAction.message || '';
+    return msg.split('\n');
   }
 
   open() {
-    console.log("opening the dialog for " + this.build.name + " on modal " + this.modal);
+    console.log('opening the dialog for ' + this.build.name + ' on modal ' + this.modal);
     this.modal.open();
   }
 
@@ -46,32 +46,32 @@ export class InputActionDialog {
 
   invokeUrl(url: string) {
     if (url) {
-      if (url.startsWith("//")) {
+      if (url.startsWith('//')) {
         url = url.substring(1);
       }
       // lets replace URL which doesn't seem to work right ;)
-      const postfix = "/wfapi/inputSubmit?inputId=Proceed";
+      const postfix = '/wfapi/inputSubmit?inputId=Proceed';
       if (url.endsWith(postfix)) {
-        url = url.substring(0, url.length - postfix.length) + "/input/Proceed/proceedEmpty";
+        url = url.substring(0, url.length - postfix.length) + '/input/Proceed/proceedEmpty';
       }
 
       let jenkinsNamespace = this.build.jenkinsNamespace;
       let forgeUrl = this.forgeApiUrl;
       if (!forgeUrl) {
-        console.log("Warning no $FABRIC8_FORGE_API_URL environment variable!");
+        console.log('Warning no $FABRIC8_FORGE_API_URL environment variable!');
       } else if (!jenkinsNamespace) {
-        console.log("Warning no jenkinsNamespace on the Build!");
+        console.log('Warning no jenkinsNamespace on the Build!');
       } else {
-        url = pathJoin(forgeUrl, "/api/openshift/services/jenkins/", jenkinsNamespace, url);
+        url = pathJoin(forgeUrl, '/api/openshift/services/jenkins/', jenkinsNamespace, url);
         let token = this.onLogin.token;
-        console.log("about to invoke " + url);
+        console.log('about to invoke ' + url);
         let options = new RequestOptions();
         let headers = new Headers();
-        headers.set("Authorization", "Bearer " + token);
+        headers.set('Authorization', 'Bearer ' + token);
         options.headers = headers;
         let body = null;
         this.http.post(url, body, options).subscribe(res => {
-          console.log("posting to url: " + url + " and returned response " + res.status);
+          console.log('posting to url: ' + url + ' and returned response ' + res.status);
         });
       }
     }

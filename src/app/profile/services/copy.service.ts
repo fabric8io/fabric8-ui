@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { DOCUMENT } from "@angular/platform-browser";
+import { DOCUMENT } from '@angular/platform-browser';
 
 import { Logger } from 'ngx-base';
 
@@ -18,14 +18,14 @@ export class CopyService {
    */
   copy(value: string): boolean {
     let result = false;
-    let textarea = this.dom.createElement("textarea");
+    let textarea = this.dom.createElement('textarea');
 
-    textarea.style.height = "0px";
-    textarea.style.left = "-100px";
-    textarea.style.opacity = "0";
-    textarea.style.position = "fixed";
-    textarea.style.top = "-100px";
-    textarea.style.width = "0px";
+    textarea.style.height = '0px';
+    textarea.style.left = '-100px';
+    textarea.style.opacity = '0';
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-100px';
+    textarea.style.width = '0px';
     textarea.value = value;
 
     this.dom.body.appendChild(textarea);

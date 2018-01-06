@@ -14,7 +14,7 @@ import { Notification, NotificationType, Notifications } from 'ngx-base';
 
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
-import { GitHubRepoDetails } from "../services/github";
+import { GitHubRepoDetails } from '../services/github';
 import { GitHubService } from '../services/github.service';
 import { removeAction } from '../../../../app-routing.module';
 
@@ -34,7 +34,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
   gitHubRepoInvalid: boolean = false;
   gitHubRepoDuplicated: boolean = false;
   license: string;
-  panelState: string = "out";
+  panelState: string = 'out';
   subscriptions: Subscription[] = [];
 
   constructor(
@@ -69,7 +69,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
     // I had to triggers another round of change detection
     // during that method - emit an event, whatever. Wrapping it in a timeout would do the job
     setTimeout(() => {
-      this.togglePanel("in");
+      this.togglePanel('in');
     });
   }
 
@@ -95,7 +95,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
 
     // Add codebase to space
     this.subscriptions.push(this.codebasesService.addCodebase(this.context.space.id, codebase)
-      .do(() => this.togglePanel("out"))
+      .do(() => this.togglePanel('out'))
       .do(codebase => this.broadcaster.broadcast('codebaseAdded', codebase))
       .switchMap(codebase => {
         let fullName = this.getGitHubRepoFullName(codebase.attributes.url);
@@ -111,7 +111,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
       .subscribe(() => {
        }, error => {
         this.gitHubRepoInvalid = true;
-        this.handleError("Failed to associate codebase with space", NotificationType.DANGER);
+        this.handleError('Failed to associate codebase with space', NotificationType.DANGER);
       }));
   }
 
@@ -136,7 +136,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
       .subscribe(gitHubRepoLicense => {
         this.license = gitHubRepoLicense.license.name;
       }, error => {
-        this.license = "None";
+        this.license = 'None';
       }));
   }
 
@@ -174,7 +174,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
     return {
       attributes: {
         type: 'git',
-        url: "https://github.com/" + this.gitHubRepoFullName + ".git"
+        url: 'https://github.com/' + this.gitHubRepoFullName + '.git'
       },
       type: 'codebases'
     } as Codebase;
@@ -210,10 +210,10 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
    * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getGitHubRepoFullNameFromBrowserUrl(url: string): string {
-    let prefix = "https://github.com/";
-    let postfix = ".git";
+    let prefix = 'https://github.com/';
+    let postfix = '.git';
     let start = url.indexOf(prefix);
-    let end = url.lastIndexOf(".git");
+    let end = url.lastIndexOf('.git');
     return (start !== -1 && end === -1) ? url.substring(prefix.length, url.length) : null;
   }
 
@@ -224,10 +224,10 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
    * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getGitHubRepoFullNameFromHttpsUrl(url: string): string {
-    let prefix = "https://github.com/";
-    let postfix = ".git";
+    let prefix = 'https://github.com/';
+    let postfix = '.git';
     let start = url.indexOf(prefix);
-    let end = url.lastIndexOf(".git");
+    let end = url.lastIndexOf('.git');
     let trueEnd = (end + postfix.length === url.length); // No chars after postfix
     return (start !== -1 && end !== -1 && trueEnd) ? url.substring(prefix.length, end) : null;
   }
@@ -239,10 +239,10 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
    * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getGitHubRepoFullNameFromSshUrl(url: string): string {
-    let prefix = "git@github.com:";
-    let postfix = ".git";
+    let prefix = 'git@github.com:';
+    let postfix = '.git';
     let start = url.indexOf(prefix);
-    let end = url.lastIndexOf(".git");
+    let end = url.lastIndexOf('.git');
     let trueEnd = (end + postfix.length === url.length); // No chars after postfix
     return (start !== -1 && end !== -1 && trueEnd) ? url.substring(prefix.length, end) : null;
   }
@@ -255,11 +255,11 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
   private isGitHubRepoFullNameInvalid(): boolean {
     return (this.gitHubRepoFullName === undefined
         || this.gitHubRepoFullName.trim().length === 0
-        || this.gitHubRepoFullName.split("/").length !== 2
-        || this.gitHubRepoFullName.indexOf(":") !== -1
-        || this.gitHubRepoFullName.indexOf("git@github.com") !== -1
-        || this.gitHubRepoFullName.indexOf("https://github.com") !== -1
-        || this.gitHubRepoFullName.indexOf(".git") !== -1);
+        || this.gitHubRepoFullName.split('/').length !== 2
+        || this.gitHubRepoFullName.indexOf(':') !== -1
+        || this.gitHubRepoFullName.indexOf('git@github.com') !== -1
+        || this.gitHubRepoFullName.indexOf('https://github.com') !== -1
+        || this.gitHubRepoFullName.indexOf('.git') !== -1);
   }
 
   /**
@@ -294,7 +294,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
           this.codebases = codebases;
         }
       }, error => {
-        this.handleError("Failed to retrieve codebases", NotificationType.WARNING);
+        this.handleError('Failed to retrieve codebases', NotificationType.WARNING);
       }));
   }
 

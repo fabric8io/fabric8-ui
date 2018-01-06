@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Namespace } from "../../../model/namespace.model";
-import { NamespaceStore } from "../../../store/namespace.store";
-import { YamlEditor } from "../../../view/yaml.editor";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Namespace } from '../../../model/namespace.model';
+import { NamespaceStore } from '../../../store/namespace.store';
+import { YamlEditor } from '../../../view/yaml.editor';
 
 @Component({
   selector: 'fabric8-namespace-edit-wrapper',

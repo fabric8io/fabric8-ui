@@ -1,5 +1,5 @@
-import { ScalableResource } from "./scalableresource.model";
-import { ReplicationControllers, ReplicationController } from "./replicationcontroller.model";
+import { ScalableResource } from './scalableresource.model';
+import { ReplicationControllers, ReplicationController } from './replicationcontroller.model';
 
 export class ReplicaSet extends ScalableResource {
 

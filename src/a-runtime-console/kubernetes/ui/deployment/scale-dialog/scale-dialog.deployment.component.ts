@@ -1,10 +1,10 @@
-import { Component, ViewChild } from "@angular/core";
-import { Deployment } from "../../../model/deployment.model";
-import { DeploymentService } from "../../../service/deployment.service";
-import { Observable } from "rxjs";
-import { DeploymentConfigService } from "../../../service/deploymentconfig.service";
-import { CompositeDeploymentStore } from "../../../store/compositedeployment.store";
-import { DeploymentConfig } from "../../../model/deploymentconfig.model";
+import { Component, ViewChild } from '@angular/core';
+import { Deployment } from '../../../model/deployment.model';
+import { DeploymentService } from '../../../service/deployment.service';
+import { Observable } from 'rxjs';
+import { DeploymentConfigService } from '../../../service/deploymentconfig.service';
+import { CompositeDeploymentStore } from '../../../store/compositedeployment.store';
+import { DeploymentConfig } from '../../../model/deploymentconfig.model';
 
 @Component({
   selector: 'scale-deployment-dialog',
@@ -59,7 +59,7 @@ export class DeploymentScaleDialog {
       if (this.scaleInput) {
         this.scaleInput.nativeElement.focus();
       } else {
-        console.log("Warning: could not find #scaleInput in the template: scale-dialog.deployment.component.html");
+        console.log('Warning: could not find #scaleInput in the template: scale-dialog.deployment.component.html');
       }
     });
   }

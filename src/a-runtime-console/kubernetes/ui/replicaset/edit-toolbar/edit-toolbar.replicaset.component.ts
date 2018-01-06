@@ -1,8 +1,8 @@
-import { Component, Input } from "@angular/core";
-import { Router } from "@angular/router";
-import { ReplicaSetService } from "../../../service/replicaset.service";
-import { YamlEditor } from "../../../view/yaml.editor";
-import { ReplicaSet } from "../../../model/replicaset.model";
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { ReplicaSetService } from '../../../service/replicaset.service';
+import { YamlEditor } from '../../../view/yaml.editor';
+import { ReplicaSet } from '../../../model/replicaset.model';
 
 @Component({
   selector: 'fabric8-replicaset-edit-toolbar',

@@ -1,35 +1,35 @@
-import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from "rxjs";
-import { Notifications } from "ngx-base";
-import { Pod, Pods } from "../../model/pod.model";
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { AbstractWatchComponent } from "../../support/abstract-watch.component";
-import { PodService } from "../../service/pod.service";
-import { SpaceStore } from "../../store/space.store";
-import { SpaceNamespace } from "../../model/space-namespace";
-import { Space } from "../../model/space.model";
-import { Namespace } from "../../model/namespace.model";
-import { DeploymentConfigService } from "../../service/deploymentconfig.service";
-import { DeploymentService } from "../../service/deployment.service";
-import { Deployments } from "../../model/deployment.model";
+import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from 'rxjs';
+import { Notifications } from 'ngx-base';
+import { Pod, Pods } from '../../model/pod.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AbstractWatchComponent } from '../../support/abstract-watch.component';
+import { PodService } from '../../service/pod.service';
+import { SpaceStore } from '../../store/space.store';
+import { SpaceNamespace } from '../../model/space-namespace';
+import { Space } from '../../model/space.model';
+import { Namespace } from '../../model/namespace.model';
+import { DeploymentConfigService } from '../../service/deploymentconfig.service';
+import { DeploymentService } from '../../service/deployment.service';
+import { Deployments } from '../../model/deployment.model';
 
 export class StatusKind {
   constructor(public message: string, public iconCss: string) {
   }
 }
 
-const statusCssUnknown = new StatusKind("Loading data", "pficon pficon-in-progress");
-const statusCssError = new StatusKind("Error", "pficon pficon-error-circle-o");
-const statusCssOK = new StatusKind("OK", "pficon pficon-ok");
-const statusCssPending = new StatusKind("Pending", "status-icon-pending fa fa-clock-o");
-const statusCssContainerCreating = new StatusKind("Creating", "pficon pficon-on-running");
-const statusCssNoResource = new StatusKind("Off", "pficon pficon-off");
+const statusCssUnknown = new StatusKind('Loading data', 'pficon pficon-in-progress');
+const statusCssError = new StatusKind('Error', 'pficon pficon-error-circle-o');
+const statusCssOK = new StatusKind('OK', 'pficon pficon-ok');
+const statusCssPending = new StatusKind('Pending', 'status-icon-pending fa fa-clock-o');
+const statusCssContainerCreating = new StatusKind('Creating', 'pficon pficon-on-running');
+const statusCssNoResource = new StatusKind('Off', 'pficon pficon-off');
 
 export class StatusInfo {
   hasResource = false;
   loaded = false;
-  statusMessage = "";
+  statusMessage = '';
 
-  constructor(public iconCss: string = statusCssUnknown.iconCss, public version: string = "") {
+  constructor(public iconCss: string = statusCssUnknown.iconCss, public version: string = '') {
   }
 
   set status(status: StatusKind) {
@@ -114,7 +114,7 @@ export class StatusListComponent extends AbstractWatchComponent implements OnIni
       .subscribe(ns => {
         if (ns) {
           let namespaceName = ns.name;
-          let data = this.listAndWatch(this.podService, namespaceName, Pod).map(pods => podsToStatusInfo(pods, "app", "jenkins"));
+          let data = this.listAndWatch(this.podService, namespaceName, Pod).map(pods => podsToStatusInfo(pods, 'app', 'jenkins'));
           this.loading.next(false);
           this.pipelineStatus.replaceSubscription(ns, data);
         }
@@ -126,7 +126,7 @@ export class StatusListComponent extends AbstractWatchComponent implements OnIni
       .subscribe(ns => {
         if (ns) {
           let namespaceName = ns.name;
-          let data = this.listAndWatchCombinedDeployments(namespaceName, this.deploymentService, this.deploymentConfigService).map(deployments => deploymentsToStatusInfo(deployments, "app", "che"));
+          let data = this.listAndWatchCombinedDeployments(namespaceName, this.deploymentService, this.deploymentConfigService).map(deployments => deploymentsToStatusInfo(deployments, 'app', 'che'));
           this.loading.next(false);
           this.cheStatus.replaceSubscription(ns, data);
         }
@@ -147,8 +147,8 @@ export class StatusListComponent extends AbstractWatchComponent implements OnIni
 }
 
 function distinctNamespace(n1: Namespace, n2: Namespace): boolean {
-  let name1 = n1 ? n1.name : "";
-  let name2 = n2 ? n2.name : "";
+  let name1 = n1 ? n1.name : '';
+  let name2 = n2 ? n2.name : '';
   return name1 === name2;
 }
 
@@ -161,7 +161,7 @@ function deploymentsToStatusInfo(deployments: Deployments, labelKey: string, lab
       if (deployment.labels[labelKey] === labelValue) {
         status = statusCssPending;
         answer.hasResource = true;
-        answer.version = deployment.labels["version"];
+        answer.version = deployment.labels['version'];
         // TODO lets just assume the first one is the status?
         if (deployment.availableReplicas) {
           status = statusCssOK;
@@ -184,7 +184,7 @@ function podsToStatusInfo(pods: Pods, labelKey: string, labelValue: string): Sta
       if (pod.labels[labelKey] === labelValue) {
         status = statusCssPending;
         answer.hasResource = true;
-        answer.version = pod.labels["version"];
+        answer.version = pod.labels['version'];
         // TODO lets just assume the first one is the status?
         status = podPhaseToCss(pod.phase);
       }
@@ -199,11 +199,11 @@ function podsToStatusInfo(pods: Pods, labelKey: string, labelValue: string): Sta
  */
 function podPhaseToCss(phase: string): StatusKind {
   switch (phase) {
-    case "Ready":
+    case 'Ready':
       return statusCssOK;
-    case "Pending":
+    case 'Pending':
       return statusCssPending;
-    case "ContainerCreating":
+    case 'ContainerCreating':
       return statusCssContainerCreating;
     default:
       return statusCssError;

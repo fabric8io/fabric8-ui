@@ -18,7 +18,7 @@ export class ExperimentalFeatureResolver implements Resolve<FeatureFlagConfig> {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<FeatureFlagConfig> {
-    let featureName = route.data["featureName"];
+    let featureName = route.data['featureName'];
     let experimentalFeaturesEnabled = true;
     if (this.authService.isLoggedIn()) {
       return this.userService.loggedInUser.map((user) => {
@@ -26,9 +26,9 @@ export class ExperimentalFeatureResolver implements Resolve<FeatureFlagConfig> {
         // Resolve the context
         let experimentalFeaturesEnabled = false;
         if (loggedInUser && loggedInUser.attributes) {
-          let contextInformation = loggedInUser.attributes["contextInformation"];
+          let contextInformation = loggedInUser.attributes['contextInformation'];
           if (contextInformation && contextInformation.experimentalFeatures) {
-            experimentalFeaturesEnabled =  contextInformation.experimentalFeatures["enabled"];
+            experimentalFeaturesEnabled =  contextInformation.experimentalFeatures['enabled'];
           }
         }
         return {

@@ -281,9 +281,9 @@ export class GitHubService implements OnDestroy {
    * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getFullName(cloneUrl: string): string {
-    let prefix = "https://github.com/";
+    let prefix = 'https://github.com/';
     let start = cloneUrl.indexOf(prefix);
-    let end = cloneUrl.indexOf(".git");
+    let end = cloneUrl.indexOf('.git');
     return (start !== -1 && end !== -1) ? cloneUrl.substring(prefix.length, end) : cloneUrl;
   }
 

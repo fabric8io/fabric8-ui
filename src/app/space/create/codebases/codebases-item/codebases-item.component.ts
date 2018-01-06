@@ -56,8 +56,8 @@ export class CodebasesItemComponent implements OnDestroy, OnInit {
   private isGitHubHtmlUrlInvalid(): boolean {
     return (this.codebase.attributes.url === undefined
       || this.codebase.attributes.url.trim().length === 0
-      || this.codebase.attributes.url.indexOf("https://github.com") === -1
-      || this.codebase.attributes.url.indexOf(".git") === -1);
+      || this.codebase.attributes.url.indexOf('https://github.com') === -1
+      || this.codebase.attributes.url.indexOf('.git') === -1);
   }
 
   /**

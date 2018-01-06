@@ -1,5 +1,5 @@
 import { KubernetesSpecResource } from './kuberentesspecresource.model';
-import { Route, Routes } from "./route.model";
+import { Route, Routes } from './route.model';
 
 export class Service extends KubernetesSpecResource {
   exposeUrl: string;
@@ -20,7 +20,7 @@ export class Service extends KubernetesSpecResource {
       let spec = value.spec || {};
       let host = spec.host;
       if (host) {
-        let protcol = spec.tls ? "https://" : "http://";
+        let protcol = spec.tls ? 'https://' : 'http://';
         this.exposeUrl = protcol + host;
       }
     }

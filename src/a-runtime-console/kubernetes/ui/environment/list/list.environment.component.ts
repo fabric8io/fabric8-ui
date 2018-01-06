@@ -3,7 +3,7 @@ import { Params } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { SpaceStore } from './../../../store/space.store';
 import { Deployments } from './../../../model/deployment.model';
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, ViewChild } from '@angular/core';
 
 import { Observable, ConnectableObservable, Subject, BehaviorSubject } from 'rxjs';
 
@@ -13,7 +13,7 @@ import {
   IActionMapping
 } from 'angular2-tree-component';
 
-import { ParentLinkFactory } from "../../../../common/parent-link-factory";
+import { ParentLinkFactory } from '../../../../common/parent-link-factory';
 import { CompositeDeploymentStore } from './../../../store/compositedeployment.store';
 import { ServiceStore } from './../../../store/service.store';
 import { createDeploymentViews } from '../../../view/deployment.view';
@@ -25,7 +25,7 @@ import { DeploymentConfigService } from './../../../service/deploymentconfig.ser
 import { DeploymentConfigs } from './../../../model/deploymentconfig.model';
 import { DeploymentService } from './../../../service/deployment.service';
 import { Space, Environment } from './../../../model/space.model';
-import { KindNode } from "../list-page/list-page.environment.component";
+import { KindNode } from '../list-page/list-page.environment.component';
 
 @Component({
   selector: 'fabric8-environments-list',

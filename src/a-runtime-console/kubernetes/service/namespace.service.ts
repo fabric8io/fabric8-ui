@@ -4,7 +4,7 @@ import { Restangular } from 'ng2-restangular';
 import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { KubernetesService } from './kubernetes.service';
 import { Namespace, Namespaces } from '../model/namespace.model';
-import { isOpenShift } from "../store/apis.store";
+import { isOpenShift } from '../store/apis.store';
 
 var namespacesUrl = '/api/v1/namespaces';
 var projectsUrl = '/oapi/v1/projects';

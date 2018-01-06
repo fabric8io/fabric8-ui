@@ -1,38 +1,38 @@
-import { Component, OnInit } from "@angular/core";
-import { Router, NavigationEnd } from "@angular/router";
-import { MenuItem } from "../../../models/menu-item";
-import { ParentLinkFactory } from "../../../common/parent-link-factory";
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { MenuItem } from '../../../models/menu-item';
+import { ParentLinkFactory } from '../../../common/parent-link-factory';
 
 export const resourceMenus = [
   {
-    name: "ConfigMap",
-    path: "configmaps"
+    name: 'ConfigMap',
+    path: 'configmaps'
   },
   {
-    name: "Deployments",
-    path: "deployments"
+    name: 'Deployments',
+    path: 'deployments'
   },
   {
-    name: "Events",
-    path: "events"
+    name: 'Events',
+    path: 'events'
   },
   {
-    name: "Pods",
-    path: "pods"
+    name: 'Pods',
+    path: 'pods'
   },
   {
-    name: "ReplicaSets",
-    path: "replicasets"
+    name: 'ReplicaSets',
+    path: 'replicasets'
   },
   {
-    name: "Services",
-    path: "services"
+    name: 'Services',
+    path: 'services'
   }
 ];
 
 @Component({
   host: {
-    'class': "kube-resource-header"
+    'class': 'kube-resource-header'
   },
   selector: 'kube-resource-header',
   templateUrl: './resource.header.component.html',
@@ -74,7 +74,7 @@ export class ResourceHeaderComponent implements OnInit {
     var url = event.url;
     var menus = this.menus;
     if (url && menus) {
-      var paths = url.split("/");
+      var paths = url.split('/');
       if (paths && paths.length) {
         var path = paths[paths.length - 1];
         this.current = null;
@@ -84,7 +84,7 @@ export class ResourceHeaderComponent implements OnInit {
           }
         });
         if (!this.current) {
-          console.log("Could not find menu for resource kind: " + path);
+          console.log('Could not find menu for resource kind: ' + path);
         }
       }
     }

@@ -1,20 +1,20 @@
-import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscriber } from "rxjs";
-import { Notifications } from "ngx-base";
-import { DeploymentService } from "./../../../service/deployment.service";
-import { Environment, Space } from "./../../../model/space.model";
-import { ServiceService } from "./../../../service/service.service";
-import { DeploymentConfigService } from "./../../../service/deploymentconfig.service";
-import { SpaceStore } from "./../../../store/space.store";
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { RouteService } from "../../../service/route.service";
-import { AbstractWatchComponent } from "../../../support/abstract-watch.component";
-import { environmentOpenShiftConoleUrl } from "../../environment/list-page/list-page.environment.component";
-import { DeploymentView, DeploymentViews } from "../../../view/deployment.view";
-import { SpaceNamespace } from "../../../model/space-namespace";
-import { sortedKeys } from "../../../model/build.model";
-import { ActivatedRoute } from "@angular/router";
-import { findParameter } from "../../../model/helpers";
-import { Subscription } from "rxjs/Subscription";
+import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscriber } from 'rxjs';
+import { Notifications } from 'ngx-base';
+import { DeploymentService } from './../../../service/deployment.service';
+import { Environment, Space } from './../../../model/space.model';
+import { ServiceService } from './../../../service/service.service';
+import { DeploymentConfigService } from './../../../service/deploymentconfig.service';
+import { SpaceStore } from './../../../store/space.store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RouteService } from '../../../service/route.service';
+import { AbstractWatchComponent } from '../../../support/abstract-watch.component';
+import { environmentOpenShiftConoleUrl } from '../../environment/list-page/list-page.environment.component';
+import { DeploymentView, DeploymentViews } from '../../../view/deployment.view';
+import { SpaceNamespace } from '../../../model/space-namespace';
+import { sortedKeys } from '../../../model/build.model';
+import { ActivatedRoute } from '@angular/router';
+import { findParameter } from '../../../model/helpers';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'fabric8-apps-list-page',
@@ -183,13 +183,13 @@ export class AppListPageComponent extends AbstractWatchComponent implements OnIn
 }
 
 function filterDeploymentViews(deploymentViews: DeploymentViews, route: ActivatedRoute): DeploymentViews {
-  let spaceId = findParameter(route, "space");
+  let spaceId = findParameter(route, 'space');
   if (!spaceId) {
     return deploymentViews;
   }
   var answer = new DeploymentViews();
   deploymentViews.forEach(dep => {
-    let depSpace = dep.labels["space"];
+    let depSpace = dep.labels['space'];
     if (!depSpace || depSpace === spaceId) {
       answer.push(dep);
     }
@@ -265,7 +265,7 @@ export class AppEnvironmentDetails {
     if (deployment.availableReplicas) {
       this.exposeUrl = deployment.exposeUrl;
     } else {
-      this.exposeUrl = "";
+      this.exposeUrl = '';
     }
   }
 }

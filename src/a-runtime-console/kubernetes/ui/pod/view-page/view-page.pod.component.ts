@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
-import { Subscription } from "rxjs/Subscription";
-import { PodStore } from "../../../store/pod.store";
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+import { PodStore } from '../../../store/pod.store';
 
 @Component({
   selector: 'fabric8-pod-view-page',

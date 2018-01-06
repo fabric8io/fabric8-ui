@@ -14,7 +14,7 @@ import { BrandInformation } from '../models/brand-information';
 // use url-loader for images
 import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -66,20 +66,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     this.brandInformation = new BrandInformation();
-    if (this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === "fabric8") {
+    if (this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === 'fabric8') {
       this.brandInformation.logo = fabric8Logo;
       // replace background image with fabric8 background once available
-      this.brandInformation.backgroundClass = "home-fabric8-background-image";
-      this.brandInformation.description = "A free, end-to-end, cloud-native development experience.";
-      this.brandInformation.name = "fabric8.io";
-      this.brandInformation.moreInfoLink = "https://fabric8.io/";
+      this.brandInformation.backgroundClass = 'home-fabric8-background-image';
+      this.brandInformation.description = 'A free, end-to-end, cloud-native development experience.';
+      this.brandInformation.name = 'fabric8.io';
+      this.brandInformation.moreInfoLink = 'https://fabric8.io/';
     } else {
       // default openshift.io branding
       this.brandInformation.logo = openshiftLogo;
-      this.brandInformation.backgroundClass = "home-header-background-image";
-      this.brandInformation.description = "A free, end-to-end, cloud-native development experience.";
-      this.brandInformation.name = "OpenShift.io";
-      this.brandInformation.moreInfoLink = "https://openshift.io/features.html";
+      this.brandInformation.backgroundClass = 'home-header-background-image';
+      this.brandInformation.description = 'A free, end-to-end, cloud-native development experience.';
+      this.brandInformation.name = 'OpenShift.io';
+      this.brandInformation.moreInfoLink = 'https://openshift.io/features.html';
     }
   }
 
@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this._spaces = spaces;
         });
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 

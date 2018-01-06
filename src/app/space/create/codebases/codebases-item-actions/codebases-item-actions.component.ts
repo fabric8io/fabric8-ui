@@ -69,7 +69,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
         }
       }, error => {
         this.workspaceBusy = false;
-        this.handleError("Failed to create workspace", NotificationType.DANGER);
+        this.handleError('Failed to create workspace', NotificationType.DANGER);
       }));
   }
 
@@ -115,7 +115,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * @returns {string} The workspace name (e.g., quydcbib)
    */
   private getWorkspaceName(url: string): string {
-    let index = url.lastIndexOf("/") + 1;
+    let index = url.lastIndexOf('/') + 1;
     return url.substring(index, url.length);
   }
 

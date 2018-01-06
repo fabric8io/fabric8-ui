@@ -8,7 +8,7 @@ import { UserService, User, AuthenticationService } from 'ngx-login-client';
 
 @Component({
   host: {
-    'class': "app-component flex-container in-column-direction flex-grow-1"
+    'class': 'app-component flex-container in-column-direction flex-grow-1'
   },
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-landing-page',

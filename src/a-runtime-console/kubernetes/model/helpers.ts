@@ -1,28 +1,28 @@
-import { OAuthConfig } from "./../store/oauth-config-store";
-import { KubernetesResource } from "./kubernetesresource.model";
-import { pathJoin } from "./utils";
-import { ActivatedRoute } from "@angular/router";
+import { OAuthConfig } from './../store/oauth-config-store';
+import { KubernetesResource } from './kubernetesresource.model';
+import { pathJoin } from './utils';
+import { ActivatedRoute } from '@angular/router';
 
 export var resourceKindToCollectionName = {
-  "Deployment": "deployments",
-  "DeploymentConfig": "deploymentconfigs",
-  "Build": "builds",
-  "BuildConfig": "buildsconfigs",
-  "ConfigMap": "configmaps",
-  "Event": "events",
-  "Namespace": "spaces",
-  "Pod": "pods",
-  "Project": "projects",
-  "ReplicationController": "replicationcontrollers",
-  "ReplicaSet": "replicasets",
-  "Route": "routes",
-  "Service": "services"
+  'Deployment': 'deployments',
+  'DeploymentConfig': 'deploymentconfigs',
+  'Build': 'builds',
+  'BuildConfig': 'buildsconfigs',
+  'ConfigMap': 'configmaps',
+  'Event': 'events',
+  'Namespace': 'spaces',
+  'Pod': 'pods',
+  'Project': 'projects',
+  'ReplicationController': 'replicationcontrollers',
+  'ReplicaSet': 'replicasets',
+  'Route': 'routes',
+  'Service': 'services'
 };
 
 export var resourceKindToOpenShiftConsoleCollectionName = {
-  "BuildConfig": "pipelines",
-  "DeploymentConfig": "dc",
-  "ReplicationController": "rc"
+  'BuildConfig': 'pipelines',
+  'DeploymentConfig': 'dc',
+  'ReplicationController': 'rc'
 };
 
 /**
@@ -30,7 +30,7 @@ export var resourceKindToOpenShiftConsoleCollectionName = {
  */
 export function isNamespacedKind(kind: string) {
   if (kind) {
-    return kind !== "Namespace" && kind !== "Project" && kind !== "PersistentVolume";
+    return kind !== 'Namespace' && kind !== 'Project' && kind !== 'PersistentVolume';
   }
   return false;
 }
@@ -46,7 +46,7 @@ export function openShiftBrowseResourceUrl(resource: KubernetesResource, oauthCo
     }
     if (!kinds) {
       let kind = resource.defaultKind();
-      if (!kind || kind === "Unknown") {
+      if (!kind || kind === 'Unknown') {
         let k8sResource = resource.resource;
         if (k8sResource) {
           kind = k8sResource.kind;
@@ -55,30 +55,30 @@ export function openShiftBrowseResourceUrl(resource: KubernetesResource, oauthCo
       if (kind) {
         kinds = resourceKindToOpenShiftConsoleCollectionName[kind] || resourceKindToCollectionName[kind];
         if (!kinds) {
-          console.log("Could not find collection name for kind: " + kind);
+          console.log('Could not find collection name for kind: ' + kind);
           kinds = kind.toLowerCase();
-          if (!kinds.endsWith("s")) {
-            kinds += "s";
+          if (!kinds.endsWith('s')) {
+            kinds += 's';
           }
         }
       }
     }
     const name = resource.name;
     const namespace = resource.namespace;
-    if (kinds === "builds" && name && namespace) {
+    if (kinds === 'builds' && name && namespace) {
       const pipelineName = resource['buildConfigName'] || name;
-      return pathJoin(openShiftConsoleUrl, "/project/", namespace, "/browse/pipelines", pipelineName, name);
-    } else if (kinds === "spaces" || kinds === "projects") {
+      return pathJoin(openShiftConsoleUrl, '/project/', namespace, '/browse/pipelines', pipelineName, name);
+    } else if (kinds === 'spaces' || kinds === 'projects') {
       if (name) {
-        return pathJoin(openShiftConsoleUrl, "/project/", name, "/overview");
+        return pathJoin(openShiftConsoleUrl, '/project/', name, '/overview');
       }
     } else {
       if (resource && openShiftConsoleUrl && namespace && name) {
-        return pathJoin(openShiftConsoleUrl, "/project/", namespace, "/browse", kinds, name);
+        return pathJoin(openShiftConsoleUrl, '/project/', namespace, '/browse', kinds, name);
       }
     }
   }
-  return "";
+  return '';
 }
 
 /**

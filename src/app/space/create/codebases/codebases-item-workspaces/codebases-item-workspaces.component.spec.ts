@@ -1,6 +1,6 @@
 import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.component';
 import { Observable } from 'rxjs';
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -50,19 +50,19 @@ describe('Codebases Item Details Component', () => {
     });
     fixture = TestBed.createComponent(CodebasesItemWorkspacesComponent);
     comp = fixture.componentInstance;
-    comp.codebase = { "id": "6f5b6738-170e-490e-b3bb-d10f56b587c8", attributes: { type: 'git', url: "toto/toto", last_used_workspace: "me" } };
+    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8', attributes: { type: 'git', url: 'toto/toto', last_used_workspace: 'me' } };
     expectedWorkspace = {
       attributes: {
         description: 'description',
         name: 'name'
       },
-      links: { open: "url" },
+      links: { open: 'url' },
       type: 'git'
     };
     expectedWorkspaces = [expectedWorkspace];
     const workspaceCreatedEvent = {
-      codebase: { "id": "6f5b6738-170e-490e-b3bb-d10f56b587c8", attributes: { type: 'git', url: "toto/toto" } },
-      workspaceName: "MyWorkspace"
+      codebase: { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8', attributes: { type: 'git', url: 'toto/toto' } },
+      workspaceName: 'MyWorkspace'
     };
     workspacesServiceMock.getWorkspaces.and.returnValue(Observable.of(expectedWorkspaces));
     broadcasterMock.on.and.returnValue(Observable.of(workspaceCreatedEvent));
@@ -85,7 +85,7 @@ describe('Codebases Item Details Component', () => {
   it('Create and open workspace', async(() => {
     // given
     workspacesServiceMock.createWorkspace.and.returnValue(Observable.of(expectedWorkspace));
-    const notificationAction = { name: "created" };
+    const notificationAction = { name: 'created' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();
 
@@ -101,12 +101,12 @@ describe('Codebases Item Details Component', () => {
     // given
     const workspaceLinks = {
       links: {
-        open: "http://somewhere.com"
+        open: 'http://somewhere.com'
       }
     };
     workspacesServiceMock.getWorkspaces.and.returnValue(Observable.of(expectedWorkspaces));
     workspacesServiceMock.openWorkspace.and.returnValue(Observable.of(workspaceLinks));
-    const notificationAction = { name: "created" };
+    const notificationAction = { name: 'created' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();
 

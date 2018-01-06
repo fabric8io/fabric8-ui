@@ -1,4 +1,4 @@
-import { KubernetesSpecResource } from "./kuberentesspecresource.model";
+import { KubernetesSpecResource } from './kuberentesspecresource.model';
 
 export class Pod extends KubernetesSpecResource {
   public images: Array<string>;
@@ -21,7 +21,7 @@ export class Pod extends KubernetesSpecResource {
     }
     let metadata = resource.metadata || {};
     if (metadata.deletionTimestamp) {
-      this.phase = "Terminating";
+      this.phase = 'Terminating';
     } else {
       let status = this.status;
       if (status) {
@@ -36,7 +36,7 @@ export class Pod extends KubernetesSpecResource {
             }
           }
           if (ready) {
-            this.phase = "Ready";
+            this.phase = 'Ready';
           }
         }
       }

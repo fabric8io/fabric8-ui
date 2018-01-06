@@ -47,7 +47,7 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
     let area = {} as Area;
     area.attributes = new AreaAttributes();
     area.attributes.name = this.name;
-    area.type = "areas";
+    area.type = 'areas';
     this.areaService.create(this.parentId, area).subscribe(newArea => {
       this.onAdded.emit(newArea);
       this.host.close();

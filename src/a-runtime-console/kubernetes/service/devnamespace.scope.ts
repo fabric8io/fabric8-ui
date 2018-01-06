@@ -1,12 +1,12 @@
-import { Inject, Injectable } from "@angular/core";
+import { Inject, Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { Observable } from "rxjs";
-import { INamespaceScope } from "./namespace.scope";
-import { pathJoin } from "../model/utils";
-import { AuthenticationService } from "ngx-login-client";
-import { WIT_API_URL } from "ngx-fabric8-wit";
-import { Logger } from "ngx-base";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Observable } from 'rxjs';
+import { INamespaceScope } from './namespace.scope';
+import { pathJoin } from '../model/utils';
+import { AuthenticationService } from 'ngx-login-client';
+import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { Logger } from 'ngx-base';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 /**
  * Defaults to using the Dev Space rather than the runtime environment
@@ -65,7 +65,7 @@ export class DevNamespaceScope implements INamespaceScope {
             for (let namespace of namespaces) {
               let name = namespace['name'];
               let type = namespace['type'];
-              if (name && type && type === "user") {
+              if (name && type && type === 'user') {
                 return name;
               }
             }
@@ -78,7 +78,7 @@ export class DevNamespaceScope implements INamespaceScope {
 }
 
 export class TestDevNamespaceScope implements INamespaceScope {
-  _currentNamespace = "mynamespace";
+  _currentNamespace = 'mynamespace';
 
   namespace: Observable<string> = new BehaviorSubject(this._currentNamespace).asObservable();
 

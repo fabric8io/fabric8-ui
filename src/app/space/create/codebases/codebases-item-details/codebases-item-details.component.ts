@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { Codebase } from '../services/codebase';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { GitHubService } from "../services/github.service";
+import { GitHubService } from '../services/github.service';
 import { Logger } from 'ngx-base';
 
 @Component({
@@ -44,7 +44,7 @@ export class CodebasesItemDetailsComponent implements OnDestroy, OnInit {
         this.gitUrl = gitHubRepoDetails.git_url;
         this.htmlUrl = gitHubRepoDetails.html_url;
       }, error => {
-        this.logger.error("Failed to retrieve GitHub repo details");
+        this.logger.error('Failed to retrieve GitHub repo details');
       }));
     this.subscriptions.push(this.gitHubService.getRepoLastCommitByUrl(this.codebase.attributes.url)
       .subscribe(gitHubRepoLastCommit => {
@@ -54,16 +54,16 @@ export class CodebasesItemDetailsComponent implements OnDestroy, OnInit {
           .subscribe(gitHubRepoCommitStatus => {
           this.filesChanged = gitHubRepoCommitStatus.files.length;
         }, error => {
-          this.logger.error("Failed to retrieve GitHub status");
+          this.logger.error('Failed to retrieve GitHub status');
         }));
       }, error => {
-        this.logger.error("Failed to retrieve GitHub repo last commit");
+        this.logger.error('Failed to retrieve GitHub repo last commit');
       }));
     this.subscriptions.push(this.gitHubService.getRepoLicenseByUrl(this.codebase.attributes.url)
       .subscribe(gitHubRepoLicense => {
         this.license = gitHubRepoLicense.license.name;
       }, error => {
-        this.license = "None";
+        this.license = 'None';
       }));
   }
 
@@ -72,8 +72,8 @@ export class CodebasesItemDetailsComponent implements OnDestroy, OnInit {
   private isGitHubHtmlUrlInvalid(): boolean {
     return (this.codebase.attributes.url === undefined
     || this.codebase.attributes.url.trim().length === 0
-    || this.codebase.attributes.url.indexOf("https://github.com") === -1
-    || this.codebase.attributes.url.indexOf(".git") === -1);
+    || this.codebase.attributes.url.indexOf('https://github.com') === -1
+    || this.codebase.attributes.url.indexOf('.git') === -1);
   }
 
   private isHtmlUrlInvalid(): boolean {

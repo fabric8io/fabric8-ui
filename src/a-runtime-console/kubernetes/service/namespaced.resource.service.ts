@@ -1,11 +1,11 @@
 import { WatcherFactory } from './watcher-factory.service';
-import { Restangular } from "ng2-restangular";
-import { KubernetesService } from "./kubernetes.service";
-import { Subscription, Observable } from "rxjs";
-import { KubernetesResource } from "../model/kubernetesresource.model";
-import { INamespaceScope, NamespaceScope } from "./namespace.scope";
-import { Watcher } from "./watcher";
-import { pathJoin } from "../model/utils";
+import { Restangular } from 'ng2-restangular';
+import { KubernetesService } from './kubernetes.service';
+import { Subscription, Observable } from 'rxjs';
+import { KubernetesResource } from '../model/kubernetesresource.model';
+import { INamespaceScope, NamespaceScope } from './namespace.scope';
+import { Watcher } from './watcher';
+import { pathJoin } from '../model/utils';
 
 
 export abstract class NamespacedResourceService<T extends KubernetesResource, L extends Array<T>> extends KubernetesService<T, L> {
@@ -95,7 +95,7 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
     }
   }
 
-  protected urlForObject(obj: T, namespace: string = "") {
+  protected urlForObject(obj: T, namespace: string = '') {
     if (!namespace) {
       namespace = obj.namespace;
     }

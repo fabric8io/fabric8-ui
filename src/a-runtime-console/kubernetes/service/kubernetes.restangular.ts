@@ -1,23 +1,23 @@
-import { NgModule, OpaqueToken } from "@angular/core";
-import { Restangular } from "ng2-restangular";
-import { KubernetesResource } from "../model/kubernetesresource.model";
-import { Service } from "../model/service.model";
-import { Event } from "../model/event.model";
-import { Deployment } from "../model/deployment.model";
-import { ConfigMap } from "../model/configmap.model";
-import { Namespace } from "../model/namespace.model";
-import { Pod } from "../model/pod.model";
-import { ReplicaSet } from "../model/replicaset.model";
-import { ReplicationController } from "../model/replicationcontroller.model";
-import { BuildConfig } from "../model/buildconfig.model";
-import { DeploymentConfig } from "../model/deploymentconfig.model";
-import { Build } from "../model/build.model";
-import { OAuthService } from "angular2-oauth2/oauth-service";
-import { OnLogin } from "../../shared/onlogin.service";
-import { currentOAuthConfig } from "../store/oauth-config-store";
+import { NgModule, OpaqueToken } from '@angular/core';
+import { Restangular } from 'ng2-restangular';
+import { KubernetesResource } from '../model/kubernetesresource.model';
+import { Service } from '../model/service.model';
+import { Event } from '../model/event.model';
+import { Deployment } from '../model/deployment.model';
+import { ConfigMap } from '../model/configmap.model';
+import { Namespace } from '../model/namespace.model';
+import { Pod } from '../model/pod.model';
+import { ReplicaSet } from '../model/replicaset.model';
+import { ReplicationController } from '../model/replicationcontroller.model';
+import { BuildConfig } from '../model/buildconfig.model';
+import { DeploymentConfig } from '../model/deploymentconfig.model';
+import { Build } from '../model/build.model';
+import { OAuthService } from 'angular2-oauth2/oauth-service';
+import { OnLogin } from '../../shared/onlogin.service';
+import { currentOAuthConfig } from '../store/oauth-config-store';
 import { AuthenticationService } from 'ngx-login-client';
 import { LoginService } from '../../shared/login.service';
-import { Route } from "../model/route.model";
+import { Route } from '../model/route.model';
 
 export const KUBERNETES_RESTANGULAR = new OpaqueToken('KubernetesRestangular');
 
@@ -103,7 +103,7 @@ export function KubernetesRestangularFactory(restangular: Restangular, oauthServ
           }
           if (!kind) {
             // TODO lets assume for now its a 'BuildConfig' from jenkinsshift
-            kind = "BuildConfig";
+            kind = 'BuildConfig';
           }
           let resourceApiVersion = (data.metadata || {}).apiVersion;
           return (data.items || []).map((object) => {
@@ -131,10 +131,10 @@ export function KubernetesRestangularFactory(restangular: Restangular, oauthServ
         baseUrl = oauthConfig.proxyApiServer ||  oauthConfig.apiServer ||  '';
         if (baseUrl) {
           let protocol = oauthConfig.apiServerProtocol || 'https';
-          baseUrl = protocol + "://" + baseUrl;
+          baseUrl = protocol + '://' + baseUrl;
         }
       } else {
-        console.log("No oauth config!");
+        console.log('No oauth config!');
       }
       // TODO setting the baseUrl to empty string doesn't seem to work so lets use the absolute URL of the app
       if (!baseUrl) {
@@ -158,7 +158,7 @@ export function KubernetesRestangularFactory(restangular: Restangular, oauthServ
       RestangularConfigurer.setBaseUrl(baseUrl);
 
       //console.log("===== setting kubernetes token: " + (token ? "token" : "no token") + " for " + url);
-      headers["Authorization"] = 'Bearer ' + onLogin.token;
+      headers['Authorization'] = 'Bearer ' + onLogin.token;
        return {
          params: params,
          headers: headers,

@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
-import { Subscription } from "rxjs/Subscription";
-import { CompositeDeploymentStore } from "../../../store/compositedeployment.store";
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+import { CompositeDeploymentStore } from '../../../store/compositedeployment.store';
 
 @Component({
   selector: 'fabric8-deployment-view-page',

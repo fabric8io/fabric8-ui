@@ -1,5 +1,5 @@
-import { Input, Component } from "@angular/core";
-import { Pod } from "../../../model/pod.model";
+import { Input, Component } from '@angular/core';
+import { Pod } from '../../../model/pod.model';
 
 @Component({
   selector: 'fabric8-pod-view',

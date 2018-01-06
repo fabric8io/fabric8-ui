@@ -32,7 +32,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
   tenantError: string;
   tenantErrorExpanded: boolean = false;
 
-  cleanupStatus: string = "notstarted";
+  cleanupStatus: string = 'notstarted';
 
   @ViewChild('confirmCleanup') confirmCleanup: IModalHost;
 
@@ -44,10 +44,10 @@ export class CleanupComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.notificationClass = "alert-danger";
-    this.notificationIcon = "pficon-error-circle-o";
-    this.notificationTitle = "Warning!";
-    this.notificationText = "This action is not reversible!";
+    this.notificationClass = 'alert-danger';
+    this.notificationIcon = 'pficon-error-circle-o';
+    this.notificationTitle = 'Warning!';
+    this.notificationText = 'This action is not reversible!';
 
     this.listConfig = {
       dblClick: false,
@@ -78,28 +78,28 @@ export class CleanupComponent implements OnInit, OnDestroy {
   }
   confirm(): void {
     this.confirmCleanup.close();
-    this.tenantError = "";
-    this.cleanupStatus = "running";
+    this.tenantError = '';
+    this.cleanupStatus = 'running';
     this.showNotification = false;
     let observableArray: Observable<any>[] = [];
     let tenantCleanError: boolean = false;
     let spaceDeleteError: boolean = false;
 
-    this.tenantIcon = "spinner spinner-lg";
+    this.tenantIcon = 'spinner spinner-lg';
 
     this.spaces.forEach((space) => {
       // only try to erase spaces if they are still around after a failed attempt
       if (!space['erased']) {
-        space['progress'] = "Erasing space";
-        space['statusIcon'] = "spinner spinner-lg";
+        space['progress'] = 'Erasing space';
+        space['statusIcon'] = 'spinner spinner-lg';
         let spaceObservable = this.spaceService.deleteSpace(space).map((result) => {
           this.eventService.deleteSpaceSubject.next(space);
           space['erased'] = true;
-          space['progress'] = "Space successfully erased";
-          space['statusIcon'] = "pficon pficon-ok";
+          space['progress'] = 'Space successfully erased';
+          space['statusIcon'] = 'pficon pficon-ok';
         }).catch((error) => {
-          space['progress'] = "Error: Unable to erase";
-          space['statusIcon'] = "pficon pficon-warning-triangle-o";
+          space['progress'] = 'Error: Unable to erase';
+          space['statusIcon'] = 'pficon pficon-warning-triangle-o';
           spaceDeleteError = true;
           this.showWarningNotification();
           return Observable.of(error);
@@ -108,13 +108,13 @@ export class CleanupComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.tenantResult = "Cleaning up tenant";
+    this.tenantResult = 'Cleaning up tenant';
     let tenantServiceCleanup = this.tenantService.cleanupTenant()
       .catch((error) => {
         tenantCleanError = true;
-        this.tenantResult = "Tenant cleanup failed";
+        this.tenantResult = 'Tenant cleanup failed';
         this.tenantError = error;
-        this.tenantIcon = "pficon pficon-warning-triangle-o cleanup-row-account-icon";
+        this.tenantIcon = 'pficon pficon-warning-triangle-o cleanup-row-account-icon';
         return Observable.of(error);
     });
 
@@ -127,11 +127,11 @@ export class CleanupComponent implements OnInit, OnDestroy {
           if (!spaceDeleteError) {
             this.showSuccessNotification();
           }
-          this.tenantIcon = "pficon pficon-ok cleanup-row-account-icon";
-          this.tenantResult = "Tenant reset successful";
+          this.tenantIcon = 'pficon pficon-ok cleanup-row-account-icon';
+          this.tenantResult = 'Tenant reset successful';
         }, (error) => {
-          this.tenantIcon = "pficon pficon-warning-triangle-o cleanup-row-account-icon";
-          this.tenantResult = "Tenant update failed";
+          this.tenantIcon = 'pficon pficon-warning-triangle-o cleanup-row-account-icon';
+          this.tenantResult = 'Tenant update failed';
           this.tenantError = error;
           this.showWarningNotification();
         });
@@ -149,20 +149,20 @@ export class CleanupComponent implements OnInit, OnDestroy {
 
   showSuccessNotification(): void {
     this.showNotification = true;
-    this.notificationClass = "alert-success";
-    this.notificationIcon = "pficon-ok";
-    this.notificationTitle = "Success!";
-    this.notificationText = "Your OpenShift.io environment has been erased!";
-    this.cleanupStatus = "completed";
+    this.notificationClass = 'alert-success';
+    this.notificationIcon = 'pficon-ok';
+    this.notificationTitle = 'Success!';
+    this.notificationText = 'Your OpenShift.io environment has been erased!';
+    this.cleanupStatus = 'completed';
   }
 
   showWarningNotification(): void {
     this.showNotification = true;
-    this.notificationClass = "alert-warning";
-    this.notificationIcon = "pficon-warning-triangle-o";
-    this.notificationTitle = "Alert!";
-    this.notificationText = "We were unable to reset your account or erase some of your spaces.";
-    this.cleanupStatus = "completedwitherrors";
+    this.notificationClass = 'alert-warning';
+    this.notificationIcon = 'pficon-warning-triangle-o';
+    this.notificationTitle = 'Alert!';
+    this.notificationText = 'We were unable to reset your account or erase some of your spaces.';
+    this.cleanupStatus = 'completedwitherrors';
   }
 
   toggleTenantError(): void {

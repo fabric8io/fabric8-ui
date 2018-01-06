@@ -1,6 +1,6 @@
-import { Input, Component, OnChanges } from "@angular/core";
-import { Event } from "../../../model/event.model";
-import { resourceKindToCollectionName, isNamespacedKind } from "../../../model/helpers";
+import { Input, Component, OnChanges } from '@angular/core';
+import { Event } from '../../../model/event.model';
+import { resourceKindToCollectionName, isNamespacedKind } from '../../../model/helpers';
 
 
 @Component({
@@ -13,7 +13,7 @@ export class EventViewComponent implements OnChanges {
   @Input() event: Event;
 
   ngOnChanges(): void {
-    this.involvedObjectPath = "";
+    this.involvedObjectPath = '';
     let event = this.event;
     if (event) {
       var resource = event.resource;
@@ -25,11 +25,11 @@ export class EventViewComponent implements OnChanges {
           if (kind && name) {
             var path = resourceKindToCollectionName[kind];
             if (path) {
-              var namespacePrefix = "/run";
+              var namespacePrefix = '/run';
               if (isNamespacedKind(kind)) {
-                namespacePrefix = "/run/namespaces/" + event.namespace + "/";
+                namespacePrefix = '/run/namespaces/' + event.namespace + '/';
               }
-              this.involvedObjectPath = namespacePrefix + path + "/" + name;
+              this.involvedObjectPath = namespacePrefix + path + '/' + name;
             }
           }
         }

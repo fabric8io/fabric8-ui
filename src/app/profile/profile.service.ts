@@ -49,7 +49,7 @@ export class ProfileService {
         if (user.attributes) {
           user.attributes.store = (user as any).attributes.contextInformation || {};
         } else {
-          user.attributes = { "fullName": "", "imageURL": "", "username": "", "store": { } };
+          user.attributes = { 'fullName': '', 'imageURL': '', 'username': '', 'store': { } };
         }
       })
       .map(user => user.attributes)

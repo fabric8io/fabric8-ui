@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable, Subscription } from "rxjs";
-import { Operation, ResourceOperation } from "./resource-operation";
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { Operation, ResourceOperation } from './resource-operation';
 
 
 /**

@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { BuildConfigService } from "../service/buildconfig.service";
-import { BuildConfig, BuildConfigs } from "../model/buildconfig.model";
-import { NamespacedResourceStore } from "./namespacedresource.store";
-import { DevNamespaceScope } from "../service/devnamespace.scope";
+import { Injectable } from '@angular/core';
+import { BuildConfigService } from '../service/buildconfig.service';
+import { BuildConfig, BuildConfigs } from '../model/buildconfig.model';
+import { NamespacedResourceStore } from './namespacedresource.store';
+import { DevNamespaceScope } from '../service/devnamespace.scope';
 
 @Injectable()
 export class BuildConfigStore extends NamespacedResourceStore<BuildConfig, BuildConfigs, BuildConfigService> {

@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
-import { Namespace } from "../../../model/namespace.model";
-import { NamespaceStore } from "../../../store/namespace.store";
-import { NamespaceService } from "../../../service/namespace.service";
+import { Component } from '@angular/core';
+import { Namespace } from '../../../model/namespace.model';
+import { NamespaceStore } from '../../../store/namespace.store';
+import { NamespaceService } from '../../../service/namespace.service';
 
 @Component({
   selector: 'delete-namespace-dialog',

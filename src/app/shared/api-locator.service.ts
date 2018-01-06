@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Fabric8UIConfig } from "./config/fabric8-ui-config";
+import { Fabric8UIConfig } from './config/fabric8-ui-config';
 
 const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(
   [
@@ -36,11 +36,11 @@ export class BaseApiLocatorService {
   }
 
   get realm(): string {
-    return this.envVars.get('realm') || "fabric8";
+    return this.envVars.get('realm') || 'fabric8';
   }
 
   get branding(): string {
-    return this.envVars.get('branding') || "openshiftio";
+    return this.envVars.get('branding') || 'openshiftio';
   }
 
   get witApiUrl(): string {

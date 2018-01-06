@@ -25,7 +25,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   subscriptions: Subscription[] = [];
   workspaceBusy: boolean = false;
   workspaceSelected: boolean = false;
-  workspaceUrl: string = "default";
+  workspaceUrl: string = 'default';
   workspaces: Workspace[];
   workspacesAvailable: boolean = false;
   workspacePollSubscription: Subscription;
@@ -82,7 +82,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
         }
       }, error => {
         this.workspaceBusy = false;
-        this.handleError("Failed to create workspace", NotificationType.DANGER);
+        this.handleError('Failed to create workspace', NotificationType.DANGER);
       }));
   }
 
@@ -106,13 +106,13 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
         }
       }, error => {
         this.workspaceBusy = false;
-        this.handleError("Failed to open workspace", NotificationType.DANGER);
+        this.handleError('Failed to open workspace', NotificationType.DANGER);
       }));
   }
 
   setWorkspaceSelected(): void {
     this.workspaceSelected = (this.workspaceUrl !== undefined && this.workspaceUrl.length !== 0
-      && this.workspaceUrl !== "default");
+      && this.workspaceUrl !== 'default');
   }
 
   // Private
@@ -126,7 +126,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * @returns {string} The workspace name (e.g., quydcbib)
    */
   getWorkspaceName(url: string): string {
-    let index = url.lastIndexOf("/") + 1;
+    let index = url.lastIndexOf('/') + 1;
     return url.substring(index, url.length);
   }
 
@@ -163,7 +163,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
           this.setWorkspaceUrl(this.codebase.attributes.last_used_workspace);
         }
       }, error => {
-        console.log("Failed to retrieve workspaces for codebase ID: " + this.codebase.id);
+        console.log('Failed to retrieve workspaces for codebase ID: ' + this.codebase.id);
       }));
   }
 

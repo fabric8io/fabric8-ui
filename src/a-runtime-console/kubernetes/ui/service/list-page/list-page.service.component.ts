@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Services } from "../../../model/service.model";
-import { RouteServiceStore } from "../../../store/route.service.store";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Services } from '../../../model/service.model';
+import { RouteServiceStore } from '../../../store/route.service.store';
 
 
 @Component({

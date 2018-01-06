@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
-import { Subscription } from "rxjs/Subscription";
-import { ConfigMapStore } from "../../../store/configmap.store";
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+import { ConfigMapStore } from '../../../store/configmap.store';
 
 @Component({
   selector: 'fabric8-configmap-view-page',

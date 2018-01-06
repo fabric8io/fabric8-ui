@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Spaces } from "../../../model/space.model";
-import { SpaceStore } from "../../../store/space.store";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Spaces } from '../../../model/space.model';
+import { SpaceStore } from '../../../store/space.store';
 
 @Component({
   host: {
-      'class': "app-component flex-container in-column-direction flex-grow-1"
+      'class': 'app-component flex-container in-column-direction flex-grow-1'
   },
   selector: 'fabric8-spaces-list-page',
   templateUrl: './list-page.space.component.html'

@@ -6,7 +6,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { Fabric8WitModule, Space } from 'ngx-fabric8-wit';
 
@@ -27,9 +27,9 @@ describe('My Spaces Item Component', () => {
     space = {
       attributes: {
         createdAt: '2017-12-07T21:25:59.811024Z',
-        description: "This is my space",
-        name: "test1",
-        "updated-at": '2017-12-07T21:25:59.811024Z',
+        description: 'This is my space',
+        name: 'test1',
+        'updated-at': '2017-12-07T21:25:59.811024Z',
         version: 1
       },
       id: '3eeaa158-a68c-4ff3-9b0d-23ee3368d8b3',
@@ -47,7 +47,7 @@ describe('My Spaces Item Component', () => {
             imageURL: 'https://www.gravatar.com/avatar/369e6a42fedbe342df8ec7f056162.jpg',
             providerType: 'kc',
             registrationCompleted: true,
-            "updated-at": '2017-12-07T21:25:59.811024Z',
+            'updated-at': '2017-12-07T21:25:59.811024Z',
             url: '',
             userID: '1477224e-25f1-4372-9cdd-a651ea588',
             username: 'name@redhat.com'

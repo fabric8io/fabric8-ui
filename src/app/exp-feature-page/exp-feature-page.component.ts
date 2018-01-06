@@ -41,7 +41,7 @@ export class ExpFeaturePageComponent implements OnInit, OnDestroy {
     if (!profile.contextInformation.experimentalFeatures) {
       profile.contextInformation.experimentalFeatures = {};
     }
-    profile.contextInformation.experimentalFeatures["enabled"] = true;
+    profile.contextInformation.experimentalFeatures['enabled'] = true;
 
     this.gettingStartedService.update(profile).subscribe(() => {
       // reset boolean in case they come back in here later

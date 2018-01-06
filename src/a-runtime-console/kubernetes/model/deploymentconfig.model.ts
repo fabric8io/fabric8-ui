@@ -1,4 +1,4 @@
-import { Deployment } from "./deployment.model";
+import { Deployment } from './deployment.model';
 
 export class DeploymentConfig extends Deployment {
   defaultKind() {

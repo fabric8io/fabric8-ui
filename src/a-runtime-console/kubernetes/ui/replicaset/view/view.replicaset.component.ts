@@ -1,6 +1,6 @@
-import { Input, Component, ViewChild } from "@angular/core";
-import { ReplicaSet } from "../../../model/replicaset.model";
-import { ReplicaSetScaleDialog } from "../scale-dialog/scale-dialog.replicaset.component";
+import { Input, Component, ViewChild } from '@angular/core';
+import { ReplicaSet } from '../../../model/replicaset.model';
+import { ReplicaSetScaleDialog } from '../scale-dialog/scale-dialog.replicaset.component';
 
 @Component({
   selector: 'fabric8-replicaset-view',

@@ -1,11 +1,11 @@
-import { KubernetesSpecResource } from "./kuberentesspecresource.model";
-import { defaultBuildIconStyle } from "./buildconfig.model";
-import { PipelineStage } from "./pipelinestage.model";
-import { pathJoin } from "./utils";
-import * as jsyaml from "js-yaml";
+import { KubernetesSpecResource } from './kuberentesspecresource.model';
+import { defaultBuildIconStyle } from './buildconfig.model';
+import { PipelineStage } from './pipelinestage.model';
+import { pathJoin } from './utils';
+import * as jsyaml from 'js-yaml';
 
 
-const serviceEnvironmentsAnnotationPrefix = "environment.services.fabric8.io/";
+const serviceEnvironmentsAnnotationPrefix = 'environment.services.fabric8.io/';
 
 
 export function sortedKeys(map: Map<String, any>): string[] {
@@ -57,10 +57,10 @@ export class Build extends KubernetesSpecResource {
                 this._serviceEnvironmentsMap[envKey] = se;
               }
             } catch (e) {
-              console.log("annotation on build " + this.name + " could not parse YAML: " + e);
+              console.log('annotation on build ' + this.name + ' could not parse YAML: ' + e);
             }
           } else {
-            console.log("annotation on build " + this.name + " has no envKey for " + key);
+            console.log('annotation on build ' + this.name + ' has no envKey for ' + key);
           }
         }
       }
@@ -81,7 +81,7 @@ export class Build extends KubernetesSpecResource {
               if (url) {
                 serviceUrls.push(new ServiceUrl(envName, serviceKey, url));
               } else {
-                console.log("build " + this.name + " does not have a URL for " + serviceKey);
+                console.log('build ' + this.name + ' does not have a URL for ' + serviceKey);
               }
             }
           }
@@ -108,7 +108,7 @@ export class Build extends KubernetesSpecResource {
     if (!this._pipelineStages) {
       this._pipelineStages = new Array<PipelineStage>();
       // lets parse the annotation from Jenkins sync plugin
-      var json = this.annotations["openshift.io/jenkins-status-json"];
+      var json = this.annotations['openshift.io/jenkins-status-json'];
       if (json) {
         try {
           var obj = JSON.parse(json);
@@ -138,7 +138,7 @@ export class Build extends KubernetesSpecResource {
 
   get pendingInputActions(): PendingInputAction[] {
     let answer: PendingInputAction[] = [];
-    var json = this.annotations["openshift.io/jenkins-pending-input-actions-json"];
+    var json = this.annotations['openshift.io/jenkins-pending-input-actions-json'];
     if (json) {
       try {
         var obj = JSON.parse(json);
@@ -161,14 +161,14 @@ export class Build extends KubernetesSpecResource {
    * or null if the namespace cannot be determined
    */
   get jenkinsNamespace(): string {
-    return this.annotations["openshift.io/jenkins-namespace"];
+    return this.annotations['openshift.io/jenkins-namespace'];
   }
 
   /**
    * Returns the Jenkins test report URL if it is available
    */
   get jenkinsTestReportUrl(): string {
-    return this.annotations["fabric8.io/jenkins.testReportUrl"];
+    return this.annotations['fabric8.io/jenkins.testReportUrl'];
   }
 
   updateValuesFromResource() {
@@ -176,14 +176,14 @@ export class Build extends KubernetesSpecResource {
     super.updateValuesFromResource();
     let status = this.status || {};
     let spec = this.spec || {};
-    this.statusPhase = status.phase || "";
+    this.statusPhase = status.phase || '';
     this.duration = status.duration || 0;
     if (this.duration) {
       this.duration = this.duration / 1000000000;
     }
     let statusConfig = status.config || {};
-    this.buildConfigName = statusConfig.name || "";
-    this.buildNumber = this.annotations["openshift.io/build.number"] || "";
+    this.buildConfigName = statusConfig.name || '';
+    this.buildNumber = this.annotations['openshift.io/build.number'] || '';
     this.buildNumberInt = 0;
     if (this.buildNumber) {
       try {
@@ -192,29 +192,29 @@ export class Build extends KubernetesSpecResource {
         // ignore invalid text values
       }
     }
-    this.jenkinsBuildURL = this.annotations["openshift.io/jenkins-build-uri"] || "";
-    this.logURL = "";
+    this.jenkinsBuildURL = this.annotations['openshift.io/jenkins-build-uri'] || '';
+    this.logURL = '';
     if (this.jenkinsBuildURL) {
-      this.logURL = pathJoin(this.jenkinsBuildURL, "/console");
+      this.logURL = pathJoin(this.jenkinsBuildURL, '/console');
     }
 
     this.repositoryInformation = spec['source'] || {};
 
     switch (this.statusPhase) {
-      case "Complete":
-        this.iconStyle = "pficon-ok";
+      case 'Complete':
+        this.iconStyle = 'pficon-ok';
         break;
-      case "Failed":
-      case "Error":
-        this.iconStyle = "pficon-error-circle-o";
+      case 'Failed':
+      case 'Error':
+        this.iconStyle = 'pficon-error-circle-o';
         break;
-      case "Cancelled":
-        this.iconStyle = "pficon-warning-triangle-o";
+      case 'Cancelled':
+        this.iconStyle = 'pficon-warning-triangle-o';
         break;
-      case "New":
-      case "Pending":
-      case "Running":
-        this.iconStyle = "pficon-running";
+      case 'New':
+      case 'Pending':
+      case 'Running':
+        this.iconStyle = 'pficon-running';
         break;
       default:
         this.iconStyle = defaultBuildIconStyle;
@@ -226,7 +226,7 @@ export class Build extends KubernetesSpecResource {
   }
 
   defaultIconUrl(): string {
-    return "";
+    return '';
   }
 }
 
@@ -234,7 +234,7 @@ export class ServiceUrl {
   label: string;
 
   constructor(public environmentName: string, public name: string, public url: string) {
-    this.label = environmentName ? (environmentName + ": " + name) : name;
+    this.label = environmentName ? (environmentName + ': ' + name) : name;
   }
 }
 
@@ -242,8 +242,8 @@ export class ServiceEnvironments {
   constructor(public environmentName: string, public serviceUrls: Map<string, string>, public deploymentVersions: Map<string, string>) {}
 
   toAppInfo(name: string): AppInfo {
-    let deployUrl = this.serviceUrls[name] || "";
-    let version = this.deploymentVersions[name] || "";
+    let deployUrl = this.serviceUrls[name] || '';
+    let version = this.deploymentVersions[name] || '';
     let environmentName = this.environmentName;
     return new AppInfo(name, deployUrl, version, environmentName);
   }

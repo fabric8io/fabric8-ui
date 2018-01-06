@@ -5,7 +5,7 @@ import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { ReplicaSet, ReplicaSets } from '../model/replicaset.model';
 import { NamespacedResourceService } from './namespaced.resource.service';
 import { NamespaceScope } from './namespace.scope';
-import { apisExtensionsNamespacesUrl } from "./deployment.service";
+import { apisExtensionsNamespacesUrl } from './deployment.service';
 
 @Injectable()
 export class ReplicaSetService extends NamespacedResourceService<ReplicaSet, ReplicaSets> {

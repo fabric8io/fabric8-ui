@@ -4,7 +4,7 @@ import { Contexts } from 'ngx-fabric8-wit';
 import { Broadcaster, Notifications, NotificationType } from 'ngx-base';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { expectedGitHubRepoDetails } from '../services/github.service.mock';
@@ -46,32 +46,32 @@ describe('Codebases Item Component', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
     codebase = {
-      "attributes": {
-        "createdAt": "2017-04-28T09:28:22.224442Z",
-        "last_used_workspace": "",
-        "stackId": "",
-        "type": "git",
-        "url": "https://github.com/fabric8-services/fabric8-wit.git"
+      'attributes': {
+        'createdAt': '2017-04-28T09:28:22.224442Z',
+        'last_used_workspace': '',
+        'stackId': '',
+        'type': 'git',
+        'url': 'https://github.com/fabric8-services/fabric8-wit.git'
       },
-      "id": "6f5b6738-170e-490e-b3bb-d10f56b587c8",
-      "links": {
-        "edit": "https://api.prod-preview.openshift.io/api/codebases/6f5b6738-170e-490e-b3bb-d10f56b587c8/edit",
-        "self": "https://api.prod-preview.openshift.io/api/codebases/6f5b6738-170e-490e-b3bb-d10f56b587c8"
+      'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8',
+      'links': {
+        'edit': 'https://api.prod-preview.openshift.io/api/codebases/6f5b6738-170e-490e-b3bb-d10f56b587c8/edit',
+        'self': 'https://api.prod-preview.openshift.io/api/codebases/6f5b6738-170e-490e-b3bb-d10f56b587c8'
       },
-      "relationships": {
-        "space": {
-          "data": {
-            "id": "1d7af8bf-0346-432d-9096-4e2b59d2db87",
-            "type": "spaces"
+      'relationships': {
+        'space': {
+          'data': {
+            'id': '1d7af8bf-0346-432d-9096-4e2b59d2db87',
+            'type': 'spaces'
           },
-          "links": {
-            "self": "https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87"
+          'links': {
+            'self': 'https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87'
           }
         }
       },
-      "type": "codebases",
-      "name": "https://github.com/fabric8-services/fabric8-wit",
-      "url": "https///github.com/fabric8-services/fabric8-wit"
+      'type': 'codebases',
+      'name': 'https://github.com/fabric8-services/fabric8-wit',
+      'url': 'https///github.com/fabric8-services/fabric8-wit'
     };
     gitHubServiceMock.getRepoDetailsByUrl.and.returnValue(Observable.of(expectedGitHubRepoDetails));
     fixture = TestBed.createComponent(CodebasesItemComponent);

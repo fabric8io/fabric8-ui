@@ -5,8 +5,8 @@ import { AuthenticationService } from 'ngx-login-client';
 import { Logger, Broadcaster } from 'ngx-base';
 import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
 import { IModalHost } from '../../space/wizard/models/modal-host';
-import { EventService } from "../../shared/event.service";
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { EventService } from '../../shared/event.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -63,7 +63,7 @@ export class SpacesComponent implements OnInit {
           this._spaces = spaces;
         });
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 
@@ -77,7 +77,7 @@ export class SpacesComponent implements OnInit {
           this.logger.error(err);
         });
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 
@@ -100,7 +100,7 @@ export class SpacesComponent implements OnInit {
           this.modalRef.hide();
         });
     } else {
-      this.logger.error("Failed to retrieve list of spaces owned by user");
+      this.logger.error('Failed to retrieve list of spaces owned by user');
     }
   }
 

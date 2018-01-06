@@ -9,7 +9,7 @@ import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
 import { CopyService } from '../services/copy.service';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { GitHubService } from "../../space/create/codebases/services/github.service";
+import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { TenentService } from '../services/tenent.service';
 import { ProviderService } from '../../shared/account/provider.service';
 
@@ -153,24 +153,24 @@ export class TenantComponent implements AfterViewInit, OnInit {
       profile.contextInformation = contextInformation;
     }
 
-    var boosterCatalog = contextInformation["boosterCatalog"];
+    var boosterCatalog = contextInformation['boosterCatalog'];
     if (!boosterCatalog) {
       boosterCatalog = {};
-      contextInformation["boosterCatalog"] = boosterCatalog;
+      contextInformation['boosterCatalog'] = boosterCatalog;
     }
-    boosterCatalog["gitRef"] = this.boosterGitRef;
-    boosterCatalog["gitRepo"] = this.boosterGitRepo;
+    boosterCatalog['gitRef'] = this.boosterGitRef;
+    boosterCatalog['gitRepo'] = this.boosterGitRepo;
 
-    var tenantConfig = contextInformation["tenantConfig"];
+    var tenantConfig = contextInformation['tenantConfig'];
     if (!tenantConfig) {
       tenantConfig = {};
-      contextInformation["tenantConfig"] = tenantConfig;
+      contextInformation['tenantConfig'] = tenantConfig;
     }
-    tenantConfig["jenkinsVersion"] = this.jenkinsVersion;
-    tenantConfig["cheVersion"] = this.cheVersion;
-    tenantConfig["teamVersion"] = this.teamVersion;
-    tenantConfig["mavenRepo"] = this.mavenRepo;
-    tenantConfig["updateTenant"] = this.updateTenant;
+    tenantConfig['jenkinsVersion'] = this.jenkinsVersion;
+    tenantConfig['cheVersion'] = this.cheVersion;
+    tenantConfig['teamVersion'] = this.teamVersion;
+    tenantConfig['mavenRepo'] = this.mavenRepo;
+    tenantConfig['updateTenant'] = this.updateTenant;
 
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
@@ -184,14 +184,14 @@ export class TenantComponent implements AfterViewInit, OnInit {
           } as Notification);
           this.routeToProfile();
         }, error => {
-          this.handleError("Failed to update tenent", NotificationType.DANGER);
+          this.handleError('Failed to update tenent', NotificationType.DANGER);
         }));
 
     }, error => {
       if (error.status === 409) {
-        this.handleError("Email already exists", NotificationType.DANGER);
+        this.handleError('Email already exists', NotificationType.DANGER);
       } else {
-        this.handleError("Failed to update profile", NotificationType.DANGER);
+        this.handleError('Failed to update profile', NotificationType.DANGER);
       }
     }));
   }
@@ -211,13 +211,13 @@ export class TenantComponent implements AfterViewInit, OnInit {
    */
   private defaultValuesFromRequestParams() {
     this.modifiedFromRequestParam = false;
-    this.cheVersion = this.defaultRequestParam("cheVersion", this.cheVersion);
-    this.jenkinsVersion = this.defaultRequestParam("jenkinsVersion", this.jenkinsVersion);
-    this.teamVersion = this.defaultRequestParam("teamVersion", this.teamVersion);
-    this.mavenRepo = this.defaultRequestParam("mavenRepo", this.mavenRepo);
+    this.cheVersion = this.defaultRequestParam('cheVersion', this.cheVersion);
+    this.jenkinsVersion = this.defaultRequestParam('jenkinsVersion', this.jenkinsVersion);
+    this.teamVersion = this.defaultRequestParam('teamVersion', this.teamVersion);
+    this.mavenRepo = this.defaultRequestParam('mavenRepo', this.mavenRepo);
 
-    this.boosterGitRef = this.defaultRequestParam("boosterGitRef", this.boosterGitRef);
-    this.boosterGitRepo = this.defaultRequestParam("boosterGitRepo", this.boosterGitRepo);
+    this.boosterGitRef = this.defaultRequestParam('boosterGitRef', this.boosterGitRef);
+    this.boosterGitRepo = this.defaultRequestParam('boosterGitRepo', this.boosterGitRepo);
   }
 
   private defaultRequestParam(paramName: string, defaultValue: string): string {
@@ -268,25 +268,25 @@ export class TenantComponent implements AfterViewInit, OnInit {
       return;
     }
 
-    var contextInformation = user.attributes["contextInformation"];
+    var contextInformation = user.attributes['contextInformation'];
     if (!contextInformation) {
       contextInformation = {};
-      user.attributes["contextInformation"] = contextInformation;
+      user.attributes['contextInformation'] = contextInformation;
     }
 
-    let boosterCatalog = contextInformation["boosterCatalog"];
+    let boosterCatalog = contextInformation['boosterCatalog'];
     if (boosterCatalog) {
-      this.boosterGitRef = boosterCatalog["gitRef"] || "";
-      this.boosterGitRepo = boosterCatalog["gitRepo"] || "";
+      this.boosterGitRef = boosterCatalog['gitRef'] || '';
+      this.boosterGitRepo = boosterCatalog['gitRepo'] || '';
     }
 
-    let tenantConfig = contextInformation["tenantConfig"];
+    let tenantConfig = contextInformation['tenantConfig'];
     if (tenantConfig) {
-      this.jenkinsVersion = tenantConfig["jenkinsVersion"] || "";
-      this.cheVersion = tenantConfig["cheVersion"] || "";
-      this.teamVersion = tenantConfig["teamVersion"] || "";
-      this.mavenRepo = tenantConfig["mavenRepo"] || "";
-      this.updateTenant = tenantConfig["updateTenant"] || false;
+      this.jenkinsVersion = tenantConfig['jenkinsVersion'] || '';
+      this.cheVersion = tenantConfig['cheVersion'] || '';
+      this.teamVersion = tenantConfig['teamVersion'] || '';
+      this.mavenRepo = tenantConfig['mavenRepo'] || '';
+      this.updateTenant = tenantConfig['updateTenant'] || false;
     }
 
     this.loadedFormEmpty = this.formValuesEmpty();
@@ -301,14 +301,14 @@ export class TenantComponent implements AfterViewInit, OnInit {
    * @returns {boolean}
    */
   private isUrlValid(url: string): boolean {
-    var trimmed = "";
+    var trimmed = '';
     if (url) {
       trimmed = url.trim();
     }
     if (!trimmed) {
       return true;
     }
-    return trimmed.startsWith("http:") || trimmed.startsWith("https:");
+    return trimmed.startsWith('http:') || trimmed.startsWith('https:');
   }
 
   private handleError(error: string, type: NotificationType) {

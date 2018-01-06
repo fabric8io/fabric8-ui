@@ -39,7 +39,7 @@ describe('Codebase: CodebasesService', () => {
           },
           {
             provide: WIT_API_URL,
-            useValue: "http://example.com"
+            useValue: 'http://example.com'
           },
           CodebasesService
         ]
@@ -49,41 +49,41 @@ describe('Codebase: CodebasesService', () => {
     });
 
     const codebase = {
-      "attributes": {
-        "type": "git",
-        "url": "https://github.com/fabric8-ui/fabric8-ui.git"
+      'attributes': {
+        'type': 'git',
+        'url': 'https://github.com/fabric8-ui/fabric8-ui.git'
       },
-      "type": "codebases"
+      'type': 'codebases'
     } as Codebase;
     const githubData = {
-      "attributes": {
-        "createdAt": "2017-04-28T14:09:52.099148Z",
-        "last_used_workspace": "",
-        "stackId": "",
-        "type": "git",
-        "url": "https://github.com/airbnb/enzyme.git"
+      'attributes': {
+        'createdAt': '2017-04-28T14:09:52.099148Z',
+        'last_used_workspace': '',
+        'stackId': '',
+        'type': 'git',
+        'url': 'https://github.com/airbnb/enzyme.git'
       },
-      "id": "c071bc6b-a241-41e4-8db1-83a3db12c4a1",
-      "links": {
-        "edit": "https://api.prod-preview.openshift.io/api/codebases/c071bc6b-a241-41e4-8db1-83a3db12c4a1/edit",
-        "self": "https://api.prod-preview.openshift.io/api/codebases/c071bc6b-a241-41e4-8db1-83a3db12c4a1"
+      'id': 'c071bc6b-a241-41e4-8db1-83a3db12c4a1',
+      'links': {
+        'edit': 'https://api.prod-preview.openshift.io/api/codebases/c071bc6b-a241-41e4-8db1-83a3db12c4a1/edit',
+        'self': 'https://api.prod-preview.openshift.io/api/codebases/c071bc6b-a241-41e4-8db1-83a3db12c4a1'
       },
-      "relationships": {
-        "space": {
-          "data": {
-            "id": "1d7af8bf-0346-432d-9096-4e2b59d2db87",
-            "type": "spaces"
+      'relationships': {
+        'space': {
+          'data': {
+            'id': '1d7af8bf-0346-432d-9096-4e2b59d2db87',
+            'type': 'spaces'
           },
-          "links": {
-            "self": "https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87"
+          'links': {
+            'self': 'https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87'
           }
         }
       },
-      "type": "codebases"};
+      'type': 'codebases'};
 
     it('Add codebase', () => {
       // given
-      const expectedResponse = {"data": githubData};
+      const expectedResponse = {'data': githubData};
       mockService.connections.subscribe((connection: any) => {
         connection.mockRespond(new Response(
           new ResponseOptions({
@@ -93,7 +93,7 @@ describe('Codebase: CodebasesService', () => {
         ));
       });
       // when
-      codebasesService.addCodebase("mySpace", codebase).subscribe((data: any) => {
+      codebasesService.addCodebase('mySpace', codebase).subscribe((data: any) => {
         // then
         expect(data.id).toEqual(expectedResponse.data.id);
         expect(data.attributes.type).toEqual(expectedResponse.data.attributes.type);
@@ -103,12 +103,12 @@ describe('Codebase: CodebasesService', () => {
 
   it('Add codebase in error', () => {
       // given
-      const expectedResponse = {"data": githubData};
+      const expectedResponse = {'data': githubData};
       mockService.connections.subscribe((connection: any) => {
         connection.mockError(new Error('some error'));
       });
       // when
-      codebasesService.addCodebase("mySpace", codebase).subscribe((data: any) => {
+      codebasesService.addCodebase('mySpace', codebase).subscribe((data: any) => {
         fail('Add codebase in error');
       }, // then
       error => expect(error).toEqual('some error'));
@@ -117,11 +117,11 @@ describe('Codebase: CodebasesService', () => {
   it('List codebases', () => {
     // given
     const githubData2 = cloneDeep(githubData);
-    githubData2.attributes.url = "git@github.com:fabric8-services/fabric8-wit.git";
+    githubData2.attributes.url = 'git@github.com:fabric8-services/fabric8-wit.git';
     const githubData3 = cloneDeep(githubData);
-    githubData3.attributes.type = "whatever";
-    githubData3.attributes.url = "http://something.com";
-    const expectedResponse = {"data": [githubData, githubData2, githubData3], "metadata": {"totalCount": 3}};
+    githubData3.attributes.type = 'whatever';
+    githubData3.attributes.url = 'http://something.com';
+    const expectedResponse = {'data': [githubData, githubData2, githubData3], 'metadata': {'totalCount': 3}};
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
@@ -131,17 +131,17 @@ describe('Codebase: CodebasesService', () => {
       ));
     });
     // when
-    codebasesService.getCodebases("mySpace").subscribe((data: any) => {
+    codebasesService.getCodebases('mySpace').subscribe((data: any) => {
       // then
       expect(data.length).toEqual(expectedResponse.data.length);
       // TODO(corinne): do we want this name/url formatting for https clone?
       // formatting is also done in component CodebasesAddComponent
-      expect(data[0].name).toEqual("https://github.com/airbnb/enzyme");
-      expect(data[0].url).toEqual("https///github.com/airbnb/enzyme");
-      expect(data[1].name).toEqual("fabric8-services/fabric8-wit");
-      expect(data[1].url).toEqual("https://github.com/fabric8-services/fabric8-wit");
-      expect(data[2].name).toEqual("http://something.com");
-      expect(data[2].url).toEqual("http://something.com");
+      expect(data[0].name).toEqual('https://github.com/airbnb/enzyme');
+      expect(data[0].url).toEqual('https///github.com/airbnb/enzyme');
+      expect(data[1].name).toEqual('fabric8-services/fabric8-wit');
+      expect(data[1].url).toEqual('https://github.com/fabric8-services/fabric8-wit');
+      expect(data[2].name).toEqual('http://something.com');
+      expect(data[2].url).toEqual('http://something.com');
     });
   });
 
@@ -151,7 +151,7 @@ describe('Codebase: CodebasesService', () => {
       connection.mockError(new Error('some error'));
     });
     // when
-    codebasesService.getCodebases("mySpace").subscribe((data: any) => {
+    codebasesService.getCodebases('mySpace').subscribe((data: any) => {
       fail('List codebases in error');
     }, // then
     error => expect(error).toEqual('some error'));
@@ -160,7 +160,7 @@ describe('Codebase: CodebasesService', () => {
   // TODO(corinne): pagination is never used
   it('List paginated codebases with empty links', () => {
     // given
-    const expectedResponse = {"data": [githubData], "links": {}};
+    const expectedResponse = {'data': [githubData], 'links': {}};
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
@@ -170,7 +170,7 @@ describe('Codebase: CodebasesService', () => {
       ));
     });
     // when
-    codebasesService.getPagedCodebases("mySpace", 2).subscribe((data: any) => {
+    codebasesService.getPagedCodebases('mySpace', 2).subscribe((data: any) => {
       // then
       expect(data.length).toEqual(expectedResponse.data.length);
     });
@@ -178,7 +178,7 @@ describe('Codebase: CodebasesService', () => {
 
   it('List paginated codebases with next link', () => {
     // given
-    const expectedResponse = {"data": [githubData], "links": {"next": "https://morelinks.com"}};
+    const expectedResponse = {'data': [githubData], 'links': {'next': 'https://morelinks.com'}};
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
@@ -188,7 +188,7 @@ describe('Codebase: CodebasesService', () => {
       ));
     });
     // when
-    codebasesService.getPagedCodebases("mySpace", 2).subscribe((data: any) => {
+    codebasesService.getPagedCodebases('mySpace', 2).subscribe((data: any) => {
       // then
       expect(data.length).toEqual(expectedResponse.data.length);
     });
@@ -196,7 +196,7 @@ describe('Codebase: CodebasesService', () => {
 
   it('Get more paginated codebases with empty next link', () => {
     // given
-    const expectedResponse = {"data": [githubData], "links": {"next": "https://morelinks.com"}};
+    const expectedResponse = {'data': [githubData], 'links': {'next': 'https://morelinks.com'}};
 
     // when
     codebasesService.getMoreCodebases().subscribe((data: any) => {
@@ -211,7 +211,7 @@ describe('Codebase: CodebasesService', () => {
       connection.mockError(new Error('some error'));
     });
     // when
-    codebasesService.getPagedCodebases("mySpace", 2).subscribe((data: any) => {
+    codebasesService.getPagedCodebases('mySpace', 2).subscribe((data: any) => {
       // then
       fail('List paginated codebases in error');
     }, error => expect(error).toEqual('some error'));
@@ -219,7 +219,7 @@ describe('Codebase: CodebasesService', () => {
 
   it('Update codebases', () => {
     // given
-    const expectedResponse = {"data": [githubData]};
+    const expectedResponse = {'data': [githubData]};
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
         new ResponseOptions({

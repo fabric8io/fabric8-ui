@@ -5,7 +5,7 @@ export class Route extends KubernetesSpecResource {
 
   updateValuesFromResource() {
     super.updateValuesFromResource();
-    this.host = this.spec.host || "";
+    this.host = this.spec.host || '';
   }
 }
 

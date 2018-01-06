@@ -1,6 +1,6 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import { ServiceDeleteDialog } from "../delete-dialog/delete-dialog.service.component";
-import { Services } from "../../../model/service.model";
+import { Component, Input, ViewChild } from '@angular/core';
+import { ServiceDeleteDialog } from '../delete-dialog/delete-dialog.service.component';
+import { Services } from '../../../model/service.model';
 
 @Component({
   selector: 'fabric8-services-list',

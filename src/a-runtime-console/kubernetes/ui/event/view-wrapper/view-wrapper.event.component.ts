@@ -1,9 +1,9 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Event } from "../../../model/event.model";
-import { EventStore } from "../../../store/event.store";
-import { AbstractViewWrapperComponent } from "../../../support/abstract-viewwrapper-component";
-import { ActivatedRoute } from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Event } from '../../../model/event.model';
+import { EventStore } from '../../../store/event.store';
+import { AbstractViewWrapperComponent } from '../../../support/abstract-viewwrapper-component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'fabric8-event-view-wrapper',

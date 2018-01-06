@@ -1,8 +1,8 @@
 import { PipelineStage } from './../../../model/pipelinestage.model';
 import { Subscription, Observable } from 'rxjs';
-import { Component, Input, ViewChild, OnDestroy } from "@angular/core";
-import { Build, isValidInputAction, PendingInputAction } from "../../../model/build.model";
-import { InputActionDialog } from "../input-action-dialog/input-action-dialog.component";
+import { Component, Input, ViewChild, OnDestroy } from '@angular/core';
+import { Build, isValidInputAction, PendingInputAction } from '../../../model/build.model';
+import { InputActionDialog } from '../input-action-dialog/input-action-dialog.component';
 
 @Component({
   selector: 'build-stage-view',

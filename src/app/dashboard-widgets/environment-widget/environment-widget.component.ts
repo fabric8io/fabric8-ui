@@ -13,10 +13,10 @@ import {
 import { DeploymentView, DeploymentViews } from '../../../a-runtime-console/index';
 import { AppEnvironmentDetails, AppDeployments, EnvironmentDeployments } from '../../../a-runtime-console/index';
 import { AbstractWatchComponent } from '../../../a-runtime-console/index';
-import { DeploymentService } from "../../../a-runtime-console/index";
-import { ServiceService } from "../../../a-runtime-console/index";
-import { DeploymentConfigService } from "../../../a-runtime-console/index";
-import { RouteService } from "../../../a-runtime-console/index";
+import { DeploymentService } from '../../../a-runtime-console/index';
+import { ServiceService } from '../../../a-runtime-console/index';
+import { DeploymentConfigService } from '../../../a-runtime-console/index';
+import { RouteService } from '../../../a-runtime-console/index';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -223,7 +223,7 @@ export class EnvironmentWidgetComponent extends AbstractWatchComponent  implemen
     }
     let answer = new DeploymentViews();
     deploymentViews.forEach(dep => {
-      let depSpace = dep.labels["space"];
+      let depSpace = dep.labels['space'];
       if (!depSpace || depSpace === spaceId) {
         answer.push(dep);
       }

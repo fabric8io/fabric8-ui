@@ -1,5 +1,5 @@
-import { Component, Input } from "@angular/core";
-import { Namespace } from "../../../model/namespace.model";
+import { Component, Input } from '@angular/core';
+import { Namespace } from '../../../model/namespace.model';
 
 @Component({
   selector: 'fabric8-namespace-view-toolbar',

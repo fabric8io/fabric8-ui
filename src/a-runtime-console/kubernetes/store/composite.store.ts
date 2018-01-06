@@ -1,5 +1,5 @@
-import { BaseEntity } from "../../store/entity/entity.model";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BaseEntity } from '../../store/entity/entity.model';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 // export abstract class CompositeStore<T extends BaseEntity, L extends Array<T>> {
 //

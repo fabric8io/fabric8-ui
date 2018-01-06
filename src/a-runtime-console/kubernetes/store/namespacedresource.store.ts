@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import { KubernetesResource } from "../model/kubernetesresource.model";
-import { NamespacedResourceService } from "../service/namespaced.resource.service";
-import { INamespaceScope, NamespaceScope } from "../service/namespace.scope";
-import { Subscription } from "rxjs";
-import { KubernetesResourceStore } from "./kuberentesresource.store";
+import { Injectable } from '@angular/core';
+import { KubernetesResource } from '../model/kubernetesresource.model';
+import { NamespacedResourceService } from '../service/namespaced.resource.service';
+import { INamespaceScope, NamespaceScope } from '../service/namespace.scope';
+import { Subscription } from 'rxjs';
+import { KubernetesResourceStore } from './kuberentesresource.store';
 
 @Injectable()
 export abstract class NamespacedResourceStore<T extends KubernetesResource, L extends Array<T>, R extends NamespacedResourceService<T, L>> extends KubernetesResourceStore<T, L, R> {

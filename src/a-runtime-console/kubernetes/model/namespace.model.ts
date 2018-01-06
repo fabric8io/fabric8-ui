@@ -12,7 +12,7 @@ export class Namespace extends KubernetesResource {
 
 
   defaultIconUrl(): string {
-    return "";
+    return '';
   }
 }
 
@@ -20,7 +20,7 @@ export class Namespaces extends Array<Namespace>{
 }
 
 export function isSecretsNamespace(namespace: Namespace) {
-  return namespace && namespace.labels["group"] === "secrets";
+  return namespace && namespace.labels['group'] === 'secrets';
 }
 
 export function isSystemNamespace(namespace: Namespace) {

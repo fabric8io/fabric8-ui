@@ -6,7 +6,7 @@ import {
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { MySpacesItemHeadingComponent } from './my-spaces-item-heading.component';
 

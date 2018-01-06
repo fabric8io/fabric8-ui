@@ -1,16 +1,16 @@
-import { Router, ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs/Observable";
-import { SpaceNamespace } from "../model/space-namespace";
-import { BehaviorSubject } from "rxjs";
-import { Injectable } from "@angular/core";
-import { merge } from "lodash";
-import { findParameter } from "../model/helpers";
+import { Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { SpaceNamespace } from '../model/space-namespace';
+import { BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { merge } from 'lodash';
+import { findParameter } from '../model/helpers';
 
 @Injectable()
 export class SpaceNamespaceService implements SpaceNamespace {
 
-  private _namespaceSpaceSubject = new BehaviorSubject("");
-  private _labelSpaceSubject = new BehaviorSubject("");
+  private _namespaceSpaceSubject = new BehaviorSubject('');
+  private _labelSpaceSubject = new BehaviorSubject('');
 
   get namespaceSpace(): Observable<string> {
     return this._namespaceSpaceSubject.asObservable();
@@ -27,14 +27,14 @@ export class SpaceNamespaceService implements SpaceNamespace {
     this.router.events
       // lets an additional event in case we miss events when reloading a page
       .startWith(null)
-      .map(() => getParameter(this.route, this.router, "entity"))
+      .map(() => getParameter(this.route, this.router, 'entity'))
       .skipWhile(val => !val)
       .distinctUntilChanged()
       .subscribe(this._namespaceSpaceSubject);
     this.router.events
       // lets an additional event in case we miss events when reloading a page
       .startWith(null)
-      .map(() => getParameter(this.route, this.router, "space"))
+      .map(() => getParameter(this.route, this.router, 'space'))
       .skipWhile(val => !val)
       .distinctUntilChanged()
       .subscribe(this._labelSpaceSubject);

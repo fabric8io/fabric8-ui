@@ -178,7 +178,7 @@
 //    "no-unnecessary-qualifier": true,
 //    "no-unnecessary-type-assertion": true,
 //    "number-literal-format": true,
-//    "object-literal-key-quotes": [true, "consistent-as-needed"],
+    "object-literal-key-quotes": [false, "as-needed"],
 //    "object-literal-shorthand": true,
 //    "one-line": [
 //      true,
@@ -198,11 +198,11 @@
 //    "prefer-object-spread": true,
 //    "prefer-switch": true,
 //    "prefer-template": true,
-//    "quotemark": [
-//      true,
-//      "single",
-//      "avoid-escape"
-//    ],
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
+    ],
 //    "return-undefined": true,
     "semicolon": [true, "always"],
     "space-before-function-paren": [true, {

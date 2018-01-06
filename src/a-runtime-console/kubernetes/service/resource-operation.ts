@@ -21,14 +21,14 @@ export function messageEventToResourceOperation(msg): ResourceOperation {
         let resource = json.object;
         if (type && resource) {
           switch (type) {
-            case "ADDED":
+            case 'ADDED':
               return new ResourceOperation(Operation.ADDED, resource);
-            case "MODIFIED":
+            case 'MODIFIED':
               return new ResourceOperation(Operation.MODIFIED, resource);
-            case "DELETED":
+            case 'DELETED':
               return new ResourceOperation(Operation.DELETED, resource);
             default:
-              console.log("Unknown WebSocket event type " + type + " for " + resource + " on " + this.service.serviceUrl);
+              console.log('Unknown WebSocket event type ' + type + ' for ' + resource + ' on ' + this.service.serviceUrl);
           }
         }
       }

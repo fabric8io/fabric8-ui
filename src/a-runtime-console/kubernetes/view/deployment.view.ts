@@ -1,6 +1,6 @@
-import { Service, Services } from "../model/service.model";
-import { Deployment, Deployments } from "../model/deployment.model";
-import { DeploymentConfigs, DeploymentConfig } from "../model/deploymentconfig.model";
+import { Service, Services } from '../model/service.model';
+import { Deployment, Deployments } from '../model/deployment.model';
+import { DeploymentConfigs, DeploymentConfig } from '../model/deploymentconfig.model';
 
 
 export class DeploymentView {
@@ -84,7 +84,7 @@ export class DeploymentView {
 
   defaultKind() {
     const deployment = this.deployment;
-    return deployment ? deployment.defaultKind() : "";
+    return deployment ? deployment.defaultKind() : '';
   }
 }
 

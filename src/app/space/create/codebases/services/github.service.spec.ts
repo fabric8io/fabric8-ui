@@ -4,7 +4,7 @@ import { MockBackend } from '@angular/http/testing';
 import { AuthenticationService } from 'ngx-login-client';
 import { Logger } from 'ngx-base';
 import { GitHubService } from './github.service';
-import { GitHubRepoCommit } from "app/create/codebases/services/github";
+import { GitHubRepoCommit } from 'app/create/codebases/services/github';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
 import { Observable } from 'rxjs';
@@ -70,7 +70,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoCommitStatusByUrl("https://github.com/fabric8-services/fabric8-wit.git", "225368a414f88bd3c45fd686496a924a15ef81XX").subscribe((data: any) => {
+    ghService.getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81XX').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
     });
@@ -82,7 +82,7 @@ describe('Github: GitHubService', () => {
       connection.mockError(new Error('some error'));
     });
     // when
-    ghService.getRepoCommitStatusByUrl("https://github.com/fabric8-services/fabric8-wit.git", "225368a414f88bd3c45fd686496a924a15ef81YY").subscribe((data: any) => {
+    ghService.getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81YY').subscribe((data: any) => {
       fail('Get repo commit status by URL and sha in error');
     }, //then
       error => expect(error).toEqual('some error'));
@@ -99,11 +99,11 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoCommitStatusByUrl("https://github.com/fabric8-services/fabric8-wit.git", "225368a414f88bd3c45fd686496a924a15ef81b0").subscribe((data: any) => {
+    ghService.getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81b0').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
       let ghService = TestBed.get(GitHubService);
-      let cachedValue = ghService.getCache("https://api.github.com/repos/fabric8-services/fabric8-wit/commits/225368a414f88bd3c45fd686496a924a15ef81b0");
+      let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit/commits/225368a414f88bd3c45fd686496a924a15ef81b0');
       expect(cachedValue !== undefined).toBeTruthy();
     });
 
@@ -113,11 +113,11 @@ describe('Github: GitHubService', () => {
     });
 
     // when
-    ghService.getRepoCommitStatusByUrl("https://github.com/fabric8-services/fabric8-wit.git", "225368a414f88bd3c45fd686496a924a15ef81b0").subscribe((data: any) => {
+    ghService.getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81b0').subscribe((data: any) => {
       // then value cached
       expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
       let ghService = TestBed.get(GitHubService);
-      let cachedValue = ghService.getCache("https://api.github.com/repos/fabric8-services/fabric8-wit/commits/225368a414f88bd3c45fd686496a924a15ef81b0");
+      let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit/commits/225368a414f88bd3c45fd686496a924a15ef81b0');
       expect(cachedValue !== undefined).toBeTruthy();
     });
   });
@@ -133,7 +133,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoDetailsByFullName("fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoDetailsByFullName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then
       expect(data.id).toEqual(expectedGitHubRepoDetails.id);
     });
@@ -145,7 +145,7 @@ describe('Github: GitHubService', () => {
       connection.mockError(new Error('some error'));
     });
     // when
-    ghService.getRepoDetailsByFullName("fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoDetailsByFullName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       fail('Get repo details by full name in error');
     }, //then
       error => expect(error).toEqual('some error'));
@@ -162,7 +162,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoDetailsByFullName("fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoDetailsByFullName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then
       expect(data.id).toEqual(expectedGitHubRepoDetails.id);
     });
@@ -173,11 +173,11 @@ describe('Github: GitHubService', () => {
     });
 
     // when
-    ghService.getRepoDetailsByFullName("fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoDetailsByFullName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then value cached
       expect(data.id).toEqual(expectedGitHubRepoDetails.id);
       let ghService = TestBed.get(GitHubService);
-      let cachedValue = ghService.getCache("https://api.github.com/repos/fabric8-services/fabric8-wit");
+      let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit');
       expect(cachedValue !== undefined).toBeTruthy();
     });
   });
@@ -193,7 +193,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoDetailsByUrl("https://github.com/fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoDetailsByUrl('https://github.com/fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then
       expect(data.full_name).toEqual(expectedGitHubRepoDetails.full_name);
     });
@@ -210,7 +210,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoLastCommitByUrl("https://github.com/fabric8-services/fabric8-wit.git").subscribe((data: any) => {
+    ghService.getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
     });
@@ -222,7 +222,7 @@ describe('Github: GitHubService', () => {
       connection.mockError(new Error('some error'));
     });
     // when
-    ghService.getRepoLastCommitByUrl("https://github.com/fabric8-services/fabric8-wit.git").subscribe((data: any) => {
+    ghService.getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').subscribe((data: any) => {
       fail('Get GitHub repo last commit for given URL in error');
     }, //then
       error => expect(error).toEqual('some error'));
@@ -239,7 +239,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoLastCommitByUrl("https://github.com/fabric8-services/fabric8-wit.git").subscribe((data: any) => {
+    ghService.getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
     });
@@ -250,11 +250,11 @@ describe('Github: GitHubService', () => {
     });
 
     // when
-    ghService.getRepoLastCommitByUrl("https://github.com/fabric8-services/fabric8-wit.git").subscribe((data: any) => {
+    ghService.getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').subscribe((data: any) => {
       // then value cached
       expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
       let ghService = TestBed.get(GitHubService);
-      let cachedValue = ghService.getCache("https://api.github.com/repos/fabric8-services/fabric8-wit/git/refs/heads/master");
+      let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit/git/refs/heads/master');
       expect(cachedValue !== undefined).toBeTruthy();
     });
   });
@@ -270,7 +270,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoLicenseByName("fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoLicenseByName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
     });
@@ -282,7 +282,7 @@ describe('Github: GitHubService', () => {
       connection.mockError(new Error('some error'));
     });
     // when
-    ghService.getRepoLicenseByName("fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoLicenseByName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       fail('Get GitHub repo license for given full name in error');
     }, //then
       error => expect(error).toEqual('some error'));
@@ -299,7 +299,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoLicenseByName("fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoLicenseByName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
     });
@@ -310,11 +310,11 @@ describe('Github: GitHubService', () => {
     });
 
     // when
-    ghService.getRepoLicenseByName("fabric8-services/fabric8-wit").subscribe((data: any) => {
+    ghService.getRepoLicenseByName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then value cached
       expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
       let ghService = TestBed.get(GitHubService);
-      let cachedValue = ghService.getCache("https://api.github.com/repos/fabric8-services/fabric8-wit/license");
+      let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit/license');
       expect(cachedValue !== undefined).toBeTruthy();
     });
   });
@@ -330,7 +330,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getRepoLicenseByUrl("https://github.com/fabric8-services/fabric8-wit.git").subscribe((data: any) => {
+    ghService.getRepoLicenseByUrl('https://github.com/fabric8-services/fabric8-wit.git').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
     });
@@ -350,7 +350,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getUserRepos("me").subscribe((data: any) => {
+    ghService.getUserRepos('me').subscribe((data: any) => {
       // then
       expect(data[0].full_name).toEqual(repos[0].full_name);
     });
@@ -362,7 +362,7 @@ describe('Github: GitHubService', () => {
       connection.mockError(new Error('some error'));
     });
     // when
-    ghService.getUserRepos("me").subscribe((data: any) => {
+    ghService.getUserRepos('me').subscribe((data: any) => {
       fail('Get GitHub repos associated with given user name in error');
     }, //then
       error => expect(error).toEqual('some error'));
@@ -380,7 +380,7 @@ describe('Github: GitHubService', () => {
       ));
     });
     // when
-    ghService.getUserRepos("me").subscribe((data: any) => {
+    ghService.getUserRepos('me').subscribe((data: any) => {
       // then
       expect(data[0].full_name).toEqual(repos[0].full_name);
     });
@@ -391,11 +391,11 @@ describe('Github: GitHubService', () => {
     });
 
     // when
-    ghService.getUserRepos("me").subscribe((data: any) => {
+    ghService.getUserRepos('me').subscribe((data: any) => {
       // then value cached
       expect(data[0].full_name).toEqual(repos[0].full_name);
       let ghService = TestBed.get(GitHubService);
-      let cachedValue = ghService.getCache("https://api.github.com/users/me/repos");
+      let cachedValue = ghService.getCache('https://api.github.com/users/me/repos');
       expect(cachedValue !== undefined).toBeTruthy();
     });
   });

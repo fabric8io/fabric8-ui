@@ -22,7 +22,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { Navigation } from './../models/navigation';
 import { MenusService } from '../layout/header/menus.service';
 
-import { EventService } from "./event.service";
+import { EventService } from './event.service';
 
 interface RawContext {
   user: any;

@@ -1,6 +1,6 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import { ConfigMapDeleteDialog } from "../delete-dialog/delete-dialog.configmap.component";
-import { ConfigMaps } from "../../../model/configmap.model";
+import { Component, Input, ViewChild } from '@angular/core';
+import { ConfigMapDeleteDialog } from '../delete-dialog/delete-dialog.configmap.component';
+import { ConfigMaps } from '../../../model/configmap.model';
 
 @Component({
   selector: 'fabric8-configmaps-list',

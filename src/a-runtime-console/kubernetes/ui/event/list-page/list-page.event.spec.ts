@@ -1,19 +1,19 @@
 import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { MockBackend } from "@angular/http/testing";
-import { RequestOptions, BaseRequestOptions, Http } from "@angular/http";
-import { RestangularModule } from "ng2-restangular";
-import { EventsListPage } from "./list-page.event.component";
-import { EventsListComponent } from "../list/list.event.component";
-import { EventsListToolbarComponent } from "../list-toolbar/list-toolbar.event.component";
-import { Fabric8CommonModule } from "../../../../common/common.module";
-import { KubernetesStoreModule } from "../../../kubernetes.store.module";
-import { ModalModule } from "ngx-modal";
-import { MomentModule } from "angular2-moment";
-import { FormsModule } from "@angular/forms";
-import { KubernetesComponentsModule } from "../../../components/components.module";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockBackend } from '@angular/http/testing';
+import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
+import { RestangularModule } from 'ng2-restangular';
+import { EventsListPage } from './list-page.event.component';
+import { EventsListComponent } from '../list/list.event.component';
+import { EventsListToolbarComponent } from '../list-toolbar/list-toolbar.event.component';
+import { Fabric8CommonModule } from '../../../../common/common.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { ModalModule } from 'ngx-modal';
+import { MomentModule } from 'angular2-moment';
+import { FormsModule } from '@angular/forms';
+import { KubernetesComponentsModule } from '../../../components/components.module';
 
 describe('EventsListPage', () => {
   let component: EventsListPage;

@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
-import { Pod } from "../../../model/pod.model";
-import { PodStore } from "../../../store/pod.store";
-import { PodService } from "../../../service/pod.service";
+import { Component } from '@angular/core';
+import { Pod } from '../../../model/pod.model';
+import { PodStore } from '../../../store/pod.store';
+import { PodService } from '../../../service/pod.service';
 
 @Component({
   selector: 'delete-pod-dialog',

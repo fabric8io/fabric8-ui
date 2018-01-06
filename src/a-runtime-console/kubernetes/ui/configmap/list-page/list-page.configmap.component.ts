@@ -1,7 +1,7 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { ConfigMaps } from "../../../model/configmap.model";
-import { ConfigMapStore } from "../../../store/configmap.store";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { ConfigMaps } from '../../../model/configmap.model';
+import { ConfigMapStore } from '../../../store/configmap.store';
 
 
 @Component({

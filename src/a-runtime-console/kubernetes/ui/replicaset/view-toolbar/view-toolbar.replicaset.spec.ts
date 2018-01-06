@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { RouterTestingModule } from "@angular/router/testing";
-import { ReplicaSetViewToolbarComponent } from "./view-toolbar.replicaset.component";
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReplicaSetViewToolbarComponent } from './view-toolbar.replicaset.component';
 
 describe('ReplicaSetViewToolbarComponent', () => {
   let replicaset: ReplicaSetViewToolbarComponent;

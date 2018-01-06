@@ -1,8 +1,8 @@
-import { Restangular } from "ng2-restangular";
-import { KUBERNETES_RESTANGULAR } from "./../service/kubernetes.restangular";
-import { Inject, Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { Http } from "@angular/http";
+import { Restangular } from 'ng2-restangular';
+import { KUBERNETES_RESTANGULAR } from './../service/kubernetes.restangular';
+import { Inject, Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Http } from '@angular/http';
 
 /**
  * Lets keep around the singleton results to avoid doing too many requests for this static data
@@ -22,10 +22,10 @@ export class APIs {
 }
 
 export function isOpenShift(): boolean {
-  let config = window["Fabric8UIEnv"];
+  let config = window['Fabric8UIEnv'];
   if (config) {
-    let flag = config["kubernetesMode"];
-    if (flag === "true") {
+    let flag = config['kubernetesMode'];
+    if (flag === 'true') {
       return false;
     }
   }
@@ -61,7 +61,7 @@ export class APIsStore {
   isOpenShift(): boolean {
     let apis = _latestAPIs;
     if (!apis) {
-      console.log("WARNING: invoked the isOpenShift() method before the APIsStore has loaded!");
+      console.log('WARNING: invoked the isOpenShift() method before the APIsStore has loaded!');
       return true;
     }
     return apis.isOpenShift;

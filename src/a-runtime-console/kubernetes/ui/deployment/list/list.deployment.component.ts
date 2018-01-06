@@ -1,6 +1,6 @@
-import { Component, Input, ViewChild } from "@angular/core";
-import { DeploymentDeleteDialog } from "../delete-dialog/delete-dialog.deployment.component";
-import { DeploymentScaleDialog } from "../scale-dialog/scale-dialog.deployment.component";
+import { Component, Input, ViewChild } from '@angular/core';
+import { DeploymentDeleteDialog } from '../delete-dialog/delete-dialog.deployment.component';
+import { DeploymentScaleDialog } from '../scale-dialog/scale-dialog.deployment.component';
 import { DeploymentViews } from '../../../view/deployment.view';
 
 @Component({

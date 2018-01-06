@@ -13,7 +13,7 @@ import { MenuedContextType } from './menued-context-type';
 import { Navigation } from './../../models/navigation';
 import { MenuItem } from './../../models/menu-item';
 import { DummyService } from './../../shared/dummy.service';
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 interface MenuHiddenCallback {
   (headerComponent: HeaderComponent): Observable<boolean>;
@@ -176,7 +176,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   get isGettingStartedPage(): boolean {
-    return (this.router.url.indexOf("_gettingstarted") !== -1);
+    return (this.router.url.indexOf('_gettingstarted') !== -1);
   }
 
   private updateMenus() {
@@ -209,7 +209,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (!foundPath) {
             // lets check if the URL matches part of the path
             for (let o of subMenus) {
-              if (!foundPath && decodeURIComponent(this.router.url).startsWith(o.fullPath + "/")) {
+              if (!foundPath && decodeURIComponent(this.router.url).startsWith(o.fullPath + '/')) {
                 foundPath = true;
                 o.active = true;
                 n.active = true;
