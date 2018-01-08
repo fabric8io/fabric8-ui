@@ -73,8 +73,7 @@ export class ContextsMock {
     this.current = Observable.of(currentContext);
   }
 }
-export const expectedGitHubRepo: GitHubRepo =
-{
+export const expectedGitHubRepo: GitHubRepo = {
   'id': 54260706,
   'name': 'almighty-core',
   'full_name': 'fabric8-services/fabric8-wit',

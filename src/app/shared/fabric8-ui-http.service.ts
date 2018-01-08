@@ -47,8 +47,7 @@ export class Fabric8UIHttpService extends Http {
     if (urlStr.startsWith(this.witApiUrl) || urlStr.startsWith(this.ssoApiUrl) ||  urlStr.startsWith(this.authApiUrl)) {
       // Only use the HttpService from ngx-login-client for requests to certain endpoints
       return this.httpService.request(url, options);
-    }
-    else {
+    } else {
       return super.request(url, options);
     }
   }

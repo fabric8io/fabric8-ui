@@ -8,7 +8,7 @@ export class ReplicaSet extends ScalableResource {
   }
 }
 
-export class ReplicaSets extends Array<ReplicaSet>{
+export class ReplicaSets extends Array<ReplicaSet> {
 }
 
 

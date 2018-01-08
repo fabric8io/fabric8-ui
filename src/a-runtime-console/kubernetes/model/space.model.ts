@@ -180,7 +180,7 @@ export class Environment {
   }
 }
 
-export class Spaces extends Array<Space>{
+export class Spaces extends Array<Space> {
   /**
    * All the spaces whether a development Space a runtime Environment or a namespace for Secrets
    */

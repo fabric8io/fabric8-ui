@@ -35,6 +35,6 @@ export class ConfigMap extends KubernetesResource {
   }
 }
 
-export class ConfigMaps extends Array<ConfigMap>{
+export class ConfigMaps extends Array<ConfigMap> {
 }
 

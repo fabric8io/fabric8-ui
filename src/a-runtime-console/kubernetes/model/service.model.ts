@@ -31,7 +31,7 @@ export class Service extends KubernetesSpecResource {
   }
 }
 
-export class Services extends Array<Service>{
+export class Services extends Array<Service> {
 }
 
 

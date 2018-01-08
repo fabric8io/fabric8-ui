@@ -7,5 +7,5 @@ export class ReplicationController extends ReplicaSet {
   }
 }
 
-export class ReplicationControllers extends Array<ReplicationController>{
+export class ReplicationControllers extends Array<ReplicationController> {
 }

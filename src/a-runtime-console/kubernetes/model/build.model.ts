@@ -254,7 +254,7 @@ export class AppInfo {
   }
 }
 
-export class Builds extends Array<Build>{
+export class Builds extends Array<Build> {
 }
 
 export class PendingInputAction {

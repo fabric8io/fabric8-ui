@@ -6,5 +6,5 @@ export class Deployment extends ScalableResource {
   }
 }
 
-export class Deployments extends Array<Deployment>{
+export class Deployments extends Array<Deployment> {
 }

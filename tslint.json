@@ -10,6 +10,7 @@
   },
   "rules": {
 //    "adjacent-overload-signatures": true,
+//    "ban-comma-operator": true,
 //    "ban-types": [
 //      true,
 //      ["Object", "Avoid using the `Object` type. Did you mean `object`?"],
@@ -19,7 +20,6 @@
 //      ["String", "Avoid using the `String` type. Did you mean `string`?"],
 //      ["Symbol", "Avoid using the `Symbol` type. Did you mean `symbol`?"]
 //    ],
-//
 //    "member-access": [true, "check-accessor", "check-constructor"],
 //    "member-ordering": [true, {
 //      "order": "statics-first",
@@ -69,7 +69,6 @@
 //    "unified-signatures": true,
 //
 //    "await-promise": true,
-//    "ban-comma-operator": true,
 //    "curly": true,
 //    "forin": true,
 //    "label-position": true,
@@ -180,14 +179,14 @@
 //    "number-literal-format": true,
     "object-literal-key-quotes": [false, "as-needed"],
 //    "object-literal-shorthand": true,
-//    "one-line": [
-//      true,
-//      "check-catch",
-//      "check-else",
-//      "check-finally",
-//      "check-open-brace",
-//      "check-whitespace"
-//    ],
+    "one-line": [
+      true,
+      "check-catch",
+      "check-else",
+      "check-finally",
+      "check-open-brace",
+      "check-whitespace"
+    ],
 //    "one-variable-per-declaration": true,
     "ordered-imports": [true, {
       "import-sources-order": "case-insensitive",

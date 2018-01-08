@@ -6,5 +6,5 @@ export class DeploymentConfig extends Deployment {
   }
 }
 
-export class DeploymentConfigs extends Array<DeploymentConfig>{
+export class DeploymentConfigs extends Array<DeploymentConfig> {
 }

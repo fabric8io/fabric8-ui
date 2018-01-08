@@ -9,5 +9,5 @@ export class Route extends KubernetesSpecResource {
   }
 }
 
-export class Routes extends Array<Route>{
+export class Routes extends Array<Route> {
 }

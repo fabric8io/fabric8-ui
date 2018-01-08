@@ -7,5 +7,5 @@ export class Event extends KubernetesResource {
   }
 }
 
-export class Events extends Array<Event>{
+export class Events extends Array<Event> {
 }

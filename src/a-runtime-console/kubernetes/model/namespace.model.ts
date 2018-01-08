@@ -16,7 +16,7 @@ export class Namespace extends KubernetesResource {
   }
 }
 
-export class Namespaces extends Array<Namespace>{
+export class Namespaces extends Array<Namespace> {
 }
 
 export function isSecretsNamespace(namespace: Namespace) {

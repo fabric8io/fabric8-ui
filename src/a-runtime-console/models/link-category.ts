@@ -1,4 +1,4 @@
-export class LinkCategory{
+export class LinkCategory {
   id: string;
   // meta: {
   //   'totalCount' : Number
