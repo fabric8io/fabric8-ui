@@ -18,6 +18,7 @@ import {
 
 import { NotificationsService } from 'app/shared/notifications.service';
 
+import { CpuStat } from '../models/cpu-stat';
 import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
 
@@ -39,6 +40,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   consoleUrl: Observable<string>;
   appUrl: Observable<string>;
 
+  cpuStat: Observable<CpuStat>;
+
   subscriptions: Array<Subscription> = [];
 
   constructor(
@@ -51,6 +54,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.cpuStat = this.deploymentsService.getCpuStat(this.spaceId, this.environment.name);
+
     this.subscriptions.push(
       this.deploymentsService
         .isApplicationDeployedInEnvironment(this.spaceId, this.applicationId, this.environment.name)
