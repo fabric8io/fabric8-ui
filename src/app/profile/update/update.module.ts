@@ -19,7 +19,7 @@ import { UpdateComponent } from './update.component';
     RemainingCharsCountModule,
     UpdateRoutingModule
   ],
-  declarations: [ UpdateComponent ]
+  declarations: [ UpdateComponent ],
   providers: [ OwnerGuard ]
 })
 export class UpdateModule {
