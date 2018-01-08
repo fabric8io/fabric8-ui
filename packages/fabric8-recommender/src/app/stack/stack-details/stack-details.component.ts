@@ -5,6 +5,7 @@ import { StackAnalysesService } from '../stack-analyses.service';
 import { getStackReportModel } from '../utils/stack-api-utils';
 import { StackReportModel, ResultInformationModel, UserStackInfoModel,
     ComponentInformationModel, RecommendationsModel } from '../models/stack-report.model';
+import { ReportSummaryUtils } from '../utils/report-summary-utils';
 
 @Component({
     selector: 'stack-details',
@@ -53,6 +54,7 @@ export class StackDetailsComponent implements OnChanges {
     private totalManifests: number;
 
     private stackId: string;
+    private reportSummaryUtils = new ReportSummaryUtils();
 
     public showStackModal(event: Event): void {
         event.preventDefault();
@@ -116,6 +118,12 @@ export class StackDetailsComponent implements OnChanges {
                 manifestinfo: tab.content.manifest_name,
                 licenseAnalysis: tab.content.user_stack_info.license_analysis
             };
+        }
+    }
+
+    public tabDeSelection(tab: any): void {
+        if (tab) {
+            tab['active'] = false;
         }
     }
 
@@ -195,11 +203,13 @@ export class StackDetailsComponent implements OnChanges {
                 if (this.totalManifests > 0) {
                     this.userStackInformationArray = result.map((r) => r.user_stack_info);
                     result.forEach((r, index) => {
-                        this.tabs.push({
+                        let tab = {
                             title: r.manifest_file_path,
                             content: r,
-                            index: index
-                        });
+                            index: index,
+                            hasWarning: this.ifManifestHasWarning(r)
+                        };
+                        this.tabs.push(tab);
                         this.recommendationsArray.push(r.recommendation);
                     });
                     this.modalHeader = 'Updated just now';
@@ -220,6 +230,14 @@ export class StackDetailsComponent implements OnChanges {
                 title: 'Updating ...'
             });
         }
+    }
+
+    private ifManifestHasWarning(manifest: ResultInformationModel): boolean {
+        let isSecurityWarning = this.reportSummaryUtils.getSecurityReportCard(manifest.user_stack_info).hasWarning;
+        let isInsightsWarning = this.reportSummaryUtils.getInsightsReportCard(manifest.recommendation).hasWarning;
+        let isLicenseWarning = this.reportSummaryUtils.getLicensesReportCard(manifest.user_stack_info).hasWarning;
+        console.log('does manifest has warning:', isSecurityWarning || isInsightsWarning || isLicenseWarning ? true : false);
+        return isSecurityWarning || isInsightsWarning || isLicenseWarning ? true : false;
     }
 
     private init(): void {

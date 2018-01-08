@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { ReportSummaryCardModule } from './report-summary-card/report-summary-card.module';
 import { ReportSummaryComponent } from './report-summary.component';
 
-
 @NgModule({
     imports: [
         CommonModule,

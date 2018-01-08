@@ -1,6 +1,13 @@
 .analytics-summary-card {
+    cursor: pointer;
     .card-pf {
         min-height: 250px;
         padding: 10px 20px;
+    }
+    &.highlight {
+        .card-pf {
+            border-bottom: 5px solid #2a9fd8;
+            box-shadow: 0 0 15px #777;
+        }
     }
 }

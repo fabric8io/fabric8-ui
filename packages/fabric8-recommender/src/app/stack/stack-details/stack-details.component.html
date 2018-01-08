@@ -5,11 +5,14 @@
       <div *ngIf="!error">
         <tabset *ngIf="dataLoaded">
             <tab *ngFor="let tabz of tabs"
-                [heading]="tabz.title"
                 (select)="tabSelection(tabz)"
+                (deselect)="tabDeSelection(tabz)"
                 (removed)="removeTabHandler(tabz)"
                 [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
-
+                <ng-template tabHeading>
+                  <i *ngIf="tabz.hasWarning" class="pficon-warning-triangle-o"></i>
+                  <span [innerHtml]="tabz.title" style="margin-left: 5px"></span>
+                </ng-template>
                 <!-- Stack Report Design Revamp - BEGIN -->
                 <analytics-report-summary [report]="tabz.content"></analytics-report-summary>
                 <!-- Stack Report Design Revamp - END -->

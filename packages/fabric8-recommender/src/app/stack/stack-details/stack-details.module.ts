@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { ModalModule } from 'ngx-modal';
-import {TabsModule, AccordionModule} from 'ngx-bootstrap';
+import { TabsModule, AccordionModule } from 'ngx-bootstrap';
 
 import { GlobalConstants } from '../constants/constants.service';
 import { StackDetailsComponent } from './stack-details.component';
@@ -12,7 +12,7 @@ import { StackDetailsComponent } from './stack-details.component';
 /** New UX */
 // import {StackLevelModule} from '../stack-level/stack-level.module';
 // import {ComponentLevelModule} from '../component-level/component-level.module';
-import {FeedbackModule} from '../feedback/feedback.module';
+import { FeedbackModule } from '../feedback/feedback.module';
 /** New UX */
 
 
@@ -42,7 +42,9 @@ const revampImports = [
   exports: [
     StackDetailsComponent
   ],
-  providers: [ GlobalConstants ],
+  providers: [
+    GlobalConstants
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class StackDetailsModule {

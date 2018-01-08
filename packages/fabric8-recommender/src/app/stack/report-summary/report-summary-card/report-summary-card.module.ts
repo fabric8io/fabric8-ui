@@ -8,10 +8,13 @@ import { ReportSummaryDescriptionComponent } from './report-summary-description/
 import { ReportSummaryContentModule } from './report-summary-content/report-summary-content.module';
 
 import { ReportSummaryCardComponent } from './report-summary-card.component';
+import { ReportSummaryCardDirective } from './report-summary-card.directive';
 
 const dependencies = [
     ReportSummaryTitleComponent,
-    ReportSummaryDescriptionComponent
+    ReportSummaryDescriptionComponent,
+    ReportSummaryCardComponent,
+    ReportSummaryCardDirective
 ];
 
 const imports = [
@@ -24,8 +27,7 @@ const imports = [
         ...imports
     ],
     declarations: [
-        ...dependencies,
-        ReportSummaryCardComponent
+        ...dependencies
     ],
     exports: [
         ReportSummaryCardComponent
