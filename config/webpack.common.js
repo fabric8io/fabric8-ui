@@ -189,7 +189,7 @@ module.exports = function (options) {
 
             // enables type checked rules like 'for-in-array'
             // uses tsconfig.json from current working directory
-            typeCheck: true,
+            typeCheck: false,
 
             // automatically fix linting errors
             fix: false,
