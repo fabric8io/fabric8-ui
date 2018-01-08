@@ -18,7 +18,7 @@ export enum TenantUpdateStatus {
   Updating,
   Success,
   Failure
-};
+}
 
 @Component({
   encapsulation: ViewEncapsulation.None,
