@@ -1,12 +1,13 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation, TemplateRef } from '@angular/core';
-import { Router } from '@angular/router';
-import { IWorkflow } from './models/workflow';
-import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+
+import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
-import { Subscription } from 'rxjs';
-import { Broadcaster } from 'ngx-base';
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
+import { Subscription } from 'rxjs';
+
+import { IWorkflow } from './models/workflow';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

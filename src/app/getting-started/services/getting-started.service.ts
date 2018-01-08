@@ -1,10 +1,10 @@
-import { Injectable, Inject, OnDestroy } from '@angular/core';
+import { Inject, Injectable, OnDestroy } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { Observable, Subscription } from 'rxjs';
 
 import { Logger } from 'ngx-base';
-import { AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
+import { Observable, Subscription } from 'rxjs';
 
 import { cloneDeep } from 'lodash';
 

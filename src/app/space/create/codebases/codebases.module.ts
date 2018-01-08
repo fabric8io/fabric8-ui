@@ -1,23 +1,22 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-
-import { ActionModule, ListModule, EmptyStateModule } from 'patternfly-ng';
+import { ActionModule, EmptyStateModule, ListModule } from 'patternfly-ng';
 
 import { CodebasesAddModule } from './codebases-add/codebases-add.module';
-import { CodebasesComponent } from './codebases.component';
-import { CodebasesItemModule } from './codebases-item/codebases-item.module';
+import { CodebaseDeleteDialogModule } from './codebases-delete/codebase-delete-dialog.module';
 import { CodebasesItemActionsModule } from './codebases-item-actions/codebases-item-actions.module';
 import { CodebasesItemDetailsModule } from './codebases-item-details/codebases-item-details.module';
 import { CodebasesItemHeadingModule } from './codebases-item-heading/codebases-item-heading.module';
 import { CodebasesItemWorkspacesModule } from './codebases-item-workspaces/codebases-item-workspaces.module';
-import { CodebasesToolbarModule } from './codebases-toolbar/codebases-toolbar.module';
+import { CodebasesItemModule } from './codebases-item/codebases-item.module';
 import { CodebasesRoutingModule } from './codebases-routing.module';
-import { CodebaseDeleteDialogModule } from './codebases-delete/codebase-delete-dialog.module';
+import { CodebasesToolbarModule } from './codebases-toolbar/codebases-toolbar.module';
+import { CodebasesComponent } from './codebases.component';
 
 @NgModule({
   imports: [

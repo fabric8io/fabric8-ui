@@ -1,6 +1,7 @@
-import { LoginService } from './../login.service';
-import { OnLogin } from '../../../a-runtime-console/index';
 import { Injectable } from '@angular/core';
+
+import { OnLogin } from '../../../a-runtime-console/index';
+import { LoginService } from '../login.service';
 
 @Injectable()
 export class Fabric8UIOnLogin implements OnLogin {

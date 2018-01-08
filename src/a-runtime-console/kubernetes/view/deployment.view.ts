@@ -1,6 +1,6 @@
-import { Service, Services } from '../model/service.model';
 import { Deployment, Deployments } from '../model/deployment.model';
-import { DeploymentConfigs, DeploymentConfig } from '../model/deploymentconfig.model';
+import { DeploymentConfig, DeploymentConfigs } from '../model/deploymentconfig.model';
+import { Service, Services } from '../model/service.model';
 
 
 export class DeploymentView {

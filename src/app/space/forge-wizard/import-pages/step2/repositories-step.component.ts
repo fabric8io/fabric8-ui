@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Gui } from 'ngx-forge';
 import { FormGroup } from '@angular/forms';
+
+import { Gui } from 'ngx-forge';
 
 @Component({
   selector: 'repositories-step',

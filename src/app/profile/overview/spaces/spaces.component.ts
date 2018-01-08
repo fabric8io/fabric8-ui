@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, TemplateRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 
-import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Logger, Broadcaster } from 'ngx-base';
-import { Space, SpaceService } from 'ngx-fabric8-wit';
-import { UserService, User, AuthenticationService } from 'ngx-login-client';
+import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Context, Contexts } from 'ngx-fabric8-wit';
+import { Space, SpaceService } from 'ngx-fabric8-wit';
+import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { Subscription } from 'rxjs';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

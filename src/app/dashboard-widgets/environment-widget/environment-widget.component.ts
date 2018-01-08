@@ -1,17 +1,17 @@
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, Subscription, ConnectableObservable, Subscriber, Subject, BehaviorSubject } from 'rxjs/Rx';
+import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from 'rxjs/Rx';
 
-import { Contexts, Context } from 'ngx-fabric8-wit';
+import { Context, Contexts } from 'ngx-fabric8-wit';
 
 import {
-  SpaceStore, Space, Environment
+  Environment, Space, SpaceStore
 } from '../../../a-runtime-console/index';
 
 // non-exported classes from runtime that need to be refactored
 import { DeploymentView, DeploymentViews } from '../../../a-runtime-console/index';
-import { AppEnvironmentDetails, AppDeployments, EnvironmentDeployments } from '../../../a-runtime-console/index';
+import { AppDeployments, AppEnvironmentDetails, EnvironmentDeployments } from '../../../a-runtime-console/index';
 import { AbstractWatchComponent } from '../../../a-runtime-console/index';
 import { DeploymentService } from '../../../a-runtime-console/index';
 import { ServiceService } from '../../../a-runtime-console/index';

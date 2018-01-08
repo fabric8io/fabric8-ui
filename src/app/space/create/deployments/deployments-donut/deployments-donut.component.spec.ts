@@ -1,23 +1,14 @@
-import {
-  Component,
-  Input
-} from '@angular/core';
-
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
-import { createMock } from 'testing/mock';
-
+import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
+import { createMock } from 'testing/mock';
+import { initContext, TestContext } from 'testing/test-context';
 
-import { DeploymentsDonutComponent } from './deployments-donut.component';
-import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
 import { Pods } from '../models/pods';
+import { DeploymentsService } from '../services/deployments.service';
+import { DeploymentsDonutComponent } from './deployments-donut.component';
 
 @Component({
   template: '<deployments-donut></deployments-donut>'

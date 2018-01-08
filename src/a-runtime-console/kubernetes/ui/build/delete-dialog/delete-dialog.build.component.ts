@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Build } from '../../../model/build.model';
-import { BuildStore } from '../../../store/build.store';
 import { BuildService } from '../../../service/build.service';
+import { BuildStore } from '../../../store/build.store';
 
 @Component({
   selector: 'delete-build-dialog',

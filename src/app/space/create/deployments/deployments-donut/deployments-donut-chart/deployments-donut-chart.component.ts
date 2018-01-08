@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  AfterViewChecked,
   Component,
   Input,
   OnChanges,
@@ -8,13 +7,12 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
-import { debounce, get, isEqual, reject, size, uniqueId } from 'lodash';
-import { Observable } from 'rxjs';
-
-import { Pods } from '../../models/pods';
 
 import * as c3 from 'c3';
 import * as d3 from 'd3';
+import { debounce, isEqual, uniqueId } from 'lodash';
+
+import { Pods } from '../../models/pods';
 
 @Component({
   selector: 'deployments-donut-chart',

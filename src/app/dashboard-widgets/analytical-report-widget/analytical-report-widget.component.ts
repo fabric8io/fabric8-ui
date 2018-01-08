@@ -1,16 +1,17 @@
-import { PipelinesService } from './../../shared/runtime-console/pipelines.service';
-import { Observable, Subscription } from 'rxjs/Rx';
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { Observable, Subscription } from 'rxjs/Rx';
 
 import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 
 import {
+  Build,
   BuildConfig,
-  BuildConfigs,
-  Build
+  BuildConfigs
 } from '../../../a-runtime-console/index';
+import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

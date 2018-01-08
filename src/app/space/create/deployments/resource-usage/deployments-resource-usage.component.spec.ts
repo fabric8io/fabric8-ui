@@ -1,21 +1,12 @@
+import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
-import {
-  Component,
-  Input
-} from '@angular/core';
-
-import { Observable } from 'rxjs';
-
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 
-import { DeploymentsResourceUsageComponent } from './deployments-resource-usage.component';
 import { Environment } from '../models/environment';
+import { DeploymentsResourceUsageComponent } from './deployments-resource-usage.component';
 
 @Component({
   template: '<deployments-resource-usage></deployments-resource-usage>'

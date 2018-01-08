@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+
+import { Area, AreaAttributes, AreaService, Context } from 'ngx-fabric8-wit';
 import { Modal } from 'ngx-modal';
-import { Context, AreaService, Area, AreaAttributes } from 'ngx-fabric8-wit';
-import { ContextService } from '../../../../shared/context.service';
+import { Subscription } from 'rxjs';
+
 import { AreaError } from '../../../../models/area-error';
+import { ContextService } from '../../../../shared/context.service';
 
 @Component({
   host: {

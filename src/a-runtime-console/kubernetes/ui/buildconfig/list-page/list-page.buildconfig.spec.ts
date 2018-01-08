@@ -1,19 +1,19 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MomentModule } from 'angular2-moment';
 import { RestangularModule } from 'ng2-restangular';
-import { BuildConfigsListPage } from './list-page.buildconfig.component';
-import { BuildConfigsListComponent } from '../list/list.buildconfig.component';
-import { BuildConfigsListToolbarComponent } from '../list-toolbar/list-toolbar.buildconfig.component';
+import { ModalModule } from 'ngx-modal';
 import { Fabric8CommonModule } from '../../../../common/common.module';
 import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { ModalModule } from 'ngx-modal';
-import { MomentModule } from 'angular2-moment';
 import { BuildConfigDeleteDialog } from '../delete-dialog/delete-dialog.buildconfig.component';
-import { FormsModule } from '@angular/forms';
+import { BuildConfigsListToolbarComponent } from '../list-toolbar/list-toolbar.buildconfig.component';
+import { BuildConfigsListComponent } from '../list/list.buildconfig.component';
+import { TestAppModule } from './../../../../app.test.module';
+import { BuildConfigsListPage } from './list-page.buildconfig.component';
 
 describe('BuildConfigsListPage', () => {
   let component: BuildConfigsListPage;

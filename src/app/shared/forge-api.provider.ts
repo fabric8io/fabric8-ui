@@ -1,5 +1,3 @@
-import { OpaqueToken } from '@angular/core';
-
 import { ApiLocatorService } from './api-locator.service';
 
 import { FABRIC8_FORGE_API_URL } from '../../a-runtime-console/index';

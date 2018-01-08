@@ -1,10 +1,10 @@
 /**
  * Angular bootstraping
  */
-import 'reflect-metadata';
-
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
 import { bootloader } from '@angularclass/hmr';
+import 'reflect-metadata';
 
 /**
  * Offline plugin

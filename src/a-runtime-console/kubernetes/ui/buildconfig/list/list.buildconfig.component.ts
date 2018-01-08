@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { BuildConfigDeleteDialog } from '../delete-dialog/delete-dialog.buildconfig.component';
 import { BuildConfigs } from '../../../model/buildconfig.model';
 import { BuildConfigService } from '../../../service/buildconfig.service';
+import { BuildConfigDeleteDialog } from '../delete-dialog/delete-dialog.buildconfig.component';
 
 @Component({
   selector: 'fabric8-buildconfigs-list',

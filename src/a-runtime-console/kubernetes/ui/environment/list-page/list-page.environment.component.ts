@@ -1,27 +1,27 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from 'rxjs';
-import { Notifications, Notification, NotificationType } from 'ngx-base';
-import { Deployment } from './../../../model/deployment.model';
-import { DeploymentService } from './../../../service/deployment.service';
 import { SpaceNamespace } from '../../../model/space-namespace';
-import { Service } from './../../../model/service.model';
-import { Pod } from './../../../model/pod.model';
-import { Event } from './../../../model/event.model';
-import { ConfigMap } from './../../../model/configmap.model';
-import { Environment, Space } from './../../../model/space.model';
-import { ServiceService } from './../../../service/service.service';
-import { ReplicaSetService } from './../../../service/replicaset.service';
-import { PodService } from './../../../service/pod.service';
-import { EventService } from './../../../service/event.service';
-import { ConfigMapService } from './../../../service/configmap.service';
-import { DeploymentConfigService } from './../../../service/deploymentconfig.service';
-import { SpaceStore } from './../../../store/space.store';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { isOpenShift } from '../../../store/apis.store';
 import { pathJoin } from '../../../model/utils';
 import { ReplicationControllerService } from '../../../service/replicationcontroller.service';
 import { RouteService } from '../../../service/route.service';
-import { AbstractWatchComponent } from '../../../support/abstract-watch.component';
+import { isOpenShift } from '../../../store/apis.store';
 import { currentOAuthConfig } from '../../../store/oauth-config-store';
+import { AbstractWatchComponent } from '../../../support/abstract-watch.component';
+import { ConfigMap } from './../../../model/configmap.model';
+import { Deployment } from './../../../model/deployment.model';
+import { Event } from './../../../model/event.model';
+import { Pod } from './../../../model/pod.model';
+import { Service } from './../../../model/service.model';
+import { Environment, Space } from './../../../model/space.model';
+import { ConfigMapService } from './../../../service/configmap.service';
+import { DeploymentService } from './../../../service/deployment.service';
+import { DeploymentConfigService } from './../../../service/deploymentconfig.service';
+import { EventService } from './../../../service/event.service';
+import { PodService } from './../../../service/pod.service';
+import { ReplicaSetService } from './../../../service/replicaset.service';
+import { ServiceService } from './../../../service/service.service';
+import { SpaceStore } from './../../../store/space.store';
 
 
 export let KINDS: Kind[] = [

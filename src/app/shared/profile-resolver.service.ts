@@ -1,15 +1,15 @@
-import { Observable } from 'rxjs';
-import { UserService, User } from 'ngx-login-client';
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
   Resolve,
   Router,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
+  RouterStateSnapshot
 } from '@angular/router';
-import {
-  Context
-} from 'ngx-fabric8-wit';
+
+import { Context } from 'ngx-fabric8-wit';
+import { UserService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
+
 import { Navigation } from '../models/navigation';
 import { ContextService } from './context.service';
 

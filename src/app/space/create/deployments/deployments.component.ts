@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { Observable } from 'rxjs';
 
 import { Spaces } from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
 
-import { DeploymentsService } from './services/deployments.service';
 import { Environment } from './models/environment';
+import { DeploymentsService } from './services/deployments.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

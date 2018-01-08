@@ -1,4 +1,4 @@
-import { Input, Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Space } from '../../../model/space.model';
 import { YamlEditor } from '../../../view/yaml.editor';
 

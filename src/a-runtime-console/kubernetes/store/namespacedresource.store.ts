@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { KubernetesResource } from '../model/kubernetesresource.model';
-import { NamespacedResourceService } from '../service/namespaced.resource.service';
-import { INamespaceScope, NamespaceScope } from '../service/namespace.scope';
 import { Subscription } from 'rxjs';
+import { KubernetesResource } from '../model/kubernetesresource.model';
+import { INamespaceScope, NamespaceScope } from '../service/namespace.scope';
+import { NamespacedResourceService } from '../service/namespaced.resource.service';
 import { KubernetesResourceStore } from './kuberentesresource.store';
 
 @Injectable()

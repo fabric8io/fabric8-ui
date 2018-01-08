@@ -1,13 +1,13 @@
-import { AfterViewInit, Component, ElementRef, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
 
 import { Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
+import { ListConfig } from 'patternfly-ng';
+import { Observable, Subscription } from 'rxjs';
+
+import { EventService } from '../../shared/event.service';
 import { IModalHost } from '../../space/wizard/models/modal-host';
 import { TenentService } from '../services/tenent.service';
-import { ListConfig } from 'patternfly-ng';
-import { EventService } from '../../shared/event.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

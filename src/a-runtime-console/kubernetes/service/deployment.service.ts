@@ -1,10 +1,10 @@
-import { WatcherFactory } from './watcher-factory.service';
 import { Inject, Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
-import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { Deployment, Deployments } from '../model/deployment.model';
-import { NamespacedResourceService } from './namespaced.resource.service';
+import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { NamespaceScope } from './namespace.scope';
+import { NamespacedResourceService } from './namespaced.resource.service';
+import { WatcherFactory } from './watcher-factory.service';
 
 export const apisExtensionsNamespacesUrl = '/apis/extensions/v1beta1/namespaces/';
 

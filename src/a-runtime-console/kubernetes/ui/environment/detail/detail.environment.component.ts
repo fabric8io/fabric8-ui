@@ -1,9 +1,9 @@
 import { AfterViewInit } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ParentLinkFactory } from './../../../../common/parent-link-factory';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { trimEnd } from 'lodash';
+import { ParentLinkFactory } from './../../../../common/parent-link-factory';
 
 @Component({
   selector: 'fabric8-environments-detail',

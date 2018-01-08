@@ -1,8 +1,9 @@
-import { Context, Contexts } from 'ngx-fabric8-wit';
+import { cloneDeep } from 'lodash';
+import { Context } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-import { GitHubRepoCommit, GitHubRepoDetails, GitHubRepo, GitHubRepoLicense } from './github';
-import { cloneDeep } from 'lodash';
+
+import { GitHubRepo, GitHubRepoCommit, GitHubRepoDetails, GitHubRepoLicense } from './github';
 
 export const currentContext: Context = {
   'user': {

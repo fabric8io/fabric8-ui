@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ReplicaSetService } from '../service/replicaset.service';
 import { ReplicaSet, ReplicaSets } from '../model/replicaset.model';
-import { NamespacedResourceStore } from './namespacedresource.store';
 import { NamespaceScope } from '../service/namespace.scope';
+import { ReplicaSetService } from '../service/replicaset.service';
+import { NamespacedResourceStore } from './namespacedresource.store';
 
 @Injectable()
 export class ReplicaSetStore extends NamespacedResourceStore<ReplicaSet, ReplicaSets, ReplicaSetService> {

@@ -1,17 +1,17 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { Subscription } from 'rxjs';
 
-import { CopyService } from '../services/copy.service';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { GitHubService } from '../../space/create/codebases/services/github.service';
-import { TenentService } from '../services/tenent.service';
 import { ProviderService } from '../../shared/account/provider.service';
+import { GitHubService } from '../../space/create/codebases/services/github.service';
+import { CopyService } from '../services/copy.service';
+import { TenentService } from '../services/tenent.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

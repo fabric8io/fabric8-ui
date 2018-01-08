@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
 import { Observable } from 'rxjs';
-import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { ConfigMap } from '../model/configmap.model';
-import { NamespacedResourceService } from './namespaced.resource.service';
+import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { NamespaceScope } from './namespace.scope';
+import { NamespacedResourceService } from './namespaced.resource.service';
 
 export const FunktionKindAnnotation = 'funktion.fabric8.io/kind';
 

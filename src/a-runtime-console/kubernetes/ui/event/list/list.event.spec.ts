@@ -1,17 +1,17 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { EventsListComponent } from './list.event.component';
-import { Fabric8CommonModule } from '../../../../common/common.module';
+import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MomentModule } from 'angular2-moment';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { ModalModule } from 'ngx-modal';
-import { FormsModule } from '@angular/forms';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
 import { RestangularModule } from 'ng2-restangular';
-import { MockBackend } from '@angular/http/testing';
+import { ModalModule } from 'ngx-modal';
+import { Fabric8CommonModule } from '../../../../common/common.module';
 import { KubernetesComponentsModule } from '../../../components/components.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { TestAppModule } from './../../../../app.test.module';
+import { EventsListComponent } from './list.event.component';
 
 describe('EventsListComponent', () => {
   let component: EventsListComponent;

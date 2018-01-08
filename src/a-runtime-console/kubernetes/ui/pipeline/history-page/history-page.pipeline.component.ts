@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import {
-  BuildConfigs, combineBuildConfigAndBuilds, filterPipelines,
-  BuildConfig, findBuildConfigByID
+  BuildConfig, BuildConfigs, combineBuildConfigAndBuilds,
+  filterPipelines, findBuildConfigByID
 } from '../../../model/buildconfig.model';
-import { BuildConfigStore } from '../../../store/buildconfig.store';
 import { APIsStore } from '../../../store/apis.store';
 import { BuildStore } from '../../../store/build.store';
-import { ActivatedRoute } from '@angular/router';
+import { BuildConfigStore } from '../../../store/buildconfig.store';
 
 
 @Component({

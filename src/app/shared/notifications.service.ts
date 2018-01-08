@@ -1,7 +1,8 @@
-import { NotificationService } from 'patternfly-ng';
 import { Injectable } from '@angular/core';
+
+import { Notification, NotificationAction, Notifications } from 'ngx-base';
+import { NotificationService } from 'patternfly-ng';
 import { Observable, Subject } from 'rxjs';
-import { Notifications, Notification, NotificationAction } from 'ngx-base';
 
 @Injectable()
 export class NotificationsService implements Notifications {

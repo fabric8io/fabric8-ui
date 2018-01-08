@@ -1,21 +1,15 @@
-import { CodebasesItemComponent } from './codebases-item.component';
-import { Observable } from 'rxjs';
-import { Contexts } from 'ngx-fabric8-wit';
-import { Broadcaster, Notifications, NotificationType } from 'ngx-base';
-import { CodebasesService } from '../services/codebases.service';
-import { GitHubService } from '../services/github.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { async, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { By } from '@angular/platform-browser';
+
+import { Broadcaster, Notifications } from 'ngx-base';
+import { Observable } from 'rxjs';
+
+import { GitHubService } from '../services/github.service';
 import { expectedGitHubRepoDetails } from '../services/github.service.mock';
-import { Codebase } from '../services/codebase';
-import { FormsModule, NgForm } from '@angular/forms';
-import {
-  async,
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
-import { cloneDeep } from 'lodash';
+import { CodebasesItemComponent } from './codebases-item.component';
 
 describe('Codebases Item Component', () => {
   let broadcasterMock: any;

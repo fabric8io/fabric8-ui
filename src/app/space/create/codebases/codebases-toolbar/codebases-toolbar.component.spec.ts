@@ -4,14 +4,12 @@ import {
   Input,
   Output
 } from '@angular/core';
-
 import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   FilterEvent,
   SortEvent
 } from 'patternfly-ng';
-
 import {
   initContext,
   TestContext

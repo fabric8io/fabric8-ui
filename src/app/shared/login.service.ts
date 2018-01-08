@@ -1,18 +1,13 @@
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageService } from 'angular-2-local-storage';
-import { Injectable, Inject } from '@angular/core';
 
+import { LocalStorageService } from 'angular-2-local-storage';
+import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
+import { AUTH_API_URL, AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
-import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { AuthenticationService, UserService, AUTH_API_URL } from 'ngx-login-client';
-//import { WIT_API_URL } from 'ngx-fabric8-wit';
-
-
-import { ContextService } from './context.service';
-import { Navigation } from './../models/navigation';
 import { ErrorService } from '../layout/error/error.service';
-
+import { ContextService } from './context.service';
 
 @Injectable()
 export class LoginService {

@@ -1,12 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { Http, Response, ResponseOptions, XHRBackend, HttpModule } from '@angular/http';
+import { Http, HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { AuthenticationService, UserService, AUTH_API_URL } from 'ngx-login-client';
+
+import { cloneDeep } from 'lodash';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { CodebasesService } from './codebases.service';
+import { AuthenticationService, UserService } from 'ngx-login-client';
+
 import { Codebase } from './codebase';
-import { cloneDeep } from 'lodash';
+import { CodebasesService } from './codebases.service';
 
 describe('Codebase: CodebasesService', () => {
   let mockLog: any;

@@ -1,24 +1,24 @@
-import { Broadcaster } from 'ngx-base';
-import { AuthenticationService } from 'ngx-login-client';
-import { OnLogin } from '../a-runtime-console/index';
-import { AnalyticService } from './shared/analytics.service';
-import { Spaces } from 'ngx-fabric8-wit';
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
-import { AboutService } from './shared/about.service';
-import { NotificationsService } from './shared/notifications.service';
-import { LoginService } from './shared/login.service';
-import { BrandingService } from './shared/branding.service';
-import { FeatureFlagConfig } from './models/feature-flag-config';
-
-import { EmptyStateConfig, ActionConfig } from 'patternfly-ng';
+import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
+import { Spaces } from 'ngx-fabric8-wit';
+import { AuthenticationService } from 'ngx-login-client';
+import { ActionConfig, EmptyStateConfig } from 'patternfly-ng';
+
+import { OnLogin } from '../a-runtime-console/index';
+import { FeatureFlagConfig } from './models/feature-flag-config';
+import { AboutService } from './shared/about.service';
 import { ProviderService } from './shared/account/provider.service';
+import { AnalyticService } from './shared/analytics.service';
+import { BrandingService } from './shared/branding.service';
+import { LoginService } from './shared/login.service';
+import { NotificationsService } from './shared/notifications.service';
 
 /*
  * App Component

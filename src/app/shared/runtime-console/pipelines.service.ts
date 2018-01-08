@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
 import { orderBy, take } from 'lodash';
+import { Context, Contexts } from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
 
 import {
   BuildConfig,
   BuildConfigs,
-  combineBuildConfigAndBuilds,
-  filterPipelines,
   BuildConfigStore,
-  BuildStore, Builds
+  Builds,
+  BuildStore,
+  combineBuildConfigAndBuilds, filterPipelines
 } from '../../../a-runtime-console/index';
-
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
-import { Context, Contexts } from 'ngx-fabric8-wit';
 
 
 @Injectable()

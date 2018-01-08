@@ -1,4 +1,3 @@
-import { Router, ActivatedRoute } from '@angular/router';
 import {
   AfterViewInit,
   Component,
@@ -6,17 +5,18 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { Broadcaster } from 'ngx-base';
+import { Notification, Notifications, NotificationType } from 'ngx-base';
+import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 
-import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Broadcaster } from 'ngx-base';
-import { Notification, NotificationType, Notifications } from 'ngx-base';
-
+import { removeAction } from '../../../../app-routing.module';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubRepoDetails } from '../services/github';
 import { GitHubService } from '../services/github.service';
-import { removeAction } from '../../../../app-routing.module';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

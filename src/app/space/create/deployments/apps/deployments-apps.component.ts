@@ -5,19 +5,17 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Environment } from '../models/environment';
-
 import { cloneDeep } from 'lodash';
-import { Observable, Subscription } from 'rxjs';
-
 import {
   Filter,
   FilterEvent,
   SortEvent,
   SortField
 } from 'patternfly-ng';
+import { Observable, Subscription } from 'rxjs';
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
+import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployments-apps',

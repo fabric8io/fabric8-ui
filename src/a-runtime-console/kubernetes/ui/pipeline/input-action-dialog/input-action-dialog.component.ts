@@ -1,10 +1,10 @@
 import { Component, Inject, ViewChild } from '@angular/core';
+import { Headers, Http, RequestOptions } from '@angular/http';
+import { FABRIC8_FORGE_API_URL } from '../../../../shared/fabric8-forge-api';
+import { OnLogin } from '../../../../shared/onlogin.service';
 import { Build, PendingInputAction } from '../../../model/build.model';
 import { PipelineStage } from '../../../model/pipelinestage.model';
-import { Http, RequestOptions, Headers } from '@angular/http';
-import { OnLogin } from '../../../../shared/onlogin.service';
 import { pathJoin } from '../../../model/utils';
-import { FABRIC8_FORGE_API_URL } from '../../../../shared/fabric8-forge-api';
 
 @Component({
   selector: 'input-action-dialog',

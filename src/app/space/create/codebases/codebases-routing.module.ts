@@ -1,9 +1,9 @@
 import { NgModule }  from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AuthGuard } from '../../../shared/auth-guard.service';
 import { codebasesAddRoutes } from './codebases-add/codebases-add-routing.module';
 import { CodebasesComponent } from './codebases.component';
-import { AuthGuard } from '../../../shared/auth-guard.service';
 
 const routes: Routes = [
   {

@@ -1,18 +1,18 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ServicesListComponent } from './list.service.component';
-import { Fabric8CommonModule } from '../../../../common/common.module';
+import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MomentModule } from 'angular2-moment';
-import { ServiceDeleteDialog } from '../delete-dialog/delete-dialog.service.component';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { ModalModule } from 'ngx-modal';
-import { FormsModule } from '@angular/forms';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
 import { RestangularModule } from 'ng2-restangular';
-import { MockBackend } from '@angular/http/testing';
+import { ModalModule } from 'ngx-modal';
+import { Fabric8CommonModule } from '../../../../common/common.module';
 import { KubernetesComponentsModule } from '../../../components/components.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { ServiceDeleteDialog } from '../delete-dialog/delete-dialog.service.component';
+import { TestAppModule } from './../../../../app.test.module';
+import { ServicesListComponent } from './list.service.component';
 
 describe('ServicesListComponent', () => {
   let component: ServicesListComponent;

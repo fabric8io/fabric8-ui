@@ -1,14 +1,15 @@
-import { CodebasesItemHeadingComponent } from './codebases-item-heading.component';
-import { Che } from '../services/che';
-import { Broadcaster } from 'ngx-base';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
 import {
   async,
   TestBed
 } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+
+import { Broadcaster } from 'ngx-base';
+
+import { Che } from '../services/che';
+import { CodebasesItemHeadingComponent } from './codebases-item-heading.component';
 
 describe('Codebases Item Heading Component', () => {
   let broadcasterMock: any;

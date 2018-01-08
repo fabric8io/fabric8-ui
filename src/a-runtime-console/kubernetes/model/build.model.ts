@@ -1,8 +1,8 @@
-import { KubernetesSpecResource } from './kuberentesspecresource.model';
+import * as jsyaml from 'js-yaml';
 import { defaultBuildIconStyle } from './buildconfig.model';
+import { KubernetesSpecResource } from './kuberentesspecresource.model';
 import { PipelineStage } from './pipelinestage.model';
 import { pathJoin } from './utils';
-import * as jsyaml from 'js-yaml';
 
 
 const serviceEnvironmentsAnnotationPrefix = 'environment.services.fabric8.io/';

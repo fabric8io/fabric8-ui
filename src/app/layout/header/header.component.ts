@@ -1,19 +1,17 @@
-import { Component, OnInit, OnDestroy, TemplateRef } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
-import { Subscription, Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Broadcaster, Logger } from 'ngx-base';
-import { UserService, User, AuthenticationService } from 'ngx-login-client';
-import { ContextType, Context, Contexts } from 'ngx-fabric8-wit';
-
-import { LoginService } from './../../shared/login.service';
-import { ContextService } from './../../shared/context.service';
-import { MenuedContextType } from './menued-context-type';
-import { Navigation } from './../../models/navigation';
-import { MenuItem } from './../../models/menu-item';
-import { DummyService } from './../../shared/dummy.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Context, Contexts } from 'ngx-fabric8-wit';
+import { AuthenticationService, User, UserService } from 'ngx-login-client';
+
+import { Navigation } from '../../models/navigation';
+import { DummyService } from '../../shared/dummy.service';
+import { LoginService } from '../../shared/login.service';
+import { MenuedContextType } from './menued-context-type';
 
 interface MenuHiddenCallback {
   (headerComponent: HeaderComponent): Observable<boolean>;

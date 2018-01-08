@@ -1,5 +1,5 @@
-import { Service, Services } from '../model/service.model';
 import { ReplicaSet, ReplicaSets } from '../model/replicaset.model';
+import { Service, Services } from '../model/service.model';
 
 
 export class ReplicaSetView {

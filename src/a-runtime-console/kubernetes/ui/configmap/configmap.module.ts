@@ -1,24 +1,24 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { MomentModule } from 'angular2-moment';
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-modal';
+import { Fabric8CommonModule } from '../../../common/common.module';
+import { KubernetesComponentsModule } from '../../components/components.module';
+import { ConfigMapDeleteDialog } from './delete-dialog/delete-dialog.configmap.component';
+import { ConfigMapEditPage } from './edit-page/edit-page.configmap.component';
+import { ConfigMapEditToolbarComponent } from './edit-toolbar/edit-toolbar.configmap.component';
+import { ConfigMapEditWrapperComponent } from './edit-wrapper/edit-wrapper.configmap.component';
+import { ConfigMapEditComponent } from './edit/edit.configmap.component';
 import { ConfigMapsListPage } from './list-page/list-page.configmap.component';
 import { ConfigMapsListToolbarComponent } from './list-toolbar/list-toolbar.configmap.component';
 import { ConfigMapsListComponent } from './list/list.configmap.component';
 import { ConfigMapViewPage } from './view-page/view-page.configmap.component';
-import { ConfigMapViewWrapperComponent } from './view-wrapper/view-wrapper.configmap.component';
 import { ConfigMapViewToolbarComponent } from './view-toolbar/view-toolbar.configmap.component';
+import { ConfigMapViewWrapperComponent } from './view-wrapper/view-wrapper.configmap.component';
 import { ConfigMapViewComponent } from './view/view.configmap.component';
-import { ConfigMapEditPage } from './edit-page/edit-page.configmap.component';
-import { ConfigMapEditWrapperComponent } from './edit-wrapper/edit-wrapper.configmap.component';
-import { ConfigMapEditToolbarComponent } from './edit-toolbar/edit-toolbar.configmap.component';
-import { ConfigMapEditComponent } from './edit/edit.configmap.component';
-import { ConfigMapDeleteDialog } from './delete-dialog/delete-dialog.configmap.component';
-import { Fabric8CommonModule } from '../../../common/common.module';
-import { MomentModule } from 'angular2-moment';
-import { KubernetesComponentsModule } from '../../components/components.module';
 
 export const configMapRoutes: Routes = [
   { path: '', component: ConfigMapsListPage },

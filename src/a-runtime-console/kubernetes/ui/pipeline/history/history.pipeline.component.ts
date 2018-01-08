@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { BuildConfigs, BuildConfig } from '../../../model/buildconfig.model';
+import { BuildConfig, BuildConfigs } from '../../../model/buildconfig.model';
 import { BuildConfigDeleteDialog } from '../../buildconfig/delete-dialog/delete-dialog.buildconfig.component';
 
 @Component({

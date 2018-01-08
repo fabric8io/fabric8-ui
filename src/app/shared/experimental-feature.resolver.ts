@@ -1,14 +1,14 @@
-import { Navigation } from './../models/navigation';
-import { Observable, ConnectableObservable, Subject, BehaviorSubject } from 'rxjs';
-import { AuthenticationService, UserService, User } from 'ngx-login-client';
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
   Resolve,
   Router,
-  NavigationEnd,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
+  RouterStateSnapshot
 } from '@angular/router';
+
+import { AuthenticationService, UserService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
+
 import { FeatureFlagConfig } from '../models/feature-flag-config';
 
 @Injectable()

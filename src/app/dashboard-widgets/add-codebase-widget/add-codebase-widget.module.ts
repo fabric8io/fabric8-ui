@@ -1,9 +1,10 @@
-import { AddCodebaseWidgetRoutingModule } from './add-codebase-widget-routing.module';
-import { CodebasesAddModule } from '../../space/create/codebases/codebases-add/codebases-add.module';
-import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
+import { CodebasesAddModule } from '../../space/create/codebases/codebases-add/codebases-add.module';
+import { AddCodebaseWidgetRoutingModule } from './add-codebase-widget-routing.module';
+import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
 
 
 @NgModule({

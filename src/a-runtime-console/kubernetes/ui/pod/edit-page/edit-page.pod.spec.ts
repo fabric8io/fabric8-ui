@@ -1,16 +1,16 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MockBackend } from '@angular/http/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
-import { RestangularModule } from 'ng2-restangular';
-import { PodEditPage } from './edit-page.pod.component';
-import { PodEditWrapperComponent } from '../edit-wrapper/edit-wrapper.pod.component';
-import { PodEditToolbarComponent } from '../edit-toolbar/edit-toolbar.pod.component';
-import { PodEditComponent } from '../edit/edit.pod.component';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
 import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { RestangularModule } from 'ng2-restangular';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { PodEditToolbarComponent } from '../edit-toolbar/edit-toolbar.pod.component';
+import { PodEditWrapperComponent } from '../edit-wrapper/edit-wrapper.pod.component';
+import { PodEditComponent } from '../edit/edit.pod.component';
+import { TestAppModule } from './../../../../app.test.module';
+import { PodEditPage } from './edit-page.pod.component';
 
 
 describe('PodEditPage', () => {

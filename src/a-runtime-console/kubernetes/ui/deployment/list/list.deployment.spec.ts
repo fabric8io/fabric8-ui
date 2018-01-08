@@ -1,19 +1,19 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { DeploymentsListComponent } from './list.deployment.component';
-import { Fabric8CommonModule } from '../../../../common/common.module';
+import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MomentModule } from 'angular2-moment';
-import { DeploymentDeleteDialog } from '../delete-dialog/delete-dialog.deployment.component';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { ModalModule } from 'ngx-modal';
-import { DeploymentScaleDialog } from '../scale-dialog/scale-dialog.deployment.component';
-import { FormsModule } from '@angular/forms';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
 import { RestangularModule } from 'ng2-restangular';
-import { MockBackend } from '@angular/http/testing';
+import { ModalModule } from 'ngx-modal';
+import { Fabric8CommonModule } from '../../../../common/common.module';
 import { KubernetesComponentsModule } from '../../../components/components.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { DeploymentDeleteDialog } from '../delete-dialog/delete-dialog.deployment.component';
+import { DeploymentScaleDialog } from '../scale-dialog/scale-dialog.deployment.component';
+import { TestAppModule } from './../../../../app.test.module';
+import { DeploymentsListComponent } from './list.deployment.component';
 
 describe('DeploymentsListComponent', () => {
   let component: DeploymentsListComponent;

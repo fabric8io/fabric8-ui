@@ -1,12 +1,11 @@
-import { UserService } from 'ngx-login-client';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { Observable, ConnectableObservable } from 'rxjs';
+import { ConnectableObservable, Observable } from 'rxjs';
 
+import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
-import { WorkItemService, WorkItem } from 'fabric8-planner';
+import { UserService } from 'ngx-login-client';
 
 import { DummyService } from './../shared/dummy.service';
 

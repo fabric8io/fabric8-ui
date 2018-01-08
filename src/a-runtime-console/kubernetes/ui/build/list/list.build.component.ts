@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { BuildDeleteDialog } from '../delete-dialog/delete-dialog.build.component';
 import { Builds } from '../../../model/build.model';
+import { BuildDeleteDialog } from '../delete-dialog/delete-dialog.build.component';
 
 @Component({
   selector: 'fabric8-builds-list',

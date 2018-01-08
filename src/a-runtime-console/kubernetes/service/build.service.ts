@@ -1,13 +1,13 @@
-import { WatcherFactory } from './watcher-factory.service';
 import { Inject, Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
-import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
-import { Builds, Build } from '../model/build.model';
-import { NamespacedResourceService } from './namespaced.resource.service';
-import { APIsStore } from '../store/apis.store';
-import { DevNamespaceScope } from './devnamespace.scope';
+import { Build, Builds } from '../model/build.model';
 import { pathJoin } from '../model/utils';
+import { APIsStore } from '../store/apis.store';
 import { getOpenShiftBuildUriPrefix } from './buildconfig.service';
+import { DevNamespaceScope } from './devnamespace.scope';
+import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
+import { NamespacedResourceService } from './namespaced.resource.service';
+import { WatcherFactory } from './watcher-factory.service';
 
 @Injectable()
 export class BuildService extends NamespacedResourceService<Build, Builds> {

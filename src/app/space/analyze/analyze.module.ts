@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { AnalyzeComponent } from './analyze.component';
 import { AnalyzeRoutingModule } from './analyze-routing.module';
+import { AnalyzeComponent } from './analyze.component';
 
 import { AnalyzeOverviewModule } from './analyze-overview/analyze-overview.module';
 

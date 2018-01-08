@@ -1,8 +1,4 @@
-import { Observable } from 'rxjs';
-
 import { Fabric8UIConfig } from './fabric8-ui-config';
-import { ConfigStore } from './../../base/config.store';
-import { ValWrapper } from './../../base/val-wrapper';
 
 function fabric8UIConfigFactory(): Fabric8UIConfig {
   let answer = window['Fabric8UIEnv'] || {};

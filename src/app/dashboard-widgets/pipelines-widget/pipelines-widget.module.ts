@@ -1,10 +1,11 @@
-import { MomentModule } from 'angular2-moment';
-import { RouterModule } from '@angular/router';
-import { PipelinesWidgetComponent } from './pipelines-widget.component';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AlmMomentTime, WidgetsModule } from 'ngx-widgets';
+import { RouterModule } from '@angular/router';
+
+import { MomentModule } from 'angular2-moment';
+
+import { PipelinesWidgetComponent } from './pipelines-widget.component';
 
 
 @NgModule({

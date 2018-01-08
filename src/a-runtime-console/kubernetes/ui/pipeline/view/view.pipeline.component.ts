@@ -1,4 +1,4 @@
-import { Input, Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BuildConfig } from '../../../model/buildconfig.model';
 
 @Component({

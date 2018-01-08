@@ -1,9 +1,9 @@
-import { NgModule }         from '@angular/core';
-import { CommonModule }     from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { SettingsOverviewComponent }     from './settings-overview.component';
 import { SettingsOverviewRoutingModule } from './settings-overview-routing.module';
+import { SettingsOverviewComponent } from './settings-overview.component';
 
 @NgModule({
   imports:      [ CommonModule, SettingsOverviewRoutingModule ],

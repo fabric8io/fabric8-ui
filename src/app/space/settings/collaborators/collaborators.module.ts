@@ -1,18 +1,16 @@
-import { Fabric8WitModule } from 'ngx-fabric8-wit';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
+import { Fabric8WitModule } from 'ngx-fabric8-wit';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { InfiniteScrollModule } from 'ngx-widgets';
 import { ModalModule } from 'ngx-modal';
-
+import { InfiniteScrollModule } from 'ngx-widgets';
 import { ListModule } from 'patternfly-ng';
 
-import { CollaboratorsComponent } from './collaborators.component';
-import { CollaboratorsRoutingModule } from './collaborators-routing.module';
-
 import { AddCollaboratorsDialogModule } from './add-collaborators-dialog/add-collaborators-dialog.module';
+import { CollaboratorsRoutingModule } from './collaborators-routing.module';
+import { CollaboratorsComponent } from './collaborators.component';
 
 @NgModule({
   imports: [

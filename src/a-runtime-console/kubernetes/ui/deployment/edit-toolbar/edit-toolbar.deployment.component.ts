@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Deployment } from '../../../model/deployment.model';
 import { DeploymentService } from '../../../service/deployment.service';
 import { YamlEditor } from '../../../view/yaml.editor';
-import { Deployment } from '../../../model/deployment.model';
 
 @Component({
   selector: 'fabric8-deployment-edit-toolbar',

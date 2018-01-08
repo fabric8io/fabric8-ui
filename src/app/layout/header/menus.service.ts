@@ -1,8 +1,10 @@
-import { MenuedContextType } from './menued-context-type';
 import { Injectable } from '@angular/core';
-import { MenuItem } from './../../models/menu-item';
-import { ContextType, Contexts, ContextTypes, Context } from 'ngx-fabric8-wit';
+
 import { cloneDeep } from 'lodash';
+import { Context, ContextType, ContextTypes } from 'ngx-fabric8-wit';
+
+import { MenuItem } from '../../models/menu-item';
+import { MenuedContextType } from './menued-context-type';
 
 @Injectable()
 export class MenusService {

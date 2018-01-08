@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Modal } from 'ngx-modal';
-import { Context, CollaboratorService } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
-import { ContextService } from '../../../../shared/context.service';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+
 import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
+import { CollaboratorService, Context } from 'ngx-fabric8-wit';
+import { User, UserService } from 'ngx-login-client';
+import { Modal } from 'ngx-modal';
+import { Subscription } from 'rxjs';
+
+import { ContextService } from '../../../../shared/context.service';
 
 @Component({
   host: {

@@ -1,31 +1,26 @@
-import {
-  async,
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { LocalStorageService } from 'angular-2-local-storage';
-import { Observable } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster, Notifications } from 'ngx-base';
 import {
-  Space,
   Contexts,
-  SpaceService,
-  SpaceNamePipe
+  SpaceNamePipe,
+  SpaceService
 } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
 
-import { ContextService } from '../../../shared/context.service';
-import { ContextsMock } from '../../../space/create/codebases/services/github.service.mock';
-import { MySpacesItemActionsComponent } from './my-spaces-item-actions.component';
 import { MenusService } from '../../../layout/header/menus.service';
-import { loggedInUser, profile, context1, context2 } from '../../../shared/context.service.mock';
-import { ProfileService } from '../../../profile/profile.service';
+import { ContextService } from '../../../shared/context.service';
+import { loggedInUser, profile } from '../../../shared/context.service.mock';
+import { ContextsMock } from '../../../space/create/codebases/services/github.service.mock';
+import { ProfileService } from '../../profile.service';
+import { MySpacesItemActionsComponent } from './my-spaces-item-actions.component';
 
 describe('My Spaces Item Actions Component', () => {
   let fixture;

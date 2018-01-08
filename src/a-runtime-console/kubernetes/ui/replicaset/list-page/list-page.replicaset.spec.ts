@@ -1,21 +1,21 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MockBackend } from '@angular/http/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
-import { RestangularModule } from 'ng2-restangular';
-import { ReplicaSetsListPage } from './list-page.replicaset.component';
-import { ReplicaSetsListComponent } from '../list/list.replicaset.component';
-import { ReplicaSetsListToolbarComponent } from '../list-toolbar/list-toolbar.replicaset.component';
-import { Fabric8CommonModule } from '../../../../common/common.module';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { ModalModule } from 'ngx-modal';
-import { MomentModule } from 'angular2-moment';
-import { ReplicaSetDeleteDialog } from '../delete-dialog/delete-dialog.replicaset.component';
-import { ReplicaSetScaleDialog } from '../scale-dialog/scale-dialog.replicaset.component';
 import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MomentModule } from 'angular2-moment';
+import { RestangularModule } from 'ng2-restangular';
+import { ModalModule } from 'ngx-modal';
+import { Fabric8CommonModule } from '../../../../common/common.module';
 import { KubernetesComponentsModule } from '../../../components/components.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { ReplicaSetDeleteDialog } from '../delete-dialog/delete-dialog.replicaset.component';
+import { ReplicaSetsListToolbarComponent } from '../list-toolbar/list-toolbar.replicaset.component';
+import { ReplicaSetsListComponent } from '../list/list.replicaset.component';
+import { ReplicaSetScaleDialog } from '../scale-dialog/scale-dialog.replicaset.component';
+import { TestAppModule } from './../../../../app.test.module';
+import { ReplicaSetsListPage } from './list-page.replicaset.component';
 
 describe('ReplicaSetsListPage', () => {
   let component: ReplicaSetsListPage;

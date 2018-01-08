@@ -5,25 +5,18 @@ import {
   Output
 } from '@angular/core';
 
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
-import {
-  FilterEvent,
-  SortEvent
-} from 'patternfly-ng';
+import { FilterEvent, SortEvent } from 'patternfly-ng';
+import { initContext, TestContext } from 'testing/test-context';
 
 import { DeploymentsToolbarComponent } from './deployments-toolbar.component';
 
 @Component({
   template: `
-  <deployments-toolbar
-  (onFilterChange)="filterChange($event)"
-  (onSortChange)="sortChange($event)"
-  [resultsCount]="resultsCount">
-  </deployments-toolbar>
+    <deployments-toolbar
+      (onFilterChange)="filterChange($event)"
+      (onSortChange)="sortChange($event)"
+      [resultsCount]="resultsCount">
+    </deployments-toolbar>
   `
 })
 class TestHostComponent {

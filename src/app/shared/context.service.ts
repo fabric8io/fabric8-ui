@@ -1,27 +1,25 @@
-import { ExtProfile, ProfileService } from './../profile/profile.service';
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { cloneDeep } from 'lodash';
-import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { User, UserService, Entity } from 'ngx-login-client';
+import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import {
-  Space,
   Context,
   Contexts,
   ContextTypes,
-  SpaceService,
-  SpaceNamePipe
+  Space,
+  SpaceNamePipe,
+  SpaceService
 } from 'ngx-fabric8-wit';
-import { Subject } from 'rxjs/Subject';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
+import { User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
+import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Subject } from 'rxjs/Subject';
+import { ExtProfile, ProfileService } from '../profile/profile.service';
 
-import { LocalStorageService } from 'angular-2-local-storage';
-import { Navigation } from './../models/navigation';
 import { MenusService } from '../layout/header/menus.service';
-
+import { Navigation } from '../models/navigation';
 import { EventService } from './event.service';
 
 interface RawContext {

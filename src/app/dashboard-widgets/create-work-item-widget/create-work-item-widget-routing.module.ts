@@ -1,8 +1,7 @@
-import { CreateWorkItemOverlayComponent } from './create-work-item-overlay/create-work-item-overlay.component';
 import { NgModule }  from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { codebasesAddRoutes } from '../../space/create/codebases/codebases-add/codebases-add-routing.module';
+import { CreateWorkItemOverlayComponent } from './create-work-item-overlay/create-work-item-overlay.component';
 
 const routes: Routes = [
   {

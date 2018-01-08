@@ -1,8 +1,8 @@
-import { Restangular } from 'ng2-restangular';
-import { KUBERNETES_RESTANGULAR } from './../service/kubernetes.restangular';
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { Http } from '@angular/http';
+import { Restangular } from 'ng2-restangular';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { KUBERNETES_RESTANGULAR } from './../service/kubernetes.restangular';
 
 /**
  * Lets keep around the singleton results to avoid doing too many requests for this static data

@@ -1,12 +1,12 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ReplicaSetEditToolbarComponent } from './edit-toolbar.replicaset.component';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { RouterTestingModule } from '@angular/router/testing';
 import { RestangularModule } from 'ng2-restangular';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { TestAppModule } from './../../../../app.test.module';
+import { ReplicaSetEditToolbarComponent } from './edit-toolbar.replicaset.component';
 
 describe('ReplicaSetEditToolbarComponent', () => {
   let replicaset: ReplicaSetEditToolbarComponent;

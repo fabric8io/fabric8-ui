@@ -1,20 +1,20 @@
-import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscriber } from 'rxjs';
-import { Notifications } from 'ngx-base';
-import { DeploymentService } from './../../../service/deployment.service';
-import { Environment, Space } from './../../../model/space.model';
-import { ServiceService } from './../../../service/service.service';
-import { DeploymentConfigService } from './../../../service/deploymentconfig.service';
-import { SpaceStore } from './../../../store/space.store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Notifications } from 'ngx-base';
+import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscriber } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
+import { sortedKeys } from '../../../model/build.model';
+import { findParameter } from '../../../model/helpers';
+import { SpaceNamespace } from '../../../model/space-namespace';
 import { RouteService } from '../../../service/route.service';
 import { AbstractWatchComponent } from '../../../support/abstract-watch.component';
-import { environmentOpenShiftConoleUrl } from '../../environment/list-page/list-page.environment.component';
 import { DeploymentView, DeploymentViews } from '../../../view/deployment.view';
-import { SpaceNamespace } from '../../../model/space-namespace';
-import { sortedKeys } from '../../../model/build.model';
-import { ActivatedRoute } from '@angular/router';
-import { findParameter } from '../../../model/helpers';
-import { Subscription } from 'rxjs/Subscription';
+import { environmentOpenShiftConoleUrl } from '../../environment/list-page/list-page.environment.component';
+import { Environment, Space } from './../../../model/space.model';
+import { DeploymentService } from './../../../service/deployment.service';
+import { DeploymentConfigService } from './../../../service/deploymentconfig.service';
+import { ServiceService } from './../../../service/service.service';
+import { SpaceStore } from './../../../store/space.store';
 
 @Component({
   selector: 'fabric8-apps-list-page',

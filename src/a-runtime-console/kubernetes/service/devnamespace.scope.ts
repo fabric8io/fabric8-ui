@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { Observable } from 'rxjs';
-import { INamespaceScope } from './namespace.scope';
-import { pathJoin } from '../model/utils';
-import { AuthenticationService } from 'ngx-login-client';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { Logger } from 'ngx-base';
+import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { AuthenticationService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { pathJoin } from '../model/utils';
+import { INamespaceScope } from './namespace.scope';
 
 /**
  * Defaults to using the Dev Space rather than the runtime environment

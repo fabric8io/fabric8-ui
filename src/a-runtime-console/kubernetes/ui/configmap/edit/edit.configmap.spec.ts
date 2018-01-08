@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ConfigMapEditComponent } from './edit.configmap.component';
 import { FormsModule } from '@angular/forms';
+import { ConfigMapEditComponent } from './edit.configmap.component';
 
 describe('ConfigMapEditComponent', () => {
   let configmap: ConfigMapEditComponent;

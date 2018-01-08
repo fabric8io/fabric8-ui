@@ -1,7 +1,8 @@
-import { async, TestBed } from '@angular/core/testing';
-import { ProjectInfoStepComponent } from './project-info-step.component';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { ProjectInfoStepComponent } from './project-info-step.component';
 
 describe('Forge-Wizard project info component', () => {
   let fixture, comp;

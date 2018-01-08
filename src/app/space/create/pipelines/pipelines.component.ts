@@ -1,33 +1,19 @@
-import { Fabric8UIConfig } from './../../../shared/config/fabric8-ui-config';
-import {
-  Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, ViewEncapsulation,
-  TemplateRef
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Subscription, Observable } from 'rxjs';
-
-import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Broadcaster } from 'ngx-base';
-import { ToolbarConfig, FilterConfig, FilterQuery, FilterEvent, Filter, SortEvent, SortField } from 'patternfly-ng';
+import { AuthenticationService, UserService } from 'ngx-login-client';
+import { Filter, FilterConfig, FilterEvent, FilterQuery, SortEvent, SortField, ToolbarConfig } from 'patternfly-ng';
+import { Subscription } from 'rxjs';
 
 
-import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
-import { PipelinesService } from './../../../shared/runtime-console/pipelines.service';
-import { Fabric8RuntimeConsoleService } from './../../../shared/runtime-console/fabric8-runtime-console.service';
-
-import {
-  BuildConfig,
-  BuildConfigs,
-  combineBuildConfigAndBuilds,
-  filterPipelines,
-  BuildConfigStore,
-  BuildStore
-} from '../../../../a-runtime-console/index';
-
-import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
-import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { BuildConfig } from 'a-runtime-console/index';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
+import { Fabric8UIConfig } from '../../../shared/config/fabric8-ui-config';
+import { PipelinesService } from '../../../shared/runtime-console/pipelines.service';
+import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

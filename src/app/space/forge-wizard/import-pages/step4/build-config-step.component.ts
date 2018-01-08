@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Gui } from 'ngx-forge';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
+import { Gui } from 'ngx-forge';
 
 @Component({
   selector: 'build-config-step',

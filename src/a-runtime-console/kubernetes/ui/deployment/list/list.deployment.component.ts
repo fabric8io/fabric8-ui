@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { DeploymentViews } from '../../../view/deployment.view';
 import { DeploymentDeleteDialog } from '../delete-dialog/delete-dialog.deployment.component';
 import { DeploymentScaleDialog } from '../scale-dialog/scale-dialog.deployment.component';
-import { DeploymentViews } from '../../../view/deployment.view';
 
 @Component({
   selector: 'fabric8-deployments-list',

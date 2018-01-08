@@ -1,16 +1,16 @@
-import { Fabric8UIConfig } from './../config/fabric8-ui-config';
-import { Response } from '@angular/http';
 import { Injectable } from '@angular/core';
-import { Spaces, Space } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-import { UserService } from 'ngx-login-client';
-import { ConfigMapService, ConfigMap } from '../../../a-runtime-console/index';
-import { Notifications, NotificationType } from 'ngx-base';
+import { Response } from '@angular/http';
 
 import * as yaml from 'js-yaml';
+import { Notifications, NotificationType } from 'ngx-base';
+import { Space, Spaces } from 'ngx-fabric8-wit';
+import { UserService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
 
-import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 import { DevNamespaceScope } from 'a-runtime-console/kubernetes/service/devnamespace.scope';
+import { ConfigMap, ConfigMapService } from '../../../a-runtime-console/index';
+import { Fabric8UIConfig } from './../config/fabric8-ui-config';
+import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 
 interface ConfigMapWrapper {
   configMap?: ConfigMap;

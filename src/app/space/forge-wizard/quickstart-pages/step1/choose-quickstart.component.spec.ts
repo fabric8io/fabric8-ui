@@ -1,6 +1,7 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+
 import { ChooseQuickstartComponent } from './choose-quickstart.component';
 
 describe('Forge-Wizard choose quickstart component', () => {

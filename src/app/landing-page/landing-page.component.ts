@@ -1,10 +1,9 @@
-import { LoginService } from './../shared/login.service';
-import { Broadcaster } from 'ngx-base';
-import { Router } from '@angular/router';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { Spaces, Context, Contexts } from 'ngx-fabric8-wit';
-import { UserService, User, AuthenticationService } from 'ngx-login-client';
+import { Broadcaster } from 'ngx-base';
+import { AuthenticationService } from 'ngx-login-client';
+
+import { LoginService } from '../shared/login.service';
 
 @Component({
   host: {

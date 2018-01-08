@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BuildConfigsListToolbarComponent } from './list-toolbar.buildconfig.component';
 import { Fabric8CommonModule } from '../../../../common/common.module';
+import { BuildConfigsListToolbarComponent } from './list-toolbar.buildconfig.component';
 
 describe('BuildConfigsListToolbarComponent', () => {
   let component: BuildConfigsListToolbarComponent;

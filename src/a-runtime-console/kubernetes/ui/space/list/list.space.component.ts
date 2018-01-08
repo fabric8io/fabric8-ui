@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { ParentLinkFactory } from '../../../../common/parent-link-factory';
 import { Spaces } from '../../../model/space.model';
 import { SpaceDeleteDialog } from '../delete-dialog/delete-dialog.space.component';
-import { ParentLinkFactory } from '../../../../common/parent-link-factory';
 
 @Component({
   selector: 'fabric8-spaces-list',

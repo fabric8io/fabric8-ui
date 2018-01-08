@@ -1,11 +1,11 @@
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+
+import * as jwt_decode from 'jwt-decode';
+import { Logger } from 'ngx-base';
+import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
-import { Headers, Http, RequestOptions } from '@angular/http';
-import { AuthenticationService, AUTH_API_URL } from 'ngx-login-client';
-import { Logger } from 'ngx-base';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-import * as jwt_decode from 'jwt-decode';
 import { Link } from './link';
 
 @Injectable()

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Input as GuiInput } from 'ngx-forge';
 import { FormGroup } from '@angular/forms';
+
+import { Input as GuiInput } from 'ngx-forge';
 
 @Component({
   selector: 'single-input',

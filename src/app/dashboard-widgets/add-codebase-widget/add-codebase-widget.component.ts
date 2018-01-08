@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-
-import { Contexts } from 'ngx-fabric8-wit';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
-import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
+import { Contexts } from 'ngx-fabric8-wit';
+
 import { Codebase } from '../../space/create/codebases/services/codebase';
+import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

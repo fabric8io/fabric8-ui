@@ -1,12 +1,13 @@
-import { ConnectedAccountsComponent } from './connected-accounts.component';
-
-import { AuthenticationService } from 'ngx-login-client';
-import { Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
+
+import { Contexts } from 'ngx-fabric8-wit';
+import { AuthenticationService } from 'ngx-login-client';
+import { UserService } from 'ngx-login-client';
+import { Observable } from 'rxjs/Observable';
+
 import { initContext, TestContext } from '../../../../testing/test-context';
 import { ProviderService } from '../../../shared/account/provider.service';
-import { UserService } from 'ngx-login-client';
+import { ConnectedAccountsComponent } from './connected-accounts.component';
 
 @Component({
   template: `<alm-connected-accounts></alm-connected-accounts>`

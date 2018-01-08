@@ -6,9 +6,8 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { DeploymentsService } from '../services/deployments.service';
-
 import { Environment } from '../models/environment';
+import { DeploymentsService } from '../services/deployments.service';
 
 @Component({
   selector: 'resource-card',

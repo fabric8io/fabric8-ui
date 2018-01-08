@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from 'ngx-login-client';
+
 import { TokenProvider } from 'ngx-forge';
+import { AuthenticationService } from 'ngx-login-client';
 
 @Injectable()
 export class KeycloakTokenProvider extends TokenProvider {

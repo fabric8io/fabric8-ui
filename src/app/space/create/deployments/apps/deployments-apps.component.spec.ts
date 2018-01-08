@@ -1,25 +1,17 @@
 import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
-import { By } from '@angular/platform-browser';
-import {
   Component,
   EventEmitter,
   Input,
   Output
 } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
-import {
-  FilterEvent,
-  SortEvent
-} from 'patternfly-ng';
-
+import { FilterEvent, SortEvent } from 'patternfly-ng';
 import { Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 
-import { DeploymentsAppsComponent } from './deployments-apps.component';
 import { Environment } from '../models/environment';
+import { DeploymentsAppsComponent } from './deployments-apps.component';
 
 @Component({
   template: '<deployments-apps></deployments-apps>'

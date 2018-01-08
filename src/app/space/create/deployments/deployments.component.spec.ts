@@ -1,27 +1,16 @@
+import { Component, Input } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
-
 import { By } from '@angular/platform-browser';
-import {
-  Component,
-  Input
-} from '@angular/core';
-
-import { createMock } from '../../../../testing/mock';
-
-import { Observable } from 'rxjs';
-
-import {
-  initContext,
-  TestContext
-} from '../../../../testing/test-context';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-
-import { DeploymentsComponent } from './deployments.component';
-import { DeploymentsService } from './services/deployments.service';
-import { Environment } from './models/environment';
-
 import { Spaces } from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
+
+import { createMock } from 'testing/mock';
+import { initContext, TestContext } from 'testing/test-context';
+import { DeploymentsComponent } from './deployments.component';
+import { Environment } from './models/environment';
+import { DeploymentsService } from './services/deployments.service';
 
 @Component({
   selector: 'deployments-resource-usage',

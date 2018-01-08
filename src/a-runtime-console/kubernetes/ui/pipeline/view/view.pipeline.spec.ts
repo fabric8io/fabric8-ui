@@ -1,18 +1,18 @@
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
-import { async, TestBed, ComponentFixture } from '@angular/core/testing';
-import { PipelineViewComponent } from './view.pipeline.component';
-import { MomentModule } from 'angular2-moment';
-import { ModalModule } from 'ngx-modal';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { RestangularModule } from 'ng2-restangular';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MomentModule } from 'angular2-moment';
+import { RestangularModule } from 'ng2-restangular';
+import { ModalModule } from 'ngx-modal';
 import { Fabric8CommonModule } from '../../../../common/common.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
 import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildconfig.dialogs.module';
+import { TestAppModule } from './../../../../app.test.module';
+import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { PipelineViewComponent } from './view.pipeline.component';
 
 describe('PipelineViewComponent', () => {
   let pipeline: PipelineViewComponent;

@@ -1,15 +1,8 @@
-import {
-  Component,
-  ViewChild
-} from '@angular/core';
+import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
 import { Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 
 import { DeploymentsDonutChartComponent } from './deployments-donut-chart.component';
 

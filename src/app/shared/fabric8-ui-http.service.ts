@@ -1,18 +1,17 @@
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
+  Headers,
   Http,
-  Response,
-  RequestOptions,
   Request,
+  RequestOptions,
   RequestOptionsArgs,
-  XHRBackend,
-  Headers
+  Response,
+  XHRBackend
 } from '@angular/http';
 
-import { Observable } from 'rxjs';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { HttpService, SSO_API_URL , AUTH_API_URL } from 'ngx-login-client';
-
+import { AUTH_API_URL, HttpService , SSO_API_URL } from 'ngx-login-client';
+import { Observable } from 'rxjs';
 import * as uuidV4 from 'uuid/v4';
 
 @Injectable()

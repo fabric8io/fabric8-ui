@@ -3,14 +3,14 @@ import {
   OnDestroy,
   ViewEncapsulation
 } from '@angular/core';
+import { Router } from '@angular/router';
 
+import { AuthenticationService, UserService } from 'ngx-login-client';
 import 'rxjs/operators/map';
 import { Subscription } from 'rxjs/Subscription';
-import { Router } from '@angular/router';
 
 import { ErrorService } from './error.service';
 
-import { UserService, User, AuthenticationService } from 'ngx-login-client';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

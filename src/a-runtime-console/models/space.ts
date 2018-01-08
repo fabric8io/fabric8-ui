@@ -1,5 +1,5 @@
-import { Team } from './team';
 import { ProcessTemplate } from './process-template';
+import { Team } from './team';
 
 export interface DevSpace {
     name: String;

@@ -1,18 +1,12 @@
+import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import {
-  Component,
-  Input
-} from '@angular/core';
-
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
 
 import { Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 
-import { DeploymentCardContainerComponent } from './deployment-card-container.component';
+
 import { Environment } from '../models/environment';
+import { DeploymentCardContainerComponent } from './deployment-card-container.component';
 
 @Component({
   template: '<deployment-card-container></deployment-card-container>'

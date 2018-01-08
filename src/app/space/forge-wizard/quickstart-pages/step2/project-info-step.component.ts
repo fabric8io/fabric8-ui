@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Gui, Input as GuiInput } from 'ngx-forge';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, Validators } from '@angular/forms';
+
+import { Gui, Input as GuiInput } from 'ngx-forge';
 
 @Component({
   selector: 'project-info-step',

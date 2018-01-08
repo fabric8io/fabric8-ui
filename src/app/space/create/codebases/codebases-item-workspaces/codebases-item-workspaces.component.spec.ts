@@ -1,18 +1,14 @@
-import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.component';
-import { Observable } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { async, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { FormsModule, NgForm } from '@angular/forms';
-//import { ContextsMock, expectedGitHubRepoDetails, expectedGitHubRepoCommit, expectedGitHubRepoLicense } from '../services/github.service.mock';
-import { Broadcaster, Notifications, NotificationType } from 'ngx-base';
+
+import { Broadcaster, Notifications } from 'ngx-base';
+import { Observable } from 'rxjs';
+
 import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
-import {
-  async,
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
+import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.component';
 
 describe('Codebases Item Details Component', () => {
   let broadcasterMock: any;

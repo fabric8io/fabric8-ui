@@ -1,17 +1,17 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MomentModule } from 'angular2-moment';
 import { RestangularModule } from 'ng2-restangular';
-import { BuildConfigEditWrapperComponent } from './edit-wrapper.buildconfig.component';
+import { ModalModule } from 'ngx-modal';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
 import { BuildConfigEditToolbarComponent } from '../edit-toolbar/edit-toolbar.buildconfig.component';
 import { BuildConfigEditComponent } from '../edit/edit.buildconfig.component';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { MomentModule } from 'angular2-moment';
-import { ModalModule } from 'ngx-modal';
-import { FormsModule } from '@angular/forms';
+import { TestAppModule } from './../../../../app.test.module';
+import { BuildConfigEditWrapperComponent } from './edit-wrapper.buildconfig.component';
 
 describe('BuildConfigEditWrapperComponent', () => {
   let buildconfig: BuildConfigEditWrapperComponent;

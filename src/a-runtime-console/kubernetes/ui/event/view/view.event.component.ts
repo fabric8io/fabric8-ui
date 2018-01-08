@@ -1,6 +1,6 @@
-import { Input, Component, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Event } from '../../../model/event.model';
-import { resourceKindToCollectionName, isNamespacedKind } from '../../../model/helpers';
+import { isNamespacedKind, resourceKindToCollectionName } from '../../../model/helpers';
 
 
 @Component({

@@ -1,9 +1,9 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { plural } from 'pluralize';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { RESTService } from './rest.service';
-import { BaseEntity } from './entity.model';
 import { Observable } from 'rxjs';
+import { BaseEntity } from './entity.model';
+import { RESTService } from './rest.service';
 
 export abstract class AbstractStore<T extends BaseEntity, L extends Array<T>,
   R extends RESTService<T, L>> {

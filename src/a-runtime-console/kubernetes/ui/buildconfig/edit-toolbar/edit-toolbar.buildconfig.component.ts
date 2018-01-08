@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { BuildConfig } from '../../../model/buildconfig.model';
 import { BuildConfigService } from '../../../service/buildconfig.service';
 import { YamlEditor } from '../../../view/yaml.editor';
-import { BuildConfig } from '../../../model/buildconfig.model';
 
 @Component({
   selector: 'fabric8-buildconfig-edit-toolbar',

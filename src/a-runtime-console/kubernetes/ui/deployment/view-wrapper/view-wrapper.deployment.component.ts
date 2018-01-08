@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Deployment } from '../../../model/deployment.model';
 import { CompositeDeploymentStore } from '../../../store/compositedeployment.store';
-import { ActivatedRoute } from '@angular/router';
 import { AbstractViewWrapperComponent } from '../../../support/abstract-viewwrapper-component';
 
 @Component({

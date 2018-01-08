@@ -1,12 +1,13 @@
-import { Component, Input, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { AuthenticationService } from 'ngx-login-client';
-import { Logger, Broadcaster } from 'ngx-base';
-import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
-import { IModalHost } from '../../space/wizard/models/modal-host';
-import { EventService } from '../../shared/event.service';
+
+import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
+import { AuthenticationService } from 'ngx-login-client';
+import { Subject } from 'rxjs';
+
+import { EventService } from '../../shared/event.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

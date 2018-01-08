@@ -1,14 +1,14 @@
-import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
+  NavigationEnd,
   Resolve,
   Router,
-  NavigationEnd,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
+  RouterStateSnapshot
 } from '@angular/router';
-import { LoginService } from './login.service';
 import { AuthenticationService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
+import { LoginService } from './login.service';
 
 @Injectable()
 export class TokenResolver implements Resolve<string> {

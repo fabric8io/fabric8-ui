@@ -1,6 +1,6 @@
-import { Observable } from 'rxjs';
-import { Notifications, NotificationAction, Notification } from 'ngx-base';
 import { Injectable } from '@angular/core';
+import { Notification, NotificationAction, Notifications } from 'ngx-base';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class NoNotifications implements Notifications {

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Namespace } from '../../../model/namespace.model';
 import { NamespaceStore } from '../../../store/namespace.store';
 import { AbstractViewWrapperComponent } from '../../../support/abstract-viewwrapper-component';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'fabric8-namespace-view-wrapper',

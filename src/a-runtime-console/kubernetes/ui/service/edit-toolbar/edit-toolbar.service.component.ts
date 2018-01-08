@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Service } from '../../../model/service.model';
 import { ServiceService } from '../../../service/service.service';
 import { YamlEditor } from '../../../view/yaml.editor';
-import { Service } from '../../../model/service.model';
 
 @Component({
   selector: 'fabric8-service-edit-toolbar',

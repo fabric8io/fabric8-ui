@@ -1,26 +1,15 @@
-import {
-  Component,
-  Input
-} from '@angular/core';
-
+import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
-import { createMock } from 'testing/mock';
-
 import { Observable } from 'rxjs';
+import { createMock } from 'testing/mock';
+import { initContext, TestContext } from 'testing/test-context';
 
-import { DeploymentsService } from '../services/deployments.service';
-
-import { Environment } from '../models/environment';
 import { CpuStat } from '../models/cpu-stat';
+import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Stat } from '../models/stat';
-
+import { DeploymentsService } from '../services/deployments.service';
 import { ResourceCardComponent } from './resource-card.component';
 
 @Component({

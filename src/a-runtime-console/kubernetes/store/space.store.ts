@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Namespaces, Namespace, isSecretsNamespace, isSystemNamespace } from '../model/namespace.model';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
-import { NamespaceStore } from './namespace.store';
-import { ConfigMapService } from '../service/configmap.service';
-import { Space, Spaces, asSpaces, SpaceConfig } from '../model/space.model';
-import { ConfigMap, ConfigMaps } from '../model/configmap.model';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import 'rxjs/add/observable/forkJoin';
 import { OnLogin } from '../../shared/onlogin.service';
+import { ConfigMap, ConfigMaps } from '../model/configmap.model';
+import { isSecretsNamespace, isSystemNamespace, Namespace, Namespaces } from '../model/namespace.model';
+import { asSpaces, Space, SpaceConfig, Spaces } from '../model/space.model';
+import { ConfigMapService } from '../service/configmap.service';
 import { messageEventToResourceOperation, Operation } from '../service/resource-operation';
 import { Watcher } from '../service/watcher';
 import { ConfigMapStore } from './configmap.store';
+import { NamespaceStore } from './namespace.store';
 
 
 const fabric8EnvironmentsName = 'fabric8-environments';

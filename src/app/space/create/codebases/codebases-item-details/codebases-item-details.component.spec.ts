@@ -1,19 +1,15 @@
-import { CodebasesItemDetailsComponent } from './codebases-item-details.component';
-import { Observable } from 'rxjs';
-import { Contexts } from 'ngx-fabric8-wit';
-import { CodebasesService } from '../services/codebases.service';
-import { GitHubService } from '../services/github.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
+import { async, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { FormsModule, NgForm } from '@angular/forms';
-import { ContextsMock, expectedGitHubRepoDetails, expectedGitHubRepoCommit, expectedGitHubRepoLicense } from '../services/github.service.mock';
+
 import { Logger } from 'ngx-base';
-import {
-  async,
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
+import { Contexts } from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
+
+import { GitHubService } from '../services/github.service';
+import { ContextsMock, expectedGitHubRepoCommit, expectedGitHubRepoDetails, expectedGitHubRepoLicense } from '../services/github.service.mock';
+import { CodebasesItemDetailsComponent } from './codebases-item-details.component';
 
 describe('Codebases Item Details Component', () => {
   let gitHubServiceMock: any;

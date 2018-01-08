@@ -1,6 +1,7 @@
-import { DummyService } from './../dummy/dummy.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { DummyService } from '../dummy/dummy.service';
 
 /*
 import { Logger } from '../shared/logger.service';
@@ -11,12 +12,12 @@ import { ToggleService } from '../toggle/toggle.service';
 import { Toggle } from '../toggle/toggle';
 import { ContextService } from '../shared/context.service';
 */
-import { User } from '../models/user';
 import { OAuthService } from 'angular2-oauth2/oauth-service';
-import { OnLogin } from '../shared/onlogin.service';
 import { Broadcaster } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
+import { User } from '../models/user';
 import { LoginService } from '../shared/login.service';
+import { OnLogin } from '../shared/onlogin.service';
 
 @Component({
   selector: 'alm-app-header',

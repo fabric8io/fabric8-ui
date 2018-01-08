@@ -1,10 +1,10 @@
 import * as jsyaml from 'js-yaml';
 
-import { Namespace, Namespaces, isSecretsNamespace, isSystemNamespace } from './namespace.model';
-import { ConfigMap } from './configmap.model';
 import { Entity } from '../../models/entity';
-import { openShiftBrowseResourceUrl } from './helpers';
 import { currentOAuthConfig } from '../store/oauth-config-store';
+import { ConfigMap } from './configmap.model';
+import { openShiftBrowseResourceUrl } from './helpers';
+import { isSecretsNamespace, isSystemNamespace, Namespace, Namespaces } from './namespace.model';
 
 
 export class SpaceConfig {

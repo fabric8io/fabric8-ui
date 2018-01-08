@@ -1,11 +1,11 @@
-import { WatcherFactory } from './watcher-factory.service';
 import { Restangular } from 'ng2-restangular';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { KubernetesResource } from '../model/kubernetesresource.model';
+import { isOpenShift } from '../store/apis.store';
 import { NamespaceScope } from './namespace.scope';
 import { NamespacedResourceService } from './namespaced.resource.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { isOpenShift } from '../store/apis.store';
 import { Watcher } from './watcher';
+import { WatcherFactory } from './watcher-factory.service';
 
 
 export abstract class OpenShiftNamespacedResourceService<T extends KubernetesResource, L extends Array<T>> extends NamespacedResourceService<T, L> {

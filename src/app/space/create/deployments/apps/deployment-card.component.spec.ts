@@ -1,43 +1,37 @@
 import {
+  Component,
+  DebugElement,
+  Input
+} from '@angular/core';
+import {
   ComponentFixture,
   fakeAsync,
   flush,
   flushMicrotasks,
   TestBed
 } from '@angular/core/testing';
-
-import { createMock } from 'testing/mock';
-
 import { By } from '@angular/platform-browser';
-import {
-  Component,
-  DebugElement,
-  Input
-} from '@angular/core';
 
-import {
-  BehaviorSubject,
-  Observable,
-  Subject
-} from 'rxjs';
-
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 import {
   BsDropdownConfig,
   BsDropdownModule,
   BsDropdownToggleDirective
 } from 'ngx-bootstrap/dropdown';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-
-import { NotificationsService } from 'app/shared/notifications.service';
-
-import { DeploymentCardComponent } from './deployment-card.component';
-import { DeploymentsService } from '../services/deployments.service';
-import { Environment } from '../models/environment';
-import { CpuStat } from '../models/cpu-stat';
-
-// Makes patternfly charts available
 import { ChartModule } from 'patternfly-ng';
 import 'patternfly/dist/js/patternfly-settings.js';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject
+} from 'rxjs';
+import { createMock } from 'testing/mock';
+
+import { NotificationsService } from 'app/shared/notifications.service';
+import { CpuStat } from '../models/cpu-stat';
+import { Environment } from '../models/environment';
+import { DeploymentsService } from '../services/deployments.service';
+import { DeploymentCardComponent } from './deployment-card.component';
 
 @Component({
   selector: 'deployments-donut',

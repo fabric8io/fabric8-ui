@@ -1,10 +1,11 @@
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { AuthenticationService, UserService } from 'ngx-login-client';
+
 import { Logger } from 'ngx-base';
+import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { Codebase } from './codebase';
 
 @Injectable()

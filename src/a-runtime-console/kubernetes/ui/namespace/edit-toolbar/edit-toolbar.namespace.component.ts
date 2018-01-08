@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Namespace } from '../../../model/namespace.model';
 import { NamespaceService } from '../../../service/namespace.service';
 import { YamlEditor } from '../../../view/yaml.editor';
-import { Namespace } from '../../../model/namespace.model';
 
 @Component({
   selector: 'fabric8-namespace-edit-toolbar',

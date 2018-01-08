@@ -1,33 +1,28 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ChartModule, ToolbarModule } from 'patternfly-ng';
 
-import { DeploymentsComponent } from '../deployments/deployments.component';
-import { DeploymentsAppsComponent } from '../deployments/apps/deployments-apps.component';
-import { DeploymentDetailsComponent } from '../deployments/apps/deployment-details.component';
-import { DeploymentsResourceUsageComponent } from '../deployments/resource-usage/deployments-resource-usage.component';
-import { DeploymentCardContainerComponent } from '../deployments/apps/deployment-card-container.component';
-import { DeploymentCardComponent } from '../deployments/apps/deployment-card.component';
-import { DeploymentGraphLabelComponent } from '../deployments/apps/deployment-graph-label.component';
+import { DeploymentCardContainerComponent } from './apps/deployment-card-container.component';
+import { DeploymentCardComponent } from './apps/deployment-card.component';
+import { DeploymentDetailsComponent } from './apps/deployment-details.component';
+import { DeploymentGraphLabelComponent } from './apps/deployment-graph-label.component';
+import { DeploymentsAppsComponent } from './apps/deployments-apps.component';
+import { DeploymentsDonutChartComponent } from './deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
 import { DeploymentStatusIconComponent } from '../deployments/apps/deployment-status-icon.component';
 import { DeploymentsDonutComponent } from './deployments-donut/deployments-donut.component';
-import {
-  DeploymentsDonutChartComponent
-} from './deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
-import { DeploymentsToolbarComponent } from './deployments-toolbar/deployments-toolbar.component';
-import { ResourceCardComponent } from '../deployments/resource-usage/resource-card.component';
-import { UtilizationBarComponent } from '../deployments/resource-usage/utilization-bar.component';
-
 import { DeploymentsRoutingModule } from './deployments-routing.module';
-
-import { DeploymentsService } from '../deployments/services/deployments.service';
-
-import { ChartModule, ToolbarModule } from 'patternfly-ng';
+import { DeploymentsToolbarComponent } from './deployments-toolbar/deployments-toolbar.component';
+import { DeploymentsComponent } from './deployments.component';
+import { DeploymentsResourceUsageComponent } from './resource-usage/deployments-resource-usage.component';
+import { ResourceCardComponent } from './resource-usage/resource-card.component';
+import { UtilizationBarComponent } from './resource-usage/utilization-bar.component';
+import { DeploymentsService } from './services/deployments.service';
 
 @NgModule({
   imports: [

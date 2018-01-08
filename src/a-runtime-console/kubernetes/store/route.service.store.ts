@@ -1,8 +1,8 @@
-import { Services, enrichServiceWithRoute } from '../model/service.model';
 import { Injectable } from '@angular/core';
-import { ServiceStore } from './service.store';
 import { Observable } from 'rxjs';
+import { enrichServiceWithRoute, Services } from '../model/service.model';
 import { RouteStore } from './route.store';
+import { ServiceStore } from './service.store';
 
 @Injectable()
 export class RouteServiceStore  {

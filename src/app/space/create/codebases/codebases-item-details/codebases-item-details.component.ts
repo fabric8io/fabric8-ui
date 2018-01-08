@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+
+import { Logger } from 'ngx-base';
+import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 
 import { Codebase } from '../services/codebase';
-import { Context, Contexts } from 'ngx-fabric8-wit';
 import { GitHubService } from '../services/github.service';
-import { Logger } from 'ngx-base';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

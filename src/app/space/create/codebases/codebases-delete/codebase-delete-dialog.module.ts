@@ -1,5 +1,6 @@
-import { NgModule }           from '@angular/core';
-import { CommonModule }       from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
 import { ModalModule } from 'ngx-modal';
 
 import { CodebaseDeleteDialogComponent } from './codebase-delete-dialog.component';

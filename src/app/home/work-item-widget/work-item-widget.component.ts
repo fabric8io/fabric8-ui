@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Subscription } from 'rxjs';
 
-import { WorkItemService, WorkItem } from 'fabric8-planner';
+import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { UserService, User } from 'ngx-login-client';
+import { User, UserService } from 'ngx-login-client';
+import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 
 @Component({

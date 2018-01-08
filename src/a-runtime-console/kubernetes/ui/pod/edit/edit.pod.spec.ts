@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { PodEditComponent } from './edit.pod.component';
 import { FormsModule } from '@angular/forms';
+import { PodEditComponent } from './edit.pod.component';
 
 describe('PodEditComponent', () => {
   let pod: PodEditComponent;

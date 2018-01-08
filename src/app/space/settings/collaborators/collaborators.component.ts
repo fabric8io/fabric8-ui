@@ -1,14 +1,13 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { IModalHost } from '../../wizard/models/modal-host';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import { Context, CollaboratorService } from 'ngx-fabric8-wit';
-
+import { find } from 'lodash';
+import { CollaboratorService, Context } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
-import { ListConfig, EmptyStateConfig } from 'patternfly-ng';
+import { EmptyStateConfig, ListConfig } from 'patternfly-ng';
+import { Subscription } from 'rxjs';
 
 import { ContextService } from '../../../shared/context.service';
-import { find } from 'lodash';
+import { IModalHost } from '../../wizard/models/modal-host';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

@@ -1,4 +1,4 @@
-import { Input, Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ReplicaSet } from '../../../model/replicaset.model';
 import { ReplicaSetScaleDialog } from '../scale-dialog/scale-dialog.replicaset.component';
 

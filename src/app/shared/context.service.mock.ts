@@ -1,12 +1,5 @@
 import { cloneDeep } from 'lodash';
-import {
-  Space,
-  Context,
-  Contexts,
-  ContextTypes,
-  SpaceService,
-  SpaceNamePipe
-} from 'ngx-fabric8-wit';
+import { Context, Space } from 'ngx-fabric8-wit';
 
 export const loggedInUser = {
   'attributes': {

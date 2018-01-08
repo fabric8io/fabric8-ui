@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ReplicaSet } from '../../../model/replicaset.model';
-import { ReplicaSetService } from '../../../service/replicaset.service';
 import { ReplicationController } from '../../../model/replicationcontroller.model';
+import { ReplicaSetService } from '../../../service/replicaset.service';
 import { ReplicationControllerService } from '../../../service/replicationcontroller.service';
 import { CompositeReplicaSetStore } from '../../../store/compositedreplicaset.store';
 

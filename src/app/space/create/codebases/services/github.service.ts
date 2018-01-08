@@ -1,11 +1,12 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { AuthenticationService } from 'ngx-login-client';
-import { Logger } from 'ngx-base';
-import { Observable, Subscription } from 'rxjs';
-import { cloneDeep } from 'lodash';
 
+import { cloneDeep } from 'lodash';
+import { Logger } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
+import { AuthenticationService } from 'ngx-login-client';
+import { Observable, Subscription } from 'rxjs';
+
 import {
   GitHubRepo,
   GitHubRepoCommit,

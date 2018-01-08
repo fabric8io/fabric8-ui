@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateComponent } from './create.component';
-import { CodebasesComponent } from './codebases/codebases.component';
+
 import { ExperimentalFeatureResolver } from '../../shared/experimental-feature.resolver';
+import { CodebasesComponent } from './codebases/codebases.component';
+import { CreateComponent } from './create.component';
 
 const routes: Routes = [
   {

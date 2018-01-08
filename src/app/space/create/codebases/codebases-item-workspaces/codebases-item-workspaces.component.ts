@@ -1,11 +1,12 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+
+import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
 
 import { Codebase } from '../services/codebase';
-import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
 import { WindowService } from '../services/window.service';
-import { WorkspacesService } from '../services/workspaces.service';
 import { Workspace } from '../services/workspace';
+import { WorkspacesService } from '../services/workspaces.service';
 
 export class WorkspaceCreatedEvent {
   codebase: Codebase;

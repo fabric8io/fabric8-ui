@@ -1,15 +1,16 @@
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  NavigationEnd,
+  Resolve,
+  Router,
+  RouterStateSnapshot
+} from '@angular/router';
+
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Injectable } from '@angular/core';
-import {
-  Resolve,
-  Router,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  NavigationEnd
-} from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ContextCurrentUserGuard implements Resolve<any> {

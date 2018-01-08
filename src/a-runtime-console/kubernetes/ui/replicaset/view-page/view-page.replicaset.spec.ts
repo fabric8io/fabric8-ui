@@ -1,20 +1,20 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MockBackend } from '@angular/http/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
-import { RestangularModule } from 'ng2-restangular';
-import { ReplicaSetViewPage } from './view-page.replicaset.component';
-import { ReplicaSetViewWrapperComponent } from '../view-wrapper/view-wrapper.replicaset.component';
-import { ReplicaSetViewToolbarComponent } from '../view-toolbar/view-toolbar.replicaset.component';
-import { ReplicaSetViewComponent } from '../view/view.replicaset.component';
-import { MomentModule } from 'angular2-moment';
-import { ReplicaSetScaleDialog } from '../scale-dialog/scale-dialog.replicaset.component';
-import { ModalModule } from 'ngx-modal';
 import { FormsModule } from '@angular/forms';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MomentModule } from 'angular2-moment';
+import { RestangularModule } from 'ng2-restangular';
+import { ModalModule } from 'ngx-modal';
 import { Fabric8CommonModule } from '../../../../common/common.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { ReplicaSetScaleDialog } from '../scale-dialog/scale-dialog.replicaset.component';
+import { ReplicaSetViewToolbarComponent } from '../view-toolbar/view-toolbar.replicaset.component';
+import { ReplicaSetViewWrapperComponent } from '../view-wrapper/view-wrapper.replicaset.component';
+import { ReplicaSetViewComponent } from '../view/view.replicaset.component';
+import { TestAppModule } from './../../../../app.test.module';
+import { ReplicaSetViewPage } from './view-page.replicaset.component';
 
 describe('ReplicaSetViewPage', () => {
   let replicaset: ReplicaSetViewPage;

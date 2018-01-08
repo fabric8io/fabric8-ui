@@ -1,15 +1,13 @@
-import { Http, Headers } from '@angular/http';
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
+import { Headers, Http } from '@angular/http';
 import { Router } from '@angular/router';
 
-import { Observable, ConnectableObservable } from 'rxjs';
 import { cloneDeep } from 'lodash';
+import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
+import { AUTH_API_URL, Profile, User , UserService } from 'ngx-login-client';
+import { ConnectableObservable, Observable } from 'rxjs';
 
-import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { Profile, User, UserService , AUTH_API_URL } from 'ngx-login-client';
-
-import { DummyService } from './../shared/dummy.service';
+import { DummyService } from '../shared/dummy.service';
 
 export class ExtUser extends User {
   attributes: ExtProfile;

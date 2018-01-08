@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { PodService } from '../service/pod.service';
 import { Pod, Pods } from '../model/pod.model';
-import { NamespacedResourceStore } from './namespacedresource.store';
 import { NamespaceScope } from '../service/namespace.scope';
+import { PodService } from '../service/pod.service';
+import { NamespacedResourceStore } from './namespacedresource.store';
 
 @Injectable()
 export class PodStore extends NamespacedResourceStore<Pod, Pods, PodService> {

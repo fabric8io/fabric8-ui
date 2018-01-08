@@ -1,28 +1,19 @@
 import { TestBed } from '@angular/core/testing';
-import { Http, Response, ResponseOptions, XHRBackend, HttpModule } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
-import { AuthenticationService, AUTH_API_URL } from 'ngx-login-client';
-import { Logger } from 'ngx-base';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { ContextService } from './context.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Broadcaster, Notifications, Notification, NotificationType } from 'ngx-base';
-import { User, UserService, Entity } from 'ngx-login-client';
-import { MenusService } from '../layout/header/menus.service';
-import {
-  Space,
-  Context,
-  Contexts,
-  ContextTypes,
-  SpaceService,
-  SpaceNamePipe
-} from 'ngx-fabric8-wit';
-import { ProfileService } from './../profile/profile.service';
+import { HttpModule } from '@angular/http';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { LocalStorageService } from 'angular-2-local-storage';
-import { EventService } from './event.service';
-import { Observable } from 'rxjs';
 import { cloneDeep } from 'lodash';
-import { loggedInUser, profile, context1, context2 } from './context.service.mock';
+import { Broadcaster, Notifications } from 'ngx-base';
+import { SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
+import { UserService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
+
+import { MenusService } from '../layout/header/menus.service';
+import { ProfileService } from '../profile/profile.service';
+import { ContextService } from './context.service';
+import { context1, context2, loggedInUser, profile } from './context.service.mock';
+import { EventService } from './event.service';
 
 describe('Context Service:', () => {
   let mockRouter: any;

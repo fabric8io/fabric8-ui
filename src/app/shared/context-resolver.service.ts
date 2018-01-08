@@ -1,15 +1,18 @@
-import { Navigation } from './../models/navigation';
-import { ContextService } from './context.service';
-import { Observable, ConnectableObservable, Subject, BehaviorSubject } from 'rxjs';
-import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
+  NavigationEnd,
   Resolve,
   Router,
-  NavigationEnd,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
+  RouterStateSnapshot
 } from '@angular/router';
+
+import { Context, Contexts } from 'ngx-fabric8-wit';
+import { BehaviorSubject, ConnectableObservable, Observable, Subject } from 'rxjs';
+
+import { Navigation } from '../models/navigation';
+import { ContextService } from './context.service';
+
 @Injectable()
 export class ContextResolver implements Resolve<Context> {
 

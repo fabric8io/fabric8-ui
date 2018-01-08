@@ -1,18 +1,18 @@
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MomentModule } from 'angular2-moment';
 import { RestangularModule } from 'ng2-restangular';
-import { EventViewWrapperComponent } from './view-wrapper.event.component';
+import { ModalModule } from 'ngx-modal';
+import { Fabric8CommonModule } from '../../../../common/common.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
 import { EventViewToolbarComponent } from '../view-toolbar/view-toolbar.event.component';
 import { EventViewComponent } from '../view/view.event.component';
-import { MomentModule } from 'angular2-moment';
-import { ModalModule } from 'ngx-modal';
-import { FormsModule } from '@angular/forms';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { Fabric8CommonModule } from '../../../../common/common.module';
+import { TestAppModule } from './../../../../app.test.module';
+import { EventViewWrapperComponent } from './view-wrapper.event.component';
 
 describe('EventViewWrapperComponent', () => {
   let event: EventViewWrapperComponent;

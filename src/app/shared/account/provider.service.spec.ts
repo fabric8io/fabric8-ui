@@ -1,10 +1,10 @@
-import { MockBackend } from '@angular/http/testing';
-import { ProviderService } from './provider.service';
-import { Broadcaster, Logger } from 'ngx-base';
 import { inject, TestBed } from '@angular/core/testing';
-import { BaseRequestOptions, Http, Response, ResponseOptions } from '@angular/http';
-import { AuthenticationService, AUTH_API_URL } from 'ngx-login-client';
+import { BaseRequestOptions, Http } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 
+import { Broadcaster, Logger } from 'ngx-base';
+import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
+import { ProviderService } from './provider.service';
 
 describe('Service: Provider Service', () => {
 

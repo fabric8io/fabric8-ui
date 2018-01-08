@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { MenuItem } from '../../../models/menu-item';
+import { NavigationEnd, Router } from '@angular/router';
+
 import { ParentLinkFactory } from '../../../common/parent-link-factory';
+import { MenuItem } from '../../../models/menu-item';
 
 export const resourceMenus = [
   {

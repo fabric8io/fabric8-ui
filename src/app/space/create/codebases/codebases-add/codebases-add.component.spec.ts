@@ -1,27 +1,20 @@
-import { CodebasesAddComponent } from './codebases-add.component';
-import { Observable } from 'rxjs';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Contexts } from 'ngx-fabric8-wit';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { By } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { Broadcaster, Notifications } from 'ngx-base';
+import { Contexts } from 'ngx-fabric8-wit';
+import { AuthenticationService, UserService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
+
+import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
-import { Logger } from 'ngx-base';
-import { AuthenticationService, UserService } from 'ngx-login-client';
-import { MockBackend } from '@angular/http/testing';
-import { XHRBackend, HttpModule } from '@angular/http';
-import { ContextsMock, expectedGitHubRepo, expectedGitHubRepoCommit, expectedGitHubRepoDetails, expectedGitHubRepoLicense } from '../services/github.service.mock';
-import { Codebase } from '../services/codebase';
-import { FormsModule, NgForm } from '@angular/forms';
-import {
-  async,
-  ComponentFixture,
-  fakeAsync,
-  inject,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { ContextsMock, expectedGitHubRepoDetails, expectedGitHubRepoLicense } from '../services/github.service.mock';
+import { CodebasesAddComponent } from './codebases-add.component';
 
 describe('Codebases Add Component', () => {
 

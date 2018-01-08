@@ -1,23 +1,25 @@
-import { Context } from './../models/context';
-import { ContextType } from './../models/context-type';
-import { DevSpace } from './../models/space';
-import { Resources } from './../models/resources';
-import { ProcessTemplate } from './../models/process-template';
-import { User } from './../models/user';
-import { Team } from './../models/team';
-import { Entity } from './../models/entity';
 import { Injectable, OnInit } from '@angular/core';
-import 'rxjs/add/operator/toPromise';
-import { Observable } from 'rxjs';
-import { Spaces, Space, LabelSpace } from '../kubernetes/model/space.model';
-import { SpaceStore } from '../kubernetes/store/space.store';
-import { Router, NavigationEnd, ActivatedRoute, Params } from '@angular/router';
-import { BuildConfigStore } from '../kubernetes/store/buildconfig.store';
-import { BuildConfigs, BuildConfig } from '../kubernetes/model/buildconfig.model';
-import { MenuItem } from '../models/menu-item';
-import { resourceMenus } from '../kubernetes/components/resource-header/resource.header.component';
-import { pathJoin } from '../kubernetes/model/utils';
+import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
+
 import { Broadcaster } from 'ngx-base';
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/toPromise';
+
+import { resourceMenus } from '../kubernetes/components/resource-header/resource.header.component';
+import { BuildConfig, BuildConfigs } from '../kubernetes/model/buildconfig.model';
+import { LabelSpace, Space, Spaces } from '../kubernetes/model/space.model';
+import { pathJoin } from '../kubernetes/model/utils';
+import { BuildConfigStore } from '../kubernetes/store/buildconfig.store';
+import { SpaceStore } from '../kubernetes/store/space.store';
+import { Context } from '../models/context';
+import { ContextType } from '../models/context-type';
+import { Entity } from '../models/entity';
+import { MenuItem } from '../models/menu-item';
+import { ProcessTemplate } from '../models/process-template';
+import { Resources } from '../models/resources';
+import { DevSpace } from '../models/space';
+import { Team } from '../models/team';
+import { User } from '../models/user';
 
 // A service responsible for providing dummy data for the UI prototypes.
 

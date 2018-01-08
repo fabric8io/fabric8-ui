@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NamespaceService } from '../service/namespace.service';
 import { Namespace, Namespaces } from '../model/namespace.model';
+import { NamespaceService } from '../service/namespace.service';
 import { KubernetesResourceStore } from './kuberentesresource.store';
 
 @Injectable()

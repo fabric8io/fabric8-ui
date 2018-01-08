@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -6,14 +6,13 @@ import { Observable } from 'rxjs';
 import { Broadcaster } from 'ngx-base';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 
-import { DummyService } from './../shared/dummy.service';
 import { removeAction } from '../../../app-routing.module';
-
+import { DummyService } from './../shared/dummy.service';
 
 // TODO HACK
-import { WorkItemService } from 'fabric8-planner/app/services/work-item.service';
-import { WorkItemType } from 'fabric8-planner/app/models/work-item-type';
 import { WorkItemDetailAddTypeSelectorWidgetComponent } from 'fabric8-planner/app/components/work-item-create/work-item-create-selector/work-item-create-selector.component';
+import { WorkItemType } from 'fabric8-planner/app/models/work-item-type';
+import { WorkItemService } from 'fabric8-planner/app/services/work-item.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

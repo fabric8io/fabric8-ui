@@ -1,24 +1,24 @@
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
-import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MockBackend } from '@angular/http/testing';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
-import { RestangularModule } from 'ng2-restangular';
-import { PipelinesListPage } from './list-page.pipeline.component';
-import { PipelinesListComponent } from '../list/list.pipeline.component';
-import { PipelinesListToolbarComponent } from '../list-toolbar/list-toolbar.pipeline.component';
-import { Fabric8CommonModule } from '../../../../common/common.module';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { ModalModule } from 'ngx-modal';
-import { MomentModule } from 'angular2-moment';
 import { FormsModule } from '@angular/forms';
-import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildconfig.dialogs.module';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MomentModule } from 'angular2-moment';
+import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
+import { RestangularModule } from 'ng2-restangular';
+import { ModalModule } from 'ngx-modal';
+import { Fabric8CommonModule } from '../../../../common/common.module';
 import { KubernetesComponentsModule } from '../../../components/components.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildconfig.dialogs.module';
 import { BuildStageViewComponent } from '../build-stage-view/build-stage-view.component';
 import { InputActionDialog } from '../input-action-dialog/input-action-dialog.component';
+import { PipelinesListToolbarComponent } from '../list-toolbar/list-toolbar.pipeline.component';
+import { PipelinesListComponent } from '../list/list.pipeline.component';
+import { TestAppModule } from './../../../../app.test.module';
+import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { PipelinesListPage } from './list-page.pipeline.component';
 
 describe('PipelinesListPage', () => {
   let component: PipelinesListPage;

@@ -1,10 +1,10 @@
-import { WatcherFactory } from './watcher-factory.service';
 import { Inject, Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
+import { Pod, Pods } from '../model/pod.model';
 import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
-import { Pods, Pod } from '../model/pod.model';
-import { NamespacedResourceService } from './namespaced.resource.service';
 import { NamespaceScope } from './namespace.scope';
+import { NamespacedResourceService } from './namespaced.resource.service';
+import { WatcherFactory } from './watcher-factory.service';
 
 
 @Injectable()

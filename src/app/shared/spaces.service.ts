@@ -1,12 +1,13 @@
-import { ProfileService, ExtProfile } from './../profile/profile.service';
-import { Broadcaster } from 'ngx-base';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Injectable } from '@angular/core';
 
 import { LocalStorageService } from 'angular-2-local-storage';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { Spaces, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
+import { Broadcaster } from 'ngx-base';
+import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { Observable, Subject } from 'rxjs';
+import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+
+import { ExtProfile, ProfileService } from '../profile/profile.service';
 
 @Injectable()
 export class SpacesService implements Spaces {

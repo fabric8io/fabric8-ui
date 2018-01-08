@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { trimEnd } from 'lodash';
 
 import { LoginComponent } from './login/login.component';
-import { SigninComponent } from './signin/signin.component';
 import { ContextResolver } from './shared/context-resolver.service';
 import { ExperimentalFeatureGuard } from './shared/experimental-feature.guard';
 import { ExperimentalFeatureResolver } from './shared/experimental-feature.resolver';
 import { ProfileResolver } from './shared/profile-resolver.service';
+import { SigninComponent } from './signin/signin.component';
 
 
 export function removeAction(url: string) {

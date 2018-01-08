@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { Che } from '../services/che';
 import { NotificationType } from 'patternfly-ng';
+
+import { Che } from '../services/che';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
+import { UserService } from 'ngx-login-client';
+import { Subscription } from 'rxjs';
 
-import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 import { ProviderService } from '../../../shared/account/provider.service';
-import { UserService, User } from 'ngx-login-client';
+import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

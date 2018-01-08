@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NamespaceEditComponent } from './edit.namespace.component';
 import { FormsModule } from '@angular/forms';
+import { NamespaceEditComponent } from './edit.namespace.component';
 
 describe('NamespaceEditComponent', () => {
   let namespace: NamespaceEditComponent;

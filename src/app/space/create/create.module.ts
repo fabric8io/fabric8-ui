@@ -1,19 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { RestangularModule } from 'ng2-restangular';
-
-import {
-  // Base functionality for the runtime console
-  KubernetesStoreModule,
-  KubernetesRestangularModule
-} from '../../../a-runtime-console/index';
-
-import { CreateComponent } from './create.component';
-import { CreateRoutingModule } from './create-routing.module';
-
 import { CodebasesModule } from './codebases/codebases.module';
+import { CreateRoutingModule } from './create-routing.module';
+import { CreateComponent } from './create.component';
 
 @NgModule({
   imports: [

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { ReplicaSet } from '../../../model/replicaset.model';
-import { AbstractViewWrapperComponent } from '../../../support/abstract-viewwrapper-component';
-import { ActivatedRoute } from '@angular/router';
 import { CompositeReplicaSetStore } from '../../../store/compositedreplicaset.store';
+import { AbstractViewWrapperComponent } from '../../../support/abstract-viewwrapper-component';
 
 @Component({
   selector: 'fabric8-replicaset-view-wrapper',

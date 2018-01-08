@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { EventsListToolbarComponent } from './list-toolbar.event.component';
 import { Fabric8CommonModule } from '../../../../common/common.module';
+import { EventsListToolbarComponent } from './list-toolbar.event.component';
 
 describe('EventsListToolbarComponent', () => {
   let component: EventsListToolbarComponent;

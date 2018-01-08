@@ -1,12 +1,14 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+
+import { Notifications } from 'ngx-base';
 import { ForgeService } from 'ngx-forge';
 import { Gui, Input } from 'ngx-forge';
-import { CodebasesService } from '../create/codebases/services/codebases.service';
-import { Codebase } from '../create/codebases/services/codebase';
-import { ContextService } from '../../shared/context.service';
 import { Observable } from 'rxjs/Rx';
-import { Notifications } from 'ngx-base';
+
 import { AbstractWizard, flattenWizardSteps } from 'app/space/forge-wizard/abstract-wizard.component';
+import { ContextService } from '../../shared/context.service';
+import { Codebase } from '../create/codebases/services/codebase';
+import { CodebasesService } from '../create/codebases/services/codebases.service';
 import { configureSteps } from './import-wizard.config';
 
 @Component({

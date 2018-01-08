@@ -1,5 +1,5 @@
-import { NgModule }           from '@angular/core';
-import { CommonModule }       from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ModalModule } from 'ngx-modal';

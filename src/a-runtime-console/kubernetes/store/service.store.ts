@@ -1,8 +1,8 @@
-import { Service, Services } from '../model/service.model';
-import { ServiceService } from '../service/service.service';
 import { Injectable } from '@angular/core';
-import { NamespacedResourceStore } from './namespacedresource.store';
+import { Service, Services } from '../model/service.model';
 import { NamespaceScope } from '../service/namespace.scope';
+import { ServiceService } from '../service/service.service';
+import { NamespacedResourceStore } from './namespacedresource.store';
 
 @Injectable()
 export class ServiceStore extends NamespacedResourceStore<Service, Services, ServiceService> {

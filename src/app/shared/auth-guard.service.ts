@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import {
+  ActivatedRouteSnapshot,
   CanActivate,
   CanActivateChild,
   Router,
-  ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
 
-import { Observable } from 'rxjs';
-
 import { Logger } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
+import { Observable } from 'rxjs';
+
 import { LoginService } from './login.service';
 import { Fabric8RuntimeConsoleService } from './runtime-console/fabric8-runtime-console.service';
 

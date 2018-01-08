@@ -1,10 +1,9 @@
 import { Component, DebugElement, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { Observable } from 'rxjs';
-
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-
+import 'patternfly/dist/js/patternfly-settings.js';
+import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -13,12 +12,7 @@ import {
 
 import { Environment } from '../models/environment';
 import { DeploymentsService } from '../services/deployments.service';
-
 import { DeploymentDetailsComponent } from './deployment-details.component';
-
-// Makes patternfly charts available
-import { ChartModule } from 'patternfly-ng';
-import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
   template: '<deployment-details></deployment-details>'

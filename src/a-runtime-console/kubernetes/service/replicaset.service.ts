@@ -1,11 +1,11 @@
-import { WatcherFactory } from './watcher-factory.service';
 import { Inject, Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
-import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { ReplicaSet, ReplicaSets } from '../model/replicaset.model';
-import { NamespacedResourceService } from './namespaced.resource.service';
-import { NamespaceScope } from './namespace.scope';
 import { apisExtensionsNamespacesUrl } from './deployment.service';
+import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
+import { NamespaceScope } from './namespace.scope';
+import { NamespacedResourceService } from './namespaced.resource.service';
+import { WatcherFactory } from './watcher-factory.service';
 
 @Injectable()
 export class ReplicaSetService extends NamespacedResourceService<ReplicaSet, ReplicaSets> {

@@ -1,22 +1,18 @@
-import { PipelinesService } from './../../shared/runtime-console/pipelines.service';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewEncapsulation
+} from '@angular/core';
+
 import { Observable } from 'rxjs/Rx';
-import { Component, OnInit, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 
-import {
-  BuildConfig,
-  BuildConfigs,
-  combineBuildConfigAndBuilds,
-  filterPipelines,
-  BuildConfigStore,
-  BuildStore
-} from '../../../a-runtime-console/index';
-
-import { Fabric8RuntimeConsoleService } from './../../shared/runtime-console/fabric8-runtime-console.service';
-
+import { BuildConfigs } from '../../../a-runtime-console/index';
+import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 import { DummyService } from './../shared/dummy.service';
 
 @Component({

@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { Restangular } from 'ng2-restangular';
 
 import { RESTService } from '../../store/entity/rest.service';
-import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { KubernetesResource } from '../model/kubernetesresource.model';
+import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { Watcher } from './watcher';
 import { WatcherFactory } from './watcher-factory.service';
 

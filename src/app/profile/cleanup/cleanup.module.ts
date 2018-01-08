@@ -1,12 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule, Http } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
 
 import { ModalModule } from 'ngx-modal';
 import { ListModule } from 'patternfly-ng';
-import { CleanupComponent } from './cleanup.component';
+
 import { CleanupRoutingModule } from './cleanup-routing.module';
+import { CleanupComponent } from './cleanup.component';
 
 @NgModule({
   imports: [

@@ -1,24 +1,13 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
-
-import {
-  Observable,
-  Subscription
-} from 'rxjs';
+import { Component, Input } from '@angular/core';
 
 import { uniqueId } from 'lodash';
+import 'patternfly/dist/js/patternfly-settings.js';
+import { Observable, Subscription } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { DeploymentsService } from '../services/deployments.service';
-
-// Makes patternfly charts available
-import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
   selector: 'deployment-details',

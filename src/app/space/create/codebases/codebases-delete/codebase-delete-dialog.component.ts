@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+
 import { Modal } from 'ngx-modal';
+
 import { Codebase } from '../services/codebase';
 
 @Component({

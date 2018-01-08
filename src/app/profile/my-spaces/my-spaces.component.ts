@@ -6,19 +6,12 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-
+import { cloneDeep, findIndex, has } from 'lodash';
 import { Logger } from 'ngx-base';
-import { Space, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
-import { UserService, User } from 'ngx-login-client';
-
-import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { EventService } from '../../shared/event.service';
-
-import { cloneDeep, find, findIndex, has } from 'lodash';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
+import { User, UserService } from 'ngx-login-client';
 import {
   Action,
   ActionConfig,
@@ -29,6 +22,10 @@ import {
   SortEvent,
   SortField
 } from 'patternfly-ng';
+import { Subscription } from 'rxjs';
+
+import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
+import { EventService } from '../../shared/event.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

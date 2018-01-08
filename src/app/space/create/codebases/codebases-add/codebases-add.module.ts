@@ -1,12 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
 
-import { CodebasesAddRoutingModule } from './codebases-add-routing.module';
-import { CodebasesService } from './../services/codebases.service';
 import { SlideOutPanelModule } from 'ngx-widgets';
+
+import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
+import { CodebasesAddRoutingModule } from './codebases-add-routing.module';
 import { CodebasesAddComponent } from './codebases-add.component';
 
 @NgModule({

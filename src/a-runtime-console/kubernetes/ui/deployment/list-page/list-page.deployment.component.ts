@@ -3,8 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { Deployments } from '../../../model/deployment.model';
 import { Services } from '../../../model/service.model';
 import { CompositeDeploymentStore } from '../../../store/compositedeployment.store';
-import { DeploymentViews, createDeploymentViews } from '../../../view/deployment.view';
 import { RouteServiceStore } from '../../../store/route.service.store';
+import { createDeploymentViews, DeploymentViews } from '../../../view/deployment.view';
 
 
 @Component({

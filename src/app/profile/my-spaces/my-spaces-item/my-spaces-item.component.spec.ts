@@ -1,14 +1,10 @@
-import {
-  async,
-  ComponentFixture,
-  TestBed
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
-import { Fabric8WitModule, Space } from 'ngx-fabric8-wit';
+import { Fabric8WitModule } from 'ngx-fabric8-wit';
 
 import { MySpacesItemComponent } from './my-spaces-item.component';
 

@@ -1,20 +1,19 @@
+import { Component, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-import { Component, OnInit, OnDestroy, ViewEncapsulation, TemplateRef } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
-import { Space, Spaces, SpaceService, Context, Contexts } from 'ngx-fabric8-wit';
-import { UserService, User, AuthenticationService } from 'ngx-login-client';
-import { Broadcaster } from 'ngx-base';
+import { Broadcaster, Logger } from 'ngx-base';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Context, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
-import { Logger } from 'ngx-base';
-import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 import { BrandInformation } from '../models/brand-information';
+import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 // use url-loader for images
-import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

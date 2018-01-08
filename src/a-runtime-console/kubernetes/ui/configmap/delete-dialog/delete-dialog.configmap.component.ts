@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ConfigMap } from '../../../model/configmap.model';
-import { ConfigMapStore } from '../../../store/configmap.store';
 import { ConfigMapService } from '../../../service/configmap.service';
+import { ConfigMapStore } from '../../../store/configmap.store';
 
 @Component({
   selector: 'delete-configmap-dialog',

@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
+
 import { debounce, isNumber } from 'lodash';
 import { Observable } from 'rxjs';
 
-import { DeploymentsService } from '../services/deployments.service';
-import { Pods } from '../models/pods';
 import { Environment } from '../models/environment';
+import { Pods } from '../models/pods';
+import { DeploymentsService } from '../services/deployments.service';
 
 @Component({
   selector: 'deployments-donut',

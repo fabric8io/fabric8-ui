@@ -1,22 +1,17 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Notification, NotificationAction, Notifications, NotificationType } from 'ngx-base';
-import {
-  SpaceService,
-  SpaceNamePipe, Context
-} from 'ngx-fabric8-wit';
+import { Notification, Notifications, NotificationType } from 'ngx-base';
+import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
+import { ProcessTemplate } from 'ngx-fabric8-wit';
+import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-import { ProcessTemplate } from 'ngx-fabric8-wit';
+
+import { ContextService } from 'app/shared/context.service';
 import { DummyService } from 'app/shared/dummy.service';
 import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
 import { SpacesService } from 'app/shared/spaces.service';
-import {
-  Space,
-  SpaceAttributes
-} from 'ngx-fabric8-wit';
-import { ContextService } from 'app/shared/context.service';
 
 @Component({
   selector: 'space-wizard',

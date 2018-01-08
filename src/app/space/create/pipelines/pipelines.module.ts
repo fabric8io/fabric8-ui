@@ -1,20 +1,17 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-
 import { ToolbarModule } from 'patternfly-ng';
 
-import {
-  PipelineModule
-} from '../../../../a-runtime-console/index';
 
-import { PipelinesComponent } from './pipelines.component';
-import { PipelinesRoutingModule } from './pipelines-routing.module';
+import { PipelineModule } from 'a-runtime-console/index';
 import { ForgeWizardModule } from '../../forge-wizard/forge-wizard.module';
-import { ModalModule } from 'ngx-bootstrap/modal';
+import { PipelinesRoutingModule } from './pipelines-routing.module';
+import { PipelinesComponent } from './pipelines.component';
 
 @NgModule({
   imports: [

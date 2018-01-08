@@ -1,10 +1,10 @@
-import { WatcherFactory } from './watcher-factory.service';
 import { Inject, Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
-import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { ConfigMap, ConfigMaps } from '../model/configmap.model';
-import { NamespacedResourceService } from './namespaced.resource.service';
+import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { NamespaceScope } from './namespace.scope';
+import { NamespacedResourceService } from './namespaced.resource.service';
+import { WatcherFactory } from './watcher-factory.service';
 
 @Injectable()
 export class ConfigMapService extends NamespacedResourceService<ConfigMap, ConfigMaps> {

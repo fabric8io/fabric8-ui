@@ -5,22 +5,13 @@ import {
   OnInit
 } from '@angular/core';
 
-import {
-  Observable,
-  Subscription
-} from 'rxjs';
-import { uniqueId } from 'lodash';
-
-import {
-  Notification,
-  NotificationType
-} from 'ngx-base';
+import { NotificationType } from 'ngx-base';
+import { Observable, Subscription } from 'rxjs';
 
 import { NotificationsService } from 'app/shared/notifications.service';
-
 import { CpuStat } from '../models/cpu-stat';
-import { DeploymentsService } from '../services/deployments.service';
 import { Environment } from '../models/environment';
+import { DeploymentsService } from '../services/deployments.service';
 
 @Component({
   selector: 'deployment-card',

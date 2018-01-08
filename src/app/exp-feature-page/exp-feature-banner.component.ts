@@ -1,13 +1,13 @@
 import {
   Component,
-  OnInit,
-  OnDestroy
+  OnDestroy,
+  OnInit
 } from '@angular/core';
-
-import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
-import { UserService, User, AuthenticationService } from 'ngx-login-client';
+import { Subscription } from 'rxjs';
+
+import { AuthenticationService, UserService } from 'ngx-login-client';
 
 @Component({
   selector: 'f8-exp-feature-banner',

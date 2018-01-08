@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ServiceEditComponent } from './edit.service.component';
 import { FormsModule } from '@angular/forms';
+import { ServiceEditComponent } from './edit.service.component';
 
 describe('ServiceEditComponent', () => {
   let service: ServiceEditComponent;

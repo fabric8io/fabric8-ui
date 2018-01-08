@@ -3,10 +3,10 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import { Broadcaster } from 'ngx-base';
-import { Contexts, SpaceService, Space, Spaces } from 'ngx-fabric8-wit';
-import { UserService, User } from 'ngx-login-client';
+import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { User, UserService } from 'ngx-login-client';
 
-import { SpaceNamespaceService } from './../../shared/runtime-console/space-namespace.service';
+import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { DummyService } from './../shared/dummy.service';
 
 @Component({

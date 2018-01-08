@@ -1,4 +1,4 @@
-import { Input, Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Deployment } from '../../../model/deployment.model';
 import { DeploymentScaleDialog } from '../scale-dialog/scale-dialog.deployment.component';
 

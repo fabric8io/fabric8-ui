@@ -5,12 +5,9 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Stat } from '../models/stat';
+import { Observable, Subscription } from 'rxjs';
 
-import {
-  Observable,
-  Subscription
-} from 'rxjs';
+import { Stat } from '../models/stat';
 
 @Component({
   selector: 'utilization-bar',

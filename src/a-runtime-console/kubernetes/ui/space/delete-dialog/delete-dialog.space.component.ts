@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Space, createEmptySpace } from '../../../model/space.model';
+import { createEmptySpace, Space } from '../../../model/space.model';
 import { SpaceStore } from '../../../store/space.store';
 
 @Component({

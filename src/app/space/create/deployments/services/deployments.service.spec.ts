@@ -5,7 +5,6 @@ import {
 } from '@angular/core/testing';
 
 import { Environment } from '../models/environment';
-
 import { DeploymentsService } from './deployments.service';
 
 describe('DeploymentsService', () => {

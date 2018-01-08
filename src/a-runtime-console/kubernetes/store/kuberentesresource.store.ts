@@ -1,11 +1,11 @@
-import { AbstractStore } from '../../store/entity/entity.store';
-import { KubernetesService } from '../service/kubernetes.service';
-import { KubernetesResource } from '../model/kubernetesresource.model';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { Watcher } from '../service/watcher';
 import { plural } from 'pluralize';
-import { messageEventToResourceOperation, Operation } from '../service/resource-operation';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { AbstractStore } from '../../store/entity/entity.store';
+import { KubernetesResource } from '../model/kubernetesresource.model';
+import { KubernetesService } from '../service/kubernetes.service';
 import { isNewerResource } from '../service/poller';
+import { messageEventToResourceOperation, Operation } from '../service/resource-operation';
+import { Watcher } from '../service/watcher';
 
 function nameOfResource(resource: any): string {
   let obj = resource || {};

@@ -1,18 +1,11 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  CanActivateChild,
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot, Resolve
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 
-
 // Basic guard that checks the user is logged in
-
 @Injectable()
 export class Fabric8RuntimeConsoleResolver implements Resolve<boolean> {
 

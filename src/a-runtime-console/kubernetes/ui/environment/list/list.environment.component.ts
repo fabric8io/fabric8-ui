@@ -1,31 +1,31 @@
-import { ServiceService } from './../../../service/service.service';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Params } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { SpaceStore } from './../../../store/space.store';
 import { Deployments } from './../../../model/deployment.model';
-import { Component, Input, ViewChild } from '@angular/core';
+import { ServiceService } from './../../../service/service.service';
+import { SpaceStore } from './../../../store/space.store';
 
-import { Observable, ConnectableObservable, Subject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, ConnectableObservable, Observable, Subject } from 'rxjs';
 
 import {
-  TreeNode,
+  IActionMapping,
   TREE_ACTIONS,
-  IActionMapping
+  TreeNode
 } from 'angular2-tree-component';
 
 import { ParentLinkFactory } from '../../../../common/parent-link-factory';
+import { createDeploymentViews } from '../../../view/deployment.view';
+import { KindNode } from '../list-page/list-page.environment.component';
+import { DeploymentConfigs } from './../../../model/deploymentconfig.model';
+import { Environment, Space } from './../../../model/space.model';
+import { ConfigMapService } from './../../../service/configmap.service';
+import { DeploymentService } from './../../../service/deployment.service';
+import { DeploymentConfigService } from './../../../service/deploymentconfig.service';
+import { EventService } from './../../../service/event.service';
+import { PodService } from './../../../service/pod.service';
+import { ReplicaSetService } from './../../../service/replicaset.service';
 import { CompositeDeploymentStore } from './../../../store/compositedeployment.store';
 import { ServiceStore } from './../../../store/service.store';
-import { createDeploymentViews } from '../../../view/deployment.view';
-import { ReplicaSetService } from './../../../service/replicaset.service';
-import { PodService } from './../../../service/pod.service';
-import { EventService } from './../../../service/event.service';
-import { ConfigMapService } from './../../../service/configmap.service';
-import { DeploymentConfigService } from './../../../service/deploymentconfig.service';
-import { DeploymentConfigs } from './../../../model/deploymentconfig.model';
-import { DeploymentService } from './../../../service/deployment.service';
-import { Space, Environment } from './../../../model/space.model';
-import { KindNode } from '../list-page/list-page.environment.component';
 
 @Component({
   selector: 'fabric8-environments-list',

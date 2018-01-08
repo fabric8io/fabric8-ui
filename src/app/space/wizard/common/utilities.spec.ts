@@ -1,6 +1,5 @@
 import { mergeArraysDistinctByKey } from './utilities';
 import { clone } from './utilities';
-import { getPropertyValue } from './utilities';
 
 describe('Utilities:', () => {
   beforeEach(() => {

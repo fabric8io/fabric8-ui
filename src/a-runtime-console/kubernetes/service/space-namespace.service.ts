@@ -1,10 +1,10 @@
-import { Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { SpaceNamespace } from '../model/space-namespace';
-import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { merge } from 'lodash';
+import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { findParameter } from '../model/helpers';
+import { SpaceNamespace } from '../model/space-namespace';
 
 @Injectable()
 export class SpaceNamespaceService implements SpaceNamespace {

@@ -1,16 +1,16 @@
-import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Notifications } from 'ngx-base';
+import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from 'rxjs';
+import { Deployments } from '../../model/deployment.model';
+import { Namespace } from '../../model/namespace.model';
 import { Pod, Pods } from '../../model/pod.model';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AbstractWatchComponent } from '../../support/abstract-watch.component';
-import { PodService } from '../../service/pod.service';
-import { SpaceStore } from '../../store/space.store';
 import { SpaceNamespace } from '../../model/space-namespace';
 import { Space } from '../../model/space.model';
-import { Namespace } from '../../model/namespace.model';
-import { DeploymentConfigService } from '../../service/deploymentconfig.service';
 import { DeploymentService } from '../../service/deployment.service';
-import { Deployments } from '../../model/deployment.model';
+import { DeploymentConfigService } from '../../service/deploymentconfig.service';
+import { PodService } from '../../service/pod.service';
+import { SpaceStore } from '../../store/space.store';
+import { AbstractWatchComponent } from '../../support/abstract-watch.component';
 
 export class StatusKind {
   constructor(public message: string, public iconCss: string) {

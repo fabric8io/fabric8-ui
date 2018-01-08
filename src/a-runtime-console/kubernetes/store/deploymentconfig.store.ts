@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { NamespacedResourceStore } from './namespacedresource.store';
-import { NamespaceScope } from '../service/namespace.scope';
 import { DeploymentConfig, DeploymentConfigs } from '../model/deploymentconfig.model';
 import { DeploymentConfigService } from '../service/deploymentconfig.service';
+import { NamespaceScope } from '../service/namespace.scope';
+import { NamespacedResourceStore } from './namespacedresource.store';
 
 @Injectable()
 export class DeploymentConfigStore extends NamespacedResourceStore<DeploymentConfig, DeploymentConfigs, DeploymentConfigService> {

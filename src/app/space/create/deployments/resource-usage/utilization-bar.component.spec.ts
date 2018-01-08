@@ -1,15 +1,11 @@
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
 import { Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 
-import { UtilizationBarComponent } from './utilization-bar.component';
 import { Stat } from '../models/stat';
+import { UtilizationBarComponent } from './utilization-bar.component';
 
 @Component({
   template: '<utilization-bar></utilization-bar>'

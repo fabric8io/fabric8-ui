@@ -1,18 +1,19 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { cloneDeep } from 'lodash';
+import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
+import { Context, Contexts } from 'ngx-fabric8-wit';
+import { AuthenticationService } from 'ngx-login-client';
 import { Observable, Subscription } from 'rxjs';
 
 import { Che } from './services/che';
 import { CheService } from './services/che.service';
 import { Codebase } from './services/codebase';
 import { CodebasesService } from './services/codebases.service';
-import { Context, Contexts } from 'ngx-fabric8-wit';
 import { GitHubService } from './services/github.service';
-import { Broadcaster, Notification, NotificationType, Notifications } from 'ngx-base';
-import { AuthenticationService } from 'ngx-login-client';
 
-import { cloneDeep } from 'lodash';
 
 import {
   ActionConfig,

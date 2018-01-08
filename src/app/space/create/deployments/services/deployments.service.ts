@@ -1,10 +1,9 @@
-import {
-  Injectable,
-  InjectionToken
-} from '@angular/core';
+import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
-import { Environment } from '../models/environment';
+
 import { CpuStat } from '../models/cpu-stat';
+import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 

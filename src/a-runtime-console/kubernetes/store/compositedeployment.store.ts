@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Deployment, Deployments } from '../model/deployment.model';
+import { combineDeployment, combineDeployments } from '../view/deployment.view';
+import { APIsStore } from './apis.store';
 import { DeploymentStore } from './deployment.store';
 import { DeploymentConfigStore } from './deploymentconfig.store';
-import { Observable } from 'rxjs';
-import { combineDeployments, combineDeployment } from '../view/deployment.view';
-import { APIsStore } from './apis.store';
-import { Deployments, Deployment } from '../model/deployment.model';
 
 /**
  * Combines Deployments and DeploymentConfigs into a single logical store to simplify the UI logic

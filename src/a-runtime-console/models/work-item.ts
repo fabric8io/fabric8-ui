@@ -1,4 +1,4 @@
-import { Comments, Comment } from './comment';
+import { Comment, Comments } from './comment';
 import { User } from './user';
 
 export class WorkItem {

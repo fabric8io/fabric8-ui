@@ -1,11 +1,8 @@
-import {
-  Component,
-  Input
-} from '@angular/core';
-
-import { Environment } from '../models/environment';
+import { Component, Input } from '@angular/core';
 
 import { Observable } from 'rxjs';
+
+import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployments-resource-usage',

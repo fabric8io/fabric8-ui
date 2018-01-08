@@ -1,10 +1,12 @@
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Broadcaster } from 'ngx-base';
+import { Contexts, Spaces } from 'ngx-fabric8-wit';
+import { UserService } from 'ngx-login-client';
+
 import { Fabric8UIConfig } from './config/fabric8-ui-config';
 import { NotificationsService } from './notifications.service';
-import { Contexts, Spaces } from 'ngx-fabric8-wit';
-import { Router } from '@angular/router';
-import { Injectable } from '@angular/core';
-import { Broadcaster, Notifications } from 'ngx-base';
-import { UserService } from 'ngx-login-client';
 
 declare global {
   interface Window {

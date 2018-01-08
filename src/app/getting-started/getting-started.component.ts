@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Router } from '@angular/router';
+
+import { Logger, Notification, Notifications, NotificationType } from 'ngx-base';
+import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
-
-import { Logger, Notification, NotificationType, Notifications } from 'ngx-base';
-import { AuthenticationService, UserService, User } from 'ngx-login-client';
-
-import { ExtUser, GettingStartedService } from './services/getting-started.service';
-import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 import { Observable } from 'rxjs/Observable';
-import { Http, Headers, RequestOptions, RequestOptionsArgs, Response } from '@angular/http';
+
 import { pathJoin } from '../../a-runtime-console/kubernetes/model/utils';
 import { ProviderService } from '../shared/account/provider.service';
+import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
+import { ExtUser, GettingStartedService } from './services/getting-started.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

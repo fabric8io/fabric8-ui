@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+
+import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Subscription } from 'rxjs';
 
 import { Che } from '../services/che';
 import { Codebase } from '../services/codebase';
 import { GitHubService } from '../services/github.service';
-import { Notification, NotificationType, Notifications } from 'ngx-base';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

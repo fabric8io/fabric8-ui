@@ -1,6 +1,7 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+
 import { PipelineQuickstartStepComponent } from './pipeline-quickstart-step.component';
 
 describe('Forge-Wizard pipeline quickstart step component', () => {

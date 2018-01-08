@@ -7,16 +7,11 @@ import {
   Output,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-
-import { Context, Contexts, Space } from 'ngx-fabric8-wit';
-
-import {
-  Action,
-  ActionConfig
-} from 'patternfly-ng';
 
 import { has } from 'lodash';
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { Action, ActionConfig } from 'patternfly-ng';
+import { Subscription } from 'rxjs';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

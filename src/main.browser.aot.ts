@@ -2,13 +2,15 @@
  * Angular bootstraping
  */
 import { platformBrowser } from '@angular/platform-browser';
-import { decorateModuleRef } from './app/environment';
+
 import { bootloader } from '@angularclass/hmr';
+
 /*
  * App Module
  * our top level module that holds all of our components
  */
 import { AppModuleNgFactory } from '../aot/app/app.module.ngfactory';
+import { decorateModuleRef } from './app/environment';
 
 /*
  * Bootstrap our Angular app with a top level NgModule

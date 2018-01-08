@@ -1,13 +1,14 @@
 import {
   Component,
+  EventEmitter,
   OnDestroy,
   OnInit,
-  EventEmitter,
   Output
 } from '@angular/core';
 
+import { Notification, Notifications, NotificationType } from 'ngx-base';
 import 'rxjs/operators/map';
-import { Notifications, Notification, NotificationType } from 'ngx-base';
+
 import { GettingStartedService } from '../getting-started/services/getting-started.service';
 
 @Component({

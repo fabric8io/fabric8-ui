@@ -1,14 +1,10 @@
-import { ActivatedRoute } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
 import { AuthenticationService } from 'ngx-login-client';
-
-
+import { Observable } from 'rxjs';
 
 import { OAuthConfigStore } from '../../../a-runtime-console/index';
-
-import { LoginService } from './../login.service';
+import { LoginService } from '../login.service';
 
 @Injectable()
 export class Fabric8RuntimeConsoleService {

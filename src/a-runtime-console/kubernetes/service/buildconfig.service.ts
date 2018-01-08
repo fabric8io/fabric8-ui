@@ -1,12 +1,12 @@
-import { WatcherFactory } from './watcher-factory.service';
 import { Inject, Injectable } from '@angular/core';
 import { Restangular } from 'ng2-restangular';
-import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
-import { BuildConfigs, BuildConfig } from '../model/buildconfig.model';
-import { NamespacedResourceService } from './namespaced.resource.service';
+import { BuildConfig, BuildConfigs } from '../model/buildconfig.model';
+import { pathJoin } from '../model/utils';
 import { APIsStore, isOpenShift } from '../store/apis.store';
 import { DevNamespaceScope } from './devnamespace.scope';
-import { pathJoin } from '../model/utils';
+import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
+import { NamespacedResourceService } from './namespaced.resource.service';
+import { WatcherFactory } from './watcher-factory.service';
 
 export function getOpenShiftBuildUriPrefix() {
   return isOpenShift() ? '/oapi/v1/namespaces/' : '/apis/build.openshift.io/v1/namespaces/';

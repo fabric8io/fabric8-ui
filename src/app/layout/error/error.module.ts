@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule, Http } from '@angular/http';
+import { NgModule } from '@angular/core';
+import { Http, HttpModule } from '@angular/http';
 
-import { ErrorComponent } from './error.component';
 import { ErrorRoutingModule } from './error-routing.module';
+import { ErrorComponent } from './error.component';
 
 @NgModule({
   imports: [CommonModule, ErrorRoutingModule, HttpModule],

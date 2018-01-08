@@ -1,22 +1,22 @@
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
-import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
-import { TestAppModule } from './../../../../app.test.module';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { PipelinesListComponent } from './list.pipeline.component';
-import { Fabric8CommonModule } from '../../../../common/common.module';
+import { FormsModule } from '@angular/forms';
+import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MomentModule } from 'angular2-moment';
-import { KubernetesStoreModule } from '../../../kubernetes.store.module';
-import { ModalModule } from 'ngx-modal';
-import { FormsModule } from '@angular/forms';
-import { RequestOptions, BaseRequestOptions, Http } from '@angular/http';
+import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { RestangularModule } from 'ng2-restangular';
-import { MockBackend } from '@angular/http/testing';
-import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildconfig.dialogs.module';
+import { ModalModule } from 'ngx-modal';
+import { Fabric8CommonModule } from '../../../../common/common.module';
 import { KubernetesComponentsModule } from '../../../components/components.module';
+import { KubernetesStoreModule } from '../../../kubernetes.store.module';
+import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildconfig.dialogs.module';
 import { BuildStageViewComponent } from '../build-stage-view/build-stage-view.component';
 import { InputActionDialog } from '../input-action-dialog/input-action-dialog.component';
+import { TestAppModule } from './../../../../app.test.module';
+import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { PipelinesListComponent } from './list.pipeline.component';
 
 describe('PipelinesListComponent', () => {
   let component: PipelinesListComponent;

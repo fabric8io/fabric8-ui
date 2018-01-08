@@ -1,23 +1,23 @@
 import { NgModule, OpaqueToken } from '@angular/core';
+import { OAuthService } from 'angular2-oauth2/oauth-service';
 import { Restangular } from 'ng2-restangular';
-import { KubernetesResource } from '../model/kubernetesresource.model';
-import { Service } from '../model/service.model';
-import { Event } from '../model/event.model';
-import { Deployment } from '../model/deployment.model';
+import { AuthenticationService } from 'ngx-login-client';
+import { LoginService } from '../../shared/login.service';
+import { OnLogin } from '../../shared/onlogin.service';
+import { Build } from '../model/build.model';
+import { BuildConfig } from '../model/buildconfig.model';
 import { ConfigMap } from '../model/configmap.model';
+import { Deployment } from '../model/deployment.model';
+import { DeploymentConfig } from '../model/deploymentconfig.model';
+import { Event } from '../model/event.model';
+import { KubernetesResource } from '../model/kubernetesresource.model';
 import { Namespace } from '../model/namespace.model';
 import { Pod } from '../model/pod.model';
 import { ReplicaSet } from '../model/replicaset.model';
 import { ReplicationController } from '../model/replicationcontroller.model';
-import { BuildConfig } from '../model/buildconfig.model';
-import { DeploymentConfig } from '../model/deploymentconfig.model';
-import { Build } from '../model/build.model';
-import { OAuthService } from 'angular2-oauth2/oauth-service';
-import { OnLogin } from '../../shared/onlogin.service';
-import { currentOAuthConfig } from '../store/oauth-config-store';
-import { AuthenticationService } from 'ngx-login-client';
-import { LoginService } from '../../shared/login.service';
 import { Route } from '../model/route.model';
+import { Service } from '../model/service.model';
+import { currentOAuthConfig } from '../store/oauth-config-store';
 
 export const KUBERNETES_RESTANGULAR = new OpaqueToken('KubernetesRestangular');
 
