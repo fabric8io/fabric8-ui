@@ -16,7 +16,7 @@ import { DeploymentsService } from '../services/deployments.service';
 })
 export class DeploymentDetailsComponent {
 
-  readonly DEFAULT_SPARKLINE_DATA_DURATION: number = 15 * 60 * 1000;
+  public static readonly DEFAULT_SPARKLINE_DATA_DURATION: number = 15 * 60 * 1000;
 
   @Input() collapsed: boolean;
   @Input() applicationId: string;
@@ -65,7 +65,7 @@ export class DeploymentDetailsComponent {
 
   ngOnInit() {
     this.setSparklineMaxElements(
-      this.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
+      DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
 
     this.cpuConfig.chartHeight = 100;
     this.memConfig.chartHeight = 100;

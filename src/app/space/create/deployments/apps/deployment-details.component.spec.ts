@@ -10,7 +10,9 @@ import {
   TestContext
 } from 'testing/test-context';
 
+import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
+import { MemoryStat } from '../models/memory-stat';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentDetailsComponent } from './deployment-details.component';
 
@@ -21,9 +23,19 @@ import { ChartModule } from 'patternfly-ng';
 import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
-  template: '<deployment-details></deployment-details>'
+  template: `<deployment-details
+  [collapsed]="collapsed"
+  [applicationId]="applicationId"
+  [environment]="environment"
+  [spaceId]="spaceId">
+  </deployment-details>`
 })
-class HostComponent { }
+class HostComponent {
+  public collapsed: boolean = false;
+  public applicationId: string = 'mockAppId';
+  public environment: Environment = { name: 'mockEnvironment' };
+  public spaceId: string = 'mockSpaceId';
+}
 
 @Component({
   selector: 'deployments-donut',
@@ -59,13 +71,12 @@ class FakePfngChartSparkline {
 describe('DeploymentDetailsComponent', () => {
   type Context = TestContext<DeploymentDetailsComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  let mockEnvironment: Environment;
-  let cpuStatObservable: BehaviorSubject<any>;
-  let memStatObservable: BehaviorSubject<any>;
+  let cpuStatObservable: BehaviorSubject<CpuStat>;
+  let memStatObservable: BehaviorSubject<MemoryStat>;
 
   beforeEach(() => {
-    cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 });
-    memStatObservable = new BehaviorSubject({ used: 3, quota: 4, units: 'GB' });
+    cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 } as CpuStat);
+    memStatObservable = new BehaviorSubject({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
 
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
@@ -75,8 +86,6 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
-
-    mockEnvironment = { name: 'mockEnvironment' } as Environment;
   });
 
   initContext(DeploymentDetailsComponent, HostComponent, {
@@ -89,11 +98,6 @@ describe('DeploymentDetailsComponent', () => {
     providers: [
       { provide: DeploymentsService, useFactory: () => mockSvc }
     ]
-  }, component => {
-    component.collapsed = false;
-    component.applicationId = 'mockAppId';
-    component.environment = mockEnvironment;
-    component.spaceId = 'mockSpaceId';
   });
 
   it('should generate unique chartIds for each DeploymentDetailsComponent instance', function(this: Context) {
@@ -162,7 +166,7 @@ describe('DeploymentDetailsComponent', () => {
     it('by default should be the default data duration divided by the polling rate', function (this: Context) {
       let detailsComponent = this.testedDirective;
       let expectedDefaultElements =
-        (detailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
+        DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS;
       expect(detailsComponent.getSparklineMaxElements()).toBe(expectedDefaultElements);
     });
 
