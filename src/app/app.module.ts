@@ -113,6 +113,10 @@ import { RavenExceptionHandler } from './shared/exception.handler';
 import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
 
 
+// ngrx stuff
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -160,7 +164,10 @@ export type StoreType = {
     PatternFlyNgModule,
     StatusListModule,
     // AppRoutingModule must appear last
-    AppRoutingModule
+    AppRoutingModule,
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
+    StoreModule.forRoot({})
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
