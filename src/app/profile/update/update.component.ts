@@ -324,9 +324,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * @returns {boolean}
    */
   private isEmailValid(): boolean {
-    if (this.email !== undefined && this.email.trim().length > 0)
+    if (this.email !== undefined && this.email.trim().length > 0) {
       return (this.email.trim().indexOf('@') !== -1);
-    else {
+    } else {
       return (this.email.trim().length > 0);
     }
   }
@@ -337,9 +337,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * @returns {boolean}
    */
   private isImageUrlValid(): boolean {
-    if (this.imageUrl !== undefined && this.imageUrl.trim().length > 0)
+    if (this.imageUrl !== undefined && this.imageUrl.trim().length > 0) {
       return (this.imageUrl.trim().indexOf('http') === 0);
-    else {
+    } else {
       return true;
     }
   }
@@ -350,9 +350,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * @returns {boolean}
    */
   private isUrlValid(): boolean {
-    if (this.url !== undefined && this.url.trim().length > 0)
+    if (this.url !== undefined && this.url.trim().length > 0) {
       return (this.url.trim().indexOf('http') === 0);
-    else {
+    } else {
       return true;
     }
   }

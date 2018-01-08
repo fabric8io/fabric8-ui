@@ -71,7 +71,7 @@ export class AppComponent {
         //reset all experimental feature flag properties
         this.experimentalFeatureEnabled = false;
         this.isExperimentalFeature = false;
-        while (route.firstChild) route = route.firstChild;
+        while (route.firstChild) { route = route.firstChild; }
         return route;
       })
       .filter(route => route.outlet === 'primary')

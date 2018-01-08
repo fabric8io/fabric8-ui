@@ -59,8 +59,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   fetchMoreCollaborators($event): void {
     this.collaboratorService.getNextCollaborators()
       .subscribe(collaborators => {
-        if (collaborators)
+        if (collaborators) {
           this.collaborators = this.collaborators.concat(collaborators);
+        }
         }, err => {
         console.log(err);
       });

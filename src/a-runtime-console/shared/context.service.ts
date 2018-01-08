@@ -33,7 +33,7 @@ export class ContextService {
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
       .map(route => {
-        while (route.firstChild) route = route.firstChild;
+        while (route.firstChild) { route = route.firstChild; }
         return route;
       })
       .filter(route => route.outlet === 'primary')

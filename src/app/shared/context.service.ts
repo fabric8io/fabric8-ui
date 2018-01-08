@@ -263,7 +263,7 @@ export class ContextService implements Contexts {
       // Broadcast the spaceChanged event
       // Ensure the menus are built
       .do(val => {
-        if (val) this.menus.attach(val);
+        if (val) { this.menus.attach(val); }
       })
       .do(val => {
         if (val) {
@@ -279,7 +279,7 @@ export class ContextService implements Contexts {
       })
       // Subscribe the current context to the revent space collector
       .do(val => {
-        if (val) this._addRecent.next(val);
+        if (val) { this._addRecent.next(val); }
       })
       .do(val => {
         this._current.next(val);

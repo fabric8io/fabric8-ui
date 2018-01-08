@@ -70,12 +70,13 @@ export class SpaceNamespaceService {
       })
       .do(val => {
         let res: Map<string, any[]> = new Map();
-        if (val.configMap)
+        if (val.configMap) {
           for (let c in val.configMap) {
             if (val.configMap.data.hasOwnProperty(c)) {
               res.set(c, yaml.safeLoad(val.configMap.data[c]));
             }
           }
+        }
         val.data = res;
       });
   }

@@ -69,7 +69,7 @@
 //    "unified-signatures": true,
 //
 //    "await-promise": true,
-//    "curly": true,
+    "curly": true,
 //    "forin": true,
 //    "label-position": true,
 //    "no-arg": true,
