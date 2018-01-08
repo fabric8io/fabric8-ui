@@ -175,7 +175,7 @@
     "no-trailing-whitespace": true,
 //    "no-unnecessary-callback-wrapper": true,
     "no-unnecessary-initializer": true,
-//    "no-unnecessary-qualifier": true,
+    "no-unnecessary-qualifier": true,
 //    "no-unnecessary-type-assertion": true,
 //    "number-literal-format": true,
     "object-literal-key-quotes": [false, "as-needed"],
