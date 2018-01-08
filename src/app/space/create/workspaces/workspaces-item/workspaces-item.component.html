@@ -1,0 +1,40 @@
+<div class="list-pf-left">
+  <!-- todo: set Che icon instead of paper-plane -->
+  <span class="fa list-pf-icon list-pf-icon-bordered list-pf-icon-small fa-paper-plane"></span>
+</div>
+<div class="list-pf-content-wrapper">
+  <div class="list-pf-main-content">
+    <div class="list-pf-title">
+      <span>{{workspace?.attributes?.name}}</span>
+    </div>
+    <div class="list-pf-description">
+      <small>{{repo?.full_name}}</small>
+      <br/>
+      <span class="fa fa-code-fork list-pf-icon workspace-icon-repository-fork"></span>
+      <small>{{branchName}}</small>
+    </div>
+    <div class="list-pf-description">
+      <div *ngIf="branchBehind !== null">
+        <span class="fa fa-arrow-down list-pf-icon workspace-icon-commits-behind"></span>
+        <small>{{branchBehind}} Behind</small>
+      </div>
+    </div>
+    <div class="list-pf-description">
+      <div *ngIf="branchAhead !== null">
+        <span class="fa fa-arrow-up list-pf-icon workspace-icon-commits-ahead"></span>
+        <small>{{branchAhead}} Ahead</small>
+      </div>
+    </div>
+    <div class="list-pf-description">
+      <div *ngIf="repo">
+        <small>Updated {{updated | amTimeAgo}}</small>
+      </div>
+    </div>
+    <div class="list-pf-description" >
+      <span class="fa list-pf-icon"
+            [ngClass]="{'fa-check workspace-icon-status-running': workspaceStatus==='RUNNING',
+          'fa-pause-circle-o workspace-icon-status-stopped': workspaceStatus!=='RUNNING'}"></span>
+      <small>{{workspaceStatus}}</small>
+    </div>
+  </div>
+</div>

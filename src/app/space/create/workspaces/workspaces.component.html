@@ -1,0 +1,35 @@
+<workspaces-toolbar
+  (onFilterChange)="filterChange($event)"
+  (onSortChange)="sortChange($event)"
+  (onOpenModal)="createWorkspaceDialog.open($event)"
+  [resultsCount]="resultsCount"
+  [workspacesCount]="workspacesCount"></workspaces-toolbar>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <pfng-list
+        *ngIf="resultsCount > 0 || rows.length === 0"
+        [actionTemplate]="actionTemplate"
+        [config]="listConfig"
+        [items]="filteredRows"
+        [itemHeadingTemplate]="itemHeadingTemplate"
+        [itemTemplate]="itemTemplate"
+        (onActionSelect)="createWorkspaceDialog.open($event)">
+        <ng-template #itemHeadingTemplate let-item="item">
+          <workspaces-item-heading [cheState]="cheState"></workspaces-item-heading>
+        </ng-template>
+        <ng-template #itemTemplate let-item="item">
+          <workspaces-item [workspace]="item.workspace" [repo]="getRepo(item.codebaseId)"></workspaces-item>
+        </ng-template>
+        <ng-template #actionTemplate let-item="item">
+          <workspaces-item-actions [workspace]="item.workspace"></workspaces-item-actions>
+        </ng-template>
+      </pfng-list>
+    </div>
+  </div>
+</div>
+
+<!-- Modal window: Create Workspace -->
+<create-workspaces-dialog #createWorkspaceDialog
+                          [reposMap]="reposByCodebase"
+                          (onCreated)="createWorkspacesToParent($event)"></create-workspaces-dialog>

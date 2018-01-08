@@ -1,0 +1,20 @@
+<div class="list-pf-content-wrapper">
+  <div class="list-pf-main-content">
+    <div class="list-pf-title margin-right-50">
+      <div>
+        WORKSPACES
+        <div class="workspaces-banner">
+          <f8-workspaces-notification [dismiss]="cheState && cheState.running"
+                                      [message]="getNotificationMessage()"
+                                      [type]="getNotificationType()"
+                                      *ngIf="!cheState || !cheState.running"></f8-workspaces-notification>
+        </div>
+      </div>
+    </div>
+    <div class="list-pf-description">CODEBASES</div>
+    <div class="list-pf-description"></div>
+    <div class="list-pf-description"></div>
+    <div class="list-pf-description"></div>
+    <div class="list-pf-description"></div>
+  </div>
+</div>

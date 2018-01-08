@@ -1,0 +1,17 @@
+<span class="dropdown dropdown-kebab-pf" dropdown>
+  <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
+    <span class="fa fa-ellipsis-v"></span>
+  </button>
+  <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
+    <li [ngClass]="{'disabled': false}"
+        [attr.role]="menuitem">
+      <a href="javascript:void(0)"
+         [ngClass]="{'disabled': workspace?.attributes?.description==='STOPPED'}"
+         class="dropdown-item secondary-action"
+         (click)="stopWorkspace()">Stop</a>
+      <a href="javascript:void(0)"
+         class="dropdown-item secondary-action"
+         (click)="deleteWorkspace()">Delete</a>
+    </li>
+  </ul>
+</span>

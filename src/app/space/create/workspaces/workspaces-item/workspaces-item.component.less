@@ -1,0 +1,26 @@
+@import (reference) '../../../../../assets/stylesheets/shared/osio.less';
+.workspace-item {
+  display: inline-flex;
+  width: 100%;
+
+  .workspace-icon-repository-fork { display: inline-flex; }
+
+  .workspace-icon-commits-behind {
+    display: inline-flex;
+    color: @color-pf-blue-500;
+  }
+
+  .workspace-icon-commits-ahead {
+    display: inline-flex;
+    color: @color-pf-blue-200;
+  }
+
+  .workspace-icon-status-running {
+    display: inline-flex;
+    color: @color-pf-green-300;
+  }
+  .workspace-icon-status-stopped {
+    display: inline-flex;
+    color: @color-pf-black-400;
+  }
+}

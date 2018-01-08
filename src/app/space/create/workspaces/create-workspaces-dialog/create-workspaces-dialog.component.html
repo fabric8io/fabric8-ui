@@ -1,0 +1,78 @@
+<form role="form" #form="ngForm" (ngSubmit)="createWorkspace(form)" class="form-horizontal">
+  <modal #createWorkspaceModal
+         title="Create Workspace"
+         modalClass="create-workspaces-dialog">
+    <modal-content class="chromeless-modal-content">
+      <div class="form">
+        <fieldset class="add-fieldset">
+          <div class="form-group">
+            <label for="workspaceName" class="col-sm-3 control-label">Name</label>
+            <div class="col-sm-9">
+              <input id="workspaceName" name="workspaceName" type="text"
+                     class="form-control"
+                     placeholder="Enter a name for your workspace"
+                     [(ngModel)]="workspaceName"
+                     #workspaceNameModel="ngModel"
+                     required
+                     minlength="3" #name="ngModel">
+              <div class="help-block" *ngIf="workspaceNameModel.invalid && (workspaceNameModel.dirty || workspaceNameModel.touched)">
+                <span *ngIf="workspaceNameModel.errors.required">Workspace name is required.</span>
+                <span *ngIf="workspaceNameModel.errors.minlength">Workspace name must be at least 3 characters long.</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="codebaseId" class="col-sm-3 control-label">Codebase</label>
+            <div class="col-sm-9">
+              <select id="codebaseId" name="codebaseId"
+                      class="form-control"
+                      [(ngModel)]="codebaseId"
+                      (change)="changeRepo($event)"
+                      #codebaseModel="ngModel"
+                      required>
+                <option #emptyOption selected value=""></option>
+                <option *ngFor="let entry of getRepos();"
+                        [value]="entry.codebaseId">{{ entry.fullName }}</option>
+              </select>
+              <div class="help-block"
+                   *ngIf="codebaseModel.invalid && (codebaseModel.dirty || codebaseModel.touched)">
+                <span *ngIf="codebaseModel.errors.required">Codebase is required.</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="branchName" class="col-sm-3 control-label">Branch</label>
+            <div class="col-sm-9">
+              <input #branchNameModel="ngModel"
+                     [(ngModel)]="branchName"
+                     [typeahead]="branchesSource"
+                     (typeaheadLoading)="changeTypeaheadLoading($event)"
+                     (typeaheadNoResults)="changeTypeaheadNoResults($event)"
+                     (typeaheadOnSelect)="typeaheadOnSelect($event)"
+                     [typeaheadOptionsLimit]="7"
+                     [attr.disabled]="codebaseModel?.errors?.required"
+                     id="branchName"
+                     name="branchName"
+                     autocomplete="off"
+                     typeaheadOptionField="name"
+                     placeholder="Enter a branch name"
+                     class="form-control"
+                     required />
+              <div class="help-block"
+                   *ngIf="branchNameModel.invalid && (branchNameModel.dirty || branchNameModel.touched)">
+                <span *ngIf="branchNameModel.errors.required">Branch is required.</span>
+                <span *ngIf="branchNameModel.errors.branchesLoading">Branches are loading now.</span>
+                <span *ngIf="branchNameModel.errors.branchNotFound">No branches found.</span>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
+      <button class="btn btn-primary" type="submit" [attr.disabled]="form.invalid?true:null">Create</button>
+    </modal-footer>
+  </modal>
+</form>
+
