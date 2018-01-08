@@ -1,9 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { Observable } from 'rxjs';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
+
 import { createMock } from 'testing/mock';
-import { initContext, TestContext } from 'testing/test-context';
+
+import {
+  BehaviorSubject,
+  Observable,
+  Subject
+ } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
@@ -34,6 +43,7 @@ describe('ResourceCardComponent', () => {
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let cpuStatMock = Observable.of({ used: 1, quota: 2 } as CpuStat);
   let memoryStatMock = Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
+  let active: Subject<boolean> = new BehaviorSubject<boolean>(true);
 
   beforeEach(() => {
     mockSvc = createMock(DeploymentsService);
@@ -44,6 +54,7 @@ describe('ResourceCardComponent', () => {
     ]));
     mockSvc.getCpuStat.and.returnValue(cpuStatMock);
     mockSvc.getMemoryStat.and.returnValue(memoryStatMock);
+    mockSvc.isDeployedInEnvironment.and.returnValue(active);
   });
 
   initContext(ResourceCardComponent, HostComponent, {
@@ -54,6 +65,10 @@ describe('ResourceCardComponent', () => {
       component.spaceId = 'spaceId';
       component.environment = { name: 'stage' } as Environment;
     });
+
+  it('should be active', function(this: Context) {
+    expect(this.testedDirective.active).toBeTruthy();
+  });
 
   it('should have its children passed the proper values', function(this: Context) {
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
@@ -68,6 +83,14 @@ describe('ResourceCardComponent', () => {
     expect(memoryUtilBar.resourceTitle).toEqual('Memory');
     expect(memoryUtilBar.resourceUnit).toEqual('GB');
     expect(memoryUtilBar.stat).toEqual(memoryStatMock);
+  });
+
+  describe('inactive environment', () => {
+    it('should not display', function(this: Context) {
+        active.next(false);
+        this.detectChanges();
+        expect(this.testedDirective.active).toBeFalsy();
+    });
   });
 
 });
