@@ -7,6 +7,14 @@ import { StackReportModel, ResultInformationModel, UserStackInfoModel,
     ComponentInformationModel, RecommendationsModel } from '../models/stack-report.model';
 import { ReportSummaryUtils } from '../utils/report-summary-utils';
 
+/**
+ * New Stack Report Revamp - Begin
+ */
+import { MCardDetails } from '../models/ui.model';
+/**
+ * New Stack Report Revamp - End
+ */
+
 @Component({
     selector: 'stack-details',
     providers: [StackAnalysesService],
@@ -25,6 +33,15 @@ export class StackDetailsComponent implements OnChanges {
     @Input() stackResponse;
 
     @ViewChild('stackModule') modalStackModule: any;
+
+
+    /**
+     * New Stack Report Revamp - Begin
+     */
+     public cardDetails: any = {};
+    /**
+     * New Stack Report Revamp - End
+     */
 
     public errorMessage: any = {};
     public cache: string = '';
@@ -55,6 +72,16 @@ export class StackDetailsComponent implements OnChanges {
 
     private stackId: string;
     private reportSummaryUtils = new ReportSummaryUtils();
+
+    /**
+     * New Stack Report Revamp - Begin
+     */
+    public handleCardClick(cardDetails: any): void {
+        this.cardDetails = cardDetails;
+    }
+    /**
+     * New Stack Report Revamp - End
+     */
 
     public showStackModal(event: Event): void {
         event.preventDefault();

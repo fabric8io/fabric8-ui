@@ -1,5 +1,11 @@
 /** Vendor imports Go HERE */
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    Input,
+    OnChanges,
+    OnInit,
+    SimpleChanges
+} from '@angular/core';
 /** Vendor imports Go HERE */
 
 import {

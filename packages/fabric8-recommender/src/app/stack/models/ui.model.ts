@@ -11,6 +11,13 @@ export class MReportSummaryTitle {
     // }
 }
 
+export class MTab {
+    constructor(
+        public title: string,
+        public content: MReportInformation
+    ) {}
+}
+
 export class MReportSummaryInfoEntry {
     infoText: string;
     infoValue: any;
@@ -23,6 +30,7 @@ export class MReportSummaryContent {
 }
 
 export class MReportSummaryCard {
+    identifier: string;
     reportSummaryTitle: MReportSummaryTitle;
     reportSummaryDescription: string;
     reportSummaryContent: MReportSummaryContent;
@@ -30,61 +38,107 @@ export class MReportSummaryCard {
 }
 
 export class MProgressMeter {
-    headerText: string;
-    value: number;
-    bgColor: string;
-    footerText: string;
+    constructor(
+        public headerText: string,
+        public value: number,
+        public bgColor: string,
+        public footerText: string,
+        public width: number
+    ) {}
 }
 
 /** Bottom Section */
-export class MRecommendationInformation {
-    type: string; // Alternate or companion
-    recommendation: MComponentInformation;
-    reason?: string = null;
-    feedback?: boolean;
-    confidenceScore: number;
-}
-
 export class MGithub {
-    contributors?: string = 'NA';
-    forks?: string = 'NA';
-    depRepos?: string = 'NA';
-    stars?: string = 'NA';
-    usage?: string = 'NA';
+    constructor(
+        public contributors: number = -1,
+        public forks: number = -1,
+        public depRepos: number = -1,
+        public stars: number = -1,
+        public usage: number = -1,
+        public users: Array<any>
+    ) {}
 }
 
 export class MOsio {
-    usage?: string = 'NA';
+    constructor(usage: number = -1) {}
 }
 
 export class MCrowdSourcing {
-    tags: Array<string>;
-    canSuggestTags?: boolean = true;
+    constructor(
+        public tags: Array<string>,
+        public canSuggestTags: boolean = true
+    ) {}
+}
+
+export class MSecurityIssue {
+    constructor(
+        public cvss: string,
+        public cve: string
+    ) {}
+}
+
+export class MSecurityDetails {
+    constructor(
+        public highestIssue: MSecurityIssue = null,
+        public progressReport: MProgressMeter = null,
+        public totalIssues: number = null
+    ) {}
 }
 
 export class MComponentInformation {
-    name: string;
-    currentVersion?: string = 'NA';
-    latestVersion?: string = 'NA';
-    hasSecurityIssue?: boolean;
-    isUsageOutlier?: boolean;
-    hasLicenseIssue?: boolean;
-    licenses: Array<string>;
-    crowdSourcing: MCrowdSourcing;
-    github: MGithub;
-    osio: MOsio;
+    constructor(
+        public name: string,
+        public currentVersion: string = 'NA',
+        public latestVersion: string = 'NA',
+        public securityDetails: MSecurityDetails = null,
+        public hasSecurityIssue: boolean,
+        public isUsageOutlier: boolean,
+        public hasLicenseIssue: boolean,
+        public licenses: Array<string>,
+        public crowdSourcing: MCrowdSourcing,
+        public github: MGithub,
+        public osio: MOsio,
+        public action: string = null,
+        public needsExpansion: boolean = true,
+        public recommendation: MRecommendationInformation = null,
+        public isOpen: boolean = false
+    ) {}
+}
+
+export class MRecommendationInformation {
+    constructor(
+        public type: string, // Alternate or companion
+        public reason: string = null,
+        public feedback: boolean,
+        public confidenceScore: MProgressMeter,
+        public componentInformation: MComponentInformation
+    ) {}
 }
 
 export class MComponentDetails {
-    componentInformation: MComponentInformation;
-    recommendationInformation?: MRecommendationInformation;
-    action?: string = null;
-    needsExpansion?: boolean = true;
+    constructor(
+        public componentInformation: MComponentInformation = null,
+        public recommendationInformation: MRecommendationInformation = null
+    ) {}
+}
+
+export class MComponentHeaderColumn {
+    constructor(
+        public identifier: string,
+        public text: string,
+        public className: string,
+        public isSortable: boolean = false,
+        public isDragable: boolean = false
+    ) {}
 }
 
 export class MReportInformation {
-    headers: Array<string>;
-    componentDetails: Array<MComponentDetails>;
+    constructor(
+        public name: string,
+        public type: string,
+        public headers: Array<MComponentHeaderColumn>,
+        public componentDetails: Array<MComponentDetails>
+    ) {}
 }
 
 export class MCardDetails {

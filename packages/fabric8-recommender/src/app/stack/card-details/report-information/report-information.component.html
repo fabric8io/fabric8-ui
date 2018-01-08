@@ -1,0 +1,9 @@
+<div class="analytics-report-information">
+    <div *ngIf="report?.componentDetails && report?.componentDetails.length > 0" class="component-detail-headers">
+        <div [class]="header.className" *ngFor="let header of report?.headers" [innerText]="header.text"></div>
+    </div>
+    <component-details (click)="handleAccordion(cdetail)" [serial]="i" [type]="report?.type" [positions]="report?.headers" [compDetails]="cdetail" *ngFor="let cdetail of report?.componentDetails; let i = index;"></component-details>
+    <div class="not-found" *ngIf="!report?.componentDetails || report?.componentDetails.length === 0">
+        Not available
+    </div>
+</div>

@@ -1,0 +1,92 @@
+<div class="analytics-component-information">
+    <div class="card-pf card-pf-view card-pf-view-xs">
+        <div class="card-pf-body clear-float header-group">
+            <div [class]="position?.className" *ngFor="let position of positions;">
+                <div [ngSwitch]="position?.identifier">
+                    <!-- Security Card -->
+                    <div *ngSwitchCase="'serial'">
+                        <!-- Serial Numbers -->
+                        <span [innerText]="serial"></span>
+                    </div>
+                    <div *ngSwitchCase="'component'">
+                        <!-- Component Names -->
+                        <span [innerText]="comp?.name"></span>
+                        <!--
+                            <reco-name [name]="comp?.name" [reason]="comp?.recommendation?.reason" *ngIf="comp?.recommendation && (comp?.recommendation?.type === 'companion')"></reco-name>
+                        -->
+                    </div>
+                    <div *ngSwitchCase="'cveCount'">
+                        <!-- cveCount -->
+                        <span [innerText]="comp?.securityDetails && comp?.securityDetails.totalIssues || 0"></span>
+                    </div>
+                    <div *ngSwitchCase="'highestCVSS'">
+                        <!-- highestCVSS -->
+                        <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
+                        <ana-progress-meter *ngIf="comp?.hasSecurityIssue" [config]="comp?.securityDetails?.progressReport"></ana-progress-meter>
+                    </div>
+                    <div *ngSwitchCase="'cveIdOfH'">
+                        <!-- cveIdOfHeighest CVSS -->
+                        <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
+                        <span *ngIf="comp?.hasSecurityIssue" [innerText]="comp?.securityDetails && comp?.securityDetails?.highestIssue?.cve"></span>
+                    </div>
+                    <div *ngSwitchCase="'action'">
+                        <!-- Action -->
+                        <span (click)="handleAction(comp)" [innerText]="comp?.action"></span>
+                    </div>
+                    <!-- Security Card -->
+
+                    
+                    
+                    <!-- Insights Card -->
+                    <div *ngSwitchCase="'alternate'">
+                        <!-- alternate -->
+                        <span [innerText]="comp?.recommendation?.componentInformation?.name"></span>
+                    </div>
+                    <div *ngSwitchCase="'feedback'">
+                        <!-- feedback -->
+                        <!--
+                            <feedback [config]="></feedback>
+                        -->
+                    </div>
+                    <div *ngSwitchCase="'confidence'">
+                        <!-- confidence -->
+                        <ana-progress-meter *ngIf="comp?.recommendation?.confidenceScore" [config]="comp?.recommendation?.confidenceScore"></ana-progress-meter>
+                        <ana-progress-meter *ngIf="component?.confidenceScore" [config]="component?.confidenceScore"></ana-progress-meter>
+                    </div>
+                    <!-- Insights Card -->
+
+                    
+                    
+                    <!-- Licenses Card -->
+                    <div *ngSwitchCase="'licensesAffected'">
+                        <!-- licensesAffected -->
+                    </div>
+                    <div *ngSwitchCase="'unknownLicenses'">
+                        <!-- unknownLicenses -->
+                        
+                    </div>
+                    <!-- Licenses Card -->
+
+                    
+                    
+                    <!-- Component Details Card -->
+                    <div *ngSwitchCase="'componentCheck'">
+                        <!-- componentCheck -->
+                    </div>
+                    <div *ngSwitchCase="'helpUsKnownMore'">
+                        <!-- Help us know more about components - get tags -->
+                    </div>
+                    <!-- Component Details Card -->
+                </div>
+            </div>
+            <div *ngIf="comp?.isOpen" class="accordion-body">
+                <div [ngClass]="{'col-xs-12': true, 'col-md-6': comp?.recommendation, 'col-md-12': !comp?.recommendation}" *ngIf="comp">
+                    <component-snippet [component]="comp"></component-snippet>
+                </div>
+                <div class="col-xs-12 col-md-6" *ngIf="comp?.recommendation?.componentInformation">
+                    <component-snippet [component]="comp?.recommendation?.componentInformation"></component-snippet>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

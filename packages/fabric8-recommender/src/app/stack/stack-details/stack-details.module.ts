@@ -18,10 +18,12 @@ import { FeedbackModule } from '../feedback/feedback.module';
 
 /** Stack Report Revamp - Latest */
 import { ReportSummaryModule } from '../report-summary/report-summary.module';
+import { CardDetailsModule } from '../card-details/card-details.module';
 /** Stack Report Revamp - Latest */
 
 const revampImports = [
-  ReportSummaryModule
+  ReportSummaryModule,
+  CardDetailsModule
 ];
 
 @NgModule({

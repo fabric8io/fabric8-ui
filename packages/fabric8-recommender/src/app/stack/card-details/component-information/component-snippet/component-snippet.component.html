@@ -1,0 +1,21 @@
+<div class="analytics-snippet-information">
+    <h4>Details of the component: <span class="component-name" [innerText]="component?.name"></span></h4>
+    <div class="component-version">
+        <div class="col-xs-6">
+            <p>Current Version</p>
+            <p [innerText]="component?.currentVersion"></p>
+        </div>
+        <div class="col-xs-6">
+            <p>Latest Version</p>
+            <p [innerText]="component?.latestVersion"></p>
+        </div>
+    </div>
+    <div *ngIf="component?.licenses?.length > 0" class="component-licenses">
+        License(s) used: 
+        <span [innerText]="license" *ngFor="let license of component?.licenses"></span>
+    </div>
+    <div *ngIf="component?.crowdSourcing?.tags && component?.crowdSourcing?.tags?.length > 0" class="component-tags">
+        Tags: 
+        <span [innerText]="tag" *ngFor="let tag of component?.crowdSourcing?.tags"></span>
+    </div>
+</div>
