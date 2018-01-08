@@ -53,7 +53,3 @@ describe('Forge-Wizard choose quickstart component', () => {
   }));
 });
 
-
-
-
-

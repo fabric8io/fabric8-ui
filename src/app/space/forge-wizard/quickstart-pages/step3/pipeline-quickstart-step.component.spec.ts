@@ -64,5 +64,3 @@ describe('Forge-Wizard pipeline quickstart step component', () => {
 
 });
 
-
-

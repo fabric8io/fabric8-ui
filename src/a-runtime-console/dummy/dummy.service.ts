@@ -870,8 +870,6 @@ export class DummyService implements OnInit {
   }
 
 
-
-
   private createBuildConfigContext(space: Space, bc: BuildConfig) {
     var appContext = this._appContext;
     let params = appContext.params;

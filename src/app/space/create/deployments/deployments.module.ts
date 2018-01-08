@@ -8,13 +8,13 @@ import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ChartModule, ToolbarModule } from 'patternfly-ng';
 
+import { DeploymentStatusIconComponent } from '../deployments/apps/deployment-status-icon.component';
 import { DeploymentCardContainerComponent } from './apps/deployment-card-container.component';
 import { DeploymentCardComponent } from './apps/deployment-card.component';
 import { DeploymentDetailsComponent } from './apps/deployment-details.component';
 import { DeploymentGraphLabelComponent } from './apps/deployment-graph-label.component';
 import { DeploymentsAppsComponent } from './apps/deployments-apps.component';
 import { DeploymentsDonutChartComponent } from './deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
-import { DeploymentStatusIconComponent } from '../deployments/apps/deployment-status-icon.component';
 import { DeploymentsDonutComponent } from './deployments-donut/deployments-donut.component';
 import { DeploymentsRoutingModule } from './deployments-routing.module';
 import { DeploymentsToolbarComponent } from './deployments-toolbar/deployments-toolbar.component';

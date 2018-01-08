@@ -46,7 +46,6 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
   }
 
 
-
   get namespace(): string {
     return this._namespace;
   }

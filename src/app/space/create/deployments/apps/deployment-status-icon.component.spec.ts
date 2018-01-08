@@ -3,18 +3,18 @@ import {
   TestBed
 } from '@angular/core/testing';
 
-import { By } from '@angular/platform-browser';
 import {
   Component,
   DebugElement,
   Input
 } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import { initContext, TestContext } from '../../../../../testing/test-context';
 
-import { Subject, Observable } from 'rxjs';
-import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
+import { Observable, Subject } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 
 import { CpuStat } from '../models/cpu-stat';
 
@@ -38,22 +38,22 @@ describe('DeploymentStatusIconComponent', () => {
 
   initContext(DeploymentStatusIconComponent, HostComponent,
     { declarations: [DeploymentStatusIconComponent] },
-    (component) => {component.cpuDataStream = mockCpuData;}
+    (component) => {component.cpuDataStream = mockCpuData; }
   );
 
-  it('should set the button\'s initial value to ok', function (this: Context) {
+  it('should set the button\'s initial value to ok', function(this: Context) {
     expect(this.testedDirective.iconClass).toBe('pficon-ok');
     expect(this.testedDirective.toolTip).toBe('Everything is ok.');
   });
 
-  it('should change the button\'s value to warning if capacity changes', function (this: Context) {
+  it('should change the button\'s value to warning if capacity changes', function(this: Context) {
     mockCpuData.next({ used: 4, quota: 5 } as CpuStat);
     this.detectChanges();
     expect(this.testedDirective.iconClass).toBe(ICON_WARN);
     expect(this.testedDirective.toolTip).toBe('CPU usage is approaching or at capacity.');
   });
 
-  it('should change the button\s value to error if capacity is exceeded', function (this: Context) {
+  it('should change the button\s value to error if capacity is exceeded', function(this: Context) {
     mockCpuData.next({ used: 6, quota: 5 } as CpuStat);
     this.detectChanges();
     expect(this.testedDirective.iconClass).toBe(ICON_ERR);

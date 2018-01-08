@@ -242,4 +242,3 @@ export function asSpaces(spaces: Space[]): Spaces {
   return answer;
 }
 
-

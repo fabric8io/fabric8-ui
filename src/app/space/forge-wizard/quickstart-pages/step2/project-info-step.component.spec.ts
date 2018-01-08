@@ -106,5 +106,3 @@ describe('Forge-Wizard project info component', () => {
   }));
 });
 
-
-

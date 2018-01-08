@@ -12,7 +12,6 @@ export class ReplicaSets extends Array<ReplicaSet>{
 }
 
 
-
 /**
  * Combines ReplicaSets and ReplicationControllers into a list removing any duplicates
  */

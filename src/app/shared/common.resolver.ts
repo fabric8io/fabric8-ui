@@ -18,5 +18,3 @@ export class AuthUserResolve implements Resolve<any> {
   }
 }
 
-
-

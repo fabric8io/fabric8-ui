@@ -161,7 +161,6 @@ export class BuildConfig extends KubernetesSpecResource {
   }
 
 
-
   updateValuesFromResource() {
     super.updateValuesFromResource();
 

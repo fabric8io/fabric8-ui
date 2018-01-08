@@ -35,7 +35,6 @@ export abstract class KubernetesResourceStore<T extends KubernetesResource, L ex
   }
 
 
-
   update(obj: T): Observable<T> {
     return this.service.update(obj);
   }

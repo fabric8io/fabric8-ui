@@ -22,7 +22,6 @@ export abstract class RESTService<T extends BaseEntity, L extends Array<T>> {
   delete(obj: T) { return this.restangularService.one(obj.id).delete(); }
 
 
-
   /**
    * If a new item has been loaded via a websocket then lets restanguarlize it
    * so that the REST APIs appear on it
