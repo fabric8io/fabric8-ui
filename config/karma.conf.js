@@ -29,7 +29,7 @@ module.exports = function (config) {
      * we are building the test environment in ./spec-bundle.js
      */
     files: [
-      { pattern: './src/assets/img/*', watched: false, included: false, served: true },
+      { pattern: './src/assets/images/*', watched: false, included: false, served: true },
       { pattern: './config/spec-bundle.js', watched: false }
     ],
 
