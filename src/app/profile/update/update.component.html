@@ -12,6 +12,7 @@
           <div [ngClass]="{'has-error': fullNameInvalid}">
             <input type="text" class="form-control" id="fullName" name="fullName"
                     placeholder="Enter your full name"
+                    [maxLength]="80"
                     [(ngModel)]="fullName">
           </div>
         </div>
@@ -20,6 +21,7 @@
           <div [ngClass]="{'has-error': emailInvalid}">
             <input type="email" class="form-control" id="email" name="email" #_email
                     placeholder="name@gmail.com"
+                    [maxLength]="255"
                     [(ngModel)]="email"
                     (change)="validateEmail()"
                     disabled>
@@ -30,6 +32,7 @@
           <div [ngClass]="{'has-error': companyInvalid}">
             <input type="text" class="form-control" id="company" name="company"
                     placeholder="Enter your company's name"
+                    [maxLength]="80"
                     [(ngModel)]="company">
           </div>
         </div>
@@ -43,6 +46,7 @@
             <span class="col-xs-8 col-sm-7 preview-field" [ngClass]="{'has-error': imageUrlInvalid}">
               <input type="text" class="form-control" id="imageUrl" name="imageUrl" #_imageUrl
                     placeholder="http://www.myphoto.com"
+                    [maxLength]="255"
                     [(ngModel)]="imageUrl"
                     (change)="validateImageUrl()">
             </span>
@@ -58,6 +62,7 @@
           <div [ngClass]="{'has-error': urlInvalid}">
             <input type="text" class="form-control" id="url" name="url" #_url
                   placeholder="http://www.myprofile.com"
+                  [maxLength]="255"
                   [(ngModel)]="url"
                   (change)="validateUrl()">
           </div>
