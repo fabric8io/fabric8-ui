@@ -112,7 +112,7 @@ export class Build extends KubernetesSpecResource {
       if (json) {
         try {
           var obj = JSON.parse(json);
-          if (obj != null) {
+          if (obj != undefined) {
             var stages = obj.stages;
             if (stages && stages.length) {
               stages.forEach(stage => {
@@ -142,7 +142,7 @@ export class Build extends KubernetesSpecResource {
     if (json) {
       try {
         var obj = JSON.parse(json);
-        if (obj != null) {
+        if (obj != undefined) {
           if (obj && obj.length) {
             obj.forEach(input => {
               answer.push(input as PendingInputAction);

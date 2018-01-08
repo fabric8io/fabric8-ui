@@ -239,7 +239,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
    */
   private getRequestParam(name: string): string {
     let param = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(window.location.search);
-    if (param != null) {
+    if (param != undefined) {
       return decodeURIComponent(param[1]);
     }
     return null;

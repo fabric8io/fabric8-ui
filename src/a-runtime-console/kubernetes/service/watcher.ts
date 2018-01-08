@@ -202,7 +202,7 @@ export class Watcher<L> {
 }
 
 function validMessage(msg): boolean {
-  if (msg != null) {
+  if (msg != undefined) {
     for (let key of msg) {
       return true;
     }

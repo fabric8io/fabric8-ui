@@ -25,7 +25,7 @@ export class DevNamespaceScope implements INamespaceScope {
               private http: Http,
               @Inject(WIT_API_URL) apiUrl: string) {
 
-    if (this.auth.getToken() != null) {
+    if (this.auth.getToken() != undefined) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
     this.userServicesUrl = pathJoin(apiUrl, '/user/services');

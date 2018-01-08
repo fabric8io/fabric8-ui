@@ -30,7 +30,7 @@ export class GettingStartedService implements OnDestroy {
       private logger: Logger,
       private userService: UserService,
       @Inject(WIT_API_URL) apiUrl: string) {
-    if (this.auth.getToken() != null) {
+    if (this.auth.getToken() != undefined) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
     this.usersUrl = apiUrl + 'users';

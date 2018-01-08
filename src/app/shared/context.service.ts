@@ -320,7 +320,7 @@ export class ContextService implements Contexts {
       c.path = '/' + c.user.attributes.username;
       c.name = c.user.attributes.username;
     } // TODO add type detection for organization and team
-    if (c.type != null) {
+    if (c.type != undefined) {
       this.menus.attach(c);
       return c;
     }

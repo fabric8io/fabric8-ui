@@ -90,7 +90,7 @@ export function activedRouteDataEntry(route: ActivatedRoute, key: string) {
     let data = route.snapshot.data;
     if (data) {
       let answer = data[key];
-      if (answer != null) {
+      if (answer != undefined) {
         return answer;
       }
       const parent = route.parent;

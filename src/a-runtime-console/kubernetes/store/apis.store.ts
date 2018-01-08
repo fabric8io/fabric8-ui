@@ -30,7 +30,7 @@ export function isOpenShift(): boolean {
     }
   }
 
-  if (_latestAPIs != null) {
+  if (_latestAPIs != undefined) {
     return _latestAPIs.isOpenShift;
   }
   return _defaultIsOpenShift;

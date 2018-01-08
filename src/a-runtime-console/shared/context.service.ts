@@ -77,7 +77,7 @@ export class ContextService {
     let c;
     for (let m of this.dummy.contexts) {
       if (this.router.url.startsWith(m.path)) {
-        if (c == null || m.path.length > c.path.length) {
+        if (c == undefined || m.path.length > c.path.length) {
           c = m;
         }
       }

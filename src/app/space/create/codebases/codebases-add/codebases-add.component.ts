@@ -290,7 +290,7 @@ export class CodebasesAddComponent implements AfterViewInit, OnDestroy, OnInit {
     // Get codebases
     this.subscriptions.push(this.codebasesService.getCodebases(this.context.space.id)
       .subscribe(codebases => {
-        if (codebases != null) {
+        if (codebases != undefined) {
           this.codebases = codebases;
         }
       }, error => {

@@ -69,7 +69,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.workspacesService.createWorkspace(this.codebase.id)
       .subscribe(workspaceLinks => {
         this.workspaceBusy = false;
-        if (workspaceLinks != null) {
+        if (workspaceLinks != undefined) {
           let name = this.getWorkspaceName(workspaceLinks.links.open);
           this.windowService.open(workspaceLinks.links.open, name);
 
@@ -102,7 +102,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.workspacesService.openWorkspace(this.workspaceUrl)
       .subscribe(workspaceLinks => {
         this.workspaceBusy = false;
-        if (workspaceLinks != null) {
+        if (workspaceLinks != undefined) {
           this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
         }
       }, error => {
@@ -158,7 +158,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   private updateWorkspaces(): void {
     this.subscriptions.push(this.workspacesService.getWorkspaces(this.codebase.id)
       .subscribe(workspaces => {
-        if (workspaces != null && workspaces.length > 0) {
+        if (workspaces != undefined && workspaces.length > 0) {
           this.workspaces = workspaces;
           this.setWorkspacesAvailable();
           this.setWorkspaceUrl(this.codebase.attributes.last_used_workspace);
@@ -185,7 +185,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     this.workspacePollSubscription = this.workspacePollTimer
       .switchMap(() => this.workspacesService.getWorkspaces(this.codebase.id))
       .map(workspaces => {
-        if (workspaces != null && workspaces.length > 0
+        if (workspaces != undefined && workspaces.length > 0
             && workspaces.length !== this.workspaces.length) {
           this.workspacePollSubscription.unsubscribe();
           this.workspaces = workspaces;

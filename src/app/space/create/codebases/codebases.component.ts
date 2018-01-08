@@ -304,7 +304,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     // Get codebases
     this.subscriptions.push(this.codebasesService.getCodebases(this.context.space.id)
       .subscribe(codebases => {
-        if (codebases != null && codebases.length > 0) {
+        if (codebases != undefined && codebases.length > 0) {
           this.allCodebases = codebases;
           this.codebases = cloneDeep(codebases);
           this.codebases.unshift({} as Codebase); // Add empty object for row header

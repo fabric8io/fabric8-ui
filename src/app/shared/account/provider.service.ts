@@ -93,7 +93,7 @@ export class ProviderService {
     + 'clientSession=' + parsedToken.client_session
     + '&sessionState=' + parsedToken.session_state
     + '&redirect=' + redirect ; // brings us back to Getting Started.
-    if (provider != null) {
+    if (provider != undefined) {
       url += '&provider=' + provider;
     }
     return url;

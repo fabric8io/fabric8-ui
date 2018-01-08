@@ -243,7 +243,7 @@ export function environmentOpenShiftConoleUrl(environment: Environment): string 
   let openshiftConsoleUrl = process.env.OPENSHIFT_CONSOLE_URL;
   if (!openshiftConsoleUrl) {
     let config = currentOAuthConfig();
-    if (config != null) {
+    if (config != undefined) {
       openshiftConsoleUrl = config.openshiftConsoleUrl;
     }
   }

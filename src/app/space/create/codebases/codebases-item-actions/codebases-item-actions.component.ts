@@ -53,7 +53,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.workspacesService.createWorkspace(this.codebase.id)
       .subscribe(workspaceLinks => {
         this.workspaceBusy = false;
-        if (workspaceLinks != null) {
+        if (workspaceLinks != undefined) {
           let name = this.getWorkspaceName(workspaceLinks.links.open);
           this.windowService.open(workspaceLinks.links.open, name);
 
