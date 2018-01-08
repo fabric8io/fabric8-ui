@@ -411,11 +411,4 @@ export class UpdateComponent implements AfterViewInit, OnInit {
       type: type
     } as Notification);
   }
-
-  private notifySuccess(successMessage: string) {
-    this.notifications.message({
-      message: successMessage,
-      type: NotificationType.SUCCESS
-    } as Notification);
-  }
 }
