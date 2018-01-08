@@ -185,7 +185,7 @@ module.exports = function (options) {
             // tslint does not interrupt the compilation by default
             // if you want any file with tslint errors to fail
             // set failOnHint to true
-            failOnHint: false,
+            failOnHint: true,
 
             // enables type checked rules like 'for-in-array'
             // uses tsconfig.json from current working directory
