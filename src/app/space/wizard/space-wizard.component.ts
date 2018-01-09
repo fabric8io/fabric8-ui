@@ -130,6 +130,11 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
           related: ''
         }
       },
+      workitemtypegroups: {
+        links: {
+          related: ''
+        }
+      },
       'owned-by': {
         data: {
           id: '',

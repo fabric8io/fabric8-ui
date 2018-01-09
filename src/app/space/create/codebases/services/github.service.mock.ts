@@ -50,6 +50,11 @@ export const currentContext: Context = {
           'related': 'https://api.prod-preview.openshift.io/api/spaces/1d7af8bf-0346-432d-9096-4e2b59d2db87/iterations'
         }
       },
+      'workitemtypegroups': {
+        'links': {
+          'related': 'https://api.prod-preview.openshift.io/api/spacetemplates/1/workitemtypegroups'
+        }
+      },
       'owned-by': {
         'data': {
           'id': 'c21f2ece-21f0-4e7f-b9ab-b49b8dd0d752',
