@@ -12,49 +12,22 @@ import {
 
 import { CpuStat } from '../models/cpu-stat';
 
-const ICON_OK = 'pficon-ok';
-const ICON_WARN = 'pficon-warning-triangle-o';
-const ICON_ERR = 'pficon-error-circle-o';
-const MSG_OK = 'Everything is ok.';
+enum CLASSES {
+  ICON_OK = 'pficon-ok',
+  ICON_WARN = 'pficon-warning-triangle-o',
+  ICON_ERR = 'pficon-error-circle-o'
+}
+
 const STAT_THRESHOLD = .6;
 @Component({
   selector: 'deployment-status-icon',
-  templateUrl: 'deployment-status-icon.component.html',
-  styleUrls: ['./deployment-status-icon.component.less']
+  templateUrl: 'deployment-status-icon.component.html'
 })
-export class DeploymentStatusIconComponent implements OnDestroy, OnInit {
-  @Input() cpuDataStream: Observable<CpuStat>;
+export class DeploymentStatusIconComponent {
 
-  iconClass: String;
-  toolTip: String;
-  subscriptions: Array<Subscription> = [];
+  @Input() iconClass: String;
+  @Input() toolTip: String;
 
-  constructor() {
-    this.iconClass = ICON_OK;
-    this.toolTip = MSG_OK;
-  }
+  public static readonly CLASSES = CLASSES;
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
-  }
-
-  ngOnInit(): void {
-    this.subscriptions.push(this.cpuDataStream.subscribe((stat) => {
-      this.changeStatus(stat);
-    }));
-  }
-
-  changeStatus(stat: CpuStat) {
-    this.iconClass = ICON_OK;
-    this.toolTip = MSG_OK;
-    if (stat.used / stat.quota > STAT_THRESHOLD) {
-      this.iconClass = ICON_WARN;
-      this.toolTip = 'CPU usage is approaching or at capacity.';
-    }
-
-    if (stat.used > stat.quota) {
-      this.iconClass = ICON_ERR;
-      this.toolTip = 'CPU usage has exceeded capacity.';
-    }
-  }
 }

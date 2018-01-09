@@ -12,6 +12,9 @@ import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { DeploymentsService } from '../services/deployments.service';
+import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
+
+const STAT_THRESHOLD = .6;
 
 @Component({
   selector: 'deployment-card',
@@ -32,6 +35,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   appUrl: Observable<string>;
 
   cpuStat: Observable<CpuStat>;
+  iconClass: string;
+  toolTip: string;
 
   subscriptions: Array<Subscription> = [];
 
@@ -45,7 +50,13 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
+    this.toolTip = 'Everything is ok';
+
     this.cpuStat = this.deploymentsService.getCpuStat(this.spaceId, this.environment.name);
+    this.subscriptions.push(this.cpuStat.subscribe((stat) => {
+      this.changeStatus(stat);
+    }));
 
     this.subscriptions.push(
       this.deploymentsService
@@ -68,6 +79,20 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
           }
         })
     );
+  }
+
+  changeStatus(stat: CpuStat) {
+    this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
+    this.toolTip = 'Everything is ok.';
+    if (stat.used / stat.quota > STAT_THRESHOLD) {
+      this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_WARN;
+      this.toolTip = 'CPU usage is nearing capacity.';
+    }
+
+    if (stat.used > stat.quota) {
+      this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_ERR;
+      this.toolTip = 'CPU usage has exceeded capacity.';
+    }
   }
 
   delete(): void {

@@ -32,7 +32,7 @@ import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentCardComponent } from './deployment-card.component';
-
+import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 @Component({
   selector: 'deployments-donut',
   template: ''
@@ -59,7 +59,8 @@ class FakeDeploymentGraphLabelComponent {
   template: ''
 })
 class FakeDeploymentStatusIconComponent {
-  @Input() cpuDataStream: Observable<CpuStat>;
+  @Input() iconClass: string;
+  @Input() toolTip: string;
 }
 
 @Component({
@@ -80,13 +81,14 @@ describe('DeploymentCardComponent', () => {
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let notifications: any;
   let active: Subject<boolean>;
+  let mockCpuData: Subject<CpuStat> = new BehaviorSubject({ used: 1, quota: 5 } as CpuStat);
 
   beforeEach(fakeAsync(() => {
     active = new BehaviorSubject<boolean>(true);
 
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
-    mockSvc.getCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
+    mockSvc.getCpuStat.and.returnValue(mockCpuData);
     mockSvc.getMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' }));
     mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
     mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
@@ -126,6 +128,27 @@ describe('DeploymentCardComponent', () => {
 
   it('should be active', () => {
     expect(component.active).toBeTruthy();
+  });
+
+  describe('iconStatusLogic', () => {
+    it('should set the button\'s initial value to ok', function() {
+      expect(component.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_OK);
+      expect(component.toolTip).toBe('Everything is ok.');
+    });
+
+    it('should change the button\'s value to warning if capacity changes', function() {
+      mockCpuData.next({ used: 4, quota: 5 } as CpuStat);
+      fixture.detectChanges();
+      expect(component.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_WARN);
+      expect(component.toolTip).toBe('CPU usage is nearing capacity.');
+    });
+
+    it('should change the button\s value to error if capacity is exceeded', function() {
+      mockCpuData.next({ used: 6, quota: 5 } as CpuStat);
+      fixture.detectChanges();
+      expect(component.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_ERR);
+      expect(component.toolTip).toBe('CPU usage has exceeded capacity.');
+    });
   });
 
   describe('versionLabel', () => {
