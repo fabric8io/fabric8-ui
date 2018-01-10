@@ -20,5 +20,11 @@
         <deployment-graph-label type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
       </div>
     </div>
+
+    <div class="deployment-chart">
+      <div class="chart-column">
+        <deployments-linechart [spaceId]="spaceId" [applicationId]="applicationId" [environment]="environment"></deployments-linechart>
+      </div>
+    </div>
   </ng-container>
 </div>

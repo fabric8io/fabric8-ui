@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
 
+import { round } from 'lodash';
+
 import { Observable } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
+
+export interface NetworkStat {
+  sent: number;
+  received: number;
+}
 
 @Injectable()
 export class DeploymentsService {
@@ -78,6 +85,14 @@ export class DeploymentsService {
       .distinctUntilChanged()
       .map(() => ({ used: Math.floor(Math.random() * 156) + 100, quota: 256, units: 'MB' } as MemoryStat))
       .startWith({ used: 200, quota: 256, units: 'MB' } as MemoryStat);
+  }
+
+  getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
+    return Observable
+      .interval(DeploymentsService.POLL_RATE_MS)
+      .distinctUntilChanged()
+      .map(() => ({ sent: round(Math.random() * 100, 1), received: round(Math.random() * 100, 1) }))
+      .startWith({ sent: 0, received: 0});
   }
 
   getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {

@@ -68,6 +68,16 @@ class FakePfngChartSparkline {
   @Input() chartData: any;
 }
 
+@Component({
+  selector: 'deployments-linechart',
+  template: ''
+})
+class FakeDeploymentsLinechart {
+  @Input() spaceId: string;
+  @Input() applicationId: string;
+  @Input() environment: Environment;
+}
+
 describe('DeploymentDetailsComponent', () => {
   type Context = TestContext<DeploymentDetailsComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
@@ -93,7 +103,8 @@ describe('DeploymentDetailsComponent', () => {
     declarations: [
       FakeDeploymentsDonutComponent,
       FakeDeploymentGraphLabelComponent,
-      FakePfngChartSparkline
+      FakePfngChartSparkline,
+      FakeDeploymentsLinechart
     ],
     providers: [
       { provide: DeploymentsService, useFactory: () => mockSvc }
