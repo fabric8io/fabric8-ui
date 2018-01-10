@@ -102,6 +102,7 @@ describe('Codebases Item Details Component', () => {
     };
     workspacesServiceMock.getWorkspaces.and.returnValue(Observable.of(expectedWorkspaces));
     workspacesServiceMock.openWorkspace.and.returnValue(Observable.of(workspaceLinks));
+    windowServiceMock.open.and.returnValue({location: { href: 'test'}});
     const notificationAction = { name: 'created' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();

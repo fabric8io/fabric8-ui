@@ -98,12 +98,13 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * Open workspace in editor
    */
   openWorkspace(): void {
+    let workspaceWindow = this.windowService.open('about:blank', '_blank');
     this.workspaceBusy = true;
     this.subscriptions.push(this.workspacesService.openWorkspace(this.workspaceUrl)
       .subscribe(workspaceLinks => {
         this.workspaceBusy = false;
         if (workspaceLinks != undefined) {
-          this.windowService.open(workspaceLinks.links.open, this.getWorkspaceName(workspaceLinks.links.open));
+          workspaceWindow.location.href = workspaceLinks.links.open;
         }
       }, error => {
         this.workspaceBusy = false;
