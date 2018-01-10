@@ -163,22 +163,22 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   describe('sparkline data', () => {
-    it('by default should be the default data duration divided by the polling rate', function (this: Context) {
+    it('by default should be the default data duration divided by the polling rate', function(this: Context) {
       let detailsComponent = this.testedDirective;
       let expectedDefaultElements =
         DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS;
       expect(detailsComponent.getSparklineMaxElements()).toBe(expectedDefaultElements);
     });
 
-    it('should not be able to be set to anything less than 1', function (this: Context) {
+    it('should not be able to be set to anything less than 1', function(this: Context) {
       let detailsComponent = this.testedDirective;
       [0, -5, -1873].forEach(n => {
         detailsComponent.setSparklineMaxElements(n);
         expect(detailsComponent.getSparklineMaxElements()).toBe(1);
-      })
+      });
     });
 
-    it('should have its cpu data bounded when enough data has been emitted', function (this: Context) {
+    it('should have its cpu data bounded when enough data has been emitted', function(this: Context) {
       const MAX_CPU_SPARKLINE_ELEMENTS = 4;
       let detailsComponent = this.testedDirective;
       detailsComponent.setSparklineMaxElements(MAX_CPU_SPARKLINE_ELEMENTS);
@@ -187,7 +187,7 @@ describe('DeploymentDetailsComponent', () => {
       expect(detailsComponent.cpuData.yData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS);
     });
 
-    it('should have its memory data bounded when enough data has been emitted', function (this: Context) {
+    it('should have its memory data bounded when enough data has been emitted', function(this: Context) {
       const MAX_MEM_SPARKLINE_ELEMENTS = 6;
       let detailsComponent = this.testedDirective;
       detailsComponent.setSparklineMaxElements(MAX_MEM_SPARKLINE_ELEMENTS);
