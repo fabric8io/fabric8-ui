@@ -31,8 +31,9 @@ describe('DeploymentsService', () => {
       svc.getEnvironments('foo')
         .subscribe(val => {
           expect(val).toEqual([
-            { name: 'stage' } as Environment,
-            { name: 'run' } as Environment
+            { name: 'test' },
+            { name: 'stage' },
+            { name: 'run'}
           ]);
         });
       tick(DeploymentsService.POLL_RATE_MS + 10);
@@ -41,10 +42,19 @@ describe('DeploymentsService', () => {
   });
 
   describe('#isApplicationDeployedInEnvironment', () => {
-    it('should be true for vertx-hello in \'stage\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-hello', 'stage')
+    it('should be true for vertx-hello in \'test\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-hello', 'test')
         .subscribe((active: boolean) => {
           expect(active).toBeTruthy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be false for vertx-hello in \'stage\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-hello', 'stage')
+        .subscribe((active: boolean) => {
+          expect(active).toBeFalsy();
         });
       tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
@@ -59,8 +69,8 @@ describe('DeploymentsService', () => {
       discardPeriodicTasks();
     }));
 
-    it('should be true for vertx-paint in \'stage\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'stage')
+    it('should be true for vertx-paint in \'test\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'test')
         .subscribe((active: boolean) => {
           expect(active).toBeTruthy();
         });
@@ -68,8 +78,26 @@ describe('DeploymentsService', () => {
       discardPeriodicTasks();
     }));
 
+    it('should be false for vertx-paint in \'stage\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'stage')
+        .subscribe((active: boolean) => {
+          expect(active).toBeFalsy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
     it('should be false for vertx-paint in \'run\'', fakeAsync(() => {
       svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'run')
+        .subscribe((active: boolean) => {
+          expect(active).toBeFalsy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be false for vertx-wiki in \'test\'', fakeAsync(() => {
+      svc.isApplicationDeployedInEnvironment('foo', 'vertx-wiki', 'test')
         .subscribe((active: boolean) => {
           expect(active).toBeFalsy();
         });
@@ -90,6 +118,35 @@ describe('DeploymentsService', () => {
       svc.isApplicationDeployedInEnvironment('foo', 'vertx-wiki', 'stage')
         .subscribe((active: boolean) => {
           expect(active).toBeFalsy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+  });
+
+  describe('#isDeployedInEnvironment', () => {
+    it('should be false for \'stage\'', fakeAsync(() => {
+      svc.isDeployedInEnvironment('foo', 'stage')
+        .subscribe((active: boolean) => {
+          expect(active).toBeFalsy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be true for \'test\'', fakeAsync(() => {
+      svc.isDeployedInEnvironment('foo', 'test')
+        .subscribe((active: boolean) => {
+          expect(active).toBeTruthy();
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should be true for \'run\'', fakeAsync(() => {
+      svc.isDeployedInEnvironment('foo', 'run')
+        .subscribe((active: boolean) => {
+          expect(active).toBeTruthy();
         });
       tick(DeploymentsService.POLL_RATE_MS + 10);
       discardPeriodicTasks();
