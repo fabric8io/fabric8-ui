@@ -11,7 +11,8 @@ import {
 import {
     MComponentInformation,
     MComponentHeaderColumn,
-    MRecommendationInformation
+    MRecommendationInformation,
+    MGenericStackInformation
 } from '../../models/ui.model';
 
 @Component({
@@ -22,6 +23,8 @@ import {
 export class ComponentInformationComponent implements OnInit, OnChanges {
     @Input() component: MComponentInformation | MRecommendationInformation;
     @Input() positions: Array<MComponentHeaderColumn>;
+    @Input() genericInformation: MGenericStackInformation;
+
     public comp: MComponentInformation;
     @Input() serial: number;
     @Input() type: string;

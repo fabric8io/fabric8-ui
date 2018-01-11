@@ -1,21 +1,29 @@
 <div class="analytics-snippet-information">
     <h4>Details of the component: <span class="component-name" [innerText]="component?.name"></span></h4>
-    <div class="component-version">
+    <div [ngClass]="{'component-version': true, 'width-60': view === 'split', 'width-40': view === 'normal'}">
         <div class="col-xs-6">
-            <p>Current Version</p>
+            <p class="info-head">Current Version</p>
             <p [innerText]="component?.currentVersion"></p>
         </div>
         <div class="col-xs-6">
-            <p>Latest Version</p>
+            <p class="info-head">Latest Version</p>
             <p [innerText]="component?.latestVersion"></p>
         </div>
     </div>
-    <div *ngIf="component?.licenses?.length > 0" class="component-licenses">
-        License(s) used: 
-        <span [innerText]="license" *ngFor="let license of component?.licenses"></span>
+    <div *ngIf="component?.licenses?.length > 0" class="common-table component-licenses">
+        <div class="common-wrapper">
+            <span class="info-head">License(s) used: </span>
+            <span class="common-container license-container">
+                <span [innerText]="license" *ngFor="let license of component?.licenses"></span>
+            </span>
+        </div>
     </div>
-    <div *ngIf="component?.crowdSourcing?.tags && component?.crowdSourcing?.tags?.length > 0" class="component-tags">
-        Tags: 
-        <span [innerText]="tag" *ngFor="let tag of component?.crowdSourcing?.tags"></span>
+    <div *ngIf="component?.crowdSourcing?.tags && component?.crowdSourcing?.tags?.length > 0" class="common-table component-tags">
+        <div class="common-wrapper">
+            <span class="info-head">Tags:</span> 
+            <span class="common-container tags-container">
+                <span [innerText]="tag" *ngFor="let tag of component?.crowdSourcing?.tags"></span>
+            </span>
+        </div>
     </div>
 </div>

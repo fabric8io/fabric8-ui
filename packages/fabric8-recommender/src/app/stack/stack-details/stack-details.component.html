@@ -15,7 +15,7 @@
                 </ng-template>
                 <!-- Stack Report Design Revamp - BEGIN -->
                 <analytics-report-summary (onCardClick)="handleCardClick($event)" [report]="tabz.content"></analytics-report-summary>
-                <card-details *ngIf="cardDetails" [cardDetails]="cardDetails"></card-details>
+                <card-details [genericInformation]="genericInformation && genericInformation" *ngIf="cardDetails" [cardDetails]="cardDetails"></card-details>
                 <!-- Stack Report Design Revamp - END -->
 
 

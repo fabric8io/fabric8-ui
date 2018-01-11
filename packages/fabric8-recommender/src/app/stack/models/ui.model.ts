@@ -14,7 +14,8 @@ export class MReportSummaryTitle {
 export class MTab {
     constructor(
         public title: string,
-        public content: MReportInformation
+        public content: MReportInformation,
+        public active: boolean = false
     ) {}
 }
 
@@ -85,6 +86,15 @@ export class MSecurityDetails {
     ) {}
 }
 
+export class MLicenseInformation {
+    constructor(
+        public licenses: Array<string>,
+        public unknownLicenses: Array<string>,
+        public hasLicenseIssue: boolean,
+        public licensesAffected: Array<MLicensesAffected> = null
+    ) {}
+}
+
 export class MComponentInformation {
     constructor(
         public name: string,
@@ -101,7 +111,31 @@ export class MComponentInformation {
         public action: string = null,
         public needsExpansion: boolean = true,
         public recommendation: MRecommendationInformation = null,
-        public isOpen: boolean = false
+        public isOpen: boolean = false,
+        public licenseInformation: MLicenseInformation
+    ) {}
+}
+
+export class MStackLicenseConflictDetails {
+    constructor(
+        public conflictedWithLicense: string,
+        public conflictedWithComponent: string,
+        public conflictedForLicense: string
+    ) {}
+}
+
+export class MConflictsWithInLicenses {
+    constructor(
+        public license1: string,
+        public license2: string
+    ) {}
+}
+
+export class MLicensesAffected {
+    constructor(
+        public affectedLicenses: Array<MConflictsWithInLicenses> = null,
+        public conflictType: string,
+        public conflictDetails: Array<MStackLicenseConflictDetails> = null
     ) {}
 }
 
@@ -146,5 +180,21 @@ export class MCardDetails {
     titleDescription: string;
     isMultiple?: boolean = true; // This is for tabs, in case it is false, report won't be rendered inside tabs
     reportInformations: Array<MReportInformation>;
+}
+
+export class MGenericStackInformation {
+    constructor(
+        public stackId: string
+    ) {}
+}
+
+export class MComponentFeedback {
+    constructor(
+        public stackId: string,
+        public recommendationType: string,
+        public packageName: string,
+        public feedbackType: boolean = null,
+        public ecosystem: string
+    ) {}
 }
 /** Bottom Section */

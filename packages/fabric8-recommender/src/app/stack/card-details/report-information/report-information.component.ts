@@ -10,7 +10,8 @@ import {
 
 import {
     MReportInformation,
-    MComponentDetails
+    MComponentDetails,
+    MGenericStackInformation
 } from '../../models/ui.model';
 
 @Component({
@@ -20,6 +21,8 @@ import {
 })
 export class ReportInformationComponent implements OnInit, OnChanges {
     @Input() report: MReportInformation;
+    @Input() genericInformation: MGenericStackInformation;
+
     public componentDetails: Array<MComponentDetails> = null;
 
     ngOnInit() {

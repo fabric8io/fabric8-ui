@@ -10,7 +10,10 @@ import { ReportSummaryUtils } from '../utils/report-summary-utils';
 /**
  * New Stack Report Revamp - Begin
  */
-import { MCardDetails } from '../models/ui.model';
+import {
+    MCardDetails,
+    MGenericStackInformation
+} from '../models/ui.model';
 /**
  * New Stack Report Revamp - End
  */
@@ -39,6 +42,7 @@ export class StackDetailsComponent implements OnChanges {
      * New Stack Report Revamp - Begin
      */
      public cardDetails: any = {};
+     public genericInformation: MGenericStackInformation = null;
     /**
      * New Stack Report Revamp - End
      */
@@ -77,6 +81,9 @@ export class StackDetailsComponent implements OnChanges {
      * New Stack Report Revamp - Begin
      */
     public handleCardClick(cardDetails: any): void {
+        this.genericInformation = new MGenericStackInformation(
+            this.stackId
+        );
         this.cardDetails = cardDetails;
     }
     /**

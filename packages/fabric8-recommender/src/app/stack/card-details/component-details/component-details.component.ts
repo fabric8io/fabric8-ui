@@ -9,7 +9,8 @@ import {
 
 import {
     MComponentDetails,
-    MComponentHeaderColumn
+    MComponentHeaderColumn,
+    MGenericStackInformation
 } from '../../models/ui.model';
 
 @Component({
@@ -22,6 +23,7 @@ export class ComponentDetailsComponent implements OnChanges {
     @Input() positions: Array<MComponentHeaderColumn>;
     @Input() type: string;
     @Input() serial: number;
+    @Input() genericInformation: MGenericStackInformation;
 
     ngOnChanges(changes: SimpleChanges) {
         let summary: any = changes['compDetails'];

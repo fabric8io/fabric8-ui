@@ -18,6 +18,7 @@ import {
 })
 export class ComponentSnippetComponent implements OnChanges {
     @Input() component: MComponentInformation;
+    @Input() view: string;
 
     ngOnChanges(changes: SimpleChanges) {
         let summary: any = changes['component'];

@@ -1,5 +1,69 @@
+@steelBlue: #2a9fd8;
 .analytics-snippet-information {
     .component-name {
         font-weight: 600;
+    }
+    .component-version {
+        background: #eff2f5;
+        width: 60%;
+        margin: 20px 0;
+        padding: 5px;
+        text-align: center;
+
+        p {
+            margin: 0;
+        }
+
+        &:after {
+            content: '';
+            clear: both;
+            float: none;
+            display: block;
+        }
+    }
+    .width-60 {
+        width: 60%;
+    }
+    .width-40 {
+        width: 40%;
+    }
+    .common-table {
+        display: table;
+        width: 100%;
+        min-height: 30px;
+    }
+    .common-wrapper {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .common-container {
+        margin-left: 10px;
+        font-size: 13px;
+    }
+    .info-head {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .license-container {
+        span {
+            margin-right: 3px;
+            &:after {
+                content: ', ';
+            }
+            &:last-child:after {
+                content: '';
+            }
+        }
+    }
+    .tags-container {
+        span {
+            display: inline-block;
+            padding: 5px 20px;
+            background: @steelBlue;
+            color: #fff;
+            margin-right: 5px;
+            border-radius: 20px;
+            font-size: 10px;
+        }
     }
 }

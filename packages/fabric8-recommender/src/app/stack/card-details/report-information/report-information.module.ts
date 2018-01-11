@@ -1,9 +1,11 @@
 /** Vendor imports Go HERE */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TooltipModule } from 'ngx-bootstrap';
 /** Vendor imports Go HERE */
 
 import { ProgressMeterModule } from '../../utils/progress-meter/progress-meter.module';
+import { ComponentFeedbackModule } from '../../utils/component-feedback/component-feedback.module';
 
 import { ComponentSnippetComponent } from '../component-information/component-snippet/component-snippet.component';
 import { ComponentInformationComponent } from '../component-information/component-information.component';
@@ -18,10 +20,16 @@ const components = [
     ReportInformationComponent
 ];
 
+const imports = [
+    TooltipModule.forRoot(),
+    ProgressMeterModule,
+    ComponentFeedbackModule
+];
+
 @NgModule({
     imports: [
         CommonModule,
-        ProgressMeterModule
+        ...imports
     ],
     declarations: [
         ...components

@@ -1,10 +1,25 @@
+@steelBlue: #2a9fd8;
 .analytics-component-information {
+    .active-card {
+        border: 1px solid @steelBlue;
+    }
     .card-pf {
         min-height: 75px;
         margin: 10px 0;
     }
+    .toggler {
+        cursor: pointer;
+        padding: 2px 5px;
+        font-size: 20px;
+        text-align: center;
+        border: 1px solid #ededed;
+        border-radius: 50%;
+    }
     .float-left {
         float: left;
+    }
+    .float-right {
+        float: right;
     }
     .extra-small {
         width: 50px;
@@ -20,6 +35,29 @@
     }
     .text-center {
         text-align: center;
+    }
+    .indicator {
+        width: 15px;
+        height: 15px;
+        background: #ccc;
+        display: inline-block;
+        margin: 0 5px;
+
+        &.usage-outlier {
+            background: #ff6162;
+        }
+        &.license-issue {
+            background: #ff6162;
+        }
+        &.security-issue {
+            background: #f5a625;
+        }
+    }
+    .common-section {
+        padding-left: 5%;
+    }
+    .recommendation-section {
+        border-left: 1px solid #ccc;
     }
     .clear-float {
         &:after {

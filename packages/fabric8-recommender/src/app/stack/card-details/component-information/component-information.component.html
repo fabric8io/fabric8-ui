@@ -1,90 +1,103 @@
 <div class="analytics-component-information">
-    <div class="card-pf card-pf-view card-pf-view-xs">
+    <div [ngClass]="{'card-pf card-pf-view card-pf-view-xs': true, 'active-card': comp?.isOpen}">
         <div class="card-pf-body clear-float header-group">
-            <div [class]="position?.className" *ngFor="let position of positions;">
-                <div [ngSwitch]="position?.identifier">
-                    <!-- Security Card -->
-                    <div *ngSwitchCase="'serial'">
-                        <!-- Serial Numbers -->
-                        <span [innerText]="serial"></span>
-                    </div>
-                    <div *ngSwitchCase="'component'">
-                        <!-- Component Names -->
-                        <span [innerText]="comp?.name"></span>
-                        <!--
-                            <reco-name [name]="comp?.name" [reason]="comp?.recommendation?.reason" *ngIf="comp?.recommendation && (comp?.recommendation?.type === 'companion')"></reco-name>
-                        -->
-                    </div>
-                    <div *ngSwitchCase="'cveCount'">
-                        <!-- cveCount -->
-                        <span [innerText]="comp?.securityDetails && comp?.securityDetails.totalIssues || 0"></span>
-                    </div>
-                    <div *ngSwitchCase="'highestCVSS'">
-                        <!-- highestCVSS -->
-                        <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
-                        <ana-progress-meter *ngIf="comp?.hasSecurityIssue" [config]="comp?.securityDetails?.progressReport"></ana-progress-meter>
-                    </div>
-                    <div *ngSwitchCase="'cveIdOfH'">
-                        <!-- cveIdOfHeighest CVSS -->
-                        <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
-                        <span *ngIf="comp?.hasSecurityIssue" [innerText]="comp?.securityDetails && comp?.securityDetails?.highestIssue?.cve"></span>
-                    </div>
-                    <div *ngSwitchCase="'action'">
-                        <!-- Action -->
-                        <span (click)="handleAction(comp)" [innerText]="comp?.action"></span>
-                    </div>
-                    <!-- Security Card -->
+            <div class="main-content">
+                <div [class]="position?.className" *ngFor="let position of positions;">
+                    <div [ngSwitch]="position?.identifier">
+                        <!-- Security Card -->
+                        <div *ngSwitchCase="'serial'">
+                            <!-- Serial Numbers -->
+                            <span [innerText]="serial + 1"></span>
+                        </div>
+                        <div *ngSwitchCase="'component'">
+                            <!-- Component Names -->
+                            <span [innerText]="comp?.name"></span>
+                            <p [tooltip]="component?.reason" *ngIf="component?.reason && type === 'recommendation' && comp?.name">Why this component?</p>
+                            <!--
+                                <reco-name [name]="comp?.name" [reason]="comp?.recommendation?.reason" *ngIf="comp?.recommendation && (comp?.recommendation?.type === 'companion')"></reco-name>
+                            -->
+                        </div>
+                        <div *ngSwitchCase="'cveCount'">
+                            <!-- cveCount -->
+                            <span [innerText]="comp?.securityDetails && comp?.securityDetails.totalIssues || 0"></span>
+                        </div>
+                        <div *ngSwitchCase="'highestCVSS'">
+                            <!-- highestCVSS -->
+                            <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
+                            <ana-progress-meter *ngIf="comp?.hasSecurityIssue" [config]="comp?.securityDetails?.progressReport"></ana-progress-meter>
+                        </div>
+                        <div *ngSwitchCase="'cveIdOfH'">
+                            <!-- cveIdOfHeighest CVSS -->
+                            <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
+                            <span *ngIf="comp?.hasSecurityIssue" [innerText]="comp?.securityDetails && comp?.securityDetails?.highestIssue?.cve"></span>
+                        </div>
+                        <div *ngSwitchCase="'action'">
+                            <!-- Action -->
+                            <span (click)="handleAction(comp)" [innerText]="comp?.action || '-----'"></span>
+                        </div>
+                        <!-- Security Card -->
 
-                    
-                    
-                    <!-- Insights Card -->
-                    <div *ngSwitchCase="'alternate'">
-                        <!-- alternate -->
-                        <span [innerText]="comp?.recommendation?.componentInformation?.name"></span>
-                    </div>
-                    <div *ngSwitchCase="'feedback'">
-                        <!-- feedback -->
-                        <!--
-                            <feedback [config]="></feedback>
-                        -->
-                    </div>
-                    <div *ngSwitchCase="'confidence'">
-                        <!-- confidence -->
-                        <ana-progress-meter *ngIf="comp?.recommendation?.confidenceScore" [config]="comp?.recommendation?.confidenceScore"></ana-progress-meter>
-                        <ana-progress-meter *ngIf="component?.confidenceScore" [config]="component?.confidenceScore"></ana-progress-meter>
-                    </div>
-                    <!-- Insights Card -->
-
-                    
-                    
-                    <!-- Licenses Card -->
-                    <div *ngSwitchCase="'licensesAffected'">
-                        <!-- licensesAffected -->
-                    </div>
-                    <div *ngSwitchCase="'unknownLicenses'">
-                        <!-- unknownLicenses -->
                         
-                    </div>
-                    <!-- Licenses Card -->
+                        
+                        <!-- Insights Card -->
+                        <div *ngSwitchCase="'alternate'">
+                            <!-- alternate -->
+                            <span [innerText]="comp?.recommendation?.componentInformation?.name || '------'"></span>
+                            <p [tooltip]="comp?.recommendation?.reason" *ngIf="comp?.recommendation?.reason && comp?.recommendation?.componentInformation?.name">Why this component?</p>
+                        </div>
+                        <div *ngSwitchCase="'feedback'">
+                            <!-- feedback -->
+                            <component-feedback [feedback]="comp?.recommendation?.feedback || component?.feedback"></component-feedback>
+                        </div>
+                        <div *ngSwitchCase="'confidence'">
+                            <!-- confidence -->
+                            <ana-progress-meter *ngIf="comp?.recommendation?.confidenceScore" [config]="comp?.recommendation?.confidenceScore"></ana-progress-meter>
+                            <ana-progress-meter *ngIf="component?.confidenceScore" [config]="component?.confidenceScore"></ana-progress-meter>
+                            <span *ngIf="!comp?.recommendation?.confidenceScore && !component?.confidenceScore">-----</span>
+                        </div>
+                        <!-- Insights Card -->
 
-                    
-                    
-                    <!-- Component Details Card -->
-                    <div *ngSwitchCase="'componentCheck'">
-                        <!-- componentCheck -->
+                        
+                        
+                        <!-- Licenses Card -->
+                        <div *ngSwitchCase="'licensesAffected'">
+                            <!-- licensesAffected -->
+                        </div>
+                        <div *ngSwitchCase="'unknownLicenses'">
+                            <!-- unknownLicenses -->
+                            <span *ngFor="let unknown of comp?.licenseInformation?.unknownLicenses" [innerText]="unknown"></span>
+                        </div>
+                        <!-- Licenses Card -->
+
+                        
+                        
+                        <!-- Component Details Card -->
+                        <div *ngSwitchCase="'componentCheck'">
+                            <!-- componentCheck -->
+                            <span [ngClass]="{'indicator': true, 'security-issue': component?.hasSecurityIssue}"></span>
+                            <span [ngClass]="{'indicator': true, 'usage-outlier': component?.isUsageOutlier}"></span>
+                            <span [ngClass]="{'indicator': true, 'license-issue': component?.hasLicenseIssue}"></span>
+                        </div>
+                        <div *ngSwitchCase="'helpUsKnownMore'">
+                            <!-- Help us know more about components - get tags -->
+                        </div>
+                        <div *ngSwitchCase="'collapse'">
+                            <!-- Toggle -->
+                            <div class="toggler">
+                                <i [ngClass]="{'fa': true, 'fa-angle-up': comp?.isOpen, 'fa-angle-down': !comp?.isOpen}" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <!-- Component Details Card -->
                     </div>
-                    <div *ngSwitchCase="'helpUsKnownMore'">
-                        <!-- Help us know more about components - get tags -->
-                    </div>
-                    <!-- Component Details Card -->
                 </div>
             </div>
+            
             <div *ngIf="comp?.isOpen" class="accordion-body">
-                <div [ngClass]="{'col-xs-12': true, 'col-md-6': comp?.recommendation, 'col-md-12': !comp?.recommendation}" *ngIf="comp">
-                    <component-snippet [component]="comp"></component-snippet>
+                <div [ngClass]="{'col-xs-12': true, 'col-md-6 common-section': comp?.recommendation, 'col-md-12': !comp?.recommendation}" *ngIf="comp">
+                    <component-snippet [view]="!comp?.recommendation ? 'normal' : 'split'" [component]="comp"></component-snippet>
                 </div>
-                <div class="col-xs-12 col-md-6" *ngIf="comp?.recommendation?.componentInformation">
-                    <component-snippet [component]="comp?.recommendation?.componentInformation"></component-snippet>
+                <div class="col-xs-12 col-md-6 recommendation-section common-section" *ngIf="comp?.recommendation?.componentInformation">
+                    <component-snippet [view]="'split'" [component]="comp?.recommendation?.componentInformation"></component-snippet>
                 </div>
             </div>
         </div>

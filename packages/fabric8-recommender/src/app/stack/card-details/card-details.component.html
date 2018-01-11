@@ -5,7 +5,7 @@
         <tabset>
             <tab *ngFor="let tabz of tabs"
                 [heading]="tabz.title"
-                (select)="tabSelection(tabz)"
+                (select)="tabz.active = true"
                 [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
 
                 <report-information [report]="tabz.content"></report-information>
