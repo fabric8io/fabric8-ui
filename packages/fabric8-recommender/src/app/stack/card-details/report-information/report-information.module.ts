@@ -12,12 +12,15 @@ import { ComponentInformationComponent } from '../component-information/componen
 import { ComponentDetailsComponent } from '../component-details/component-details.component';
 
 import { ReportInformationComponent } from './report-information.component';
+import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
+import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
 
 const components = [
     ComponentSnippetComponent,
     ComponentInformationComponent,
     ComponentDetailsComponent,
-    ReportInformationComponent
+    ReportInformationComponent,
+    ToastNotificationComponent
 ];
 
 const imports = [
@@ -34,6 +37,7 @@ const imports = [
     declarations: [
         ...components
     ],
+    providers: [ AddWorkFlowService ],
     exports: [
         ...components
     ]

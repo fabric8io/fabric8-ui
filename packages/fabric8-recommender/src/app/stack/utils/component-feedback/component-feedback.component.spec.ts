@@ -1,31 +1,33 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@angular/http';
 
-import { ReportSummaryCardModule } from './report-summary-card/report-summary-card.module';
-import { ReportSummaryComponent } from './report-summary.component';
+import { AuthenticationService, AUTH_API_URL, SSO_API_URL } from 'ngx-login-client';
+import { MockAuthenticationService } from '../../../shared/mock-auth.service';
 
-describe ('ReportSummaryComponent', () => {
-    let component: ReportSummaryComponent;
-    let fixture: ComponentFixture<ReportSummaryComponent>;
+import { ComponentFeedbackComponent } from './component-feedback.component';
+
+describe ('ComponentFeedbackComponent', () => {
+    let component: ComponentFeedbackComponent;
+    let fixture: ComponentFixture<ComponentFeedbackComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [
-                ReportSummaryCardModule
-            ],
             declarations: [
-                ReportSummaryComponent
+                ComponentFeedbackComponent
             ],
             providers: [
                 Http,
                 ConnectionBackend,
-                { provide: RequestOptions, useClass: BaseRequestOptions }
+                { provide: RequestOptions, useClass: BaseRequestOptions },
+                {
+                    provide: AuthenticationService, useClass: MockAuthenticationService
+                }
             ]
         }).compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(ReportSummaryComponent);
+        fixture = TestBed.createComponent(ComponentFeedbackComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

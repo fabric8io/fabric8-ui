@@ -11,8 +11,8 @@ import {TabsModule, AccordionModule} from 'ngx-bootstrap';
 import { GlobalConstants } from '../constants/constants.service';
 
 /** New UX */
-import {StackLevelModule} from '../stack-level/stack-level.module';
-import {ComponentLevelModule} from '../component-level/component-level.module';
+// import {StackLevelModule} from '../stack-level/stack-level.module';
+// import {ComponentLevelModule} from '../component-level/component-level.module';
 import {FeedbackModule} from '../feedback/feedback.module';
 
 import { Broadcaster } from 'ngx-base';
@@ -29,10 +29,12 @@ import { MockAuthenticationService } from '../../shared/mock-auth.service';
 
 /** Stack Report Revamp - Latest */
 import { ReportSummaryModule } from '../report-summary/report-summary.module';
+import { CardDetailsModule } from '../card-details/card-details.module';
 /** Stack Report Revamp - Latest */
 
 const revampImports = [
-  ReportSummaryModule
+  ReportSummaryModule,
+  CardDetailsModule
 ];
 
 describe ('StackDetailsComponent', () => {
@@ -46,8 +48,8 @@ describe ('StackDetailsComponent', () => {
                 HttpModule,
                 FormsModule,
                 ModalModule,
-                StackLevelModule,
-                ComponentLevelModule,
+                // StackLevelModule,
+                // ComponentLevelModule,
                 FeedbackModule,
                 AccordionModule.forRoot(),
                 TabsModule.forRoot(),

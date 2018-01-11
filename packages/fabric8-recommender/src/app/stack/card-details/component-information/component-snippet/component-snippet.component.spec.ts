@@ -1,20 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@angular/http';
 
-import { ReportSummaryCardModule } from './report-summary-card/report-summary-card.module';
-import { ReportSummaryComponent } from './report-summary.component';
+import { ComponentSnippetComponent } from './component-snippet.component';
 
-describe ('ReportSummaryComponent', () => {
-    let component: ReportSummaryComponent;
-    let fixture: ComponentFixture<ReportSummaryComponent>;
+describe ('ComponentSnippetComponent', () => {
+    let component: ComponentSnippetComponent;
+    let fixture: ComponentFixture<ComponentSnippetComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [
-                ReportSummaryCardModule
-            ],
             declarations: [
-                ReportSummaryComponent
+                ComponentSnippetComponent
             ],
             providers: [
                 Http,
@@ -25,7 +21,7 @@ describe ('ReportSummaryComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(ReportSummaryComponent);
+        fixture = TestBed.createComponent(ComponentSnippetComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

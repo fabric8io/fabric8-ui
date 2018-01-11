@@ -294,7 +294,6 @@ export class StackDetailsComponent implements OnChanges {
 
     private init(): void {
         if (this.stackResponse && this.cacheResponse !== this.stackResponse) {
-            console.log('stack details', this.stackResponse);
             this.cacheResponse = this.stackResponse;
             // Change this to some other logic
             setTimeout(() => {

@@ -63,11 +63,11 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
             title: 'Components with security issues in your stack',
-            description: 'OSIO Analytics has identified security issues in your stack. Click this card to see further details of the security tasks affecting your stack.'
+            description: 'OSIO Analytics identifies security issues in your stack. Click this card to see further details of the security tasks affecting your stack.'
         },
         [this.cardTypes.INSIGHTS]: {
             title: 'Insights on alternate or additional components that can augment your stack',
-            description: 'OSIO Analytics has identified components that are rarely used in similar stacks, and suggest (suggests) alternate and additional components that can enhance your stack. Click this card to see detailed suggestions on alternate and additional components for your stack.'
+            description: 'OSIO Analytics identifies components that are rarely used in similar stacks, and suggests alternate and additional components that can enhance your stack. Click this card to see detailed suggestions on alternate and additional components.'
         },
         [this.cardTypes.LICENSES]: {
             title: 'License details of components in your stack',

@@ -52,10 +52,13 @@ export class ComponentSnippetComponent implements OnInit, OnChanges {
         if (this.component) {
             if (this.component.github) {
                 let github = this.component.github;
+                let value = '';
                 for (let key in github) {
                     if (key === 'users') continue;
                     if (github.hasOwnProperty(key)) {
-                        this.githubEntries.push({ key: this.githubKeys[key], value: github[key] });
+                        value = github[key];
+                        value = value && value.toString() === '-1' ? 'NA' : value;
+                        this.githubEntries.push({ key: this.githubKeys[key], value: value });
                     }
                 }
             }

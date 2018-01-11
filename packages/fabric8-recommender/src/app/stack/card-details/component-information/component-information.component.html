@@ -1,3 +1,4 @@
+<fab-toast-notification [notifications]="workItemResponse"></fab-toast-notification>
 <div class="analytics-component-information">
     <div [ngClass]="{'card-pf card-pf-view card-pf-view-xs': true, 'active-card': comp?.isOpen}">
         <div class="card-pf-body clear-float header-group">
@@ -31,9 +32,13 @@
                             <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
                             <span *ngIf="comp?.hasSecurityIssue" [innerText]="comp?.securityDetails && comp?.securityDetails?.highestIssue?.cve"></span>
                         </div>
-                        <div *ngSwitchCase="'action'">
+                        <div *ngSwitchCase="'action'" class="action">
                             <!-- Action -->
-                            <span (click)="handleAction(comp)" [innerText]="comp?.action || '-----'"></span>
+                            <span *ngIf="!comp?.workItem?.isWorkItemCreated" (click)="handleAction($event, comp)" [innerText]="comp?.action || '-----'" class="not-created"></span>
+                            <span *ngIf="comp?.workItem?.isWorkItemCreated">
+                                Work item created
+                                <a class="created" target="_blank" href="{{comp?.workItem?.url}}">View here</a>
+                            </span>
                         </div>
                         <!-- Security Card -->
 

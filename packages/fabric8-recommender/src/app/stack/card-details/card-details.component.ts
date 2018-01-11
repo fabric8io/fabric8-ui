@@ -43,7 +43,8 @@ import {
     MConflictsWithInLicenses,
     MStackLicenseConflictDetails,
     MLicenseInformation,
-    MComponentFeedback
+    MComponentFeedback,
+    MFeedbackTemplate
 } from '../models/ui.model';
 
 @Component({
@@ -55,6 +56,7 @@ import {
 export class CardDetailsComponent implements OnInit, OnChanges {
     @Input() cardDetails: any;
     @Input() genericInformation: MGenericStackInformation;
+    @Input() repoInfo: any;
     public report: ResultInformationModel;
     public whatCard: string;
     public details: MCardDetails = null;
@@ -93,16 +95,14 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     };
 
     ngOnInit() {
-        
         this.paint();
     }
 
     ngOnChanges(changes: SimpleChanges) {
         let summary: any = changes['cardDetails'];
-        
+
         if (summary) {
             this.cardDetails = <any> summary.currentValue;
-            
             if (this.cardDetails && this.cardDetails.report) {
                 this.report = this.cardDetails.report;
             } else {
@@ -141,11 +141,14 @@ export class CardDetailsComponent implements OnInit, OnChanges {
         let feedback: MComponentFeedback = null;
         if (this.genericInformation && this.genericInformation.stackId && component) {
             feedback = new MComponentFeedback(
-                this.genericInformation.stackId,
-                type,
-                component.name,
-                null,
-                component.ecosystem
+                new MFeedbackTemplate(
+                    this.genericInformation.stackId,
+                    type,
+                    component.name,
+                    null,
+                    component.ecosystem
+                ),
+                this.genericInformation.baseUrl
             );
         }
         return feedback;
@@ -197,7 +200,8 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                             false,
                             null,
                             companion.ecosystem
-                        )
+                        ),
+                        this.report.manifest_file_path
                     ));
                 });
             }
@@ -323,11 +327,12 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 licenseAnalysis.unknown_licenses.really_unknown.length > 0
             ) {
                 let reallyUnknown = licenseAnalysis.unknown_licenses.really_unknown;
-                reallyUnknown.forEach((unknown) => {
-                    if (unknown.package === component.name) {
+                let len: number = reallyUnknown.length;
+                for (let i = 0; i < len; ++ i) {
+                    if (reallyUnknown[i].package === component.name) {
                         return true;
                     }
-                });
+                }
             }
         }
         return false;
@@ -501,7 +506,8 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                     hasLicenseIssue,
                     this.getMLicenseAffected(component)
                 ),
-                component.ecosystem
+                component.ecosystem,
+                this.report.manifest_file_path
             );
         }
         return null;

@@ -24,6 +24,7 @@ export class ComponentDetailsComponent implements OnChanges {
     @Input() type: string;
     @Input() serial: number;
     @Input() genericInformation: MGenericStackInformation;
+    @Input() repoInfo: any;
 
     ngOnChanges(changes: SimpleChanges) {
         let summary: any = changes['compDetails'];

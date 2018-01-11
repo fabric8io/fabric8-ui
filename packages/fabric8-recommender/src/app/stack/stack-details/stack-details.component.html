@@ -1,5 +1,6 @@
 <div class="stack-report">
   <a class="stack-reports-btn" (click)="showStackModal($event)">{{displayName}}</a>
+  <!-- TODO module for pipeline insights -->
   <modal #stackModule title="Stack report for {{appName}}, Build #{{buildNumber}}" modalClass="modal-lg modal-fullscreen modal-width-class" (onClose)="handleModalClose();" (onOpen)="init();">
     <modal-content>
       <div *ngIf="!error">
@@ -15,7 +16,7 @@
                 </ng-template>
                 <!-- Stack Report Design Revamp - BEGIN -->
                 <analytics-report-summary (onCardClick)="handleCardClick($event)" [report]="tabz.content"></analytics-report-summary>
-                <card-details [genericInformation]="genericInformation && genericInformation" *ngIf="cardDetails" [cardDetails]="cardDetails"></card-details>
+                <card-details [genericInformation]="genericInformation && genericInformation" *ngIf="cardDetails" [cardDetails]="cardDetails" [repoInfo]="repoInfo"></card-details>
                 <!-- Stack Report Design Revamp - END -->
 
 

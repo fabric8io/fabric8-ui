@@ -1,8 +1,11 @@
 <div class="analytics-component-feedback">
-    <span (click)="handleFeedback($event, true)">
-        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-    </span>
-    <span (click)="handleFeedback($event, false)">
-        <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-    </span>
+    <div *ngIf="feedback?.feedbackTemplate" class="feedback">
+        <span (click)="handleFeedback($event, true)">
+            <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+        </span>
+        <span (click)="handleFeedback($event, false)">
+            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+        </span>
+    </div>
+    <span class="no-feedback" *ngIf="!feedback?.feedbackTemplate">-----</span>
 </div>

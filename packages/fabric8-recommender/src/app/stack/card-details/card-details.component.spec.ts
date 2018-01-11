@@ -1,20 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@angular/http';
+import { TabsModule } from 'ngx-bootstrap';
 
-import { ReportSummaryCardModule } from './report-summary-card/report-summary-card.module';
-import { ReportSummaryComponent } from './report-summary.component';
+import { CardDetailsComponent } from './card-details.component';
+import { ReportInformationModule } from './report-information/report-information.module';
 
-describe ('ReportSummaryComponent', () => {
-    let component: ReportSummaryComponent;
-    let fixture: ComponentFixture<ReportSummaryComponent>;
+const imports = [
+    TabsModule,
+    ReportInformationModule
+];
+
+describe ('CardDetailsComponent', () => {
+    let component: CardDetailsComponent;
+    let fixture: ComponentFixture<CardDetailsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
-                ReportSummaryCardModule
+                ...imports
             ],
             declarations: [
-                ReportSummaryComponent
+                CardDetailsComponent
             ],
             providers: [
                 Http,
@@ -25,7 +31,7 @@ describe ('ReportSummaryComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(ReportSummaryComponent);
+        fixture = TestBed.createComponent(CardDetailsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

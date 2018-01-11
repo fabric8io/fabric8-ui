@@ -8,13 +8,13 @@
                 (select)="tabz.active = true"
                 [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
 
-                <report-information [genericInformation]="genericInformation" [report]="tabz.content"></report-information>
+                <report-information [genericInformation]="genericInformation" [report]="tabz.content" [repoInfo]="repoInfo"></report-information>
 
             </tab>
         </tabset>
     </div>
     <div *ngIf="details?.reportInformations && details?.reportInformations.length === 1">
-        <report-information [genericInformation]="genericInformation" [report]="details?.reportInformations[0]"></report-information>
+        <report-information [genericInformation]="genericInformation" [report]="details?.reportInformations[0]" [repoInfo]="repoInfo"></report-information>
     </div>
     <div *ngIf="details?.reportInformations && details?.reportInformations.length === 0">
         <!-- Handle no information scenario -->

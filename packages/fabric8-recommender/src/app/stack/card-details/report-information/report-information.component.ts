@@ -22,6 +22,7 @@ import {
 export class ReportInformationComponent implements OnInit, OnChanges {
     @Input() report: MReportInformation;
     @Input() genericInformation: MGenericStackInformation;
+    @Input() repoInfo: any;
 
     public componentDetails: Array<MComponentDetails> = null;
 
