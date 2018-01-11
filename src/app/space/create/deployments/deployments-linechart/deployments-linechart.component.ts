@@ -19,25 +19,24 @@ import {
   uniqueId
 } from 'lodash';
 
-import { LinechartConfig } from './linechart-config';
-
-import { LinechartData } from './linechart-data';
+import { DeploymentsLinechartConfig } from './deployments-linechart-config';
+import { DeploymentsLinechartData } from './deployments-linechart-data';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'linechart',
-  templateUrl: './linechart.component.html',
-  styleUrls: ['./linechart.component.less']
+  selector: 'deployments-linechart',
+  templateUrl: './deployments-linechart.component.html',
+  styleUrls: ['./deployments-linechart.component.less']
 })
-export class LinechartComponent extends ChartBase implements DoCheck, OnInit {
+export class DeploymentsLinechartComponent extends ChartBase implements DoCheck, OnInit {
 
-  @Input() chartData: LinechartData;
+  @Input() chartData: DeploymentsLinechartData;
 
-  @Input() config: LinechartConfig;
+  @Input() config: DeploymentsLinechartConfig;
 
-  private defaultConfig: LinechartConfig;
-  private prevChartData: LinechartData;
-  private prevConfig: LinechartConfig;
+  private defaultConfig: DeploymentsLinechartConfig;
+  private prevChartData: DeploymentsLinechartData;
+  private prevConfig: DeploymentsLinechartConfig;
 
   constructor(private chartDefaults: ChartDefaults) {
     super();

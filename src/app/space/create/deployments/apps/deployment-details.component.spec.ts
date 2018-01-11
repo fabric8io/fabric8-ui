@@ -69,10 +69,10 @@ class FakePfngChartSparkline {
 }
 
 @Component({
-  selector: 'linechart',
+  selector: 'deployments-linechart',
   template: ''
 })
-class FakeLinechart {
+class FakeDeploymentsLinechart {
   @Input() config: any;
   @Input() chartData: any;
 }
@@ -95,6 +95,7 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
+    mockSvc.getDeploymentNetworkStat.and.returnValue(Observable.of({ sent: 1, received: 2 }));
   });
 
   initContext(DeploymentDetailsComponent, HostComponent, {
@@ -103,7 +104,7 @@ describe('DeploymentDetailsComponent', () => {
       FakeDeploymentsDonutComponent,
       FakeDeploymentGraphLabelComponent,
       FakePfngChartSparkline,
-      FakeLinechart
+      FakeDeploymentsLinechart
     ],
     providers: [
       { provide: DeploymentsService, useFactory: () => mockSvc }

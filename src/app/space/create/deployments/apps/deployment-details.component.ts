@@ -12,8 +12,8 @@ import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { DeploymentsService } from '../services/deployments.service';
 
-import { LinechartConfig } from '../deployments-linechart/linechart-component/linechart-config';
-import { LinechartData } from '../deployments-linechart/linechart-component/linechart-data';
+import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
+import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
 
 @Component({
   selector: 'deployment-details',
@@ -45,7 +45,7 @@ export class DeploymentDetailsComponent {
     yData: ['used', 1]
   };
 
-  public netData: LinechartData = {
+  public netData: DeploymentsLinechartData = {
     xData: ['time'],
     yData: [
       ['sent'],
@@ -63,7 +63,7 @@ export class DeploymentDetailsComponent {
     chartId: uniqueId('mem-chart-') + '-'
   };
 
-  public netConfig: LinechartConfig = {
+  public netConfig: DeploymentsLinechartConfig = {
     chartId: uniqueId('network'),
     showXAxis: true
   };

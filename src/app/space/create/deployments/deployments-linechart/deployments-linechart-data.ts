@@ -1,4 +1,4 @@
-export abstract class LinechartData {
+export abstract class DeploymentsLinechartData {
   dataAvailable?: boolean;
 
   total?: number;

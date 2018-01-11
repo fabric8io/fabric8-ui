@@ -16,7 +16,7 @@ import { DeploymentGraphLabelComponent } from './apps/deployment-graph-label.com
 import { DeploymentsAppsComponent } from './apps/deployments-apps.component';
 import { DeploymentsDonutChartComponent } from './deployments-donut/deployments-donut-chart/deployments-donut-chart.component';
 import { DeploymentsDonutComponent } from './deployments-donut/deployments-donut.component';
-import { LinechartComponent } from './deployments-linechart/linechart-component/linechart.component';
+import { DeploymentsLinechartComponent } from './deployments-linechart/deployments-linechart.component';
 import { DeploymentsRoutingModule } from './deployments-routing.module';
 import { DeploymentsToolbarComponent } from './deployments-toolbar/deployments-toolbar.component';
 import { DeploymentsComponent } from './deployments.component';
@@ -47,7 +47,7 @@ import { DeploymentsService } from './services/deployments.service';
     DeploymentsResourceUsageComponent,
     DeploymentsDonutComponent,
     DeploymentsDonutChartComponent,
-    LinechartComponent,
+    DeploymentsLinechartComponent,
     DeploymentsToolbarComponent,
     ResourceCardComponent,
     UtilizationBarComponent
