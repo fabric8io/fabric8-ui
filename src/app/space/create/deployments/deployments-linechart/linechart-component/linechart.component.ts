@@ -26,7 +26,8 @@ import { LinechartData } from './linechart-data';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'linechart',
-  templateUrl: './linechart.component.html'
+  templateUrl: './linechart.component.html',
+  styleUrls: ['./linechart.component.less']
 })
 export class LinechartComponent extends ChartBase implements DoCheck, OnInit {
 
@@ -85,7 +86,8 @@ export class LinechartComponent extends ChartBase implements DoCheck, OnInit {
         tick: {
           format: () => {
             return '';
-          }
+          },
+          outer: false
         }
       },
       y: {

@@ -13,6 +13,9 @@ import { DeploymentsService } from '../services/deployments.service';
 
 import { Environment } from '../models/environment';
 
+import { LinechartConfig } from './linechart-component/linechart-config';
+import { LinechartData } from './linechart-component/linechart-data';
+
 @Component({
   selector: 'deployments-linechart',
   templateUrl: './deployments-linechart.component.html'
@@ -28,15 +31,16 @@ export class DeploymentsLinechartComponent implements OnInit, OnDestroy {
   private sent: number;
   private received: number;
 
-  private chartData: any = {
+  private chartData: LinechartData = {
     xData: ['time'],
     yData: [
       ['sent'],
       ['received']
     ]
   };
-  private config: any = {
-    chartId: uniqueId('network')
+  private config: LinechartConfig = {
+    chartId: uniqueId('network'),
+    showXAxis: true
   };
 
   constructor(
