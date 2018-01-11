@@ -84,7 +84,7 @@ export class DeploymentDetailsComponent {
   constructor(private deploymentsService: DeploymentsService) { }
 
   ngOnInit() {
-    this.setSparklineMaxElements(
+    this.setChartMaxElements(
       DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
 
     this.cpuConfig.chartHeight = 100;
@@ -103,7 +103,7 @@ export class DeploymentDetailsComponent {
       this.cpuMax = stat.quota;
       this.cpuData.yData.push(stat.used);
       this.cpuData.xData.push(this.cpuTime++);
-      this.shrinkChartDataIfNeeded(this.cpuData);
+      this.trimSparklineData(this.cpuData);
     }));
 
     this.subscriptions.push(this.memStat.subscribe(stat => {
@@ -112,7 +112,7 @@ export class DeploymentDetailsComponent {
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
       this.memUnits = stat.units;
-      this.shrinkChartDataIfNeeded(this.memData);
+      this.trimSparklineData(this.memData);
     }));
 
     this.subscriptions.push(
@@ -122,6 +122,7 @@ export class DeploymentDetailsComponent {
           this.netData.xData.push(+new Date());
           this.netData.yData[0].push(stat.sent);
           this.netData.yData[1].push(stat.received);
+          this.trimLinechartData(this.netData);
         })
     );
   }
@@ -130,7 +131,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  private shrinkChartDataIfNeeded(chartData: any): void {
+  private trimSparklineData(chartData: any): void {
     if (chartData.xData.length > this.sparklineMaxElements) {
       let elementsToRemoveCount = chartData.xData.length - this.sparklineMaxElements;
       chartData.xData.splice(1, elementsToRemoveCount);
@@ -138,11 +139,21 @@ export class DeploymentDetailsComponent {
     }
   }
 
-  public getSparklineMaxElements(): number {
+  private trimLinechartData(chartData: any): void {
+    if (chartData.xData.length > this.sparklineMaxElements) {
+      let elementsToRemoveCount = chartData.xData.length - this.sparklineMaxElements;
+      chartData.xData.splice(1, elementsToRemoveCount);
+      chartData.yData.forEach(yData => {
+        yData.splice(1, elementsToRemoveCount);
+      });
+    }
+  }
+
+  public getChartMaxElements(): number {
     return this.sparklineMaxElements;
   }
 
-  public setSparklineMaxElements(maxElements: number): void {
+  public setChartMaxElements(maxElements: number): void {
     this.sparklineMaxElements = Math.max(1, maxElements);
   }
 }

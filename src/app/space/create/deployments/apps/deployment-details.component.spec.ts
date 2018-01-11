@@ -178,21 +178,21 @@ describe('DeploymentDetailsComponent', () => {
       let detailsComponent = this.testedDirective;
       let expectedDefaultElements =
         DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS;
-      expect(detailsComponent.getSparklineMaxElements()).toBe(expectedDefaultElements);
+      expect(detailsComponent.getChartMaxElements()).toBe(expectedDefaultElements);
     });
 
     it('should not be able to be set to anything less than 1', function(this: Context) {
       let detailsComponent = this.testedDirective;
       [0, -5, -1873].forEach(n => {
-        detailsComponent.setSparklineMaxElements(n);
-        expect(detailsComponent.getSparklineMaxElements()).toBe(1);
+        detailsComponent.setChartMaxElements(n);
+        expect(detailsComponent.getChartMaxElements()).toBe(1);
       });
     });
 
     it('should have its cpu data bounded when enough data has been emitted', function(this: Context) {
       const MAX_CPU_SPARKLINE_ELEMENTS = 4;
       let detailsComponent = this.testedDirective;
-      detailsComponent.setSparklineMaxElements(MAX_CPU_SPARKLINE_ELEMENTS);
+      detailsComponent.setChartMaxElements(MAX_CPU_SPARKLINE_ELEMENTS);
       times(MAX_CPU_SPARKLINE_ELEMENTS + 10, () => cpuStatObservable.next({ used: 1, quota: 2 }));
       expect(detailsComponent.cpuData.xData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS);
       expect(detailsComponent.cpuData.yData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS);
@@ -201,7 +201,7 @@ describe('DeploymentDetailsComponent', () => {
     it('should have its memory data bounded when enough data has been emitted', function(this: Context) {
       const MAX_MEM_SPARKLINE_ELEMENTS = 6;
       let detailsComponent = this.testedDirective;
-      detailsComponent.setSparklineMaxElements(MAX_MEM_SPARKLINE_ELEMENTS);
+      detailsComponent.setChartMaxElements(MAX_MEM_SPARKLINE_ELEMENTS);
       times(MAX_MEM_SPARKLINE_ELEMENTS + 10, () => memStatObservable.next({ used: 3, quota: 4, units: 'GB' }));
       expect(detailsComponent.memData.xData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
       expect(detailsComponent.memData.yData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
