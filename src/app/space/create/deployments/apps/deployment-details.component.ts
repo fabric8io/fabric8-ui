@@ -12,6 +12,9 @@ import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { DeploymentsService } from '../services/deployments.service';
 
+import { LinechartConfig } from '../deployments-linechart/linechart-component/linechart-config';
+import { LinechartData } from '../deployments-linechart/linechart-component/linechart-data';
+
 @Component({
   selector: 'deployment-details',
   templateUrl: 'deployment-details.component.html',
@@ -42,6 +45,14 @@ export class DeploymentDetailsComponent {
     yData: ['used', 1]
   };
 
+  public netData: LinechartData = {
+    xData: ['time'],
+    yData: [
+      ['sent'],
+      ['received']
+    ]
+  };
+
   public cpuConfig: any = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('cpu-chart-') + '-'
@@ -50,6 +61,11 @@ export class DeploymentDetailsComponent {
   public memConfig: any = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('mem-chart-') + '-'
+  };
+
+  public netConfig: LinechartConfig = {
+    chartId: uniqueId('network'),
+    showXAxis: true
   };
 
   cpuStat: Observable<CpuStat>;
@@ -103,6 +119,9 @@ export class DeploymentDetailsComponent {
       this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name)
         .subscribe(stat => {
           this.netVal = round(stat.received + stat.sent, 1);
+          this.netData.xData.push(+new Date());
+          this.netData.yData[0].push(stat.sent);
+          this.netData.yData[1].push(stat.received);
         })
     );
   }

@@ -69,13 +69,12 @@ class FakePfngChartSparkline {
 }
 
 @Component({
-  selector: 'deployments-linechart',
+  selector: 'linechart',
   template: ''
 })
-class FakeDeploymentsLinechart {
-  @Input() spaceId: string;
-  @Input() applicationId: string;
-  @Input() environment: Environment;
+class FakeLinechart {
+  @Input() config: any;
+  @Input() chartData: any;
 }
 
 describe('DeploymentDetailsComponent', () => {
@@ -104,7 +103,7 @@ describe('DeploymentDetailsComponent', () => {
       FakeDeploymentsDonutComponent,
       FakeDeploymentGraphLabelComponent,
       FakePfngChartSparkline,
-      FakeDeploymentsLinechart
+      FakeLinechart
     ],
     providers: [
       { provide: DeploymentsService, useFactory: () => mockSvc }

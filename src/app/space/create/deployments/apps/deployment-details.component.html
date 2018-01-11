@@ -23,7 +23,7 @@
 
     <div class="deployment-chart">
       <div class="chart-column">
-        <deployments-linechart [spaceId]="spaceId" [applicationId]="applicationId" [environment]="environment"></deployments-linechart>
+        <linechart [config]="netConfig" [chartData]="netData"></linechart>
       </div>
       <div class="chart-column">
         <deployment-graph-label type="Network" [dataMeasure]="'KiB/s'" [value]="netVal"></deployment-graph-label>
