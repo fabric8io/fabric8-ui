@@ -24,6 +24,32 @@ export class ReportSummaryUtils {
         }
     };
 
+    public cardTypes: any = {
+        SECURITY: 'security',
+        INSIGHTS: 'insights',
+        LICENSES: 'licenses',
+        COMP_DETAILS: 'compDetails'
+    };
+
+    public titleAndDescription: any = {
+        [this.cardTypes.SECURITY]: {
+            title: 'Components with security issues in your stack',
+            description: 'Description'
+        },
+        [this.cardTypes.INSIGHTS]: {
+            title: 'Insights on alternate or additional components that can augment your stack',
+            description: 'Description'
+        },
+        [this.cardTypes.LICENSES]: {
+            title: 'License details of components in your stack',
+            description: 'Description'
+        },
+        [this.cardTypes.COMP_DETAILS]: {
+            title: 'Component details of your manifest file',
+            description: 'Description'
+        }
+    };
+
     public newCardInstance(): MReportSummaryCard {
         let newCard: MReportSummaryCard = new MReportSummaryCard();
         newCard.reportSummaryContent = new MReportSummaryContent();
@@ -33,6 +59,7 @@ export class ReportSummaryUtils {
 
     public getSecurityReportCard(userStackInfo: UserStackInfoModel): MReportSummaryCard {
         let securityCard: MReportSummaryCard = this.newCardInstance();
+        securityCard.identifier = this.cardTypes.SECURITY;
         securityCard.reportSummaryTitle.titleIcon = 'fa fa-shield';
         securityCard.reportSummaryDescription =
             'This shows the Security Description and it can go to more than a line';
@@ -110,6 +137,7 @@ export class ReportSummaryUtils {
 
     public getInsightsReportCard(recommendation: RecommendationsModel): MReportSummaryCard {
         let insightsCard: MReportSummaryCard = this.newCardInstance();
+        insightsCard.identifier = this.cardTypes.INSIGHTS;
         insightsCard.reportSummaryTitle.titleText = 'Insights';
         insightsCard.reportSummaryTitle.titleIcon = 'pficon-zone';
         insightsCard.reportSummaryDescription = 'This shows the Insights Description and it can go to more than a line';
@@ -154,6 +182,7 @@ export class ReportSummaryUtils {
 
     public getLicensesReportCard(userStackInfo: UserStackInfoModel): MReportSummaryCard {
         let licensesCard: MReportSummaryCard = this.newCardInstance();
+        licensesCard.identifier = this.cardTypes.LICENSES;
         licensesCard.reportSummaryTitle.titleText = 'Licenses';
         licensesCard.reportSummaryTitle.titleIcon = 'fa fa-bolt';
         licensesCard.reportSummaryDescription = 'This shows the Licenses Description and it can go to more than a line';
