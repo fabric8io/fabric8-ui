@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 
-import { uniqueId } from 'lodash';
+import {
+  round,
+  uniqueId
+} from 'lodash';
 import 'patternfly/dist/js/patternfly-settings.js';
 import { Observable, Subscription } from 'rxjs';
 
@@ -58,6 +61,7 @@ export class DeploymentDetailsComponent {
   memVal: number;
   memUnits: string;
   memMax: number;
+  netVal: number;
 
   sparklineMaxElements: number;
 
@@ -94,6 +98,13 @@ export class DeploymentDetailsComponent {
       this.memUnits = stat.units;
       this.shrinkChartDataIfNeeded(this.memData);
     }));
+
+    this.subscriptions.push(
+      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name)
+        .subscribe(stat => {
+          this.netVal = round(stat.received + stat.sent, 1);
+        })
+    );
   }
 
   ngOnDestroy(): void {
