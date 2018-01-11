@@ -14,6 +14,7 @@ import {
     MCardDetails,
     MGenericStackInformation
 } from '../models/ui.model';
+import { SaveState } from '../utils/SaveState';
 /**
  * New Stack Report Revamp - End
  */
@@ -82,7 +83,8 @@ export class StackDetailsComponent implements OnChanges {
      */
     public handleCardClick(cardDetails: any): void {
         this.genericInformation = new MGenericStackInformation(
-            this.stackId
+            this.stackId,
+            this.getBaseUrl(this.stack)
         );
         this.cardDetails = cardDetails;
     }
@@ -189,6 +191,21 @@ export class StackDetailsComponent implements OnChanges {
     }
 
     constructor(private stackAnalysisService: StackAnalysesService) {}
+    /**
+     * New Revamp - Begin
+     * https://recommender.api.openshift.io/api/v1/stack-analyses/
+     */
+    private getBaseUrl(url: string): string {
+        if (url && url !== '') {
+            let splitter: string = 'api/v1';
+            return url.indexOf(splitter) !== -1 ? url.split(splitter)[0] : '';
+        }
+        return '';
+    }
+
+    /**
+     * New Revamp - End
+     */
 
     private handleError(error: any): void {
         this.errorMessage = error;
@@ -223,6 +240,7 @@ export class StackDetailsComponent implements OnChanges {
         this.componentLevelInformation = {};
         this.companionLevelRecommendation = {};
         this.cacheResponse = {};
+        SaveState.ELEMENTS = [];
         // this.dataLoaded = false;
     }
 

@@ -32,6 +32,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
     public paint(): void {
         if (this.component) {
             if (this.type === 'recommendation') {
+                debugger;
                 let c = (<MRecommendationInformation>this.component);
                 this.comp = c && c.componentInformation;
             } else {

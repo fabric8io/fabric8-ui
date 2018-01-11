@@ -27,8 +27,9 @@ export class ComponentFeedbackComponent implements OnChanges {
 
     public handleFeedback(event: MouseEvent, type: boolean): void {
         event.stopPropagation();
+        debugger;
         if (this.feedback) {
-            this.feedback.feedbackType = type;
+            this.feedback.feedback_type = type;
             let subscription = this.feedbackService.postFeedback(this.feedback);
             if (subscription) {
                 subscription.subscribe((result) => {
@@ -39,6 +40,7 @@ export class ComponentFeedbackComponent implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        debugger;
         let summary: any = changes['feedback'];
         if (summary) {
             this.feedback = <MComponentFeedback> summary.currentValue;

@@ -1,13 +1,28 @@
 .analytics-summary-card {
     cursor: pointer;
     .card-pf {
-        min-height: 250px;
+        min-height: 350px;
         padding: 10px 20px;
     }
     &.highlight {
         .card-pf {
             border-bottom: 5px solid #2a9fd8;
             box-shadow: 0 0 15px #777;
+            &:after {
+                content: '';
+                width: 30px;
+                height: 30px;
+                display: block;
+                position: absolute;
+                border: #2a9fd8 2px solid;
+                bottom: -15px;
+                left: 45%;
+                transform: rotate(45deg);
+                border-bottom: 0;
+                border-right: 0;
+                background: #fff;
+                z-index: 9;
+            }
         }
     }
 }

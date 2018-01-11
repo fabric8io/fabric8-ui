@@ -63,19 +63,19 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
             title: 'Components with security issues in your stack',
-            description: 'Description'
+            description: 'OSIO Analytics has identified security issues in your stack. Click this card to see further details of the security tasks affecting your stack.'
         },
         [this.cardTypes.INSIGHTS]: {
             title: 'Insights on alternate or additional components that can augment your stack',
-            description: 'Description'
+            description: 'OSIO Analytics has identified components that are rarely used in similar stacks, and suggest (suggests) alternate and additional components that can enhance your stack. Click this card to see detailed suggestions on alternate and additional components for your stack.'
         },
         [this.cardTypes.LICENSES]: {
             title: 'License details of components in your stack',
-            description: 'Description'
+            description: 'OSIO Analytics identifies the stack level license, the conflicting licenses, and the unknown licenses for your stack. Click this card to see detailed information on the conflicting and unknown licenses in your stack.'
         },
         [this.cardTypes.COMP_DETAILS]: {
             title: 'Component details of your manifest file',
-            description: 'Description'
+            description: 'OSIO Analytics identifies the total number of components, analyzes them, and provides details on security, usage, and license issues in your components. It also lists components unknown to OSIO.'
         }
     };
 
@@ -163,7 +163,7 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
         componentDetailsCard.identifier = this.cardTypes.COMP_DETAILS;
         componentDetailsCard.reportSummaryTitle.titleIcon = 'fa fa-cube';
         componentDetailsCard.reportSummaryTitle.titleText = 'Component Details';
-        componentDetailsCard.reportSummaryDescription = 'This shows the Component Details Description and it can go to more than a line';
+        componentDetailsCard.reportSummaryDescription = this.titleAndDescription[this.cardTypes.COMP_DETAILS].description;
         componentDetailsCard.reportSummaryContent.infoEntries = [];
 
         if (this.report.user_stack_info
@@ -206,6 +206,8 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
             cards[3] = this.getComponentDetailsReportCard();
         }
         this.reportSummaryCards = cards;
+        // Select the first card by default
+        this.handleSummaryClick(cards[0]);
     }
 
     private paintView(): void {

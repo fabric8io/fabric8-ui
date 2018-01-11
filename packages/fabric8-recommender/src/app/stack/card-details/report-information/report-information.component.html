@@ -2,8 +2,11 @@
     <div *ngIf="report?.componentDetails && report?.componentDetails.length > 0" class="component-detail-headers">
         <div [class]="header.className" *ngFor="let header of report?.headers" [innerText]="header.text"></div>
     </div>
-    <component-details (click)="handleAccordion(cdetail)" [serial]="i" [type]="report?.type" [positions]="report?.headers" [compDetails]="cdetail" *ngFor="let cdetail of report?.componentDetails; let i = index;"></component-details>
+    <component-details [genericInformation]="genericInformation" (click)="handleAccordion(cdetail)" [serial]="i" [type]="report?.type" [positions]="report?.headers" [compDetails]="cdetail" *ngFor="let cdetail of report?.componentDetails; let i = index;"></component-details>
     <div class="not-found" *ngIf="!report?.componentDetails || report?.componentDetails.length === 0">
-        Not available
+        <div class="no-data">
+            <h3>Your stack looks healthy & no issues at the moment</h3>
+            <p>This is more description about the same scenario</p>
+        </div>
     </div>
 </div>

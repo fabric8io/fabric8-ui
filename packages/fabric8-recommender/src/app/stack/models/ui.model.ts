@@ -112,7 +112,8 @@ export class MComponentInformation {
         public needsExpansion: boolean = true,
         public recommendation: MRecommendationInformation = null,
         public isOpen: boolean = false,
-        public licenseInformation: MLicenseInformation
+        public licenseInformation: MLicenseInformation,
+        public ecosystem: string
     ) {}
 }
 
@@ -143,7 +144,7 @@ export class MRecommendationInformation {
     constructor(
         public type: string, // Alternate or companion
         public reason: string = null,
-        public feedback: boolean,
+        public feedback: MComponentFeedback = null,
         public confidenceScore: MProgressMeter,
         public componentInformation: MComponentInformation
     ) {}
@@ -184,16 +185,17 @@ export class MCardDetails {
 
 export class MGenericStackInformation {
     constructor(
-        public stackId: string
+        public stackId: string,
+        public baseUrl: string
     ) {}
 }
 
 export class MComponentFeedback {
     constructor(
-        public stackId: string,
-        public recommendationType: string,
-        public packageName: string,
-        public feedbackType: boolean = null,
+        public stack_id: string,
+        public recommendation_type: string,
+        public package_name: string,
+        public feedback_type: boolean = null,
         public ecosystem: string
     ) {}
 }

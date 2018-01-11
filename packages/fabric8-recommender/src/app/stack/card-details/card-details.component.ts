@@ -42,7 +42,8 @@ import {
     MLicensesAffected,
     MConflictsWithInLicenses,
     MStackLicenseConflictDetails,
-    MLicenseInformation
+    MLicenseInformation,
+    MComponentFeedback
 } from '../models/ui.model';
 
 @Component({
@@ -75,19 +76,19 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
             title: 'Components with security issues in your stack',
-            description: 'Description'
+            description: 'A list of the components affected with common vulnerabilities and exposures (CVE), component with the highest common vulnerability score (CVSS), and its CVE ID. You can take corrective actions by reporting the issues'
         },
         [this.cardTypes.INSIGHTS]: {
             title: 'Insights on alternate or additional components that can augment your stack',
-            description: 'Description'
+            description: 'A list of components that are not commonly used in similar stacks, suggestions for alternate components to replace them, and suggestions for additional components to complement your stack. Take corrective action by creating a work item in Planner or leave us feedback.'
         },
         [this.cardTypes.LICENSES]: {
             title: 'License details of components in your stack',
-            description: 'Description'
+            description: 'A list of stack and component level license conflicts, licenses unknown to Openshift.io and suggestions for alternate components to resolve these issues. Create a work item in Planner to replace these components'
         },
         [this.cardTypes.COMP_DETAILS]: {
             title: 'Component details of your manifest file',
-            description: 'Description'
+            description: 'A list of all the analyzed components that flags security, usage, and license issues in your stack and suggests alternate components to replace components with these issues. Take corrective action by creating a work item in Planner. It also lists components unknown to OSIO'
         }
     };
 
@@ -136,6 +137,20 @@ export class CardDetailsComponent implements OnInit, OnChanges {
         return false;
     }
 
+    private getMComponentFeedback(type: string, component: ComponentInformationModel): MComponentFeedback {
+        let feedback: MComponentFeedback = null;
+        if (this.genericInformation && this.genericInformation.stackId && component) {
+            feedback = new MComponentFeedback(
+                this.genericInformation.stackId,
+                type,
+                component.name,
+                null,
+                component.ecosystem
+            );
+        }
+        return feedback;
+    }
+
     private getCompanionComponents(): Array<MRecommendationInformation> {
         let companions: Array<MRecommendationInformation> = [];
         if (this.report) {
@@ -158,7 +173,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                     companions.push(new MRecommendationInformation(
                         'companion',
                         companion.reason,
-                        null,
+                        this.getMComponentFeedback('companion', companion),
                         progress,
                         new MComponentInformation(
                             companion.name,
@@ -180,7 +195,8 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                             true,
                             null,
                             false,
-                            null
+                            null,
+                            companion.ecosystem
                         )
                     ));
                 });
@@ -271,9 +287,8 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                     ));
                     break;
                 case 'licenses':
-                    genericReport.name = 'Conflict License(s) details';
+                    genericReport.name = 'Conflicting License(s) details';
                     reportInformations.push(genericReport);
-                    debugger;
                     reportInformations.push(new MReportInformation(
                         'Unknown license(s) details',
                         'component',
@@ -301,13 +316,24 @@ export class CardDetailsComponent implements OnInit, OnChanges {
 
     private hasUnknownLicense(component: ComponentInformationModel): boolean {
         if (component) {
-            return component.license_analysis && component.license_analysis.unknown_licenses && component.license_analysis.unknown_licenses.length > 0;
+            let licenseAnalysis: StackLicenseAnalysisModel = this.getLicensesAnalysis();
+            if (licenseAnalysis &&
+                licenseAnalysis.unknown_licenses &&
+                licenseAnalysis.unknown_licenses.really_unknown &&
+                licenseAnalysis.unknown_licenses.really_unknown.length > 0
+            ) {
+                let reallyUnknown = licenseAnalysis.unknown_licenses.really_unknown;
+                reallyUnknown.forEach((unknown) => {
+                    if (unknown.package === component.name) {
+                        return true;
+                    }
+                });
+            }
         }
         return false;
     }
 
     private getUnknownLicenseComponentDetails(): Array<MComponentDetails> {
-        debugger;
         let unknownLicenseComps: Array<MComponentDetails> = null;
         let components: Array<ComponentInformationModel> = null;
         if (this.report.user_stack_info
@@ -386,7 +412,6 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             let latestVersion: string = component.latest_version;
             let github: GithubModel = component.github;
             let hasLicenseIssue: boolean = this.hasLicenseIssue(component);
-            debugger;
             let isUsageOutlier: boolean = false;
             let securityDetails: MSecurityDetails = this.getComponentSecurity(component);
             let recommendation: RecommendationsModel = this.report.recommendation;
@@ -424,7 +449,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                                 recommendationInformation = new MRecommendationInformation(
                                     'alternate',
                                     alternate.reason,
-                                    false,
+                                    this.getMComponentFeedback('alternate', alternate),
                                     progress,
                                     new MComponentInformation(
                                         alternate.name,
@@ -442,7 +467,8 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                                         false,
                                         null,
                                         false,
-                                        null
+                                        null,
+                                        alternate.ecosystem
                                     )
                                 );
                                 break;
@@ -474,7 +500,8 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                     this.getUnknownLicenses(component),
                     hasLicenseIssue,
                     this.getMLicenseAffected(component)
-                )
+                ),
+                component.ecosystem
             );
         }
         return null;
@@ -601,7 +628,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                     maxIssue.CVE
                 );
                 securityDetails.progressReport = new MProgressMeter(
-                    '',
+                    Number(maxIssue.CVSS) + '/10',
                     Number(maxIssue.CVSS),
                     Number(maxIssue.CVSS) >= 7 ? '#ff6162' : 'ORANGE',
                     '',
@@ -679,7 +706,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 headers.push(new MComponentHeaderColumn(
                     'confidence',
                     'Confidence Score',
-                    'float-left medium'
+                    'float-left extra-medium'
                 ));
                 headers.push(new MComponentHeaderColumn(
                     'feedback',

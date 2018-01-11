@@ -1,8 +1,8 @@
 <div class="analytics-component-details">
     <div *ngIf="type === 'component'" class="component-information-container">
-        <component-information [type]="type" [serial]="serial" [positions]="positions" [component]="compDetails?.componentInformation"></component-information>
+        <component-information [genericInformation]="genericInformation" [type]="type" [serial]="serial" [positions]="positions" [component]="compDetails?.componentInformation"></component-information>
     </div>
     <div *ngIf="type === 'recommendation'" class="component-information-container">
-        <component-information [type]="type" [serial]="serial" [positions]="positions" [component]="compDetails?.recommendationInformation"></component-information>
+        <component-information [genericInformation]="genericInformation" [type]="type" [serial]="serial" [positions]="positions" [component]="compDetails?.recommendationInformation"></component-information>
     </div>
 </div>

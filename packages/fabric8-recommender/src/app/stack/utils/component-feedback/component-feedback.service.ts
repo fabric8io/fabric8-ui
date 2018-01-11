@@ -25,6 +25,7 @@ export class ComponentFeedbackService {
   postFeedback(feedback: MComponentFeedback): Observable<any> {
     let options = new RequestOptions({ headers: this.headers });
     let body = JSON.stringify(feedback);
+    console.log('Feedback Request: ', body);
     return this.http.post(this.FEEDBACK_URL, body, options)
       .map(this.extractData)
       .catch(this.handleError);
