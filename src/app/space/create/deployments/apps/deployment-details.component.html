@@ -25,6 +25,9 @@
       <div class="chart-column">
         <deployments-linechart [spaceId]="spaceId" [applicationId]="applicationId" [environment]="environment"></deployments-linechart>
       </div>
+      <div class="chart-column">
+        <deployment-graph-label type="Network" [dataMeasure]="'KiB/s'" [value]="'10'"></deployment-graph-label>
+      </div>
     </div>
   </ng-container>
 </div>
