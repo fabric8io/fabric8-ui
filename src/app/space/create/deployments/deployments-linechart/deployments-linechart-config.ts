@@ -19,7 +19,5 @@ export class DeploymentsLinechartConfig extends ChartConfig {
 
   tooltip?: any;
 
-  tooltipType?: string;
-
   units?: string;
 }

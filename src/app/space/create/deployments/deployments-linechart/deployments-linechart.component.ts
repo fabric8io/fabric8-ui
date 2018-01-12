@@ -110,7 +110,7 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
       sent: '#00b9e4', // pf-light-blue-400
       received: '#f39d3c' // pf-orange-300
     };
-    // this.defaultConfig.tooltip = this.tooltip();
+    this.defaultConfig.tooltip = this.tooltip();
     this.defaultConfig.units = '';
   }
 
@@ -125,6 +125,54 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
       ];
     }
     return data;
+  }
+
+  tooltip(): any {
+    return {
+      contents: (d: any) => {
+        let tipRows: string = '';
+        for (let i = 0; i < d.length; i++) {
+          tipRows +=
+          '<tr>' +
+          '  <td class="value">' + d[i].name + '</td>' +
+          '  <td class="value text-nowrap">' + d[i].value + '</td>' +
+          '</tr>';
+        }
+        return this.getTooltipTableHTML(tipRows);
+      },
+      position: (data: any, width: number, height: number, element: any) => {
+        let center;
+        let top;
+        let chartBox;
+        let graphOffsetX;
+        let x;
+
+        try {
+          center = parseInt(element.getAttribute('x'), 10);
+          top = parseInt(element.getAttribute('y'), 10);
+          chartBox = document.querySelector('#' + this.config.chartId).getBoundingClientRect();
+          graphOffsetX = document.querySelector('#' + this.config.chartId + ' g.c3-axis-y')
+            .getBoundingClientRect().right;
+          x = Math.max(0, center + graphOffsetX - chartBox.left - Math.floor(width / 2));
+
+          return {
+            top: top - height,
+            left: Math.min(x, chartBox.width - width)
+          };
+        } catch (e) {
+        }
+      }
+    };
+  }
+
+  private getTooltipTableHTML(tipRows: any): string {
+    return '<div class="module-triangle-bottom">' +
+      '  <table class="c3-tooltip">' +
+      '    <tbody>' +
+      tipRows +
+      '    </tbody>' +
+      '  </table>' +
+      '</div>';
   }
 
 }
