@@ -62,7 +62,7 @@
       <div class="col-xs-12 col-md-4">
         <div class="card-pf f8-card">
           <div class="card-pf-heading f8-card-heading">
-            <div class="card-pf-heading-details f8-card-heading-details" *ngIf="_spaces.length > 0">
+            <div class="card-pf-heading-details f8-card-heading-details">
               <a class="btn btn-link f8-card-heading-btn-link" (click)="openForgeWizard(createSpace)">
                 <i class="pficon pficon-add-circle-o"></i>
               </a>
@@ -123,4 +123,3 @@
   <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
   <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
 </ng-template>
-
