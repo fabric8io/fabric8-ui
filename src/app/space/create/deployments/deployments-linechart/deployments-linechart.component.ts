@@ -50,8 +50,9 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
 
   ngDoCheck(): void {
     if (!isEqual(this.config, this.prevConfig) || !isEqual(this.chartData, this.prevChartData)) {
+      const dataChanged = isEqual(this.chartData, this.prevChartData);
       this.setupConfig();
-      this.generateChart(this.config, true);
+      this.generateChart(this.config, dataChanged);
     }
   }
 
