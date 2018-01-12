@@ -1,5 +1,10 @@
 <div id="spacehome-pipelines-card" class="pipelines-widget card-pf f8-card">
   <div class="card-pf-heading f8-card-heading">
+    <div class="card-pf-heading-details f8-card-heading-details">
+      <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
+        <i class="pficon pficon-add-circle-o"></i>
+      </a>
+    </div>
     <h2 class="card-pf-title">
       <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, 'create', 'pipelines']">Pipelines</a>
       <span id="spacehome-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount | async}}</span>
