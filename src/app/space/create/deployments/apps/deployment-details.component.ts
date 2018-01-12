@@ -55,16 +55,16 @@ export class DeploymentDetailsComponent {
 
   public cpuConfig: any = {
     // Seperate charts must have unique IDs, otherwise only one will appear
-    chartId: uniqueId('cpu-chart-') + '-'
+    chartId: uniqueId('cpu-chart')
   };
 
   public memConfig: any = {
     // Seperate charts must have unique IDs, otherwise only one will appear
-    chartId: uniqueId('mem-chart-') + '-'
+    chartId: uniqueId('mem-chart')
   };
 
   public netConfig: DeploymentsLinechartConfig = {
-    chartId: uniqueId('network'),
+    chartId: uniqueId('net-chart'),
     showXAxis: true
   };
 
