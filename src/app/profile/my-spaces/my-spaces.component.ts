@@ -156,6 +156,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   filterChange($event: FilterEvent): void {
     this.applyFilters($event.appliedFilters);
+    this.sort();
   }
 
   matchesFilter(space: Space, filter: Filter): boolean {
