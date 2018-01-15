@@ -8,6 +8,7 @@ import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
+import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 
 export interface NetworkStat {
   sent: number;
@@ -83,8 +84,8 @@ export class DeploymentsService {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
-      .map(() => ({ used: Math.floor(Math.random() * 156) + 100, quota: 256, units: 'MB' } as MemoryStat))
-      .startWith({ used: 200, quota: 256, units: 'MB' } as MemoryStat);
+      .map(() => (new ScaledMemoryStat(Math.floor(Math.random() * 156) + 100, 256)))
+      .startWith(new ScaledMemoryStat(200, 256));
   }
 
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
@@ -99,8 +100,8 @@ export class DeploymentsService {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
-      .map(() => ({ used: Math.floor(Math.random() * 156) + 100, quota: 256, units: 'MB' } as MemoryStat))
-      .startWith({ used: 200, quota: 256, units: 'MB' } as MemoryStat);
+      .map(() => (new ScaledMemoryStat(Math.floor(Math.random() * 156) + 100, 256)))
+      .startWith(new ScaledMemoryStat(200, 256));
   }
 
   getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {

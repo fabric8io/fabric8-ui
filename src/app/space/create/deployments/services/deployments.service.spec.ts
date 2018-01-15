@@ -5,6 +5,7 @@ import {
 } from '@angular/core/testing';
 
 import { Environment } from '../models/environment';
+import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { DeploymentsService } from './deployments.service';
 
 describe('DeploymentsService', () => {
@@ -204,10 +205,10 @@ describe('DeploymentsService', () => {
       discardPeriodicTasks();
     }));
 
-    it('should return a value in MB', fakeAsync(() => {
-      svc.getEnvironmentMemoryStat('foo', 'bar')
+    it('should return a value in bytes', fakeAsync(() => {
+      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
         .subscribe(val => {
-          expect(val.units).toEqual('MB');
+          expect(val.units).toEqual('bytes');
         });
         tick(DeploymentsService.POLL_RATE_MS + 10);
         discardPeriodicTasks();
@@ -255,10 +256,10 @@ describe('DeploymentsService', () => {
       discardPeriodicTasks();
     }));
 
-    it('should return a value in MB', fakeAsync(() => {
+    it('should return a value in bytes', fakeAsync(() => {
       svc.getEnvironmentMemoryStat('foo', 'bar')
         .subscribe(val => {
-          expect(val.units).toEqual('MB');
+          expect(val.units).toEqual('bytes');
         });
         tick(DeploymentsService.POLL_RATE_MS + 10);
         discardPeriodicTasks();
