@@ -53,7 +53,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
     this.toolTip = 'Everything is ok';
 
-    this.cpuStat = this.deploymentsService.getCpuStat(this.spaceId, this.environment.name);
+    this.cpuStat = this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
     this.subscriptions.push(this.cpuStat.subscribe((stat) => {
       this.changeStatus(stat);
     }));

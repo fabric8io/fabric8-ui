@@ -52,8 +52,8 @@ describe('ResourceCardComponent', () => {
       { name: 'stage' } as Environment,
       { name: 'prod' } as Environment
     ]));
-    mockSvc.getCpuStat.and.returnValue(cpuStatMock);
-    mockSvc.getMemoryStat.and.returnValue(memoryStatMock);
+    mockSvc.getEnvironmentCpuStat.and.returnValue(cpuStatMock);
+    mockSvc.getEnvironmentMemoryStat.and.returnValue(memoryStatMock);
     mockSvc.isDeployedInEnvironment.and.returnValue(active);
   });
 

@@ -163,9 +163,9 @@ describe('DeploymentsService', () => {
     }));
   });
 
-  describe('#getCpuStat', () => {
+  describe('#getDeploymentCpuStat', () => {
     it('should return a "quota" value of 10', fakeAsync(() => {
-      svc.getCpuStat('foo', 'bar')
+      svc.getDeploymentCpuStat('foo', 'bar', 'baz')
         .subscribe(val => {
           expect(val.quota).toBe(10);
         });
@@ -174,7 +174,7 @@ describe('DeploymentsService', () => {
     }));
 
     it('should return a "used" value between 1 and 10', fakeAsync(() => {
-      svc.getCpuStat('foo', 'bar')
+      svc.getDeploymentCpuStat('foo', 'bar', 'baz')
         .subscribe(val => {
           expect(val.used).toBeGreaterThanOrEqual(1);
           expect(val.used).toBeLessThanOrEqual(10);
@@ -184,9 +184,9 @@ describe('DeploymentsService', () => {
     }));
   });
 
-  describe('#getMemoryStat', () => {
+  describe('#getDeploymentMemoryStat', () => {
     it('should return a "quota" value of 256', fakeAsync(() => {
-      svc.getMemoryStat('foo', 'bar')
+      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
         .subscribe(val => {
           expect(val.quota).toBe(256);
         });
@@ -195,7 +195,7 @@ describe('DeploymentsService', () => {
     }));
 
     it('should return a "used" value between 100 and 256', fakeAsync(() => {
-      svc.getMemoryStat('foo', 'bar')
+      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
         .subscribe(val => {
           expect(val.used).toBeGreaterThanOrEqual(100);
           expect(val.used).toBeLessThanOrEqual(256);
@@ -205,7 +205,58 @@ describe('DeploymentsService', () => {
     }));
 
     it('should return a value in MB', fakeAsync(() => {
-      svc.getMemoryStat('foo', 'bar')
+      svc.getEnvironmentMemoryStat('foo', 'bar')
+        .subscribe(val => {
+          expect(val.units).toEqual('MB');
+        });
+        tick(DeploymentsService.POLL_RATE_MS + 10);
+        discardPeriodicTasks();
+    }));
+  });
+
+  describe('#getEnvironmentCpuStat', () => {
+    it('should return a "quota" value of 10', fakeAsync(() => {
+      svc.getEnvironmentCpuStat('foo', 'bar')
+        .subscribe(val => {
+          expect(val.quota).toBe(10);
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should return a "used" value between 1 and 10', fakeAsync(() => {
+      svc.getEnvironmentCpuStat('foo', 'bar')
+        .subscribe(val => {
+          expect(val.used).toBeGreaterThanOrEqual(1);
+          expect(val.used).toBeLessThanOrEqual(10);
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+  });
+
+  describe('#getEnvironmentMemoryStat', () => {
+    it('should return a "quota" value of 256', fakeAsync(() => {
+      svc.getEnvironmentMemoryStat('foo', 'bar')
+        .subscribe(val => {
+          expect(val.quota).toBe(256);
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should return a "used" value between 100 and 256', fakeAsync(() => {
+      svc.getEnvironmentMemoryStat('foo', 'bar')
+        .subscribe(val => {
+          expect(val.used).toBeGreaterThanOrEqual(100);
+          expect(val.used).toBeLessThanOrEqual(256);
+        });
+      tick(DeploymentsService.POLL_RATE_MS + 10);
+      discardPeriodicTasks();
+    }));
+
+    it('should return a value in MB', fakeAsync(() => {
+      svc.getEnvironmentMemoryStat('foo', 'bar')
         .subscribe(val => {
           expect(val.units).toEqual('MB');
         });

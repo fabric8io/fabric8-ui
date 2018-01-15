@@ -88,8 +88,8 @@ function initMockSvc(): jasmine.SpyObj<DeploymentsService> {
   let mockSvc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
 
   mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
-  mockSvc.getCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
-  mockSvc.getMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' }));
+  mockSvc.getDeploymentCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
+  mockSvc.getDeploymentMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' }));
   mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
   mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
   mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
@@ -206,7 +206,7 @@ describe('DeploymentCardComponent', () => {
     active = new BehaviorSubject<boolean>(true);
     mockSvc = initMockSvc();
     mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
-    mockSvc.getCpuStat.and.returnValue(mockCpuData);
+    mockSvc.getDeploymentCpuStat.and.returnValue(mockCpuData);
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     flush();

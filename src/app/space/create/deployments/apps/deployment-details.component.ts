@@ -93,10 +93,10 @@ export class DeploymentDetailsComponent {
     this.memTime = 1;
 
     this.cpuStat =
-      this.deploymentsService.getCpuStat(this.applicationId, this.environment.name);
+      this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
 
     this.memStat =
-      this.deploymentsService.getMemoryStat(this.applicationId, this.environment.name);
+      this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.applicationId, this.environment.name);
 
     this.subscriptions.push(this.cpuStat.subscribe(stat => {
       this.cpuVal = stat.used;

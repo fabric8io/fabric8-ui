@@ -32,7 +32,7 @@ export class ResourceCardComponent implements OnInit {
     .subscribe((active: boolean) => {
       this.active = active;
       if (active) {
-        this.memUnit = this.deploymentsService.getMemoryStat(this.spaceId, this.environment.name)
+        this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment.name)
         .first()
         .map((stat: MemoryStat) => stat.units);
       }

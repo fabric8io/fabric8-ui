@@ -94,8 +94,8 @@ describe('DeploymentDetailsComponent', () => {
 
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
-    mockSvc.getCpuStat.and.returnValue(cpuStatObservable);
-    mockSvc.getMemoryStat.and.returnValue(memStatObservable);
+    mockSvc.getDeploymentCpuStat.and.returnValue(cpuStatObservable);
+    mockSvc.getDeploymentMemoryStat.and.returnValue(memStatObservable);
     mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
     mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
@@ -139,7 +139,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should be called with the proper arguments', () => {
-      expect(mockSvc.getCpuStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
+      expect(mockSvc.getDeploymentCpuStat).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
     });
 
     it('should use the \'Cores\' label for its data measure', () => {
@@ -165,7 +165,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should use units from service result', () => {
-      expect(mockSvc.getMemoryStat).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
+      expect(mockSvc.getDeploymentMemoryStat).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
       expect(de.componentInstance.dataMeasure).toEqual('GB');
     });
 

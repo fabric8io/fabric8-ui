@@ -1,8 +1,8 @@
 <ng-container *ngIf="active">
   <div class="card-pf">
     <div class="card-pf-body resource-card-body">
-      <utilization-bar [resourceTitle]="'CPU'" [resourceUnit]="'Cores'" [stat]="deploymentsService.getCpuStat(spaceId, environment.name)"></utilization-bar>
-      <utilization-bar [resourceTitle]="'Memory'" [resourceUnit]="memUnit | async" [stat]="deploymentsService.getMemoryStat(spaceId, environment.name)"></utilization-bar>
+      <utilization-bar [resourceTitle]="'CPU'" [resourceUnit]="'Cores'" [stat]="deploymentsService.getEnvironmentCpuStat(spaceId, environment.name)"></utilization-bar>
+      <utilization-bar [resourceTitle]="'Memory'" [resourceUnit]="memUnit | async" [stat]="deploymentsService.getEnvironmentMemoryStat(spaceId, environment.name)"></utilization-bar>
     </div>
   </div>
 </ng-container>

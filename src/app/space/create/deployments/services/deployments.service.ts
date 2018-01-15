@@ -71,7 +71,7 @@ export class DeploymentsService {
     return Observable.of({ pods: [['Running', 2], ['Terminating', 1]], total: 3 } as Pods);
   }
 
-  getCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
+  getDeploymentCpuStat(spaceId: string, applicationName: string, environmentName: string): Observable<CpuStat> {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
@@ -79,7 +79,23 @@ export class DeploymentsService {
       .startWith({ used: 3, quota: 10 } as CpuStat);
   }
 
-  getMemoryStat(spaceId: string, environmentName: string): Observable<MemoryStat> {
+  getDeploymentMemoryStat(spaceId: string, applicationName: string, environmentName: string): Observable<MemoryStat> {
+    return Observable
+      .interval(DeploymentsService.POLL_RATE_MS)
+      .distinctUntilChanged()
+      .map(() => ({ used: Math.floor(Math.random() * 156) + 100, quota: 256, units: 'MB' } as MemoryStat))
+      .startWith({ used: 200, quota: 256, units: 'MB' } as MemoryStat);
+  }
+
+  getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
+    return Observable
+      .interval(DeploymentsService.POLL_RATE_MS)
+      .distinctUntilChanged()
+      .map(() => ({ used: Math.floor(Math.random() * 9) + 1, quota: 10 } as CpuStat))
+      .startWith({ used: 3, quota: 10 } as CpuStat);
+  }
+
+  getEnvironmentMemoryStat(spaceId: string, environmentName: string): Observable<MemoryStat> {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
       .distinctUntilChanged()
