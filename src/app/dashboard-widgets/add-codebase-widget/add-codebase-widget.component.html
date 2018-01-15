@@ -1,7 +1,7 @@
 <div id="spacehome-codebases-card" class="add-codebase-widget card-pf f8-card">
   <div class="card-pf-heading f8-card-heading">
       <div class="card-pf-heading-details f8-card-heading-details">
-        <a id="spacehome-codebases-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
+        <a id="spacehome-codebases-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
           <i class="pficon pficon-add-circle-o"></i>
         </a>
       </div>
