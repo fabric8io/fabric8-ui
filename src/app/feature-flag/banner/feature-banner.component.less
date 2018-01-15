@@ -1,6 +1,6 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 
-.featureLevel(@color-for-feature) {
+.feature-level(@color-for-feature) {
   &-bar {
     margin-top: 35px;
     height: 25px;
@@ -27,7 +27,7 @@
     vertical-align: baseline;
   }
 }
-.btn-link-featureLevel(@color-for-feature) {
+.btn-link-feature-level(@color-for-feature) {
   &:extend(.btn-link);
   padding: 0;
   height: 25px;
@@ -37,7 +37,7 @@
   text-decoration: underline;
   vertical-align: baseline;
 }
-.btn-featureLevel(@color-for-feature) {
+.btn-feature-level(@color-for-feature) {
   &:extend(.btn-default);
   border-color: @color-for-feature;
   background-color: @color-for-feature;
@@ -46,66 +46,66 @@
 
 // EXPERIMENTAL
 .experimental {
-  .featureLevel(@color-experimental);
+  .feature-level(@color-experimental);
 }
 .btn-link-experimental {
-  .btn-link-featureLevel(@color-experimental);
+  .btn-link-feature-level(@color-experimental);
 }
 .btn-experimental {
-  .btn-featureLevel(@color-experimental);
+  .btn-feature-level(@color-experimental);
 }
 
 // BETA
 .beta {
-  .featureLevel(@color-beta);
+  .feature-level(@color-beta);
 }
 .btn-link-beta {
-  .btn-link-featureLevel(@color-beta);
+  .btn-link-feature-level(@color-beta);
 }
 .btn-beta {
-  .btn-featureLevel(@color-beta);
+  .btn-feature-level(@color-beta);
 }
 
 // INTERNAL
 .internal {
-  .featureLevel(@color-internal);
+  .feature-level(@color-internal);
 }
 .btn-link-internal {
-  .btn-link-featureLevel(@color-internal);
+  .btn-link-feature-level(@color-internal);
 }
 .btn-link-internal {
-  .btn-featureLevel(@color-internal);
+  .btn-feature-level(@color-internal);
 }
 
 // NOT-APPLICABLE
 .not-applicable {
-  .featureLevel(@color-not-applicable);
+  .feature-level(@color-not-applicable);
 }
 .btn-link-not-applicable {
-  .btn-link-featureLevel(@color-not-applicable);
+  .btn-link-feature-level(@color-not-applicable);
 }
 .btn-not-applicable {
-  .btn-featureLevel(@color-not-applicable);
+  .btn-feature-level(@color-not-applicable);
 }
 
 // SYSTEM-ERROR
 .system-error {
-  .featureLevel(@color-system-error);
+  .feature-level(@color-system-error);
 }
 .btn-link-system-error {
-  .btn-link-featureLevel(@color-system-error);
+  .btn-link-feature-level(@color-system-error);
 }
 .btn-system-error {
-  .btn-featureLevel(@color-system-error);
+  .btn-feature-level(@color-system-error);
 }
 
 // NOT-LOGGED-IN
 .not-logged-in {
-  .featureLevel(@color-not-logged-in);
+  .feature-level(@color-not-logged-in);
 }
 .btn-link-not-logged-in {
-  .btn-link-featureLevel(@color-not-logged-in);
+  .btn-link-feature-level(@color-not-logged-in);
 }
 .btn-not-logged-in {
-  .btn-featureLevel(@color-not-logged-in);
+  .btn-feature-level(@color-not-logged-in);
 }
