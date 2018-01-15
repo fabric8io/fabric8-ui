@@ -52,12 +52,18 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   filterChange($event: FilterEvent): void {
     this.currentFilters = $event.appliedFilters;
     this.applyFilters();
+
+    this.sortApplications();
   }
 
   sortChange($event: SortEvent): void {
     this.currentSortField = $event.field;
     this.isAscendingSort = $event.isAscending;
 
+    this.sortApplications();
+  }
+
+  sortApplications(): void {
     this.filteredApplicationsList.sort((a: string, b: string) => {
       let v: number = a.localeCompare(b);
       if (!this.isAscendingSort) {
