@@ -1,11 +1,32 @@
-import { Injectable } from '@angular/core';
+import {
+  Inject,
+  Injectable
+} from '@angular/core';
 
 import { round } from 'lodash';
 
-import { Observable } from 'rxjs';
+import {
+  Headers,
+  Http,
+  Response
+} from '@angular/http';
+
+import {
+  BehaviorSubject,
+  Observable
+} from 'rxjs';
+
+import { AuthenticationService } from 'ngx-login-client';
+
+import { WIT_API_URL } from 'ngx-fabric8-wit';
+
+import {
+  includes,
+  isEqual as deepEqual
+} from 'lodash';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
+import { Environment as ModelEnvironment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
@@ -15,45 +36,82 @@ export interface NetworkStat {
   received: number;
 }
 
+export interface ApplicationsResponse {
+  data: Applications;
+}
+
+export interface EnvironmentsResponse {
+  data: EnvironmentStat[];
+}
+
+export interface Applications {
+  applications: Application[];
+}
+
+export interface Application {
+  name: string;
+  pipeline: Environment[];
+}
+
+export interface Environment {
+  name: string;
+}
+
+export interface EnvironmentStat {
+  name: string;
+}
+
 @Injectable()
 export class DeploymentsService {
-  static readonly POLL_RATE_MS: number = 5000;
+
+  static readonly INITIAL_UPDATE_DELAY: number = 0;
+  static readonly POLL_RATE_MS: number = 30000;
+
+  headers: Headers = new Headers({ 'Content-Type': 'application/json' });
+  apiUrl: string;
+
+  private readonly appsObservables = new Map<string, Observable<Applications>>();
+  private readonly envsObservables = new Map<string, Observable<EnvironmentStat[]>>();
+
+  private readonly pollTimer = Observable
+    .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
+    .share();
+
+  constructor(
+    public http: Http,
+    public auth: AuthenticationService,
+    @Inject(WIT_API_URL) witUrl: string
+  ) {
+    if (this.auth.getToken() != null) {
+      this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
+    }
+    this.apiUrl = witUrl + 'apps/spaces/';
+  }
 
   getApplications(spaceId: string): Observable<string[]> {
-    return Observable.of(['vertx-hello', 'vertx-paint', 'vertx-wiki']);
+    return this.getApplicationsResponse(spaceId)
+      .map((resp: Applications) => resp.applications.map((app: Application) => app.name))
+      .distinctUntilChanged(deepEqual);
   }
 
   getEnvironments(spaceId: string): Observable<Environment[]> {
-    return Observable.of([
-      { name: 'test' },
-      { name: 'stage' },
-      { name: 'run' }
-    ]);
+    return this.getEnvironmentsResponse(spaceId)
+      .map((envs: EnvironmentStat[]) => envs.map((env: EnvironmentStat) => ({ name: env.name} as ModelEnvironment)))
+      .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
+        deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
   }
 
   isApplicationDeployedInEnvironment(spaceId: string, applicationName: string, environmentName: string):
     Observable<boolean> {
-    if (environmentName === 'stage') {
-      return Observable.of(false);
-    }
-    if (applicationName === 'vertx-paint') {
-      return environmentName === 'test' ? Observable.of(true) : Observable.of(false);
-    }
-    if (applicationName === 'vertx-wiki') {
-      return environmentName === 'run' ? Observable.of(true) : Observable.of(false);
-    }
-
-    return Observable.of(true);
+    return this.getApplication(spaceId, applicationName)
+      .map((app: Application) => app.pipeline)
+      .map((pipe: Environment[]) => includes(pipe.map((p: Environment) => p.name), environmentName));
   }
 
   isDeployedInEnvironment(spaceId: string, environmentName: string):
     Observable<boolean> {
-      if (environmentName === 'stage') {
-        return Observable.of(false);
-      } else {
-        return Observable.of(true);
-      }
-    }
+    return Observable.of(true);
+  }
 
   getVersion(spaceId: string, environmentName: string): Observable<string> {
     return Observable.of('1.0.2');
@@ -134,6 +192,36 @@ export class DeploymentsService {
     } else {
       return Observable.throw(`Failed to delete ${applicationId} in ${spaceId} (${environmentName})`);
     }
+  }
+
+  private getApplicationsResponse(spaceId: string): Observable<Applications> {
+    if (!this.appsObservables.has(spaceId)) {
+      const subject = new BehaviorSubject<Applications>({ applications: [] });
+      const observable = this.pollTimer
+        .concatMap(() => this.http.get(this.apiUrl + spaceId, { headers: this.headers }))
+        .map((response: Response) => (response.json() as ApplicationsResponse).data);
+      observable.subscribe(subject);
+      this.appsObservables.set(spaceId, subject);
+    }
+    return this.appsObservables.get(spaceId);
+  }
+
+  private getApplication(spaceId: string, applicationName: string): Observable<Application> {
+    return this.getApplicationsResponse(spaceId)
+      .flatMap((apps: Applications) => apps.applications)
+      .filter((app: Application) => app.name === applicationName);
+  }
+
+  private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {
+    if (!this.envsObservables.has(spaceId)) {
+      const subject = new BehaviorSubject<EnvironmentStat[]>([]);
+      const observable = this.pollTimer
+        .concatMap(() => this.http.get(this.apiUrl + spaceId + '/environments', { headers: this.headers }))
+        .map((response: Response) => (response.json() as EnvironmentsResponse).data);
+      observable.subscribe(subject);
+      this.envsObservables.set(spaceId, subject);
+    }
+    return this.envsObservables.get(spaceId);
   }
 
 }

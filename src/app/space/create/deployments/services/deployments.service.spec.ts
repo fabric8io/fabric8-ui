@@ -1,151 +1,154 @@
 import {
   discardPeriodicTasks,
   fakeAsync,
+  TestBed,
   tick
 } from '@angular/core/testing';
 
+import {
+  HttpModule,
+  Response,
+  ResponseOptions,
+  XHRBackend
+} from '@angular/http';
+
+import {
+  MockBackend,
+  MockConnection
+} from '@angular/http/testing';
+
+import { createMock } from 'testing/mock';
+
+import { Observable } from 'rxjs';
+
+import {
+  AuthenticationService,
+  UserService
+} from 'ngx-login-client';
+
+import { WIT_API_URL } from 'ngx-fabric8-wit';
+
 import { Environment } from '../models/environment';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
-import { DeploymentsService } from './deployments.service';
+import {
+  Application,
+  DeploymentsService
+} from './deployments.service';
 
 describe('DeploymentsService', () => {
 
+  let mockBackend: MockBackend;
   let svc: DeploymentsService;
 
   beforeEach(() => {
-    svc = new DeploymentsService();
+    const mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
+    mockAuthService.getToken.and.returnValue('mock-auth-token');
+
+    TestBed.configureTestingModule({
+      imports: [ HttpModule ],
+      providers: [
+        {
+          provide: XHRBackend, useClass: MockBackend
+        },
+        {
+          provide: AuthenticationService, useValue: mockAuthService
+        },
+        {
+          provide: WIT_API_URL, useValue: 'http://example.com'
+        },
+        DeploymentsService
+      ]
+    });
+    svc = TestBed.get(DeploymentsService);
+    mockBackend = TestBed.get(XHRBackend);
   });
 
+  function doMockHttpTest<U>(response: any, expected: U, obs: Observable<U>, done: DoneFn): void {
+    mockBackend.connections.subscribe((connection: MockConnection) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          body: JSON.stringify(response),
+          status: 200
+        })
+      ));
+    });
+
+    obs.subscribe((data: U) => {
+      expect(data).toEqual(expected);
+      done();
+    });
+  }
+
   describe('#getApplications', () => {
-    it('should publish faked application IDs', fakeAsync(() => {
-      svc.getApplications('foo')
-        .subscribe(val => {
-          expect(val).toEqual(['vertx-hello', 'vertx-paint', 'vertx-wiki']);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should publish faked application names', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            { name: 'vertx-hello' }, { name: 'vertx-paint' }, { name: 'vertx-wiki' }
+          ]
+        }
+      };
+      // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, expectedResponse.data.applications.map(app => app.name),
+        svc.getApplications('foo-spaceId').skip(1), done);
+    });
   });
 
   describe('#getEnvironments', () => {
-    it('should publish faked environments', fakeAsync(() => {
-      svc.getEnvironments('foo')
-        .subscribe(val => {
-          expect(val).toEqual([
-            { name: 'test' },
-            { name: 'stage' },
-            { name: 'run'}
-          ]);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should publish faked environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: [
+          { name: 'stage' }, { name: 'run' }, { name: 'test' }
+        ]
+      };
+      // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId').skip(1), done);
+    });
   });
 
   describe('#isApplicationDeployedInEnvironment', () => {
-    it('should be true for vertx-hello in \'test\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-hello', 'test')
-        .subscribe((active: boolean) => {
-          expect(active).toBeTruthy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should be true for included deployments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, true,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'), done);
+    });
 
-    it('should be false for vertx-hello in \'stage\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-hello', 'stage')
-        .subscribe((active: boolean) => {
-          expect(active).toBeFalsy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be true for vertx-hello in \'run\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-hello', 'run')
-        .subscribe((active: boolean) => {
-          expect(active).toBeTruthy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be true for vertx-paint in \'test\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'test')
-        .subscribe((active: boolean) => {
-          expect(active).toBeTruthy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be false for vertx-paint in \'stage\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'stage')
-        .subscribe((active: boolean) => {
-          expect(active).toBeFalsy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be false for vertx-paint in \'run\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-paint', 'run')
-        .subscribe((active: boolean) => {
-          expect(active).toBeFalsy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be false for vertx-wiki in \'test\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-wiki', 'test')
-        .subscribe((active: boolean) => {
-          expect(active).toBeFalsy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be true for vertx-wiki in \'run\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-wiki', 'run')
-        .subscribe((active: boolean) => {
-          expect(active).toBeTruthy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be false for vertx-wiki in \'stage\'', fakeAsync(() => {
-      svc.isApplicationDeployedInEnvironment('foo', 'vertx-wiki', 'stage')
-        .subscribe((active: boolean) => {
-          expect(active).toBeFalsy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should be false for excluded deployments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
   });
 
   describe('#isDeployedInEnvironment', () => {
-    it('should be false for \'stage\'', fakeAsync(() => {
+    it('should be true', fakeAsync(() => {
       svc.isDeployedInEnvironment('foo', 'stage')
-        .subscribe((active: boolean) => {
-          expect(active).toBeFalsy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be true for \'test\'', fakeAsync(() => {
-      svc.isDeployedInEnvironment('foo', 'test')
-        .subscribe((active: boolean) => {
-          expect(active).toBeTruthy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should be true for \'run\'', fakeAsync(() => {
-      svc.isDeployedInEnvironment('foo', 'run')
         .subscribe((active: boolean) => {
           expect(active).toBeTruthy();
         });
