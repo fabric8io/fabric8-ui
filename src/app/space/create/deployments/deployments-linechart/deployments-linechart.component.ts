@@ -24,7 +24,7 @@ import { DeploymentsLinechartData } from './deployments-linechart-data';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'deployments-linechart',
+  selector: 'f8-deployments-linechart',
   templateUrl: './deployments-linechart.component.html',
   styleUrls: ['./deployments-linechart.component.less']
 })

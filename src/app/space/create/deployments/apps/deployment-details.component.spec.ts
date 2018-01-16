@@ -72,7 +72,7 @@ class FakePfngChartSparkline {
 }
 
 @Component({
-  selector: 'deployments-linechart',
+  selector: 'f8-deployments-linechart',
   template: ''
 })
 class FakeDeploymentsLinechart {
