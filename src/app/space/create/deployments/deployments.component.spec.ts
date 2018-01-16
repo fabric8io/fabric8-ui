@@ -16,8 +16,8 @@ import { DeploymentsService } from './services/deployments.service';
   selector: 'deployments-resource-usage',
   template: ''
 })
-
 class FakeDeploymentsResourceUsageComponent {
+  @Input() spaceId: Observable<string>;
   @Input() environments: Observable<Environment[]>;
 }
 

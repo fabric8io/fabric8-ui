@@ -144,17 +144,90 @@ describe('DeploymentsService', () => {
       doMockHttpTest(expectedResponse, false,
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
     });
+
+    it('should be false if no deployments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [ ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
   });
 
   describe('#isDeployedInEnvironment', () => {
-    it('should be true', fakeAsync(() => {
-      svc.isDeployedInEnvironment('foo', 'stage')
-        .subscribe((active: boolean) => {
-          expect(active).toBeTruthy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should be true for included environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, true,
+        svc.isDeployedInEnvironment('foo-spaceId', 'run').skip(1), done);
+    });
+
+    it('should be false for excluded environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, false,
+        svc.isDeployedInEnvironment('foo-spaceId', 'stage').skip(1), done);
+    });
+
+    it('should be false if no environments are deployed', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [ ]
+            }
+          ]
+        }
+      };
+      // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, false,
+        svc.isDeployedInEnvironment('foo-spaceId', 'stage').skip(1), done);
+    });
+
+    it('should be false if no applications exist', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [ ]
+        }
+      };
+      // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, false,
+        svc.isDeployedInEnvironment('foo-spaceId', 'stage').skip(1), done);
+    });
   });
 
   describe('#getVersion', () => {

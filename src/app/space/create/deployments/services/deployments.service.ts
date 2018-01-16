@@ -21,6 +21,7 @@ import { AuthenticationService } from 'ngx-login-client';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import {
+  flatten,
   includes,
   isEqual as deepEqual
 } from 'lodash';
@@ -110,7 +111,12 @@ export class DeploymentsService {
 
   isDeployedInEnvironment(spaceId: string, environmentName: string):
     Observable<boolean> {
-    return Observable.of(true);
+    return this.getApplicationsResponse(spaceId)
+      .map((apps: Applications) => apps.applications)
+      .map((apps: Application[]) => apps.map((app: Application) => app.pipeline))
+      .map((pipes: Environment[][]) => pipes.map((pipe: Environment[]) => pipe.map((env: Environment) => env.name)))
+      .map((pipeEnvNames: string[][]) => flatten(pipeEnvNames))
+      .map((envNames: string[]) => includes(envNames, environmentName));
   }
 
   getVersion(spaceId: string, environmentName: string): Observable<string> {
