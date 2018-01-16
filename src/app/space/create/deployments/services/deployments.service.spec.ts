@@ -287,4 +287,16 @@ describe('DeploymentsService', () => {
     }));
   });
 
+  describe('#getDeploymentNetworkRequests', () => {
+    it('should return a value between 0 and 50', fakeAsync(() => {
+      svc.getDeploymentNetworkRequests('foo', 'bar', 'baz')
+        .subscribe(val => {
+          expect(val).toBeGreaterThanOrEqual(0);
+          expect(val).toBeLessThanOrEqual(50);
+        });
+        tick(DeploymentsService.POLL_RATE_MS + 10);
+        discardPeriodicTasks();
+    }));
+  });
+
 });
