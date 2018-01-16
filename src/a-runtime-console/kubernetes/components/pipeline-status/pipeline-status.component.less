@@ -79,6 +79,7 @@
   content: '\f05e';
   opacity: 1;
 }
+
 /** we have animations on in progress stages */
 .pipeline-status-bar.IN_PROGRESS .clip1:before,
 .pipeline-status-bar.IN_PROGRESS .clip2:before,
@@ -86,7 +87,7 @@
   background-color: #0088ce;
 }
 .pipeline-status-bar.IN_PROGRESS .pipeline-circle {
-  animation: fadeInProgress 0s .7s linear forwards;
+  animation: 0s .7s linear forwards;
 }
 .pipeline-status-bar.IN_PROGRESS .pipeline-circle:after {
   content: '\f021';
@@ -95,7 +96,7 @@
   overflow: hidden;
 }
 .pipeline-status-bar.IN_PROGRESS .pipeline-line:before {
-  animation: progress-rail 5s .5s linear infinite;
+  animation: 5s .5s linear infinite;
   background-color: #0088ce;
   transform: translateX(-100%);
   width: 25%;
@@ -103,12 +104,12 @@
 .pipeline-status-bar {
   display: flex;
   -webkit-align-items: center;
-     -moz-align-items: center;
-          align-items: center;
+  -moz-align-items: center;
+  align-items: center;
   -webkit-flex-direction: column;
-     -moz-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   margin-bottom: -9px;
 }
 .pipeline-status-bar .pipeline-line {
