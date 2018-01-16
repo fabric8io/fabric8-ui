@@ -154,6 +154,14 @@ export class DeploymentsService {
       .startWith(new ScaledMemoryStat(200, 256));
   }
 
+  getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
+    return Observable
+      .interval(DeploymentsService.POLL_RATE_MS)
+      .distinctUntilChanged()
+      .map(() => ({ sent: round(Math.random() * 100, 1), received: round(Math.random() * 100, 1) }))
+      .startWith({ sent: 0, received: 0});
+  }
+
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
     return Observable
       .interval(DeploymentsService.POLL_RATE_MS)
@@ -168,14 +176,6 @@ export class DeploymentsService {
       .distinctUntilChanged()
       .map(() => (new ScaledMemoryStat(Math.floor(Math.random() * 156) + 100, 256)))
       .startWith(new ScaledMemoryStat(200, 256));
-  }
-
-  getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
-    return Observable
-      .interval(DeploymentsService.POLL_RATE_MS)
-      .distinctUntilChanged()
-      .map(() => ({ sent: round(Math.random() * 100, 1), received: round(Math.random() * 100, 1) }))
-      .startWith({ sent: 0, received: 0});
   }
 
   getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
