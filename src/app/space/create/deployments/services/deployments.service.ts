@@ -56,6 +56,7 @@ export interface Application {
 
 export interface Environment {
   name: string;
+  version: string;
 }
 
 export interface EnvironmentStat {
@@ -95,7 +96,7 @@ export class DeploymentsService {
       .distinctUntilChanged(deepEqual);
   }
 
-  getEnvironments(spaceId: string): Observable<Environment[]> {
+  getEnvironments(spaceId: string): Observable<ModelEnvironment[]> {
     return this.getEnvironmentsResponse(spaceId)
       .map((envs: EnvironmentStat[]) => envs.map((env: EnvironmentStat) => ({ name: env.name} as ModelEnvironment)))
       .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
@@ -119,8 +120,9 @@ export class DeploymentsService {
       .map((envNames: string[]) => includes(envNames, environmentName));
   }
 
-  getVersion(spaceId: string, environmentName: string): Observable<string> {
-    return Observable.of('1.0.2');
+  getVersion(spaceId: string, applicationName: string, environmentName: string): Observable<string> {
+    return this.getDeployment(spaceId, applicationName, environmentName)
+      .map((env: Environment) => env.version);
   }
 
   scalePods(
@@ -220,6 +222,12 @@ export class DeploymentsService {
     return this.getApplicationsResponse(spaceId)
       .flatMap((apps: Applications) => apps.applications)
       .filter((app: Application) => app.name === applicationName);
+  }
+
+  private getDeployment(spaceId: string, applicationName: string, environmentName: string): Observable<Environment> {
+    return this.getApplication(spaceId, applicationName)
+      .map((app: Application) => app.pipeline)
+      .map((envs: Environment[]) => envs.filter((env: Environment) => env.name === environmentName)[0]);
   }
 
   private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {

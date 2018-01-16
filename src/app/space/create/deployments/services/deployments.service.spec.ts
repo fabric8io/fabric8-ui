@@ -231,13 +231,25 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getVersion', () => {
-    it('should return 1.0.2', fakeAsync(() => {
-      svc.getVersion('foo', 'bar').subscribe(val => {
-        expect(val).toEqual('1.0.2');
-      });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should return 1.0.2', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'stage',
+                  version: '1.0.2'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, expectedResponse.data.applications[0].pipeline[0].version,
+        svc.getVersion('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
   });
 
   describe('#getDeploymentCpuStat', () => {

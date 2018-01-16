@@ -273,7 +273,7 @@ describe('DeploymentCardComponent', () => {
     });
 
     it('should be set from mockSvc.getVersion result', () => {
-      expect(mockSvc.getVersion).toHaveBeenCalledWith('mockAppId', 'mockEnvironment');
+      expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
       expect(el.textContent).toEqual('1.2.3');
     });
   });
