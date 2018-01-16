@@ -61,6 +61,11 @@ export interface Environment {
 
 export interface EnvironmentStat {
   name: string;
+  quota: Quota;
+}
+
+export interface Quota {
+  cpucores: CpuStat;
 }
 
 @Injectable()
@@ -163,11 +168,8 @@ export class DeploymentsService {
   }
 
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
-    return Observable
-      .interval(DeploymentsService.POLL_RATE_MS)
-      .distinctUntilChanged()
-      .map(() => ({ used: Math.floor(Math.random() * 9) + 1, quota: 10 } as CpuStat))
-      .startWith({ used: 3, quota: 10 } as CpuStat);
+    return this.getEnvironment(spaceId, environmentName)
+      .map((env: EnvironmentStat) => env.quota.cpucores);
   }
 
   getEnvironmentMemoryStat(spaceId: string, environmentName: string): Observable<MemoryStat> {
@@ -244,6 +246,12 @@ export class DeploymentsService {
       this.envsObservables.set(spaceId, subject);
     }
     return this.envsObservables.get(spaceId);
+  }
+
+  private getEnvironment(spaceId: string, environmentName: string): Observable<EnvironmentStat> {
+    return this.getEnvironmentsResponse(spaceId)
+      .concatMap((envs: EnvironmentStat[]) => Observable.from(envs))
+      .filter((env: EnvironmentStat) => env.name === environmentName);
   }
 
 }

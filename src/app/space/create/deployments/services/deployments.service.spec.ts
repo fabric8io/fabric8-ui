@@ -304,24 +304,21 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getEnvironmentCpuStat', () => {
-    it('should return a "quota" value of 10', fakeAsync(() => {
-      svc.getEnvironmentCpuStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.quota).toBe(10);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should return a "used" value between 1 and 10', fakeAsync(() => {
-      svc.getEnvironmentCpuStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.used).toBeGreaterThanOrEqual(1);
-          expect(val.used).toBeLessThanOrEqual(10);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn) => {
+      const expectedResponse = {
+        data: [{
+          name: 'stage',
+          quota: {
+            cpucores: {
+              quota: 10,
+              used: 8
+            }
+          }
+        }]
+      };
+      doMockHttpTest(expectedResponse, expectedResponse.data[0].quota.cpucores,
+        svc.getEnvironmentCpuStat('foo-spaceId', 'stage'), done);
+    });
   });
 
   describe('#getEnvironmentMemoryStat', () => {
