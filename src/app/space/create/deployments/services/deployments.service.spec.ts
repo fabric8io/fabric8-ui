@@ -214,4 +214,26 @@ describe('DeploymentsService', () => {
     }));
   });
 
+  describe('#getDeploymentNetworkStat', () => {
+    it('should return a "sent" value between 0 and 100', fakeAsync(() => {
+      svc.getDeploymentNetworkStat('foo', 'bar', 'baz')
+        .subscribe(val => {
+          expect(val.sent).toBeGreaterThanOrEqual(0);
+          expect(val.sent).toBeLessThanOrEqual(100);
+        });
+        tick(DeploymentsService.POLL_RATE_MS + 10);
+        discardPeriodicTasks();
+    }));
+
+    it('should return a "received" value between 0 and 100', fakeAsync(() => {
+      svc.getDeploymentNetworkStat('foo', 'bar', 'baz')
+        .subscribe(val => {
+          expect(val.received).toBeGreaterThanOrEqual(0);
+          expect(val.received).toBeLessThanOrEqual(100);
+        });
+        tick(DeploymentsService.POLL_RATE_MS + 10);
+        discardPeriodicTasks();
+    }));
+  });
+
 });
