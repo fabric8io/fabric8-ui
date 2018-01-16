@@ -3,10 +3,12 @@
     <div class="container-fluid content padding-top-15 internal-page internal-border">
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 feature-content">
         <div class="col-xs-12">
-          <i class="fa fa-flask fa-5x"></i>
-          <h2>Internal Features</h2>
-          <p>This feature is open to Red Hat users only. You can manage pre-production features on your <a [routerLink]="profileLink">profile</a> page.</p>
-        </div>
+          <i class="fa fa-lock fa-5x"></i>
+          <h2>Internal Features Opt-in</h2>
+          <p>These features are only available to Red Hat users and have no guarantee of performance or stability.
+            Use theses at your own risk.</p>
+          <button [routerLink]="profileLink">Opt-in to Internal Features</button>
+         </div>
       </div>
     </div>
   </div>
@@ -15,8 +17,10 @@
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 feature-content">
         <div class="col-xs-12">
           <i class="fa fa-flask fa-5x"></i>
-          <h2>Experimental Features</h2>
-          <p>This feature is experimental. You can manage pre-production features on your <a [routerLink]="profileLink">profile</a> page.</p>
+          <h2>Experimental Features Opt-in</h2>
+          <p>These features are currently in beta testing and have no guarantee of performance or stability.
+            Use theses at your own risk.</p>
+            <button [routerLink]="profileLink">Opt-in to Experimental Features</button>
         </div>
       </div>
     </div>
@@ -26,8 +30,10 @@
       <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 feature-content">
         <div class="col-xs-12">
           <i class="fa fa-flask fa-5x"></i>
-          <h2>Beta Features</h2>
-          <p>This feature is in beta. You can manage pre-production features on your <a [routerLink]="profileLink">profile</a> page.</p>
+          <h2>Beta Features Opt-in</h2>
+          <p>These features are currently in beta testing and have no guarantee of performance or stability.
+            Use theses at your own risk.</p>
+          <button [routerLink]="profileLink">Opt-in to Beta Features</button>
         </div>
       </div>
     </div>
