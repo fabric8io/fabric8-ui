@@ -363,4 +363,38 @@ describe('DeploymentsService', () => {
     }));
   });
 
+  describe('#getPods', () => {
+    it('should return pods array', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'stage',
+                  pods: {
+                    total: 6,
+                    running: 1,
+                    starting: 2,
+                    stopping: 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, {
+        total: 6,
+        pods: [
+          [ 'Running', 1 ],
+          [ 'Starting', 2 ],
+          [ 'Stopping', 3 ]
+        ]
+      },
+        svc.getPods('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
+  });
+
 });

@@ -29,7 +29,7 @@ import {
 import { CpuStat } from '../models/cpu-stat';
 import { Environment as ModelEnvironment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
-import { Pods } from '../models/pods';
+import { Pods as ModelPods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 
 export interface NetworkStat {
@@ -56,6 +56,7 @@ export interface Application {
 
 export interface Environment {
   name: string;
+  pods: Pods;
   version: string;
 }
 
@@ -67,6 +68,13 @@ export interface EnvironmentStat {
 export interface Quota {
   cpucores: CpuStat;
   memory: MemoryStat;
+}
+
+export interface Pods {
+  running: number;
+  starting: number;
+  stopping: number;
+  total: number;
 }
 
 @Injectable()
@@ -140,8 +148,19 @@ export class DeploymentsService {
     return Observable.of(`Scaled ${applicationId} in ${spaceId}/${environmentName} to ${desiredReplicas} replicas`);
   }
 
-  getPods(spaceId: string, applicationId: string, environmentName: string): Observable<Pods> {
-    return Observable.of({ pods: [['Running', 2], ['Terminating', 1]], total: 3 } as Pods);
+  getPods(spaceId: string, applicationId: string, environmentName: string): Observable<ModelPods> {
+    return this.getDeployment(spaceId, applicationId, environmentName)
+      .map((env: Environment) => env.pods)
+      .map((pods: Pods) => {
+        return {
+          total: pods.total,
+          pods: [
+            [ 'Running', pods.running ],
+            [ 'Starting', pods.starting ],
+            [ 'Stopping', pods.stopping ]
+          ]
+        } as ModelPods;
+      });
   }
 
   getDeploymentCpuStat(spaceId: string, applicationName: string, environmentName: string): Observable<CpuStat> {
