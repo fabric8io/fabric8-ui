@@ -31,6 +31,7 @@ import {
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
+import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
@@ -258,24 +259,51 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getDeploymentCpuStat', () => {
-    it('should return a "quota" value of 10', fakeAsync(() => {
-      svc.getDeploymentCpuStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.quota).toBe(10);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should combine timeseries and quota data', (done: DoneFn) => {
+      const timeseriesResponse = {
+        data: {
+          cores: {
+            time: 1,
+            value: 2
+          }
+        }
+      };
+      const quotaResponse = {
+        data: [{
+          name: 'foo-env',
+          quota: {
+            cpucores: {
+              quota: 3,
+              used: 4
+            }
+          }
+        }]
+      };
 
-    it('should return a "used" value between 1 and 10', fakeAsync(() => {
-      svc.getDeploymentCpuStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.used).toBeGreaterThanOrEqual(1);
-          expect(val.used).toBeLessThanOrEqual(10);
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (timeseriesRegex.test(requestUrl)) {
+          responseBody = timeseriesResponse;
+        } else {
+          responseBody = quotaResponse;
+        }
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env')
+        .subscribe((stat: CpuStat) => {
+          expect(stat).toEqual({ used: 2, quota: 3 });
+          subscription.unsubscribe();
+          done();
         });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    });
   });
 
   describe('#getDeploymentMemoryStat', () => {

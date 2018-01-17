@@ -183,11 +183,13 @@ export class DeploymentsService {
   }
 
   getDeploymentCpuStat(spaceId: string, applicationName: string, environmentName: string): Observable<CpuStat> {
-    return Observable
-      .interval(DeploymentsService.POLL_RATE_MS)
-      .distinctUntilChanged()
-      .map(() => ({ used: Math.floor(Math.random() * 9) + 1, quota: 10 } as CpuStat))
-      .startWith({ used: 3, quota: 10 } as CpuStat);
+    const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
+      .map((t: TimeseriesData) => t.cores);
+    const quota = this.getEnvironmentCpuStat(spaceId, environmentName)
+      .map((stat: CpuStat) => stat.quota);
+
+      // TODO: propagate CoresSeries timestamp to caller
+      return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota }));
   }
 
   getDeploymentMemoryStat(spaceId: string, applicationName: string, environmentName: string): Observable<MemoryStat> {
