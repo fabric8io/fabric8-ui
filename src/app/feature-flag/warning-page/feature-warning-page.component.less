@@ -1,0 +1,40 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+
+.featureLevel(@color-for-feature) {
+  &-page {
+    height: 100vh;
+    background-color: @color-pf-black-200;
+    text-align: center;
+    .feature-content {
+      margin-top: 5%;
+      i {
+        color: @color-for-feature;
+      }
+    }
+  }
+}
+
+// EXPERIMENTAL
+.experimental {
+  .featureLevel(@color-experimental);
+}
+
+// BETA
+.beta {
+  .featureLevel(@color-beta);
+}
+
+// INTERNAL
+.internal {
+  .featureLevel(@color-internal);
+}
+
+// NOT-APPLICABLE
+.not-applicable {
+  .featureLevel(@color-not-applicable);
+}
+
+// NOT-LOGGED_IN
+.not-Logged-in {
+  .featureLevel(@color-not-logged-in);
+}

@@ -86,7 +86,7 @@ export const profile = {
   }
 };
 
-export const context1: Context = {
+export const context1 = {
   user: {
     'attributes': {
       'fullName': 'Corinne Krych',
@@ -146,7 +146,7 @@ export const context1: Context = {
   },
   name: 'space1',
   path: '/ckrych@redhat.com/space1'
-};
+} as Context;
 
 export const context2 = cloneDeep(context1);
 context2.name = 'space2';

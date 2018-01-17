@@ -15,6 +15,7 @@ export class ExtUser extends User {
 export class ExtProfile extends Profile {
   contextInformation: any;
   registrationCompleted: boolean;
+  featureLevel: string;
 }
 
 @Injectable()

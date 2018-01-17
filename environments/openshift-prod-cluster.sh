@@ -50,6 +50,8 @@ export FABRIC8_AUTH_API_URL=https://auth.openshift.io/api/
 
 export FABRIC8_FORGE_API_URL="https://forge.api.openshift.io"
 
+# this URL is used in dev mode only, for now feature-toggles.service.ts used WITH url as a proxy
+# export FABRIC8_FEATURE_TOGGLES_API_URL=http://localhost:8080/api/api/
 
 echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_SERVER}/"
 
@@ -68,6 +70,7 @@ echo "FABRIC8_SSO_API_URL            ${KEYCLOAK_SAAS_URL}"
 echo "FABRIC8_WIT_API_URL            ${FABRIC8_WIT_API_URL}"
 echo "FABRIC8_AUTH_API_URL"          ${FABRIC8_AUTH_API_URL}""
 echo "FABRIC8_FORGE_API_URL          ${FABRIC8_FORGE_API_URL}"
+# echo "FABRIC8_FEATURE_TOGGLES_API_URL          ${FABRIC8_FEATURE_TOGGLES_API_URL}"
 echo "FABRIC8_REALM                  ${FABRIC8_REALM}"
 echo "WS_K8S_API_SERVER              ${WS_K8S_API_SERVER}"
 echo "BRANDING                       ${BRANDING}"

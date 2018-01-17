@@ -8,15 +8,15 @@
 <main class="">
   <div class="">
     <router-outlet name="action"></router-outlet>
-    <div [hidden]="!isExperimentalFeature">
-      <f8-exp-feature-banner>
-      </f8-exp-feature-banner>
-      <div [hidden]="experimentalFeatureEnabled">
-        <f8-exp-feature-page (onExperimentalFeaturesEnabled)="updateFeatureEnabled($event)">
-        </f8-exp-feature-page>
+    <div [hidden]="!isExperimentalFeature"> <!--if not exp feature, hide-->
+      <feature-banner level="{{featureEnablementLevel}}">
+      </feature-banner>
+      <div [hidden]="experimentalFeatureEnabled"> <!-- not enable for this user -->
+        <feature-warning-page level="{{featureEnablementLevel}}">
+        </feature-warning-page>
       </div>
     </div>
-    <div [hidden]="isExperimentalFeature && !experimentalFeatureEnabled" [class.experimental-border]="isExperimentalFeature">
+    <div [hidden]="isExperimentalFeature && !experimentalFeatureEnabled">
       <router-outlet></router-outlet>
     </div>
   </div>
