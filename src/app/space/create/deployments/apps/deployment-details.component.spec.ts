@@ -86,11 +86,13 @@ describe('DeploymentDetailsComponent', () => {
   let cpuStatObservable: BehaviorSubject<CpuStat>;
   let memStatObservable: BehaviorSubject<MemoryStat>;
   let netStatObservable: BehaviorSubject<NetworkStat>;
+  let reqStatObservable: BehaviorSubject<number>;
 
   beforeEach(() => {
     cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 } as CpuStat);
     memStatObservable = new BehaviorSubject({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
     netStatObservable = new BehaviorSubject({ sent: 1, received: 2 } as NetworkStat);
+    reqStatObservable = new BehaviorSubject(25);
 
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
@@ -101,6 +103,7 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
     mockSvc.getDeploymentNetworkStat.and.returnValue(netStatObservable);
+    mockSvc.getDeploymentNetworkRequests.and.returnValue(reqStatObservable);
   });
 
   initContext(DeploymentDetailsComponent, HostComponent, {
@@ -204,6 +207,32 @@ describe('DeploymentDetailsComponent', () => {
     });
   });
 
+  describe('requests label', () => {
+    let de: DebugElement;
+
+    beforeEach(function(this: Context) {
+      let charts = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
+      let requestsChart = charts[3];
+      de = requestsChart.query(By.directive(FakeDeploymentGraphLabelComponent));
+    });
+
+    it('should call to service', () => {
+      expect(mockSvc.getDeploymentNetworkRequests).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
+    });
+
+    it('should not have units', () => {
+      expect(de.componentInstance.dataMeasure).toBeFalsy();
+    });
+
+    it('should use value from service result', () => {
+      expect(de.componentInstance.value).toEqual(25);
+    });
+
+    it('should have no upper bound', () => {
+      expect(de.componentInstance.valueUpperBound).toBeFalsy();
+    });
+  });
+
   describe('charts', () => {
     it('by default should be the default data duration divided by the polling rate', function(this: Context) {
       let detailsComponent = this.testedDirective;
@@ -237,6 +266,15 @@ describe('DeploymentDetailsComponent', () => {
         times(MAX_MEM_SPARKLINE_ELEMENTS + 10, () => memStatObservable.next({ used: 3, quota: 4, units: 'GB' }));
         expect(detailsComponent.memData.xData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
         expect(detailsComponent.memData.yData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
+      });
+
+      it('should have its network request data bounded when enough data has been emitted', function(this: Context) {
+        const MAX_MEM_SPARKLINE_ELEMENTS = 6;
+        let detailsComponent = this.testedDirective;
+        detailsComponent.setChartMaxElements(MAX_MEM_SPARKLINE_ELEMENTS);
+        times(MAX_MEM_SPARKLINE_ELEMENTS + 10, () => reqStatObservable.next(10));
+        expect(detailsComponent.reqData.xData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
+        expect(detailsComponent.reqData.yData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
       });
     });
 

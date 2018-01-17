@@ -53,6 +53,13 @@ export class DeploymentDetailsComponent {
     ]
   };
 
+  public reqData: any = {
+    dataAvailable: true,
+    total: 0,
+    xData: ['time'],
+    yData: ['requests']
+  };
+
   public cpuConfig: any = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('cpu-chart')
@@ -68,6 +75,10 @@ export class DeploymentDetailsComponent {
     showXAxis: true
   };
 
+  public reqConfig: any = {
+    chartId: uniqueId('req-chart')
+  };
+
   cpuStat: Observable<CpuStat>;
   memStat: Observable<MemoryStat>;
   cpuTime: number;
@@ -78,6 +89,7 @@ export class DeploymentDetailsComponent {
   memUnits: string;
   memMax: number;
   netVal: number;
+  reqVal: number;
 
   sparklineMaxElements: number;
 
@@ -123,6 +135,16 @@ export class DeploymentDetailsComponent {
           this.netData.yData[0].push(stat.sent);
           this.netData.yData[1].push(stat.received);
           this.trimLinechartData(this.netData);
+        })
+    );
+
+    this.subscriptions.push(
+      this.deploymentsService.getDeploymentNetworkRequests(this.spaceId, this.applicationId, this.environment.name)
+        .subscribe(stat => {
+          this.reqVal = stat;
+          this.reqData.xData.push(+new Date());
+          this.reqData.yData.push(stat);
+          this.trimSparklineData(this.reqData);
         })
     );
   }

@@ -170,6 +170,14 @@ export class DeploymentsService {
       .startWith({ sent: 0, received: 0});
   }
 
+  getDeploymentNetworkRequests(spaceId: string, applicationId: string, environmentName: string): Observable<number> {
+    return Observable
+      .interval(DeploymentsService.POLL_RATE_MS)
+      .distinctUntilChanged()
+      .map(() => Math.floor(Math.random() * 50))
+      .startWith(25);
+  }
+
   getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
     return Observable.of('http://example.com/');
   }
