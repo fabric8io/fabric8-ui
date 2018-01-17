@@ -295,29 +295,37 @@ export class DeploymentsService {
   }
 
   private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
-    const key = `${spaceId}:${applicationId}:${environmentName}`;
-    if (!this.timeseriesObservables.has(key)) {
-      const currentTime = +Date.now();
-      const emptyResult: TimeseriesData = {
-        cores: {
-          time: currentTime,
-          value: 0
-        },
-        memory: {
-          time: currentTime,
-          value: 0
-        }
-      };
-      const subject = new BehaviorSubject<TimeseriesData>(emptyResult);
+    const currentTime = +Date.now();
+    const emptyResult: TimeseriesData = {
+      cores: {
+        time: currentTime,
+        value: 0
+      },
+      memory: {
+        time: currentTime,
+        value: 0
+      }
+    };
 
-      const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
-      const observable = this.pollTimer
-        .concatMap(() => this.http.get(url, { headers: this.headers }))
-        .map((response: Response) => (response.json() as TimeseriesResponse).data);
-        observable.subscribe(subject);
-        this.timeseriesObservables.set(key, subject);
-     }
-    return this.timeseriesObservables.get(key);
+    return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+      .flatMap((deployed: boolean) => {
+        if (deployed) {
+          const key = `${spaceId}:${applicationId}:${environmentName}`;
+          if (!this.timeseriesObservables.has(key)) {
+            const subject = new BehaviorSubject<TimeseriesData>(emptyResult);
+
+            const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
+            const observable = Observable.concat(Observable.of(0), this.pollTimer)
+              .concatMap(() => this.http.get(url, { headers: this.headers }))
+              .map((response: Response) => (response.json() as TimeseriesResponse).data);
+            observable.subscribe(subject);
+            this.timeseriesObservables.set(key, subject);
+          }
+          return this.timeseriesObservables.get(key);
+        } else {
+          return Observable.of(emptyResult);
+        }
+      });
   }
 
 }

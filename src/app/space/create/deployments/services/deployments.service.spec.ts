@@ -59,7 +59,7 @@ describe('DeploymentsService', () => {
           provide: AuthenticationService, useValue: mockAuthService
         },
         {
-          provide: WIT_API_URL, useValue: 'http://example.com'
+          provide: WIT_API_URL, useValue: 'http://example.com/'
         },
         DeploymentsService
       ]
@@ -268,6 +268,20 @@ describe('DeploymentsService', () => {
           }
         }
       };
+      const deploymentResponse = {
+        data: {
+          applications: [
+            {
+              name: 'foo-app',
+              pipeline: [
+                {
+                  name: 'foo-env'
+                }
+              ]
+            }
+          ]
+        }
+      };
       const quotaResponse = {
         data: [{
           name: 'foo-env',
@@ -282,10 +296,13 @@ describe('DeploymentsService', () => {
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
         const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/apps\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
         if (timeseriesRegex.test(requestUrl)) {
           responseBody = timeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
         } else {
           responseBody = quotaResponse;
         }
@@ -316,6 +333,20 @@ describe('DeploymentsService', () => {
           }
         }
       };
+      const deploymentResponse = {
+        data: {
+          applications: [
+            {
+              name: 'foo-app',
+              pipeline: [
+                {
+                  name: 'foo-env'
+                }
+              ]
+            }
+          ]
+        }
+      };
       const quotaResponse = {
         data: [{
           name: 'foo-env',
@@ -330,10 +361,13 @@ describe('DeploymentsService', () => {
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
         const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/apps\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
         if (timeseriesRegex.test(requestUrl)) {
           responseBody = timeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
         } else {
           responseBody = quotaResponse;
         }
