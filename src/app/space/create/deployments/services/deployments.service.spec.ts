@@ -68,7 +68,7 @@ describe('DeploymentsService', () => {
     mockBackend = TestBed.get(XHRBackend);
   });
 
-  function doMockHttpTest<U>(response: any, expected: U, obs: Observable<U>, done: DoneFn): void {
+  function doMockHttpTest<U>(response: any, expected: U, obs: Observable<U>, done?: DoneFn): void {
     const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
@@ -81,7 +81,9 @@ describe('DeploymentsService', () => {
     obs.subscribe((data: U) => {
       expect(data).toEqual(expected);
       subscription.unsubscribe();
-      done();
+      if (done) {
+        done();
+      }
     });
   }
 
@@ -189,7 +191,8 @@ describe('DeploymentsService', () => {
     });
 
     it('should be false for excluded environments', (done: DoneFn) => {
-      const expectedResponse = {
+      // prep the service first to avoid "distinctUntilChanged" emission block
+      let expectedResponse = {
         data: {
           applications: [
             {
@@ -204,12 +207,46 @@ describe('DeploymentsService', () => {
         }
       };
       // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, true,
+        svc.isDeployedInEnvironment('foo-spaceId', 'run').skip(1));
+      expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
       doMockHttpTest(expectedResponse, false,
-        svc.isDeployedInEnvironment('foo-spaceId', 'stage').skip(1), done);
+        svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
 
     it('should be false if no environments are deployed', (done: DoneFn) => {
-      const expectedResponse = {
+      // prep the service first to avoid "distinctUntilChanged" emission block
+      let expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, true,
+        svc.isDeployedInEnvironment('foo-spaceId', 'run').skip(1));
+      expectedResponse = {
         data: {
           applications: [
             {
@@ -219,20 +256,36 @@ describe('DeploymentsService', () => {
           ]
         }
       };
-      // skip the first result since it will be a BehaviorSubject default value
       doMockHttpTest(expectedResponse, false,
-        svc.isDeployedInEnvironment('foo-spaceId', 'stage').skip(1), done);
+        svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
 
     it('should be false if no applications exist', (done: DoneFn) => {
-      const expectedResponse = {
+      // prep the service first to avoid "distinctUntilChanged" emission block
+      let expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      // skip the first result since it will be a BehaviorSubject default value
+      doMockHttpTest(expectedResponse, true,
+        svc.isDeployedInEnvironment('foo-spaceId', 'run').skip(1));
+      expectedResponse = {
         data: {
           applications: [ ]
         }
       };
-      // skip the first result since it will be a BehaviorSubject default value
       doMockHttpTest(expectedResponse, false,
-        svc.isDeployedInEnvironment('foo-spaceId', 'stage').skip(1), done);
+        svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
   });
 

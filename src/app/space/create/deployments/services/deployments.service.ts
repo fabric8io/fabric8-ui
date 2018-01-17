@@ -140,7 +140,8 @@ export class DeploymentsService {
     Observable<boolean> {
     return this.getApplication(spaceId, applicationName)
       .map((app: Application) => app.pipeline)
-      .map((pipe: Environment[]) => includes(pipe.map((p: Environment) => p.name), environmentName));
+      .map((pipe: Environment[]) => includes(pipe.map((p: Environment) => p.name), environmentName))
+      .distinctUntilChanged();
   }
 
   isDeployedInEnvironment(spaceId: string, environmentName: string):
@@ -150,12 +151,14 @@ export class DeploymentsService {
       .map((apps: Application[]) => apps.map((app: Application) => app.pipeline))
       .map((pipes: Environment[][]) => pipes.map((pipe: Environment[]) => pipe.map((env: Environment) => env.name)))
       .map((pipeEnvNames: string[][]) => flatten(pipeEnvNames))
-      .map((envNames: string[]) => includes(envNames, environmentName));
+      .map((envNames: string[]) => includes(envNames, environmentName))
+      .distinctUntilChanged();
   }
 
   getVersion(spaceId: string, applicationName: string, environmentName: string): Observable<string> {
     return this.getDeployment(spaceId, applicationName, environmentName)
-      .map((env: Environment) => env.version);
+      .map((env: Environment) => env.version)
+      .distinctUntilChanged();
   }
 
   scalePods(
@@ -179,7 +182,8 @@ export class DeploymentsService {
             [ 'Stopping', pods.stopping ]
           ]
         } as ModelPods;
-      });
+      })
+      .distinctUntilChanged(deepEqual);
   }
 
   getDeploymentCpuStat(spaceId: string, applicationName: string, environmentName: string): Observable<CpuStat> {
