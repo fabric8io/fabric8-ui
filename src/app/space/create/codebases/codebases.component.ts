@@ -301,22 +301,60 @@ export class CodebasesComponent implements OnDestroy, OnInit {
    * Update latest codebases for current space
    */
   private updateCodebases(): void {
-    // Get codebases
-    this.subscriptions.push(this.codebasesService.getCodebases(this.context.space.id)
-      .subscribe(codebases => {
-        if (codebases != undefined && codebases.length > 0) {
-          this.allCodebases = codebases;
-          this.codebases = cloneDeep(codebases);
-          this.codebases.unshift({} as Codebase); // Add empty object for row header
-          this.applyFilters(this.appliedFilters);
-        } else {
-          // clear the codebases list:
-          this.allCodebases = [];
-          this.codebases = [];
-        }
-      }, error => {
-        this.handleError('Failed to retrieve codebases', NotificationType.DANGER);
-      }));
+    this.fetchCodebases().subscribe((codebases: Codebase[]) => {
+      if (codebases != undefined && codebases.length > 0) {
+        this.allCodebases = codebases;
+        this.codebases = cloneDeep(codebases);
+        this.codebases.unshift({} as Codebase); // Add empty object for row header
+        this.applyFilters(this.appliedFilters);
+      } else {
+        // clear the codebases list:
+        this.allCodebases = [];
+        this.codebases = [];
+      }
+    }, error => {
+      this.handleError('Failed to retrieve codebases', NotificationType.DANGER);
+    });
+  }
+
+  /**
+   * Fetch the list of codebases and the related data for each codebase.
+   * @returns {Observable<Codebase[]>}
+   */
+  private fetchCodebases(): Observable<Codebase[]> {
+    return this.codebasesService.getCodebases(this.context.space.id).flatMap(codebases => {
+      if (codebases.length === 0) {
+        return Observable.of([]);
+      }
+      return Observable.forkJoin(
+        codebases.map((codebase: Codebase) => {
+          if (!this.isGitHubHtmlUrlInvalid(codebase)) {
+            return this.gitHubService.getRepoDetailsByUrl(codebase.attributes.url).map(gitHubRepoDetails => {
+              codebase.gitHubRepo = {};
+              codebase.gitHubRepo.htmlUrl = gitHubRepoDetails.html_url;
+              codebase.gitHubRepo.fullName = gitHubRepoDetails.full_name;
+              codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
+              codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
+              return codebase;
+            }).first();
+          } else {
+            this.handleError(`Invalid URL: ${codebase.attributes.url}`, NotificationType.WARNING);
+          }
+        })
+      );
+    }).last();
+  }
+
+  /**
+   * Helper to test if codebase contains a valid GitHub HTML URL
+   *
+   * @returns {boolean}
+   */
+  private isGitHubHtmlUrlInvalid(codebase: Codebase): boolean {
+    return (codebase.attributes.url === undefined
+      || codebase.attributes.url.trim().length === 0
+      || codebase.attributes.url.indexOf('https://github.com') === -1
+      || codebase.attributes.url.indexOf('.git') === -1);
   }
 
   private handleError(error: string, type: NotificationType) {

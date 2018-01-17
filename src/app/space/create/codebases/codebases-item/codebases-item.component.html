@@ -5,10 +5,10 @@
 <div class="list-pf-content-wrapper">
   <div class="list-pf-main-content">
     <div class="list-pf-title">
-      <a [href]="htmlUrl" target="_blank">{{fullName}}</a>
+      <a [href]="codebase.gitHubRepo.htmlUrl" target="_blank">{{codebase.gitHubRepo.fullName}}</a>
     </div>
-    <div class="list-pf-description">{{createdDate | date:'medium'}}</div>
-    <div class="list-pf-description">{{lastCommitDate | date:'medium'}}</div>
+    <div class="list-pf-description">{{codebase.gitHubRepo.createdAt | date:'medium'}}</div>
+    <div class="list-pf-description">{{codebase.gitHubRepo.pushedAt | date:'medium'}}</div>
   </div>
   <div class="list-pf-additional-content">
     <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running"></codebases-item-workspaces>

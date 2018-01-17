@@ -49,5 +49,7 @@ export class GenericLinks {
 // For filtering GitHub repo details
 export class GitHubRepo {
   createdAt?: string;
+  fullName?: string;
+  htmlUrl?: string;
   pushedAt?: string;
 }

@@ -13,14 +13,10 @@ import { CodebasesItemComponent } from './codebases-item.component';
 
 describe('Codebases Item Component', () => {
   let broadcasterMock: any;
-  let gitHubServiceMock: any;
-  let notificationMock: any;
   let fixture, codebases, codebase;
 
   beforeEach(() => {
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['on']);
-    gitHubServiceMock = jasmine.createSpyObj('GitHubService', ['getRepoDetailsByUrl']);
-    notificationMock = jasmine.createSpyObj('Notifications', ['message']);
 
     TestBed.configureTestingModule({
       imports: [FormsModule, HttpModule],
@@ -28,12 +24,6 @@ describe('Codebases Item Component', () => {
       providers: [
         {
           provide: Broadcaster, useValue: broadcasterMock
-        },
-        {
-          provide: GitHubService, useValue: gitHubServiceMock
-        },
-        {
-          provide: Notifications, useValue: notificationMock
         }
       ],
       // Tells the compiler not to error on unknown elements and attributes
@@ -46,6 +36,10 @@ describe('Codebases Item Component', () => {
         'stackId': '',
         'type': 'git',
         'url': 'https://github.com/fabric8-services/fabric8-wit.git'
+      },
+      'gitHubRepo': {
+        'htmlUrl': 'https://github.com/fabric8-services/fabric8-wit',
+        'fullName': 'fabric8-services/fabric8-wit'
       },
       'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8',
       'links': {
@@ -67,11 +61,10 @@ describe('Codebases Item Component', () => {
       'name': 'https://github.com/fabric8-services/fabric8-wit',
       'url': 'https///github.com/fabric8-services/fabric8-wit'
     };
-    gitHubServiceMock.getRepoDetailsByUrl.and.returnValue(Observable.of(expectedGitHubRepoDetails));
     fixture = TestBed.createComponent(CodebasesItemComponent);
   });
 
-  it('Init component succesfully', async(() => {
+  it('Init component successfully', async(() => {
     // given
     let comp = fixture.componentInstance;
     let debug = fixture.debugElement;
