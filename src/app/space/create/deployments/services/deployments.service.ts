@@ -316,8 +316,11 @@ export class DeploymentsService {
 
             const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
             const observable = Observable.concat(Observable.of(0), this.pollTimer)
-              .concatMap(() => this.http.get(url, { headers: this.headers }))
-              .map((response: Response) => (response.json() as TimeseriesResponse).data);
+              .concatMap(() =>
+                this.http.get(url, { headers: this.headers })
+                  .map((response: Response) => (response.json() as TimeseriesResponse).data)
+                  .catch(() => Observable.of(emptyResult))
+              );
             observable.subscribe(subject);
             this.timeseriesObservables.set(key, subject);
           }
