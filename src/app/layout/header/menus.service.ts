@@ -142,5 +142,4 @@ export class MenusService {
     }
     return res;
   }
-  
 }

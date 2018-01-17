@@ -9,7 +9,7 @@ import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'feature-banner',
+  selector: 'f8-feature-banner',
   templateUrl: './feature-banner.component.html',
   styleUrls: ['./feature-banner.component.less']
 })

@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
 import 'rxjs/operators/map';
 
 @Component({
-  selector: 'feature-warning-page',
+  selector: 'f8-feature-warning-page',
   templateUrl: './feature-warning-page.component.html',
   styleUrls: ['./feature-warning-page.component.less']
 })

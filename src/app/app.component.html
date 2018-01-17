@@ -9,11 +9,11 @@
   <div class="">
     <router-outlet name="action"></router-outlet>
     <div [hidden]="!isExperimentalFeature"> <!--if not exp feature, hide-->
-      <feature-banner level="{{featureEnablementLevel}}">
-      </feature-banner>
+      <f8-feature-banner level="{{featureEnablementLevel}}">
+      </f8-feature-banner>
       <div [hidden]="experimentalFeatureEnabled"> <!-- not enable for this user -->
-        <feature-warning-page level="{{featureEnablementLevel}}">
-        </feature-warning-page>
+        <f8-feature-warning-page level="{{featureEnablementLevel}}">
+        </f8-feature-warning-page>
       </div>
     </div>
     <div [hidden]="isExperimentalFeature && !experimentalFeatureEnabled">
