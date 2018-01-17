@@ -139,8 +139,8 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   // Filter
 
-  applyFilters(filters: Filter[]): void {
-    this.appliedFilters = filters;
+  applyFilters(): void {
+    let filters = this.appliedFilters;
     this._spaces = [];
     if (filters && filters.length > 0) {
       this.allSpaces.forEach((space) => {
@@ -152,11 +152,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       this._spaces = cloneDeep(this.allSpaces);
     }
     this.resultsCount = this._spaces.length;
-  }
-
-  filterChange($event: FilterEvent): void {
-    this.applyFilters($event.appliedFilters);
-    this.sort();
   }
 
   matchesFilter(space: Space, filter: Filter): boolean {
@@ -177,6 +172,11 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       }
     });
     return matches;
+  }
+
+  filterChange($event: FilterEvent): void {
+    this.appliedFilters = $event.appliedFilters;
+    this.updateSpaces();
   }
 
   // Spaces
@@ -236,7 +236,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   }
 
   updateSpaces(): void {
-    this.applyFilters(this.appliedFilters);
+    this.applyFilters();
     this.sort();
   }
 
