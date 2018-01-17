@@ -45,6 +45,10 @@ export interface EnvironmentsResponse {
   data: EnvironmentStat[];
 }
 
+export interface TimeseriesResponse {
+  data: TimeseriesData;
+}
+
 export interface Applications {
   applications: Application[];
 }
@@ -77,6 +81,20 @@ export interface Pods {
   total: number;
 }
 
+export interface TimeseriesData {
+  cores: CoresSeries;
+  memory: MemorySeries;
+}
+
+export interface CoresSeries extends SeriesData { }
+
+export interface MemorySeries extends SeriesData { }
+
+export interface SeriesData {
+  time: number;
+  value: number;
+}
+
 @Injectable()
 export class DeploymentsService {
 
@@ -88,6 +106,7 @@ export class DeploymentsService {
 
   private readonly appsObservables = new Map<string, Observable<Applications>>();
   private readonly envsObservables = new Map<string, Observable<EnvironmentStat[]>>();
+  private readonly timeseriesObservables = new Map<string, Observable<TimeseriesData>>();
 
   private readonly pollTimer = Observable
     .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
@@ -172,11 +191,13 @@ export class DeploymentsService {
   }
 
   getDeploymentMemoryStat(spaceId: string, applicationName: string, environmentName: string): Observable<MemoryStat> {
-    return Observable
-      .interval(DeploymentsService.POLL_RATE_MS)
-      .distinctUntilChanged()
-      .map(() => (new ScaledMemoryStat(Math.floor(Math.random() * 156) + 100, 256)))
-      .startWith(new ScaledMemoryStat(200, 256));
+    const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
+      .map((t: TimeseriesData) => t.memory);
+    const quota = this.getEnvironment(spaceId, environmentName)
+      .map((env: EnvironmentStat) => env.quota.memory.quota);
+
+      // TODO: propagate MemorySeries timestamp to caller
+      return Observable.combineLatest(series, quota, (series: MemorySeries, quota: number) => new ScaledMemoryStat(series.value, quota));
   }
 
   getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
@@ -269,6 +290,32 @@ export class DeploymentsService {
     return this.getEnvironmentsResponse(spaceId)
       .concatMap((envs: EnvironmentStat[]) => Observable.from(envs))
       .filter((env: EnvironmentStat) => env.name === environmentName);
+  }
+
+  private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
+    const key = `${spaceId}:${applicationId}:${environmentName}`;
+    if (!this.timeseriesObservables.has(key)) {
+      const currentTime = +Date.now();
+      const emptyResult: TimeseriesData = {
+        cores: {
+          time: currentTime,
+          value: 0
+        },
+        memory: {
+          time: currentTime,
+          value: 0
+        }
+      };
+      const subject = new BehaviorSubject<TimeseriesData>(emptyResult);
+
+      const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
+      const observable = this.pollTimer
+        .concatMap(() => this.http.get(url, { headers: this.headers }))
+        .map((response: Response) => (response.json() as TimeseriesResponse).data);
+        observable.subscribe(subject);
+        this.timeseriesObservables.set(key, subject);
+     }
+    return this.timeseriesObservables.get(key);
   }
 
 }

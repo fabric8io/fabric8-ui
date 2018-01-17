@@ -19,7 +19,10 @@ import {
 
 import { createMock } from 'testing/mock';
 
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
 
 import {
   AuthenticationService,
@@ -29,6 +32,7 @@ import {
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { Environment } from '../models/environment';
+import { MemoryStat } from '../models/memory-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import {
   Application,
@@ -64,7 +68,7 @@ describe('DeploymentsService', () => {
   });
 
   function doMockHttpTest<U>(response: any, expected: U, obs: Observable<U>, done: DoneFn): void {
-    mockBackend.connections.subscribe((connection: MockConnection) => {
+    const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
           body: JSON.stringify(response),
@@ -75,6 +79,7 @@ describe('DeploymentsService', () => {
 
     obs.subscribe((data: U) => {
       expect(data).toEqual(expected);
+      subscription.unsubscribe();
       done();
     });
   }
@@ -274,33 +279,51 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getDeploymentMemoryStat', () => {
-    it('should return a "quota" value of 256', fakeAsync(() => {
-      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.quota).toBe(256);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should combine timeseries and quota data', (done: DoneFn) => {
+      const timeseriesResponse = {
+        data: {
+          memory: {
+            time: 1,
+            value: 2
+          }
+        }
+      };
+      const quotaResponse = {
+        data: [{
+          name: 'foo-env',
+          quota: {
+            memory: {
+              quota: 3,
+              used: 4
+            }
+          }
+        }]
+      };
 
-    it('should return a "used" value between 100 and 256', fakeAsync(() => {
-      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.used).toBeGreaterThanOrEqual(100);
-          expect(val.used).toBeLessThanOrEqual(256);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (timeseriesRegex.test(requestUrl)) {
+          responseBody = timeseriesResponse;
+        } else {
+          responseBody = quotaResponse;
+        }
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
 
-    it('should return a value in bytes', fakeAsync(() => {
-      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.units).toEqual('bytes');
+      svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env')
+        .subscribe((stat: MemoryStat) => {
+          expect(stat).toEqual(new ScaledMemoryStat(2, 3));
+          subscription.unsubscribe();
+          done();
         });
-        tick(DeploymentsService.POLL_RATE_MS + 10);
-        discardPeriodicTasks();
-    }));
+    });
   });
 
   describe('#getEnvironmentCpuStat', () => {

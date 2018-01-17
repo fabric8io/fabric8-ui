@@ -40,9 +40,8 @@ export class DeploymentDetailsComponent {
 
   public memData: any = {
     dataAvailable: true,
-    total: 100,
-    xData: ['time', 0],
-    yData: ['used', 1]
+    xData: ['time'],
+    yData: ['used']
   };
 
   public netData: DeploymentsLinechartData = {
@@ -109,6 +108,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(this.memStat.subscribe(stat => {
       this.memVal = stat.used;
       this.memMax = stat.quota;
+      this.memData.total = stat.quota;
       this.memData.yData.push(stat.used);
       this.memData.xData.push(this.cpuTime++);
       this.memUnits = stat.units;
