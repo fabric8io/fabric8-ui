@@ -196,10 +196,14 @@ export class DeploymentsService {
 
   private getApplicationsResponse(spaceId: string): Observable<Applications> {
     if (!this.appsObservables.has(spaceId)) {
-      const subject = new BehaviorSubject<Applications>({ applications: [] });
+      const emptyResponse: Applications = { applications: [] };
+      const subject = new BehaviorSubject<Applications>(emptyResponse);
       const observable = this.pollTimer
-        .concatMap(() => this.http.get(this.apiUrl + spaceId, { headers: this.headers }))
-        .map((response: Response) => (response.json() as ApplicationsResponse).data);
+        .concatMap(() =>
+          this.http.get(this.apiUrl + spaceId, { headers: this.headers })
+            .map((response: Response) => (response.json() as ApplicationsResponse).data)
+            .catch(() => Observable.of(emptyResponse))
+        );
       observable.subscribe(subject);
       this.appsObservables.set(spaceId, subject);
     }
@@ -214,10 +218,14 @@ export class DeploymentsService {
 
   private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {
     if (!this.envsObservables.has(spaceId)) {
-      const subject = new BehaviorSubject<EnvironmentStat[]>([]);
+      const emptyResponse: EnvironmentStat[] = [];
+      const subject = new BehaviorSubject<EnvironmentStat[]>(emptyResponse);
       const observable = this.pollTimer
-        .concatMap(() => this.http.get(this.apiUrl + spaceId + '/environments', { headers: this.headers }))
-        .map((response: Response) => (response.json() as EnvironmentsResponse).data);
+        .concatMap(() =>
+          this.http.get(this.apiUrl + spaceId + '/environments', { headers: this.headers })
+            .map((response: Response) => (response.json() as EnvironmentsResponse).data)
+            .catch(() => Observable.of(emptyResponse))
+        );
       observable.subscribe(subject);
       this.envsObservables.set(spaceId, subject);
     }
