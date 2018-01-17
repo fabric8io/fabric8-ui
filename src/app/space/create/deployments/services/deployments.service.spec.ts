@@ -322,33 +322,23 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getEnvironmentMemoryStat', () => {
-    it('should return a "quota" value of 256', fakeAsync(() => {
-      svc.getEnvironmentMemoryStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.quota).toBe(256);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should return a "used" value between 100 and 256', fakeAsync(() => {
-      svc.getEnvironmentMemoryStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.used).toBeGreaterThanOrEqual(100);
-          expect(val.used).toBeLessThanOrEqual(256);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should return a value in bytes', fakeAsync(() => {
-      svc.getEnvironmentMemoryStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.units).toEqual('bytes');
-        });
-        tick(DeploymentsService.POLL_RATE_MS + 10);
-        discardPeriodicTasks();
-    }));
+    it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', (done: DoneFn) => {
+      const GB = Math.pow(1024, 3);
+      const expectedResponse = {
+        data: [{
+          name: 'stage',
+          quota: {
+            memory: {
+              used: 0.5 * GB,
+              quota: 1 * GB,
+              units: 'bytes'
+            }
+          }
+        }]
+      };
+      doMockHttpTest(expectedResponse, new ScaledMemoryStat(0.5 * GB, 1 * GB),
+        svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'), done);
+    });
   });
 
   describe('#getDeploymentNetworkStat', () => {

@@ -66,6 +66,7 @@ export interface EnvironmentStat {
 
 export interface Quota {
   cpucores: CpuStat;
+  memory: MemoryStat;
 }
 
 @Injectable()
@@ -173,11 +174,8 @@ export class DeploymentsService {
   }
 
   getEnvironmentMemoryStat(spaceId: string, environmentName: string): Observable<MemoryStat> {
-    return Observable
-      .interval(DeploymentsService.POLL_RATE_MS)
-      .distinctUntilChanged()
-      .map(() => (new ScaledMemoryStat(Math.floor(Math.random() * 156) + 100, 256)))
-      .startWith(new ScaledMemoryStat(200, 256));
+    return this.getEnvironment(spaceId, environmentName)
+      .map((env: EnvironmentStat) => new ScaledMemoryStat(env.quota.memory.used, env.quota.memory.quota));
   }
 
   getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
