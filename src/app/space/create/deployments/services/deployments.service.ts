@@ -133,7 +133,8 @@ export class DeploymentsService {
 
   getEnvironments(spaceId: string): Observable<ModelEnvironment[]> {
     return this.getEnvironmentsResponse(spaceId)
-      .map((envs: EnvironmentStat[]) => envs ? envs.sort((a, b) =>  -1 * a.name.localeCompare(b.name)) : [])
+      .map((envs: EnvironmentStat[]) => envs || [])
+      .map((envs: EnvironmentStat[]) => envs.sort((a, b) =>  -1 * a.name.localeCompare(b.name)))
       .map((envs: EnvironmentStat[]) => envs
         .filter((env: EnvironmentStat) => env.name !== 'test')
         .map((env: EnvironmentStat) => ({ name: env.name} as ModelEnvironment))
