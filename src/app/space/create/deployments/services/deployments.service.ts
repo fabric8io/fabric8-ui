@@ -152,7 +152,8 @@ export class DeploymentsService {
     Observable<boolean> {
     return this.getApplicationsResponse(spaceId)
       .map((apps: Applications) => apps.applications)
-      .map((apps: Application[]) => apps.map((app: Application) => app.pipeline))
+      .map((apps: Application[]) => apps || [])
+      .map((apps: Application[]) => apps.map((app: Application) => app.pipeline || []))
       .map((pipes: Environment[][]) => pipes.map((pipe: Environment[]) => pipe.map((env: Environment) => env.name)))
       .map((pipeEnvNames: string[][]) => flatten(pipeEnvNames))
       .map((envNames: string[]) => includes(envNames, environmentName))

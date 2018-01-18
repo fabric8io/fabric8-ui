@@ -257,6 +257,29 @@ describe('DeploymentsService', () => {
       };
       doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
+
+    it('should be false if applications are null', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: null
+        }
+      };
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+    });
+
+    it('should be false if pipeline is null', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: null
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+    });
   });
 
   describe('#getVersion', () => {
