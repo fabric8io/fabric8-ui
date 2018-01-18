@@ -133,10 +133,10 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getEnvironments', () => {
-    it('should publish faked environments', (done: DoneFn) => {
+    it('should publish faked, filtered and sorted environments', (done: DoneFn) => {
       const expectedResponse = {
         data: [
-          { name: 'stage' }, { name: 'run' }, { name: 'test' }
+          { name: 'stage' }, { name: 'run' }
         ]
       };
       doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId'), done);
