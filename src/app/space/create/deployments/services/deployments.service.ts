@@ -298,8 +298,9 @@ export class DeploymentsService {
   }
 
   private getEnvironment(spaceId: string, environmentName: string): Observable<EnvironmentStat> {
+    // does not emit if there are no environments matching the specified name
     return this.getEnvironmentsResponse(spaceId)
-      .concatMap((envs: EnvironmentStat[]) => Observable.from(envs))
+      .flatMap((envs: EnvironmentStat[]) => envs || [])
       .filter((env: EnvironmentStat) => env.name === environmentName);
   }
 
