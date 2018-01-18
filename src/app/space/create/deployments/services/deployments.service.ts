@@ -12,8 +12,8 @@ import {
 } from '@angular/http';
 
 import {
-  BehaviorSubject,
-  Observable
+  Observable,
+  ReplaySubject
 } from 'rxjs';
 
 import { AuthenticationService } from 'ngx-login-client';
@@ -250,13 +250,12 @@ export class DeploymentsService {
 
   private getApplicationsResponse(spaceId: string): Observable<Applications> {
     if (!this.appsObservables.has(spaceId)) {
-      const emptyResponse: Applications = { applications: [] };
-      const subject = new BehaviorSubject<Applications>(emptyResponse);
+      const subject = new ReplaySubject<Applications>(1);
       const observable = this.pollTimer
         .concatMap(() =>
           this.http.get(this.apiUrl + spaceId, { headers: this.headers })
             .map((response: Response) => (response.json() as ApplicationsResponse).data)
-            .catch(() => Observable.of(emptyResponse))
+            .catch(() => Observable.of({ applications: [] }))
         );
       observable.subscribe(subject);
       this.appsObservables.set(spaceId, subject);
@@ -278,13 +277,12 @@ export class DeploymentsService {
 
   private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {
     if (!this.envsObservables.has(spaceId)) {
-      const emptyResponse: EnvironmentStat[] = [];
-      const subject = new BehaviorSubject<EnvironmentStat[]>(emptyResponse);
+      const subject = new ReplaySubject<EnvironmentStat[]>(1);
       const observable = this.pollTimer
         .concatMap(() =>
           this.http.get(this.apiUrl + spaceId + '/environments', { headers: this.headers })
             .map((response: Response) => (response.json() as EnvironmentsResponse).data)
-            .catch(() => Observable.of(emptyResponse))
+            .catch(() => Observable.of([]))
         );
       observable.subscribe(subject);
       this.envsObservables.set(spaceId, subject);
@@ -316,7 +314,7 @@ export class DeploymentsService {
         if (deployed) {
           const key = `${spaceId}:${applicationId}:${environmentName}`;
           if (!this.timeseriesObservables.has(key)) {
-            const subject = new BehaviorSubject<TimeseriesData>(emptyResult);
+            const subject = new ReplaySubject<TimeseriesData>(1);
 
             const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
             const observable = Observable.concat(Observable.of(0), this.pollTimer)

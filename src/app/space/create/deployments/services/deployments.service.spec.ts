@@ -96,9 +96,8 @@ describe('DeploymentsService', () => {
           ]
         }
       };
-      // skip the first result since it will be a BehaviorSubject default value
       doMockHttpTest(expectedResponse, expectedResponse.data.applications.map(app => app.name),
-        svc.getApplications('foo-spaceId').skip(1), done);
+        svc.getApplications('foo-spaceId'), done);
     });
   });
 
@@ -109,8 +108,7 @@ describe('DeploymentsService', () => {
           { name: 'stage' }, { name: 'run' }, { name: 'test' }
         ]
       };
-      // skip the first result since it will be a BehaviorSubject default value
-      doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId').skip(1), done);
+      doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId'), done);
     });
   });
 
@@ -185,14 +183,11 @@ describe('DeploymentsService', () => {
           ]
         }
       };
-      // skip the first result since it will be a BehaviorSubject default value
-      doMockHttpTest(expectedResponse, true,
-        svc.isDeployedInEnvironment('foo-spaceId', 'run').skip(1), done);
+      doMockHttpTest(expectedResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
     });
 
     it('should be false for excluded environments', (done: DoneFn) => {
-      // prep the service first to avoid "distinctUntilChanged" emission block
-      let expectedResponse = {
+      const expectedResponse = {
         data: {
           applications: [
             {
@@ -206,47 +201,11 @@ describe('DeploymentsService', () => {
           ]
         }
       };
-      // skip the first result since it will be a BehaviorSubject default value
-      doMockHttpTest(expectedResponse, true,
-        svc.isDeployedInEnvironment('foo-spaceId', 'run').skip(1));
-      expectedResponse = {
-        data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
-                }
-              ]
-            }
-          ]
-        }
-      };
-      doMockHttpTest(expectedResponse, false,
-        svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
 
     it('should be false if no environments are deployed', (done: DoneFn) => {
-      // prep the service first to avoid "distinctUntilChanged" emission block
-      let expectedResponse = {
-        data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
-                }
-              ]
-            }
-          ]
-        }
-      };
-      // skip the first result since it will be a BehaviorSubject default value
-      doMockHttpTest(expectedResponse, true,
-        svc.isDeployedInEnvironment('foo-spaceId', 'run').skip(1));
-      expectedResponse = {
+      const expectedResponse = {
         data: {
           applications: [
             {
@@ -256,36 +215,16 @@ describe('DeploymentsService', () => {
           ]
         }
       };
-      doMockHttpTest(expectedResponse, false,
-        svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
 
     it('should be false if no applications exist', (done: DoneFn) => {
-      // prep the service first to avoid "distinctUntilChanged" emission block
-      let expectedResponse = {
-        data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
-                }
-              ]
-            }
-          ]
-        }
-      };
-      // skip the first result since it will be a BehaviorSubject default value
-      doMockHttpTest(expectedResponse, true,
-        svc.isDeployedInEnvironment('foo-spaceId', 'run').skip(1));
-      expectedResponse = {
+      const expectedResponse = {
         data: {
           applications: [ ]
         }
       };
-      doMockHttpTest(expectedResponse, false,
-        svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
   });
 
