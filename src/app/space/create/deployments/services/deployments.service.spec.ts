@@ -100,6 +100,28 @@ describe('DeploymentsService', () => {
         svc.getApplications('foo-spaceId'), done);
     });
 
+    it('should return empty array if no applications', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: []
+        }
+      };
+      doMockHttpTest(expectedResponse, [],
+        svc.getApplications('foo-spaceId'), done);
+    });
+
+    it('should return singleton array result', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            { name: 'vertx-hello' }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, ['vertx-hello'],
+        svc.getApplications('foo-spaceId'), done);
+    });
+
     it('should return empty array for null applications response', (done: DoneFn) => {
       const expectedResponse = {
         data: {
@@ -118,6 +140,22 @@ describe('DeploymentsService', () => {
         ]
       };
       doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId'), done);
+    });
+
+    it('should return singleton array result', (done: DoneFn) => {
+      const expectedResponse = {
+        data: [
+          { name: 'stage' }
+        ]
+      };
+      doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId'), done);
+    });
+
+    it('should return empty array if no environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: []
+      };
+      doMockHttpTest(expectedResponse, [], svc.getEnvironments('foo-spaceId'), done);
     });
 
     it('should return empty array for null environments response', (done: DoneFn) => {
@@ -148,6 +186,28 @@ describe('DeploymentsService', () => {
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'), done);
     });
 
+    it('should be true if included in multiple deployments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                },
+                {
+                  name: 'stage'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, true,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'), done);
+    });
+
     it('should be false for excluded deployments', (done: DoneFn) => {
       const expectedResponse = {
         data: {
@@ -167,13 +227,35 @@ describe('DeploymentsService', () => {
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
     });
 
+    it('should be false if excluded in multiple deployments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                },
+                {
+                  name: 'test'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
+
     it('should be false if no deployments', (done: DoneFn) => {
       const expectedResponse = {
         data: {
           applications: [
             {
               name: 'vertx-hello',
-              pipeline: [ ]
+              pipeline: []
             }
           ]
         }
@@ -217,6 +299,38 @@ describe('DeploymentsService', () => {
       doMockHttpTest(expectedResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
     });
 
+    it('should be true if included in multiple applications and environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                },
+                {
+                  name: 'test'
+                }
+              ]
+            },
+            {
+              name: 'vertx-wiki',
+              pipeline: [
+                {
+                  name: 'run'
+                },
+                {
+                  name: 'stage'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
+    });
+
     it('should be false for excluded environments', (done: DoneFn) => {
       const expectedResponse = {
         data: {
@@ -226,6 +340,14 @@ describe('DeploymentsService', () => {
               pipeline: [
                 {
                   name: 'run'
+                }
+              ]
+            },
+            {
+              name: 'vertx-wiki',
+              pipeline: [
+                {
+                  name: 'test'
                 }
               ]
             }
@@ -241,7 +363,11 @@ describe('DeploymentsService', () => {
           applications: [
             {
               name: 'vertx-hello',
-              pipeline: [ ]
+              pipeline: []
+            },
+            {
+              name: 'vertx-wiki',
+              pipeline: []
             }
           ]
         }
@@ -252,7 +378,7 @@ describe('DeploymentsService', () => {
     it('should be false if no applications exist', (done: DoneFn) => {
       const expectedResponse = {
         data: {
-          applications: [ ]
+          applications: []
         }
       };
       doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
