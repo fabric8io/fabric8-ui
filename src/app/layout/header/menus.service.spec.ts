@@ -149,7 +149,7 @@ describe('MenuService service: it', () => {
 
     let menus = myContext.type['menus'];
     let createMenu = menus[3];
-    expect(createMenu.menus.length).toEqual(3);
+    expect(createMenu.menus.length).toEqual(4);
     expect(createMenu.menus.filter(subMenu => subMenu.name == 'Environments').length == 0);
     expect(createMenu.menus.filter(subMenu => subMenu.name == 'Codebases').length == 1);
     expect(createMenu.menus.filter(subMenu => subMenu.name == 'Pipelines').length == 1);
