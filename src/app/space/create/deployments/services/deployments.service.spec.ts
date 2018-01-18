@@ -119,6 +119,13 @@ describe('DeploymentsService', () => {
       };
       doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId'), done);
     });
+
+    it('should return empty array for null environments response', (done: DoneFn) => {
+      const expectedResponse = {
+        data: null
+      };
+      doMockHttpTest(expectedResponse, [], svc.getEnvironments('foo-spaceId'), done);
+    });
   });
 
   describe('#isApplicationDeployedInEnvironment', () => {

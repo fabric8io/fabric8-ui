@@ -133,6 +133,7 @@ export class DeploymentsService {
 
   getEnvironments(spaceId: string): Observable<ModelEnvironment[]> {
     return this.getEnvironmentsResponse(spaceId)
+      .map((envs: EnvironmentStat[]) => envs || [])
       .map((envs: EnvironmentStat[]) => envs.map((env: EnvironmentStat) => ({ name: env.name} as ModelEnvironment)))
       .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
         deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
