@@ -24,6 +24,7 @@ const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 // if env is 'inmemory', the inmemory debug resource is used
 const FABRIC8_FORGE_API_URL = process.env.FABRIC8_FORGE_API_URL || 'https://forge.api.prod-preview.openshift.io';
+const FABRIC8_FEATURE_TOGGLES_API_URL = process.env.FABRIC8_FEATURE_TOGGLES_API_URL;
 const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL || 'https://api.prod-preview.openshift.io/api/';
 const FABRIC8_AUTH_API_URL = process.env.FABRIC8_AUTH_API_URL || 'https://auth.prod-preview.openshift.io/api/';
 const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
@@ -57,6 +58,7 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   ENV: ENV,
   HMR: HMR,
   FABRIC8_FORGE_API_URL: FABRIC8_FORGE_API_URL,
+  FABRIC8_FEATURE_TOGGLES_API_URL: FABRIC8_FEATURE_TOGGLES_API_URL,
   FABRIC8_WIT_API_URL: FABRIC8_WIT_API_URL,
   FABRIC8_REALM: FABRIC8_REALM,
   FABRIC8_SSO_API_URL: FABRIC8_SSO_API_URL,
@@ -186,6 +188,7 @@ module.exports = function (options) {
           'HMR': METADATA.HMR,
           'API_URL': JSON.stringify(METADATA.FABRIC8_WIT_API_URL),
           'FABRIC8_FORGE_API_URL': JSON.stringify(METADATA.FABRIC8_FORGE_API_URL),
+          'FABRIC8_FEATURE_TOGGLES_API_URL': JSON.stringify(METADATA.FABRIC8_FEATURE_TOGGLES_API_URL),
           'FABRIC8_WIT_API_URL': JSON.stringify(METADATA.FABRIC8_WIT_API_URL),
           'FABRIC8_REALM': JSON.stringify(METADATA.FABRIC8_REALM),
           'FABRIC8_SSO_API_URL': JSON.stringify(METADATA.FABRIC8_SSO_API_URL),

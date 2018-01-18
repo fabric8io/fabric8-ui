@@ -26,7 +26,7 @@ export class DeploymentsDonutComponent implements OnInit {
   debounceScale = debounce(this.scale, 650);
 
   colors = {
-    'Empty': '#030303', // pf-black
+    'Empty': '#fafafa', // pf-black-100
     'Running': '#00b9e4', // pf-light-blue-400
     'Not Ready': '#beedf9', // pf-light-blue-100
     'Warning': '#f39d3c', // pf-orange-300

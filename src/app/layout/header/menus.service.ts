@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Context, ContextType, ContextTypes } from 'ngx-fabric8-wit';
 
+import { Feature } from '../../feature-flag/service/feature-toggles.service';
 import { MenuItem } from '../../models/menu-item';
 import { MenuedContextType } from './menued-context-type';
 
@@ -37,6 +38,7 @@ export class MenusService {
             path: ''
           }, {
             name: 'Plan',
+            feature: 'Planner',
             path: 'plan',
             menus: [
               {
@@ -61,14 +63,17 @@ export class MenusService {
               },
               {
                 name: 'Applications',
+                feature: 'Applications',
                 path: 'apps'
               },
               {
                 name: 'Environments',
+                feature: 'Environments',
                 path: 'environments'
               },
               {
                 name: 'Deployments',
+                feature: 'Deployments',
                 path: 'deployments'
               }
             ]
@@ -76,6 +81,14 @@ export class MenusService {
         ]
       ]
     ]);
+  }
+  private isFeatureEnabled(feature: string, features: Feature[]): boolean {
+    for (let f of features) {
+      if (f.id === feature) {
+        return f.attributes.enabled;
+      }
+    }
+    return true;
   }
 
   public attach(context: Context) {
@@ -88,16 +101,33 @@ export class MenusService {
         console.log('Failed to attach menus to', context.type);
         return;
       }
-      for (let n of res.menus) {
-        n.fullPath = this.buildPath(context.path, n.path);
-        if (n.menus) {
-          for (let o of n.menus) {
-            o.fullPath = this.buildPath(context.path, n.path, o.path);
+      let menuToDelete = [];
+      for (let menu of res.menus) {
+        if (menu['feature'] && context.user['features'] && !this.isFeatureEnabled(menu['feature'], context.user['features'])) {
+          menuToDelete.push(menu);
+        } else {
+          menu.fullPath = this.buildPath(context.path, menu.path);
+          if (menu.menus) {
+            let subMenuToDelete = [];
+            for (let subMenu of menu.menus) {
+              if (subMenu['feature'] && context.user['features'] && !this.isFeatureEnabled(subMenu['feature'], context.user['features'])) {
+                subMenuToDelete.push(subMenu);
+              } else {
+                subMenu.fullPath = this.buildPath(context.path, menu.path, subMenu.path);
+              }
+            }
+            if (subMenuToDelete.length > 0) { // some subMenu need to be removed
+              menu.menus = menu.menus.filter(obj => subMenuToDelete.filter(m => m.name === obj.name).length == 0);
+            }
           }
         }
       }
+      if (menuToDelete.length > 0) { // some menu need to be remove
+        res.menus = res.menus.filter(obj => menuToDelete.filter(m => m.name === obj.name).length == 0);
+      }
       context.type = res;
     }
+
   }
 
   private buildPath(...args: string[]): string {

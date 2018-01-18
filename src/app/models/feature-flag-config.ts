@@ -1,5 +1,5 @@
 export class FeatureFlagConfig {
   name: string;
-  showBanner: boolean;
+  showBanner: string;
   enabled: boolean;
 }

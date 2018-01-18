@@ -91,8 +91,9 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
           enabled: false
         },
         columns: [
-          ['Empty', 0]
-        ]
+          ['Empty', 1]
+        ],
+        unload: true
       }
     };
 
@@ -145,7 +146,11 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
 
   private updateChart(): void {
     if (this.chart && this.pods) {
-      this.config.data.columns = this.pods.pods;
+      if (this.pods.total === 0) {
+        this.config.data.columns = [['Empty', 1]];
+      } else {
+        this.config.data.columns = this.pods.pods;
+      }
       this.chart.load(this.config.data);
       this.updateCountText();
     }

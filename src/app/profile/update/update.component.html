@@ -87,23 +87,50 @@
     <!-- right column -->
     <div class="col-xs-12 col-sm-4 col-sm-offset-1">
       <form #advancedForm="ngForm">
-        <div class="form-group padding-top-40">
-          <div class="feature-toggle-text">
-            <div class="feature-toggle-text-header">
-              <h2>Experimental Features</h2>
-              <p>Experimental features are areas of the product that we’re trying out and would like your feedback on.</p>
-            </div>
-            <div class="feature-toggle-text-body">
-              <p>Experimental features are provided for use with no guarantee of service, data longevity, or support.  You agree to use these at your own risk with the acknowledgement that the features may not operate correctly and may be substantially modified.  These features are provided “AS IS” without warranty of any kind.  In no event shall Red Hat be liable for any damage whatsoever arising out of the use or inability to use these features. You can opt out of these experimental features at any point in time by unchecking the box below.</p>
-              <p>These terms and conditions do not replace the terms and conditions you agreed to when you signed up for the OpenShift.io service.</p>
-            </div>
+        <h2>Features Opt-in</h2>
+        <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select">
+          <div class="radio">
+            <label for="no_pre_production">
+            <input type="radio" id="no_pre_production" name="No Pre-Prodcution Features" value="nopreproduction"
+            [(ngModel)]="featureLevel"> <p>Production Features</p>
+              Only access features that have been deployed to production.
+              This feature is recommenced for users working with sensitive data.
+            </label>
+            <br/>
           </div>
         </div>
-        <div class="checkbox">
-          <label class="padding-left-none" for="experimental">
-            <input type="checkbox" id="experimental" name="experimental"
-                   [(ngModel)]="isExperimental"> I agree to the terms above and would like to opt into experimental features
-          </label>
+        <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select">
+          <div class="radio">
+            <label for="beta">
+              <input type="radio" id="beta" name="Beta Features" value="beta"
+                     [(ngModel)]="featureLevel"> <p>Beta Features</p>
+              Access to features that are considered beta.
+              This feature is recommenced for users looking to test feature that have not yet been deployed to production.
+            </label>
+            <br/>
+          </div>
+        </div>
+        <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select">
+          <div class="radio">
+            <label for="experimental">
+              <input type="radio" id="experimental" name="Experimental Features" value="experimental"
+                     [(ngModel)]="featureLevel"> <p>Experimental Features</p>
+              Access to all experimental features.
+              These features are not guaranteed to be stable or in complete working order.
+            </label>
+            <br/>
+          </div>
+        </div>
+        <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select" *ngIf="emailVerified && email.endsWith('redhat.com')">
+          <div class="radio">
+            <label for="internal">
+              <input type="radio" id="internal" name="Internal Features" value="internal"
+                     [(ngModel)]="featureLevel"> <p>Internal Features</p>
+              Access to all internal features.
+              These features are not guaranteed to be stable or in complete working order.
+            </label>
+            <br/>
+          </div>
         </div>
         <div class="form-divider"></div>
         <div class="form-group">

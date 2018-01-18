@@ -19,7 +19,10 @@ import {
 
 import { createMock } from 'testing/mock';
 
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
 
 import {
   AuthenticationService,
@@ -28,7 +31,9 @@ import {
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
+import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
+import { MemoryStat } from '../models/memory-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import {
   Application,
@@ -54,7 +59,7 @@ describe('DeploymentsService', () => {
           provide: AuthenticationService, useValue: mockAuthService
         },
         {
-          provide: WIT_API_URL, useValue: 'http://example.com'
+          provide: WIT_API_URL, useValue: 'http://example.com/'
         },
         DeploymentsService
       ]
@@ -63,8 +68,8 @@ describe('DeploymentsService', () => {
     mockBackend = TestBed.get(XHRBackend);
   });
 
-  function doMockHttpTest<U>(response: any, expected: U, obs: Observable<U>, done: DoneFn): void {
-    mockBackend.connections.subscribe((connection: MockConnection) => {
+  function doMockHttpTest<U>(response: any, expected: U, obs: Observable<U>, done?: DoneFn): void {
+    const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
           body: JSON.stringify(response),
@@ -75,7 +80,10 @@ describe('DeploymentsService', () => {
 
     obs.subscribe((data: U) => {
       expect(data).toEqual(expected);
-      done();
+      subscription.unsubscribe();
+      if (done) {
+        done();
+      }
     });
   }
 
@@ -88,9 +96,39 @@ describe('DeploymentsService', () => {
           ]
         }
       };
-      // skip the first result since it will be a BehaviorSubject default value
       doMockHttpTest(expectedResponse, expectedResponse.data.applications.map(app => app.name),
-        svc.getApplications('foo-spaceId').skip(1), done);
+        svc.getApplications('foo-spaceId'), done);
+    });
+
+    it('should return empty array if no applications', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: []
+        }
+      };
+      doMockHttpTest(expectedResponse, [],
+        svc.getApplications('foo-spaceId'), done);
+    });
+
+    it('should return singleton array result', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            { name: 'vertx-hello' }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, ['vertx-hello'],
+        svc.getApplications('foo-spaceId'), done);
+    });
+
+    it('should return empty array for null applications response', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: null
+        }
+      };
+      doMockHttpTest(expectedResponse, [], svc.getApplications('foo-spaceId'), done);
     });
   });
 
@@ -101,8 +139,30 @@ describe('DeploymentsService', () => {
           { name: 'stage' }, { name: 'run' }, { name: 'test' }
         ]
       };
-      // skip the first result since it will be a BehaviorSubject default value
-      doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId').skip(1), done);
+      doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId'), done);
+    });
+
+    it('should return singleton array result', (done: DoneFn) => {
+      const expectedResponse = {
+        data: [
+          { name: 'stage' }
+        ]
+      };
+      doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId'), done);
+    });
+
+    it('should return empty array if no environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: []
+      };
+      doMockHttpTest(expectedResponse, [], svc.getEnvironments('foo-spaceId'), done);
+    });
+
+    it('should return empty array for null environments response', (done: DoneFn) => {
+      const expectedResponse = {
+        data: null
+      };
+      doMockHttpTest(expectedResponse, [], svc.getEnvironments('foo-spaceId'), done);
     });
   });
 
@@ -116,6 +176,28 @@ describe('DeploymentsService', () => {
               pipeline: [
                 {
                   name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, true,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'), done);
+    });
+
+    it('should be true if included in multiple deployments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                },
+                {
+                  name: 'stage'
                 }
               ]
             }
@@ -144,129 +226,376 @@ describe('DeploymentsService', () => {
       doMockHttpTest(expectedResponse, false,
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
     });
+
+    it('should be false if excluded in multiple deployments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                },
+                {
+                  name: 'test'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
+
+    it('should be false if no deployments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: []
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
+
+    it('should be false if deployments is null', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: null
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false,
+        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
   });
 
   describe('#isDeployedInEnvironment', () => {
-    it('should be true', fakeAsync(() => {
-      svc.isDeployedInEnvironment('foo', 'stage')
-        .subscribe((active: boolean) => {
-          expect(active).toBeTruthy();
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should be true for included environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
+    });
+
+    it('should be true if included in multiple applications and environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                },
+                {
+                  name: 'test'
+                }
+              ]
+            },
+            {
+              name: 'vertx-wiki',
+              pipeline: [
+                {
+                  name: 'run'
+                },
+                {
+                  name: 'stage'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
+    });
+
+    it('should be false for excluded environments', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'run'
+                }
+              ]
+            },
+            {
+              name: 'vertx-wiki',
+              pipeline: [
+                {
+                  name: 'test'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+    });
+
+    it('should be false if no environments are deployed', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: []
+            },
+            {
+              name: 'vertx-wiki',
+              pipeline: []
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+    });
+
+    it('should be false if no applications exist', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: []
+        }
+      };
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+    });
+
+    it('should be false if applications are null', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: null
+        }
+      };
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+    });
+
+    it('should be false if pipeline is null', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: null
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+    });
   });
 
   describe('#getVersion', () => {
-    it('should return 1.0.2', fakeAsync(() => {
-      svc.getVersion('foo', 'bar').subscribe(val => {
-        expect(val).toEqual('1.0.2');
-      });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should return 1.0.2', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'stage',
+                  version: '1.0.2'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, expectedResponse.data.applications[0].pipeline[0].version,
+        svc.getVersion('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
   });
 
   describe('#getDeploymentCpuStat', () => {
-    it('should return a "quota" value of 10', fakeAsync(() => {
-      svc.getDeploymentCpuStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.quota).toBe(10);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should combine timeseries and quota data', (done: DoneFn) => {
+      const timeseriesResponse = {
+        data: {
+          cores: {
+            time: 1,
+            value: 2
+          }
+        }
+      };
+      const deploymentResponse = {
+        data: {
+          applications: [
+            {
+              name: 'foo-app',
+              pipeline: [
+                {
+                  name: 'foo-env'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      const quotaResponse = {
+        data: [{
+          name: 'foo-env',
+          quota: {
+            cpucores: {
+              quota: 3,
+              used: 4
+            }
+          }
+        }]
+      };
 
-    it('should return a "used" value between 1 and 10', fakeAsync(() => {
-      svc.getDeploymentCpuStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.used).toBeGreaterThanOrEqual(1);
-          expect(val.used).toBeLessThanOrEqual(10);
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/apps\/spaces\/foo-space$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (timeseriesRegex.test(requestUrl)) {
+          responseBody = timeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
+        } else {
+          responseBody = quotaResponse;
+        }
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env')
+        .subscribe((stat: CpuStat) => {
+          expect(stat).toEqual({ used: 2, quota: 3 });
+          subscription.unsubscribe();
+          done();
         });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    });
   });
 
   describe('#getDeploymentMemoryStat', () => {
-    it('should return a "quota" value of 256', fakeAsync(() => {
-      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.quota).toBe(256);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should combine timeseries and quota data', (done: DoneFn) => {
+      const timeseriesResponse = {
+        data: {
+          memory: {
+            time: 1,
+            value: 2
+          }
+        }
+      };
+      const deploymentResponse = {
+        data: {
+          applications: [
+            {
+              name: 'foo-app',
+              pipeline: [
+                {
+                  name: 'foo-env'
+                }
+              ]
+            }
+          ]
+        }
+      };
+      const quotaResponse = {
+        data: [{
+          name: 'foo-env',
+          quota: {
+            memory: {
+              quota: 3,
+              used: 4
+            }
+          }
+        }]
+      };
 
-    it('should return a "used" value between 100 and 256', fakeAsync(() => {
-      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.used).toBeGreaterThanOrEqual(100);
-          expect(val.used).toBeLessThanOrEqual(256);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/apps\/spaces\/foo-space$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (timeseriesRegex.test(requestUrl)) {
+          responseBody = timeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
+        } else {
+          responseBody = quotaResponse;
+        }
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
 
-    it('should return a value in bytes', fakeAsync(() => {
-      svc.getDeploymentMemoryStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.units).toEqual('bytes');
+      svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env')
+        .subscribe((stat: MemoryStat) => {
+          expect(stat).toEqual(new ScaledMemoryStat(2, 3));
+          subscription.unsubscribe();
+          done();
         });
-        tick(DeploymentsService.POLL_RATE_MS + 10);
-        discardPeriodicTasks();
-    }));
+    });
   });
 
   describe('#getEnvironmentCpuStat', () => {
-    it('should return a "quota" value of 10', fakeAsync(() => {
-      svc.getEnvironmentCpuStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.quota).toBe(10);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should return a "used" value between 1 and 10', fakeAsync(() => {
-      svc.getEnvironmentCpuStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.used).toBeGreaterThanOrEqual(1);
-          expect(val.used).toBeLessThanOrEqual(10);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
+    it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn) => {
+      const expectedResponse = {
+        data: [{
+          name: 'stage',
+          quota: {
+            cpucores: {
+              quota: 10,
+              used: 8
+            }
+          }
+        }]
+      };
+      doMockHttpTest(expectedResponse, expectedResponse.data[0].quota.cpucores,
+        svc.getEnvironmentCpuStat('foo-spaceId', 'stage'), done);
+    });
   });
 
   describe('#getEnvironmentMemoryStat', () => {
-    it('should return a "quota" value of 256', fakeAsync(() => {
-      svc.getEnvironmentMemoryStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.quota).toBe(256);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should return a "used" value between 100 and 256', fakeAsync(() => {
-      svc.getEnvironmentMemoryStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.used).toBeGreaterThanOrEqual(100);
-          expect(val.used).toBeLessThanOrEqual(256);
-        });
-      tick(DeploymentsService.POLL_RATE_MS + 10);
-      discardPeriodicTasks();
-    }));
-
-    it('should return a value in bytes', fakeAsync(() => {
-      svc.getEnvironmentMemoryStat('foo', 'bar')
-        .subscribe(val => {
-          expect(val.units).toEqual('bytes');
-        });
-        tick(DeploymentsService.POLL_RATE_MS + 10);
-        discardPeriodicTasks();
-    }));
+    it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', (done: DoneFn) => {
+      const GB = Math.pow(1024, 3);
+      const expectedResponse = {
+        data: [{
+          name: 'stage',
+          quota: {
+            memory: {
+              used: 0.5 * GB,
+              quota: 1 * GB,
+              units: 'bytes'
+            }
+          }
+        }]
+      };
+      doMockHttpTest(expectedResponse, new ScaledMemoryStat(0.5 * GB, 1 * GB),
+        svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'), done);
+    });
   });
 
   describe('#getDeploymentNetworkStat', () => {
@@ -289,6 +618,40 @@ describe('DeploymentsService', () => {
         tick(DeploymentsService.POLL_RATE_MS + 10);
         discardPeriodicTasks();
     }));
+  });
+
+  describe('#getPods', () => {
+    it('should return pods array', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'stage',
+                  pods: {
+                    total: 6,
+                    running: 1,
+                    starting: 2,
+                    stopping: 3
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      };
+      doMockHttpTest(expectedResponse, {
+        total: 6,
+        pods: [
+          [ 'Running', 1 ],
+          [ 'Starting', 2 ],
+          [ 'Stopping', 3 ]
+        ]
+      },
+        svc.getPods('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
   });
 
 });
