@@ -143,6 +143,7 @@ export class DeploymentsService {
     Observable<boolean> {
     return this.getApplication(spaceId, applicationName)
       .map((app: Application) => app.pipeline)
+      .map((pipe: Environment[]) => pipe || [])
       .map((pipe: Environment[]) => includes(pipe.map((p: Environment) => p.name), environmentName))
       .distinctUntilChanged();
   }
