@@ -60,6 +60,7 @@ import { AppState, InternalStateType } from './app.service';
 // Footer & Header
 import { FeatureBannerComponent } from './feature-flag/banner/feature-banner.component';
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
+import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
 import { FeatureWarningPageComponent } from './feature-flag/warning-page/feature-warning-page.component';
 
@@ -209,6 +210,7 @@ export type StoreType = {
       provide: OnLogin,
       useClass: Fabric8UIOnLogin
     },
+    FeatureAcknowledgementService,
     forgeApiUrlProvider,
     GettingStartedService,
     HttpService,

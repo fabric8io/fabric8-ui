@@ -26,10 +26,10 @@ export class GettingStartedService implements OnDestroy {
   private usersUrl: string;
 
   constructor(
-      private auth: AuthenticationService,
-      private http: Http,
-      private logger: Logger,
-      private userService: UserService,
+      protected auth: AuthenticationService,
+      protected http: Http,
+      protected logger: Logger,
+      protected userService: UserService,
       @Inject(WIT_API_URL) apiUrl: string) {
     if (this.auth.getToken() != undefined) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
@@ -49,13 +49,13 @@ export class GettingStartedService implements OnDestroy {
     this.userService.loggedInUser
       .map(user => {
         profile = cloneDeep(user) as ExtUser;
-        if (profile.attributes != undefined) {
+        if (profile.attributes !== undefined) {
           profile.attributes.contextInformation = (user as ExtUser).attributes.contextInformation || {};
         }
       })
       .publish().connect();
 
-    return profile.attributes;
+    return (profile !== undefined) ? profile.attributes : {} as ExtProfile;
   }
 
   /**
@@ -101,7 +101,7 @@ export class GettingStartedService implements OnDestroy {
 
   // Private
 
-  private handleError(error: any) {
+  protected handleError(error: any) {
     this.logger.error(error);
     return Observable.throw(error.message || error);
   }
