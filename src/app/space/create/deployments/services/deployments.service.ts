@@ -276,9 +276,10 @@ export class DeploymentsService {
   }
 
   private getDeployment(spaceId: string, applicationName: string, environmentName: string): Observable<Environment> {
+    // does not emit if there are no applications or environments matching the specified names
     return this.getApplication(spaceId, applicationName)
-      .map((app: Application) => app.pipeline)
-      .map((envs: Environment[]) => envs.filter((env: Environment) => env.name === environmentName)[0]);
+      .flatMap((app: Application) => app.pipeline || [])
+      .filter((env: Environment) => env.name === environmentName);
   }
 
   private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {
