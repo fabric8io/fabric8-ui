@@ -31,10 +31,11 @@ import { Environment as ModelEnvironment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods as ModelPods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
+import { ScaledNetworkStat } from '../models/scaled-network-stat';
 
 export interface NetworkStat {
-  sent: number;
-  received: number;
+  sent: ScaledNetworkStat;
+  received: ScaledNetworkStat;
 }
 
 export interface ApplicationsResponse {
@@ -228,7 +229,12 @@ export class DeploymentsService {
   getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
     // TODO: propagate timestamps to caller
     return this.getTimeseriesData(spaceId, applicationId, environmentName)
-      .map((t: TimeseriesData) => ({ sent: t.net_tx.value, received: t.net_rx.value } as NetworkStat));
+      .map((t: TimeseriesData) =>
+        ({
+          sent: new ScaledNetworkStat(t.net_tx.value),
+          received: new ScaledNetworkStat(t.net_rx.value)
+        } as NetworkStat)
+      );
   }
 
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {

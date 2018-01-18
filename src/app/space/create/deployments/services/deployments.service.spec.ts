@@ -40,6 +40,7 @@ import {
   DeploymentsService,
   NetworkStat
 } from './deployments.service';
+import { ScaledNetworkStat } from 'app/space/create/deployments/models/scaled-network-stat';
 
 describe('DeploymentsService', () => {
 
@@ -563,16 +564,16 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getDeploymentNetworkStat', () => {
-    it('should return timeseries data', (done: DoneFn) => {
+    it('should return scaled timeseries data', (done: DoneFn) => {
       const timeseriesResponse = {
         data: {
           net_tx: {
             time: 0,
-            value: 1
+            value: 1.7
           },
           net_rx: {
             time: 2,
-            value: 3
+            value: 3.1
           }
         }
       };
@@ -612,7 +613,7 @@ describe('DeploymentsService', () => {
 
       svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env')
         .subscribe((stat: NetworkStat) => {
-          expect(stat).toEqual({ sent: 1, received: 3 });
+          expect(stat).toEqual({ sent: new ScaledNetworkStat(1.7), received: new ScaledNetworkStat(3.1) });
           subscription.unsubscribe();
           done();
         });

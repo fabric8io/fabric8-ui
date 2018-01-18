@@ -13,6 +13,7 @@ import {
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
+import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   DeploymentsService,
   NetworkStat
@@ -90,7 +91,12 @@ describe('DeploymentDetailsComponent', () => {
   beforeEach(() => {
     cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 } as CpuStat);
     memStatObservable = new BehaviorSubject({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
-    netStatObservable = new BehaviorSubject({ sent: 1, received: 2 } as NetworkStat);
+
+    const mb = Math.pow(1024, 2);
+    netStatObservable = new BehaviorSubject({
+      sent: new ScaledNetworkStat(1 * mb),
+      received: new ScaledNetworkStat(2 * mb)
+    } as NetworkStat);
 
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
@@ -191,8 +197,8 @@ describe('DeploymentDetailsComponent', () => {
       expect(mockSvc.getDeploymentNetworkStat).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
     });
 
-    it('should use \'KiB/s\' units', () => {
-      expect(de.componentInstance.dataMeasure).toEqual('KiB/s');
+    it('should use \'MB/s\' units', () => {
+      expect(de.componentInstance.dataMeasure).toEqual('MB/s');
     });
 
     it('should use value from service result', () => {
@@ -245,7 +251,8 @@ describe('DeploymentDetailsComponent', () => {
         const MAX_NET_LINE_ELEMENTS = 4;
         let detailsComponent = this.testedDirective;
         detailsComponent.setChartMaxElements(MAX_NET_LINE_ELEMENTS);
-        times(MAX_NET_LINE_ELEMENTS + 10, () => netStatObservable.next({ sent: 3, received: 4 }));
+        times(MAX_NET_LINE_ELEMENTS + 10,
+          () => netStatObservable.next({ sent: new ScaledNetworkStat(3), received: new ScaledNetworkStat(4) }));
         expect(detailsComponent.netData.xData.length).toBe(MAX_NET_LINE_ELEMENTS);
         expect(detailsComponent.netData.yData[0].length).toBe(MAX_NET_LINE_ELEMENTS);
       });
