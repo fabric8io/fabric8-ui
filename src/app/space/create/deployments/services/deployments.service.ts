@@ -269,8 +269,9 @@ export class DeploymentsService {
   }
 
   private getApplication(spaceId: string, applicationName: string): Observable<Application> {
+    // does not emit if there are no applications matching the specified name
     return this.getApplicationsResponse(spaceId)
-      .flatMap((apps: Applications) => apps.applications)
+      .flatMap((apps: Applications) => apps.applications || [])
       .filter((app: Application) => app.name === applicationName);
   }
 
