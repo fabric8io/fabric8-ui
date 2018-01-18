@@ -37,7 +37,8 @@ import { MemoryStat } from '../models/memory-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import {
   Application,
-  DeploymentsService
+  DeploymentsService,
+  NetworkStat
 } from './deployments.service';
 
 describe('DeploymentsService', () => {
@@ -561,6 +562,63 @@ describe('DeploymentsService', () => {
     });
   });
 
+  describe('#getDeploymentNetworkStat', () => {
+    it('should return timeseries data', (done: DoneFn) => {
+      const timeseriesResponse = {
+        data: {
+          net_tx: {
+            time: 0,
+            value: 1
+          },
+          net_rx: {
+            time: 2,
+            value: 3
+          }
+        }
+      };
+
+      const deploymentResponse = {
+        data: {
+          applications: [
+            {
+              name: 'foo-app',
+              pipeline: [
+                {
+                  name: 'foo-env'
+                }
+              ]
+            }
+          ]
+        }
+      };
+
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/apps\/spaces\/foo-space$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (timeseriesRegex.test(requestUrl)) {
+          responseBody = timeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
+        }
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env')
+        .subscribe((stat: NetworkStat) => {
+          expect(stat).toEqual({ sent: 1, received: 3 });
+          subscription.unsubscribe();
+          done();
+        });
+    });
+  });
+
   describe('#getEnvironmentCpuStat', () => {
     it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn) => {
       const expectedResponse = {
@@ -597,28 +655,6 @@ describe('DeploymentsService', () => {
       doMockHttpTest(expectedResponse, new ScaledMemoryStat(0.5 * GB, 1 * GB),
         svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'), done);
     });
-  });
-
-  describe('#getDeploymentNetworkStat', () => {
-    it('should return a "sent" value between 0 and 100', fakeAsync(() => {
-      svc.getDeploymentNetworkStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.sent).toBeGreaterThanOrEqual(0);
-          expect(val.sent).toBeLessThanOrEqual(100);
-        });
-        tick(DeploymentsService.POLL_RATE_MS + 10);
-        discardPeriodicTasks();
-    }));
-
-    it('should return a "received" value between 0 and 100', fakeAsync(() => {
-      svc.getDeploymentNetworkStat('foo', 'bar', 'baz')
-        .subscribe(val => {
-          expect(val.received).toBeGreaterThanOrEqual(0);
-          expect(val.received).toBeLessThanOrEqual(100);
-        });
-        tick(DeploymentsService.POLL_RATE_MS + 10);
-        discardPeriodicTasks();
-    }));
   });
 
   describe('#getPods', () => {

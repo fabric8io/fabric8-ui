@@ -84,11 +84,17 @@ export interface Pods {
 export interface TimeseriesData {
   cores: CoresSeries;
   memory: MemorySeries;
+  net_tx: NetworkSentSeries;
+  net_rx: NetworkReceivedSeries;
 }
 
 export interface CoresSeries extends SeriesData { }
 
 export interface MemorySeries extends SeriesData { }
+
+export interface NetworkSentSeries extends SeriesData { }
+
+export interface NetworkReceivedSeries extends SeriesData { }
 
 export interface SeriesData {
   time: number;
@@ -220,11 +226,9 @@ export class DeploymentsService {
   }
 
   getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
-    return Observable
-      .interval(DeploymentsService.POLL_RATE_MS)
-      .distinctUntilChanged()
-      .map(() => ({ sent: round(Math.random() * 100, 1), received: round(Math.random() * 100, 1) }))
-      .startWith({ sent: 0, received: 0});
+    // TODO: propagate timestamps to caller
+    return this.getTimeseriesData(spaceId, applicationId, environmentName)
+      .map((t: TimeseriesData) => ({ sent: t.net_tx.value, received: t.net_rx.value } as NetworkStat));
   }
 
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
@@ -320,6 +324,14 @@ export class DeploymentsService {
         value: 0
       },
       memory: {
+        time: currentTime,
+        value: 0
+      },
+      net_tx: {
+        time: currentTime,
+        value: 0
+      },
+      net_rx: {
         time: currentTime,
         value: 0
       }
