@@ -1,9 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { debounce, isNumber } from 'lodash';
+import { NotificationType } from 'ngx-base';
 import { Observable } from 'rxjs';
 
 import { Environment } from '../models/environment';
+
+import { NotificationsService } from 'app/shared/notifications.service';
 import { Pods } from '../models/pods';
 import { DeploymentsService } from '../services/deployments.service';
 
@@ -41,7 +44,8 @@ export class DeploymentsDonutComponent implements OnInit {
   private replicas: number;
 
   constructor(
-    private deploymentsService: DeploymentsService
+    private deploymentsService: DeploymentsService,
+    private notifications: NotificationsService
   ) { }
 
   ngOnInit(): void {
@@ -91,6 +95,16 @@ export class DeploymentsDonutComponent implements OnInit {
   private scale(): void {
     this.deploymentsService.scalePods(
       this.spaceId, this.environment.name, this.applicationId, this.desiredReplicas
+    ).first().subscribe(
+      success => {
+        // Do nothing
+      },
+      error => {
+        this.notifications.message({
+          type: NotificationType.WARNING,
+          message: error
+        });
+      }
     );
   }
 }

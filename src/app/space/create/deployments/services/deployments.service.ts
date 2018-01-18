@@ -172,7 +172,10 @@ export class DeploymentsService {
     applicationId: string,
     desiredReplicas: number
   ): Observable<string> {
-    return Observable.of(`Scaled ${applicationId} in ${spaceId}/${environmentName} to ${desiredReplicas} replicas`);
+    const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/control?podCount=${desiredReplicas}`;
+    return this.http.put(url, '')
+      .map((r: Response) => { return `Successfully scaled ${applicationId}`; })
+      .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
 
   getPods(spaceId: string, applicationId: string, environmentName: string): Observable<ModelPods> {

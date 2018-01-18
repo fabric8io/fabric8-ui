@@ -1,10 +1,15 @@
 import { Component, Input } from '@angular/core';
+import {
+  fakeAsync
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 
+
+import { NotificationsService } from 'app/shared/notifications.service';
 import { Environment } from '../models/environment';
 import { Pods } from '../models/pods';
 import { DeploymentsService } from '../services/deployments.service';
@@ -30,8 +35,10 @@ class FakeDeploymentsDonutChartComponent {
 describe('DeploymentsDonutComponent', () => {
   type Context = TestContext<DeploymentsDonutComponent, HostComponent>;
 
+  let notifications: jasmine.SpyObj<NotificationsService> =
+    jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  beforeEach(() => {
+  beforeEach(fakeAsync(() => {
     mockSvc = createMock(DeploymentsService);
     mockSvc.scalePods.and.returnValue(
       Observable.of('scalePods')
@@ -39,12 +46,15 @@ describe('DeploymentsDonutComponent', () => {
     mockSvc.getPods.and.returnValue(
       Observable.of({ pods: [['Running', 1], ['Terminating', 1]], total: 2 } as Pods)
     );
-  });
+  }));
 
   initContext(DeploymentsDonutComponent, HostComponent,
     {
       declarations: [FakeDeploymentsDonutChartComponent],
-      providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
+      providers: [
+        { provide: DeploymentsService, useFactory: () => mockSvc },
+        { provide: NotificationsService, useValue: notifications }
+      ]
     },
     component => {
       component.mini = false;
@@ -136,5 +146,56 @@ describe('DeploymentsDonutComponent', () => {
     el.click();
     this.testedDirective.debounceScale.flush();
     expect(mockSvc.scalePods).toHaveBeenCalledTimes(2);
+  });
+
+  it('should not call notifications when scaling successfully', function(this: Context) {
+    this.testedDirective.scaleUp();
+    this.detectChanges();
+    this.testedDirective.debounceScale.flush();
+
+    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
+    expect(notifications.message).not.toHaveBeenCalled();
+  });
+});
+
+describe('DeploymentsDonutComponent error handling', () => {
+  type Context = TestContext<DeploymentsDonutComponent, HostComponent>;
+
+  let notifications: jasmine.SpyObj<NotificationsService> =
+    jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
+  let mockSvc: jasmine.SpyObj<DeploymentsService>;
+  beforeEach(fakeAsync(() => {
+    mockSvc = createMock(DeploymentsService);
+    mockSvc.scalePods.and.returnValue(
+      Observable.throw('scalePods error')
+    );
+    mockSvc.getPods.and.returnValue(
+      Observable.of({ pods: [['Running', 1], ['Terminating', 1]], total: 2 } as Pods)
+    );
+  }));
+
+  initContext(DeploymentsDonutComponent, HostComponent,
+    {
+      declarations: [FakeDeploymentsDonutChartComponent],
+      providers: [
+        { provide: DeploymentsService, useFactory: () => mockSvc },
+        { provide: NotificationsService, useValue: notifications }
+      ]
+    },
+    component => {
+      component.mini = false;
+      component.spaceId = 'space';
+      component.applicationId = 'application';
+      component.environment = { name: 'environmentName' } as Environment;
+    });
+
+
+  it('should notify if scaling pods has an error', function(this: Context) {
+    this.testedDirective.scaleUp();
+    this.detectChanges();
+    this.testedDirective.debounceScale.flush();
+
+    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
+    expect(notifications.message).toHaveBeenCalled();
   });
 });
