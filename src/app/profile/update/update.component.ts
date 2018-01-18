@@ -216,7 +216,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (!profile.contextInformation) {
       profile.contextInformation = {};
     }
-    
     profile.featureLevel = this.featureLevel;
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
