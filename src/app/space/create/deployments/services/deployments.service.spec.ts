@@ -99,6 +99,15 @@ describe('DeploymentsService', () => {
       doMockHttpTest(expectedResponse, expectedResponse.data.applications.map(app => app.name),
         svc.getApplications('foo-spaceId'), done);
     });
+
+    it('should return empty array for null applications response', (done: DoneFn) => {
+      const expectedResponse = {
+        data: {
+          applications: null
+        }
+      };
+      doMockHttpTest(expectedResponse, [], svc.getApplications('foo-spaceId'), done);
+    });
   });
 
   describe('#getEnvironments', () => {

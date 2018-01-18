@@ -125,7 +125,9 @@ export class DeploymentsService {
 
   getApplications(spaceId: string): Observable<string[]> {
     return this.getApplicationsResponse(spaceId)
-      .map((resp: Applications) => resp.applications.map((app: Application) => app.name))
+      .map((resp: Applications) => resp.applications)
+      .map((apps: Application[]) => apps || [])
+      .map((apps: Application[]) => apps.map((app: Application) => app.name))
       .distinctUntilChanged(deepEqual);
   }
 
