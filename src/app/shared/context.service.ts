@@ -16,10 +16,10 @@ import { Observable } from 'rxjs';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
-import { ExtProfile, ProfileService } from '../profile/profile.service';
-
+import { FeatureTogglesService } from '../feature-flag/service/feature-toggles.service';
 import { MenusService } from '../layout/header/menus.service';
 import { Navigation } from '../models/navigation';
+import { ExtProfile, ProfileService } from '../profile/profile.service';
 import { EventService } from './event.service';
 
 interface RawContext {
@@ -55,7 +55,8 @@ export class ContextService implements Contexts {
     private route: ActivatedRoute,
     private profileService: ProfileService,
     private spaceNamePipe: SpaceNamePipe,
-    private eventService: EventService) {
+    private eventService: EventService,
+    private toggleService: FeatureTogglesService) {
 
     this._addRecent = new Subject<Context>();
     this._deleteFromRecent = new Subject<Context>();
@@ -112,23 +113,23 @@ export class ContextService implements Contexts {
         }
       })
       // Ensure the menus are built
-      .do(val => {
-        if (val.type) {
-          this.menus.attach(val);
-        }
-      })
-      .do(val => {
-        if (val.type) {
-          console.log('Default Context Changed to', val);
-          this.broadcaster.broadcast('defaultContextChanged', val);
-        }
-      })
-      .do(val => {
-        if (val.type) {
-          // Add to the recent contexts
-          this._addRecent.next(val);
-        }
-      })
+      // .do(val => {
+      //   if (val.type) {
+      //     this.menus.attach(val);
+      //   }
+      // })
+      // .do(val => {
+      //   if (val.type) {
+      //     console.log('Default Context Changed to', val);
+      //     this.broadcaster.broadcast('defaultContextChanged', val);
+      //   }
+      // })
+      // .do(val => {
+      //   if (val.type) {
+      //     // Add to the recent contexts
+      //     this._addRecent.next(val);
+      //   }
+      // })
       .multicast(() => new ReplaySubject(1));
 
     // Create the recent space list
@@ -256,6 +257,13 @@ export class ContextService implements Contexts {
               return Observable.throw(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
             });
         }
+      })
+      // Get the list of features enabled for this given user to know whether we should display feature menu.
+      .switchMap(val => {
+        return this.toggleService.getFeatures(['Applications', 'Deployments', 'Environments', 'Planner']).map(features => {
+          val.user.features = features;
+          return val;
+        });
       })
       // Use a map to convert from a navigation url to a context
       .map(val => this.buildContext(val))

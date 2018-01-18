@@ -1,0 +1,111 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+
+.feature-level(@color-for-feature) {
+  &-bar {
+    margin-top: 35px;
+    height: 25px;
+    @media (max-width: 768px) { height: 48px; }
+    background-color: @color-for-feature;
+    text-align: center;
+    transition: ease all .3;
+    &-minimal {
+      height: 5px;
+      background-color: @color-for-feature;
+      .feature-text {
+        display: none;
+      }
+    }
+  }
+
+  &-more-info {
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 25px;
+    background-color: @color-for-feature;
+    border-width: 0;
+    color: @color-pf-black;
+    vertical-align: baseline;
+  }
+}
+.btn-link-feature-level(@color-for-feature) {
+  &:extend(.btn-link);
+  padding: 0;
+  height: 25px;
+  background-color: @color-for-feature;
+  border-width: 0;
+  color: @color-pf-black;
+  text-decoration: underline;
+  vertical-align: baseline;
+}
+.btn-feature-level(@color-for-feature) {
+  &:extend(.btn-default);
+  border-color: @color-for-feature;
+  background-color: @color-for-feature;
+  background-image: linear-gradient(to bottom, @color-for-feature 0, @color-for-feature 100%);
+}
+
+// EXPERIMENTAL
+.experimental {
+  .feature-level(@color-experimental);
+}
+.btn-link-experimental {
+  .btn-link-feature-level(@color-experimental);
+}
+.btn-experimental {
+  .btn-feature-level(@color-experimental);
+}
+
+// BETA
+.beta {
+  .feature-level(@color-beta);
+}
+.btn-link-beta {
+  .btn-link-feature-level(@color-beta);
+}
+.btn-beta {
+  .btn-feature-level(@color-beta);
+}
+
+// INTERNAL
+.internal {
+  .feature-level(@color-internal);
+}
+.btn-link-internal {
+  .btn-link-feature-level(@color-internal);
+}
+.btn-link-internal {
+  .btn-feature-level(@color-internal);
+}
+
+// NOT-APPLICABLE
+.not-applicable {
+  .feature-level(@color-not-applicable);
+}
+.btn-link-not-applicable {
+  .btn-link-feature-level(@color-not-applicable);
+}
+.btn-not-applicable {
+  .btn-feature-level(@color-not-applicable);
+}
+
+// SYSTEM-ERROR
+.system-error {
+  .feature-level(@color-system-error);
+}
+.btn-link-system-error {
+  .btn-link-feature-level(@color-system-error);
+}
+.btn-system-error {
+  .btn-feature-level(@color-system-error);
+}
+
+// NOT-LOGGED-IN
+.not-logged-in {
+  .feature-level(@color-not-logged-in);
+}
+.btn-link-not-logged-in {
+  .btn-link-feature-level(@color-not-logged-in);
+}
+.btn-not-logged-in {
+  .btn-feature-level(@color-not-logged-in);
+}

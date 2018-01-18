@@ -1,0 +1,56 @@
+<div [ngSwitch]="level">
+  <div *ngSwitchCase="'internal'">
+    <div class="internal-bar" [class.internal-bar-minimal]="hideBanner">
+      <span class="feature-text">
+        This feature is open to Red Hat users only. You can manage pre-production features on your <a class="btn btn-link-internal" [routerLink]="profileLink">profile</a> page.
+        <a class="btn btn-link-internal" (click)="acknowledgeWarning()">Got it!</a>
+      </span>
+      <button class="pull-right internal-more-info">
+        <i class="fa fa-flask"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngSwitchCase="'experimental'">
+    <div class="experimental-bar" [class.experimental-bar-minimal]="hideBanner">
+      <span class="feature-text">
+        This feature is experimental. You can manage pre-production features on your  <a class="btn btn-link-exprimental" [routerLink]="profileLink">profile</a> page.
+        <a class="btn btn-link-experimental" (click)="acknowledgeWarning()">Got it!</a>
+      </span>
+      <button class="pull-right experimental-more-info">
+        <i class="fa fa-flask"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngSwitchCase="'beta'">
+    <div class="beta-bar" [class.beta-bar-minimal]="hideBanner">
+      <span class="feature-text">
+        This feature is in beta. You can manage pre-production features on your <a class="btn btn-link-beta" [routerLink]="profileLink">profile</a> page.
+        <a class="btn btn-link-beta" (click)="acknowledgeWarning()">Got it!</a>
+      </span>
+      <button class="pull-right beta-more-info">
+        <i class="fa fa-flask"></i>
+      </button>
+    </div>
+  </div>
+  <div *ngSwitchCase="'notApplicable'">
+    <div class="not-applicable-bar" [class.not-applicable-bar-minimal]="hideBanner">
+      <span class="feature-text">
+         This feature is toggled off. It will be made available to experimental users very soon.
+      </span>
+    </div>
+  </div>
+  <div *ngSwitchCase="'systemError'">
+    <div class="system-error-bar" [class.system-error-bar-minimal]="hideBanner">
+      <span class="feature-text">
+        This feature is marked as either experimental or beta. The feature toggles service is down.
+      </span>
+    </div>
+  </div>
+  <div *ngSwitchCase="'notLoggedIn'">
+    <div class="not-logged-in-bar" [class.not-logged-in-bar-minimal]="hideBanner">
+      <span class="feature-text">
+        This feature is marked as either experimental or beta. To match your level of pre-production more accurately, please log in.
+      </span>
+    </div>
+  </div>
+</div>

@@ -45,8 +45,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   companyInvalid: boolean = false;
   context: Context;
   email: string;
+  emailVerified: boolean;
   emailInvalid: boolean = false;
-  isExperimental: boolean = false;
+  featureLevel: string;
   gitHubLinked: boolean = false;
   imageUrl: string;
   imageUrlInvalid: boolean = false;
@@ -54,18 +55,13 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   fullName: string;
   fullNameInvalid: boolean = false;
   openShiftLinked: boolean = false;
-  registrationCompleted: boolean = true;
-  showActivity: boolean = true;
-  showFullName: boolean = true;
-  showEmail: boolean = true;
-  showSpaces: boolean = true;
-  showWorkItems: boolean = true;
+
   subscriptions: Subscription[] = [];
   token: string;
   tokenPanelOpen: boolean = false;
   updateTenantStatus: TenantUpdateStatus = TenantUpdateStatus.NoAction;
   username: string;
-  usernameInvalid: boolean = false;
+
   url: string;
   urlInvalid: boolean = false;
 
@@ -220,14 +216,14 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (!profile.contextInformation) {
       profile.contextInformation = {};
     }
-
-    if (!profile.contextInformation.experimentalFeatures) {
-      profile.contextInformation.experimentalFeatures = {};
-    }
-    profile.contextInformation.experimentalFeatures['enabled'] = this.isExperimental;
+    profile.featureLevel = this.featureLevel;
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.setUserProperties(user);
+      this.userService.loggedInUser.map(loggedInUser => {
+        // make sure the update of profile (deep clone of user) also get the logged-in user updated
+        (loggedInUser.attributes as any).featureLevel = (user.attributes as any).featureLevel;
+      }).publish().connect();
       this.notifications.message({
         message: `Profile updated!`,
         type: NotificationType.SUCCESS
@@ -394,14 +390,38 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.bio = (user.attributes.bio !== undefined) ? user.attributes.bio : '';
     this.company = (user.attributes.company !== undefined) ? user.attributes.company : '';
     this.email = (user.attributes.email !== undefined) ? user.attributes.email : '';
+    this.emailVerified = ((user as any).attributes.emailVerified !== undefined) ?
+      (user as any).attributes.emailVerified : false;
     this.fullName = (user.attributes.fullName !== undefined) ? user.attributes.fullName : '';
     this.imageUrl = (user.attributes.imageURL !== undefined) ? user.attributes.imageURL : '';
     this.url = (user.attributes.url !== undefined) ? user.attributes.url : '';
     this.username = (user.attributes.username !== undefined) ? user.attributes.username : '';
 
-    let contextInformation = user.attributes['contextInformation'];
-    if (contextInformation && contextInformation.experimentalFeatures) {
-      this.isExperimental =  contextInformation.experimentalFeatures['enabled'];
+    if (user
+      && user.attributes
+      && (user.attributes as any).featureLevel) {
+        this.setFeatureLevel((user.attributes as any).featureLevel);
+    }
+  }
+
+  private setFeatureLevel(level) {
+    switch (level) {
+      case 'beta': {
+        this.featureLevel = 'beta';
+        break;
+      }
+      case 'experimental': {
+        this.featureLevel = 'experimental';
+        break;
+      }
+      case 'internal': {
+        this.featureLevel = 'internal';
+        break;
+      }
+      default: {
+        this.featureLevel = 'nopreproduction';
+        break;
+      }
     }
   }
 

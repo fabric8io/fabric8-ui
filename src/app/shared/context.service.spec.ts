@@ -8,7 +8,7 @@ import { Broadcaster, Notifications } from 'ngx-base';
 import { SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-
+import { FeatureTogglesService } from '../feature-flag/service/feature-toggles.service';
 import { MenusService } from '../layout/header/menus.service';
 import { ProfileService } from '../profile/profile.service';
 import { ContextService } from './context.service';
@@ -26,8 +26,8 @@ describe('Context Service:', () => {
   let mockProfileService: any;
   let mockSpaceNamePipe: any;
   let mockLocalStorage: any;
+  let mockFeatureTogglesService: any;
   let contextService: ContextService;
-
 
   beforeEach(() => {
     mockRouter = jasmine.createSpy('Router');
@@ -43,7 +43,7 @@ describe('Context Service:', () => {
     mockProfileService.current = Observable.of(profile);
     mockSpaceNamePipe = jasmine.createSpy('SpaceNamePipe');
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
-
+    mockFeatureTogglesService = jasmine.createSpy('FeatureTogglesService');
     TestBed.configureTestingModule({
       imports: [HttpModule],
       providers: [
@@ -76,6 +76,9 @@ describe('Context Service:', () => {
         },
         {
           provide: SpaceNamePipe, useValue: mockSpaceNamePipe
+        },
+        {
+          provide: FeatureTogglesService, useValue: mockFeatureTogglesService
         },
         EventService,
         ContextService
