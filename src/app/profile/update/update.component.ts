@@ -419,7 +419,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
         break;
       }
       default: {
-        this.featureLevel = 'nopreproduction';
+        this.featureLevel = 'released';
         break;
       }
     }

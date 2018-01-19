@@ -8,7 +8,7 @@
 <main class="">
   <div class="">
     <router-outlet name="action"></router-outlet>
-    <div [hidden]="!isExperimentalFeature"> <!--if not exp feature, hide-->
+    <div [hidden]="!isExperimentalFeature && featureEnablementLevel!='released'"> <!--if not exp feature oe exp feature of released state, hide-->
       <f8-feature-banner level="{{featureEnablementLevel}}">
       </f8-feature-banner>
       <div [hidden]="experimentalFeatureEnabled"> <!-- not enable for this user -->
