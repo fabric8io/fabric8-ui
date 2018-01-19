@@ -132,6 +132,7 @@ export class DeploymentsService {
   }
 
   getEnvironments(spaceId: string): Observable<ModelEnvironment[]> {
+    // Note: Sorting and filtering out test should ideally be moved to the backend
     return this.getEnvironmentsResponse(spaceId)
       .map((envs: EnvironmentStat[]) => envs || [])
       .map((envs: EnvironmentStat[]) => envs.sort((a, b) =>  -1 * a.name.localeCompare(b.name)))
