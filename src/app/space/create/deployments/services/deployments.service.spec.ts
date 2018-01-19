@@ -1034,4 +1034,90 @@ describe('DeploymentsService', () => {
     });
   });
 
+  describe('application links', () => {
+    it('should provide logs URL', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env'
+                      },
+                      links: {
+                        logs: 'http://example.com/logs'
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+      doMockHttpTest(httpResponse, 'http://example.com/logs',
+        svc.getLogsUrl('foo-space', 'foo-app', 'foo-env'), done);
+    });
+
+    it('should provide console URL', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env'
+                      },
+                      links: {
+                        console: 'http://example.com/console'
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+      doMockHttpTest(httpResponse, 'http://example.com/console',
+        svc.getConsoleUrl('foo-space', 'foo-app', 'foo-env'), done);
+    });
+
+    it('should provide application URL', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env'
+                      },
+                      links: {
+                        application: 'http://example.com/application'
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+      doMockHttpTest(httpResponse, 'http://example.com/application',
+        svc.getAppUrl('foo-space', 'foo-app', 'foo-env'), done);
+    });
+  });
+
 });
