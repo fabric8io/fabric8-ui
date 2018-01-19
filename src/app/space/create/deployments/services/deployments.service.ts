@@ -313,19 +313,18 @@ export class DeploymentsService implements OnDestroy {
   }
 
   getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return Observable.of('http://example.com/');
+    return this.getDeployment(spaceId, applicationId, environmentName)
+      .map((deployment: Deployment) => deployment.links.logs);
   }
 
   getConsoleUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return Observable.of('http://example.com/');
+    return this.getDeployment(spaceId, applicationId, environmentName)
+      .map((deployment: Deployment) => deployment.links.console);
   }
 
   getAppUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    if (Math.random() > 0.5) {
-      return Observable.of('http://example.com/');
-    } else {
-      return Observable.of('');
-    }
+    return this.getDeployment(spaceId, applicationId, environmentName)
+      .map((deployment: Deployment) => deployment.links.application);
   }
 
   deleteApplication(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
