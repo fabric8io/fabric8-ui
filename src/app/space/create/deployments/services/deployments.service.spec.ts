@@ -114,46 +114,68 @@ describe('DeploymentsService', () => {
 
   describe('#getApplications', () => {
     it('should publish faked application names', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            { name: 'vertx-hello' }, { name: 'vertx-paint' }, { name: 'vertx-wiki' }
-          ]
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello'
+                }
+              },
+              {
+                attributes: {
+                  name: 'vertx-paint'
+                }
+              },
+              {
+                attributes: {
+                  name: 'vertx-wiki'
+                }
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, expectedResponse.data.applications.map(app => app.name),
+      doMockHttpTest(httpResponse, ['vertx-hello', 'vertx-paint', 'vertx-wiki'],
         svc.getApplications('foo-spaceId'), done);
     });
 
     it('should return empty array if no applications', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: []
+          attributes: {
+            applications: []
+          }
         }
       };
-      doMockHttpTest(expectedResponse, [],
+      doMockHttpTest(httpResponse, [],
         svc.getApplications('foo-spaceId'), done);
     });
 
     it('should return singleton array result', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            { name: 'vertx-hello' }
-          ]
+          attributes: {
+            applications: [{
+              attributes: { name: 'vertx-hello' }
+            }]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, ['vertx-hello'],
+      doMockHttpTest(httpResponse, ['vertx-hello'],
         svc.getApplications('foo-spaceId'), done);
     });
 
     it('should return empty array for null applications response', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: null
+          attributes: {
+            applications: null
+          }
         }
       };
-      doMockHttpTest(expectedResponse, [], svc.getApplications('foo-spaceId'), done);
+      doMockHttpTest(httpResponse, [], svc.getApplications('foo-spaceId'), done);
     });
   });
 
@@ -161,7 +183,19 @@ describe('DeploymentsService', () => {
     it('should publish faked, filtered and sorted environments', (done: DoneFn) => {
       const httpResponse = {
         data: [
-          { name: 'run' }, { name: 'test' }, { name: 'stage'}
+          {
+            attributes: {
+              name: 'run'
+            }
+          }, {
+            attributes: {
+              name: 'test'
+            }
+          }, {
+            attributes: {
+              name: 'stage'
+            }
+          }
         ]
       };
       const expectedResponse = [{ name: 'stage' }, { name: 'run' }];
@@ -169,289 +203,379 @@ describe('DeploymentsService', () => {
     });
 
     it('should return singleton array result', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: [
-          { name: 'stage' }
+          {
+            attributes: {
+              name: 'stage'
+            }
+          }
         ]
       };
-      doMockHttpTest(expectedResponse, expectedResponse.data, svc.getEnvironments('foo-spaceId'), done);
+      doMockHttpTest(httpResponse, [{ name: 'stage' }], svc.getEnvironments('foo-spaceId'), done);
     });
 
     it('should return empty array if no environments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: []
       };
-      doMockHttpTest(expectedResponse, [], svc.getEnvironments('foo-spaceId'), done);
+      doMockHttpTest(httpResponse, [], svc.getEnvironments('foo-spaceId'), done);
     });
 
     it('should return empty array for null environments response', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: null
       };
-      doMockHttpTest(expectedResponse, [], svc.getEnvironments('foo-spaceId'), done);
+      doMockHttpTest(httpResponse, [], svc.getEnvironments('foo-spaceId'), done);
     });
   });
 
   describe('#isApplicationDeployedInEnvironment', () => {
     it('should be true for included deployments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, true,
+      doMockHttpTest(httpResponse, true,
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'), done);
     });
 
     it('should be true if included in multiple deployments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
-                },
-                {
-                  name: 'stage'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run'
+                      }
+                    },
+                    {
+                      attributes: {
+                        name: 'stage'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, true,
+      doMockHttpTest(httpResponse, true,
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'), done);
     });
 
     it('should be false for excluded deployments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false,
+      doMockHttpTest(httpResponse, false,
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
     });
 
     it('should be false if excluded in multiple deployments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
-                },
-                {
-                  name: 'test'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run'
+                      }
+                    },
+                    {
+                      attributes: {
+                        name: 'test'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false,
+      doMockHttpTest(httpResponse, false,
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
     });
 
     it('should be false if no deployments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: []
-            }
-          ]
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: []
+                }
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false,
+      doMockHttpTest(httpResponse, false,
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
     });
 
     it('should be false if deployments is null', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: null
-            }
-          ]
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: null
+                }
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false,
+      doMockHttpTest(httpResponse, false,
         svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
     });
   });
 
   describe('#isDeployedInEnvironment', () => {
     it('should be true for included environments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
+      doMockHttpTest(httpResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
     });
 
     it('should be true if included in multiple applications and environments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
-                },
-                {
-                  name: 'test'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run'
+                      }
+                    },
+                    {
+                      attributes: {
+                        name: 'test'
+                      }
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              name: 'vertx-wiki',
-              pipeline: [
-                {
-                  name: 'run'
-                },
-                {
-                  name: 'stage'
+              },
+              {
+                attributes: {
+                  name: 'vertx-wiki',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run'
+                      }
+                    },
+                    {
+                      attributes: {
+                        name: 'stage'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
+      doMockHttpTest(httpResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
     });
 
     it('should be false for excluded environments', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'run'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run'
+                      }
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              name: 'vertx-wiki',
-              pipeline: [
-                {
-                  name: 'test'
+              },
+              {
+                attributes: {
+                  name: 'vertx-wiki',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'test'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
 
     it('should be false if no environments are deployed', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: []
-            },
-            {
-              name: 'vertx-wiki',
-              pipeline: []
-            }
-          ]
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: []
+                }
+              },
+              {
+                attributes: {
+                  name: 'vertx-wiki',
+                  deployments: []
+                }
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
 
     it('should be false if no applications exist', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: []
+          attributes: {
+            applications: []
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
 
     it('should be false if applications are null', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: null
+          attributes: {
+            applications: null
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
 
-    it('should be false if pipeline is null', (done: DoneFn) => {
-      const expectedResponse = {
+    it('should be false if deployments is null', (done: DoneFn) => {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: null
-            }
-          ]
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: null
+                }
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
     });
   });
 
   describe('#getVersion', () => {
     it('should return 1.0.2', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'stage',
-                  version: '1.0.2'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'stage',
+                        version: '1.0.2'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
-      doMockHttpTest(expectedResponse, expectedResponse.data.applications[0].pipeline[0].version,
+      doMockHttpTest(httpResponse, '1.0.2',
         svc.getVersion('foo-spaceId', 'vertx-hello', 'stage'), done);
     });
   });
@@ -460,36 +584,46 @@ describe('DeploymentsService', () => {
     it('should return pods for an existing deployment', (done: DoneFn) => {
       const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'stage',
-                  pods: {
-                    running: 1,
-                    starting: 0,
-                    stopping: 1,
-                    total: 2
-                  }
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'stage',
+                        pod_total: 2,
+                        pods: [
+                          ['Running', '1'],
+                          ['Starting', '0'],
+                          ['Stopping', '1']
+                        ]
+                      }
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              name: 'foo-app',
-              pipeline: [
-                {
-                  name: 'run',
-                  pods: {
-                    running: 0,
-                    starting: 0,
-                    stopping: 1,
-                    total: 1
-                  }
+              },
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'run',
+                        pod_total: 1,
+                        pods: [
+                          ['Running', '0'],
+                          ['Starting', '0'],
+                          ['Stopping', '1']
+                        ]
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
 
@@ -509,31 +643,39 @@ describe('DeploymentsService', () => {
     it('should return pods when there are multiple deployments', (done: DoneFn) => {
       const httpResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'stage',
-                  pods: {
-                    running: 1,
-                    starting: 0,
-                    stopping: 1,
-                    total: 2
-                  }
-                },
-                {
-                  name: 'run',
-                  pods: {
-                    running: 3,
-                    starting: 2,
-                    stopping: 1,
-                    total: 6
-                  }
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'stage',
+                        pod_total: 2,
+                        pods: [
+                          ['Running', '1'],
+                          ['Starting', '0'],
+                          ['Stopping', '1']
+                        ]
+                      }
+                    },
+                    {
+                      attributes: {
+                        name: 'run',
+                        pod_total: 6,
+                        pods: [
+                          ['Running', '3'],
+                          ['Starting', '2'],
+                          ['Stopping', '1']
+                        ]
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
 
@@ -555,33 +697,43 @@ describe('DeploymentsService', () => {
     it('should combine timeseries and quota data', (done: DoneFn) => {
       const timeseriesResponse = {
         data: {
-          cores: {
-            time: 1,
-            value: 2
+          attributes: {
+            cores: {
+              time: 1,
+              value: 2
+            }
           }
         }
       };
       const deploymentResponse = {
         data: {
-          applications: [
-            {
-              name: 'foo-app',
-              pipeline: [
-                {
-                  name: 'foo-env'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
       const quotaResponse = {
         data: [{
-          name: 'foo-env',
-          quota: {
-            cpucores: {
-              quota: 3,
-              used: 4
+          attributes: {
+            name: 'foo-env',
+            quota: {
+              cpucores: {
+                quota: 3,
+                used: 4
+              }
             }
           }
         }]
@@ -620,33 +772,43 @@ describe('DeploymentsService', () => {
     it('should combine timeseries and quota data', (done: DoneFn) => {
       const timeseriesResponse = {
         data: {
-          memory: {
-            time: 1,
-            value: 2
+          attributes: {
+            memory: {
+              time: 1,
+              value: 2
+            }
           }
         }
       };
       const deploymentResponse = {
         data: {
-          applications: [
-            {
-              name: 'foo-app',
-              pipeline: [
-                {
-                  name: 'foo-env'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
       const quotaResponse = {
         data: [{
-          name: 'foo-env',
-          quota: {
-            memory: {
-              quota: 3,
-              used: 4
+          attributes: {
+            name: 'foo-env',
+            quota: {
+              memory: {
+                quota: 3,
+                used: 4
+              }
             }
           }
         }]
@@ -742,16 +904,18 @@ describe('DeploymentsService', () => {
     it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn) => {
       const expectedResponse = {
         data: [{
-          name: 'stage',
-          quota: {
-            cpucores: {
-              quota: 10,
-              used: 8
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                quota: 10,
+                used: 8
+              }
             }
           }
         }]
       };
-      doMockHttpTest(expectedResponse, expectedResponse.data[0].quota.cpucores,
+      doMockHttpTest(expectedResponse, expectedResponse.data[0].attributes.quota.cpucores,
         svc.getEnvironmentCpuStat('foo-spaceId', 'stage'), done);
     });
   });
@@ -761,12 +925,14 @@ describe('DeploymentsService', () => {
       const GB = Math.pow(1024, 3);
       const expectedResponse = {
         data: [{
-          name: 'stage',
-          quota: {
-            memory: {
-              used: 0.5 * GB,
-              quota: 1 * GB,
-              units: 'bytes'
+          attributes: {
+            name: 'stage',
+            quota: {
+              memory: {
+                used: 0.5 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
             }
           }
         }]
@@ -780,22 +946,28 @@ describe('DeploymentsService', () => {
     it('should return pods array', (done: DoneFn) => {
       const expectedResponse = {
         data: {
-          applications: [
-            {
-              name: 'vertx-hello',
-              pipeline: [
-                {
-                  name: 'stage',
-                  pods: {
-                    total: 6,
-                    running: 1,
-                    starting: 2,
-                    stopping: 3
-                  }
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'stage',
+                        pod_total: 6,
+                        pods: [
+                          ['Running', '1'],
+                          ['Starting', '2'],
+                          ['Stopping', '3']
+                        ]
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
       doMockHttpTest(expectedResponse, {
