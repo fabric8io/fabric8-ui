@@ -10,7 +10,7 @@
               *ngIf="isEditing && (isEditable() | async)"
               (keyup.enter)="onUpdateDescription(description.value)"
               (keydown.enter)="preventDef($event)"
-              #description>{{space.attributes.description}}</textarea>
+              #description>{{space?.attributes.description}}</textarea>
     <div *ngIf="isEditing">
       <button id="_btn_cancel"
               class="pull-right btn btn-default edit-space-description-btn"
@@ -25,7 +25,7 @@
       </button>
     </div>
     <span *ngIf="!isEditing || !(isEditable() | async)" (click)="startEditingDescription()" class="edit-space-description-span">
-      {{space.attributes.description || "Enter a description"}}
+      {{space?.attributes.description || "Enter a description"}}
     </span>
   </div>
 </div>
