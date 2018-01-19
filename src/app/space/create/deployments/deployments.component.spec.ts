@@ -91,13 +91,13 @@ describe('DeploymentsComponent', () => {
     let resourceUsageComponents = this.tested.queryAll(By.directive(FakeDeploymentsResourceUsageComponent));
     expect(resourceUsageComponents.length).toEqual(1);
     let resourceUsageComponent = resourceUsageComponents[0].componentInstance;
-    expect(resourceUsageComponent.environments).toBe(mockEnvironments);
+    expect(resourceUsageComponent.environments).toBe(this.testedDirective.environments);
 
     let appsComponents = this.tested.queryAll(By.directive(FakeDeploymentAppsComponent));
     expect(appsComponents.length).toEqual(1);
     let appsComponent = appsComponents[0].componentInstance;
-    expect(appsComponent.environments).toBe(mockEnvironments);
-    expect(appsComponent.applications).toBe(mockApplications);
+    expect(appsComponent.environments).toBe(this.testedDirective.environments);
+    expect(appsComponent.applications).toBe(this.testedDirective.applications);
   });
 
 });
