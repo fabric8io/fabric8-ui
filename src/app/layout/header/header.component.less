@@ -96,7 +96,9 @@
     overflow: hidden;
     white-space: nowrap;
     &-dropdown {
-      @extend: {.recent-items-toggle-text};
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
       margin-right: 2px;
     }
   }
