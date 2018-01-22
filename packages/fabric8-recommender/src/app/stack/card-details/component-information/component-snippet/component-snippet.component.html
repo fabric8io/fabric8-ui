@@ -34,19 +34,25 @@
             </div>
         </div>
     </div>
-    <div *ngIf="component?.licenses?.length > 0" class="common-table component-licenses">
+    <div class="common-table component-licenses">
         <div class="common-wrapper">
             <span class="info-head">License(s) used: </span>
-            <span class="common-container license-container">
+            <span *ngIf="component?.licenses?.length > 0" class="common-container license-container">
                 <span [innerText]="license" *ngFor="let license of component?.licenses"></span>
+            </span>
+            <span *ngIf="component?.licenses?.length === 0" class="common-container license-container">
+                -----
             </span>
         </div>
     </div>
-    <div *ngIf="component?.crowdSourcing?.tags && component?.crowdSourcing?.tags?.length > 0" class="common-table component-tags">
+    <div class="common-table component-tags">
         <div class="common-wrapper">
             <span class="info-head">Tags:</span> 
-            <span class="common-container tags-container">
+            <span *ngIf="component?.crowdSourcing?.tags && component?.crowdSourcing?.tags?.length > 0" class="common-container tags-container">
                 <span [innerText]="tag" *ngFor="let tag of component?.crowdSourcing?.tags"></span>
+            </span>
+            <span *ngIf="!component?.crowdSourcing?.tags || component?.crowdSourcing?.tags?.length === 0" class="common-container tags-container">
+                -----
             </span>
         </div>
     </div>
