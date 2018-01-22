@@ -132,9 +132,14 @@ export class DeploymentsService {
   }
 
   getEnvironments(spaceId: string): Observable<ModelEnvironment[]> {
+    // Note: Sorting and filtering out test should ideally be moved to the backend
     return this.getEnvironmentsResponse(spaceId)
       .map((envs: EnvironmentStat[]) => envs || [])
-      .map((envs: EnvironmentStat[]) => envs.map((env: EnvironmentStat) => ({ name: env.name} as ModelEnvironment)))
+      .map((envs: EnvironmentStat[]) => envs.sort((a, b) =>  -1 * a.name.localeCompare(b.name)))
+      .map((envs: EnvironmentStat[]) => envs
+        .filter((env: EnvironmentStat) => env.name !== 'test')
+        .map((env: EnvironmentStat) => ({ name: env.name} as ModelEnvironment))
+      )
       .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
         deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
   }
@@ -172,7 +177,10 @@ export class DeploymentsService {
     applicationId: string,
     desiredReplicas: number
   ): Observable<string> {
-    return Observable.of(`Scaled ${applicationId} in ${spaceId}/${environmentName} to ${desiredReplicas} replicas`);
+    const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/control?podCount=${desiredReplicas}`;
+    return this.http.put(url, '')
+      .map((r: Response) => { return `Successfully scaled ${applicationId}`; })
+      .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
 
   getPods(spaceId: string, applicationId: string, environmentName: string): Observable<ModelPods> {

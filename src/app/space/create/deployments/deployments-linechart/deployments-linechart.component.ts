@@ -101,7 +101,7 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
     };
     this.defaultConfig.grid.y.show = false;
     this.defaultConfig.point = { r: 0 };
-    this.defaultConfig.size = { height: 100 };
+    this.defaultConfig.size = { height: 80 };
     this.defaultConfig.legend = { show: false };
     this.defaultConfig.data = {
       type: 'line',

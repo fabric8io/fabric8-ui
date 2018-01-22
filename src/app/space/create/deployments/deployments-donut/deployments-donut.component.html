@@ -18,7 +18,9 @@
   </div>
 </div>
 <div class="deployments-donut-legend" *ngIf="!mini">
-  <div *ngFor="let column of (pods | async)?.pods">
-    <div class="deployments-donut-square" [style.background]='colors[column[0]]'></div>{{ column[1] > 0 ? column[1] + ' ' + column[0] : '' }}
-  </div>
+  <ng-container *ngFor="let column of (pods | async)?.pods">
+    <div *ngIf="column[1] > 0">
+      <div class="deployments-donut-square" [style.background]='colors[column[0]]'></div>{{ column[1] + ' ' + column[0] }}
+    </div>
+  </ng-container>
 </div>

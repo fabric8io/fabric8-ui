@@ -85,8 +85,8 @@ export class DeploymentDetailsComponent {
     this.setChartMaxElements(
       DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
 
-    this.cpuConfig.chartHeight = 100;
-    this.memConfig.chartHeight = 100;
+    this.cpuConfig.chartHeight = 60;
+    this.memConfig.chartHeight = 60;
     this.cpuTime = 1;
     this.memTime = 1;
 
