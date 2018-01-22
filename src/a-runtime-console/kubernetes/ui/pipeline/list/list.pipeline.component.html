@@ -26,27 +26,6 @@
                   <a (click)="startBuild(pipeline)" title="Start this Pipeline">Start Pipeline</a>
                 </li>
 
-                <li class="divider" *ngIf="pipeline.serviceUrls.length"></li>
-                <li *ngFor='let service of pipeline.serviceUrls'>
-                  <a [href]="service.url"
-                     title="open the {{service.name}} service in the {{service.environmentName}} environment"
-                     target="deployment"
-                     class="external-service">
-                    {{service.label}}
-                  </a>
-                </li>
-                <li class="divider" *ngIf="pipeline.serviceUrls.length"></li>
-
-                <li *ngIf="pipeline.lastBuildPath">
-                  <a routerLink="{{pipeline.lastBuildPath}}" title="view last build">
-                    View last build
-                  </a>
-                </li>
-                <li *ngIf="pipeline.jenkinsTestReportUrl">
-                  <a [href]="pipeline.jenkinsTestReportUrl" target="jenkins" title="view the JUnit Test report results">
-                    View test report
-                  </a>
-                </li>
                 <li class="divider" *ngIf="pipeline.gitUrl"></li>
                 <li *ngIf="pipeline.openInDEAUrl">
                   <a [href]="pipeline.openInDEAUrl | safeUrl" title="open this project in IDEA IntelliJ\n(Requires Jetbrains Toolbox to be installed)">
@@ -57,10 +36,6 @@
                   <a href="{{pipeline.jenkinsJobUrl}}" title="open the Jenksin Job for this build" target="jenkins">
                     Open Jenkins Job
                   </a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <a [routerLink]="[pipeline.id, 'edit']">Edit</a>
                 </li>
                 <li class="divider"></li>
                 <li>
@@ -109,5 +84,3 @@
     <delete-buildconfig-dialog></delete-buildconfig-dialog>
   </modal-content>
 </modal>
-
-
