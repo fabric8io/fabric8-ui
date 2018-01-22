@@ -178,7 +178,7 @@
         <div class="pre-loader-spinner spinner spinner-lg"></div>
     </div>
     <div class="show-full-report">
-        <stack-details *ngIf="result" class="report-link" [buildNumber]="buildNumber" [appName]="appName" [displayName]="'Show complete stack report'" [repoInfo]="repoInfo" [stackResponse]="result && result" [gatewayConfig]="gatewayConfig && gatewayConfig" [stack]="stackUrl"></stack-details>
+        <stack-details *ngIf="result" class="report-link" [showFlags]="'false'" [buildNumber]="buildNumber" [appName]="appName" [displayName]="'Show complete stack report'" [repoInfo]="repoInfo" [stackResponse]="result && result" [gatewayConfig]="gatewayConfig && gatewayConfig" [stack]="stackUrl"></stack-details>
     </div>
 </div>
 <div *ngIf="error" class="error-class">

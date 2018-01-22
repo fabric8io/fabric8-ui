@@ -46,6 +46,7 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
     public geturl(): void {
         let subs = null;
         let alive: boolean = true;
+        let counter: number = 0;
         if(this.url && this.url !== '') {
             this.stackUrl = this.url;
             let observable: any = this.PipelineInsightsService
@@ -108,6 +109,9 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
                     },  error => {
                         alive = false;
                     });
+                    if (counter ++ > 5) {
+                        alive = false;
+                    }
                 })
         }
                 

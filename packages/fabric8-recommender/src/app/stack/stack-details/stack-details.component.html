@@ -1,6 +1,6 @@
 <div class="stack-report">
   <a class="stack-reports-btn" (click)="showStackModal($event)">{{displayName}}</a>
-  <pipleine-insights-details *ngIf="stack" [url]="stack" ></pipleine-insights-details>
+  <pipleine-insights-details *ngIf="stack && showF" [url]="stack"></pipleine-insights-details>
   <modal #stackModule title="Stack report for {{appName}}, Build #{{buildNumber}}" modalClass="modal-lg modal-fullscreen modal-width-class" (onClose)="handleModalClose();" (onOpen)="init();">
     <modal-content>
       <div *ngIf="!error">

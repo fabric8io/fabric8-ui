@@ -35,6 +35,7 @@ export class StackDetailsComponent implements OnChanges {
     @Input() buildNumber;
     @Input() appName;
     @Input() stackResponse;
+    @Input() showFlags;
 
     @ViewChild('stackModule') modalStackModule: any;
 
@@ -47,7 +48,6 @@ export class StackDetailsComponent implements OnChanges {
     /**
      * New Stack Report Revamp - End
      */
-
     public errorMessage: any = {};
     public cache: string = '';
     public cacheResponse: any;
@@ -70,6 +70,7 @@ export class StackDetailsComponent implements OnChanges {
     public feedbackConfig: any = {};
 
     public tabs: Array<any> = [];
+    public showF: boolean = true;
 
     private userStackInformationArray: Array<UserStackInfoModel> = [];
     private totalManifests: number;
@@ -190,6 +191,9 @@ export class StackDetailsComponent implements OnChanges {
                 subHeader: 'Consider theses additional dependencies'
             };
             this.displayName = this.displayName || 'Stack Report';
+        }
+        if (this.showFlags === 'false') {
+            this.showF =false;
         }
     }
 
