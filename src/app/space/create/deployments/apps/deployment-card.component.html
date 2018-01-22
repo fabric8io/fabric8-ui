@@ -38,8 +38,8 @@
           </div>
         </div>
       </div>
-      <deployment-details [collapsed]="collapsed" [applicationId]="applicationId"
-        [environment]="environment" [spaceId]="spaceId"></deployment-details>
+      <deployment-details (click)="$event.stopPropagation()" [collapsed]="collapsed"
+        [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId"></deployment-details>
     </div>
   </div>
 </ng-container>
