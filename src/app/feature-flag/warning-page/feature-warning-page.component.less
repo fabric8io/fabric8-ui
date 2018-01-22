@@ -10,9 +10,16 @@
       i {
         color: @color-for-feature;
       }
-      button {
+      .btn-feature-level {
+        &:extend(.btn-default);
+        border-color: @color-for-feature;
         background-color: @color-for-feature;
-        color: white;
+        background-image: linear-gradient(to bottom, @color-for-feature 0, @color-for-feature 100%);
+        &:hover {
+          background-color: @color-for-feature;
+          background-image: none;
+          border-color: darken((@color-for-feature), 10%);
+        }
       }
     }
   }
