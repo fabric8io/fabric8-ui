@@ -12,7 +12,7 @@ import { Environment } from '../models/environment';
   templateUrl: 'deployment-card-container.component.html'
 })
 export class DeploymentCardContainerComponent {
-  @Input() spaceId: string;
+  @Input() spaceId: Observable<string>;
   @Input() environments: Observable<Environment[]>;
   @Input() application: string;
 }

@@ -44,7 +44,7 @@ describe('DeploymentCardContainer', () => {
       declarations: [FakeDeploymentCardComponent]
     },
     (component: DeploymentCardContainerComponent) => {
-      component.spaceId = 'space';
+      component.spaceId = Observable.of('space');
       component.environments = Observable.of(environments);
       component.application = 'app';
     });
