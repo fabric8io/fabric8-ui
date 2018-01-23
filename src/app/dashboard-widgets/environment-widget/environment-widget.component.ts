@@ -217,14 +217,13 @@ export class EnvironmentWidgetComponent extends AbstractWatchComponent  implemen
   }
 
   private filterDeploymentViews(deploymentViews: DeploymentViews): DeploymentViews {
-    let spaceId = this.currentContext.space.attributes.name;
-    if (!spaceId) {
+    if (!this.currentContext.space || !this.currentContext.space.attributes.name) {
       return deploymentViews;
     }
     let answer = new DeploymentViews();
     deploymentViews.forEach(dep => {
       let depSpace = dep.labels['space'];
-      if (!depSpace || depSpace === spaceId) {
+      if (!depSpace || depSpace === this.currentContext.space.attributes.name) {
         answer.push(dep);
       }
     });

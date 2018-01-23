@@ -51,7 +51,6 @@
 }
 .navbar-pf {
   min-height: 48px;
-  border-color: @color-pf-red-100;
   .infotip {
     &.bottom-right {
       .arrow { left: 88%; }
@@ -96,7 +95,9 @@
     overflow: hidden;
     white-space: nowrap;
     &-dropdown {
-      @extend: {.recent-items-toggle-text};
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
       margin-right: 2px;
     }
   }

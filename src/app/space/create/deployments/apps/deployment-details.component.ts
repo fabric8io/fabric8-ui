@@ -10,6 +10,7 @@ import { Observable, Subscription } from 'rxjs';
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
+import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import { DeploymentsService } from '../services/deployments.service';
 
 import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
@@ -63,6 +64,7 @@ export class DeploymentDetailsComponent {
 
   public netConfig: DeploymentsLinechartConfig = {
     chartId: uniqueId('net-chart'),
+    units: 'bytes',
     showXAxis: true
   };
 
@@ -76,6 +78,7 @@ export class DeploymentDetailsComponent {
   memUnits: string;
   memMax: number;
   netVal: number;
+  netUnits: string;
 
   sparklineMaxElements: number;
 
@@ -118,10 +121,12 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name)
         .subscribe(stat => {
-          this.netVal = round(stat.received + stat.sent, 1);
+          const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
+          this.netVal = round(netTotal.used, 1);
+          this.netUnits = netTotal.units;
           this.netData.xData.push(+new Date());
-          this.netData.yData[0].push(stat.sent);
-          this.netData.yData[1].push(stat.received);
+          this.netData.yData[0].push(stat.sent.raw);
+          this.netData.yData[1].push(stat.received.raw);
           this.trimLinechartData(this.netData);
         })
     );
