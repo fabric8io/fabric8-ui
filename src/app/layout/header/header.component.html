@@ -63,19 +63,19 @@
             <!-- current Space and recent items dropdown -->
             <ul class="dropdown-menu recent-items" *dropdownMenu>
               <li class="recent-items-toggle" *ngFor="let m of recent">
-                <a class="recent-items-text-dropdown"
+                <a class="recent-items-toggle-text-dropdown"
                   [routerLink]="[m.path]"
                   *ngIf="m.path !== null && m.path != context.path"
                   data-toggle="tooltip" title="{{m.name}}">
-                <span class="nav-item-icon">
-                  <span class=" {{m.type.icon}}"></span>
-                </span>
+                  <span class="nav-item-icon">
+                    <span class=" {{m.type.icon}}"></span>
+                  </span>
                   <span>{{m.name}}</span>
                 </a>
                 <a *ngIf="m.path === null">
-                <span class="nav-item-icon">
-                  <span class=" {{m.type.icon}}"></span>
-                </span>
+                  <span class="nav-item-icon">
+                    <span class=" {{m.type.icon}}"></span>
+                  </span>
                   <span>{{m.name}}</span>
                 </a>
               </li>
