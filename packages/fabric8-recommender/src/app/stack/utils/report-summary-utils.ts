@@ -225,7 +225,7 @@ export class ReportSummaryUtils {
             conflictLicense.infoText = 'License Conflicts';
             let conflictLicenses = licenseAnalysis.conflict_packages;
             conflictLicense.infoValue = conflictLicenses ? conflictLicenses.length : 0;
-            if (stackLicense.infoValue === 'Failure') {
+            if (stackLicense.infoValue === 'Unknown') {
                 conflictLicense.infoValue = 'NA';
             }
             licensesCard.reportSummaryContent.infoEntries.push(conflictLicense);
@@ -234,12 +234,12 @@ export class ReportSummaryUtils {
             unknownLicense.infoText = 'Unknown Licenses';
             let unknownLicenses = licenseAnalysis.unknown_licenses.really_unknown;
             unknownLicense.infoValue = unknownLicenses ? unknownLicenses.length : 0;
-            if (stackLicense.infoValue === 'Failure') {
+            if (stackLicense.infoValue === 'Unknown') {
                 unknownLicense.infoValue = 'NA';
             }
             licensesCard.reportSummaryContent.infoEntries.push(unknownLicense);
 
-            if (stackLicense.infoValue !== 'NONE' && stackLicense.infoValue !== 'Failure') {
+            if (stackLicense.infoValue !== 'NONE' && stackLicense.infoValue !== 'Unknown') {
                 let restrictiveLicenses: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
             restrictiveLicenses.infoText = 'Restrictive License(s)';
                 let restrictive = licenseAnalysis.outlier_packages;
