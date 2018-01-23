@@ -24,7 +24,7 @@ const STAT_THRESHOLD = .6;
 })
 export class DeploymentCardComponent implements OnDestroy, OnInit {
 
-  @Input() spaceId: string;
+  @Input() spaceId: Observable<string>;
   @Input() applicationId: string;
   @Input() environment: Environment;
 
@@ -45,6 +45,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   private readonly waitTime: number = 5000; // 5 seconds
   private readonly maxWaitTime: number = 10000; // 10 seconds
   private debouncedUpdateDetails = debounce(this.updateDetails, this.waitTime, { maxWait: this.maxWaitTime});
+  private spaceIdReference: string;
 
   constructor(
     private deploymentsService: DeploymentsService,
@@ -59,32 +60,35 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
     this.toolTip = 'Everything is ok';
 
-    this.cpuStat = this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
-    this.subscriptions.push(this.cpuStat.subscribe((stat) => {
-      this.changeStatus(stat);
+    this.subscriptions.push(this.spaceId.subscribe((spaceId: string) => {
+      this.spaceIdReference = spaceId;
+      this.cpuStat = this.deploymentsService.getDeploymentCpuStat(spaceId, this.applicationId, this.environment.name);
+      this.subscriptions.push(this.cpuStat.subscribe((stat) => {
+        this.changeStatus(stat);
+      }));
+
+      this.subscriptions.push(
+        this.deploymentsService
+          .isApplicationDeployedInEnvironment(spaceId, this.applicationId, this.environment.name)
+          .subscribe((active: boolean) => {
+            this.active = active;
+
+            if (active) {
+              this.version =
+                this.deploymentsService.getVersion(spaceId, this.applicationId, this.environment.name);
+
+              this.logsUrl =
+                this.deploymentsService.getLogsUrl(spaceId, this.applicationId, this.environment.name);
+
+              this.consoleUrl =
+                this.deploymentsService.getConsoleUrl(spaceId, this.applicationId, this.environment.name);
+
+              this.appUrl =
+                this.deploymentsService.getAppUrl(spaceId, this.applicationId, this.environment.name);
+            }
+          })
+      );
     }));
-
-    this.subscriptions.push(
-      this.deploymentsService
-        .isApplicationDeployedInEnvironment(this.spaceId, this.applicationId, this.environment.name)
-        .subscribe((active: boolean) => {
-          this.active = active;
-
-          if (active) {
-            this.version =
-              this.deploymentsService.getVersion(this.spaceId, this.applicationId, this.environment.name);
-
-            this.logsUrl =
-              this.deploymentsService.getLogsUrl(this.spaceId, this.applicationId, this.environment.name);
-
-            this.consoleUrl =
-              this.deploymentsService.getConsoleUrl(this.spaceId, this.applicationId, this.environment.name);
-
-            this.appUrl =
-              this.deploymentsService.getAppUrl(this.spaceId, this.applicationId, this.environment.name);
-          }
-        })
-    );
   }
 
   changeStatus(stat: CpuStat) {
@@ -117,22 +121,29 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   delete(): void {
-    this.subscriptions.push(
-      this.deploymentsService.deleteApplication(this.spaceId, this.applicationId, this.environment.name)
-        .subscribe(
-          success => {
-            this.notifications.message({
-              type: NotificationType.SUCCESS,
-              message: success
-            });
-          },
-          error => {
-            this.notifications.message({
-              type: NotificationType.WARNING,
-              message: error
-            });
-          }
-        )
-    );
+    if (this.spaceIdReference) {
+      this.subscriptions.push(
+        this.deploymentsService.deleteApplication(this.spaceIdReference, this.applicationId, this.environment.name)
+          .subscribe(
+            success => {
+              this.notifications.message({
+                type: NotificationType.SUCCESS,
+                message: success
+              });
+            },
+            error => {
+              this.notifications.message({
+                type: NotificationType.WARNING,
+                message: error
+              });
+            }
+          )
+      );
+    } else {
+      this.notifications.message({
+        type: NotificationType.WARNING,
+        message: 'Unable to delete. Unknown space.'
+      });
+    }
   }
 }
