@@ -31,7 +31,8 @@ import 'patternfly/dist/js/patternfly-settings.js';
   [collapsed]="collapsed"
   [applicationId]="applicationId"
   [environment]="environment"
-  [spaceId]="spaceId">
+  [spaceId]="spaceId"
+  [active]="detailsActive">
   </deployment-details>`
 })
 class HostComponent {
@@ -39,6 +40,7 @@ class HostComponent {
   public applicationId: string = 'mockAppId';
   public environment: Environment = { name: 'mockEnvironment' };
   public spaceId: string = 'mockSpaceId';
+  public detailsActive: boolean = true;
 }
 
 @Component({
