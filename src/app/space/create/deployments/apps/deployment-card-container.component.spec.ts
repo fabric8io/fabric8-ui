@@ -26,7 +26,7 @@ class HostComponent { }
   template: ''
 })
 class FakeDeploymentCardComponent {
-  @Input() spaceId: string;
+  @Input() spaceId: Observable<string>;
   @Input() applicationId: string;
   @Input() environment: Environment;
 }

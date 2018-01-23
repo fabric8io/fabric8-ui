@@ -7,7 +7,7 @@
     </div>
     <deployment-card class="col-xs-6 col-sm-4 col-md-3"
       *ngFor="let environment of environments | async"
-      [spaceId]="spaceId | async"
+      [spaceId]="spaceId"
       [applicationId]="application"
       [environment]="environment"
     ></deployment-card>
