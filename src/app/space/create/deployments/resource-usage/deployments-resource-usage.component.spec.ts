@@ -22,7 +22,7 @@ class HostComponent { }
   template: ''
 })
 class FakeResourceCardComponent {
-  @Input() spaceId: string;
+  @Input() spaceId: Observable<string>;
   @Input() environment: Environment;
 }
 
@@ -55,7 +55,7 @@ describe('DeploymentsResourceUsageComponent', () => {
     mockEnvironmentData.forEach((envData: Environment, index: number) => {
       let cardComponent: FakeResourceCardComponent = arrayOfComponents[index].componentInstance;
       expect(cardComponent.environment).toEqual(mockEnvironmentData[index]);
-      expect(cardComponent.spaceId).toEqual('spaceId');
+      expect(cardComponent.spaceId).toEqual(spaceIdObservable);
     });
   });
 

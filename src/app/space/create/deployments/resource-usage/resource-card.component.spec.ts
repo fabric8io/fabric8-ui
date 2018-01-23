@@ -66,7 +66,7 @@ describe('ResourceCardComponent', () => {
       providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
     },
     (component: ResourceCardComponent) => {
-      component.spaceId = 'spaceId';
+      component.spaceId = Observable.of('spaceId');
       component.environment = { name: 'stage' } as Environment;
     }
   );
