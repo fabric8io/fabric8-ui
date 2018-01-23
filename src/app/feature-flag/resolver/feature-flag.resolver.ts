@@ -13,6 +13,7 @@ import { FeatureTogglesService } from '../service/feature-toggles.service';
 
 enum FeatureLevel {
   internal = 'internal',
+  released = 'released',
   notApplicable = 'notApplicable', // non redhat user trying to access internal feature
   systemError = 'systemError', // f8-toggles-service is down, this features is disabled by PM for all level
   notLoggedIn = 'notLoggedIn',
@@ -68,6 +69,9 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
   private getBannerColor(level: string): string {
     if (level.toLocaleLowerCase() === 'beta') {
       return FeatureLevel.beta as string;
+    }
+    if (level.toLocaleLowerCase() === 'released') {
+      return FeatureLevel.released as string;
     }
     if (level.toLocaleLowerCase() === 'internal') {
       return FeatureLevel.internal as string;

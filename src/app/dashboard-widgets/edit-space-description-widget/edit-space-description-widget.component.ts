@@ -48,8 +48,8 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
         let patch = {
           attributes: {
             description: description,
-            name: this.space.attributes.name,
-            version: this.space.attributes.version
+            name: this.space ? this.space.attributes.name : '',
+            version: this.space ? this.space.attributes.version : ''
           },
           type: 'spaces',
           id: this.space.id
@@ -62,7 +62,9 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
         .do(val => {
           console.log('updatedspace', val);
           this.isEditing = false;
-          this.space.attributes.description = val.attributes.description;
+          if (this.space && val) {
+            this.space.attributes.description = val.attributes.description;
+          }
         })
         .do(updated => this.broadcaster.broadcast('spaceUpdated', updated))
         .switchMap(updated => this.spaceNamespaceService.updateConfigMap(Observable.of(updated)))

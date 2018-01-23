@@ -91,14 +91,16 @@ export class SpaceNamespaceService {
       }
     )
       .do(val => {
-        val.data[val.space.attributes.name] = val.data.get(val.space.attributes.name) || {};
-        val.data[val.space.attributes.name]['name'] = val.space.attributes.name;
-        if (val.space.attributes.description) {
-          val.data[val.space.attributes.name]['description'] = val.space.attributes.description;
+        if (val.space) {
+          val.data[val.space.attributes.name] = val.data.get(val.space.attributes.name) || {};
+          val.data[val.space.attributes.name]['name'] = val.space.attributes.name;
+          if (val.space.attributes.description) {
+            val.data[val.space.attributes.name]['description'] = val.space.attributes.description;
+          }
+          val.data[val.space.attributes.name]['creator'] = val.space.relationalData.creator.attributes.username;
+          val.data[val.space.attributes.name]['id'] = val.space.id;
+          val.data[val.space.attributes.name]['version'] = 'v1';
         }
-        val.data[val.space.attributes.name]['creator'] = val.space.relationalData.creator.attributes.username;
-        val.data[val.space.attributes.name]['id'] = val.space.id;
-        val.data[val.space.attributes.name]['version'] = 'v1';
       })
       .switchMap(val => {
         let cm = val.configMap;
