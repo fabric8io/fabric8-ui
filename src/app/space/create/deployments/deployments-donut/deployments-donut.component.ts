@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { debounce, isNumber } from 'lodash';
 import { NotificationType } from 'ngx-base';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Environment } from '../models/environment';
 
@@ -15,10 +15,10 @@ import { DeploymentsService } from '../services/deployments.service';
   templateUrl: './deployments-donut.component.html',
   styleUrls: ['./deployments-donut.component.less']
 })
-export class DeploymentsDonutComponent implements OnInit {
+export class DeploymentsDonutComponent implements OnDestroy, OnInit {
 
   @Input() mini: boolean;
-  @Input() spaceId: string;
+  @Input() spaceId: Observable<string>;
   @Input() applicationId: string;
   @Input() environment: Environment;
 
@@ -43,6 +43,8 @@ export class DeploymentsDonutComponent implements OnInit {
 
   private replicas: number;
   private scaleRequestPending: boolean = false;
+  private subscriptions: Subscription[] = [];
+  private spaceIdRef: string;
 
   constructor(
     private deploymentsService: DeploymentsService,
@@ -50,12 +52,24 @@ export class DeploymentsDonutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name);
-    this.pods.subscribe(pods => {
-      this.replicas = pods.total;
-      if (!this.scaleRequestPending) {
-        this.desiredReplicas = this.replicas;
+
+    this.subscriptions.push(
+      this.spaceId.subscribe((spaceId: string) => {
+        this.spaceIdRef = spaceId;
+        this.pods = this.deploymentsService.getPods(spaceId, this.applicationId, this.environment.name);
+        this.subscriptions.push(this.pods.subscribe(pods => {
+            this.replicas = pods.total;
+            if (!this.scaleRequestPending) {
+              this.desiredReplicas = this.replicas;
+            }
+          }));
       }
+    ));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
     });
   }
 
@@ -87,19 +101,26 @@ export class DeploymentsDonutComponent implements OnInit {
   }
 
   private scale(): void {
-    this.deploymentsService.scalePods(
-      this.spaceId, this.environment.name, this.applicationId, this.desiredReplicas
-    ).first().subscribe(
-      success => {
-        this.scaleRequestPending = false;
-      },
-      error => {
-        this.scaleRequestPending = false;
-        this.notifications.message({
-          type: NotificationType.WARNING,
-          message: error
-        });
-      }
-    );
+    if (this.spaceIdRef) {
+      this.deploymentsService.scalePods(
+        this.spaceIdRef, this.environment.name, this.applicationId, this.desiredReplicas
+      ).first().subscribe(
+        success => {
+          this.scaleRequestPending = false;
+        },
+        error => {
+          this.scaleRequestPending = false;
+          this.notifications.message({
+            type: NotificationType.WARNING,
+            message: error
+          });
+        }
+      );
+    } else {
+      this.notifications.message({
+        type: NotificationType.WARNING,
+        message: 'Unable to scale. Unknown space'
+      });
+    }
   }
 }

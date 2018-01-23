@@ -6,7 +6,7 @@
           <deployment-status-icon [iconClass]="iconClass" [toolTip]="toolTip"></deployment-status-icon>
         </div>
         <div class="col-sm-7">
-          <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId | async" [mini]="true"></deployments-donut>
+          <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="true"></deployments-donut>
         </div>
         <div class="col-sm-1">
           <span id="versionLabel">{{ version | async }}</span>

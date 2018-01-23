@@ -1,7 +1,7 @@
 <div [collapse]="collapsed">
   <ng-container *ngIf="!collapsed">
     <hr>
-    <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId | async" [mini]="false"></deployments-donut>
+    <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="false"></deployments-donut>
 
     <div class="deployment-chart">
       <div class="chart-column">
