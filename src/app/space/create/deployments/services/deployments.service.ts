@@ -31,6 +31,7 @@ import {
 
 import {
   flatten,
+  has,
   includes,
   isEmpty,
   isEqual as deepEqual
@@ -271,6 +272,7 @@ export class DeploymentsService implements OnDestroy {
 
   getDeploymentCpuStat(spaceId: string, applicationName: string, environmentName: string): Observable<CpuStat> {
     const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
+      .filter((t: TimeseriesData) => t && has(t, 'cores'))
       .map((t: TimeseriesData) => t.cores);
     const quota = this.getEnvironmentCpuStat(spaceId, environmentName)
       .map((stat: CpuStat) => stat.quota)
@@ -282,6 +284,7 @@ export class DeploymentsService implements OnDestroy {
 
   getDeploymentMemoryStat(spaceId: string, applicationName: string, environmentName: string): Observable<MemoryStat> {
     const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
+      .filter((t: TimeseriesData) => t && has(t, 'memory'))
       .map((t: TimeseriesData) => t.memory);
     const quota = this.getEnvironment(spaceId, environmentName)
       .map((env: EnvironmentStat) => env.attributes.quota.memory.quota)
@@ -294,6 +297,7 @@ export class DeploymentsService implements OnDestroy {
   getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
     // TODO: propagate timestamps to caller
     return this.getTimeseriesData(spaceId, applicationId, environmentName)
+      .filter((t: TimeseriesData) => t && has(t, 'net_tx') && has(t, 'net_rx'))
       .map((t: TimeseriesData) =>
         ({
           sent: new ScaledNetworkStat(t.net_tx.value),

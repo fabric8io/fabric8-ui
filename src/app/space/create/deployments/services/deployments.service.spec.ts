@@ -847,29 +847,37 @@ describe('DeploymentsService', () => {
     it('should return scaled timeseries data', (done: DoneFn) => {
       const timeseriesResponse = {
         data: {
-          net_tx: {
-            time: 0,
-            value: 1.7
-          },
-          net_rx: {
-            time: 2,
-            value: 3.1
+          attributes: {
+            net_tx: {
+              time: 0,
+              value: 1.7
+            },
+            net_rx: {
+              time: 2,
+              value: 3.1
+            }
           }
         }
       };
 
       const deploymentResponse = {
         data: {
-          applications: [
-            {
-              name: 'foo-app',
-              pipeline: [
-                {
-                  name: 'foo-env'
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env'
+                      }
+                    }
+                  ]
                 }
-              ]
-            }
-          ]
+              }
+            ]
+          }
         }
       };
 
