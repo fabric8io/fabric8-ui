@@ -63,7 +63,7 @@ describe('DeploymentsDonutComponent', () => {
     },
     (component: DeploymentsDonutComponent) => {
       component.mini = false;
-      component.spaceId = 'space';
+      component.spaceId = Observable.of('space');
       component.applicationId = 'application';
       component.environment = { name: 'environmentName' } as Environment;
     });
@@ -188,7 +188,7 @@ describe('DeploymentsDonutComponent error handling', () => {
     },
     (component: DeploymentsDonutComponent) => {
       component.mini = false;
-      component.spaceId = 'space';
+      component.spaceId = Observable.of('space');
       component.applicationId = 'application';
       component.environment = { name: 'environmentName' } as Environment;
     });
