@@ -38,7 +38,7 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
    */
   getAcknowledgement(featureName: string): boolean {
     if (featureName === undefined || featureName.length === 0) {
-      return;
+      return false;
     }
     let acknowledged: boolean = false;
     let profile = this.getTransientProfile();
