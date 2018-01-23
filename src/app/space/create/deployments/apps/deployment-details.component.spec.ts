@@ -40,7 +40,7 @@ class HostComponent {
   public collapsed: boolean = false;
   public applicationId: string = 'mockAppId';
   public environment: Environment = { name: 'mockEnvironment' };
-  public spaceId: string = 'mockSpaceId';
+  public spaceId: Observable<string> = Observable.of('mockSpaceId');
   public detailsActive: boolean = true;
 }
 
