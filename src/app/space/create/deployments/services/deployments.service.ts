@@ -1,6 +1,7 @@
 import {
   Inject,
-  Injectable
+  Injectable,
+  OnDestroy
 } from '@angular/core';
 
 import { round } from 'lodash';
@@ -13,7 +14,8 @@ import {
 
 import {
   Observable,
-  ReplaySubject
+  ReplaySubject,
+  Subscription
 } from 'rxjs';
 
 import { AuthenticationService } from 'ngx-login-client';
@@ -111,7 +113,7 @@ export interface SeriesData {
 }
 
 @Injectable()
-export class DeploymentsService {
+export class DeploymentsService implements OnDestroy {
 
   static readonly INITIAL_UPDATE_DELAY: number = 0;
   static readonly POLL_RATE_MS: number = 60000;
@@ -127,6 +129,8 @@ export class DeploymentsService {
     .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
     .share();
 
+  private serviceSubscriptions: Subscription[] = [];
+
   constructor(
     public http: Http,
     public auth: AuthenticationService,
@@ -138,6 +142,12 @@ export class DeploymentsService {
       this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
     this.apiUrl = witUrl + 'apps/spaces/';
+  }
+
+  ngOnDestroy(): void {
+    this.serviceSubscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
+    });
   }
 
   getApplications(spaceId: string): Observable<string[]> {
@@ -292,7 +302,7 @@ export class DeploymentsService {
             .map((response: Response) => (response.json() as ApplicationsResponse).data)
             .catch((err: Response) => this.handleHttpError(err))
         );
-      observable.subscribe(subject);
+      this.serviceSubscriptions.push(observable.subscribe(subject));
       this.appsObservables.set(spaceId, subject);
     }
     return this.appsObservables.get(spaceId);
@@ -321,7 +331,7 @@ export class DeploymentsService {
             .map((response: Response) => (response.json() as EnvironmentsResponse).data)
             .catch((err: Response) => this.handleHttpError(err))
         );
-      observable.subscribe(subject);
+      this.serviceSubscriptions.push(observable.subscribe(subject));
       this.envsObservables.set(spaceId, subject);
     }
     return this.envsObservables.get(spaceId);
@@ -350,7 +360,7 @@ export class DeploymentsService {
                   .catch((err: Response) => this.handleHttpError(err))
                   .filter((t: TimeseriesData) => !!t && !isEmpty(t))
               );
-            observable.subscribe(subject);
+            this.serviceSubscriptions.push(observable.subscribe(subject));
             this.timeseriesObservables.set(key, subject);
           }
           return this.timeseriesObservables.get(key);
@@ -388,5 +398,4 @@ export class DeploymentsService {
     } as Notification);
     return Observable.throw(response.status);
   }
-
 }
