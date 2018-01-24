@@ -418,11 +418,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
         this.featureLevel = 'internal';
         break;
       }
-      // to be deleted once auth-service and DB have been migrated
-      case 'nopreproduction': {
-        this.featureLevel = 'released';
-        break;
-      }
       default: {
         this.featureLevel = 'released';
         break;
