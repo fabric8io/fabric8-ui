@@ -25,7 +25,7 @@ export class DeploymentsDonutComponent implements OnInit {
   isIdled = false;
   scalable = true;
   pods: Observable<Pods>;
-  desiredReplicas: number;
+  desiredReplicas: number = 1;
   debounceScale = debounce(this.scale, 650);
 
   colors = {
@@ -42,6 +42,7 @@ export class DeploymentsDonutComponent implements OnInit {
   };
 
   private replicas: number;
+  private scaleRequestPending: boolean = false;
 
   constructor(
     private deploymentsService: DeploymentsService,
@@ -50,19 +51,23 @@ export class DeploymentsDonutComponent implements OnInit {
 
   ngOnInit(): void {
     this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name);
-    this.pods.subscribe(pods => this.replicas = pods.total);
-
-    this.desiredReplicas = this.getDesiredReplicas();
+    this.pods.subscribe(pods => {
+      this.replicas = pods.total;
+      if (!this.scaleRequestPending) {
+        this.desiredReplicas = this.replicas;
+      }
+    });
   }
 
   scaleUp(): void {
     if (!this.scalable) {
       return;
     }
-    let desired = this.getDesiredReplicas();
+    let desired = this.desiredReplicas;
     this.desiredReplicas = desired + 1;
 
     this.debounceScale();
+    this.scaleRequestPending = true;
   }
 
   scaleDown(): void {
@@ -70,26 +75,15 @@ export class DeploymentsDonutComponent implements OnInit {
       return;
     }
 
-    if (this.getDesiredReplicas() === 0) {
+    if (this.desiredReplicas === 0) {
       return;
     }
 
-    let desired = this.getDesiredReplicas();
+    let desired = this.desiredReplicas;
     this.desiredReplicas = desired - 1;
 
     this.debounceScale();
-  }
-
-  getDesiredReplicas(): number {
-    if (isNumber(this.desiredReplicas)) {
-      return this.desiredReplicas;
-    }
-
-    if (this.replicas) {
-      return this.replicas;
-    }
-
-    return 1;
+    this.scaleRequestPending = true;
   }
 
   private scale(): void {
@@ -97,9 +91,10 @@ export class DeploymentsDonutComponent implements OnInit {
       this.spaceId, this.environment.name, this.applicationId, this.desiredReplicas
     ).first().subscribe(
       success => {
-        // Do nothing
+        this.scaleRequestPending = false;
       },
       error => {
+        this.scaleRequestPending = false;
         this.notifications.message({
           type: NotificationType.WARNING,
           message: error
