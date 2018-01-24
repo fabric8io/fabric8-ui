@@ -106,7 +106,7 @@ export interface SeriesData {
 export class DeploymentsService {
 
   static readonly INITIAL_UPDATE_DELAY: number = 0;
-  static readonly POLL_RATE_MS: number = 30000;
+  static readonly POLL_RATE_MS: number = 60000;
 
   headers: Headers = new Headers({ 'Content-Type': 'application/json' });
   apiUrl: string;
