@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Scheduler, Subject } from 'rxjs';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
@@ -29,7 +29,8 @@ export class SpacesService implements Spaces {
     this._current = Observable.merge(
       contexts.current
         .map(val => val.space),
-      this.broadcaster.on<Space>('spaceUpdated'));
+      this.broadcaster.on<Space>('spaceUpdated'))
+        .observeOn(Scheduler.asap);
     // Create the recent context list
 
     this._recent = Observable.merge(

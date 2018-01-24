@@ -134,7 +134,7 @@ describe('DeploymentCardComponent async tests', () => {
       fixture = TestBed.createComponent(DeploymentCardComponent);
       component = fixture.componentInstance;
 
-      component.spaceId = 'mockSpaceId';
+      component.spaceId = Observable.of('mockSpaceId');
       component.applicationId = 'mockAppId';
       component.environment = { name: 'mockEnvironment' } as Environment;
 
@@ -231,7 +231,7 @@ describe('DeploymentCardComponent', () => {
       { provide: DeploymentsService, useFactory: () => mockSvc }
     ]
   }, component => {
-    component.spaceId = 'mockSpaceId';
+    component.spaceId = Observable.of('mockSpaceId');
     component.applicationId = 'mockAppId';
     component.environment = { name: 'mockEnvironment' } as Environment;
   });
