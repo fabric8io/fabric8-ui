@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { debounce, isNumber } from 'lodash';
 import { NotificationType } from 'ngx-base';
@@ -11,6 +11,7 @@ import { Pods } from '../models/pods';
 import { DeploymentsService } from '../services/deployments.service';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'deployments-donut',
   templateUrl: './deployments-donut.component.html',
   styleUrls: ['./deployments-donut.component.less']
