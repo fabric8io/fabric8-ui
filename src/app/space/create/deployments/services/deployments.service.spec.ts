@@ -35,12 +35,12 @@ import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
+import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   Application,
   DeploymentsService,
   NetworkStat
 } from './deployments.service';
-import { ScaledNetworkStat } from 'app/space/create/deployments/models/scaled-network-stat';
 
 describe('DeploymentsService', () => {
 
