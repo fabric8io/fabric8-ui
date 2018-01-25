@@ -277,7 +277,6 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             componentDetails
         );
 
-        let firstTabCount: number = componentDetails && componentDetails.length || 0;
         let compDetails: Array<MComponentDetails> = [];
         switch (cardType) {
             case 'security':
@@ -287,13 +286,13 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 break;
             case 'insights':
                 genericReport.identifier = 'ins-usage';
-                genericReport.name = `Usage Outlier Details `;
+                genericReport.name = 'Usage Outlier Details';
                 reportInformations.push(genericReport);
 
                 compDetails = this.getCompanionComponentDetails();
                 reportInformations.push(new MReportInformation(
                     'ins-companion',
-                    `Companion Component Details (${compDetails && compDetails.length || 0})`,
+                    'Companion Component Details',
                     'recommendation',
                     this.fillColumnHeaders(cardType, 2),
                     compDetails
@@ -307,7 +306,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 compDetails = this.getUnknownLicenseComponentDetails();
                 reportInformations.push(new MReportInformation(
                     'lic-unknown',
-                    `Unknown license(s) details (${compDetails && compDetails.length || 0})`,
+                    'Unknown license(s) details',
                     'component',
                     this.fillColumnHeaders(cardType, 2),
                     compDetails
@@ -321,7 +320,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 compDetails = this.getUnknownComponentDetails(cardType);
                 reportInformations.push(new MReportInformation(
                     'comp-unknown',
-                    `Unknown Component details (${compDetails && compDetails.length || 0})`,
+                    'Unknown Component details',
                     'component',
                     this.fillColumnHeaders(cardType, 2),
                     compDetails
@@ -329,9 +328,6 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 break;
             default:
                 break;
-        }
-        if (reportInformations[0]) {
-            reportInformations[0].name += ` (${firstTabCount})`;
         }
         return reportInformations;
     }

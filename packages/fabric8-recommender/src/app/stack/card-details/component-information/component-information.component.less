@@ -54,7 +54,6 @@
     .indicator {
         width: 15px;
         height: 15px;
-        background: #ccc;
         display: inline-block;
         margin: 0 25px 0 0;
         position: relative;
@@ -63,9 +62,13 @@
             display: block;
             position: absolute;
             text-align: center;
-            bottom: -20px;
+            bottom: -15px;
             left: -7px;
             font-size: 10px;
+        }
+
+        .warning {
+            color: #ec7a08;
         }
 
         &.security {
@@ -88,13 +91,19 @@
         }
 
         &.usage-outlier {
-            background: #ff6162;
+            &:before {
+                .warning;
+            }
         }
         &.license-issue {
-            background: #ff6162;
+            &:before {
+                .warning;
+            }
         }
         &.security-issue {
-            background: #f5a625;
+            &:before {
+                .warning;
+            }
         }
     }
     .common-section {

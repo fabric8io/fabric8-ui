@@ -4,10 +4,12 @@
     <div *ngIf="details?.reportInformations && details?.reportInformations.length > 1">
         <tabset>
             <tab *ngFor="let tabz of tabs"
-                [heading]="tabz.title"
                 (select)="tabz.active = true"
                 [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
-
+                <ng-template tabHeading>
+                    <span [innerHtml]="tabz.title"></span>
+                    <span [innerHtml]="tabz?.content?.componentDetails?.length || '0'" class="badge"></span>
+                </ng-template>
                 <report-information [genericInformation]="genericInformation" [report]="tabz.content" [repoInfo]="repoInfo"></report-information>
 
             </tab>

@@ -79,9 +79,9 @@
                         <!-- Component Details Card -->
                         <div *ngSwitchCase="'componentCheck'">
                             <!-- componentCheck -->
-                            <span [ngClass]="{'indicator security': true, 'security-issue': component?.hasSecurityIssue}"></span>
-                            <span [ngClass]="{'indicator usage': true, 'usage-outlier': component?.isUsageOutlier}"></span>
-                            <span [ngClass]="{'indicator license': true, 'license-issue': component?.hasLicenseIssue}"></span>
+                            <span [ngClass]="{'indicator security': true, 'pficon-warning-triangle-o security-issue': component?.hasSecurityIssue, 'pficon-ok': !component?.hasSecurityIssue}"></span>
+                            <span [ngClass]="{'indicator usage': true, 'pficon-warning-triangle-o usage-outlier': component?.isUsageOutlier, 'pficon-ok': !component?.isUsageOutlier}"></span>
+                            <span [ngClass]="{'indicator license': true, 'pficon-warning-triangle-o license-issue': component?.hasLicenseIssue, 'pficon-ok': !component?.hasLicenseIssue}"></span>
                         </div>
                         <div *ngSwitchCase="'helpUsKnownMore'">
                             <!-- Help us know more about components - get tags -->
