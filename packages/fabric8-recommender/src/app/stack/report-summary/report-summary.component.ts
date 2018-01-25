@@ -201,8 +201,8 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
         let cards: Array<MReportSummaryCard> = [];
         if (this.report) {
             cards[0] = this.getSecurityReportCard();
-            cards[1] = this.getInsightsReportCard();
-            cards[2] = this.getLicensesReportCard();
+            cards[1] = this.getLicensesReportCard();
+            cards[2] = this.getInsightsReportCard();
             cards[3] = this.getComponentDetailsReportCard();
         }
         this.reportSummaryCards = cards;

@@ -1,4 +1,4 @@
-@steelBlue: #2a9fd8;
+@steelBlue: #39a5dc;
 .stack-report .analytics-card-details .tab-container .nav-tabs { // Is needed to avoid important in css
     border: none;
     border-bottom: 1px solid #ededed;
@@ -8,10 +8,13 @@
         .nav-link.active {
             color: @steelBlue;
             font-weight: normal;
+            border: 1px solid #ddd;
+            border-bottom: 1px solid #fff;
+            box-shadow: unset;
         }
     }
 }
 
 .analytics-card-details {
-    border-top: 2px solid #2a9fd8;
+    border-top: 2px solid @steelBlue;
 }

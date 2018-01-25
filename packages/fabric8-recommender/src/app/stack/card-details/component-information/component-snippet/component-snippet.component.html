@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <div class="osio put-bar left">
+        <div *ngIf="showOSIOUsage" class="osio put-bar left">
             <div class="box-header">
                 OSIO Statistics:
             </div>
@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <div class="osio left">
+        <div *ngIf="showOSIOUsage" class="osio left">
             <div class="box-header">
                 OSIO Statistics:
             </div>

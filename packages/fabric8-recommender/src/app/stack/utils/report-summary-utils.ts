@@ -15,7 +15,7 @@ import {
 export class ReportSummaryUtils {
     public notification: any = {
         warning: {
-            bg: '#d1011c',
+            bg: '#f5a625',
             icon: 'pficon-warning-triangle-o'
         },
         good: {
@@ -119,6 +119,8 @@ export class ReportSummaryUtils {
             securityCard.reportSummaryContent.infoEntries.push(totalIssuesEntry);
 
             if (maxIssue) {
+                let securityColor: string = Number(maxIssue.CVSS) >= 7 ? this.colors.security.warning : this.colors.security.moderate;
+
                 let maxIssueEntry: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
                 maxIssueEntry.infoText = 'Highest CVSS Score';
                 maxIssueEntry.infoValue = maxIssue.CVSS;
@@ -126,14 +128,15 @@ export class ReportSummaryUtils {
                 maxIssueEntry.config = {
                     headerText: maxIssue.CVSS + ' / ' + 10,
                     value: Number(maxIssue.CVSS),
-                    bgColor: Number(maxIssue.CVSS) >= 7 ? this.colors.security.warning : this.colors.security.moderate,
+                    bgColor: securityColor,
                     footerText: 'No. of components with this CVSS Score: ' + totalComponentsWithMaxScore,
                     width: Number(maxIssue.CVSS) * 10
                 };
                 securityCard.reportSummaryContent.infoEntries.push(maxIssueEntry);
                 securityCard.reportSummaryTitle.notificationIcon = this.notification.warning.icon;
-                securityCard.reportSummaryTitle.notificationIconBgColor = this.notification.warning.bg;
+                securityCard.reportSummaryTitle.notificationIconBgColor = securityColor;
                 securityCard.hasWarning = true;
+                securityCard.severity = Number(maxIssue.CVSS) >= 7 ? 1 : 2;
             } else {
                 // securityCard.reportSummaryTitle.notificationIcon = this.notification.good.icon;
                 // securityCard.reportSummaryTitle.notificationIconBgColor = this.notification.good.bg;
@@ -180,7 +183,7 @@ export class ReportSummaryUtils {
             insightsCard.hasWarning = false;
             if (usageOutliersCount > 0) {
                 insightsCard.reportSummaryTitle.notificationIcon = this.notification.warning.icon;
-                insightsCard.reportSummaryTitle.notificationIconBgColor = this.notification.warning.bg;
+                insightsCard.reportSummaryTitle.notificationIconBgColor = this.colors.security.moderate;
                 insightsCard.hasWarning = true;
             }
 

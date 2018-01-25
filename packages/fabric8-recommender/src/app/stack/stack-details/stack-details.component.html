@@ -11,7 +11,7 @@
                 (removed)="removeTabHandler(tabz)"
                 [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
                 <ng-template tabHeading>
-                  <i *ngIf="tabz.hasWarning" class="pficon-warning-triangle-o"></i>
+                  <i *ngIf="tabz.hasWarning" [ngClass]="{'pficon-warning-triangle-o': true, 'icon-severe': tabz.severity === 1, 'icon-moderate': tabz.severity === 2}"></i>
                   <span [innerHtml]="tabz.title" style="margin-left: 5px"></span>
                 </ng-template>
                 <!-- Stack Report Design Revamp - BEGIN -->

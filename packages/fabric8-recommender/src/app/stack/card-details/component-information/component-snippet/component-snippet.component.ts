@@ -35,6 +35,8 @@ export class ComponentSnippetComponent implements OnInit, OnChanges {
         usage: 'Usage'
     };
 
+    public showOSIOUsage: boolean = false;
+
     ngOnInit() {
         this.paint();
     }

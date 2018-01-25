@@ -36,6 +36,7 @@ export class MReportSummaryCard {
     reportSummaryDescription: string;
     reportSummaryContent: MReportSummaryContent;
     hasWarning?: boolean;
+    severity?: number; // 1 critical, 2 moderate, ...
 }
 
 export class MProgressMeter {

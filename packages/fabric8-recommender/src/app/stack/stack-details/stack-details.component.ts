@@ -266,11 +266,13 @@ export class StackDetailsComponent implements OnChanges {
                 if (this.totalManifests > 0) {
                     this.userStackInformationArray = result.map((r) => r.user_stack_info);
                     result.forEach((r, index) => {
+                        let warning: any = this.ifManifestHasWarning(r);
                         let tab = {
                             title: r.manifest_file_path,
                             content: r,
                             index: index,
-                            hasWarning: this.ifManifestHasWarning(r)
+                            hasWarning: warning.has,
+                            severity: warning.severity
                         };
                         this.tabs.push(tab);
                         this.recommendationsArray.push(r.recommendation);
@@ -295,12 +297,15 @@ export class StackDetailsComponent implements OnChanges {
         }
     }
 
-    private ifManifestHasWarning(manifest: ResultInformationModel): boolean {
-        let isSecurityWarning = this.reportSummaryUtils.getSecurityReportCard(manifest.user_stack_info).hasWarning;
+    private ifManifestHasWarning(manifest: ResultInformationModel): any {
+        let securityInfo = this.reportSummaryUtils.getSecurityReportCard(manifest.user_stack_info);
+        let isSecurityWarning = securityInfo.hasWarning;
         let isInsightsWarning = this.reportSummaryUtils.getInsightsReportCard(manifest.recommendation).hasWarning;
         let isLicenseWarning = this.reportSummaryUtils.getLicensesReportCard(manifest.user_stack_info).hasWarning;
-        console.log('does manifest has warning:', isSecurityWarning || isInsightsWarning || isLicenseWarning ? true : false);
-        return isSecurityWarning || isInsightsWarning || isLicenseWarning ? true : false;
+        return {
+            has: isSecurityWarning || isInsightsWarning || isLicenseWarning,
+            severity: (isSecurityWarning && securityInfo.severity) || 2
+        };
     }
 
     private init(): void {

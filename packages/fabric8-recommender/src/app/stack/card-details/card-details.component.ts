@@ -168,7 +168,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                         progress = new MProgressMeter(
                             Math.round(companion.confidence_reason) + '%',
                             Math.round(companion.confidence_reason),
-                            Math.round(companion.confidence_reason) > 50 ? 'GREEN' : 'ORANGE',
+                            Math.round(companion.confidence_reason) > 50 ? '#6ec664' : 'ORANGE',
                             '',
                             Math.round(companion.confidence_reason)
                         );
@@ -277,6 +277,8 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             componentDetails
         );
 
+        let firstTabCount: number = componentDetails && componentDetails.length || 0;
+        let compDetails: Array<MComponentDetails> = [];
         switch (cardType) {
             case 'security':
                 genericReport.identifier = 'security';
@@ -285,42 +287,51 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 break;
             case 'insights':
                 genericReport.identifier = 'ins-usage';
-                genericReport.name = 'Usage Outlier Details';
+                genericReport.name = `Usage Outlier Details `;
                 reportInformations.push(genericReport);
+
+                compDetails = this.getCompanionComponentDetails();
                 reportInformations.push(new MReportInformation(
                     'ins-companion',
-                    'Companion Component Details',
+                    `Companion Component Details (${compDetails && compDetails.length || 0})`,
                     'recommendation',
                     this.fillColumnHeaders(cardType, 2),
-                    this.getCompanionComponentDetails()
+                    compDetails
                 ));
                 break;
             case 'licenses':
                 genericReport.identifier = 'lic-conflicts';
                 genericReport.name = 'Conflicting License(s) details';
                 reportInformations.push(genericReport);
+
+                compDetails = this.getUnknownLicenseComponentDetails();
                 reportInformations.push(new MReportInformation(
                     'lic-unknown',
-                    'Unknown license(s) details',
+                    `Unknown license(s) details (${compDetails && compDetails.length || 0})`,
                     'component',
                     this.fillColumnHeaders(cardType, 2),
-                    this.getUnknownLicenseComponentDetails()
+                    compDetails
                 ));
                 break;
             case 'compDetails':
                 genericReport.identifier = 'comp-analyzed';
                 genericReport.name = 'Analyzed component Details';
                 reportInformations.push(genericReport);
+
+                compDetails = this.getUnknownComponentDetails(cardType);
                 reportInformations.push(new MReportInformation(
                     'comp-unknown',
-                    'Unknown Component details',
+                    `Unknown Component details (${compDetails && compDetails.length || 0})`,
                     'component',
                     this.fillColumnHeaders(cardType, 2),
-                    this.getUnknownComponentDetails(cardType)
+                    compDetails
                 ));
                 break;
             default:
                 break;
+        }
+        if (reportInformations[0]) {
+            reportInformations[0].name += ` (${firstTabCount})`;
         }
         return reportInformations;
     }
@@ -475,7 +486,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                                     progress = new MProgressMeter(
                                         Math.round(alternate.confidence_reason) + '%',
                                         Math.round(alternate.confidence_reason),
-                                        Math.round(alternate.confidence_reason) > 50 ? 'GREEN' : 'ORANGE',
+                                        Math.round(alternate.confidence_reason) > 50 ? '#6ec664' : 'ORANGE',
                                         '',
                                         Math.round(alternate.confidence_reason)
                                     );
