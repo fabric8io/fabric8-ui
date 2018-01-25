@@ -20,11 +20,11 @@
 
   .c3 {
     &-defocused {
-      opacity: .5;
+      opacity: .5 !important; /* stylelint-disable-line declaration-no-important */
     }
     &-tooltip-container {
-      top: -27px;
-      left: 50%;
+      top: -27px !important; /* stylelint-disable-line declaration-no-important */
+      left: 50% !important; /* stylelint-disable-line declaration-no-important */
       -webkit-transform: translateX(-50%);
       transform: translateX(-50%);
       white-space: nowrap;
@@ -36,6 +36,6 @@
 
   path.c3-arc-Empty {
     stroke: @color-pf-black-300;
-    cursor: inherit;
+    cursor: inherit !important; /* stylelint-disable-line declaration-no-important */
   }
 }
