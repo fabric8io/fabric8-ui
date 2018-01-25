@@ -25,13 +25,14 @@ export class ProviderService {
   /**
    * Link an OpenShift.com account to the user account
    *
+   * @param cluster URL of the openshift cluster the user is associated with
    * @param redirect URL to be redirected to after successful account linking
    */
-  linkAll(redirect: string): void {
-        let openShiftLinkingRedirectUrl = this.getLegacyLinkingUrl('openshift-v3', redirect);
+  linkAll(cluster: string, redirect: string): void {
+        let redirectToGithubLinkURL = window.location.origin + '/_gettingstarted?wait=true&link=' + encodeURIComponent('https://github.com');
         // after linking github, proceed with linking openshift-v3,
         // hence passing openshift linking url as a redirect.
-        this.linkGitHub(openShiftLinkingRedirectUrl);
+        this.linkOpenShift(cluster, redirectToGithubLinkURL);
   }
 
   /**
@@ -40,23 +41,7 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   linkGitHub(next: string): void {
-    // let tokenUrl = this.apiUrl + 'token/link?for=https://github.com&redirect=' + encodeURIComponent(redirectUrl);
-    let githubLinkURL = this.linkUrl + '?for=https://github.com&redirect=' +  encodeURIComponent(next) ;
-    console.log('attempting to connect github ' + githubLinkURL);
-    this.http
-    .get(githubLinkURL)
-    .map(response => {
-      // TODO: what happens to this when the response is not a pure json
-      let redirectInfo = response.json() as Link;
-      this.redirectToAuth(redirectInfo.redirect_location);
-
-      // todo - handle redirect info?
-      console.log(redirectInfo);
-    })
-    .catch((error) => {
-      console.log('error while linking github ' + githubLinkURL);
-      return this.handleError(error);
-    }).subscribe();
+    this.link('https://github.com', next);
   }
 
   disconnectGitHub(): Observable<any> {
@@ -99,13 +84,18 @@ export class ProviderService {
     return url;
   }
 
+  getLinkingURL(provider: string, redirect: string): string {
+    let linkURL = this.linkUrl + '?for=' + provider + '&redirect=' +  encodeURIComponent(redirect) ;
+    return linkURL;
+  }
+
   /**
    * Link an OpenShift.com account to the user account
    *
    * @param redirect URL to be redirected to after successful account linking
    */
-  linkOpenShift(redirect: string): void {
-    this.link('openshift-v3', redirect);
+  linkOpenShift(cluster: string, redirect: string): void {
+    this.link(cluster, redirect);
   }
 
   /**
@@ -115,8 +105,22 @@ export class ProviderService {
    * @param redirect URL to be redirected to after successful account linking
    */
   link(provider: string, redirect: string): void {
-    let url = this.getLegacyLinkingUrl(provider, redirect);
-    this.redirectToAuth(url);
+    let linkURL = this.linkUrl + '?for=' + provider + '&redirect=' +  encodeURIComponent(redirect) ;
+    console.log('attempting to connect ' + provider + ' using ' + linkURL);
+    this.http
+    .get(linkURL)
+    .map(response => {
+      // TODO: what happens to this when the response is not a pure json
+      let redirectInfo = response.json() as Link;
+      this.redirectToAuth(redirectInfo.redirect_location);
+
+      // todo - handle redirect info?
+      console.log(redirectInfo);
+    })
+    .catch((error) => {
+      console.log('error while linking ' + linkURL);
+      return this.handleError(error);
+    }).subscribe();
   }
 
   // Private
