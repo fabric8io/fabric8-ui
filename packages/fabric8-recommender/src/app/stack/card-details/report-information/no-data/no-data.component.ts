@@ -21,31 +21,31 @@ export class NoDataComponent implements OnChanges {
     private TITLE_AND_DESCRIPTION: any = {
         'security': {
             title: 'No security issues',
-            description: 'OSIO Analytics has not identified any security issues affecting the components of this stack.'
+            description: 'OSIO Analytics has not identified any security issues affecting the dependencies of this stack.'
         },
         'ins-usage': {
             title: 'No usage outliers',
-            description: 'OSIO Analytics has not identified any usage outliers and has no suggestions for alternate components for this stack.'
+            description: 'OSIO Analytics has not identified any usage outliers and has no suggestions for alternate dependencies for this stack.'
         },
         'lic-conflicts': {
             title: 'No license conflicts',
             description: 'OSIO Analytics could not find any conflicting licences in this stack'
         },
         'comp-analyzed': {
-            title: 'No analyzed components',
-            description: 'OSIO Analytics was unable to analyze any components for this stack'
+            title: 'No analyzed dependencies',
+            description: 'OSIO Analytics was unable to analyze any dependencies for this stack'
         },
         'ins-companion': {
-            title: 'No companion components',
-            description: 'OSIO Analytics has no suggestions for companion components for this stack.'
+            title: 'No companion dependencies',
+            description: 'OSIO Analytics has no suggestions for companion dependencies for this stack.'
         },
         'lic-unknown': {
             title: 'No unknown licenses',
             description: 'OSIO Analytics could not find any unknown licences in this stack'
         },
         'comp-unknown': {
-            title: 'No unknown components',
-            description: 'OSIO Analytics has analyzed all the components in this stack'
+            title: 'No unknown dependencies',
+            description: 'OSIO Analytics has analyzed all the dependencies in this stack'
         },
     };
 

@@ -208,7 +208,7 @@ export class ReportSummaryUtils {
             licenseAnalysis = userStackInfo.license_analysis;
 
             let stackLicense: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
-            stackLicense.infoText = 'Stack License';
+            stackLicense.infoText = 'Recommended License';
             let stackLicenses = licenseAnalysis.f8a_stack_licenses;
             if (stackLicenses) {
                 if (stackLicenses.length > 0) {
@@ -244,7 +244,7 @@ export class ReportSummaryUtils {
 
             if (stackLicense.infoValue !== 'NONE' && stackLicense.infoValue !== 'Unknown') {
                 let restrictiveLicenses: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
-            restrictiveLicenses.infoText = 'Restrictive License(s)';
+            restrictiveLicenses.infoText = 'Restrictive Licenses';
                 let restrictive = licenseAnalysis.outlier_packages;
                 restrictiveLicenses.infoValue = restrictive ? restrictive.length : 0;
                 licensesCard.reportSummaryContent.infoEntries.push(restrictiveLicenses);

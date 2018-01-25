@@ -42,17 +42,10 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
     @Output('onCardClick') onCardClick = new EventEmitter<any>();
 
     public reportSummaryCards: Array<MReportSummaryCard> = [];
-
     public reportSummaryContent: MReportSummaryContent;
     public reportSummaryTitle: MReportSummaryTitle;
     public reportSummaryDescription: string;
     public notification = null;
-    private reportSummaryUtils = new ReportSummaryUtils();
-
-    constructor() {
-        this.notification = this.reportSummaryUtils.notification;
-    }
-
     public cardTypes: any = {
         SECURITY: 'security',
         INSIGHTS: 'insights',
@@ -62,22 +55,28 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
 
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
-            title: 'Components with security issues in your stack',
+            title: 'Dependencies with security issues in your stack',
             description: 'OSIO Analytics identifies security issues in your stack. Click this card to see further details of the security tasks affecting your stack.'
         },
         [this.cardTypes.INSIGHTS]: {
-            title: 'Insights on alternate or additional components that can augment your stack',
-            description: 'OSIO Analytics identifies components that are rarely used in similar stacks, and suggests alternate and additional components that can enhance your stack. Click this card to see detailed suggestions on alternate and additional components.'
+            title: 'Insights on alternate or additional dependencies that can augment your stack',
+            description: 'OSIO Analytics identifies dependencies that are rarely used in similar stacks, and suggests alternate and additional dependencies that can enhance your stack. Click this card to see detailed suggestions on alternate and additional dependencies.'
         },
         [this.cardTypes.LICENSES]: {
-            title: 'License details of components in your stack',
+            title: 'License details of dependencies in your stack',
             description: 'OSIO Analytics identifies the stack level license, the conflicting licenses, and the unknown licenses for your stack. Click this card to see detailed information on the conflicting and unknown licenses in your stack.'
         },
         [this.cardTypes.COMP_DETAILS]: {
-            title: 'Component details of your manifest file',
-            description: 'OSIO Analytics identifies the total number of components, analyzes them, and provides details on security, usage, and license issues in your components. It also lists components unknown to OSIO.'
+            title: 'Dependency details of your manifest file',
+            description: 'OSIO Analytics identifies the total number of dependencies, analyzes them, and provides details on security, usage, and license issues in your dependencies. It also lists dependencies unknown to OSIO.'
         }
     };
+
+    private reportSummaryUtils = new ReportSummaryUtils();
+
+    constructor() {
+        this.notification = this.reportSummaryUtils.notification;
+    }
 
     ngOnInit() {
         this.paintView();
@@ -162,7 +161,7 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
 
         componentDetailsCard.identifier = this.cardTypes.COMP_DETAILS;
         componentDetailsCard.reportSummaryTitle.titleIcon = 'fa fa-cube';
-        componentDetailsCard.reportSummaryTitle.titleText = 'Component Details';
+        componentDetailsCard.reportSummaryTitle.titleText = 'Dependency Details';
         componentDetailsCard.reportSummaryDescription = this.titleAndDescription[this.cardTypes.COMP_DETAILS].description;
         componentDetailsCard.reportSummaryContent.infoEntries = [];
 
@@ -176,22 +175,22 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
             unknownCount = userStackInfo.unknown_dependencies ? userStackInfo.unknown_dependencies.length : totalCount - analyzedCount;
 
             let totalEntry: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
-            totalEntry.infoText = 'Total Components';
+            totalEntry.infoText = 'Total Dependencies';
             totalEntry.infoValue = totalCount;
 
             let analyzedEntry: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
-            analyzedEntry.infoText = 'Analyzed Components';
+            analyzedEntry.infoText = 'Analyzed Dependencies';
             analyzedEntry.infoValue = analyzedCount;
 
             let unknownEntry: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
-            unknownEntry.infoText = 'Unknown Components';
+            unknownEntry.infoText = 'Unknown Dependencies';
             unknownEntry.infoValue = unknownCount;
 
             componentDetailsCard.reportSummaryContent.infoEntries.push(totalEntry);
             componentDetailsCard.reportSummaryContent.infoEntries.push(analyzedEntry);
             componentDetailsCard.reportSummaryContent.infoEntries.push(unknownEntry);
         } else {
-            // Handle no user components scenario
+            // Handle no user dependencies scenario
         }
 
         return componentDetailsCard;

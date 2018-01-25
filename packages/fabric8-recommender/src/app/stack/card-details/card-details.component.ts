@@ -78,19 +78,19 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
             title: 'Components with security issues in your stack',
-            description: 'A list of the components affected with common vulnerabilities and exposures (CVE), component with the highest common vulnerability score (CVSS), and its CVE ID. You can take corrective actions by reporting the issues'
+            description: 'A list of the dependencies affected with common vulnerabilities and exposures (CVE), component with the highest common vulnerability score (CVSS), and its CVE ID. You can take corrective actions by reporting the issues'
         },
         [this.cardTypes.INSIGHTS]: {
-            title: 'Insights on alternate or additional components that can augment your stack',
-            description: 'A list of components that are not commonly used in similar stacks, suggestions for alternate components to replace them, and suggestions for additional components to complement your stack. Take corrective action by creating a work item in Planner or leave us feedback.'
+            title: 'Insights on alternate or additional dependencies that can augment your stack',
+            description: 'A list of dependencies that are not commonly used in similar stacks, suggestions for alternate dependencies to replace them, and suggestions for additional dependencies to complement your stack. Take corrective action by creating a work item in Planner or leave us feedback.'
         },
         [this.cardTypes.LICENSES]: {
-            title: 'License details of components in your stack',
-            description: 'A list of stack and component level license conflicts, licenses unknown to Openshift.io and suggestions for alternate components to resolve these issues. Create a work item in Planner to replace these components'
+            title: 'License details of dependencies in your stack',
+            description: 'A list of stack and component level license conflicts, licenses unknown to Openshift.io and suggestions for alternate dependencies to resolve these issues. Create a work item in Planner to replace these dependencies'
         },
         [this.cardTypes.COMP_DETAILS]: {
             title: 'Component details of your manifest file',
-            description: 'A list of all the analyzed components that flags security, usage, and license issues in your stack and suggests alternate components to replace components with these issues. Take corrective action by creating a work item in Planner. It also lists components unknown to OSIO'
+            description: 'A list of all the analyzed dependencies that flags security, usage, and license issues in your stack and suggests alternate dependencies to replace dependencies with these issues. Take corrective action by creating a work item in Planner. It also lists dependencies unknown to OSIO'
         }
     };
 
