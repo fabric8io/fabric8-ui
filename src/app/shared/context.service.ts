@@ -263,6 +263,8 @@ export class ContextService implements Contexts {
         return this.toggleService.getFeatures(['Applications', 'Deployments', 'Environments', 'Planner']).map(features => {
           val.user.features = features;
           return val;
+        }).catch(err => {
+          return Observable.of(val);
         });
       })
       // Use a map to convert from a navigation url to a context
