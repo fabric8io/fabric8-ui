@@ -23,6 +23,7 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 import {
   flatten,
   includes,
+  isEmpty,
   isEqual as deepEqual
 } from 'lodash';
 
@@ -356,6 +357,7 @@ export class DeploymentsService {
                 this.http.get(url, { headers: this.headers })
                   .map((response: Response) => (response.json() as TimeseriesResponse).data)
                   .catch(() => Observable.of(emptyResult))
+                  .filter((t: TimeseriesData) => !!t && !isEmpty(t))
               );
             observable.subscribe(subject);
             this.timeseriesObservables.set(key, subject);
