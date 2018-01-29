@@ -5,7 +5,12 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Observable, Subscription } from 'rxjs';
+import {
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription
+} from 'rxjs';
 
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
@@ -21,11 +26,11 @@ export class ResourceCardComponent implements OnDestroy, OnInit {
   @Input() spaceId: Observable<string>;
   @Input() environment: Environment;
 
-  memUnit: Observable<string>;
+  memUnit: Subject<string> = new ReplaySubject(1);
   active: boolean = false;
 
-  cpuStat: Observable<Stat>;
-  memStat: Observable<Stat>;
+  cpuStat: Subject<Stat> = new ReplaySubject(1);
+  memStat: Subject<Stat> = new ReplaySubject(1);
 
   private subscriptions: Subscription[] = [];
 
@@ -40,13 +45,20 @@ export class ResourceCardComponent implements OnDestroy, OnInit {
       .subscribe((active: boolean) => {
         this.active = active;
         if (active) {
-          this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(spaceId, this.environment.name)
-          .first()
-          .map((stat: MemoryStat) => stat.units);
+          this.subscriptions.push(
+            this.deploymentsService.getEnvironmentMemoryStat(spaceId, this.environment.name)
+              .first()
+              .map((stat: MemoryStat) => stat.units)
+              .subscribe(this.memUnit)
+          );
         }
       }));
-      this.cpuStat = this.deploymentsService.getEnvironmentCpuStat(spaceId, this.environment.name);
-      this.memStat = this.deploymentsService.getEnvironmentMemoryStat(spaceId, this.environment.name);
+      this.subscriptions.push(
+        this.deploymentsService.getEnvironmentCpuStat(spaceId, this.environment.name).subscribe(this.cpuStat)
+      );
+      this.subscriptions.push(
+        this.deploymentsService.getEnvironmentMemoryStat(spaceId, this.environment.name).subscribe(this.memStat)
+      );
     }));
   }
 
