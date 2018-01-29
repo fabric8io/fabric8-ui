@@ -26,17 +26,14 @@
                   <a (click)="startBuild(pipeline)" title="Start this Pipeline">Start Pipeline</a>
                 </li>
 
-                <li class="divider" *ngIf="pipeline.gitUrl"></li>
-                <li *ngIf="pipeline.openInDEAUrl">
-                  <a [href]="pipeline.openInDEAUrl | safeUrl" title="open this project in IDEA IntelliJ\n(Requires Jetbrains Toolbox to be installed)">
-                    Open in IDEA
-                  </a>
-                </li>
-                <li *ngIf="pipeline.jenkinsJobUrl">
-                  <a href="{{pipeline.jenkinsJobUrl}}" title="open the Jenksin Job for this build" target="jenkins">
-                    Open Jenkins Job
-                  </a>
-                </li>
+                <div *ngIf="pipeline.jenkinsJobUrl">
+                  <li class="divider"></li>
+                  <li>
+                    <a href="{{pipeline.jenkinsJobUrl}}" title="open the Jenkins Job for this build" target="jenkins">
+                      Open Jenkins Job
+                    </a>
+                  </li>
+                </div>
                 <li class="divider"></li>
                 <li>
                   <a (click)="openDeleteDialog(deleteBuildConfigModal, pipeline)" title="Delete this Pipeline">Delete</a>
