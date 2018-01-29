@@ -43,20 +43,20 @@ export class ReportSummaryUtils {
 
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
-            title: 'Components with security issues in your stack',
-            description: 'OSIO Analytics has identified security issues in your stack. Click this card to see further details of the security tasks affecting your stack.'
+            title: 'Dependencies with security issues in your stack',
+            description: 'Dependencies with high common vulnerabilities and exposures (CVE) score.  Click this card to see the details of all CVE(s).'
         },
         [this.cardTypes.INSIGHTS]: {
-            title: 'Insights on alternate or additional components that can augment your stack',
-            description: 'OSIO Analytics has identified components that are rarely used in similar stacks, and suggest (suggests) alternate and additional components that can enhance your stack. Click this card to see detailed suggestions on alternate and additional components for your stack.'
+            title: 'Insights on alternate or additional dependencies that can augment your stack',
+            description: 'Suggested dependencies that can be added to your application stack or replace current dependencies with alternate one. Click to see details.'
         },
         [this.cardTypes.LICENSES]: {
-            title: 'License details of components in your stack',
-            description: 'OSIO Analytics identifies the stack level license, the conflicting licenses, and the unknown licenses for your stack. Click this card to see detailed information on the conflicting and unknown licenses in your stack.'
+            title: 'License details of dependencies in your stack',
+            description: 'Recommended license for your application stack, flag any unknown/restrictive license(s) present. Click this card to see the detailed information.'
         },
         [this.cardTypes.COMP_DETAILS]: {
-            title: 'Component details of your manifest file',
-            description: 'OSIO Analytics identifies the total number of components, analyzes them, and provides details on security, usage, and license issues in your components. It also lists components unknown to OSIO.'
+            title: 'Dependency details of your manifest file',
+            description: 'Dependencies analyzed based on versions and popularity. Click this card to see security, license and usage information for each dependency.'
         }
     };
 
@@ -198,7 +198,7 @@ export class ReportSummaryUtils {
         let licensesCard: MReportSummaryCard = this.newCardInstance();
         licensesCard.identifier = this.cardTypes.LICENSES;
         licensesCard.reportSummaryTitle.titleText = 'Licenses';
-        licensesCard.reportSummaryTitle.titleIcon = 'fa fa-bolt';
+        licensesCard.reportSummaryTitle.titleIcon = 'fa fa-file-text-o';
         licensesCard.reportSummaryDescription = this.titleAndDescription[this.cardTypes.LICENSES].description;
         licensesCard.reportSummaryContent.infoEntries = [];
 

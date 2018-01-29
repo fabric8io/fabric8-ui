@@ -68,7 +68,7 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
         },
         [this.cardTypes.COMP_DETAILS]: {
             title: 'Dependency details of your manifest file',
-            description: 'OSIO Analytics identifies the total number of dependencies, analyzes them, and provides details on security, usage, and license issues in your dependencies. It also lists dependencies unknown to OSIO.'
+            description: 'Dependencies analyzed based on versions and popularity. Click this card to see security, license and usage information for each dependency.'
         }
     };
 
