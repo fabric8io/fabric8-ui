@@ -1,29 +1,29 @@
 <div class="pipeline-insights">
   <div class="imp " *ngIf="flag && flag1; else elseBlock">
-    <div class="imp_info row">
-      <span class="pficon-warning-triangle-o col" style="padding-right:2px;color:red;font-size: medium;" data-toggle="tooltip"
+    <div class="imp_info row warning-style">
+      <span class="pficon-warning-triangle-o" data-toggle="tooltip"
         title="CVE Issue">
       </span>
-      <span class="col">
+      <span>
         <b>CVE's</b> and
-        <b>License Issue</b> are present
+        <b>License Issue(s)</b> are present
       </span>
     </div>
   </div>
   <ng-template #elseBlock>
     <div class="imp">
-      <div class="imp_info row" *ngIf="flag" >
-        <span class="pficon-warning-triangle-o col" style="padding-right:2px;color:red;font-size: medium;" data-toggle="tooltip"
+      <div class="imp_info row warning-style" *ngIf="flag" >
+        <span class="pficon-warning-triangle-o" data-toggle="tooltip"
           title="CVE Issue">
         </span>
-        <span class="col">
+        <span>
           <b>CVE's</b> are present</span>
       </div>
       <div class="imp_info row" *ngIf="flag1">
-        <span class="pficon-warning-triangle-o col" style="padding-right:2px;color:red;font-size: medium;" data-toggle="tooltip"
-          title="Liscence Issue">
+        <span class="pficon-warning-triangle-o col warning-style" data-toggle="tooltip"
+          title="License Issue">
         </span>
-        <span class="col">
+        <span>
           <b>License</b> Issue are present.</span>
       </div>
     </div>
