@@ -1,7 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Spaces } from 'ngx-fabric8-wit';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription
+} from 'rxjs';
 
 import { Environment } from './models/environment';
 import { DeploymentsService } from './services/deployments.service';
@@ -15,18 +20,16 @@ import { DeploymentsService } from './services/deployments.service';
 })
 export class DeploymentsComponent implements OnDestroy, OnInit {
 
-  spaceId: Observable<string>;
-  environments: Observable<Environment[]>;
-  applications: Observable<string[]>;
+  spaceId: Subject<string> = new ReplaySubject(1);
+  environments: Subject<Environment[]> = new ReplaySubject(1);
+  applications: Subject<string[]> = new ReplaySubject(1);
 
   private subscriptions: Subscription[] = [];
 
   constructor(
     private spaces: Spaces,
     private deploymentsService: DeploymentsService
-  ) {
-    this.spaceId = this.spaces.current.first().map(space => space.id);
-  }
+  ) { }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub: Subscription) => {
@@ -35,17 +38,22 @@ export class DeploymentsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.subscriptions.push(
+      this.spaces.current.first().map(space => space.id).subscribe(this.spaceId)
+    );
     this.updateResources();
   }
 
   private updateResources(): void {
     this.subscriptions.push(
       this.spaceId.subscribe(spaceId => {
-        this.environments =
-          this.deploymentsService.getEnvironments(spaceId);
+        this.subscriptions.push(
+          this.deploymentsService.getEnvironments(spaceId).subscribe(this.environments)
+        );
 
-        this.applications =
-          this.deploymentsService.getApplications(spaceId);
+        this.subscriptions.push(
+          this.deploymentsService.getApplications(spaceId).subscribe(this.applications)
+        );
       })
     );
   }
