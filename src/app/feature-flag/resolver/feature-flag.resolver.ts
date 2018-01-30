@@ -25,7 +25,8 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
 
   constructor(private logger: Logger,
               private authService: AuthenticationService,
-              private toggleService: FeatureTogglesService) {
+              private toggleService: FeatureTogglesService,
+              private router: Router) {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<FeatureFlagConfig> {
@@ -37,17 +38,22 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
       return this.toggleService.getFeature(featureName).map((feature) => {
         this.logger.log('>> Feature = ' + featureName + ' enabled = ' + feature.attributes['enabled']);
         if (!feature.attributes['enabled']) { // PM has disabled the feature for all users
-          return {
-            name: featureName,
-            showBanner: FeatureLevel.notApplicable,
-            enabled: false
-          } as FeatureFlagConfig;
+          this.router.navigate(['/_error']);
+          return null;
         } else {
+          let enablementLevel = this.getBannerColor(feature.attributes['enablement-level']);
+          if (enablementLevel === 'notApplicable') {
+            // for non-internal user trying to see internal feature toggles-service return a enablement-level null
+            // route to error page.
+            this.router.navigate(['/_error']);
+            return null;
+          } else {
             return { // feature is not toggled off, check user's level
-            name: featureName,
-            showBanner: this.getBannerColor(feature.attributes['enablement-level']),
-            enabled: feature.attributes['user-enabled']
-          } as FeatureFlagConfig;
+              name: featureName,
+              showBanner: this.getBannerColor(feature.attributes['enablement-level']),
+              enabled: feature.attributes['user-enabled']
+            } as FeatureFlagConfig;
+          }
         }
       }).catch(err => {
         return Observable.of({
@@ -67,6 +73,9 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
   }
 
   private getBannerColor(level: string): string {
+    if (!level) {
+      return FeatureLevel.notApplicable as string;
+    }
     if (level.toLocaleLowerCase() === 'beta') {
       return FeatureLevel.beta as string;
     }
