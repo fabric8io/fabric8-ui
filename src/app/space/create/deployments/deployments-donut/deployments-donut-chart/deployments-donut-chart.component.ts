@@ -5,7 +5,8 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
-  SimpleChanges
+  SimpleChanges,
+  ViewEncapsulation
 } from '@angular/core';
 
 import * as c3 from 'c3';
@@ -15,6 +16,7 @@ import { debounce, isEqual, uniqueId } from 'lodash';
 import { Pods } from '../../models/pods';
 
 @Component({
+  encapsulation: ViewEncapsulation.None,
   selector: 'deployments-donut-chart',
   templateUrl: './deployments-donut-chart.component.html',
   styleUrls: ['./deployments-donut-chart.component.less']

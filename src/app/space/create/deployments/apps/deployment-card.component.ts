@@ -5,6 +5,7 @@ import {
   OnInit
 } from '@angular/core';
 
+import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
 
@@ -28,6 +29,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   @Input() environment: Environment;
 
   active: boolean = false;
+  detailsActive: boolean = false;
   collapsed: boolean = true;
   version: Observable<string>;
   logsUrl: Observable<string>;
@@ -39,6 +41,10 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   toolTip: string;
 
   subscriptions: Array<Subscription> = [];
+
+  private readonly waitTime: number = 5000; // 5 seconds
+  private readonly maxWaitTime: number = 10000; // 10 seconds
+  private debouncedUpdateDetails = debounce(this.updateDetails, this.waitTime, { maxWait: this.maxWaitTime});
 
   constructor(
     private deploymentsService: DeploymentsService,
@@ -92,6 +98,21 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     if (stat.used > stat.quota) {
       this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_ERR;
       this.toolTip = 'CPU usage has exceeded capacity.';
+    }
+  }
+
+  toggleCollapsed(): void {
+    this.collapsed = !this.collapsed;
+    if (!this.collapsed) {
+      this.detailsActive = true;
+    } else {
+      this.debouncedUpdateDetails();
+    }
+  }
+
+  updateDetails(): void {
+    if (this.collapsed) {
+      this.detailsActive = false;
     }
   }
 

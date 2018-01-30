@@ -1,5 +1,5 @@
 <div [collapse]="collapsed">
-  <ng-container *ngIf="!collapsed">
+  <ng-container *ngIf="active">
     <hr>
     <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="false"></deployments-donut>
 
