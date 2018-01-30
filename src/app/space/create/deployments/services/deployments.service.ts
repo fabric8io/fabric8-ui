@@ -211,7 +211,8 @@ export class DeploymentsService {
     const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
       .map((t: TimeseriesData) => t.cores);
     const quota = this.getEnvironmentCpuStat(spaceId, environmentName)
-      .map((stat: CpuStat) => stat.quota);
+      .map((stat: CpuStat) => stat.quota)
+      .distinctUntilChanged();
 
       // TODO: propagate CoresSeries timestamp to caller
       return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota }));
@@ -221,7 +222,8 @@ export class DeploymentsService {
     const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
       .map((t: TimeseriesData) => t.memory);
     const quota = this.getEnvironment(spaceId, environmentName)
-      .map((env: EnvironmentStat) => env.quota.memory.quota);
+      .map((env: EnvironmentStat) => env.quota.memory.quota)
+      .distinctUntilChanged();
 
       // TODO: propagate MemorySeries timestamp to caller
       return Observable.combineLatest(series, quota, (series: MemorySeries, quota: number) => new ScaledMemoryStat(series.value, quota));
