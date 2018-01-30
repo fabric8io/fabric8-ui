@@ -588,8 +588,8 @@ describe('DeploymentsService', () => {
       };
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/apps\/spaces\/foo-space$/;
+        const timeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
         if (timeseriesRegex.test(requestUrl)) {
@@ -653,8 +653,8 @@ describe('DeploymentsService', () => {
       };
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/apps\/spaces\/foo-space$/;
+        const timeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
         if (timeseriesRegex.test(requestUrl)) {
@@ -712,8 +712,8 @@ describe('DeploymentsService', () => {
       };
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const timeseriesRegex: RegExp = /\/apps\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/apps\/spaces\/foo-space$/;
+        const timeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
         if (timeseriesRegex.test(requestUrl)) {
