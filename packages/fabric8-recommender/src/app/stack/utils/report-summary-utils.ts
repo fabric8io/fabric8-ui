@@ -129,7 +129,7 @@ export class ReportSummaryUtils {
                     headerText: maxIssue.CVSS + ' / ' + 10,
                     value: Number(maxIssue.CVSS),
                     bgColor: securityColor,
-                    footerText: 'No. of components with this CVSS Score: ' + totalComponentsWithMaxScore,
+                    footerText: 'No. of dependencies with this CVSS Score: ' + totalComponentsWithMaxScore,
                     width: Number(maxIssue.CVSS) * 10
                 };
                 securityCard.reportSummaryContent.infoEntries.push(maxIssueEntry);

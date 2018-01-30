@@ -11,7 +11,7 @@
                             <span [innerText]="serial + 1"></span>
                         </div>
                         <div *ngSwitchCase="'component'">
-                            <!-- Component Names -->
+                            <!-- Dependency Names -->
                             <span [innerText]="comp?.name"></span>
                             <span class="recommendation-reason" [tooltip]="component?.reason" *ngIf="component?.reason && type === 'recommendation' && comp?.name">Why this component?</span>
                             <!--
@@ -76,7 +76,7 @@
 
                         
                         
-                        <!-- Component Details Card -->
+                        <!-- Dependency Details Card -->
                         <div *ngSwitchCase="'componentCheck'">
                             <!-- componentCheck -->
                             <span [ngClass]="{'indicator security': true, 'pficon-warning-triangle-o security-issue': component?.hasSecurityIssue, 'pficon-ok': !component?.hasSecurityIssue}"></span>
@@ -84,7 +84,7 @@
                             <span [ngClass]="{'indicator license': true, 'pficon-warning-triangle-o license-issue': component?.hasLicenseIssue, 'pficon-ok': !component?.hasLicenseIssue}"></span>
                         </div>
                         <div *ngSwitchCase="'helpUsKnownMore'">
-                            <!-- Help us know more about components - get tags -->
+                            <!-- Help us know more about dependencies - get tags -->
                         </div>
                         <div *ngSwitchCase="'collapse'">
                             <!-- Toggle -->
@@ -92,7 +92,7 @@
                                 <i [ngClass]="{'fa': true, 'fa-angle-up': comp?.isOpen, 'fa-angle-down': !comp?.isOpen}" aria-hidden="true"></i>
                             </div>
                         </div>
-                        <!-- Component Details Card -->
+                        <!-- Dependency Details Card -->
                     </div>
                 </div>
             </div>

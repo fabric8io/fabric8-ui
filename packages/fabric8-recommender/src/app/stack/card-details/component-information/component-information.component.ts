@@ -104,16 +104,16 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
             for **${comp.name}**.
             You have chosen to replace **${comp.name}** with **${comp.recommendation.componentInformation.name}**
             and version: **${comp.recommendation.componentInformation.currentVersion}** in your application stack`;
-            titleHdr = `Alternate components for ${comp.name}`;
+            titleHdr = `Alternate dependencies for ${comp.name}`;
             key = comp.recommendation.componentInformation.name;
         } else if (comp && !comp.hasSecurityIssue && !comp.recommendation) {
-            message = `Stack analysis has identified some additional components for your
+            message = `Stack analysis has identified some additional dependencies for your
             application stack. You have chosen to add **${comp.name}**
             with **${comp.currentVersion}** to your application stack`;
             titleHdr = `Add ${comp.name} to your application stack`;
             key = comp.name;
         } else if (comp && comp.hasSecurityIssue) {
-            message = `Stack analysis has identified some security issues for component **${comp.name}**
+            message = `Stack analysis has identified some security issues for dependency **${comp.name}**
             with **${comp.currentVersion}** in your application stack. CVE id for the highest security issue is **${comp.securityDetails.highestIssue.cve}**`;
             titleHdr = `${comp.name} has some security issues`;
             key = comp.name;

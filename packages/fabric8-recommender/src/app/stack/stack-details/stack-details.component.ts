@@ -144,9 +144,9 @@ export class StackDetailsComponent implements OnChanges {
             this.analysis = {
                 stackLevel: 'Total: ' +  total + ' | Analyzed: ' + analyzed + ' | Unknown: ' +
                 unknown,
-                alternate: '[' + alternate + ' alternate components match your stack ' +
+                alternate: '[' + alternate + ' alternate dependencies match your stack ' +
                 'composition and may be more appropriate]',
-                companion: '[' + companion + ' additional components are often used by ' +
+                companion: '[' + companion + ' additional dependencies are often used by ' +
                 'similar stacks]'
             };
             this.componentLevelInformation = {

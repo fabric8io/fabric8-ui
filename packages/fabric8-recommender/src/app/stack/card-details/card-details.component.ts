@@ -78,7 +78,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
             title: 'Components with security issues in your stack',
-            description: 'A list of the dependencies affected with common vulnerabilities and exposures (CVE), component with the highest common vulnerability score (CVSS), and its CVE ID. You can take corrective actions by reporting the issues'
+            description: 'A list of the dependencies affected with common vulnerabilities and exposures (CVE), dependency with the highest common vulnerability score (CVSS), and its CVE ID. You can take corrective actions by reporting the issues'
         },
         [this.cardTypes.INSIGHTS]: {
             title: 'Insights on alternate or additional dependencies that can augment your stack',
@@ -86,7 +86,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
         },
         [this.cardTypes.LICENSES]: {
             title: 'License details of dependencies in your stack',
-            description: 'A list of stack and component level license conflicts, licenses unknown to Openshift.io and suggestions for alternate dependencies to resolve these issues. Create a work item in Planner to replace these dependencies'
+            description: 'A list of stack and dependency level license conflicts, licenses unknown to Openshift.io and suggestions for alternate dependencies to resolve these issues. Create a work item in Planner to replace these dependencies'
         },
         [this.cardTypes.COMP_DETAILS]: {
             title: 'Component details of your manifest file',
@@ -292,7 +292,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 compDetails = this.getCompanionComponentDetails();
                 reportInformations.push(new MReportInformation(
                     'ins-companion',
-                    'Companion Component Details',
+                    'Companion Dependency Details',
                     'recommendation',
                     this.fillColumnHeaders(cardType, 2),
                     compDetails
@@ -314,13 +314,13 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 break;
             case 'compDetails':
                 genericReport.identifier = 'comp-analyzed';
-                genericReport.name = 'Analyzed component Details';
+                genericReport.name = 'Analyzed dependency Details';
                 reportInformations.push(genericReport);
 
                 compDetails = this.getUnknownComponentDetails(cardType);
                 reportInformations.push(new MReportInformation(
                     'comp-unknown',
-                    'Unknown Component details',
+                    'Unknown Dependency details',
                     'component',
                     this.fillColumnHeaders(cardType, 2),
                     compDetails
