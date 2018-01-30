@@ -7,7 +7,12 @@ import {
 
 import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription
+} from 'rxjs';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
@@ -31,12 +36,14 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   active: boolean = false;
   detailsActive: boolean = false;
   collapsed: boolean = true;
-  version: Observable<string>;
-  logsUrl: Observable<string>;
-  consoleUrl: Observable<string>;
-  appUrl: Observable<string>;
 
-  cpuStat: Observable<CpuStat>;
+  version: Subject<string> = new ReplaySubject(1);
+  logsUrl: Subject<string> = new ReplaySubject(1);
+  consoleUrl: Subject<string> = new ReplaySubject(1);
+  appUrl: Subject<string> = new ReplaySubject(1);
+
+  cpuStat: Subject<CpuStat> = new ReplaySubject(1);
+
   iconClass: string;
   toolTip: string;
 
@@ -62,7 +69,11 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
     this.subscriptions.push(this.spaceId.subscribe((spaceId: string) => {
       this.spaceIdReference = spaceId;
-      this.cpuStat = this.deploymentsService.getDeploymentCpuStat(spaceId, this.applicationId, this.environment.name);
+      this.subscriptions.push(
+        this.deploymentsService
+          .getDeploymentCpuStat(spaceId, this.applicationId, this.environment.name)
+          .subscribe(this.cpuStat)
+      );
       this.subscriptions.push(this.cpuStat.subscribe((stat) => {
         this.changeStatus(stat);
       }));
@@ -74,17 +85,28 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
             this.active = active;
 
             if (active) {
-              this.version =
-                this.deploymentsService.getVersion(spaceId, this.applicationId, this.environment.name);
+              this.subscriptions.push(
+                this.deploymentsService
+                  .getVersion(spaceId, this.applicationId, this.environment.name)
+                  .subscribe(this.version)
+              );
 
-              this.logsUrl =
-                this.deploymentsService.getLogsUrl(spaceId, this.applicationId, this.environment.name);
+              this.subscriptions.push(
+                this.deploymentsService
+                  .getLogsUrl(spaceId, this.applicationId, this.environment.name)
+                  .subscribe(this.logsUrl)
+              );
+              this.subscriptions.push(
+                this.deploymentsService
+                  .getConsoleUrl(spaceId, this.applicationId, this.environment.name)
+                  .subscribe(this.consoleUrl)
+              );
 
-              this.consoleUrl =
-                this.deploymentsService.getConsoleUrl(spaceId, this.applicationId, this.environment.name);
-
-              this.appUrl =
-                this.deploymentsService.getAppUrl(spaceId, this.applicationId, this.environment.name);
+              this.subscriptions.push(
+                this.deploymentsService
+                  .getAppUrl(spaceId, this.applicationId, this.environment.name)
+                  .subscribe(this.appUrl)
+              );
             }
           })
       );
