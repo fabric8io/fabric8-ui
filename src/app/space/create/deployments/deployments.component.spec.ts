@@ -1,5 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { ComponentFixture } from '@angular/core/testing';
+import {
+  Component,
+  Input
+} from '@angular/core';
+import {
+  async,
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -7,7 +14,10 @@ import { Spaces } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
 
 import { createMock } from 'testing/mock';
-import { initContext, TestContext } from 'testing/test-context';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { DeploymentsComponent } from './deployments.component';
 import { Environment } from './models/environment';
 import { DeploymentsService } from './services/deployments.service';
@@ -56,6 +66,10 @@ describe('DeploymentsComponent', () => {
     mockSvc.getEnvironments.and.returnValue(mockEnvironments);
   });
 
+  beforeEach(async(() => {
+    TestBed.overrideProvider(DeploymentsService, { useFactory: () => mockSvc, deps: [] });
+  }));
+
   initContext(DeploymentsComponent, HostComponent, {
     imports: [CollapseModule.forRoot()],
     declarations: [
@@ -63,7 +77,6 @@ describe('DeploymentsComponent', () => {
       FakeDeploymentsResourceUsageComponent
     ],
     providers: [
-      { provide: DeploymentsService, useFactory: () => mockSvc },
       { provide: Spaces, useValue: spaces }
     ]
   });
