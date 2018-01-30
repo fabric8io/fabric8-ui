@@ -77,7 +77,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
 
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
-            title: 'Components with security issues in your stack',
+            title: 'Dependencies with security issues in your stack',
             description: 'A list of the dependencies affected with common vulnerabilities and exposures (CVE), dependency with the highest common vulnerability score (CVSS), and its CVE ID. You can take corrective actions by reporting the issues'
         },
         [this.cardTypes.INSIGHTS]: {
@@ -706,7 +706,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             case 'security':
                 headers.push(new MComponentHeaderColumn(
                     'component',
-                    'Components',
+                    'Dependencies',
                     'float-left medium'
                 ));
                 headers.push(new MComponentHeaderColumn(
@@ -733,13 +733,13 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             case 'insights':
                 headers.push(new MComponentHeaderColumn(
                     'component',
-                    'Components',
+                    'Dependencies',
                     'float-left medium'
                 ));
                 if (tabNo === 1) {
                     headers.push(new MComponentHeaderColumn(
                         'alternate',
-                        'Alternate Components',
+                        'Alternate Dependencies',
                         'float-left medium'
                     ));
                 } else if (tabNo === 2) {
@@ -764,7 +764,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             case 'licenses':
                 headers.push(new MComponentHeaderColumn(
                     'component',
-                    'Components',
+                    'Dependencies',
                     'float-left medium'
                 ));
                 if (tabNo === 1) {
@@ -783,7 +783,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                 }
                 headers.push(new MComponentHeaderColumn(
                     'alternate',
-                    'Alternate Components',
+                    'Alternate Dependencies',
                     'float-left medium'
                 ));
                 headers.push(new MComponentHeaderColumn(
@@ -795,7 +795,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             case 'compDetails':
                 headers.push(new MComponentHeaderColumn(
                     'component',
-                    'Components',
+                    'Dependencies',
                     'float-left medium'
                 ));
                 if (tabNo === 1) {
@@ -806,7 +806,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                     ));
                     headers.push(new MComponentHeaderColumn(
                         'alternate',
-                        'Alternate Components',
+                        'Alternate Dependencies',
                         'float-left medium'
                     ));
                     headers.push(new MComponentHeaderColumn(

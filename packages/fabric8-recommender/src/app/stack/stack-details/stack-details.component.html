@@ -30,7 +30,7 @@
                             Stack summary
                           </div>
                           <div class="accordion-sub-heading">
-                            [Components: <b>{{analysis && analysis.stackLevel}}</b>]
+                            [Dependencies: <b>{{analysis && analysis.stackLevel}}</b>]
                           </div>
                         </div>
                         <stack-level-information (changeFilter)="handleChangeFilter($event)" [outliers]="stackLevelOutliers" [userStack]="tabz && tabz.content && tabz.content.user_stack_info" (sendcveInfo) = "getcve($event)"></stack-level-information>

@@ -174,7 +174,7 @@ export class ReportSummaryUtils {
             insightsCard.reportSummaryContent.infoEntries.push(outliersInsights);
 
             let companionInsights: MReportSummaryInfoEntry = new MReportSummaryInfoEntry();
-            companionInsights.infoText = 'Companion Components';
+            companionInsights.infoText = 'Companion Dependencies';
             companionInsights.infoValue = companionCount;
             insightsCard.reportSummaryContent.infoEntries.push(companionInsights);
 
