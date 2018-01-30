@@ -76,8 +76,9 @@ export class DeploymentDetailsComponent {
   };
 
   hasPods: Subject<boolean> = new ReplaySubject<boolean>(1);
-  cpuStat: Observable<CpuStat>;
-  memStat: Observable<MemoryStat>;
+  cpuStat: Subject<CpuStat> = new ReplaySubject(1);
+  memStat: Subject<MemoryStat> = new ReplaySubject(1);
+
   cpuTime: number;
   memTime: number;
   cpuVal: number;
@@ -96,23 +97,28 @@ export class DeploymentDetailsComponent {
     this.setChartMaxElements(
       DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
 
-    this.subscriptions.push(
-      this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name)
-        .map((p: Pods) => p.total > 0)
-        .subscribe(this.hasPods)
-    );
-
     this.cpuConfig.chartHeight = 60;
     this.memConfig.chartHeight = 60;
     this.cpuTime = 1;
     this.memTime = 1;
     this.subscriptions.push(this.spaceId.subscribe((spaceId: string) => {
+      this.subscriptions.push(
+        this.deploymentsService.getPods(spaceId, this.applicationId, this.environment.name)
+          .map((p: Pods) => p.total > 0)
+          .subscribe(this.hasPods)
+      );
 
-      this.cpuStat =
-        this.deploymentsService.getDeploymentCpuStat(spaceId, this.applicationId, this.environment.name);
+      this.subscriptions.push(
+        this.deploymentsService
+          .getDeploymentCpuStat(spaceId, this.applicationId, this.environment.name)
+          .subscribe(this.cpuStat)
+      );
 
-      this.memStat =
-        this.deploymentsService.getDeploymentMemoryStat(spaceId, this.applicationId, this.environment.name);
+      this.subscriptions.push(
+        this.deploymentsService
+          .getDeploymentMemoryStat(spaceId, this.applicationId, this.environment.name)
+          .subscribe(this.memStat)
+      );
 
       this.subscriptions.push(this.cpuStat.subscribe(stat => {
         this.cpuVal = stat.used;
