@@ -90,9 +90,10 @@ export class DeploymentDetailsComponent {
   };
 
   hasPods: Subject<boolean> = new ReplaySubject<boolean>(1);
-  cpuStat: Observable<CpuStat>;
-  memStat: Observable<MemoryStat>;
+  cpuStat: Subject<CpuStat> = new ReplaySubject(1);
+  memStat: Subject<MemoryStat> = new ReplaySubject(1);
   initialChartStats: Observable<TimeConstrainedStats>;
+
   cpuTime: number;
   memTime: number;
   cpuVal: number;
@@ -127,14 +128,21 @@ export class DeploymentDetailsComponent {
         this.deploymentsService.getDeploymentTimeConstrainedStats(spaceId, this.applicationId, this.environment.name, DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION)
           .first();
 
-      this.cpuStat =
-        this.deploymentsService.getDeploymentCpuStat(spaceId, this.applicationId, this.environment.name);
-
-      this.memStat =
-        this.deploymentsService.getDeploymentMemoryStat(spaceId, this.applicationId, this.environment.name);
-        this.processTimeConstrainedStats(this.initialChartStats)
+      this.processTimeConstrainedStats(this.initialChartStats)
         .subscribe(() => {
-          this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat) => {
+          this.subscriptions.push(
+            this.deploymentsService
+              .getDeploymentCpuStat(spaceId, this.applicationId, this.environment.name)
+              .subscribe(this.cpuStat)
+          );
+
+          this.subscriptions.push(
+            this.deploymentsService
+              .getDeploymentMemoryStat(spaceId, this.applicationId, this.environment.name)
+              .subscribe(this.memStat)
+          );
+
+          this.subscriptions.push(this.cpuStat.subscribe(stat => {
             this.cpuVal = stat.used;
             this.cpuMax = stat.quota;
             this.cpuData.total = stat.quota;
@@ -143,19 +151,19 @@ export class DeploymentDetailsComponent {
             this.trimSparklineData(this.cpuData);
           }));
 
-          this.subscriptions.push(this.memStat.subscribe((stat: MemoryStat) => {
+          this.subscriptions.push(this.memStat.subscribe(stat => {
             this.memVal = stat.used;
             this.memMax = stat.quota;
             this.memData.total = stat.quota;
             this.memData.yData.push(stat.used);
-            this.memData.xData.push(this.memTime++);
+            this.memData.xData.push(this.cpuTime++);
             this.memUnits = stat.units;
             this.trimSparklineData(this.memData);
           }));
 
           this.subscriptions.push(
             this.deploymentsService.getDeploymentNetworkStat(spaceId, this.applicationId, this.environment.name)
-              .subscribe((stat: NetworkStat) => {
+              .subscribe(stat => {
                 const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
                 this.netVal = round(netTotal.used, 1);
                 this.netUnits = netTotal.units;
@@ -166,6 +174,7 @@ export class DeploymentDetailsComponent {
               })
           );
         });
+
     }));
   }
 
@@ -226,7 +235,7 @@ export class DeploymentDetailsComponent {
           this.netData.yData[0].push(e.data.sent.raw);
           this.netData.yData[1].push(e.data.received.raw);
         });
-      }, (error: any) => {}, () => { latch.next(); latch.complete(); })
+      }, (error: any) => { }, () => { latch.next(); latch.complete(); })
     );
     return latch;
   }
