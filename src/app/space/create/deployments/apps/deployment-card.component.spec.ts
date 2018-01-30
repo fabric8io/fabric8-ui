@@ -82,6 +82,7 @@ class FakeDeploymentDetailsComponent {
   @Input() applicationId: string;
   @Input() environment: Environment;
   @Input() spaceId: string;
+  @Input() active: boolean;
 }
 
 function initMockSvc(): jasmine.SpyObj<DeploymentsService> {

@@ -1,5 +1,5 @@
 <ng-container *ngIf="active">
-  <div class="card-pf" (click)="collapsed = !collapsed">
+  <div class="card-pf" (click)="toggleCollapsed()">
     <div class="card-pf-body">
       <div class="row mini-card-content">
         <div class="col-sm-2">
@@ -38,7 +38,7 @@
           </div>
         </div>
       </div>
-      <deployment-details (click)="$event.stopPropagation()" [collapsed]="collapsed"
+      <deployment-details (click)="$event.stopPropagation()" [collapsed]="collapsed" [active]="detailsActive"
         [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId"></deployment-details>
     </div>
   </div>

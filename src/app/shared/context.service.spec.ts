@@ -12,7 +12,7 @@ import { FeatureTogglesService } from '../feature-flag/service/feature-toggles.s
 import { MenusService } from '../layout/header/menus.service';
 import { ProfileService } from '../profile/profile.service';
 import { ContextService } from './context.service';
-import { context1, context2, loggedInUser, profile } from './context.service.mock';
+import { context1, context2, loggedInUser, profile, spaceMock } from './context.service.mock';
 import { EventService } from './event.service';
 
 describe('Context Service:', () => {
@@ -31,9 +31,10 @@ describe('Context Service:', () => {
 
   beforeEach(() => {
     mockRouter = jasmine.createSpy('Router');
-    mockBroadcaster = jasmine.createSpy('Broadcaster');
+    mockBroadcaster = jasmine.createSpyObj('Broadcaster', ['broadcast']);
     mockMenu = jasmine.createSpyObj('MenusService', ['attach']);
-    mockSpaceService = jasmine.createSpy('SpaceService');
+    mockSpaceService = jasmine.createSpyObj('SpaceService', ['getSpaceByName']);
+    mockSpaceService.getSpaceByName.and.returnValue(Observable.of(spaceMock));
     mockUserService = jasmine.createSpyObj('UserService', ['getUserByUserId']);
     mockUserService.getUserByUserId.and.returnValue(Observable.of(loggedInUser));
     mockUserService.loggedInUser = Observable.of(loggedInUser);
@@ -41,9 +42,11 @@ describe('Context Service:', () => {
     mockRoute = jasmine.createSpy('ActivatedRoute');
     mockProfileService = jasmine.createSpy('ProfileService');
     mockProfileService.current = Observable.of(profile);
-    mockSpaceNamePipe = jasmine.createSpy('SpaceNamePipe');
+    mockSpaceNamePipe = jasmine.createSpyObj('SpaceNamePipe', ['transform']);
+    mockSpaceNamePipe.transform.and.returnValue('SPACE');
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
-    mockFeatureTogglesService = jasmine.createSpy('FeatureTogglesService');
+    mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeatures']);
+    mockFeatureTogglesService.getFeatures.and.returnValue(Observable.of([]));
     TestBed.configureTestingModule({
       imports: [HttpModule],
       providers: [
@@ -146,5 +149,48 @@ describe('Context Service:', () => {
     expect(recent[0]).toEqual(context1);
   });
 
+  it('Feature-flag - getFeatures return a list of features', () => {
+    // given
+    const features = [
+      {
+        id: 'Deployments',
+        attributes: {
+          enabled: true
+        }
+      },
+      {
+        id: 'Applications',
+        attributes: {
+          enabled: false
+        }
+      }];
+    mockFeatureTogglesService.getFeatures.and.returnValue(Observable.of(features));
+    const navigation = Observable.of({
+      space: 'TEST',
+      url: '/user_name/TEST',
+      user: 'user_name'
+    });
 
+    // when
+    contextService.changeContext(navigation).subscribe(val => {});
+    contextService.current.subscribe(val => {
+      expect((val.user as any).features).toEqual(features);
+    });
+  });
+
+  it('Feature-flag - getFeatures return an error', () => {
+    // given
+    mockFeatureTogglesService.getFeatures.and.throwError({});
+    const navigation = Observable.of({
+      space: 'TEST',
+      url: '/user_name/TEST',
+      user: 'user_name'
+    });
+
+    // when
+    contextService.changeContext(navigation).subscribe(val => {});
+    contextService.current.subscribe(val => {
+      expect((val.user as any).features).toBeNull();
+    });
+  });
 });
