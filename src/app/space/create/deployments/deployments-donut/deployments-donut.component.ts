@@ -11,7 +11,12 @@ import {
   isNumber
 } from 'lodash';
 import { NotificationType } from 'ngx-base';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription
+} from 'rxjs';
 
 import { Environment } from '../models/environment';
 import { PodPhase } from '../models/pod-phase';
@@ -35,7 +40,7 @@ export class DeploymentsDonutComponent implements OnDestroy, OnInit {
 
   isIdled = false;
   scalable = true;
-  pods: Observable<Pods>;
+  pods: Subject<Pods> = new ReplaySubject(1);
   desiredReplicas: number = 1;
   debounceScale = debounce(this.scale, 650);
 
@@ -67,7 +72,9 @@ export class DeploymentsDonutComponent implements OnDestroy, OnInit {
     this.subscriptions.push(
       this.spaceId.subscribe((spaceId: string) => {
         this.spaceIdRef = spaceId;
-        this.pods = this.deploymentsService.getPods(spaceId, this.applicationId, this.environment.name);
+        this.deploymentsService
+          .getPods(spaceId, this.applicationId, this.environment.name)
+          .subscribe(this.pods);
         this.subscriptions.push(this.pods.subscribe(pods => {
             this.replicas = pods.total;
             if (!this.scaleRequestPending) {
