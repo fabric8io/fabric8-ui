@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export KUBERNETES_SERVICE_HOST=api.free-stg.openshift.com
+export KUBERNETES_SERVICE_HOST=f8osoproxy-test-dsaas-preview.b6ff.rh-idev.openshiftapps.com
 export KUBERNETES_SERVICE_PORT=443
 export OPENSHIFT_CONSOLE_HOST=console.free-stg.openshift.com
 export OPENSHIFT_CONSOLE_PORT=443
@@ -31,10 +31,10 @@ if [ -z "${OAUTH_CLIENT_ID}" ]; then
   export OAUTH_CLIENT_ID="fabric8"
 fi
 if [ -z "${K8S_API_SERVER_PROTOCOL}" ]; then
-  export K8S_API_SERVER_PROTOCOL="http"
+  export K8S_API_SERVER_PROTOCOL="https"
 fi
 if [ -z "${K8S_API_SERVER_BASE_PATH}" ]; then
-  export K8S_API_SERVER_BASE_PATH="/_p/oso"
+  export K8S_API_SERVER_BASE_PATH=""
 fi
 if [ -z "${WS_K8S_API_SERVER}" ]; then
   export WS_K8S_API_SERVER=${PROXIED_K8S_API_SERVER}
