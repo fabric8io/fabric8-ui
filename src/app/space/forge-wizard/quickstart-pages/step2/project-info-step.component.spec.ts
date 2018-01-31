@@ -101,7 +101,7 @@ describe('Forge-Wizard project info component', () => {
       fixture.detectChanges();
     }).then(() => {
       expect(comp.form.controls['groupId'].valid).toEqual(false);
-      expect(comp.form.controls['groupId'].errors.pattern.requiredPattern).toEqual('/^[a-z][a-z_0-9\\.]*[a-z_0-9]$/');
+      expect(comp.form.controls['groupId'].errors.pattern.requiredPattern).toEqual('/^[a-z][a-z_0-9\\.]*$/');
     });
   }));
 });
