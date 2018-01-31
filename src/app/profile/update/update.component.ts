@@ -51,6 +51,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   gitHubLinked: boolean = false;
   imageUrl: string;
   imageUrlInvalid: boolean = false;
+
   loggedInUser: User;
   fullName: string;
   fullNameInvalid: boolean = false;
@@ -187,6 +188,10 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   routeToProfile(): void {
     this.router.navigate(['/', this.context.user.attributes.username]);
+  }
+
+  resetPasswordUrl(): void {
+    window.open('https://developers.redhat.com/auth/realms/rhd/account/password');
   }
 
   /**
