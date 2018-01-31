@@ -9,6 +9,7 @@ import {
   HttpModule,
   Response,
   ResponseOptions,
+  ResponseType,
   XHRBackend
 } from '@angular/http';
 
@@ -23,6 +24,10 @@ import {
   Observable,
   Subscription
 } from 'rxjs';
+
+import { Logger } from 'ngx-base';
+
+import { NotificationsService } from 'app/shared/notifications.service';
 
 import {
   AuthenticationService,
@@ -45,11 +50,16 @@ import {
 describe('DeploymentsService', () => {
 
   let mockBackend: MockBackend;
+  let mockLogger: jasmine.SpyObj<Logger>;
+  let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
   let svc: DeploymentsService;
 
   beforeEach(() => {
     const mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
     mockAuthService.getToken.and.returnValue('mock-auth-token');
+
+    mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);
+    mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     TestBed.configureTestingModule({
       imports: [ HttpModule ],
@@ -62,6 +72,12 @@ describe('DeploymentsService', () => {
         },
         {
           provide: WIT_API_URL, useValue: 'http://example.com/'
+        },
+        {
+          provide: Logger, useValue: mockLogger
+        },
+        {
+          provide: NotificationsService, useValue: mockNotificationsService
         },
         DeploymentsService
       ]
@@ -689,6 +705,58 @@ describe('DeploymentsService', () => {
         ]
       },
         svc.getPods('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
+  });
+
+  describe('HTTP error handling', () => {
+    it('should log errors', (done: DoneFn) => {
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        connection.mockError(new Response(
+          new ResponseOptions({
+            type: ResponseType.Error,
+            body: JSON.stringify('Mock HTTP Error'),
+            status: 404
+          })
+        ) as Response & Error);
+      });
+      expect(mockLogger.error).not.toHaveBeenCalled();
+      svc.getApplications('foo-spaceId').subscribe(
+        success => {
+          subscription.unsubscribe();
+          done.fail('Should have hit error handler');
+        },
+        error => {
+          expect(error).toBe(404);
+          expect(mockLogger.error).toHaveBeenCalled();
+          subscription.unsubscribe();
+          done();
+        }
+      );
+    });
+
+    it('should notify on errors', (done: DoneFn) => {
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        connection.mockError(new Response(
+          new ResponseOptions({
+            type: ResponseType.Error,
+            body: JSON.stringify('Mock HTTP Error'),
+            status: 404
+          })
+        ) as Response & Error);
+      });
+      expect(mockNotificationsService.message).not.toHaveBeenCalled();
+      svc.getApplications('foo-spaceId').subscribe(
+        success => {
+          subscription.unsubscribe();
+          done.fail('Should have hit error handler');
+        },
+        error => {
+          expect(error).toBe(404);
+          expect(mockNotificationsService.message).toHaveBeenCalled();
+          subscription.unsubscribe();
+          done();
+        }
+      );
     });
   });
 
