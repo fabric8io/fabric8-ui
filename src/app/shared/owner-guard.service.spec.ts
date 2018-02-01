@@ -12,7 +12,7 @@ describe('OwnerGuard', () => {
     const FAKE_URL = 'fakeUrl';
     let ownerGuard: OwnerGuard;
     let mockAuthService = { isLoggedIn: () => { return false; } };
-    let mockContext = { };
+    let mockContext = {  };
     let mockLoginService = { redirectToLogin: () => { } };
     let mockRoute = { } as ActivatedRouteSnapshot;
     let mockState = { url: FAKE_URL } as RouterStateSnapshot;
@@ -50,10 +50,10 @@ describe('OwnerGuard', () => {
     let mockAuthService = { isLoggedIn: () => { return true; } };
     let mockLoginService = { redirectToLogin: () => { } };
     let mockRoute = { } as ActivatedRouteSnapshot;
-    let mockState = { } as RouterStateSnapshot;
+    let mockState = { url: '', root: {firstChild: {params: {entity: 'me' }}} } as RouterStateSnapshot;
 
     describe('should handle logged in users who are not viewing their own context', () => {
-      let mockContextService = { viewingOwnContext: () => { return false; } };
+      let mockContextService = { currentUser: 'not_me' };
 
       beforeEach(() => {
         spyOn(mockAuthService, 'isLoggedIn').and.callThrough();
@@ -81,8 +81,7 @@ describe('OwnerGuard', () => {
     });
 
     describe('should handle logged in users who are viewing their own context', () => {
-      let mockContextService = { viewingOwnContext: () => { return true; } };
-
+      let mockContextService = { currentUser: 'me' };
       beforeEach(() => {
         spyOn(mockAuthService, 'isLoggedIn').and.callThrough();
 
