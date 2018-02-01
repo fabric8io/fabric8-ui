@@ -70,7 +70,11 @@
                         </div>
                         <div *ngSwitchCase="'unknownLicenses'">
                             <!-- unknownLicenses -->
-                            <span *ngFor="let unknown of comp?.licenseInformation?.unknownLicenses" [innerText]="unknown"></span>
+                            <span *ngFor="let unknown of comp?.licenseInformation?.unknownLicenses; let i = index">
+                                <span [innerText]="unknown"></span>
+                                <span *ngIf="i < comp?.licenseInformation?.unknownLicenses?.length - 1">,</span>
+                                <br *ngIf="i < comp?.licenseInformation?.unknownLicenses?.length - 1">
+                            </span>
                         </div>
                         <!-- Licenses Card -->
 

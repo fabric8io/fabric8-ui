@@ -18,55 +18,8 @@
                 <analytics-report-summary (onCardClick)="handleCardClick($event)" [report]="tabz.content"></analytics-report-summary>
                 <card-details [genericInformation]="genericInformation && genericInformation" *ngIf="cardDetails" [cardDetails]="cardDetails" [repoInfo]="repoInfo"></card-details>
                 <!-- Stack Report Design Revamp - END -->
-
-
-                <!--<accordion>
-                  <accordion-group
-                      [isOpen]="true"
-                      [panelClass]="customClass"
-                      [isDisabled]="true">
-                        <div accordion-heading>
-                          <div class="accordion-heading" accordion-heading>
-                            Stack summary
-                          </div>
-                          <div class="accordion-sub-heading">
-                            [Dependencies: <b>{{analysis && analysis.stackLevel}}</b>]
-                          </div>
-                        </div>
-                        <stack-level-information (changeFilter)="handleChangeFilter($event)" [outliers]="stackLevelOutliers" [userStack]="tabz && tabz.content && tabz.content.user_stack_info" (sendcveInfo) = "getcve($event)"></stack-level-information>
-                  </accordion-group>
-                  <accordion-group #grouped [isOpen]="true" [panelClass]="customClass">
-                    <div accordion-heading>
-                      <div class="accordion-heading" accordion-heading>
-                        Detailed analysis of your stack components
-                      </div>
-                      <i class="pull-right accordion-indicator float-xs-right glyphicon"
-                        [ngClass]="{'glyphicon-chevron-down': grouped?.isOpen, 'glyphicon-chevron-right': !grouped?.isOpen}"></i>
-                      <div class="accordion-sub-heading">
-                        <b>{{analysis && analysis.alternate}}</b>
-                      </div>
-                    </div>
-                    <component-level-information [data]="repoInfo" [filterBy]="componentFilterBy" [header]="componentLevel.header" [subHeader]="componentLevel.subHeader" [component]="componentLevelInformation"></component-level-information>
-                  </accordion-group>
-                  <accordion-group #companion [panelClass]="customClass">
-                    <div accordion-heading>
-                      <div class="accordion-heading" accordion-heading>
-                        Additional dependencies recommended by Openshift IO
-                      </div>
-                      <i class="pull-right accordion-indicator float-xs-right glyphicon"
-                        [ngClass]="{'glyphicon-chevron-down': companion?.isOpen, 'glyphicon-chevron-right': !companion?.isOpen}"></i>
-                      <div class="accordion-sub-heading">
-                        <b>{{analysis && analysis.companion}}</b>
-                      </div>
-                    </div>
-                    <component-level-information [data]="repoInfo" [header]="companionLevel.header" [subHeader]="companionLevel.subHeader" [isCompanion]="true" [component]="companionLevelRecommendation"></component-level-information>
-                  </accordion-group>
-                </accordion>-->
             </tab>
         </tabset>
-
-
-
       </div>
       <div *ngIf="!dataLoaded" class="pre-loader">
         <div class="pre-loader-spinner spinner spinner-lg"></div>

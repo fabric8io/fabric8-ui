@@ -87,9 +87,17 @@ export class AppComponent implements OnInit {
 }
 
 // format of the url
-// http://localhost:8088/#/analyze/4460cedfec3e49b5b6cf5712ccf7750b?api_data={
-    // "access_token": "<ACCESS_TOKEN>",
-    // "route_config": {
-        // "api_url": "https://recommender.api.openshift.io/"
-    // }
+// http://localhost:8088/#/analyze/84abe04135f04b2d818b412bb52207c8?api_data={
+//     "access_token": "<ACCESS_TOKEN>",
+//     "route_config": {
+//         "api_url": "https://recommender.api.openshift.io/"
+//     }
+// }
+
+// prod link
+// https://stack-analytics-report.openshift.io/#/analyze/84abe04135f04b2d818b412bb52207c8?api_data={
+//     "access_token": "<ACCESS_TOKEN>",
+//     "route_config": {
+//         "api_url": "https://recommender.api.openshift.io/"
+//     }
 // }
