@@ -132,7 +132,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
   private updateCountText(): void {
     if (!this.mini && this.pods) {
       let smallText: string;
-      if (!this.desiredReplicas || this.desiredReplicas === this.pods.total) {
+      if (this.desiredReplicas == null || this.desiredReplicas === this.pods.total) {
         smallText = (this.pods.total === 1) ? 'pod' : 'pods';
       } else {
         smallText = `scaling to ${this.desiredReplicas}...`;
