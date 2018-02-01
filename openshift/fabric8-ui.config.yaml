@@ -10,7 +10,7 @@ data:
   oauth.client.id: fabric8
   oauth.scope: user:full
   fabric8.pipelines.namespace: ""
-  ws.k8s.api.server: ""
+  ws.k8s.api.server: ${ws.k8s.api.server}
   proxy.pass.url: ""
   openshift.console.url: ""
   oauth.issuer: ""
