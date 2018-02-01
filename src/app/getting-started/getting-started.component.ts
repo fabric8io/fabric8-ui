@@ -58,9 +58,11 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
 
     if (!this.kubeMode) {
       // Still need to retrieve OpenShift token for checkbox, in case the GitHub token cannot be obtained below.
-      this.subscriptions.push(auth.openShiftToken.subscribe(token => {
-        this.openShiftLinked = (token !== undefined && token.length !== 0);
-      }));
+      if (this.loggedInUser && this.loggedInUser.attributes) {
+        this.subscriptions.push(auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster).subscribe(isConnected => {
+          this.openShiftLinked = isConnected;
+        }));
+      }
     } else {
       // lets poll for the kube tenant connected when the lazily created Jenkins endpoint
       // can be registered into KeyCloak
@@ -92,10 +94,10 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       .map(token => {
         this.gitHubLinked = (token !== undefined && token.length !== 0);
       })
-      .switchMap(() => this.auth.openShiftToken)
-      .map(token => {
+      .switchMap(() => this.auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster))
+      .map(isConnected => {
         if (!this.kubeMode) {
-          this.openShiftLinked = (token !== undefined && token.length !== 0);
+          this.openShiftLinked = isConnected;
         }
       })
       .do(() => {
