@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnChanges, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { StackAnalysesService } from '../stack-analyses.service';
@@ -15,6 +15,7 @@ import {
     MGenericStackInformation
 } from '../models/ui.model';
 import { SaveState } from '../utils/SaveState';
+import { CommonService } from '../utils/common.service';
 /**
  * New Stack Report Revamp - End
  */
@@ -27,7 +28,7 @@ import { SaveState } from '../utils/SaveState';
     templateUrl: './stack-details.component.html'
 })
 
-export class StackDetailsComponent implements OnChanges {
+export class StackDetailsComponent implements OnChanges, OnInit {
     @Input() gatewayConfig: any;
     @Input() stack: string;
     @Input() displayName;
@@ -36,6 +37,7 @@ export class StackDetailsComponent implements OnChanges {
     @Input() appName;
     @Input() stackResponse;
     @Input() showFlags;
+    @Input() openStackModalFromCard: string;
 
     @ViewChild('stackModule') modalStackModule: any;
 
@@ -93,7 +95,9 @@ export class StackDetailsComponent implements OnChanges {
      */
 
     public showStackModal(event: Event): void {
-        event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
         this.modalStackModule.open();
     }
 
@@ -193,15 +197,22 @@ export class StackDetailsComponent implements OnChanges {
             this.displayName = this.displayName || 'Stack Report';
         }
         if (this.showFlags === 'false') {
-            this.showF =false;
+            this.showF = false;
         }
+    }
+
+    ngOnInit() {
+        this.commonService.inshortCardClicked
+        .subscribe(response => {
+            this.showStackModal(null);
+        });
     }
 
     public handleChangeFilter(filterBy: any): void {
         this.componentFilterBy = filterBy.filterBy;
     }
 
-    constructor(private stackAnalysisService: StackAnalysesService) {}
+    constructor(private stackAnalysisService: StackAnalysesService, private commonService: CommonService) {}
     /**
      * New Revamp - Begin
      * https://recommender.api.openshift.io/api/v1/stack-analyses/
@@ -252,6 +263,7 @@ export class StackDetailsComponent implements OnChanges {
         this.companionLevelRecommendation = {};
         this.cacheResponse = {};
         SaveState.ELEMENTS = [];
+        this.openStackModalFromCard = 'false';
         // this.dataLoaded = false;
     }
 

@@ -1,20 +1,20 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {StackDetailsComponent} from './stack-details.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { StackDetailsComponent } from './stack-details.component';
 
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 
 import { ModalModule } from 'ngx-modal';
-import {TabsModule, AccordionModule} from 'ngx-bootstrap';
+import { TabsModule, AccordionModule } from 'ngx-bootstrap';
 
 import { GlobalConstants } from '../constants/constants.service';
 
 /** New UX */
 // import {StackLevelModule} from '../stack-level/stack-level.module';
 // import {ComponentLevelModule} from '../component-level/component-level.module';
-import {FeedbackModule} from '../feedback/feedback.module';
-import {PipelineInsightsModule} from '../pipeline-insights/pipeline-insights.module';
+import { FeedbackModule } from '../feedback/feedback.module';
+import { PipelineInsightsModule } from '../pipeline-insights/pipeline-insights.module';
 
 import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
@@ -27,10 +27,10 @@ import { ssoApiUrlProvider } from '../../shared/sso-api.provider';
 import { realmProvider } from '../../shared/realm-token.provider';
 import { MockAuthenticationService } from '../../shared/mock-auth.service';
 
-
 /** Stack Report Revamp - Latest */
 import { ReportSummaryModule } from '../report-summary/report-summary.module';
 import { CardDetailsModule } from '../card-details/card-details.module';
+import { CommonService } from '../utils/common.service';
 /** Stack Report Revamp - Latest */
 
 const revampImports = [
@@ -70,7 +70,8 @@ describe ('StackDetailsComponent', () => {
                 {
                     provide: AuthenticationService, useClass: MockAuthenticationService
                 },
-                Contexts
+                Contexts,
+                CommonService
             ]
         }).compileComponents();
     }));

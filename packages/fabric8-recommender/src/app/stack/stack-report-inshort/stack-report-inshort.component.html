@@ -1,202 +1,51 @@
 <div class="stack-report-inshort">
-<div *ngIf="!error || !progress">
+  <div *ngIf="!error || !progress">
     <tabset *ngIf="tabs && tabs.length > 0">
-        <tab *ngFor="let tabz of tabs"
-            [heading]="tabz.title"
-            [active]="tabz.active"
-            (select)="tabSelection(tabz)"
-            [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'"
-            (deselect)="tabz.active = false">
-
-            <!-- Stack Report Snippet -->
-                <div class="stack-report-snippet">
-                    <div class="findings-inshort">
-                        [Components <b>Total: {{stackLevel && stackLevel.dependencies && stackLevel.dependencies.length}}</b> | <b>Analyzed: {{stackLevel && stackLevel.analyzed_dependencies && stackLevel.analyzed_dependencies.length}}</b> | <b>Unknown: {{stackLevel && stackLevel.unknown_dependencies && stackLevel.unknown_dependencies.length}}</b>]
-                    </div>
-                    <div class="summary-inshort">
-                        <div class="stat-container security-issues-stat">
-                            <div class="stat-box">
-                                <h3>
-                                    <span>Security Issues</span>
-                                </h3>
-                                <div class="stat-content">
-                                    <div *ngIf="securityInfo" class="col-xs-12">
-                                        <div class="cvss-id">
-                                            {{securityInfo.cve && securityInfo.cve.CVE}}
-                                            <i class="{{securityInfo.iconClass}}" 
-                                            data-toggle="tooltip" data-placement="top" 
-                                            title="CVSS: Score to measure the impact of security vulnerability. In a scale from 0.0-10.0, vulnerabilities less than 7.0 are considered medium impact and more than or equal to 7.0 are considered high impact ones."></i>
-                                        </div>
-                                        <div class="cvss-data">
-                                            <div>
-                                                <span class="cvss-indication"><b>{{securityInfo.cve && securityInfo.cve.CVSS}} out of</b> 10</span>
-                                            </div>
-                                        </div>
-                                        <div class="progress">
-                                            <!--added inline style here to handle the dynamic value of cvss score for the progress bar-->
-                                            <div class="progress-bar" role="progressbar"
-                                            [ngStyle]="{'width': securityInfo.percentage +'%'}"
-                                            [ngClass]="securityInfo.displayClass"
-                                            data-toggle="tooltip" data-placement="top" 
-                                            title="{{securityInfo.cve && securityInfo.cve.CVSS}} out of 10">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="center-text" *ngIf="!securityInfo">No CVEs</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stat-container outlier-stat">
-                            <div class="stat-box">
-                                <h3>
-                                    <span>Usage Outliers</span>
-                                </h3>
-                                <div class="stat-content usage-outlier">
-                                    <div *ngIf="stackLevelOutliers && stackLevelOutliers.usage && stackLevelOutliers.usage.length" class="metric-container">
-                                        <div class="metric-desc">
-                                            Components not used together
-                                        </div>
-                                        <div class="metric">
-                                            <span>{{stackLevelOutliers && stackLevelOutliers.usage && stackLevelOutliers.usage.length}}</span>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="stackLevelOutliers && stackLevelOutliers.usage && !stackLevelOutliers.usage.length" class="center-text">
-                                        All the components in your stack work well with each other
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="stat-container stack-license-stat">
-                            <div class="stat-box">
-                                <h3>
-                                    <span>Licenses</span>
-                                </h3>
-                                <div class="stat-content license-area" *ngIf="licenseAnalysis.status.toLowerCase() !== 'failure' && licenseAnalysis.status.toLowerCase() !== 'nolicensedata'">
-                                    <div class="stack-license-text flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'successful'">
-                                        <div class="metric-desc">
-                                            Stack level license
-                                        </div>
-                                        <div class="metric metric-license-status">
-                                            <span>{{licenseAnalysis.stackLicenseText}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="outlier-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'successful'">
-                                        <div class="metric-desc">
-                                            Restrictive license(s)
-                                        </div>
-                                        <div class="metric">
-                                            <span>{{licenseAnalysis.licenseOutliersCount}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="conflict-license flex-2"
-                                        *ngIf="licenseAnalysis.status.toLowerCase() === 'stackconflict'">
-                                        <div class="metric-desc">
-                                            Stack level license
-                                        </div>
-                                        <div class="metric metric-license-status">
-                                            <span>
-                                                None
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="conflict-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'stackconflict'">
-                                        <div class="metric-desc">
-                                            Licenses that can't be used together
-                                        </div>
-                                        <div class="metric">
-                                            <span>
-                                                {{licenseAnalysis.licenseStackConflictCount}}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="conflict-license flex-2"
-                                        *ngIf="licenseAnalysis.status.toLowerCase() === 'componentconflict'">
-                                        <div class="metric-desc">
-                                            Stack level license
-                                        </div>
-                                        <div class="metric metric-license-status">
-                                            <span>
-                                                None
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="conflict-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'componentconflict'">
-                                        <div class="metric-desc">
-                                            Licenses that can't be used together
-                                        </div>
-                                        <div class="metric">
-                                            <span>
-                                                {{licenseAnalysis.licenseComponentConflictCount}}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="conflict-license flex-2"
-                                        *ngIf="licenseAnalysis.status.toLowerCase() === 'unknown'">
-                                        <div class="metric-desc">
-                                            Stack level license
-                                        </div>
-                                        <div class="metric metric-license-status">
-                                            <span>
-                                                None
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="unknown-license flex-2" *ngIf="licenseAnalysis.status.toLowerCase() === 'unknown'">
-                                        <div class="metric-desc">
-                                            Unknown license(s)
-                                        </div>
-                                        <div class="metric">
-                                            <span>
-                                                {{licenseAnalysis.licenseUnknownCount}}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="stat-content center-text failure-text" *ngIf="licenseAnalysis && licenseAnalysis.status && licenseAnalysis.status.toLowerCase() === 'failure'">
-                                        Sorry! we were unable to get license data for this stack.
-                                </div>
-                                <div class="stat-content center-text" *ngIf="licenseAnalysis && licenseAnalysis.status && licenseAnalysis.status.toLowerCase() === 'nolicensedata'">
-                                        Sorry! we were unable to get license data for this stack.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="recommendations-inshort">
-                        <div *ngIf="recommendations && recommendations.alternate" class="recommendation-components alternate-components">
-                            <b class="reco-text">{{recommendations && recommendations.alternate && recommendations.alternate.length}} alternate components</b> match your stack composition and may be more appropriate.
-                        </div>
-                        <div *ngIf="recommendations && recommendations.companion" class="recommendation-components companion-components">
-                            <b class="reco-text">{{recommendations && recommendations.companion && recommendations.companion.length}} additional components</b> are often used by similar stacks.
-                        </div>
-                    </div>
-                </div>
-                <!-- Stack Report Snippet -->
-    
-        </tab>
+      <tab *ngFor="let tabz of tabs" (select)="tabSelection(tabz)" (deselect)="tabDeSelection(tabz)" (removed)="removeTabHandler(tabz)"
+        [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
+        <ng-template tabHeading>
+          <i *ngIf="tabz.hasWarning" [ngClass]="{'pficon-warning-triangle-o': true, 'icon-severe': tabz.severity === 1, 'icon-moderate': tabz.severity === 2}"></i>
+          <span [innerHtml]="tabz.title" style="margin-left: 5px"></span>
+        </ng-template>
+        <!-- Stack Report Design Revamp - BEGIN -->
+        <div class="row info-row">
+          <div class="col-sm-7">
+            Dependencies: [
+            <b>Total: {{stackLevel && stackLevel.dependencies && stackLevel.dependencies.length}}</b> |
+            <b>Analyzed: {{stackLevel && stackLevel.analyzed_dependencies && stackLevel.analyzed_dependencies.length}}</b> |
+            <b>Unknown: {{stackLevel && stackLevel.unknown_dependencies && stackLevel.unknown_dependencies.length}}</b>]
+          </div>
+          <div class="col-sm-5">
+            <stack-details *ngIf="result" class="report-link" [showFlags]="'false'" [buildNumber]="buildNumber" [appName]="appName" [displayName]="'View complete stack report'"
+              [repoInfo]="repoInfo" [stackResponse]="result && result" [gatewayConfig]="gatewayConfig && gatewayConfig" [stack]="stackUrl"></stack-details>
+          </div>
+        </div>
+        <analytics-report-summary [report]="tabz.content" [isFromShortReport]="'true'"></analytics-report-summary>
+        <!-- Stack Report Design Revamp - END -->
+      </tab>
     </tabset>
     <div *ngIf="!dataLoaded" class="pre-loader">
-        <div class="pre-loader-spinner spinner spinner-lg"></div>
+      <div class="pre-loader-spinner spinner spinner-lg"></div>
     </div>
-    <div class="show-full-report">
-        <stack-details *ngIf="result" class="report-link" [showFlags]="'false'" [buildNumber]="buildNumber" [appName]="appName" [displayName]="'Show complete stack report'" [repoInfo]="repoInfo" [stackResponse]="result && result" [gatewayConfig]="gatewayConfig && gatewayConfig" [stack]="stackUrl"></stack-details>
-    </div>
-</div>
-<div *ngIf="error" class="error-class">
+  </div>
+  <div *ngIf="error" class="error-class">
     <div class="f8-blank-slate-card">
-        <div class="f8-blank-slate-icon">
-            <i class="pficon pficon-warning-triangle-o"></i>
-        </div>
-        <h3>{{error && error.title}}</h3>
-        <p>{{error && error.detail}}</p>
-        <p>Switch to the Pipelines view to restart the pipeline: <b>{{pipeline}}</b></p>
+      <div class="f8-blank-slate-icon">
+        <i class="pficon pficon-warning-triangle-o"></i>
+      </div>
+      <h3>{{error && error.title}}</h3>
+      <p>{{error && error.detail}}</p>
+      <p>Switch to the Pipelines view to restart the pipeline:
+        <b>{{pipeline}}</b>
+      </p>
     </div>
-</div>
-<div *ngIf="progress" class="error-class">
-        <div class="container-progress progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
-                <span>50%</span>
-            </div>
-        </div>
-        <h3>{{progress && progress.title}}</h3>
+  </div>
+  <div *ngIf="progress" class="error-class">
+    <div class="container-progress progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">
+        <span>50%</span>
+      </div>
     </div>
+    <h3>{{progress && progress.title}}</h3>
+  </div>
 </div>

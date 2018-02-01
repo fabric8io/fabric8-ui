@@ -1,3 +1,6 @@
-<div class="analytics-summary-report">
+<div class="analytics-summary-report" *ngIf="isFromShortReport !== 'true'">
     <analytics-summary-card (click)="handleSummaryClick(card)" class="col-md-3" *ngFor="let card of reportSummaryCards" [card]="card"></analytics-summary-card>
+</div>
+<div class="analytics-summary-report short-report" *ngIf="isFromShortReport === 'true'">
+    <analytics-summary-card (click)="handleSummaryClick(card)" class="col-md-4" [card]="card" *ngFor="let card of reportSummaryCardsForShort" [isFromShortReport]="isFromShortReport"></analytics-summary-card>
 </div>

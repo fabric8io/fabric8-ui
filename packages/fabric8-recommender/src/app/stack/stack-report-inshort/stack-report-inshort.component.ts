@@ -5,6 +5,8 @@ import { getStackReportModel } from '../utils/stack-api-utils';
 
 import { StackReportModel, ResultInformationModel, UserStackInfoModel,
     RecommendationsModel, ComponentInformationModel } from '../models/stack-report.model';
+import { ReportSummaryUtils } from '../utils/report-summary-utils';
+import { CommonService } from '../utils/common.service';
 
 @Component({
     selector: 'stack-report-inshort',
@@ -34,8 +36,9 @@ export class StackReportInShortComponent implements OnChanges {
     public licenseAnalysis: any;
 
     private cache: string = '';
+    private reportSummaryUtils = new ReportSummaryUtils();
 
-    constructor(private stackAnalysisService: StackAnalysesService) {}
+    constructor(private stackAnalysisService: StackAnalysesService, private commonService: CommonService) {}
 
     ngOnChanges(): void {
         if (this.stackUrl && this.stackUrl !== this.cache) {
@@ -99,6 +102,10 @@ export class StackReportInShortComponent implements OnChanges {
         }
         this.handleLicenseInformation(this.stackLevel);
         this.handleSecurityInformation(this.stackLevel);
+    }
+
+    public handleCardClick(cardDetails: any): void {
+        this.commonService.shortCardClicked();
     }
 
     private sortChartColumnData(array: Array<Array<any>>): Array<Array<any>> {
@@ -203,10 +210,13 @@ export class StackReportInShortComponent implements OnChanges {
         let resultInformation: Array<ResultInformationModel> = this.result.result;
         if (resultInformation && resultInformation.length > 0) {
             resultInformation.forEach((one: ResultInformationModel, index: number) => {
+                let warning: any = this.ifManifestHasWarning(one);
                 this.tabs[index] = {
                     title: one.manifest_file_path,
                     content: one,
-                    index: index
+                    index: index,
+                    hasWarning: warning.has,
+                    severity: warning.severity
                 };
             });
             if (this.tabs[0]) this.tabs[0]['active'] = true;
@@ -214,5 +224,16 @@ export class StackReportInShortComponent implements OnChanges {
             this.dataLoaded = true;
             this.error = null;
         }
+    }
+
+    private ifManifestHasWarning(manifest: ResultInformationModel): any {
+        let securityInfo = this.reportSummaryUtils.getSecurityReportCard(manifest.user_stack_info);
+        let isSecurityWarning = securityInfo.hasWarning;
+        let isInsightsWarning = this.reportSummaryUtils.getInsightsReportCard(manifest.recommendation).hasWarning;
+        let isLicenseWarning = this.reportSummaryUtils.getLicensesReportCard(manifest.user_stack_info).hasWarning;
+        return {
+            has: isSecurityWarning || isInsightsWarning || isLicenseWarning,
+            severity: (isSecurityWarning && securityInfo.severity) || 2
+        };
     }
 }

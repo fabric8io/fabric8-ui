@@ -44,15 +44,18 @@ export class ReportSummaryUtils {
     public titleAndDescription: any = {
         [this.cardTypes.SECURITY]: {
             title: 'Dependencies with security issues in your stack',
-            description: 'Dependencies with high common vulnerabilities and exposures (CVE) score.  Click this card to see the details of all CVE(s).'
+            description: 'Dependencies with high common vulnerabilities and exposures (CVE) score.  Click this card to see the details of all CVE(s).',
+            descriptionShort: 'Click this card to see details of CVEs in your stack.'
         },
         [this.cardTypes.INSIGHTS]: {
             title: 'Insights on alternate or additional dependencies that can augment your stack',
-            description: 'Suggested dependencies that can be added to your application stack or replace current dependencies with alternate one. Click to see details.'
+            description: 'Suggested dependencies that can be added to your application stack or replace current dependencies with alternate one. Click to see details.',
+            descriptionShort: 'Click this card to see detailed license information for your stack.'
         },
         [this.cardTypes.LICENSES]: {
             title: 'License details of dependencies in your stack',
-            description: 'Recommended license for your application stack, flag any unknown/restrictive license(s) present. Click this card to see the detailed information.'
+            description: 'Recommended license for your application stack, flag any unknown/restrictive license(s) present. Click this card to see the detailed information.',
+            descriptionShort: 'Click this card to see suggested dependencies that complement your stack.'
         },
         [this.cardTypes.COMP_DETAILS]: {
             title: 'Dependency details of your manifest file',
@@ -73,6 +76,8 @@ export class ReportSummaryUtils {
         securityCard.reportSummaryTitle.titleIcon = 'fa fa-shield';
         securityCard.reportSummaryDescription =
             this.titleAndDescription[this.cardTypes.SECURITY].description;
+        securityCard.reportSummaryDescriptionShort =
+            this.titleAndDescription[this.cardTypes.SECURITY].descriptionShort;
         securityCard.reportSummaryTitle.titleText = 'Security Issues';
         securityCard.reportSummaryContent.infoEntries = [];
 
@@ -155,6 +160,7 @@ export class ReportSummaryUtils {
         insightsCard.reportSummaryTitle.titleText = 'Insights';
         insightsCard.reportSummaryTitle.titleIcon = 'pficon-zone';
         insightsCard.reportSummaryDescription = this.titleAndDescription[this.cardTypes.INSIGHTS].description;
+        insightsCard.reportSummaryDescriptionShort = this.titleAndDescription[this.cardTypes.INSIGHTS].descriptionShort;
         insightsCard.reportSummaryContent.infoEntries = [];
 
         let usageOutliersCount: number = 0, companionCount: number = 0;
@@ -200,6 +206,7 @@ export class ReportSummaryUtils {
         licensesCard.reportSummaryTitle.titleText = 'Licenses';
         licensesCard.reportSummaryTitle.titleIcon = 'fa fa-file-text-o';
         licensesCard.reportSummaryDescription = this.titleAndDescription[this.cardTypes.LICENSES].description;
+        licensesCard.reportSummaryDescriptionShort = this.titleAndDescription[this.cardTypes.LICENSES].descriptionShort;
         licensesCard.reportSummaryContent.infoEntries = [];
 
         if (userStackInfo &&

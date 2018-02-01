@@ -1,20 +1,24 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import {TabsModule} from 'ngx-bootstrap';
-import {ChartModule} from '../utils/chart/chart.module';
-import {StackDetailsModule} from '../stack-details/stack-details.module';
-import {StackReportInShortComponent} from './stack-report-inshort.component';
+import { TabsModule } from 'ngx-bootstrap';
+import { ChartModule } from '../utils/chart/chart.module';
+import { StackDetailsModule } from '../stack-details/stack-details.module';
+import { StackReportInShortComponent } from './stack-report-inshort.component';
+import { ReportSummaryModule } from '../report-summary/report-summary.module';
+import { CommonService } from '../utils/common.service';
 
 @NgModule({
     imports: [
         CommonModule,
         ChartModule,
         StackDetailsModule,
-        TabsModule.forRoot()
+        TabsModule.forRoot(),
+        ReportSummaryModule
     ],
     declarations: [StackReportInShortComponent],
-    exports: [StackReportInShortComponent]
+    exports: [StackReportInShortComponent],
+    providers: [ CommonService ]
 })
 
 export class StackReportInShortModule {}

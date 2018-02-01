@@ -25,6 +25,7 @@ import { SaveState } from '../../utils/SaveState';
 export class ReportSummaryCardComponent implements AfterContentInit {
 
     @Input() card: MReportSummaryCard;
+    @Input() isFromShortReport: string;
 
     public reportSummaryContent: MReportSummaryContent;
     public reportSummaryTitle: MReportSummaryTitle;
@@ -43,13 +44,19 @@ export class ReportSummaryCardComponent implements AfterContentInit {
     }
 
     ngAfterContentInit() {
-        SaveState.ELEMENTS[0].click();
+        if (this.isFromShortReport !== 'true' && SaveState.ELEMENTS[0]) {
+            SaveState.ELEMENTS[0].click();
+        }
     }
 
     private updateCard(): void {
         if (this.card) {
             this.reportSummaryTitle = this.card.reportSummaryTitle;
-            this.reportSummaryDescription = this.card.reportSummaryDescription;
+            if (this.isFromShortReport === 'true') {
+                this.reportSummaryDescription = this.card.reportSummaryDescriptionShort;
+            } else {
+                this.reportSummaryDescription = this.card.reportSummaryDescription;
+            }
             this.reportSummaryContent = this.card.reportSummaryContent;
         }
     }
