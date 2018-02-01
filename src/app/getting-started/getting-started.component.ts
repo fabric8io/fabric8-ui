@@ -86,7 +86,7 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
     // the following code will 'read' the link param and then
     // call the auth service's LINK API with the required authorization header.
     let linkRedirect = this.getRequestParam('link');
-    if !(linkRedirect === null) && (linkRedirect === 'https://github.com') {
+    if (!(linkRedirect === null) && (linkRedirect === 'https://github.com')) {
       this.providerService.linkGitHub(window.location.origin + '/_gettingstarted?wait=true');
     }
 
