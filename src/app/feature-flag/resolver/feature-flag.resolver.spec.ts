@@ -10,15 +10,12 @@ import { FeatureFlagResolver } from './feature-flag.resolver';
 
 describe('FeatureFlag resolver: it', () => {
   let mockLog: any;
-  let mockAuthService: any;
   let mockRouter: any;
   let mockTogglesService: any;
   let resolver: FeatureFlagResolver;
   let mockActivatedRoute: any;
   beforeEach(() => {
     mockLog = jasmine.createSpyObj('Logger', ['log']);
-    mockAuthService = jasmine.createSpyObj('AuthenticationService', ['isLoggedIn']);
-    mockAuthService.isLoggedIn.and.returnValue(true);
     mockTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     mockActivatedRoute = jasmine.createSpy('ActivatedRouteSnapshot');
@@ -31,10 +28,6 @@ describe('FeatureFlag resolver: it', () => {
         {
           provide: Router,
           useValue: mockRouter
-        },
-        {
-          provide: AuthenticationService,
-          useValue: mockAuthService
         },
         {
           provide: Router,

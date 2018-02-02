@@ -6,7 +6,6 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { Logger } from 'ngx-base';
-import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 import { FeatureFlagConfig } from '../../../app/models/feature-flag-config';
 import { FeatureTogglesService } from '../service/feature-toggles.service';
@@ -23,7 +22,6 @@ enum FeatureLevel {
 export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
 
   constructor(private logger: Logger,
-              private authService: AuthenticationService,
               private toggleService: FeatureTogglesService,
               private router: Router) {
   }
