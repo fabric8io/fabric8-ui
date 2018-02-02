@@ -1,0 +1,29 @@
+<div  class="container">
+  <div class="row">
+    <div class="blank-slate-pf">
+      <div *ngIf="verified === 'true'">
+        <h1>
+          <span class="pficon pficon-ok"></span>
+          Your e-mail has been confirmed</h1>
+        <hr>
+        <p>Thank you for validating your e-mail address.
+          You can now contribute to use Openshift.io
+        </p>
+      </div>
+      <div *ngIf="verified === 'false'">
+        <h1>
+          <span class="pficon pficon-warning-triangle-o"></span>
+          This URL has already been used to verify your e-mail
+        </h1>
+        <hr>
+        <p>Your e-mail address has been approved.
+          Click on my profile below to continue.
+        </p>
+      </div>
+      <div class="blank-slate-pf-main-action">
+        <a href="#"
+          class="btn btn-primary btn-lg">Continue to my dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
