@@ -136,11 +136,11 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   connectAccounts(): void {
     // Todo: Still cannot refresh current page, so send user to getting started page
     if (this.authGitHub && !this.gitHubLinked && this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkAll(window.location.origin + '/_gettingstarted?wait=true');
+      this.providerService.linkAll(this.loggedInUser.attributes.cluster, window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authGitHub && !this.gitHubLinked) {
       this.providerService.linkGitHub(window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkOpenShift(window.location.origin + '/_gettingstarted?wait=true');
+      this.providerService.linkOpenShift(this.loggedInUser.attributes.cluster, window.location.origin + '/_gettingstarted?wait=true');
     }
   }
 

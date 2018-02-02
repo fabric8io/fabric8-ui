@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export KUBERNETES_SERVICE_HOST=api.starter-us-east-2.openshift.com
+export KUBERNETES_SERVICE_HOST=f8osoproxy-test-dsaas-production.09b5.dsaas.openshiftapps.com
 export KUBERNETES_SERVICE_PORT=443
 export OPENSHIFT_CONSOLE_HOST=console.starter-us-east-2.openshift.com
 export OPENSHIFT_CONSOLE_PORT=443
