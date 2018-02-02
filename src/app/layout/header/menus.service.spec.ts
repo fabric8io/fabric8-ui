@@ -22,9 +22,9 @@ describe('MenuService service: it', () => {
         'enabled': true,
         'enablement-level': 'beta',
         'description': 'boo',
-        'name': 'Environments'
+        'name': 'Deployments'
       },
-      'id': 'Environments'
+      'id': 'Deployments'
     }
   ];
   const fullMenu = [
@@ -86,18 +86,6 @@ describe('MenuService service: it', () => {
             'fullPath':  '/ckrych@redhat.com/test2/create/pipelines'
           },
           {
-            'name':  'Applications',
-            'feature':  'Application',
-            'path':  'apps',
-            'fullPath':  '/ckrych@redhat.com/test2/create/apps'
-          },
-          {
-            'name':  'Environments',
-            'feature':  'Environments',
-            'path':  'environments',
-            'fullPath':  '/ckrych@redhat.com/test2/create/environments'
-          },
-          {
             'name':  'Deployments',
             'feature':  'Deployments',
             'path':  'deployments',
@@ -149,11 +137,10 @@ describe('MenuService service: it', () => {
 
     let menus = myContext.type['menus'];
     let createMenu = menus[3];
-    expect(createMenu.menus.length).toEqual(4);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Environments').length == 0);
+    expect(createMenu.menus.length).toEqual(2);
+    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Deployments').length == 0);
     expect(createMenu.menus.filter(subMenu => subMenu.name == 'Codebases').length == 1);
     expect(createMenu.menus.filter(subMenu => subMenu.name == 'Pipelines').length == 1);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Applications').length == 1);
   });
 
   it('should return a filtered sub-menu if some features are internal and user in non internal', () => {
@@ -170,11 +157,10 @@ describe('MenuService service: it', () => {
 
     let menus = myContext.type['menus'];
     let createMenu = menus[3];
-    expect(createMenu.menus.length).toEqual(4);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Environments').length == 0);
+    expect(createMenu.menus.length).toEqual(2);
+    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Deployments').length == 0);
     expect(createMenu.menus.filter(subMenu => subMenu.name == 'Codebases').length == 1);
     expect(createMenu.menus.filter(subMenu => subMenu.name == 'Pipelines').length == 1);
-    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Applications').length == 1);
   });
 
 });
