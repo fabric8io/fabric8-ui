@@ -17,13 +17,30 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="email" class="control-label required-pf">Email</label>
-          <div [ngClass]="{'has-error': emailInvalid}">
+          <label for="email" class="control-label required-pf email-alignment-label">Email</label>
+          <div [ngClass]="{'has-error': emailInvalid}" class="email-alignment">
             <input type="email" class="form-control" id="email" name="email" #_email
                     placeholder="name@gmail.com"
                     [maxLength]="255"
                     [(ngModel)]="email"
                     (change)="validateEmail()">
+            <div class="radio email-alignment_settings">
+              <label>
+                <input type="radio" name="emailVisibility" id="emailPrivate"
+                        [(ngModel)]="emailPrivate"
+                        [value]="true"
+                        [checked]="emailPrivate">
+                Private
+              </label>
+              <label class="margin-left-30">
+                <input type="radio" name="emailVisibility" id="emailPublic"
+                        [(ngModel)]="emailPrivate"
+                        [value]="false"
+                        [checked]="!emailPrivate">
+                Public
+              </label>
+
+            </div>
           </div>
         </div>
         <div class="form-group">

@@ -45,6 +45,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   companyInvalid: boolean = false;
   context: Context;
   email: string;
+  emailPrivate: boolean = true;
   emailVerified: boolean;
   emailInvalid: boolean = false;
   featureLevel: string;
@@ -335,6 +336,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (this.url !== undefined && this.url.length > 0) {
       profile.url = this.url.trim();
     }
+    if (this.emailPrivate !== undefined) {
+      profile.emailPrivate = this.emailPrivate;
+    }
     return profile;
   }
 
@@ -390,6 +394,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.bio = (user.attributes.bio !== undefined) ? user.attributes.bio : '';
     this.company = (user.attributes.company !== undefined) ? user.attributes.company : '';
     this.email = (user.attributes.email !== undefined) ? user.attributes.email : '';
+    this.emailPrivate = (user.attributes.emailPrivate !== undefined) ? user.attributes.emailPrivate : true;
     this.emailVerified = ((user as any).attributes.emailVerified !== undefined) ?
       (user as any).attributes.emailVerified : false;
     this.fullName = (user.attributes.fullName !== undefined) ? user.attributes.fullName : '';

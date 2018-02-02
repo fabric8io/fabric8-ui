@@ -20,13 +20,13 @@
         </p>
         <hr>
         <div *ngIf="(context.user.attributes.email !== undefined && context.user.attributes.email.length !== 0); then showEmail else addEmail"></div>
-        <ng-template #showEmail>
+        <ng-template #showEmail *ngIf="context.user.attributes.emailPrivate">
           <p class="col-sm-12 profile-wrapper-email truncate">
             <span class="fa fa-envelope"></span>
             <a href="mailto:{{context.user.attributes.email}}" class="margin-left-5 margin-right-5">{{context.user.attributes.email}}</a>
           </p>
         </ng-template>
-        <ng-template #addEmail>
+        <ng-template #addEmail *ngIf="!context.user.attributes.emailPrivate">
           <p class="col-sm-12 profile-wrapper-email">
             <span class="fa fa-envelope"></span>
             <a href="javascript:void(0)"
