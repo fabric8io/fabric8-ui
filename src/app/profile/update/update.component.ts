@@ -85,8 +85,8 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.subscriptions.push(auth.gitHubToken.subscribe(token => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
     }));
-    this.subscriptions.push(auth.openShiftToken.subscribe(token => {
-      this.openShiftLinked = (token !== undefined && token.length !== 0);
+    this.subscriptions.push(auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster).subscribe(isConnected => {
+      this.openShiftLinked = isConnected;
     }));
   }
 
