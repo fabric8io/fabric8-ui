@@ -37,15 +37,14 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     this.subscriptions.push(contexts.current.subscribe(val => {
       this.contextUserName = val.user.attributes.username;
     }));
-    this.subscriptions.push(auth.openShiftToken.subscribe(token => {
-      this.openShiftLinked = (token !== undefined && token.length !== 0);
-    }));
 
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      if (user.attributes) {
-        this.cluster = user.attributes['cluster'];
-      }
-    }));
+    if (userService.currentLoggedInUser.attributes) {
+      let user = userService.currentLoggedInUser;
+      this.subscriptions.push(auth.isOpenShiftConnected(user.attributes.cluster).subscribe(isConnected => {
+        this.openShiftLinked = isConnected;
+      }));
+      this.cluster = user.attributes.cluster;
+    }
   }
 
   ngOnDestroy(): void {
