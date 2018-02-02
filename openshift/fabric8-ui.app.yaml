@@ -152,3 +152,7 @@ objects:
 parameters:
 - name: IMAGE_TAG
   value: latest
+- name: k8s_api_server_base_path
+  value: ''
+- name: ws_k8s_api_server
+  value: ''
