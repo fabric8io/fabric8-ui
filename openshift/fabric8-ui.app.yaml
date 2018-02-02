@@ -45,20 +45,14 @@ objects:
                   name: f8ui
                   key: analytics.write.key
             - name: WS_K8S_API_SERVER
-              valueFrom:
-                configMapKeyRef:
-                  name: f8ui
-                  key: ws.k8s.api.server
+              value: ${ws.k8s.api.server}
             - name: K8S_API_SERVER_PROTOCOL
               valueFrom:
                 configMapKeyRef:
                   name: f8ui
                   key: k8s.api.server.protocol
             - name: K8S_API_SERVER_BASE_PATH
-              valueFrom:
-                configMapKeyRef:
-                  name: f8ui
-                  key: k8s.api.server.base.path
+              value: ${k8s.api.server.base.path}
             - name: OAUTH_ISSUER
               valueFrom:
                 configMapKeyRef:
