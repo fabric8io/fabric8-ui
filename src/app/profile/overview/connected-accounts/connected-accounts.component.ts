@@ -71,7 +71,7 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   }
 
   public connectOpenShift(): void {
-    this.providerService.linkOpenShift(window.location.href);
+    this.providerService.linkOpenShift(this.cluster, window.location.href);
   }
 
   public refreshGitHub(): void {
