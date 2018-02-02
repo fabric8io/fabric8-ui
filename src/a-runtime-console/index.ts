@@ -1,7 +1,4 @@
 export { SpaceNamespace } from './kubernetes/model/space-namespace';
-export { EnvironmentListPageComponent } from './kubernetes/ui/environment/list-page/list-page.environment.component';
-export { EnvironmentModule } from './kubernetes/ui/environment/environment.module';
-export { AppModule } from './kubernetes/ui/app/app.module';
 export { PipelineStatusComponent } from './kubernetes/components/pipeline-status/pipeline-status.component';
 export { PodPhaseIconComponent } from './kubernetes/components/pod-phase-icon/pod-phase-icon.component';
 export { KubernetesLabelsComponent } from './kubernetes/components/k8s-labels/k8s-labels.component';
@@ -26,9 +23,7 @@ export { Deployment, Deployments } from './kubernetes/model/deployment.model';
 export { ConfigMap, ConfigMaps } from './kubernetes/model/configmap.model';
 export { Build, Builds } from './kubernetes/model/build.model';
 export { KubernetesStoreModule } from './kubernetes/kubernetes.store.module';
-export { SpaceModule } from './kubernetes/ui/space/space.module';
 export { PipelineModule } from './kubernetes/ui/pipeline/pipeline.module';
-export { SpacesListComponent } from './kubernetes/ui/space/list/list.space.component';
 export { KubernetesRestangularModule } from './kubernetes/service/kubernetes.restangular';
 export {
   BuildConfig,
@@ -46,7 +41,6 @@ export { APIsStore } from './kubernetes/store/apis.store';
 export { LoginService } from './shared/login.service';
 export { NamespaceScope } from './kubernetes/service/namespace.scope';
 export { DevNamespaceScope } from './kubernetes/service/devnamespace.scope';
-export { DeploymentModule } from './kubernetes/ui/deployment/deployment.module';
 export { createDeploymentViews } from './kubernetes/view/deployment.view';
 export { CompositeDeploymentStore } from './kubernetes/store/compositedeployment.store';
 export { ServiceStore } from './kubernetes/store/service.store';
@@ -78,5 +72,5 @@ export { StatusListModule } from './kubernetes/ui/status/status-list.module';
 
 export { DeploymentViews } from './kubernetes/view/deployment.view';
 export { DeploymentView } from './kubernetes/view/deployment.view';
-export { AppEnvironmentDetails, AppDeployments, EnvironmentDeployments } from './kubernetes/ui/app/list-page/list-page.app.component';
+export { AppEnvironmentDetails, AppDeployments, EnvironmentDeployments } from './kubernetes/model/app-env.model';
 export { AbstractWatchComponent } from './kubernetes/support/abstract-watch.component';
