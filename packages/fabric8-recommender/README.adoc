@@ -2,7 +2,7 @@
 
 image:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic%20release-b4d455.svg[Semantic Release, link="https://github.com/semantic-release/semantic-release"]
 
-**Fabric8 Recommender is a stack analysis feature.**
+**Fabric8 Recommender is a stack analysis feature.** 
 
 == Running the app
 
