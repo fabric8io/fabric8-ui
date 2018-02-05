@@ -2,10 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 import { Logger } from 'ngx-base';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { FABRIC8_FEATURE_TOGGLES_API_URL } from '../../../a-runtime-console/shared/feature-toggles.provider';
-import { Feature, FeatureTogglesService } from './feature-toggles.service';
+import { FABRIC8_FEATURE_TOGGLES_API_URL, Feature, FeatureTogglesService } from './feature-toggles.service';
 
 describe('FeatureToggles service: it', () => {
   let mockLog: any;
@@ -29,8 +27,7 @@ describe('FeatureToggles service: it', () => {
           useValue: mockAuthService
         },
         {
-          //provide: FABRIC8_FEATURE_TOGGLES_API_URL,
-          provide: WIT_API_URL,
+          provide: FABRIC8_FEATURE_TOGGLES_API_URL,
           useValue: 'http://example.com'
         },
         FeatureTogglesService

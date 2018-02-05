@@ -47,7 +47,6 @@ import {
 /*
  * Platform and Environment providers/directives/pipes
  */
-import { featureTogglesApiUrlProvider } from '../a-runtime-console/shared/feature-toggles.provider';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ENV_PROVIDERS }    from './environment';
@@ -60,7 +59,7 @@ import { AppState, InternalStateType } from './app.service';
 // Footer & Header
 import { FeatureBannerComponent } from './feature-flag/banner/feature-banner.component';
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
-import { FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
+import { featureTogglesApiUrlProvider, FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
 import { FeatureWarningPageComponent } from './feature-flag/warning-page/feature-warning-page.component';
 
 import { FooterComponent } from './layout/footer/footer.component';
