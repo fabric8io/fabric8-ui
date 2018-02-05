@@ -72,16 +72,17 @@ export class TenantComponent implements AfterViewInit, OnInit {
       private tenentService: TenentService,
       private userService: UserService) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-      this.setUserProperties(user);
-    }));
-    this.subscriptions.push(auth.gitHubToken.subscribe(token => {
-      this.gitHubLinked = (token !== undefined && token.length !== 0);
-    }));
-    this.subscriptions.push(auth.openShiftToken.subscribe(token => {
-      this.openShiftLinked = (token !== undefined && token.length !== 0);
-    }));
+
+    if (userService.currentLoggedInUser.attributes) {
+      this.loggedInUser = userService.currentLoggedInUser;
+      this.setUserProperties(this.loggedInUser);
+      this.subscriptions.push(auth.gitHubToken.subscribe(token => {
+        this.gitHubLinked = (token !== undefined && token.length !== 0);
+      }));
+      this.subscriptions.push(auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster).subscribe((isConnected) => {
+        this.openShiftLinked = isConnected;
+      }));
+    }
   }
 
   ngAfterViewInit(): void {
