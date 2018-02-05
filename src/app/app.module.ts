@@ -47,7 +47,6 @@ import {
 /*
  * Platform and Environment providers/directives/pipes
  */
-import { featureTogglesApiUrlProvider } from '../a-runtime-console/shared/feature-toggles.provider';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ENV_PROVIDERS }    from './environment';
@@ -197,7 +196,6 @@ export type StoreType = {
     ErrorService,
     FeatureFlagResolver,
     FeatureTogglesService,
-    featureTogglesApiUrlProvider,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
     {
