@@ -449,6 +449,101 @@ describe('DeploymentsService', () => {
     });
   });
 
+  describe('#getPods', () => {
+    it('should return pods for an existing deployment', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'stage',
+                  pods: {
+                    running: 1,
+                    starting: 0,
+                    stopping: 1,
+                    total: 2
+                  }
+                }
+              ]
+            },
+            {
+              name: 'foo-app',
+              pipeline: [
+                {
+                  name: 'run',
+                  pods: {
+                    running: 0,
+                    starting: 0,
+                    stopping: 1,
+                    total: 1
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      };
+
+      const expectedResponse = {
+        total: 2,
+        pods: [
+          ['Running', 1],
+          ['Starting', 0],
+          ['Stopping', 1]
+        ]
+      };
+
+      doMockHttpTest(httpResponse, expectedResponse,
+        svc.getPods('foo-spaceId', 'vertx-hello', 'stage'), done);
+    });
+
+    it('should return pods when there are multiple deployments', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          applications: [
+            {
+              name: 'vertx-hello',
+              pipeline: [
+                {
+                  name: 'stage',
+                  pods: {
+                    running: 1,
+                    starting: 0,
+                    stopping: 1,
+                    total: 2
+                  }
+                },
+                {
+                  name: 'run',
+                  pods: {
+                    running: 3,
+                    starting: 2,
+                    stopping: 1,
+                    total: 6
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      };
+
+      const expectedResponse = {
+        total: 6,
+        pods: [
+          ['Running', 3],
+          ['Starting', 2],
+          ['Stopping', 1]
+        ]
+      };
+
+      doMockHttpTest(httpResponse, expectedResponse,
+        svc.getPods('foo-spaceId', 'vertx-hello', 'run'), done);
+    });
+  });
+
   describe('#getDeploymentCpuStat', () => {
     it('should combine timeseries and quota data', (done: DoneFn) => {
       const timeseriesResponse = {
