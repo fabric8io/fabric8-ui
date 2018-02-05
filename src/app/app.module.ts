@@ -59,7 +59,7 @@ import { AppState, InternalStateType } from './app.service';
 // Footer & Header
 import { FeatureBannerComponent } from './feature-flag/banner/feature-banner.component';
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
-import { FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
+import { FABRIC8_FEATURE_TOGGLES_API_URL, featureTogglesApiUrlProvider, FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
 import { FeatureWarningPageComponent } from './feature-flag/warning-page/feature-warning-page.component';
 
 import { FooterComponent } from './layout/footer/footer.component';
@@ -196,6 +196,7 @@ export type StoreType = {
     ErrorService,
     FeatureFlagResolver,
     FeatureTogglesService,
+    featureTogglesApiUrlProvider,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
     {
