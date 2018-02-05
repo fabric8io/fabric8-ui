@@ -38,8 +38,12 @@
   </div>
 </div>
 
-<modal #createArea modalClass="chromeless-modal">
-  <modal-content class="chromeless-modal-content">
-    <create-area-dialog [host]="createArea" [parentId]="selectedAreaId" [areas]="areas" (onAdded)="addArea($event)"></create-area-dialog>
-  </modal-content>
-</modal>
+<div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-hidden="true" (onShown)="onShowHandler()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <create-area-dialog [host]="modal" [parentId]="selectedAreaId" [areas]="areas" (onAdded)="addArea($event)"></create-area-dialog>
+      </div>
+    </div>
+  </div>
+</div>
