@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaAttributes, AreaService, Context } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
@@ -21,6 +21,7 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
   @Input() parentId: string;
   @Input() areas: Area[];
   @Output() onAdded = new EventEmitter<Area>();
+  @ViewChild('nameInput') nameInput: ElementRef;
 
   private context: Context;
   private openSubscription: Subscription;
@@ -37,6 +38,10 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.openSubscription.unsubscribe();
+  }
+
+  public focus() {
+    this.nameInput.nativeElement.focus();
   }
 
   createArea() {

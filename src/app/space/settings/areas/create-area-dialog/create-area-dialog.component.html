@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
           <label for="name" class="control-label">Name</label>
-          <input id="name" name="name" type="text" class="form-control" placeholder="Enter a name for your area" [(ngModel)]="name" required />
+          <input #nameInput id="name" name="name" type="text" class="form-control" placeholder="Enter a name for your area" [(ngModel)]="name" required />
         </div>
         <div class="form-group">
           <label class="control-label">Parent area</label>

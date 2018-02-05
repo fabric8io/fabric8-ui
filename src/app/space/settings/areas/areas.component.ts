@@ -15,6 +15,7 @@ import { CreateAreaDialogComponent } from './create-area-dialog/create-area-dial
 })
 export class AreasComponent implements OnInit, OnDestroy {
 
+  @ViewChild(CreateAreaDialogComponent) createAreaDialog: CreateAreaDialogComponent;
   @ViewChild(ModalDirective) modal: ModalDirective;
 
   private context: Context;
@@ -58,6 +59,10 @@ export class AreasComponent implements OnInit, OnDestroy {
 
   openModal() {
     this.modal.show();
+  }
+
+  onShowHandler() {
+    this.createAreaDialog.focus();
   }
 
   addChildArea(id: string) {
