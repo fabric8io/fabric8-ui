@@ -43,6 +43,7 @@ if [ -z "${FABRIC8_PIPELINES_NAMESPACE}" ]; then
   export FABRIC8_PIPELINES_NAMESPACE=""
 fi
 
+# this URL is used in dev mode only, for now feature-toggles.service.ts used WIT url as a proxy
 #export FABRIC8_FEATURE_TOGGLES_API_URL=http://localhost:8080/api/
 export FABRIC8_WIT_API_URL="https://api.prod-preview.openshift.io/api/"
 export FABRIC8_FEATURE_TOGGLES_API_URL=${FABRIC8_WIT_API_URL}
