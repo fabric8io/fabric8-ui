@@ -29,7 +29,6 @@ export class OwnerGuard implements CanActivate, CanActivateChild {
       let isViewingOwnContext = state.root.firstChild.params['entity'] === this.contextService.currentUser;
       return isViewingOwnContext;
     } else {
-      console.log('OwnerGuard: CanActivate returns false because you dont own the space');
       this.loginService.redirectToLogin(state.url);
       return false;
     }
