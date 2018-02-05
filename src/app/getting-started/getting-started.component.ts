@@ -58,9 +58,11 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
 
     if (!this.kubeMode) {
       // Still need to retrieve OpenShift token for checkbox, in case the GitHub token cannot be obtained below.
-      this.subscriptions.push(auth.openShiftToken.subscribe(token => {
-        this.openShiftLinked = (token !== undefined && token.length !== 0);
-      }));
+      if (this.loggedInUser && this.loggedInUser.attributes) {
+        this.subscriptions.push(auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster).subscribe(isConnected => {
+          this.openShiftLinked = isConnected;
+        }));
+      }
     } else {
       // lets poll for the kube tenant connected when the lazily created Jenkins endpoint
       // can be registered into KeyCloak
@@ -76,6 +78,18 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+
+
+    // when both github and openshift is being linked together,
+    // openshift is linked first and then user is redirected
+    // to the https://openshift.io/_gettingstarted?link=https://github.com
+    // the following code will 'read' the link param and then
+    // call the auth service's LINK API with the required authorization header.
+    let linkRedirect = this.getRequestParam('link');
+    if (!(linkRedirect === null) && (linkRedirect === 'https://github.com')) {
+      this.providerService.linkGitHub(window.location.origin + '/_gettingstarted?wait=true');
+    }
+
     // Route to home if registration is complete.
     this.userService.loggedInUser
       .map(user => {
@@ -92,10 +106,10 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
       .map(token => {
         this.gitHubLinked = (token !== undefined && token.length !== 0);
       })
-      .switchMap(() => this.auth.openShiftToken)
-      .map(token => {
+      .switchMap(() => this.auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster))
+      .map(isConnected => {
         if (!this.kubeMode) {
-          this.openShiftLinked = (token !== undefined && token.length !== 0);
+          this.openShiftLinked = isConnected;
         }
       })
       .do(() => {
@@ -146,11 +160,11 @@ export class GettingStartedComponent implements OnDestroy, OnInit {
    */
   connectAccounts(): void {
     if (this.authGitHub && !this.gitHubLinked && this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkAll(window.location.origin + '/_gettingstarted?wait=true');
+      this.providerService.linkAll(this.loggedInUser.attributes.cluster , window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authGitHub && !this.gitHubLinked) {
       this.providerService.linkGitHub(window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkOpenShift(window.location.origin + '/_gettingstarted?wait=true');
+      this.providerService.linkOpenShift(this.loggedInUser.attributes.cluster, window.location.origin + '/_gettingstarted?wait=true');
     }
   }
 

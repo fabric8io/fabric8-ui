@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-
+import { UserService } from 'ngx-login-client';
 
 export class OAuthConfig {
   public authorizeUri: string;
@@ -40,7 +40,7 @@ export class OAuthConfig {
     this.issuer = oauth.oauth_issuer || '';
     this.scope = oauth.oauth_scope || 'user:full';
     this.logoutUri = oauth.logout_uri || '';
-    this.openshiftConsoleUrl = config.openshift_console_url || '';
+    //this.openshiftConsoleUrl = config.openshift_console_url || '';
     this.witApiUrl = config.wit_api_url || '';
     this.ssoApiUrl = config.sso_api_url || '';
     this.forgeApiUrl = config.forge_api_url || '';
@@ -77,7 +77,7 @@ export function currentOAuthConfig() {
 @Injectable()
 export class OAuthConfigStore {
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private userService: UserService) {
     this.load();
   }
 
@@ -122,6 +122,11 @@ export class OAuthConfigStore {
             }
           }
           _latestOAuthConfig = new OAuthConfig(data);
+          if (this.userService.currentLoggedInUser.attributes) {
+            let cluster = this.userService.currentLoggedInUser.attributes.cluster;
+            let console = cluster.replace('api', 'console');
+            _latestOAuthConfig.openshiftConsoleUrl = console + 'console';
+          }
           _currentOAuthConfig.next(_latestOAuthConfig);
           _loadingOAuthConfig.next(false);
         },
