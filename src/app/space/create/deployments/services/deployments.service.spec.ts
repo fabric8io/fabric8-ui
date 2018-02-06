@@ -96,13 +96,20 @@ describe('DeploymentsService', () => {
       ));
     });
 
-    obs.subscribe((data: U) => {
-      expect(data).toEqual(expected);
-      subscription.unsubscribe();
-      if (done) {
-        done();
+    obs.subscribe(
+      (data: U) => {
+        expect(data).toEqual(expected);
+        subscription.unsubscribe();
+        if (done) {
+          done();
+        }
+      },
+      (err: any) => {
+        if (done) {
+          done.fail(err);
+        }
       }
-    });
+    );
   }
 
   describe('#getApplications', () => {
