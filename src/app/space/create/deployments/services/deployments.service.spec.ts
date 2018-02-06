@@ -580,6 +580,51 @@ describe('DeploymentsService', () => {
     });
   });
 
+  describe('#scalePods', () => {
+    it('should return success message on success', (done: DoneFn) => {
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        connection.mockRespond(new Response(
+          new ResponseOptions({ status: 200 })
+        ));
+      });
+
+      svc.scalePods('foo-spaceId', 'vertx-hello', 'stage', 2)
+        .subscribe(
+          (msg: string) => {
+            expect(msg).toEqual('Successfully scaled stage');
+            subscription.unsubscribe();
+            done();
+          },
+          (err: string) => {
+            done.fail(err);
+          }
+        );
+    });
+
+    it('should return failure message on error', (done: DoneFn) => {
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        connection.mockError(new Response(
+          new ResponseOptions({
+            type: ResponseType.Error,
+            status: 400
+          })
+        ) as Response & Error);
+      });
+
+      svc.scalePods('foo-spaceId', 'vertx-hello', 'stage', 2)
+        .subscribe(
+          (msg: string) => {
+            done.fail(msg);
+          },
+          (err: string) => {
+            expect(err).toEqual('Failed to scale stage');
+            subscription.unsubscribe();
+            done();
+          }
+        );
+    });
+  });
+
   describe('#getPods', () => {
     it('should return pods for an existing deployment', (done: DoneFn) => {
       const httpResponse = {
