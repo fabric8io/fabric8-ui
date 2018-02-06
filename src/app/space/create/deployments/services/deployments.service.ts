@@ -249,7 +249,7 @@ export class DeploymentsService implements OnDestroy {
     desiredReplicas: number
   ): Observable<string> {
     const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}?podCount=${desiredReplicas}`;
-    return this.http.put(url, '')
+    return this.http.put(url, '', { headers: this.headers })
       .map((r: Response) => `Successfully scaled ${applicationId}`)
       .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
