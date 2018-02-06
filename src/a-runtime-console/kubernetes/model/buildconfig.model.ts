@@ -14,7 +14,6 @@ export class BuildConfig extends KubernetesSpecResource {
 
   jenkinsJobUrl: string;
   editPipelineUrl: string;
-  openInDEAUrl: string;
   openInCheUrl: string;
 
   lastBuildPath: string;
@@ -183,9 +182,6 @@ export class BuildConfig extends KubernetesSpecResource {
     }
     this.gitUrl = gitUrl;
     this.jenkinsJobUrl = this.annotations['fabric8.link.jenkins.job/url'] || '';
-    if (gitUrl) {
-      this.openInDEAUrl = 'jetbrains://idea/checkout/git?idea.required.plugins.id=Git4Idea&checkout.repo=' + gitUrl;
-    }
     this.onBuildsUpdated();
 
     let name = this.name;

@@ -32,6 +32,19 @@ export const routes: Routes = [
     }
   },
 
+  // App Launcher
+  {
+    path: '_applauncher',
+    resolve: {
+      featureFlagConfig: FeatureFlagResolver
+    },
+    loadChildren: './app-launcher/app-launcher.module#AppLauncherModule',
+    data: {
+      title: 'App Launcher',
+      featureName: 'AppLauncher'
+    }
+  },
+
   // Getting started
   {
     path: '_gettingstarted',

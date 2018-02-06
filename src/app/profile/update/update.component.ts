@@ -51,6 +51,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   gitHubLinked: boolean = false;
   imageUrl: string;
   imageUrlInvalid: boolean = false;
+
   loggedInUser: User;
   fullName: string;
   fullNameInvalid: boolean = false;
@@ -78,16 +79,18 @@ export class UpdateComponent implements AfterViewInit, OnInit {
       private tenentService: TenentService,
       private userService: UserService) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-      this.setUserProperties(user);
-    }));
+
     this.subscriptions.push(auth.gitHubToken.subscribe(token => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
     }));
-    this.subscriptions.push(auth.openShiftToken.subscribe(token => {
-      this.openShiftLinked = (token !== undefined && token.length !== 0);
-    }));
+
+    if (userService.currentLoggedInUser.attributes) {
+      this.loggedInUser = userService.currentLoggedInUser;
+      this.setUserProperties(this.loggedInUser);
+      this.subscriptions.push(auth.isOpenShiftConnected(this.loggedInUser.attributes.cluster).subscribe((isConnected) => {
+        this.openShiftLinked = isConnected;
+      }));
+    }
   }
 
   ngAfterViewInit(): void {
@@ -136,11 +139,11 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   connectAccounts(): void {
     // Todo: Still cannot refresh current page, so send user to getting started page
     if (this.authGitHub && !this.gitHubLinked && this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkAll(window.location.origin + '/_gettingstarted?wait=true');
+      this.providerService.linkAll(this.loggedInUser.attributes.cluster, window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authGitHub && !this.gitHubLinked) {
       this.providerService.linkGitHub(window.location.origin + '/_gettingstarted?wait=true');
     } else if (this.authOpenShift && !this.openShiftLinked) {
-      this.providerService.linkOpenShift(window.location.origin + '/_gettingstarted?wait=true');
+      this.providerService.linkOpenShift(this.loggedInUser.attributes.cluster, window.location.origin + '/_gettingstarted?wait=true');
     }
   }
 
@@ -187,6 +190,10 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   routeToProfile(): void {
     this.router.navigate(['/', this.context.user.attributes.username]);
+  }
+
+  resetPasswordUrl(): void {
+    window.open('https://developers.redhat.com/auth/realms/rhd/account/password');
   }
 
   /**

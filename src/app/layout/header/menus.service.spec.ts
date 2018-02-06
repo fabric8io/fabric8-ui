@@ -156,4 +156,25 @@ describe('MenuService service: it', () => {
     expect(createMenu.menus.filter(subMenu => subMenu.name == 'Applications').length == 1);
   });
 
+  it('should return a filtered sub-menu if some features are internal and user in non internal', () => {
+    // given
+    let myContext = cloneDeep(context1);
+    myContext.type = ContextTypes.BUILTIN.get('space');
+    let featuresEnvironmentsDisabled = cloneDeep(featuresEnabled);
+    featuresEnvironmentsDisabled[1].attributes['enablement-level'] = null;
+    myContext.user['features'] = featuresEnvironmentsDisabled;
+    // when
+    let res = menusService.attach(myContext);
+    // then
+    expect(myContext.type['menus'].length).toEqual(fullMenu.length);
+
+    let menus = myContext.type['menus'];
+    let createMenu = menus[3];
+    expect(createMenu.menus.length).toEqual(4);
+    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Environments').length == 0);
+    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Codebases').length == 1);
+    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Pipelines').length == 1);
+    expect(createMenu.menus.filter(subMenu => subMenu.name == 'Applications').length == 1);
+  });
+
 });

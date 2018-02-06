@@ -25,6 +25,7 @@ export class DeploymentDetailsComponent {
 
   public static readonly DEFAULT_SPARKLINE_DATA_DURATION: number = 15 * 60 * 1000;
 
+  @Input() active: boolean;
   @Input() collapsed: boolean;
   @Input() applicationId: string;
   @Input() environment: Environment;

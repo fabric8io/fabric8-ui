@@ -85,7 +85,50 @@ export const profile = {
     ]
   }
 };
-
+export const spaceMock = {
+  attributes: {
+    'created-at': '2017-06-08T15:18:39.270343Z',
+    description: '',
+    name: 'space1',
+    'updated-at': '2017-06-08T15:18:39.270343Z',
+    version: 0
+  },
+  id: '1',
+  name: 'space1',
+  path: '/ckrych@redhat.com/space1',
+  teams: [],
+  defaultTeam: { name: '', members: [] },
+  type: '',
+  links: {
+    'self': 'http://localhost:8080/api/spaces/5444e0bc-f21e-4090-a3bc-1f0fe293a113/backlog'
+  },
+  relationalData: {
+    creator: loggedInUser
+  },
+  relationships: {
+    areas: {
+      links: {
+        related: 'http://localhost:8080/api/spaces/5444e0bc-f21e-4090-a3bc-1f0fe293a113/backlog'
+      }
+    },
+    iterations: {
+      links: {
+        related: 'http://localhost:8080/api/spaces/5444e0bc-f21e-4090-a3bc-1f0fe293a113/backlog'
+      }
+    },
+    workitemtypegroups: {
+      links: {
+        related: 'https://api.prod-preview.openshift.io/api/spacetemplates/1/workitemtypegroups'
+      }
+    },
+    'owned-by': {
+      data: {
+        id: '',
+        type: ''
+      }
+    }
+  }
+};
 export const context1 = {
   user: {
     'attributes': {
@@ -99,47 +142,7 @@ export const context1 = {
     },
     'type': 'identities'
   },
-  space: {
-    attributes: {
-      'created-at': '2017-06-08T15:18:39.270343Z',
-      description: '',
-      name: 'space1',
-      'updated-at': '2017-06-08T15:18:39.270343Z',
-      version: 0
-    },
-    id: '1',
-    name: 'space1',
-    path: '/ckrych@redhat.com/space1',
-    teams: [],
-    defaultTeam: { name: '', members: [] },
-    type: '',
-    links: {
-      'self': 'http://localhost:8080/api/spaces/5444e0bc-f21e-4090-a3bc-1f0fe293a113/backlog'
-    },
-    relationships: {
-      areas: {
-        links: {
-          related: 'http://localhost:8080/api/spaces/5444e0bc-f21e-4090-a3bc-1f0fe293a113/backlog'
-        }
-      },
-      iterations: {
-        links: {
-          related: 'http://localhost:8080/api/spaces/5444e0bc-f21e-4090-a3bc-1f0fe293a113/backlog'
-        }
-      },
-      workitemtypegroups: {
-        links: {
-          related: 'https://api.prod-preview.openshift.io/api/spacetemplates/1/workitemtypegroups'
-        }
-      },
-      'owned-by': {
-        data: {
-          id: '',
-          type: ''
-        }
-      }
-    }
-  },
+  space: spaceMock,
   type: {
     'name': 'Space',
     'icon': 'fa fa-th-large'

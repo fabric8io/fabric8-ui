@@ -23,7 +23,6 @@ import { DeploymentsComponent } from './deployments.component';
 import { DeploymentsResourceUsageComponent } from './resource-usage/deployments-resource-usage.component';
 import { ResourceCardComponent } from './resource-usage/resource-card.component';
 import { UtilizationBarComponent } from './resource-usage/utilization-bar.component';
-import { DeploymentsService } from './services/deployments.service';
 
 @NgModule({
   imports: [
@@ -53,8 +52,7 @@ import { DeploymentsService } from './services/deployments.service';
     UtilizationBarComponent
   ],
   providers: [
-    BsDropdownConfig,
-    DeploymentsService
+    BsDropdownConfig
   ]
 })
 export class DeploymentsModule {

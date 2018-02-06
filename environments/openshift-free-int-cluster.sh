@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export KUBERNETES_SERVICE_HOST=api.free-stg.openshift.com
+export KUBERNETES_SERVICE_HOST=f8osoproxy-test-dsaas-preview.b6ff.rh-idev.openshiftapps.com
 export KUBERNETES_SERVICE_PORT=443
 export OPENSHIFT_CONSOLE_HOST=console.free-stg.openshift.com
 export OPENSHIFT_CONSOLE_PORT=443
@@ -31,10 +31,10 @@ if [ -z "${OAUTH_CLIENT_ID}" ]; then
   export OAUTH_CLIENT_ID="fabric8"
 fi
 if [ -z "${K8S_API_SERVER_PROTOCOL}" ]; then
-  export K8S_API_SERVER_PROTOCOL="http"
+  export K8S_API_SERVER_PROTOCOL="https"
 fi
 if [ -z "${K8S_API_SERVER_BASE_PATH}" ]; then
-  export K8S_API_SERVER_BASE_PATH="/_p/oso"
+  export K8S_API_SERVER_BASE_PATH=""
 fi
 if [ -z "${WS_K8S_API_SERVER}" ]; then
   export WS_K8S_API_SERVER=${PROXIED_K8S_API_SERVER}
@@ -43,8 +43,10 @@ if [ -z "${FABRIC8_PIPELINES_NAMESPACE}" ]; then
   export FABRIC8_PIPELINES_NAMESPACE=""
 fi
 
-# this URL is used in dev mode only, for now feature-toggles.service.ts used WITH url as a proxy
-# export FABRIC8_FEATURE_TOGGLES_API_URL=http://localhost:8080/api/
+# this URL is used in dev mode only, for now feature-toggles.service.ts used WIT url as a proxy
+#export FABRIC8_FEATURE_TOGGLES_API_URL=http://localhost:8080/api/
+export FABRIC8_WIT_API_URL="https://api.prod-preview.openshift.io/api/"
+export FABRIC8_FEATURE_TOGGLES_API_URL=${FABRIC8_WIT_API_URL}
 
 echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_SERVER}/"
 

@@ -82,6 +82,7 @@ export class MenusService {
       ]
     ]);
   }
+
   private isFeatureEnabled(feature: string, features: Feature[]): boolean {
     for (let f of features) {
       if (f.id === feature) {
@@ -89,6 +90,16 @@ export class MenusService {
       }
     }
     return true;
+  }
+
+  // if a user is non-internal, she should not see internal feature in menu (feature is unapplicable)
+  private isFeatureNonApplicable(feature: string, features: Feature[]): boolean {
+    for (let f of features) {
+      if (f.id === feature && !f.attributes['enablement-level']) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public attach(context: Context) {
@@ -103,14 +114,16 @@ export class MenusService {
       }
       let menuToDelete = [];
       for (let menu of res.menus) {
-        if (menu['feature'] && context.user['features'] && !this.isFeatureEnabled(menu['feature'], context.user['features'])) {
+        if ((menu['feature'] && context.user['features'] && !this.isFeatureEnabled(menu['feature'], context.user['features']))
+          || (menu['feature'] && context.user['features'] && this.isFeatureNonApplicable(menu['feature'], context.user['features']))) {
           menuToDelete.push(menu);
         } else {
           menu.fullPath = this.buildPath(context.path, menu.path);
           if (menu.menus) {
             let subMenuToDelete = [];
             for (let subMenu of menu.menus) {
-              if (subMenu['feature'] && context.user['features'] && !this.isFeatureEnabled(subMenu['feature'], context.user['features'])) {
+              if ((subMenu['feature'] && context.user['features'] && !this.isFeatureEnabled(subMenu['feature'], context.user['features']))
+              || (subMenu['feature'] && context.user['features'] && this.isFeatureNonApplicable(subMenu['feature'], context.user['features']))) {
                 subMenuToDelete.push(subMenu);
               } else {
                 subMenu.fullPath = this.buildPath(context.path, menu.path, subMenu.path);
