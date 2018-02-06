@@ -20,6 +20,13 @@ import { AuthenticationService } from 'ngx-login-client';
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
+import { NotificationsService } from 'app/shared/notifications.service';
+import {
+  Logger,
+  Notification,
+  NotificationType
+} from 'ngx-base';
+
 import {
   flatten,
   includes,
@@ -123,6 +130,8 @@ export class DeploymentsService {
   constructor(
     public http: Http,
     public auth: AuthenticationService,
+    public logger: Logger,
+    public notifications: NotificationsService,
     @Inject(WIT_API_URL) witUrl: string
   ) {
     if (this.auth.getToken() != null) {
@@ -281,7 +290,7 @@ export class DeploymentsService {
         .concatMap(() =>
           this.http.get(this.apiUrl + spaceId, { headers: this.headers })
             .map((response: Response) => (response.json() as ApplicationsResponse).data)
-            .catch(() => Observable.of({ applications: [] }))
+            .catch((err: Response) => this.handleHttpError(err))
         );
       observable.subscribe(subject);
       this.appsObservables.set(spaceId, subject);
@@ -310,7 +319,7 @@ export class DeploymentsService {
         .concatMap(() =>
           this.http.get(this.apiUrl + spaceId + '/environments', { headers: this.headers })
             .map((response: Response) => (response.json() as EnvironmentsResponse).data)
-            .catch(() => Observable.of([]))
+            .catch((err: Response) => this.handleHttpError(err))
         );
       observable.subscribe(subject);
       this.envsObservables.set(spaceId, subject);
@@ -326,26 +335,6 @@ export class DeploymentsService {
   }
 
   private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
-    const currentTime = +Date.now();
-    const emptyResult: TimeseriesData = {
-      cores: {
-        time: currentTime,
-        value: 0
-      },
-      memory: {
-        time: currentTime,
-        value: 0
-      },
-      net_tx: {
-        time: currentTime,
-        value: 0
-      },
-      net_rx: {
-        time: currentTime,
-        value: 0
-      }
-    };
-
     return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
       .flatMap((deployed: boolean) => {
         if (deployed) {
@@ -358,7 +347,7 @@ export class DeploymentsService {
               .concatMap(() =>
                 this.http.get(url, { headers: this.headers })
                   .map((response: Response) => (response.json() as TimeseriesResponse).data)
-                  .catch(() => Observable.of(emptyResult))
+                  .catch((err: Response) => this.handleHttpError(err))
                   .filter((t: TimeseriesData) => !!t && !isEmpty(t))
               );
             observable.subscribe(subject);
@@ -366,9 +355,38 @@ export class DeploymentsService {
           }
           return this.timeseriesObservables.get(key);
         } else {
+          const currentTime = +Date.now();
+          const emptyResult: TimeseriesData = {
+            cores: {
+              time: currentTime,
+              value: 0
+            },
+            memory: {
+              time: currentTime,
+              value: 0
+            },
+            net_tx: {
+              time: currentTime,
+              value: 0
+            },
+            net_rx: {
+              time: currentTime,
+              value: 0
+            }
+          };
           return Observable.of(emptyResult);
         }
       });
+  }
+
+  private handleHttpError(response: Response): Observable<any> {
+    this.logger.error(response);
+    this.notifications.message({
+      type: NotificationType.DANGER,
+      header: `Request failed: ${response.status} (${response.statusText})`,
+      message: response.text()
+    } as Notification);
+    return Observable.throw(response.status);
   }
 
 }

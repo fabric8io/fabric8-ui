@@ -14,6 +14,7 @@ const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const cloneDeep = require('lodash/cloneDeep');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 /**
  * Webpack Constants
@@ -222,6 +223,20 @@ module.exports = function (options) {
         options: {
 
         }
+      }),
+
+      /*
+       * StyleLintPlugin
+      */
+      new StyleLintPlugin({
+        configFile: '.stylelintrc',
+        syntax: 'less',
+        context: 'src',
+        files: '**/*.less',
+        lintDirtyModulesOnly: true,
+        failOnError: false,
+        emitErrors: true,
+        quiet: true,
       })
 
     ],

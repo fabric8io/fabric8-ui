@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 
 import { Config } from 'ngx-forge';
 
-import { FABRIC8_FORGE_API_URL } from 'a-runtime-console/shared/fabric8-forge-api';
+import { FABRIC8_FORGE_API_URL } from 'app/shared/runtime-console/fabric8-ui-forge-api';
 
 @Injectable()
 export class ForgeConfig extends Config {

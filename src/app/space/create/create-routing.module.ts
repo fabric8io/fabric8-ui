@@ -18,28 +18,6 @@ const routes: Routes = [
         }
       },
       {
-        path: 'environments',
-        loadChildren: './environments/create-environments.module#CreateEnvironmentsModule',
-        resolve: {
-          featureFlagConfig: FeatureFlagResolver
-        },
-        data: {
-          title: 'Environments',
-          featureName: 'Environments'
-        }
-      },
-      {
-        path: 'apps',
-        loadChildren: './apps/create-apps.module#CreateAppsModule',
-        resolve: {
-          featureFlagConfig: FeatureFlagResolver
-        },
-        data: {
-          title: 'Applications',
-          featureName: 'Applications'
-        }
-      },
-      {
         path: 'deployments',
         loadChildren: './deployments/deployments.module#DeploymentsModule',
         resolve: {

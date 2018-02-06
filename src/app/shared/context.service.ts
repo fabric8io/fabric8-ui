@@ -260,7 +260,13 @@ export class ContextService implements Contexts {
       })
       // Get the list of features enabled for this given user to know whether we should display feature menu.
       .switchMap(val => {
-        return this.toggleService.getFeatures(['Applications', 'Deployments', 'Environments', 'Planner']).map(features => {
+        return this.toggleService.getFeatures([
+            'AppLauncher',
+            'Applications',
+            'Deployments',
+            'Environments',
+            'Planner'
+          ]).map(features => {
           val.user.features = features;
           return val;
         }).catch(err => {

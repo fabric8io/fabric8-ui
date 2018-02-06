@@ -1,4 +1,4 @@
-import { ApplicationRef, NgModule } from '@angular/core';
+import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -108,6 +108,7 @@ import { SpaceWizardModule }         from './space/wizard/space-wizard.module';
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
 import { GettingStartedService } from './getting-started/services/getting-started.service';
+import { RavenExceptionHandler } from './shared/exception.handler';
 import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
 
 
@@ -193,6 +194,10 @@ export type StoreType = {
       useExisting: ContextService
     },
     DummyService,
+    {
+      provide: ErrorHandler,
+      useClass: RavenExceptionHandler
+    },
     ErrorService,
     FeatureFlagResolver,
     FeatureTogglesService,

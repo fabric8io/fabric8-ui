@@ -4,6 +4,12 @@
   display: flex;
 }
 
+.resource-usage-header {
+  padding-top: 20px;
+  font-weight: 600;
+  font-size: .9em;
+}
+
 .chart-info-header {
   margin-bottom: 10px;
 }
@@ -11,5 +17,10 @@
 .chart-column {
   flex: 1;
   height: 100%;
-  width: 50%;
+  &-left {
+    width: 65%;
+  }
+  &-right {
+    width: 35%;
+  }
 }
