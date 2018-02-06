@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { DialogModule } from 'ngx-widgets';
 
@@ -20,6 +21,7 @@ import { CodebasesItemActionsComponent } from './codebases-item-actions.componen
     CommonModule,
     DialogModule,
     FormsModule,
+    ModalModule.forRoot(),
     TooltipModule.forRoot()
   ],
   declarations: [ CodebasesItemActionsComponent ],

@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
-
-import { Modal } from 'ngx-modal';
-
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Codebase } from '../services/codebase';
 
 @Component({
@@ -12,7 +10,7 @@ import { Codebase } from '../services/codebase';
 })
 export class CodebaseDeleteDialogComponent implements OnInit, OnDestroy {
   @Input() codebase: Codebase;
-  @Input() host: Modal;
+  @Input() host: ModalDirective;
   @Output() onDelete = new EventEmitter<Codebase>();
 
   constructor() {
@@ -35,6 +33,6 @@ export class CodebaseDeleteDialogComponent implements OnInit, OnDestroy {
    * Cancel and close the dialog.
    */
   cancel() {
-    this.host.close();
+    this.host.hide();
   }
 }

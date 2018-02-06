@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Dialog } from 'ngx-widgets';
 import { Subscription } from 'rxjs';
 
-import { IModalHost } from '../../../wizard/models/modal-host';
+import { CodebaseDeleteDialogComponent } from '../codebases-delete/codebase-delete-dialog.component';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
 import { WindowService } from '../services/window.service';
@@ -20,7 +21,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   @Input() cheRunning: boolean;
   @Input() codebase: Codebase;
   @Input() index: number = -1;
-  @ViewChild('deleteCodebaseDialog') deleteCodebaseDialog: IModalHost;
+  @ViewChild(ModalDirective) modal: ModalDirective;
 
   subscriptions: Subscription[] = [];
   workspaceBusy: boolean = false;
@@ -80,7 +81,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * @param {MouseEvent} event mouse event
    */
   confirmDeleteCodebase(event: MouseEvent): void {
-    this.deleteCodebaseDialog.open();
+    this.modal.show();
   }
 
   /**
@@ -95,12 +96,12 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    */
   deleteCodebase(): void {
     this.subscriptions.push(this.codebasesService.deleteCodebase(this.codebase).subscribe((codebase: Codebase) => {
-      this.deleteCodebaseDialog.close();
+      this.modal.hide();
       this.broadcaster.broadcast('codebaseDeleted', {
         codebase: codebase
       });
     }, (error: any) => {
-      this.deleteCodebaseDialog.close();
+      this.modal.hide();
       this.handleError('Failed to deleteCodebase codebase ' + this.codebase.name, NotificationType.DANGER);
     }));
   }

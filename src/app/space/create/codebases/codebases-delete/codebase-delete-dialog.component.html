@@ -1,6 +1,14 @@
-<span>You are about to remove codebase <b>{{codebase.name}}</b> from your space.
-    Please, verify this action by clicking Remove below.</span>
-<div class="remove-footer pull-right">
-  <button class="btn btn-default" (click)="cancel()">Cancel</button>
-  <button class="btn btn-danger" (click)="confirmDelete()">Remove</button>
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Remove Codebase</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="host.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <span>You are about to remove codebase <b>{{codebase.name}}</b> from your space.
+      Please, verify this action by clicking Remove below.</span>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" (click)="cancel()">Cancel</button>
+    <button class="btn btn-danger" (click)="confirmDelete()">Remove</button>
 </div>
