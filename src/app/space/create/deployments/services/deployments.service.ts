@@ -71,6 +71,10 @@ export interface TimeseriesResponse {
   data: DeploymentStats;
 }
 
+export interface MultiTimeseriesResponse {
+  data: MultiTimeseriesData;
+}
+
 export interface Application {
   attributes: ApplicationAttributes;
   id: string;
@@ -142,6 +146,36 @@ export interface TimeseriesData {
   memory: MemorySeries;
   net_tx: NetworkSentSeries;
   net_rx: NetworkReceivedSeries;
+}
+
+export interface MultiTimeseriesData {
+  cores: CoresSeries[];
+  memory: MemorySeries[];
+  net_tx: NetworkSentSeries[];
+  net_rx: NetworkReceivedSeries[];
+  start: number;
+  end: number;
+}
+
+export interface TimestampedCpuStats {
+  data: CpuStat;
+  timestamp: number;
+}
+
+export interface TimestampedMemoryStats {
+  data: ScaledMemoryStat;
+  timestamp: number;
+}
+
+export interface TimestampedNetworkStats {
+  data: { sent: ScaledNetworkStat, received: ScaledNetworkStat };
+  timestamp: number;
+}
+
+export interface TimeConstrainedStats {
+  cpu: TimestampedCpuStats[];
+  memory: TimestampedMemoryStats[];
+  network: TimestampedNetworkStats[];
 }
 
 export interface CoresSeries extends SeriesData { }
@@ -306,6 +340,47 @@ export class DeploymentsService implements OnDestroy {
       );
   }
 
+  getDeploymentTimeConstrainedStats(spaceId: string, applicationId: string, environmentName: string, elapsedTime: number, endTime: number = Date.now()): Observable<TimeConstrainedStats> {
+    const startTime = endTime - elapsedTime;
+    const series = this.getTimeConstrainedTimeseriesData(spaceId, applicationId, environmentName, startTime, endTime);
+    // Process CPU Stats
+    const coresSeries: Observable<CoresSeries[]> = series.map((t: MultiTimeseriesData) => t.cores);
+    const cpuQuota = this.getEnvironmentCpuStat(spaceId, environmentName).map((stat: CpuStat) => stat.quota);
+    let cpuStats = Observable.combineLatest(coresSeries, cpuQuota, (coresSeries: CoresSeries[], cpuQuota: number) => {
+      let arr = [];
+      for (let i = 0; i < coresSeries.length; i++) {
+        arr.push({ data: { used: coresSeries[i].value, quota: cpuQuota }, timestamp: coresSeries[i].time });
+      }
+      return arr;
+    });
+    // Process Memory Stats
+    const memSeries: Observable<MemorySeries[]> = series.map((t: MultiTimeseriesData) => t.memory);
+    const memQuota = this.getEnvironment(spaceId, environmentName).map((env: EnvironmentStat) => env.attributes.quota.memory.quota);
+    let memStats = Observable.combineLatest(memSeries, memQuota, (memSeries: MemorySeries[], memQuota: number) => {
+      let arr = [];
+      for (let i = 0; i < memSeries.length; i++) {
+        arr.push({ data: new ScaledMemoryStat(memSeries[i].value, memQuota), timestamp: memSeries[i].time });
+      }
+      return arr;
+    });
+    // Process Network Stats
+    const net_txSeries: Observable<NetworkSentSeries[]> = series.map((t: MultiTimeseriesData) => t.net_tx);
+    const net_rxSeries: Observable<NetworkReceivedSeries[]> = series.map((t: MultiTimeseriesData) => t.net_rx);
+    let networkStats: Observable<NetworkStat[]> = Observable.combineLatest(net_txSeries, net_rxSeries).map((n) => {
+      let arr = [];
+      for (let i = 0; i < n[0].length; i++) {
+        arr.push({ data: { sent: new ScaledNetworkStat(n[0][i].value), received: new ScaledNetworkStat(n[1][i].value) }, timestamp: n[0][i].time });
+      }
+      return arr;
+    });
+    return Observable.combineLatest(cpuStats, memStats, networkStats, (
+        cpuStats: TimestampedCpuStats[],
+        memStats: TimestampedMemoryStats[],
+        networkStats: TimestampedNetworkStats[]
+      ) => ({ cpu: cpuStats, memory: memStats, network: networkStats })
+    );
+  }
+
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
     return this.getEnvironment(spaceId, environmentName)
       .map((env: EnvironmentStat) => env.attributes.quota.cpucores);
@@ -433,6 +508,29 @@ export class DeploymentsService implements OnDestroy {
           return Observable.of(emptyResult);
         }
       });
+  }
+
+  private getTimeConstrainedTimeseriesData(spaceId: string, applicationId: string, environmentName: string, startTime: number, endTime: number): Observable<MultiTimeseriesData> {
+    return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+    .flatMap((deployed: boolean) => {
+      if (deployed) {
+        const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/statseries?start=${startTime}&end=${endTime}`;
+        return this.http.get(url, { headers: this.headers })
+          .map((response: Response) => (response.json() as MultiTimeseriesResponse).data)
+          .catch((err: Response) => this.handleHttpError(err))
+          .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t));
+      } else {
+        const emptyResult: MultiTimeseriesData = {
+          cores: [],
+          memory: [],
+          net_tx: [],
+          net_rx: [],
+          start: startTime,
+          end: endTime
+        };
+        return Observable.of(emptyResult);
+      }
+    });
   }
 
   private handleHttpError(response: Response): Observable<any> {

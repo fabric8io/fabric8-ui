@@ -17,7 +17,8 @@ import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   DeploymentsService,
-  NetworkStat
+  NetworkStat,
+  TimeConstrainedStats
 } from '../services/deployments.service';
 import { DeploymentDetailsComponent } from './deployment-details.component';
 
@@ -91,6 +92,7 @@ describe('DeploymentDetailsComponent', () => {
   let memStatObservable: BehaviorSubject<MemoryStat>;
   let netStatObservable: BehaviorSubject<NetworkStat>;
   let podsObservable: BehaviorSubject<Pods>;
+  let initialStatsObservable: BehaviorSubject<TimeConstrainedStats>;
 
   beforeEach(() => {
     cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 } as CpuStat);
@@ -106,6 +108,18 @@ describe('DeploymentDetailsComponent', () => {
       { total: 1, pods: [['Running', 1], ['Starting', 0], ['Stopping', 0]] } as Pods
     );
 
+    initialStatsObservable = new BehaviorSubject({
+      cpu: [
+        { data: { used: 2, quota: 2 }, timestamp: 1234567891011 }
+      ],
+      memory: [
+        { data: { used: 2, quota: 4, units: 'GB' }, timestamp: 1234567891011 }
+      ],
+      network: [
+        { data: { sent: new ScaledNetworkStat(2 * mb), received: new ScaledNetworkStat(1 * mb) }, timestamp: 1234567891011 }
+      ]
+    } as TimeConstrainedStats);
+
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
     mockSvc.getDeploymentCpuStat.and.returnValue(cpuStatObservable);
@@ -116,6 +130,7 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
     mockSvc.getDeploymentNetworkStat.and.returnValue(netStatObservable);
     mockSvc.getPods.and.returnValue(podsObservable);
+    mockSvc.getDeploymentTimeConstrainedStats.and.returnValue(initialStatsObservable);
   });
 
   initContext(DeploymentDetailsComponent, HostComponent, {
@@ -158,6 +173,34 @@ describe('DeploymentDetailsComponent', () => {
         expect(b).toBeFalsy();
         done();
       });
+    });
+  });
+
+  describe('initial data', () => {
+    it('should request the last 15 minutes worth of deployments data on chart initialization', () => {
+      expect(mockSvc.getDeploymentTimeConstrainedStats).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment', DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION);
+    });
+
+    it('should have cpu information be added first to the cpuData data structure', function(this: Context) {
+      let detailsComponent = this.testedDirective;
+      expect(detailsComponent.cpuData.xData.length).toEqual(3);
+      expect(detailsComponent.cpuData.yData[1]).toEqual(2); // value of 2 from initialStatsObservable
+      expect(detailsComponent.cpuData.yData[2]).toEqual(1); // value of 1 from cpuStatObservable
+    });
+
+    it('should have memory information be added first to the memData data structure', function(this: Context) {
+      let detailsComponent = this.testedDirective;
+      expect(detailsComponent.memData.xData.length).toEqual(3);
+      expect(detailsComponent.memData.yData[1]).toEqual(2); // value of 2 from initialStatsObservable
+      expect(detailsComponent.memData.yData[2]).toEqual(3); // value of 3 from memStatObservable
+    });
+
+    it('should have network information be added first to the netData data structure', function(this: Context) {
+      let detailsComponent = this.testedDirective;
+      let mb = Math.pow(1024, 2);
+      expect(detailsComponent.netData.xData.length).toEqual(3);
+      expect(detailsComponent.netData.yData[0][1]).toEqual(2 * mb); // value of 2 * mb from initialStatsObservable
+      expect(detailsComponent.netData.yData[0][2]).toEqual(1 * mb); // value of 1 * mb from netStatObservable
     });
   });
 

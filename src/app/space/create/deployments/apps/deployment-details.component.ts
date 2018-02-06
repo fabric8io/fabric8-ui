@@ -17,7 +17,7 @@ import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
-import { DeploymentsService } from '../services/deployments.service';
+import { DeploymentsService, TimeConstrainedStats } from '../services/deployments.service';
 
 import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
 import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
@@ -78,6 +78,7 @@ export class DeploymentDetailsComponent {
   hasPods: Subject<boolean> = new ReplaySubject<boolean>(1);
   cpuStat: Observable<CpuStat>;
   memStat: Observable<MemoryStat>;
+  initialChartStats: Observable<TimeConstrainedStats>;
   cpuTime: number;
   memTime: number;
   cpuVal: number;
@@ -107,11 +108,16 @@ export class DeploymentDetailsComponent {
     this.cpuTime = 1;
     this.memTime = 1;
 
+    this.initialChartStats =
+      this.deploymentsService.getDeploymentTimeConstrainedStats(this.spaceId, this.applicationId, this.environment.name, DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION);
+
     this.cpuStat =
       this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
 
     this.memStat =
       this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.applicationId, this.environment.name);
+
+    this.processTimeConstrainedStats(this.initialChartStats);
 
     this.subscriptions.push(this.cpuStat.subscribe(stat => {
       this.cpuVal = stat.used;
@@ -127,7 +133,7 @@ export class DeploymentDetailsComponent {
       this.memMax = stat.quota;
       this.memData.total = stat.quota;
       this.memData.yData.push(stat.used);
-      this.memData.xData.push(this.cpuTime++);
+      this.memData.xData.push(this.memTime++);
       this.memUnits = stat.units;
       this.trimSparklineData(this.memData);
     }));
@@ -166,6 +172,33 @@ export class DeploymentDetailsComponent {
         yData.splice(1, elementsToRemoveCount);
       });
     }
+  }
+
+  private processTimeConstrainedStats(stats: Observable<TimeConstrainedStats>): void {
+    this.subscriptions.push(stats.subscribe(s => {
+      s.cpu.forEach(e => {
+        this.cpuVal = e.data.used;
+        this.cpuMax = e.data.quota;
+        this.cpuData.total = e.data.quota;
+        this.cpuData.yData.push(e.data.used);
+        this.cpuData.xData.push(this.cpuTime++);
+      });
+      s.memory.forEach(e => {
+        this.memVal = e.data.used;
+        this.memMax = e.data.quota;
+        this.memData.total = e.data.quota;
+        this.memData.yData.push(e.data.used);
+        this.memData.xData.push(this.memTime++);
+      });
+      s.network.forEach(e => {
+        const netTotal: ScaledNetworkStat = new ScaledNetworkStat(e.data.received.raw + e.data.sent.raw);
+        this.netVal = round(netTotal.used, 1);
+        this.netUnits = netTotal.units;
+        this.netData.xData.push(e.timestamp);
+        this.netData.yData[0].push(e.data.sent.raw);
+        this.netData.yData[1].push(e.data.received.raw);
+      });
+    }));
   }
 
   public getChartMaxElements(): number {
