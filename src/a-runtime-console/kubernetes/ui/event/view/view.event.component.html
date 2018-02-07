@@ -1,0 +1,78 @@
+<div class="row row-cards-pf center" *ngIf="event">
+  <div class="col-xs-12">
+    <span class="name">
+      <span class="pull-right">created {{event.creationTimestamp | amTimeAgo}}</span>
+      <h2 class="card-pf-title">
+        <span [ngSwitch]="event?.resource?.type">
+          <ng-template [ngSwitchCase]="'Normal'">
+            <span class="pficon-info" title="Normal event"></span>
+          </ng-template>
+          <ng-template [ngSwitchCase]="'Warning'">
+            <span class="pficon-warning-triangle-o" title="Warning event"></span>
+          </ng-template>
+          <ng-template ngSwitchDefault>
+            <span class=" pficon-error-circle-o" title="Unknown event type: {{event?.resource?.type}}"></span>
+          </ng-template>
+        </span>
+        &nbsp;
+        {{event.name}}
+        &nbsp;
+        <a *ngIf="event.openShiftConsoleUrl" [href]="event.openShiftConsoleUrl" target="openshift" title="Open in the OpenShift console">
+          <i class="fa fa-external-link" aria-hidden="true"></i>
+        </a>
+      </h2>
+    </span>
+
+    <h3>Details</h3>
+
+    <dl class="dl-horizontal left" *ngIf="event?.resource">
+      <dt>Type:</dt>
+      <dd title="type">
+        {{event.resource.type}}
+      </dd>
+      <dt>Message:</dt>
+      <dd title="message">
+        {{event.resource.message}}
+      </dd>
+      <dt>Reason:</dt>
+      <dd title="reason">
+        {{event.resource.reason}}
+      </dd>
+      <dt>Count:</dt>
+      <dd title="count">
+        {{event.resource.count}}
+      </dd>
+      <dt>First time:</dt>
+      <dd title="first time">
+        {{event.resource.firstTimestamp | amTimeAgo}}
+      </dd>
+      <dt>Last time:</dt>
+      <dd title="first time">
+        {{event.resource.lastTimestamp | amTimeAgo}}
+      </dd>
+      <div *ngIf="event.resource.source?.component">
+        <dt>Source component:</dt>
+        <dd title="source component">
+          {{event.resource.source.component}}
+        </dd>
+      </div>
+      <div *ngIf="event.labels?.length">
+        <dt>Labels:</dt>
+        <dd title="selector" *ngFor='let entry of event.labels | entries'>
+          {{entry.key}}: {{entry.value}}
+        </dd>
+      </div>
+      <div *ngIf="event.resource.involvedObject?.kind">
+        <dt>Involved resource:</dt>
+        <dd title="involved resource">
+          <a *ngIf="involvedObjectPath" href="{{involvedObjectPath}}">
+            {{event.resource.involvedObject.kind}} {{event.resource.involvedObject.name}}
+          </a>
+          <span *ngIf="!involvedObjectPath">
+            {{event.resource.involvedObject.kind}} {{event.resource.involvedObject.name}}
+          </span>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

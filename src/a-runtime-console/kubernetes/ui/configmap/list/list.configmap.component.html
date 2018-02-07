@@ -1,0 +1,60 @@
+<div class='kube-resource-list'>
+
+  <fabric8-loading [loading]="loading">
+    <div class='list-group-item configmap' *ngFor='let configmap of configmaps'>
+      <div class='list-view-pf-checkbox' *ngIf="!hideCheckbox">
+        <input type='checkbox'>
+      </div>
+      <div class='list-view-pf-actions'>
+        <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
+          <button class='btn btn-link dropdown-toggle' type='button' id='dropdownKebabRight9' aria-haspopup='true' aria-expanded='true' dropdownToggle>
+              <span class='fa fa-ellipsis-v'></span>
+            </button>
+          <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
+            <li>
+              <a [routerLink]="[prefixPath(configmap.id), 'edit']">Edit</a>
+            </li>
+
+            <li>
+              <a (click)="openDeleteDialog(deleteConfigMapModal, configmap)" title="Delete this ConfigMap">Delete</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class='list-view-pf-main-info'>
+        <div class='list-view-pf-left'>
+          <img class='list-view-pf-icon-sm' src="{{configmap.icon}}" height="30" width="30"/>
+        </div>
+        <div class='list-view-pf-body'>
+          <div class='list-view-pf-description'>
+            <div class='list-group-item-heading'>
+              <a [routerLink]="[prefixPath(configmap.id)]" class="card-title" title="view configmap">{{ configmap.name }}</a>
+            </div>
+            <div class='list-group-item-text'>
+              <span class="" *ngFor='let image of configmap.images' title="docker image">
+                   {{image}}
+               </span>
+            </div>
+          </div>
+          <div class='list-view-pf-additional-info'>
+            <div class='list-view-pf-additional-info-item' title="created time">
+              {{configmap.creationTimestamp | amTimeAgo}}
+            </div>
+            <div class='list-view-pf-additional-info-item'>
+              <k8s-labels [labels]="configmap.labels"></k8s-labels>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fabric8-loading>
+</div>
+
+<modal #deleteConfigMapModal title="Delete ConfigMap">
+  <modal-content>
+    <delete-configmap-dialog></delete-configmap-dialog>
+  </modal-content>
+</modal>
+
+

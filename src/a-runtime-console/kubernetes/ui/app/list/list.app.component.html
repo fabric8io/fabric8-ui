@@ -1,0 +1,162 @@
+<fabric8-loading [loading]="loading">
+  <div class="center-block">
+    <div class="app-env-info-panel">
+      <div class="row">
+        <div class="app-env-info-panel-header">
+          <div class="col-md-2">
+            <div class="text-center">
+              <div class="header">
+                Applications
+              </div>
+            </div>
+          </div>
+          <div *ngIf="space">
+            <div class="col-md-2" *ngFor="let env of space.environments">
+              <div class="text-center">
+                <div class="header">
+                  <span *ngIf="env.openShiftConsoleUrl">
+                    <a [href]="env.openShiftConsoleUrl" title="View this environment in the OpenShift console" target="openshift">
+                    {{env.name}}
+                    </a>
+                  </span>
+                  <span *ngIf="!env.openShiftConsoleUrl">
+                    {{env.name}}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngFor="let app of apps">
+        <div class="app-env-info-panel-row">
+          <div class="col-md-2">
+            <div class="card-pf card-pf-accented card-pf-aggregate-status">
+              <h2 class="card-pf-title">
+                <i *ngIf="!app.icon" class="fa fa-cubes"></i>
+                <img *ngIf="app.icon" class='app-icon' src="{{app.icon}}"/>
+              </h2>
+              <div class="card-pf-body">
+                <div class="card-pf-aggregate-status-notifications">
+                  <span class="card-pf-aggregate-status-notification">
+                    <a [routerLink]="[parentLink, 'pipelines', app.name, 'history']">
+                      {{app.name}}
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngFor="let envInfo of app.environmentDetails" class="col-md-2">
+            <div class="card-pf card-pf-accented card-pf-aggregate-status" *ngIf="envInfo && envInfo.deployment">
+              <h2 class="card-pf-title">
+                <span title="version of the application running in this environment">
+                  <span class="card-pf-aggregate-status-count">
+                    <span *ngIf="!envInfo.exposeUrl">
+                      {{envInfo.version}}
+                    </span>
+                    <span *ngIf="envInfo.exposeUrl">
+                      <a [href]="envInfo.exposeUrl" title="View the app in this environment" target="app" class="app-version-link">
+                        {{envInfo.version}}
+                      </a>
+                    </span>
+                  </span>
+                </span>
+
+                <span class='pull-right dropdown-kebab-pf dropdown' dropdown>
+                  <button class='btn btn-link kebab dropdown-toggle' type='button'
+                          aria-haspopup='true' aria-expanded='true' dropdownToggle>
+                    <span class='fa fa-ellipsis-v'></span>
+                  </button>
+                  <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
+                    <li>
+                      <a (click)="openScaleDialog(scaleDeploymentModal, envInfo.deployment.deployment)"
+                         *ngIf="envInfo.deployment.deployment"
+                         title="Scale the number of pods for this app in this environment">Scale</a>
+                    </li>
+                    <li *ngIf="envInfo.deployment.deployment && envInfo.deployment.deployment.openShiftConsoleUrl">
+                      <a [href]="envInfo.deployment.deployment.openShiftConsoleUrl" target="openshift"
+                         title="View this Deployment in the OpenShift Console">OpenShift Console</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li *ngIf="envInfo.exposeUrl">
+                      <a target="deployment" [href]="envInfo.exposeUrl"
+                         title="View the application in this environment in another browser tab">
+                        Application
+                      </a>
+                    </li>
+                    <li *ngIf="envInfo.exposeUrl" class="divider"></li>
+                    <li>
+                      <a (click)="openDeleteDialog(deleteDeploymentModal, envInfo.deployment.deployment)"
+                         *ngIf="envInfo.deployment.deployment"
+                         title="Delete this Deployment">Delete</a>
+                    </li>
+                  </ul>
+                </span>
+              </h2>
+
+              <div class="card-pf-body">
+                <div class="card-pf-aggregate-status-notifications">
+                  <div *ngIf="envInfo.deployment">
+                    <span class="card-pf-aggregate-status-notification" *ngIf="envInfo.deployment.availableReplicas"
+                          title="Number of available pods">
+                      <span class="pficon pficon-ok"></span> {{envInfo.deployment.availableReplicas}}
+                    </span>
+                    <span class="card-pf-aggregate-status-notification" *ngIf="envInfo.deployment.startingReplicas"
+                          title="Number of pods that are starting up">
+                      <span class="spinner spinner-xs spinner-inline fa-spin"></span> {{envInfo.deployment.startingReplicas}}
+                    </span>
+                    <span class="card-pf-aggregate-status-notification" *ngIf="envInfo.deployment.terminatingReplicas"
+                          title="Number of pods that are terminating">
+                      <span class="pficon pficon-warning-triangle-o"></span> {{envInfo.deployment.terminatingReplicas}}
+                    </span>
+                    <div *ngIf="envInfo.deployment.emptyReplicas">
+                      <span class="card-pf-aggregate-status-notification"
+                            title="There are current no pods in this environment">
+                        0
+                      </span>
+                    </div>
+                  </div>
+
+                  <!--
+                                    <div *ngIf="!envInfo.deployment">
+                                      <span class="card-pf-aggregate-status-notification" title="Number of available pods">
+                                        0
+                                      </span>
+                                    </div>
+                  -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--
+          <div class="col-md-4">
+            <span class="openshift-console-link-panel" *ngIf="e.openshiftConsoleUrl">
+              <a [href]="e.openshiftConsoleUrl" title="View this environment in the OpenShift console">
+                See more in OpenShift console &nbsp;<span class="fa fa-external-link"></span>
+              </a>
+            </span>
+          </div>
+  -->
+
+
+</fabric8-loading>
+
+
+<modal #deleteDeploymentModal title="Delete Deployment">
+  <modal-content>
+    <delete-deployment-dialog></delete-deployment-dialog>
+  </modal-content>
+</modal>
+
+<modal #scaleDeploymentModal title="Scale Deployment">
+  <modal-content>
+    <scale-deployment-dialog></scale-deployment-dialog>
+  </modal-content>
+</modal>

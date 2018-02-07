@@ -1,6 +1,6 @@
 import { ApiLocatorService } from './api-locator.service';
 
-import { FABRIC8_FORGE_API_URL } from './runtime-console/fabric8-ui-forge-api';
+import { FABRIC8_FORGE_API_URL } from '../../a-runtime-console/index';
 
 let forgeApiUrlFactory = (api: ApiLocatorService) => {
   return api.forgeApiUrl;

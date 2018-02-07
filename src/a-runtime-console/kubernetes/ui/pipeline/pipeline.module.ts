@@ -28,7 +28,8 @@ import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { InputActionDialog } from './input-action-dialog/input-action-dialog.component';
 
 const routes: Routes = [
-  { path: ':id/history', component: PipelinesHistoryPage }
+  { path: ':id/history', component: PipelinesHistoryPage },
+  { path: ':buildConfig/builds', loadChildren: '../build/build.module#BuildModule' }
 ];
 
 @NgModule({

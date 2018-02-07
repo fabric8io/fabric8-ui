@@ -1,0 +1,69 @@
+<fabric8-loading [loading]="loading">
+  <div id="environments">
+    <div class="environment" *ngFor="let e of environments">
+      <div class="row">
+        <div class="col-md-4">
+          <h2 *ngIf="!e.openshiftConsoleUrl">{{e.environment.name}}</h2>
+          <h2 *ngIf="e.openshiftConsoleUrl">
+            <a [href]="e.openshiftConsoleUrl" target="openshift" title="View this environment in the OpenShift console">
+              {{e.environment.name}}
+            </a>
+          </h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <tabset>
+            <!-- Setting active to false forces the select event on startup to load deployments -->
+            <tab heading="Deployments" (select)="selectTab(e.deployments)" active="false">
+              <div class="list-group list-view-pf">
+                <fabric8-deployments-list [runtimeDeployments]="e.deployments.data | async"
+                                          [loading]="e.deployments.loading | async"
+                                          [prefix]="'namespaces/' + e.environment.namespaceName + '/deployments'"
+                                          [hideCheckbox]='true'></fabric8-deployments-list>
+              </div>
+            </tab>
+            <tab heading="Pods" (select)="selectTab(e.pods)">
+              <div class="list-group list-view-pf">
+                <fabric8-pods-list [pods]="e.pods.data | async" [loading]="e.pods.loading | async"
+                                   [prefix]="'namespaces/' + e.environment.namespaceName + '/pods'"
+                                   [hideCheckbox]='true'></fabric8-pods-list>
+              </div>
+            </tab>
+            <tab heading="Replica Sets" (select)="selectTab(e.replicasets)">
+              <div class="list-group list-view-pf">
+                <fabric8-replicasets-list [runtimeReplicaSets]="e.replicasets.data | async"
+                                          [loading]="e.replicasets.loading | async"
+                                          [prefix]="'namespaces/' + e.environment.namespaceName + '/replicasets'"
+                                          [hideCheckbox]='true'></fabric8-replicasets-list>
+              </div>
+            </tab>
+            <tab heading="Services" (select)="selectTab(e.services)">
+              <div class="list-group list-view-pf">
+                <fabric8-services-list [services]="e.services.data | async" [loading]="e.services.loading | async"
+                                       [prefix]="'namespaces/' + e.environment.namespaceName + '/services'"
+                                       [hideCheckbox]='true'></fabric8-services-list>
+              </div>
+            </tab>
+            <tab heading="Config Maps" (select)="selectTab(e.configmaps)">
+              <div class="list-group list-view-pf">
+                <fabric8-configmaps-list [configmaps]="e.configmaps.data | async"
+                                         [loading]="e.configmaps.loading | async"
+                                         [prefix]="'namespaces/' + e.environment.namespaceName + '/configmaps'"
+                                         [hideCheckbox]='true'></fabric8-configmaps-list>
+              </div>
+            </tab>
+            <tab heading="Events" (select)="selectTab(e.events)">
+              <div class="list-group list-view-pf">
+                <fabric8-events-list [events]="e.events.data | async" [loading]="e.events.loading | async"
+                                     [prefix]="'namespaces/' + e.environment.namespaceName + '/events'"
+                                     [hideCheckbox]='true'></fabric8-events-list>
+              </div>
+            </tab>
+          </tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+</fabric8-loading>

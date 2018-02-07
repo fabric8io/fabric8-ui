@@ -1,0 +1,4 @@
+<div class='configmaps detail' *ngIf='configmap'>
+  <fabric8-configmap-edit-toolbar [configmap]="configmap | async" [yamlEditor]="yamlEditor"></fabric8-configmap-edit-toolbar>
+  <fabric8-configmap-edit [configmap]="configmap | async" [yamlEditor]="yamlEditor"></fabric8-configmap-edit>
+</div>

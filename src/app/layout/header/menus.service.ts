@@ -62,6 +62,16 @@ export class MenusService {
                 path: 'pipelines'
               },
               {
+                name: 'Applications',
+                feature: 'Applications',
+                path: 'apps'
+              },
+              {
+                name: 'Environments',
+                feature: 'Environments',
+                path: 'environments'
+              },
+              {
                 name: 'Deployments',
                 feature: 'Deployments',
                 path: 'deployments'
