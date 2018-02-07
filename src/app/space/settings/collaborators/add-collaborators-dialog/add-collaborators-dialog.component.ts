@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService, Context } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { Modal } from 'ngx-modal';
 import { Subscription } from 'rxjs';
 
 import { ContextService } from '../../../../shared/context.service';
@@ -17,9 +17,9 @@ import { ContextService } from '../../../../shared/context.service';
   templateUrl: './add-collaborators-dialog.component.html',
   styleUrls: ['./add-collaborators-dialog.component.less']
 })
-export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
+export class AddCollaboratorsDialogComponent implements OnInit {
 
-  @Input() host: Modal;
+  @Input() host: ModalDirective;
   @Input() spaceId: string;
   @Input() collaborators: User[];
   @Output() onAdded = new EventEmitter<User[]>();
@@ -53,20 +53,16 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
       maxHeight: '300px'
     };
 
-    this.openSubscription = this.host.onOpen.subscribe(() => {
-      this.dropdownModel = [];
-    });
   }
 
-  ngOnDestroy() {
-    this.openSubscription.unsubscribe();
+  public onOpen() {
+    this.dropdownModel = [];
   }
 
   addCollaborators() {
-    this.host.close();
     this.collaboratorService.addCollaborators(this.spaceId, this.dropdownModel).subscribe(() => {
       this.onAdded.emit(this.dropdownModel as User[]);
-      this.host.close();
+      this.host.hide();
     });
   }
 
@@ -84,6 +80,6 @@ export class AddCollaboratorsDialogComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.host.close();
+    this.host.hide();
   }
 }

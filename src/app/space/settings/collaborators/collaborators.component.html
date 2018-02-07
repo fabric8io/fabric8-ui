@@ -47,21 +47,30 @@
   </div>
 </div>
 
-<modal #addCollaborators modalClass="chromeless-modal">
-  <modal-content class="chromeless-modal-content">
-    <add-collaborators-dialog [host]="addCollaborators" [spaceId]="context?.space.id" (onAdded)="addCollaboratorsToParent($event)"></add-collaborators-dialog>
-  </modal-content>
-</modal>
-
-
-<!-- Delete modal -->
-<modal #removeCollaborator title="Remove collaborator from space">
-  <modal-content *ngIf="userToRemove">
-    <div>You are about to remove collaborator {{userToRemove.attributes.fullName}} from this collaboration space.</div>
-    <div>The selected user will not be able to edit or be assigned work in the {{context.space.attributes.name}}.</div>
-    <div class="remove-footer pull-right">
-      <button class="btn btn-default" (click)="removeCollaborator.close()">Cancel</button>
-      <button class="btn btn-danger" (click)="removeUser()">Remove</button>
+<div class="modal fade" bsModal #modalAdd="bs-modal" tabindex="-1" role="dialog" aria-hidden="true" (onShown)="onShowHandler()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <add-collaborators-dialog #addCollabDialog [host]="modalAdd" [spaceId]="context?.space.id" (onAdded)="addCollaboratorsToParent($event)"></add-collaborators-dialog>
     </div>
-  </modal-content>
-</modal>
+  </div>
+</div>
+
+<div class="modal fade" bsModal #modalDelete="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" *ngIf="userToRemove">
+    <div class="modal-content">
+      <div class="modal-header">
+        <b>Remove collaborator</b>
+      </div>
+      <div class="modal-body">
+        <div>You are about to remove collaborator {{userToRemove.attributes.fullName}} from this collaboration space.</div>
+        <div>The selected user will not be able to edit or be assigned work in the {{context.space.attributes.name}}.</div>
+      </div>
+      <div class="modal-footer">
+        <div class="pull-right">
+          <button class="btn btn-default" (click)="modalDelete.hide()">Cancel</button>
+          <button class="btn btn-danger" (click)="removeUser()">Remove</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

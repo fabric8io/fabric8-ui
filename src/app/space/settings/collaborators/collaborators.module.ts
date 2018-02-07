@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule } from 'ngx-modal';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { InfiniteScrollModule } from 'ngx-widgets';
 import { ListModule } from 'patternfly-ng';
 
@@ -20,7 +20,7 @@ import { CollaboratorsComponent } from './collaborators.component';
     ListModule,
     InfiniteScrollModule,
     AddCollaboratorsDialogModule,
-    ModalModule,
+    ModalModule.forRoot(),
     Fabric8WitModule
   ],
   declarations: [
