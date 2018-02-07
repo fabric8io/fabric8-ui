@@ -16,14 +16,14 @@
         [itemTemplate]="itemTemplate"
         [actionTemplate]="actionTemplate"
         [items]="areas" >
-        <template #itemTemplate let-item="item" let-index="index">
+        <ng-template #itemTemplate let-item="item" let-index="index">
           <div class="list-pf-content-wrapper">
             <div class="list-pf-main-content">
               <div class="list-pf-title">{{itemPath(item.attributes)}}</div>
             </div>
           </div>
-        </template>
-        <template #actionTemplate let-item="item" let-index="index">
+        </ng-template>
+        <ng-template #actionTemplate let-item="item" let-index="index">
           <span class="dropdown-kebab-pf areas-display dropdown" dropdown>
             <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
               <span class="fa fa-ellipsis-v"></span>
@@ -32,7 +32,7 @@
               <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="addChildArea(item.id)">Add Child Area</a></li>
             </ul>
           </span>
-        </template>
+        </ng-template>
       </pfng-list>
     </div>
   </div>
