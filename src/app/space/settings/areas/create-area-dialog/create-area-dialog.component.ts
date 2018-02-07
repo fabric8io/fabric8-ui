@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaAttributes, AreaService, Context } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { ContextService } from '../../../../shared/context.service';
   templateUrl: './create-area-dialog.component.html',
   styleUrls: ['./create-area-dialog.component.less']
 })
-export class CreateAreaDialogComponent implements OnInit, OnDestroy {
+export class CreateAreaDialogComponent {
 
   @Input() host: ModalDirective;
   @Input() parentId: string;
@@ -24,7 +24,6 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
   @ViewChild('nameInput') nameInput: ElementRef;
 
   private context: Context;
-  private openSubscription: Subscription;
   private name: string;
   private errors: AreaError;
 
@@ -32,12 +31,6 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
     private contexts: ContextService,
     private areaService: AreaService) {
     this.contexts.current.subscribe(val => this.context = val);
-  }
-
-  ngOnInit() { }
-
-  ngOnDestroy() {
-    this.openSubscription.unsubscribe();
   }
 
   public focus() {
