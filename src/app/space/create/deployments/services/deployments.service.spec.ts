@@ -47,6 +47,15 @@ import {
   NetworkStat
 } from './deployments.service';
 
+interface MockHttpParams<U> {
+  url: string;
+  response: { data: {} } | Response;
+  expected?: U;
+  expectedError?: any;
+  observable: Observable<U>;
+  done: DoneFn;
+}
+
 describe('DeploymentsService', () => {
 
   let mockBackend: MockBackend;
@@ -86,30 +95,47 @@ describe('DeploymentsService', () => {
     mockBackend = TestBed.get(XHRBackend);
   });
 
-  function doMockHttpTest<U>(response: any, expected: U, obs: Observable<U>, done?: DoneFn): void {
-    const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-      connection.mockRespond(new Response(
-        new ResponseOptions({
-          body: JSON.stringify(response),
-          status: 200
-        })
-      ));
-    });
+  function doMockHttpTest<U>(params: MockHttpParams<U>): void {
+    if (params.expected !== undefined && params.expectedError !== undefined) {
+      throw 'Cannot have both expected value and expected error';
+    }
+    if (params.expected === undefined && params.expectedError === undefined) {
+      throw 'Must have either an expected value or an expected error';
+    }
 
-    obs.subscribe(
-      (data: U) => {
-        expect(data).toEqual(expected);
+    let response: Response;
+    if (params.response instanceof Response) {
+      response = params.response;
+    } else {
+      response = new Response(new ResponseOptions({ body: params.response }));
+    }
+
+    const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+      const unexpectedEmissionHandler = (v: any) => {
         subscription.unsubscribe();
-        if (done) {
-          done();
-        }
-      },
-      (err: any) => {
-        if (done) {
-          done.fail(err);
-        }
+        params.done.fail(JSON.stringify(v));
+      };
+      const testBody = (expected: U, actual: U) => {
+        subscription.unsubscribe();
+        expect(connection.request.url).toEqual(params.url);
+        expect(actual).toEqual(expected);
+        params.done();
+      };
+
+      if (params.expected !== undefined) {
+        connection.mockRespond(response);
+        params.observable.subscribe(
+          (data: U) => testBody(params.expected, data),
+          unexpectedEmissionHandler
+        );
+      } else if (params.expectedError !== undefined) {
+        connection.mockError(response as Response & Error);
+        params.observable.subscribe(
+          unexpectedEmissionHandler,
+          (err: any) => testBody(params.expectedError, err)
+        );
       }
-    );
+    });
   }
 
   describe('#getApplications', () => {
@@ -137,8 +163,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, ['vertx-hello', 'vertx-paint', 'vertx-wiki'],
-        svc.getApplications('foo-spaceId'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: ['vertx-hello', 'vertx-paint', 'vertx-wiki'],
+        observable: svc.getApplications('foo-spaceId'),
+        done: done
+      });
     });
 
     it('should return empty array if no applications', (done: DoneFn) => {
@@ -149,8 +180,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, [],
-        svc.getApplications('foo-spaceId'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: [],
+        observable: svc.getApplications('foo-spaceId'),
+        done: done
+      });
     });
 
     it('should return singleton array result', (done: DoneFn) => {
@@ -163,8 +199,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, ['vertx-hello'],
-        svc.getApplications('foo-spaceId'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: ['vertx-hello'],
+        observable: svc.getApplications('foo-spaceId'),
+        done: done
+      });
     });
 
     it('should return empty array for null applications response', (done: DoneFn) => {
@@ -175,7 +216,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, [], svc.getApplications('foo-spaceId'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: [],
+        observable: svc.getApplications('foo-spaceId'),
+        done: done
+      });
     });
   });
 
@@ -199,7 +246,13 @@ describe('DeploymentsService', () => {
         ]
       };
       const expectedResponse = [{ name: 'stage' }, { name: 'run' }];
-      doMockHttpTest(httpResponse, expectedResponse, svc.getEnvironments('foo-spaceId'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
+        response: httpResponse,
+        expected: expectedResponse,
+        observable: svc.getEnvironments('foo-spaceId'),
+        done: done
+      });
     });
 
     it('should return singleton array result', (done: DoneFn) => {
@@ -212,21 +265,39 @@ describe('DeploymentsService', () => {
           }
         ]
       };
-      doMockHttpTest(httpResponse, [{ name: 'stage' }], svc.getEnvironments('foo-spaceId'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
+        response: httpResponse,
+        expected: [{ name: 'stage' }],
+        observable: svc.getEnvironments('foo-spaceId'),
+        done: done
+      });
     });
 
     it('should return empty array if no environments', (done: DoneFn) => {
       const httpResponse = {
         data: []
       };
-      doMockHttpTest(httpResponse, [], svc.getEnvironments('foo-spaceId'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
+        response: httpResponse,
+        expected: [],
+        observable: svc.getEnvironments('foo-spaceId'),
+        done: done
+      });
     });
 
     it('should return empty array for null environments response', (done: DoneFn) => {
       const httpResponse = {
         data: null
       };
-      doMockHttpTest(httpResponse, [], svc.getEnvironments('foo-spaceId'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
+        response: httpResponse,
+        expected: [],
+        observable: svc.getEnvironments('foo-spaceId'),
+        done: done
+      });
     });
   });
 
@@ -252,8 +323,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, true,
-        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: true,
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'),
+        done: done
+      });
     });
 
     it('should be true if included in multiple deployments', (done: DoneFn) => {
@@ -282,8 +358,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, true,
-        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: true,
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'),
+        done: done
+      });
     });
 
     it('should be false for excluded deployments', (done: DoneFn) => {
@@ -307,8 +388,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false,
-        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        done: done
+      });
     });
 
     it('should be false if excluded in multiple deployments', (done: DoneFn) => {
@@ -337,8 +423,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false,
-        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        done: done
+      });
     });
 
     it('should be false if no deployments', (done: DoneFn) => {
@@ -356,8 +447,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false,
-        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        done: done
+      });
     });
 
     it('should be false if deployments is null', (done: DoneFn) => {
@@ -375,8 +471,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false,
-        svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        done: done
+      });
     });
   });
 
@@ -402,7 +503,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: true,
+        observable: svc.isDeployedInEnvironment('foo-spaceId', 'run'),
+        done: done
+      });
     });
 
     it('should be true if included in multiple applications and environments', (done: DoneFn) => {
@@ -448,7 +555,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, true, svc.isDeployedInEnvironment('foo-spaceId', 'run'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: true,
+        observable: svc.isDeployedInEnvironment('foo-spaceId', 'run'),
+        done: done
+      });
     });
 
     it('should be false for excluded environments', (done: DoneFn) => {
@@ -484,7 +597,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
+        done: done
+      });
     });
 
     it('should be false if no environments are deployed', (done: DoneFn) => {
@@ -508,7 +627,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
+        done: done
+      });
     });
 
     it('should be false if no applications exist', (done: DoneFn) => {
@@ -519,7 +644,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
+        done: done
+      });
     });
 
     it('should be false if applications are null', (done: DoneFn) => {
@@ -530,7 +661,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
+        done: done
+      });
     });
 
     it('should be false if deployments is null', (done: DoneFn) => {
@@ -548,7 +685,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, false, svc.isDeployedInEnvironment('foo-spaceId', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
+        done: done
+      });
     });
   });
 
@@ -575,8 +718,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, '1.0.2',
-        svc.getVersion('foo-spaceId', 'vertx-hello', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: '1.0.2',
+        observable: svc.getVersion('foo-spaceId', 'vertx-hello', 'stage'),
+        done: done
+      });
     });
   });
 
@@ -671,7 +819,6 @@ describe('DeploymentsService', () => {
           }
         }
       };
-
       const expectedResponse = {
         total: 2,
         pods: [
@@ -680,9 +827,13 @@ describe('DeploymentsService', () => {
           ['Stopping', 1]
         ]
       };
-
-      doMockHttpTest(httpResponse, expectedResponse,
-        svc.getPods('foo-spaceId', 'vertx-hello', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: expectedResponse,
+        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'stage'),
+        done: done
+      });
     });
 
     it('should return pods when there are multiple deployments', (done: DoneFn) => {
@@ -723,7 +874,6 @@ describe('DeploymentsService', () => {
           }
         }
       };
-
       const expectedResponse = {
         total: 6,
         pods: [
@@ -732,9 +882,13 @@ describe('DeploymentsService', () => {
           ['Stopping', 1]
         ]
       };
-
-      doMockHttpTest(httpResponse, expectedResponse,
-        svc.getPods('foo-spaceId', 'vertx-hello', 'run'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: expectedResponse,
+        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'run'),
+        done: done
+      });
     });
   });
 
@@ -955,7 +1109,7 @@ describe('DeploymentsService', () => {
 
   describe('#getEnvironmentCpuStat', () => {
     it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: [{
           attributes: {
             name: 'stage',
@@ -968,15 +1122,20 @@ describe('DeploymentsService', () => {
           }
         }]
       };
-      doMockHttpTest(expectedResponse, expectedResponse.data[0].attributes.quota.cpucores,
-        svc.getEnvironmentCpuStat('foo-spaceId', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
+        response: httpResponse,
+        expected: httpResponse.data[0].attributes.quota.cpucores,
+        observable: svc.getEnvironmentCpuStat('foo-spaceId', 'stage'),
+        done: done
+      });
     });
   });
 
   describe('#getEnvironmentMemoryStat', () => {
     it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', (done: DoneFn) => {
       const GB = Math.pow(1024, 3);
-      const expectedResponse = {
+      const httpResponse = {
         data: [{
           attributes: {
             name: 'stage',
@@ -990,14 +1149,19 @@ describe('DeploymentsService', () => {
           }
         }]
       };
-      doMockHttpTest(expectedResponse, new ScaledMemoryStat(0.5 * GB, 1 * GB),
-        svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
+        response: httpResponse,
+        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB),
+        observable: svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'),
+        done: done
+      });
     });
   });
 
   describe('#getPods', () => {
     it('should return pods array', (done: DoneFn) => {
-      const expectedResponse = {
+      const httpResponse = {
         data: {
           attributes: {
             applications: [
@@ -1023,67 +1187,55 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(expectedResponse, {
+      const expectedResponse = {
         total: 6,
         pods: [
           [ 'Running', 1 ],
           [ 'Starting', 2 ],
           [ 'Stopping', 3 ]
         ]
-      },
-        svc.getPods('foo-spaceId', 'vertx-hello', 'stage'), done);
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: httpResponse,
+        expected: expectedResponse,
+        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'stage'),
+        done: done
+      });
     });
   });
 
   describe('HTTP error handling', () => {
     it('should log errors', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(new Response(
-          new ResponseOptions({
-            type: ResponseType.Error,
-            body: JSON.stringify('Mock HTTP Error'),
-            status: 404
-          })
-        ) as Response & Error);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })),
+        expectedError: 404,
+        observable: svc.getApplications('foo-spaceId')
+          .do(() => done.fail('should hit error handler'),
+            () => expect(mockLogger.error).toHaveBeenCalled()),
+        done: done
       });
-      expect(mockLogger.error).not.toHaveBeenCalled();
-      svc.getApplications('foo-spaceId').subscribe(
-        success => {
-          subscription.unsubscribe();
-          done.fail('Should have hit error handler');
-        },
-        error => {
-          expect(error).toBe(404);
-          expect(mockLogger.error).toHaveBeenCalled();
-          subscription.unsubscribe();
-          done();
-        }
-      );
     });
 
     it('should notify on errors', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(new Response(
-          new ResponseOptions({
-            type: ResponseType.Error,
-            body: JSON.stringify('Mock HTTP Error'),
-            status: 404
-          })
-        ) as Response & Error);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })),
+        expectedError: 404,
+        observable: svc.getApplications('foo-spaceId')
+          .do(() => done.fail('should hit error handler'),
+            () => expect(mockNotificationsService.message).toHaveBeenCalled()),
+        done: done
       });
-      expect(mockNotificationsService.message).not.toHaveBeenCalled();
-      svc.getApplications('foo-spaceId').subscribe(
-        success => {
-          subscription.unsubscribe();
-          done.fail('Should have hit error handler');
-        },
-        error => {
-          expect(error).toBe(404);
-          expect(mockNotificationsService.message).toHaveBeenCalled();
-          subscription.unsubscribe();
-          done();
-        }
-      );
     });
   });
 
@@ -1112,8 +1264,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, 'http://example.com/logs',
-        svc.getLogsUrl('foo-space', 'foo-app', 'foo-env'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-space',
+        response: httpResponse,
+        expected: 'http://example.com/logs',
+        observable: svc.getLogsUrl('foo-space', 'foo-app', 'foo-env'),
+        done: done
+      });
     });
 
     it('should provide console URL', (done: DoneFn) => {
@@ -1140,8 +1297,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, 'http://example.com/console',
-        svc.getConsoleUrl('foo-space', 'foo-app', 'foo-env'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-space',
+        response: httpResponse,
+        expected: 'http://example.com/console',
+        observable: svc.getConsoleUrl('foo-space', 'foo-app', 'foo-env'),
+        done: done
+      });
     });
 
     it('should provide application URL', (done: DoneFn) => {
@@ -1168,8 +1330,13 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      doMockHttpTest(httpResponse, 'http://example.com/application',
-        svc.getAppUrl('foo-space', 'foo-app', 'foo-env'), done);
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-space',
+        response: httpResponse,
+        expected: 'http://example.com/application',
+        observable: svc.getAppUrl('foo-space', 'foo-app', 'foo-env'),
+        done: done
+      });
     });
   });
 
