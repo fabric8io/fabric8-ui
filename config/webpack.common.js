@@ -480,7 +480,9 @@ module.exports = function (options) {
         syntax: 'less',
         context: 'src',
         files: '**/*.less',
+        lintDirtyModulesOnly: true,
         failOnError: true,
+        emitErrors: true,
         quiet: false,
       })
     ],

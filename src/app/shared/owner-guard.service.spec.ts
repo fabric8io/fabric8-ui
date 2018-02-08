@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { AuthenticationService } from 'ngx-login-client';
-
+import { cloneDeep } from 'lodash';
 import { ContextService } from './context.service';
 import { LoginService } from './login.service';
 import { OwnerGuard } from './owner-guard.service';
@@ -50,10 +50,48 @@ describe('OwnerGuard', () => {
     let mockAuthService = { isLoggedIn: () => { return true; } };
     let mockLoginService = { redirectToLogin: () => { } };
     let mockRoute = { } as ActivatedRouteSnapshot;
-    let mockState = { } as RouterStateSnapshot;
+    const activatedRoute = {
+      url: null,
+      root: null,
+      children: null,
+      queryParams: null,
+      pathFromRoot: null,
+      fragment: null,
+      params: null,
+      data: null,
+      outlet: null,
+      component: null,
+      routeConfig: null,
+      parent: null,
+      paramMap: null,
+      queryParamMap: null,
+      firstChild: null
+    } as ActivatedRouteSnapshot;
+    let child = cloneDeep(activatedRoute);
+    child.params = {entity: 'me'};
+    let mockState = {
+      url: '',
+      root: {
+        url: null,
+        root: null,
+        children: null,
+        queryParams: null,
+        pathFromRoot: null,
+        fragment: null,
+        params: null,
+        data: null,
+        outlet: null,
+        component: null,
+        routeConfig: null,
+        parent: null,
+        paramMap: null,
+        queryParamMap: null,
+        firstChild: child
+      }
+    } as RouterStateSnapshot;
 
     describe('should handle logged in users who are not viewing their own context', () => {
-      let mockContextService = { viewingOwnContext: () => { return false; } };
+      let mockContextService = { currentUser: 'not_me' };
 
       beforeEach(() => {
         spyOn(mockAuthService, 'isLoggedIn').and.callThrough();
@@ -81,8 +119,7 @@ describe('OwnerGuard', () => {
     });
 
     describe('should handle logged in users who are viewing their own context', () => {
-      let mockContextService = { viewingOwnContext: () => { return true; } };
-
+      let mockContextService = { currentUser: 'me' };
       beforeEach(() => {
         spyOn(mockAuthService, 'isLoggedIn').and.callThrough();
 

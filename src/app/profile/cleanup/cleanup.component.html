@@ -54,7 +54,7 @@
             [config]="listConfig"
             [itemTemplate]="itemTemplate"
             [items]="spaces" >
-            <template #itemTemplate let-item="item" let-index="index">
+            <ng-template #itemTemplate let-item="item" let-index="index">
               <div class="list-pf-content-wrapper">
                 <div class="list-pf-main-content">
                   <span *ngIf="item.statusIcon" class="cleanup-status-icon {{item.statusIcon}}"></span>
@@ -62,7 +62,7 @@
                   <div class="list-pf-progress-results">{{item.progress}}</div>
                 </div>
               </div>
-            </template>
+            </ng-template>
           </pfng-list>
         </div>
       </div>

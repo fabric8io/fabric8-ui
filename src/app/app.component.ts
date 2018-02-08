@@ -32,6 +32,7 @@ import { NotificationsService } from './shared/notifications.service';
 })
 export class AppComponent {
   public experimentalFeatureEnabled: boolean;
+  public featureName: string;
   public isExperimentalFeature: boolean;
   public featureEnablementLevel: string;
   public disconnectedStateConfig: EmptyStateConfig;
@@ -73,6 +74,7 @@ export class AppComponent {
         this.experimentalFeatureEnabled = false;
         this.isExperimentalFeature = false;
         this.featureEnablementLevel = '';
+        this.featureName = undefined;
         while (route.firstChild) {
           route = route.firstChild;
         }
@@ -96,6 +98,7 @@ export class AppComponent {
           this.experimentalFeatureEnabled = featureFlagConfig.enabled;
           this.isExperimentalFeature = true;
           this.featureEnablementLevel = featureFlagConfig.showBanner;
+          this.featureName = featureFlagConfig.name;
         }
         let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
         this.titleService.setTitle(title);

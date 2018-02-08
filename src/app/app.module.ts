@@ -1,4 +1,4 @@
-import { ApplicationRef, NgModule } from '@angular/core';
+import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -47,7 +47,6 @@ import {
 /*
  * Platform and Environment providers/directives/pipes
  */
-import { featureTogglesApiUrlProvider } from '../a-runtime-console/shared/feature-toggles.provider';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ENV_PROVIDERS }    from './environment';
@@ -60,7 +59,8 @@ import { AppState, InternalStateType } from './app.service';
 // Footer & Header
 import { FeatureBannerComponent } from './feature-flag/banner/feature-banner.component';
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
-import { FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
+import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
+import { featureTogglesApiUrlProvider, FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
 import { FeatureWarningPageComponent } from './feature-flag/warning-page/feature-warning-page.component';
 
 import { FooterComponent } from './layout/footer/footer.component';
@@ -109,6 +109,7 @@ import { SpaceWizardModule }         from './space/wizard/space-wizard.module';
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
 import { GettingStartedService } from './getting-started/services/getting-started.service';
+import { RavenExceptionHandler } from './shared/exception.handler';
 import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
 
 
@@ -194,6 +195,10 @@ export type StoreType = {
       useExisting: ContextService
     },
     DummyService,
+    {
+      provide: ErrorHandler,
+      useClass: RavenExceptionHandler
+    },
     ErrorService,
     FeatureFlagResolver,
     FeatureTogglesService,
@@ -209,6 +214,7 @@ export type StoreType = {
       provide: OnLogin,
       useClass: Fabric8UIOnLogin
     },
+    FeatureAcknowledgementService,
     forgeApiUrlProvider,
     GettingStartedService,
     HttpService,

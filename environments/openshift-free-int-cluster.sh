@@ -43,8 +43,10 @@ if [ -z "${FABRIC8_PIPELINES_NAMESPACE}" ]; then
   export FABRIC8_PIPELINES_NAMESPACE=""
 fi
 
-# this URL is used in dev mode only, for now feature-toggles.service.ts used WITH url as a proxy
-# export FABRIC8_FEATURE_TOGGLES_API_URL=http://localhost:8080/api/
+# this URL is used in dev mode only, for now feature-toggles.service.ts used WIT url as a proxy
+#export FABRIC8_FEATURE_TOGGLES_API_URL=http://localhost:8080/api/
+export FABRIC8_WIT_API_URL="https://api.prod-preview.openshift.io/api/"
+export FABRIC8_FEATURE_TOGGLES_API_URL=${FABRIC8_WIT_API_URL}
 
 echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_SERVER}/"
 

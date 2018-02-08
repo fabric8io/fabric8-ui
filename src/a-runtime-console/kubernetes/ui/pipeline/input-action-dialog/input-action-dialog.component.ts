@@ -1,5 +1,6 @@
 import { Component, Inject, ViewChild } from '@angular/core';
 import { Headers, Http, RequestOptions } from '@angular/http';
+import { AuthenticationService } from 'ngx-login-client';
 import { FABRIC8_FORGE_API_URL } from '../../../../shared/fabric8-forge-api';
 import { OnLogin } from '../../../../shared/onlogin.service';
 import { Build, PendingInputAction } from '../../../model/build.model';
@@ -19,7 +20,7 @@ export class InputActionDialog {
   @ViewChild('inputModal') modal: any;
 
   constructor(private http: Http,
-              private onLogin: OnLogin,
+              private authService: AuthenticationService,
               @Inject(FABRIC8_FORGE_API_URL) private forgeApiUrl: string
   ) {
   }
@@ -63,7 +64,7 @@ export class InputActionDialog {
         console.log('Warning no jenkinsNamespace on the Build!');
       } else {
         url = pathJoin(forgeUrl, '/api/openshift/services/jenkins/', jenkinsNamespace, url);
-        let token = this.onLogin.token;
+        let token = this.authService.getToken();
         console.log('about to invoke ' + url);
         let options = new RequestOptions();
         let headers = new Headers();

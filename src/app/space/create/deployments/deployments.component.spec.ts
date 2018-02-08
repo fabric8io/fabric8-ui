@@ -64,6 +64,7 @@ describe('DeploymentsComponent', () => {
     mockSvc = createMock(DeploymentsService);
     mockSvc.getApplications.and.returnValue(mockApplications);
     mockSvc.getEnvironments.and.returnValue(mockEnvironments);
+    mockSvc.ngOnDestroy.and.callThrough();
   });
 
   beforeEach(async(() => {
