@@ -21,9 +21,8 @@ import { DeploymentsToolbarComponent } from './deployments-toolbar.component';
 })
 class TestHostComponent {
   public resultsCount: number = 0;
-
-  public filterChange($event: FilterEvent): void { }
-  public sortChange($event: SortEvent): void { }
+  public filterChange(event: FilterEvent): void { }
+  public sortChange(event: SortEvent): void { }
 }
 
 @Component({
@@ -61,7 +60,17 @@ describe('DeploymentsToolbarComponent', () => {
 
   it('should emit sortChange event', function(this: Context) {
     spyOn(this.hostComponent, 'sortChange');
-    this.testedDirective.sortChange({field: {sortType: 'alphanumeric'}, isAscending: false});
-    expect(this.hostComponent.sortChange).toHaveBeenCalledWith({field: {sortType: 'alphanumeric'}, isAscending: false});
+    this.testedDirective.sortChange({
+      field: {
+        sortType: 'alphanumeric'
+      },
+      isAscending: false
+    });
+    expect(this.hostComponent.sortChange).toHaveBeenCalledWith({
+      field: {
+        sortType: 'alphanumeric'
+      },
+      isAscending: false
+    });
   });
 });
