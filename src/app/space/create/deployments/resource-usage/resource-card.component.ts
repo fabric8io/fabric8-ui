@@ -28,17 +28,15 @@ export class ResourceCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.deploymentsService
-    .isDeployedInEnvironment(this.spaceId, this.environment.name)
-    .subscribe((active: boolean) => {
-      this.active = active;
-      if (active) {
-        this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment.name)
-        .first()
-        .map((stat: MemoryStat) => stat.units);
-      }
-    });
-
-
+      .isDeployedInEnvironment(this.spaceId, this.environment.name)
+      .subscribe((active: boolean) => {
+        this.active = active;
+        if (active) {
+          this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment.name)
+            .first()
+            .map((stat: MemoryStat) => stat.units);
+        }
+      });
   }
 
 }

@@ -16,7 +16,10 @@ import {
 
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
-import { MemoryStat } from '../models/memory-stat';
+import {
+  MemoryStat,
+  MemoryUnit
+} from '../models/memory-stat';
 import { Stat } from '../models/stat';
 import { DeploymentsService } from '../services/deployments.service';
 import { ResourceCardComponent } from './resource-card.component';
@@ -39,10 +42,10 @@ class FakeUtilizationBarComponent {
 describe('ResourceCardComponent', () => {
   type Context = TestContext<ResourceCardComponent, HostComponent>;
 
-  let mockResourceTitle = 'resource title';
+  let mockResourceTitle: string = 'resource title';
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  let cpuStatMock = Observable.of({ used: 1, quota: 2 } as CpuStat);
-  let memoryStatMock = Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
+  let cpuStatMock: Observable<CpuStat> = Observable.of({ used: 1, quota: 2 });
+  let memoryStatMock: Observable<MemoryStat> = Observable.of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  });
   let active: Subject<boolean> = new BehaviorSubject<boolean>(true);
 
   beforeEach(() => {
@@ -57,14 +60,16 @@ describe('ResourceCardComponent', () => {
     mockSvc.isDeployedInEnvironment.and.returnValue(active);
   });
 
-  initContext(ResourceCardComponent, HostComponent, {
-    declarations: [FakeUtilizationBarComponent],
-    providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
-  },
-    component => {
+  initContext(ResourceCardComponent, HostComponent,
+    {
+      declarations: [FakeUtilizationBarComponent],
+      providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
+    },
+    (component: ResourceCardComponent) => {
       component.spaceId = 'spaceId';
       component.environment = { name: 'stage' } as Environment;
-    });
+    }
+  );
 
   it('should be active', function(this: Context) {
     expect(this.testedDirective.active).toBeTruthy();
@@ -87,9 +92,9 @@ describe('ResourceCardComponent', () => {
 
   describe('inactive environment', () => {
     it('should not display', function(this: Context) {
-        active.next(false);
-        this.detectChanges();
-        expect(this.testedDirective.active).toBeFalsy();
+      active.next(false);
+      this.detectChanges();
+      expect(this.testedDirective.active).toBeFalsy();
     });
   });
 
