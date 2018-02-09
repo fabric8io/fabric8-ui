@@ -11,8 +11,13 @@ import {
 
 import * as c3 from 'c3';
 import * as d3 from 'd3';
-import { debounce, isEqual, uniqueId } from 'lodash';
+import {
+  debounce,
+  isEqual,
+  uniqueId
+} from 'lodash';
 
+import { PodPhase } from '../../models/pod-phase';
 import { Pods } from '../../models/pods';
 
 @Component({
@@ -32,22 +37,8 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
   chartId = uniqueId('deployments-donut-chart');
   debounceUpdateChart = debounce(this.updateChart, 350, { maxWait: 500 });
 
-  private phases = [
-    'Running',
-    'Not Ready',
-    'Warning',
-    'Error',
-    'Pulling',
-    'Pending',
-    'Succeeded',
-    'Terminating',
-    'Unknown'
-  ];
-
   private config: any;
   private chart: any;
-
-  constructor() { }
 
   ngOnInit(): void {
     this.config = {
@@ -86,7 +77,7 @@ export class DeploymentsDonutChartComponent implements AfterViewInit, OnChanges,
       },
       data: {
         type: 'donut',
-        groups: [this.phases],
+        groups: [Object.keys(PodPhase).map(p => PodPhase[p]).filter(p => p !== PodPhase.EMPTY)],
         order: null,
         colors: this.colors,
         selection: {

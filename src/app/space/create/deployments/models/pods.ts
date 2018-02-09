@@ -1,6 +1,6 @@
+import { PodPhase } from './pod-phase';
 
-
-type PodsData = [string, number];
+export type PodsData = [PodPhase, number];
 
 export declare interface Pods {
   readonly pods: PodsData[];

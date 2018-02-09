@@ -2,7 +2,13 @@ import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
-import { initContext, TestContext } from 'testing/test-context';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
+
+import { PodPhase } from '../../models/pod-phase';
+import { Pods } from '../../models/pods';
 
 import { DeploymentsDonutChartComponent } from './deployments-donut-chart.component';
 
@@ -11,7 +17,7 @@ import { DeploymentsDonutChartComponent } from './deployments-donut-chart.compon
     <deployments-donut-chart
     [colors]="colors"
     [mini]="mini"
-    [pods]="pods | async"
+    [pods]="pods"
     [desiredReplicas]="desiredReplicas"
     [idled]="isIdled">
     </deployments-donut-chart>
@@ -19,10 +25,10 @@ import { DeploymentsDonutChartComponent } from './deployments-donut-chart.compon
 })
 class TestHostComponent {
   mini = false;
-  pods = Observable.of({ pods: [['Running', 1], ['Terminating', 1]], total: 2 });
-  desiredReplicas = 1;
-  isIdled = false;
-  colors = {
+  pods: Pods = { pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 };
+  desiredReplicas: number = 1;
+  isIdled: boolean = false;
+  colors: { [s in PodPhase]: string } = {
     'Empty': '#030303', // pf-black
     'Running': '#00b9e4', // pf-light-blue-400
     'Not Ready': '#beedf9', // pf-light-blue-100

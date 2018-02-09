@@ -1,16 +1,21 @@
-import { Component, Input } from '@angular/core';
 import {
-  fakeAsync
-} from '@angular/core/testing';
+  Component,
+  DebugElement,
+  Input
+} from '@angular/core';
+import { fakeAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
-import { initContext, TestContext } from 'testing/test-context';
-
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { Environment } from '../models/environment';
+import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentsDonutComponent } from './deployments-donut.component';
@@ -44,7 +49,7 @@ describe('DeploymentsDonutComponent', () => {
       Observable.of('scalePods')
     );
     mockSvc.getPods.and.returnValue(
-      Observable.of({ pods: [['Running', 1], ['Terminating', 1]], total: 2 } as Pods)
+      Observable.of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
     );
   }));
 
@@ -56,7 +61,7 @@ describe('DeploymentsDonutComponent', () => {
         { provide: NotificationsService, useValue: notifications }
       ]
     },
-    component => {
+    (component: DeploymentsDonutComponent) => {
       component.mini = false;
       component.spaceId = 'space';
       component.applicationId = 'application';
@@ -68,7 +73,7 @@ describe('DeploymentsDonutComponent', () => {
   });
 
   it('should increment desired replicas on scale up by one', function(this: Context) {
-    let desired = 2;
+    let desired: number = 2;
     expect(this.testedDirective.desiredReplicas).toBe(desired);
 
     this.testedDirective.scaleUp();
@@ -77,7 +82,7 @@ describe('DeploymentsDonutComponent', () => {
   });
 
   it('should decrement desired replicas on scale down by one', function(this: Context) {
-    let desired = 2;
+    let desired: number = 2;
     expect(this.testedDirective.desiredReplicas).toBe(desired);
 
     this.testedDirective.scaleDown();
@@ -86,7 +91,7 @@ describe('DeploymentsDonutComponent', () => {
   });
 
   it('should not decrement desired replicas below zero when scaling down', function(this: Context) {
-    let desired = 2;
+    let desired: number = 2;
     expect(this.testedDirective.desiredReplicas).toBe(desired);
 
     this.testedDirective.scaleDown();
@@ -103,9 +108,9 @@ describe('DeploymentsDonutComponent', () => {
   });
 
   it('should acquire pods data', function(this: Context, done: DoneFn) {
-    this.testedDirective.pods.subscribe(pods => {
+    this.testedDirective.pods.subscribe((pods: Pods) => {
       expect(pods).toEqual({
-        pods: [['Running', 1], ['Terminating', 1]],
+        pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]],
         total: 2
       });
       done();
@@ -113,8 +118,8 @@ describe('DeploymentsDonutComponent', () => {
   });
 
   it('should call scalePods when scaling up', function(this: Context) {
-    let de = this.fixture.debugElement.query(By.css('#scaleUp'));
-    let el = de.nativeElement;
+    let de: DebugElement = this.fixture.debugElement.query(By.css('#scaleUp'));
+    let el: any = de.nativeElement;
 
     el.click();
     this.testedDirective.debounceScale.flush();
@@ -122,8 +127,8 @@ describe('DeploymentsDonutComponent', () => {
   });
 
   it('should call scalePods when scaling down', function(this: Context) {
-    let de = this.fixture.debugElement.query(By.css('#scaleDown'));
-    let el = de.nativeElement;
+    let de: DebugElement = this.fixture.debugElement.query(By.css('#scaleDown'));
+    let el: any = de.nativeElement;
 
     el.click();
     this.testedDirective.debounceScale.flush();
@@ -131,8 +136,8 @@ describe('DeploymentsDonutComponent', () => {
   });
 
   it('should not call scalePods when scaling below 0', function(this: Context) {
-    let de = this.fixture.debugElement.query(By.css('#scaleDown'));
-    let el = de.nativeElement;
+    let de: DebugElement = this.fixture.debugElement.query(By.css('#scaleDown'));
+    let el: any = de.nativeElement;
 
     el.click();
     this.testedDirective.debounceScale.flush();
@@ -141,7 +146,6 @@ describe('DeploymentsDonutComponent', () => {
     el.click();
     this.testedDirective.debounceScale.flush();
     expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 0);
-
 
     el.click();
     this.testedDirective.debounceScale.flush();
@@ -170,7 +174,7 @@ describe('DeploymentsDonutComponent error handling', () => {
       Observable.throw('scalePods error')
     );
     mockSvc.getPods.and.returnValue(
-      Observable.of({ pods: [['Running', 1], ['Terminating', 1]], total: 2 } as Pods)
+      Observable.of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
     );
   }));
 
@@ -182,7 +186,7 @@ describe('DeploymentsDonutComponent error handling', () => {
         { provide: NotificationsService, useValue: notifications }
       ]
     },
-    component => {
+    (component: DeploymentsDonutComponent) => {
       component.mini = false;
       component.spaceId = 'space';
       component.applicationId = 'application';
