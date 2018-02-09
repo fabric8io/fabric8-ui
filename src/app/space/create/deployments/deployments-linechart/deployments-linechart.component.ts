@@ -31,7 +31,6 @@ import { DeploymentsLinechartData } from './deployments-linechart-data';
 export class DeploymentsLinechartComponent extends ChartBase implements DoCheck, OnInit {
 
   @Input() chartData: DeploymentsLinechartData;
-
   @Input() config: DeploymentsLinechartConfig;
 
   private defaultConfig: DeploymentsLinechartConfig;
@@ -142,11 +141,11 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
         return this.getTooltipTableHTML(tipRows);
       },
       position: (data: any, width: number, height: number, element: any) => {
-        let center;
-        let top;
-        let chartBox;
-        let graphOffsetX;
-        let x;
+        let center: number;
+        let top: number;
+        let chartBox: ClientRect;
+        let graphOffsetX: number;
+        let x: number;
 
         try {
           center = parseInt(element.getAttribute('x'), 10);
@@ -166,7 +165,7 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
     };
   }
 
-  private getTooltipTableHTML(tipRows: any): string {
+  private getTooltipTableHTML(tipRows: string): string {
     return '<div class="module-triangle-bottom">' +
       '  <table class="c3-tooltip">' +
       '    <tbody>' +
