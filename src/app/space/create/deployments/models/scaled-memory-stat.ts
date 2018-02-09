@@ -9,11 +9,11 @@ export class ScaledMemoryStat implements MemoryStat {
 
   private static readonly UNITS = ['bytes', 'KB', 'MB', 'GB'];
 
-  public units: MemoryUnit;
+  public readonly units: MemoryUnit;
 
   constructor(
-    public used: number,
-    public quota: number
+    public readonly used: number,
+    public readonly quota: number
   ) {
     let scale = 0;
     if (this.used !== 0) {
