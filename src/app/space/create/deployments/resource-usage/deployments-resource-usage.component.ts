@@ -10,10 +10,8 @@ import { Environment } from '../models/environment';
   templateUrl: 'deployments-resource-usage.component.html'
 })
 export class DeploymentsResourceUsageComponent {
-
   @Input() environments: Observable<Environment[]>;
   @Input() spaceId: Observable<string>;
 
-  constructor() { }
-
+  resourcesCollapsed: boolean = false;
 }
