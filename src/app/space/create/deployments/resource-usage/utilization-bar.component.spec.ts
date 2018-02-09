@@ -5,7 +5,10 @@ import { Observable } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
 
 import { Stat } from '../models/stat';
-import { UtilizationBarComponent } from './utilization-bar.component';
+import {
+  State,
+  UtilizationBarComponent
+} from './utilization-bar.component';
 
 @Component({
   template: '<utilization-bar></utilization-bar>'
@@ -16,7 +19,7 @@ describe('UtilizationBarComponent', () => {
   type Context = TestContext<UtilizationBarComponent, HostComponent>;
 
   describe('with valid Stat', () => {
-    initContext(UtilizationBarComponent, HostComponent, {}, component => {
+    initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
       component.stat = Observable.of({ used: 1, quota: 4 } as Stat);
@@ -42,18 +45,18 @@ describe('UtilizationBarComponent', () => {
     });
 
     it('should set state to okay when under 75% used', function(this: Context) {
-      expect(this.testedDirective.currentState).toEqual(['utilization-okay']);
+      expect(this.testedDirective.getUtilizationClass()).toEqual(State.Okay);
 
-      let de = this.fixture.debugElement.query(By.css('.utilization-okay'));
+      let de = this.fixture.debugElement.query(By.css(`.${State.Okay}`));
       expect(de).toBeTruthy();
 
-      let de2 = this.fixture.debugElement.query(By.css('.utilization-warning'));
+      let de2 = this.fixture.debugElement.query(By.css(`.${State.Warning}`));
       expect(de2).toBeFalsy();
     });
   });
 
   describe('with Warning level Stat', () => {
-    initContext(UtilizationBarComponent, HostComponent, {}, component => {
+    initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
       component.stat = Observable.of({ used: 3, quota: 4 } as Stat);
@@ -79,18 +82,18 @@ describe('UtilizationBarComponent', () => {
     });
 
     it('should set state to warning to false when 75% or higher used', function(this: Context) {
-      expect(this.testedDirective.currentState).toEqual(['utilization-warning']);
+      expect(this.testedDirective.getUtilizationClass()).toEqual(State.Warning);
 
-      let de = this.fixture.debugElement.query(By.css('.utilization-okay'));
+      let de = this.fixture.debugElement.query(By.css(`.${State.Okay}`));
       expect(de).toBeFalsy();
 
-      let de2 = this.fixture.debugElement.query(By.css('.utilization-warning'));
+      let de2 = this.fixture.debugElement.query(By.css(`.${State.Warning}`));
       expect(de2).toBeTruthy();
     });
   });
 
   describe('with invalid Stat', () => {
-    initContext(UtilizationBarComponent, HostComponent, {}, component => {
+    initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
       component.stat = Observable.of({ used: 2, quota: 0 } as Stat);

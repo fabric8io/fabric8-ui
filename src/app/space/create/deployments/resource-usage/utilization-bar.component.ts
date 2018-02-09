@@ -9,6 +9,11 @@ import { Observable, Subscription } from 'rxjs';
 
 import { Stat } from '../models/stat';
 
+export enum State {
+  Okay = 'utilization-okay',
+  Warning = 'utilization-warning'
+}
+
 @Component({
   selector: 'utilization-bar',
   templateUrl: 'utilization-bar.component.html',
@@ -20,26 +25,18 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
   @Input() resourceUnit: string;
   @Input() stat: Observable<Stat>;
 
+  private static readonly WARNING_THRESHOLD = 75;
+
   used: number;
   total: number;
   usedPercent: number;
   unusedPercent: number;
 
-  currentState: any;
-
+  private currentState: State;
   private statSubscription: Subscription;
-  private readonly warningThreshold = 75;
-
-  private states = {
-    'Okay' : ['utilization-okay'],
-    'Warning' : ['utilization-warning']
-  };
-
-
-  constructor() { }
 
   ngOnInit(): void {
-    this.currentState = this.states.Okay;
+    this.currentState = State.Okay;
 
     this.statSubscription = this.stat.subscribe(val => {
       this.used = val.used;
@@ -47,10 +44,10 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
       this.usedPercent = (this.total !== 0) ? Math.floor(this.used / this.total * 100) : 0;
       this.unusedPercent = 100 - this.usedPercent;
 
-      if (this.usedPercent < this.warningThreshold) {
-        this.currentState = this.states.Okay;
+      if (this.usedPercent < UtilizationBarComponent.WARNING_THRESHOLD) {
+        this.currentState = State.Okay;
       } else {
-        this.currentState = this.states.Warning;
+        this.currentState = State.Warning;
       }
     });
   }
@@ -59,7 +56,7 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
     this.statSubscription.unsubscribe();
   }
 
-  getUtilizationClasses() {
+  getUtilizationClass(): State {
     return this.currentState;
   }
 
