@@ -37,6 +37,10 @@ export class CreateAreaDialogComponent {
     this.nameInput.nativeElement.focus();
   }
 
+  public clearField() {
+    this.nameInput.nativeElement.value = '';
+  }
+
   createArea() {
     let area = {} as Area;
     area.attributes = new AreaAttributes();

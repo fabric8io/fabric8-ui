@@ -65,6 +65,10 @@ export class AreasComponent implements OnInit, OnDestroy {
     this.createAreaDialog.focus();
   }
 
+  onHideHandler() {
+    this.createAreaDialog.clearField();
+  }
+
   addChildArea(id: string) {
     if (id) {
       this.selectedAreaId = id;
