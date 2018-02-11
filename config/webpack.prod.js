@@ -83,7 +83,7 @@ module.exports = function (env) {
      */
 
     // PROD VALUE
-    devtool: 'cheap-module-source-map',
+    devtool: 'hidden-source-map',
 
     // DEBUG VALUE
     //devtool: 'inline-source-map',
