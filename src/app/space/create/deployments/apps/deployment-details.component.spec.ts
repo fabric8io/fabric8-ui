@@ -1,9 +1,16 @@
-import { Component, DebugElement, Input } from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  Input
+} from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import 'patternfly/dist/js/patternfly-settings.js';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable
+} from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -25,7 +32,11 @@ import { DeploymentDetailsComponent } from './deployment-details.component';
 import { times } from 'lodash';
 
 // Makes patternfly charts available
-import { ChartModule } from 'patternfly-ng';
+import {
+  ChartModule,
+  SparklineConfig,
+  SparklineData
+} from 'patternfly-ng';
 import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
@@ -38,11 +49,11 @@ import 'patternfly/dist/js/patternfly-settings.js';
   </deployment-details>`
 })
 class HostComponent {
-  public collapsed: boolean = false;
-  public applicationId: string = 'mockAppId';
-  public environment: Environment = { name: 'mockEnvironment' };
-  public spaceId: string = 'mockSpaceId';
-  public detailsActive: boolean = true;
+  collapsed: boolean = false;
+  applicationId: string = 'mockAppId';
+  environment: Environment = { name: 'mockEnvironment' };
+  spaceId: string = 'mockSpaceId';
+  detailsActive: boolean = true;
 }
 
 @Component({
@@ -81,8 +92,8 @@ class FakePfngChartSparkline {
   template: ''
 })
 class FakeDeploymentsLinechart {
-  @Input() config: any;
-  @Input() chartData: any;
+  @Input() config: SparklineConfig;
+  @Input() chartData: SparklineData;
 }
 
 describe('DeploymentDetailsComponent', () => {
@@ -147,15 +158,16 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   it('should generate unique chartIds for each DeploymentDetailsComponent instance', function(this: Context) {
-    let detailsComponent = this.testedDirective;
+    const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
     expect(detailsComponent.cpuConfig.chartId).not.toBe(detailsComponent.memConfig.chartId);
   });
 
   it('should create a child donut component with proper values', function(this: Context) {
-    let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentsDonutComponent));
+    const arrayOfComponents: DebugElement[] =
+      this.fixture.debugElement.queryAll(By.directive(FakeDeploymentsDonutComponent));
     expect(arrayOfComponents.length).toEqual(1);
 
-    let container = arrayOfComponents[0].componentInstance;
+    const container: DeploymentDetailsComponent = arrayOfComponents[0].componentInstance;
     expect(container.applicationId).toEqual('mockAppId');
   });
 
@@ -208,8 +220,8 @@ describe('DeploymentDetailsComponent', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
-      let charts = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
-      let cpuChart = charts[0];
+      const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
+      const cpuChart: DebugElement = charts[0];
       de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
 
@@ -234,8 +246,8 @@ describe('DeploymentDetailsComponent', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
-      let charts = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
-      let memoryChart = charts[1];
+      const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
+      const memoryChart: DebugElement = charts[1];
       de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
 
@@ -257,8 +269,8 @@ describe('DeploymentDetailsComponent', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
-      let charts = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
-      let networkChart = charts[2];
+      const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
+      const networkChart: DebugElement = charts[2];
       de = networkChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
 
@@ -281,15 +293,15 @@ describe('DeploymentDetailsComponent', () => {
 
   describe('charts', () => {
     it('by default should be the default data duration divided by the polling rate', function(this: Context) {
-      let detailsComponent = this.testedDirective;
-      let expectedDefaultElements =
+      const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
+      const expectedDefaultElements: number =
         DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS;
       expect(detailsComponent.getChartMaxElements()).toBe(expectedDefaultElements);
     });
 
     it('should not be able to be set to anything less than 1', function(this: Context) {
-      let detailsComponent = this.testedDirective;
-      [0, -5, -1873].forEach(n => {
+      const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
+      [0, -5, -1873].forEach((n: number) => {
         detailsComponent.setChartMaxElements(n);
         expect(detailsComponent.getChartMaxElements()).toBe(1);
       });
@@ -298,7 +310,7 @@ describe('DeploymentDetailsComponent', () => {
     describe('sparkline data', () => {
       it('should have its cpu data bounded when enough data has been emitted', function(this: Context) {
         const MAX_CPU_SPARKLINE_ELEMENTS = 4;
-        let detailsComponent = this.testedDirective;
+        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
         detailsComponent.setChartMaxElements(MAX_CPU_SPARKLINE_ELEMENTS);
         times(MAX_CPU_SPARKLINE_ELEMENTS + 10, () => cpuStatObservable.next({ used: 1, quota: 2 }));
         expect(detailsComponent.cpuData.xData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS);
@@ -307,7 +319,7 @@ describe('DeploymentDetailsComponent', () => {
 
       it('should have its memory data bounded when enough data has been emitted', function(this: Context) {
         const MAX_MEM_SPARKLINE_ELEMENTS = 6;
-        let detailsComponent = this.testedDirective;
+        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
         detailsComponent.setChartMaxElements(MAX_MEM_SPARKLINE_ELEMENTS);
         times(MAX_MEM_SPARKLINE_ELEMENTS + 10, () => memStatObservable.next({ used: 3, quota: 4, units: 'GB' }));
         expect(detailsComponent.memData.xData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
@@ -318,7 +330,7 @@ describe('DeploymentDetailsComponent', () => {
     describe('linechart data', () => {
       it('should have its net data bounded when enough data has been emitted', function(this: Context) {
         const MAX_NET_LINE_ELEMENTS = 4;
-        let detailsComponent = this.testedDirective;
+        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
         detailsComponent.setChartMaxElements(MAX_NET_LINE_ELEMENTS);
         times(MAX_NET_LINE_ELEMENTS + 10,
           () => netStatObservable.next({ sent: new ScaledNetworkStat(3), received: new ScaledNetworkStat(4) }));

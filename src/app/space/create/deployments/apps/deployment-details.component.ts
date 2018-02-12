@@ -1,9 +1,16 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input
+} from '@angular/core';
 
 import {
   round,
   uniqueId
 } from 'lodash';
+import {
+  SparklineConfig,
+  SparklineData
+} from 'patternfly-ng';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   Observable,
@@ -17,7 +24,14 @@ import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
-import { DeploymentsService, TimeConstrainedStats } from '../services/deployments.service';
+import {
+  DeploymentsService,
+  NetworkStat,
+  TimeConstrainedStats,
+  TimestampedCpuStats,
+  TimestampedMemoryStats,
+  TimestampedNetworkStats
+} from '../services/deployments.service';
 
 import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
 import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
@@ -29,7 +43,7 @@ import { DeploymentsLinechartData } from '../deployments-linechart/deployments-l
 })
 export class DeploymentDetailsComponent {
 
-  public static readonly DEFAULT_SPARKLINE_DATA_DURATION: number = 15 * 60 * 1000;
+  static readonly DEFAULT_SPARKLINE_DATA_DURATION: number = 15 * 60 * 1000;
 
   @Input() active: boolean;
   @Input() collapsed: boolean;
@@ -39,19 +53,19 @@ export class DeploymentDetailsComponent {
 
   subscriptions: Array<Subscription> = [];
 
-  public cpuData: any = {
+  cpuData: SparklineData = {
     dataAvailable: true,
     xData: ['time'],
     yData: ['used']
   };
 
-  public memData: any = {
+  memData: SparklineData = {
     dataAvailable: true,
     xData: ['time'],
     yData: ['used']
   };
 
-  public netData: DeploymentsLinechartData = {
+  netData: DeploymentsLinechartData = {
     xData: ['time'],
     yData: [
       ['sent'],
@@ -59,17 +73,17 @@ export class DeploymentDetailsComponent {
     ]
   };
 
-  public cpuConfig: any = {
+  cpuConfig: SparklineConfig = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('cpu-chart')
   };
 
-  public memConfig: any = {
+  memConfig: SparklineConfig = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('mem-chart')
   };
 
-  public netConfig: DeploymentsLinechartConfig = {
+  netConfig: DeploymentsLinechartConfig = {
     chartId: uniqueId('net-chart'),
     units: 'bytes',
     showXAxis: true
@@ -93,7 +107,7 @@ export class DeploymentDetailsComponent {
 
   constructor(private deploymentsService: DeploymentsService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setChartMaxElements(
       DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
 
@@ -119,7 +133,7 @@ export class DeploymentDetailsComponent {
 
     this.processTimeConstrainedStats(this.initialChartStats);
 
-    this.subscriptions.push(this.cpuStat.subscribe(stat => {
+    this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat) => {
       this.cpuVal = stat.used;
       this.cpuMax = stat.quota;
       this.cpuData.total = stat.quota;
@@ -128,7 +142,7 @@ export class DeploymentDetailsComponent {
       this.trimSparklineData(this.cpuData);
     }));
 
-    this.subscriptions.push(this.memStat.subscribe(stat => {
+    this.subscriptions.push(this.memStat.subscribe((stat: MemoryStat) => {
       this.memVal = stat.used;
       this.memMax = stat.quota;
       this.memData.total = stat.quota;
@@ -140,7 +154,7 @@ export class DeploymentDetailsComponent {
 
     this.subscriptions.push(
       this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name)
-        .subscribe(stat => {
+        .subscribe((stat: NetworkStat) => {
           const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
           this.netVal = round(netTotal.used, 1);
           this.netUnits = netTotal.units;
@@ -153,10 +167,18 @@ export class DeploymentDetailsComponent {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
   }
 
-  private trimSparklineData(chartData: any): void {
+  getChartMaxElements(): number {
+    return this.sparklineMaxElements;
+  }
+
+  setChartMaxElements(maxElements: number): void {
+    this.sparklineMaxElements = Math.max(1, maxElements);
+  }
+
+  private trimSparklineData(chartData: SparklineData): void {
     if (chartData.xData.length > this.sparklineMaxElements) {
       let elementsToRemoveCount = chartData.xData.length - this.sparklineMaxElements;
       chartData.xData.splice(1, elementsToRemoveCount);
@@ -164,7 +186,7 @@ export class DeploymentDetailsComponent {
     }
   }
 
-  private trimLinechartData(chartData: any): void {
+  private trimLinechartData(chartData: SparklineData): void {
     if (chartData.xData.length > this.sparklineMaxElements) {
       let elementsToRemoveCount = chartData.xData.length - this.sparklineMaxElements;
       chartData.xData.splice(1, elementsToRemoveCount);
@@ -175,37 +197,31 @@ export class DeploymentDetailsComponent {
   }
 
   private processTimeConstrainedStats(stats: Observable<TimeConstrainedStats>): void {
-    this.subscriptions.push(stats.subscribe(s => {
-      s.cpu.forEach(e => {
-        this.cpuVal = e.data.used;
-        this.cpuMax = e.data.quota;
-        this.cpuData.total = e.data.quota;
-        this.cpuData.yData.push(e.data.used);
-        this.cpuData.xData.push(this.cpuTime++);
-      });
-      s.memory.forEach(e => {
-        this.memVal = e.data.used;
-        this.memMax = e.data.quota;
-        this.memData.total = e.data.quota;
-        this.memData.yData.push(e.data.used);
-        this.memData.xData.push(this.memTime++);
-      });
-      s.network.forEach(e => {
-        const netTotal: ScaledNetworkStat = new ScaledNetworkStat(e.data.received.raw + e.data.sent.raw);
-        this.netVal = round(netTotal.used, 1);
-        this.netUnits = netTotal.units;
-        this.netData.xData.push(e.timestamp);
-        this.netData.yData[0].push(e.data.sent.raw);
-        this.netData.yData[1].push(e.data.received.raw);
-      });
-    }));
-  }
-
-  public getChartMaxElements(): number {
-    return this.sparklineMaxElements;
-  }
-
-  public setChartMaxElements(maxElements: number): void {
-    this.sparklineMaxElements = Math.max(1, maxElements);
+    this.subscriptions.push(
+      stats.subscribe((s: TimeConstrainedStats) => {
+        s.cpu.forEach((e: TimestampedCpuStats) => {
+          this.cpuVal = e.data.used;
+          this.cpuMax = e.data.quota;
+          this.cpuData.total = e.data.quota;
+          this.cpuData.yData.push(e.data.used);
+          this.cpuData.xData.push(this.cpuTime++);
+        });
+        s.memory.forEach((e: TimestampedMemoryStats) => {
+          this.memVal = e.data.used;
+          this.memMax = e.data.quota;
+          this.memData.total = e.data.quota;
+          this.memData.yData.push(e.data.used);
+          this.memData.xData.push(this.memTime++);
+        });
+        s.network.forEach((e: TimestampedNetworkStats) => {
+          const netTotal: ScaledNetworkStat = new ScaledNetworkStat(e.data.received.raw + e.data.sent.raw);
+          this.netVal = round(netTotal.used, 1);
+          this.netUnits = netTotal.units;
+          this.netData.xData.push(e.timestamp);
+          this.netData.yData[0].push(e.data.sent.raw);
+          this.netData.yData[1].push(e.data.received.raw);
+        });
+      })
+    );
   }
 }
