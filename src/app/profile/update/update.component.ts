@@ -283,7 +283,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * Validate email
    */
   validateEmail(): void {
-    this.emailInvalid = !this.isEmailValid();
+    this.emailInvalid = !this.isEmailValid(this.email);
   }
 
   /**
@@ -354,12 +354,10 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    *
    * @returns {boolean}
    */
-  private isEmailValid(): boolean {
-    if (this.email !== undefined && this.email.trim().length > 0) {
-      return (this.email.trim().indexOf('@') !== -1);
-    } else {
-      return (this.email.trim().length > 0);
-    }
+  public isEmailValid(email: string): boolean {
+    // Email validation regex modified from: http://emailregex.com/
+    const emailRegex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return emailRegex.test(email.trim());
   }
 
   /**
