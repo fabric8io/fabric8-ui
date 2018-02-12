@@ -41,6 +41,10 @@ export class CreateAreaDialogComponent {
     this.nameInput.nativeElement.value = '';
   }
 
+  public resetError() {
+    this.errors = null;
+  }
+
   createArea() {
     let area = {} as Area;
     area.attributes = new AreaAttributes();

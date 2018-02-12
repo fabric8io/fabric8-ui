@@ -67,6 +67,7 @@ export class AreasComponent implements OnInit, OnDestroy {
 
   onHideHandler() {
     this.createAreaDialog.clearField();
+    this.createAreaDialog.resetError();
   }
 
   addChildArea(id: string) {
