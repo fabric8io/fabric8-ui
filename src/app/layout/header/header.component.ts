@@ -177,6 +177,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return (this.router.url.indexOf('_gettingstarted') !== -1);
   }
 
+  private stripQueryFromUrl(url: string) {
+    if (url.indexOf('?q=') !== -1) {
+      url = url.substring(0, url.indexOf('?q='));
+    }
+    return url;
+  }
+
   private updateMenus() {
     if (this.context && this.context.type && this.context.type.hasOwnProperty('menus')) {
       let foundPath = false;
@@ -191,7 +198,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // /namespace/space/create instead of /namespace/space/create/pipelines
         // as the 'Create' page matches to the 'Codebases' page
         let subMenus = (n.menus || []).slice().reverse();
-        if (subMenus) {
+        if (subMenus && subMenus.length > 0) {
           for (let o of subMenus) {
             // Clear the menu's active state
             o.active = false;
@@ -231,7 +238,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               }
             }
           }
-        } else if (!foundPath && n.fullPath === this.router.url) {
+        } else if (!foundPath && n.fullPath === this.stripQueryFromUrl(this.router.url)) {
           n.active = true;
           foundPath = true;
         }

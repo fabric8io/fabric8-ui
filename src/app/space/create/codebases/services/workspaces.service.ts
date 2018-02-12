@@ -52,7 +52,7 @@ export class WorkspacesService {
    * @returns {Observable<Codebase>}
    */
   getWorkspaces(codebaseId: string): Observable<Workspace[]> {
-    let url = `${this.workspacesUrl}/${codebaseId}/edit`;
+    let url = `${this.workspacesUrl}/${codebaseId}/workspaces`;
     return this.http
       .get(url, { headers: this.headers })
       .retryWhen(attempts => {
