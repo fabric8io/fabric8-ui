@@ -203,6 +203,7 @@ export class DeploymentsService implements OnDestroy {
   private readonly appsObservables = new Map<string, Observable<Application[]>>();
   private readonly envsObservables = new Map<string, Observable<EnvironmentStat[]>>();
   private readonly timeseriesObservables = new Map<string, Observable<TimeseriesData>>();
+  private readonly multiTimeseriesObservables = new Map<string, Observable<MultiTimeseriesData>>();
 
   private readonly pollTimer = Observable
     .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
@@ -514,11 +515,19 @@ export class DeploymentsService implements OnDestroy {
     return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
     .flatMap((deployed: boolean) => {
       if (deployed) {
-        const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/statseries?start=${startTime}&end=${endTime}`;
-        return this.http.get(url, { headers: this.headers })
-          .map((response: Response) => (response.json() as MultiTimeseriesResponse).data)
-          .catch((err: Response) => this.handleHttpError(err))
-          .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t));
+        const key = `${spaceId}:${applicationId}:${environmentName}`;
+        if (!this.multiTimeseriesObservables.has(key)) {
+          const subject = new ReplaySubject<MultiTimeseriesData>(1);
+
+          const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/statseries?start=${startTime}&end=${endTime}`;
+          const observable = this.http.get(url, { headers: this.headers })
+            .map((response: Response) => (response.json() as MultiTimeseriesResponse).data)
+            .catch((err: Response) => this.handleHttpError(err))
+            .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t));
+          this.serviceSubscriptions.push(observable.subscribe(subject));
+          this.multiTimeseriesObservables.set(key, subject);
+        }
+        return this.multiTimeseriesObservables.get(key);
       } else {
         const emptyResult: MultiTimeseriesData = {
           cores: [],
