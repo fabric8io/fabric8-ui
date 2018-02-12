@@ -12,18 +12,18 @@
   <div class="row">
     <div class="col-md-12">
       <pfng-list
-        [config]="listViewConfig"
+        [config]="listConfig"
         [itemTemplate]="itemTemplate"
         [actionTemplate]="actionTemplate"
         [items]="areas" >
-        <template #itemTemplate let-item="item" let-index="index">
+        <ng-template #itemTemplate let-item="item" let-index="index">
           <div class="list-pf-content-wrapper">
             <div class="list-pf-main-content">
               <div class="list-pf-title">{{itemPath(item.attributes)}}</div>
             </div>
           </div>
-        </template>
-        <template #actionTemplate let-item="item" let-index="index">
+        </ng-template>
+        <ng-template #actionTemplate let-item="item" let-index="index">
           <span class="dropdown-kebab-pf areas-display dropdown" dropdown>
             <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
               <span class="fa fa-ellipsis-v"></span>
@@ -32,14 +32,16 @@
               <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="addChildArea(item.id)">Add Child Area</a></li>
             </ul>
           </span>
-        </template>
+        </ng-template>
       </pfng-list>
     </div>
   </div>
 </div>
 
-<modal #createArea modalClass="chromeless-modal">
-  <modal-content class="chromeless-modal-content">
-    <create-area-dialog [host]="createArea" [parentId]="selectedAreaId" [areas]="areas" (onAdded)="addArea($event)"></create-area-dialog>
-  </modal-content>
-</modal>
+<div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-hidden="true" (onShown)="onShowHandler()" (onHide)="onHideHandler()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <create-area-dialog #createAreaDialog [host]="modal" [parentId]="selectedAreaId" [areas]="areas" (onAdded)="addArea($event)"></create-area-dialog>
+    </div>
+  </div>
+</div>

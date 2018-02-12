@@ -53,6 +53,8 @@ objects:
                   key: k8s.api.server.protocol
             - name: K8S_API_SERVER_BASE_PATH
               value: ${k8s_api_server_base_path}
+            - name: FABRIC8_FEATURE_TOGGLES_API_URL
+              value: ${fabric8_feature_toggles_api_url}
             - name: OAUTH_ISSUER
               valueFrom:
                 configMapKeyRef:
@@ -155,4 +157,6 @@ parameters:
 - name: k8s_api_server_base_path
   value: ''
 - name: ws_k8s_api_server
+  value: ''
+- name: fabric8_feature_toggles_api_url
   value: ''

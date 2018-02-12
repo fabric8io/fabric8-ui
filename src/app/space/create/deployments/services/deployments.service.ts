@@ -1,6 +1,7 @@
 import {
   Inject,
-  Injectable
+  Injectable,
+  OnDestroy
 } from '@angular/core';
 
 import { round } from 'lodash';
@@ -13,7 +14,8 @@ import {
 
 import {
   Observable,
-  ReplaySubject
+  ReplaySubject,
+  Subscription
 } from 'rxjs';
 
 import { AuthenticationService } from 'ngx-login-client';
@@ -29,6 +31,7 @@ import {
 
 import {
   flatten,
+  has,
   includes,
   isEmpty,
   isEqual as deepEqual
@@ -47,7 +50,17 @@ export interface NetworkStat {
 }
 
 export interface ApplicationsResponse {
-  data: Applications;
+  data: Space;
+}
+
+export interface Space {
+  attributes: SpaceAttributes;
+  id: string;
+  type: string;
+}
+
+export interface SpaceAttributes {
+  applications: Application[];
 }
 
 export interface EnvironmentsResponse {
@@ -55,16 +68,38 @@ export interface EnvironmentsResponse {
 }
 
 export interface TimeseriesResponse {
-  data: TimeseriesData;
-}
-
-export interface Applications {
-  applications: Application[];
+  data: DeploymentStats;
 }
 
 export interface Application {
+  attributes: ApplicationAttributes;
+  id: string;
+  type: string;
+}
+
+export interface ApplicationAttributes {
   name: string;
-  pipeline: Environment[];
+  deployments: Deployment[];
+}
+
+export interface Deployment {
+  attributes: DeploymentAttributes;
+  links: Links;
+  id: string;
+  type: string;
+}
+
+export interface DeploymentAttributes {
+  name: string;
+  pod_total: number;
+  pods: [[string, string]];
+  version: string;
+}
+
+export interface Links {
+  application: string;
+  console: string;
+  logs: string;
 }
 
 export interface Environment {
@@ -74,6 +109,12 @@ export interface Environment {
 }
 
 export interface EnvironmentStat {
+  attributes: EnvironmentAttributes;
+  id: string;
+  type: string;
+}
+
+export interface EnvironmentAttributes {
   name: string;
   quota: Quota;
 }
@@ -88,6 +129,12 @@ export interface Pods {
   starting: number;
   stopping: number;
   total: number;
+}
+
+export interface DeploymentStats {
+  attributes: TimeseriesData;
+  id: string;
+  type: string;
 }
 
 export interface TimeseriesData {
@@ -111,7 +158,7 @@ export interface SeriesData {
 }
 
 @Injectable()
-export class DeploymentsService {
+export class DeploymentsService implements OnDestroy {
 
   static readonly INITIAL_UPDATE_DELAY: number = 0;
   static readonly POLL_RATE_MS: number = 60000;
@@ -119,13 +166,15 @@ export class DeploymentsService {
   headers: Headers = new Headers({ 'Content-Type': 'application/json' });
   apiUrl: string;
 
-  private readonly appsObservables = new Map<string, Observable<Applications>>();
+  private readonly appsObservables = new Map<string, Observable<Application[]>>();
   private readonly envsObservables = new Map<string, Observable<EnvironmentStat[]>>();
   private readonly timeseriesObservables = new Map<string, Observable<TimeseriesData>>();
 
   private readonly pollTimer = Observable
     .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
     .share();
+
+  private serviceSubscriptions: Subscription[] = [];
 
   constructor(
     public http: Http,
@@ -137,14 +186,19 @@ export class DeploymentsService {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
-    this.apiUrl = witUrl + 'apps/spaces/';
+    this.apiUrl = witUrl + 'deployments/spaces/';
+  }
+
+  ngOnDestroy(): void {
+    this.serviceSubscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
+    });
   }
 
   getApplications(spaceId: string): Observable<string[]> {
     return this.getApplicationsResponse(spaceId)
-      .map((resp: Applications) => resp.applications)
       .map((apps: Application[]) => apps || [])
-      .map((apps: Application[]) => apps.map((app: Application) => app.name))
+      .map((apps: Application[]) => apps.map((app: Application) => app.attributes.name))
       .distinctUntilChanged(deepEqual);
   }
 
@@ -152,10 +206,11 @@ export class DeploymentsService {
     // Note: Sorting and filtering out test should ideally be moved to the backend
     return this.getEnvironmentsResponse(spaceId)
       .map((envs: EnvironmentStat[]) => envs || [])
-      .map((envs: EnvironmentStat[]) => envs.sort((a, b) =>  -1 * a.name.localeCompare(b.name)))
-      .map((envs: EnvironmentStat[]) => envs
-        .filter((env: EnvironmentStat) => env.name !== 'test')
-        .map((env: EnvironmentStat) => ({ name: env.name} as ModelEnvironment))
+      .map((envs: EnvironmentStat[]) => envs.map((env: EnvironmentStat) => env.attributes))
+      .map((envs: EnvironmentAttributes[]) => envs.sort((a, b) =>  -1 * a.name.localeCompare(b.name)))
+      .map((envs: EnvironmentAttributes[]) => envs
+        .filter((env: EnvironmentAttributes) => env.name !== 'test')
+        .map((env: EnvironmentAttributes) => ({ name: env.name} as ModelEnvironment))
       )
       .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
         deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
@@ -164,19 +219,18 @@ export class DeploymentsService {
   isApplicationDeployedInEnvironment(spaceId: string, applicationName: string, environmentName: string):
     Observable<boolean> {
     return this.getApplication(spaceId, applicationName)
-      .map((app: Application) => app.pipeline)
-      .map((pipe: Environment[]) => pipe || [])
-      .map((pipe: Environment[]) => includes(pipe.map((p: Environment) => p.name), environmentName))
+      .map((app: Application) => app.attributes.deployments)
+      .map((deployments: Deployment[]) => deployments || [])
+      .map((deployments: Deployment[]) => includes(deployments.map((d: Deployment) => d.attributes.name), environmentName))
       .distinctUntilChanged();
   }
 
   isDeployedInEnvironment(spaceId: string, environmentName: string):
     Observable<boolean> {
     return this.getApplicationsResponse(spaceId)
-      .map((apps: Applications) => apps.applications)
       .map((apps: Application[]) => apps || [])
-      .map((apps: Application[]) => apps.map((app: Application) => app.pipeline || []))
-      .map((pipes: Environment[][]) => pipes.map((pipe: Environment[]) => pipe.map((env: Environment) => env.name)))
+      .map((apps: Application[]) => apps.map((app: Application) => app.attributes.deployments || []))
+      .map((deployments: Deployment[][]) => deployments.map((pipeline: Deployment[]) => pipeline.map((deployment: Deployment) => deployment.attributes.name)))
       .map((pipeEnvNames: string[][]) => flatten(pipeEnvNames))
       .map((envNames: string[]) => includes(envNames, environmentName))
       .distinctUntilChanged();
@@ -184,7 +238,7 @@ export class DeploymentsService {
 
   getVersion(spaceId: string, applicationName: string, environmentName: string): Observable<string> {
     return this.getDeployment(spaceId, applicationName, environmentName)
-      .map((env: Environment) => env.version)
+      .map((deployment: Deployment) => deployment.attributes.version)
       .distinctUntilChanged();
   }
 
@@ -194,23 +248,23 @@ export class DeploymentsService {
     applicationId: string,
     desiredReplicas: number
   ): Observable<string> {
-    const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/control?podCount=${desiredReplicas}`;
-    return this.http.put(url, '')
-      .map((r: Response) => { return `Successfully scaled ${applicationId}`; })
+    const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}?podCount=${desiredReplicas}`;
+    return this.http.put(url, '', { headers: this.headers })
+      .map((r: Response) => `Successfully scaled ${applicationId}`)
       .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
 
   getPods(spaceId: string, applicationId: string, environmentName: string): Observable<ModelPods> {
     return this.getDeployment(spaceId, applicationId, environmentName)
-      .map((env: Environment) => env.pods)
-      .map((pods: Pods) => {
+      .map((deployment: Deployment) => deployment.attributes)
+      .map((attrs: DeploymentAttributes) => {
+        const pods = [];
+        attrs.pods.forEach(p => {
+          pods.push([ p[0], parseInt(p[1])]);
+        });
         return {
-          total: pods.total,
-          pods: [
-            [ 'Running', pods.running ],
-            [ 'Starting', pods.starting ],
-            [ 'Stopping', pods.stopping ]
-          ]
+          total: attrs.pod_total,
+          pods: pods
         } as ModelPods;
       })
       .distinctUntilChanged(deepEqual);
@@ -218,6 +272,7 @@ export class DeploymentsService {
 
   getDeploymentCpuStat(spaceId: string, applicationName: string, environmentName: string): Observable<CpuStat> {
     const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
+      .filter((t: TimeseriesData) => t && has(t, 'cores'))
       .map((t: TimeseriesData) => t.cores);
     const quota = this.getEnvironmentCpuStat(spaceId, environmentName)
       .map((stat: CpuStat) => stat.quota)
@@ -229,9 +284,10 @@ export class DeploymentsService {
 
   getDeploymentMemoryStat(spaceId: string, applicationName: string, environmentName: string): Observable<MemoryStat> {
     const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
+      .filter((t: TimeseriesData) => t && has(t, 'memory'))
       .map((t: TimeseriesData) => t.memory);
     const quota = this.getEnvironment(spaceId, environmentName)
-      .map((env: EnvironmentStat) => env.quota.memory.quota)
+      .map((env: EnvironmentStat) => env.attributes.quota.memory.quota)
       .distinctUntilChanged();
 
       // TODO: propagate MemorySeries timestamp to caller
@@ -241,6 +297,7 @@ export class DeploymentsService {
   getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
     // TODO: propagate timestamps to caller
     return this.getTimeseriesData(spaceId, applicationId, environmentName)
+      .filter((t: TimeseriesData) => t && has(t, 'net_tx') && has(t, 'net_rx'))
       .map((t: TimeseriesData) =>
         ({
           sent: new ScaledNetworkStat(t.net_tx.value),
@@ -251,28 +308,27 @@ export class DeploymentsService {
 
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
     return this.getEnvironment(spaceId, environmentName)
-      .map((env: EnvironmentStat) => env.quota.cpucores);
+      .map((env: EnvironmentStat) => env.attributes.quota.cpucores);
   }
 
   getEnvironmentMemoryStat(spaceId: string, environmentName: string): Observable<MemoryStat> {
     return this.getEnvironment(spaceId, environmentName)
-      .map((env: EnvironmentStat) => new ScaledMemoryStat(env.quota.memory.used, env.quota.memory.quota));
+      .map((env: EnvironmentStat) => new ScaledMemoryStat(env.attributes.quota.memory.used, env.attributes.quota.memory.quota));
   }
 
   getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return Observable.of('http://example.com/');
+    return this.getDeployment(spaceId, applicationId, environmentName)
+      .map((deployment: Deployment) => deployment.links.logs);
   }
 
   getConsoleUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return Observable.of('http://example.com/');
+    return this.getDeployment(spaceId, applicationId, environmentName)
+      .map((deployment: Deployment) => deployment.links.console);
   }
 
   getAppUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    if (Math.random() > 0.5) {
-      return Observable.of('http://example.com/');
-    } else {
-      return Observable.of('');
-    }
+    return this.getDeployment(spaceId, applicationId, environmentName)
+      .map((deployment: Deployment) => deployment.links.application);
   }
 
   deleteApplication(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
@@ -283,16 +339,16 @@ export class DeploymentsService {
     }
   }
 
-  private getApplicationsResponse(spaceId: string): Observable<Applications> {
+  private getApplicationsResponse(spaceId: string): Observable<Application[]> {
     if (!this.appsObservables.has(spaceId)) {
-      const subject = new ReplaySubject<Applications>(1);
+      const subject = new ReplaySubject<Application[]>(1);
       const observable = this.pollTimer
         .concatMap(() =>
           this.http.get(this.apiUrl + spaceId, { headers: this.headers })
-            .map((response: Response) => (response.json() as ApplicationsResponse).data)
+            .map((response: Response) => (response.json() as ApplicationsResponse).data.attributes.applications)
             .catch((err: Response) => this.handleHttpError(err))
         );
-      observable.subscribe(subject);
+      this.serviceSubscriptions.push(observable.subscribe(subject));
       this.appsObservables.set(spaceId, subject);
     }
     return this.appsObservables.get(spaceId);
@@ -301,15 +357,15 @@ export class DeploymentsService {
   private getApplication(spaceId: string, applicationName: string): Observable<Application> {
     // does not emit if there are no applications matching the specified name
     return this.getApplicationsResponse(spaceId)
-      .flatMap((apps: Applications) => apps.applications || [])
-      .filter((app: Application) => app.name === applicationName);
+      .flatMap((apps: Application[]) => apps || [])
+      .filter((app: Application) => app.attributes.name === applicationName);
   }
 
-  private getDeployment(spaceId: string, applicationName: string, environmentName: string): Observable<Environment> {
+  private getDeployment(spaceId: string, applicationName: string, environmentName: string): Observable<Deployment> {
     // does not emit if there are no applications or environments matching the specified names
     return this.getApplication(spaceId, applicationName)
-      .flatMap((app: Application) => app.pipeline || [])
-      .filter((env: Environment) => env.name === environmentName);
+      .flatMap((app: Application) => app.attributes.deployments || [])
+      .filter((deployment: Deployment) => deployment.attributes.name === environmentName);
   }
 
   private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {
@@ -321,7 +377,7 @@ export class DeploymentsService {
             .map((response: Response) => (response.json() as EnvironmentsResponse).data)
             .catch((err: Response) => this.handleHttpError(err))
         );
-      observable.subscribe(subject);
+      this.serviceSubscriptions.push(observable.subscribe(subject));
       this.envsObservables.set(spaceId, subject);
     }
     return this.envsObservables.get(spaceId);
@@ -331,7 +387,7 @@ export class DeploymentsService {
     // does not emit if there are no environments matching the specified name
     return this.getEnvironmentsResponse(spaceId)
       .flatMap((envs: EnvironmentStat[]) => envs || [])
-      .filter((env: EnvironmentStat) => env.name === environmentName);
+      .filter((env: EnvironmentStat) => env.attributes.name === environmentName);
   }
 
   private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
@@ -346,11 +402,11 @@ export class DeploymentsService {
             const observable = Observable.concat(Observable.of(0), this.pollTimer)
               .concatMap(() =>
                 this.http.get(url, { headers: this.headers })
-                  .map((response: Response) => (response.json() as TimeseriesResponse).data)
+                  .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes)
                   .catch((err: Response) => this.handleHttpError(err))
                   .filter((t: TimeseriesData) => !!t && !isEmpty(t))
               );
-            observable.subscribe(subject);
+            this.serviceSubscriptions.push(observable.subscribe(subject));
             this.timeseriesObservables.set(key, subject);
           }
           return this.timeseriesObservables.get(key);
@@ -388,5 +444,4 @@ export class DeploymentsService {
     } as Notification);
     return Observable.throw(response.status);
   }
-
 }

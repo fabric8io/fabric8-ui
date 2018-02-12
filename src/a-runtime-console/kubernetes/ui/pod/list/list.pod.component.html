@@ -1,0 +1,69 @@
+<div class='kube-resource-list'>
+
+  <fabric8-loading [loading]="loading">
+    <div class='list-group-item pod' *ngFor='let pod of pods'>
+      <div class='list-view-pf-checkbox' *ngIf="!hideCheckbox">
+        <input type='checkbox'>
+      </div>
+      <div class='list-view-pf-actions'>
+        <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
+          <button class='btn btn-link dropdown-toggle' type='button' id='dropdownKebabRight9' aria-haspopup='true' aria-expanded='true' dropdownToggle>
+              <span class='fa fa-ellipsis-v'></span>
+            </button>
+          <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
+            <li *ngIf="consoleLogsUrl(pod)">
+              <a [href]="consoleLogsUrl(pod)" target="openshift">View Logs</a>
+            </li>
+            <li *ngIf="consoleTerminalUrl(pod)">
+              <a [href]="consoleTerminalUrl(pod)" target="openshift">Terminal</a>
+            </li>
+            <li>
+              <a [routerLink]="[ prefixPath(pod.id), 'edit']">Edit</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a (click)="openDeleteDialog(deletePodModal, pod)" title="Delete this Pod">Delete</a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class='list-view-pf-main-info'>
+        <div class='list-view-pf-left'>
+          <img class='list-view-pf-icon-sm' src="{{pod.icon}}" height="30" width="30"/>
+        </div>
+        <div class='list-view-pf-body'>
+          <div class='list-view-pf-description'>
+            <div class='list-group-item-heading'>
+              <a [routerLink]="[prefixPath(pod.id)]" class="card-title" title="view pod">{{ pod.name }}</a>
+            </div>
+            <div class='list-group-item-text'>
+              <span class="" *ngFor='let image of pod.images' title="docker image: {{image}}">
+                   {{image | truncate:40}}
+               </span>
+            </div>
+          </div>
+          <div class='list-view-pf-additional-info'>
+            <div class='list-view-pf-additional-info-item' title="status: {{pod.phase}}">
+              <pod-phase-icon [phase]="pod.phase"></pod-phase-icon>
+            </div>
+            <div class='list-view-pf-additional-info-item' title="created time">
+              {{pod.creationTimestamp | amTimeAgo}}
+            </div>
+            <div class='list-view-pf-additional-info-item'>
+              <k8s-labels [labels]="pod.labels"></k8s-labels>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fabric8-loading>
+</div>
+
+<modal #deletePodModal title="Delete Pod">
+  <modal-content>
+    <delete-pod-dialog></delete-pod-dialog>
+  </modal-content>
+</modal>
+
+

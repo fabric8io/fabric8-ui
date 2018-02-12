@@ -2,13 +2,14 @@ import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { UserService } from 'ngx-login-client';
 import Raven from 'raven-js';
 
-const isPreview = window.location.href.indexOf('prod-preview') > -1;
-const isLocal = window.location.href.indexOf('localhost') > -1;
+const currentUrl = window.location.href;
 let environment = 'production';
-if (isPreview) {
+if (currentUrl.indexOf('prod-preview') > -1) {
   environment = 'prod-preview';
-} else if (isLocal) {
+} else if (currentUrl.indexOf('localhost') > -1) {
   environment = 'development';
+} else if (currentUrl.indexOf('badger') > -1) {
+  environment = 'prDeploy';
 }
 
 // TODO - replace with configuration variable
@@ -18,8 +19,9 @@ Raven.config('https://e71023d2bd794b708ea5a4f43e914b11@errortracking.prod-previe
 }).install();
 
 @Injectable()
-export class RavenExceptionHandler implements ErrorHandler {
+export class RavenExceptionHandler extends ErrorHandler {
   constructor(private injector: Injector) {
+    super();
   }
 
   handleError(err: any) {
@@ -30,6 +32,10 @@ export class RavenExceptionHandler implements ErrorHandler {
         id: userService.currentLoggedInUser.id
       });
     }
-    Raven.captureException(err.originalException || err);
+    if (environment === 'prod-preview' || environment === 'production') {
+      Raven.captureException(err.originalException || err);
+    } else {
+      super.handleError(err);
+    }
   }
 }

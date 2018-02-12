@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaAttributes, AreaService, Context } from 'ngx-fabric8-wit';
 import { EmptyStateConfig, ListConfig } from 'patternfly-ng';
 import { Subscription } from 'rxjs';
 
 import { ContextService } from '../../../shared/context.service';
-import { IModalHost } from '../../wizard/models/modal-host';
+import { CreateAreaDialogComponent } from './create-area-dialog/create-area-dialog.component';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -14,13 +14,16 @@ import { IModalHost } from '../../wizard/models/modal-host';
   styleUrls: ['./areas.component.less']
 })
 export class AreasComponent implements OnInit, OnDestroy {
+
+  @ViewChild(CreateAreaDialogComponent) createAreaDialog: CreateAreaDialogComponent;
+  @ViewChild(ModalDirective) modal: ModalDirective;
+
   private context: Context;
   private areas: Area[];
   private emptyStateConfig: EmptyStateConfig;
   private listConfig: ListConfig;
   private areaSubscription: Subscription;
   private selectedAreaId: string;
-  @ViewChild('createArea') createArea: IModalHost;
 
   constructor(
     private contexts: ContextService,
@@ -54,11 +57,23 @@ export class AreasComponent implements OnInit, OnDestroy {
     this.areaSubscription.unsubscribe();
   }
 
+  openModal() {
+    this.modal.show();
+  }
+
+  onShowHandler() {
+    this.createAreaDialog.focus();
+  }
+
+  onHideHandler() {
+    this.createAreaDialog.clearField();
+  }
+
   addChildArea(id: string) {
     if (id) {
       this.selectedAreaId = id;
     }
-    this.createArea.open();
+    this.openModal();
   }
 
   itemPath(item: AreaAttributes) {

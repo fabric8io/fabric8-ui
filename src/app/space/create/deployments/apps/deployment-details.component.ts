@@ -5,11 +5,17 @@ import {
   uniqueId
 } from 'lodash';
 import 'patternfly/dist/js/patternfly-settings.js';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription
+} from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
+import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import { DeploymentsService } from '../services/deployments.service';
 
@@ -69,6 +75,7 @@ export class DeploymentDetailsComponent {
     showXAxis: true
   };
 
+  hasPods: Subject<boolean> = new ReplaySubject<boolean>(1);
   cpuStat: Observable<CpuStat>;
   memStat: Observable<MemoryStat>;
   cpuTime: number;
@@ -88,6 +95,12 @@ export class DeploymentDetailsComponent {
   ngOnInit() {
     this.setChartMaxElements(
       DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
+
+    this.subscriptions.push(
+      this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name)
+        .map((p: Pods) => p.total > 0)
+        .subscribe(this.hasPods)
+    );
 
     this.cpuConfig.chartHeight = 60;
     this.memConfig.chartHeight = 60;

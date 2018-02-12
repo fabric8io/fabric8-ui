@@ -13,6 +13,7 @@ import {
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
+import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   DeploymentsService,
@@ -89,6 +90,7 @@ describe('DeploymentDetailsComponent', () => {
   let cpuStatObservable: BehaviorSubject<CpuStat>;
   let memStatObservable: BehaviorSubject<MemoryStat>;
   let netStatObservable: BehaviorSubject<NetworkStat>;
+  let podsObservable: BehaviorSubject<Pods>;
 
   beforeEach(() => {
     cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 } as CpuStat);
@@ -100,6 +102,10 @@ describe('DeploymentDetailsComponent', () => {
       received: new ScaledNetworkStat(2 * mb)
     } as NetworkStat);
 
+    podsObservable = new BehaviorSubject(
+      { total: 1, pods: [['Running', 1], ['Starting', 0], ['Stopping', 0]] } as Pods
+    );
+
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
     mockSvc.getDeploymentCpuStat.and.returnValue(cpuStatObservable);
@@ -109,6 +115,7 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
     mockSvc.getDeploymentNetworkStat.and.returnValue(netStatObservable);
+    mockSvc.getPods.and.returnValue(podsObservable);
   });
 
   initContext(DeploymentDetailsComponent, HostComponent, {
@@ -135,6 +142,23 @@ describe('DeploymentDetailsComponent', () => {
 
     let container = arrayOfComponents[0].componentInstance;
     expect(container.applicationId).toEqual('mockAppId');
+  });
+
+  describe('hasPods', () => {
+    it('should be true for initial state', function(this: Context, done: DoneFn) {
+      this.testedDirective.hasPods.subscribe((b: boolean) => {
+        expect(b).toBeTruthy();
+        done();
+      });
+    });
+
+    it('should be false for state without pods', function(this: Context, done: DoneFn) {
+      podsObservable.next({ total: 0, pods: [] });
+      this.testedDirective.hasPods.subscribe((b: boolean) => {
+        expect(b).toBeFalsy();
+        done();
+      });
+    });
   });
 
   describe('cpu label', () => {
