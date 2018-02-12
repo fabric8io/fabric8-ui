@@ -121,7 +121,7 @@
     "angular2-websocket": "0.9.5",
     "chunk-manifest-webpack2-plugin": "1.0.1",
     "core-js": "2.5.1",
-    "fabric8-planner": "0.42.18",
+    "fabric8-planner": "0.42.19",
     "fabric8-stack-analysis-ui": "0.10.2",
     "http-server": "0.10.0",
     "ie-shim": "0.1.0",
