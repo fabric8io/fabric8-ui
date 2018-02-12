@@ -1,10 +1,10 @@
-<form role="form" #areaForm="ngForm" (ngSubmit)="createArea()" novalidate>
-  <header>
-    <h3 class="create-dialog-header">
-      <b>Add New Area</b>
-    </h3>
-  </header>
-  <section>
+<div class="modal-header">
+  <h3>
+    <b>Add New Area</b>
+  </h3>
+</div>
+<div class="modal-body">
+  <form role="form" #areaForm="ngForm" (ngSubmit)="createArea()" novalidate>
     <div class="form">
       <fieldset class="create-fieldset">
         <div *ngIf="errors" class="alert alert-danger">
@@ -25,11 +25,13 @@
         </div>
       </fieldset>
     </div>
-  </section>
-  <footer>
-    <div class="create-footer">
-      <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
-      <button class="btn btn-primary" [disabled]="!areaForm.form.valid" type="submit">Create</button>
+
+    <div class="modal-footer">
+      <div class="create-footer">
+        <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
+        <button class="btn btn-primary" [disabled]="!areaForm.form.valid" type="submit">Create</button>
+      </div>
     </div>
-  </footer>
-</form>
+  </form>
+</div>
+
