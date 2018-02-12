@@ -12,7 +12,10 @@ import {
   SortEvent,
   SortField
 } from 'patternfly-ng';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
 import { Environment } from '../models/environment';
@@ -23,12 +26,12 @@ import { Environment } from '../models/environment';
 })
 export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
-  @Input() public applications: Observable<string[]>;
-  @Input() public environments: Observable<Environment[]>;
-  @Input() public spaceId: Observable<string>;
+  @Input() applications: Observable<string[]>;
+  @Input() environments: Observable<Environment[]>;
+  @Input() spaceId: Observable<string>;
 
-  public filteredApplicationsList: string[];
-  public resultsCount: number = 0;
+  filteredApplicationsList: string[];
+  resultsCount: number = 0;
 
   private applicationsList: string[];
   private currentFilters: Filter[];
@@ -36,29 +39,29 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   private isAscendingSort: boolean = true;
   private subscriptions: Subscription[] = [];
 
-  public constructor() { }
-
   ngOnInit(): void {
-    this.subscriptions.push(this.applications.subscribe(applications => {
-      this.applicationsList = applications;
-      this.applyFilters();
-    }));
+    this.subscriptions.push(
+      this.applications.subscribe((applications: string[]) => {
+        this.applicationsList = applications;
+        this.applyFilters();
+      })
+    );
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
   }
 
-  filterChange($event: FilterEvent): void {
-    this.currentFilters = $event.appliedFilters;
+  filterChange(event: FilterEvent): void {
+    this.currentFilters = event.appliedFilters;
     this.applyFilters();
 
     this.sortApplications();
   }
 
-  sortChange($event: SortEvent): void {
-    this.currentSortField = $event.field;
-    this.isAscendingSort = $event.isAscending;
+  sortChange(event: SortEvent): void {
+    this.currentSortField = event.field;
+    this.isAscendingSort = event.isAscending;
 
     this.sortApplications();
   }
