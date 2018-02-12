@@ -19,15 +19,14 @@ enum CLASSES {
 }
 
 const STAT_THRESHOLD = .6;
+
 @Component({
   selector: 'deployment-status-icon',
   templateUrl: 'deployment-status-icon.component.html'
 })
 export class DeploymentStatusIconComponent {
+  static readonly CLASSES = CLASSES;
 
   @Input() iconClass: String;
   @Input() toolTip: String;
-
-  public static readonly CLASSES = CLASSES;
-
 }
