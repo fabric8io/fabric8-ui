@@ -24,6 +24,9 @@ const STAT_THRESHOLD = .6;
 })
 export class DeploymentCardComponent implements OnDestroy, OnInit {
 
+  private static readonly DEBOUNCE_TIME: number = 5000; // 5 seconds
+  private static readonly MAX_DEBOUNCE_TIME: number = 10000; // 10 seconds
+
   @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: Environment;
@@ -42,9 +45,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   subscriptions: Array<Subscription> = [];
 
-  private readonly waitTime: number = 5000; // 5 seconds
-  private readonly maxWaitTime: number = 10000; // 10 seconds
-  private debouncedUpdateDetails = debounce(this.updateDetails, this.waitTime, { maxWait: this.maxWaitTime});
+  private readonly debouncedUpdateDetails = debounce(this.updateDetails, DeploymentCardComponent.DEBOUNCE_TIME, { maxWait: DeploymentCardComponent.MAX_DEBOUNCE_TIME });
 
   constructor(
     private deploymentsService: DeploymentsService,
@@ -52,7 +53,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   ) { }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
   }
 
   ngOnInit(): void {
@@ -60,7 +61,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.toolTip = 'Everything is ok';
 
     this.cpuStat = this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
-    this.subscriptions.push(this.cpuStat.subscribe((stat) => {
+    this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat) => {
       this.changeStatus(stat);
     }));
 
@@ -87,7 +88,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     );
   }
 
-  changeStatus(stat: CpuStat) {
+  changeStatus(stat: CpuStat): void {
     this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
     this.toolTip = 'Everything is ok.';
     if (stat.used / stat.quota > STAT_THRESHOLD) {
@@ -120,13 +121,13 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.subscriptions.push(
       this.deploymentsService.deleteApplication(this.spaceId, this.applicationId, this.environment.name)
         .subscribe(
-          success => {
+          (success: string) => {
             this.notifications.message({
               type: NotificationType.SUCCESS,
               message: success
             });
           },
-          error => {
+          (error: any) => {
             this.notifications.message({
               type: NotificationType.WARNING,
               message: error

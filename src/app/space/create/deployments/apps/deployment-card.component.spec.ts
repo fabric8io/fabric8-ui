@@ -86,7 +86,7 @@ class FakeDeploymentDetailsComponent {
 }
 
 function initMockSvc(): jasmine.SpyObj<DeploymentsService> {
-  let mockSvc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
+  const mockSvc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
 
   mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
   mockSvc.getDeploymentCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
@@ -124,7 +124,8 @@ describe('DeploymentCardComponent async tests', () => {
         imports: [
           BsDropdownModule.forRoot(),
           CollapseModule.forRoot(),
-          ChartModule ],
+          ChartModule
+        ],
         providers: [
           BsDropdownConfig,
           { provide: NotificationsService, useValue: notifications },
@@ -149,16 +150,16 @@ describe('DeploymentCardComponent async tests', () => {
 
       function getItemByLabel(label: string): DebugElement {
         return menuItems
-          .filter(item => item.nativeElement.textContent.includes(label))[0];
+          .filter((item: DebugElement) => item.nativeElement.textContent.includes(label))[0];
       }
 
       beforeEach(fakeAsync(() => {
-        let de = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
+        const de: DebugElement = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
         de.triggerEventHandler('click', null);
 
         fixture.detectChanges();
 
-        let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
+        const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
         menuItems = menu.queryAll(By.css('li'));
       }));
 
@@ -167,14 +168,14 @@ describe('DeploymentCardComponent async tests', () => {
 
         fixture.detectChanges();
 
-        let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
+        const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
         menuItems = menu.queryAll(By.css('li'));
-        let item = getItemByLabel('Open Application');
+        const item: DebugElement = getItemByLabel('Open Application');
         expect(item).toBeFalsy();
       }));
 
       it('should invoke service \'delete\' function on Delete item click', fakeAsync(() => {
-        let item = getItemByLabel('Delete');
+        const item: DebugElement = getItemByLabel('Delete');
         expect(item).toBeTruthy();
         expect(mockSvc.deleteApplication).not.toHaveBeenCalled();
         item.query(By.css('a')).triggerEventHandler('click', null);
@@ -225,17 +226,19 @@ describe('DeploymentCardComponent', () => {
     imports: [
       BsDropdownModule.forRoot(),
       CollapseModule.forRoot(),
-      ChartModule ],
+      ChartModule
+    ],
     providers: [
       BsDropdownConfig,
       { provide: NotificationsService, useFactory: () => notifications },
       { provide: DeploymentsService, useFactory: () => mockSvc }
     ]
-  }, component => {
-    component.spaceId = 'mockSpaceId';
-    component.applicationId = 'mockAppId';
-    component.environment = { name: 'mockEnvironment' } as Environment;
-  });
+  },
+    (component: DeploymentCardComponent) => {
+      component.spaceId = 'mockSpaceId';
+      component.applicationId = 'mockAppId';
+      component.environment = { name: 'mockEnvironment' } as Environment;
+    });
 
   it('should be active', function(this: Context) {
     let detailsComponent = this.testedDirective;
@@ -262,7 +265,6 @@ describe('DeploymentCardComponent', () => {
       expect(this.testedDirective.toolTip).toBe('CPU usage has exceeded capacity.');
     });
   });
-
 
   describe('versionLabel', () => {
     let de: DebugElement;
