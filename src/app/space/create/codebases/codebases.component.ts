@@ -105,7 +105,6 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           }],
           moreActions: []
         } as ActionConfig,
-        iconStyleClass: 'pficon-add-circle-o',
         title: 'Add a Codebase',
         info: 'Start by importing your code repository.'
       } as EmptyStateConfig;
@@ -132,7 +131,6 @@ export class CodebasesComponent implements OnDestroy, OnInit {
         }],
         moreActions: []
       } as ActionConfig,
-      iconStyleClass: 'pficon-info',
       title: 'GitHub Disconnected',
       info: 'You must be connected to GitHub in order to connect or create a Codebase'
     } as EmptyStateConfig;
