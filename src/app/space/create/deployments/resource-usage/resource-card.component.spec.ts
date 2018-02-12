@@ -62,7 +62,7 @@ describe('ResourceCardComponent', () => {
     providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
   },
     component => {
-      component.spaceId = 'spaceId';
+      component.spaceId = Observable.of('spaceId');
       component.environment = { name: 'stage' } as Environment;
     });
 
@@ -77,12 +77,12 @@ describe('ResourceCardComponent', () => {
     let cpuUtilBar = arrayOfComponents[0].componentInstance;
     expect(cpuUtilBar.resourceTitle).toEqual('CPU');
     expect(cpuUtilBar.resourceUnit).toEqual('Cores');
-    expect(cpuUtilBar.stat).toEqual(cpuStatMock);
+    expect(cpuUtilBar.stat).toEqual(this.testedDirective.cpuStat);
 
     let memoryUtilBar = arrayOfComponents[1].componentInstance;
     expect(memoryUtilBar.resourceTitle).toEqual('Memory');
     expect(memoryUtilBar.resourceUnit).toEqual('GB');
-    expect(memoryUtilBar.stat).toEqual(memoryStatMock);
+    expect(memoryUtilBar.stat).toEqual(this.testedDirective.memStat);
   });
 
   describe('inactive environment', () => {

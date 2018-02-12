@@ -49,7 +49,7 @@ describe('DeploymentsResourceUsageComponent', () => {
     mockEnvironmentData.forEach((envData, index) => {
       let cardComponent = arrayOfComponents[index].componentInstance;
       expect(cardComponent.environment).toEqual(mockEnvironmentData[index]);
-      expect(cardComponent.spaceId).toEqual('spaceId');
+      expect(cardComponent.spaceId).toEqual(spaceIdObservable);
     });
   });
 

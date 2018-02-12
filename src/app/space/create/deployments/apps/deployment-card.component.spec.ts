@@ -91,7 +91,7 @@ function initMockSvc(): jasmine.SpyObj<DeploymentsService> {
   mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
   mockSvc.getDeploymentCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
   mockSvc.getDeploymentMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' }));
-  mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
+  mockSvc.getAppUrl.and.returnValue(Observable.of(''));
   mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
   mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
   mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
@@ -135,7 +135,7 @@ describe('DeploymentCardComponent async tests', () => {
       fixture = TestBed.createComponent(DeploymentCardComponent);
       component = fixture.componentInstance;
 
-      component.spaceId = 'mockSpaceId';
+      component.spaceId = Observable.of('mockSpaceId');
       component.applicationId = 'mockAppId';
       component.environment = { name: 'mockEnvironment' } as Environment;
 
@@ -163,10 +163,6 @@ describe('DeploymentCardComponent async tests', () => {
       }));
 
       it('should not display appUrl if none available', fakeAsync(() => {
-        component.appUrl = Observable.of('');
-
-        fixture.detectChanges();
-
         let menu = fixture.debugElement.query(By.css('.dropdown-menu'));
         menuItems = menu.queryAll(By.css('li'));
         let item = getItemByLabel('Open Application');
@@ -232,7 +228,7 @@ describe('DeploymentCardComponent', () => {
       { provide: DeploymentsService, useFactory: () => mockSvc }
     ]
   }, component => {
-    component.spaceId = 'mockSpaceId';
+    component.spaceId = Observable.of('mockSpaceId');
     component.applicationId = 'mockAppId';
     component.environment = { name: 'mockEnvironment' } as Environment;
   });

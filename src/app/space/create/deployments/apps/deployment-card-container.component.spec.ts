@@ -18,7 +18,7 @@ class HostComponent { }
   template: ''
 })
 class FakeDeploymentCardComponent {
-  @Input() spaceId: string;
+  @Input() spaceId: Observable<string>;
   @Input() applicationId: string;
   @Input() environment: Environment;
 }
@@ -33,7 +33,7 @@ describe('DeploymentCardContainer', () => {
 
   initContext(DeploymentCardContainerComponent, HostComponent, { declarations: [FakeDeploymentCardComponent] },
     component => {
-      component.spaceId = 'space';
+      component.spaceId = Observable.of('space');
       component.environments = Observable.of(environments);
       component.application = 'app';
     });
