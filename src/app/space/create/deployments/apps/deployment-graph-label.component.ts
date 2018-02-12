@@ -1,25 +1,16 @@
 import {
   Component,
-  Input,
-  OnDestroy,
-  OnInit
+  Input
 } from '@angular/core';
 
 @Component({
   selector: 'deployment-graph-label',
   templateUrl: 'deployment-graph-label.component.html',
   styleUrls: ['./deployment-graph-label.component.less']
-
 })
-export class DeploymentGraphLabelComponent implements OnDestroy, OnInit {
-  @Input() type: any;
-  @Input() dataMeasure: any;
-  @Input() value: any;
-  @Input() valueUpperBound: any;
-
-  constructor() { }
-
-  ngOnDestroy(): void { }
-
-  ngOnInit(): void { }
+export class DeploymentGraphLabelComponent {
+  @Input() type: string;
+  @Input() dataMeasure: string;
+  @Input() value: number;
+  @Input() valueUpperBound: number;
 }
