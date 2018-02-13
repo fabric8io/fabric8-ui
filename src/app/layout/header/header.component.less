@@ -32,10 +32,10 @@
   .context {
     &:hover { .pointer; }
   }
-  .status-dropdown {
-    border-right: 1px solid;
-    border-right-color: @color-pf-black-600;
-  }
+  // .status-dropdown {
+  //   border-right: 1px solid;
+  //   border-right-color: @color-pf-black-600;
+  // }
   .user-dropdown-menu {
     height: 43px;
     transition: height 4s;
@@ -118,16 +118,37 @@
     }
   }
 }
-
-.status-dropdown {
-  &:hover { .pointer; }
+.icon-dropdown {
+  &:hover { .pointer };
   a {
     padding-top: 12px;
+    padding-right: 5px;
     padding-bottom: 12px;
+    padding-left: 5px;
+    color: @color-pf-black;
   }
   .pficon-white {
     font-size: 1.3em;
     &:before { color: @color-pf-white; }
+  }
+  .infotip {
+    right: -15px;
+  }
+  &-status {
+    margin-right: 5px;
+    &.open {
+      > a {
+        background-color: transparent !important; /* stylelint-disable-line declaration-no-important */
+      }
+    }
+  }
+  &-documentation {
+    margin-right: 15px;
+    &.open {
+      > a {
+        background-color: transparent !important; /* stylelint-disable-line declaration-no-important */
+      }
+    }
   }
 }
 .login-block {
