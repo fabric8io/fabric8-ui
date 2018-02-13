@@ -52,7 +52,7 @@
         </ng-template>
         <div *ngIf="(context.user.attributes.bio !== undefined && context.user.attributes.bio.length !== 0); then showBio else addBio"></div>
         <ng-template #showBio>
-          <p class="col-sm-12 profile-wrapper-bio">{{context.user.attributes.bio}}</p>
+          <p class="col-sm-12 profile-wrapper-bio" lang="en">{{context.user.attributes.bio}}</p>
         </ng-template>
         <ng-template #addBio>
           <p class="col-sm-12 profile-wrapper-bio">

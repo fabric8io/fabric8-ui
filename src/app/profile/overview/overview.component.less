@@ -23,7 +23,17 @@
 .profile-wrapper {
   &-email,
   &-url,
-  &-bio,
+  &-bio {
+    word-wrap: break-word;
+    /*
+     * Hyphens CSS property not currently supported by all browsers
+     * For more information & support, see: 
+     * https://caniuse.com/#search=hyphens
+     */
+    -webkit-hyphens: auto; // Safari & Chrome
+    -ms-hyphens: auto; // IE and Edge
+    hyphens: auto; // Firefox
+  }
   &-username {
     padding-left: 5px;
   }
