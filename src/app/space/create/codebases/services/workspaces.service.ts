@@ -53,6 +53,8 @@ export class WorkspacesService {
    */
   getWorkspaces(codebaseId: string): Observable<Workspace[]> {
     let url = `${this.workspacesUrl}/${codebaseId}/workspaces`;
+    // TODO: remove the old url when it is not needed.
+    let old_url = `${this.workspacesUrl}/${codebaseId}/edit`;
     return this.http
       .get(url, { headers: this.headers })
       .retryWhen(attempts => {
@@ -65,7 +67,24 @@ export class WorkspacesService {
         return response.json().data as Workspace[];
       })
       .catch((error) => {
-        return this.handleError(error);
+        if (error.status === 404) {
+          return this.http
+            .get(old_url, {headers: this.headers})
+            .retryWhen(attempts => {
+              let count = 0;
+              return attempts.flatMap(error => {
+                return ++count >= 10 ? Observable.throw(error) : Observable.timer(count * 3000); // Wait for Che to start
+              });
+            })
+            .map(response => {
+              return response.json().data as Workspace[];
+            })
+            .catch((error) => {
+              return this.handleError(error);
+            });
+        } else {
+          return this.handleError(error);
+        }
       });
   }
 
