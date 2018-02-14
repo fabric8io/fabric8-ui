@@ -6,27 +6,38 @@
           src="../../../assets/images/Logotype_RH_OpenShift-io_RGB_RedGray.png">
       </div>
       <div *ngIf="verified === 'true'">
-        <span class="f8-email-verify-img img-trophy"></span>
+        <img 
+          width="100"
+          height="100" 
+          src="../../../assets/images/trophy.png" />
         <h1>
-          Your e-mail has been confirmed</h1>
+          Your e-mail has been confirmed
+        </h1>
         <hr>
-        <p>Thank you for validating your e-mail address.
+        <p>
+          Thank you for validating your e-mail address.
           You can now continue to use Openshift.io
         </p>
       </div>
       <div *ngIf="verified === 'false'">
-        <span class="f8-email-verify-img img-frown"></span>
+        <img
+          width="100"
+          height="100"
+          src="../../../assets/images/neutralface.png">
         <h1>
           This URL has already been used to verify your e-mail
         </h1>
         <hr>
-        <p>Your e-mail has already been approved.
+        <p>
+          Your e-mail has already been approved.
           Click on my profile below to continue.
         </p>
       </div>
       <div class="blank-slate-pf-main-action">
         <a href="#"
-          class="btn btn-primary btn-lg">Continue to my dashboard</a>
+          class="btn btn-primary btn-lg">
+          Continue to my dashboard
+        </a>
       </div>
     </div>
   </div>
