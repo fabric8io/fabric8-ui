@@ -35,15 +35,24 @@ export class CreateAreaDialogComponent {
     this.contexts.current.subscribe(val => this.context = val);
   }
 
-  public focus() {
+  public onOpen() {
+    this.focus();
+  }
+
+  public onClose() {
+    this.clearField();
+    this.resetErrors();
+  }
+
+  focus() {
     this.nameInput.nativeElement.focus();
   }
 
-  public clearField() {
+  clearField() {
     this.areaForm.form.controls['name'].reset();
   }
 
-  public resetError() {
+  resetErrors() {
     this.errors = null;
   }
 
