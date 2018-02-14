@@ -368,6 +368,34 @@ describe('DeploymentDetailsComponent', () => {
         expect(detailsComponent.netData.xData.length).toBe(MAX_NET_LINE_ELEMENTS);
         expect(detailsComponent.netData.yData[0].length).toBe(MAX_NET_LINE_ELEMENTS);
       });
+
+      it('should be rounded to whole numbers when units are bytes', function(this: Context) {
+        netStatObservable.next({
+          sent: new ScaledNetworkStat(100.567),
+          received: new ScaledNetworkStat(200.234)
+        } as NetworkStat);
+        this.detectChanges();
+        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
+        expect(detailsComponent.netVal).toEqual(301);
+        expect(detailsComponent.netData.xData.length).toEqual(4);
+        expect(detailsComponent.netData.yData.length).toEqual(2);
+        expect(detailsComponent.netData.yData[0][3]).toEqual(101);
+        expect(detailsComponent.netData.yData[1][3]).toEqual(200);
+      });
+
+      it('should be rounded to tenths when units are larger than bytes', function(this: Context) {
+        netStatObservable.next({
+          sent: new ScaledNetworkStat(12.34 * 1024),
+          received: new ScaledNetworkStat(45.67 * 1024)
+        } as NetworkStat);
+        this.detectChanges();
+        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
+        expect(detailsComponent.netVal).toEqual(58);
+        expect(detailsComponent.netData.xData.length).toEqual(4);
+        expect(detailsComponent.netData.yData.length).toEqual(2);
+        expect(detailsComponent.netData.yData[0][3]).toEqual(12636.2);
+        expect(detailsComponent.netData.yData[1][3]).toEqual(46766.1);
+      });
     });
   });
 
