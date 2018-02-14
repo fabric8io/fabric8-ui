@@ -42,10 +42,10 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
     }
     let acknowledged: boolean = false;
     let profile = this.getTransientProfile();
-    if (profile.contextInformation === undefined) {
+    if (profile && profile.contextInformation === undefined) {
       return acknowledged;
     }
-    if (profile.contextInformation.featureAcknowledgement !== undefined) {
+    if (profile && profile.contextInformation.featureAcknowledgement !== undefined) {
       acknowledged = Boolean(profile.contextInformation.featureAcknowledgement[featureName]);
     }
     return acknowledged;
@@ -62,10 +62,12 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
       return;
     }
     let profile = this.getTransientProfile();
-    if (profile.contextInformation.featureAcknowledgement === undefined) {
+    if (profile && profile.contextInformation.featureAcknowledgement === undefined) {
       profile.contextInformation.featureAcknowledgement = {};
     }
-    profile.contextInformation.featureAcknowledgement[featureName] = acknowledged;
+    if (profile) {
+      profile.contextInformation.featureAcknowledgement[featureName] = acknowledged;
+    }
 
     this.subscriptions.push(this.update(profile).subscribe(user => {
       // Do nothing
@@ -83,7 +85,9 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
    */
   private getTransientProfile(): ExtProfile {
     let profile = this.createTransientProfile();
-    delete profile.username;
+    if (profile && profile.username) {
+      delete profile.username;
+    }
 
     return profile;
   }
