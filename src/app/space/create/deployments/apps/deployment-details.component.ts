@@ -53,13 +53,13 @@ export class DeploymentDetailsComponent {
   cpuData: SparklineData = {
     dataAvailable: true,
     xData: ['time'],
-    yData: ['used']
+    yData: ['CPU']
   };
 
   memData: SparklineData = {
     dataAvailable: true,
     xData: ['time'],
-    yData: ['used']
+    yData: ['Memory']
   };
 
   netData: DeploymentsLinechartData = {
@@ -75,7 +75,9 @@ export class DeploymentDetailsComponent {
     chartId: uniqueId('cpu-chart'),
     axis: {
       type: 'timeseries'
-    }
+    },
+    tooltip: this.getTooltipContents(),
+    units: 'Cores'
   };
 
   memConfig: SparklineConfig = {
@@ -83,7 +85,8 @@ export class DeploymentDetailsComponent {
     chartId: uniqueId('mem-chart'),
     axis: {
       type: 'timeseries'
-    }
+    },
+    tooltip: this.getTooltipContents()
   };
 
   netConfig: DeploymentsLinechartConfig = {
@@ -241,4 +244,43 @@ export class DeploymentDetailsComponent {
     );
     return latch;
   }
+
+  private getTooltipContents(): any {
+    return {
+      contents: (d: any) => {
+        // d is an object containing the data displayed for a given data point in the tooltip
+        // example: [{ x: Date, value: number, id: string, index: number, name: string }]
+        // http://c3js.org/reference.html#tooltip-contents
+        let tipRows: string = '';
+        let color = '#0088ce'; // pf-blue-400
+        let units: string = '';
+        if (d[0].name === 'CPU') {
+          units = this.cpuConfig.units;
+        } else if (d[0].name === 'Memory') {
+          units = this.memUnits;
+        }
+        tipRows += `
+          <tr><th colspan="2">${d[0].x.toLocaleString()}</th></tr>
+          <tr>
+            <td class="name"><span style="background-color: ${color}"></span>${d[0].name}</td>
+            <td class="value text-nowrap">${d[0].value} ${units}</td>
+          </tr>
+        `;
+        return this.getTooltipTableHTML(tipRows);
+      }
+    };
+  }
+
+  private getTooltipTableHTML(tipRows: string): string {
+    return `
+      <div class="module-triangle-bottom">
+        <table class="c3-tooltip">
+          <tbody>
+            ${tipRows}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
 }

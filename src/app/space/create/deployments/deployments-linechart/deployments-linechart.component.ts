@@ -132,11 +132,21 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
       contents: (d: any) => {
         let tipRows: string = '';
         for (let i = 0; i < d.length; i++) {
-          tipRows +=
-          '<tr>' +
-          '  <td class="value">' + d[i].name + '</td>' +
-          '  <td class="value text-nowrap">' + d[i].value + '</td>' +
-          '</tr>';
+          let color;
+          if (d[i].name === 'sent') {
+            color = this.defaultConfig.data.colors.sent;
+          } else if (d[i].name === 'received') {
+            color = this.defaultConfig.data.colors.received;
+          }
+          if (i === 0) {
+            tipRows += `<tr><th colspan="2">${d[i].x.toLocaleString()}</th></tr>`;
+          }
+          tipRows += `
+            <tr>
+              <td class="name"><span style="background-color: ${color}"></span>${d[i].name}</td>
+              <td class="value text-nowrap">${d[i].value} ${this.config.units}/s</td>
+            </tr>
+          `;
         }
         return this.getTooltipTableHTML(tipRows);
       },
@@ -166,13 +176,15 @@ export class DeploymentsLinechartComponent extends ChartBase implements DoCheck,
   }
 
   private getTooltipTableHTML(tipRows: string): string {
-    return '<div class="module-triangle-bottom">' +
-      '  <table class="c3-tooltip">' +
-      '    <tbody>' +
-      tipRows +
-      '    </tbody>' +
-      '  </table>' +
-      '</div>';
+    return `
+      <div class="module-triangle-bottom">
+        <table class="c3-tooltip">
+          <tbody>
+            ${tipRows}
+          </tbody>
+        </table>
+      </div>
+    `;
   }
 
 }
