@@ -123,7 +123,8 @@ export class DeploymentDetailsComponent {
     this.memTime = 1;
 
     this.initialChartStats =
-      this.deploymentsService.getDeploymentTimeConstrainedStats(this.spaceId, this.applicationId, this.environment.name, DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION);
+      this.deploymentsService.getDeploymentTimeConstrainedStats(this.spaceId, this.applicationId, this.environment.name, DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION)
+        .first();
 
     this.cpuStat =
       this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
@@ -131,39 +132,40 @@ export class DeploymentDetailsComponent {
     this.memStat =
       this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.applicationId, this.environment.name);
 
-    this.processTimeConstrainedStats(this.initialChartStats);
+    this.processTimeConstrainedStats(this.initialChartStats)
+      .subscribe(() => {
+        this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat) => {
+          this.cpuVal = stat.used;
+          this.cpuMax = stat.quota;
+          this.cpuData.total = stat.quota;
+          this.cpuData.yData.push(stat.used);
+          this.cpuData.xData.push(this.cpuTime++);
+          this.trimSparklineData(this.cpuData);
+        }));
 
-    this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat) => {
-      this.cpuVal = stat.used;
-      this.cpuMax = stat.quota;
-      this.cpuData.total = stat.quota;
-      this.cpuData.yData.push(stat.used);
-      this.cpuData.xData.push(this.cpuTime++);
-      this.trimSparklineData(this.cpuData);
-    }));
+        this.subscriptions.push(this.memStat.subscribe((stat: MemoryStat) => {
+          this.memVal = stat.used;
+          this.memMax = stat.quota;
+          this.memData.total = stat.quota;
+          this.memData.yData.push(stat.used);
+          this.memData.xData.push(this.memTime++);
+          this.memUnits = stat.units;
+          this.trimSparklineData(this.memData);
+        }));
 
-    this.subscriptions.push(this.memStat.subscribe((stat: MemoryStat) => {
-      this.memVal = stat.used;
-      this.memMax = stat.quota;
-      this.memData.total = stat.quota;
-      this.memData.yData.push(stat.used);
-      this.memData.xData.push(this.memTime++);
-      this.memUnits = stat.units;
-      this.trimSparklineData(this.memData);
-    }));
-
-    this.subscriptions.push(
-      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name)
-        .subscribe((stat: NetworkStat) => {
-          const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
-          this.netVal = round(netTotal.used, 1);
-          this.netUnits = netTotal.units;
-          this.netData.xData.push(+new Date());
-          this.netData.yData[0].push(stat.sent.raw);
-          this.netData.yData[1].push(stat.received.raw);
-          this.trimLinechartData(this.netData);
-        })
-    );
+        this.subscriptions.push(
+          this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name)
+            .subscribe((stat: NetworkStat) => {
+              const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
+              this.netVal = round(netTotal.used, 1);
+              this.netUnits = netTotal.units;
+              this.netData.xData.push(+new Date());
+              this.netData.yData[0].push(stat.sent.raw);
+              this.netData.yData[1].push(stat.received.raw);
+              this.trimLinechartData(this.netData);
+            })
+        );
+      });
   }
 
   ngOnDestroy(): void {
@@ -196,7 +198,8 @@ export class DeploymentDetailsComponent {
     }
   }
 
-  private processTimeConstrainedStats(stats: Observable<TimeConstrainedStats>): void {
+  private processTimeConstrainedStats(stats: Observable<TimeConstrainedStats>): Observable<void> {
+    const latch: Subject<void> = new Subject<void>();
     this.subscriptions.push(
       stats.subscribe((s: TimeConstrainedStats) => {
         s.cpu.forEach((e: TimestampedCpuStats) => {
@@ -209,6 +212,7 @@ export class DeploymentDetailsComponent {
         s.memory.forEach((e: TimestampedMemoryStats) => {
           this.memVal = e.data.used;
           this.memMax = e.data.quota;
+          this.memUnits = e.data.units;
           this.memData.total = e.data.quota;
           this.memData.yData.push(e.data.used);
           this.memData.xData.push(this.memTime++);
@@ -221,7 +225,8 @@ export class DeploymentDetailsComponent {
           this.netData.yData[0].push(e.data.sent.raw);
           this.netData.yData[1].push(e.data.received.raw);
         });
-      })
+      }, (error: any) => {}, () => { latch.next(); latch.complete(); })
     );
+    return latch;
   }
 }

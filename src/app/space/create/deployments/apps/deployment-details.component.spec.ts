@@ -9,7 +9,8 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,
-  Observable
+  Observable,
+  Subject
 } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
@@ -103,13 +104,25 @@ describe('DeploymentDetailsComponent', () => {
   let memStatObservable: BehaviorSubject<MemoryStat>;
   let netStatObservable: BehaviorSubject<NetworkStat>;
   let podsObservable: BehaviorSubject<Pods>;
-  let initialStatsObservable: BehaviorSubject<TimeConstrainedStats>;
+  let initialStatsObservable: Subject<TimeConstrainedStats>;
+
+  const mb = Math.pow(1024, 2);
+  const initialStats: TimeConstrainedStats = {
+    cpu: [
+      { data: { used: 2, quota: 2 }, timestamp: 1234567891011 }
+    ],
+    memory: [
+      { data: { used: 2, quota: 4, units: 'GB' }, timestamp: 1234567891011 }
+    ],
+    network: [
+      { data: { sent: new ScaledNetworkStat(2 * mb), received: new ScaledNetworkStat(1 * mb) }, timestamp: 1234567891011 }
+    ]
+  };
 
   beforeEach(() => {
     cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 } as CpuStat);
     memStatObservable = new BehaviorSubject({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
 
-    const mb = Math.pow(1024, 2);
     netStatObservable = new BehaviorSubject({
       sent: new ScaledNetworkStat(1 * mb),
       received: new ScaledNetworkStat(2 * mb)
@@ -119,17 +132,7 @@ describe('DeploymentDetailsComponent', () => {
       { total: 1, pods: [['Running', 1], ['Starting', 0], ['Stopping', 0]] } as Pods
     );
 
-    initialStatsObservable = new BehaviorSubject({
-      cpu: [
-        { data: { used: 2, quota: 2 }, timestamp: 1234567891011 }
-      ],
-      memory: [
-        { data: { used: 2, quota: 4, units: 'GB' }, timestamp: 1234567891011 }
-      ],
-      network: [
-        { data: { sent: new ScaledNetworkStat(2 * mb), received: new ScaledNetworkStat(1 * mb) }, timestamp: 1234567891011 }
-      ]
-    } as TimeConstrainedStats);
+    initialStatsObservable = new Subject<TimeConstrainedStats>();
 
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
@@ -173,6 +176,7 @@ describe('DeploymentDetailsComponent', () => {
 
   describe('hasPods', () => {
     it('should be true for initial state', function(this: Context, done: DoneFn) {
+      initialStatsObservable.next(initialStats);
       this.testedDirective.hasPods.subscribe((b: boolean) => {
         expect(b).toBeTruthy();
         done();
@@ -180,6 +184,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should be false for state without pods', function(this: Context, done: DoneFn) {
+      initialStatsObservable.complete();
       podsObservable.next({ total: 0, pods: [] });
       this.testedDirective.hasPods.subscribe((b: boolean) => {
         expect(b).toBeFalsy();
@@ -189,6 +194,10 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   describe('initial data', () => {
+    beforeEach(function(this: Context) {
+      initialStatsObservable.next(initialStats);
+    });
+
     it('should request the last 15 minutes worth of deployments data on chart initialization', () => {
       expect(mockSvc.getDeploymentTimeConstrainedStats).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment', DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION);
     });
@@ -220,6 +229,11 @@ describe('DeploymentDetailsComponent', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
+      initialStatsObservable.next(initialStats);
+      initialStatsObservable.complete();
+
+      this.detectChanges();
+
       const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const cpuChart: DebugElement = charts[0];
       de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
@@ -246,6 +260,11 @@ describe('DeploymentDetailsComponent', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
+      initialStatsObservable.next(initialStats);
+      initialStatsObservable.complete();
+
+      this.detectChanges();
+
       const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const memoryChart: DebugElement = charts[1];
       de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));
@@ -269,6 +288,11 @@ describe('DeploymentDetailsComponent', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
+      initialStatsObservable.next(initialStats);
+      initialStatsObservable.complete();
+
+      this.detectChanges();
+
       const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const networkChart: DebugElement = charts[2];
       de = networkChart.query(By.directive(FakeDeploymentGraphLabelComponent));
@@ -292,6 +316,13 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   describe('charts', () => {
+    beforeEach(function(this: Context) {
+      initialStatsObservable.next(initialStats);
+      initialStatsObservable.complete();
+
+      this.detectChanges();
+    });
+
     it('by default should be the default data duration divided by the polling rate', function(this: Context) {
       const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
       const expectedDefaultElements: number =
