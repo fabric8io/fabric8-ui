@@ -157,11 +157,14 @@ export class DeploymentDetailsComponent {
           this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name)
             .subscribe((stat: NetworkStat) => {
               const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
-              this.netVal = round(netTotal.used, 1);
               this.netUnits = netTotal.units;
+              const decimals = this.netUnits === 'bytes' ? 0 : 1;
+              this.netVal = round(netTotal.used, decimals);
+              const sent = round(stat.sent.raw, decimals);
+              const received = round(stat.received.raw, decimals);
               this.netData.xData.push(+new Date());
-              this.netData.yData[0].push(stat.sent.raw);
-              this.netData.yData[1].push(stat.received.raw);
+              this.netData.yData[0].push(sent);
+              this.netData.yData[1].push(received);
               this.trimLinechartData(this.netData);
             })
         );
@@ -219,11 +222,14 @@ export class DeploymentDetailsComponent {
         });
         s.network.forEach((e: TimestampedNetworkStats) => {
           const netTotal: ScaledNetworkStat = new ScaledNetworkStat(e.data.received.raw + e.data.sent.raw);
-          this.netVal = round(netTotal.used, 1);
           this.netUnits = netTotal.units;
+          const decimals = this.netUnits === 'bytes' ? 0 : 1;
+          this.netVal = round(netTotal.used, decimals);
+          const sent = round(e.data.sent.raw, decimals);
+          const received = round(e.data.received.raw, decimals);
           this.netData.xData.push(e.timestamp);
-          this.netData.yData[0].push(e.data.sent.raw);
-          this.netData.yData[1].push(e.data.received.raw);
+          this.netData.yData[0].push(sent);
+          this.netData.yData[1].push(received);
         });
       }, (error: any) => {}, () => { latch.next(); latch.complete(); })
     );
