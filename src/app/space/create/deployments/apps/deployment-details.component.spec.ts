@@ -109,13 +109,13 @@ describe('DeploymentDetailsComponent', () => {
   const mb = Math.pow(1024, 2);
   const initialStats: TimeConstrainedStats = {
     cpu: [
-      { data: { used: 2, quota: 2 }, timestamp: 1234567891011 }
+      { used: 2, quota: 2, timestamp: 1234567891011 }
     ],
     memory: [
-      { data: { used: 2, quota: 4, units: 'GB' }, timestamp: 1234567891011 }
+      { used: 2, quota: 4, units: 'GB', timestamp: 1234567891011 }
     ],
     network: [
-      { data: { sent: new ScaledNetworkStat(2 * mb), received: new ScaledNetworkStat(1 * mb) }, timestamp: 1234567891011 }
+      { sent: new ScaledNetworkStat(2 * mb, 1234567891011), received: new ScaledNetworkStat(1 * mb, 1234567891011) }
     ]
   };
 

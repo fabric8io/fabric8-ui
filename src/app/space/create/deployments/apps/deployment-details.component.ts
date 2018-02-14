@@ -27,10 +27,7 @@ import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   DeploymentsService,
   NetworkStat,
-  TimeConstrainedStats,
-  TimestampedCpuStats,
-  TimestampedMemoryStats,
-  TimestampedNetworkStats
+  TimeConstrainedStats
 } from '../services/deployments.service';
 
 import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
@@ -75,18 +72,27 @@ export class DeploymentDetailsComponent {
 
   cpuConfig: SparklineConfig = {
     // Seperate charts must have unique IDs, otherwise only one will appear
-    chartId: uniqueId('cpu-chart')
+    chartId: uniqueId('cpu-chart'),
+    axis: {
+      type: 'timeseries'
+    }
   };
 
   memConfig: SparklineConfig = {
     // Seperate charts must have unique IDs, otherwise only one will appear
-    chartId: uniqueId('mem-chart')
+    chartId: uniqueId('mem-chart'),
+    axis: {
+      type: 'timeseries'
+    }
   };
 
   netConfig: DeploymentsLinechartConfig = {
     chartId: uniqueId('net-chart'),
     units: 'bytes',
-    showXAxis: true
+    showXAxis: true,
+    axis: {
+      type: 'timeseries'
+    }
   };
 
   hasPods: Subject<boolean> = new ReplaySubject<boolean>(1);
@@ -139,7 +145,7 @@ export class DeploymentDetailsComponent {
           this.cpuMax = stat.quota;
           this.cpuData.total = stat.quota;
           this.cpuData.yData.push(stat.used);
-          this.cpuData.xData.push(this.cpuTime++);
+          this.cpuData.xData.push(stat.timestamp);
           this.trimSparklineData(this.cpuData);
         }));
 
@@ -148,7 +154,7 @@ export class DeploymentDetailsComponent {
           this.memMax = stat.quota;
           this.memData.total = stat.quota;
           this.memData.yData.push(stat.used);
-          this.memData.xData.push(this.memTime++);
+          this.memData.xData.push(stat.timestamp);
           this.memUnits = stat.units;
           this.trimSparklineData(this.memData);
         }));
@@ -205,29 +211,29 @@ export class DeploymentDetailsComponent {
     const latch: Subject<void> = new Subject<void>();
     this.subscriptions.push(
       stats.subscribe((s: TimeConstrainedStats) => {
-        s.cpu.forEach((e: TimestampedCpuStats) => {
-          this.cpuVal = e.data.used;
-          this.cpuMax = e.data.quota;
-          this.cpuData.total = e.data.quota;
-          this.cpuData.yData.push(e.data.used);
-          this.cpuData.xData.push(this.cpuTime++);
+        s.cpu.forEach((e: CpuStat) => {
+          this.cpuVal = e.used;
+          this.cpuMax = e.quota;
+          this.cpuData.total = e.quota;
+          this.cpuData.yData.push(e.used);
+          this.cpuData.xData.push(e.timestamp);
         });
-        s.memory.forEach((e: TimestampedMemoryStats) => {
-          this.memVal = e.data.used;
-          this.memMax = e.data.quota;
-          this.memUnits = e.data.units;
-          this.memData.total = e.data.quota;
-          this.memData.yData.push(e.data.used);
-          this.memData.xData.push(this.memTime++);
+        s.memory.forEach((e: MemoryStat) => {
+          this.memVal = e.used;
+          this.memMax = e.quota;
+          this.memUnits = e.units;
+          this.memData.total = e.quota;
+          this.memData.yData.push(e.used);
+          this.memData.xData.push(e.timestamp);
         });
-        s.network.forEach((e: TimestampedNetworkStats) => {
-          const netTotal: ScaledNetworkStat = new ScaledNetworkStat(e.data.received.raw + e.data.sent.raw);
+        s.network.forEach((e: NetworkStat) => {
+          const netTotal: ScaledNetworkStat = new ScaledNetworkStat(e.received.raw + e.sent.raw);
           this.netUnits = netTotal.units;
           const decimals = this.netUnits === 'bytes' ? 0 : 1;
           this.netVal = round(netTotal.used, decimals);
-          const sent = round(e.data.sent.raw, decimals);
-          const received = round(e.data.received.raw, decimals);
-          this.netData.xData.push(e.timestamp);
+          const sent = round(e.sent.raw, decimals);
+          const received = round(e.received.raw, decimals);
+          this.netData.xData.push(e.sent.timestamp);
           this.netData.yData[0].push(sent);
           this.netData.yData[1].push(received);
         });

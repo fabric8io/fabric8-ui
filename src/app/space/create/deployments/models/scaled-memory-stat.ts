@@ -13,7 +13,8 @@ export class ScaledMemoryStat implements MemoryStat {
 
   constructor(
     public readonly used: number,
-    public readonly quota: number
+    public readonly quota: number,
+    public readonly timestamp?: number
   ) {
     let scale = 0;
     if (this.used !== 0) {

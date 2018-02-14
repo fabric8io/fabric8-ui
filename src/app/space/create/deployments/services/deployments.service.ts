@@ -157,25 +157,10 @@ export interface MultiTimeseriesData {
   end: number;
 }
 
-export interface TimestampedCpuStats {
-  data: CpuStat;
-  timestamp: number;
-}
-
-export interface TimestampedMemoryStats {
-  data: ScaledMemoryStat;
-  timestamp: number;
-}
-
-export interface TimestampedNetworkStats {
-  data: { sent: ScaledNetworkStat, received: ScaledNetworkStat };
-  timestamp: number;
-}
-
 export interface TimeConstrainedStats {
-  cpu: TimestampedCpuStats[];
-  memory: TimestampedMemoryStats[];
-  network: TimestampedNetworkStats[];
+  cpu: CpuStat[];
+  memory: MemoryStat[];
+  network: NetworkStat[];
 }
 
 export interface CoresSeries extends SeriesData { }
@@ -312,9 +297,7 @@ export class DeploymentsService implements OnDestroy {
     const quota = this.getEnvironmentCpuStat(spaceId, environmentName)
       .map((stat: CpuStat) => stat.quota)
       .distinctUntilChanged();
-
-      // TODO: propagate CoresSeries timestamp to caller
-      return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota }));
+      return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota, timestamp: series.time } as CpuStat));
   }
 
   getDeploymentMemoryStat(spaceId: string, applicationName: string, environmentName: string): Observable<MemoryStat> {
@@ -324,19 +307,16 @@ export class DeploymentsService implements OnDestroy {
     const quota = this.getEnvironment(spaceId, environmentName)
       .map((env: EnvironmentStat) => env.attributes.quota.memory.quota)
       .distinctUntilChanged();
-
-      // TODO: propagate MemorySeries timestamp to caller
-      return Observable.combineLatest(series, quota, (series: MemorySeries, quota: number) => new ScaledMemoryStat(series.value, quota));
+      return Observable.combineLatest(series, quota, (series: MemorySeries, quota: number) => new ScaledMemoryStat(series.value, quota, series.time) as MemoryStat);
   }
 
   getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
-    // TODO: propagate timestamps to caller
     return this.getTimeseriesData(spaceId, applicationId, environmentName)
       .filter((t: TimeseriesData) => t && has(t, 'net_tx') && has(t, 'net_rx'))
       .map((t: TimeseriesData) =>
         ({
-          sent: new ScaledNetworkStat(t.net_tx.value),
-          received: new ScaledNetworkStat(t.net_rx.value)
+          sent: new ScaledNetworkStat(t.net_tx.value, t.net_tx.time),
+          received: new ScaledNetworkStat(t.net_rx.value, t.net_rx.time)
         } as NetworkStat)
       );
   }
@@ -350,7 +330,7 @@ export class DeploymentsService implements OnDestroy {
     let cpuStats = Observable.combineLatest(coresSeries, cpuQuota, (coresSeries: CoresSeries[], cpuQuota: number) => {
       let arr = [];
       for (let i = 0; i < coresSeries.length; i++) {
-        arr.push({ data: { used: coresSeries[i].value, quota: cpuQuota }, timestamp: coresSeries[i].time });
+        arr.push({ used: coresSeries[i].value, quota: cpuQuota, timestamp: coresSeries[i].time } as CpuStat);
       }
       return arr;
     });
@@ -360,7 +340,7 @@ export class DeploymentsService implements OnDestroy {
     let memStats = Observable.combineLatest(memSeries, memQuota, (memSeries: MemorySeries[], memQuota: number) => {
       let arr = [];
       for (let i = 0; i < memSeries.length; i++) {
-        arr.push({ data: new ScaledMemoryStat(memSeries[i].value, memQuota), timestamp: memSeries[i].time });
+        arr.push(new ScaledMemoryStat(memSeries[i].value, memQuota, memSeries[i].time));
       }
       return arr;
     });
@@ -370,14 +350,14 @@ export class DeploymentsService implements OnDestroy {
     let networkStats: Observable<NetworkStat[]> = Observable.combineLatest(net_txSeries, net_rxSeries).map((n) => {
       let arr = [];
       for (let i = 0; i < n[0].length; i++) {
-        arr.push({ data: { sent: new ScaledNetworkStat(n[0][i].value), received: new ScaledNetworkStat(n[1][i].value) }, timestamp: n[0][i].time });
+        arr.push({ sent: new ScaledNetworkStat(n[0][i].value, n[0][i].time), received: new ScaledNetworkStat(n[1][i].value, n[1][i].time) } as NetworkStat);
       }
       return arr;
     });
     return Observable.combineLatest(cpuStats, memStats, networkStats, (
-        cpuStats: TimestampedCpuStats[],
-        memStats: TimestampedMemoryStats[],
-        networkStats: TimestampedNetworkStats[]
+        cpuStats: CpuStat[],
+        memStats: MemoryStat[],
+        networkStats: NetworkStat[]
       ) => ({ cpu: cpuStats, memory: memStats, network: networkStats })
     );
   }

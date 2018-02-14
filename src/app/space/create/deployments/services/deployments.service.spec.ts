@@ -933,7 +933,8 @@ describe('DeploymentsService', () => {
             quota: {
               cpucores: {
                 quota: 3,
-                used: 4
+                used: 4,
+                timestamp: 1
               }
             }
           }
@@ -962,7 +963,7 @@ describe('DeploymentsService', () => {
 
       svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env')
         .subscribe((stat: CpuStat) => {
-          expect(stat).toEqual({ used: 2, quota: 3 });
+          expect(stat).toEqual({ used: 2, quota: 3, timestamp: 1 });
           subscription.unsubscribe();
           done();
         });
@@ -1008,7 +1009,8 @@ describe('DeploymentsService', () => {
             quota: {
               memory: {
                 quota: 3,
-                used: 4
+                used: 4,
+                timestamp: 1
               }
             }
           }
@@ -1037,7 +1039,7 @@ describe('DeploymentsService', () => {
 
       svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env')
         .subscribe((stat: MemoryStat) => {
-          expect(stat).toEqual(new ScaledMemoryStat(2, 3));
+          expect(stat).toEqual(new ScaledMemoryStat(2, 3, 1));
           subscription.unsubscribe();
           done();
         });
@@ -1050,11 +1052,11 @@ describe('DeploymentsService', () => {
         data: {
           attributes: {
             net_tx: {
-              time: 0,
+              time: 1,
               value: 1.7
             },
             net_rx: {
-              time: 2,
+              time: 1,
               value: 3.1
             }
           }
@@ -1102,7 +1104,7 @@ describe('DeploymentsService', () => {
 
       svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env')
         .subscribe((stat: NetworkStat) => {
-          expect(stat).toEqual({ sent: new ScaledNetworkStat(1.7), received: new ScaledNetworkStat(3.1) });
+          expect(stat).toEqual({ sent: new ScaledNetworkStat(1.7, 1), received: new ScaledNetworkStat(3.1, 1) });
           subscription.unsubscribe();
           done();
         });
@@ -1161,16 +1163,16 @@ describe('DeploymentsService', () => {
       };
       const expectedResponse: TimeConstrainedStats = {
         cpu: [
-          { data: { used: 1, quota: 2 }, timestamp: 1 },
-          { data: { used: 2, quota: 2 }, timestamp: 2 }
+          { used: 1, quota: 2, timestamp: 1 },
+          { used: 2, quota: 2, timestamp: 2 }
         ],
         memory: [
-          { data: new ScaledMemoryStat(2, 4), timestamp: 1 },
-          { data: new ScaledMemoryStat(3, 4), timestamp: 2 }
+          new ScaledMemoryStat(2, 4, 1),
+          new ScaledMemoryStat(3, 4, 2)
         ],
         network: [
-          { data: { sent: new ScaledNetworkStat(3), received: new ScaledNetworkStat(4) }, timestamp: 1 },
-          { data: { sent: new ScaledNetworkStat(4), received: new ScaledNetworkStat(5) }, timestamp: 2 }
+          { sent: new ScaledNetworkStat(3, 1), received: new ScaledNetworkStat(4, 1) },
+          { sent: new ScaledNetworkStat(4, 2), received: new ScaledNetworkStat(5, 2) }
         ]
       };
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
