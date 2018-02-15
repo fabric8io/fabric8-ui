@@ -2,4 +2,7 @@
     <div *ngIf="content?.infoEntries" class="ana-summary-metric">
         <ana-summary-info *ngFor="let entry of content?.infoEntries" [entry]="entry" ></ana-summary-info>
     </div>
+    <div *ngIf="content?.infoEntries?.length === 0 && cardType === 'security'" class="no-security-message">
+        No securities issues found.
+    </div>
 </div>

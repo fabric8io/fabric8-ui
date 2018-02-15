@@ -11,4 +11,5 @@ import { MReportSummaryContent } from '../../../models/ui.model';
 })
 export class ReportSummaryContentComponent {
     @Input() content: MReportSummaryContent;
+    @Input() cardType: string;
 }

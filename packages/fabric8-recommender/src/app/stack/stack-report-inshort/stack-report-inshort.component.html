@@ -20,7 +20,7 @@
               [repoInfo]="repoInfo" [stackResponse]="result && result" [gatewayConfig]="gatewayConfig && gatewayConfig" [stack]="stackUrl"></stack-details>
           </div>
         </div>
-        <analytics-report-summary [report]="tabz.content" [isFromShortReport]="'true'"></analytics-report-summary>
+        <analytics-report-summary [report]="tabz.content" [isFromShortReport]="'true'" (onCardClick)="handleCardClick($event)"></analytics-report-summary>
         <!-- Stack Report Design Revamp - END -->
       </tab>
     </tabset>

@@ -30,6 +30,7 @@ export class ReportSummaryCardComponent implements AfterContentInit {
     public reportSummaryContent: MReportSummaryContent;
     public reportSummaryTitle: MReportSummaryTitle;
     public reportSummaryDescription: string;
+    public identifier: string;
 
     ngOnInit() {
         this.paintView();
@@ -58,6 +59,7 @@ export class ReportSummaryCardComponent implements AfterContentInit {
                 this.reportSummaryDescription = this.card.reportSummaryDescription;
             }
             this.reportSummaryContent = this.card.reportSummaryContent;
+            this.identifier = this.card.identifier;
         }
     }
 

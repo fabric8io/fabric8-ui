@@ -1,10 +1,11 @@
-import { EventEmitter, Output, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
 @Injectable()
 export class CommonService {
-  @Output() inshortCardClicked = new EventEmitter < any > ();
+  inshortCardClicked = new Subject < any > ();
 
   shortCardClicked() {
-    this.inshortCardClicked.emit(true);
+    this.inshortCardClicked.next(true);
   }
 }
