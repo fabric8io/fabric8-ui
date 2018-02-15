@@ -15,7 +15,6 @@ export class EmailVerificationComponent implements OnInit {
   private message: string = 'Your e-mail has been confirmed.';
   private secMessage: string = 'Thank you for validating your e-mail address.' +
   'You can now continue to use Openshift.io';
-  private messageEmoji: string = 'trophy.png';
 
   constructor(
     private route: ActivatedRoute) {}
@@ -28,7 +27,6 @@ export class EmailVerificationComponent implements OnInit {
         this.message = this.route.snapshot.queryParams['error'];
         this.secMessage = 'Your e-mail has already been approved. ' +
         'Click on my profile below to continue.';
-        this.messageEmoji = 'neutralface.png';
       }
     }
   }
