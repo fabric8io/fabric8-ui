@@ -11,7 +11,7 @@ import { ExtProfile, GettingStartedService } from '../../getting-started/service
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
-import { TenentService } from '../services/tenent.service';
+import { TenantService } from '../services/tenant.service';
 
 export enum TenantUpdateStatus {
   NoAction,
@@ -25,7 +25,7 @@ export enum TenantUpdateStatus {
   selector: 'alm-update',
   templateUrl: 'update.component.html',
   styleUrls: ['./update.component.less'],
-  providers: [CopyService, GettingStartedService, GitHubService, TenentService]
+  providers: [CopyService, GettingStartedService, GitHubService, TenantService]
 })
 export class UpdateComponent implements AfterViewInit, OnInit {
   // Required for usage of enums in the template.
@@ -77,7 +77,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
       private providerService: ProviderService,
       private renderer: Renderer2,
       private router: Router,
-      private tenentService: TenentService,
+      private tenantService: TenantService,
       private userService: UserService) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
 
@@ -247,11 +247,11 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * Update tenent
+   * Update tenant
    */
-  updateTenent(): void {
+  updateTenant(): void {
     this.updateTenantStatus = TenantUpdateStatus.Updating;
-    this.subscriptions.push(this.tenentService.updateTenent()
+    this.subscriptions.push(this.tenantService.updateTenant()
       .subscribe(res => {
         if (res.status === 200) {
           this.updateTenantStatus = TenantUpdateStatus.Success;

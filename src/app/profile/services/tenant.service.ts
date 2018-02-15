@@ -10,7 +10,7 @@ import { Codebase } from './codebase';
 import { Workspace, WorkspaceLinks } from './workspace';
 
 @Injectable()
-export class TenentService {
+export class TenantService {
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private userUrl: string;
 
@@ -27,11 +27,11 @@ export class TenentService {
   }
 
   /**
-   * Update tenent
+   * Update tenant
    *
    * @returns {Observable<any>}
    */
-  updateTenent(): Observable<any> {
+  updateTenant(): Observable<any> {
     let url = `${this.userUrl}/services`;
     return this.http
       .patch(url, null, { headers: this.headers })

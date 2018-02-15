@@ -15,7 +15,7 @@ import { GettingStartedService } from '../../getting-started/services/getting-st
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
-import { TenentService } from '../services/tenent.service';
+import { TenantService } from '../services/tenant.service';
 import { UpdateComponent } from './update.component';
 
 describe('UpdateComponent', () => {
@@ -30,7 +30,7 @@ describe('UpdateComponent', () => {
   let mockProviderService: any = jasmine.createSpyObj('ProviderService', ['getGitHubStatus']);
   let mockRenderer: any = jasmine.createSpy('Renderer2');
   let mockRouter: any = jasmine.createSpy('Router');
-  let mockTenentService: any = jasmine.createSpy('TenentService');
+  let mockTenantService: any = jasmine.createSpy('TenantService');
   let mockUserService: any = jasmine.createSpy('UserService');
   let mockLogger: any = jasmine.createSpy('Logger');
 
@@ -52,7 +52,7 @@ describe('UpdateComponent', () => {
         { provide: ProviderService, useValue: mockProviderService },
         { provide: Renderer2, useValue: mockRenderer },
         { provide: Router, useValue: mockRouter },
-        { provide: TenentService, useValue: mockTenentService },
+        { provide: TenantService, useValue: mockTenantService },
         { provide: UserService, useValue: mockUserService },
         { provide: Logger, useValue: mockLogger },
         { provide: WIT_API_URL, useValue: 'http://example.com'}

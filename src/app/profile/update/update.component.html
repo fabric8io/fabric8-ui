@@ -179,7 +179,7 @@
         <div class="container-fluid pull-right">
           <div class="row">
             <div class="col">
-              <button class="btn btn-lg btn-default" (click)="updateTenent()" [disabled]="updateTenantStatus === TenantUpdateStatus.Updating">Update Tenant</button>
+              <button class="btn btn-lg btn-default" (click)="updateTenant()" [disabled]="updateTenantStatus === TenantUpdateStatus.Updating">Update Tenant</button>
               <button class="btn btn-lg btn-default" (click)="cleanupTenant()">Reset Environment</button>
             </div>
             <div class="update-tenant-status" *ngIf="updateTenantStatus !== TenantUpdateStatus.NoAction">
