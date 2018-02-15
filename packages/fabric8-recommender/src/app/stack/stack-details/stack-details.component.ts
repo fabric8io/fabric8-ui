@@ -298,7 +298,7 @@ export class StackDetailsComponent implements OnChanges, OnInit {
             this.handleError({
                 message: 'Analysis for your stack is in progress ...',
                 code: data.statusCode,
-                title: 'Updating ...'
+                title: 'Report is getting ready.'
             });
         } else {
             this.handleError({
