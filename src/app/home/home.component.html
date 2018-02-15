@@ -16,14 +16,14 @@
           <div class="col-sm-4 col-lg-4">
             <div class="card-pf-body text-center">
               <div class="card-pf-top-element">
-                <span class="fa fa-search card-pf-icon-circle home-icon"></span>
+                <span class="fa fa-book card-pf-icon-circle home-icon"></span>
               </div>
               <h2 class="card-pf-title home-title">
-                {{brandInformation.name}} information
+                Get Started
               </h2>
               <p class="card-pf-info">
-                <a [href]="brandInformation.moreInfoLink" class="home-banner-link" target="_blank">Learn more</a>
-                about what {{brandInformation.name}} can do for you.
+                <a href="https://docs.openshift.io/getting-started-guide.html" class="home-banner-link" target="_blank">Follow our guide</a>
+                to build your first application.
               </p>
             </div>
           </div>
@@ -43,13 +43,14 @@
           <div class="col-sm-4 col-lg-4">
             <div class="card-pf-body text-center">
               <div class="card-pf-top-element">
-                <span class="pficon pficon-cluster card-pf-icon-circle home-icon"></span>
+                <span class="fa fa-search card-pf-icon-circle home-icon"></span>
               </div>
               <h2 class="card-pf-title home-title">
-                Learn about OpenShift
+                {{brandInformation.name}} information
               </h2>
-              <p class="card-pf-info">See how
-                <a href="https://www.openshift.com/container-platform" class="home-banner-link" target="_blank">containerized development and deployment</a> can help you.
+              <p class="card-pf-info">
+                <a [href]="brandInformation.moreInfoLink" class="home-banner-link" target="_blank">Learn more</a>
+                about what {{brandInformation.name}} can do for you.
               </p>
             </div>
           </div>
