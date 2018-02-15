@@ -6,7 +6,7 @@
           <h3>
             <b>
               <a class="resource-title" (click)="resourcesCollapsed = !resourcesCollapsed">
-                <span class="fa fa-angle-down"></span>&nbsp;&nbsp;Resource Usage
+                <span [ngClass]="resourcesCollapsed ? 'fa fa-angle-right' : 'fa fa-angle-down'"></span>&nbsp;&nbsp;Resource Usage
               </a>
             </b>
           </h3>
