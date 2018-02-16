@@ -24,6 +24,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   private listConfig: ListConfig;
   private areaSubscription: Subscription;
   private selectedAreaId: string;
+  private defaultArea: string;
 
   constructor(
     private contexts: ContextService,
@@ -47,6 +48,7 @@ export class AreasComponent implements OnInit, OnDestroy {
       areas.forEach((area) => {
         if (area.attributes.parent_path == '/') {
           this.selectedAreaId = area.id;
+          this.defaultArea = area.id;
         }
       });
       this.areas = areas;
@@ -62,6 +64,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   }
 
   addChildArea(id: string) {
+    this.selectedAreaId = this.defaultArea;
     if (id) {
       this.selectedAreaId = id;
     }
