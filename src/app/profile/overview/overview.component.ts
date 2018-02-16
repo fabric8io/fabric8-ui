@@ -40,6 +40,9 @@ export class OverviewComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.viewingOwnAccount = this.contextService.viewingOwnContext();
+    if (this.userService.currentLoggedInUser.attributes) {
+      this.context.user = this.userService.currentLoggedInUser;
+    }
   }
 
   ngOnDestroy(): void {

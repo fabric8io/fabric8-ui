@@ -227,11 +227,8 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     profile.featureLevel = this.featureLevel;
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
+      this.userService.currentLoggedInUser = user;
       this.setUserProperties(user);
-      this.userService.loggedInUser.map(loggedInUser => {
-        // make sure the update of profile (deep clone of user) also get the logged-in user updated
-        (loggedInUser.attributes as any).featureLevel = (user.attributes as any).featureLevel;
-      }).publish().connect();
       this.notifications.message({
         message: `Profile updated!`,
         type: NotificationType.SUCCESS
