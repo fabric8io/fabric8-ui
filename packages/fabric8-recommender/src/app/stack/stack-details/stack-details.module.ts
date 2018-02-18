@@ -13,13 +13,14 @@ import { StackDetailsComponent } from './stack-details.component';
 // import {StackLevelModule} from '../stack-level/stack-level.module';
 // import {ComponentLevelModule} from '../component-level/component-level.module';
 import { FeedbackModule } from '../feedback/feedback.module';
-import {PipelineInsightsModule} from '../pipeline-insights/pipeline-insights.module';
+import { PipelineInsightsModule } from '../pipeline-insights/pipeline-insights.module';
 /** New UX */
 
 
 /** Stack Report Revamp - Latest */
 import { ReportSummaryModule } from '../report-summary/report-summary.module';
 import { CardDetailsModule } from '../card-details/card-details.module';
+import { CommonService } from '../utils/common.service';
 /** Stack Report Revamp - Latest */
 
 const revampImports = [
@@ -33,8 +34,6 @@ const revampImports = [
     HttpModule,
     FormsModule,
     ModalModule,
-    // StackLevelModule,
-    // ComponentLevelModule,
     PipelineInsightsModule,
     AccordionModule.forRoot(),
     TabsModule.forRoot(),
@@ -47,7 +46,8 @@ const revampImports = [
     StackDetailsComponent
   ],
   providers: [
-    GlobalConstants
+    GlobalConstants,
+    CommonService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
