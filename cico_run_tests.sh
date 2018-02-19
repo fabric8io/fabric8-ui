@@ -51,6 +51,8 @@ echo "NPM Install starting: $(date) $line"
 # Build almighty-ui
 docker exec fabric8-ui-builder npm install
 echo "NPM Install Complete: $(date) $line"
+echo "Listing NPM dependencies"
+docker exec fabric8-ui-builder npm list
 ## Exec unit tests
 docker exec fabric8-ui-builder ./run_unit_tests.sh
 
