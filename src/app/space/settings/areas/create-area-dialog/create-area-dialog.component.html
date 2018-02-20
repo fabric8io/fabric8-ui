@@ -7,15 +7,16 @@
   <form role="form" #areaForm="ngForm" (ngSubmit)="createArea()" novalidate>
     <div class="form">
       <fieldset class="create-fieldset">
-        <div *ngIf="errors" class="alert alert-danger">
-          <div [hidden]="!errors.uniqueValidationFailure">
+        <div [hidden]="!errors.uniqueValidationFailure" class="alert alert-danger">
+          <div>
             <span class="pficon pficon-error-circle-o"></span>
             <b>Unique Name</b> A unique name is required to add a new area.
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" [ngClass]="{'has-error': errors.uniqueValidationFailure}">
           <label for="name" class="control-label">Name</label>
-          <input #nameInput id="name" name="name" type="text" class="form-control" placeholder="Enter a name for your area" [(ngModel)]="name" required />
+          <input #rawInputField id="name" name="name" type="text" class="form-control" placeholder="Enter a name for your area" [(ngModel)]="name" required />
+          <small [hidden]="!errors.uniqueValidationFailure">Please choose a unique name.</small>
         </div>
         <div class="form-group">
           <label class="control-label">Parent area</label>
