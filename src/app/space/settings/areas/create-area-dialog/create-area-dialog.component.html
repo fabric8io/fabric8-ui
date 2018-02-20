@@ -8,15 +8,18 @@
     <div class="form">
       <fieldset class="create-fieldset">
         <div [hidden]="!errors.uniqueValidationFailure" class="alert alert-danger">
-          <div>
-            <span class="pficon pficon-error-circle-o"></span>
-            <b>Unique Name</b> A unique name is required to add a new area.
-          </div>
+          <span class="pficon pficon-error-circle-o"></span>
+          <b>Unique Name</b> A unique name is required to add a new area.
         </div>
-        <div class="form-group" [ngClass]="{'has-error': errors.uniqueValidationFailure}">
+        <div [hidden]="!(inputModel.hasError('required')) || inputModel.pristine" class="alert alert-danger">
+          <span class="pficon pficon-error-circle-o"></span>
+          <b>Missing name</b> A name is required to add a new area.
+        </div>
+        <div class="form-group" [ngClass]="{'has-error': errors.uniqueValidationFailure || !inputModel.pristine && !inputModel.valid}">
           <label for="name" class="control-label">Name</label>
-          <input #rawInputField id="name" name="name" type="text" class="form-control" placeholder="Enter a name for your area" [(ngModel)]="name" required />
+          <input #rawInputField #inputModel="ngModel" id="name" name="name" type="text" class="form-control" placeholder="Enter a name for your area" [(ngModel)]="name" required />
           <small [hidden]="!errors.uniqueValidationFailure">Please choose a unique name.</small>
+          <small [hidden]="!(inputModel.hasError('required')) || inputModel.pristine">Please enter a name.</small>
         </div>
         <div class="form-group">
           <label class="control-label">Parent area</label>
@@ -26,7 +29,6 @@
         </div>
       </fieldset>
     </div>
-
     <div class="modal-footer">
       <div class="create-footer">
         <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
@@ -35,4 +37,3 @@
     </div>
   </form>
 </div>
-

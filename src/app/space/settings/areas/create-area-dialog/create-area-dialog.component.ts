@@ -25,6 +25,7 @@ export class CreateAreaDialogComponent implements OnInit {
   @ViewChild('areaForm') areaForm: NgForm;
 
   @ViewChild('rawInputField') rawInputField: ElementRef;
+  @ViewChild('inputModel') inputModel: NgModel;
 
   private context: Context;
   private name: string;
@@ -54,11 +55,11 @@ export class CreateAreaDialogComponent implements OnInit {
   }
 
   clearField() {
-    this.areaForm.form.controls['name'].reset();
+    this.inputModel.reset();
   }
 
   resetErrors() {
-    this.errors = null;
+    this.errors = {uniqueValidationFailure: false};
   }
 
   createArea() {
