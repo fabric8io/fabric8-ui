@@ -1,5 +1,5 @@
 <ng-container *ngIf="active">
-  <div class="card-pf" (click)="toggleCollapsed()">
+  <div class="card-pf" (click)="toggleCollapsed($event)">
     <div class="card-pf-body">
       <div class="row mini-card-content">
         <div class="col-sm-2">
@@ -12,9 +12,9 @@
           <span id="versionLabel">{{ version | async }}</span>
         </div>
         <div class="col-sm-2">
-          <div class="dropdown-kebab-pf dropdown" (click)="$event.stopPropagation()" dropdown>
-            <button class="btn btn-link pull-right dropdown-toggle" id="kebab" type="button" aria-haspopup="true" aria-expanded="true"
-              data-toggle="dropdown" dropdownToggle>
+          <div class="dropdown-kebab-pf dropdown" (click)="$event.preventDefault()" dropdown>
+            <button class="btn btn-link pull-right dropdown-toggle" id="kebab"
+              type="button" aria-haspopup="true" aria-expanded="true" dropdownToggle>
               <span class="fa fa-ellipsis-v"></span>
             </button>
             <ul class="dropdown-menu-right dropdown-menu deployment-dropdown" aria-labelledby="kebab" role="menu" *dropdownMenu>
@@ -38,7 +38,7 @@
           </div>
         </div>
       </div>
-      <deployment-details (click)="$event.stopPropagation()" [collapsed]="collapsed" [active]="detailsActive"
+      <deployment-details (click)="$event.preventDefault()" [collapsed]="collapsed" [active]="detailsActive"
         [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId"></deployment-details>
     </div>
   </div>

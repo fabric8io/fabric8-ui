@@ -102,7 +102,10 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     }
   }
 
-  toggleCollapsed(): void {
+  toggleCollapsed(event: Event): void {
+    if (event.defaultPrevented) {
+      return;
+    }
     this.collapsed = !this.collapsed;
     if (!this.collapsed) {
       this.detailsActive = true;
