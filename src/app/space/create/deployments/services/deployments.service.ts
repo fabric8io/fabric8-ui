@@ -189,6 +189,9 @@ export class DeploymentsService implements OnDestroy {
   static readonly INITIAL_UPDATE_DELAY: number = 0;
   static readonly POLL_RATE_MS: number = 60000;
 
+  static readonly FRONT_LOAD_SAMPLES: number = 15;
+  static readonly FRONT_LOAD_WINDOW_WIDTH: number = DeploymentsService.FRONT_LOAD_SAMPLES * DeploymentsService.POLL_RATE_MS;
+
   readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
   readonly apiUrl: string;
 
@@ -437,11 +440,10 @@ export class DeploymentsService implements OnDestroy {
         }
         const key = `${spaceId}:${applicationId}:${environmentName}`;
         if (!this.timeseriesSubjects.has(key)) {
-          const subject = new ReplaySubject<TimeseriesData>(15);
+          const subject = new ReplaySubject<TimeseriesData>(DeploymentsService.FRONT_LOAD_SAMPLES);
 
-          const frontLoadWindowWidth = 15 * 60 * 1000;
           const now = +Date.now();
-          const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, applicationId, environmentName, now - frontLoadWindowWidth, now);
+          const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, applicationId, environmentName, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now);
 
           const polledUpdates = this.getStreamingTimeseriesData(spaceId, applicationId, environmentName);
 
