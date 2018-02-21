@@ -1,10 +1,5 @@
 import { ErrorHandler } from '@angular/core';
-import {
-  discardPeriodicTasks,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import {
   HttpModule,
@@ -23,6 +18,7 @@ import { createMock } from 'testing/mock';
 
 import {
   Observable,
+  Subject,
   Subscription
 } from 'rxjs';
 
@@ -30,20 +26,15 @@ import { Logger } from 'ngx-base';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 
-import {
-  AuthenticationService,
-  UserService
-} from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
-  Application,
   DeploymentsService,
   NetworkStat,
   TIMER_TOKEN
@@ -60,6 +51,7 @@ interface MockHttpParams<U> {
 
 describe('DeploymentsService', () => {
 
+  const serviceUpdater: Subject<void> = new Subject<void>();
   let mockBackend: MockBackend;
   let mockLogger: jasmine.SpyObj<Logger>;
   let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
@@ -97,9 +89,7 @@ describe('DeploymentsService', () => {
         },
         {
           provide: TIMER_TOKEN,
-          useValue: Observable
-            .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
-            .share()
+          useValue: serviceUpdater
         },
         DeploymentsService
       ]
@@ -149,6 +139,7 @@ describe('DeploymentsService', () => {
         );
       }
     });
+    serviceUpdater.next();
   }
 
   describe('#getApplications', () => {
@@ -989,6 +980,7 @@ describe('DeploymentsService', () => {
           expect(stat).toEqual({ used: 2, quota: 3, timestamp: 2 });
           done();
         });
+      serviceUpdater.next();
     });
   });
 
@@ -1077,6 +1069,7 @@ describe('DeploymentsService', () => {
           subscription.unsubscribe();
           done();
         });
+      serviceUpdater.next();
     });
   });
 
@@ -1151,6 +1144,7 @@ describe('DeploymentsService', () => {
           subscription.unsubscribe();
           done();
         });
+      serviceUpdater.next();
     });
   });
 
