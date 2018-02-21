@@ -195,8 +195,8 @@ export class DeploymentsService implements OnDestroy {
   static readonly FRONT_LOAD_SAMPLES: number = 15;
   static readonly FRONT_LOAD_WINDOW_WIDTH: number = DeploymentsService.FRONT_LOAD_SAMPLES * DeploymentsService.POLL_RATE_MS;
 
-  readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
-  readonly apiUrl: string;
+  private readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
+  private readonly apiUrl: string;
 
   private readonly appsObservables: Map<string, Observable<Application[]>> = new Map<string, Observable<Application[]>>();
   private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
@@ -205,12 +205,12 @@ export class DeploymentsService implements OnDestroy {
   private readonly serviceSubscriptions: Subscription[] = [];
 
   constructor(
-    public http: Http,
-    public auth: AuthenticationService,
-    public logger: Logger,
-    public errorHandler: ErrorHandler,
-    public notifications: NotificationsService,
-    @Inject(WIT_API_URL) witUrl: string,
+    private readonly http: Http,
+    private readonly auth: AuthenticationService,
+    private readonly logger: Logger,
+    private readonly errorHandler: ErrorHandler,
+    private readonly notifications: NotificationsService,
+    @Inject(WIT_API_URL) private readonly witUrl: string,
     @Inject(TIMER_TOKEN) private readonly pollTimer: Observable<void>
   ) {
     if (this.auth.getToken() != null) {
