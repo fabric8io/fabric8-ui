@@ -16,6 +16,7 @@ import {
 import {
   Observable,
   ReplaySubject,
+  Subject,
   Subscription
 } from 'rxjs';
 
@@ -169,12 +170,6 @@ export interface MultiTimeseriesData {
   end: number;
 }
 
-export interface TimeConstrainedStats {
-  cpu: CpuStat[];
-  memory: MemoryStat[];
-  network: NetworkStat[];
-}
-
 export interface CoresSeries extends SeriesData { }
 
 export interface MemorySeries extends SeriesData { }
@@ -194,19 +189,18 @@ export class DeploymentsService implements OnDestroy {
   static readonly INITIAL_UPDATE_DELAY: number = 0;
   static readonly POLL_RATE_MS: number = 60000;
 
-  headers: Headers = new Headers({ 'Content-Type': 'application/json' });
-  apiUrl: string;
+  readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
+  readonly apiUrl: string;
 
-  private readonly appsObservables = new Map<string, Observable<Application[]>>();
-  private readonly envsObservables = new Map<string, Observable<EnvironmentStat[]>>();
-  private readonly timeseriesObservables = new Map<string, Observable<TimeseriesData>>();
-  private readonly multiTimeseriesObservables = new Map<string, Observable<MultiTimeseriesData>>();
+  private readonly appsObservables: Map<string, Observable<Application[]>> = new Map<string, Observable<Application[]>>();
+  private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
+  private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData>> = new Map<string, Subject<TimeseriesData>>();
 
   private readonly pollTimer = Observable
     .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
     .share();
 
-  private serviceSubscriptions: Subscription[] = [];
+  private readonly serviceSubscriptions: Subscription[] = [];
 
   constructor(
     public http: Http,
@@ -351,47 +345,6 @@ export class DeploymentsService implements OnDestroy {
       );
   }
 
-  getDeploymentTimeConstrainedStats(spaceId: string, applicationId: string, environmentName: string, elapsedTime: number, endTime: number = Date.now()): Observable<TimeConstrainedStats> {
-    const startTime = endTime - elapsedTime;
-    const series = this.getTimeConstrainedTimeseriesData(spaceId, applicationId, environmentName, startTime, endTime);
-    // Process CPU Stats
-    const coresSeries: Observable<CoresSeries[]> = series.map((t: MultiTimeseriesData) => t.cores);
-    const cpuQuota = this.getEnvironmentCpuStat(spaceId, environmentName).map((stat: CpuStat) => stat.quota);
-    let cpuStats = Observable.combineLatest(coresSeries, cpuQuota, (coresSeries: CoresSeries[], cpuQuota: number) => {
-      let arr = [];
-      for (let i = 0; i < coresSeries.length; i++) {
-        arr.push({ used: coresSeries[i].value, quota: cpuQuota, timestamp: coresSeries[i].time } as CpuStat);
-      }
-      return arr;
-    });
-    // Process Memory Stats
-    const memSeries: Observable<MemorySeries[]> = series.map((t: MultiTimeseriesData) => t.memory);
-    const memQuota = this.getEnvironment(spaceId, environmentName).map((env: EnvironmentStat) => env.attributes.quota.memory.quota);
-    let memStats = Observable.combineLatest(memSeries, memQuota, (memSeries: MemorySeries[], memQuota: number) => {
-      let arr = [];
-      for (let i = 0; i < memSeries.length; i++) {
-        arr.push(new ScaledMemoryStat(memSeries[i].value, memQuota, memSeries[i].time));
-      }
-      return arr;
-    });
-    // Process Network Stats
-    const net_txSeries: Observable<NetworkSentSeries[]> = series.map((t: MultiTimeseriesData) => t.net_tx);
-    const net_rxSeries: Observable<NetworkReceivedSeries[]> = series.map((t: MultiTimeseriesData) => t.net_rx);
-    let networkStats: Observable<NetworkStat[]> = Observable.combineLatest(net_txSeries, net_rxSeries).map((n) => {
-      let arr = [];
-      for (let i = 0; i < n[0].length; i++) {
-        arr.push({ sent: new ScaledNetworkStat(n[0][i].value, n[0][i].time), received: new ScaledNetworkStat(n[1][i].value, n[1][i].time) } as NetworkStat);
-      }
-      return arr;
-    });
-    return Observable.combineLatest(cpuStats, memStats, networkStats, (
-        cpuStats: CpuStat[],
-        memStats: MemoryStat[],
-        networkStats: NetworkStat[]
-      ) => ({ cpu: cpuStats, memory: memStats, network: networkStats })
-    );
-  }
-
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
     return this.getEnvironment(spaceId, environmentName)
       .map((env: EnvironmentStat) => env.attributes.quota.cpucores);
@@ -479,77 +432,83 @@ export class DeploymentsService implements OnDestroy {
   private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
     return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
       .flatMap((deployed: boolean) => {
-        if (deployed) {
-          const key = `${spaceId}:${applicationId}:${environmentName}`;
-          if (!this.timeseriesObservables.has(key)) {
-            const subject = new ReplaySubject<TimeseriesData>(1);
-
-            const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
-            const observable = Observable.concat(Observable.of(0), this.pollTimer)
-              .concatMap(() =>
-                this.http.get(url, { headers: this.headers })
-                  .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes)
-                  .catch((err: Response) => this.handleHttpError(err))
-                  .filter((t: TimeseriesData) => !!t && !isEmpty(t))
-              );
-            this.serviceSubscriptions.push(observable.subscribe(subject));
-            this.timeseriesObservables.set(key, subject);
-          }
-          return this.timeseriesObservables.get(key);
-        } else {
-          const currentTime = +Date.now();
-          const emptyResult: TimeseriesData = {
-            cores: {
-              time: currentTime,
-              value: 0
-            },
-            memory: {
-              time: currentTime,
-              value: 0
-            },
-            net_tx: {
-              time: currentTime,
-              value: 0
-            },
-            net_rx: {
-              time: currentTime,
-              value: 0
-            }
-          };
-          return Observable.of(emptyResult);
+        if (!deployed) {
+          return Observable.never();
         }
+        const key = `${spaceId}:${applicationId}:${environmentName}`;
+        if (!this.timeseriesSubjects.has(key)) {
+          const subject = new ReplaySubject<TimeseriesData>(15);
+
+          const frontLoadWindowWidth = 15 * 60 * 1000;
+          const now = +Date.now();
+          const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, applicationId, environmentName, now - frontLoadWindowWidth, now);
+
+          const polledUpdates = this.getStreamingTimeseriesData(spaceId, applicationId, environmentName);
+
+          const seriesData = Observable.concat(frontLoadedUpdates, polledUpdates);
+          this.serviceSubscriptions.push(seriesData.subscribe(subject));
+          this.timeseriesSubjects.set(key, subject);
+        }
+        return this.timeseriesSubjects.get(key);
       });
   }
 
-  private getTimeConstrainedTimeseriesData(spaceId: string, applicationId: string, environmentName: string, startTime: number, endTime: number): Observable<MultiTimeseriesData> {
+  private getInitialTimeseriesData(spaceId: string, applicationId: string, environmentName: string, startTime: number, endTime: number): Observable<TimeseriesData> {
     return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
-    .flatMap((deployed: boolean) => {
-      if (deployed) {
-        const key = `${spaceId}:${applicationId}:${environmentName}`;
-        if (!this.multiTimeseriesObservables.has(key)) {
-          const subject = new ReplaySubject<MultiTimeseriesData>(1);
-
-          const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/statseries?start=${startTime}&end=${endTime}`;
-          const observable = this.http.get(url, { headers: this.headers })
-            .map((response: Response) => (response.json() as MultiTimeseriesResponse).data)
-            .catch((err: Response) => this.handleHttpError(err))
-            .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t));
-          this.serviceSubscriptions.push(observable.subscribe(subject));
-          this.multiTimeseriesObservables.set(key, subject);
+      .first()
+      .flatMap((deployed: boolean) => {
+        if (!deployed) {
+          return Observable.empty();
         }
-        return this.multiTimeseriesObservables.get(key);
-      } else {
-        const emptyResult: MultiTimeseriesData = {
-          cores: [],
-          memory: [],
-          net_tx: [],
-          net_rx: [],
-          start: startTime,
-          end: endTime
-        };
-        return Observable.of(emptyResult);
+        const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/statseries?start=${startTime}&end=${endTime}`;
+        return this.http.get(url, { headers: this.headers })
+          .map((response: Response) => (response.json() as MultiTimeseriesResponse).data)
+          .catch((err: Response) => this.handleHttpError(err))
+          .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t))
+          .concatMap((t: MultiTimeseriesData) => {
+            const results: TimeseriesData[] = [];
+            const numSamples = t.cores.length;
+            for (let i = 0; i < numSamples; i++) {
+              results.push({
+                cores: {
+                  time: t.cores[i].time,
+                  value: t.cores[i].value
+                },
+                memory: {
+                  time: t.memory[i].time,
+                  value: t.memory[i].value
+                },
+                net_tx: {
+                  time: t.net_tx[i].time,
+                  value: t.net_tx[i].value
+                },
+                net_rx: {
+                  time: t.net_rx[i].time,
+                  value: t.net_rx[i].value
+                }
+              });
+            }
+            return Observable.from(results);
+          });
       }
-    });
+      );
+  }
+
+  private getStreamingTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
+    return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+      .flatMap((deployed: boolean) => {
+        if (!deployed) {
+          return Observable.never();
+        }
+        const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
+        return this.pollTimer
+          .concatMap(() =>
+            this.http.get(url, { headers: this.headers })
+              .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes)
+              .catch((err: Response) => this.handleHttpError(err))
+              .filter((t: TimeseriesData) => !!t && !isEmpty(t))
+          );
+      });
   }
 
   private handleHttpError(response: Response): Observable<any> {

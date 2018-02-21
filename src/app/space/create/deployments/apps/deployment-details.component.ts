@@ -26,8 +26,7 @@ import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   DeploymentsService,
-  NetworkStat,
-  TimeConstrainedStats
+  NetworkStat
 } from '../services/deployments.service';
 
 import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
@@ -101,7 +100,6 @@ export class DeploymentDetailsComponent {
   hasPods: Subject<boolean> = new ReplaySubject<boolean>(1);
   cpuStat: Observable<CpuStat>;
   memStat: Observable<MemoryStat>;
-  initialChartStats: Observable<TimeConstrainedStats>;
   cpuTime: number;
   memTime: number;
   cpuVal: number;
@@ -131,53 +129,49 @@ export class DeploymentDetailsComponent {
     this.cpuTime = 1;
     this.memTime = 1;
 
-    this.initialChartStats =
-      this.deploymentsService.getDeploymentTimeConstrainedStats(this.spaceId, this.applicationId, this.environment.name, DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION)
-        .first();
-
     this.cpuStat =
       this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
 
     this.memStat =
       this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.applicationId, this.environment.name);
 
-    this.processTimeConstrainedStats(this.initialChartStats)
-      .subscribe(() => {
-        this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat) => {
-          this.cpuVal = stat.used;
-          this.cpuMax = stat.quota;
-          this.cpuData.total = stat.quota;
-          this.cpuData.yData.push(stat.used);
-          this.cpuData.xData.push(stat.timestamp);
-          this.trimSparklineData(this.cpuData);
-        }));
+    this.subscriptions.push(
+      this.cpuStat.subscribe((stat: CpuStat) => {
+        this.cpuVal = stat.used;
+        this.cpuMax = stat.quota;
+        this.cpuData.total = stat.quota;
+        this.cpuData.yData.push(stat.used);
+        this.cpuData.xData.push(stat.timestamp);
+        this.trimSparklineData(this.cpuData);
+      })
+    );
 
-        this.subscriptions.push(this.memStat.subscribe((stat: MemoryStat) => {
-          this.memVal = stat.used;
-          this.memMax = stat.quota;
-          this.memData.total = stat.quota;
-          this.memData.yData.push(stat.used);
-          this.memData.xData.push(stat.timestamp);
-          this.memUnits = stat.units;
-          this.trimSparklineData(this.memData);
-        }));
+    this.subscriptions.push(
+      this.memStat.subscribe((stat: MemoryStat) => {
+        this.memVal = stat.used;
+        this.memMax = stat.quota;
+        this.memData.total = stat.quota;
+        this.memData.yData.push(stat.used);
+        this.memData.xData.push(stat.timestamp);
+        this.memUnits = stat.units;
+        this.trimSparklineData(this.memData);
+      })
+    );
 
-        this.subscriptions.push(
-          this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name)
-            .subscribe((stat: NetworkStat) => {
-              const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
-              this.netUnits = netTotal.units;
-              const decimals = this.netUnits === 'bytes' ? 0 : 1;
-              this.netVal = round(netTotal.used, decimals);
-              const sent = round(stat.sent.raw, decimals);
-              const received = round(stat.received.raw, decimals);
-              this.netData.xData.push(+new Date());
-              this.netData.yData[0].push(sent);
-              this.netData.yData[1].push(received);
-              this.trimLinechartData(this.netData);
-            })
-        );
-      });
+    this.subscriptions.push(
+      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name).subscribe((stat: NetworkStat) => {
+        const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
+        this.netUnits = netTotal.units;
+        const decimals = this.netUnits === 'bytes' ? 0 : 1;
+        this.netVal = round(netTotal.used, decimals);
+        const sent = round(stat.sent.raw, decimals);
+        const received = round(stat.received.raw, decimals);
+        this.netData.xData.push(stat.received.timestamp);
+        this.netData.yData[0].push(sent);
+        this.netData.yData[1].push(received);
+        this.trimLinechartData(this.netData);
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -208,41 +202,6 @@ export class DeploymentDetailsComponent {
         yData.splice(1, elementsToRemoveCount);
       });
     }
-  }
-
-  private processTimeConstrainedStats(stats: Observable<TimeConstrainedStats>): Observable<void> {
-    const latch: Subject<void> = new Subject<void>();
-    this.subscriptions.push(
-      stats.subscribe((s: TimeConstrainedStats) => {
-        s.cpu.forEach((e: CpuStat) => {
-          this.cpuVal = e.used;
-          this.cpuMax = e.quota;
-          this.cpuData.total = e.quota;
-          this.cpuData.yData.push(e.used);
-          this.cpuData.xData.push(e.timestamp);
-        });
-        s.memory.forEach((e: MemoryStat) => {
-          this.memVal = e.used;
-          this.memMax = e.quota;
-          this.memUnits = e.units;
-          this.memData.total = e.quota;
-          this.memData.yData.push(e.used);
-          this.memData.xData.push(e.timestamp);
-        });
-        s.network.forEach((e: NetworkStat) => {
-          const netTotal: ScaledNetworkStat = new ScaledNetworkStat(e.received.raw + e.sent.raw);
-          this.netUnits = netTotal.units;
-          const decimals = this.netUnits === 'bytes' ? 0 : 1;
-          this.netVal = round(netTotal.used, decimals);
-          const sent = round(e.sent.raw, decimals);
-          const received = round(e.received.raw, decimals);
-          this.netData.xData.push(e.sent.timestamp);
-          this.netData.yData[0].push(sent);
-          this.netData.yData[1].push(received);
-        });
-      }, (error: any) => {}, () => { latch.next(); latch.complete(); })
-    );
-    return latch;
   }
 
   private getTooltipContents(): any {

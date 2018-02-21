@@ -25,8 +25,7 @@ import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   DeploymentsService,
-  NetworkStat,
-  TimeConstrainedStats
+  NetworkStat
 } from '../services/deployments.service';
 import { DeploymentDetailsComponent } from './deployment-details.component';
 
@@ -104,25 +103,12 @@ describe('DeploymentDetailsComponent', () => {
   let memStatObservable: BehaviorSubject<MemoryStat>;
   let netStatObservable: BehaviorSubject<NetworkStat>;
   let podsObservable: BehaviorSubject<Pods>;
-  let initialStatsObservable: Subject<TimeConstrainedStats>;
-
-  const mb = Math.pow(1024, 2);
-  const initialStats: TimeConstrainedStats = {
-    cpu: [
-      { used: 2, quota: 2, timestamp: 1234567891011 }
-    ],
-    memory: [
-      { used: 2, quota: 4, units: 'GB', timestamp: 1234567891011 }
-    ],
-    network: [
-      { sent: new ScaledNetworkStat(2 * mb, 1234567891011), received: new ScaledNetworkStat(1 * mb, 1234567891011) }
-    ]
-  };
 
   beforeEach(() => {
     cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 } as CpuStat);
     memStatObservable = new BehaviorSubject({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
 
+    const mb = Math.pow(1024, 2);
     netStatObservable = new BehaviorSubject({
       sent: new ScaledNetworkStat(1 * mb),
       received: new ScaledNetworkStat(2 * mb)
@@ -131,8 +117,6 @@ describe('DeploymentDetailsComponent', () => {
     podsObservable = new BehaviorSubject(
       { total: 1, pods: [['Running', 1], ['Starting', 0], ['Stopping', 0]] } as Pods
     );
-
-    initialStatsObservable = new Subject<TimeConstrainedStats>();
 
     mockSvc = createMock(DeploymentsService);
     mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
@@ -144,7 +128,6 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
     mockSvc.getDeploymentNetworkStat.and.returnValue(netStatObservable);
     mockSvc.getPods.and.returnValue(podsObservable);
-    mockSvc.getDeploymentTimeConstrainedStats.and.returnValue(initialStatsObservable);
   });
 
   initContext(DeploymentDetailsComponent, HostComponent, {
@@ -175,16 +158,7 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   describe('hasPods', () => {
-    it('should be true for initial state', function(this: Context, done: DoneFn) {
-      initialStatsObservable.next(initialStats);
-      this.testedDirective.hasPods.subscribe((b: boolean) => {
-        expect(b).toBeTruthy();
-        done();
-      });
-    });
-
     it('should be false for state without pods', function(this: Context, done: DoneFn) {
-      initialStatsObservable.complete();
       podsObservable.next({ total: 0, pods: [] });
       this.testedDirective.hasPods.subscribe((b: boolean) => {
         expect(b).toBeFalsy();
@@ -193,47 +167,10 @@ describe('DeploymentDetailsComponent', () => {
     });
   });
 
-  describe('initial data', () => {
-    beforeEach(function(this: Context) {
-      initialStatsObservable.next(initialStats);
-    });
-
-    it('should request the last 15 minutes worth of deployments data on chart initialization', () => {
-      expect(mockSvc.getDeploymentTimeConstrainedStats).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment', DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION);
-    });
-
-    it('should have cpu information be added first to the cpuData data structure', function(this: Context) {
-      let detailsComponent = this.testedDirective;
-      expect(detailsComponent.cpuData.xData.length).toEqual(3);
-      expect(detailsComponent.cpuData.yData[1]).toEqual(2); // value of 2 from initialStatsObservable
-      expect(detailsComponent.cpuData.yData[2]).toEqual(1); // value of 1 from cpuStatObservable
-    });
-
-    it('should have memory information be added first to the memData data structure', function(this: Context) {
-      let detailsComponent = this.testedDirective;
-      expect(detailsComponent.memData.xData.length).toEqual(3);
-      expect(detailsComponent.memData.yData[1]).toEqual(2); // value of 2 from initialStatsObservable
-      expect(detailsComponent.memData.yData[2]).toEqual(3); // value of 3 from memStatObservable
-    });
-
-    it('should have network information be added first to the netData data structure', function(this: Context) {
-      let detailsComponent = this.testedDirective;
-      let mb = Math.pow(1024, 2);
-      expect(detailsComponent.netData.xData.length).toEqual(3);
-      expect(detailsComponent.netData.yData[0][1]).toEqual(2 * mb); // value of 2 * mb from initialStatsObservable
-      expect(detailsComponent.netData.yData[0][2]).toEqual(1 * mb); // value of 1 * mb from netStatObservable
-    });
-  });
-
   describe('cpu label', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
-      initialStatsObservable.next(initialStats);
-      initialStatsObservable.complete();
-
-      this.detectChanges();
-
       const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const cpuChart: DebugElement = charts[0];
       de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
@@ -260,11 +197,6 @@ describe('DeploymentDetailsComponent', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
-      initialStatsObservable.next(initialStats);
-      initialStatsObservable.complete();
-
-      this.detectChanges();
-
       const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const memoryChart: DebugElement = charts[1];
       de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));
@@ -288,11 +220,6 @@ describe('DeploymentDetailsComponent', () => {
     let de: DebugElement;
 
     beforeEach(function(this: Context) {
-      initialStatsObservable.next(initialStats);
-      initialStatsObservable.complete();
-
-      this.detectChanges();
-
       const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const networkChart: DebugElement = charts[2];
       de = networkChart.query(By.directive(FakeDeploymentGraphLabelComponent));
@@ -316,13 +243,6 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   describe('charts', () => {
-    beforeEach(function(this: Context) {
-      initialStatsObservable.next(initialStats);
-      initialStatsObservable.complete();
-
-      this.detectChanges();
-    });
-
     it('by default should be the default data duration divided by the polling rate', function(this: Context) {
       const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
       const expectedDefaultElements: number =
@@ -377,10 +297,10 @@ describe('DeploymentDetailsComponent', () => {
         this.detectChanges();
         const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
         expect(detailsComponent.netVal).toEqual(301);
-        expect(detailsComponent.netData.xData.length).toEqual(4);
+        expect(detailsComponent.netData.xData.length).toEqual(3);
         expect(detailsComponent.netData.yData.length).toEqual(2);
-        expect(detailsComponent.netData.yData[0][3]).toEqual(101);
-        expect(detailsComponent.netData.yData[1][3]).toEqual(200);
+        expect(detailsComponent.netData.yData[0][2]).toEqual(101);
+        expect(detailsComponent.netData.yData[1][2]).toEqual(200);
       });
 
       it('should be rounded to tenths when units are larger than bytes', function(this: Context) {
@@ -391,10 +311,10 @@ describe('DeploymentDetailsComponent', () => {
         this.detectChanges();
         const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
         expect(detailsComponent.netVal).toEqual(58);
-        expect(detailsComponent.netData.xData.length).toEqual(4);
+        expect(detailsComponent.netData.xData.length).toEqual(3);
         expect(detailsComponent.netData.yData.length).toEqual(2);
-        expect(detailsComponent.netData.yData[0][3]).toEqual(12636.2);
-        expect(detailsComponent.netData.yData[1][3]).toEqual(46766.1);
+        expect(detailsComponent.netData.yData[0][2]).toEqual(12636.2);
+        expect(detailsComponent.netData.yData[1][2]).toEqual(46766.1);
       });
     });
   });
