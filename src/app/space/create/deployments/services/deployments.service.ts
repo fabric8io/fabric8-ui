@@ -2,6 +2,7 @@ import {
   ErrorHandler,
   Inject,
   Injectable,
+  InjectionToken,
   OnDestroy
 } from '@angular/core';
 
@@ -183,6 +184,8 @@ export interface SeriesData {
   value: number;
 }
 
+export const TIMER_TOKEN: InjectionToken<string> = new InjectionToken<string>('DeploymentsServiceTimer');
+
 @Injectable()
 export class DeploymentsService implements OnDestroy {
 
@@ -199,10 +202,6 @@ export class DeploymentsService implements OnDestroy {
   private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
   private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData>> = new Map<string, Subject<TimeseriesData>>();
 
-  private readonly pollTimer = Observable
-    .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
-    .share();
-
   private readonly serviceSubscriptions: Subscription[] = [];
 
   constructor(
@@ -211,7 +210,8 @@ export class DeploymentsService implements OnDestroy {
     public logger: Logger,
     public errorHandler: ErrorHandler,
     public notifications: NotificationsService,
-    @Inject(WIT_API_URL) witUrl: string
+    @Inject(WIT_API_URL) witUrl: string,
+    @Inject(TIMER_TOKEN) private readonly pollTimer: Observable<void>
   ) {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);

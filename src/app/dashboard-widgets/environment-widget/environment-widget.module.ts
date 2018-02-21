@@ -5,11 +5,11 @@ import { RouterModule } from '@angular/router';
 
 import { MomentModule } from 'angular2-moment';
 
+import { DeploymentsModule } from '../../space/create/deployments/deployments.module';
 import { EnvironmentWidgetComponent } from './environment-widget.component';
 
-
 @NgModule({
-  imports: [CommonModule, FormsModule, RouterModule, MomentModule ],
+  imports: [CommonModule, DeploymentsModule, FormsModule, RouterModule, MomentModule],
   declarations: [EnvironmentWidgetComponent],
   exports: [EnvironmentWidgetComponent]
 })

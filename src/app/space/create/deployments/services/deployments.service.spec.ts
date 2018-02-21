@@ -45,7 +45,8 @@ import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   Application,
   DeploymentsService,
-  NetworkStat
+  NetworkStat,
+  TIMER_TOKEN
 } from './deployments.service';
 
 interface MockHttpParams<U> {
@@ -93,6 +94,12 @@ describe('DeploymentsService', () => {
         },
         {
           provide: NotificationsService, useValue: mockNotificationsService
+        },
+        {
+          provide: TIMER_TOKEN,
+          useValue: Observable
+            .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
+            .share()
         },
         DeploymentsService
       ]
