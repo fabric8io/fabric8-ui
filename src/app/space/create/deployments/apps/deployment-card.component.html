@@ -12,12 +12,14 @@
           <span id="versionLabel">{{ version | async }}</span>
         </div>
         <div class="col-sm-2">
-          <div class="dropdown-kebab-pf dropdown" (click)="$event.preventDefault()" dropdown>
+          <div class="dropdown-kebab-pf dropdown" dropdown>
             <button class="btn btn-link pull-right dropdown-toggle" id="kebab"
-              type="button" aria-haspopup="true" aria-expanded="true" dropdownToggle>
+              type="button" aria-haspopup="true" aria-expanded="true" dropdownToggle
+              (click)="$event.preventDefault()">
               <span class="fa fa-ellipsis-v"></span>
             </button>
-            <ul class="dropdown-menu-right dropdown-menu deployment-dropdown" aria-labelledby="kebab" role="menu" *dropdownMenu>
+            <ul class="dropdown-menu-right dropdown-menu deployment-dropdown" aria-labelledby="kebab"
+              role="menu" *dropdownMenu (click)="$event.stopPropagation()">
               <li>
                 <a class="menu-item" [attr.href]="logsUrl | async" target="_blank">View logs</a>
               </li>
