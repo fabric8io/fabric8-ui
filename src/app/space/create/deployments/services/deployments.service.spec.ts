@@ -51,7 +51,7 @@ interface MockHttpParams<U> {
 
 describe('DeploymentsService', () => {
 
-  const serviceUpdater: Subject<void> = new Subject<void>();
+  let serviceUpdater: Subject<void>;
   let mockBackend: MockBackend;
   let mockLogger: jasmine.SpyObj<Logger>;
   let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
@@ -59,6 +59,8 @@ describe('DeploymentsService', () => {
   let svc: DeploymentsService;
 
   beforeEach(() => {
+    serviceUpdater = new Subject<void>();
+
     const mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
     mockAuthService.getToken.and.returnValue('mock-auth-token');
 
@@ -906,7 +908,7 @@ describe('DeploymentsService', () => {
           ],
           memory: [
             { value: 3, time: 3 },
-            { value: 4, time: 4}
+            { value: 4, time: 4 }
           ],
           net_rx: [
             { value: 5, time: 5 },
@@ -914,10 +916,28 @@ describe('DeploymentsService', () => {
           ],
           net_tx: [
             { value: 7, time: 7 },
-            { value: 8, time: 8}
+            { value: 8, time: 8 }
           ],
           start: 1,
           end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
+            }
+          }
         }
       };
       const deploymentResponse = {
@@ -957,11 +977,14 @@ describe('DeploymentsService', () => {
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
         const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
         const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
         if (initialTimeseriesRegex.test(requestUrl)) {
           responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
         } else if (deploymentRegex.test(requestUrl)) {
           responseBody = deploymentResponse;
         } else {
@@ -975,11 +998,17 @@ describe('DeploymentsService', () => {
         ));
       });
 
+      // FIXME: for some reason in the test environment, the first front loaded stat is dropped by Observable.combineLatest
       svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env')
-        .subscribe((stat: CpuStat) => {
-          expect(stat).toEqual({ used: 2, quota: 3, timestamp: 2 });
+        .bufferCount(2)
+        .subscribe((stats: CpuStat[]) => {
+          expect(stats).toEqual([
+            { used: 2, quota: 3, timestamp: 2 },
+            { used: 9, quota: 3, timestamp: 9 }
+          ]);
           done();
         });
+      serviceUpdater.next();
       serviceUpdater.next();
     });
   });
@@ -994,7 +1023,7 @@ describe('DeploymentsService', () => {
           ],
           memory: [
             { value: 3, time: 3 },
-            { value: 4, time: 4}
+            { value: 4, time: 4 }
           ],
           net_rx: [
             { value: 5, time: 5 },
@@ -1002,10 +1031,28 @@ describe('DeploymentsService', () => {
           ],
           net_tx: [
             { value: 7, time: 7 },
-            { value: 8, time: 8}
+            { value: 8, time: 8 }
           ],
           start: 1,
           end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
+            }
+          }
         }
       };
       const deploymentResponse = {
@@ -1045,11 +1092,14 @@ describe('DeploymentsService', () => {
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
         const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
         const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
         if (initialTimeseriesRegex.test(requestUrl)) {
           responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
         } else if (deploymentRegex.test(requestUrl)) {
           responseBody = deploymentResponse;
         } else {
@@ -1063,12 +1113,18 @@ describe('DeploymentsService', () => {
         ));
       });
 
+      // FIXME: for some reason in the test environment, the first front loaded stat is dropped by Observable.combineLatest
       svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env')
-        .subscribe((stat: MemoryStat) => {
-          expect(stat).toEqual(new ScaledMemoryStat(4, 5, 4));
+        .bufferCount(2)
+        .subscribe((stats: MemoryStat[]) => {
+          expect(stats).toEqual([
+            new ScaledMemoryStat(4, 5, 4),
+            new ScaledMemoryStat(10, 5, 10)
+          ]);
           subscription.unsubscribe();
           done();
         });
+      serviceUpdater.next();
       serviceUpdater.next();
     });
   });
@@ -1083,7 +1139,7 @@ describe('DeploymentsService', () => {
           ],
           memory: [
             { value: 3, time: 3 },
-            { value: 4, time: 4}
+            { value: 4, time: 4 }
           ],
           net_rx: [
             { value: 5, time: 5 },
@@ -1091,10 +1147,28 @@ describe('DeploymentsService', () => {
           ],
           net_tx: [
             { value: 7, time: 7 },
-            { value: 8, time: 8}
+            { value: 8, time: 8 }
           ],
           start: 1,
           end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
+            }
+          }
         }
       };
       const deploymentResponse = {
@@ -1120,11 +1194,14 @@ describe('DeploymentsService', () => {
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
         const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
         const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
         if (initialTimeseriesRegex.test(requestUrl)) {
           responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
         } else if (deploymentRegex.test(requestUrl)) {
           responseBody = deploymentResponse;
         }
@@ -1136,14 +1213,18 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      // use "first" operator because there is no network quota request which acts as a bottleneck for other metric cases
       svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env')
-        .first()
-        .subscribe((stat: NetworkStat) => {
-          expect(stat).toEqual({ sent: new ScaledNetworkStat(7, 7), received: new ScaledNetworkStat(5, 5) });
+        .bufferCount(3)
+        .subscribe((stats: NetworkStat[]) => {
+          expect(stats).toEqual([
+            { sent: new ScaledNetworkStat(7, 7), received: new ScaledNetworkStat(5, 5) },
+            { sent: new ScaledNetworkStat(8, 8), received: new ScaledNetworkStat(6, 6) },
+            { sent: new ScaledNetworkStat(11, 11), received: new ScaledNetworkStat(12, 12) }
+          ]);
           subscription.unsubscribe();
           done();
         });
+      serviceUpdater.next();
       serviceUpdater.next();
     });
   });
