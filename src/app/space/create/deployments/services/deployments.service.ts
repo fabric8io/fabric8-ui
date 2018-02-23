@@ -237,10 +237,10 @@ export class DeploymentsService implements OnDestroy {
     return this.getEnvironmentsResponse(spaceId)
       .map((envs: EnvironmentStat[]) => envs || [])
       .map((envs: EnvironmentStat[]) => envs.map((env: EnvironmentStat) => env.attributes))
-      .map((envs: EnvironmentAttributes[]) => envs.sort((a, b) =>  -1 * a.name.localeCompare(b.name)))
+      .map((envs: EnvironmentAttributes[]) => envs.sort((a, b) => -1 * a.name.localeCompare(b.name)))
       .map((envs: EnvironmentAttributes[]) => envs
         .filter((env: EnvironmentAttributes) => env.name !== 'test')
-        .map((env: EnvironmentAttributes) => ({ name: env.name} as ModelEnvironment))
+        .map((env: EnvironmentAttributes) => ({ name: env.name } as ModelEnvironment))
       )
       .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
         deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
@@ -252,7 +252,8 @@ export class DeploymentsService implements OnDestroy {
       .map((apps: Application[]) => apps.map((app: Application) => {
         const appName = app.attributes.name;
         const deploymentNamesAndVersions = app.attributes.deployments.map(
-          (dep: Deployment) => ({ name: dep.attributes.name, version: dep.attributes.version, url: dep.links.application
+          (dep: Deployment) => ({
+            name: dep.attributes.name, version: dep.attributes.version, url: dep.links.application
           })
         );
 
@@ -307,7 +308,7 @@ export class DeploymentsService implements OnDestroy {
       .map((attrs: DeploymentAttributes) => {
         const pods = [];
         attrs.pods.forEach(p => {
-          pods.push([ p[0], parseInt(p[1])]);
+          pods.push([p[0], parseInt(p[1])]);
         });
         return {
           total: attrs.pod_total,
@@ -324,7 +325,7 @@ export class DeploymentsService implements OnDestroy {
     const quota = this.getEnvironmentCpuStat(spaceId, environmentName)
       .map((stat: CpuStat) => stat.quota)
       .distinctUntilChanged();
-      return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota, timestamp: series.time } as CpuStat));
+    return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota, timestamp: series.time } as CpuStat));
   }
 
   getDeploymentMemoryStat(spaceId: string, applicationId: string, environmentName: string): Observable<MemoryStat> {
@@ -334,7 +335,7 @@ export class DeploymentsService implements OnDestroy {
     const quota = this.getEnvironment(spaceId, environmentName)
       .map((env: EnvironmentStat) => env.attributes.quota.memory.quota)
       .distinctUntilChanged();
-      return Observable.combineLatest(series, quota, (series: MemorySeries, quota: number) => new ScaledMemoryStat(series.value, quota, series.time) as MemoryStat);
+    return Observable.combineLatest(series, quota, (series: MemorySeries, quota: number) => new ScaledMemoryStat(series.value, quota, series.time) as MemoryStat);
   }
 
   getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
