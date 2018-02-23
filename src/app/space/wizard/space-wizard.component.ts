@@ -7,8 +7,9 @@ import {
   Output
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
-import { Logger, Notification, Notifications, NotificationType } from 'ngx-base';
+import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
@@ -20,6 +21,8 @@ import { DummyService } from 'app/shared/dummy.service';
 import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
 import { SpacesService } from 'app/shared/spaces.service';
 
+import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
+
 @Component({
   selector: 'space-wizard',
   templateUrl: './space-wizard.component.html',
@@ -30,12 +33,16 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
   @Output('onSelect') onSelect = new EventEmitter();
   @Output('onCancel') onCancel = new EventEmitter();
 
+  appLauncherEnabled: boolean = false;
   spaceTemplates: ProcessTemplate[];
   selectedTemplate: ProcessTemplate;
   space: Space;
+  subscriptions: Subscription[] = [];
   currentSpace: Space;
 
   constructor(
+    private broadcaster: Broadcaster,
+    private featureTogglesService: FeatureTogglesService,
     private router: Router,
     public dummy: DummyService,
     private spaceService: SpaceService,
@@ -50,10 +57,15 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
   ) {
     this.spaceTemplates = dummy.processTemplates;
     this.space = this.createTransientSpace();
-
+    this.subscriptions.push(featureTogglesService.getFeature('AppLauncher').subscribe((feature) => {
+      this.appLauncherEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
+    }));
   }
 
   ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
     this.finish();
   }
 
@@ -127,6 +139,11 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
 
   cancel() {
     this.onCancel.emit({});
+  }
+
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+    this.cancel();
   }
 
   private createTransientSpace(): Space {

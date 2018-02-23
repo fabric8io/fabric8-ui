@@ -108,6 +108,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return this._context;
     }
   }
+
   openForgeWizard(addSpace: TemplateRef<any>) {
     if (this.authentication.getGitHubToken()) {
       this.selectedFlow = 'start';
@@ -126,5 +127,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.space = $event.space;
   }
 
-
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  }
 }

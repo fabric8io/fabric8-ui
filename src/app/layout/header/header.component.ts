@@ -160,6 +160,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.modalRef.hide();
   }
 
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  }
+
   selectFlow($event) {
     this.selectedFlow = $event.flow;
     this.space = $event.space;
@@ -175,6 +179,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   get isGettingStartedPage(): boolean {
     return (this.router.url.indexOf('_gettingstarted') !== -1);
+  }
+
+  get isAppLauncherPage(): boolean {
+    return (this.router.url.indexOf('applauncher') !== -1);
   }
 
   private stripQueryFromUrl(url: string) {
