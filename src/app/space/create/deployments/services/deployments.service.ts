@@ -236,9 +236,9 @@ export class DeploymentsService implements OnDestroy {
         deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
   }
 
-  isApplicationDeployedInEnvironment(spaceId: string, applicationName: string, environmentName: string):
+  isApplicationDeployedInEnvironment(spaceId: string, applicationId: string, environmentName: string):
     Observable<boolean> {
-    return this.getApplication(spaceId, applicationName)
+    return this.getApplication(spaceId, applicationId)
       .map((app: Application) => app.attributes.deployments)
       .map((deployments: Deployment[]) => deployments || [])
       .map((deployments: Deployment[]) => includes(deployments.map((d: Deployment) => d.attributes.name), environmentName))
@@ -256,8 +256,8 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged();
   }
 
-  getVersion(spaceId: string, applicationName: string, environmentName: string): Observable<string> {
-    return this.getDeployment(spaceId, applicationName, environmentName)
+  getVersion(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
+    return this.getDeployment(spaceId, applicationId, environmentName)
       .map((deployment: Deployment) => deployment.attributes.version)
       .distinctUntilChanged();
   }
@@ -290,8 +290,8 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged(deepEqual);
   }
 
-  getDeploymentCpuStat(spaceId: string, applicationName: string, environmentName: string): Observable<CpuStat> {
-    const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
+  getDeploymentCpuStat(spaceId: string, applicationId: string, environmentName: string): Observable<CpuStat> {
+    const series = this.getTimeseriesData(spaceId, applicationId, environmentName)
       .filter((t: TimeseriesData) => t && has(t, 'cores'))
       .map((t: TimeseriesData) => t.cores);
     const quota = this.getEnvironmentCpuStat(spaceId, environmentName)
@@ -300,8 +300,8 @@ export class DeploymentsService implements OnDestroy {
       return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota, timestamp: series.time } as CpuStat));
   }
 
-  getDeploymentMemoryStat(spaceId: string, applicationName: string, environmentName: string): Observable<MemoryStat> {
-    const series = this.getTimeseriesData(spaceId, applicationName, environmentName)
+  getDeploymentMemoryStat(spaceId: string, applicationId: string, environmentName: string): Observable<MemoryStat> {
+    const series = this.getTimeseriesData(spaceId, applicationId, environmentName)
       .filter((t: TimeseriesData) => t && has(t, 'memory'))
       .map((t: TimeseriesData) => t.memory);
     const quota = this.getEnvironment(spaceId, environmentName)
@@ -410,16 +410,16 @@ export class DeploymentsService implements OnDestroy {
     return this.appsObservables.get(spaceId);
   }
 
-  private getApplication(spaceId: string, applicationName: string): Observable<Application> {
+  private getApplication(spaceId: string, applicationId: string): Observable<Application> {
     // does not emit if there are no applications matching the specified name
     return this.getApplicationsResponse(spaceId)
       .flatMap((apps: Application[]) => apps || [])
-      .filter((app: Application) => app.attributes.name === applicationName);
+      .filter((app: Application) => app.attributes.name === applicationId);
   }
 
-  private getDeployment(spaceId: string, applicationName: string, environmentName: string): Observable<Deployment> {
+  private getDeployment(spaceId: string, applicationId: string, environmentName: string): Observable<Deployment> {
     // does not emit if there are no applications or environments matching the specified names
-    return this.getApplication(spaceId, applicationName)
+    return this.getApplication(spaceId, applicationId)
       .flatMap((app: Application) => app.attributes.deployments || [])
       .filter((deployment: Deployment) => deployment.attributes.name === environmentName);
   }
