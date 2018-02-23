@@ -1,31 +1,34 @@
 <div id="spacehome-environments-card" class="environment-widget card-pf f8-card">
-  <div class="card-pf-heading f8-card-heading">
-    <h2 class="card-pf-title">
-      <a id="spacehome-environments-title" [routerLink]="[contextPath | async, 'create', 'deployments']">Deployments</a>
-      <span id="spacehome-environments-badge" class="badge f8-card-badge">{{(apps | async).length}}</span>
-    </h2>
-  </div>
-  <div class="card-pf-body f8-card-body">
-    <div class="f8-blank-slate-card" *ngIf="(apps | async).length === 0">
-      <h3>This space has no applications</h3>
-      <p>
-        Applications are shown once you deploy your code through a pipeline onto the defined environments.
-      </p>
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        <a id="spacehome-environments-title" [routerLink]="[contextPath | async, 'create', 'deployments']">Deployments</a>
+        <span id="spacehome-environments-badge" class="badge f8-card-badge">{{(appInfos | async)?.length}}</span>
+      </h2>
     </div>
-    <ul id="spacehome-environments-list" class="list-group" *ngIf="(apps | async).length > 0">
-      <li class="list-group-item" *ngFor="let app of apps | async">
-        <h5>{{app.name}}</h5>
-        <div *ngFor="let envInfo of app.environmentDetails">
-          <span *ngIf="envInfo && envInfo.deployment">
-            <a [href]="envInfo.exposeUrl" title="View the app in this environment" target="app" class="app-version-link" *ngIf="envInfo.exposeUrl">
-              {{envInfo.environmentName}} - {{envInfo.version}}
-            </a>
-            <span *ngIf="!envInfo.exposeUrl">
-              {{envInfo.environmentName}} - {{envInfo.version}}
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card" *ngIf="!(appInfos | async)">
+        <h3>Loading ...</h3>
+      </div>
+      <div class="f8-blank-slate-card" *ngIf="(appInfos | async)?.length === 0">
+        <h3>This space has no applications</h3>
+        <p>
+          Applications are shown once you deploy your code through a pipeline onto the defined environments.
+        </p>
+      </div>
+      <ul id="spacehome-environments-list" class="list-group" *ngIf="(appInfos | async)?.length > 0">
+        <li class="list-group-item" *ngFor="let app of (appInfos | async)">
+          <h5>{{app.appName}}</h5>
+          <div *ngFor="let envInfo of app.deploymentsInfo">
+            <span *ngIf="envInfo && envInfo.name">
+              <a [href]="envInfo.url" title="View the app in this environment" target="app" class="app-version-link" *ngIf="envInfo.url">
+                {{envInfo.name}} - {{envInfo.version}}
+              </a>
+              <span *ngIf="!envInfo.url">
+                {{envInfo.name}} - {{envInfo.version}}
+              </span>
             </span>
-          </span>
-        </div>
-      </li>
-    </ul>
-  </div>
+          </div>
+        </li>
+      </ul>
+    </div>
 </div>

@@ -86,6 +86,17 @@ export interface ApplicationAttributes {
   deployments: Deployment[];
 }
 
+export interface ApplicationAttributesOverview {
+  appName: string;
+  deploymentsInfo: DeploymentPreviewInfo[];
+}
+
+export interface DeploymentPreviewInfo {
+  name: string;
+  version: string;
+  url: string;
+}
+
 export interface Deployment {
   attributes: DeploymentAttributes;
   links: Links;
@@ -234,6 +245,23 @@ export class DeploymentsService implements OnDestroy {
       )
       .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
         deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
+  }
+
+  getAppsAndEnvironments(spaceId: string): Observable<ApplicationAttributesOverview[]> {
+    return this.getApplicationsResponse(spaceId)
+      .map((apps: Application[]) => apps || [])
+      .map((apps: Application[]) => apps.map((app: Application) => {
+        const appName = app.attributes.name;
+        const deploymentNamesAndVersions = app.attributes.deployments.map(
+          (dep: Deployment) => ({ name: dep.attributes.name, version: dep.attributes.version, url: dep.links.application
+          })
+        );
+
+        return {
+          appName: appName,
+          deploymentsInfo: deploymentNamesAndVersions as DeploymentPreviewInfo[]
+        } as ApplicationAttributesOverview;
+      }));
   }
 
   isApplicationDeployedInEnvironment(spaceId: string, applicationId: string, environmentName: string):
