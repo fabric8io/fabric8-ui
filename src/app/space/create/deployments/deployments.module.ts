@@ -27,7 +27,8 @@ import { ResourceCardComponent } from './resource-usage/resource-card.component'
 import { UtilizationBarComponent } from './resource-usage/utilization-bar.component';
 import {
   DeploymentsService,
-  TIMER_TOKEN
+  TIMER_TOKEN,
+  TIMESERIES_SAMPLES_TOKEN
 } from './services/deployments.service';
 
 const DEPLOYMENTS_SERVICE_POLL_TIMER = Observable
@@ -63,7 +64,8 @@ const DEPLOYMENTS_SERVICE_POLL_TIMER = Observable
   ],
   providers: [
     BsDropdownConfig,
-    { provide: TIMER_TOKEN, useValue: DEPLOYMENTS_SERVICE_POLL_TIMER }
+    { provide: TIMER_TOKEN, useValue: DEPLOYMENTS_SERVICE_POLL_TIMER },
+    { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 15 }
   ]
 })
 export class DeploymentsModule {

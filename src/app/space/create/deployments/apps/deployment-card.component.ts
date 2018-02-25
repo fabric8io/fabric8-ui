@@ -39,7 +39,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   consoleUrl: Observable<string>;
   appUrl: Observable<string>;
 
-  cpuStat: Observable<CpuStat>;
+  cpuStat: Observable<CpuStat[]>;
   iconClass: string;
   toolTip: string;
 
@@ -60,9 +60,9 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
     this.toolTip = 'Everything is ok';
 
-    this.cpuStat = this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
-    this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat) => {
-      this.changeStatus(stat);
+    this.cpuStat = this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name, 1);
+    this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat[]) => {
+      this.changeStatus(stat[0]);
     }));
 
     this.subscriptions.push(

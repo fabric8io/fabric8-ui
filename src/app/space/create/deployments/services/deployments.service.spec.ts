@@ -37,7 +37,8 @@ import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
   DeploymentsService,
   NetworkStat,
-  TIMER_TOKEN
+  TIMER_TOKEN,
+  TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
 
 interface MockHttpParams<U> {
@@ -90,8 +91,10 @@ describe('DeploymentsService', () => {
           provide: NotificationsService, useValue: mockNotificationsService
         },
         {
-          provide: TIMER_TOKEN,
-          useValue: serviceUpdater
+          provide: TIMER_TOKEN, useValue: serviceUpdater
+        },
+        {
+          provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3
         },
         DeploymentsService
       ]
@@ -987,11 +990,10 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      // FIXME: for some reason in the test environment, the first front loaded stat is dropped by Observable.combineLatest
-      svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env')
-        .bufferCount(2)
+      svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env', 3)
         .subscribe((stats: CpuStat[]) => {
           expect(stats).toEqual([
+            { used: 1, quota: 3, timestamp: 1 },
             { used: 2, quota: 3, timestamp: 2 },
             { used: 9, quota: 3, timestamp: 9 }
           ]);
@@ -1091,11 +1093,10 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      // FIXME: for some reason in the test environment, the first front loaded stat is dropped by Observable.combineLatest
-      svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env')
-        .bufferCount(2)
+      svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env', 3)
         .subscribe((stats: MemoryStat[]) => {
           expect(stats).toEqual([
+            new ScaledMemoryStat(3, 3, 3),
             new ScaledMemoryStat(4, 3, 4),
             new ScaledMemoryStat(10, 3, 10)
           ]);
@@ -1191,8 +1192,7 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env')
-        .bufferCount(3)
+      svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env', 3)
         .subscribe((stats: NetworkStat[]) => {
           expect(stats).toEqual([
             { sent: new ScaledNetworkStat(7, 7), received: new ScaledNetworkStat(5, 5) },

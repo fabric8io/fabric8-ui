@@ -34,6 +34,7 @@ import { createMock } from 'testing/mock';
 import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
+import { MemoryStat } from '../models/memory-stat';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentCardComponent } from './deployment-card.component';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
@@ -89,8 +90,8 @@ function initMockSvc(): jasmine.SpyObj<DeploymentsService> {
   const mockSvc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
 
   mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
-  mockSvc.getDeploymentCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
-  mockSvc.getDeploymentMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' }));
+  mockSvc.getDeploymentCpuStat.and.returnValue(Observable.of([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]));
+  mockSvc.getDeploymentMemoryStat.and.returnValue(Observable.of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]));
   mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
   mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
   mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
@@ -202,7 +203,7 @@ describe('DeploymentCardComponent', () => {
   let active: Subject<boolean>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let notifications: any;
-  let mockCpuData: Subject<CpuStat> = new BehaviorSubject({ used: 1, quota: 5 } as CpuStat);
+  let mockCpuData: Subject<CpuStat[]> = new BehaviorSubject([{ used: 1, quota: 5, timestamp: 1 }] as CpuStat[]);
 
   beforeEach(fakeAsync(() => {
     active = new BehaviorSubject<boolean>(true);
@@ -252,14 +253,14 @@ describe('DeploymentCardComponent', () => {
     });
 
     it('should change the button\'s value to warning if capacity changes', function(this: Context) {
-      mockCpuData.next({ used: 4, quota: 5 } as CpuStat);
+      mockCpuData.next([{ used: 4, quota: 5, timestamp: 2 }] as CpuStat[]);
       this.detectChanges();
       expect(this.testedDirective.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_WARN);
       expect(this.testedDirective.toolTip).toBe('CPU usage is nearing capacity.');
     });
 
     it('should change the button\s value to error if capacity is exceeded', function(this: Context) {
-      mockCpuData.next({ used: 6, quota: 5 } as CpuStat);
+      mockCpuData.next([{ used: 6, quota: 5, timestamp: 2 }] as CpuStat[]);
       this.detectChanges();
       expect(this.testedDirective.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_ERR);
       expect(this.testedDirective.toolTip).toBe('CPU usage has exceeded capacity.');
