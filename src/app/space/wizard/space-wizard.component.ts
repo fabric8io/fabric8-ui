@@ -53,39 +53,47 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
    * by invoking the spaceService
    */
   createSpace() {
-    console.log('Creating space', this.space);
+    if (!this.userService.currentLoggedInUser && !this.userService.currentLoggedInUser.id) {
+      console.log('Error creating space, invalid user.', this.userService.currentLoggedInUser);
+      this.notifications.message(<Notification> {
+        message: `Failed to create "${this.space.name}". Invalid user: "${this.userService.currentLoggedInUser}"`,
+        type: NotificationType.DANGER
+      });
+      return;
+    }
+
+    console.log('Creating space', this.space, this.userService.currentLoggedInUser.id);
     if (!this.space) {
       this.space = this.createTransientSpace();
     }
     this.space.attributes.name = this.space.name.replace(/ /g, '_');
-    this.userService.getUser()
-      .switchMap(user => {
-        this.space.relationships['owned-by'].data.id = user.id;
-        return this.spaceService.create(this.space);
-      })
-      .do(createdSpace => {
-        this.spacesService.addRecent.next(createdSpace);
-      })
-      .switchMap(createdSpace => {
-        return this.spaceNamespaceService
-          .updateConfigMap(Observable.of(createdSpace))
-          .map(() => createdSpace)
-          // Ignore any errors coming out here, we've logged and notified them earlier
-          .catch(err => Observable.of(createdSpace));
-      })
-      .subscribe(createdSpace => {
-          this.router.navigate([createdSpace.relationalData.creator.attributes.username,
-            createdSpace.attributes.name]);
-          this.finish();
-        },
-        err => {
-          console.log('Error creating space', err);
-          this.notifications.message(<Notification> {
-            message: `Failed to create "${this.space.name}"`,
-            type: NotificationType.DANGER
-          });
-          this.finish();
+
+    this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
+    this.spaceService.create(this.space)
+    .first()
+    .do(createdSpace => {
+      this.spacesService.addRecent.next(createdSpace);
+    })
+    .switchMap(createdSpace => {
+      return this.spaceNamespaceService
+        .updateConfigMap(Observable.of(createdSpace))
+        .map(() => createdSpace)
+        // Ignore any errors coming out here, we've logged and notified them earlier
+        .catch(err => Observable.of(createdSpace));
+    })
+    .subscribe(createdSpace => {
+        this.router.navigate([createdSpace.relationalData.creator.attributes.username,
+          createdSpace.attributes.name]);
+        this.finish();
+      },
+      err => {
+        console.log('Error creating space', err);
+        this.notifications.message(<Notification> {
+          message: `Failed to create "${this.space.name}"`,
+          type: NotificationType.DANGER
         });
+        this.finish();
+      });
   }
 
   ngOnInit() {
