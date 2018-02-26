@@ -8,6 +8,8 @@ import { RouterModule } from '@angular/router';
 import './rxjs-extensions';
 
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
@@ -113,10 +115,6 @@ import { RavenExceptionHandler } from './shared/exception.handler';
 import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
 
 
-// ngrx stuff
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -142,6 +140,7 @@ export type StoreType = {
     BrowserModule,
     BsDropdownModule.forRoot(),
     ChartModule,
+    EffectsModule.forRoot([]),
     EmptyStateModule,
     FormsModule,
     HttpModule,
@@ -163,11 +162,9 @@ export type StoreType = {
     WidgetsModule,
     PatternFlyNgModule,
     StatusListModule,
-    // AppRoutingModule must appear last
-    AppRoutingModule,
     StoreModule.forRoot({}),
-    EffectsModule.forRoot([]),
-    StoreModule.forRoot({})
+    // AppRoutingModule must appear last
+    AppRoutingModule
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
