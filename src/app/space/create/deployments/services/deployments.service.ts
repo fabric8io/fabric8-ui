@@ -111,6 +111,7 @@ export interface DeploymentAttributes {
   name: string;
   pod_total: number;
   pods: [[string, string]];
+  pods_quota: PodsQuota;
   version: string;
 }
 
@@ -147,6 +148,11 @@ export interface Pods {
   starting: number;
   stopping: number;
   total: number;
+}
+
+export interface PodsQuota {
+  cpucores: number;
+  memory: number;
 }
 
 export interface DeploymentStats {
@@ -318,13 +324,23 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged(deepEqual);
   }
 
+  getPodsQuota(spaceId: string, applicationId: string, environmentName: string): Observable<PodsQuota> {
+    return this.getDeployment(spaceId, applicationId, environmentName)
+      .map((deployment: Deployment) => deployment.attributes)
+      .filter((attrs: DeploymentAttributes) => attrs && has(attrs, 'pods_quota'))
+      .map((attrs: DeploymentAttributes) => attrs.pods_quota)
+      .distinctUntilChanged(deepEqual);
+  }
+
   getDeploymentCpuStat(spaceId: string, applicationId: string, environmentName: string): Observable<CpuStat> {
     const series = this.getTimeseriesData(spaceId, applicationId, environmentName)
       .filter((t: TimeseriesData) => t && has(t, 'cores'))
       .map((t: TimeseriesData) => t.cores);
-    const quota = this.getEnvironmentCpuStat(spaceId, environmentName)
-      .map((stat: CpuStat) => stat.quota)
+    const quota = this.getPodsQuota(spaceId, applicationId, environmentName)
+      .map((podsQuota: PodsQuota) => podsQuota.cpucores)
       .distinctUntilChanged();
+
+
     return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota, timestamp: series.time } as CpuStat));
   }
 
@@ -332,8 +348,8 @@ export class DeploymentsService implements OnDestroy {
     const series = this.getTimeseriesData(spaceId, applicationId, environmentName)
       .filter((t: TimeseriesData) => t && has(t, 'memory'))
       .map((t: TimeseriesData) => t.memory);
-    const quota = this.getEnvironment(spaceId, environmentName)
-      .map((env: EnvironmentStat) => env.attributes.quota.memory.quota)
+    const quota = this.getPodsQuota(spaceId, applicationId, environmentName)
+      .map((podsQuota: PodsQuota) => podsQuota.memory)
       .distinctUntilChanged();
     return Observable.combineLatest(series, quota, (series: MemorySeries, quota: number) => new ScaledMemoryStat(series.value, quota, series.time) as MemoryStat);
   }

@@ -950,7 +950,11 @@ describe('DeploymentsService', () => {
                   deployments: [
                     {
                       attributes: {
-                        name: 'foo-env'
+                        name: 'foo-env',
+                        pods_quota: {
+                          cpucores: 3,
+                          memory: 3
+                        }
                       }
                     }
                   ]
@@ -959,20 +963,6 @@ describe('DeploymentsService', () => {
             ]
           }
         }
-      };
-      const quotaResponse = {
-        data: [{
-          attributes: {
-            name: 'foo-env',
-            quota: {
-              cpucores: {
-                quota: 3,
-                used: 2,
-                timestamp: 2
-              }
-            }
-          }
-        }]
       };
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -987,9 +977,8 @@ describe('DeploymentsService', () => {
           responseBody = streamingTimeseriesResponse;
         } else if (deploymentRegex.test(requestUrl)) {
           responseBody = deploymentResponse;
-        } else {
-          responseBody = quotaResponse;
         }
+
         connection.mockRespond(new Response(
           new ResponseOptions({
             body: JSON.stringify(responseBody),
@@ -1065,7 +1054,11 @@ describe('DeploymentsService', () => {
                   deployments: [
                     {
                       attributes: {
-                        name: 'foo-env'
+                        name: 'foo-env',
+                        pods_quota: {
+                          cpucores: 3,
+                          memory: 3
+                        }
                       }
                     }
                   ]
@@ -1074,20 +1067,6 @@ describe('DeploymentsService', () => {
             ]
           }
         }
-      };
-      const quotaResponse = {
-        data: [{
-          attributes: {
-            name: 'foo-env',
-            quota: {
-              memory: {
-                quota: 5,
-                used: 4,
-                timestamp: 4
-              }
-            }
-          }
-        }]
       };
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -1102,9 +1081,8 @@ describe('DeploymentsService', () => {
           responseBody = streamingTimeseriesResponse;
         } else if (deploymentRegex.test(requestUrl)) {
           responseBody = deploymentResponse;
-        } else {
-          responseBody = quotaResponse;
         }
+
         connection.mockRespond(new Response(
           new ResponseOptions({
             body: JSON.stringify(responseBody),
