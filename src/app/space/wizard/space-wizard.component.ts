@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Notification, Notifications, NotificationType } from 'ngx-base';
+import { Logger, Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
@@ -37,7 +37,8 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
     private spaceNamespaceService: SpaceNamespaceService,
     private spaceNamePipe: SpaceNamePipe,
     private spacesService: SpacesService,
-    private context: ContextService
+    private context: ContextService,
+    private logger: Logger
   ) {
     this.spaceTemplates = dummy.processTemplates;
     this.space = this.createTransientSpace();
@@ -54,7 +55,7 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
    */
   createSpace() {
     if (!this.userService.currentLoggedInUser && !this.userService.currentLoggedInUser.id) {
-      console.log('Error creating space, invalid user.', this.userService.currentLoggedInUser);
+      this.logger.error('Error creating space, invalid user.' + this.userService.currentLoggedInUser);
       this.notifications.message(<Notification> {
         message: `Failed to create "${this.space.name}". Invalid user: "${this.userService.currentLoggedInUser}"`,
         type: NotificationType.DANGER
@@ -86,7 +87,7 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
         this.finish();
       },
       err => {
-        console.log('Error creating space', err);
+        this.logger.error(err);
         this.notifications.message(<Notification> {
           message: `Failed to create "${this.space.name}"`,
           type: NotificationType.DANGER
