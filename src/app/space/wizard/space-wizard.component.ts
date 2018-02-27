@@ -70,7 +70,6 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
 
     this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
     this.spaceService.create(this.space)
-    .first()
     .do(createdSpace => {
       this.spacesService.addRecent.next(createdSpace);
     })
