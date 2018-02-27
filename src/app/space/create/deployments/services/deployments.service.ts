@@ -1,4 +1,5 @@
 import {
+  ErrorHandler,
   Inject,
   Injectable,
   OnDestroy
@@ -211,6 +212,7 @@ export class DeploymentsService implements OnDestroy {
     public http: Http,
     public auth: AuthenticationService,
     public logger: Logger,
+    public errorHandler: ErrorHandler,
     public notifications: NotificationsService,
     @Inject(WIT_API_URL) witUrl: string
   ) {
@@ -551,12 +553,13 @@ export class DeploymentsService implements OnDestroy {
   }
 
   private handleHttpError(response: Response): Observable<any> {
+    this.errorHandler.handleError(response);
     this.logger.error(response);
     this.notifications.message({
       type: NotificationType.DANGER,
       header: `Request failed: ${response.status} (${response.statusText})`,
       message: response.text()
     } as Notification);
-    return Observable.throw(response.status);
+    return Observable.empty();
   }
 }
