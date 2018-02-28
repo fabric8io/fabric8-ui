@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Rx';
@@ -12,7 +12,7 @@ import { PipelinesService } from '../../shared/runtime-console/pipelines.service
   templateUrl: './recent-pipelines-widget.component.html',
   styleUrls: ['./recent-pipelines-widget.component.less']
 })
-export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
+export class RecentPipelinesWidgetComponent implements OnInit {
 
   buildConfigs: Observable<BuildConfigs>;
   buildConfigsCount: Observable<number>;
@@ -29,14 +29,8 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
     this.bcs = this.pipelinesService.recentPipelines
       .publish();
     this.buildConfigs = this.bcs;
-    this.buildConfigsCount = this.bcs.do((object) => {
-      return object;
-    }).map(buildConfigs => buildConfigs.length);
+    this.buildConfigsCount = this.bcs.map(buildConfigs => buildConfigs.length);
     this.bcs.connect();
-  }
-
-  ngOnDestroy() {
-
   }
 
 }
