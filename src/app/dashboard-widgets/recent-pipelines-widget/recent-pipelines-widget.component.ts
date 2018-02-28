@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs/Rx';
+import { ConnectableObservable, Observable } from 'rxjs/Rx';
 
 import { BuildConfigs } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
@@ -14,10 +14,9 @@ import { PipelinesService } from '../../shared/runtime-console/pipelines.service
 })
 export class RecentPipelinesWidgetComponent implements OnInit {
 
-  buildConfigs: Observable<BuildConfigs>;
-  buildConfigsCount: Observable<number>;
   contextPath: Observable<string>;
-  bcs: any;
+  buildConfigs: ConnectableObservable<BuildConfigs>;
+  buildConfigsCount: Observable<number>;
 
   constructor(
     private context: Contexts,
@@ -26,11 +25,10 @@ export class RecentPipelinesWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.contextPath = this.context.default.map(context => context.path);
-    this.bcs = this.pipelinesService.recentPipelines
+    this.buildConfigs = this.pipelinesService.recentPipelines
       .publish();
-    this.buildConfigs = this.bcs;
-    this.buildConfigsCount = this.bcs.map(buildConfigs => buildConfigs.length);
-    this.bcs.connect();
+    this.buildConfigsCount = this.buildConfigs.map(buildConfigs => buildConfigs.length);
+    this.buildConfigs.connect();
   }
 
 }
