@@ -25,7 +25,7 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.contextPath = this.context.current.map(context => context.path);
+    this.contextPath = this.context.default.map(context => context.path);
     this.bcs = this.pipelinesService.recentPipelines
       .publish();
     this.buildConfigs = this.bcs;
