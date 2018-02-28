@@ -50,12 +50,12 @@ export class ReportSummaryUtils {
         [this.cardTypes.INSIGHTS]: {
             title: 'Insights on alternate or additional dependencies that can augment your stack',
             description: 'Suggested dependencies that can be added to your application stack or replace current dependencies with alternate one. Click to see details.',
-            descriptionShort: 'Click this card to see detailed license information for your stack.'
+            descriptionShort: 'Click this card to see suggested dependencies that complement your stack.'
         },
         [this.cardTypes.LICENSES]: {
             title: 'License details of dependencies in your stack',
             description: 'Recommended license for your application stack, flag any unknown/restrictive license(s) present. Click this card to see the detailed information.',
-            descriptionShort: 'Click this card to see suggested dependencies that complement your stack.'
+            descriptionShort: 'Click this card to see detailed license information for your stack.'
         },
         [this.cardTypes.COMP_DETAILS]: {
             title: 'Dependency details of your manifest file',
