@@ -34,6 +34,15 @@ module.exports = function (config) {
     ],
 
     /*
+     * Proxies allow karma to serve specific paths in proxy of another (e.g., a relative path)
+     * Currently used to prevent PhantomJS from crashing when looking for image files
+     * http://karma-runner.github.io/2.0/config/configuration-file.html
+     */
+    proxies: {
+      '/assets/': '/base/src/assets/'
+    },
+
+    /*
      * preprocess matching files before serving them to the browser
      * available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
      */
