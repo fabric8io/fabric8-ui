@@ -1,3 +1,4 @@
+import { ErrorHandler } from '@angular/core';
 import {
   discardPeriodicTasks,
   fakeAsync,
@@ -62,6 +63,7 @@ describe('DeploymentsService', () => {
 
   let mockBackend: MockBackend;
   let mockLogger: jasmine.SpyObj<Logger>;
+  let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
   let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
   let svc: DeploymentsService;
 
@@ -70,6 +72,7 @@ describe('DeploymentsService', () => {
     mockAuthService.getToken.and.returnValue('mock-auth-token');
 
     mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);
+    mockErrorHandler = jasmine.createSpyObj<ErrorHandler>('ErrorHandler', ['handleError']);
     mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     TestBed.configureTestingModule({
@@ -86,6 +89,9 @@ describe('DeploymentsService', () => {
         },
         {
           provide: Logger, useValue: mockLogger
+        },
+        {
+          provide: ErrorHandler, useValue: mockErrorHandler
         },
         {
           provide: NotificationsService, useValue: mockNotificationsService
@@ -1381,7 +1387,25 @@ describe('DeploymentsService', () => {
     });
   });
 
-  describe('HTTP error handling', () => {
+  // TODO: re-enable error propagation.
+  // See https://github.com/openshiftio/openshift.io/issues/2360#issuecomment-368915994
+  xdescribe('HTTP error handling', () => {
+    it('should report errors to global ErrorHandler', (done: DoneFn) => {
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId',
+        response: new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })),
+        expectedError: 404,
+        observable: svc.getApplications('foo-spaceId')
+          .do(() => done.fail('should hit error handler'),
+            () => expect(mockErrorHandler.handleError).toHaveBeenCalled()),
+        done: done
+      });
+    });
+
     it('should log errors', (done: DoneFn) => {
       doMockHttpTest({
         url: 'http://example.com/deployments/spaces/foo-spaceId',
