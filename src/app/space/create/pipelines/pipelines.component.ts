@@ -69,7 +69,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   private selectedFlow: string;
   private space: Space;
-  modalRef: BsModalRef;
+  private modalRef: BsModalRef;
 
   constructor(
     private modalService: BsModalService,
@@ -81,7 +81,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     private fabric8UIConfig: Fabric8UIConfig,
     private broadcaster: Broadcaster
   ) {
-
     this.updateConsoleLink();
 
     this.toolbarConfig = {
@@ -121,7 +120,58 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         ]
       }
     } as ToolbarConfig;
+  }
 
+  ngOnInit(): void {
+    this._pipelinesSubscription = this.pipelinesService.current
+      .subscribe((buildConfigs: BuildConfig[]) => {
+        buildConfigs.forEach((buildConfig: BuildConfig) => {
+          const application: string = buildConfig.id;
+          const codebase: string = buildConfig.gitUrl;
+          if (!this._apps.find(fq => fq.id === application)) {
+            this._apps.push({ id: application, value: application } as FilterQuery);
+          }
+          if (!this._codebases.find(fq => fq.id === codebase)) {
+            this._codebases.push({ id: codebase, value: codebase } as FilterQuery);
+          }
+        });
+        this._allPipelines = buildConfigs;
+        this.applyFilters();
+        this.applySort();
+        this.updateConsoleLink();
+      });
+
+    this.contextSubscription = this.contexts.current
+      .subscribe((context: Context) => {
+        this._context = context;
+        this.space = context.space;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this._pipelinesSubscription.unsubscribe();
+    this.contextSubscription.unsubscribe();
+  }
+
+  get pipelines(): BuildConfig[] {
+    return this._filteredPipelines;
+  }
+
+  openForgeWizard(addSpace: TemplateRef<any>): void {
+    if (this.authService.getGitHubToken()) {
+      this.selectedFlow = '';
+      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    } else {
+      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+    }
+  }
+
+  closeModal(): void {
+    this.modalRef.hide();
+  }
+
+  selectFlow($event: any): void {
+    this.selectedFlow = $event.flow;
   }
 
   filterChange($event: FilterEvent): void {
@@ -135,27 +185,19 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     this.applySort();
   }
 
-  applySort(): void {
-    this._filteredPipelines.sort(this.compare.bind(this));
+  private updateConsoleLink(): void {
+    this.openshiftConsoleUrl = this.fabric8UIConfig.openshiftConsoleUrl;
+    const pipelines = this._allPipelines;
+    if (this.openshiftConsoleUrl && pipelines && pipelines.length) {
+      const pipeline = pipelines[0];
+      const namespace = pipeline.namespace;
+      if (namespace) {
+        this.openshiftConsoleUrl = pathJoin(this.openshiftConsoleUrl, '/project', namespace, '/browse/pipelines');
+      }
+    }
   }
 
-  compare(a: BuildConfig, b: BuildConfig): number {
-    let res = 0;
-
-    if (this._currentSortField.id === 'application' && a.id && b.id) {
-      res = a.id.localeCompare(b.id);
-    } else if (this._currentSortField.id === 'codebase' && a.gitUrl && b.gitUrl) {
-      res = a.gitUrl.localeCompare(b.gitUrl);
-    }
-
-    if (!this._ascending) {
-      res = res * -1;
-    }
-    return res;
-  }
-
-
-  applyFilters(): void {
+  private applyFilters(): void {
     if (this._allPipelines) {
       const filteredPipelines = [];
       this._allPipelines.forEach((bc: BuildConfig) => {
@@ -194,67 +236,23 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void {
-    this._pipelinesSubscription = this.pipelinesService.current
-      .subscribe((buildConfigs: BuildConfig[]) => {
-        buildConfigs.forEach((buildConfig: BuildConfig) => {
-          const application: string = buildConfig.id;
-          const codebase: string = buildConfig.gitUrl;
-          if (!this._apps.find(fq => fq.id === application)) {
-            this._apps.push({ id: application, value: application } as FilterQuery);
-          }
-          if (!this._codebases.find(fq => fq.id === codebase)) {
-            this._codebases.push({ id: codebase, value: codebase } as FilterQuery);
-          }
-        });
-        this._allPipelines = buildConfigs;
-        this.applyFilters();
-        this.applySort();
-        this.updateConsoleLink();
-      });
-
-    this.contextSubscription = this.contexts.current
-      .subscribe((context: Context) => {
-        this._context = context;
-        this.space = context.space;
-      });
+  private applySort(): void {
+    this._filteredPipelines.sort(this.compare.bind(this));
   }
 
-  ngOnDestroy(): void {
-    this._pipelinesSubscription.unsubscribe();
-    this.contextSubscription.unsubscribe();
-  }
+  private compare(a: BuildConfig, b: BuildConfig): number {
+    let res = 0;
 
-  updateConsoleLink(): void {
-    this.openshiftConsoleUrl = this.fabric8UIConfig.openshiftConsoleUrl;
-    const pipelines = this._allPipelines;
-    if (this.openshiftConsoleUrl && pipelines && pipelines.length) {
-      const pipeline = pipelines[0];
-      const namespace = pipeline.namespace;
-      if (namespace) {
-        this.openshiftConsoleUrl = pathJoin(this.openshiftConsoleUrl, '/project', namespace, '/browse/pipelines');
-      }
+    if (this._currentSortField.id === 'application' && a.id && b.id) {
+      res = a.id.localeCompare(b.id);
+    } else if (this._currentSortField.id === 'codebase' && a.gitUrl && b.gitUrl) {
+      res = a.gitUrl.localeCompare(b.gitUrl);
     }
-  }
 
-  get pipelines(): BuildConfig[] {
-    return this._filteredPipelines;
-  }
-
-  openForgeWizard(addSpace: TemplateRef<any>): void {
-    if (this.authService.getGitHubToken()) {
-      this.selectedFlow = '';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+    if (!this._ascending) {
+      res = res * -1;
     }
+    return res;
   }
 
-  closeModal(): void {
-    this.modalRef.hide();
-  }
-
-  selectFlow($event: any): void {
-    this.selectedFlow = $event.flow;
-  }
 }
