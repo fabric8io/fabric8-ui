@@ -22,7 +22,8 @@ import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployments-apps',
-  templateUrl: 'deployments-apps.component.html'
+  templateUrl: 'deployments-apps.component.html',
+  styleUrls: ['./deployments-apps.component.less']
 })
 export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
@@ -32,6 +33,7 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
   filteredApplicationsList: string[];
   resultsCount: number = 0;
+  hasLoaded: Observable<boolean>;
 
   private applicationsList: string[];
   private currentFilters: Filter[];
@@ -40,6 +42,7 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
+    this.hasLoaded = Observable.forkJoin(this.applications.first(), this.environments.first()).map(() => true);
     this.subscriptions.push(
       this.applications.subscribe((applications: string[]) => {
         this.applicationsList = applications;
