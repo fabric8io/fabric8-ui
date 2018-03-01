@@ -36,7 +36,8 @@ Run `npm start`. This will start the UI with live reload enabled. Then navigate 
 
 Run `ext install EditorConfig` to read the .editorconfig file
 
-
+### Feature flag
+To learn how to toggle your work in progress development, read our [wiki page on fabric8-toggles](https://github.com/fabric8-ui/fabric8-ui/wiki/fabric8-toggles).
 ## HTML, CSS and Less
 | [Code Guidelines](https://fabric8-ui.github.io/fabric8-ux/code-guidelines)
 
