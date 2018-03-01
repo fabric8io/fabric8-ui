@@ -237,22 +237,20 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   private applySort(): void {
-    this._filteredPipelines.sort(this.compare.bind(this));
-  }
+    this._filteredPipelines.sort((a: BuildConfig, b: BuildConfig): number => {
+      let res = 0;
 
-  private compare(a: BuildConfig, b: BuildConfig): number {
-    let res = 0;
+      if (this._currentSortField.id === 'application' && a.id && b.id) {
+        res = a.id.localeCompare(b.id);
+      } else if (this._currentSortField.id === 'codebase' && a.gitUrl && b.gitUrl) {
+        res = a.gitUrl.localeCompare(b.gitUrl);
+      }
 
-    if (this._currentSortField.id === 'application' && a.id && b.id) {
-      res = a.id.localeCompare(b.id);
-    } else if (this._currentSortField.id === 'codebase' && a.gitUrl && b.gitUrl) {
-      res = a.gitUrl.localeCompare(b.gitUrl);
-    }
-
-    if (!this._ascending) {
-      res = res * -1;
-    }
-    return res;
+      if (!this._ascending) {
+        res = res * -1;
+      }
+      return res;
+    });
   }
 
 }
