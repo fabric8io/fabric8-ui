@@ -17,7 +17,7 @@
         <div class="f8-card__pipeline-column">
           <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
           <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
-          <a id="spacehome-pipelines-title" [routerLink]="['/', buildconfig.namespace, buildconfig.labels['space'], 'create', 'pipelines']" class="f8-card__pipeline-column-name">
+          <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, buildconfig.labels['space'], 'create', 'pipelines']" class="f8-card__pipeline-column-name">
             {{buildconfig.name}}
           </a>
           <span>|</span>

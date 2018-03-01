@@ -8,6 +8,8 @@ import { RouterModule } from '@angular/router';
 import './rxjs-extensions';
 
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
@@ -138,6 +140,7 @@ export type StoreType = {
     BrowserModule,
     BsDropdownModule.forRoot(),
     ChartModule,
+    EffectsModule.forRoot([]),
     EmptyStateModule,
     FormsModule,
     HttpModule,
@@ -159,6 +162,7 @@ export type StoreType = {
     WidgetsModule,
     PatternFlyNgModule,
     StatusListModule,
+    StoreModule.forRoot({}),
     // AppRoutingModule must appear last
     AppRoutingModule
   ],

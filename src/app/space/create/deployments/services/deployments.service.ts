@@ -1,4 +1,5 @@
 import {
+  ErrorHandler,
   Inject,
   Injectable,
   OnDestroy
@@ -84,6 +85,17 @@ export interface Application {
 export interface ApplicationAttributes {
   name: string;
   deployments: Deployment[];
+}
+
+export interface ApplicationAttributesOverview {
+  appName: string;
+  deploymentsInfo: DeploymentPreviewInfo[];
+}
+
+export interface DeploymentPreviewInfo {
+  name: string;
+  version: string;
+  url: string;
 }
 
 export interface Deployment {
@@ -200,6 +212,7 @@ export class DeploymentsService implements OnDestroy {
     public http: Http,
     public auth: AuthenticationService,
     public logger: Logger,
+    public errorHandler: ErrorHandler,
     public notifications: NotificationsService,
     @Inject(WIT_API_URL) witUrl: string
   ) {
@@ -234,6 +247,23 @@ export class DeploymentsService implements OnDestroy {
       )
       .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
         deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
+  }
+
+  getAppsAndEnvironments(spaceId: string): Observable<ApplicationAttributesOverview[]> {
+    return this.getApplicationsResponse(spaceId)
+      .map((apps: Application[]) => apps || [])
+      .map((apps: Application[]) => apps.map((app: Application) => {
+        const appName = app.attributes.name;
+        const deploymentNamesAndVersions = app.attributes.deployments.map(
+          (dep: Deployment) => ({ name: dep.attributes.name, version: dep.attributes.version, url: dep.links.application
+          })
+        );
+
+        return {
+          appName: appName,
+          deploymentsInfo: deploymentNamesAndVersions as DeploymentPreviewInfo[]
+        } as ApplicationAttributesOverview;
+      }));
   }
 
   isApplicationDeployedInEnvironment(spaceId: string, applicationId: string, environmentName: string):
@@ -523,12 +553,13 @@ export class DeploymentsService implements OnDestroy {
   }
 
   private handleHttpError(response: Response): Observable<any> {
+    this.errorHandler.handleError(response);
     this.logger.error(response);
     this.notifications.message({
       type: NotificationType.DANGER,
       header: `Request failed: ${response.status} (${response.statusText})`,
       message: response.text()
     } as Notification);
-    return Observable.throw(response.status);
+    return Observable.empty();
   }
 }

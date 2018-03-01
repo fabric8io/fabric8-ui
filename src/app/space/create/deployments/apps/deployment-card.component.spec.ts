@@ -155,7 +155,7 @@ describe('DeploymentCardComponent async tests', () => {
 
       beforeEach(fakeAsync(() => {
         const de: DebugElement = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
-        de.triggerEventHandler('click', null);
+        de.triggerEventHandler('click', new CustomEvent('click'));
 
         fixture.detectChanges();
 
@@ -178,7 +178,7 @@ describe('DeploymentCardComponent async tests', () => {
         const item: DebugElement = getItemByLabel('Delete');
         expect(item).toBeTruthy();
         expect(mockSvc.deleteApplication).not.toHaveBeenCalled();
-        item.query(By.css('a')).triggerEventHandler('click', null);
+        item.query(By.css('a')).triggerEventHandler('click', new CustomEvent('click'));
 
         fixture.detectChanges();
 

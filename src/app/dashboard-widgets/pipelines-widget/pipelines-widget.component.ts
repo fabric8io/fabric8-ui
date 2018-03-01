@@ -6,7 +6,10 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { Observable } from 'rxjs/Rx';
+import {
+  ConnectableObservable,
+  Observable
+} from 'rxjs/Rx';
 
 import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
@@ -25,9 +28,9 @@ export class PipelinesWidgetComponent implements OnInit {
 
   @Output() addToSpace = new EventEmitter();
 
-  buildConfigs: Observable<BuildConfigs>;
-  buildConfigsCount: Observable<number>;
   contextPath: Observable<string>;
+  buildConfigs: ConnectableObservable<BuildConfigs>;
+  buildConfigsCount: Observable<number>;
 
   constructor(
     private context: Contexts,
@@ -37,11 +40,10 @@ export class PipelinesWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.contextPath = this.context.current.map(context => context.path);
-    let bcs = this.pipelinesService.current
+    this.buildConfigs = this.pipelinesService.current
       .publish();
-    this.buildConfigs = bcs;
-    this.buildConfigsCount = bcs.map(buildConfigs => buildConfigs.length);
-    bcs.connect();
+    this.buildConfigsCount = this.buildConfigs.map(buildConfigs => buildConfigs.length);
+    this.buildConfigs.connect();
   }
 
 }
