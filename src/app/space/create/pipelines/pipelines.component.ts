@@ -118,10 +118,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   compare(a: BuildConfig, b: BuildConfig) {
     let res = 0;
 
-    if (this._currentSortField.id === 'application' && a.labels['app'] && b.labels['app']) {
-      res = a.labels['app'].localeCompare(b.labels['app']);
-    } else if (this._currentSortField.id === 'codebase' && a.labels['codebase'] && b.labels['codebase']) {
-      res = a.labels['codebase'].localeCompare(b.labels['codebase']);
+    if (this._currentSortField.id === 'application' && a.id && b.id) {
+      res = a.id.localeCompare(b.id);
+    } else if (this._currentSortField.id === 'codebase' && a.gitUrl && b.gitUrl) {
+      res = a.gitUrl.localeCompare(b.gitUrl);
     }
 
     if (!this._ascending) {
@@ -134,7 +134,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   applyFilters() {
     if (this._allPipelines) {
       let filteredPipelines = [];
-      this._allPipelines.forEach(bc => {
+      this._allPipelines.forEach((bc: BuildConfig) => {
         let matches = true;
         let spaceId = '';
         if (this._context) {
@@ -152,11 +152,11 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         }
         this._appliedFilters.forEach(filter => {
           if (filter.field.id === 'application') {
-            if (filter.value !== bc.labels['app']) {
+            if (filter.value !== bc.id) {
               matches = false;
             }
           } else if (filter.field.id === 'codebase') {
-            if (filter.value !== bc.labels['codebase']) {
+            if (filter.value !== bc.gitUrl) {
               matches = false;
             }
           }
@@ -166,25 +166,24 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         }
       });
       this._filteredPipelines = filteredPipelines;
+      this.toolbarConfig.filterConfig.resultsCount = this.pipelines.length;
     }
   }
 
   ngOnInit() {
     this._pipelinesSubscription = this.pipelinesService.current
-      .do(val => {
-        (val as BuildConfig[])
-          .forEach(buildConfig => {
-            if (!this._apps.find(fq => fq.id === buildConfig.labels['app'])) {
-              this._apps.push({ id: buildConfig.labels['app'], value: buildConfig.labels['app'] } as FilterQuery);
-            }
-            if (!this._codebases.find(fq => fq.id === buildConfig.labels['codebase'])) {
-              this._codebases.push({ id: buildConfig.labels['codebase'], value: buildConfig.labels['codebase'] } as FilterQuery);
-            }
-          });
-      })
-      .subscribe(val => {
-        // console.log('Updating build configs:', val);
-        this._allPipelines = val;
+      .subscribe((buildConfigs: BuildConfig[]) => {
+        buildConfigs.forEach((buildConfig: BuildConfig) => {
+          const application: string = buildConfig.id;
+          const codebase: string = buildConfig.gitUrl;
+          if (!this._apps.find(fq => fq.id === application)) {
+            this._apps.push({ id: application, value: application } as FilterQuery);
+          }
+          if (!this._codebases.find(fq => fq.id === codebase)) {
+            this._codebases.push({ id: codebase, value: codebase } as FilterQuery);
+          }
+        });
+        this._allPipelines = buildConfigs;
         this.applyFilters();
         this.applySort();
         this.updateConsoleLink();
