@@ -5,13 +5,9 @@ import {
   TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
-import {
-  AuthenticationService,
-  UserService
-} from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 import {
   Filter,
   FilterConfig,
@@ -74,9 +70,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   constructor(
     private modalService: BsModalService,
     private contexts: Contexts,
-    private router: Router,
     private authService: AuthenticationService,
-    private userService: UserService,
     private pipelinesService: PipelinesService,
     private fabric8UIConfig: Fabric8UIConfig,
     private broadcaster: Broadcaster
@@ -123,6 +117,12 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.contextSubscription = this.contexts.current
+      .subscribe((context: Context) => {
+        this._context = context;
+        this.space = context.space;
+      });
+
     this._pipelinesSubscription = this.pipelinesService.current
       .subscribe((buildConfigs: BuildConfig[]) => {
         buildConfigs.forEach((buildConfig: BuildConfig) => {
@@ -139,12 +139,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         this.applyFilters();
         this.applySort();
         this.updateConsoleLink();
-      });
-
-    this.contextSubscription = this.contexts.current
-      .subscribe((context: Context) => {
-        this._context = context;
-        this.space = context.space;
       });
   }
 
