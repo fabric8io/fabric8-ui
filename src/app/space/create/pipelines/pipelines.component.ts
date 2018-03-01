@@ -1,15 +1,39 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewEncapsulation
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
-import { AuthenticationService, UserService } from 'ngx-login-client';
-import { Filter, FilterConfig, FilterEvent, FilterQuery, SortEvent, SortField, ToolbarConfig } from 'patternfly-ng';
+import {
+  AuthenticationService,
+  UserService
+} from 'ngx-login-client';
+import {
+  Filter,
+  FilterConfig,
+  FilterEvent,
+  FilterQuery,
+  FilterType,
+  SortEvent,
+  SortField,
+  ToolbarConfig
+} from 'patternfly-ng';
 import { Subscription } from 'rxjs';
 
-
 import { BuildConfig } from 'a-runtime-console/index';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import {
+  BsModalRef,
+  BsModalService
+} from 'ngx-bootstrap/modal';
+import {
+  Context,
+  Contexts,
+  Space
+} from 'ngx-fabric8-wit';
 import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
 import { Fabric8UIConfig } from '../../../shared/config/fabric8-ui-config';
 import { PipelinesService } from '../../../shared/runtime-console/pipelines.service';
@@ -67,14 +91,14 @@ export class PipelinesComponent implements OnInit, OnDestroy {
             id: 'application',
             title: 'Application',
             placeholder: 'Filter by Application...',
-            type: 'select',
+            type: FilterType.SELECT,
             queries: this._apps
           },
           {
             id: 'codebase',
             title: 'Codebase',
             placeholder: 'Filter by Codebase...',
-            type: 'select',
+            type: FilterType.SELECT,
             queries: this._codebases
           }
         ],
@@ -100,22 +124,22 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   }
 
-  filterChange($event: FilterEvent) {
+  filterChange($event: FilterEvent): void {
     this._appliedFilters = $event.appliedFilters;
     this.applyFilters();
   }
 
-  sortChange($event: SortEvent) {
+  sortChange($event: SortEvent): void {
     this._currentSortField = $event.field;
     this._ascending = $event.isAscending;
     this.applySort();
   }
 
-  applySort() {
-    this._filteredPipelines.sort((a: any, b: any) => this.compare(a, b));
+  applySort(): void {
+    this._filteredPipelines.sort(this.compare.bind(this));
   }
 
-  compare(a: BuildConfig, b: BuildConfig) {
+  compare(a: BuildConfig, b: BuildConfig): number {
     let res = 0;
 
     if (this._currentSortField.id === 'application' && a.id && b.id) {
@@ -131,21 +155,21 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
 
-  applyFilters() {
+  applyFilters(): void {
     if (this._allPipelines) {
-      let filteredPipelines = [];
+      const filteredPipelines = [];
       this._allPipelines.forEach((bc: BuildConfig) => {
         let matches = true;
         let spaceId = '';
         if (this._context) {
           spaceId = this._context.name;
-          let paths = this._context.path.split('/');
+          const paths = this._context.path.split('/');
           if (paths[paths.length - 1]) {
             spaceId = paths[paths.length - 1];
           }
         }
         if (spaceId) {
-          let bcSpace = bc.labels['space'];
+          const bcSpace = bc.labels['space'];
           if (bcSpace && bcSpace !== spaceId) {
             matches = false;
           }
@@ -170,7 +194,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._pipelinesSubscription = this.pipelinesService.current
       .subscribe((buildConfigs: BuildConfig[]) => {
         buildConfigs.forEach((buildConfig: BuildConfig) => {
@@ -189,34 +213,35 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         this.updateConsoleLink();
       });
 
-    this.contextSubscription = this.contexts.current.subscribe(val => {
-      this._context = val;
-      this.space = val.space;
-    });
+    this.contextSubscription = this.contexts.current
+      .subscribe((context: Context) => {
+        this._context = context;
+        this.space = context.space;
+      });
   }
 
-  updateConsoleLink() {
+  ngOnDestroy(): void {
+    this._pipelinesSubscription.unsubscribe();
+    this.contextSubscription.unsubscribe();
+  }
+
+  updateConsoleLink(): void {
     this.openshiftConsoleUrl = this.fabric8UIConfig.openshiftConsoleUrl;
-    let pipelines = this._allPipelines;
+    const pipelines = this._allPipelines;
     if (this.openshiftConsoleUrl && pipelines && pipelines.length) {
-      let pipeline = pipelines[0];
-      let namespace = pipeline.namespace;
+      const pipeline = pipelines[0];
+      const namespace = pipeline.namespace;
       if (namespace) {
         this.openshiftConsoleUrl = pathJoin(this.openshiftConsoleUrl, '/project', namespace, '/browse/pipelines');
       }
     }
   }
 
-  ngOnDestroy() {
-    this._pipelinesSubscription.unsubscribe();
-    this.contextSubscription.unsubscribe();
-  }
-
-  get pipelines() {
+  get pipelines(): BuildConfig[] {
     return this._filteredPipelines;
   }
 
-  openForgeWizard(addSpace: TemplateRef<any>) {
+  openForgeWizard(addSpace: TemplateRef<any>): void {
     if (this.authService.getGitHubToken()) {
       this.selectedFlow = '';
       this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
@@ -225,11 +250,11 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     }
   }
 
-  closeModal($event: any): void {
+  closeModal(): void {
     this.modalRef.hide();
   }
 
-  selectFlow($event) {
+  selectFlow($event: any): void {
     this.selectedFlow = $event.flow;
   }
 }
