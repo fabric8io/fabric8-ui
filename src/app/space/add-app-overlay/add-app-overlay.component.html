@@ -1,0 +1,70 @@
+<div class="imports-dialog">
+  <div class="code-imports">
+    <form class="col-sm-8 col-sm-offset-2 code-imports--step active" role="form">
+      <section class="container-fluid">
+        <form class="form" #spaceForm="ngForm">
+          <div class="row">
+            <h1 class="code-imports--step_title">Getting Started</h1>
+            <p>
+              When getting started with setting up a application, there are two different set up paths you can take. You can either choose to import an existing project or create a new application.
+            </p>
+          </div>
+          <div class="row row-cards-pf">
+            <div class="col-sm-6">
+              <div class="container-fluid container-cards-pf" (click)="routeToImportApp()">
+                <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
+                  <div class="card-pf-body">
+                    <h2 class="card-pf-title">
+                      Import Existing Application
+                    </h2>
+                    <div class="card-pf-items">
+                      <div class="card-pf-item">
+                        I have an existing application that I would like to import to use as the base for my application.
+                      </div>
+                    </div>
+                    <p class="card-pf-info text-center">
+                      <i class="pficon pficon-export"></i>
+                    </p>
+                  </div>
+                  <div class="card-pf-view-checkbox">
+                    <input type="checkbox">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="container-fluid container-cards-pf" (click)="routeToCreateApp()">
+                <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
+                  <div class="card-pf-body">
+                    <h2 class="card-pf-title">
+                      Create a New Application
+                    </h2>
+                    <div class="card-pf-items">
+                      <div class="card-pf-item">
+                        I want to create a new application from scratch. I would like to use the preset technologies and missions within OpenShift.io to help me create a new application.
+                      </div>
+                    </div>
+                    <p class="card-pf-info text-center">
+                      <i class="pficon pficon-add-circle-o"></i>
+                    </p>
+                  </div>
+                  <div class="card-pf-view-checkbox">
+                    <input type="checkbox">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+      <footer class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12 code-imports--step_tool-bar button-right">
+            <button id="cancelImportsButton" class="btn btn-link" aria-label="Cancel"
+                    (click)="hideAddAppOverlay()">Cancel</button>
+          </div>
+        </div>
+      </footer>
+    </form>
+  </div>
+</div>

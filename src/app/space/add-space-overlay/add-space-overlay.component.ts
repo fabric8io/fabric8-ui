@@ -1,8 +1,11 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
-import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
+import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
@@ -14,50 +17,42 @@ import { DummyService } from 'app/shared/dummy.service';
 import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
 import { SpacesService } from 'app/shared/spaces.service';
 
-import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
-
 @Component({
-  selector: 'space-wizard',
-  templateUrl: './space-wizard.component.html',
-  styleUrls: ['./space-wizard.component.less']
+  encapsulation: ViewEncapsulation.None,
+  selector: 'f8-add-space-overlay',
+  styleUrls: ['./add-space-overlay.component.less'],
+  templateUrl: './add-space-overlay.component.html'
 })
-export class SpaceWizardComponent implements OnInit, OnDestroy {
-
-  @Output('onSelect') onSelect = new EventEmitter();
-  @Output('onCancel') onCancel = new EventEmitter();
-
-  appLauncherEnabled: boolean = false;
-  spaceTemplates: ProcessTemplate[];
-  selectedTemplate: ProcessTemplate;
-  space: Space;
-  subscriptions: Subscription[] = [];
+export class AddSpaceOverlayComponent implements OnInit {
   currentSpace: Space;
+  selectedTemplate: ProcessTemplate;
+  spaceTemplates: ProcessTemplate[];
+  space: Space;
 
-  constructor(
-    private router: Router,
-    public dummy: DummyService,
-    private spaceService: SpaceService,
-    private notifications: Notifications,
-    private userService: UserService,
-    private spaceNamespaceService: SpaceNamespaceService,
-    private spaceNamePipe: SpaceNamePipe,
-    private spacesService: SpacesService,
-    private context: ContextService,
-    private broadcaster: Broadcaster,
-    private featureTogglesService: FeatureTogglesService
-  ) {
+  constructor(private router: Router,
+              public dummy: DummyService,
+              private spaceService: SpaceService,
+              private notifications: Notifications,
+              private userService: UserService,
+              private spaceNamespaceService: SpaceNamespaceService,
+              private spaceNamePipe: SpaceNamePipe,
+              private spacesService: SpacesService,
+              private context: ContextService,
+              private broadcaster: Broadcaster) {
     this.spaceTemplates = dummy.processTemplates;
     this.space = this.createTransientSpace();
-    this.subscriptions.push(featureTogglesService.getFeature('AppLauncher').subscribe((feature) => {
-      this.appLauncherEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
-    }));
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
+  ngOnInit() {
+    const srumTemplates = this.spaceTemplates.filter(template => template.name === 'Scenario Driven Planning');
+    if (srumTemplates && srumTemplates.length > 0) {
+      this.selectedTemplate = srumTemplates[0];
+    }
+    this.context.current.subscribe((ctx: Context) => {
+      if (ctx.space) {
+        this.currentSpace = ctx.space;
+      }
     });
-    this.finish();
   }
 
   /*
@@ -88,7 +83,8 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
       .subscribe(createdSpace => {
           this.router.navigate([createdSpace.relationalData.creator.attributes.username,
             createdSpace.attributes.name]);
-          this.finish();
+          this.showAddAppOverlay();
+          this.hideAddSpaceOverlay();
         },
         err => {
           console.log('Error creating space', err);
@@ -96,35 +92,15 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
             message: `Failed to create "${this.space.name}"`,
             type: NotificationType.DANGER
           });
-          this.finish();
         });
   }
 
-  ngOnInit() {
-    const srumTemplates = this.spaceTemplates.filter(template => template.name === 'Scenario Driven Planning');
-    if (srumTemplates && srumTemplates.length > 0) {
-      this.selectedTemplate = srumTemplates[0];
-    }
-    this.context.current.subscribe((ctx: Context) => {
-      if (ctx.space) {
-        this.currentSpace = ctx.space;
-        console.log(`ForgeWizardComponent::The current space has been updated to ${this.currentSpace.attributes.name}`);
-      }
-    });
+  hideAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', false);
   }
 
-  finish() {
-    console.log(`finish ...`);
-    this.onSelect.emit({flow: 'selectFlow', space: this.space.attributes.name});
-  }
-
-  cancel() {
-    this.onCancel.emit({});
-  }
-
-  showAddSpaceOverlay(): void {
-    this.broadcaster.broadcast('showAddSpaceOverlay', true);
-    this.cancel();
+  showAddAppOverlay(): void {
+    this.broadcaster.broadcast('showAddAppOverlay', true);
   }
 
   private createTransientSpace(): Space {

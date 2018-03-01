@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaAttributes, AreaService, Context } from 'ngx-fabric8-wit';
@@ -16,16 +16,14 @@ import { ContextService } from '../../../../shared/context.service';
   templateUrl: './create-area-dialog.component.html',
   styleUrls: ['./create-area-dialog.component.less']
 })
-export class CreateAreaDialogComponent implements OnInit {
+export class CreateAreaDialogComponent {
 
   @Input() host: ModalDirective;
   @Input() parentId: string;
   @Input() areas: Area[];
   @Output() onAdded = new EventEmitter<Area>();
+  @ViewChild('nameInput') nameInput: ElementRef;
   @ViewChild('areaForm') areaForm: NgForm;
-
-  @ViewChild('rawInputField') rawInputField: ElementRef;
-  @ViewChild('inputModel') inputModel: NgModel;
 
   private context: Context;
   private name: string;
@@ -47,19 +45,15 @@ export class CreateAreaDialogComponent implements OnInit {
   }
 
   focus() {
-    this.rawInputField.nativeElement.focus();
-  }
-
-  ngOnInit() {
-    this.errors = {uniqueValidationFailure: false};
+    this.nameInput.nativeElement.focus();
   }
 
   clearField() {
-    this.inputModel.reset();
+    this.areaForm.form.controls['name'].reset();
   }
 
   resetErrors() {
-    this.errors = {uniqueValidationFailure: false};
+    this.errors = null;
   }
 
   createArea() {
@@ -92,7 +86,9 @@ export class CreateAreaDialogComponent implements OnInit {
     if (error.errors.length) {
       error.errors.forEach(error => {
         if (error.status === '409') {
-          this.errors.uniqueValidationFailure = true;
+          this.errors = {
+            uniqueValidationFailure: true
+          };
         }
       });
     }

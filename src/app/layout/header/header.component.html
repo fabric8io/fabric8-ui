@@ -1,4 +1,4 @@
-<div *ngIf="isGettingStartedPage; then showGettingStartedHeader else showHeader"></div>
+<div *ngIf="isGettingStartedPage || isAppLauncherPage; then showGettingStartedHeader else showHeader"></div>
 <ng-template #showGettingStartedHeader>
   <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
     <img src="../../../assets/images/openshift-io_white.png" class="navbar-getting-started-logo" />
@@ -36,7 +36,8 @@
   </nav>
 </ng-template>
 <ng-template #showHeader>
-  <nav class="navbar navbar-default navbar-inverse navbar-pf navbar-fixed-top" role="navigation" *ngIf="context">
+  <nav class="navbar navbar-default navbar-inverse navbar-pf navbar-fixed-top" role="navigation"
+       *ngIf="context">
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" (click)="toggleState()">
@@ -82,6 +83,7 @@
               <li class="divider"></li>
               <li id="header_createSpace">
                 <a (click)="openForgeWizard(spaceWizard)">
+                <!-- <a  (click)="showAddSpaceOverlay()"> -->
                 <span class="nav-item-icon">
                   <i class="pficon pficon-add-circle-o"></i>
                 </span>

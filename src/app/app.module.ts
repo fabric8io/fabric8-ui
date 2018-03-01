@@ -105,7 +105,11 @@ import { witApiUrlProvider }             from './shared/wit-api.provider';
 import { ConfigStore }               from './base/config.store';
 import { ErrorService }              from './layout/error/error.service';
 import { ProfileService }            from './profile/profile.service';
-import { SpaceWizardModule }         from './space/wizard/space-wizard.module';
+import { SpaceWizardModule } from './space/wizard/space-wizard.module';
+
+// App launcher
+import { AddAppOverlayModule }   from './space/add-app-overlay/add-app-overlay.module';
+import { AddSpaceOverlayModule } from './space/add-space-overlay/add-space-overlay.module';
 
 // About Modal
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
@@ -136,6 +140,8 @@ export type StoreType = {
     // needed by the components in this module
     AboutModalModule,
     ActionModule,
+    AddAppOverlayModule,
+    AddSpaceOverlayModule,
     BrowserAnimationsModule,
     BrowserModule,
     BsDropdownModule.forRoot(),
