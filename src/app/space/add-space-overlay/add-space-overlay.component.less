@@ -1,0 +1,147 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+@icon-path: '../../../assets/stylesheets/shared/_icons.less';
+
+.launcher-dialog {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, .8);
+  .create-launcher {
+    color: @color-pf-white;
+    .alert-danger {
+      background-color: transparent;
+      border: none;
+      color: @color-pf-red-100;
+    }
+    &-step {
+      margin-top: 5%;
+      padding: 35px;
+      &-header,
+      &-footer {
+        background-color: transparent;
+        border: 0;
+      }
+      &-title {
+        font-size: 1.2em; // matches h4
+      }
+      &-backdrop.in { opacity: .85; }
+      &-lg { width: 75%; }
+      &-content {
+        background-color: transparent;
+        color: @color-pf-white;
+        box-shadow: none;
+        border: 0;
+      }
+      .form-group {
+        margin-top: 35px;
+      }
+      .form-control {
+        background-color: transparent;
+        border: 0;
+        border-bottom: 1px solid @color-pf-white;
+        border-radius: 0;
+        font-size: 1.2em;
+        color: @color-pf-white;
+        &:focus {
+          border-bottom-color: @color-pf-blue;
+          box-shadow: none;
+        }
+      }
+      &-tool-bar {
+        margin-top: 15px;
+        text-align: center;
+        color: @color-pf-black-700;
+        .btn.disabled, .btn[disabled] {
+          /* stylelint-disable */
+          background-color: transparent !important;
+          background: transparent !important;
+          /* stylelint-enable */
+        }
+        .btn.btn-link {
+          margin-left: 10px;
+        }
+      }
+      .create-launcher-description {
+        border: 0;
+        border-bottom: 1px solid @color-pf-white;
+        min-height: 25px;
+        &:hover,
+        &:active,
+        &:focus {
+          border-bottom-color: @color-pf-blue;
+        }
+      }
+    }
+    .development-process-selector {
+      top: 70px;
+      right: 25px;
+      color: @color-pf-white;
+    }
+    input::placeholder,
+    select {
+      font-style: italic;
+      color: @color-pf-white;
+    }
+    input:hover,
+    input:focus,
+    textarea:hover,
+    textarea:active,
+    select:hover,
+    select:active {
+      border-bottom-color: @color-pf-blue;
+    }
+    select:hover {
+      cursor: pointer;
+    }
+    select {
+      -webkit-appearance: none;
+      -webkit-border-radius: 0;
+    }
+    textarea {
+      resize: none;
+      overflow-y: auto;
+    }
+    .form-group {
+      margin-top: 35px;
+    }
+    .form-control {
+      color: @color-pf-white;
+    }
+    .spaces-information-block {
+      margin-top: 35px;
+      &_notice {
+        border: 1px solid;
+        border-color: @color-pf-orange-400;
+        padding: 15px;
+        margin: 15px;
+        margin-top: 50px;
+      }
+      i {
+        font-size: @pf-icon-3x;
+      }
+    }
+    .row-space-step-selection {
+      &_header {
+        margin-bottom: 25px;
+      }
+      &_plan-things,
+      &_do-things {
+        display: flex;
+        align-items: center;
+      }
+      &_radio {
+        border-left: 1px solid;
+        border-left-color: @color-pf-black-150;
+        text-align: center;
+      }
+      &_icon {
+        width: 8em;
+      }
+      h2 {
+        margin-top: 0;
+      }
+    }
+  }
+}

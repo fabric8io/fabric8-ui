@@ -1,10 +1,5 @@
 import { ErrorHandler } from '@angular/core';
-import {
-  discardPeriodicTasks,
-  fakeAsync,
-  TestBed,
-  tick
-} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import {
   HttpModule,
@@ -23,6 +18,7 @@ import { createMock } from 'testing/mock';
 
 import {
   Observable,
+  Subject,
   Subscription
 } from 'rxjs';
 
@@ -30,24 +26,18 @@ import { Logger } from 'ngx-base';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 
-import {
-  AuthenticationService,
-  UserService
-} from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import {
-  Application,
   DeploymentsService,
-  MultiTimeseriesData,
   NetworkStat,
-  TimeConstrainedStats
+  TIMER_TOKEN
 } from './deployments.service';
 
 interface MockHttpParams<U> {
@@ -61,6 +51,7 @@ interface MockHttpParams<U> {
 
 describe('DeploymentsService', () => {
 
+  let serviceUpdater: Subject<void>;
   let mockBackend: MockBackend;
   let mockLogger: jasmine.SpyObj<Logger>;
   let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
@@ -68,6 +59,8 @@ describe('DeploymentsService', () => {
   let svc: DeploymentsService;
 
   beforeEach(() => {
+    serviceUpdater = new Subject<void>();
+
     const mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
     mockAuthService.getToken.and.returnValue('mock-auth-token');
 
@@ -95,6 +88,10 @@ describe('DeploymentsService', () => {
         },
         {
           provide: NotificationsService, useValue: mockNotificationsService
+        },
+        {
+          provide: TIMER_TOKEN,
+          useValue: serviceUpdater
         },
         DeploymentsService
       ]
@@ -144,6 +141,7 @@ describe('DeploymentsService', () => {
         );
       }
     });
+    serviceUpdater.next();
   }
 
   describe('#getApplications', () => {
@@ -902,12 +900,42 @@ describe('DeploymentsService', () => {
 
   describe('#getDeploymentCpuStat', () => {
     it('should combine timeseries and quota data', (done: DoneFn) => {
-      const timeseriesResponse = {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 1, time: 1 },
+            { value: 2, time: 2 }
+          ],
+          memory: [
+            { value: 3, time: 3 },
+            { value: 4, time: 4 }
+          ],
+          net_rx: [
+            { value: 5, time: 5 },
+            { value: 6, time: 6 }
+          ],
+          net_tx: [
+            { value: 7, time: 7 },
+            { value: 8, time: 8 }
+          ],
+          start: 1,
+          end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
         data: {
           attributes: {
             cores: {
-              time: 1,
-              value: 2
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
             }
           }
         }
@@ -922,7 +950,11 @@ describe('DeploymentsService', () => {
                   deployments: [
                     {
                       attributes: {
-                        name: 'foo-env'
+                        name: 'foo-env',
+                        pods_quota: {
+                          cpucores: 3,
+                          memory: 3
+                        }
                       }
                     }
                   ]
@@ -932,33 +964,21 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      const quotaResponse = {
-        data: [{
-          attributes: {
-            name: 'foo-env',
-            quota: {
-              cpucores: {
-                quota: 3,
-                used: 4,
-                timestamp: 1
-              }
-            }
-          }
-        }]
-      };
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const timeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
         const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
-        if (timeseriesRegex.test(requestUrl)) {
-          responseBody = timeseriesResponse;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
         } else if (deploymentRegex.test(requestUrl)) {
           responseBody = deploymentResponse;
-        } else {
-          responseBody = quotaResponse;
         }
+
         connection.mockRespond(new Response(
           new ResponseOptions({
             body: JSON.stringify(responseBody),
@@ -967,23 +987,59 @@ describe('DeploymentsService', () => {
         ));
       });
 
+      // FIXME: for some reason in the test environment, the first front loaded stat is dropped by Observable.combineLatest
       svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env')
-        .subscribe((stat: CpuStat) => {
-          expect(stat).toEqual({ used: 2, quota: 3, timestamp: 1 });
-          subscription.unsubscribe();
+        .bufferCount(2)
+        .subscribe((stats: CpuStat[]) => {
+          expect(stats).toEqual([
+            { used: 2, quota: 3, timestamp: 2 },
+            { used: 9, quota: 3, timestamp: 9 }
+          ]);
           done();
         });
+      serviceUpdater.next();
+      serviceUpdater.next();
     });
   });
 
   describe('#getDeploymentMemoryStat', () => {
     it('should combine timeseries and quota data', (done: DoneFn) => {
-      const timeseriesResponse = {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 1, time: 1 },
+            { value: 2, time: 2 }
+          ],
+          memory: [
+            { value: 3, time: 3 },
+            { value: 4, time: 4 }
+          ],
+          net_rx: [
+            { value: 5, time: 5 },
+            { value: 6, time: 6 }
+          ],
+          net_tx: [
+            { value: 7, time: 7 },
+            { value: 8, time: 8 }
+          ],
+          start: 1,
+          end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
         data: {
           attributes: {
+            cores: {
+              time: 9, value: 9
+            },
             memory: {
-              time: 1,
-              value: 2
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
             }
           }
         }
@@ -998,7 +1054,11 @@ describe('DeploymentsService', () => {
                   deployments: [
                     {
                       attributes: {
-                        name: 'foo-env'
+                        name: 'foo-env',
+                        pods_quota: {
+                          cpucores: 3,
+                          memory: 3
+                        }
                       }
                     }
                   ]
@@ -1008,33 +1068,21 @@ describe('DeploymentsService', () => {
           }
         }
       };
-      const quotaResponse = {
-        data: [{
-          attributes: {
-            name: 'foo-env',
-            quota: {
-              memory: {
-                quota: 3,
-                used: 4,
-                timestamp: 1
-              }
-            }
-          }
-        }]
-      };
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const timeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
         const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
-        if (timeseriesRegex.test(requestUrl)) {
-          responseBody = timeseriesResponse;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
         } else if (deploymentRegex.test(requestUrl)) {
           responseBody = deploymentResponse;
-        } else {
-          responseBody = quotaResponse;
         }
+
         connection.mockRespond(new Response(
           new ResponseOptions({
             body: JSON.stringify(responseBody),
@@ -1043,32 +1091,64 @@ describe('DeploymentsService', () => {
         ));
       });
 
+      // FIXME: for some reason in the test environment, the first front loaded stat is dropped by Observable.combineLatest
       svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env')
-        .subscribe((stat: MemoryStat) => {
-          expect(stat).toEqual(new ScaledMemoryStat(2, 3, 1));
+        .bufferCount(2)
+        .subscribe((stats: MemoryStat[]) => {
+          expect(stats).toEqual([
+            new ScaledMemoryStat(4, 3, 4),
+            new ScaledMemoryStat(10, 3, 10)
+          ]);
           subscription.unsubscribe();
           done();
         });
+      serviceUpdater.next();
+      serviceUpdater.next();
     });
   });
 
   describe('#getDeploymentNetworkStat', () => {
     it('should return scaled timeseries data', (done: DoneFn) => {
-      const timeseriesResponse = {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 1, time: 1 },
+            { value: 2, time: 2 }
+          ],
+          memory: [
+            { value: 3, time: 3 },
+            { value: 4, time: 4 }
+          ],
+          net_rx: [
+            { value: 5, time: 5 },
+            { value: 6, time: 6 }
+          ],
+          net_tx: [
+            { value: 7, time: 7 },
+            { value: 8, time: 8 }
+          ],
+          start: 1,
+          end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
         data: {
           attributes: {
+            cores: {
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
             net_tx: {
-              time: 1,
-              value: 1.7
+              time: 11, value: 11
             },
             net_rx: {
-              time: 1,
-              value: 3.1
+              time: 12, value: 12
             }
           }
         }
       };
-
       const deploymentResponse = {
         data: {
           attributes: {
@@ -1091,12 +1171,15 @@ describe('DeploymentsService', () => {
       };
 
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const timeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
         const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
         const requestUrl: string = connection.request.url;
         let responseBody: any;
-        if (timeseriesRegex.test(requestUrl)) {
-          responseBody = timeseriesResponse;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
         } else if (deploymentRegex.test(requestUrl)) {
           responseBody = deploymentResponse;
         }
@@ -1109,183 +1192,18 @@ describe('DeploymentsService', () => {
       });
 
       svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env')
-        .subscribe((stat: NetworkStat) => {
-          expect(stat).toEqual({ sent: new ScaledNetworkStat(1.7, 1), received: new ScaledNetworkStat(3.1, 1) });
+        .bufferCount(3)
+        .subscribe((stats: NetworkStat[]) => {
+          expect(stats).toEqual([
+            { sent: new ScaledNetworkStat(7, 7), received: new ScaledNetworkStat(5, 5) },
+            { sent: new ScaledNetworkStat(8, 8), received: new ScaledNetworkStat(6, 6) },
+            { sent: new ScaledNetworkStat(11, 11), received: new ScaledNetworkStat(12, 12) }
+          ]);
           subscription.unsubscribe();
           done();
         });
-    });
-  });
-
-  describe('#getDeploymentTimeConstrainedStats', () => {
-    it('should combine MultiTimeseries and quota data', (done: DoneFn) => {
-      const timeseriesResponse = {
-        data: {
-          cores: [{ time: 1, value: 1 }, { time: 2, value: 2 }],
-          memory: [{ time: 1, value: 2 }, { time: 2, value: 3 }],
-          net_tx: [{ time: 1, value: 3 }, { time: 2, value: 4 }],
-          net_rx: [{ time: 1, value: 4 }, { time: 2, value: 5 }],
-          start: 0,
-          end: 0
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const quotaResponse = {
-        data: [{
-          attributes: {
-            name: 'foo-env',
-            quota: {
-              cpucores: {
-                quota: 2,
-                used: 1
-              },
-              memory: {
-                quota: 4,
-                used: 2,
-                units: 'MB'
-              }
-            }
-          }
-        }]
-      };
-      const expectedResponse: TimeConstrainedStats = {
-        cpu: [
-          { used: 1, quota: 2, timestamp: 1 },
-          { used: 2, quota: 2, timestamp: 2 }
-        ],
-        memory: [
-          new ScaledMemoryStat(2, 4, 1),
-          new ScaledMemoryStat(3, 4, 2)
-        ],
-        network: [
-          { sent: new ScaledNetworkStat(3, 1), received: new ScaledNetworkStat(4, 1) },
-          { sent: new ScaledNetworkStat(4, 2), received: new ScaledNetworkStat(5, 2) }
-        ]
-      };
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const timeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (timeseriesRegex.test(requestUrl)) {
-          responseBody = timeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        } else {
-          responseBody = quotaResponse;
-        }
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentTimeConstrainedStats('foo-space', 'foo-app', 'foo-env', (2 * 60 * 1000))
-        .subscribe((stats: TimeConstrainedStats) => {
-          expect(stats).toEqual(expectedResponse);
-          subscription.unsubscribe();
-          done();
-        });
-    });
-
-    it('should return an empty TimeConstrainedStats object if there is no data', (done: DoneFn) => {
-      const timeseriesResponse = {
-        data: {
-          cores: [],
-          memory: [],
-          net_tx: [],
-          net_rx: []
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const quotaResponse = {
-        data: [{
-          attributes: {
-            name: 'foo-env',
-            quota: {
-              cpucores: {
-                quota: 2,
-                used: 0
-              },
-              memory: {
-                quota: 4,
-                used: 0
-              }
-            }
-          }
-        }]
-      };
-      const expectedResponse: TimeConstrainedStats = {
-        cpu: [],
-        memory: [],
-        network: []
-      };
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const timeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (timeseriesRegex.test(requestUrl)) {
-          responseBody = timeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        } else {
-          responseBody = quotaResponse;
-        }
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentTimeConstrainedStats('foo-space', 'foo-app', 'foo-env', (2 * 60 * 1000))
-      .subscribe((stats: TimeConstrainedStats) => {
-        expect(stats).toEqual(expectedResponse);
-        subscription.unsubscribe();
-        done();
-      });
+      serviceUpdater.next();
+      serviceUpdater.next();
     });
   });
 

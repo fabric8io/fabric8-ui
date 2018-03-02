@@ -69,3 +69,19 @@ a {
     transform-origin: bottom;
   }
 }
+
+/*
+** Create Space Launcher Overlay
+*/
+.launcher.in {
+  .launcher-dialog {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+}
+.launcher.fade.in {
+  .launcher-dialog {
+    -webkit-transition: webkit-transform .3s ease out;
+    transition: .3s ease-out;
+  }
+}

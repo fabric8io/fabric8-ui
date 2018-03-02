@@ -1,0 +1,107 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+@icon-path: '../../../assets/stylesheets/shared/_icons.less';
+
+p,
+form,
+input,
+.btn {
+  font-size: 14px;
+}
+.imports-dialog {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, .8);
+  overflow-y: auto;
+  .form-group {
+    margin-top: 35px;
+  }
+  .form-control {
+    background-color: transparent;
+    border: 0;
+    border-bottom: 1px solid @color-pf-white;
+    border-radius: 0;
+    font-size: 1.2em;
+    color: @color-pf-white;
+    &:focus {
+      border-bottom-color: @color-pf-blue;
+      box-shadow: none;
+    }
+  }
+  input::placeholder {
+    font-style: italic;
+    color: @color-pf-white;
+  }
+  input:hover,
+  input:focus {
+    border-bottom-color: @color-pf-blue;
+  }
+  .code-imports {
+    color: @color-pf-white;
+    .alert-danger {
+      background-color: transparent;
+      border: none;
+      color: @color-pf-red-100;
+    }
+    &--step {
+      margin-top: 5%;
+      padding: 35px;
+      &_title {
+        font-size: 2em; // matches h4
+      }
+      label {
+        margin-bottom: 15px;
+      }
+      &_pencil {
+        &:hover {
+          &:after {
+            content: '\f040';
+            font-family: FontAwesome;
+            position: absolute;
+            top: 59px;
+            right: 20px;
+            color: @color-pf-white;
+            font-size: 1.5em;
+            border-bottom: 4px solid;
+            border-bottom-color: @color-pf-blue;
+          }
+        }
+      }
+      &_input {
+        margin-bottom: 10px;
+      }
+      &_content {
+        height: 350px;
+        background-color: transparent;
+        color: @color-pf-white;
+        border: 0;
+        &:hover {
+          box-shadow: 0 1px 6px rgba(255, 255, 255, .35);
+        }
+        i {
+          position: absolute;
+          right: 0;
+          bottom: 25px;
+          left: 0;
+          font-size: 8em;
+        }
+      }
+      &_toolbar {
+        margin-top: 40px;
+        text-align: center;
+        color: @color-pf-black-700;
+        button:last-of-type {
+          margin-left: 15px;
+        }
+        .btn.disabled, .btn[disabled] {
+          /* stylelint-disable */
+          background-color: transparent !important;
+          background: transparent !important;
+          /* stylelint-enable */
+        }
+      }
+    }
+  }
+}
