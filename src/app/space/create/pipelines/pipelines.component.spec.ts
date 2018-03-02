@@ -305,6 +305,91 @@ describe('PipelinesComponent', () => {
       ]);
       expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
     });
+
+    describe('Type Ahead', () => {
+      it('should narrow available filters on user input', function(this: TestingContext) {
+        this.testedDirective.filterQueries({
+          field: {
+            id: 'application',
+            title: 'Application',
+            placeholder: 'Filter by Application...',
+            type: 'typeahead',
+            queries: [
+              {
+                id: 'app',
+                value: 'app'
+              },
+              {
+                id: 'app2',
+                value: 'app2'
+              }
+            ]
+          },
+          value: '2'
+        });
+        expect(this.testedDirective.toolbarConfig.filterConfig.fields[0].queries as any[])
+          .toEqual([{ id: 'app2', value: 'app2' }]);
+      });
+
+      it('should reset available filters on filter selection', function(this: TestingContext) {
+        this.testedDirective.filterQueries({
+          field: {
+            id: 'application',
+            title: 'Application',
+            placeholder: 'Filter by Application...',
+            type: 'typeahead',
+            queries: [
+              {
+                id: 'app',
+                value: 'app'
+              },
+              {
+                id: 'app2',
+                value: 'app2'
+              }
+            ]
+          },
+          value: '2'
+        });
+        expect(this.testedDirective.toolbarConfig.filterConfig.fields[0].queries as any[])
+          .toEqual([{ id: 'app2', value: 'app2' }]);
+        this.testedDirective.filterChange(
+          {
+            appliedFilters: [
+              {
+                field: {
+                  id: 'application',
+                  title: 'Application',
+                  placeholder: 'Filter by Application...',
+                  type: 'select',
+                  queries: [
+                    {
+                      id: 'app',
+                      value: 'app'
+                    },
+                    {
+                      id: 'app2',
+                      value: 'app2'
+                    }
+                  ]
+                },
+                query: {
+                  id: 'app2',
+                  value: 'app2'
+                },
+                value: 'app2'
+              }
+            ]
+          }
+        );
+        expect(this.testedDirective.toolbarConfig.filterConfig.fields[0].queries as any[])
+          .toEqual([
+            { id: 'app', value: 'app' },
+            { id: 'app2', value: 'app2' },
+            { id: 'app3', value: 'app3' }
+          ]);
+      });
+    });
   });
 
   describe('sorting', () => {
