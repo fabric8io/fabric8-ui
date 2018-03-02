@@ -32,9 +32,7 @@ export class AddAppOverlayComponent implements OnDestroy, OnInit {
               private broadcaster: Broadcaster,
               private userService: UserService,
               private router: Router) {
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-    }));
+    this.loggedInUser = this.userService.currentLoggedInUser;
     this.subscriptions.push(context.current.subscribe((ctx: Context) => {
       this.currentSpace = ctx.space;
     }));

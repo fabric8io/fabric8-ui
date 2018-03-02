@@ -60,7 +60,6 @@ export class AddSpaceOverlayComponent implements OnInit {
    * by invoking the spaceService
    */
   createSpace() {
-    console.log('Creating space', this.space);
     if (!this.space) {
       this.space = this.createTransientSpace();
     }
@@ -87,7 +86,6 @@ export class AddSpaceOverlayComponent implements OnInit {
           this.hideAddSpaceOverlay();
         },
         err => {
-          console.log('Error creating space', err);
           this.notifications.message(<Notification> {
             message: `Failed to create "${this.space.name}"`,
             type: NotificationType.DANGER
