@@ -1096,8 +1096,8 @@ describe('DeploymentsService', () => {
         .bufferCount(2)
         .subscribe((stats: MemoryStat[]) => {
           expect(stats).toEqual([
-            new ScaledMemoryStat(4, 5, 4),
-            new ScaledMemoryStat(10, 5, 10)
+            new ScaledMemoryStat(4, 3, 4),
+            new ScaledMemoryStat(10, 3, 10)
           ]);
           subscription.unsubscribe();
           done();
