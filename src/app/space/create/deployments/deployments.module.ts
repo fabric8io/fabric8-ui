@@ -23,6 +23,7 @@ import { DeploymentsRoutingModule } from './deployments-routing.module';
 import { DeploymentsToolbarComponent } from './deployments-toolbar/deployments-toolbar.component';
 import { DeploymentsComponent } from './deployments.component';
 import { DeploymentsResourceUsageComponent } from './resource-usage/deployments-resource-usage.component';
+import { LoadingUtilizationBarComponent } from './resource-usage/loading-utilization-bar.component';
 import { ResourceCardComponent } from './resource-usage/resource-card.component';
 import { UtilizationBarComponent } from './resource-usage/utilization-bar.component';
 import {
@@ -59,6 +60,7 @@ const DEPLOYMENTS_SERVICE_POLL_TIMER = Observable
     DeploymentsDonutChartComponent,
     DeploymentsLinechartComponent,
     DeploymentsToolbarComponent,
+    LoadingUtilizationBarComponent,
     ResourceCardComponent,
     UtilizationBarComponent
   ],

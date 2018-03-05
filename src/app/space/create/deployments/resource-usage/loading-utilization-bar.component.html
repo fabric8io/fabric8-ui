@@ -1,0 +1,11 @@
+<div class="progress-container progress-description-left progress-label-right">
+    <div class="progress-description">
+      {{ resourceTitle }} ({{ resourceUnit }})
+    </div>
+    <div class="progress">
+      <div class="utilization-okay progress-bar" role="progressbar" [attr.aria-valuenow]="0" aria-valuemin="0" aria-valuemax="100"
+        [style.width]="'0%'" data-toggle="tooltip" title="Loading">
+        <span><b>Loading ....</b></span>
+      </div>
+    </div>
+  </div>
