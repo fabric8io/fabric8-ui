@@ -2,8 +2,10 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
   ViewEncapsulation
@@ -24,7 +26,7 @@ import {
   styleUrls: ['./my-spaces-toolbar.component.less'],
   templateUrl: './my-spaces-toolbar.component.html'
 })
-export class MySpacesToolbarComponent implements OnInit {
+export class MySpacesToolbarComponent implements OnInit, OnChanges {
   @Input() resultsCount: number = 0;
 
   @Output('onCreateSpace') onCreateSpace = new EventEmitter();
@@ -52,7 +54,7 @@ export class MySpacesToolbarComponent implements OnInit {
         type: 'text'
       }] as FilterField[],
       appliedFilters: [],
-      resultsCount: this.resultsCount,
+      resultsCount: 0,
       selectedCount: 0,
       totalCount: 0
     } as FilterConfig;
@@ -70,6 +72,12 @@ export class MySpacesToolbarComponent implements OnInit {
       filterConfig: this.filterConfig,
       sortConfig: this.sortConfig
     } as ToolbarConfig;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.resultsCount && this.filterConfig) {
+      this.filterConfig.resultsCount = changes.resultsCount.currentValue;
+    }
   }
 
   // Actions

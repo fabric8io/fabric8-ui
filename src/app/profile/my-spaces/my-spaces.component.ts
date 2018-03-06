@@ -38,6 +38,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   listConfig: ListConfig;
   showSpaces: boolean = false;
+  resultsCount: number = 0;
 
   private _spaces: Space[] = [];
   private appliedFilters: Filter[];
@@ -50,7 +51,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   private modalRef: BsModalRef;
   private pageName = 'myspaces';
   private pageSize: number = 2000;
-  private resultsCount: number = 0;
   private selectedFlow: string = 'start';
   private space: string = '';
   private spaceToDelete: Space;
