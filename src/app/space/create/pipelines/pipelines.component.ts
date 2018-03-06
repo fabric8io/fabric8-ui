@@ -12,6 +12,7 @@ import {
   Filter,
   FilterConfig,
   FilterEvent,
+  FilterField,
   FilterQuery,
   FilterType,
   SortEvent,
@@ -84,14 +85,14 @@ export class PipelinesComponent implements OnInit, OnDestroy {
             id: 'application',
             title: 'Application',
             placeholder: 'Filter by Application...',
-            type: FilterType.SELECT,
+            type: FilterType.TYPEAHEAD,
             queries: this._apps
           },
           {
             id: 'codebase',
             title: 'Codebase',
             placeholder: 'Filter by Codebase...',
-            type: FilterType.SELECT,
+            type: FilterType.TYPEAHEAD,
             queries: this._codebases
           }
         ],
@@ -170,6 +171,8 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   filterChange($event: FilterEvent): void {
     this._appliedFilters = $event.appliedFilters;
+    this.toolbarConfig.filterConfig.fields[0].queries = this._apps;
+    this.toolbarConfig.filterConfig.fields[1].queries = this._codebases;
     this.applyFilters();
   }
 
@@ -177,6 +180,26 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     this._currentSortField = $event.field;
     this._ascending = $event.isAscending;
     this.applySort();
+  }
+
+  filterQueries($event: FilterEvent): void {
+    const typeAheadValue = $event.value.trim();
+
+    const fieldIndex = this.toolbarConfig.filterConfig.fields
+      .findIndex((i: FilterField) => i.id === $event.field.id);
+    const field = this.toolbarConfig.filterConfig.fields[fieldIndex];
+
+    let fieldQueries: FilterQuery[] = [];
+    if (field.id === 'application') {
+      fieldQueries = this._apps;
+    } else if (field.id === 'codebase') {
+      fieldQueries = this._codebases;
+    }
+
+    this.toolbarConfig.filterConfig.fields[fieldIndex].queries =
+      fieldQueries.filter((item: FilterQuery) =>
+        item.value.toLowerCase().includes(typeAheadValue.toLowerCase())
+      );
   }
 
   private updateConsoleLink(): void {

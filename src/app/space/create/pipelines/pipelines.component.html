@@ -3,7 +3,8 @@
     <pfng-toolbar [config]="toolbarConfig"
                   [viewTemplate]="addOpenShiftConsoleLink"
                   (onFilterChange)="filterChange($event)"
-                  (onSortChange)="sortChange($event)">
+                  (onSortChange)="sortChange($event)"
+                  (onFilterTypeAhead)="filterQueries($event)">
       <ng-template #addOpenShiftConsoleLink>
         <div class="openshift-links" placement="bottom">
           <div class='pull-right dropdown-kebab-pf dropdown' dropdown>
