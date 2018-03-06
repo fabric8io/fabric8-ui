@@ -49,8 +49,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   private _context: Context;
   private contextSubscription: Subscription;
 
-  private _apps: FilterQuery[] = [];
-  private _codebases: FilterQuery[] = [];
   private _filteredPipelines: BuildConfig[] = [];
   private _allPipelines: BuildConfig[] = [];
 
@@ -84,15 +82,13 @@ export class PipelinesComponent implements OnInit, OnDestroy {
             id: 'application',
             title: 'Application',
             placeholder: 'Filter by Application...',
-            type: FilterType.SELECT,
-            queries: this._apps
+            type: FilterType.TEXT
           },
           {
             id: 'codebase',
             title: 'Codebase',
             placeholder: 'Filter by Codebase...',
-            type: FilterType.SELECT,
-            queries: this._codebases
+            type: FilterType.TEXT
           }
         ],
         appliedFilters: [],
@@ -125,16 +121,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
     this._pipelinesSubscription = this.pipelinesService.current
       .subscribe((buildConfigs: BuildConfig[]) => {
-        buildConfigs.forEach((buildConfig: BuildConfig) => {
-          const application: string = buildConfig.id;
-          const codebase: string = buildConfig.gitUrl;
-          if (!this._apps.find(fq => fq.id === application)) {
-            this._apps.push({ id: application, value: application } as FilterQuery);
-          }
-          if (!this._codebases.find(fq => fq.id === codebase)) {
-            this._codebases.push({ id: codebase, value: codebase } as FilterQuery);
-          }
-        });
         this._allPipelines = buildConfigs;
         this.applyFilters();
         this.applySort();
@@ -212,11 +198,11 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         }
         this._appliedFilters.forEach(filter => {
           if (filter.field.id === 'application') {
-            if (filter.value !== bc.id) {
+            if (!bc.id.includes(filter.value)) {
               matches = false;
             }
           } else if (filter.field.id === 'codebase') {
-            if (filter.value !== bc.gitUrl) {
+            if (!bc.gitUrl.includes(filter.value)) {
               matches = false;
             }
           }

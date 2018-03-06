@@ -178,21 +178,7 @@ describe('PipelinesComponent', () => {
                 id: 'application',
                 title: 'Application',
                 placeholder: 'Filter by Application...',
-                type: 'select',
-                queries: [
-                  {
-                    id: 'app',
-                    value: 'app'
-                  },
-                  {
-                    id: 'app2',
-                    value: 'app2'
-                  }
-                ]
-              },
-              query: {
-                id: 'app2',
-                value: 'app2'
+                type: 'text'
               },
               value: 'app2'
             }
@@ -218,21 +204,7 @@ describe('PipelinesComponent', () => {
                 id: 'codebase',
                 title: 'Codebase',
                 placeholder: 'Filter by Codebase...',
-                type: 'select',
-                queries: [
-                  {
-                    id: 'https://example.com/app.git',
-                    value: 'https://example.com/app.git'
-                  },
-                  {
-                    id: 'https://example.com/app2.git',
-                    value: 'https://example.com/app2.git'
-                  }
-                ]
-              },
-              query: {
-                id: 'https://example.com/app2.git',
-                value: 'https://example.com/app2.git'
+                type: 'text'
               },
               value: 'https://example.com/app2.git'
             }
@@ -258,21 +230,7 @@ describe('PipelinesComponent', () => {
                 id: 'codebase',
                 title: 'Codebase',
                 placeholder: 'Filter by Codebase...',
-                type: 'select',
-                queries: [
-                  {
-                    id: 'https://example.com/app.git',
-                    value: 'https://example.com/app.git'
-                  },
-                  {
-                    id: 'https://example.com/app2.git',
-                    value: 'https://example.com/app2.git'
-                  }
-                ]
-              },
-              query: {
-                id: 'https://example.com/app2.git',
-                value: 'https://example.com/app2.git'
+                type: 'text'
               },
               value: 'https://example.com/app2.git'
             }
