@@ -1,7 +1,15 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ErrorHandler,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
-import { Notification, Notifications, NotificationType } from 'ngx-base';
+import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
@@ -13,6 +21,8 @@ import { DummyService } from 'app/shared/dummy.service';
 import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
 import { SpacesService } from 'app/shared/spaces.service';
 
+import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
+
 @Component({
   selector: 'space-wizard',
   templateUrl: './space-wizard.component.html',
@@ -23,12 +33,16 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
   @Output('onSelect') onSelect = new EventEmitter();
   @Output('onCancel') onCancel = new EventEmitter();
 
+  appLauncherEnabled: boolean = false;
   spaceTemplates: ProcessTemplate[];
   selectedTemplate: ProcessTemplate;
   space: Space;
+  subscriptions: Subscription[] = [];
   currentSpace: Space;
 
   constructor(
+    private broadcaster: Broadcaster,
+    private featureTogglesService: FeatureTogglesService,
     private router: Router,
     public dummy: DummyService,
     private spaceService: SpaceService,
@@ -37,14 +51,21 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
     private spaceNamespaceService: SpaceNamespaceService,
     private spaceNamePipe: SpaceNamePipe,
     private spacesService: SpacesService,
-    private context: ContextService
+    private context: ContextService,
+    private logger: Logger,
+    private errorHandler: ErrorHandler
   ) {
     this.spaceTemplates = dummy.processTemplates;
     this.space = this.createTransientSpace();
-
+    this.subscriptions.push(featureTogglesService.getFeature('AppLauncher').subscribe((feature) => {
+      this.appLauncherEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
+    }));
   }
 
   ngOnDestroy() {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
     this.finish();
   }
 
@@ -53,39 +74,49 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
    * by invoking the spaceService
    */
   createSpace() {
-    console.log('Creating space', this.space);
+    if (!this.userService.currentLoggedInUser && !this.userService.currentLoggedInUser.id) {
+      const err: Error = Error('Error creating space, invalid user.' + this.userService.currentLoggedInUser);
+      this.errorHandler.handleError(err);
+      this.logger.error(err);
+      this.notifications.message(<Notification> {
+        message: `Failed to create "${this.space.name}". Invalid user: "${this.userService.currentLoggedInUser}"`,
+        type: NotificationType.DANGER
+      });
+      return;
+    }
+
+    console.log('Creating space', this.space, this.userService.currentLoggedInUser.id);
     if (!this.space) {
       this.space = this.createTransientSpace();
     }
     this.space.attributes.name = this.space.name.replace(/ /g, '_');
-    this.userService.getUser()
-      .switchMap(user => {
-        this.space.relationships['owned-by'].data.id = user.id;
-        return this.spaceService.create(this.space);
-      })
-      .do(createdSpace => {
-        this.spacesService.addRecent.next(createdSpace);
-      })
-      .switchMap(createdSpace => {
-        return this.spaceNamespaceService
-          .updateConfigMap(Observable.of(createdSpace))
-          .map(() => createdSpace)
-          // Ignore any errors coming out here, we've logged and notified them earlier
-          .catch(err => Observable.of(createdSpace));
-      })
-      .subscribe(createdSpace => {
-          this.router.navigate([createdSpace.relationalData.creator.attributes.username,
-            createdSpace.attributes.name]);
-          this.finish();
-        },
-        err => {
-          console.log('Error creating space', err);
-          this.notifications.message(<Notification> {
-            message: `Failed to create "${this.space.name}"`,
-            type: NotificationType.DANGER
-          });
-          this.finish();
+
+    this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
+    this.spaceService.create(this.space)
+    .do(createdSpace => {
+      this.spacesService.addRecent.next(createdSpace);
+    })
+    .switchMap(createdSpace => {
+      return this.spaceNamespaceService
+        .updateConfigMap(Observable.of(createdSpace))
+        .map(() => createdSpace)
+        // Ignore any errors coming out here, we've logged and notified them earlier
+        .catch(err => Observable.of(createdSpace));
+    })
+    .subscribe(createdSpace => {
+        this.router.navigate([createdSpace.relationalData.creator.attributes.username,
+          createdSpace.attributes.name]);
+        this.finish();
+      },
+      err => {
+        this.errorHandler.handleError(err);
+        this.logger.error(err);
+        this.notifications.message(<Notification> {
+          message: `Failed to create "${this.space.name}"`,
+          type: NotificationType.DANGER
         });
+        this.finish();
+      });
   }
 
   ngOnInit() {
@@ -108,6 +139,11 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
 
   cancel() {
     this.onCancel.emit({});
+  }
+
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+    this.cancel();
   }
 
   private createTransientSpace(): Space {

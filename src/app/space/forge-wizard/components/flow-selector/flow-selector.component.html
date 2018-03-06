@@ -15,26 +15,22 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12 panel">
+    <div class="col-sm-12">
       <div id="importCodeButton" class="col-sm-6 panel-item" (click)="select('import')">
-        <ul class="action-panel-list">
-          <li>
-            <h3>Import existing <b>code</b></h3>
-          </li>
-          <li>
-            <i class="pficon fa-3x pficon-import"></i>
-          </li>
-        </ul>
+        <div class="col-sm-6">
+          <h3>Import existing <b>code</b></h3>
+        </div>
+        <div class="col-sm-6">
+          <i class="pficon pficon-import fa-3x"></i>
+        </div>
       </div>
       <div id="forgeQuickStartButton" class="col-sm-6 panel-item" (click)="select('quickstart')">
-        <ul class="action-panel-list">
-          <li>
-            <h3>Create a new <b>Quickstart</b> project</h3>
-          </li>
-          <li>
-            <i class="pficon fa-3x pficon-screen"></i>
-          </li>
-        </ul>
+        <div class="col-sm-6">
+          <h3>Create a new <b>Quickstart</b> project</h3>
+        </div>
+        <div class="col-sm-6">
+          <i class="pficon fa-3x pficon-screen"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -46,6 +42,13 @@
         </a>
       </div>
     </div>
+    <div class="row" *ngIf="appLauncherEnabled">
+      <div class="col-sm-12 text-center">
+        <button class="btn btn-link"
+              type="button"
+              (click)="showAddAppOverlay(); cancel();"
+              aria-label="Open New Import Experience">New Import Experience</button>
+      </div>
+    </div>
   </div>
 </section>
-

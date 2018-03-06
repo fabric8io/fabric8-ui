@@ -6,11 +6,12 @@ import { RouterModule } from '@angular/router';
 import { MomentModule } from 'angular2-moment';
 
 // import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
+
+import { DeploymentsModule } from '../../space/create/deployments/deployments.module';
 import { EnvironmentWidgetComponent } from './environment-widget.component';
 
-
 @NgModule({
-  imports: [CommonModule, FormsModule, RouterModule, MomentModule/*, FeatureFlagModule */],
+  imports: [CommonModule, DeploymentsModule, FormsModule, RouterModule, MomentModule/*, FeatureFlagModule */],
   declarations: [EnvironmentWidgetComponent],
   exports: [EnvironmentWidgetComponent]
 })

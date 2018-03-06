@@ -1,0 +1,90 @@
+<div class="imports-dialog">
+  <div class="code-imports">
+    <form class="code-imports--step active" role="form">
+      <section class="container-fluid">
+        <form class="form" #spaceForm="ngForm">
+          <div class="row">
+            <div class="col-sm-4 col-sm-offset-2">
+              <h1 class="code-imports--step_title">Create Application</h1>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+              <form>
+                <div class="form-group">
+                  <label for="projectName">
+                    To begin creating your Application, give it a name.
+                  </label>
+                  <span class="code-imports--step_pencil">
+                    <input id="projectName" name="projectName" type="text" class="form-control code-imports--step_input col-sm-5" placeholder="Enter Application Name"
+                           aria-label="Application Name Input" required [(ngModel)]="projectName">
+                  </span>
+                  <p class="help-block">
+                    Application name must be unique, at least 4 characters long, cannot be more than 65 characters and must contain only letters,
+                    numbers, spaces underscores or hyphens.
+                    <br>
+                    It cannot start of end with a space, underscore or hyphen.
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row row-cards-pf">
+            <div class="col-sm-4 col-sm-offset-2">
+              <div class="container-fluid container-cards-pf" (click)="routeToImportApp()">
+                <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
+                  <div class="card-pf-body">
+                    <h2 class="card-pf-title">
+                      Import Existing Application
+                    </h2>
+                    <div class="card-pf-items">
+                      <div class="card-pf-item">
+                        I have an existing application that I would like to import to use as the base for my application.
+                      </div>
+                    </div>
+                    <p class="card-pf-info text-center">
+                      <i class="pficon pficon-export"></i>
+                    </p>
+                  </div>
+                  <div class="card-pf-view-checkbox">
+                    <input type="checkbox">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="container-fluid container-cards-pf" (click)="routeToCreateApp()">
+                <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
+                  <div class="card-pf-body">
+                    <h2 class="card-pf-title">
+                      Create a New Application
+                    </h2>
+                    <div class="card-pf-items">
+                      <div class="card-pf-item">
+                        I want to create a new application from scratch. I would like to use the preset technologies and missions within OpenShift.io to help me create a new application.
+                      </div>
+                    </div>
+                    <p class="card-pf-info text-center">
+                      <i class="pficon pficon-add-circle-o"></i>
+                    </p>
+                  </div>
+                  <div class="card-pf-view-checkbox">
+                    <input type="checkbox">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+      <footer class="container-fluid">
+        <div class="row">
+          <div class="col-sm-12 code-imports--step_toolbar">
+            <button id="cancelImportsButton" class="btn btn-outline" aria-label="Cancel"
+                    (click)="hideAddAppOverlay()">Cancel</button>
+          </div>
+        </div>
+      </footer>
+    </form>
+  </div>
+</div>
