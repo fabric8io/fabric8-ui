@@ -314,10 +314,13 @@ export class DeploymentsService implements OnDestroy {
     return this.getDeployment(spaceId, applicationId, environmentName)
       .map((deployment: Deployment) => deployment.attributes)
       .map((attrs: DeploymentAttributes) => {
-        const pods = [];
-        attrs.pods.forEach(p => {
-          pods.push([p[0], parseInt(p[1])]);
-        });
+        const pods = attrs.pods
+          .sort((a: [string, string], b: [string, string]): number =>
+            a[0].localeCompare(b[0])
+          )
+          .map((entry: [string, string]): [string, number] =>
+            [entry[0], parseInt(entry[1])]
+          );
         return {
           total: attrs.pod_total,
           pods: pods

@@ -1272,11 +1272,13 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'stage',
-                        pod_total: 6,
+                        pod_total: 15,
                         pods: [
+                          ['Terminating', 5],
+                          ['Stopping', '3'],
                           ['Running', '1'],
-                          ['Starting', '2'],
-                          ['Stopping', '3']
+                          ['Not Running', 4],
+                          ['Starting', '2']
                         ]
                       }
                     }
@@ -1288,11 +1290,13 @@ describe('DeploymentsService', () => {
         }
       };
       const expectedResponse = {
-        total: 6,
+        total: 15,
         pods: [
+          [ 'Not Running', 4 ],
           [ 'Running', 1 ],
           [ 'Starting', 2 ],
-          [ 'Stopping', 3 ]
+          [ 'Stopping', 3 ],
+          [ 'Terminating', 5 ]
         ]
       };
       doMockHttpTest({
