@@ -190,7 +190,8 @@ export interface SeriesData {
   value: number;
 }
 
-export const TIMER_TOKEN: InjectionToken<string> = new InjectionToken<string>('DeploymentsServiceTimer');
+export const TIMER_TOKEN: InjectionToken<Observable<void>> = new InjectionToken<Observable<void>>('DeploymentsServiceTimer');
+export const TIMESERIES_SAMPLES_TOKEN: InjectionToken<number> = new InjectionToken<number>('DeploymentsServiceTimeseriesSamples');
 
 @Injectable()
 export class DeploymentsService implements OnDestroy {
@@ -206,7 +207,7 @@ export class DeploymentsService implements OnDestroy {
 
   private readonly appsObservables: Map<string, Observable<Application[]>> = new Map<string, Observable<Application[]>>();
   private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
-  private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData>> = new Map<string, Subject<TimeseriesData>>();
+  private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData[]>> = new Map<string, Subject<TimeseriesData[]>>();
 
   private readonly serviceSubscriptions: Subscription[] = [];
 
@@ -217,7 +218,8 @@ export class DeploymentsService implements OnDestroy {
     private readonly errorHandler: ErrorHandler,
     private readonly notifications: NotificationsService,
     @Inject(WIT_API_URL) private readonly witUrl: string,
-    @Inject(TIMER_TOKEN) private readonly pollTimer: Observable<void>
+    @Inject(TIMER_TOKEN) private readonly pollTimer: Observable<void>,
+    @Inject(TIMESERIES_SAMPLES_TOKEN) private readonly timeseriesSamples: number
   ) {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
@@ -332,36 +334,42 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged(deepEqual);
   }
 
-  getDeploymentCpuStat(spaceId: string, applicationId: string, environmentName: string): Observable<CpuStat> {
-    const series = this.getTimeseriesData(spaceId, applicationId, environmentName)
-      .filter((t: TimeseriesData) => t && has(t, 'cores'))
-      .map((t: TimeseriesData) => t.cores);
+  getDeploymentCpuStat(spaceId: string, applicationId: string, environmentName: string, maxSamples: number = this.timeseriesSamples): Observable<CpuStat[]> {
+    const series = this.getTimeseriesData(spaceId, applicationId, environmentName, maxSamples)
+      .filter((t: TimeseriesData[]) => t && t.some((el: TimeseriesData) => has(el, 'cores')))
+      .map((t: TimeseriesData[]) => t.map((s: TimeseriesData) => s.cores));
     const quota = this.getPodsQuota(spaceId, applicationId, environmentName)
       .map((podsQuota: PodsQuota) => podsQuota.cpucores)
       .distinctUntilChanged();
-
-
-    return Observable.combineLatest(series, quota, (series: CoresSeries, quota: number) => ({ used: series.value, quota: quota, timestamp: series.time } as CpuStat));
+    return Observable.combineLatest(series, quota, (series: CoresSeries[], quota: number) =>
+      series.map((s: CoresSeries) =>
+        ({ used: s.value, quota: quota, timestamp: s.time } as CpuStat)
+      )
+    );
   }
 
-  getDeploymentMemoryStat(spaceId: string, applicationId: string, environmentName: string): Observable<MemoryStat> {
-    const series = this.getTimeseriesData(spaceId, applicationId, environmentName)
-      .filter((t: TimeseriesData) => t && has(t, 'memory'))
-      .map((t: TimeseriesData) => t.memory);
+  getDeploymentMemoryStat(spaceId: string, applicationId: string, environmentName: string, maxSamples: number = this.timeseriesSamples): Observable<MemoryStat[]> {
+    const series = this.getTimeseriesData(spaceId, applicationId, environmentName, maxSamples)
+      .filter((t: TimeseriesData[]) => t && t.some((el: TimeseriesData) => has(el, 'memory')))
+      .map((t: TimeseriesData[]) => t.map((s: TimeseriesData) => s.memory));
     const quota = this.getPodsQuota(spaceId, applicationId, environmentName)
       .map((podsQuota: PodsQuota) => podsQuota.memory)
       .distinctUntilChanged();
-    return Observable.combineLatest(series, quota, (series: MemorySeries, quota: number) => new ScaledMemoryStat(series.value, quota, series.time) as MemoryStat);
+    return Observable.combineLatest(series, quota, (series: MemorySeries[], quota: number) =>
+      series.map((s: MemorySeries) => new ScaledMemoryStat(s.value, quota, s.time)
+      )
+    );
   }
 
-  getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string): Observable<NetworkStat> {
-    return this.getTimeseriesData(spaceId, applicationId, environmentName)
-      .filter((t: TimeseriesData) => t && has(t, 'net_tx') && has(t, 'net_rx'))
-      .map((t: TimeseriesData) =>
+  getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string, maxSamples: number = this.timeseriesSamples): Observable<NetworkStat[]> {
+    return this.getTimeseriesData(spaceId, applicationId, environmentName, maxSamples)
+      .filter((t: TimeseriesData[]) => t && t.some((el: TimeseriesData) => has(el, 'net_tx')) && t.some((el: TimeseriesData) => has(el, 'net_rx')))
+      .map((t: TimeseriesData[]) =>
+        t.map((s: TimeseriesData) =>
         ({
-          sent: new ScaledNetworkStat(t.net_tx.value, t.net_tx.time),
-          received: new ScaledNetworkStat(t.net_rx.value, t.net_rx.time)
-        } as NetworkStat)
+          sent: new ScaledNetworkStat(s.net_tx.value, s.net_tx.time),
+          received: new ScaledNetworkStat(s.net_rx.value, s.net_rx.time)
+        } as NetworkStat))
       );
   }
 
@@ -449,7 +457,7 @@ export class DeploymentsService implements OnDestroy {
       .filter((env: EnvironmentStat) => env.attributes.name === environmentName);
   }
 
-  private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
+  private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string, maxSamples: number): Observable<TimeseriesData[]> {
     return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
       .flatMap((deployed: boolean) => {
         if (!deployed) {
@@ -457,18 +465,25 @@ export class DeploymentsService implements OnDestroy {
         }
         const key = `${spaceId}:${applicationId}:${environmentName}`;
         if (!this.timeseriesSubjects.has(key)) {
-          const subject = new ReplaySubject<TimeseriesData>(DeploymentsService.FRONT_LOAD_SAMPLES);
+          const subject = new ReplaySubject<TimeseriesData[]>(this.timeseriesSamples);
 
           const now = +Date.now();
           const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, applicationId, environmentName, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now);
 
           const polledUpdates = this.getStreamingTimeseriesData(spaceId, applicationId, environmentName);
 
-          const seriesData = Observable.concat(frontLoadedUpdates, polledUpdates);
+          const seriesData = Observable.concat(frontLoadedUpdates, polledUpdates)
+            .bufferCount(this.timeseriesSamples, 1);
           this.serviceSubscriptions.push(seriesData.subscribe(subject));
           this.timeseriesSubjects.set(key, subject);
         }
-        return this.timeseriesSubjects.get(key);
+        return this.timeseriesSubjects.get(key)
+          .map((data: TimeseriesData[]) => {
+            if (maxSamples >= data.length) {
+              return data;
+            }
+            return data.slice(data.length - maxSamples);
+          });
       });
   }
 

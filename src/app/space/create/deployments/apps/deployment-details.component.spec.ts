@@ -99,20 +99,20 @@ class FakeDeploymentsLinechart {
 describe('DeploymentDetailsComponent', () => {
   type Context = TestContext<DeploymentDetailsComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  let cpuStatObservable: BehaviorSubject<CpuStat>;
-  let memStatObservable: BehaviorSubject<MemoryStat>;
-  let netStatObservable: BehaviorSubject<NetworkStat>;
+  let cpuStatObservable: BehaviorSubject<CpuStat[]>;
+  let memStatObservable: BehaviorSubject<MemoryStat[]>;
+  let netStatObservable: BehaviorSubject<NetworkStat[]>;
   let podsObservable: BehaviorSubject<Pods>;
 
   beforeEach(() => {
-    cpuStatObservable = new BehaviorSubject({ used: 1, quota: 2 } as CpuStat);
-    memStatObservable = new BehaviorSubject({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
+    cpuStatObservable = new BehaviorSubject([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]);
+    memStatObservable = new BehaviorSubject([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]);
 
     const mb = Math.pow(1024, 2);
-    netStatObservable = new BehaviorSubject({
-      sent: new ScaledNetworkStat(1 * mb),
-      received: new ScaledNetworkStat(2 * mb)
-    } as NetworkStat);
+    netStatObservable = new BehaviorSubject([{
+      sent: new ScaledNetworkStat(1 * mb, 1),
+      received: new ScaledNetworkStat(2 * mb, 1)
+    }] as NetworkStat[]);
 
     podsObservable = new BehaviorSubject(
       { total: 1, pods: [['Running', 1], ['Starting', 0], ['Stopping', 0]] } as Pods
@@ -242,80 +242,47 @@ describe('DeploymentDetailsComponent', () => {
     });
   });
 
-  describe('charts', () => {
-    it('by default should be the default data duration divided by the polling rate', function(this: Context) {
+  describe('linechart data', () => {
+    it('should be rounded to whole numbers when units are bytes', function(this: Context) {
+      const mb = Math.pow(1024, 2);
+      netStatObservable.next([
+        {
+          sent: new ScaledNetworkStat(1 * mb, 1),
+          received: new ScaledNetworkStat(2 * mb, 1)
+        },
+        {
+          sent: new ScaledNetworkStat(100.567, 2),
+          received: new ScaledNetworkStat(200.234, 2)
+        }
+      ] as NetworkStat[]);
+      this.detectChanges();
       const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-      const expectedDefaultElements: number =
-        DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS;
-      expect(detailsComponent.getChartMaxElements()).toBe(expectedDefaultElements);
+      expect(detailsComponent.netVal).toEqual(301);
+      expect(detailsComponent.netData.xData).toEqual(['time', 1, 2]);
+      expect(detailsComponent.netData.yData.length).toEqual(2);
+      expect(detailsComponent.netData.yData[0][2]).toEqual(101);
+      expect(detailsComponent.netData.yData[1][2]).toEqual(200);
     });
 
-    it('should not be able to be set to anything less than 1', function(this: Context) {
+    it('should be rounded to tenths when units are larger than bytes', function(this: Context) {
+      const mb = Math.pow(1024, 2);
+      netStatObservable.next([
+        {
+          sent: new ScaledNetworkStat(1 * mb, 1),
+          received: new ScaledNetworkStat(2 * mb, 1)
+        },
+        {
+          sent: new ScaledNetworkStat(12.34 * 1024, 2),
+          received: new ScaledNetworkStat(45.67 * 1024, 2)
+        }
+      ] as NetworkStat[]);
+      this.detectChanges();
       const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-      [0, -5, -1873].forEach((n: number) => {
-        detailsComponent.setChartMaxElements(n);
-        expect(detailsComponent.getChartMaxElements()).toBe(1);
-      });
-    });
-
-    describe('sparkline data', () => {
-      it('should have its cpu data bounded when enough data has been emitted', function(this: Context) {
-        const MAX_CPU_SPARKLINE_ELEMENTS = 4;
-        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-        detailsComponent.setChartMaxElements(MAX_CPU_SPARKLINE_ELEMENTS);
-        times(MAX_CPU_SPARKLINE_ELEMENTS + 10, () => cpuStatObservable.next({ used: 1, quota: 2 }));
-        expect(detailsComponent.cpuData.xData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS);
-        expect(detailsComponent.cpuData.yData.length).toBe(MAX_CPU_SPARKLINE_ELEMENTS);
-      });
-
-      it('should have its memory data bounded when enough data has been emitted', function(this: Context) {
-        const MAX_MEM_SPARKLINE_ELEMENTS = 6;
-        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-        detailsComponent.setChartMaxElements(MAX_MEM_SPARKLINE_ELEMENTS);
-        times(MAX_MEM_SPARKLINE_ELEMENTS + 10, () => memStatObservable.next({ used: 3, quota: 4, units: 'GB' }));
-        expect(detailsComponent.memData.xData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
-        expect(detailsComponent.memData.yData.length).toBe(MAX_MEM_SPARKLINE_ELEMENTS);
-      });
-    });
-
-    describe('linechart data', () => {
-      it('should have its net data bounded when enough data has been emitted', function(this: Context) {
-        const MAX_NET_LINE_ELEMENTS = 4;
-        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-        detailsComponent.setChartMaxElements(MAX_NET_LINE_ELEMENTS);
-        times(MAX_NET_LINE_ELEMENTS + 10,
-          () => netStatObservable.next({ sent: new ScaledNetworkStat(3), received: new ScaledNetworkStat(4) }));
-        expect(detailsComponent.netData.xData.length).toBe(MAX_NET_LINE_ELEMENTS);
-        expect(detailsComponent.netData.yData[0].length).toBe(MAX_NET_LINE_ELEMENTS);
-      });
-
-      it('should be rounded to whole numbers when units are bytes', function(this: Context) {
-        netStatObservable.next({
-          sent: new ScaledNetworkStat(100.567),
-          received: new ScaledNetworkStat(200.234)
-        } as NetworkStat);
-        this.detectChanges();
-        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-        expect(detailsComponent.netVal).toEqual(301);
-        expect(detailsComponent.netData.xData.length).toEqual(3);
-        expect(detailsComponent.netData.yData.length).toEqual(2);
-        expect(detailsComponent.netData.yData[0][2]).toEqual(101);
-        expect(detailsComponent.netData.yData[1][2]).toEqual(200);
-      });
-
-      it('should be rounded to tenths when units are larger than bytes', function(this: Context) {
-        netStatObservable.next({
-          sent: new ScaledNetworkStat(12.34 * 1024),
-          received: new ScaledNetworkStat(45.67 * 1024)
-        } as NetworkStat);
-        this.detectChanges();
-        const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-        expect(detailsComponent.netVal).toEqual(58);
-        expect(detailsComponent.netData.xData.length).toEqual(3);
-        expect(detailsComponent.netData.yData.length).toEqual(2);
-        expect(detailsComponent.netData.yData[0][2]).toEqual(12636.2);
-        expect(detailsComponent.netData.yData[1][2]).toEqual(46766.1);
-      });
+      expect(detailsComponent.netVal).toEqual(58);
+      expect(detailsComponent.netData.xData).toEqual(['time', 1, 2]);
+      expect(detailsComponent.netData.yData.length).toEqual(2);
+      expect(detailsComponent.netData.yData[0][2]).toEqual(12636.2);
+      expect(detailsComponent.netData.yData[1][2]).toEqual(46766.1);
     });
   });
 

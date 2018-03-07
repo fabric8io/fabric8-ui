@@ -12,9 +12,16 @@
           </h3>
         </div>
         <div [collapse]="resourcesCollapsed">
-          <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
-            <resource-card [spaceId]="spaceId | async" [environment]="environment"></resource-card>
+          <div *ngIf="environments | async as environmentsList; else loading">
+            <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environmentsList">
+              <resource-card [spaceId]="spaceId | async" [environment]="environment"></resource-card>
+            </div>
           </div>
+          <ng-template #loading>
+            <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let num of [0, 1]">
+              <resource-card [spaceId]="null" [environment]="null"></resource-card>
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>

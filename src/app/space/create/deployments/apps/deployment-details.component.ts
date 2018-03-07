@@ -39,8 +39,6 @@ import { DeploymentsLinechartData } from '../deployments-linechart/deployments-l
 })
 export class DeploymentDetailsComponent {
 
-  static readonly DEFAULT_SPARKLINE_DATA_DURATION: number = 15 * 60 * 1000;
-
   @Input() active: boolean;
   @Input() collapsed: boolean;
   @Input() applicationId: string;
@@ -98,10 +96,8 @@ export class DeploymentDetailsComponent {
   };
 
   hasPods: Subject<boolean> = new ReplaySubject<boolean>(1);
-  cpuStat: Observable<CpuStat>;
-  memStat: Observable<MemoryStat>;
-  cpuTime: number;
-  memTime: number;
+  cpuStat: Observable<CpuStat[]>;
+  memStat: Observable<MemoryStat[]>;
   cpuVal: number;
   cpuMax: number;
   memVal: number;
@@ -110,14 +106,9 @@ export class DeploymentDetailsComponent {
   netVal: number;
   netUnits: string;
 
-  sparklineMaxElements: number;
-
   constructor(private deploymentsService: DeploymentsService) { }
 
   ngOnInit(): void {
-    this.setChartMaxElements(
-      DeploymentDetailsComponent.DEFAULT_SPARKLINE_DATA_DURATION / DeploymentsService.POLL_RATE_MS);
-
     this.subscriptions.push(
       this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name)
         .map((p: Pods) => p.total > 0)
@@ -126,8 +117,6 @@ export class DeploymentDetailsComponent {
 
     this.cpuConfig.chartHeight = 60;
     this.memConfig.chartHeight = 60;
-    this.cpuTime = 1;
-    this.memTime = 1;
 
     this.cpuStat =
       this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
@@ -136,72 +125,44 @@ export class DeploymentDetailsComponent {
       this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.applicationId, this.environment.name);
 
     this.subscriptions.push(
-      this.cpuStat.subscribe((stat: CpuStat) => {
-        this.cpuVal = stat.used;
-        this.cpuMax = stat.quota;
-        this.cpuData.total = stat.quota;
-        this.cpuData.yData.push(stat.used);
-        this.cpuData.xData.push(stat.timestamp);
-        this.trimSparklineData(this.cpuData);
+      this.cpuStat.subscribe((stats: CpuStat[]) => {
+        const last: CpuStat = stats[stats.length - 1];
+        this.cpuVal = last.used;
+        this.cpuMax = last.quota;
+        this.cpuData.total = last.quota;
+        this.cpuData.xData = [this.cpuData.xData[0], ...stats.map((stat: CpuStat) => stat.timestamp)];
+        this.cpuData.yData = [this.cpuData.yData[0], ...stats.map((stat: CpuStat) => stat.used)];
       })
     );
 
     this.subscriptions.push(
-      this.memStat.subscribe((stat: MemoryStat) => {
-        this.memVal = stat.used;
-        this.memMax = stat.quota;
-        this.memData.total = stat.quota;
-        this.memData.yData.push(stat.used);
-        this.memData.xData.push(stat.timestamp);
-        this.memUnits = stat.units;
-        this.trimSparklineData(this.memData);
+      this.memStat.subscribe((stats: MemoryStat[]) => {
+        const last: MemoryStat = stats[stats.length - 1];
+        this.memVal = last.used;
+        this.memMax = last.quota;
+        this.memData.total = last.quota;
+        this.memUnits = last.units;
+        this.memData.xData = [this.memData.xData[0], ...stats.map((stat: MemoryStat) => stat.timestamp)];
+        this.memData.yData = [this.memData.yData[0], ...stats.map((stat: MemoryStat) => stat.used)];
       })
     );
 
     this.subscriptions.push(
-      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name).subscribe((stat: NetworkStat) => {
-        const netTotal: ScaledNetworkStat = new ScaledNetworkStat(stat.received.raw + stat.sent.raw);
+      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name).subscribe((stats: NetworkStat[]) => {
+        const last: NetworkStat = stats[stats.length - 1];
+        const netTotal: ScaledNetworkStat = new ScaledNetworkStat(last.received.raw + last.sent.raw);
         this.netUnits = netTotal.units;
         const decimals = this.netUnits === 'bytes' ? 0 : 1;
         this.netVal = round(netTotal.used, decimals);
-        const sent = round(stat.sent.raw, decimals);
-        const received = round(stat.received.raw, decimals);
-        this.netData.xData.push(stat.received.timestamp);
-        this.netData.yData[0].push(sent);
-        this.netData.yData[1].push(received);
-        this.trimLinechartData(this.netData);
+        this.netData.xData = [this.netData.xData[0], ...stats.map((stat: NetworkStat) => stat.received.timestamp)];
+        this.netData.yData[0] = [this.netData.yData[0][0], ...stats.map((stat: NetworkStat) => round(stat.sent.raw, decimals))];
+        this.netData.yData[1] = [this.netData.yData[1][0], ...stats.map((stat: NetworkStat) => round(stat.received.raw, decimals))];
       })
     );
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
-  }
-
-  getChartMaxElements(): number {
-    return this.sparklineMaxElements;
-  }
-
-  setChartMaxElements(maxElements: number): void {
-    this.sparklineMaxElements = Math.max(1, maxElements);
-  }
-
-  private trimSparklineData(chartData: SparklineData): void {
-    if (chartData.xData.length > this.sparklineMaxElements) {
-      let elementsToRemoveCount = chartData.xData.length - this.sparklineMaxElements;
-      chartData.xData.splice(1, elementsToRemoveCount);
-      chartData.yData.splice(1, elementsToRemoveCount);
-    }
-  }
-
-  private trimLinechartData(chartData: SparklineData): void {
-    if (chartData.xData.length > this.sparklineMaxElements) {
-      let elementsToRemoveCount = chartData.xData.length - this.sparklineMaxElements;
-      chartData.xData.splice(1, elementsToRemoveCount);
-      chartData.yData.forEach(yData => {
-        yData.splice(1, elementsToRemoveCount);
-      });
-    }
   }
 
   private getTooltipContents(): any {

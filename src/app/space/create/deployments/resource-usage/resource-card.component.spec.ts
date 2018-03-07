@@ -39,6 +39,16 @@ class FakeUtilizationBarComponent {
   @Input() stat: Observable<Stat>;
 }
 
+@Component({
+  selector: 'loading-utilization-bar',
+  template: ''
+})
+class FakeLoadingUtilizationBarComponent {
+  @Input() resourceTitle: string;
+  @Input() resourceUnit: string;
+}
+
+
 describe('ResourceCardComponent', () => {
   type Context = TestContext<ResourceCardComponent, HostComponent>;
 
@@ -62,7 +72,7 @@ describe('ResourceCardComponent', () => {
 
   initContext(ResourceCardComponent, HostComponent,
     {
-      declarations: [FakeUtilizationBarComponent],
+      declarations: [FakeUtilizationBarComponent, FakeLoadingUtilizationBarComponent],
       providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
     },
     (component: ResourceCardComponent) => {
