@@ -27,7 +27,8 @@ export class ResourceCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.deploymentsService
+    if (this.spaceId && this.environment) {
+      this.deploymentsService
       .isDeployedInEnvironment(this.spaceId, this.environment.name)
       .subscribe((active: boolean) => {
         this.active = active;
@@ -37,6 +38,6 @@ export class ResourceCardComponent implements OnInit {
             .map((stat: MemoryStat) => stat.units);
         }
       });
+    }
   }
-
 }

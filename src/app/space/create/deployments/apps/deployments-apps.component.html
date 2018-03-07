@@ -1,32 +1,66 @@
 <deployments-toolbar (onFilterChange)="filterChange($event)" (onSortChange)="sortChange($event)" [resultsCount]="resultsCount">
 </deployments-toolbar>
 
-<div class="cards-pf">
-  <div class="row row-cards-pf">
-    <div class="col-xs-12 col-sm-4 col-md-2">
-      <h3>
-        <b>Applications</b>
-      </h3>
+<div *ngIf="(hasLoaded | async); else loading">
+  <div class="cards-pf">
+    <div class="row row-cards-pf">
+      <div class="col-xs-12 col-sm-4 col-md-2">
+        <h3>
+          <b>Applications</b>
+        </h3>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-2">
+        <h3>
+          <b>Environments</b>
+        </h3>
+      </div>
     </div>
-    <div class="col-xs-12 col-sm-4 col-md-2">
-      <h3>
-        <b>Environments</b>
-      </h3>
+  </div>
+
+  <div class="cards-pf">
+    <div class="row row-cards-pf">
+      <div class="col-xs-12 col-sm-4 col-md-2"></div>
+      <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
+        <h4 class="env-card-title">
+          {{environment.name}}
+        </h4>
+      </div>
     </div>
+  </div>
+
+  <div *ngFor="let application of filteredApplicationsList">
+    <deployment-card-container [spaceId]="spaceId | async" [application]="application" [environments]="environments"></deployment-card-container>
   </div>
 </div>
 
-<div class="cards-pf">
-  <div class="row row-cards-pf">
-    <div class="col-xs-12 col-sm-4 col-md-2"></div>
-    <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
-      <h4 class="env-card-title">
-        {{environment.name}}
-      </h4>
+<ng-template #loading>
+  <div>
+    <div class="cards-pf">
+        <div class="row row-cards-pf">
+          <div>
+            <div class="spinner"></div>
+            <h3 class="loading-msg">Loading Deployments...</h3>
+          </div>
+        </div>
+      </div>
+
+    <div class="cards-pf">
+      <div class="row row-cards-pf">
+        <div class="spacer col-xs-12 col-sm-4 col-md-2">&nbsp;</div>
+        <div class="filler col-xs-12 col-sm-4 col-md-3">&nbsp;</div>
+        <div class="filler col-xs-12 col-sm-4 col-md-3">&nbsp;</div>
+      </div>
+    </div>
+
+    <div class="cards-pf">
+      <div *ngFor="let number of [0,1,2,3]">
+        <div class="row row-cards-pf">
+          <div class="filler col-xs-12 col-sm-4 col-md-2">&nbsp;</div>
+          <div class="filler col-xs-12 col-sm-4 col-md-3"><br><br><br></div>
+          <div class="filler col-xs-12 col-sm-4 col-md-3"><br><br><br></div>
+        </div>
+      </div>
+      <br>
     </div>
   </div>
-</div>
-
-<div *ngFor="let application of filteredApplicationsList">
-  <deployment-card-container [spaceId]="spaceId | async" [application]="application" [environments]="environments"></deployment-card-container>
-</div>
+</ng-template>
