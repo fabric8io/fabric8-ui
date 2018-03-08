@@ -401,12 +401,11 @@ export class DeploymentsService implements OnDestroy {
       .map((deployment: Deployment) => deployment.links.application);
   }
 
-  deleteApplication(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    if (Math.random() > 0.5) {
-      return Observable.of(`Deleted ${applicationId} in ${spaceId} (${environmentName})`);
-    } else {
-      return Observable.throw(`Failed to delete ${applicationId} in ${spaceId} (${environmentName})`);
-    }
+  deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
+    const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}`;
+    return this.http.delete(url, { headers: this.headers })
+      .map((r: Response) => `Deployment has successfully deleted`)
+      .catch(err => Observable.throw(`Failed to delete ${applicationId} in ${spaceId} (${environmentName})`));
   }
 
   private getApplicationsResponse(spaceId: string): Observable<Application[]> {

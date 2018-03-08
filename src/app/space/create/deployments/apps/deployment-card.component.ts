@@ -143,7 +143,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   delete(): void {
     this.subscriptions.push(
-      this.deploymentsService.deleteApplication(this.spaceId, this.applicationId, this.environment.name)
+      this.deploymentsService.deleteDeployment(this.spaceId, this.applicationId, this.environment.name)
         .subscribe(
           (success: string) => {
             this.notifications.message({

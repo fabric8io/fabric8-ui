@@ -100,7 +100,7 @@ function initMockSvc(): jasmine.SpyObj<DeploymentsService> {
   mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
   mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
   mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
-  mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
+  mockSvc.deleteDeployment.and.returnValue(Observable.of('mockDeletedMessage'));
 
   return mockSvc;
 }
@@ -187,12 +187,12 @@ describe('DeploymentCardComponent async tests', () => {
     it('should invoke service \'delete\' function on Delete item click', fakeAsync(() => {
       const item: DebugElement = getItemByLabel('Delete');
       expect(item).toBeTruthy();
-      expect(mockSvc.deleteApplication).not.toHaveBeenCalled();
+      expect(mockSvc.deleteDeployment).not.toHaveBeenCalled();
       item.query(By.css('a')).triggerEventHandler('click', new CustomEvent('click'));
 
       fixture.detectChanges();
 
-      expect(mockSvc.deleteApplication).toHaveBeenCalled();
+      expect(mockSvc.deleteDeployment).toHaveBeenCalled();
       expect(notifications.message).toHaveBeenCalled();
     }));
   });
