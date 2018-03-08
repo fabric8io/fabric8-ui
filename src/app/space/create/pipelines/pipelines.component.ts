@@ -157,6 +157,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   filterChange($event: FilterEvent): void {
     this._appliedFilters = $event.appliedFilters;
     this.applyFilters();
+    this.applySort();
   }
 
   sortChange($event: SortEvent): void {
