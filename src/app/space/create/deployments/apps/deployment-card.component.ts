@@ -5,13 +5,17 @@ import {
   OnInit
 } from '@angular/core';
 
-import { debounce } from 'lodash';
+import {
+  debounce,
+  last
+} from 'lodash';
 import { NotificationType } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
+import { MemoryStat } from '../models/memory-stat';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 
@@ -40,6 +44,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   appUrl: Observable<string>;
 
   cpuStat: Observable<CpuStat[]>;
+  memoryStat: Observable<MemoryStat[]>;
   iconClass: string;
   toolTip: string;
 
@@ -61,9 +66,16 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.toolTip = 'Everything is ok';
 
     this.cpuStat = this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name, 1);
-    this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat[]) => {
-      this.changeStatus(stat[0]);
-    }));
+    this.memoryStat = this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.applicationId, this.environment.name);
+
+    this.subscriptions.push(
+      Observable.combineLatest(this.cpuStat, this.memoryStat)
+        .subscribe((arr: [CpuStat[], MemoryStat[]]) => {
+          const cpuStats: CpuStat[] = arr[0];
+          const memoryStats: MemoryStat[] = arr[1];
+          this.changeStatus(last(cpuStats), last(memoryStats));
+        })
+    );
 
     this.subscriptions.push(
       this.deploymentsService
@@ -88,17 +100,38 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     );
   }
 
-  changeStatus(stat: CpuStat): void {
-    this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
-    this.toolTip = 'Everything is ok.';
-    if (stat.used / stat.quota > STAT_THRESHOLD) {
-      this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_WARN;
-      this.toolTip = 'CPU usage is nearing capacity.';
+  changeStatus(cpuStat: CpuStat, memoryStat: MemoryStat): void {
+    let toolTip: string = '';
+    let hasWarning: boolean = false;
+    let hasError: boolean = false;
+
+    if (cpuStat.used >= cpuStat.quota) {
+      hasError = true;
+      toolTip += 'CPU usage has reached capacity. ';
+    } else if (cpuStat.used / cpuStat.quota > STAT_THRESHOLD) {
+      hasWarning = true;
+      toolTip += 'CPU usage is nearing capacity. ';
     }
 
-    if (stat.used > stat.quota) {
+    if (memoryStat.used >= memoryStat.quota) {
+      hasError = true;
+      toolTip += 'Memory usage has reached capacity. ';
+    } else if (memoryStat.used / memoryStat.quota > STAT_THRESHOLD) {
+      hasWarning = true;
+      toolTip += 'Memory usage is nearing capacity. ';
+    }
+
+    if (!toolTip) {
+      toolTip = 'Everything is OK.';
+    }
+    this.toolTip = toolTip.trim();
+
+    if (hasError) {
       this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_ERR;
-      this.toolTip = 'CPU usage has exceeded capacity.';
+    } else if (hasWarning) {
+      this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_WARN;
+    } else {
+      this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
     }
   }
 
