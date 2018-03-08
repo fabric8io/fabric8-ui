@@ -31,7 +31,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
-    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus']);
+    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'getOpenShiftStatus']);
     let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
@@ -69,7 +69,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
-    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus']);
+    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'getOpenShiftStatus']);
     let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
@@ -106,7 +106,7 @@ describe('Connected Accounts Component', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');
     let authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
-    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus']);
+    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'getOpenShiftStatus']);
     let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
