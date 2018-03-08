@@ -24,6 +24,7 @@ import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
+import { Stat } from '../models/stat';
 import {
   DeploymentsService,
   NetworkStat
@@ -71,7 +72,12 @@ export class DeploymentDetailsComponent {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('cpu-chart'),
     axis: {
-      type: 'timeseries'
+      type: 'timeseries',
+      y: {
+        min: 0,
+        max: 1,
+        padding: 0
+      }
     },
     tooltip: this.getTooltipContents(),
     units: 'Cores'
@@ -81,7 +87,12 @@ export class DeploymentDetailsComponent {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('mem-chart'),
     axis: {
-      type: 'timeseries'
+      type: 'timeseries',
+      y: {
+        min: 0,
+        max: 1,
+        padding: 0
+      }
     },
     tooltip: this.getTooltipContents()
   };
@@ -130,6 +141,7 @@ export class DeploymentDetailsComponent {
         this.cpuVal = last.used;
         this.cpuMax = last.quota;
         this.cpuData.total = last.quota;
+        this.cpuConfig.axis.y.max = this.getChartYAxisMax(stats);
         this.cpuData.xData = [this.cpuData.xData[0], ...stats.map((stat: CpuStat) => stat.timestamp)];
         this.cpuData.yData = [this.cpuData.yData[0], ...stats.map((stat: CpuStat) => stat.used)];
       })
@@ -141,6 +153,7 @@ export class DeploymentDetailsComponent {
         this.memVal = last.used;
         this.memMax = last.quota;
         this.memData.total = last.quota;
+        this.memConfig.axis.y.max = this.getChartYAxisMax(stats);
         this.memUnits = last.units;
         this.memData.xData = [this.memData.xData[0], ...stats.map((stat: MemoryStat) => stat.timestamp)];
         this.memData.yData = [this.memData.yData[0], ...stats.map((stat: MemoryStat) => stat.used)];
@@ -201,6 +214,16 @@ export class DeploymentDetailsComponent {
         </table>
       </div>
     `;
+  }
+
+  private getChartYAxisMax(stats: Stat[]): number {
+    const largestUsage: number = stats
+      .map((stat: Stat): number => stat.used)
+      .reduce((acc: number, next: number): number => Math.max(acc, next));
+    const largestQuota: number = stats
+      .map((stat: Stat): number => stat.quota)
+      .reduce((acc: number, next: number): number => Math.max(acc, next));
+    return Math.max(largestUsage, largestQuota);
   }
 
 }
