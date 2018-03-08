@@ -251,43 +251,6 @@ describe('DeploymentCardComponent', () => {
     expect(detailsComponent.active).toBeTruthy();
   });
 
-  describe('iconStatusLogic', () => {
-    it("should set the icon's initial value to ok", function(this: Context) {
-      expect(this.testedDirective.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_OK);
-      expect(this.testedDirective.toolTip).toBe('Everything is OK.');
-    });
-
-    it("should change the icon's value to warning if capacity changes", function(this: Context) {
-      mockCpuData.next([{ used: 4, quota: 5, timestamp: 2 }] as CpuStat[]);
-      this.detectChanges();
-      expect(this.testedDirective.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_WARN);
-      expect(this.testedDirective.toolTip).toBe('CPU usage is nearing capacity.');
-    });
-
-    it("should change the icon's value to error if capacity is exceeded", function(this: Context) {
-      mockCpuData.next([{ used: 6, quota: 5, timestamp: 2 }] as CpuStat[]);
-      this.detectChanges();
-      expect(this.testedDirective.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_ERR);
-      expect(this.testedDirective.toolTip).toBe('CPU usage has reached capacity.');
-    });
-
-    it('should combine warning labels if multiple resources are reaching capacity', function(this: Context) {
-      mockCpuData.next([{ used: 4, quota: 5, timestamp: 2 }] as CpuStat[]);
-      mockMemoryData.next([{ used: 4, quota: 5, timestamp: 2 }] as MemoryStat[]);
-      this.detectChanges();
-      expect(this.testedDirective.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_WARN);
-      expect(this.testedDirective.toolTip).toBe('CPU usage is nearing capacity. Memory usage is nearing capacity.');
-    });
-
-    it('should favour error icons over warning icons', function(this: Context) {
-      mockCpuData.next([{ used: 4, quota: 5, timestamp: 2 }] as CpuStat[]);
-      mockMemoryData.next([{ used: 5, quota: 5, timestamp: 2 }] as MemoryStat[]);
-      this.detectChanges();
-      expect(this.testedDirective.iconClass).toBe(DeploymentStatusIconComponent.CLASSES.ICON_ERR);
-      expect(this.testedDirective.toolTip).toBe('CPU usage is nearing capacity. Memory usage has reached capacity.');
-    });
-  });
-
   describe('versionLabel', () => {
     let de: DebugElement;
     let el: HTMLElement;
