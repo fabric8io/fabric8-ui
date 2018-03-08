@@ -35,6 +35,7 @@ import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
+import { DeploymentStatusService } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentCardComponent } from './deployment-card.component';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
@@ -130,7 +131,8 @@ describe('DeploymentCardComponent async tests', () => {
         providers: [
           BsDropdownConfig,
           { provide: NotificationsService, useValue: notifications },
-          { provide: DeploymentsService, useValue: mockSvc }
+          { provide: DeploymentsService, useValue: mockSvc },
+          DeploymentStatusService
         ]
       });
 
@@ -234,7 +236,8 @@ describe('DeploymentCardComponent', () => {
     providers: [
       BsDropdownConfig,
       { provide: NotificationsService, useFactory: () => notifications },
-      { provide: DeploymentsService, useFactory: () => mockSvc }
+      { provide: DeploymentsService, useFactory: () => mockSvc },
+      DeploymentStatusService
     ]
   },
     (component: DeploymentCardComponent) => {
