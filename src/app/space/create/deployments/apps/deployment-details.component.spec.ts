@@ -23,6 +23,7 @@ import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
+import { DeploymentStatusService, StatusType } from '../services/deployment-status.service';
 import {
   DeploymentsService,
   NetworkStat
@@ -33,6 +34,7 @@ import { times } from 'lodash';
 
 // Makes patternfly charts available
 import {
+  ChartDefaults,
   ChartModule,
   SparklineConfig,
   SparklineData
@@ -99,6 +101,7 @@ class FakeDeploymentsLinechart {
 describe('DeploymentDetailsComponent', () => {
   type Context = TestContext<DeploymentDetailsComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
+  let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
   let cpuStatObservable: BehaviorSubject<CpuStat[]>;
   let memStatObservable: BehaviorSubject<MemoryStat[]>;
   let netStatObservable: BehaviorSubject<NetworkStat[]>;
@@ -128,6 +131,11 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
     mockSvc.getDeploymentNetworkStat.and.returnValue(netStatObservable);
     mockSvc.getPods.and.returnValue(podsObservable);
+
+    mockStatusSvc = createMock(DeploymentStatusService);
+    mockStatusSvc.getAggregateStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: 'Memory usage is nearing capacity.' }));
+    mockStatusSvc.getCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
+    mockStatusSvc.getMemoryStatus.and.returnValue(Observable.of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
   });
 
   initContext(DeploymentDetailsComponent, HostComponent, {
@@ -139,7 +147,9 @@ describe('DeploymentDetailsComponent', () => {
       FakeDeploymentsLinechart
     ],
     providers: [
-      { provide: DeploymentsService, useFactory: () => mockSvc }
+      { provide: DeploymentsService, useFactory: () => mockSvc },
+      { provide: DeploymentStatusService, useFactory: () => mockStatusSvc },
+      { provide: ChartDefaults, useValue: { getDefaultSparklineColor: () => ({}) } }
     ]
   });
 
@@ -157,13 +167,11 @@ describe('DeploymentDetailsComponent', () => {
     expect(container.applicationId).toEqual('mockAppId');
   });
 
-  describe('hasPods', () => {
-    it('should be false for state without pods', function(this: Context, done: DoneFn) {
-      podsObservable.next({ total: 0, pods: [] });
-      this.testedDirective.hasPods.subscribe((b: boolean) => {
-        expect(b).toBeFalsy();
-        done();
-      });
+  it('should set hasPods to false for state without pods', function(this: Context, done: DoneFn) {
+    podsObservable.next({ total: 0, pods: [] });
+    this.testedDirective.hasPods.subscribe((b: boolean) => {
+      expect(b).toBeFalsy();
+      done();
     });
   });
 
@@ -191,6 +199,11 @@ describe('DeploymentDetailsComponent', () => {
     it('should use upper bound from service result', () => {
       expect(de.componentInstance.valueUpperBound).toEqual(2);
     });
+
+    it('should be set to OK (empty) class status', function(this: Context) {
+      expect(this.testedDirective.cpuLabelClass).toEqual('');
+      expect(this.testedDirective.cpuChartClass).toEqual('');
+    });
   });
 
   describe('memory label', () => {
@@ -213,6 +226,11 @@ describe('DeploymentDetailsComponent', () => {
 
     it('should use upper bound from service result', () => {
       expect(de.componentInstance.valueUpperBound).toEqual(4);
+    });
+
+    it('should be set to WARN class status', function(this: Context) {
+      expect(this.testedDirective.memLabelClass).toEqual('label-warn');
+      expect(this.testedDirective.memChartClass).toEqual('chart-warn');
     });
   });
 

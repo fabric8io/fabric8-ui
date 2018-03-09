@@ -8,6 +8,7 @@ import {
   uniqueId
 } from 'lodash';
 import {
+  ChartDefaults,
   SparklineConfig,
   SparklineData
 } from 'patternfly-ng';
@@ -26,12 +27,29 @@ import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 import { Stat } from '../models/stat';
 import {
+  DeploymentStatusService,
+  Status,
+  StatusType
+} from '../services/deployment-status.service';
+import {
   DeploymentsService,
   NetworkStat
 } from '../services/deployments.service';
 
 import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
 import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
+
+enum ChartClass {
+  OK = '',
+  WARN = 'chart-warn',
+  ERR = 'chart-err'
+}
+
+enum LabelClass {
+  OK = '',
+  WARN = 'label-warn',
+  ERR = 'label-err'
+}
 
 @Component({
   selector: 'deployment-details',
@@ -71,6 +89,7 @@ export class DeploymentDetailsComponent {
   cpuConfig: SparklineConfig = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('cpu-chart'),
+    chartHeight: 60,
     axis: {
       type: 'timeseries',
       y: {
@@ -86,6 +105,7 @@ export class DeploymentDetailsComponent {
   memConfig: SparklineConfig = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('mem-chart'),
+    chartHeight: 60,
     axis: {
       type: 'timeseries',
       y: {
@@ -117,7 +137,17 @@ export class DeploymentDetailsComponent {
   netVal: number;
   netUnits: string;
 
-  constructor(private deploymentsService: DeploymentsService) { }
+  cpuLabelClass: string;
+  memLabelClass: string;
+
+  cpuChartClass: string;
+  memChartClass: string;
+
+  constructor(
+    private deploymentsService: DeploymentsService,
+    private deploymentStatusService: DeploymentStatusService,
+    private chartDefaults: ChartDefaults
+  ) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -126,8 +156,58 @@ export class DeploymentDetailsComponent {
         .subscribe(this.hasPods)
     );
 
-    this.cpuConfig.chartHeight = 60;
-    this.memConfig.chartHeight = 60;
+    this.subscriptions.push(
+      this.deploymentStatusService.getCpuStatus(this.spaceId, this.environment.name, this.applicationId)
+        .subscribe((status: Status): void => {
+          if (status.type === StatusType.OK) {
+            this.cpuChartClass = '';
+            this.cpuLabelClass = '';
+          } else if (status.type === StatusType.WARN) {
+            this.cpuChartClass = ChartClass.WARN;
+            this.cpuLabelClass = LabelClass.WARN;
+            this.cpuConfig['color'] = {
+              pattern: [
+                '#ec7a08' // pf-orange-400
+              ]
+            };
+          } else if (status.type === StatusType.ERR) {
+            this.cpuChartClass = ChartClass.ERR;
+            this.cpuLabelClass = LabelClass.ERR;
+            this.cpuConfig['color'] = {
+              pattern: [
+                '#cc0000' // pf-red-100
+              ]
+            };
+          }
+        })
+    );
+
+    this.subscriptions.push(
+      this.deploymentStatusService.getMemoryStatus(this.spaceId, this.environment.name, this.applicationId)
+        .subscribe((status: Status): void => {
+          if (status.type === StatusType.OK) {
+            this.memChartClass = '';
+            this.memLabelClass = '';
+            this.memConfig['color'] = this.chartDefaults.getDefaultSparklineColor();
+          } else if (status.type === StatusType.WARN) {
+            this.memChartClass = ChartClass.WARN;
+            this.memLabelClass = LabelClass.WARN;
+            this.memConfig['color'] = {
+              pattern: [
+                '#ec7a08' // pf-orange-400
+              ]
+            };
+          } else if (status.type === StatusType.ERR) {
+            this.memChartClass = ChartClass.ERR;
+            this.memLabelClass = LabelClass.ERR;
+            this.memConfig['color'] = {
+              pattern: [
+                '#cc0000' // pf-red-100
+              ]
+            };
+          }
+        })
+    );
 
     this.cpuStat =
       this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);

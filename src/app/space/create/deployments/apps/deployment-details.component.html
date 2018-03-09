@@ -6,21 +6,21 @@
     <ng-container *ngIf="hasPods | async">
       <p class="resource-usage-header">Resource Usage</p>
 
-      <div class="deployment-chart">
+      <div class="deployment-chart" [ngClass]="cpuChartClass">
         <div class="chart-column-left">
           <pfng-chart-sparkline class="chart-sparkline" [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>
         </div>
         <div class="chart-column-right">
-          <deployment-graph-label type="CPU" dataMeasure="Cores" [value]="cpuVal" [valueUpperBound]="cpuMax"></deployment-graph-label>
+          <deployment-graph-label [ngClass]="cpuLabelClass" type="CPU" dataMeasure="Cores" [value]="cpuVal" [valueUpperBound]="cpuMax"></deployment-graph-label>
         </div>
       </div>
 
-      <div class="deployment-chart">
+      <div class="deployment-chart" [ngClass]="memChartClass">
         <div class="chart-column-left">
           <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
         </div>
         <div class="chart-column-right">
-          <deployment-graph-label type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
+          <deployment-graph-label [ngClass]="memLabelClass" type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
         </div>
       </div>
 
