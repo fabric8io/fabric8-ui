@@ -107,105 +107,103 @@ function initMockSvc(): jasmine.SpyObj<DeploymentsService> {
 
 describe('DeploymentCardComponent async tests', () => {
 
-    let component: DeploymentCardComponent;
-    let fixture: ComponentFixture<DeploymentCardComponent>;
-    let mockSvc: jasmine.SpyObj<DeploymentsService>;
-    let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
-    let notifications: any;
-    let active: Subject<boolean>;
+  let component: DeploymentCardComponent;
+  let fixture: ComponentFixture<DeploymentCardComponent>;
+  let mockSvc: jasmine.SpyObj<DeploymentsService>;
+  let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
+  let notifications: any;
+  let active: Subject<boolean>;
+
+  beforeEach(fakeAsync(() => {
+    active = new BehaviorSubject<boolean>(true);
+    mockSvc = initMockSvc();
+    mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
+    mockStatusSvc = createMock(DeploymentStatusService);
+    mockStatusSvc.getAggregateStatus.and.returnValue(Observable.never());
+    notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
+
+    TestBed.configureTestingModule({
+      declarations: [
+        DeploymentCardComponent,
+        FakeDeploymentsDonutComponent,
+        FakeDeploymentGraphLabelComponent,
+        FakeDeploymentDetailsComponent,
+        FakeDeploymentStatusIconComponent
+      ],
+      imports: [
+        BsDropdownModule.forRoot(),
+        CollapseModule.forRoot(),
+        ChartModule
+      ],
+      providers: [
+        BsDropdownConfig,
+        { provide: NotificationsService, useValue: notifications },
+        { provide: DeploymentsService, useValue: mockSvc },
+        { provide: DeploymentStatusService, useValue: mockStatusSvc }
+      ]
+    });
+
+    fixture = TestBed.createComponent(DeploymentCardComponent);
+    component = fixture.componentInstance;
+
+    component.spaceId = 'mockSpaceId';
+    component.applicationId = 'mockAppId';
+    component.environment = { name: 'mockEnvironment' } as Environment;
+
+    fixture.detectChanges();
+    flush();
+    flushMicrotasks();
+  }));
+
+  describe('dropdown menus', () => {
+    let menuItems: DebugElement[];
+
+    function getItemByLabel(label: string): DebugElement {
+      return menuItems
+        .filter((item: DebugElement) => item.nativeElement.textContent.includes(label))[0];
+    }
 
     beforeEach(fakeAsync(() => {
-      active = new BehaviorSubject<boolean>(true);
-      mockSvc = initMockSvc();
-      mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
-      mockStatusSvc = createMock(DeploymentStatusService);
-      mockStatusSvc.getAggregateStatus.and.returnValue(Observable.never());
-      notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
-
-      TestBed.configureTestingModule({
-        declarations: [
-          DeploymentCardComponent,
-          FakeDeploymentsDonutComponent,
-          FakeDeploymentGraphLabelComponent,
-          FakeDeploymentDetailsComponent,
-          FakeDeploymentStatusIconComponent
-        ],
-        imports: [
-          BsDropdownModule.forRoot(),
-          CollapseModule.forRoot(),
-          ChartModule
-        ],
-        providers: [
-          BsDropdownConfig,
-          { provide: NotificationsService, useValue: notifications },
-          { provide: DeploymentsService, useValue: mockSvc },
-          { provide: DeploymentStatusService, useValue: mockStatusSvc }
-        ]
-      });
-
-      fixture = TestBed.createComponent(DeploymentCardComponent);
-      component = fixture.componentInstance;
-
-      component.spaceId = 'mockSpaceId';
-      component.applicationId = 'mockAppId';
-      component.environment = { name: 'mockEnvironment' } as Environment;
+      const de: DebugElement = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
+      de.triggerEventHandler('click', new CustomEvent('click'));
 
       fixture.detectChanges();
-      flush();
-      flushMicrotasks();
+
+      const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
+      menuItems = menu.queryAll(By.css('li'));
     }));
 
-    describe('dropdown menus', () => {
-      let menuItems: DebugElement[];
+    it('should not display appUrl if none available', fakeAsync(() => {
+      component.appUrl = Observable.of('');
 
-      function getItemByLabel(label: string): DebugElement {
-        return menuItems
-          .filter((item: DebugElement) => item.nativeElement.textContent.includes(label))[0];
-      }
+      fixture.detectChanges();
 
-      beforeEach(fakeAsync(() => {
-        const de: DebugElement = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
-        de.triggerEventHandler('click', new CustomEvent('click'));
+      const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
+      menuItems = menu.queryAll(By.css('li'));
+      const item: DebugElement = getItemByLabel('Open Application');
+      expect(item).toBeFalsy();
+    }));
 
-        fixture.detectChanges();
+    it('should invoke service \'delete\' function on Delete item click', fakeAsync(() => {
+      const item: DebugElement = getItemByLabel('Delete');
+      expect(item).toBeTruthy();
+      expect(mockSvc.deleteApplication).not.toHaveBeenCalled();
+      item.query(By.css('a')).triggerEventHandler('click', new CustomEvent('click'));
 
-        const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
-        menuItems = menu.queryAll(By.css('li'));
-      }));
+      fixture.detectChanges();
 
-      it('should not display appUrl if none available', fakeAsync(() => {
-        component.appUrl = Observable.of('');
-
-        fixture.detectChanges();
-
-        const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
-        menuItems = menu.queryAll(By.css('li'));
-        const item: DebugElement = getItemByLabel('Open Application');
-        expect(item).toBeFalsy();
-      }));
-
-      it('should invoke service \'delete\' function on Delete item click', fakeAsync(() => {
-        const item: DebugElement = getItemByLabel('Delete');
-        expect(item).toBeTruthy();
-        expect(mockSvc.deleteApplication).not.toHaveBeenCalled();
-        item.query(By.css('a')).triggerEventHandler('click', new CustomEvent('click'));
-
-        fixture.detectChanges();
-
-        expect(mockSvc.deleteApplication).toHaveBeenCalled();
-        expect(notifications.message).toHaveBeenCalled();
-      }));
-    });
-
-    describe('inactive environment', () => {
-      it('should not display', fakeAsync(() => {
-        active.next(false);
-        fixture.detectChanges();
-
-        expect(component.active).toBeFalsy();
-      }));
-    });
+      expect(mockSvc.deleteApplication).toHaveBeenCalled();
+      expect(notifications.message).toHaveBeenCalled();
+    }));
   });
+
+  it('should not display inactive environments', fakeAsync(() => {
+    active.next(false);
+    fixture.detectChanges();
+
+    expect(component.active).toBeFalsy();
+  }));
+});
 
 describe('DeploymentCardComponent', () => {
   type Context =  TestContext<DeploymentCardComponent, HostComponent>;
@@ -262,29 +260,19 @@ describe('DeploymentCardComponent', () => {
     expect(detailsComponent.active).toBeTruthy();
   });
 
-  describe('versionLabel', () => {
-    let de: DebugElement;
-    let el: HTMLElement;
-
-    beforeEach(function(this: Context) {
-      de = this.fixture.debugElement.query(By.css('#versionLabel'));
-      el = de.nativeElement;
-    });
-
-    it('should be set from mockSvc.getVersion result', () => {
-      expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
-      expect(el.textContent).toEqual('1.2.3');
-    });
+  it('should set versionLabel from mockSvc.getVersion result', function(this: Context) {
+    let de: DebugElement = this.fixture.debugElement.query(By.css('#versionLabel'));
+    let el: HTMLElement = de.nativeElement;
+    expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
+    expect(el.textContent).toEqual('1.2.3');
   });
 
-  describe('inactive environment', () => {
-    it('should not display', fakeAsync(function(this: Context) {
-      active.next(false);
-      this.detectChanges();
+  it('should not display inactive environments', fakeAsync(function(this: Context) {
+    active.next(false);
+    this.detectChanges();
 
-      expect(this.testedDirective.active).toBeFalsy();
-    }));
-  });
+    expect(this.testedDirective.active).toBeFalsy();
+  }));
 
   it('should set icon status from DeploymentStatusService aggregate', function(this: Context) {
     expect(mockStatusSvc.getAggregateStatus).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
