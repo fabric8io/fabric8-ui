@@ -178,21 +178,7 @@ describe('PipelinesComponent', () => {
                 id: 'application',
                 title: 'Application',
                 placeholder: 'Filter by Application...',
-                type: 'select',
-                queries: [
-                  {
-                    id: 'app',
-                    value: 'app'
-                  },
-                  {
-                    id: 'app2',
-                    value: 'app2'
-                  }
-                ]
-              },
-              query: {
-                id: 'app2',
-                value: 'app2'
+                type: 'text'
               },
               value: 'app2'
             }
@@ -218,21 +204,7 @@ describe('PipelinesComponent', () => {
                 id: 'codebase',
                 title: 'Codebase',
                 placeholder: 'Filter by Codebase...',
-                type: 'select',
-                queries: [
-                  {
-                    id: 'https://example.com/app.git',
-                    value: 'https://example.com/app.git'
-                  },
-                  {
-                    id: 'https://example.com/app2.git',
-                    value: 'https://example.com/app2.git'
-                  }
-                ]
-              },
-              query: {
-                id: 'https://example.com/app2.git',
-                value: 'https://example.com/app2.git'
+                type: 'text'
               },
               value: 'https://example.com/app2.git'
             }
@@ -258,21 +230,7 @@ describe('PipelinesComponent', () => {
                 id: 'codebase',
                 title: 'Codebase',
                 placeholder: 'Filter by Codebase...',
-                type: 'select',
-                queries: [
-                  {
-                    id: 'https://example.com/app.git',
-                    value: 'https://example.com/app.git'
-                  },
-                  {
-                    id: 'https://example.com/app2.git',
-                    value: 'https://example.com/app2.git'
-                  }
-                ]
-              },
-              query: {
-                id: 'https://example.com/app2.git',
-                value: 'https://example.com/app2.git'
+                type: 'text'
               },
               value: 'https://example.com/app2.git'
             }
@@ -289,15 +247,15 @@ describe('PipelinesComponent', () => {
       this.testedDirective.filterChange({ appliedFilters: [] });
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
-          id: 'app',
-          gitUrl: 'https://example.com/app.git',
+          id: 'app2',
+          gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
           }
         },
         {
-          id: 'app2',
-          gitUrl: 'https://example.com/app2.git',
+          id: 'app',
+          gitUrl: 'https://example.com/app.git',
           labels: {
             space: 'space'
           }
@@ -414,6 +372,107 @@ describe('PipelinesComponent', () => {
           }
         }
       ]);
+    });
+
+    it('should sort after filters change', function(this: TestingContext) {
+      this.testedDirective.sortChange({
+        field: {
+          id: 'application',
+          title: 'Application',
+          sortType: 'alpha'
+        },
+        isAscending: true
+      });
+      expect(this.testedDirective.pipelines as any[]).toEqual([
+        {
+          id: 'app',
+          gitUrl: 'https://example.com/app.git',
+          labels: {
+            space: 'space'
+          }
+        },
+        {
+          id: 'app2',
+          gitUrl: 'https://example.com/app2.git',
+          labels: {
+            space: 'space'
+          }
+        }
+      ]);
+      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
+
+      this.testedDirective.sortChange({
+        field: {
+          id: 'application',
+          title: 'Application',
+          sortType: 'alpha'
+        },
+        isAscending: false
+      });
+      expect(this.testedDirective.pipelines as any[]).toEqual([
+        {
+          id: 'app2',
+          gitUrl: 'https://example.com/app2.git',
+          labels: {
+            space: 'space'
+          }
+        },
+        {
+          id: 'app',
+          gitUrl: 'https://example.com/app.git',
+          labels: {
+            space: 'space'
+          }
+        }
+      ]);
+      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
+
+      this.testedDirective.filterChange(
+        {
+          appliedFilters: [
+            {
+              field: {
+                id: 'application',
+                title: 'Application',
+                placeholder: 'Filter by Application...',
+                type: 'text'
+              },
+              value: 'app2'
+            }
+          ]
+        }
+      );
+      expect(this.testedDirective.pipelines as any[]).toEqual([
+        {
+          id: 'app2',
+          gitUrl: 'https://example.com/app2.git',
+          labels: {
+            space: 'space'
+          }
+        }
+      ]);
+      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
+
+      this.testedDirective.filterChange({
+        appliedFilters: []
+      });
+      expect(this.testedDirective.pipelines as any[]).toEqual([
+        {
+          id: 'app2',
+          gitUrl: 'https://example.com/app2.git',
+          labels: {
+            space: 'space'
+          }
+        },
+        {
+          id: 'app',
+          gitUrl: 'https://example.com/app.git',
+          labels: {
+            space: 'space'
+          }
+        }
+      ]);
+      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
     });
   });
 
