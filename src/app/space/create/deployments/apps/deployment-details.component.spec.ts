@@ -23,7 +23,11 @@ import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
-import { DeploymentStatusService, StatusType } from '../services/deployment-status.service';
+import {
+  DeploymentStatusService,
+  Status,
+  StatusType
+} from '../services/deployment-status.service';
 import {
   DeploymentsService,
   NetworkStat
@@ -102,6 +106,7 @@ describe('DeploymentDetailsComponent', () => {
   type Context = TestContext<DeploymentDetailsComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
+  let status: Subject<Status>;
   let cpuStatObservable: BehaviorSubject<CpuStat[]>;
   let memStatObservable: BehaviorSubject<MemoryStat[]>;
   let netStatObservable: BehaviorSubject<NetworkStat[]>;
@@ -132,8 +137,9 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.getDeploymentNetworkStat.and.returnValue(netStatObservable);
     mockSvc.getPods.and.returnValue(podsObservable);
 
+    status = new BehaviorSubject<Status>({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' });
     mockStatusSvc = createMock(DeploymentStatusService);
-    mockStatusSvc.getAggregateStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: 'Memory usage is nearing capacity.' }));
+    mockStatusSvc.getAggregateStatus.and.returnValue(status);
     mockStatusSvc.getCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
     mockStatusSvc.getMemoryStatus.and.returnValue(Observable.of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
   });
@@ -231,6 +237,26 @@ describe('DeploymentDetailsComponent', () => {
     it('should be set to WARN class status', function(this: Context) {
       expect(this.testedDirective.memLabelClass).toEqual('label-warn');
       expect(this.testedDirective.memChartClass).toEqual('chart-warn');
+    });
+  });
+
+  describe('usage message', () => {
+    it('should be an empty string when status is OK', function(this: Context) {
+      status.next({ type: StatusType.OK, message: '' });
+      this.detectChanges();
+      expect(this.testedDirective.usageMessage).toEqual('');
+    });
+
+    it('should be "Nearing quota" when status is WARN', function(this: Context) {
+      status.next({ type: StatusType.WARN, message: '' });
+      this.detectChanges();
+      expect(this.testedDirective.usageMessage).toEqual('Nearing quota');
+    });
+
+    it('should be "Reached quota" when status is WARN', function(this: Context) {
+      status.next({ type: StatusType.ERR, message: '' });
+      this.detectChanges();
+      expect(this.testedDirective.usageMessage).toEqual('Reached quota');
     });
   });
 

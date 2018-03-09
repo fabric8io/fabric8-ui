@@ -64,7 +64,9 @@ export class DeploymentDetailsComponent {
   @Input() environment: Environment;
   @Input() spaceId: string;
 
-  subscriptions: Array<Subscription> = [];
+  usageMessage: string = '';
+
+  private readonly subscriptions: Array<Subscription> = [];
 
   cpuData: SparklineData = {
     dataAvailable: true,
@@ -154,6 +156,19 @@ export class DeploymentDetailsComponent {
       this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name)
         .map((p: Pods) => p.total > 0)
         .subscribe(this.hasPods)
+    );
+
+    this.subscriptions.push(
+      this.deploymentStatusService.getAggregateStatus(this.spaceId, this.environment.name, this.applicationId)
+        .subscribe((status: Status): void => {
+          if (status.type === StatusType.OK) {
+            this.usageMessage = '';
+          } else if (status.type === StatusType.WARN) {
+            this.usageMessage = 'Nearing quota';
+          } else if (status.type === StatusType.ERR) {
+            this.usageMessage = 'Reached quota';
+          }
+        })
     );
 
     this.subscriptions.push(

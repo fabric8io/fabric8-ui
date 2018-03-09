@@ -4,7 +4,13 @@
     <deployments-donut [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId" [mini]="false"></deployments-donut>
 
     <ng-container *ngIf="hasPods | async">
-      <p class="resource-usage-header">Resource Usage</p>
+      <p class="resource-usage-header">
+        Resource Usage
+        <span class="badge resource-badge" *ngIf="usageMessage">
+          <span class="pficon-warning-triangle-o"></span>
+          {{usageMessage}}
+        </span>
+      </p>
 
       <div class="deployment-chart" [ngClass]="cpuChartClass">
         <div class="chart-column-left">
