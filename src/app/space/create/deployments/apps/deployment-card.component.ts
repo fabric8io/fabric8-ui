@@ -49,7 +49,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   iconClass: string;
   toolTip: string;
 
-  subscriptions: Array<Subscription> = [];
+  private readonly subscriptions: Array<Subscription> = [];
 
   private readonly debouncedUpdateDetails = debounce(this.updateDetails, DeploymentCardComponent.DEBOUNCE_TIME, { maxWait: DeploymentCardComponent.MAX_DEBOUNCE_TIME });
 
