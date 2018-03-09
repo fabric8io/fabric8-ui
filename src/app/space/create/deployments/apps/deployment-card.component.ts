@@ -24,6 +24,12 @@ import {
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 
+enum CardStatusClass {
+  OK = '',
+  WARN = 'status-ribbon-warn',
+  ERR = 'status-ribbon-err'
+}
+
 @Component({
   selector: 'deployment-card',
   templateUrl: 'deployment-card.component.html',
@@ -45,6 +51,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   logsUrl: Observable<string>;
   consoleUrl: Observable<string>;
   appUrl: Observable<string>;
+
+  cardStatusClass: string;
 
   iconClass: string;
   toolTip: string;
@@ -103,10 +111,13 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.toolTip = toolTip;
 
     if (status.type === StatusType.ERR) {
+      this.cardStatusClass = CardStatusClass.ERR;
       this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_ERR;
     } else if (status.type === StatusType.WARN) {
+      this.cardStatusClass = CardStatusClass.WARN;
       this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_WARN;
     } else {
+      this.cardStatusClass = CardStatusClass.OK;
       this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
     }
   }

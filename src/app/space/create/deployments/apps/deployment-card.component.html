@@ -1,7 +1,7 @@
 <ng-container *ngIf="active">
   <div class="card-pf" (click)="toggleCollapsed($event)">
     <div class="card-pf-body">
-      <div class="row mini-card-content">
+      <div class="row mini-card-content" [ngClass]="cardStatusClass">
         <div class="col-sm-2">
           <deployment-status-icon [iconClass]="iconClass" [toolTip]="toolTip"></deployment-status-icon>
         </div>
