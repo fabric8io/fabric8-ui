@@ -2,7 +2,8 @@ import {
   Component,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -10,6 +11,7 @@ import {
   last
 } from 'lodash';
 import { NotificationType } from 'ngx-base';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, Subscription } from 'rxjs';
 
 import { NotificationsService } from 'app/shared/notifications.service';
@@ -22,6 +24,7 @@ import {
   StatusType
 } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
+import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 
 enum CardStatusClass {
@@ -44,10 +47,12 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: Environment;
+  @ViewChild(DeleteDeploymentModal) deleteDeploymentModal: DeleteDeploymentModal;
 
   active: boolean = false;
   detailsActive: boolean = false;
   collapsed: boolean = true;
+  deleting: boolean = false;
   version: Observable<string>;
   logsUrl: Observable<string>;
   consoleUrl: Observable<string>;
@@ -124,14 +129,16 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   toggleCollapsed(event: Event): void {
-    if (event.defaultPrevented) {
-      return;
-    }
-    this.collapsed = !this.collapsed;
-    if (!this.collapsed) {
-      this.detailsActive = true;
-    } else {
-      this.debouncedUpdateDetails();
+    if (!this.deleting) {
+      if (event.defaultPrevented) {
+        return;
+      }
+      this.collapsed = !this.collapsed;
+      if (!this.collapsed) {
+        this.detailsActive = true;
+      } else {
+        this.debouncedUpdateDetails();
+      }
     }
   }
 
@@ -141,10 +148,17 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     }
   }
 
+  openModal(): void {
+    this.deleteDeploymentModal.openModal();
+  }
+
   delete(): void {
     this.subscriptions.push(
-      this.deploymentsService.deleteDeployment(this.spaceId, this.applicationId, this.environment.name)
-        .subscribe(
+      this.deploymentsService.deleteDeployment(
+        this.spaceId,
+        this.environment.name,
+        this.applicationId
+        ).subscribe(
           (success: string) => {
             this.notifications.message({
               type: NotificationType.SUCCESS,
@@ -159,5 +173,12 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
           }
         )
     );
+
+    this.lockAndDelete();
+  }
+
+  private lockAndDelete(): void {
+    this.collapsed = true;
+    this.deleting = true;
   }
 }

@@ -1,7 +1,9 @@
 import {
   Component,
   DebugElement,
-  Input
+  EventEmitter,
+  Input,
+  Output
 } from '@angular/core';
 import {
   ComponentFixture,
@@ -22,6 +24,8 @@ import {
   BsDropdownModule,
   BsDropdownToggleDirective
 } from 'ngx-bootstrap/dropdown';
+import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
+
 import { ChartModule } from 'patternfly-ng';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
@@ -59,6 +63,18 @@ class FakeDeploymentsDonutComponent {
   @Input() applicationId: string;
   @Input() environment: Environment;
 }
+
+@Component({
+  selector: 'delete-deployment-modal',
+  template: ''
+})
+class FakeDeleteDeploymentModal {
+  @Input() host: ModalDirective;
+  @Input() applicationId: string;
+  @Input() environmentName: string;
+  @Output() deleteEvent = new EventEmitter();
+}
+
 @Component({
   selector: 'deployment-graph-label',
   template: ''
@@ -128,12 +144,14 @@ describe('DeploymentCardComponent async tests', () => {
         FakeDeploymentsDonutComponent,
         FakeDeploymentGraphLabelComponent,
         FakeDeploymentDetailsComponent,
-        FakeDeploymentStatusIconComponent
+        FakeDeploymentStatusIconComponent,
+        FakeDeleteDeploymentModal
       ],
       imports: [
         BsDropdownModule.forRoot(),
         CollapseModule.forRoot(),
-        ChartModule
+        ChartModule,
+        ModalModule.forRoot()
       ],
       providers: [
         BsDropdownConfig,
@@ -150,6 +168,7 @@ describe('DeploymentCardComponent async tests', () => {
     component.applicationId = 'mockAppId';
     component.environment = { name: 'mockEnvironment' } as Environment;
 
+    spyOn(component, 'openModal');
     fixture.detectChanges();
     flush();
     flushMicrotasks();
@@ -184,17 +203,22 @@ describe('DeploymentCardComponent async tests', () => {
       expect(item).toBeFalsy();
     }));
 
-    it('should invoke service \'delete\' function on Delete item click', fakeAsync(() => {
+    it('should call the delete modal open method', fakeAsync(()  => {
       const item: DebugElement = getItemByLabel('Delete');
       expect(item).toBeTruthy();
-      expect(mockSvc.deleteDeployment).not.toHaveBeenCalled();
       item.query(By.css('a')).triggerEventHandler('click', new CustomEvent('click'));
-
       fixture.detectChanges();
 
-      expect(mockSvc.deleteDeployment).toHaveBeenCalled();
-      expect(notifications.message).toHaveBeenCalled();
+      expect(component.openModal).toHaveBeenCalled();
     }));
+
+    it('should call the delete service method when the modal event fires', fakeAsync(() => {
+      const de: DebugElement = fixture.debugElement.query(By.directive(FakeDeleteDeploymentModal));
+      expect(mockSvc.deleteDeployment).not.toHaveBeenCalled();
+      de.componentInstance.deleteEvent.emit();
+      expect(mockSvc.deleteDeployment).toHaveBeenCalled();
+    }));
+
   });
 
   it('should not display inactive environments', fakeAsync(() => {
@@ -235,12 +259,14 @@ describe('DeploymentCardComponent', () => {
       FakeDeploymentsDonutComponent,
       FakeDeploymentGraphLabelComponent,
       FakeDeploymentDetailsComponent,
-      FakeDeploymentStatusIconComponent
+      FakeDeploymentStatusIconComponent,
+      FakeDeleteDeploymentModal
     ],
     imports: [
       BsDropdownModule.forRoot(),
       CollapseModule.forRoot(),
-      ChartModule
+      ChartModule,
+      ModalModule.forRoot()
     ],
     providers: [
       BsDropdownConfig,
