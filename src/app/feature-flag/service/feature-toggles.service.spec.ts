@@ -1,3 +1,4 @@
+import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
@@ -9,10 +10,12 @@ import { Feature, FeatureTogglesService } from './feature-toggles.service';
 describe('FeatureToggles service: it', () => {
   let mockLog: any;
   let mockAuthService: any;
+  let mockErrorHandler: any;
   let mockService: MockBackend;
   let togglesService: FeatureTogglesService;
   beforeEach(() => {
     mockLog = jasmine.createSpyObj('Logger', ['log']);
+    mockLog = jasmine.createSpy('ErrorHandler');
     mockAuthService = jasmine.createSpyObj('AuthenticationService', ['getToken']);
     TestBed.configureTestingModule({
       imports: [HttpModule],
@@ -26,6 +29,10 @@ describe('FeatureToggles service: it', () => {
         {
           provide: AuthenticationService,
           useValue: mockAuthService
+        },
+        {
+          provide: ErrorHandler,
+          useValue: mockErrorHandler
         },
         {
           provide: WIT_API_URL,
