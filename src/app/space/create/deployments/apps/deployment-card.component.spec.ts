@@ -35,7 +35,11 @@ import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
-import { DeploymentStatusService } from '../services/deployment-status.service';
+import {
+  DeploymentStatusService,
+  Status,
+  StatusType
+} from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentCardComponent } from './deployment-card.component';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
@@ -106,6 +110,7 @@ describe('DeploymentCardComponent async tests', () => {
     let component: DeploymentCardComponent;
     let fixture: ComponentFixture<DeploymentCardComponent>;
     let mockSvc: jasmine.SpyObj<DeploymentsService>;
+    let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
     let notifications: any;
     let active: Subject<boolean>;
 
@@ -113,6 +118,8 @@ describe('DeploymentCardComponent async tests', () => {
       active = new BehaviorSubject<boolean>(true);
       mockSvc = initMockSvc();
       mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
+      mockStatusSvc = createMock(DeploymentStatusService);
+      mockStatusSvc.getAggregateStatus.and.returnValue(Observable.never());
       notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
       TestBed.configureTestingModule({
@@ -132,7 +139,7 @@ describe('DeploymentCardComponent async tests', () => {
           BsDropdownConfig,
           { provide: NotificationsService, useValue: notifications },
           { provide: DeploymentsService, useValue: mockSvc },
-          DeploymentStatusService
+          { provide: DeploymentStatusService, useValue: mockStatusSvc }
         ]
       });
 
@@ -204,6 +211,8 @@ describe('DeploymentCardComponent', () => {
   type Context =  TestContext<DeploymentCardComponent, HostComponent>;
   let active: Subject<boolean>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
+  let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
+  let mockStatus: Subject<Status> = new BehaviorSubject({ type: StatusType.WARN, message: 'warning message' });
   let notifications: any;
   let mockCpuData: Subject<CpuStat[]> = new BehaviorSubject([{ used: 1, quota: 5, timestamp: 1 }] as CpuStat[]);
   let mockMemoryData: Subject<MemoryStat[]> = new BehaviorSubject([{ used: 1, quota: 5, timestamp: 1 }] as MemoryStat[]);
@@ -214,6 +223,8 @@ describe('DeploymentCardComponent', () => {
     mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
     mockSvc.getDeploymentCpuStat.and.returnValue(mockCpuData);
     mockSvc.getDeploymentMemoryStat.and.returnValue(mockMemoryData);
+    mockStatusSvc = createMock(DeploymentStatusService);
+    mockStatusSvc.getAggregateStatus.and.returnValue(mockStatus);
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     flush();
@@ -237,7 +248,7 @@ describe('DeploymentCardComponent', () => {
       BsDropdownConfig,
       { provide: NotificationsService, useFactory: () => notifications },
       { provide: DeploymentsService, useFactory: () => mockSvc },
-      DeploymentStatusService
+      { provide: DeploymentStatusService, useFactory: () => mockStatusSvc }
     ]
   },
     (component: DeploymentCardComponent) => {
@@ -273,5 +284,19 @@ describe('DeploymentCardComponent', () => {
 
       expect(this.testedDirective.active).toBeFalsy();
     }));
+  });
+
+  it('should set icon status from DeploymentStatusService aggregate', function(this: Context) {
+    expect(mockStatusSvc.getAggregateStatus).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(this.testedDirective.toolTip).toEqual('warning message');
+    expect(this.testedDirective.iconClass).toEqual('pficon-warning-triangle-o');
+
+    mockStatus.next({ type: StatusType.ERR, message: 'error message' });
+    expect(this.testedDirective.toolTip).toEqual('error message');
+    expect(this.testedDirective.iconClass).toEqual('pficon-error-circle-o');
+
+    mockStatus.next({ type: StatusType.OK, message: '' });
+    expect(this.testedDirective.toolTip).toEqual('Everything is OK.');
+    expect(this.testedDirective.iconClass).toEqual('pficon-ok');
   });
 });
