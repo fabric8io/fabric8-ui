@@ -1,15 +1,19 @@
 {
 "rules": {
+    "block-closing-brace-empty-line-before": "never",
     "block-closing-brace-newline-after": "always",
     "block-closing-brace-newline-before": "always-multi-line",
     "block-no-empty": true,
     "block-opening-brace-newline-after": "always-multi-line",
-    "block-opening-brace-space-before": "always-multi-line",
+    "block-opening-brace-space-before": "always",
     "color-hex-case": ["lower", {
       "message": "Use lowercase hex codes for better readability."
     }],
     "color-hex-length": ["short", {
       "message": "Use shorthand hex codes when possible"
+    }],
+    "color-named": ["never", {
+      "message": "Please use a PatternFly variable or hex value for color declarations."
     }],
     "color-no-invalid-hex": [true, {
       "message": "You must use a valid hex code.",
@@ -19,6 +23,7 @@
       "ignore": ["stylelint-commands", "after-comment"]
     } ],
     "comment-no-empty": true,
+    "comment-whitespace-inside": "always",
     "declaration-block-no-duplicate-properties": [true, {
       "ignore": ["consecutive-duplicates-with-different-values"]
     }],
@@ -26,6 +31,10 @@
     "declaration-block-semicolon-newline-after": "always-multi-line",
     "declaration-block-semicolon-space-before": "never",
     "declaration-block-semicolon-space-after": "always-single-line",
+    "declaration-block-single-line-max-declarations": [1, {
+      "message": "More than one declaration requires multiple lines.",
+      "severity": "warning"
+    }],
     "declaration-block-trailing-semicolon": "always",
     "declaration-no-important": [true, {
       "message": "If this is necessary, you must get approval for a line item exclusion.",
@@ -37,6 +46,7 @@
     "function-comma-space-after": "always-single-line",
     "function-comma-space-before": "never",
     "function-name-case": "lower",
+    "function-parentheses-newline-inside": "never-multi-line",
     "function-url-quotes": "always",
     "function-whitespace-after": "always",
     "indentation": [ 2, {
@@ -46,20 +56,41 @@
     } ],
     "length-zero-no-unit": true,
     "keyframe-declaration-no-important": true,
+    "media-feature-name-no-unknown": true,
     "no-duplicate-at-import-rules": [true, {
       "message": "You cannot import the same thing twice."
     }],
     "no-eol-whitespace": true,
-    "no-invalid-double-slash-comments": true,
+    "no-extra-semicolons": [true, {
+      "message": "You have extra semicolons - please remove them.",
+      "severity": "error"
+    }],
+    "no-invalid-double-slash-comments": [true, {
+      "message": "Double Slash `//` comments are not supported by CSS."
+    }],
     "no-unknown-animations": true,
     "number-leading-zero": ["never", {
-      "message": "Do not add zeros before a number."
+      "message": "Do not add zeros before a number.",
+      "severity": "error"
     }],
+    "number-max-precision": 3,
     "number-no-trailing-zeros": null,
     "property-case": "lower",
+    "rule-empty-line-before": ["always", {
+      "except": ["after-single-line-comment",
+                 "inside-block-and-after-rule",
+                 "inside-block",
+                 "first-nested"],
+      "ignore": ["after-comment"]
+    }],
     "selector-attribute-brackets-space-inside": "never",
     "selector-attribute-operator-space-after": "never",
     "selector-attribute-operator-space-before": "never",
+    "selector-descendant-combinator-no-non-space": true,
+    "selector-list-comma-newline-after": "always-multi-line",
+    "selector-list-comma-newline-before": "never-multi-line",
+    "selector-list-comma-space-after": "never-single-line",
+    "selector-list-comma-space-before": "never",
     "selector-pseudo-class-case": "lower",
     "selector-pseudo-class-parentheses-space-inside": "never",
     "selector-pseudo-element-case": "lower",
@@ -79,7 +110,8 @@
       "em",
       "rem",
       "vh",
-      "vw"
+      "vw",
+      "fr"
     ],
     "value-list-comma-space-after": "always-single-line",
     "value-list-comma-space-before": "never",

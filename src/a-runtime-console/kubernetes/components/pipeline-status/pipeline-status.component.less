@@ -1,17 +1,21 @@
 @import (reference) '../../../../assets/stylesheets/shared/osio.less';
+
 .console-os .top-header,
 .pipeline-status-bar {
   display: flex;
 }
+
 .pipeline-status-bar .clip1:before,
 .pipeline-status-bar .clip2:before,
 .pipeline-status-bar .pipeline-line:before {
   background-color: #d1d1d1;
 }
+
 .pipeline-status-bar .inner-circle-fill {
   background-color: #fff;
   opacity: 0;
 }
+
 .pipeline-status-bar.SUCCESS .clip1:before,
 .pipeline-status-bar.SUCCESS .clip2:before,
 .pipeline-status-bar.SUCCESS .inner-circle-fill,
@@ -21,10 +25,12 @@
 .pipeline-status-bar.SUCCESS .pipeline-circle .inner-circle {
   background-color: #3f9c35;
 }
+
 .pipeline-status-bar.SUCCESS .pipeline-circle:after {
   content: '\f00c';
   opacity: 1;
 }
+
 .pipeline-status-bar.FAILED .clip1:before,
 .pipeline-status-bar.FAILED .clip2:before,
 .pipeline-status-bar.FAILED .inner-circle-fill,
@@ -34,10 +40,12 @@
 .pipeline-status-bar.FAILED .pipeline-circle .inner-circle {
   background-color: #c00;
 }
+
 .pipeline-status-bar.FAILED .pipeline-circle:after {
   content: '\f00d';
   opacity: 1;
 }
+
 .pipeline-status-bar.NOT_EXECUTED .clip1:before,
 .pipeline-status-bar.NOT_EXECUTED .clip2:before,
 .pipeline-status-bar.NOT_EXECUTED .inner-circle-fill,
@@ -47,10 +55,12 @@
 .pipeline-status-bar.NOT_EXECUTED .pipeline-circle .inner-circle {
   background-color: #d1d1d1;
 }
+
 .pipeline-status-bar.NOT_EXECUTED .pipeline-circle:after {
   content: '';
   opacity: 1;
 }
+
 .pipeline-status-bar.PAUSED_PENDING_INPUT .clip1:before,
 .pipeline-status-bar.PAUSED_PENDING_INPUT .clip2:before,
 .pipeline-status-bar.PAUSED_PENDING_INPUT .inner-circle-fill,
@@ -60,11 +70,13 @@
 .pipeline-status-bar.PAUSED_PENDING_INPUT .pipeline-circle .inner-circle {
   background-color: #f0ab00;
 }
+
 .pipeline-status-bar.PAUSED_PENDING_INPUT .pipeline-circle:after {
   content: '\f04c';
   font-size: 10px;
   opacity: 1;
 }
+
 .pipeline-status-bar.ABORTED .clip1:before,
 .pipeline-status-bar.ABORTED .clip2:before,
 .pipeline-status-bar.ABORTED .inner-circle-fill,
@@ -75,6 +87,7 @@
 .pipeline-status-bar.ABORTED .pipeline-circle .inner-circle {
   background-color: #d1d1d1;
 }
+
 .pipeline-status-bar.ABORTED .pipeline-circle:after {
   content: '\f05e';
   opacity: 1;
@@ -86,21 +99,26 @@
 .pipeline-status-bar.IN_PROGRESS .inner-circle-fill {
   background-color: #0088ce;
 }
+
 .pipeline-status-bar.IN_PROGRESS .pipeline-circle {
   animation: 0s .7s linear forwards;
 }
+
 .pipeline-status-bar.IN_PROGRESS .pipeline-circle:after {
   content: '\f021';
 }
+
 .pipeline-status-bar.IN_PROGRESS .pipeline-line {
   overflow: hidden;
 }
+
 .pipeline-status-bar.IN_PROGRESS .pipeline-line:before {
   animation: 5s .5s linear infinite;
   background-color: #0088ce;
   transform: translateX(-100%);
   width: 25%;
 }
+
 .pipeline-status-bar {
   display: flex;
   -webkit-align-items: center;
@@ -112,17 +130,20 @@
   flex-direction: column;
   margin-bottom: -9px;
 }
+
 .pipeline-status-bar .pipeline-line {
   position: relative;
   width: 100%;
   height: 4px;
   background: #d1d1d1;
 }
+
 .pipeline-status-bar .pipeline-line:before {
   content: '';
   position: absolute;
   height: 100%;
 }
+
 .pipeline-circle {
   position: relative;
   width: 18px;
@@ -132,6 +153,7 @@
   background: #d1d1d1;
   transform: rotate(-90deg);
 }
+
 .pipeline-circle:after {
   position: absolute;
   top: 50%;
@@ -142,6 +164,7 @@
   color: #fff;
   opacity: 0;
 }
+
 .pipeline-circle .clip1:before,
 .pipeline-circle .clip2:before {
   position: absolute;
@@ -151,22 +174,27 @@
   border-radius: 9px;
   content: '';
 }
+
 .pipeline-circle .clip1 {
   position: absolute;
   clip: rect(0, 18px, 18px, 9px);
   z-index: -9;
 }
+
 .pipeline-circle .clip1:before {
   clip: rect(0, 9px, 18px, 0);
 }
+
 .pipeline-circle .clip2 {
   position: absolute;
   clip: rect(0, 9px, 18px, 0);
   z-index: -9;
 }
+
 .pipeline-circle .clip2:before {
   clip: rect(0, 18px, 18px, 9px);
 }
+
 .pipeline-circle .inner-circle {
   position: absolute;
   top: 4px;
@@ -176,6 +204,7 @@
   border-radius: 9px;
   background-color: #fff;
 }
+
 .pipeline-circle .inner-circle .inner-circle-fill {
   box-sizing: border-box;
   height: 100%;

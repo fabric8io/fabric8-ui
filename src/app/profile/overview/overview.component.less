@@ -2,6 +2,7 @@
 
 // tabs content area
 .overview-nav-tab-content { padding: 20px 0; }
+
 .edit-profile-img {
   position: absolute;
   right: 5px;
@@ -9,35 +10,38 @@
   color: @color-pf-black-300;
   .pointer;
 }
+
 .edit-profile-name-icon {
   margin-top: 25px;
   color: @color-pf-black-500;
   .pointer;
 }
+
 .profile-wrapper-email {
   .pficon-edit {
     color: @color-pf-black-500;
     .pointer;
   }
 }
+
 .profile-wrapper {
   &-email,
   &-url,
   &-bio {
     word-wrap: break-word;
+
     /*
      * Hyphens CSS property not currently supported by all browsers
-     * For more information & support, see: 
+     * For more information & support, see:
      * https://caniuse.com/#search=hyphens
      */
     -webkit-hyphens: auto; // Safari & Chrome
     -ms-hyphens: auto; // IE and Edge
     hyphens: auto; // Firefox
   }
-  &-username {
-    padding-left: 5px;
-  }
+  &-username { padding-left: 5px; }
 }
+
 .profile-img-none,
 .preview-img-none {
   border-top: solid 2px;
@@ -49,10 +53,13 @@
   border-left: solid 2px;
   border-left-color: @color-pf-black-300;
 }
+
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .wrap { word-wrap: break-word; }
+
 .profile-update-button { white-space: normal; }

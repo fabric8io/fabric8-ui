@@ -16,7 +16,6 @@
       }
     }
   }
-
   &-more-info {
     padding-left: 10px;
     padding-right: 10px;
@@ -27,6 +26,7 @@
     vertical-align: baseline;
   }
 }
+
 .btn-link-feature-level(@color-for-feature) {
   &:extend(.btn-link);
   padding: 0;
@@ -37,6 +37,7 @@
   text-decoration: underline;
   vertical-align: baseline;
 }
+
 .btn-feature-level(@color-for-feature) {
   &:extend(.btn-default);
   border-color: @color-for-feature;
@@ -53,9 +54,11 @@
 .experimental {
   .feature-level(@color-experimental);
 }
+
 .btn-link-experimental {
   .btn-link-feature-level(@color-experimental);
 }
+
 .btn-experimental {
   .btn-feature-level(@color-experimental);
 }
@@ -64,9 +67,11 @@
 .beta {
   .feature-level(@color-beta);
 }
+
 .btn-link-beta {
   .btn-link-feature-level(@color-beta);
 }
+
 .btn-beta {
   .btn-feature-level(@color-beta);
 }
@@ -75,9 +80,11 @@
 .internal {
   .feature-level(@color-internal);
 }
+
 .btn-link-internal {
   .btn-link-feature-level(@color-internal);
 }
+
 .btn-link-internal {
   .btn-feature-level(@color-internal);
 }
@@ -86,9 +93,11 @@
 .system-error {
   .feature-level(@color-system-error);
 }
+
 .btn-link-system-error {
   .btn-link-feature-level(@color-system-error);
 }
+
 .btn-system-error {
   .btn-feature-level(@color-system-error);
 }

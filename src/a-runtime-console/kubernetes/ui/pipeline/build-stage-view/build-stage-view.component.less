@@ -10,7 +10,7 @@
 @keyframes flexShrink {
   to {
     flex-basis: 1;
-    flex-grow: .000001;
+    flex-grow: .001;
     flex-shrink: 1;
   }
 }
@@ -76,24 +76,29 @@
     background-color: #d1d1d1;
   }
 }
+
 .build-pipeline {
   border: 1px solid;
   border-color: #d1d1d1;
   border-top-width: 2px;
 }
+
 .build-pipeline:first-child {
   border-top-width: 1px;
 }
+
 .pipeline-container {
   flex: 1 1 auto;
   overflow: hidden;
 }
+
 .pipeline {
   display: flex;
   flex-wrap: wrap;
   height: 100%;
   padding: 0 5px;
 }
+
 .pipeline .pipeline-stage {
   flex: 0 0 auto;
   min-height: 96px;
@@ -101,6 +106,7 @@
   position: relative;
   width: 100%;
 }
+
 .pipeline .pipeline-stage:before {
   position: absolute;
   right: 0;
@@ -112,9 +118,11 @@
   color: #c4c4c4;
   content: '\2193';
 }
+
 .pipeline .pipeline-stage:last-child:before {
   display: none;
 }
+
 .pipeline .pipeline-stage.no-stages {
   align-items: center;
   display: flex;
@@ -122,18 +130,22 @@
   width: auto !important;
   /* stylelint-enable */
 }
+
 .pipeline .pipeline-stage.no-stages:before {
   display: none;
 }
+
 .pipeline .pipeline-stage.no-stages .pipeline-stage-name {
   margin-bottom: 0;
 }
+
 .pipeline-stage-name,
 .pipeline-time,
 .pipeline-actions {
   font-size: 12px;
   text-align: center;
 }
+
 .pipeline-stage-name {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -141,27 +153,33 @@
   line-height: initial;
   margin-bottom: 15px;
 }
+
 .pipeline-time,
 .pipeline-actions {
   margin-top: 12px;
   color: #9c9c9c;
 }
+
 .build-name,
 .build-phase,
 .build-timestamp {
   padding: 0 10px;
 }
+
 .build-timestamp {
   padding-top: 2px;
   font-size: 84%;
 }
+
 .build-phase .status-icon {
   margin-right: 2px;
 }
+
 .build-summary,
 .stage {
   text-align: center;
 }
+
 .build-summary {
   position: relative;
   display: flex;
@@ -172,9 +190,11 @@
   border-bottom: 1px solid;
   border-color: #d1d1d1;
 }
+
 .build-timestamp {
   color: #9c9c9c;
 }
+
 @media (min-width: 400px) {
   .pipeline .pipeline-stage {
     padding-right: 52px;
@@ -189,6 +209,7 @@
     content: '\2192';
   }
 }
+
 @media (min-width: 600px) {
   .build-timestamp {
     padding-top: 0;
@@ -209,11 +230,13 @@
     border-right-color: #d1d1d1;
   }
 }
+
 @media (min-width: 992px) {
   .pipeline .pipeline-stage {
-    width: 33.333333%;
+    width: 33.333%;
   }
 }
+
 @media (min-width: 1200px) {
   .pipeline .pipeline-stage {
     width: 25%;

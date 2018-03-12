@@ -1,25 +1,29 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 
 .view-width-100 { width: 100vw !important; /* stylelint-disable-line declaration-no-important */ }
+
 .container-fluid {
   padding-right: 0;
   padding-left: 0;
 }
+
 .nav {
   .open {
     >.dropdown-menu {
       transform: scale(1, 1);
     }
-    &>a {
+    & >a {
       height: 43px;
       background-color: @color-pf-black-900;
       border-color: @color-pf-black-600;
     }
   }
 }
+
 .navbar-inverse {
   background-color: @color-pf-black;
 }
+
 .navbar {
   margin-bottom: 0;
   border-top: 3px solid;
@@ -51,6 +55,7 @@
     margin-top: 7px;
   }
 }
+
 .navbar-pf {
   min-height: 48px;
   .infotip {
@@ -83,12 +88,14 @@
     }
   }
 }
+
 .io-recent-items-active {
   height: 43px;
   width: 275px;
   border-right: 1px solid;
   border-right-color: @color-pf-black-600;
 }
+
 .recent-items-toggle {
   width: 273px;
   &-text {
@@ -110,6 +117,7 @@
     margin-top: 3px;
   }
 }
+
 .recent-items-dropdown {
   &.open {
     .recent-items {
@@ -118,8 +126,9 @@
     }
   }
 }
+
 .icon-dropdown {
-  &:hover { .pointer };
+  &:hover { .pointer; }
   a {
     padding-top: 12px;
     padding-right: 5px;
@@ -151,6 +160,7 @@
     }
   }
 }
+
 .login-block {
   border-left: 1px solid;
   border-left-color: @color-pf-black-600;
@@ -169,6 +179,7 @@
     &:hover { .pointer; }
   }
 }
+
 .user-dropdown {
   padding: 10px 14px;
   width: 200px;
@@ -208,9 +219,10 @@
     }
   }
 }
+
 @media (max-width: 768px) {
   .nav {
-    &>li { float: left; }
+    & >li { float: left; }
     .recent-items-dropdown { width: 100%; }
     .status-dropdown { display: none; }
     .user-dropdown { width: 100%; }
