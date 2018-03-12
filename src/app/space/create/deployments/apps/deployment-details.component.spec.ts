@@ -242,6 +242,66 @@ describe('DeploymentDetailsComponent', () => {
     });
   });
 
+  describe('sparkline data', () => {
+    it('should set CPU Y axis max to quota', function(this: Context) {
+      expect(this.testedDirective.cpuConfig.axis.y.max).toEqual(2);
+    });
+
+    it('should set CPU Y axis max to maximum value or maximum quota', function(this: Context) {
+      cpuStatObservable.next([
+        {
+          used: 1,
+          quota: 100
+        },
+        {
+          used: 2,
+          quota: 200
+        },
+        {
+          used: 150,
+          quota: 200
+        },
+        {
+          used: 75,
+          quota: 100
+        }
+      ]);
+      this.detectChanges();
+      expect(this.testedDirective.cpuConfig.axis.y.max).toEqual(200);
+    });
+
+    it('should set Memory Y axis max to quota', function(this: Context) {
+      expect(this.testedDirective.memConfig.axis.y.max).toEqual(4);
+    });
+
+    it('should set Memory Y axis max to maximum value or maximum quota', function(this: Context) {
+      memStatObservable.next([
+        {
+          used: 1,
+          quota: 100,
+          units: 'MB'
+        },
+        {
+          used: 2,
+          quota: 200,
+          units: 'MB'
+        },
+        {
+          used: 150,
+          quota: 200,
+          units: 'MB'
+        },
+        {
+          used: 75,
+          quota: 100,
+          units: 'MB'
+        }
+      ]);
+      this.detectChanges();
+      expect(this.testedDirective.memConfig.axis.y.max).toEqual(200);
+    });
+  });
+
   describe('linechart data', () => {
     it('should be rounded to whole numbers when units are bytes', function(this: Context) {
       const mb = Math.pow(1024, 2);
