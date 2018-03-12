@@ -5,17 +5,24 @@ import {
   OnInit
 } from '@angular/core';
 
-import { debounce } from 'lodash';
+import {
+  debounce,
+  last
+} from 'lodash';
 import { NotificationType } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { Environment } from '../models/environment';
+import { MemoryStat } from '../models/memory-stat';
+import {
+  DeploymentStatusService,
+  Status,
+  StatusType
+} from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
-
-const STAT_THRESHOLD = .6;
 
 @Component({
   selector: 'deployment-card',
@@ -39,16 +46,16 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   consoleUrl: Observable<string>;
   appUrl: Observable<string>;
 
-  cpuStat: Observable<CpuStat[]>;
   iconClass: string;
   toolTip: string;
 
-  subscriptions: Array<Subscription> = [];
+  private readonly subscriptions: Array<Subscription> = [];
 
   private readonly debouncedUpdateDetails = debounce(this.updateDetails, DeploymentCardComponent.DEBOUNCE_TIME, { maxWait: DeploymentCardComponent.MAX_DEBOUNCE_TIME });
 
   constructor(
     private deploymentsService: DeploymentsService,
+    private statusService: DeploymentStatusService,
     private notifications: NotificationsService
   ) { }
 
@@ -60,10 +67,10 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
     this.toolTip = 'Everything is ok';
 
-    this.cpuStat = this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name, 1);
-    this.subscriptions.push(this.cpuStat.subscribe((stat: CpuStat[]) => {
-      this.changeStatus(stat[0]);
-    }));
+    this.subscriptions.push(
+      this.statusService.getAggregateStatus(this.spaceId, this.environment.name, this.applicationId)
+        .subscribe((status: Status): void => this.changeStatus(status))
+    );
 
     this.subscriptions.push(
       this.deploymentsService
@@ -88,17 +95,19 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     );
   }
 
-  changeStatus(stat: CpuStat): void {
-    this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
-    this.toolTip = 'Everything is ok.';
-    if (stat.used / stat.quota > STAT_THRESHOLD) {
-      this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_WARN;
-      this.toolTip = 'CPU usage is nearing capacity.';
+  changeStatus(status: Status): void {
+    let toolTip: string = status.message;
+    if (!toolTip) {
+      toolTip = 'Everything is OK.';
     }
+    this.toolTip = toolTip;
 
-    if (stat.used > stat.quota) {
+    if (status.type === StatusType.ERR) {
       this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_ERR;
-      this.toolTip = 'CPU usage has exceeded capacity.';
+    } else if (status.type === StatusType.WARN) {
+      this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_WARN;
+    } else {
+      this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
     }
   }
 
