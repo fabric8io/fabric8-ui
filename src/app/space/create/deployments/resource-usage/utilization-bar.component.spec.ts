@@ -5,10 +5,7 @@ import { Observable } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
 
 import { Stat } from '../models/stat';
-import {
-  State,
-  UtilizationBarComponent
-} from './utilization-bar.component';
+import { UtilizationBarComponent } from './utilization-bar.component';
 
 @Component({
   template: '<utilization-bar></utilization-bar>'
@@ -44,13 +41,13 @@ describe('UtilizationBarComponent', () => {
       expect(el.textContent.trim()).toEqual('1 of 4');
     });
 
-    it('should set state to okay when under 75% used', function(this: Context) {
-      expect(this.testedDirective.getUtilizationClass()).toEqual(State.Okay);
+    it('should clear warning when under 60% used', function(this: Context) {
+      expect(this.testedDirective.warn).toBeFalsy();
 
-      let de = this.fixture.debugElement.query(By.css(`.${State.Okay}`));
+      let de = this.fixture.debugElement.query(By.css(`.utilization-okay`));
       expect(de).toBeTruthy();
 
-      let de2 = this.fixture.debugElement.query(By.css(`.${State.Warning}`));
+      let de2 = this.fixture.debugElement.query(By.css(`.utilization-warning`));
       expect(de2).toBeFalsy();
     });
   });
@@ -81,13 +78,13 @@ describe('UtilizationBarComponent', () => {
       expect(el.textContent.trim()).toEqual('3 of 4');
     });
 
-    it('should set state to warning to false when 75% or higher used', function(this: Context) {
-      expect(this.testedDirective.getUtilizationClass()).toEqual(State.Warning);
+    it('should set warning 60% or higher used', function(this: Context) {
+      expect(this.testedDirective.warn).toBeTruthy();
 
-      let de = this.fixture.debugElement.query(By.css(`.${State.Okay}`));
+      let de = this.fixture.debugElement.query(By.css(`.utilization-okay`));
       expect(de).toBeFalsy();
 
-      let de2 = this.fixture.debugElement.query(By.css(`.${State.Warning}`));
+      let de2 = this.fixture.debugElement.query(By.css(`.utilization-warning`));
       expect(de2).toBeTruthy();
     });
   });

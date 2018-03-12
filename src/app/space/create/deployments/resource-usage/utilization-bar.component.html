@@ -1,12 +1,12 @@
 <div class="progress-container progress-description-left progress-label-right">
-  <div class="progress-description">
+  <div class="progress-description" [ngClass]="{ 'label-warn': warn }">
     {{ resourceTitle }} ({{ resourceUnit }})
   </div>
   <div class="progress">
     <div class="progress-bar" role="progressbar" [attr.aria-valuenow]="usedPercent" aria-valuemin="0" aria-valuemax="100"
-      [ngClass]="getUtilizationClass()"
+      [ngClass]="warn ? 'utilization-warning' : 'utilization-okay'"
       [style.width]="usedPercent + '%'" data-toggle="tooltip" title="{{ usedPercent }}% Used">
-      <span><b id="resourceCardLabel">{{ used }} of {{ total }}</b></span>
+      <span><b id="resourceCardLabel" [ngClass]="{ 'label-warn': warn }">{{ used }} of {{ total }}</b></span>
     </div>
     <div class="progress-bar progress-bar-remaining" role="progressbar" [attr.aria-valuenow]="unusedPercent" aria-valuemin="0" aria-valuemax="100"
       [style.width]="unusedPercent + '%'" data-toggle="tooltip" title="{{ unusedPercent }}% Available">

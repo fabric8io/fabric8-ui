@@ -8,11 +8,7 @@ import {
 import { Observable, Subscription } from 'rxjs';
 
 import { Stat } from '../models/stat';
-
-export enum State {
-  Okay = 'utilization-okay',
-  Warning = 'utilization-warning'
-}
+import { DeploymentStatusService } from '../services/deployment-status.service';
 
 @Component({
   selector: 'utilization-bar',
@@ -25,39 +21,28 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
   @Input() resourceUnit: string;
   @Input() stat: Observable<Stat>;
 
-  private static readonly WARNING_THRESHOLD = 75;
+  warn: boolean = false;
 
   used: number;
   total: number;
   usedPercent: number;
   unusedPercent: number;
 
-  private currentState: State;
   private statSubscription: Subscription;
 
   ngOnInit(): void {
-    this.currentState = State.Okay;
-
-    this.statSubscription = this.stat.subscribe(val => {
+    this.statSubscription = this.stat.subscribe((val: Stat): void => {
       this.used = val.used;
       this.total = val.quota;
       this.usedPercent = (this.total !== 0) ? Math.floor(this.used / this.total * 100) : 0;
       this.unusedPercent = 100 - this.usedPercent;
 
-      if (this.usedPercent < UtilizationBarComponent.WARNING_THRESHOLD) {
-        this.currentState = State.Okay;
-      } else {
-        this.currentState = State.Warning;
-      }
+      this.warn = val.used / val.quota >= DeploymentStatusService.WARNING_THRESHOLD;
     });
   }
 
   ngOnDestroy(): void {
     this.statSubscription.unsubscribe();
-  }
-
-  getUtilizationClass(): State {
-    return this.currentState;
   }
 
 }
