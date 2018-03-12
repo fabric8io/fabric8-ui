@@ -1,9 +1,16 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Contexts, Spaces } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs/Rx';
+import { ActivatedRoute } from '@angular/router';
+
+import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from 'rxjs/Rx';
+
+import { Context, Contexts, Spaces } from 'ngx-fabric8-wit';
+
+import { Environment as ModelEnvironment } from '../../../app/space/create/deployments/models/environment';
+
 import {
   ApplicationAttributesOverview,
-  DeploymentsService
+  DeploymentsService,
+  Space
 } from '../../../app/space/create/deployments/services/deployments.service';
 
 @Component({
@@ -23,7 +30,6 @@ export class EnvironmentWidgetComponent implements OnInit {
               private spaces: Spaces,
               private deploymentsService: DeploymentsService) {
     this.spaceId = this.spaces.current.first().map(space => space.id);
-    // console.log('::LOADING....::');
   }
 
   ngOnInit() {
