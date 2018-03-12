@@ -12,16 +12,17 @@
   justify-content: center;
 }
 
-.status-ribbon-warn {
-  border-left-style: solid;
-  border-left-width: 4px;
-  border-left-color: @color-pf-orange-300;
-}
-
-.status-ribbon-err {
-  border-left-style: solid;
-  border-left-width: 4px;
-  border-left-color: @color-pf-red-100;
+.status-ribbon {
+  &-warn {
+    border-left-style: solid;
+    border-left-width: 4px;
+    border-left-color: @color-pf-orange-300;
+  }
+  &-err {
+    border-left-style: solid;
+    border-left-width: 4px;
+    border-left-color: @color-pf-red-100;
+  }
 }
 
 .deployment-dropdown {
