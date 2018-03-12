@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Inject, Injectable, OpaqueToken } from '@angular/core';
+import { ErrorHandler, Inject, Injectable, OpaqueToken } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
@@ -25,6 +25,7 @@ export class FeatureTogglesService {
   constructor(
     private http: Http,
     private logger: Logger,
+    private errorHandler: ErrorHandler,
     private auth: AuthenticationService,
     @Inject(WIT_API_URL) apiUrl: string) {
     if (this.auth.getToken() != null) {
@@ -69,6 +70,7 @@ export class FeatureTogglesService {
 
   private handleError(error: any) {
     this.logger.error(error);
+    this.errorHandler.handleError(error);
     return Observable.throw(error.message || error);
   }
 }

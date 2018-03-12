@@ -1,4 +1,4 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
+import { ErrorHandler, Inject, Injectable, OnDestroy } from '@angular/core';
 import { Http } from '@angular/http';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 
@@ -18,6 +18,7 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
       protected auth: AuthenticationService,
       protected http: Http,
       protected logger: Logger,
+      private errorHandler: ErrorHandler,
       protected userService: UserService,
       @Inject(WIT_API_URL) apiUrl: string) {
     super(auth, http, logger, userService, apiUrl);
@@ -73,6 +74,7 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
       // Do nothing
     }, error => {
       this.logger.error('Failed to save acknowledge state');
+      this.errorHandler.handleError(error);
     }));
   }
 

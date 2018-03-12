@@ -6,6 +6,7 @@ import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
 
+import { ErrorHandler } from '@angular/core';
 import { loggedInUser } from '../../shared/context.service.mock';
 import { FeatureAcknowledgementService } from './feature-acknowledgement.service';
 
@@ -13,11 +14,13 @@ describe('FeatureAcknowledgement service: it', () => {
   let extUser = loggedInUser;
   let featureAckService: FeatureAcknowledgementService;
   let mockLog: any;
+  let mockErrorHandler: any;
   let mockAuthService: any;
   let mockUserService: any;
 
   beforeEach(() => {
     mockLog = jasmine.createSpyObj('Logger', ['log']);
+    mockErrorHandler = jasmine.createSpy('ErrorHandler');
     mockAuthService = jasmine.createSpyObj('AuthenticationService', ['getToken']);
     mockUserService = jasmine.createSpyObj('UserService', ['getUserByUserId']);
 
@@ -35,6 +38,10 @@ describe('FeatureAcknowledgement service: it', () => {
       providers: [
         {
           provide: Logger, useValue: mockLog
+        },
+        {
+          provide: ErrorHandler,
+          useValue: mockErrorHandler
         },
         {
           provide: AuthenticationService,
