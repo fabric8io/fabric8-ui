@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { Pods } from '../models/pods';
 import { Stat } from '../models/stat';
 import { DeploymentsService } from './deployments.service';
 
@@ -25,18 +26,26 @@ export interface Status {
 @Injectable()
 export class DeploymentStatusService {
 
-  static readonly WARNING_THRESHOLD = .6;
+  static readonly WARNING_THRESHOLD: number = .6;
+
+  private static readonly OK_STATUS: Status = { type: StatusType.OK, message: '' };
 
   constructor(private readonly deploymentsService: DeploymentsService) { }
 
   getCpuStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
-    return this.deploymentsService.getDeploymentCpuStat(spaceId, applicationName, environmentName, 1)
-      .map((stats: CpuStat[]): Status => this.getStatStatus(last(stats), 'CPU'));
+    return this.adjustStatusForPods(
+      this.deploymentsService.getPods(spaceId, applicationName, environmentName),
+      this.deploymentsService.getDeploymentCpuStat(spaceId, applicationName, environmentName, 1)
+        .map((stats: CpuStat[]): Status => this.getStatStatus(last(stats), 'CPU'))
+    );
   }
 
   getMemoryStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
-    return this.deploymentsService.getDeploymentMemoryStat(spaceId, applicationName, environmentName, 1)
-      .map((stats: MemoryStat[]): Status => this.getStatStatus(last(stats), 'Memory'));
+    return this.adjustStatusForPods(
+      this.deploymentsService.getPods(spaceId, applicationName, environmentName),
+      this.deploymentsService.getDeploymentMemoryStat(spaceId, applicationName, environmentName, 1)
+        .map((stats: MemoryStat[]): Status => this.getStatStatus(last(stats), 'Memory'))
+    );
   }
 
   getAggregateStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
@@ -44,37 +53,37 @@ export class DeploymentStatusService {
       this.getCpuStatus(spaceId, environmentName, applicationName),
       this.getMemoryStatus(spaceId, environmentName, applicationName)
     ).map((statuses: [Status, Status]): Status => {
-      const maxType: StatusType = statuses
+      const type: StatusType = statuses
         .map((status: Status): StatusType => status.type)
         .reduce((accum: StatusType, next: StatusType): StatusType => Math.max(accum, next));
-      const joinedMessage: string = statuses
+      const message: string = statuses
         .map((status: Status): string => status.message)
         .join(' ')
         .trim();
-      return {
-        type: maxType,
-        message: joinedMessage
-      };
+      return { type, message };
     });
   }
 
+  private adjustStatusForPods(pods: Observable<Pods>, status: Observable<Status>): Observable<Status> {
+    return Observable.combineLatest(pods, status)
+      .map((val: [Pods, Status]): Status => {
+        if (val[0].total === 0) {
+          return Object.assign({}, DeploymentStatusService.OK_STATUS);
+        }
+        return val[1];
+      });
+  }
+
   private getStatStatus(stat: Stat, metricName: string): Status {
-    let type: StatusType;
-    let message: string;
+    let status: Status = Object.assign({}, DeploymentStatusService.OK_STATUS);
     if (stat.used >= stat.quota) {
-      type = StatusType.ERR;
-      message = `${metricName} usage has reached capacity.`;
+      status.type = StatusType.ERR;
+      status.message = `${metricName} usage has reached capacity.`;
     } else if (stat.used / stat.quota >= DeploymentStatusService.WARNING_THRESHOLD) {
-      type = StatusType.WARN;
-      message = `${metricName} usage is nearing capacity.`;
-    } else {
-      type = StatusType.OK;
-      message = '';
+      status.type = StatusType.WARN;
+      status.message = `${metricName} usage is nearing capacity.`;
     }
-    return {
-      type: type,
-      message: message
-    };
+    return status;
   }
 
 }
