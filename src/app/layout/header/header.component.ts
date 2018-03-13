@@ -170,7 +170,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   get context(): Context {
-    if (this.router.url.startsWith('/_home')) {
+    if (this.router.url.startsWith('/_home') || this.router.url.startsWith('/_featureflag')) {
       return this._defaultContext;
     } else {
       return this._context;
