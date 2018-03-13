@@ -9,7 +9,7 @@ import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
-import { GettingStartedService } from '../../getting-started/services/getting-started.service';
+import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
 import { EventService } from '../../shared/event.service';
 import { MySpacesComponent } from './my-spaces.component';
@@ -29,9 +29,10 @@ describe('MySpacesComponent', () => {
   let mockModalRef: any = jasmine.createSpyObj('BsModalRef', ['hide']);
   let mockTemplateRef = jasmine.createSpy('TemplateRef');
   let mockUser: User;
+  let mockExtProfile: ExtProfile;
   let mockContext: Context;
-  let spaceMock1: Space;
-  let spaceMock2: Space;
+  let spaceMock1: any;
+  let spaceMock2: any;
   let mockEvent: any = {
     'flow': 'mock-flow',
     'space': 'mock-space'
@@ -66,8 +67,7 @@ describe('MySpacesComponent', () => {
 
   beforeEach(() => {
 
-    mockUser = {
-      'attributes': {
+    mockExtProfile = {
         'bio': 'mock-bio',
         'company': 'mock-company',
         'email': 'mock-email',
@@ -75,8 +75,13 @@ describe('MySpacesComponent', () => {
         'fullName': 'mock-fullName',
         'imageURL': 'mock-imageUrl',
         'url': 'mock-url',
-        'username': 'mock-username'
-      },
+        'username': 'mock-username',
+        'contextInformation': undefined,
+        'registrationCompleted': true,
+        'featureLevel': 'mock-featureLevel'
+    };
+    mockUser = {
+      'attributes': mockExtProfile,
       'id': 'mock-id',
       'type': 'mock-type'
     };
@@ -92,7 +97,7 @@ describe('MySpacesComponent', () => {
     spaceMock2.attributes.name = 'spaceMock2-id';
     mockContexts.current = Observable.of(mockContext);
     mockUserService.loggedInUser = Observable.of(mockUser);
-    mockGettingStartedService.createTransientProfile.and.returnValue(mockUser.attributes);
+    mockGettingStartedService.createTransientProfile.and.returnValue(mockExtProfile);
     mockGettingStartedService.update.and.returnValue(Observable.of({}));
     mockSpaceService.getSpacesByUser.and.returnValue(Observable.of([spaceMock1, spaceMock2])); // called by ngOnInit() to initialize allSpaces
 
@@ -168,26 +173,20 @@ describe('MySpacesComponent', () => {
     it('should show the pin for the space if pinned', () => {
       spyOn(component, 'savePins').and.callFake(() => {});
       spyOn(component, 'updateSpaces');
-      // @ts-ignore: Property does not exist error
       spaceMock1.showPin = false;
       component.allSpaces = [spaceMock1];
       component.handlePinChange(spaceMock1);
-      // @ts-ignore: Property does not exist error
       expect(spaceMock1.showPin).toBeDefined();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock1.showPin).toBeTruthy();
     });
 
     it('should remove the pin from the space if unpinned', () => {
       spyOn(component, 'savePins').and.callFake(() => {});
       spyOn(component, 'updateSpaces');
-      // @ts-ignore: Property does not exist error
       spaceMock1.showPin = true;
       component.allSpaces = [ spaceMock1 ];
       component.handlePinChange(spaceMock1);
-      // @ts-ignore: Property does not exist error
       expect(spaceMock1.showPin).toBeDefined();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock1.showPin).toBeFalsy();
     });
   });
@@ -479,14 +478,10 @@ describe('MySpacesComponent', () => {
       };
       component.pageName = 'myspaces';
       component.allSpaces = [spaceMock1, spaceMock2];
-      // @ts-ignore: Property does not exist error
       expect(spaceMock1.showPin).toBeUndefined();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock2.showPin).toBeUndefined();
       component.restorePins();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock1.showPin).toBeDefined();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock2.showPin).toBeDefined();
     });
 
@@ -499,9 +494,7 @@ describe('MySpacesComponent', () => {
       component.pageName = 'myspaces';
       component.ngOnInit();
       component.restorePins();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock1.showPin).toBeFalsy();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock2.showPin).toBeFalsy();
     });
 
@@ -516,9 +509,7 @@ describe('MySpacesComponent', () => {
       component.pageName = 'myspaces';
       component.ngOnInit();
       component.restorePins();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock1.showPin).toBeTruthy();
-      // @ts-ignore: Property does not exist error
       expect(spaceMock2.showPin).toBeFalsy();
     });
 
@@ -532,19 +523,14 @@ describe('MySpacesComponent', () => {
 
   describe('#savePins', () => {
     it('should initialize the contextInformation and pins if undefined', () => {
-      // @ts-ignore: Property does not exist error
-      expect(mockContext.user.attributes.contextInformation).toBeUndefined();
+      expect(mockExtProfile.contextInformation).toBeUndefined();
       component.savePins();
-      // @ts-ignore: Property does not exist error
-      expect(mockContext.user.attributes.contextInformation).toBeDefined();
-      // @ts-ignore: Property does not exist error
-      expect(mockContext.user.attributes.contextInformation.pins).toBeDefined();
+      expect(mockExtProfile.contextInformation).toBeDefined();
+      expect(mockExtProfile.contextInformation.pins).toBeDefined();
     });
 
     it('should save the pins that are currently showing', () => {
-      // @ts-ignore: Property does not exist error
       spaceMock1.showPin = true;
-      // @ts-ignore: Property does not exist error
       spaceMock2.showPin = false;
       mockContext.user.attributes['contextInformation'] = {
         pins: {
@@ -557,8 +543,7 @@ describe('MySpacesComponent', () => {
       mockGettingStartedService.update.and.returnValue(Observable.of(mockContext.user.attributes));
       component.ngOnInit();
       component.savePins();
-      // @ts-ignore: Property does not exist error
-      expect(mockContext.user.attributes.contextInformation.pins['myspaces']).toEqual([spaceMock1.id]);
+      expect(mockExtProfile.contextInformation.pins['myspaces']).toEqual([spaceMock1.id]);
     });
 
     it('should update the profile via GettingStartedService update()', () => {
