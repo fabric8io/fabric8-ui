@@ -334,13 +334,20 @@ export class CodebasesComponent implements OnDestroy, OnInit {
               codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
               codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
               return codebase;
-            }).first();
+            })
+              .catch(err => {
+                this.handleError(err, NotificationType.WARNING);
+                return Observable.of(null);
+              })
+              .first();
           } else {
             this.handleError(`Invalid URL: ${codebase.attributes.url}`, NotificationType.WARNING);
           }
         })
       );
-    }).last();
+    })
+      .last()
+      .map(codebases => codebases.filter(c => c !== null));
   }
 
   /**
