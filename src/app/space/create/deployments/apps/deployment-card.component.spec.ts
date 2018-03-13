@@ -278,13 +278,16 @@ describe('DeploymentCardComponent', () => {
     expect(mockStatusSvc.getAggregateStatus).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     expect(this.testedDirective.toolTip).toEqual('warning message');
     expect(this.testedDirective.iconClass).toEqual('pficon-warning-triangle-o');
+    expect(this.testedDirective.cardStatusClass).toEqual('status-ribbon-warn');
 
     mockStatus.next({ type: StatusType.ERR, message: 'error message' });
     expect(this.testedDirective.toolTip).toEqual('error message');
     expect(this.testedDirective.iconClass).toEqual('pficon-error-circle-o');
+    expect(this.testedDirective.cardStatusClass).toEqual('status-ribbon-err');
 
     mockStatus.next({ type: StatusType.OK, message: '' });
     expect(this.testedDirective.toolTip).toEqual('Everything is OK.');
     expect(this.testedDirective.iconClass).toEqual('pficon-ok');
+    expect(this.testedDirective.cardStatusClass).toEqual('');
   });
 });
