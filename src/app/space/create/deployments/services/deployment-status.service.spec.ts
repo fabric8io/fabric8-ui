@@ -8,6 +8,8 @@ import { createMock } from 'testing/mock';
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { PodPhase } from '../models/pod-phase';
+import { Pods } from '../models/pods';
 import {
   DeploymentStatusService,
   Status,
@@ -21,15 +23,18 @@ describe('DeploymentStatusService', (): void => {
   let deploymentsService: jasmine.SpyObj<DeploymentsService>;
   let cpuSubject: Subject<CpuStat[]>;
   let memorySubject: Subject<MemoryStat[]>;
+  let podsSubject: Subject<Pods>;
 
   beforeEach((): void => {
     deploymentsService = createMock(DeploymentsService);
 
     cpuSubject = new BehaviorSubject<CpuStat[]>([{ used: 3, quota: 10 }]);
     memorySubject = new BehaviorSubject<MemoryStat[]>([{ used: 4, quota: 10, units: 'GB' }]);
+    podsSubject = new BehaviorSubject<Pods>({ total: 1, pods: [[PodPhase.RUNNING, 1]] });
 
     deploymentsService.getDeploymentCpuStat.and.returnValue(cpuSubject);
     deploymentsService.getDeploymentMemoryStat.and.returnValue(memorySubject);
+    deploymentsService.getPods.and.returnValue(podsSubject);
 
     svc = new DeploymentStatusService(deploymentsService);
   });
@@ -115,6 +120,25 @@ describe('DeploymentStatusService', (): void => {
           done();
         });
     });
+
+    it('should return OK status after scaling down to 0 pods', (done: DoneFn): void => {
+      cpuSubject.next([{ used: 10, quota: 10 }]);
+      svc.getCpuStatus('foo', 'bar', 'baz')
+        .first()
+        .subscribe((status: Status): void => {
+          expect(status.type).toEqual(StatusType.ERR);
+          expect(status.message).toEqual('CPU usage has reached capacity.');
+          podsSubject.next({ total: 0, pods: [] });
+          cpuSubject.next([{ used: 0, quota: 0 }]);
+          svc.getCpuStatus('foo', 'bar', 'baz')
+            .first()
+            .subscribe((status: Status): void => {
+              expect(status.type).toEqual(StatusType.OK);
+              expect(status.message).toEqual('');
+              done();
+            });
+        });
+    });
   });
 
   describe('#getMemoryStatus', (): void => {
@@ -147,6 +171,25 @@ describe('DeploymentStatusService', (): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('Memory usage has reached capacity.');
           done();
+        });
+    });
+
+    it('should return OK status after scaling down to 0 pods', (done: DoneFn): void => {
+      memorySubject.next([{ used: 10, quota: 10, units: 'MB' }]);
+      svc.getMemoryStatus('foo', 'bar', 'baz')
+        .first()
+        .subscribe((status: Status): void => {
+          expect(status.type).toEqual(StatusType.ERR);
+          expect(status.message).toEqual('Memory usage has reached capacity.');
+          podsSubject.next({ total: 0, pods: [] });
+          memorySubject.next([{ used: 0, quota: 0, units: 'MB' }]);
+          svc.getMemoryStatus('foo', 'bar', 'baz')
+            .first()
+            .subscribe((status: Status): void => {
+              expect(status.type).toEqual(StatusType.OK);
+              expect(status.message).toEqual('');
+              done();
+            });
         });
     });
   });

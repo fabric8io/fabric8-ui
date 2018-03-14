@@ -286,7 +286,7 @@ describe('DeploymentCardComponent', () => {
     expect(this.testedDirective.cardStatusClass).toEqual('status-ribbon-err');
 
     mockStatus.next({ type: StatusType.OK, message: '' });
-    expect(this.testedDirective.toolTip).toEqual('Everything is OK.');
+    expect(this.testedDirective.toolTip).toEqual(DeploymentCardComponent.OK_TOOLTIP);
     expect(this.testedDirective.iconClass).toEqual('pficon-ok');
     expect(this.testedDirective.cardStatusClass).toEqual('');
   });

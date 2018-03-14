@@ -37,6 +37,7 @@ enum CardStatusClass {
 })
 export class DeploymentCardComponent implements OnDestroy, OnInit {
 
+  public static readonly OK_TOOLTIP: string = 'Everything is ok';
   private static readonly DEBOUNCE_TIME: number = 5000; // 5 seconds
   private static readonly MAX_DEBOUNCE_TIME: number = 10000; // 10 seconds
 
@@ -73,7 +74,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
-    this.toolTip = 'Everything is ok';
+    this.toolTip = DeploymentCardComponent.OK_TOOLTIP;
 
     this.subscriptions.push(
       this.statusService.getAggregateStatus(this.spaceId, this.environment.name, this.applicationId)
@@ -106,7 +107,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   changeStatus(status: Status): void {
     let toolTip: string = status.message;
     if (!toolTip) {
-      toolTip = 'Everything is OK.';
+      toolTip = DeploymentCardComponent.OK_TOOLTIP;
     }
     this.toolTip = toolTip;
 
