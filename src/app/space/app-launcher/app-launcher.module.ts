@@ -15,6 +15,7 @@ import { AppLauncherRoutingModule } from './app-launcher-routing.module';
 import { AppLauncherComponent } from './app-launcher.component';
 import { CreateAppModule } from './create-app/create-app.module';
 import { ImportAppModule } from './import-app/import-app.module';
+import { NewForgeConfig } from './shared/new-forge.config';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ImportAppModule } from './import-app/import-app.module';
   ],
   providers: [
     HelperService,
+    { provide: Config, useClass: NewForgeConfig },
     {
       provide: TokenProvider,
       useFactory: (auth: AuthenticationService) => new KeycloakTokenProvider(auth),
