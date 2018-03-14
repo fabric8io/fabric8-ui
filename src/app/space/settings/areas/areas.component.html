@@ -1,47 +1,39 @@
+<areas-toolbar
+    (onAddArea)="addChildArea()"
+    (onFilterChange)="filterChange($event)"
+    (onSortChange)="sortChange($event)"
+    [resultsCount]="resultsCount">
+</areas-toolbar>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-xs-8 col-sm-8 col-md-9">
-      <h3 class="areas-header">Areas that make up the {{context.space.attributes.name | spaceName}} Space:</h3>
-    </div>
-    <div class="col-xs-4 col-sm-4 col-md-3">
-      <div class="table-action-heading" (click)="addChildArea()">
-        <a><i class="pficon pficon-add-circle-o"></i> Add Areas</a>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <pfng-list
-        [config]="listConfig"
-        [itemTemplate]="itemTemplate"
-        [actionTemplate]="actionTemplate"
-        [items]="areas" >
-        <ng-template #itemTemplate let-item="item" let-index="index">
+    <div class="col-sm-12">
+      <pfng-tree-list *ngIf="showTree === true"
+          [actionTemplate]="actionTemplate"
+          [config]="treeListConfig"
+          [itemTemplate]="itemTemplate"
+          [items]="treeAreas"
+          (onActionSelect)="handleAction($event)">
+        <ng-template #itemTemplate let-node="node" let-index="index">
           <div class="list-pf-content-wrapper">
             <div class="list-pf-main-content">
-              <div class="list-pf-title">{{itemPath(item.attributes)}}</div>
+              <div class="list-pf-title">{{node.data?.attributes?.name}}</div>
             </div>
           </div>
         </ng-template>
-        <ng-template #actionTemplate let-item="item" let-index="index">
-          <span class="dropdown-kebab-pf areas-display dropdown" dropdown>
-            <button class="btn btn-link dropdown-toggle" type="button" dropdownToggle>
-              <span class="fa fa-ellipsis-v"></span>
-            </button>
-            <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
-              <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="addChildArea(item.id)">Add Child Area</a></li>
-            </ul>
-          </span>
+        <ng-template #actionTemplate let-node="node" let-index="index">
+          <pfng-action class="list-pf-actions"
+                       [config]="actionConfig"
+                       (onActionSelect)="handleAction($event, node)">
+          </pfng-action>
         </ng-template>
-      </pfng-list>
+      </pfng-tree-list>
     </div>
   </div>
 </div>
-
 <div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-hidden="true" (onShown)="createAreaDialog.onOpen()" (onHide)="createAreaDialog.onClose()">
   <div class="modal-dialog">
     <div class="modal-content">
-      <create-area-dialog #createAreaDialog [host]="modal" [parentId]="selectedAreaId" [areas]="areas" (onAdded)="addArea($event)"></create-area-dialog>
+      <create-area-dialog #createAreaDialog [host]="modal" [parentId]="selectedAreaId" [areas]="allAreas" (onAdded)="addArea($event)"></create-area-dialog>
     </div>
   </div>
 </div>

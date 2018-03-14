@@ -15,4 +15,10 @@
   .pficon { color: @color-pf-blue-300; }
 }
 
-.list-pf-item { background-color: @color-pf-white; }
+/* Override angular-tree-component */
+.list-pf tree-viewport {
+  overflow: initial;
+  .tree-children {
+    overflow: initial;
+  }
+}
