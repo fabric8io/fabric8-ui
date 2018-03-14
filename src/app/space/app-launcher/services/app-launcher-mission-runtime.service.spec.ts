@@ -14,10 +14,6 @@ import {
     Runtime,
     TokenProvider
 } from 'ngx-forge';
-import {
-    Observable,
-    Subject
-} from 'rxjs';
 
 import { FABRIC8_FORGE_API_URL } from 'app/shared/runtime-console/fabric8-ui-forge-api';
 import { NewForgeConfig } from '../shared/new-forge.config';
