@@ -19,7 +19,7 @@ describe('CleanupComponent', () => {
   let fixture: ComponentFixture<CleanupComponent>;
   let component: DebugNode['componentInstance'];
   let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockSpaceService: any = jasmine.createSpy('SpaceService');
+  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['deleteSpace', 'getSpacesByUser']);
   let mockTenantService: any = jasmine.createSpy('TenantService');
   let mockEventService: any = jasmine.createSpy('EventService');
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
@@ -28,10 +28,31 @@ describe('CleanupComponent', () => {
   let mockUserService: any = jasmine.createSpy('UserService');
   let mockSpace: any;
 
-  mockSpaceService.deleteSpace = {};
-  mockEventService.deleteSpaceSubject = jasmine.createSpyObj('deleteSpaceSubject', ['next']);
-
   beforeEach(() => {
+
+    mockSpace = {
+      name: 'mock-space',
+      path: 'mock-path',
+      id: 'mock-id',
+      attributes: {
+        name: 'mock-attribute',
+        description: 'mock-description',
+        'updated-at': 'mock-updated-at',
+        'created-at': 'mock-created-at',
+        version: 0
+      }
+    };
+    mockContexts.current = Observable.of({
+      'user': {
+        'attributes': {
+          'username': 'mock-username'
+        },
+        'id': 'mock-user'
+      }
+    });
+    mockEventService.deleteSpaceSubject = jasmine.createSpyObj('deleteSpaceSubject', ['next']);
+    mockSpaceService.getSpacesByUser.and.returnValue(Observable.of([mockSpace]));
+
     TestBed.configureTestingModule({
       imports: [FormsModule, HttpModule],
       declarations: [CleanupComponent],
@@ -49,9 +70,9 @@ describe('CleanupComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(CleanupComponent);
+    fixture.detectChanges();
     component = fixture.debugElement.componentInstance;
     component.confirmCleanup = jasmine.createSpyObj('IModalHost', ['open', 'close']);
-    mockSpace = jasmine.createSpy('Space');
   });
 
   describe('#confirmErase', () => {
@@ -64,7 +85,7 @@ describe('CleanupComponent', () => {
   describe('#confirm', () => {
     it('should show a success message if spaces were erased successfully', () => {
       component.spaces = [mockSpace];
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(Observable.of(mockSpace));
+      component.spaceService.deleteSpace.and.returnValue(Observable.of(mockSpace));
       spyOn(component.tenantService, 'cleanupTenant').and.returnValue(Observable.of('mock-response'));
       spyOn(component.tenantService, 'updateTenant').and.returnValue(Observable.of('mock-response'));
       spyOn(component, 'showSuccessNotification');
@@ -77,7 +98,7 @@ describe('CleanupComponent', () => {
 
     it('should show a notification if a space is unable to be erased', () => {
       component.spaces = [mockSpace];
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(Observable.throw('error'));
+      component.spaceService.deleteSpace.and.returnValue(Observable.throw('error'));
       spyOn(component.tenantService, 'cleanupTenant').and.returnValue(Observable.of('mock-response'));
       spyOn(component.tenantService, 'updateTenant').and.returnValue(Observable.of('mock-response'));
       spyOn(component, 'showWarningNotification');
@@ -97,6 +118,8 @@ describe('CleanupComponent', () => {
     });
 
     it('should show a successful notification if tenant update & reset worked', () => {
+      component.spaces = [mockSpace];
+      component.spaceService.deleteSpace.and.returnValue(Observable.of(mockSpace));
       spyOn(component.tenantService, 'cleanupTenant').and.returnValue(Observable.of('mock-response'));
       spyOn(component.tenantService, 'updateTenant').and.returnValue(Observable.of('mock-response'));
       spyOn(component, 'showSuccessNotification');
