@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { Logger } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 
@@ -20,13 +19,12 @@ export class CodebasesItemDetailsComponent implements OnDestroy, OnInit {
   gitUrl: string;
   lastCommit: string;
   license: string;
-  htmlUrl: string;
   subscriptions: Subscription[] = [];
 
   constructor(
-      private contexts: Contexts,
-      private gitHubService: GitHubService,
-      private logger: Logger) {
+    private contexts: Contexts,
+    private gitHubService: GitHubService
+    ) {
     this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
   }
 
@@ -37,34 +35,39 @@ export class CodebasesItemDetailsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    if (this.codebase == undefined || this.codebase.attributes.type !== 'git') {
+    if (this.codebase == undefined || !this.codebase.gitHubRepo || this.codebase.attributes.type !== 'git') {
       return;
     }
     this.subscriptions.push(this.gitHubService.getRepoDetailsByUrl(this.codebase.attributes.url)
       .subscribe(gitHubRepoDetails => {
+        this.codebase.gitHubRepo = {};
+        this.codebase.gitHubRepo.htmlUrl = gitHubRepoDetails.html_url;
+        this.codebase.gitHubRepo.fullName = gitHubRepoDetails.full_name;
+        this.codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
+        this.codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
         this.gitUrl = gitHubRepoDetails.git_url;
-        this.htmlUrl = gitHubRepoDetails.html_url;
+
+        this.subscriptions.push(this.gitHubService.getRepoLastCommitByUrl(this.codebase.attributes.url)
+          .subscribe(gitHubRepoLastCommit => {
+            this.lastCommit = gitHubRepoLastCommit.object.sha;
+            this.subscriptions.push(this.gitHubService
+              .getRepoCommitStatusByUrl(this.codebase.attributes.url, this.lastCommit)
+              .subscribe(gitHubRepoCommitStatus => {
+                this.filesChanged = gitHubRepoCommitStatus.files.length;
+              }, error => {
+                // no-op
+              }));
+          }, error => {
+            // no-op
+          }));
+        this.subscriptions.push(this.gitHubService.getRepoLicenseByUrl(this.codebase.attributes.url)
+          .subscribe(gitHubRepoLicense => {
+            this.license = gitHubRepoLicense.license.name;
+          }, error => {
+            this.license = 'None';
+          }));
       }, error => {
-        this.logger.error('Failed to retrieve GitHub repo details');
-      }));
-    this.subscriptions.push(this.gitHubService.getRepoLastCommitByUrl(this.codebase.attributes.url)
-      .subscribe(gitHubRepoLastCommit => {
-        this.lastCommit = gitHubRepoLastCommit.object.sha;
-        this.subscriptions.push(this.gitHubService
-            .getRepoCommitStatusByUrl(this.codebase.attributes.url, this.lastCommit)
-          .subscribe(gitHubRepoCommitStatus => {
-          this.filesChanged = gitHubRepoCommitStatus.files.length;
-        }, error => {
-          this.logger.error('Failed to retrieve GitHub status');
-        }));
-      }, error => {
-        this.logger.error('Failed to retrieve GitHub repo last commit');
-      }));
-    this.subscriptions.push(this.gitHubService.getRepoLicenseByUrl(this.codebase.attributes.url)
-      .subscribe(gitHubRepoLicense => {
-        this.license = gitHubRepoLicense.license.name;
-      }, error => {
-        this.license = 'None';
+        this.codebase.gitHubRepo = undefined;
       }));
   }
 
@@ -72,9 +75,9 @@ export class CodebasesItemDetailsComponent implements OnDestroy, OnInit {
 
   private isGitHubHtmlUrlInvalid(): boolean {
     return (this.codebase.attributes.url === undefined
-    || this.codebase.attributes.url.trim().length === 0
-    || this.codebase.attributes.url.indexOf('https://github.com') === -1
-    || this.codebase.attributes.url.indexOf('.git') === -1);
+      || this.codebase.attributes.url.trim().length === 0
+      || this.codebase.attributes.url.indexOf('https://github.com') === -1
+      || this.codebase.attributes.url.indexOf('.git') === -1);
   }
 
   private isHtmlUrlInvalid(): boolean {
