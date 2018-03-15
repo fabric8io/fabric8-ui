@@ -19,6 +19,19 @@ import { CreateAreaDialogComponent } from './create-area-dialog/create-area-dial
 
 import { cloneDeep } from 'lodash';
 
+// Interface to extend Area of ngx-fabric8-wit
+export interface ExtArea extends Area {
+  expanded: boolean;
+  children: Area[];
+}
+
+// Interface for the node object of angular-tree-component
+export interface Node {
+ data: {
+   id: string;
+ };
+}
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-areas',
@@ -30,22 +43,22 @@ export class AreasComponent implements OnInit, OnDestroy {
   @ViewChild(CreateAreaDialogComponent) createAreaDialog: CreateAreaDialogComponent;
   @ViewChild(ModalDirective) modal: ModalDirective;
 
-  private allAreas: Area[]; // flat array obtained directly from API
-  private filteredAreas: Area[]; // flat array filtered and sorted
-  private treeAreas: Area[]; // transformed flat array into tree list
+  allAreas: ExtArea[]; // flat array obtained directly from API
+  filteredAreas: ExtArea[]; // flat array filtered and sorted
+  treeAreas: ExtArea[]; // transformed flat array into tree list
 
-  private actionConfig: ActionConfig;
-  private appliedFilters: Filter[];
-  private context: Context;
-  private currentSortField: SortField;
-  private defaultArea: string;
-  private emptyStateConfig: EmptyStateConfig;
-  private isAscendingSort: boolean = true;
-  private selectedAreaId: string;
-  private subscriptions: Subscription[] = [];
-  private resultsCount: number = 0;
-  private showTree: boolean = true;
-  private treeListConfig: TreeListConfig;
+  actionConfig: ActionConfig;
+  appliedFilters: Filter[];
+  context: Context;
+  currentSortField: SortField;
+  defaultArea: string;
+  emptyStateConfig: EmptyStateConfig;
+  isAscendingSort: boolean = true;
+  selectedAreaId: string;
+  subscriptions: Subscription[] = [];
+  resultsCount: number = 0;
+  showTree: boolean = true;
+  treeListConfig: TreeListConfig;
 
   constructor(private contexts: ContextService,
               private areaService: AreaService) {
@@ -94,7 +107,7 @@ export class AreasComponent implements OnInit, OnDestroy {
           this.defaultArea = area.id;
         }
       });
-      this.allAreas = areas; // store all areas for filter/sort
+      this.allAreas = areas as ExtArea[]; // store all areas for filter/sort
       this.treeAreas = this.buildTree(this.allAreas); // transform flat array into tree list
     }));
   }
@@ -117,7 +130,7 @@ export class AreasComponent implements OnInit, OnDestroy {
     this.openModal();
   }
 
-  addArea(area: Area): void {
+  addArea(area: ExtArea): void {
     this.allAreas.push(area);
     this.showTree = false;
 
@@ -195,7 +208,7 @@ export class AreasComponent implements OnInit, OnDestroy {
 
   // Transform flat array into tree list
 
-  private buildTree(elements: any[], tree = []): any[] {
+  private buildTree(elements: ExtArea[], tree = []): ExtArea[] {
     elements.forEach((element) => {
       if (element.relationships.parent === undefined) {
         let children = this.getNestedChildren(elements, element);
@@ -209,7 +222,7 @@ export class AreasComponent implements OnInit, OnDestroy {
     return tree;
   }
 
-  private getNestedChildren(elements: any[], parent: Area): any[] {
+  private getNestedChildren(elements: ExtArea[], parent: Area): ExtArea[] {
     let areas = [];
     elements.forEach((element) => {
       if (element.relationships.parent !== undefined && element.relationships.parent.data.id === parent.id) {
@@ -226,7 +239,7 @@ export class AreasComponent implements OnInit, OnDestroy {
 
   // Transform filtered flat array into tree list
 
-  private buildFilteredTree(elements: any[]): any[] {
+  private buildFilteredTree(elements: ExtArea[]): ExtArea[] {
     // Reassign filtered parents using closest ancestor
     elements.forEach((element) => {
       element.children = undefined;
@@ -243,7 +256,7 @@ export class AreasComponent implements OnInit, OnDestroy {
     return this.buildTree(elements);
   }
 
-  private getClosestAncestor(elements: any[], parent: Area): Area {
+  private getClosestAncestor(elements: ExtArea[], parent: Area): Area {
     let area;
     for (let i = 0; i < elements.length; i++) {
       if (elements[i].id === parent.id) {
@@ -270,7 +283,7 @@ export class AreasComponent implements OnInit, OnDestroy {
 
   // Actions
 
-  handleAction($event: Action, node: any): void {
+  handleAction($event: Action, node: Node): void {
     if ($event.id === 'addChildArea') {
       this.addChildArea(node.data.id);
     } else if ($event.id === 'addArea') {
