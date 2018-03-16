@@ -25,8 +25,8 @@ export class EmailVerificationComponent implements OnInit {
       this.verified = this.route.snapshot.queryParams['verified'];
       if (this.verified === 'false') {
         this.message = this.route.snapshot.queryParams['error'];
-        this.secMessage = 'Your e-mail has already been approved. ' +
-        'Click on my profile below to continue.';
+        this.secMessage = 'It appears there is a problem with validating your e-mail.' +
+        'You can reset your e-mail on your Profile Page';
       }
     }
   }

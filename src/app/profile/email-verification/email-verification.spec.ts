@@ -47,7 +47,7 @@ describe('Email Verification Component', () => {
       expect(element.find('img').prop('src')).toEqual('../../../assets/images/trophy.png');
     });
   }));
-  it('should verify email is already verified', async(() => {
+  it('should verify email has already been used', async(() => {
     let comp = fixture.componentInstance;
     let debug = fixture.debugElement;
     comp.email_false = email_false;
