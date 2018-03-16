@@ -57,7 +57,6 @@ export class AreasComponent implements OnInit, OnDestroy {
   selectedAreaId: string;
   subscriptions: Subscription[] = [];
   resultsCount: number = 0;
-  showTree: boolean = true;
   treeListConfig: TreeListConfig;
 
   constructor(private contexts: ContextService,
@@ -132,15 +131,10 @@ export class AreasComponent implements OnInit, OnDestroy {
 
   addArea(area: ExtArea): void {
     this.allAreas.push(area);
-    this.showTree = false;
 
-    // Hide the tree list to rerender existing toggles in expanded state
-    setTimeout(() => {
-      // Reapply sort and filter, if any
-      this.allAreas.sort((area1: Area, area2: Area) => this.compare(area1, area2));
-      this.applyFilters(this.appliedFilters);
-      this.showTree = true;
-    }, 10);
+    // Reapply sort and filter, if any
+    this.allAreas.sort((area1: Area, area2: Area) => this.compare(area1, area2));
+    this.applyFilters(this.appliedFilters);
   }
 
   // Filter
@@ -214,7 +208,6 @@ export class AreasComponent implements OnInit, OnDestroy {
         let children = this.getNestedChildren(elements, element);
         if (children.length > 0) {
           element.children = children;
-          element.expanded = true;
         }
         tree.push(element);
       }
@@ -229,7 +222,6 @@ export class AreasComponent implements OnInit, OnDestroy {
         let children = this.getNestedChildren(elements, element);
         if (children.length > 0) {
           element.children = children;
-          element.expanded = true;
         }
         areas.push(element);
       }
