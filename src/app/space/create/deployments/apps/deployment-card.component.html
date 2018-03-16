@@ -26,7 +26,7 @@
               <li>
                 <a class="menu-item" [attr.href]="consoleUrl | async" target="_blank">View OpenShift Console</a>
               </li>
-              <ng-container *ngIf="appUrl | async; let appUrl">
+              <ng-container *ngIf="appUrl | async as appUrl">
                 <li role="separator" class="divider"></li>
                 <li>
                   <a class="menu-item" [attr.href]="appUrl" target="_blank">Open Application</a>
