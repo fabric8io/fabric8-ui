@@ -255,7 +255,7 @@ describe('DeploymentsService', () => {
           }
         ]
       };
-      const expectedResponse = [{ name: 'stage' }, { name: 'run' }];
+      const expectedResponse = ['stage', 'run'];
       doMockHttpTest({
         url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
         response: httpResponse,
@@ -278,7 +278,7 @@ describe('DeploymentsService', () => {
       doMockHttpTest({
         url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
         response: httpResponse,
-        expected: [{ name: 'stage' }],
+        expected: ['stage'],
         observable: svc.getEnvironments('foo-spaceId'),
         done: done
       });

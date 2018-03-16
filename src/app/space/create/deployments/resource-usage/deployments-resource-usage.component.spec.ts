@@ -9,7 +9,6 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { Observable } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
 
-import { Environment } from '../models/environment';
 import { DeploymentsResourceUsageComponent } from './deployments-resource-usage.component';
 
 @Component({
@@ -23,18 +22,15 @@ class HostComponent { }
 })
 class FakeResourceCardComponent {
   @Input() spaceId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
 }
 
 describe('DeploymentsResourceUsageComponent', () => {
   type Context = TestContext<DeploymentsResourceUsageComponent, HostComponent>;
 
   let spaceIdObservable: Observable<string> = Observable.of('spaceId');
-  let mockEnvironmentData: Environment[] = [
-    { name: 'envId1'},
-    { name: 'envId2'}
-  ];
-  let mockEnvironments: Observable<Environment[]> = Observable.of(mockEnvironmentData);
+  let mockEnvironmentData: string[] = ['envId1', 'envId2'];
+  let mockEnvironments: Observable<string[]> = Observable.of(mockEnvironmentData);
 
   initContext(DeploymentsResourceUsageComponent, HostComponent,
     {
@@ -52,7 +48,7 @@ describe('DeploymentsResourceUsageComponent', () => {
       this.fixture.debugElement.queryAll(By.directive(FakeResourceCardComponent));
     expect(arrayOfComponents.length).toEqual(mockEnvironmentData.length);
 
-    mockEnvironmentData.forEach((envData: Environment, index: number) => {
+    mockEnvironmentData.forEach((envData: string, index: number) => {
       let cardComponent: FakeResourceCardComponent = arrayOfComponents[index].componentInstance;
       expect(cardComponent.environment).toEqual(mockEnvironmentData[index]);
       expect(cardComponent.spaceId).toEqual('spaceId');

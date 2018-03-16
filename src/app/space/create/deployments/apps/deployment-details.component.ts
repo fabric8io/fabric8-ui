@@ -21,7 +21,6 @@ import {
 } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
@@ -61,7 +60,7 @@ export class DeploymentDetailsComponent {
   @Input() active: boolean;
   @Input() collapsed: boolean;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
   @Input() spaceId: string;
 
   usageMessage: string = '';
@@ -153,13 +152,13 @@ export class DeploymentDetailsComponent {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.deploymentsService.getPods(this.spaceId, this.environment.name, this.applicationId)
+      this.deploymentsService.getPods(this.spaceId, this.environment, this.applicationId)
         .map((p: Pods) => p.total > 0)
         .subscribe(this.hasPods)
     );
 
     this.subscriptions.push(
-      this.deploymentStatusService.getAggregateStatus(this.spaceId, this.environment.name, this.applicationId)
+      this.deploymentStatusService.getAggregateStatus(this.spaceId, this.environment, this.applicationId)
         .subscribe((status: Status): void => {
           if (status.type === StatusType.OK) {
             this.usageMessage = '';
@@ -172,7 +171,7 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.deploymentStatusService.getCpuStatus(this.spaceId, this.environment.name, this.applicationId)
+      this.deploymentStatusService.getCpuStatus(this.spaceId, this.environment, this.applicationId)
         .subscribe((status: Status): void => {
           if (status.type === StatusType.OK) {
             this.cpuChartClass = '';
@@ -198,7 +197,7 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.deploymentStatusService.getMemoryStatus(this.spaceId, this.environment.name, this.applicationId)
+      this.deploymentStatusService.getMemoryStatus(this.spaceId, this.environment, this.applicationId)
         .subscribe((status: Status): void => {
           if (status.type === StatusType.OK) {
             this.memChartClass = '';
@@ -225,10 +224,10 @@ export class DeploymentDetailsComponent {
     );
 
     this.cpuStat =
-      this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.environment.name, this.applicationId);
+      this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.environment, this.applicationId);
 
     this.memStat =
-      this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.environment.name, this.applicationId);
+      this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.environment, this.applicationId);
 
     this.subscriptions.push(
       this.cpuStat.subscribe((stats: CpuStat[]) => {
@@ -256,7 +255,7 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment.name, this.applicationId).subscribe((stats: NetworkStat[]) => {
+      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment, this.applicationId).subscribe((stats: NetworkStat[]) => {
         const last: NetworkStat = stats[stats.length - 1];
         const netTotal: ScaledNetworkStat = new ScaledNetworkStat(last.received.raw + last.sent.raw);
         this.netUnits = netTotal.units;

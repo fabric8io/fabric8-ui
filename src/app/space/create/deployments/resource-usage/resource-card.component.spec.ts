@@ -15,7 +15,6 @@ import {
  } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import {
   MemoryStat,
   MemoryUnit
@@ -60,10 +59,7 @@ describe('ResourceCardComponent', () => {
   beforeEach(() => {
     mockSvc = createMock(DeploymentsService);
     mockSvc.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
-    mockSvc.getEnvironments.and.returnValue(Observable.of([
-      { name: 'stage' } as Environment,
-      { name: 'prod' } as Environment
-    ]));
+    mockSvc.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
     mockSvc.getEnvironmentCpuStat.and.returnValue(cpuStatMock);
     mockSvc.getEnvironmentMemoryStat.and.returnValue(memoryStatMock);
   });
@@ -75,7 +71,7 @@ describe('ResourceCardComponent', () => {
     },
     (component: ResourceCardComponent) => {
       component.spaceId = 'spaceId';
-      component.environment = { name: 'stage' } as Environment;
+      component.environment = 'stage';
     }
   );
 

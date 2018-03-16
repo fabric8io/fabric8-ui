@@ -12,7 +12,6 @@ import {
 import { NotificationType } from 'ngx-base';
 import { Observable } from 'rxjs';
 
-import { Environment } from '../models/environment';
 import { PodPhase } from '../models/pod-phase';
 
 import { NotificationsService } from 'app/shared/notifications.service';
@@ -30,7 +29,7 @@ export class DeploymentsDonutComponent implements OnInit {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
 
   isIdled = false;
   scalable = true;
@@ -60,7 +59,7 @@ export class DeploymentsDonutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.pods = this.deploymentsService.getPods(this.spaceId, this.environment.name,  this.applicationId);
+    this.pods = this.deploymentsService.getPods(this.spaceId, this.environment,  this.applicationId);
     this.pods.subscribe(pods => {
       this.replicas = pods.total;
       if (!this.scaleRequestPending) {
@@ -98,7 +97,7 @@ export class DeploymentsDonutComponent implements OnInit {
 
   private scale(): void {
     this.deploymentsService.scalePods(
-      this.spaceId, this.environment.name, this.applicationId, this.desiredReplicas
+      this.spaceId, this.environment, this.applicationId, this.desiredReplicas
     ).first().subscribe(
       success => {
         this.scaleRequestPending = false;

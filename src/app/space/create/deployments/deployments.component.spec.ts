@@ -19,7 +19,6 @@ import {
   TestContext
 } from 'testing/test-context';
 import { DeploymentsComponent } from './deployments.component';
-import { Environment } from './models/environment';
 import { DeploymentsService } from './services/deployments.service';
 
 @Component({
@@ -28,7 +27,7 @@ import { DeploymentsService } from './services/deployments.service';
 })
 class FakeDeploymentsResourceUsageComponent {
   @Input() spaceId: Observable<string>;
-  @Input() environments: Observable<Environment[]>;
+  @Input() environments: Observable<string[]>;
 }
 
 @Component({
@@ -37,7 +36,7 @@ class FakeDeploymentsResourceUsageComponent {
 })
 class FakeDeploymentAppsComponent {
   @Input() spaceId: Observable<string>;
-  @Input() environments: Observable<Environment[]>;
+  @Input() environments: Observable<string[]>;
   @Input() applications: Observable<string[]>;
 }
 
@@ -55,10 +54,7 @@ describe('DeploymentsComponent', () => {
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let spaces = { current: Observable.of({ id: 'fake-spaceId' }) };
   let mockApplications = Observable.of(['foo-app', 'bar-app']);
-  let mockEnvironments = Observable.of([
-    { name: 'stage' } as Environment,
-    { name: 'prod' } as Environment
-  ]);
+  let mockEnvironments = Observable.of(['stage', 'prod']);
 
   beforeAll(() => {
     mockSvc = createMock(DeploymentsService);
@@ -93,10 +89,7 @@ describe('DeploymentsComponent', () => {
   it('should set service result to environments property', function(this: Context, done: DoneFn) {
     expect(mockSvc.getEnvironments).toHaveBeenCalledWith('fake-spaceId');
     this.testedDirective.environments.subscribe(environments => {
-      expect(environments).toEqual([
-        { name: 'stage' } as Environment,
-        { name: 'prod' } as Environment
-      ]);
+      expect(environments).toEqual(['stage', 'prod']);
       done();
     });
   });
