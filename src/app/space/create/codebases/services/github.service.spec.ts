@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { Headers, HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 
-import { Logger } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
@@ -12,13 +11,10 @@ import { GitHubService } from './github.service';
 import { ContextsMock, expectedGitHubRepo, expectedGitHubRepoCommit, expectedGitHubRepoDetails, expectedGitHubRepoLicense } from './github.service.mock';
 
 
-function initTestBed(mockLog, mockAuthService) {
+function initTestBed(mockAuthService) {
   TestBed.configureTestingModule({
     imports: [HttpModule],
     providers: [
-      {
-        provide: Logger, useValue: mockLog
-      },
       {
         provide: Contexts, useClass: ContextsMock
       },
@@ -35,17 +31,15 @@ function initTestBed(mockLog, mockAuthService) {
 }
 
 describe('Github: GitHubService', () => {
-  let mockLog: any;
   let mockContexts: any;
   let mockAuthService: any;
   let mockService: MockBackend;
   let ghService: GitHubService;
 
   beforeEach(() => {
-    mockLog = jasmine.createSpyObj('Logger', ['error']);
     mockContexts = jasmine.createSpy('Contexts');
     mockAuthService = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-    initTestBed(mockLog, mockAuthService);
+    initTestBed(mockAuthService);
     ghService = TestBed.get(GitHubService);
     mockService = TestBed.get(XHRBackend);
     const fakeHeaderObservable = Observable.of({
@@ -404,18 +398,16 @@ describe('Github: GitHubService', () => {
 
 
 describe('Github: GitHubService', () => {
-  let mockLog: any;
   let mockContexts: any;
   let mockAuthService: any;
   let mockService: MockBackend;
   let ghService: GitHubService;
 
   beforeEach(() => {
-    mockLog = jasmine.createSpyObj('Logger', ['error']);
     mockContexts = jasmine.createSpy('Contexts');
     mockAuthService = jasmine.createSpy('AuthenticationService');
     mockAuthService.gitHubToken = Observable.of('XXX');
-    initTestBed(mockLog, mockAuthService);
+    initTestBed(mockAuthService);
     ghService = TestBed.get(GitHubService);
     mockService = TestBed.get(XHRBackend);
   });

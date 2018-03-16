@@ -216,7 +216,7 @@ describe('CodebasesComponent', () => {
   });
 
   describe('GitHub repo details', () => {
-    it('should filter Codebases where GitHub repo no longer exists', function(this: TestingContext) {
+    it('should handle Codebases where GitHub repo no longer exists', function(this: TestingContext) {
       broadcastSubject.next();
       codebasesSubject.next([
         {
@@ -231,13 +231,19 @@ describe('CodebasesComponent', () => {
         } as Codebase
       ]);
       codebasesSubject.complete();
-      expect(this.testedDirective.allCodebases.length).toEqual(1);
-      const codebase: Codebase = this.testedDirective.allCodebases[0];
-      expect(codebase.attributes.url).toEqual('https://github.com/foo-org/foo-project.git');
-      expect(codebase.gitHubRepo.htmlUrl).toEqual('https://github.com/foo-org/foo-project/html');
-      expect(codebase.gitHubRepo.fullName).toEqual('Foo Project');
-      expect(codebase.gitHubRepo.createdAt).toEqual('123');
-      expect(codebase.gitHubRepo.pushedAt).toEqual('456');
+
+      expect(this.testedDirective.allCodebases.length).toEqual(2);
+
+      const first: Codebase = this.testedDirective.allCodebases[0];
+      expect(first.attributes.url).toEqual('https://github.com/foo-org/foo-project.git');
+      expect(first.gitHubRepo.htmlUrl).toEqual('https://github.com/foo-org/foo-project/html');
+      expect(first.gitHubRepo.fullName).toEqual('Foo Project');
+      expect(first.gitHubRepo.createdAt).toEqual('123');
+      expect(first.gitHubRepo.pushedAt).toEqual('456');
+
+      const second: Codebase = this.testedDirective.allCodebases[1];
+      expect(second.attributes.url).toEqual('https://github.com/foo-org/bar-project.git');
+      expect(second.gitHubRepo).not.toBeDefined();
     });
   });
 
