@@ -1,6 +1,6 @@
 <ng-container *ngIf="active">
   <div class="card-pf" (click)="toggleCollapsed($event)">
-    <div class="card-pf-body">
+    <div class="card-pf-body" *ngIf="!deleting; else deletingTemplate">
       <div class="row mini-card-content" [ngClass]="cardStatusClass">
         <div class="col-sm-2">
           <deployment-status-icon [iconClass]="iconClass" [toolTip]="toolTip"></deployment-status-icon>
@@ -34,7 +34,7 @@
               </ng-container>
               <li role="separator" class="divider"></li>
               <li>
-                <a class="menu-item" (click)="delete()">Delete</a>
+                <a class="menu-item" (click)="openModal()">Delete</a>
               </li>
             </ul>
           </div>
@@ -43,5 +43,24 @@
       <deployment-details (click)="$event.preventDefault()" [collapsed]="collapsed" [active]="detailsActive"
         [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId"></deployment-details>
     </div>
+    <ng-template #deletingTemplate>
+      <div div class="card-pf-body">
+          <div class="spinner delete-spinner"></div>
+          <p class="delete-msg">Deleting deployment...</p>
+      </div>
+    </ng-template>
   </div>
 </ng-container>
+
+<div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <delete-deployment-modal #deleteDeploymentModal
+      (deleteEvent)="delete()"
+      [host]="modal"
+      [applicationId]="applicationId"
+      [environmentName]="environment.name"
+      ></delete-deployment-modal>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Delete Deployment</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="host.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>You are about to delete the <b>{{ applicationId }}</b> deployment
+    from the <b>{{ environmentName }}</b> environment.
+    This action is not reversible. Are you sure you want to delete this
+    deployment?</p>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-default margin-right-5" (click)="host.hide()">Cancel</button>
+  <button class="btn btn-danger" (click)="confirmDeletion()">Delete Deployment</button>
+</div>

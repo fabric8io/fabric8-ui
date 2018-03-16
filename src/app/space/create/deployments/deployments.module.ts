@@ -7,9 +7,11 @@ import { Observable } from 'rxjs';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ChartModule, ToolbarModule } from 'patternfly-ng';
 
+import { DeleteDeploymentModal } from './apps/delete-deployment-modal.component';
 import { DeploymentCardContainerComponent } from './apps/deployment-card-container.component';
 import { DeploymentCardComponent } from './apps/deployment-card.component';
 import { DeploymentDetailsComponent } from './apps/deployment-details.component';
@@ -45,9 +47,11 @@ const DEPLOYMENTS_SERVICE_POLL_TIMER = Observable
     CommonModule,
     ChartModule,
     DeploymentsRoutingModule,
+    ModalModule.forRoot(),
     ToolbarModule
   ],
   declarations: [
+    DeleteDeploymentModal,
     DeploymentsComponent,
     DeploymentCardContainerComponent,
     DeploymentCardComponent,

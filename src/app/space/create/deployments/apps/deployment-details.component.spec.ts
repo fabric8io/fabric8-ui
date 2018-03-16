@@ -133,7 +133,7 @@ describe('DeploymentDetailsComponent', () => {
     mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
     mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
     mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
-    mockSvc.deleteApplication.and.returnValue(Observable.of('mockDeletedMessage'));
+    mockSvc.deleteDeployment.and.returnValue(Observable.of('mockDeletedMessage'));
     mockSvc.getDeploymentNetworkStat.and.returnValue(netStatObservable);
     mockSvc.getPods.and.returnValue(podsObservable);
 

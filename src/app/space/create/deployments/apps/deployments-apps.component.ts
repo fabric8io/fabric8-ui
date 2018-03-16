@@ -19,6 +19,7 @@ import {
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
 import { Environment } from '../models/environment';
+import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 
 @Component({
   selector: 'deployments-apps',
