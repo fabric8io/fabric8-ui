@@ -289,7 +289,7 @@ describe('DeploymentCardComponent', () => {
   it('should set versionLabel from mockSvc.getVersion result', function(this: Context) {
     let de: DebugElement = this.fixture.debugElement.query(By.css('#versionLabel'));
     let el: HTMLElement = de.nativeElement;
-    expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
+    expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     expect(el.textContent).toEqual('1.2.3');
   });
 

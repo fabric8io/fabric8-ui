@@ -272,7 +272,7 @@ export class DeploymentsService implements OnDestroy {
       }));
   }
 
-  isApplicationDeployedInEnvironment(spaceId: string, applicationId: string, environmentName: string):
+  isApplicationDeployedInEnvironment(spaceId: string, environmentName: string, applicationId: string):
     Observable<boolean> {
     return this.getApplication(spaceId, applicationId)
       .map((app: Application) => app.attributes.deployments)
@@ -292,8 +292,8 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged();
   }
 
-  getVersion(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return this.getDeployment(spaceId, applicationId, environmentName)
+  getVersion(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
+    return this.getDeployment(spaceId, environmentName, applicationId)
       .map((deployment: Deployment) => deployment.attributes.version)
       .distinctUntilChanged();
   }
@@ -310,8 +310,8 @@ export class DeploymentsService implements OnDestroy {
       .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
 
-  getPods(spaceId: string, applicationId: string, environmentName: string): Observable<ModelPods> {
-    return this.getDeployment(spaceId, applicationId, environmentName)
+  getPods(spaceId: string, environmentName: string, applicationId: string): Observable<ModelPods> {
+    return this.getDeployment(spaceId, environmentName, applicationId)
       .map((deployment: Deployment) => deployment.attributes)
       .map((attrs: DeploymentAttributes) => {
         const pods = attrs.pods
@@ -329,19 +329,19 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged(deepEqual);
   }
 
-  getPodsQuota(spaceId: string, applicationId: string, environmentName: string): Observable<PodsQuota> {
-    return this.getDeployment(spaceId, applicationId, environmentName)
+  getPodsQuota(spaceId: string, environmentName: string, applicationId: string): Observable<PodsQuota> {
+    return this.getDeployment(spaceId, environmentName, applicationId)
       .map((deployment: Deployment) => deployment.attributes)
       .filter((attrs: DeploymentAttributes) => attrs && has(attrs, 'pods_quota'))
       .map((attrs: DeploymentAttributes) => attrs.pods_quota)
       .distinctUntilChanged(deepEqual);
   }
 
-  getDeploymentCpuStat(spaceId: string, applicationId: string, environmentName: string, maxSamples: number = this.timeseriesSamples): Observable<CpuStat[]> {
-    const series = this.getTimeseriesData(spaceId, applicationId, environmentName, maxSamples)
+  getDeploymentCpuStat(spaceId: string, environmentName: string, applicationId: string, maxSamples: number = this.timeseriesSamples): Observable<CpuStat[]> {
+    const series = this.getTimeseriesData(spaceId, environmentName, applicationId, maxSamples)
       .filter((t: TimeseriesData[]) => t && t.some((el: TimeseriesData) => has(el, 'cores')))
       .map((t: TimeseriesData[]) => t.map((s: TimeseriesData) => s.cores));
-    const quota = this.getPodsQuota(spaceId, applicationId, environmentName)
+    const quota = this.getPodsQuota(spaceId, environmentName, applicationId)
       .map((podsQuota: PodsQuota) => podsQuota.cpucores)
       .distinctUntilChanged();
     return Observable.combineLatest(series, quota, (series: CoresSeries[], quota: number) =>
@@ -351,11 +351,11 @@ export class DeploymentsService implements OnDestroy {
     );
   }
 
-  getDeploymentMemoryStat(spaceId: string, applicationId: string, environmentName: string, maxSamples: number = this.timeseriesSamples): Observable<MemoryStat[]> {
-    const series = this.getTimeseriesData(spaceId, applicationId, environmentName, maxSamples)
+  getDeploymentMemoryStat(spaceId: string, environmentName: string, applicationId: string, maxSamples: number = this.timeseriesSamples): Observable<MemoryStat[]> {
+    const series = this.getTimeseriesData(spaceId, environmentName, applicationId, maxSamples)
       .filter((t: TimeseriesData[]) => t && t.some((el: TimeseriesData) => has(el, 'memory')))
       .map((t: TimeseriesData[]) => t.map((s: TimeseriesData) => s.memory));
-    const quota = this.getPodsQuota(spaceId, applicationId, environmentName)
+    const quota = this.getPodsQuota(spaceId, environmentName, applicationId)
       .map((podsQuota: PodsQuota) => podsQuota.memory)
       .distinctUntilChanged();
     return Observable.combineLatest(series, quota, (series: MemorySeries[], quota: number) =>
@@ -364,8 +364,8 @@ export class DeploymentsService implements OnDestroy {
     );
   }
 
-  getDeploymentNetworkStat(spaceId: string, applicationId: string, environmentName: string, maxSamples: number = this.timeseriesSamples): Observable<NetworkStat[]> {
-    return this.getTimeseriesData(spaceId, applicationId, environmentName, maxSamples)
+  getDeploymentNetworkStat(spaceId: string, environmentName: string, applicationId: string, maxSamples: number = this.timeseriesSamples): Observable<NetworkStat[]> {
+    return this.getTimeseriesData(spaceId, environmentName, applicationId, maxSamples)
       .filter((t: TimeseriesData[]) => t && t.some((el: TimeseriesData) => has(el, 'net_tx')) && t.some((el: TimeseriesData) => has(el, 'net_rx')))
       .map((t: TimeseriesData[]) =>
         t.map((s: TimeseriesData) =>
@@ -386,18 +386,18 @@ export class DeploymentsService implements OnDestroy {
       .map((env: EnvironmentStat) => new ScaledMemoryStat(env.attributes.quota.memory.used, env.attributes.quota.memory.quota));
   }
 
-  getLogsUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return this.getDeployment(spaceId, applicationId, environmentName)
+  getLogsUrl(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
+    return this.getDeployment(spaceId, environmentName, applicationId)
       .map((deployment: Deployment) => deployment.links.logs);
   }
 
-  getConsoleUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return this.getDeployment(spaceId, applicationId, environmentName)
+  getConsoleUrl(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
+    return this.getDeployment(spaceId, environmentName, applicationId)
       .map((deployment: Deployment) => deployment.links.console);
   }
 
-  getAppUrl(spaceId: string, applicationId: string, environmentName: string): Observable<string> {
-    return this.getDeployment(spaceId, applicationId, environmentName)
+  getAppUrl(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
+    return this.getDeployment(spaceId, environmentName, applicationId)
       .map((deployment: Deployment) => deployment.links.application);
   }
 
@@ -430,7 +430,7 @@ export class DeploymentsService implements OnDestroy {
       .filter((app: Application) => app.attributes.name === applicationId);
   }
 
-  private getDeployment(spaceId: string, applicationId: string, environmentName: string): Observable<Deployment> {
+  private getDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<Deployment> {
     // does not emit if there are no applications or environments matching the specified names
     return this.getApplication(spaceId, applicationId)
       .flatMap((app: Application) => app.attributes.deployments || [])
@@ -459,8 +459,8 @@ export class DeploymentsService implements OnDestroy {
       .filter((env: EnvironmentStat) => env.attributes.name === environmentName);
   }
 
-  private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string, maxSamples: number): Observable<TimeseriesData[]> {
-    return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+  private getTimeseriesData(spaceId: string, environmentName: string, applicationId: string, maxSamples: number): Observable<TimeseriesData[]> {
+    return this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId)
       .first()
       .flatMap((deployed: boolean) => {
         if (!deployed) {
@@ -471,9 +471,9 @@ export class DeploymentsService implements OnDestroy {
           const subject = new ReplaySubject<TimeseriesData[]>(this.timeseriesSamples);
 
           const now = +Date.now();
-          const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, applicationId, environmentName, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now);
+          const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, environmentName, applicationId, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now);
 
-          const polledUpdates = this.getStreamingTimeseriesData(spaceId, applicationId, environmentName);
+          const polledUpdates = this.getStreamingTimeseriesData(spaceId, environmentName, applicationId);
 
           const seriesData = Observable.concat(frontLoadedUpdates, polledUpdates)
             .finally(() => {
@@ -493,8 +493,8 @@ export class DeploymentsService implements OnDestroy {
       });
   }
 
-  private getInitialTimeseriesData(spaceId: string, applicationId: string, environmentName: string, startTime: number, endTime: number): Observable<TimeseriesData> {
-    return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+  private getInitialTimeseriesData(spaceId: string, environmentName: string,  applicationId: string, startTime: number, endTime: number): Observable<TimeseriesData> {
+    return this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId)
       .first()
       .flatMap((deployed: boolean) => {
         if (!deployed) {
@@ -534,8 +534,8 @@ export class DeploymentsService implements OnDestroy {
       );
   }
 
-  private getStreamingTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
-    return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+  private getStreamingTimeseriesData(spaceId: string, environmentName: string, applicationId: string): Observable<TimeseriesData> {
+    return this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId)
       .first()
       .flatMap((deployed: boolean) => {
         if (!deployed) {

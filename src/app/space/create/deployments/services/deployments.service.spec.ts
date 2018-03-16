@@ -336,7 +336,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: true,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello'),
         done: done
       });
     });
@@ -371,7 +371,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: true,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello'),
         done: done
       });
     });
@@ -401,7 +401,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -436,7 +436,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -460,7 +460,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -484,7 +484,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -731,7 +731,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: '1.0.2',
-        observable: svc.getVersion('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.getVersion('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -745,10 +745,10 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.scalePods('foo-spaceId', 'vertx-hello', 'stage', 2)
+      svc.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
         .subscribe(
           (msg: string) => {
-            expect(msg).toEqual('Successfully scaled stage');
+            expect(msg).toEqual('Successfully scaled vertx-hello');
             subscription.unsubscribe();
             done();
           },
@@ -768,13 +768,13 @@ describe('DeploymentsService', () => {
         ) as Response & Error);
       });
 
-      svc.scalePods('foo-spaceId', 'vertx-hello', 'stage', 2)
+      svc.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
         .subscribe(
           (msg: string) => {
             done.fail(msg);
           },
           (err: string) => {
-            expect(err).toEqual('Failed to scale stage');
+            expect(err).toEqual('Failed to scale vertx-hello');
             subscription.unsubscribe();
             done();
           }
@@ -840,7 +840,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -895,7 +895,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'run'),
+        observable: svc.getPods('foo-spaceId', 'run', 'vertx-hello'),
         done: done
       });
     });
@@ -990,7 +990,7 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env', 3)
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: CpuStat[]) => {
           expect(stats).toEqual([
@@ -1095,7 +1095,7 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env', 3)
+      svc.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: MemoryStat[]) => {
           expect(stats).toEqual([
@@ -1195,7 +1195,7 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env', 3)
+      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: NetworkStat[]) => {
           expect(stats).toEqual([
@@ -1326,7 +1326,7 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env', 3)
+      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
         .takeUntil(Observable.timer(2000))
         .subscribe(
           (stat: NetworkStat[]): void => {
@@ -1445,7 +1445,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -1532,7 +1532,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-space',
         response: httpResponse,
         expected: 'http://example.com/logs',
-        observable: svc.getLogsUrl('foo-space', 'foo-app', 'foo-env'),
+        observable: svc.getLogsUrl('foo-space', 'foo-env', 'foo-app'),
         done: done
       });
     });
@@ -1565,7 +1565,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-space',
         response: httpResponse,
         expected: 'http://example.com/console',
-        observable: svc.getConsoleUrl('foo-space', 'foo-app', 'foo-env'),
+        observable: svc.getConsoleUrl('foo-space', 'foo-env', 'foo-app'),
         done: done
       });
     });
@@ -1598,7 +1598,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-space',
         response: httpResponse,
         expected: 'http://example.com/application',
-        observable: svc.getAppUrl('foo-space', 'foo-app', 'foo-env'),
+        observable: svc.getAppUrl('foo-space', 'foo-env', 'foo-app'),
         done: done
       });
     });

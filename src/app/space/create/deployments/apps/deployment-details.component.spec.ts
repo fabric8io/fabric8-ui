@@ -191,7 +191,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should be called with the proper arguments', () => {
-      expect(mockSvc.getDeploymentCpuStat).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
+      expect(mockSvc.getDeploymentCpuStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     });
 
     it('should use the \'Cores\' label for its data measure', () => {
@@ -222,7 +222,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should use units from service result', () => {
-      expect(mockSvc.getDeploymentMemoryStat).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
+      expect(mockSvc.getDeploymentMemoryStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
       expect(de.componentInstance.dataMeasure).toEqual('GB');
     });
 
@@ -270,7 +270,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should call to service', () => {
-      expect(mockSvc.getDeploymentNetworkStat).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
+      expect(mockSvc.getDeploymentNetworkStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     });
 
     it('should use \'MB/s\' units', () => {
