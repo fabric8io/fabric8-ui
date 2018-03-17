@@ -63,7 +63,6 @@ import { FeatureBannerComponent } from './feature-flag/banner/feature-banner.com
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { featureTogglesApiUrlProvider, FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
-import { FeatureWarningPageComponent } from './feature-flag/warning-page/feature-warning-page.component';
 
 import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -176,7 +175,6 @@ export type StoreType = {
     AppComponent,
     FooterComponent,
     HeaderComponent,
-    FeatureWarningPageComponent,
     FeatureBannerComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection

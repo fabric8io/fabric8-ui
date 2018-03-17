@@ -2,7 +2,8 @@ import {
   Component,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -10,6 +11,7 @@ import {
   last
 } from 'lodash';
 import { NotificationType } from 'ngx-base';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, Subscription } from 'rxjs';
 
 import { NotificationsService } from 'app/shared/notifications.service';
@@ -22,6 +24,7 @@ import {
   StatusType
 } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
+import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 
 enum CardStatusClass {
@@ -37,16 +40,19 @@ enum CardStatusClass {
 })
 export class DeploymentCardComponent implements OnDestroy, OnInit {
 
+  public static readonly OK_TOOLTIP: string = 'Everything is ok';
   private static readonly DEBOUNCE_TIME: number = 5000; // 5 seconds
   private static readonly MAX_DEBOUNCE_TIME: number = 10000; // 10 seconds
 
   @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: Environment;
+  @ViewChild(DeleteDeploymentModal) deleteDeploymentModal: DeleteDeploymentModal;
 
   active: boolean = false;
   detailsActive: boolean = false;
   collapsed: boolean = true;
+  deleting: boolean = false;
   version: Observable<string>;
   logsUrl: Observable<string>;
   consoleUrl: Observable<string>;
@@ -73,7 +79,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.iconClass = DeploymentStatusIconComponent.CLASSES.ICON_OK;
-    this.toolTip = 'Everything is ok';
+    this.toolTip = DeploymentCardComponent.OK_TOOLTIP;
 
     this.subscriptions.push(
       this.statusService.getAggregateStatus(this.spaceId, this.environment.name, this.applicationId)
@@ -106,7 +112,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   changeStatus(status: Status): void {
     let toolTip: string = status.message;
     if (!toolTip) {
-      toolTip = 'Everything is OK.';
+      toolTip = DeploymentCardComponent.OK_TOOLTIP;
     }
     this.toolTip = toolTip;
 
@@ -123,14 +129,16 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   toggleCollapsed(event: Event): void {
-    if (event.defaultPrevented) {
-      return;
-    }
-    this.collapsed = !this.collapsed;
-    if (!this.collapsed) {
-      this.detailsActive = true;
-    } else {
-      this.debouncedUpdateDetails();
+    if (!this.deleting) {
+      if (event.defaultPrevented) {
+        return;
+      }
+      this.collapsed = !this.collapsed;
+      if (!this.collapsed) {
+        this.detailsActive = true;
+      } else {
+        this.debouncedUpdateDetails();
+      }
     }
   }
 
@@ -140,10 +148,17 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     }
   }
 
+  openModal(): void {
+    this.deleteDeploymentModal.openModal();
+  }
+
   delete(): void {
     this.subscriptions.push(
-      this.deploymentsService.deleteApplication(this.spaceId, this.applicationId, this.environment.name)
-        .subscribe(
+      this.deploymentsService.deleteDeployment(
+        this.spaceId,
+        this.environment.name,
+        this.applicationId
+        ).subscribe(
           (success: string) => {
             this.notifications.message({
               type: NotificationType.SUCCESS,
@@ -158,5 +173,12 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
           }
         )
     );
+
+    this.lockAndDelete();
+  }
+
+  private lockAndDelete(): void {
+    this.collapsed = true;
+    this.deleting = true;
   }
 }

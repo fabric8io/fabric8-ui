@@ -14,7 +14,7 @@
     <ng-template #elsePods>
       <div>
         Pod status:
-        <li *ngFor="let column of pods.pods">
+        <li *ngFor="let column of pods.pods"  [attr.id]="'pod_status_' + column[0]">
           <span>{{ column[1] ? column[1] + ' ' + column[0] : '0 ' + column[0] }}</span>
         </li>
       </div>

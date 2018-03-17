@@ -150,7 +150,11 @@ module.exports = function (options) {
             helpers.nodeModulePath("ngx-dropdown"),
             helpers.nodeModulePath("ngx-modal"),
             helpers.nodeModulePath("ngx-modal"),
-            helpers.nodeModulePath("ng2-dnd")
+            helpers.nodeModulePath("ng2-dnd"),
+            helpers.nodeModulePath("jw-bootstrap-switch-ng2"),
+            helpers.nodeModulePath("ng2-truncate"),
+            helpers.nodeModulePath("angular-2-dropdown-multiselect"),
+            helpers.nodeModulePath("@angular")
           ],
           use: ["source-map-loader"],
           enforce: "pre"

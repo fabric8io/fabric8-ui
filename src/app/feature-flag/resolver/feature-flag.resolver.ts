@@ -40,12 +40,18 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
           // route to error page.
           this.router.navigate(['/_error']);
           return null;
-        } else {
-          return { // feature is not toggled off, check user's level
+        } else if (feature.attributes['user-enabled']) { // feature is not toggled off and user-level is enabled
+          return {
             name: featureName,
             showBanner: this.getBannerColor(feature.attributes['enablement-level']),
             enabled: feature.attributes['user-enabled']
           } as FeatureFlagConfig;
+        } else { // feature is not toggled off but user-level is disabled, forward to opt-in page
+          this.router.navigate(['/_featureflag'], {queryParams: {
+              name: featureName,
+              showBanner: this.getBannerColor(feature.attributes['enablement-level']),
+              enabled: feature.attributes['user-enabled']
+            } });
         }
       }
     }).catch(err => {

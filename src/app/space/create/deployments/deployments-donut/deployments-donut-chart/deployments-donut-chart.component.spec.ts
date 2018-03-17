@@ -70,6 +70,16 @@ describe('DeploymentsDonutChartComponent', () => {
       expect(textEl.innerText).toEqual('2 pods');
     });
 
+    it('should show pods status', function(this: Context) {
+      let runningText = this.fixture.debugElement.query(By.css('#pod_status_Running'));
+      expect(runningText).toBeTruthy();
+      expect(runningText.nativeElement.innerText).toBe('1 Running');
+
+      let terminating = this.fixture.debugElement.query(By.css('#pod_status_Terminating'));
+      expect(terminating).toBeTruthy();
+      expect(terminating.nativeElement.innerText).toBe('1 Terminating');
+    });
+
     describe('Mini Idle chart', () => {
       beforeEach(function(this: Context) {
         this.hostComponent.isIdled = true;

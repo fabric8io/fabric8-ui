@@ -353,28 +353,32 @@ module.exports = function (options) {
          * File loader for supporting fonts, for example, in CSS files.
          */
         {
-          test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
-          use: [
-            {
-              loader: 'url-loader',
-              query: {
-                limit: 3000,
-                name: '_assets/fonts/[name].' + (isProd ? '[hash]' : '') + '[ext]'
-              }
+          test: /\.(woff2|woff|ttf|eot|svg)$/,
+          use: {
+            loader: 'url-loader',
+            query: {
+              limit: 3000,
+              includePaths: [
+                path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
+              ],
+              name: '_assets/fonts/[name].' + (isProd ? '[hash]' : '') + '[ext]'
             }
-          ]
+          },
+          exclude: path.resolve(__dirname, "../src/assets/images/")
         },
         {
-          test: /\.jpg$|\.png$|\.svg$|\.gif$|\.jpeg$/,
-          use: [
-            {
-              loader: 'url-loader',
-              query: {
-                limit: 3000,
-                name: '_assets/images/[name].' + (isProd ? '[hash]' : '') + '[ext]'
-              }
+          test: /\.(jpg|png|svg|gif|jpeg)$/,
+          use: {
+            loader: 'url-loader',
+            query: {
+              limit: 3000,
+              includePaths: [
+                path.resolve(__dirname, "../src/assets/images/")
+              ],
+              name: '_assets/images/[name].' + (isProd ? '[hash]' : '') + '[ext]'
             }
-          ]
+          },
+          exclude: path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
         }
       ]
     },
@@ -414,7 +418,7 @@ module.exports = function (options) {
        */
       new ContextReplacementPlugin(
         // The (\\|\/) piece accounts for path separators in *nix and Windows
-        /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+        /(.+)?angular(\\|\/)core(.+)?/,
         path.resolve(__dirname, 'src') // location of your src
       ),
 

@@ -40,13 +40,20 @@ export const routes: Routes = [
       title: 'Getting Started'
     }
   },
-
   // Error Pages
   {
     path: '_error',
     loadChildren: './layout/error/error.module#ErrorModule',
     data: {
       title: 'Error'
+    }
+  },
+  // Feature Flag
+  {
+    path: '_featureflag',
+    loadChildren: './feature-flag/feature-flag.module#FeatureFlagModule',
+    data: {
+      title: 'Feature Flag'
     }
   },
   // Profile
