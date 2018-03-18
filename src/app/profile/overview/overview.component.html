@@ -61,7 +61,9 @@
                [queryParams]="{ bio: true }">Add a bio</a>
           </p>
         </ng-template>
-        <button class="col-xs-12 btn btn-lg btn-default profile-update-button margin-bottom-15" (click)="routeToUpdateProfile()">
+        <button class="col-xs-12 btn btn-lg btn-default profile-update-button margin-bottom-15"
+          *ngIf="viewingOwnAccount"
+          (click)="routeToUpdateProfile()">
           Update Profile
         </button>
       </div>
