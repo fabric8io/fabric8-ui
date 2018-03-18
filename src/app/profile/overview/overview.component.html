@@ -27,7 +27,7 @@
           </p>
         </ng-template>
         <ng-template #addEmail>
-          <p class="col-sm-12 profile-wrapper-email">
+          <p class="col-sm-12 profile-wrapper-email" *ngIf="!context.user.attributes.emailPrivate">
             <span class="fa fa-envelope"></span>
             <a href="javascript:void(0)"
                [routerLink]="['/', context?.user?.attributes?.username, '_update']"

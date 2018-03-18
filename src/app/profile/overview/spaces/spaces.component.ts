@@ -37,6 +37,10 @@ export class SpacesComponent implements OnDestroy, OnInit  {
     this.space = '';
     this.selectedFlow = 'start';
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
+    this.subscriptions.push(this.broadcaster.on('contextChanged').subscribe(val => {
+      this.context = val as Context;
+      this.initSpaces({pageSize: this.pageSize});
+     }));
   }
 
   ngOnInit(): void {
