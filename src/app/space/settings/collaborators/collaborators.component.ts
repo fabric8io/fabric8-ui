@@ -4,7 +4,8 @@ import { find } from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService, Context } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
-import { EmptyStateConfig, ListConfig } from 'patternfly-ng';
+import { EmptyStateConfig } from 'patternfly-ng/empty-state';
+import { ListConfig } from 'patternfly-ng/list';
 import { Subscription } from 'rxjs';
 
 import { ContextService } from '../../../shared/context.service';

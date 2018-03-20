@@ -14,16 +14,12 @@ import { Codebase } from './services/codebase';
 import { CodebasesService } from './services/codebases.service';
 import { GitHubService } from './services/github.service';
 
+import { ActionConfig } from 'patternfly-ng/action';
+import { EmptyStateConfig } from 'patternfly-ng/empty-state';
+import { Filter, FilterEvent } from 'patternfly-ng/filter';
+import { ListConfig } from 'patternfly-ng/list';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
 
-import {
-  ActionConfig,
-  EmptyStateConfig,
-  Filter,
-  FilterEvent,
-  ListConfig,
-  SortEvent,
-  SortField
-} from 'patternfly-ng';
 import { ProviderService } from '../../../shared/account/provider.service';
 
 @Component({

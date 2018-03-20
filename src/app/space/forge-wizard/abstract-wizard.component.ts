@@ -18,7 +18,7 @@ import {
   WizardStep,
   WizardStepComponent,
   WizardStepConfig
-} from 'patternfly-ng';
+} from 'patternfly-ng/wizard';
 import { Observable } from 'rxjs';
 import { isNullOrUndefined } from 'util';
 

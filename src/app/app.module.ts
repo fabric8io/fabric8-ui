@@ -30,14 +30,11 @@ import {
   UserService
 } from 'ngx-login-client';
 import { WidgetsModule } from 'ngx-widgets';
-import {
-  ActionModule,
-  ChartModule,
-  EmptyStateModule,
-  ListModule,
-  PatternFlyNgModule,
-  TreeListComponent
-} from 'patternfly-ng';
+
+import { ActionModule } from 'patternfly-ng/action';
+import { EmptyStateModule } from 'patternfly-ng/empty-state';
+import { NotificationModule } from 'patternfly-ng/notification';
+
 import {
   // Base functionality for the runtime console
   KubernetesRestangularModule,
@@ -144,20 +141,19 @@ export type StoreType = {
     BrowserAnimationsModule,
     BrowserModule,
     BsDropdownModule.forRoot(),
-    ChartModule,
     EffectsModule.forRoot([]),
     EmptyStateModule,
     FormsModule,
     HttpModule,
     KubernetesRestangularModule,
     KubernetesStoreModule,
-    ListModule,
     LocalStorageModule.withConfig({
       prefix: 'fabric8',
       storageType: 'localStorage'
     }),
     ModalModule.forRoot(),
     MomentModule,
+    NotificationModule,
     ReactiveFormsModule,
     RestangularModule,
     RouterModule,
@@ -165,7 +161,6 @@ export type StoreType = {
     ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,
-    PatternFlyNgModule,
     StatusListModule,
     StoreModule.forRoot({}),
     // AppRoutingModule must appear last
@@ -251,7 +246,6 @@ export type StoreType = {
       useClass: Fabric8UISpaceNamespace
     },
     ssoApiUrlProvider,
-    TreeListComponent,
     UserService,
     witApiUrlProvider,
     realmProvider

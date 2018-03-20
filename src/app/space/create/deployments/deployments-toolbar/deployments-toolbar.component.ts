@@ -9,15 +9,9 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import {
-  FilterConfig,
-  FilterEvent,
-  FilterField,
-  FilterType,
-  SortConfig,
-  SortEvent,
-  ToolbarConfig
-} from 'patternfly-ng';
+import { FilterConfig, FilterEvent, FilterField, FilterType } from 'patternfly-ng/filter';
+import { SortConfig, SortEvent } from 'patternfly-ng/sort';
+import { ToolbarConfig } from 'patternfly-ng/toolbar';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

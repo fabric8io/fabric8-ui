@@ -26,7 +26,7 @@ import {
 } from 'ngx-bootstrap/dropdown';
 import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 
-import { ChartModule } from 'patternfly-ng';
+import { ChartModule } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,

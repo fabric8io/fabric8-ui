@@ -42,7 +42,7 @@ import {
   ChartModule,
   SparklineConfig,
   SparklineData
-} from 'patternfly-ng';
+} from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
