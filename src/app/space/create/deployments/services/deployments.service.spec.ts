@@ -991,12 +991,14 @@ describe('DeploymentsService', () => {
       });
 
       svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env', 3)
+        .first()
         .subscribe((stats: CpuStat[]) => {
           expect(stats).toEqual([
             { used: 1, quota: 3, timestamp: 1 },
             { used: 2, quota: 3, timestamp: 2 },
             { used: 9, quota: 3, timestamp: 9 }
           ]);
+          subscription.unsubscribe();
           done();
         });
       serviceUpdater.next();
@@ -1094,6 +1096,7 @@ describe('DeploymentsService', () => {
       });
 
       svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env', 3)
+        .first()
         .subscribe((stats: MemoryStat[]) => {
           expect(stats).toEqual([
             new ScaledMemoryStat(3, 3, 3),
@@ -1193,6 +1196,7 @@ describe('DeploymentsService', () => {
       });
 
       svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env', 3)
+        .first()
         .subscribe((stats: NetworkStat[]) => {
           expect(stats).toEqual([
             { sent: new ScaledNetworkStat(7, 7), received: new ScaledNetworkStat(5, 5) },
@@ -1203,6 +1207,144 @@ describe('DeploymentsService', () => {
           done();
         });
       serviceUpdater.next();
+      serviceUpdater.next();
+    });
+  });
+
+  describe('#getTimeseriesData', () => {
+    it('should complete without errors if the deployment disappears', (done: DoneFn) => {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 1, time: 1 },
+            { value: 2, time: 2 }
+          ],
+          memory: [
+            { value: 3, time: 3 },
+            { value: 4, time: 4 }
+          ],
+          net_rx: [
+            { value: 5, time: 5 },
+            { value: 6, time: 6 }
+          ],
+          net_tx: [
+            { value: 7, time: 7 },
+            { value: 8, time: 8 }
+          ],
+          start: 1,
+          end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
+            }
+          }
+        }
+      };
+      const initialDeploymentResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env',
+                        pods_quota: {
+                          cpucores: 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+      const updatedDeploymentResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [ ]
+                }
+              }
+            ]
+          }
+        }
+      };
+
+      let deploymentStatus: boolean = false;
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          if (!deploymentStatus) {
+            responseBody = streamingTimeseriesResponse;
+          } else {
+            connection.mockError(new Response(
+              new ResponseOptions({
+                body: 'Generic error message',
+                status: 404
+              })
+            ) as Response & Error);
+            return;
+          }
+        } else if (deploymentRegex.test(requestUrl) && !deploymentStatus) {
+          responseBody = initialDeploymentResponse;
+        } else if (deploymentRegex.test(requestUrl) && deploymentStatus) {
+          responseBody = updatedDeploymentResponse;
+        }
+
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env', 3)
+        .takeUntil(Observable.timer(2000))
+        .subscribe(
+          (stat: NetworkStat[]): void => {
+            deploymentStatus = true;
+            serviceUpdater.next();
+          },
+          err => {
+            done.fail(err.message || err);
+            return Observable.empty();
+          },
+          () => {
+            expect(mockLogger.error).not.toHaveBeenCalled();
+            expect(mockNotificationsService.message).not.toHaveBeenCalled();
+            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
+            subscription.unsubscribe();
+            done();
+          }
+      );
       serviceUpdater.next();
     });
   });

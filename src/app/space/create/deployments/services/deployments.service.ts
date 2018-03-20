@@ -461,6 +461,7 @@ export class DeploymentsService implements OnDestroy {
 
   private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string, maxSamples: number): Observable<TimeseriesData[]> {
     return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+      .first()
       .flatMap((deployed: boolean) => {
         if (!deployed) {
           return Observable.never();
@@ -475,6 +476,9 @@ export class DeploymentsService implements OnDestroy {
           const polledUpdates = this.getStreamingTimeseriesData(spaceId, applicationId, environmentName);
 
           const seriesData = Observable.concat(frontLoadedUpdates, polledUpdates)
+            .finally(() => {
+              this.timeseriesSubjects.delete(key);
+            })
             .bufferCount(this.timeseriesSamples, 1);
           this.serviceSubscriptions.push(seriesData.subscribe(subject));
           this.timeseriesSubjects.set(key, subject);
@@ -532,12 +536,22 @@ export class DeploymentsService implements OnDestroy {
 
   private getStreamingTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
     return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+      .first()
       .flatMap((deployed: boolean) => {
         if (!deployed) {
-          return Observable.never();
+          return Observable.empty();
         }
         const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
-        return this.pollTimer
+        /* piggyback on getApplicationsResponse rather than pollTimer directly in order to
+        * establish a happens-before relationship between applications updates and timeseries
+        * updates within each poll cycle, so that we can detect a deployment disappearing and
+        * cancel upcoming timeseries queries
+        */
+        return this.getApplicationsResponse(spaceId)
+          .takeUntil(
+            this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+              .filter((deployed: boolean): boolean => !deployed)
+          )
           .concatMap(() =>
             this.http.get(url, { headers: this.headers })
               .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes)
