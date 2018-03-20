@@ -39,6 +39,13 @@ const routes: Routes = [
         }
       },
       {
+        path: '_settings',
+        loadChildren: './settings/settings.module#SettingsModule',
+        data: {
+          title: 'Settings'
+        }
+      },
+      {
         path: '_tenant',
         loadChildren: './tenant/tenant.module#TenantModule',
         data: {
