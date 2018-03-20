@@ -460,32 +460,26 @@ export class DeploymentsService implements OnDestroy {
   }
 
   private getTimeseriesData(spaceId: string, applicationId: string, environmentName: string, maxSamples: number): Observable<TimeseriesData[]> {
-    return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
-      .flatMap((deployed: boolean) => {
-        if (!deployed) {
-          return Observable.never();
+    const key = `${spaceId}:${applicationId}:${environmentName}`;
+    if (!this.timeseriesSubjects.has(key)) {
+      const subject = new ReplaySubject<TimeseriesData[]>(this.timeseriesSamples);
+
+      const now = +Date.now();
+      const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, applicationId, environmentName, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now);
+
+      const polledUpdates = this.getStreamingTimeseriesData(spaceId, applicationId, environmentName);
+
+      const seriesData = Observable.concat(frontLoadedUpdates, polledUpdates)
+        .bufferCount(this.timeseriesSamples, 1);
+      this.serviceSubscriptions.push(seriesData.subscribe(subject));
+      this.timeseriesSubjects.set(key, subject);
+    }
+    return this.timeseriesSubjects.get(key)
+      .map((data: TimeseriesData[]) => {
+        if (maxSamples >= data.length) {
+          return data;
         }
-        const key = `${spaceId}:${applicationId}:${environmentName}`;
-        if (!this.timeseriesSubjects.has(key)) {
-          const subject = new ReplaySubject<TimeseriesData[]>(this.timeseriesSamples);
-
-          const now = +Date.now();
-          const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, applicationId, environmentName, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now);
-
-          const polledUpdates = this.getStreamingTimeseriesData(spaceId, applicationId, environmentName);
-
-          const seriesData = Observable.concat(frontLoadedUpdates, polledUpdates)
-            .bufferCount(this.timeseriesSamples, 1);
-          this.serviceSubscriptions.push(seriesData.subscribe(subject));
-          this.timeseriesSubjects.set(key, subject);
-        }
-        return this.timeseriesSubjects.get(key)
-          .map((data: TimeseriesData[]) => {
-            if (maxSamples >= data.length) {
-              return data;
-            }
-            return data.slice(data.length - maxSamples);
-          });
+        return data.slice(data.length - maxSamples);
       });
   }
 
@@ -531,20 +525,23 @@ export class DeploymentsService implements OnDestroy {
   }
 
   private getStreamingTimeseriesData(spaceId: string, applicationId: string, environmentName: string): Observable<TimeseriesData> {
-    return this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
-      .flatMap((deployed: boolean) => {
-        if (!deployed) {
-          return Observable.never();
-        }
-        const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
-        return this.pollTimer
-          .concatMap(() =>
-            this.http.get(url, { headers: this.headers })
-              .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes)
-              .catch((err: Response) => this.handleHttpError(err))
-              .filter((t: TimeseriesData) => !!t && !isEmpty(t))
-          );
-      });
+    const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
+    /* piggyback on getApplicationsResponse rather than pollTimer directly in order to
+     * establish a happens-before relationship between applications updates and timeseries
+     * updates within each poll cycle, so that we can detect a deployment disappearing and
+     * cancel upcoming timeseries queries
+     */
+    return this.getApplicationsResponse(spaceId)
+      .takeUntil(
+        this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+          .filter((b: boolean): boolean => !b)
+      )
+      .concatMap(() =>
+        this.http.get(url, { headers: this.headers })
+          .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes)
+          .catch((err: Response) => this.handleHttpError(err))
+          .filter((t: TimeseriesData) => !!t && !isEmpty(t))
+      );
   }
 
   private handleHttpError(response: Response): Observable<any> {
