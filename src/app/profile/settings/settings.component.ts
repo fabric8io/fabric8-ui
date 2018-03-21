@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
   encapsulation: ViewEncapsulation.None,
   selector: '',
   templateUrl: 'settings.component.html',
-  styleUrls: []
+  styleUrls: ['./settings.component.less']
 })
 export class SettingsComponent implements OnInit {
   ngOnInit() {}
