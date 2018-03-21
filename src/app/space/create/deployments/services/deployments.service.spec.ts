@@ -100,6 +100,7 @@ describe('DeploymentsService', () => {
       ]
     });
     svc = TestBed.get(DeploymentsService);
+    spyOn(svc, 'getPodsQuota').and.callThrough();
     mockBackend = TestBed.get(XHRBackend);
   });
 
@@ -1003,6 +1004,10 @@ describe('DeploymentsService', () => {
         });
       serviceUpdater.next();
       serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
+      });
     });
   });
 
@@ -1108,6 +1113,10 @@ describe('DeploymentsService', () => {
         });
       serviceUpdater.next();
       serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
+      });
     });
   });
 
@@ -1208,6 +1217,10 @@ describe('DeploymentsService', () => {
         });
       serviceUpdater.next();
       serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
+      });
     });
   });
 

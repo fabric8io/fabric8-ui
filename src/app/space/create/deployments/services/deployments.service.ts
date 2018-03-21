@@ -549,7 +549,7 @@ export class DeploymentsService implements OnDestroy {
         */
         return this.getApplicationsResponse(spaceId)
           .takeUntil(
-            this.isApplicationDeployedInEnvironment(spaceId, applicationId, environmentName)
+            this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId)
               .filter((deployed: boolean): boolean => !deployed)
           )
           .concatMap(() =>

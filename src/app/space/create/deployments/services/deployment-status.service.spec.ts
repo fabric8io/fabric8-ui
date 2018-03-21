@@ -19,6 +19,10 @@ import { DeploymentsService } from './deployments.service';
 
 describe('DeploymentStatusService', (): void => {
 
+  const spaceId = 'mockSpaceId';
+  const environmentName = 'mockEnvName';
+  const applicationName = 'mockAppName';
+
   let svc: DeploymentStatusService;
   let deploymentsService: jasmine.SpyObj<DeploymentsService>;
   let cpuSubject: Subject<CpuStat[]>;
@@ -89,6 +93,12 @@ describe('DeploymentStatusService', (): void => {
   });
 
   describe('#getCpuStatus', (): void => {
+    it('should correctly invoke the deployments service', () => {
+      svc.getCpuStatus(spaceId, environmentName, applicationName);
+      expect(deploymentsService.getPods).toHaveBeenCalledWith(spaceId, environmentName, applicationName);
+      expect(deploymentsService.getDeploymentCpuStat).toHaveBeenCalledWith(spaceId, environmentName, applicationName, 1);
+    });
+
     it('should return OK status when not nearing quota', (done: DoneFn): void => {
       svc.getCpuStatus('foo', 'bar', 'baz')
         .first()
@@ -142,6 +152,12 @@ describe('DeploymentStatusService', (): void => {
   });
 
   describe('#getMemoryStatus', (): void => {
+    it('should correctly invoke the deployments service', () => {
+      svc.getMemoryStatus(spaceId, environmentName, applicationName);
+      expect(deploymentsService.getPods).toHaveBeenCalledWith(spaceId, environmentName, applicationName);
+      expect(deploymentsService.getDeploymentMemoryStat).toHaveBeenCalledWith(spaceId, environmentName, applicationName, 1);
+    });
+
     it('should return OK status when not nearing quota', (done: DoneFn): void => {
       svc.getMemoryStatus('foo', 'bar', 'baz')
         .first()

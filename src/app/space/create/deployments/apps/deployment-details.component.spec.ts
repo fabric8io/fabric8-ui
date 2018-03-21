@@ -159,6 +159,13 @@ describe('DeploymentDetailsComponent', () => {
     ]
   });
 
+  it('should correctly call deployments service functions with the correct arguments', function(this: Context) {
+    expect(mockSvc.getPods).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockSvc.getDeploymentCpuStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockSvc.getDeploymentMemoryStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockSvc.getDeploymentNetworkStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+  });
+
   it('should generate unique chartIds for each DeploymentDetailsComponent instance', function(this: Context) {
     const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
     expect(detailsComponent.cpuConfig.chartId).not.toBe(detailsComponent.memConfig.chartId);
