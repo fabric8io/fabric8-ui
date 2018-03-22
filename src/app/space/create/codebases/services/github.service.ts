@@ -2,7 +2,6 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
 import { cloneDeep } from 'lodash';
-import { Logger } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable, Subscription } from 'rxjs';
@@ -37,8 +36,8 @@ export class GitHubService implements OnDestroy {
   constructor(
     private authService: AuthenticationService,
       private contexts: Contexts,
-      private http: Http,
-      private logger: Logger) {
+      private http: Http
+      ) {
     this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
     this.gitHubUrl = 'https://api.github.com';
     this.cache = new Map();
@@ -289,7 +288,6 @@ export class GitHubService implements OnDestroy {
   }
 
   private handleError(error: any) {
-    this.logger.error(error);
     return Observable.throw(error.message || error);
   }
 

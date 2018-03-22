@@ -1,16 +1,30 @@
 <div class="list-pf-left">
     <span class="fa list-pf-icon list-pf-icon-bordered list-pf-icon-small"
-          [ngClass]="{'fa-github': codebase?.attributes?.type === 'git'}"></span>
+          [ngClass]="{
+            'list-pf-icon-bordered': codebase?.gitHubRepo && codebase?.attributes?.type === 'git',
+            'fa-github': codebase?.gitHubRepo && codebase?.attributes?.type === 'git',
+            'pficon-error-circle-o': !codebase?.gitHubRepo
+            }"></span>
 </div>
 <div class="list-pf-content-wrapper">
   <div class="list-pf-main-content">
-    <div class="list-pf-title">
-      <a [href]="codebase.gitHubRepo.htmlUrl" target="_blank">{{codebase.gitHubRepo.fullName}}</a>
-    </div>
-    <div class="list-pf-description">{{codebase.gitHubRepo.createdAt | date:'medium'}}</div>
-    <div class="list-pf-description">{{codebase.gitHubRepo.pushedAt | date:'medium'}}</div>
+    <ng-template *ngIf="codebase.gitHubRepo then valid; else invalid"></ng-template>
+    <ng-template #invalid>
+      <div class="list-pf-title">
+        <a [href]="codebase.name" target="_blank">{{codebase.name}}</a>
+      </div>
+      <div class="list-pf-description">Unavailable</div>
+      <div class="list-pf-description">Unavailable</div>
+    </ng-template>
+    <ng-template #valid>
+      <div class="list-pf-title">
+        <a [href]="codebase.gitHubRepo.htmlUrl" target="_blank">{{codebase.gitHubRepo.fullName}}</a>
+      </div>
+      <div class="list-pf-description">{{codebase.gitHubRepo.createdAt | date:'medium'}}</div>
+      <div class="list-pf-description">{{codebase.gitHubRepo.pushedAt | date:'medium'}}</div>
+    </ng-template>
   </div>
   <div class="list-pf-additional-content">
-    <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running"></codebases-item-workspaces>
+    <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running && codebase.gitHubRepo"></codebases-item-workspaces>
   </div>
 </div>

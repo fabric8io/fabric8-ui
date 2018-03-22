@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   title = 'Almighty';
   imgLoaded: Boolean = false;
   statusListVisible = false;
+  documentationListVisible: Boolean = false;
   modalRef: BsModalRef;
   isIn = false;   // store state
   toggleState() { // click handler
@@ -38,6 +39,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.statusListVisible = flag;
   }
 
+  onDocumentationListVisible = (flag: boolean) => {
+    this.documentationListVisible = flag;
+  }
 
   menuCallbacks = new Map<String, MenuHiddenCallback>([
     [

@@ -327,20 +327,27 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       return Observable.forkJoin(
         codebases.map((codebase: Codebase) => {
           if (!this.isGitHubHtmlUrlInvalid(codebase)) {
-            return this.gitHubService.getRepoDetailsByUrl(codebase.attributes.url).map(gitHubRepoDetails => {
-              codebase.gitHubRepo = {};
-              codebase.gitHubRepo.htmlUrl = gitHubRepoDetails.html_url;
-              codebase.gitHubRepo.fullName = gitHubRepoDetails.full_name;
-              codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
-              codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
-              return codebase;
-            }).first();
+            return this.gitHubService.getRepoDetailsByUrl(codebase.attributes.url)
+              .map(gitHubRepoDetails => {
+                codebase.gitHubRepo = {};
+                codebase.gitHubRepo.htmlUrl = gitHubRepoDetails.html_url;
+                codebase.gitHubRepo.fullName = gitHubRepoDetails.full_name;
+                codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
+                codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
+                return codebase;
+              })
+              .catch(err => {
+                // this.handleError(err, NotificationType.WARNING);
+                return Observable.of(codebase);
+              })
+              .first();
           } else {
             this.handleError(`Invalid URL: ${codebase.attributes.url}`, NotificationType.WARNING);
           }
         })
       );
-    }).last();
+    })
+      .last();
   }
 
   /**
