@@ -27,7 +27,7 @@
           </p>
         </ng-template>
         <ng-template #addEmail>
-          <p class="col-sm-12 profile-wrapper-email">
+          <p class="col-sm-12 profile-wrapper-email" *ngIf="!context.user.attributes.emailPrivate">
             <span class="fa fa-envelope"></span>
             <a href="javascript:void(0)"
                [routerLink]="['/', context?.user?.attributes?.username, '_update']"
@@ -61,7 +61,9 @@
                [queryParams]="{ bio: true }">Add a bio</a>
           </p>
         </ng-template>
-        <button class="col-xs-12 btn btn-lg btn-default profile-update-button margin-bottom-15" (click)="routeToUpdateProfile()">
+        <button class="col-xs-12 btn btn-lg btn-default profile-update-button margin-bottom-15"
+          *ngIf="viewingOwnAccount"
+          (click)="routeToUpdateProfile()">
           Update Profile
         </button>
       </div>

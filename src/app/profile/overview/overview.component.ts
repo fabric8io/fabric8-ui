@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
@@ -26,6 +27,7 @@ export class OverviewComponent implements OnDestroy, OnInit {
       private spaceService: SpaceService,
       private userService: UserService,
       private contextService: ContextService,
+      private broadcaster: Broadcaster,
       private router: Router) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
@@ -36,11 +38,15 @@ export class OverviewComponent implements OnDestroy, OnInit {
         }));
       }
     }));
+    this.subscriptions.push(this.broadcaster.on('contextChanged').subscribe(val => {
+      this.context = val as Context;
+      this.viewingOwnAccount = this.contextService.viewingOwnContext();
+     }));
   }
 
   ngOnInit() {
     this.viewingOwnAccount = this.contextService.viewingOwnContext();
-    if (this.userService.currentLoggedInUser.attributes) {
+    if (this.viewingOwnAccount && this.userService.currentLoggedInUser.attributes) {
       this.context.user = this.userService.currentLoggedInUser;
     }
   }
