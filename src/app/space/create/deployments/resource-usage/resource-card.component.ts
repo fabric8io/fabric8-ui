@@ -20,7 +20,6 @@ export class ResourceCardComponent implements OnInit {
   @Input() environment: Environment;
 
   memUnit: Observable<string>;
-  active: boolean = false;
 
   constructor(
     private deploymentsService: DeploymentsService
@@ -28,16 +27,9 @@ export class ResourceCardComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.spaceId && this.environment) {
-      this.deploymentsService
-      .isDeployedInEnvironment(this.spaceId, this.environment.name)
-      .subscribe((active: boolean) => {
-        this.active = active;
-        if (active) {
-          this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment.name)
-            .first()
-            .map((stat: MemoryStat) => stat.units);
-        }
-      });
+      this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment.name)
+        .first()
+        .map((stat: MemoryStat) => stat.units);
     }
   }
 }

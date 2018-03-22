@@ -1,4 +1,4 @@
-<ng-container *ngIf="active">
+<ng-container *ngIf="environment && spaceId">
   <div class="card-pf">
     <div class="card-pf-body resource-card-body">
       <utilization-bar [resourceTitle]="'CPU'" [resourceUnit]="'Cores'" [stat]="deploymentsService.getEnvironmentCpuStat(spaceId, environment.name)"></utilization-bar>

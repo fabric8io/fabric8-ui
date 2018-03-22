@@ -56,7 +56,6 @@ describe('ResourceCardComponent', () => {
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let cpuStatMock: Observable<CpuStat> = Observable.of({ used: 1, quota: 2 });
   let memoryStatMock: Observable<MemoryStat> = Observable.of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  });
-  let active: Subject<boolean> = new BehaviorSubject<boolean>(true);
 
   beforeEach(() => {
     mockSvc = createMock(DeploymentsService);
@@ -67,7 +66,6 @@ describe('ResourceCardComponent', () => {
     ]));
     mockSvc.getEnvironmentCpuStat.and.returnValue(cpuStatMock);
     mockSvc.getEnvironmentMemoryStat.and.returnValue(memoryStatMock);
-    mockSvc.isDeployedInEnvironment.and.returnValue(active);
   });
 
   initContext(ResourceCardComponent, HostComponent,
@@ -81,12 +79,8 @@ describe('ResourceCardComponent', () => {
     }
   );
 
-  it('should be active', function(this: Context) {
-    expect(this.testedDirective.active).toBeTruthy();
-  });
 
   it('should correctly request the deployed environment data', function(this: Context) {
-    expect(mockSvc.isDeployedInEnvironment).toHaveBeenCalledWith('spaceId', 'stage');
     expect(mockSvc.getEnvironmentCpuStat).toHaveBeenCalledWith('spaceId', 'stage');
     expect(mockSvc.getEnvironmentMemoryStat).toHaveBeenCalledWith('spaceId', 'stage');
   });
@@ -105,13 +99,4 @@ describe('ResourceCardComponent', () => {
     expect(memoryUtilBar.resourceUnit).toEqual('GB');
     expect(memoryUtilBar.stat).toEqual(memoryStatMock);
   });
-
-  describe('inactive environment', () => {
-    it('should not display', function(this: Context) {
-      active.next(false);
-      this.detectChanges();
-      expect(this.testedDirective.active).toBeFalsy();
-    });
-  });
-
 });
