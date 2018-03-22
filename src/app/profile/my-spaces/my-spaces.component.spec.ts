@@ -3,10 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
 import { cloneDeep } from 'lodash';
-import { Logger } from 'ngx-base';
+import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
+import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
@@ -28,6 +28,8 @@ describe('MySpacesComponent', () => {
   let mockUserService: any = jasmine.createSpy('UserService');
   let mockModalRef: any = jasmine.createSpyObj('BsModalRef', ['hide']);
   let mockTemplateRef = jasmine.createSpy('TemplateRef');
+  let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast']);
+  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getGithubToken']);
   let mockUser: User;
   let mockExtProfile: ExtProfile;
   let mockContext: Context;
@@ -62,6 +64,7 @@ describe('MySpacesComponent', () => {
     value: 'zzz'
   };
 
+  mockAuthenticationService.getGitHubToken = {};
   mockSpaceService.deleteSpace = {};
   mockEventService.deleteSpaceSubject = jasmine.createSpyObj('deleteSpaceSubject', ['next']);
 
@@ -111,7 +114,9 @@ describe('MySpacesComponent', () => {
         { provide: Logger, useValue: mockLogger },
         { provide: BsModalService, useValue: mockBsModalService },
         { provide: SpaceService, useValue: mockSpaceService },
-        { provide: UserService, useValue: mockUserService }
+        { provide: UserService, useValue: mockUserService },
+        { provide: AuthenticationService, useValue: mockAuthenticationService },
+        { provide: Broadcaster, useValue: mockBroadcaster }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     });
@@ -449,12 +454,21 @@ describe('MySpacesComponent', () => {
   });
 
   describe('#openForgeWizard', () => {
-    it('should open a large modal and set the flow to \'start\'', () => {
+    it('should open a large modal and set the flow to \'start\' if there exists GitHub token', () => {
       let mockTemplateRef = jasmine.createSpy('TemplateRef');
+      spyOn(component.authentication, 'getGitHubToken').and.returnValue('mock-token');
       component.openForgeWizard(mockTemplateRef);
       expect(component.selectedFlow).toBe('start');
       expect(component.modalService.show).toHaveBeenCalledWith(mockTemplateRef, {class: 'modal-lg'});
     });
+
+    it('should broadcast an event indicating a disconnection from GitHub if no token', () => {
+      let mockTemplateRef = jasmine.createSpy('TemplateRef');
+      spyOn(component.authentication, 'getGitHubToken').and.returnValue('');
+      component.openForgeWizard(mockTemplateRef);
+      expect(component.broadcaster.broadcast).toHaveBeenCalled();
+    });
+
   });
 
   describe('#selectFlow', () => {

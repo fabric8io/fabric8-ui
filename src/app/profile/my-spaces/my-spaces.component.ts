@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 
 import { cloneDeep, findIndex, has } from 'lodash';
-import { Logger } from 'ngx-base';
+import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
+import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import {
   Action,
   ActionConfig,
@@ -61,9 +61,11 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     private eventService: EventService,
     private gettingStartedService: GettingStartedService,
     private logger: Logger,
+    private broadcaster: Broadcaster,
     private modalService: BsModalService,
     private spaceService: SpaceService,
-    private userService: UserService
+    private userService: UserService,
+    private authentication: AuthenticationService
   ) {
     this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
@@ -270,8 +272,12 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.selectedFlow = 'start';
-    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    if (this.authentication.getGitHubToken()) {
+      this.selectedFlow = 'start';
+      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    } else {
+      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+    }
   }
 
   selectFlow($event) {
