@@ -55,7 +55,7 @@ export class GettingStartedService implements OnDestroy {
       })
       .publish().connect();
 
-    return (profile !== undefined) ? profile.attributes : {} as ExtProfile;
+    return (profile !== undefined && profile.attributes !== undefined) ? profile.attributes : {} as ExtProfile;
   }
 
   /**
