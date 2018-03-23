@@ -18,7 +18,6 @@ import {
 } from 'rxjs';
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
-import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 
 @Component({
   selector: 'deployments-apps',

@@ -33,12 +33,9 @@ import {
 } from '../services/deployments.service';
 import { DeploymentDetailsComponent } from './deployment-details.component';
 
-import { times } from 'lodash';
-
 // Makes patternfly charts available
 import {
   ChartDefaults,
-  ChartModule,
   SparklineConfig,
   SparklineData
 } from 'patternfly-ng';

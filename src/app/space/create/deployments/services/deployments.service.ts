@@ -6,8 +6,6 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import { round } from 'lodash';
-
 import {
   Headers,
   Http,
