@@ -1,21 +1,28 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { async, TestBed, RouterTestingModule } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
-
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmailVerificationComponent } from './email-verification.component';
 
 describe('Email Verification Component', () => {
   let fixture;
   let email_true;
   let email_false;
+  let routeMock: any;
 
   beforeEach(() => {
+    routeMock = jasmine.createSpy('ActivatedRoute');
+
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule, HttpModule, RouterTestingModule.withRoutes([])],
       declarations: [EmailVerificationComponent],
-      providers: [],
+      providers: [
+        {
+          provide: ActivatedRoute, useValue: routeMock
+        }
+      ],
       // Tells the compiler not to error on unknown elements and attributes
       schemas: [NO_ERRORS_SCHEMA]
     });
