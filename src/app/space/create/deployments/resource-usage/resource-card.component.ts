@@ -28,7 +28,6 @@ export class ResourceCardComponent implements OnInit {
   ngOnInit(): void {
     if (this.spaceId && this.environment) {
       this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment.name)
-        .first()
         .map((stat: MemoryStat) => stat.units);
     }
   }
