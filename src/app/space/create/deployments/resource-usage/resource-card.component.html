@@ -1,16 +1,14 @@
-<ng-container *ngIf="environment && spaceId">
-  <div class="card-pf">
-    <div class="card-pf-body resource-card-body">
-      <utilization-bar [resourceTitle]="'CPU'" [resourceUnit]="'Cores'" [stat]="deploymentsService.getEnvironmentCpuStat(spaceId, environment.name)"></utilization-bar>
-      <utilization-bar [resourceTitle]="'Memory'" [resourceUnit]="memUnit | async" [stat]="deploymentsService.getEnvironmentMemoryStat(spaceId, environment.name)"></utilization-bar>
-    </div>
+<div class="card-pf" *ngIf="environment && spaceId; else loading">
+  <div class="card-pf-body resource-card-body">
+    <utilization-bar [resourceTitle]="'CPU'" [resourceUnit]="'Cores'" [stat]="deploymentsService.getEnvironmentCpuStat(spaceId, environment.name)"></utilization-bar>
+    <utilization-bar [resourceTitle]="'Memory'" [resourceUnit]="memUnit | async" [stat]="deploymentsService.getEnvironmentMemoryStat(spaceId, environment.name)"></utilization-bar>
   </div>
-</ng-container>
-<ng-container *ngIf="!environment || !spaceId">
+</div>
+<ng-template #loading>
   <div class="card-pf">
     <div class="card-pf-body resource-card-body">
       <loading-utilization-bar [resourceTitle]="'CPU'" [resourceUnit]="'Cores'"></loading-utilization-bar>
       <loading-utilization-bar [resourceTitle]="'Memory'" [resourceUnit]="'MB'"></loading-utilization-bar>
     </div>
   </div>
-</ng-container>
+</ng-template>
