@@ -60,7 +60,7 @@ export class DeploymentsDonutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name);
+    this.pods = this.deploymentsService.getPods(this.spaceId, this.environment.name,  this.applicationId);
     this.pods.subscribe(pods => {
       this.replicas = pods.total;
       if (!this.scaleRequestPending) {

@@ -85,6 +85,12 @@ describe('ResourceCardComponent', () => {
     expect(this.testedDirective.active).toBeTruthy();
   });
 
+  it('should correctly request the deployed environment data', function(this: Context) {
+    expect(mockSvc.isDeployedInEnvironment).toHaveBeenCalledWith('spaceId', 'stage');
+    expect(mockSvc.getEnvironmentCpuStat).toHaveBeenCalledWith('spaceId', 'stage');
+    expect(mockSvc.getEnvironmentMemoryStat).toHaveBeenCalledWith('spaceId', 'stage');
+  });
+
   it('should have its children passed the proper values', function(this: Context) {
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
     expect(arrayOfComponents.length).toEqual(2);

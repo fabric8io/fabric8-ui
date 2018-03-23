@@ -153,7 +153,7 @@ export class DeploymentDetailsComponent {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name)
+      this.deploymentsService.getPods(this.spaceId, this.environment.name, this.applicationId)
         .map((p: Pods) => p.total > 0)
         .subscribe(this.hasPods)
     );
@@ -225,10 +225,10 @@ export class DeploymentDetailsComponent {
     );
 
     this.cpuStat =
-      this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.applicationId, this.environment.name);
+      this.deploymentsService.getDeploymentCpuStat(this.spaceId, this.environment.name, this.applicationId);
 
     this.memStat =
-      this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.applicationId, this.environment.name);
+      this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.environment.name, this.applicationId);
 
     this.subscriptions.push(
       this.cpuStat.subscribe((stats: CpuStat[]) => {
@@ -256,7 +256,7 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.applicationId, this.environment.name).subscribe((stats: NetworkStat[]) => {
+      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment.name, this.applicationId).subscribe((stats: NetworkStat[]) => {
         const last: NetworkStat = stats[stats.length - 1];
         const netTotal: ScaledNetworkStat = new ScaledNetworkStat(last.received.raw + last.sent.raw);
         this.netUnits = netTotal.units;

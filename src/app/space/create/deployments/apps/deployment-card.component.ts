@@ -88,22 +88,22 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
     this.subscriptions.push(
       this.deploymentsService
-        .isApplicationDeployedInEnvironment(this.spaceId, this.applicationId, this.environment.name)
+        .isApplicationDeployedInEnvironment(this.spaceId, this.environment.name, this.applicationId)
         .subscribe((active: boolean) => {
           this.active = active;
 
           if (active) {
             this.version =
-              this.deploymentsService.getVersion(this.spaceId, this.applicationId, this.environment.name);
+              this.deploymentsService.getVersion(this.spaceId, this.environment.name, this.applicationId);
 
             this.logsUrl =
-              this.deploymentsService.getLogsUrl(this.spaceId, this.applicationId, this.environment.name);
+              this.deploymentsService.getLogsUrl(this.spaceId, this.environment.name, this.applicationId);
 
             this.consoleUrl =
-              this.deploymentsService.getConsoleUrl(this.spaceId, this.applicationId, this.environment.name);
+              this.deploymentsService.getConsoleUrl(this.spaceId, this.environment.name, this.applicationId);
 
             this.appUrl =
-              this.deploymentsService.getAppUrl(this.spaceId, this.applicationId, this.environment.name);
+              this.deploymentsService.getAppUrl(this.spaceId, this.environment.name, this.applicationId);
           }
         })
     );
