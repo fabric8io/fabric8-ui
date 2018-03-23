@@ -34,16 +34,16 @@ export class DeploymentStatusService {
 
   getCpuStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
     return this.adjustStatusForPods(
-      this.deploymentsService.getPods(spaceId, applicationName, environmentName),
-      this.deploymentsService.getDeploymentCpuStat(spaceId, applicationName, environmentName, 1)
+      this.deploymentsService.getPods(spaceId, environmentName, applicationName),
+      this.deploymentsService.getDeploymentCpuStat(spaceId, environmentName, applicationName, 1)
         .map((stats: CpuStat[]): Status => this.getStatStatus(last(stats), 'CPU'))
     );
   }
 
   getMemoryStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
     return this.adjustStatusForPods(
-      this.deploymentsService.getPods(spaceId, applicationName, environmentName),
-      this.deploymentsService.getDeploymentMemoryStat(spaceId, applicationName, environmentName, 1)
+      this.deploymentsService.getPods(spaceId, environmentName, applicationName),
+      this.deploymentsService.getDeploymentMemoryStat(spaceId, environmentName, applicationName, 1)
         .map((stats: MemoryStat[]): Status => this.getStatStatus(last(stats), 'Memory'))
     );
   }

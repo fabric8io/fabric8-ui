@@ -100,6 +100,7 @@ describe('DeploymentsService', () => {
       ]
     });
     svc = TestBed.get(DeploymentsService);
+    spyOn(svc, 'getPodsQuota').and.callThrough();
     mockBackend = TestBed.get(XHRBackend);
   });
 
@@ -336,7 +337,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: true,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello'),
         done: done
       });
     });
@@ -371,7 +372,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: true,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'run'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello'),
         done: done
       });
     });
@@ -401,7 +402,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -436,7 +437,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -460,7 +461,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -484,7 +485,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -731,7 +732,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: '1.0.2',
-        observable: svc.getVersion('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.getVersion('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -745,10 +746,10 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.scalePods('foo-spaceId', 'vertx-hello', 'stage', 2)
+      svc.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
         .subscribe(
           (msg: string) => {
-            expect(msg).toEqual('Successfully scaled stage');
+            expect(msg).toEqual('Successfully scaled vertx-hello');
             subscription.unsubscribe();
             done();
           },
@@ -768,13 +769,13 @@ describe('DeploymentsService', () => {
         ) as Response & Error);
       });
 
-      svc.scalePods('foo-spaceId', 'vertx-hello', 'stage', 2)
+      svc.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
         .subscribe(
           (msg: string) => {
             done.fail(msg);
           },
           (err: string) => {
-            expect(err).toEqual('Failed to scale stage');
+            expect(err).toEqual('Failed to scale vertx-hello');
             subscription.unsubscribe();
             done();
           }
@@ -840,7 +841,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -895,7 +896,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'run'),
+        observable: svc.getPods('foo-spaceId', 'run', 'vertx-hello'),
         done: done
       });
     });
@@ -990,17 +991,23 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.getDeploymentCpuStat('foo-space', 'foo-app', 'foo-env', 3)
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
         .subscribe((stats: CpuStat[]) => {
           expect(stats).toEqual([
             { used: 1, quota: 3, timestamp: 1 },
             { used: 2, quota: 3, timestamp: 2 },
             { used: 9, quota: 3, timestamp: 9 }
           ]);
+          subscription.unsubscribe();
           done();
         });
       serviceUpdater.next();
       serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
+      });
     });
   });
 
@@ -1093,7 +1100,8 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.getDeploymentMemoryStat('foo-space', 'foo-app', 'foo-env', 3)
+      svc.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
         .subscribe((stats: MemoryStat[]) => {
           expect(stats).toEqual([
             new ScaledMemoryStat(3, 3, 3),
@@ -1105,6 +1113,10 @@ describe('DeploymentsService', () => {
         });
       serviceUpdater.next();
       serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
+      });
     });
   });
 
@@ -1192,7 +1204,8 @@ describe('DeploymentsService', () => {
         ));
       });
 
-      svc.getDeploymentNetworkStat('foo-space', 'foo-app', 'foo-env', 3)
+      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
         .subscribe((stats: NetworkStat[]) => {
           expect(stats).toEqual([
             { sent: new ScaledNetworkStat(7, 7), received: new ScaledNetworkStat(5, 5) },
@@ -1203,6 +1216,148 @@ describe('DeploymentsService', () => {
           done();
         });
       serviceUpdater.next();
+      serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
+      });
+    });
+  });
+
+  describe('#getTimeseriesData', () => {
+    it('should complete without errors if the deployment disappears', (done: DoneFn) => {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 1, time: 1 },
+            { value: 2, time: 2 }
+          ],
+          memory: [
+            { value: 3, time: 3 },
+            { value: 4, time: 4 }
+          ],
+          net_rx: [
+            { value: 5, time: 5 },
+            { value: 6, time: 6 }
+          ],
+          net_tx: [
+            { value: 7, time: 7 },
+            { value: 8, time: 8 }
+          ],
+          start: 1,
+          end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
+            }
+          }
+        }
+      };
+      const initialDeploymentResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env',
+                        pods_quota: {
+                          cpucores: 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+      const updatedDeploymentResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [ ]
+                }
+              }
+            ]
+          }
+        }
+      };
+
+      let deploymentStatus: boolean = false;
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          if (!deploymentStatus) {
+            responseBody = streamingTimeseriesResponse;
+          } else {
+            connection.mockError(new Response(
+              new ResponseOptions({
+                body: 'Generic error message',
+                status: 404
+              })
+            ) as Response & Error);
+            return;
+          }
+        } else if (deploymentRegex.test(requestUrl) && !deploymentStatus) {
+          responseBody = initialDeploymentResponse;
+        } else if (deploymentRegex.test(requestUrl) && deploymentStatus) {
+          responseBody = updatedDeploymentResponse;
+        }
+
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
+        .takeUntil(Observable.timer(2000))
+        .subscribe(
+          (stat: NetworkStat[]): void => {
+            deploymentStatus = true;
+            serviceUpdater.next();
+          },
+          err => {
+            done.fail(err.message || err);
+            return Observable.empty();
+          },
+          () => {
+            expect(mockLogger.error).not.toHaveBeenCalled();
+            expect(mockNotificationsService.message).not.toHaveBeenCalled();
+            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
+            subscription.unsubscribe();
+            done();
+          }
+      );
       serviceUpdater.next();
     });
   });
@@ -1303,7 +1458,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-spaceId',
         response: httpResponse,
         expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'vertx-hello', 'stage'),
+        observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -1390,7 +1545,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-space',
         response: httpResponse,
         expected: 'http://example.com/logs',
-        observable: svc.getLogsUrl('foo-space', 'foo-app', 'foo-env'),
+        observable: svc.getLogsUrl('foo-space', 'foo-env', 'foo-app'),
         done: done
       });
     });
@@ -1423,7 +1578,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-space',
         response: httpResponse,
         expected: 'http://example.com/console',
-        observable: svc.getConsoleUrl('foo-space', 'foo-app', 'foo-env'),
+        observable: svc.getConsoleUrl('foo-space', 'foo-env', 'foo-app'),
         done: done
       });
     });
@@ -1456,7 +1611,7 @@ describe('DeploymentsService', () => {
         url: 'http://example.com/deployments/spaces/foo-space',
         response: httpResponse,
         expected: 'http://example.com/application',
-        observable: svc.getAppUrl('foo-space', 'foo-app', 'foo-env'),
+        observable: svc.getAppUrl('foo-space', 'foo-env', 'foo-app'),
         done: done
       });
     });

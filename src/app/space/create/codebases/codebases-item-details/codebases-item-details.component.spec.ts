@@ -3,7 +3,6 @@ import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { Logger } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
 
@@ -18,7 +17,6 @@ describe('Codebases Item Details Component', () => {
 
   beforeEach(() => {
     gitHubServiceMock = jasmine.createSpyObj('GitHubService', ['getRepoDetailsByUrl', 'getRepoLastCommitByUrl', 'getRepoCommitStatusByUrl', 'getRepoLicenseByUrl']);
-    loggerMock = jasmine.createSpy('Logger');
 
     TestBed.configureTestingModule({
       imports: [FormsModule, HttpModule],
@@ -29,9 +27,6 @@ describe('Codebases Item Details Component', () => {
         },
         {
           provide: GitHubService, useValue: gitHubServiceMock
-        },
-        {
-          provide: Logger, useValue: loggerMock
         }
       ],
       // Tells the compiler not to error on unknown elements and attributes
@@ -40,10 +35,22 @@ describe('Codebases Item Details Component', () => {
     fixture = TestBed.createComponent(CodebasesItemDetailsComponent);
   });
 
-  it('Init component', async(() => {
+  it('Init component with valid gitHubRepo', async(() => {
     // given
     let comp = fixture.componentInstance;
-    comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8', attributes: { type: 'git', url: 'toto/toto' } };
+    comp.codebase = {
+      'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8',
+      attributes: {
+        type: 'git',
+        url: 'toto/toto'
+      },
+      gitHubRepo: {
+        htmlUrl: 'htmlUrl',
+        fullName: 'fullName',
+        createdAt: 'createdAt',
+        pushedAt: 'pushedAt'
+      }
+    };
     const expectedLastCommit = {
       'ref': '',
       'url': 'toto/toto',
@@ -66,6 +73,32 @@ describe('Codebases Item Details Component', () => {
     expect(gitHubServiceMock.getRepoLastCommitByUrl).toHaveBeenCalled();
     expect(gitHubServiceMock.getRepoLicenseByUrl).toHaveBeenCalled();
     expect(gitHubServiceMock.getRepoCommitStatusByUrl).toHaveBeenCalled();
+
+    expect(comp.codebase.gitHubRepo.createdAt).toEqual(expectedGitHubRepoDetails.created_at);
+    expect(comp.codebase.gitHubRepo.fullName).toEqual(expectedGitHubRepoDetails.full_name);
+    expect(comp.codebase.gitHubRepo.htmlUrl).toEqual(expectedGitHubRepoDetails.html_url);
+    expect(comp.codebase.gitHubRepo.pushedAt).toEqual(expectedGitHubRepoDetails.pushed_at);
+  }));
+
+  it('Init component without valid gitHubRepo', async(() => {
+    // given
+    let comp = fixture.componentInstance;
+    comp.codebase = {
+      'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8',
+      attributes: {
+        type: 'git',
+        url: 'toto/toto'
+      }
+    };
+    fixture.detectChanges();
+
+    // when init
+
+    // then
+    expect(gitHubServiceMock.getRepoDetailsByUrl).not.toHaveBeenCalled();
+    expect(gitHubServiceMock.getRepoLastCommitByUrl).not.toHaveBeenCalled();
+    expect(gitHubServiceMock.getRepoLicenseByUrl).not.toHaveBeenCalled();
+    expect(gitHubServiceMock.getRepoCommitStatusByUrl).not.toHaveBeenCalled();
   }));
 
 });

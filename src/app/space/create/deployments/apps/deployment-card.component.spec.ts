@@ -216,7 +216,7 @@ describe('DeploymentCardComponent async tests', () => {
       const de: DebugElement = fixture.debugElement.query(By.directive(FakeDeleteDeploymentModal));
       expect(mockSvc.deleteDeployment).not.toHaveBeenCalled();
       de.componentInstance.deleteEvent.emit();
-      expect(mockSvc.deleteDeployment).toHaveBeenCalled();
+      expect(mockSvc.deleteDeployment).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     }));
 
   });
@@ -289,8 +289,15 @@ describe('DeploymentCardComponent', () => {
   it('should set versionLabel from mockSvc.getVersion result', function(this: Context) {
     let de: DebugElement = this.fixture.debugElement.query(By.css('#versionLabel'));
     let el: HTMLElement = de.nativeElement;
-    expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockAppId', 'mockEnvironment');
+    expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     expect(el.textContent).toEqual('1.2.3');
+  });
+
+  it('should invoke deployments service calls with the correct arguments', function(this: Context) {
+    expect(mockSvc.isApplicationDeployedInEnvironment).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockSvc.getLogsUrl).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockSvc.getConsoleUrl).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockSvc.getAppUrl).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
   });
 
   it('should not display inactive environments', fakeAsync(function(this: Context) {

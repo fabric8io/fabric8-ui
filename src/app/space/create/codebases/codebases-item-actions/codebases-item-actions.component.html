@@ -3,14 +3,18 @@
     <span class="fa fa-ellipsis-v"></span>
   </button>
   <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
-    <li [ngClass]="{'disabled': workspaceBusy}"
-        [attr.role]="menuitem">
-      <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!workspaceBusy"
+    <li [ngClass]="{'disabled': workspaceBusy || !codebase.gitHubRepo}"
+        [attr.role]="'menuitem'">
+      <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!workspaceBusy && codebase.gitHubRepo; else createDisabled"
          (click)="createAndOpenWorkspace()">Create workspace</a>
-      <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="workspaceBusy"
-         tooltip="Waiting for Che..." disabled>Create workspace</a>
+      <ng-template #createDisabled>
+        <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="workspaceBusy"
+          tooltip="Waiting for Che..." disabled>Create workspace</a>
+        <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!codebase.gitHubRepo"
+          tooltip="GitHub repository is not accessible" disabled>Create workspace</a>
+      </ng-template>
     </li>
-    <li [attr.role]="menuitem">
+    <li [attr.role]="'menuitem'">
       <a href="javascript:void(0)" class="dropdown-item secondary-action"
          (click)="confirmDeleteCodebase($event)">Remove codebase</a>
     </li>

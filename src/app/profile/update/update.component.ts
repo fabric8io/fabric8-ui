@@ -320,8 +320,11 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   private getTransientProfile(): ExtProfile {
     let profile = this.gettingStartedService.createTransientProfile();
+    // Delete extra information that make the update fails if present
     delete profile.username;
-
+    if (profile) {
+      delete profile['registrationCompleted'];
+    }
     if (this.bio !== undefined && this.bio.length > 0) {
       profile.bio = this.bio.trim();
     }

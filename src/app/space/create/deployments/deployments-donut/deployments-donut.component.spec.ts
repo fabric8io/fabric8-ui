@@ -68,6 +68,10 @@ describe('DeploymentsDonutComponent', () => {
       component.environment = { name: 'environmentName' } as Environment;
     });
 
+  it('should get the pods with the correct arguments', function(this: Context) {
+    expect(mockSvc.getPods).toHaveBeenCalledWith('space', 'environmentName', 'application');
+  });
+
   it('should use pods data for initial desired replicas', function(this: Context) {
     expect(this.testedDirective.desiredReplicas).toEqual(2);
   });
