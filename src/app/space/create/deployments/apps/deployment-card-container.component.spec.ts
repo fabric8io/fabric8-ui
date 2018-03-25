@@ -12,8 +12,6 @@ import {
   TestContext
 } from 'testing/test-context';
 
-import { Environment } from '../models/environment';
-
 import { DeploymentCardContainerComponent } from './deployment-card-container.component';
 
 @Component({
@@ -28,16 +26,13 @@ class HostComponent { }
 class FakeDeploymentCardComponent {
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
 }
 
 describe('DeploymentCardContainer', () => {
   type Context = TestContext<DeploymentCardContainerComponent, HostComponent>;
 
-  const environments: Environment[] = [
-    { name: 'envId1' },
-    { name: 'envId2' }
-  ];
+  const environments: string[] = ['envId1', 'envId2'];
 
   initContext(DeploymentCardContainerComponent, HostComponent,
     {
@@ -54,7 +49,7 @@ describe('DeploymentCardContainer', () => {
       this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
     expect(arrayOfComponents.length).toEqual(environments.length);
 
-    environments.forEach((envData: Environment, index: number) => {
+    environments.forEach((envData: string, index: number) => {
       const cardComponent = arrayOfComponents[index].componentInstance;
       expect(cardComponent.applicationId).toEqual('app');
       expect(cardComponent.environment).toEqual(environments[index]);

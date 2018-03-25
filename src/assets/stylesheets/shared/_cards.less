@@ -7,6 +7,9 @@
 .f8 {
   &-card {
     height: 440px;
+    &-lg {
+      height: 650px;
+    }
     &__activity {
       max-height: 300px;
     }
@@ -93,14 +96,5 @@
     &-link {
       padding-left: 10px;
     }
-  }
-}
-
-// creates an alternating row stripe for lists
-// similar to how tables use the .table-striped class
-.list-view-pf-striped .list-group-item:nth-of-type(2n) {
-  background-color: @color-pf-black-150;
-  &:hover {
-    background-color: #edf8ff;
   }
 }

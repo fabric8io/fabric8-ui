@@ -19,7 +19,6 @@ import {
 } from 'testing/test-context';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
@@ -57,7 +56,7 @@ import 'patternfly/dist/js/patternfly-settings.js';
 class HostComponent {
   collapsed: boolean = false;
   applicationId: string = 'mockAppId';
-  environment: Environment = { name: 'mockEnvironment' };
+  environment: string = 'mockEnvironment';
   spaceId: string = 'mockSpaceId';
   detailsActive: boolean = true;
 }
@@ -70,7 +69,7 @@ class FakeDeploymentsDonutComponent {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
 }
 
 @Component({

@@ -3,7 +3,6 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Spaces } from 'ngx-fabric8-wit';
 import { Observable, Subscription } from 'rxjs';
 
-import { Environment } from './models/environment';
 import { DeploymentStatusService } from './services/deployment-status.service';
 import { DeploymentsService } from './services/deployments.service';
 
@@ -20,7 +19,7 @@ import { DeploymentsService } from './services/deployments.service';
 export class DeploymentsComponent implements OnDestroy, OnInit {
 
   spaceId: Observable<string>;
-  environments: Observable<Environment[]>;
+  environments: Observable<string[]>;
   applications: Observable<string[]>;
 
   private subscriptions: Subscription[] = [];

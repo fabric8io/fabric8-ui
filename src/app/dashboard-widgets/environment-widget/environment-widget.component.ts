@@ -5,8 +5,6 @@ import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscripti
 
 import { Context, Contexts, Spaces } from 'ngx-fabric8-wit';
 
-import { Environment as ModelEnvironment } from '../../../app/space/create/deployments/models/environment';
-
 import {
   ApplicationAttributesOverview,
   DeploymentsService,

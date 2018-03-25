@@ -76,3 +76,118 @@
   }
   @media (max-width: 768px) { transform: none; }
 }
+
+
+.f8-home {
+  &-wrapper {
+    margin-top: 0;
+    min-height: 100%;
+  }
+  &-carousel-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    height: 75%;
+    width: 15%;
+  }
+
+  &-banner {
+    max-height: 260px;
+    background-color: @color-pf-black-900;
+    color: @color-pf-white;
+    &-whats-new {
+      display: inline-flex;
+      align-items: center;
+      height: 35px;
+      font-weight: 700;
+      .badge {
+        margin-right: 5px;
+        border-radius: 50%;
+      }
+    }
+    .carousel {
+      height: 225px;
+      &-background {
+        display: block;
+        height: 200px;
+        width: 100%;
+      }
+      &-control {
+        &.carousel-control-prev,
+        &.carousel-control-next {
+          &.disabled {
+            display: none; // hides the previous & next arrow in the carousel when on the first or last slide
+          }
+        }
+        &:focus,
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      &-caption {
+        top: 0;
+        right: 50%;
+        left: 10%;
+        text-align: left;
+        padding-top: 0;
+        padding-bottom: 0;
+        /* Small devices (tablets, 768px and up) */
+        @media (min-width: @screen-sm-min) {
+          left: 15%;
+        }
+        /* Medium devices (desktops, 992px and up) */
+        @media (min-width: @screen-md-min) {
+          left: 12%;
+        }
+        /* Large devices (large desktops, 1200px and up) */
+        @media (min-width: @screen-lg-min) {
+          left: 17%;
+        }
+        /* Extra Large devices (x-large desktops, 1440px and up) */
+        @media (min-width: 1440px) {
+          left: 25%;
+        }
+        h1 {
+          margin-top: 0;
+        }
+        p {
+          max-width: 65%;
+        }
+      }
+      &-indicators {
+        &.active {
+          margin-top: 1px;
+          margin-right: 5px;
+          margin-bottom: 1px;
+          margin-left: 5px;
+        }
+        li {
+          width: 35px;
+          height: 6px;
+          margin-top: 1px;
+          margin-right: 5px;
+          margin-bottom: 1px;
+          margin-left: 5px;
+          border-radius: 0;
+          &.active {
+            width: 35px;
+            height: 5px;
+            margin-top: 1px;
+            margin-right: 5px;
+            margin-left: 5px;
+            margin-bottom: 1px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.list-group-item-text {
+  width: 540px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
