@@ -6,6 +6,8 @@ import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 
+import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-work-item-widget',
@@ -22,12 +24,14 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   subscriptions: Subscription[] = [];
   spaces: Space[] = [];
   workItems: WorkItem[] = [];
+  newHomeDashboardEnabled: boolean = false;
 
   constructor(
       private spacesService: Spaces,
       private spaceService: SpaceService,
       private workItemService: WorkItemService,
-      private userService: UserService) {
+      private userService: UserService,
+      private featureTogglesService: FeatureTogglesService) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
       if (user.attributes) {
@@ -39,6 +43,9 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
     this.subscriptions.push(spacesService.recent.subscribe(spaces => {
       this.recentSpaces = spaces;
       this.fetchRecentSpace();
+    }));
+    this.subscriptions.push(featureTogglesService.getFeature('newHomeDashboard').subscribe((feature) => {
+      this.newHomeDashboardEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
     }));
   }
 

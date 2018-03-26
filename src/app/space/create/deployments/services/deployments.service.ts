@@ -41,7 +41,6 @@ import {
 } from 'lodash';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment as ModelEnvironment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods as ModelPods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
@@ -240,7 +239,7 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged(deepEqual);
   }
 
-  getEnvironments(spaceId: string): Observable<ModelEnvironment[]> {
+  getEnvironments(spaceId: string): Observable<string[]> {
     // Note: Sorting and filtering out test should ideally be moved to the backend
     return this.getEnvironmentsResponse(spaceId)
       .map((envs: EnvironmentStat[]) => envs || [])
@@ -248,10 +247,9 @@ export class DeploymentsService implements OnDestroy {
       .map((envs: EnvironmentAttributes[]) => envs.sort((a, b) => -1 * a.name.localeCompare(b.name)))
       .map((envs: EnvironmentAttributes[]) => envs
         .filter((env: EnvironmentAttributes) => env.name !== 'test')
-        .map((env: EnvironmentAttributes) => ({ name: env.name } as ModelEnvironment))
+        .map((env: EnvironmentAttributes) => env.name)
       )
-      .distinctUntilChanged((p: ModelEnvironment[], q: ModelEnvironment[]) =>
-        deepEqual(new Set<string>(p.map(v => v.name)), new Set<string>(q.map(v => v.name))));
+      .distinctUntilChanged((p: string[], q: string[]) => deepEqual(new Set<string>(p), new Set<string>(q)));
   }
 
   getAppsAndEnvironments(spaceId: string): Observable<ApplicationAttributesOverview[]> {

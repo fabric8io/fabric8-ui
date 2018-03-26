@@ -37,7 +37,6 @@ import { createMock } from 'testing/mock';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import {
   DeploymentStatusService,
@@ -61,7 +60,7 @@ class FakeDeploymentsDonutComponent {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
 }
 
 @Component({
@@ -102,7 +101,7 @@ class FakeDeploymentStatusIconComponent {
 class FakeDeploymentDetailsComponent {
   @Input() collapsed: boolean;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
   @Input() spaceId: string;
   @Input() active: boolean;
 }
@@ -166,7 +165,7 @@ describe('DeploymentCardComponent async tests', () => {
 
     component.spaceId = 'mockSpaceId';
     component.applicationId = 'mockAppId';
-    component.environment = { name: 'mockEnvironment' } as Environment;
+    component.environment = 'mockEnvironment';
 
     spyOn(component, 'openModal');
     fixture.detectChanges();
@@ -278,7 +277,7 @@ describe('DeploymentCardComponent', () => {
     (component: DeploymentCardComponent) => {
       component.spaceId = 'mockSpaceId';
       component.applicationId = 'mockAppId';
-      component.environment = { name: 'mockEnvironment' } as Environment;
+      component.environment = 'mockEnvironment';
     });
 
   it('should be active', function(this: Context) {

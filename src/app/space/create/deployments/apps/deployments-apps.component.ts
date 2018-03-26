@@ -18,7 +18,6 @@ import {
 } from 'rxjs';
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
-import { Environment } from '../models/environment';
 import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 
 @Component({
@@ -29,7 +28,7 @@ import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
   @Input() applications: Observable<string[]>;
-  @Input() environments: Observable<Environment[]>;
+  @Input() environments: Observable<string[]>;
   @Input() spaceId: Observable<string>;
 
   filteredApplicationsList: string[];

@@ -16,7 +16,6 @@ import { Observable, Subscription } from 'rxjs';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import {
   DeploymentStatusService,
@@ -46,7 +45,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
 
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
   @ViewChild(DeleteDeploymentModal) deleteDeploymentModal: DeleteDeploymentModal;
 
   active: boolean = false;
@@ -82,28 +81,28 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.toolTip = DeploymentCardComponent.OK_TOOLTIP;
 
     this.subscriptions.push(
-      this.statusService.getAggregateStatus(this.spaceId, this.environment.name, this.applicationId)
+      this.statusService.getAggregateStatus(this.spaceId, this.environment, this.applicationId)
         .subscribe((status: Status): void => this.changeStatus(status))
     );
 
     this.subscriptions.push(
       this.deploymentsService
-        .isApplicationDeployedInEnvironment(this.spaceId, this.environment.name, this.applicationId)
+        .isApplicationDeployedInEnvironment(this.spaceId, this.environment, this.applicationId)
         .subscribe((active: boolean) => {
           this.active = active;
 
           if (active) {
             this.version =
-              this.deploymentsService.getVersion(this.spaceId, this.environment.name, this.applicationId);
+              this.deploymentsService.getVersion(this.spaceId, this.environment, this.applicationId);
 
             this.logsUrl =
-              this.deploymentsService.getLogsUrl(this.spaceId, this.environment.name, this.applicationId);
+              this.deploymentsService.getLogsUrl(this.spaceId, this.environment, this.applicationId);
 
             this.consoleUrl =
-              this.deploymentsService.getConsoleUrl(this.spaceId, this.environment.name, this.applicationId);
+              this.deploymentsService.getConsoleUrl(this.spaceId, this.environment, this.applicationId);
 
             this.appUrl =
-              this.deploymentsService.getAppUrl(this.spaceId, this.environment.name, this.applicationId);
+              this.deploymentsService.getAppUrl(this.spaceId, this.environment, this.applicationId);
           }
         })
     );
@@ -156,7 +155,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.subscriptions.push(
       this.deploymentsService.deleteDeployment(
         this.spaceId,
-        this.environment.name,
+        this.environment,
         this.applicationId
         ).subscribe(
           (success: string) => {
