@@ -9,22 +9,29 @@ import {
 import { Observable } from 'rxjs';
 
 import {
+  Context
+} from 'ngx-fabric8-wit';
+import {
   HelperService,
   ProjectSummaryService,
   Summary,
   TokenProvider
 } from 'ngx-forge';
 
+import { ContextService } from '../../../shared/context.service';
+
 @Injectable()
 export class AppLauncherProjectSummaryService implements ProjectSummaryService {
 
   // TODO: remove the hardcodes
   private END_POINT: string = '';
-  private API_BASE: string = 'osio/launch';
+  private API_BASE_CREATE: string = 'osio/launch';
+  private API_BASE_IMPORT: string = 'osio/import';
   private ORIGIN: string = '';
 
   constructor(
     private http: Http,
+    private context: ContextService,
     private helperService: HelperService,
     private tokenProvider: TokenProvider
   ) {
@@ -32,6 +39,41 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
       this.END_POINT = this.helperService.getBackendUrl();
       this.ORIGIN = this.helperService.getOrigin();
     }
+  }
+
+  /**
+   * Set up the project for the given summary
+   *
+   * @param {Summary} summary The project summary
+   * @returns {Observable<boolean>}
+   */
+  setup(summary: Summary, spaceId: string, spaceName: string, isImport: boolean): Observable<boolean> {
+    let summaryEndPoint = '';
+    let payload = null;
+    if (isImport) {
+      summaryEndPoint = this.END_POINT + this.API_BASE_IMPORT;
+      payload = this.getImportPayload(summary, spaceId, spaceName);
+    } else {
+      summaryEndPoint = this.END_POINT + this.API_BASE_CREATE;
+      payload = this.getCreatePayload(summary, spaceId, spaceName);
+    }
+    return this.options.flatMap((option) => {
+      return this.http.post(summaryEndPoint, payload, option)
+        .map(response => {
+          console.log(response.json());
+          return response.json();
+        })
+        .catch(this.handleError);
+    });
+  }
+
+  /**
+   * Get the current context details
+   *
+   * @returns {Observable<Context>}
+   */
+  getCurrentContext(): Observable<Context> {
+    return this.context.current;
   }
 
   private get options(): Observable<RequestOptions> {
@@ -46,34 +88,6 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
         headers: headers
       });
     }));
-  }
-
-  /**
-   * Set up the project for the given summary
-   *
-   * @param {Summary} summary The project summary
-   * @returns {Observable<boolean>}
-   */
-  setup(summary: Summary): Observable<boolean> {
-    let summaryEndPoint: string = this.END_POINT + this.API_BASE;
-    return this.options.flatMap((option) => {
-      return this.http.post(summaryEndPoint, this.getPayload(summary), option)
-        .map(response => {
-          console.log(response.json());
-          return response.json();
-        })
-        .catch(this.handleError);
-    });
-  }
-
-  /**
-   * Verify the project for the given summary
-   *
-   * @param {Summary} summary The project summary
-   * @returns {Observable<boolean>}
-   */
-  verify(summary: Summary): Observable<boolean> {
-    return Observable.of(true);
   }
 
   private handleError(error: Response | any) {
@@ -91,7 +105,7 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     return Observable.throw(errMsg);
   }
 
-  private getPayload(summary: Summary) {
+  private getCreatePayload(summary: Summary, spaceId: string, spaceName: string) {
     let payload =
     'missionId=' + summary.mission.id +
     '&runtimeId=' + summary.runtime.id +
@@ -101,8 +115,22 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     '&projectVersion=' + summary.dependencyCheck.projectVersion +
     '&groupId=' + summary.dependencyCheck.groupId +
     '&artifactId=' + summary.dependencyCheck.mavenArtifact +
-    '&spacePath=' + summary.dependencyCheck.spacePath +
-    '&gitRepository=' + summary.gitHubDetails.repository;
+    '&spacePath=' + spaceName +
+    '&gitRepository=' + summary.gitHubDetails.repository +
+    '&spaceId=' + spaceId;
+    if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
+      payload += '&gitOrganization=' + summary.gitHubDetails.organization;
+    }
+    return payload;
+  }
+
+  private getImportPayload(summary: Summary, spaceId: string, spaceName: string) {
+    let payload =
+    '&pipelineId=' + summary.pipeline.id +
+    '&projectName=' + summary.dependencyCheck.projectName +
+    '&spacePath=' + spaceName +
+    '&gitRepository=' + summary.gitHubDetails.repository +
+    '&spaceId=' + spaceId;
     if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
       payload += '&gitOrganization=' + summary.gitHubDetails.organization;
     }

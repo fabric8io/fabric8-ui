@@ -6,17 +6,11 @@ import {
   ViewChild
 } from '@angular/core';
 
-import {
-  debounce,
-  last
-} from 'lodash';
+import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, Subscription } from 'rxjs';
 
 import { NotificationsService } from 'app/shared/notifications.service';
-import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
 import {
   DeploymentStatusService,
   Status,

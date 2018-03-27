@@ -45,7 +45,6 @@ import {
 } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentCardComponent } from './deployment-card.component';
-import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 
 @Component({
   template: '<deployment-card></deployment-card>'
