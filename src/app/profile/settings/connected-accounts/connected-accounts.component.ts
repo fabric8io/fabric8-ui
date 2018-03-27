@@ -30,9 +30,9 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   cluster: string;
 
   constructor(private contexts: Contexts,
-              private auth: AuthenticationService,
-              private userService: UserService,
-              private providerService: ProviderService) {
+    private auth: AuthenticationService,
+    private userService: UserService,
+    private providerService: ProviderService) {
     this.subscriptions.push(auth.gitHubToken.subscribe(token => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
     }));
@@ -68,6 +68,11 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     });
   }
 
+  public refreshGitHub(): void {
+    // call linking api again to reconnect if a connection doesn't exist
+    this.connectGitHub();
+  }
+
   public connectGitHub(): void {
     this.providerService.linkGitHub(window.location.href);
   }
@@ -76,12 +81,8 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     this.providerService.linkOpenShift(this.cluster, window.location.href);
   }
 
-  public refreshGitHub(): void {
-    // call linking api again to reconnect if a connection doesn't exist
-    this.connectGitHub();
-  }
-
   public refreshOpenShift(): void {
+    this.connectGitHub();
     this.providerService.disconnectOpenShift(this.cluster).subscribe(() => {
       this.connectOpenShift();
     });

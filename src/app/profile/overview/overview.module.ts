@@ -4,7 +4,6 @@ import { Http } from '@angular/http';
 
 import { TabsModule } from 'ngx-bootstrap';
 
-import { ConnectedAccountsModule } from './connected-accounts/connected-accounts.module';
 import { NotificationsPageModule } from './notifications/notifications-page.module';
 import { OverviewRoutingModule } from './overview-routing.module';
 import { OverviewComponent } from './overview.component';
@@ -17,8 +16,7 @@ import { WorkItemsModule } from './work-items/work-items.module';
     OverviewRoutingModule,
     SpacesModule,
     TabsModule.forRoot(),
-    WorkItemsModule,
-    ConnectedAccountsModule
+    WorkItemsModule
   ],
   declarations: [ OverviewComponent ]
 })

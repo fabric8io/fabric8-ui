@@ -7,16 +7,13 @@ import { NgArrayPipesModule } from 'angular-pipes';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { WidgetsModule } from 'ngx-widgets';
 
+import { ConnectedAccountsRoutingModule } from './connected-accounts-routing.module';
 import { ConnectedAccountsComponent } from './connected-accounts.component';
-
 @NgModule({
   imports: [
     RouterModule,
     CommonModule,
-    FormsModule,
-    WidgetsModule,
-    NgArrayPipesModule,
-    Fabric8WitModule
+    ConnectedAccountsRoutingModule
   ],
   declarations: [ConnectedAccountsComponent],
   exports: [ConnectedAccountsComponent]

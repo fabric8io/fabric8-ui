@@ -27,44 +27,6 @@ describe('Connected Accounts Component', () => {
 
   type Context = TestContext<ConnectedAccountsComponent, SampleTestComponent>;
 
-  describe('User has only GitHub account connected', () => {
-
-    let contextsMock: any = jasmine.createSpy('Contexts');
-    let authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
-    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'getOpenShiftStatus']);
-    let userServiceMock: any = jasmine.createSpy('UserService');
-
-    beforeAll(() => {
-      authMock.gitHubToken = Observable.of('gh-test-user');
-      //authMock.openShiftToken = Observable.empty();
-      authMock.isOpenShiftConnected.and.returnValue(Observable.of(false));
-      contextsMock.current = Observable.empty();
-      userServiceMock.loggedInUser = Observable.empty();
-      userServiceMock.currentLoggedInUser = {};
-      providersMock.getGitHubStatus.and.returnValue(Observable.of({'username': 'username'}));
-      providersMock.getOpenShiftStatus.and.returnValue(Observable.throw('failure'));
-    });
-
-    initContext(ConnectedAccountsComponent, SampleTestComponent,  {
-      providers: [ { provide: AuthenticationService, useValue: authMock },
-        { provide: Contexts, useValue: contextsMock },
-        { provide: UserService, useValue: userServiceMock },
-        { provide: ProviderService, useValue: providersMock }]
-    });
-
-    it('should have GitHub connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('username');
-
-    });
-
-    it('should have absence of OpenShift connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('OpenShift Not Connected');
-    });
-
-  });
-
   describe('User has only OpenShift account connected', () => {
 
     let contextsMock: any = jasmine.createSpy('Contexts');

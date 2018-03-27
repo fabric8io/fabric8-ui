@@ -6,7 +6,14 @@ import { SettingsComponent } from './settings.component';
 const routes: Routes = [
   {
     path: '',
-    component: SettingsComponent
+    component: SettingsComponent,
+    children: [
+      {
+        // Preserves the navbar and defaults to connected accounts
+        path: '',
+        loadChildren: './connected-accounts/connected-accounts.module#ConnectedAccountsModule'
+      }
+    ]
   }
 ];
 
