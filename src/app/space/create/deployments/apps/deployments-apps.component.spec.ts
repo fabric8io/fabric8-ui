@@ -7,17 +7,14 @@ import {
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import {
-  FilterEvent,
-  SortEvent
-} from 'patternfly-ng';
+import { FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent } from 'patternfly-ng/sort';
 import { Observable } from 'rxjs';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
 
-import { Environment } from '../models/environment';
 import { DeploymentsAppsComponent } from './deployments-apps.component';
 
 @Component({
@@ -31,7 +28,7 @@ class HostComponent { }
 })
 class FakeDeploymentCardContainerComponent {
   @Input() spaceId: string;
-  @Input() environments: Observable<Environment[]>;
+  @Input() environments: Observable<string[]>;
   @Input() application: string;
 }
 
@@ -48,10 +45,10 @@ class FakeDeploymentsToolbarComponent {
 describe('DeploymentsAppsComponent', () => {
   type Context = TestContext<DeploymentsAppsComponent, HostComponent>;
 
-  const environments: Environment[] = [{ name: 'envId1' }, { name: 'envId2' }];
+  const environments: string[] = ['envId1', 'envId2'];
   const applications: string[] = ['first', 'second'];
   const spaceId: Observable<string> = Observable.of('spaceId');
-  const mockEnvironments: Observable<Environment[]> = Observable.of(environments);
+  const mockEnvironments: Observable<string[]> = Observable.of(environments);
   const mockApplications: Observable<string[]> = Observable.of(applications);
 
   initContext(DeploymentsAppsComponent, HostComponent,

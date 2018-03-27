@@ -1,37 +1,79 @@
-<div id="recent-pipelines-card" class="pipelines-widget card-pf f8-card">
-  <div class="card-pf-heading f8-card-heading">
-    <h2 class="card-pf-title">
-      Recent Active Pipelines
-      <span id="recent-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount | async}}</span>
-    </h2>
-  </div>
-  <div class="card-pf-body f8-card-body">
-    <div class="f8-blank-slate-card blank-slate-recent-pipelines-card" *ngIf="!(buildConfigsCount | async)">
-      <h3>Pipelines reflect integration and deployment stages that code goes through</h3>
-      <p>
-        Pipelines display here when you commit and build your codebase.
-      </p>
+<f8-feature-toggle featureName="newHomeDashboard" restricted="dev">
+  <div id="recent-apps-card" class="card-pf f8-card-lg" user-level>
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        Recent Workspaces
+      </h2>
     </div>
-    <ul id="recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">
-      <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async" >
-        <div class="f8-card__pipeline-column">
-          <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
-          <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
-          <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, buildconfig.labels['space'], 'create', 'pipelines']" class="f8-card__pipeline-column-name">
-            {{buildconfig.name}}
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card">
+        <h3>Create a workspace</h3>
+        <p>Learn how to
+          <a href="https://docs.openshift.io/user-guide.html#importing_a_codebase" target="top">
+            create a workspace
           </a>
-          <span>|</span>
-          <a [href]="buildconfig.openShiftConsoleUrl" target="_blank" class="f8-card__pipeline-column-build">
-            Build #{{buildconfig.lastVersion}} <i class="fa fa-external-link" aria-hidden="true"></i>
-          </a>
-        </div>
-        <div class="f8-card__pipeline-column-start">
-          Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}
-        </div>
-        <div class="f8-card__pipeline-column-status">
-          Status: <b>{{buildconfig.statusPhase || 'Unknown'}}</b>
-        </div>
-      </li>
-    </ul>
+          by importing a codebase.
+        </p>
+      </div>
+      <!-- A list of the 5 most recent Workspaces will be displayed in place of the Blank Slate. -->
+      <!-- <div class="home-space-list-result">
+        <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
+          <li class="list-group-item" *ngFor="let space of recent">
+            <div class="list-view-pf-main-info">
+              <div class="list-view-pf-body">
+                <div class="list-view-pf-description">
+                  <div class="list-group-item-text">
+                    <a>
+                      Workspace name
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div> -->
+    </div>
   </div>
-</div>
+  <div id="recent-pipelines-card" class="pipelines-widget card-pf f8-card" default-level>
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        Recent Active Pipelines
+        <span id="recent-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount | async}}</span>
+      </h2>
+    </div>
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card blank-slate-recent-pipelines-card" *ngIf="!(buildConfigsCount | async)">
+        <h3>Pipelines reflect integration and deployment stages that code goes through</h3>
+        <p>
+          Pipelines display here when you commit and build your codebase.
+        </p>
+      </div>
+      <ul id="recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">
+        <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async">
+          <div class="f8-card__pipeline-column">
+            <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
+            <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
+            <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, buildconfig.labels['space'], 'create', 'pipelines']"
+              class="f8-card__pipeline-column-name">
+              {{buildconfig.name}}
+            </a>
+            <span>|</span>
+            <a [href]="buildconfig.openShiftConsoleUrl" target="_blank" class="f8-card__pipeline-column-build">
+              Build #{{buildconfig.lastVersion}}
+              <i class="fa fa-external-link" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="f8-card__pipeline-column-start">
+            Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}
+          </div>
+          <div class="f8-card__pipeline-column-status">
+            Status:
+            <b>{{buildconfig.statusPhase || 'Unknown'}}</b>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</f8-feature-toggle>

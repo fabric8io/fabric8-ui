@@ -26,7 +26,7 @@ import {
 } from 'ngx-bootstrap/dropdown';
 import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 
-import { ChartModule } from 'patternfly-ng';
+import { ChartModule } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,
@@ -37,7 +37,6 @@ import { createMock } from 'testing/mock';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import {
   DeploymentStatusService,
@@ -46,7 +45,6 @@ import {
 } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentCardComponent } from './deployment-card.component';
-import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 
 @Component({
   template: '<deployment-card></deployment-card>'
@@ -61,7 +59,7 @@ class FakeDeploymentsDonutComponent {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
 }
 
 @Component({
@@ -102,7 +100,7 @@ class FakeDeploymentStatusIconComponent {
 class FakeDeploymentDetailsComponent {
   @Input() collapsed: boolean;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
   @Input() spaceId: string;
   @Input() active: boolean;
 }
@@ -166,7 +164,7 @@ describe('DeploymentCardComponent async tests', () => {
 
     component.spaceId = 'mockSpaceId';
     component.applicationId = 'mockAppId';
-    component.environment = { name: 'mockEnvironment' } as Environment;
+    component.environment = 'mockEnvironment';
 
     spyOn(component, 'openModal');
     fixture.detectChanges();
@@ -278,7 +276,7 @@ describe('DeploymentCardComponent', () => {
     (component: DeploymentCardComponent) => {
       component.spaceId = 'mockSpaceId';
       component.applicationId = 'mockAppId';
-      component.environment = { name: 'mockEnvironment' } as Environment;
+      component.environment = 'mockEnvironment';
     });
 
   it('should be active', function(this: Context) {

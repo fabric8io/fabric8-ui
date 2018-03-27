@@ -14,7 +14,6 @@ import {
 } from 'testing/test-context';
 
 import { NotificationsService } from 'app/shared/notifications.service';
-import { Environment } from '../models/environment';
 import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
 import { DeploymentsService } from '../services/deployments.service';
@@ -65,7 +64,7 @@ describe('DeploymentsDonutComponent', () => {
       component.mini = false;
       component.spaceId = 'space';
       component.applicationId = 'application';
-      component.environment = { name: 'environmentName' } as Environment;
+      component.environment = 'environmentName';
     });
 
   it('should get the pods with the correct arguments', function(this: Context) {
@@ -194,7 +193,7 @@ describe('DeploymentsDonutComponent error handling', () => {
       component.mini = false;
       component.spaceId = 'space';
       component.applicationId = 'application';
-      component.environment = { name: 'environmentName' } as Environment;
+      component.environment = 'environmentName';
     });
 
 

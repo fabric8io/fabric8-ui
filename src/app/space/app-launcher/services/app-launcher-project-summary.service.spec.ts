@@ -7,6 +7,7 @@ import {
 } from 'ngx-forge';
 
 import { FABRIC8_FORGE_API_URL } from 'app/shared/runtime-console/fabric8-ui-forge-api';
+import { ContextService } from '../../../shared/context.service';
 import { NewForgeConfig } from '../shared/new-forge.config';
 import { AppLauncherProjectSummaryService } from './app-launcher-project-summary.service';
 
@@ -19,6 +20,7 @@ function initTestBed() {
         AuthHelperService,
         HelperService,
         TokenProvider,
+        { provide: ContextService, useValue: {} },
         { provide: Config, useClass: NewForgeConfig },
         { provide: FABRIC8_FORGE_API_URL, useValue: 'url-here' },
         {

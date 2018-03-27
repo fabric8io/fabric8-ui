@@ -5,7 +5,7 @@ import { Http } from '@angular/http';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-import { ToolbarModule } from 'patternfly-ng';
+import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 
 import { PipelineModule } from 'a-runtime-console/index';

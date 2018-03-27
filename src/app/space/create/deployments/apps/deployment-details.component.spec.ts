@@ -19,7 +19,6 @@ import {
 } from 'testing/test-context';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
@@ -34,15 +33,12 @@ import {
 } from '../services/deployments.service';
 import { DeploymentDetailsComponent } from './deployment-details.component';
 
-import { times } from 'lodash';
-
 // Makes patternfly charts available
 import {
   ChartDefaults,
-  ChartModule,
   SparklineConfig,
   SparklineData
-} from 'patternfly-ng';
+} from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({
@@ -57,7 +53,7 @@ import 'patternfly/dist/js/patternfly-settings.js';
 class HostComponent {
   collapsed: boolean = false;
   applicationId: string = 'mockAppId';
-  environment: Environment = { name: 'mockEnvironment' };
+  environment: string = 'mockEnvironment';
   spaceId: string = 'mockSpaceId';
   detailsActive: boolean = true;
 }
@@ -70,7 +66,7 @@ class FakeDeploymentsDonutComponent {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
 }
 
 @Component({

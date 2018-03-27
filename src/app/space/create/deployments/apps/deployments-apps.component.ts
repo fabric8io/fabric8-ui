@@ -6,20 +6,14 @@ import {
 } from '@angular/core';
 
 import { cloneDeep } from 'lodash';
-import {
-  Filter,
-  FilterEvent,
-  SortEvent,
-  SortField
-} from 'patternfly-ng';
+import { Filter, FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
   Observable,
   Subscription
 } from 'rxjs';
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
-import { Environment } from '../models/environment';
-import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 
 @Component({
   selector: 'deployments-apps',
@@ -29,7 +23,7 @@ import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
   @Input() applications: Observable<string[]>;
-  @Input() environments: Observable<Environment[]>;
+  @Input() environments: Observable<string[]>;
   @Input() spaceId: Observable<string>;
 
   filteredApplicationsList: string[];

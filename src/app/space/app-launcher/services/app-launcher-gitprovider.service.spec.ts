@@ -39,6 +39,7 @@ describe('Service: AppLauncherGitproviderService', () => {
     organizations: []
   } as GitHubDetails;
   let orgs = ['fabric-ui'];
+  let repos = ['fabric-ui', 'fabric-uxd'];
 
   beforeEach(() => {
     initTestBed();
@@ -85,6 +86,20 @@ describe('Service: AppLauncherGitproviderService', () => {
     });
     appLauncherGitproviderService.isGitHubRepo('fabric-ui', 'test-repo').subscribe((val) => {
         expect(val).toBeTruthy();
+    });
+  });
+
+  it('Get gitHub repos for selected organisation', () => {
+    mockService.connections.subscribe((connection: any) => {
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(repos),
+            status: 200
+          })
+        ));
+    });
+    appLauncherGitproviderService.getGitHubRepoList(orgs[0]).subscribe((val) => {
+        expect(val).toEqual(repos);
     });
   });
 

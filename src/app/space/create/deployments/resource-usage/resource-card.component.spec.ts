@@ -8,14 +8,9 @@ import {
 
 import { createMock } from 'testing/mock';
 
-import {
-  BehaviorSubject,
-  Observable,
-  Subject
- } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
 import {
   MemoryStat,
   MemoryUnit
@@ -56,18 +51,13 @@ describe('ResourceCardComponent', () => {
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let cpuStatMock: Observable<CpuStat> = Observable.of({ used: 1, quota: 2 });
   let memoryStatMock: Observable<MemoryStat> = Observable.of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  });
-  let active: Subject<boolean> = new BehaviorSubject<boolean>(true);
 
   beforeEach(() => {
     mockSvc = createMock(DeploymentsService);
     mockSvc.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
-    mockSvc.getEnvironments.and.returnValue(Observable.of([
-      { name: 'stage' } as Environment,
-      { name: 'prod' } as Environment
-    ]));
+    mockSvc.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
     mockSvc.getEnvironmentCpuStat.and.returnValue(cpuStatMock);
     mockSvc.getEnvironmentMemoryStat.and.returnValue(memoryStatMock);
-    mockSvc.isDeployedInEnvironment.and.returnValue(active);
   });
 
   initContext(ResourceCardComponent, HostComponent,
@@ -77,16 +67,12 @@ describe('ResourceCardComponent', () => {
     },
     (component: ResourceCardComponent) => {
       component.spaceId = 'spaceId';
-      component.environment = { name: 'stage' } as Environment;
+      component.environment = 'stage';
     }
   );
 
-  it('should be active', function(this: Context) {
-    expect(this.testedDirective.active).toBeTruthy();
-  });
 
   it('should correctly request the deployed environment data', function(this: Context) {
-    expect(mockSvc.isDeployedInEnvironment).toHaveBeenCalledWith('spaceId', 'stage');
     expect(mockSvc.getEnvironmentCpuStat).toHaveBeenCalledWith('spaceId', 'stage');
     expect(mockSvc.getEnvironmentMemoryStat).toHaveBeenCalledWith('spaceId', 'stage');
   });
@@ -105,13 +91,4 @@ describe('ResourceCardComponent', () => {
     expect(memoryUtilBar.resourceUnit).toEqual('GB');
     expect(memoryUtilBar.stat).toEqual(memoryStatMock);
   });
-
-  describe('inactive environment', () => {
-    it('should not display', function(this: Context) {
-      active.next(false);
-      this.detectChanges();
-      expect(this.testedDirective.active).toBeFalsy();
-    });
-  });
-
 });

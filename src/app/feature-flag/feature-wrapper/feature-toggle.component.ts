@@ -7,11 +7,13 @@ import { Feature, FeatureTogglesService } from '../service/feature-toggles.servi
 
 @Component({
   selector: 'f8-feature-toggle',
-  template: `<ng-content *ngIf="isEnabled"></ng-content>`
+  template: `<ng-content *ngIf="isEnabled" select="[user-level]"></ng-content><ng-content *ngIf="!isEnabled" select="[default-level]"></ng-content>`
 })
 export class FeatureToggleComponent implements OnInit {
   @Input() featureName: string;
+  @Input() restricted = 'prod';
   isEnabled = false;
+  currentUrl = window.location.href;
 
   constructor(private featureService: FeatureTogglesService) {}
 
@@ -21,7 +23,12 @@ export class FeatureToggleComponent implements OnInit {
     }
 
     this.featureService.getFeature(this.featureName).subscribe((f: Feature) => {
-        this.isEnabled = f.attributes.enabled && f.attributes['user-enabled'];
+        let localHost = this.currentUrl.indexOf('localhost') > -1;
+        if (this.restricted.toLowerCase() === 'dev') {
+          this.isEnabled = f.attributes.enabled && f.attributes['user-enabled'] && localHost;
+        } else {
+          this.isEnabled = f.attributes.enabled && f.attributes['user-enabled'];
+        }
       },
       err => {
         this.isEnabled = false;

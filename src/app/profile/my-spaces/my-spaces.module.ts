@@ -5,7 +5,7 @@ import { Http } from '@angular/http';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule } from 'ngx-widgets';
-import { ListModule } from 'patternfly-ng';
+import { ListModule } from 'patternfly-ng/list';
 
 import { ForgeWizardModule } from '../../space/forge-wizard/forge-wizard.module';
 import { SpaceWizardModule } from '../../space/wizard/space-wizard.module';

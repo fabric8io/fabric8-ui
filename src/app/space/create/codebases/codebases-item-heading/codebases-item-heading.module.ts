@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
 
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-import { NotificationModule } from 'patternfly-ng';
+import { NotificationModule } from 'patternfly-ng/notification';
 
 import { WorkspacesNotificationModule } from '../workspaces-notification/workspaces-notification.module';
 import { CodebasesItemHeadingComponent } from './codebases-item-heading.component';

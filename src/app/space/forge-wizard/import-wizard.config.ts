@@ -1,4 +1,4 @@
-import { WizardStepConfig } from 'patternfly-ng';
+import { WizardStepConfig } from 'patternfly-ng/wizard';
 
 export function configureSteps(): WizardStepConfig[] {
   let steps: WizardStepConfig[] = [];
