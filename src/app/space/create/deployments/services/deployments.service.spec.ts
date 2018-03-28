@@ -70,7 +70,7 @@ describe('DeploymentsService', () => {
     mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     TestBed.configureTestingModule({
-      imports: [ HttpModule ],
+      imports: [HttpModule],
       providers: [
         {
           provide: XHRBackend, useClass: MockBackend
@@ -923,9 +923,9 @@ describe('DeploymentsService', () => {
                         name: 'stage',
                         pod_total: 2,
                         pods: [
-                          [ 'Running', '1' ],
-                          [ 'Starting', '0' ],
-                          [ 'Stopping', '1' ]
+                          ['Running', '1'],
+                          ['Starting', '0'],
+                          ['Stopping', '1']
                         ]
                       }
                     }
@@ -941,9 +941,9 @@ describe('DeploymentsService', () => {
                         name: 'run',
                         pod_total: 1,
                         pods: [
-                          [ 'Running', '0' ],
-                          [ 'Starting', '0' ],
-                          [ 'Stopping', '1' ]
+                          ['Running', '0'],
+                          ['Starting', '0'],
+                          ['Stopping', '1']
                         ]
                       }
                     }
@@ -957,9 +957,9 @@ describe('DeploymentsService', () => {
       const expectedResponse = {
         total: 2,
         pods: [
-          [ 'Running', 1 ],
-          [ 'Starting', 0 ],
-          [ 'Stopping', 1 ]
+          ['Running', 1],
+          ['Starting', 0],
+          ['Stopping', 1]
         ]
       };
       doMockHttpTest({
@@ -985,9 +985,9 @@ describe('DeploymentsService', () => {
                         name: 'stage',
                         pod_total: 2,
                         pods: [
-                          [ 'Running', '1' ],
-                          [ 'Starting', '0' ],
-                          [ 'Stopping', '1' ]
+                          ['Running', '1'],
+                          ['Starting', '0'],
+                          ['Stopping', '1']
                         ]
                       }
                     },
@@ -996,9 +996,9 @@ describe('DeploymentsService', () => {
                         name: 'run',
                         pod_total: 6,
                         pods: [
-                          [ 'Running', '3' ],
-                          [ 'Starting', '2' ],
-                          [ 'Stopping', '1' ]
+                          ['Running', '3'],
+                          ['Starting', '2'],
+                          ['Stopping', '1']
                         ]
                       }
                     }
@@ -1012,9 +1012,9 @@ describe('DeploymentsService', () => {
       const expectedResponse = {
         total: 6,
         pods: [
-          [ 'Running', 3 ],
-          [ 'Starting', 2 ],
-          [ 'Stopping', 1 ]
+          ['Running', 3],
+          ['Starting', 2],
+          ['Stopping', 1]
         ]
       };
       doMockHttpTest({
@@ -1857,11 +1857,11 @@ describe('DeploymentsService', () => {
                         name: 'stage',
                         pod_total: 15,
                         pods: [
-                          [ 'Terminating', 5 ],
-                          [ 'Stopping', '3' ],
-                          [ 'Running', '1' ],
-                          [ 'Not Running', 4 ],
-                          [ 'Starting', '2' ]
+                          ['Terminating', 5],
+                          ['Stopping', '3'],
+                          ['Running', '1'],
+                          ['Not Running', 4],
+                          ['Starting', '2']
                         ]
                       }
                     }
@@ -1875,11 +1875,11 @@ describe('DeploymentsService', () => {
       const expectedResponse = {
         total: 15,
         pods: [
-          [ 'Not Running', 4 ],
-          [ 'Running', 1 ],
-          [ 'Starting', 2 ],
-          [ 'Stopping', 3 ],
-          [ 'Terminating', 5 ]
+          ['Not Running', 4],
+          ['Running', 1],
+          ['Starting', 2],
+          ['Stopping', 3],
+          ['Terminating', 5]
         ]
       };
       doMockHttpTest({
@@ -1905,11 +1905,11 @@ describe('DeploymentsService', () => {
                         name: 'stage',
                         pod_total: 15,
                         pods: [
-                          [ 'Terminating', 5 ],
-                          [ 'Stopping', '3' ],
-                          [ 'Running', '1' ],
-                          [ 'Not Running', 4 ],
-                          [ 'Starting', '2' ]
+                          ['Terminating', 5],
+                          ['Stopping', '3'],
+                          ['Running', '1'],
+                          ['Not Running', 4],
+                          ['Starting', '2']
                         ]
                       }
                     }
@@ -1923,11 +1923,11 @@ describe('DeploymentsService', () => {
       const expectedResponse = {
         total: 15,
         pods: [
-          [ 'Not Running', 4 ],
-          [ 'Running', 1 ],
-          [ 'Starting', 2 ],
-          [ 'Stopping', 3 ],
-          [ 'Terminating', 5 ]
+          ['Not Running', 4],
+          ['Running', 1],
+          ['Starting', 2],
+          ['Stopping', 3],
+          ['Terminating', 5]
         ]
       };
       doMockHttpTest({
