@@ -26,8 +26,7 @@ import { CodebasesService } from '../../space/create/codebases/services/codebase
 })
 export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
 
-  codebases: Codebase[];
-  codebaseCount: number;
+  codebases: Codebase[] = [];
   context: Context;
   contextPath: string;
   subscriptions: Subscription[] = [];
@@ -78,7 +77,6 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.codebaseService.getCodebases(this.context.space.id).subscribe((codebases) => {
         this.codebases = codebases;
-        this.codebaseCount = codebases.length;
         this.sortCodebases();
       })
     );
