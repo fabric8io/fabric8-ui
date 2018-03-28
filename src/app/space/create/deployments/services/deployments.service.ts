@@ -300,7 +300,10 @@ export class DeploymentsService implements OnDestroy {
     applicationId: string,
     desiredReplicas: number
   ): Observable<string> {
-    const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}?podCount=${desiredReplicas}`;
+    const encSpaceId = encodeURIComponent(spaceId);
+    const encEnvironmentName = encodeURIComponent(environmentName);
+    const encApplicationId = encodeURIComponent(applicationId);
+    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
     return this.http.put(url, '', { headers: this.headers })
       .map((r: Response) => `Successfully scaled ${applicationId}`)
       .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
@@ -398,7 +401,10 @@ export class DeploymentsService implements OnDestroy {
   }
 
   deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
-    const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}`;
+    const encSpaceId = encodeURIComponent(spaceId);
+    const encEnvironmentName = encodeURIComponent(environmentName);
+    const encApplicationId = encodeURIComponent(applicationId);
+    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
     return this.http.delete(url, { headers: this.headers })
       .map((r: Response) => `Deployment has successfully deleted`)
       .catch(err => Observable.throw(`Failed to delete ${applicationId} in ${spaceId} (${environmentName})`));
@@ -406,10 +412,11 @@ export class DeploymentsService implements OnDestroy {
 
   private getApplicationsResponse(spaceId: string): Observable<Application[]> {
     if (!this.appsObservables.has(spaceId)) {
+      const encSpaceId = encodeURIComponent(spaceId);
       const subject = new ReplaySubject<Application[]>(1);
       const observable = this.pollTimer
         .concatMap(() =>
-          this.http.get(this.apiUrl + spaceId, { headers: this.headers })
+          this.http.get(this.apiUrl + encSpaceId, { headers: this.headers })
             .map((response: Response) => (response.json() as ApplicationsResponse).data.attributes.applications)
             .catch((err: Response) => this.handleHttpError(err))
         );
@@ -435,10 +442,11 @@ export class DeploymentsService implements OnDestroy {
 
   private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {
     if (!this.envsObservables.has(spaceId)) {
+      const encSpaceId = encodeURIComponent(spaceId);
       const subject = new ReplaySubject<EnvironmentStat[]>(1);
       const observable = this.pollTimer
         .concatMap(() =>
-          this.http.get(this.apiUrl + spaceId + '/environments', { headers: this.headers })
+          this.http.get(this.apiUrl + encSpaceId + '/environments', { headers: this.headers })
             .map((response: Response) => (response.json() as EnvironmentsResponse).data)
             .catch((err: Response) => this.handleHttpError(err))
         );
@@ -496,7 +504,10 @@ export class DeploymentsService implements OnDestroy {
         if (!deployed) {
           return Observable.empty();
         }
-        const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/statseries?start=${startTime}&end=${endTime}`;
+        const encSpaceId = encodeURIComponent(spaceId);
+        const encEnvironmentName = encodeURIComponent(environmentName);
+        const encApplicationId = encodeURIComponent(applicationId);
+        const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries?start=${startTime}&end=${endTime}`;
         return this.http.get(url, { headers: this.headers })
           .map((response: Response) => (response.json() as MultiTimeseriesResponse).data)
           .catch((err: Response) => this.handleHttpError(err))
@@ -537,7 +548,10 @@ export class DeploymentsService implements OnDestroy {
         if (!deployed) {
           return Observable.empty();
         }
-        const url = `${this.apiUrl}${spaceId}/applications/${applicationId}/deployments/${environmentName}/stats`;
+        const encSpaceId = encodeURIComponent(spaceId);
+        const encEnvironmentName = encodeURIComponent(environmentName);
+        const encApplicationId = encodeURIComponent(applicationId);
+        const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
         /* piggyback on getApplicationsResponse rather than pollTimer directly in order to
         * establish a happens-before relationship between applications updates and timeseries
         * updates within each poll cycle, so that we can detect a deployment disappearing and
