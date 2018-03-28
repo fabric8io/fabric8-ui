@@ -18,10 +18,6 @@ import { BuildConfigs } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 import { DummyService } from './../shared/dummy.service';
 
-import { Subscription } from 'rxjs';
-
-import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
-
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-pipelines-widget',
@@ -35,19 +31,12 @@ export class PipelinesWidgetComponent implements OnInit {
   contextPath: Observable<string>;
   buildConfigs: ConnectableObservable<BuildConfigs>;
   buildConfigsCount: Observable<number>;
-  newSpaceDashboardEnabled: boolean = false;
-  subscriptions: Subscription[] = [];
 
   constructor(
     private context: Contexts,
     private broadcaster: Broadcaster,
-    private pipelinesService: PipelinesService,
-    private featureTogglesService: FeatureTogglesService
-  ) {
-    this.subscriptions.push(featureTogglesService.getFeature('newSpaceDashboard').subscribe((feature) => {
-      this.newSpaceDashboardEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
-    }));
-  }
+    private pipelinesService: PipelinesService
+  ) {}
 
   ngOnInit() {
     this.contextPath = this.context.current.map(context => context.path);

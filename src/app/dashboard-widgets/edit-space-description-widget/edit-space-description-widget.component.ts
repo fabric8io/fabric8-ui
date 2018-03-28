@@ -1,14 +1,9 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-
-import { Observable, Subject } from 'rxjs';
-
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
+import { Observable, Subject } from 'rxjs';
 import { Subscription } from 'rxjs';
-
-import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
-
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { DummyService } from './../shared/dummy.service';
 
@@ -21,8 +16,6 @@ import { DummyService } from './../shared/dummy.service';
 export class EditSpaceDescriptionWidgetComponent implements OnInit {
 
   space: Space;
-  newSpaceDashboardEnabled: boolean = false;
-  subscriptions: Subscription[] = [];
 
   private _descriptionUpdater: Subject<string> = new Subject();
 
@@ -37,17 +30,13 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
     private userService: UserService,
     private broadcaster: Broadcaster,
     private spaceService: SpaceService,
-    private spaceNamespaceService: SpaceNamespaceService,
-    private featureTogglesService: FeatureTogglesService
+    private spaceNamespaceService: SpaceNamespaceService
   ) {
     spaces.current.subscribe(val => {
       this.space = val;
       console.log('newspace', val);
     });
     userService.loggedInUser.subscribe(val => this.loggedInUser = val);
-    this.subscriptions.push(featureTogglesService.getFeature('newSpaceDashboard').subscribe((feature) => {
-      this.newSpaceDashboardEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
-    }));
   }
 
   ngOnInit() {

@@ -28,9 +28,6 @@ class WorkItemFilter {
 })
 export class CreateWorkItemWidgetComponent implements OnInit {
 
-  newSpaceDashboardEnabled: boolean = false;
-  subscriptions: Subscription[] = [];
-
   private _myWorkItems: ConnectableObservable<WorkItem[]>;
   myWorkItemsCount: Observable<number>;
   contextPath: Observable<string>;
@@ -40,13 +37,8 @@ export class CreateWorkItemWidgetComponent implements OnInit {
     private broadcaster: Broadcaster,
     private workItemService: WorkItemService,
     private userService: UserService,
-    private contexts: Contexts,
-    private featureTogglesService: FeatureTogglesService
-  ) {
-    this.subscriptions.push(featureTogglesService.getFeature('newSpaceDashboard').subscribe((feature) => {
-      this.newSpaceDashboardEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
-    }));
-  }
+    private contexts: Contexts
+  ) {}
 
   ngOnInit() {
     this.contextPath = this.contexts.current.map(context => context.path);
