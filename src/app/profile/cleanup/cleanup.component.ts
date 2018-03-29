@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@ang
 import { Router } from '@angular/router';
 
 import { Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
-import { ListConfig } from 'patternfly-ng';
+import { ListConfig } from 'patternfly-ng/list';
 import { Observable, Subscription } from 'rxjs';
 
 import { EventService } from '../../shared/event.service';

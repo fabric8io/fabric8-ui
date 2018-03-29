@@ -5,10 +5,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import {
-  debounce,
-  isNumber
-} from 'lodash';
+import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
 import { Observable } from 'rxjs';
 

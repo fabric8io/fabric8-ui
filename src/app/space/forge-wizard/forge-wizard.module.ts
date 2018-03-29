@@ -15,7 +15,8 @@ import {
   VisibleItemsPipe
 } from 'ngx-forge';
 import { AuthenticationService } from 'ngx-login-client';
-import { FilterModule, WizardModule } from 'patternfly-ng';
+import { FilterModule } from 'patternfly-ng/filter';
+import { WizardModule } from 'patternfly-ng/wizard';
 
 import { FlowSelectorComponent } from './components/flow-selector/flow-selector.component';
 import { SingleInputComponent } from './components/single-input/single-input.component';

@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {
-  last,
-  reduce
-} from 'lodash';
+import { last } from 'lodash';
 import { Observable } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';

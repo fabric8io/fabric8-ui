@@ -1,13 +1,73 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 
-.work-item-title {
-  position: absolute;
-  left: 115px;
-  width: 420px;
-  @media (min-width: 1440px) and (max-width: 1920px) { width: 70%; }
-  @media (min-width: 1280px) and (max-width: 1440px) { width: 64%; }
-  @media (min-width: 1024px) and (max-width: 1280px) { width: 50%; }
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.f8-card-body-grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+.f8-work-item-card {
+  &-data-totals {
+    &--overview {
+      margin-bottom: 0;
+      font-weight: 500;
+      &-subtitle {
+        margin-bottom: 0;
+      }
+    }
+    &--link {
+      .btn-link {
+        padding: 0;
+      }
+    }
+  }
+  &-data-status {
+    display: grid;
+    grid-template-columns: 1fr;
+    &--resolved {
+      display: grid;
+      grid-template-columns: 20px 35px 1fr;
+      height: 30px;
+      align-items: center;
+      &_color {
+        color: @color-pf-green-400;
+      }
+    }
+    &--in-progress {
+      display: grid;
+      grid-template-columns: 20px 35px 1fr;
+      height: 30px;
+      align-items: center;
+      &_color {
+        color: @color-pf-orange-400;
+      }
+    }
+    &--open {
+      display: grid;
+      grid-template-columns: 20px 35px 1fr;
+      height: 30px;
+      align-items: center;
+      &_color {
+        color: @color-pf-red-100;
+      }
+    }
+  }
+  &-chart {
+    display: grid;
+    grid-template-columns: 75px;
+    grid-template-rows: 60px 50px 120px;
+    grid-row-gap: 2px;
+    justify-content: center;
+    margin-top: 50px;
+    &--resolved {
+      background-color: @color-pf-green-400;
+    }
+    &--in-progress {
+      background-color: @color-pf-orange-400;
+    }
+    &--open {
+      background-color: @color-pf-red-100;
+    }
+    svg {
+      height: 300px;
+    }
+  }
 }

@@ -1,5 +1,48 @@
-<div id="spacehome-codebases-card" class="add-codebase-widget card-pf f8-card">
-  <div class="card-pf-heading f8-card-heading">
+<f8-feature-toggle featureName="newSpaceDashboard" restricted="dev">
+  <div id="spacehome-codebases" class="add-codebase-widget card-pf f8-card" user-level>
+    <div class="card-pf-heading f8-card-heading">
+      <div class="card-pf-heading-details f8-card-heading-details">
+        <a id="spacehome-codebases-add-space-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
+          <i class="pficon pficon-add-circle-o"></i>
+        </a>
+      </div>
+      <h2 class="card-pf-title">
+        <span id="spacehome-codebases-card-title">Codebases</span>
+      </h2>
+    </div>
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card" *ngIf="codebaseCount === 0">
+        <h3>This Space has no Codebases</h3>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
+        </div>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
+        </div>
+      </div>
+      <div id="spacehome-codebases-card-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped" *ngIf="codebaseCount > 0">
+        <div class="list-group-item list-view-pf-stacked list-view-pf-top-align" *ngFor="let codebase of codebases">
+          <div class="list-view-pf-checkbox f8-card-list-view-pf-checkbox-icon">
+            <span class="avatar fa" [ngClass]="{'fa-github fa-2x': codebase.attributes.type === 'git'}"></span>
+          </div>
+          <div class="list-view-pf-main-info f8-card-list-view-pf-main-info">
+            <div class="list-view-pf-body">
+              <div class="list-view-pf-description">
+                <div class="list-group-item-heading f8-card-list-group-item-heading">
+                  <a href="{{codebase.attributes.url}}" target="_blank" class="f8-card-codebase-url truncate">{{codebase.name}}</a>
+                </div>
+                <div class="list-group-item-text f8-card-list-group-item-text">
+                  codebase last updated 03/12/2018 <!-- replace with real code -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="spacehome-codebases-card" class="add-codebase-widget card-pf f8-card" default-level>
+    <div class="card-pf-heading f8-card-heading">
       <div class="card-pf-heading-details f8-card-heading-details">
         <a id="spacehome-codebases-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
           <i class="pficon pficon-add-circle-o"></i>
@@ -9,30 +52,31 @@
         <a id="spacehome-codebases-title" href="#" [routerLink]="[contextPath, 'create']">Codebases</a>
         <span id="spacehome-codebases-badge" class="badge f8-card-badge">{{codebaseCount}}</span>
       </h2>
-  </div>
-  <div class="card-pf-body f8-card-body">
-    <div class="f8-blank-slate-card" *ngIf="codebaseCount === 0">
-      <h3>This Space has no Codebases</h3>
-      <div class="f8-blank-slate-main-action">
-        <button id="spacehome-my-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
-      </div>
-      <div class="f8-blank-slate-main-action">
-        <button id="spacehome-my-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
-      </div>
     </div>
-    <ul id="spacehome-codebases-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped" *ngIf="codebaseCount > 0">
-      <li class="list-group-item" *ngFor="let codebase of codebases">
-        <div class="list-view-pf-main-info">
-          <div class="list-view-pf-body">
-            <div class="list-view-pf-description">
-              <div class="list-group-item-text">
-                <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
-                <a href="{{codebase.attributes.url}}" target="_blank" class="f8-card-codebase-url truncate">{{codebase.name}}</a>
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card" *ngIf="codebaseCount === 0">
+        <h3>This Space has no Codebases</h3>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-my-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
+        </div>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-my-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
+        </div>
+      </div>
+      <ul id="spacehome-codebases-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped" *ngIf="codebaseCount > 0">
+        <li class="list-group-item" *ngFor="let codebase of codebases">
+          <div class="list-view-pf-main-info">
+            <div class="list-view-pf-body">
+              <div class="list-view-pf-description">
+                <div class="list-group-item-text">
+                  <span class="avatar fa" [ngClass]="{'fa-github': codebase.attributes.type === 'git'}"></span>
+                  <a href="{{codebase.attributes.url}}" target="_blank" class="f8-card-codebase-url truncate">{{codebase.name}}</a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
+</f8-feature-toggle>

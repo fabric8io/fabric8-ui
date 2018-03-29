@@ -6,7 +6,7 @@ import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { InfiniteScrollModule } from 'ngx-widgets';
-import { ListModule } from 'patternfly-ng';
+import { ListModule } from 'patternfly-ng/list';
 
 import { AddCollaboratorsDialogModule } from './add-collaborators-dialog/add-collaborators-dialog.module';
 import { CollaboratorsRoutingModule } from './collaborators-routing.module';

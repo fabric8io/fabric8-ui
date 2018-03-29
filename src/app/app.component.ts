@@ -9,7 +9,8 @@ import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Spaces } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { ActionConfig, EmptyStateConfig } from 'patternfly-ng';
+import { ActionConfig } from 'patternfly-ng/action';
+import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 
 import { OnLogin } from '../a-runtime-console/index';
 import { FeatureFlagConfig } from './models/feature-flag-config';

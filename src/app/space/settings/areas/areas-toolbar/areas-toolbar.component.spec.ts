@@ -6,10 +6,8 @@ import {
 } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import {
-  FilterEvent,
-  SortEvent
-} from 'patternfly-ng';
+import { FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent } from 'patternfly-ng/sort';
 
 import {
   initContext,

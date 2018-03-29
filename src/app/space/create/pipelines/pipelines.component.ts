@@ -8,17 +8,11 @@ import {
 
 import { Broadcaster } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
-import {
-  Filter,
-  FilterConfig,
-  FilterEvent,
-  FilterQuery,
-  FilterType,
-  SortEvent,
-  SortField,
-  ToolbarConfig
-} from 'patternfly-ng';
 import { Subscription } from 'rxjs';
+
+import { Filter, FilterConfig, FilterEvent, FilterQuery, FilterType } from 'patternfly-ng/filter';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
+import { ToolbarConfig } from 'patternfly-ng/toolbar';
 
 import { BuildConfig } from 'a-runtime-console/index';
 import {

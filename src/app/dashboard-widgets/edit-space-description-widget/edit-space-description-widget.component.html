@@ -1,31 +1,66 @@
-<div class="edit-space-description-widget">
-  <h2 class="margin-0">
-    <b>{{space?.attributes.name | spaceName}}</b>
-  </h2>
-  <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
-  <div class="form-group">
-    <textarea row="2"
-              placeholder="Description goes here"
-              class="space-description form-control"
-              *ngIf="isEditing && (isEditable() | async)"
-              (keyup.enter)="onUpdateDescription(description.value)"
-              (keydown.enter)="preventDef($event)"
-              #description>{{space?.attributes.description}}</textarea>
-    <div *ngIf="isEditing">
-      <button id="_btn_cancel"
-              class="pull-right btn btn-default edit-space-description-btn"
-              (click)="stopEditingDescription()">
-        <span class="fa fa-close"></span>
-      </button>
-      <!--Save icon-->
-      <button id="workItemTitle_btn_save"
-              class="pull-right btn btn-primary edit-space-description-btn "
-              (click)="saveDescription()" >
-        <span class="fa fa-check"></span>
-      </button>
+<f8-feature-toggle featureName="newSpaceDashboard" restricted="dev">
+  <div class="edit-space-description-widget" user-level>
+    <div class="col-sm-3 f8-space-masthead-space-info">
+      <div>
+        <span class="f8-space-masthead-name">{{space?.attributes.name | spaceName}}</span> <span class="f8-space-masthead-owner">bobross_925</span>
+      </div>
+      <div>
+        <span class="pficon pficon-users fa-lg"></span> 59
+        <span class="f8-space-masthead-vertical-divider-collab"></span>
+        <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
+      </div>
     </div>
-    <span *ngIf="!isEditing || !(isEditable() | async)" (click)="startEditingDescription()" class="edit-space-description-span">
-      {{space?.attributes.description || "Enter a description"}}
-    </span>
+    <div class="f8-space-masthead-vertical-divider"></div>
+    <div class="col-sm-9 f8-space-masthead-description">
+      <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
+      <div class="form-group">
+        <div class="f8-space-masthead-description-title"></div>
+        <textarea row="3"
+                  placeholder="Description goes here"
+                  class="space-description form-control"
+                  *ngIf="isEditing && (isEditable() | async)"
+                  (keyup.enter)="onUpdateDescription(description.value)"
+                  (keydown.enter)="preventDef($event)"
+                  #description>{{space?.attributes.description}}</textarea>
+        <div class="f8-space-masthead-description-edit-buttons" *ngIf="isEditing">
+          <button id="_btn_cancel_description"
+                  class="pull-right btn btn-default edit-space-description-btn"
+                  (click)="stopEditingDescription()">
+            Cancel
+          </button>
+          <!--Save icon-->
+          <button id="workItemTitle_btn_save_description"
+                  class="pull-right btn btn-primary edit-space-description-btn "
+                  (click)="saveDescription()" >
+            Save
+          </button>
+        </div>
+        <p *ngIf="!isEditing || !(isEditable() | async)" (click)="startEditingDescription()" class="f8-space-masthead-description-body edit-space-description-pencil truncate-multiline">
+          {{space?.attributes.description || "Enter a description"}}
+        </p>
+      </div>
+    </div>
   </div>
-</div>
+  <div class="old-edit-space-description-widget" default-level>
+    <h2 class="margin-0">
+      <b>{{space?.attributes.name | spaceName}}</b>
+    </h2>
+    <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
+    <div class="form-group">
+      <textarea row="2" placeholder="Description goes here" class="space-description form-control" *ngIf="isEditing && (isEditable() | async)"
+        (keyup.enter)="onUpdateDescription(description.value)" (keydown.enter)="preventDef($event)" #description>{{space?.attributes.description}}</textarea>
+      <div *ngIf="isEditing">
+        <button id="_btn_cancel" class="pull-right btn btn-default edit-space-description-btn" (click)="stopEditingDescription()">
+          <span class="fa fa-close"></span>
+        </button>
+        <!--Save icon-->
+        <button id="workItemTitle_btn_save" class="pull-right btn btn-primary edit-space-description-btn " (click)="saveDescription()">
+          <span class="fa fa-check"></span>
+        </button>
+      </div>
+      <span *ngIf="!isEditing || !(isEditable() | async)" (click)="startEditingDescription()" class="edit-space-description-span">
+        {{space?.attributes.description || "Enter a description"}}
+      </span>
+    </div>
+  </div>
+</f8-feature-toggle>

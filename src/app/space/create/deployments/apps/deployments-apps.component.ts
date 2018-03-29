@@ -6,19 +6,14 @@ import {
 } from '@angular/core';
 
 import { cloneDeep } from 'lodash';
-import {
-  Filter,
-  FilterEvent,
-  SortEvent,
-  SortField
-} from 'patternfly-ng';
+import { Filter, FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
   Observable,
   Subscription
 } from 'rxjs';
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
-import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 
 @Component({
   selector: 'deployments-apps',

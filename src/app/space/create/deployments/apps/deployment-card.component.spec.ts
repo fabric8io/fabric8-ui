@@ -26,7 +26,7 @@ import {
 } from 'ngx-bootstrap/dropdown';
 import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 
-import { ChartModule } from 'patternfly-ng';
+import { ChartModule } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,
@@ -45,7 +45,6 @@ import {
 } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentCardComponent } from './deployment-card.component';
-import { DeploymentStatusIconComponent } from './deployment-status-icon.component';
 
 @Component({
   template: '<deployment-card></deployment-card>'

@@ -14,7 +14,7 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
     return Observable.of({
       mavenArtifact: 'd4.345',
       groupId: '124-644',
-      projectName: 'App_test_1',
+      projectName: 'app-test-1',
       projectVersion: '124.554',
       spacePath: '/myspace'
     });

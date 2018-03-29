@@ -5,7 +5,7 @@ import {
   OnInit
 } from '@angular/core';
 
-import { NotificationType } from 'patternfly-ng';
+import { NotificationType } from 'patternfly-ng/notification';
 
 @Component({
   selector: 'f8-workspaces-notification',

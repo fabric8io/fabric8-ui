@@ -8,11 +8,7 @@ import {
 
 import { createMock } from 'testing/mock';
 
-import {
-  BehaviorSubject,
-  Observable,
-  Subject
- } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
 import {

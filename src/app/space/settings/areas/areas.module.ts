@@ -5,7 +5,9 @@ import { Http } from '@angular/http';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
-import { ActionModule, ListModule } from 'patternfly-ng';
+
+import { ActionModule } from 'patternfly-ng/action';
+import { ListModule } from 'patternfly-ng/list';
 
 import { AreasRoutingModule } from './areas-routing.module';
 import { AreasToolbarModule } from './areas-toolbar/areas-toolbar.module';

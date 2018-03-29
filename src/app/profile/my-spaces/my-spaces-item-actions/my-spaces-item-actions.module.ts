@@ -7,7 +7,7 @@ import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { DialogModule } from 'ngx-widgets';
-import { ActionModule } from 'patternfly-ng';
+import { ActionModule } from 'patternfly-ng/action';
 
 import { MySpacesItemActionsComponent } from './my-spaces-item-actions.component';
 

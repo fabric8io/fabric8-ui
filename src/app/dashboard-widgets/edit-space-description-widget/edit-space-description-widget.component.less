@@ -28,3 +28,166 @@
     }
   }
 }
+
+.f8-space-masthead {
+  &-vertical-divider {
+    width: 1px;
+    height: 75%;
+    background-color: @color-pf-black-500;
+    &-collab {
+      margin-right: 10px;
+      margin-left: 10px;
+      padding-right: 1px;
+      width: 1px;
+      height: 75%;
+      background-color: @color-pf-black-500;
+    }
+  }
+  &-space-info {
+    margin-top: -20px;
+  }
+  &-name {
+    padding-right: 10px;
+    font-size: 1.5em;
+    font-weight: 300;
+    .truncate;
+  }
+  &-owner {
+    font-size: .9em;
+  }
+  &-description {
+    &:hover {
+      cursor: pointer;
+    }
+    > * {
+      flex: 1 100%;
+    }
+    .form-group {
+      margin-top: 15px;
+    }
+    &-text {
+      display: inline-flex;
+      width: ~"calc(70% - 20px)";
+      padding-right: 10px;
+      padding-left: 10px;
+      &-title {
+        flex-basis: 25%;
+        font-size: 1.5em;
+        font-weight: 600;
+        .truncate;
+      }
+      &-body {
+        flex-basis: 75%;
+        padding-top: 7px;
+        padding-right: 10px;
+        padding-left: 15px;
+        .truncate;
+      }
+    }
+    &-edit-buttons {
+      position: relative;
+      bottom: -10px;
+    }
+  }
+}
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.truncate-multiline {
+  position: relative;
+  max-height: 4.4em;
+  text-align: justify;
+  margin-right: -1em;
+  padding-right: 1em;
+  overflow: hidden;
+  /* need to configure dynamically to add '...' at the end of the paragraph */
+  // &:before {
+  //   content: '...';
+  //   position: absolute;
+  //   right: 0;
+  //   bottom: -1px;
+  // }
+  // &:after {
+  //   content: '';
+  //   position: absolute;
+  //   right: 0;
+  //   width: 1em;
+  //   height: 1em;
+  //   margin-top: 0.2em;
+  //   background: @color-pf-black-900;
+  // }
+}
+.edit-space-description {
+  &-widget {
+    display: flex;
+    align-items: center;
+    height: 130px;
+    color: @color-pf-black-200;
+    .space-description {
+      position: relative;
+      top: 10px;
+      height: 70px;
+      margin: 5px 0;
+      resize: none;
+      line-height: 1.5;
+    }
+  }
+
+  &-btn {
+    margin-left: 5px;
+    text-align: center;
+    width: auto;
+    padding-right: 5px !important; /* stylelint-disable-line declaration-no-important */
+    padding-left: 5px !important; /* stylelint-disable-line declaration-no-important */
+    .pointer;
+  }
+
+  &-pencil {
+    line-height: 1.5;
+    &:hover {
+      &:after {
+        position: absolute;
+        top: 40px;
+        right: 5px;
+        padding-right: 10px;
+        padding-left: 10px;
+        background: @color-pf-black-900;
+        font-family: PatternFlyIcons-webfont;
+        content: '\e60a';
+        color: @color-pf-white;
+      }
+    }
+  }
+}
+
+/* remove everything below this line to complete redesign */
+.old-edit-space-description-widget {
+  max-height: 245px;
+  h2 { text-transform: capitalize; }
+  .space-description {
+    margin: 5px 0;
+    resize: none;
+  }
+}
+
+.old-edit-space-description-btn {
+  width: 42px;
+  padding: 0 !important; /* stylelint-disable-line declaration-no-important */
+  margin-bottom: 10px;
+  margin-left: 5px;
+  text-align: center;
+  .pointer;
+}
+
+.old-edit-space-description-span {
+  line-height: 1.5;
+  &:hover {
+    &:after {
+      padding-left: 20px;
+      font-family: PatternFlyIcons-webfont;
+      content: '\E60A';
+    }
+  }
+}

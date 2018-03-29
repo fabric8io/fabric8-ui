@@ -24,8 +24,6 @@ import { FeatureTogglesService } from '../feature-flag/service/feature-toggles.s
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  newHomeDashboardEnabled: boolean = false;
-  subscriptions: Subscription[] = [];
 
   brandInformation: BrandInformation;
   loggedInUser: User;
@@ -57,9 +55,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.space = '';
     this.selectedFlow = 'start';
     this._spaceSubscription = spaces.recent.subscribe(val => this.recent = val);
-    this.subscriptions.push(featureTogglesService.getFeature('newHomeDashboard').subscribe((feature) => {
-      this.newHomeDashboardEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
-    }));
   }
 
   ngOnInit() {

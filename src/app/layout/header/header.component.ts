@@ -134,6 +134,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   login() {
+    this.loginService.redirectUrl = this.router.url;
     this.broadcaster.broadcast('login');
     this.loginService.redirectToAuth();
   }

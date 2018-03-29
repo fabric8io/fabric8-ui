@@ -1,44 +1,120 @@
-<div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf f8-card">
-  <div class="card-pf-heading f8-card-heading">
-    <div class="card-pf-heading-details f8-card-heading-details">
-      <a id="spacehome-my-workitems-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
-        <i class="pficon pficon-add-circle-o"></i>
-      </a>
+<f8-feature-toggle featureName="newSpaceDashboard" restricted="dev">
+  <div id="spacehome-workitems-card" class="create-work-item-widget card-pf f8-card" user-level>
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        Work Item Overview
+      </h2>
     </div>
-    <h2 class="card-pf-title">
-      <a id="spacehome-my-workitems-title" [routerLink]="[contextPath | async, 'plan']">My Work Items</a>
-      <span id="spacehome-my-workitems-badge" class="badge f8-card-badge">{{myWorkItemsCount | async}}</span>
-    </h2>
-  </div>
-  <div class="card-pf-body f8-card-body">
-    <div class="f8-blank-slate-card" *ngIf="(myWorkItemsCount | async) === 0">
-      <h3>You can view your recent work items</h3>
-      <p>
-        Planner will help you to create different types of work-items, allows you to assign team members and iterations.
-      </p>
-      <div class="f8-blank-slate-main-action">
-        <button id="spacehome-my-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
-      </div>
-    </div>
-    <ul id="spacehome-my-workitems-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped f8-card-list" *ngIf="(myWorkItemsCount | async) > 0">
-      <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 6">
-        <div class="list-view-pf-main-info">
-          <div class="list-view-pf-body">
-            <div class="list-view-pf-description">
-              <div class="list-group-item-text">
-                <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left f8-list-group-item-icon"></span>
-                <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} f8-list-group-item-icon"></span>
-                <span>{{workItem.attributes['system.number']}}</span>
-                <span class="work-item-title" *ngIf="workItem.attributes">
-                  <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="f8-list-group-item-link">
-                    {{workItem.attributes['system.title']}}
-                  </a>
-                </span>
+    <div class="card-pf-body f8-card-body">
+      <!-- uncomment this section once connected -->
+      <!-- <div class="f8-blank-slate-card" *ngIf="(myWorkItemsCount | async) === 0">
+        <h3>Create Work Items</h3>
+        <p>
+          Planner will help you to create different types of work-items, allows you to assign team members and iterations.
+        </p>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
+        </div>
+      </div> -->
+      <div class="f8-card-body-grid">
+        <div class="f8-work-item-card-data">
+          <div class="f8-work-item-card-data-totals">
+            <h1 class="f8-work-item-card-data-totals--overview">979</h1> <!-- replace this with queried number -->
+            <p class="f8-work-item-card-data-totals--overview-subtitle">Total work items</p>
+            <p class="f8-work-item-card-data-totals--link">
+              <a href="#" class="btn btn-link">View Planner</a>
+            </p>
+          </div>
+          <div class="f8-work-item-card-data-status">
+            <div class="f8-work-item-card-data-status--resolved">
+              <div class="f8-work-item-card-data-status--resolved_color">
+                <span class="pficon pficon-resources-full"></span>
+              </div>
+              <div class="f8-work-item-card-data-status--resolved_color">
+                102<!-- replace this with queried number -->
+              </div>
+              <div>
+                Resolved
+              </div>
+            </div>
+            <div class="f8-work-item-card-data-status--in-progress">
+              <div class="f8-work-item-card-data-status--in-progress_color">
+                <span class="pficon pficon-resources-almost-full"></span>
+              </div>
+              <div class="f8-work-item-card-data-status--in-progress_color">
+                175<!-- replace this with queried number -->
+              </div>
+              <div>
+                In progress
+              </div>
+            </div>
+            <div class="f8-work-item-card-data-status--open">
+              <div class="f8-work-item-card-data-status--open_color">
+                <span class="fa fa-fire"></span>
+              </div>
+              <div class="f8-work-item-card-data-status--open_color">
+                358<!-- replace this with queried number -->
+              </div>
+              <div>
+                Open
               </div>
             </div>
           </div>
         </div>
-      </li>
-    </ul>
+        <div class="f8-work-item-card-chart"> <!-- replace this with actual D3 chart -->
+          <div class="f8-work-item-card-chart--resolved">
+          </div>
+          <div class="f8-work-item-card-chart--in-progress">
+          </div>
+          <div class="f8-work-item-card-chart--open">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+  <div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf f8-card" default-level>
+    <div class="card-pf-heading f8-card-heading">
+      <div class="card-pf-heading-details f8-card-heading-details">
+        <a id="spacehome-my-workitems-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
+          <i class="pficon pficon-add-circle-o"></i>
+        </a>
+      </div>
+      <h2 class="card-pf-title">
+        <a id="spacehome-my-workitems-title" [routerLink]="[contextPath | async, 'plan']">My Work Items</a>
+        <span id="spacehome-my-workitems-badge" class="badge f8-card-badge">{{myWorkItemsCount | async}}</span>
+      </h2>
+    </div>
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card" *ngIf="(myWorkItemsCount | async) === 0">
+        <h3>You can view your recent work items</h3>
+        <p>
+          Planner will help you to create different types of work-items, allows you to assign team members and iterations.
+        </p>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-my-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
+        </div>
+      </div>
+      <ul id="spacehome-my-workitems-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped f8-card-list"
+        *ngIf="(myWorkItemsCount | async) > 0">
+        <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 6">
+          <div class="list-view-pf-main-info">
+            <div class="list-view-pf-body">
+              <div class="list-view-pf-description">
+                <div class="list-group-item-text">
+                  <span almIcon [iconType]="workItem.attributes['system.state']" class="color-grey pull-left f8-list-group-item-icon"></span>
+                  <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} f8-list-group-item-icon"></span>
+                  <span>{{workItem.attributes['system.number']}}</span>
+                  <span class="work-item-title" *ngIf="workItem.attributes">
+                    <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="f8-list-group-item-link">
+                      {{workItem.attributes['system.title']}}
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</f8-feature-toggle>
