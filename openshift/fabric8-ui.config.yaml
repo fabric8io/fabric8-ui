@@ -5,6 +5,8 @@ metadata:
 type: Opaque
 data:
   analytics.write.key: ""
+  analytics.recommender.url: ""
+  analytics.license.url: ""
   k8s.api.server.protocol: https
   k8s.api.server.base.path: ""
   oauth.client.id: fabric8
