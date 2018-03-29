@@ -1,3 +1,35 @@
-.pipelines-widget {
-  .list-group { margin-top: -1px; }
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+
+.applications-widget {
+  .f8-card-applications-list {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 58vh;
+    &-step,
+    &-name {
+      margin-top: 25px;
+    }
+    .f8-card-applications-list-name {
+      .list-group {
+        border-top-color: transparent;
+        .list-view-pf-checkbox {
+          border-right: transparent;
+        }
+        .list-group-item-heading {
+          font-weight: 500;
+        }
+        .list-group-item-text {
+          color: @color-pf-black-500 !important; /* styleint-disable-line no-declaration-important */
+          font-weight: 400;
+          font-size: .8em;
+        }
+      }
+    }
+    &-stage {
+      border-right: 1px solid @color-pf-black-400;
+    }
+    &-run {
+      padding-left: 20px;
+    }
+  }
 }

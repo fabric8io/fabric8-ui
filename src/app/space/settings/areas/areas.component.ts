@@ -3,16 +3,11 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaService, Context } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 
-import {
-  Action,
-  ActionConfig,
-  EmptyStateConfig,
-  Filter,
-  FilterEvent,
-  SortEvent,
-  SortField,
-  TreeListConfig
-} from 'patternfly-ng';
+import { Action, ActionConfig } from 'patternfly-ng/action';
+import { EmptyStateConfig } from 'patternfly-ng/empty-state';
+import { Filter, FilterEvent } from 'patternfly-ng/filter';
+import { TreeListConfig } from 'patternfly-ng/list';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
 
 import { ContextService } from '../../../shared/context.service';
 import { CreateAreaDialogComponent } from './create-area-dialog/create-area-dialog.component';

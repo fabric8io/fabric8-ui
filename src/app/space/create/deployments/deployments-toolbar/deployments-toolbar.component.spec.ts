@@ -5,7 +5,9 @@ import {
   Output
 } from '@angular/core';
 
-import { FilterEvent, SortEvent } from 'patternfly-ng';
+import { FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent } from 'patternfly-ng/sort';
+
 import { initContext, TestContext } from 'testing/test-context';
 
 import { DeploymentsToolbarComponent } from './deployments-toolbar.component';

@@ -9,7 +9,8 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { ChartModule, ToolbarModule } from 'patternfly-ng';
+import { ChartModule } from 'patternfly-ng/chart';
+import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 import { DeleteDeploymentModal } from './apps/delete-deployment-modal.component';
 import { DeploymentCardContainerComponent } from './apps/deployment-card-container.component';

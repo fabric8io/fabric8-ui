@@ -6,12 +6,8 @@ import {
 } from '@angular/core';
 
 import { cloneDeep } from 'lodash';
-import {
-  Filter,
-  FilterEvent,
-  SortEvent,
-  SortField
-} from 'patternfly-ng';
+import { Filter, FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
   Observable,
   Subscription

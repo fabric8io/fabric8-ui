@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 
 import { ModalModule } from 'ngx-modal';
-import { ListModule } from 'patternfly-ng';
+import { ListModule } from 'patternfly-ng/list';
 
 import { CleanupRoutingModule } from './cleanup-routing.module';
 import { CleanupComponent } from './cleanup.component';

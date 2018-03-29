@@ -36,7 +36,7 @@ export class PipelinesWidgetComponent implements OnInit {
     private context: Contexts,
     private broadcaster: Broadcaster,
     private pipelinesService: PipelinesService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.contextPath = this.context.current.map(context => context.path);

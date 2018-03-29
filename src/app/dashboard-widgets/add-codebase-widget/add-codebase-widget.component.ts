@@ -1,9 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
-
-import { Subscription } from 'rxjs';
-
 import { Contexts } from 'ngx-fabric8-wit';
-
+import { Subscription } from 'rxjs';
 import { Codebase } from '../../space/create/codebases/services/codebase';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 
@@ -19,12 +16,13 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
   codebaseCount: number;
   contextPath: string;
   contextSubscription: Subscription;
+  subscriptions: Subscription[] = [];
   @Output() addToSpace = new EventEmitter();
 
   constructor(
     private context: Contexts,
     private codebaseService: CodebasesService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.contextSubscription = this.context.current.subscribe(context => {

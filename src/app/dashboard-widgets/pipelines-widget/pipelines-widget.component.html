@@ -1,45 +1,146 @@
-<div id="spacehome-pipelines-card" class="pipelines-widget card-pf f8-card">
-  <div class="card-pf-heading f8-card-heading">
-    <div class="card-pf-heading-details f8-card-heading-details">
-      <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
-        <i class="pficon pficon-add-circle-o"></i>
-      </a>
+<f8-feature-toggle featureName="newSpaceDashboard" restricted="dev">
+  <div id="spacehome-applications-card" class="applications-widget card-pf f8-card" user-level>
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        Applications
+      </h2>
     </div>
-    <h2 class="card-pf-title">
-      <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, 'create', 'pipelines']">Pipelines</a>
-      <span id="spacehome-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount | async}}</span>
-    </h2>
-  </div>
-  <div class="card-pf-body f8-card-body">
-    <div class="f8-blank-slate-card" *ngIf="!(buildConfigsCount | async)">
-      <h3>No Pipelines have run</h3>
-      <p>
-        Pipelines run when you commit and build your code base.
-      </p>
-      <div class="f8-blank-slate-main-action">
-        <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to Space</button>
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card" *ngIf="!(buildConfigsCount | async)">
+        <h3>This space has no applications</h3>
+        <p>
+          Applications are shown once you deploy your code through a pipeline onto the defined environments.
+        </p>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-applications-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Create an Application</button>
+        </div>
+      </div>
+      <div id="spacehome-applications-list" class="f8-card-applications-list" *ngIf="(buildConfigsCount | async) > 0">
+        <div class="f8-card-applications-list-stage" *ngFor="let buildconfig of buildConfigs | async">
+          <h4 class="f8-card-applications-list-step">Stage</h4>
+          <div class="f8-card-applications-list-name">
+            <div class="list-group list-view-pf">
+              <div class="list-group-item list-view-pf-stacked list-view-pf-top-align">
+                <div class="list-view-pf-checkbox">
+                  <span class="fa fa-angle-right fa-lg"></span>
+                </div>
+                <div class="list-view-pf-actions">
+                  <div class="dropdown pull-right dropdown-kebab-pf">
+                    <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="true">
+                      <span class="fa fa-ellipsis-v fa-lg"></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="list-view-pf-main-info">
+                  <div class="list-view-pf-body">
+                    <div class="list-pf-left">
+                      <span class="{{buildconfig.iconStyle}} fa-spin list-pf-icon list-pf-icon-small" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
+                      <span class="{{buildconfig.iconStyle}} list-pf-icon list-pf-icon-small" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
+                    </div>
+                    <div class="list-view-pf-description">
+                      <div class="list-group-item-heading">
+                        <a [routerLink]="[contextPath | async, 'create', 'pipelines']">
+                          {{buildconfig.name}}
+                        </a>
+                      </div>
+                      <div class="list-group-item-text">
+                        Build #{{buildconfig.lastVersion}} - {{buildconfig.statusPhase || 'Unknown'}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="f8-card-applications-list-run" *ngFor="let buildconfig of buildConfigs | async">
+          <h4 class="f8-card-applications-list-step">Run</h4>
+          <div class="f8-card-applications-list-name">
+            <div class="list-group list-view-pf">
+              <div class="list-group-item list-view-pf-stacked list-view-pf-top-align">
+                <div class="list-view-pf-checkbox">
+                  <span class="fa fa-angle-right fa-lg"></span>
+                </div>
+                <div class="list-view-pf-actions">
+                  <div class="dropdown pull-right dropdown-kebab-pf">
+                    <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="true">
+                      <span class="fa fa-ellipsis-v fa-lg"></span>
+                    </button>
+                  </div>
+                </div>
+                <div class="list-view-pf-main-info">
+                  <div class="list-view-pf-body">
+                    <div class="list-pf-left">
+                      <span class="{{buildconfig.iconStyle}} fa-spin list-pf-icon list-pf-icon-small" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
+                      <span class="{{buildconfig.iconStyle}} list-pf-icon list-pf-icon-small" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
+                    </div>
+                    <div class="list-view-pf-description">
+                      <div class="list-group-item-heading">
+                        <a [routerLink]="[contextPath | async, 'create', 'pipelines']">
+                          {{buildconfig.name}}
+                        </a>
+                      </div>
+                      <div class="list-group-item-text">
+                        Build #{{buildconfig.lastVersion}} - {{buildconfig.statusPhase || 'Unknown'}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <ul id="spacehome-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">
-      <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async" >
-        <div class="f8-card__pipeline-column">
-          <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
-          <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
-          <a [routerLink]="[contextPath | async, 'create', 'pipelines']" class="f8-card__pipeline-column-name">
-            {{buildconfig.name}}
-          </a>
-          <span>|</span>
-          <a [href]="buildconfig.openShiftConsoleUrl" target="_blank"  class="f8-card__pipeline-column-build">
-            Build #{{buildconfig.lastVersion}} <i class="fa fa-external-link" aria-hidden="true"></i>
-          </a>
-        </div>
-        <div class="f8-card__pipeline-column-start">
-          Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}
-        </div>
-        <div class="f8-card__pipeline-column-status">
-          Status: <b>{{buildconfig.statusPhase || 'Unknown'}}</b>
-        </div>
-      </li>
-    </ul>
   </div>
-</div>
+  <div id="spacehome-pipelines-card" class="pipelines-widget card-pf f8-card" default-level>
+    <div class="card-pf-heading f8-card-heading">
+      <div class="card-pf-heading-details f8-card-heading-details">
+        <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
+          <i class="pficon pficon-add-circle-o"></i>
+        </a>
+      </div>
+      <h2 class="card-pf-title">
+        <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, 'create', 'pipelines']">Pipelines</a>
+        <span id="spacehome-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount | async}}</span>
+      </h2>
+    </div>
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card" *ngIf="!(buildConfigsCount | async)">
+        <h3>No Pipelines have run</h3>
+        <p>
+          Pipelines run when you commit and build your code base.
+        </p>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to Space</button>
+        </div>
+      </div>
+      <ul id="spacehome-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">
+        <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async">
+          <div class="f8-card__pipeline-column">
+            <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
+            <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
+            <a [routerLink]="[contextPath | async, 'create', 'pipelines']" class="f8-card__pipeline-column-name">
+              {{buildconfig.name}}
+            </a>
+            <span>|</span>
+            <a [href]="buildconfig.openShiftConsoleUrl" target="_blank" class="f8-card__pipeline-column-build">
+              Build #{{buildconfig.lastVersion}}
+              <i class="fa fa-external-link" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="f8-card__pipeline-column-start">
+            Started: {{buildconfig.lastBuild?.creationTimestamp | date:'short'}}
+          </div>
+          <div class="f8-card__pipeline-column-status">
+            Status:
+            <b>{{buildconfig.statusPhase || 'Unknown'}}</b>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</f8-feature-toggle>

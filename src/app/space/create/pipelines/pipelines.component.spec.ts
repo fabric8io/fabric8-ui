@@ -29,7 +29,7 @@ import {
   TooltipModule
 } from 'ngx-bootstrap/tooltip';
 import { AuthenticationService } from 'ngx-login-client';
-import { ToolbarModule } from 'patternfly-ng';
+import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 import { BuildConfig } from 'a-runtime-console/index';
 import { Broadcaster } from 'ngx-base';

@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-import { ToolbarModule } from 'patternfly-ng';
+import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 import { AreasToolbarComponent } from './areas-toolbar.component';
 

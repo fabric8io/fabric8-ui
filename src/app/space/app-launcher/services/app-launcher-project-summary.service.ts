@@ -44,8 +44,11 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
   /**
    * Set up the project for the given summary
    *
-   * @param {Summary} summary The project summary
-   * @returns {Observable<boolean>}
+   * @param  {Summary} summary
+   * @param  {string} spaceId
+   * @param  {string} spaceName
+   * @param  {boolean} isImport
+   * @returns Observable
    */
   setup(summary: Summary, spaceId: string, spaceName: string, isImport: boolean): Observable<boolean> {
     let summaryEndPoint = '';

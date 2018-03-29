@@ -7,15 +7,17 @@ import { NgArrayPipesModule } from 'angular-pipes';
 import { PlannerListModule, WorkItemDetailAddTypeSelectorModule, WorkItemDetailModule } from 'fabric8-planner';
 import { WidgetsModule } from 'ngx-widgets';
 
+import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
+
 import { CreateWorkItemOverlayComponent } from './create-work-item-overlay/create-work-item-overlay.component';
 import { CreateWorkItemWidgetRoutingModule } from './create-work-item-widget-routing.module';
 import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
-
 
 @NgModule({
   imports: [
     RouterModule,
     CommonModule,
+    FeatureFlagModule,
     FormsModule,
     WidgetsModule,
     PlannerListModule,

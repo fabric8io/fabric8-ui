@@ -7,10 +7,8 @@ import {
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import {
-  FilterEvent,
-  SortEvent
-} from 'patternfly-ng';
+import { FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent } from 'patternfly-ng/sort';
 import { Observable } from 'rxjs';
 import {
   initContext,

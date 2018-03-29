@@ -1,6 +1,6 @@
 import { async } from '@angular/core/testing';
 
-import { WizardComponent, WizardConfig, WizardStep, WizardStepComponent, WizardStepConfig } from 'patternfly-ng';
+import { WizardComponent, WizardConfig, WizardStep, WizardStepComponent, WizardStepConfig } from 'patternfly-ng/wizard';
 
 import { flattenWizardSteps, getParentStep } from './abstract-wizard.component';
 

@@ -9,7 +9,7 @@ import {
 import {
   ChartBase,
   ChartDefaults
-} from 'patternfly-ng';
+} from 'patternfly-ng/chart';
 
 import {
   cloneDeep,
