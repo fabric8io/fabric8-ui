@@ -12,6 +12,10 @@ const routes: Routes = [
         // Preserves the navbar and defaults to connected accounts
         path: '',
         loadChildren: './connected-accounts/connected-accounts.module#ConnectedAccountsModule'
+      },
+      {
+        path: 'feature-opt-in',
+        loadChildren: './feature-opt-in/feature-opt-in.module#FeatureOptInModule'
       }
     ]
   }

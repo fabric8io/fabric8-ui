@@ -48,7 +48,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   emailPrivate: boolean = true;
   emailVerified: boolean;
   emailInvalid: boolean = false;
-  featureLevel: string;
   gitHubLinked: boolean = false;
   imageUrl: string;
   imageUrlInvalid: boolean = false;
@@ -224,7 +223,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (!profile.contextInformation) {
       profile.contextInformation = {};
     }
-    profile.featureLevel = this.featureLevel;
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.userService.currentLoggedInUser = user;
@@ -406,33 +404,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.imageUrl = (user.attributes.imageURL !== undefined) ? user.attributes.imageURL : '';
     this.url = (user.attributes.url !== undefined) ? user.attributes.url : '';
     this.username = (user.attributes.username !== undefined) ? user.attributes.username : '';
-
-    if (user
-      && user.attributes
-      && (user.attributes as any).featureLevel) {
-        this.setFeatureLevel((user.attributes as any).featureLevel);
-    }
-  }
-
-  private setFeatureLevel(level) {
-    switch (level) {
-      case 'beta': {
-        this.featureLevel = 'beta';
-        break;
-      }
-      case 'experimental': {
-        this.featureLevel = 'experimental';
-        break;
-      }
-      case 'internal': {
-        this.featureLevel = 'internal';
-        break;
-      }
-      default: {
-        this.featureLevel = 'released';
-        break;
-      }
-    }
   }
 
   private handleError(error: string, type: NotificationType) {
