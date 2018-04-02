@@ -18,7 +18,7 @@ import {
   TokenProvider
 } from 'ngx-forge';
 
-import { ContextService } from '../../../shared/context.service';
+import { ContextService } from 'app/shared/context.service';
 
 @Injectable()
 export class AppLauncherProjectSummaryService implements ProjectSummaryService {
@@ -52,7 +52,7 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
    */
   setup(summary: Summary, spaceId: string, spaceName: string, isImport: boolean): Observable<boolean> {
     let summaryEndPoint = '';
-    let payload = null;
+    let payload = '';
     if (isImport) {
       summaryEndPoint = this.END_POINT + this.API_BASE_IMPORT;
       payload = this.getImportPayload(summary, spaceId, spaceName);
@@ -63,8 +63,9 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     return this.options.flatMap((option) => {
       return this.http.post(summaryEndPoint, payload, option)
         .map(response => {
-          console.log(response.json());
-          return response.json();
+          if (response) {
+            return response.json();
+          }
         })
         .catch(this.handleError);
     });
@@ -76,7 +77,11 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
    * @returns {Observable<Context>}
    */
   getCurrentContext(): Observable<Context> {
-    return this.context.current;
+    if (this.context) {
+      return this.context.current;
+    } else {
+      return Observable.of(<Context> {});
+    }
   }
 
   private get options(): Observable<RequestOptions> {
@@ -85,12 +90,19 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     headers.append('X-Git-Provider', 'GitHub');
     headers.append('X-Execution-Step-Index', '0');
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    return Observable.fromPromise(this.tokenProvider.token.then((token) => {
-      headers.append('Authorization', 'Bearer ' + token);
-      return new RequestOptions({
-        headers: headers
-      });
-    }));
+    if (this.tokenProvider) {
+      return Observable.fromPromise(this.tokenProvider.token.then((token) => {
+        headers.append('Authorization', 'Bearer ' + token);
+        return new RequestOptions({
+          headers: headers
+        });
+      }));
+    } else {
+      return Observable.of(
+        new RequestOptions({
+          headers: headers
+        }));
+    }
   }
 
   private handleError(error: Response | any) {
@@ -109,33 +121,40 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
   }
 
   private getCreatePayload(summary: Summary, spaceId: string, spaceName: string) {
-    let payload =
-    'missionId=' + summary.mission.id +
-    '&runtimeId=' + summary.runtime.id +
-    '&runtimeVersion=' + summary.runtime.version.id +
-    '&pipelineId=' + summary.pipeline.id +
-    '&projectName=' + summary.dependencyCheck.projectName +
-    '&projectVersion=' + summary.dependencyCheck.projectVersion +
-    '&groupId=' + summary.dependencyCheck.groupId +
-    '&artifactId=' + summary.dependencyCheck.mavenArtifact +
-    '&spacePath=' + spaceName +
-    '&gitRepository=' + summary.gitHubDetails.repository +
-    '&spaceId=' + spaceId;
-    if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
-      payload += '&gitOrganization=' + summary.gitHubDetails.organization;
+    let payload = '';
+    if (summary && summary.mission && summary.runtime && summary.pipeline
+      && summary.dependencyCheck && summary.gitHubDetails && summary.runtime.version) {
+      payload =
+      'missionId=' + summary.mission.id +
+      '&runtimeId=' + summary.runtime.id +
+      '&runtimeVersion=' + summary.runtime.version.id +
+      '&pipelineId=' + summary.pipeline.id +
+      '&projectName=' + summary.dependencyCheck.projectName +
+      '&projectVersion=' + summary.dependencyCheck.projectVersion +
+      '&groupId=' + summary.dependencyCheck.groupId +
+      '&artifactId=' + summary.dependencyCheck.mavenArtifact +
+      '&spacePath=' + spaceName +
+      '&gitRepository=' + summary.gitHubDetails.repository +
+      '&spaceId=' + spaceId;
+      if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
+        payload += '&gitOrganization=' + summary.gitHubDetails.organization;
+      }
     }
     return payload;
   }
 
   private getImportPayload(summary: Summary, spaceId: string, spaceName: string) {
-    let payload =
-    '&pipelineId=' + summary.pipeline.id +
-    '&projectName=' + summary.dependencyCheck.projectName +
-    '&spacePath=' + spaceName +
-    '&gitRepository=' + summary.gitHubDetails.repository +
-    '&spaceId=' + spaceId;
-    if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
-      payload += '&gitOrganization=' + summary.gitHubDetails.organization;
+    let payload = '';
+    if (summary && summary.dependencyCheck && summary.pipeline && summary.gitHubDetails) {
+      payload =
+      '&pipelineId=' + summary.pipeline.id +
+      '&projectName=' + summary.dependencyCheck.projectName +
+      '&spacePath=' + spaceName +
+      '&gitRepository=' + summary.gitHubDetails.repository +
+      '&spaceId=' + spaceId;
+      if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
+        payload += '&gitOrganization=' + summary.gitHubDetails.organization;
+      }
     }
     return payload;
   }

@@ -169,10 +169,10 @@ export class AppLauncherGitproviderService implements GitProviderService {
   }
 
   /**
-   * Returns true if GitHub repo exists
+   * Returns list 0f GitHub repos
    *
    * @param {string} org The GitHub org (e.g., fabric8-launcher/ngx-launcher)
-   * @returns {Observable<boolean>} True if GitHub repo exists
+   * @returns {Observable<any>} list of existing GitHub repos
    */
   getGitHubRepoList(org: string): Observable<any> {
     let url = this.END_POINT + this.API_BASE + 'repositories';
@@ -183,11 +183,13 @@ export class AppLauncherGitproviderService implements GitProviderService {
     let res = this.options.flatMap((option) => {
       return this.http.get(url, option)
         .map(response => {
-            let responseList: string[] =  response.json();
             let repoList = [];
-            responseList.forEach(function(ele) {
-              repoList.push(ele.replace(location, ''));
-            });
+            if (response) {
+              let responseList: string[] =  response.json();
+              responseList.forEach(function(ele) {
+                repoList.push(ele.replace(location, ''));
+              });
+            }
             return repoList;
           })
         .catch(error => {
