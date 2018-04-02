@@ -105,7 +105,7 @@
                   <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} f8-list-group-item-icon"></span>
                   <span>{{workItem.attributes['system.number']}}</span>
                   <span class="work-item-title" *ngIf="workItem.attributes">
-                    <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.id]" class="f8-list-group-item-link">
+                    <a [routerLink]="[contextPath | async, 'plan', 'detail', workItem.attributes['system.number']]" class="f8-list-group-item-link">
                       {{workItem.attributes['system.title']}}
                     </a>
                   </span>
