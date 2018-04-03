@@ -70,7 +70,7 @@ describe('DeploymentsService', () => {
     mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     TestBed.configureTestingModule({
-      imports: [ HttpModule ],
+      imports: [HttpModule],
       providers: [
         {
           provide: XHRBackend, useClass: MockBackend
@@ -234,6 +234,23 @@ describe('DeploymentsService', () => {
         done: done
       });
     });
+
+    it('should encode url', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: null
+          }
+        }
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
+        response: httpResponse,
+        expected: [],
+        observable: svc.getApplications('foo-spaceId+'),
+        done: done
+      });
+    });
   });
 
   describe('#getEnvironments', () => {
@@ -306,6 +323,19 @@ describe('DeploymentsService', () => {
         response: httpResponse,
         expected: [],
         observable: svc.getEnvironments('foo-spaceId'),
+        done: done
+      });
+    });
+
+    it('should encode url', (done: DoneFn) => {
+      const httpResponse = {
+        data: null
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
+        response: httpResponse,
+        expected: [],
+        observable: svc.getEnvironments('foo-spaceId+'),
         done: done
       });
     });
@@ -486,6 +516,30 @@ describe('DeploymentsService', () => {
         response: httpResponse,
         expected: false,
         observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
+        done: done
+      });
+    });
+
+    it('should encode url', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: null
+                }
+              }
+            ]
+          }
+        }
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId+', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -703,6 +757,23 @@ describe('DeploymentsService', () => {
         done: done
       });
     });
+
+    it('should encode url', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: null
+          }
+        }
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
+        response: httpResponse,
+        expected: false,
+        observable: svc.isDeployedInEnvironment('foo-spaceId+', 'stage'),
+        done: done
+      });
+    });
   });
 
   describe('#getVersion', () => {
@@ -733,6 +804,37 @@ describe('DeploymentsService', () => {
         response: httpResponse,
         expected: '1.0.2',
         observable: svc.getVersion('foo-spaceId', 'stage', 'vertx-hello'),
+        done: done
+      });
+    });
+
+    it('should encode url', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'stage',
+                        version: '1.0.2'
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
+        response: httpResponse,
+        expected: '1.0.2',
+        observable: svc.getVersion('foo-spaceId+', 'stage', 'vertx-hello'),
         done: done
       });
     });
@@ -781,6 +883,29 @@ describe('DeploymentsService', () => {
           }
         );
     });
+
+    it('should encode url', (done: DoneFn) => {
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        expect(connection.request.url)
+          .toEqual('http://example.com/deployments/spaces/foo-spaceId%2B/applications/vertx-hello%2B/deployments/stage%2B?podCount=2');
+        connection.mockRespond(new Response(
+          new ResponseOptions({ status: 200 })
+        ));
+      });
+
+      svc.scalePods('foo-spaceId+', 'stage+', 'vertx-hello+', 2)
+        .subscribe(
+          (msg: string) => {
+            expect(msg).toEqual('Successfully scaled vertx-hello+');
+            subscription.unsubscribe();
+            done();
+          },
+          (err: string) => {
+            done.fail(err);
+          }
+        );
+    });
+
   });
 
   describe('#getPods', () => {
@@ -900,6 +1025,46 @@ describe('DeploymentsService', () => {
         done: done
       });
     });
+
+    it('should encode url', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'stage',
+                        pod_total: 1,
+                        pods: [
+                          ['Running', '1']
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+      const expectedResponse = {
+        total: 1,
+        pods: [
+          ['Running', 1]
+        ]
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
+        response: httpResponse,
+        expected: expectedResponse,
+        observable: svc.getPods('foo-spaceId+', 'stage', 'vertx-hello'),
+        done: done
+      });
+    });
   });
 
   describe('#getDeploymentCpuStat', () => {
@@ -1007,6 +1172,113 @@ describe('DeploymentsService', () => {
 
       it('should have queried the pods quota with the correct arguments', () => {
         expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
+      });
+    });
+
+    it('should encode url', (done: DoneFn) => {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 1, time: 1 },
+            { value: 2, time: 2 }
+          ],
+          memory: [
+            { value: 3, time: 3 },
+            { value: 4, time: 4 }
+          ],
+          net_rx: [
+            { value: 5, time: 5 },
+            { value: 6, time: 6 }
+          ],
+          net_tx: [
+            { value: 7, time: 7 },
+            { value: 8, time: 8 }
+          ],
+          start: 1,
+          end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
+            }
+          }
+        }
+      };
+      const deploymentResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app+',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env+',
+                        pods_quota: {
+                          cpucores: 3,
+                          memory: 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space%2B$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
+        }
+
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentCpuStat('foo-space+', 'foo-env+', 'foo-app+', 3)
+        .first()
+        .subscribe((stats: CpuStat[]) => {
+          expect(stats).toEqual([
+            { used: 1, quota: 3, timestamp: 1 },
+            { used: 2, quota: 3, timestamp: 2 },
+            { used: 9, quota: 3, timestamp: 9 }
+          ]);
+          subscription.unsubscribe();
+          done();
+        });
+      serviceUpdater.next();
+      serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space+', 'foo-env+', 'foo-app+');
       });
     });
   });
@@ -1118,6 +1390,114 @@ describe('DeploymentsService', () => {
         expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
       });
     });
+
+    it('should encode url', (done: DoneFn) => {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 1, time: 1 },
+            { value: 2, time: 2 }
+          ],
+          memory: [
+            { value: 3, time: 3 },
+            { value: 4, time: 4 }
+          ],
+          net_rx: [
+            { value: 5, time: 5 },
+            { value: 6, time: 6 }
+          ],
+          net_tx: [
+            { value: 7, time: 7 },
+            { value: 8, time: 8 }
+          ],
+          start: 1,
+          end: 8
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 9, value: 9
+            },
+            memory: {
+              time: 10, value: 10
+            },
+            net_tx: {
+              time: 11, value: 11
+            },
+            net_rx: {
+              time: 12, value: 12
+            }
+          }
+        }
+      };
+      const deploymentResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app+',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env+',
+                        pods_quota: {
+                          cpucores: 3,
+                          memory: 3
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space%2B$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
+        }
+
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentMemoryStat('foo-space+', 'foo-env+', 'foo-app+', 3)
+        .first()
+        .subscribe((stats: MemoryStat[]) => {
+          expect(stats).toEqual([
+            new ScaledMemoryStat(3, 3, 3),
+            new ScaledMemoryStat(4, 3, 4),
+            new ScaledMemoryStat(10, 3, 10)
+          ]);
+          subscription.unsubscribe();
+          done();
+        });
+      serviceUpdater.next();
+      serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space+', 'foo-env+', 'foo-app+');
+      });
+    });
+
   });
 
   describe('#getDeploymentNetworkStat', () => {
@@ -1296,7 +1676,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-app',
-                  deployments: [ ]
+                  deployments: []
                 }
               }
             ]
@@ -1357,7 +1737,7 @@ describe('DeploymentsService', () => {
             subscription.unsubscribe();
             done();
           }
-      );
+        );
       serviceUpdater.next();
     });
   });
@@ -1385,6 +1765,29 @@ describe('DeploymentsService', () => {
         done: done
       });
     });
+
+    it('should encode url', (done: DoneFn) => {
+      const httpResponse = {
+        data: [{
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                quota: 10,
+                used: 8
+              }
+            }
+          }
+        }]
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
+        response: httpResponse,
+        expected: httpResponse.data[0].attributes.quota.cpucores,
+        observable: svc.getEnvironmentCpuStat('foo-spaceId+', 'stage'),
+        done: done
+      });
+    });
   });
 
   describe('#getEnvironmentMemoryStat', () => {
@@ -1409,6 +1812,31 @@ describe('DeploymentsService', () => {
         response: httpResponse,
         expected: new ScaledMemoryStat(0.5 * GB, 1 * GB),
         observable: svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'),
+        done: done
+      });
+    });
+
+    it('should encode url', (done: DoneFn) => {
+      const GB = Math.pow(1024, 3);
+      const httpResponse = {
+        data: [{
+          attributes: {
+            name: 'stage',
+            quota: {
+              memory: {
+                used: 0.5 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }]
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
+        response: httpResponse,
+        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB),
+        observable: svc.getEnvironmentMemoryStat('foo-spaceId+', 'stage'),
         done: done
       });
     });
@@ -1447,11 +1875,11 @@ describe('DeploymentsService', () => {
       const expectedResponse = {
         total: 15,
         pods: [
-          [ 'Not Running', 4 ],
-          [ 'Running', 1 ],
-          [ 'Starting', 2 ],
-          [ 'Stopping', 3 ],
-          [ 'Terminating', 5 ]
+          ['Not Running', 4],
+          ['Running', 1],
+          ['Starting', 2],
+          ['Stopping', 3],
+          ['Terminating', 5]
         ]
       };
       doMockHttpTest({
@@ -1459,6 +1887,54 @@ describe('DeploymentsService', () => {
         response: httpResponse,
         expected: expectedResponse,
         observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
+        done: done
+      });
+    });
+
+    it('should encode url', (done: DoneFn) => {
+      const httpResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'vertx-hello',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'stage',
+                        pod_total: 15,
+                        pods: [
+                          ['Terminating', 5],
+                          ['Stopping', '3'],
+                          ['Running', '1'],
+                          ['Not Running', 4],
+                          ['Starting', '2']
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+      const expectedResponse = {
+        total: 15,
+        pods: [
+          ['Not Running', 4],
+          ['Running', 1],
+          ['Starting', 2],
+          ['Stopping', 3],
+          ['Terminating', 5]
+        ]
+      };
+      doMockHttpTest({
+        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
+        response: httpResponse,
+        expected: expectedResponse,
+        observable: svc.getPods('foo-spaceId+', 'stage', 'vertx-hello'),
         done: done
       });
     });

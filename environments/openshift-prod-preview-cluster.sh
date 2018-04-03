@@ -2,7 +2,7 @@
 
 export KUBERNETES_SERVICE_HOST=f8osoproxy-test-dsaas-preview.b6ff.rh-idev.openshiftapps.com
 export KUBERNETES_SERVICE_PORT=443
-export OPENSHIFT_CONSOLE_HOST=console.free-stg.openshift.com
+export OPENSHIFT_CONSOLE_HOST=console.starter-us-east-2.openshift.com
 export OPENSHIFT_CONSOLE_PORT=443
 
 echo "Using Kubernetes Master: ${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
@@ -21,8 +21,8 @@ export K8S_API_SERVER="localhost:3000"
 
 export OPENSHIFT_CONSOLE_URL="https://${OPENSHIFT_CONSOLE_HOST}:${OPENSHIFT_CONSOLE_PORT}/console"
 
-if [ -z "${OAUTH_ISSUER}" ]; then
-  export OAUTH_ISSUER="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
+if [ -z "${FABRIC8_REALM}" ]; then
+  export FABRIC8_REALM="fabric8"
 fi
 if [ -z "${OAUTH_SCOPE}" ]; then
   export OAUTH_SCOPE="user:full"
@@ -30,22 +30,28 @@ fi
 if [ -z "${OAUTH_CLIENT_ID}" ]; then
   export OAUTH_CLIENT_ID="fabric8"
 fi
-if [ -z "${K8S_API_SERVER_PROTOCOL}" ]; then
-  export K8S_API_SERVER_PROTOCOL="https"
-fi
-if [ -z "${K8S_API_SERVER_BASE_PATH}" ]; then
-  export K8S_API_SERVER_BASE_PATH=""
-fi
-if [ -z "${WS_K8S_API_SERVER}" ]; then
-  export WS_K8S_API_SERVER=${PROXIED_K8S_API_SERVER}
-fi
 if [ -z "${FABRIC8_PIPELINES_NAMESPACE}" ]; then
   export FABRIC8_PIPELINES_NAMESPACE=""
 fi
 
+
+export BRANDING="openshiftio"
+export K8S_API_SERVER_BASE_PATH=""
+export K8S_API_SERVER_PROTOCOL="https"
+export OAUTH_ISSUER="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
+export WS_K8S_API_SERVER="${PROXIED_K8S_API_SERVER}"
+export WS_K8S_API_SERVER_PROTOCOL="wss"
+export WS_K8S_API_SERVER_BASE_PATH=""
+
+export FABRIC8_SSO_API_URL=https://sso.prod-preview.openshift.io/
+export FABRIC8_WIT_API_URL=https://api.prod-preview.openshift.io/api/
+export FABRIC8_AUTH_API_URL=https://auth.prod-preview.openshift.io/api/
+
+
+export FABRIC8_FORGE_API_URL="https://forge.api.prod-preview.openshift.io"
+
 # this URL is used in dev mode only, for now feature-toggles.service.ts used WIT url as a proxy
 #export FABRIC8_FEATURE_TOGGLES_API_URL=http://localhost:8080/api/
-export FABRIC8_WIT_API_URL="https://api.prod-preview.openshift.io/api/"
 export FABRIC8_FEATURE_TOGGLES_API_URL=${FABRIC8_WIT_API_URL}
 
 echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_SERVER}/"
@@ -61,5 +67,12 @@ echo "OAUTH_AUTHORIZE_URI            ${OAUTH_AUTHORIZE_URI}"
 echo "OAUTH_LOGOUT_URI               ${OAUTH_LOGOUT_URI}"
 echo "FABRIC8_PIPELINES_NAMESPACE    ${FABRIC8_PIPELINES_NAMESPACE}"
 echo "OPENSHIFT_CONSOLE_URL          ${OPENSHIFT_CONSOLE_URL}"
+echo "FABRIC8_SSO_API_URL            ${KEYCLOAK_SAAS_URL}"
+echo "FABRIC8_WIT_API_URL            ${FABRIC8_WIT_API_URL}"
+echo "FABRIC8_AUTH_API_URL"          ${FABRIC8_AUTH_API_URL}""
+echo "FABRIC8_FORGE_API_URL          ${FABRIC8_FORGE_API_URL}"
 # echo "FABRIC8_FEATURE_TOGGLES_API_URL          ${FABRIC8_FEATURE_TOGGLES_API_URL}"
+echo "FABRIC8_REALM                  ${FABRIC8_REALM}"
+echo "WS_K8S_API_SERVER              ${WS_K8S_API_SERVER}"
+echo "BRANDING                       ${BRANDING}"
 echo ""

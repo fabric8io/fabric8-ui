@@ -1,7 +1,7 @@
 import { EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { Notification, Notifications, NotificationType } from 'ngx-base';
+import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, Space } from 'ngx-fabric8-wit';
 import {
   ForgeService,
@@ -44,6 +44,7 @@ export abstract class AbstractWizard implements OnInit {
   validation: Promise<boolean>;
 
   constructor(public forgeService: ForgeService,
+              public broadcaster: Broadcaster,
               public codebasesService: CodebasesService,
               public context: ContextService,
               public notifications: Notifications) {
@@ -87,8 +88,12 @@ export abstract class AbstractWizard implements OnInit {
     });
     obs.subscribe(
       codebase => {
-        // todo broadcast
-        // this._broadcaster.broadcast('codebaseAdded', codebase);
+        if (codebase.attributes.type === 'git') {
+          codebase.name = codebase.attributes.url.replace('.git', '').replace('git@github.com:', '');
+        } else {
+          codebase.name = codebase.attributes.url;
+        }
+        this.broadcaster.broadcast('codebaseAdded', codebase);
         this.notifications.message(<Notification> {
           message: `Your ${codebase.attributes.url} repository has been `
           + `added to the ${this.currentSpace.attributes.name} space`,
