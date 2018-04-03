@@ -26,6 +26,8 @@ source environments/local-cluster.sh
 
 ### Build and Run
 
+Requires `node` version 8.3.0 and `npm` 5.3.0. Consider using [Node Version Manager](https://github.com/creationix/nvm).
+
 Run `npm install`. 
 This will download all the required dependencies to be able to start the UI.
 
