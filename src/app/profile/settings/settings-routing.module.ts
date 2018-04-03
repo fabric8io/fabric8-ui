@@ -16,6 +16,10 @@ const routes: Routes = [
       {
         path: 'feature-opt-in',
         loadChildren: './feature-opt-in/feature-opt-in.module#FeatureOptInModule'
+      },
+      {
+        path: 'notifications',
+        loadChildren: './notifications/notifications.module#NotificationsModule'
       }
     ]
   }

@@ -1,0 +1,58 @@
+@import (reference) '../../../../assets/stylesheets/shared/osio.less';
+
+.toggle {
+  display: none;
+  // add default box-sizing for this scope
+  &,
+  &:after,
+  &:before,
+  & *,
+  & *:after,
+  & *:before,
+  & + .toggle-btn {
+    box-sizing: border-box;
+    &::selection {
+      background: none;
+    }
+  }
+  + .toggle-btn {
+    outline: 0;
+    display: block;
+    width: 4em;
+    height: 2em;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    &:after,
+    &:before {
+      position: relative;
+      display: block;
+      content: '';
+      width: 1em;
+      height: 1.8em;
+    }
+    &:after {
+      left: 0;
+    }
+    &:before {
+      display: none;
+    }
+  }
+}
+
+.toggle-light {
+  + .toggle-btn {
+    background: @color-pf-black-200;
+    border-radius: 1px;
+    border: 1px solid @color-pf-black-400;
+    padding: 0;
+    &:after {
+      background: @color-pf-blue-400;
+      box-shadow: 0 0 2px rgba(3, 3, 3, .4);
+      background-image: linear-gradient(to bottom, @color-pf-black-100  0, @color-pf-black-200  100%);
+      background-repeat: repeat-x;
+      position: relative;
+      z-index: 9;
+    }
+  }
+}
