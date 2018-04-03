@@ -16,12 +16,14 @@
               <li>
                 <a (click)="openForgeWizard(updateSpace)">Add to Space</a>
               </li>
-              <li class="divider"></li>
-              <li>
-                <a [href]="openshiftConsoleUrl" *ngIf="openshiftConsoleUrl"
-                   title="View in the OpenShift Console" target="_blank">Open in OpenShift Console
-                </a>
-              </li>
+              <ng-container *ngIf="consoleAvailable">
+                <li class="divider"></li>
+                <li>
+                  <a [href]="openshiftConsoleUrl"
+                     title="View in the OpenShift Console" target="_blank">Open in OpenShift Console
+                  </a>
+                </li>
+              </ng-container>
             </ul>
           </div>
         </div>

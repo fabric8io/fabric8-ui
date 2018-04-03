@@ -25,23 +25,26 @@ import {
   Space
 } from 'ngx-fabric8-wit';
 import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
-import { Fabric8UIConfig } from '../../../shared/config/fabric8-ui-config';
-import { PipelinesService } from '../../../shared/runtime-console/pipelines.service';
+import { PipelinesService as RuntimePipelinesService } from '../../../shared/runtime-console/pipelines.service';
+import { PipelinesService } from './services/pipelines.service';
 import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-pipelines',
   templateUrl: 'pipelines.component.html',
-  styleUrls: ['./pipelines.component.less']
+  styleUrls: ['./pipelines.component.less'],
+  providers: [
+    PipelinesService
+  ]
 })
 export class PipelinesComponent implements OnInit, OnDestroy {
 
   toolbarConfig: ToolbarConfig;
+  consoleAvailable: boolean = false;
   openshiftConsoleUrl: string;
 
   private _context: Context;
-  private contextSubscription: Subscription;
 
   private _filteredPipelines: BuildConfig[] = [];
   private _allPipelines: BuildConfig[] = [];
@@ -53,22 +56,21 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     title: 'Application',
     sortType: 'alpha'
   } as SortField;
-  private _pipelinesSubscription: Subscription;
 
   private selectedFlow: string;
   private space: Space;
   private modalRef: BsModalRef;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
     private modalService: BsModalService,
     private contexts: Contexts,
     private authService: AuthenticationService,
+    private runtimePipelinesService: RuntimePipelinesService,
     private pipelinesService: PipelinesService,
-    private fabric8UIConfig: Fabric8UIConfig,
     private broadcaster: Broadcaster
   ) {
-    this.updateConsoleLink();
-
     this.toolbarConfig = {
       filterConfig: {
         fields: [
@@ -107,24 +109,34 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.contextSubscription = this.contexts.current
-      .subscribe((context: Context) => {
+    this.subscriptions.push(
+      this.contexts.current.subscribe((context: Context) => {
         this._context = context;
         this.space = context.space;
-      });
+      }));
 
-    this._pipelinesSubscription = this.pipelinesService.current
-      .subscribe((buildConfigs: BuildConfig[]) => {
+    this.subscriptions.push(
+      this.runtimePipelinesService.current.subscribe((buildConfigs: BuildConfig[]) => {
         this._allPipelines = buildConfigs;
         this.applyFilters();
         this.applySort();
-        this.updateConsoleLink();
-      });
+      }));
+
+    this.subscriptions.push(
+      this.pipelinesService.getOpenshiftConsoleUrl().subscribe((url: string) => {
+        if (url !== '') {
+          this.consoleAvailable = true;
+        } else {
+          this.consoleAvailable = false;
+        }
+        this.openshiftConsoleUrl = url;
+    }));
   }
 
   ngOnDestroy(): void {
-    this._pipelinesSubscription.unsubscribe();
-    this.contextSubscription.unsubscribe();
+    this.subscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
+    });
   }
 
   get pipelines(): BuildConfig[] {
@@ -134,9 +146,9 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   openForgeWizard(addSpace: TemplateRef<any>): void {
     if (this.authService.getGitHubToken()) {
       this.selectedFlow = '';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+      this.modalRef = this.modalService.show(addSpace, { class: 'modal-lg' });
     } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+      this.broadcaster.broadcast('showDisconnectedFromGitHub', { 'location': window.location.href });
     }
   }
 
@@ -158,18 +170,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     this._currentSortField = $event.field;
     this._ascending = $event.isAscending;
     this.applySort();
-  }
-
-  private updateConsoleLink(): void {
-    this.openshiftConsoleUrl = this.fabric8UIConfig.openshiftConsoleUrl;
-    const pipelines = this._allPipelines;
-    if (this.openshiftConsoleUrl && pipelines && pipelines.length) {
-      const pipeline = pipelines[0];
-      const namespace = pipeline.namespace;
-      if (namespace) {
-        this.openshiftConsoleUrl = pathJoin(this.openshiftConsoleUrl, '/project', namespace, '/browse/pipelines');
-      }
-    }
   }
 
   private applyFilters(): void {
