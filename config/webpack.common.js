@@ -361,7 +361,7 @@ module.exports = function (options) {
               includePaths: [
                 path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
               ],
-              name: '_assets/fonts/[name].' + (isProd ? '[hash]' : '') + '[ext]'
+              name: '_assets/fonts/[name]' + (isProd ? '.[hash]' : '') + '.[ext]'
             }
           },
           exclude: path.resolve(__dirname, "../src/assets/images/")
@@ -375,7 +375,7 @@ module.exports = function (options) {
               includePaths: [
                 path.resolve(__dirname, "../src/assets/images/")
               ],
-              name: '_assets/images/[name].' + (isProd ? '[hash]' : '') + '[ext]'
+              name: '_assets/images/[name]' + (isProd ? '.[hash]' : '') + '.[ext]'
             }
           },
           exclude: path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
