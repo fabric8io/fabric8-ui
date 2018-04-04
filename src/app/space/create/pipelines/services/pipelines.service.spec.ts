@@ -309,4 +309,70 @@ describe('Pipelines Service', () => {
       );
   });
 
+  describe('PipelinesService - OK calls', () => {
+    const userServiceResponse = {
+      'data': {
+        'attributes': {
+          'created-at': '2017-05-11T16:44:56.376777Z',
+          'namespaces': [{
+            'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
+            'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
+            'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
+            'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
+            'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
+            'created-at': '2017-05-11T16:44:56.561538Z',
+            'name': 'blob',
+            'state': 'created',
+            'type': 'user',
+            'updated-at': '2017-05-11T16:44:56.561538Z',
+            'version': '1.0.91'
+          }]
+        },
+        'id': 'eae1de87-f58f-4e67-977a-95024dd7c6aa',
+        'type': 'userservices'
+      }
+    };
+
+    var subscription: Subscription;
+
+    beforeEach(() => {
+      this.subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(userServiceResponse),
+            status: 200
+          })
+        ));
+      });
+    });
+
+    it('should emit response with repeat calls', (done: DoneFn) => {
+      svc.getOpenshiftConsoleUrl()
+        .subscribe(
+          (msg: string) => {
+            expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
+            done();
+          },
+          (err: string) => {
+            done.fail(err);
+          }
+        );
+
+      svc.getOpenshiftConsoleUrl()
+        .subscribe(
+          (msg: string) => {
+            expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
+            done();
+          },
+          (err: string) => {
+            done.fail(err);
+          }
+        );
+    });
+
+    afterEach(() => {
+      this.subscription.unsubscribe();
+    });
+  });
+
 });

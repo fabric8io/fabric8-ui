@@ -48,8 +48,6 @@ export class PipelinesService {
   private readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
   private readonly apiUrl: string;
 
-  private consoleObservable: Observable<string>;
-
   constructor(
     private readonly http: Http,
     private readonly auth: AuthenticationService,
@@ -65,23 +63,19 @@ export class PipelinesService {
   }
 
   getOpenshiftConsoleUrl(): Observable<string> {
-    if (!this.consoleObservable) {
-      this.consoleObservable = this.http.get(this.apiUrl, { headers: this.headers })
-        .map((resp: Response) => resp.json() as UserServiceResponse)
-        .catch((err: Response) => this.handleHttpError(err))
-        .map((resp: UserServiceResponse) => resp.data.attributes.namespaces)
-        .map((namespaces: UserServiceNamespace[]) => {
-          for (let namespace of namespaces) {
-            if (namespace.name && namespace.type && namespace.type === 'user' && namespace['cluster-console-url']) {
-              return namespace['cluster-console-url'] + 'project/' + namespace.name + '/browse/pipelines';
-            }
+    return this.http.get(this.apiUrl, { headers: this.headers })
+      .map((resp: Response) => resp.json() as UserServiceResponse)
+      .catch((err: Response) => this.handleHttpError(err))
+      .map((resp: UserServiceResponse) => resp.data.attributes.namespaces)
+      .map((namespaces: UserServiceNamespace[]) => {
+        for (let namespace of namespaces) {
+          if (namespace.name && namespace.type && namespace.type === 'user' && namespace['cluster-console-url']) {
+            return namespace['cluster-console-url'] + 'project/' + namespace.name + '/browse/pipelines';
           }
+        }
 
-          return '';
-        });
-    }
-
-    return this.consoleObservable;
+        return '';
+      });
   }
 
   private handleHttpError(response: Response): Observable<any> {
