@@ -11,19 +11,21 @@
                     aria-haspopup='true' aria-expanded='true' dropdownToggle>
               <span class='fa fa-ellipsis-v'></span>
             </button>
-
             <ul class='dropdown-menu-right dropdown-menu' aria-labelledby='dropdownKebabRight9' role="menu" *dropdownMenu>
               <li>
                 <a (click)="openForgeWizard(updateSpace)">Add to Space</a>
               </li>
-              <ng-container *ngIf="consoleAvailable">
-                <li class="divider"></li>
-                <li>
-                  <a [href]="openshiftConsoleUrl"
-                     title="View in the OpenShift Console" target="_blank">Open in OpenShift Console
+              <li class="divider"></li>
+              <li [ngClass]="{'disabled': !consoleAvailable}">
+                <a [href]="openshiftConsoleUrl" *ngIf="consoleAvailable; else consoleDisabled" target="_blank">
+                  Open in OpenShift Console
+                </a>
+                <ng-template #consoleDisabled>
+                  <a tooltip="Openshift Console unavailable" target="_blank" disabled>
+                    Open in OpenShift Console
                   </a>
-                </li>
-              </ng-container>
+                </ng-template>
+              </li>
             </ul>
           </div>
         </div>
