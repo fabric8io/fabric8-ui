@@ -56,7 +56,6 @@ import { APP_RESOLVER_PROVIDERS }      from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
 // Header
-import { FeatureBannerComponent } from './feature-flag/banner/feature-banner.component';
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { featureTogglesApiUrlProvider, FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
@@ -168,8 +167,7 @@ export type StoreType = {
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
-    HeaderComponent,
-    FeatureBannerComponent
+    HeaderComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first

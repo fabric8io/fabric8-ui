@@ -1,47 +1,59 @@
-<div [ngSwitch]="feature.level" class="feature-footer">
+<div [ngSwitch]="userLevel" class="feature-footer">
 
   <div *ngSwitchCase="'internal'">
     <ng-template #tooltipTemplateInternal>
-      <div>There are {{feature.number}} {{feature.level}} features on this page.
-        <ul>
-          <li>feature1</li>
-          <li>feature2</li>
-        </ul>
+      <div>
+        <span *ngIf="featurePageConfig?.featuresPerLevel?.internal?.length !== 0">{{featurePageConfig?.featuresPerLevel?.internal?.length}} internal feature(s) on this page.
+          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.internal">{{feature.id}}: {{feature.attributes.description}}</li>
+        </span>
+        <span *ngIf="featurePageConfig?.featuresPerLevel?.experimental?.length !== 0">{{featurePageConfig?.featuresPerLevel?.experimental?.length}} experimental feature(s) on this page.
+          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">{{feature.id}}: {{feature.attributes.description}}</li>
+        </span>
+        <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">{{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.
+          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+        </span>
       </div>
     </ng-template>
-    <div [tooltip]="tooltipTemplateInternal" class="internal">
+    <div *ngIf="!noFeaturesInInternal" [tooltip]="tooltipTemplateInternal" class="internal">
+      <i class="fa fa-lock fa-1x"></i>
+    </div>
+    <div *ngIf="noFeaturesInInternal" class="empty">
       <i class="fa fa-lock fa-1x"></i>
     </div>
   </div>
   <div *ngSwitchCase="'experimental'">
     <ng-template #tooltipTemplateExperimental>
-      <div>There are {{feature.number}} {{feature.level}} features on this page.
-        <ul>
-          <li>feature1</li>
-          <li>feature2</li>
-        </ul>
+      <div>
+        <span *ngIf="featurePageConfig?.featuresPerLevel?.experimental?.length !== 0">{{featurePageConfig?.featuresPerLevel?.experimental?.length}} experimental feature(s) on this page.
+          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">{{feature.id}}: {{feature.attributes.description}}</li>
+        </span>
+        <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">{{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.
+          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+        </span>
       </div>
     </ng-template>
-    <div [tooltip]="tooltipTemplateExperimental" class="experimental">
+    <div *ngIf="!noFeaturesInExperimental" [tooltip]="tooltipTemplateExperimental" class="experimental">
+      <i class="fa fa-flask fa-1x"></i>
+    </div>
+    <div *ngIf="noFeaturesInExperimental" class="empty">
       <i class="fa fa-flask fa-1x"></i>
     </div>
   </div>
   <div *ngSwitchCase="'beta'">
     <ng-template #tooltipTemplateBeta>
-      <div>There are {{feature.number}} {{feature.level}} features on this page.
-        <ul>
-          <li>feature1</li>
-          <li>feature2</li>
-        </ul>
+      <div *ngIf="!noFeaturesInBeta">
+        <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">{{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.
+          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+        </span>
       </div>
     </ng-template>
-    <div [tooltip]="tooltipTemplateBeta" class="beta">
+    <div *ngIf="!noFeaturesInBeta" [tooltip]="tooltipTemplateBeta" class="beta">
+      <i class="fa fa-1x">&Beta;</i>
+    </div>
+    <div *ngIf="noFeaturesInBeta" class="empty">
       <i class="fa fa-1x">&Beta;</i>
     </div>
   </div>
   <div *ngSwitchCase="'released'">
-    <div class="released">
-      <i class="fa fa-1x">&Beta;</i>
-    </div>
   </div>
 </div>

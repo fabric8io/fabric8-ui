@@ -22,7 +22,7 @@
   font-size:20px;
   font-weight:bold;
   float:right;
-  margin-right: 42px;
+  margin-right: 8%;
   &:hover {
     background: darken((@color-for-feature), 10%);
   }
@@ -43,6 +43,9 @@ f8-feature-footer .arrow {
   display: none;
 }
 
+.empty {
+  .round-button(@color-pf-black-400;);
+}
 
 // INTERNAL
 .internal {
@@ -65,6 +68,6 @@ f8-feature-footer .arrow {
 }
 
 // ERROR
-.experimental {
+.error {
   .round-button(@color-system-error);
 }

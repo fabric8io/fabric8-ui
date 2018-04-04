@@ -77,46 +77,43 @@ export class FeatureTogglesService {
     let params = [];
     params['page'] = page;
 
-    // return this.http.get(url, { headers: this.headers, params: params })
-    //   .map((response) => {
-    //     return response.json().data as Feature[];
-    //   })
-    //   .catch((error) => {
-    //     return this.handleError(error);
-    //   });
-    const features = [
-      {
-        attributes: {
-          name: 'Analyze',
-          description: 'DEscription',
-          enabled: true,
-          'enablement-level': 'beta',
-          'user-level': 'internal',
-          'user-enabled': true
-        },
-        id: 'Analyze'} as Feature,
-      {
-      attributes: {
-        name: 'Analyze.newHomeDashboard',
-        description: 'DEscription',
-        enabled: true,
-       'enablement-level': 'experimental',
-        'user-level': 'internal',
-       'user-enabled': true
-      },
-    id: 'Analyze.newHomeDashboard'} as Feature,
-      {
-        attributes: {
-          name: 'Analyze.newSpaceDashboard',
-          description: 'DEscription',
-          enabled: true,
-          'enablement-level': 'internal',
-          'user-level': 'internal',
-          'user-enabled': false
-        },
-        id: 'Analyze.newSpaceDashboard'} as Feature];
-
-    return Observable.of(features);
+    return this.http.get(url, { headers: this.headers, params: params })
+      .map((response) => {
+        return response.json().data as Feature[];
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+    // const features = [
+    //   {
+    //     attributes: {
+    //       name: 'Analyze',
+    //       description: 'DEscription',
+    //       enabled: true,
+    //       'enablement-level': 'experimental',
+    //       'user-enabled': true
+    //     },
+    //     id: 'Analyze'} as Feature,
+    //   {
+    //   attributes: {
+    //     name: 'Analyze.newHomeDashboard',
+    //     description: 'DEscription',
+    //     enabled: true,
+    //    'enablement-level': 'experimental',
+    //    'user-enabled': true
+    //   },
+    // id: 'Analyze.newHomeDashboard'} as Feature,
+    //   {
+    //     attributes: {
+    //       name: 'Analyze.newSpaceDashboard',
+    //       description: 'DEscription',
+    //       enabled: true,
+    //       'enablement-level': 'internal',
+    //       'user-enabled': true
+    //     },
+    //     id: 'Analyze.newSpaceDashboard'} as Feature];
+    //
+    // return Observable.of(features);
   }
   private handleError(error: any) {
     this.logger.error(error);
