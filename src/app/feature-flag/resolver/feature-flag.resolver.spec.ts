@@ -16,7 +16,7 @@ describe('FeatureFlag resolver: it', () => {
   let mockActivatedRoute: any;
   beforeEach(() => {
     mockLog = jasmine.createSpyObj('Logger', ['log']);
-    mockTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
+    mockTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeaturesPerPage']);
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     mockActivatedRoute = jasmine.createSpy('ActivatedRouteSnapshot');
     TestBed.configureTestingModule({
@@ -57,7 +57,7 @@ describe('FeatureFlag resolver: it', () => {
       showBanner: 'internal',
       enabled: true
     } as FeatureFlagConfig;
-    mockTogglesService.getFeature.and.returnValue(Observable.of(feature));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
     // when
     resolver.resolve(route as ActivatedRouteSnapshot, null).subscribe(val => {
       // then
@@ -76,7 +76,7 @@ describe('FeatureFlag resolver: it', () => {
       'user-enabled': true,
       'enablement-level': 'internal'
     }} as Feature;
-    mockTogglesService.getFeature.and.returnValue(Observable.of(feature));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
     // when
     resolver.resolve(route, null).subscribe(val => {
       // then
@@ -93,7 +93,7 @@ describe('FeatureFlag resolver: it', () => {
       enabled: true,
       'user-enabled': false
     }} as Feature;
-    mockTogglesService.getFeature.and.returnValue(Observable.of(feature));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
     // when
     resolver.resolve(route, null).subscribe(val => {
       // then

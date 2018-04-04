@@ -1,0 +1,47 @@
+<div [ngSwitch]="feature.level" class="feature-footer">
+
+  <div *ngSwitchCase="'internal'">
+    <ng-template #tooltipTemplateInternal>
+      <div>There are {{feature.number}} {{feature.level}} features on this page.
+        <ul>
+          <li>feature1</li>
+          <li>feature2</li>
+        </ul>
+      </div>
+    </ng-template>
+    <div [tooltip]="tooltipTemplateInternal" class="internal">
+      <i class="fa fa-lock fa-1x"></i>
+    </div>
+  </div>
+  <div *ngSwitchCase="'experimental'">
+    <ng-template #tooltipTemplateExperimental>
+      <div>There are {{feature.number}} {{feature.level}} features on this page.
+        <ul>
+          <li>feature1</li>
+          <li>feature2</li>
+        </ul>
+      </div>
+    </ng-template>
+    <div [tooltip]="tooltipTemplateExperimental" class="experimental">
+      <i class="fa fa-flask fa-1x"></i>
+    </div>
+  </div>
+  <div *ngSwitchCase="'beta'">
+    <ng-template #tooltipTemplateBeta>
+      <div>There are {{feature.number}} {{feature.level}} features on this page.
+        <ul>
+          <li>feature1</li>
+          <li>feature2</li>
+        </ul>
+      </div>
+    </ng-template>
+    <div [tooltip]="tooltipTemplateBeta" class="beta">
+      <i class="fa fa-1x">&Beta;</i>
+    </div>
+  </div>
+  <div *ngSwitchCase="'released'">
+    <div class="released">
+      <i class="fa fa-1x">&Beta;</i>
+    </div>
+  </div>
+</div>

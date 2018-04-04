@@ -10,8 +10,18 @@ import { FeatureWarningPageComponent } from './warning-page/feature-warning-page
 
 @NgModule({
   imports: [CommonModule, RouterModule, FeatureFlagRoutingModule],
-  declarations: [FeatureToggleComponent, FeatureContainerComponent, FeatureWarningPageComponent, FeatureFlagHomeComponent],
-  exports: [FeatureToggleComponent, FeatureContainerComponent, FeatureWarningPageComponent, FeatureFlagHomeComponent],
+  declarations: [
+    FeatureToggleComponent,
+    FeatureContainerComponent,
+    FeatureWarningPageComponent,
+    FeatureFlagHomeComponent
+  ],
+  exports: [
+    FeatureToggleComponent,
+    FeatureContainerComponent,
+    FeatureWarningPageComponent,
+    FeatureFlagHomeComponent
+  ],
   providers: [FeatureFlagMapping]
 
 })
