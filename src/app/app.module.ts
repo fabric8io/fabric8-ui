@@ -57,7 +57,6 @@ import { AppState, InternalStateType } from './app.service';
 
 // Header
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
-import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { featureTogglesApiUrlProvider, FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
 
 import { HeaderComponent } from './layout/header/header.component';
@@ -213,7 +212,6 @@ export type StoreType = {
       provide: OnLogin,
       useClass: Fabric8UIOnLogin
     },
-    FeatureAcknowledgementService,
     forgeApiUrlProvider,
     GettingStartedService,
     HttpService,

@@ -93,7 +93,7 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
          } as FeatureFlagConfig;
        } else { // feature is not toggled off but user-level is disabled, forward to opt-in page
          return {
-           showBanner: this.getBannerColor(this.userLevel)
+           showBanner: this.getBannerColor(mainFeature.attributes['enablement-level'])
          };
        }
      }
@@ -109,7 +109,7 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
          this.router.navigate(['/_error']);
        } else if (!config.featuresPerLevel) {
          this.router.navigate(['/_featureflag'], {queryParams: {
-             showBanner: this.getBannerColor(this.userLevel)
+             showBanner: config.showBanner
            } });
          return null;
        }

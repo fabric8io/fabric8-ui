@@ -72,10 +72,10 @@ export class FeatureTogglesService {
    * @param ids An arrays of feature Id.
    * @returns {Observable<Feature>}
    */
-  getFeaturesPerPage(page: string): Observable<Feature[]> {
+  getFeaturesPerPage(group: string): Observable<Feature[]> {
     let url = Location.stripTrailingSlash(this.featureTogglesUrl || '') + '/features';
     let params = [];
-    params['page'] = page;
+    params['group'] = group;
 
     return this.http.get(url, { headers: this.headers, params: params })
       .map((response) => {
@@ -84,36 +84,6 @@ export class FeatureTogglesService {
       .catch((error) => {
         return this.handleError(error);
       });
-    // const features = [
-    //   {
-    //     attributes: {
-    //       name: 'Analyze',
-    //       description: 'DEscription',
-    //       enabled: true,
-    //       'enablement-level': 'experimental',
-    //       'user-enabled': true
-    //     },
-    //     id: 'Analyze'} as Feature,
-    //   {
-    //   attributes: {
-    //     name: 'Analyze.newHomeDashboard',
-    //     description: 'DEscription',
-    //     enabled: true,
-    //    'enablement-level': 'experimental',
-    //    'user-enabled': true
-    //   },
-    // id: 'Analyze.newHomeDashboard'} as Feature,
-    //   {
-    //     attributes: {
-    //       name: 'Analyze.newSpaceDashboard',
-    //       description: 'DEscription',
-    //       enabled: true,
-    //       'enablement-level': 'internal',
-    //       'user-enabled': true
-    //     },
-    //     id: 'Analyze.newSpaceDashboard'} as Feature];
-    //
-    // return Observable.of(features);
   }
   private handleError(error: any) {
     this.logger.error(error);
