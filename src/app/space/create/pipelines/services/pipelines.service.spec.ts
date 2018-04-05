@@ -336,7 +336,7 @@ describe('Pipelines Service', () => {
     var subscription: Subscription;
 
     beforeEach(() => {
-      this.subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+      subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
         connection.mockRespond(new Response(
           new ResponseOptions({
             body: JSON.stringify(userServiceResponse),
@@ -351,18 +351,16 @@ describe('Pipelines Service', () => {
         .subscribe(
           (msg: string) => {
             expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
-            done();
-          },
-          (err: string) => {
-            done.fail(err);
-          }
-        );
-
-      svc.getOpenshiftConsoleUrl()
-        .subscribe(
-          (msg: string) => {
-            expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
-            done();
+            svc.getOpenshiftConsoleUrl()
+            .subscribe(
+              (msg: string) => {
+                expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
+                done();
+              },
+              (err: string) => {
+                done.fail(err);
+              }
+            );
           },
           (err: string) => {
             done.fail(err);
@@ -371,7 +369,7 @@ describe('Pipelines Service', () => {
     });
 
     afterEach(() => {
-      this.subscription.unsubscribe();
+      subscription.unsubscribe();
     });
   });
 
