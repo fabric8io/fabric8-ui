@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
@@ -12,7 +12,7 @@ import {
   SpaceService
 } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { Observable, Scheduler } from 'rxjs';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
@@ -53,7 +53,6 @@ export class ContextService implements Contexts {
     private spaceService: SpaceService,
     private userService: UserService,
     private notifications: Notifications,
-    private route: ActivatedRoute,
     private profileService: ProfileService,
     private spaceNamePipe: SpaceNamePipe,
     private eventService: EventService,
@@ -203,25 +202,6 @@ export class ContextService implements Contexts {
 
   changeContext(navigation: Observable<Navigation>): Observable<Context> {
     let res = navigation
-      // Process the navigation only if it is safe
-      .filter(val => {
-        if (this.checkForReservedWords(val.user)) {
-          this.notifications.message({
-            message: `${val.user} not found`,
-            type: NotificationType.WARNING
-          } as Notification);
-          console.log(`User name ${val.user} from path ${val.url} contains reserved characters.`);
-          return false;
-        } else if (this.checkForReservedWords(val.space)) {
-          this.notifications.message({
-            message: `${val.space} not found`,
-            type: NotificationType.WARNING
-          } as Notification);
-          console.log(`Space name ${val.space} from path ${val.url} contains reserved characters.`);
-          return false;
-        }
-        return true;
-      })
       // Fetch the objects from the REST API
       .switchMap(val => {
         if (val.space) {
@@ -232,15 +212,10 @@ export class ContextService implements Contexts {
               return { user: space.relationalData.creator, space: space } as RawContext;
             })
             .catch((err, caught) => {
-              this.notifications.message({
-                message: `${val.url} not found`,
-                type: NotificationType.WARNING
-              } as Notification);
               console.log(`Space with name ${val.space} and owner ${val.user}
                 from path ${val.url} was not found because of ${err}`);
               return Observable.throw(`Space with name ${val.space} and owner ${val.user}
                 from path ${val.url} was not found because of ${err}`);
-
             });
         } else {
           // Otherwise, load the user and use that as the owner
@@ -250,10 +225,6 @@ export class ContextService implements Contexts {
               return { user: user, space: null } as RawContext;
             })
             .catch((err, caught) => {
-              this.notifications.message({
-                message: `${val.url} not found`,
-                type: NotificationType.WARNING
-              } as Notification);
               console.log(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
               return Observable.throw(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
             });
@@ -353,6 +324,9 @@ export class ContextService implements Contexts {
 
 
   private loadUser(userName: string): Observable<User> {
+    if (this.checkForReservedWords(userName)) {
+      return Observable.throw(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+    }
     return this.userService
       .getUserByUsername(userName)
       .map(val => {
@@ -386,6 +360,12 @@ export class ContextService implements Contexts {
   }
 
   private loadSpace(userName: string, spaceName: string): Observable<Space> {
+    if (this.checkForReservedWords(userName)) {
+      return Observable.throw(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+    } else if (this.checkForReservedWords(spaceName)) {
+      return Observable.throw(new Error(`Space name ${spaceName} contains reserved characters.`), Scheduler.asap);
+    }
+
     if (userName && spaceName) {
       return this.spaceService.getSpaceByName(userName, spaceName);
     } else {

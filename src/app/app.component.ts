@@ -1,16 +1,17 @@
-import { Location } from '@angular/common';
 import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Event, NavigationEnd, NavigationError, Router } from '@angular/router';
 
-import { Broadcaster } from 'ngx-base';
+import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Spaces } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
+import { Observable } from 'rxjs';
 
 import { OnLogin } from '../a-runtime-console/index';
+import { ErrorService } from './layout/error/error.service';
 import { FeatureFlagConfig } from './models/feature-flag-config';
 import { AboutService } from './shared/about.service';
 import { ProviderService } from './shared/account/provider.service';
@@ -50,11 +51,12 @@ export class AppComponent {
     private authService: AuthenticationService,
     private broadcaster: Broadcaster,
     private router: Router,
-    private location: Location,
     private titleService: Title,
     private brandingService: BrandingService,
     private modalService: BsModalService,
-    private providerService: ProviderService
+    private providerService: ProviderService,
+    private errorService: ErrorService,
+    private logger: Logger
   ) {
   }
 
@@ -66,10 +68,18 @@ export class AppComponent {
       this.loginService.login();
     });
 
-    // preserve an invalid URL in the browser's history while routing to the 404 page
-    this.router.events
-      .filter(event => event instanceof NavigationEnd && event.urlAfterRedirects === '/_error')
-      .subscribe((event: NavigationEnd) => this.location.replaceState(event.url));
+    Observable.merge(
+      this.router.events
+        .filter((event: Event): boolean => event instanceof NavigationEnd)
+        .filter((event: NavigationEnd): boolean => event.url !== '/_error')
+        .filter((event: NavigationEnd): boolean => event.urlAfterRedirects === '/_error')
+        .map((event: NavigationEnd): string => event.url),
+      this.router.events
+        .filter((event: Event): boolean => event instanceof NavigationError)
+        .map((event: NavigationError): string => event.url)
+    ).subscribe((url: string): void => this.handleNavigationError(url));
+
+    this.router.errorHandler = this.logger.error;
 
     this.router.events
       .filter(event => event instanceof NavigationEnd)
@@ -141,5 +151,9 @@ export class AppComponent {
 
   connectToGithub(): void {
     this.providerService.linkGitHub(this.lastPageToTryGitHub);
+  }
+
+  private handleNavigationError(url: string): void {
+    this.router.navigate(['_error']).then(() => this.errorService.updateFailedRoute(url));
   }
 }

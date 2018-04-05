@@ -3,7 +3,11 @@ import {
   Component,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import {
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -13,7 +17,10 @@ import {
   TestContext
 } from 'testing/test-context';
 
-import { Broadcaster } from 'ngx-base';
+import {
+  Broadcaster,
+  Logger
+} from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Spaces } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
@@ -31,6 +38,7 @@ import { LoginService } from './shared/login.service';
 import { NotificationsService } from './shared/notifications.service';
 
 import { AppComponent } from './app.component';
+import { ErrorService } from './layout/error/error.service';
 
 @Component({
   template: '<f8-app></f8-app>'
@@ -49,12 +57,6 @@ class MockErrorComponent { }
 
 describe('AppComponent', () => {
   type Context = TestContext<AppComponent, HostComponent>;
-
-  const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
-  mockBroadcaster.on.and.returnValue(Observable.never());
-
-  let testRouter: Router;
-  let testLocation: Location;
 
   initContext(AppComponent, HostComponent, {
     imports: [
@@ -82,27 +84,43 @@ describe('AppComponent', () => {
       { provide: AnalyticService, useValue: null },
       { provide: OnLogin, useValue: null },
       { provide: AuthenticationService, useValue: null },
-      { provide: Broadcaster, useValue: mockBroadcaster },
       { provide: BrandingService, useValue: createMock(BrandingService) },
       { provide: BsModalService, useValue: createMock(BsModalService) },
-      { provide: ProviderService, useValue: createMock(ProviderService) }
+      { provide: ProviderService, useValue: createMock(ProviderService) },
+      {
+        provide: Broadcaster, useFactory: () => {
+          const broadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
+          broadcaster.on.and.returnValue(Observable.never());
+          return broadcaster;
+        }
+      },
+      {
+        provide: ErrorService, useFactory: () => {
+          const svc: jasmine.SpyObj<ErrorService> = createMock(ErrorService);
+          svc.updateFailedRoute.and.stub();
+          return svc;
+        }
+      },
+      {
+        provide: Logger, useFactory: () => {
+          const logger: jasmine.SpyObj<Logger> = createMock(Logger);
+          logger.error.and.stub();
+          return logger;
+        }
+      }
     ],
     schemas: [ NO_ERRORS_SCHEMA ]
   });
 
-  beforeEach(() => {
-    testRouter = TestBed.get(Router);
-    testLocation = TestBed.get(Location);
-  });
-
-  it('should preserve URL on error state redirect', function(this: Context, done: DoneFn) {
-    spyOn(testLocation, 'replaceState').and.callThrough();
+  it('should call ErrorService#updateFailedRoute on invalid URL', fakeAsync(() => {
+    const testRouter: Router = TestBed.get(Router);
+    const mockErrorService: jasmine.SpyObj<ErrorService> = TestBed.get(ErrorService);
     testRouter.navigate(['/nonexistent/app/path']).then((status: boolean): void => {
       expect(status).toBeTruthy();
       expect(testRouter.url).toEqual('/_error');
-      expect(testLocation.replaceState).toHaveBeenCalledWith('/nonexistent/app/path');
-      expect(testLocation.path()).toEqual('/nonexistent/app/path');
-      done();
+      tick();
+      expect(mockErrorService.updateFailedRoute).toHaveBeenCalledWith('/nonexistent/app/path');
     });
-  });
+    tick();
+  }));
 });
