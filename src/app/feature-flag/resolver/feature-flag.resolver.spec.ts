@@ -127,8 +127,8 @@ describe('FeatureFlag resolver: it', () => {
       // then
       expect(val).toBeNull();
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/_featureflag'], {queryParams: {
-          showBanner: 'beta'
-        }} );
+          showBanner: 'internal'
+        }});
     });
   });
 });
