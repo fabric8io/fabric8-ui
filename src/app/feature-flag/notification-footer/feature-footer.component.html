@@ -4,13 +4,19 @@
     <ng-template #tooltipTemplateInternal>
       <div>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.internal?.length !== 0">{{featurePageConfig?.featuresPerLevel?.internal?.length}} internal feature(s) on this page.
-          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.internal">{{feature.id}}: {{feature.attributes.description}}</li>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.internal">{{feature.id}}: {{feature.attributes.description}}</li>
+          </ul>
         </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.experimental?.length !== 0">{{featurePageConfig?.featuresPerLevel?.experimental?.length}} experimental feature(s) on this page.
-          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">{{feature.id}}: {{feature.attributes.description}}</li>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">{{feature.id}}: {{feature.attributes.description}}</li>
+          </ul>
         </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">{{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.
-          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+          </ul>
         </span>
       </div>
     </ng-template>
@@ -25,10 +31,14 @@
     <ng-template #tooltipTemplateExperimental>
       <div>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.experimental?.length !== 0">{{featurePageConfig?.featuresPerLevel?.experimental?.length}} experimental feature(s) on this page.
-          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">{{feature.id}}: {{feature.attributes.description}}</li>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">{{feature.id}}: {{feature.attributes.description}}</li>
+          </ul>
         </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">{{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.
-          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+          </ul>
         </span>
       </div>
     </ng-template>
@@ -43,7 +53,9 @@
     <ng-template #tooltipTemplateBeta>
       <div *ngIf="!noFeaturesInBeta">
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">{{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.
-          <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">{{feature.id}}: {{feature.attributes.description}}</li>
+          </ul>
         </span>
       </div>
     </ng-template>
