@@ -12,7 +12,7 @@ const stringify = require('json-stringify');
  * Webpack Plugins
  */
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
+// const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
