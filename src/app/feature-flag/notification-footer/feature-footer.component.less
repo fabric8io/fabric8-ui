@@ -1,28 +1,27 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 
 .feature-footer {
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:60px;   /* Height of the footer */
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
   background: transparent;
 }
 
-
 .round-button(@color-for-feature) {
-  display:block;
-  width:50px;
-  height:50px;
-  line-height:50px;
+  display: block;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
   border-radius: 50%;
-  color: white;
-  text-align:center;
+  color: @color-pf-black-100;
+  text-align: center;
   background: @color-for-feature;
-  box-shadow: 0 0 3px gray;
-  font-size:20px;
-  font-weight:bold;
-  float:right;
-  margin-right: 8%;
+  box-shadow: 0 0 3px @color-pf-black-600;
+  font-size: 20px;
+  font-weight: 700;
+  float: right;
+  margin-right: 4em;
   &:hover {
     background: darken((@color-for-feature), 10%);
   }
@@ -62,12 +61,7 @@ f8-feature-footer .arrow {
   .round-button(@color-beta);
 }
 
-// ERROR
+// RELEASED
 .released {
-  .round-button(@color-system-error);
-}
-
-// ERROR
-.error {
   .round-button(@color-system-error);
 }
