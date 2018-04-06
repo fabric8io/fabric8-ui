@@ -22,6 +22,7 @@ import { DependencyCheckService } from 'ngx-forge';
 })
 export class AddAppOverlayComponent implements OnDestroy, OnInit {
   currentSpace: Space;
+  isProjectNameValid: boolean;
   loggedInUser: User;
   projectName: string = '';
   selectedFlow: string = '';
@@ -73,5 +74,13 @@ export class AddAppOverlayComponent implements OnDestroy, OnInit {
       this.loggedInUser.attributes.username, this.currentSpace.attributes.name,
       'applauncher', this.selectedFlow, this.projectName]);
     this.hideAddAppOverlay();
+  }
+
+  /**
+   * Validate the application name
+   */
+  validateProjectName(): void {
+    this.isProjectNameValid =
+      this.dependencyCheckService.validateProjectName(this.projectName);
   }
 }

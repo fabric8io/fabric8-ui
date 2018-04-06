@@ -3,6 +3,10 @@
 export KUBERNETES_SERVICE_HOST=tsrv.devshift.net
 export KUBERNETES_SERVICE_PORT=8443
 
+# Below variables have to be set explicitly during development
+export ANALYTICS_RECOMMENDER_URL=""
+export ANALYTICS_LICENSE_URL=""
+
 echo "Using Kubernetes Master: ${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
 
 [ -z "$KUBERNETES_SERVICE_HOST" ] && IFS=':' read KUBERNETES_SERVICE_HOST KUBERNETES_SERVICE_PORT <<< "$PARTS"
@@ -48,6 +52,8 @@ echo "OAUTH_CLIENT_ID:               ${OAUTH_CLIENT_ID}"
 echo "OAUTH_SCOPE:                   ${OAUTH_SCOPE}"
 echo "OAUTH_AUTHORIZE_URI            ${OAUTH_AUTHORIZE_URI}"
 echo "OAUTH_LOGOUT_URI               ${OAUTH_LOGOUT_URI}"
+echo "ANALYTICS_RECOMMENDER_URL     ${ANALYTICS_RECOMMENDER_URL}"
+echo "ANALYTICS_LICENSE_URL         ${ANALYTICS_LICENSE_URL}"
 echo ""
 
 echo "Now run:"

@@ -3,6 +3,16 @@
     <form class="code-imports--step active" role="form">
       <section class="container-fluid">
         <form class="form" #spaceForm="ngForm">
+          <div class="row alert-row">
+            <div class="col-sm-10 col-md-8 col-md-offset-2 alert-column">
+              <div class="alert-box" *ngIf="isProjectNameValid === false">
+                <div class="alert alert-danger">
+                  <span class="pficon pficon-error-circle-o"></span>
+                  <strong>Syntax Error.</strong> See a full list of naming requirements below the input field.
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="row">
             <div class="col-sm-8 col-sm-offset-4 col-md-offset-5 col-md-4">
               <h1 class="code-imports--step_title">Create an Application</h1>
@@ -11,95 +21,87 @@
           <div class="row row-cards-pf">
             <div class="col-sm-10 col-md-8 col-md-offset-2">
               <form>
-                <div class="form-group">
+                <div class="form-group" [ngClass]="{'has-error': isProjectNameValid === false}">
                   <h1 class="code-imports--step_title">
                     Name your application
                   </h1>
                   <span class="code-imports--step_pencil">
                     <input id="projectName" name="projectName" type="text" class="form-control code-imports--step_input col-sm-5" placeholder="Enter Application Name"
-                           aria-label="Application Name Input" required [(ngModel)]="projectName">
+                      aria-label="Application Name Input" required [(ngModel)]="projectName" (keyup)="validateProjectName()">
                   </span>
-                  <p class="help-block">
-                    Application name must be unique, at least 4 characters long, cannot be more than 65 characters and must contain only letters,
-                    numbers, spaces underscores or hyphens.
-                    <br>
-                    It cannot start or end with a space, underscore or hyphen.
-                  </p>
+                  <span class="help-block code-imports--step_help-block" *ngIf="isProjectNameValid === false">
+                    Names may not start or end with spaces, underscores, or hyphens.
+                  </span>
                 </div>
               </form>
             </div>
           </div>
           <div class="row row-cards-pf">
-              <div class="col-sm-10 col-md-10 col-md-offset-2">
-                  <h1 class="code-imports--step_title">
-                    How do you want to start?</h1>
-              </div>
+            <div class="col-sm-10 col-md-10 col-md-offset-2">
+              <h1 class="code-imports--step_title">
+                How do you want to start?</h1>
+            </div>
           </div>
           <div class="row row-cards-pf">
             <div class="col-sm-10 col-md-4 col-md-offset-2">
-              <div class="container-fluid container-cards-pf" >
+              <div class="container-fluid container-cards-pf">
                 <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
                   <div class="card-pf-body" (click)="updateLauncherFlowSelection('createapp')">
-                      <div class="row codebase-card-container">
-                          <div class="col-sm-1 codebase-card-container-radio">
-                              <div class="list-view-pf-checkbox codebase-card-container-radio-input">
-                                <input name="import" type="radio"
-                                [(ngModel)]="selectedFlow"
-                                value="createapp">
-                              </div>
-                          </div>
-                          <div class="col-sm-2">
-                              <p class="card-pf-info text-center">
-                                <i class="pficon pficon-add-circle-o fa-3x"></i>
-                              </p>
-                          </div>
-                          <div class="col-sm-9 codebase-card-container-desp">
-                              <h2 class="card-pf-title">
-                                  Create a new codebase
-                              </h2>
-                              <div class="card-pf-items">
-                                <div class="card-pf-item">
-                                    choose from a variety of Red Hat certified templates to generate the foundation for a new application
-                                    in the OpenShift ecosystem.
-                                </div>
-                              </div>
-                          </div>
+                    <div class="row codebase-card-container">
+                      <div class="col-sm-1 codebase-card-container-radio">
+                        <div class="list-view-pf-checkbox codebase-card-container-radio-input">
+                          <input name="import" type="radio" [(ngModel)]="selectedFlow" value="createapp">
+                        </div>
                       </div>
+                      <div class="col-sm-2">
+                        <p class="card-pf-info text-center">
+                          <i class="pficon pficon-add-circle-o fa-3x"></i>
+                        </p>
+                      </div>
+                      <div class="col-sm-9 codebase-card-container-desp">
+                        <h2 class="card-pf-title">
+                          Create a new codebase
+                        </h2>
+                        <div class="card-pf-items">
+                          <div class="card-pf-item">
+                            Choose from a variety of Red Hat certified templates to generate the foundation for a new application in the OpenShift ecosystem.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="col-sm-10 col-md-4">
-                <div class="container-fluid container-cards-pf">
-                  <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
-                    <div class="card-pf-body" (click)="updateLauncherFlowSelection('importapp')">
-                      <div class="row codebase-card-container">
-                          <div class="col-sm-1 codebase-card-container-radio">
-                              <div class="list-view-pf-checkbox codebase-card-container-radio-input">
-                                <input name="import" type="radio"
-                                [(ngModel)]="selectedFlow"
-                                value="importapp">
-                              </div>
+              <div class="container-fluid container-cards-pf">
+                <div class="card-pf card-pf-view card-pf-view-select card-pf-view-single-select code-imports--step_content">
+                  <div class="card-pf-body" (click)="updateLauncherFlowSelection('importapp')">
+                    <div class="row codebase-card-container">
+                      <div class="col-sm-1 codebase-card-container-radio">
+                        <div class="list-view-pf-checkbox codebase-card-container-radio-input">
+                          <input name="import" type="radio" [(ngModel)]="selectedFlow" value="importapp">
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <p class="card-pf-info text-center">
+                          <i class="pficon pficon-export fa-3x"></i>
+                        </p>
+                      </div>
+                      <div class="col-sm-9 codebase-card-container-desp">
+                        <h2 class="card-pf-title">
+                          Import an existing codebase
+                        </h2>
+                        <div class="card-pf-items">
+                          <div class="card-pf-item">
+                            Use code you already have as the foundation for your new application.
                           </div>
-                          <div class="col-sm-2">
-                              <p class="card-pf-info text-center">
-                                <i class="pficon pficon-export fa-3x"></i>
-                              </p>
-                          </div>
-                          <div class="col-sm-9 codebase-card-container-desp">
-                              <h2 class="card-pf-title">
-                                  Import an existing codebase
-                              </h2>
-                              <div class="card-pf-items">
-                                <div class="card-pf-item">
-                                  Use code you already have as the foundation for your new application.
-                                </div>
-                              </div>
-                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
             </div>
           </div>
         </form>
@@ -107,17 +109,16 @@
       <footer class="container-fluid">
         <div class="row">
           <div class="col-sm-12 code-imports--step_toolbar">
-            <button id="cancelImportsButton" class="btn btn-primary" aria-label="Continue"
-            [disabled]="selectedFlow === ''"
-            (click)="routeToLaunchApp()">Continue</button>
+            <button id="cancelImportsButton" class="btn btn-primary" aria-label="Continue" [disabled]="selectedFlow === '' || projectName === '' || isProjectNameValid === false"
+              (click)="routeToLaunchApp()">Continue</button>
           </div>
         </div>
       </footer>
     </form>
     <div class="f8launcher-container_close">
-        <div class="sticky close animate-continue">
-          <span class="pficon pficon-close" aria-hidden="true" title="cancel" (click)="hideAddAppOverlay()"></span>
-        </div>
+      <div class="sticky close animate-continue">
+        <span class="pficon pficon-close" aria-hidden="true" title="cancel" (click)="hideAddAppOverlay()"></span>
+      </div>
     </div>
   </div>
 </div>

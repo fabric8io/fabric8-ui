@@ -1,6 +1,8 @@
 window.Fabric8UIEnv = {
   "kubernetesMode": "{{ .Env.KUBERNETES_MODE }}",
   "analyticsWriteKey": "{{ .Env.ANALYTICS_WRITE_KEY }}",
+  "analyticsRecommenderUrl": "{{ .Env.ANALYTICS_RECOMMENDER_URL }}",
+  "analyticsLicenseUrl": "{{ .Env.ANALYTICS_LICENSE_URL }}",
   "branding": "{{ .Env.BRANDING }}",
   "forgeApiUrl": "{{ .Env.FABRIC8_FORGE_API_URL }}",
   "openshiftConsoleUrl": "{{ .Env.OPENSHIFT_CONSOLE_URL }}",

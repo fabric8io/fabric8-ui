@@ -46,6 +46,9 @@ const BUILD_TIMESTAMP = process.env.BUILD_TIMESTAMP;
 const BUILD_VERSION = process.env.BUILD_VERSION;
 const FABRIC8_BRANDING = process.env.FABRIC8_BRANDING || 'fabric8';
 
+const ANALYTICS_RECOMMENDER_URL = process.env.ANALYTICS_RECOMMENDER_URL;
+const ANALYTICS_LICENSE_URL = process.env.ANALYTICS_LICENSE_URL;
+
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
@@ -66,7 +69,9 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   BUILD_NUMBER: BUILD_NUMBER,
   BUILD_TIMESTAMP: BUILD_TIMESTAMP,
   BUILD_VERSION: BUILD_VERSION,
-  FABRIC8_BRANDING: FABRIC8_BRANDING
+  FABRIC8_BRANDING: FABRIC8_BRANDING,
+  ANALYTICS_RECOMMENDER_URL: ANALYTICS_RECOMMENDER_URL,
+  ANALYTICS_LICENSE_URL: ANALYTICS_LICENSE_URL
 });
 
 module.exports = function (env) {
@@ -211,7 +216,9 @@ module.exports = function (env) {
           'BUILD_NUMBER': stringify(METADATA.BUILD_NUMBER),
           'BUILD_TIMESTAMP': stringify(METADATA.BUILD_TIMESTAMP),
           'BUILD_VERSION': stringify(METADATA.BUILD_VERSION),
-          'FABRIC8_BRANDING': stringify(METADATA.FABRIC8_BRANDING)
+          'FABRIC8_BRANDING': stringify(METADATA.FABRIC8_BRANDING),
+          'ANALYTICS_RECOMMENDER_URL': stringify(METADATA.ANALYTICS_RECOMMENDER_URL),
+          'ANALYTICS_LICENSE_URL': stringify(METADATA.ANALYTICS_LICENSE_URL)
         }
       }),
 

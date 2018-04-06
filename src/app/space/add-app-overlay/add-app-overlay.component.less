@@ -42,16 +42,23 @@ input,
   .code-imports {
     color: @color-pf-white;
     overflow-y: auto;
-    .alert-danger {
-      background-color: transparent;
-      border: none;
-      color: @color-pf-red-100;
+    .alert-row {
+      position: relative;
+      .alert-column {
+        position: absolute;
+        top: -50px;
+        .alert-danger {
+          background-color: rgba(0, 0, 0, 1);
+          border: 1px solid @color-pf-red-100;
+          color: @color-pf-red-100;
+        }
+      }
     }
     &--step {
       margin-top: 5%;
       padding: 35px;
       &_title {
-        font-size: 2em; // matches h4
+        font-size: 1.5em;
       }
       label {
         margin-bottom: 15px;
@@ -62,17 +69,19 @@ input,
             content: '\f040';
             font-family: FontAwesome;
             position: absolute;
-            top: 59px;
+            top: 67px;
             right: 20px;
             color: @color-pf-white;
             font-size: 1.5em;
-            border-bottom: 4px solid;
-            border-bottom-color: @color-pf-blue;
           }
         }
       }
       &_input {
         margin-bottom: 10px;
+      }
+      &_help-block {
+        position: absolute;
+        top: 96px;
       }
       &_content {
         background-color: transparent;
@@ -116,9 +125,10 @@ input,
     .sticky.close {
       color: @color-pf-white;
       position: fixed;
-      right: 30px;
-      top: 71px;
+      right: 130px;
+      top: 121px;
       z-index: 1030;
+      font-size: 25px;
       .pficon {
         background: @color-pf-black-900;
         border: 3px solid @color-pf-black-900;
