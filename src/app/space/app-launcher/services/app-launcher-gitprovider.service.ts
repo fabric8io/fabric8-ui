@@ -200,11 +200,6 @@ export class AppLauncherGitproviderService implements GitProviderService {
 
   // Private
 
-  private isPageRedirect(): boolean {
-    let result = this.getRequestParam('selection'); // simulate Github auth redirect
-    return (result !== null);
-  }
-
   private getRequestParam(name: string): string {
     let param = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(window.location.search);
     if (param !== null) {
