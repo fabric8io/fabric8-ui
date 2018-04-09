@@ -9,7 +9,6 @@ const routes: Routes = [
     component: SettingsComponent,
     children: [
       {
-        // Preserves the navbar and defaults to connected accounts
         path: '',
         loadChildren: './connected-accounts/connected-accounts.module#ConnectedAccountsModule'
       },

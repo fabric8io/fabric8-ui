@@ -6,10 +6,22 @@
 </div>
 <div class="settings-nav" id="settings-options-nav" role="navigation">
   <ul>
-    <li>Connected Accounts</li>
-    <li>Features Opt-in</li>
-    <li>Notifications</li>
-    <li>Resources</li>
+    <li>
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+        true}">Connected Accounts</a>
+    </li>
+    <li>
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/feature-opt-in']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+        true}">Features Opt-in</a>
+    </li>
+    <li>
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/notifications']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+        true}">Notifications</a>
+    </li>
+    <li>
+      <a [routerLink]="['/' + loggedInUserName + '/_settings/resources']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+        true}">Resources</a>
+    </li>
   </ul>
 </div>
 <router-outlet></router-outlet>

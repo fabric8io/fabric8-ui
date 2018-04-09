@@ -1,14 +1,15 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+
 .settings-nav {
   position: relative;
   overflow: hidden;
 }
 
 #settings-title-nav {
-  background-color: #393F44;
-  color: #ffffff;
+  background-color: @color-pf-black-800;
+  color: @color-pf-black-100;
   padding: 20px 15px 15px 25px;
 }
-
 
 .settings-title-nav-text {
   margin: 0;
@@ -16,17 +17,30 @@
 }
 
 #settings-options-nav {
-  height: 25px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #d1d1d1;
-}
-
-#settings-options-nav ul {
-  list-style-type: none;
-  padding-left: 25px;
-}
-
-#settings-options-nav li {
-  padding-right: 10px;
-  display: inline-block;
+  padding: 10px 0 0;
+  background-color: @color-pf-black-150;
+  border-bottom: 1px solid @color-pf-black-300;
+  ul {
+    list-style-type: none;
+    padding-left: 25px;
+    li {
+      a.active-link {
+        color: @color-pf-blue;
+        border-bottom: 3px solid @color-pf-blue;
+        padding-bottom: 9px;
+        text-decoration: none;
+      }
+    }
+  }
+  li {
+    padding-right: 10px;
+    display: inline-block;
+  }
+  a {
+    color: @color-pf-black;
+    text-decoration: none;
+  }
+  a:hover {
+    color: @color-pf-blue;
+  }
 }
