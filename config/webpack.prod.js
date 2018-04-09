@@ -1,7 +1,7 @@
 /**
  * @author: @AngularClass
  */
-
+const webpack = require('webpack');
 const helpers = require('./helpers');
 const branding = require('./branding');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
@@ -76,7 +76,31 @@ module.exports = function (env) {
   // stringify can't cope with undefined
   console.log('The env from the webpack.prod config: ' + (env ? stringify(env, null, 2) : env));
   console.log('The merged metadata:', METADATA);
-  return webpackMerge(commonConfig({ env: ENV }), {
+  return webpackMerge({
+    plugins: [
+      /**
+       * Plugin: ModuleConcatenationPlugin
+       * Description: Hoist modules into one closure for performance.
+       *
+       * See: https://webpack.js.org/plugins/module-concatenation-plugin/
+       */
+      new webpack.optimize.ModuleConcatenationPlugin(),
+
+      /**
+       * Plugin: HashedModuleIdsPlugin
+       * Description: This plugin will cause hashes to be based on the relative path of the module,
+       * generating a four character string as the module id.
+       * Prevents busting the cache prematurely due to default internal module ID generation.
+       *
+       * See: https://webpack.js.org/plugins/hashed-module-ids-plugin/
+       */
+      new webpack.HashedModuleIdsPlugin(),
+    ]
+  },
+
+  commonConfig({ env: ENV }),
+
+  {
 
     /**
      * Developer tool to enhance debugging
