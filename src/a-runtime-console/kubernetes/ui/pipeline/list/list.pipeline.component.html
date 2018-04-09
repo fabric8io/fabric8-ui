@@ -3,12 +3,12 @@
   <fabric8-loading [loading]="loading">
     <div class="pipelines-page">
       <div class='pipeline-list animate-repeat' *ngFor='let pipeline of pipelines'>
-        <div class="row">
+        <div id="pipeline-list-item" class="row">
           <div class="col-12">
             <h3>
-              <span class="{{pipeline.iconStyle}} fa-spin" title="{{pipeline.statusPhase}}" *ngIf="pipeline.iconStyle === 'pficon-running'"></span>
-              <span class="{{pipeline.iconStyle}}" title="{{pipeline.statusPhase}}" *ngIf="pipeline.iconStyle !== 'pficon-running'"></span>
-              <a [href]="pipeline.openShiftConsoleUrl" target="openshift" class="card-title" title="view pipeline in the OpenShift console">{{ pipeline.name }}</a>
+              <span id="pipeline-status-running" class="{{pipeline.iconStyle}} fa-spin" title="{{pipeline.statusPhase}}" *ngIf="pipeline.iconStyle === 'pficon-running'"></span>
+              <span id="pipeline-status-other" class="{{pipeline.iconStyle}}" title="{{pipeline.statusPhase}}" *ngIf="pipeline.iconStyle !== 'pficon-running'"></span>
+              <a id="pipeline-name" [href]="pipeline.openShiftConsoleUrl" target="openshift" class="card-title" title="view pipeline in the OpenShift console">{{ pipeline.name }}</a>
 <!--
               <a [routerLink]="[pipeline.id]" class="card-title" title="view pipeline">{{ pipeline.name }}</a>
 -->
@@ -42,7 +42,7 @@
             </div>
           </div>
           <div *ngIf="pipeline.gitUrl">Source Repository:
-            <a href="{{pipeline.gitUrl}}">{{pipeline.gitUrl}}</a>
+            <a id="pipeline-git" href="{{pipeline.gitUrl}}">{{pipeline.gitUrl}}</a>
           </div>
 
           <div *ngIf="!pipeline.interestingBuilds.length">

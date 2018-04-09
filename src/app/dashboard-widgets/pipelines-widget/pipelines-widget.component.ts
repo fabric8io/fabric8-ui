@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 
 import {
-  ConnectableObservable,
   Observable
 } from 'rxjs/Rx';
 
@@ -29,8 +28,8 @@ export class PipelinesWidgetComponent implements OnInit {
   @Output() addToSpace = new EventEmitter();
 
   contextPath: Observable<string>;
-  buildConfigs: ConnectableObservable<BuildConfigs>;
-  buildConfigsCount: Observable<number>;
+  buildConfigs: Observable<BuildConfigs>;
+  buildConfigsCount: number = 0;
 
   constructor(
     private context: Contexts,
@@ -40,10 +39,13 @@ export class PipelinesWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.contextPath = this.context.current.map(context => context.path);
-    this.buildConfigs = this.pipelinesService.current
-      .publish();
-    this.buildConfigsCount = this.buildConfigs.map(buildConfigs => buildConfigs.length);
-    this.buildConfigs.connect();
+    this.buildConfigs = this.pipelinesService.current.share();
+    // buildConfigsCount triggers changes in the DOM; force Angular Change Detection
+    // via setTimeout encapsulation
+    this.buildConfigs
+      .map(buildConfigs => buildConfigs.length)
+      .share()
+      .subscribe(length => setTimeout(() => this.buildConfigsCount = length));
   }
 
 }

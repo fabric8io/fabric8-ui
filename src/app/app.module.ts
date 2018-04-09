@@ -78,7 +78,6 @@ import { fabric8UIConfigProvider }       from './shared/config/fabric8-ui-config
 import { ContextCurrentUserGuard }       from './shared/context-current-user-guard.service';
 import { ContextResolver }               from './shared/context-resolver.service';
 import { ContextService }                from './shared/context.service';
-import { DummyService }                  from './shared/dummy.service';
 import { EventService }                  from './shared/event.service';
 import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
@@ -197,7 +196,6 @@ export type StoreType = {
       provide: Contexts,
       useExisting: ContextService
     },
-    DummyService,
     {
       provide: ErrorHandler,
       useClass: RavenExceptionHandler

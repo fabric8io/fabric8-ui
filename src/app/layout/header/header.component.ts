@@ -9,7 +9,6 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
 import { Navigation } from '../../models/navigation';
-import { DummyService } from '../../shared/dummy.service';
 import { LoginService } from '../../shared/login.service';
 import { MenuedContextType } from './menued-context-type';
 
@@ -78,7 +77,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private logger: Logger,
     public loginService: LoginService,
     private broadcaster: Broadcaster,
-    public dummy: DummyService,
     private contexts: Contexts,
     private modalService: BsModalService,
     private authentication: AuthenticationService

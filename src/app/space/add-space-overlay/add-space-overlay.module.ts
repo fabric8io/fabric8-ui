@@ -10,6 +10,8 @@ import { SelectedItemsPipe } from '../wizard/pipes/selected-items.pipe';
 import { VisibleItemsPipe } from '../wizard/pipes/visible-items.pipe';
 import { AddSpaceOverlayComponent } from './add-space-overlay.component';
 
+import { SpaceTemplateService } from 'app/shared/space-template.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -23,7 +25,8 @@ import { AddSpaceOverlayComponent } from './add-space-overlay.component';
     AddSpaceOverlayComponent
   ],
   providers: [
-    CodebasesService
+    CodebasesService,
+    SpaceTemplateService
   ]
 })
 

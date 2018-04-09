@@ -12,7 +12,9 @@
                       id="developmentProcess"
                       [(ngModel)]="selectedTemplate"
                       name="developmentProcess">
-                    <option *ngFor="let p of spaceTemplates" [ngValue]="p">{{p.name}}</option>
+                    <option *ngFor="let p of spaceTemplates" [ngValue]="p">
+                      {{p.attributes.name}}
+                    </option>
                   </select>
                   <span class="fa fa-angle-down form-control-feedback development-process-selector" aria-hidden="true"></span>
                 </div>
@@ -44,9 +46,9 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <p *ngIf="selectedTemplate?.description">
+                  <p *ngIf="selectedTemplate?.attributes.description">
                     <i class="pficon pficon-info"></i>
-                    {{selectedTemplate.description}}
+                    {{selectedTemplate.attributes.description}}
                   </p>
                 </div>
             </div>

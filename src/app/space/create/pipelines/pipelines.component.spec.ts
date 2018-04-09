@@ -4,6 +4,7 @@ import {
   Input
 } from '@angular/core';
 import {
+  async,
   ComponentFixture,
   TestBed
 } from '@angular/core/testing';
@@ -19,6 +20,7 @@ import {
   TestContext
 } from 'testing/test-context';
 
+import { Broadcaster } from 'ngx-base';
 import {
   BsDropdownConfig,
   BsDropdownModule
@@ -28,19 +30,19 @@ import {
   TooltipConfig,
   TooltipModule
 } from 'ngx-bootstrap/tooltip';
-import { AuthenticationService } from 'ngx-login-client';
-import { ToolbarModule } from 'patternfly-ng/toolbar';
-
-import { BuildConfig } from 'a-runtime-console/index';
-import { Broadcaster } from 'ngx-base';
 import {
   Context,
   Contexts
 } from 'ngx-fabric8-wit';
-import { Fabric8UIConfig } from '../../../shared/config/fabric8-ui-config';
-import { PipelinesService } from '../../../shared/runtime-console/pipelines.service';
+import { AuthenticationService } from 'ngx-login-client';
+import { ToolbarModule } from 'patternfly-ng/toolbar';
+
+import { BuildConfig } from 'a-runtime-console/index';
+import { PipelinesService as RuntimePipelinesService } from '../../../shared/runtime-console/pipelines.service';
+
 import { ForgeWizardModule } from '../../forge-wizard/forge-wizard.module';
 import { PipelinesComponent } from './pipelines.component';
+import { PipelinesService } from './services/pipelines.service';
 
 @Component({
   selector: 'fabric8-pipelines-list',
@@ -64,9 +66,19 @@ describe('PipelinesComponent', () => {
 
   let contexts: Contexts;
   let authenticationService: jasmine.SpyObj<AuthenticationService>;
-  let pipelinesService: { current: Observable<BuildConfig[]> };
+  let runtimePipelinesService: { current: Observable<BuildConfig[]> };
   let f8uiConfig: { openshiftConsoleUrl: string };
   let broadcaster: { broadcast: Function };
+
+  let pipelinesService: jasmine.SpyObj<PipelinesService>;
+
+  beforeAll(() => {
+    pipelinesService = createMock(PipelinesService);
+  });
+
+  beforeEach(async(() => {
+    TestBed.overrideProvider(PipelinesService, { useFactory: () => pipelinesService, deps: [] });
+  }));
 
   beforeEach(() => {
     contexts = {
@@ -86,7 +98,7 @@ describe('PipelinesComponent', () => {
     authenticationService = createMock(AuthenticationService);
     authenticationService.getGitHubToken.and.returnValue('some-token');
 
-    pipelinesService = {
+    runtimePipelinesService = {
       current: new BehaviorSubject<any[]>([
         {
           id: 'app',
@@ -111,9 +123,6 @@ describe('PipelinesComponent', () => {
         }
       ])
     };
-
-    f8uiConfig = { openshiftConsoleUrl: 'http://example.com/openshift' };
-
     broadcaster = { broadcast: jasmine.createSpy('broadcast') };
   });
 
@@ -134,14 +143,33 @@ describe('PipelinesComponent', () => {
       TooltipConfig,
       { provide: Contexts, useFactory: () => contexts },
       { provide: AuthenticationService, useFactory: () => authenticationService },
+      { provide: RuntimePipelinesService, useFactory: () => runtimePipelinesService },
       { provide: PipelinesService, useFactory: () => pipelinesService },
-      { provide: Fabric8UIConfig, useFactory: () => f8uiConfig },
       { provide: Broadcaster, useFactory: () => broadcaster }
     ]
   });
 
-  it('should set OpenShift Console URL', function(this: TestingContext) {
-    expect(this.testedDirective.openshiftConsoleUrl).toEqual('http://example.com/openshift');
+  describe('Pipelines component with url', () => {
+    beforeAll(() => {
+      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(Observable.of('http://example.com/openshift'));
+    });
+
+    it('should set OpenShift Console URL', function(this: TestingContext) {
+      expect(this.testedDirective.consoleAvailable).toBeTruthy();
+      expect(this.testedDirective.openshiftConsoleUrl).toEqual('http://example.com/openshift');
+    });
+  });
+
+
+  describe('Pipelines component with empty url', () => {
+    beforeAll(() => {
+      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(Observable.of(''));
+    });
+
+    it('should hide OpenShift Console URL', function(this: TestingContext) {
+      expect(this.testedDirective.consoleAvailable).toBeFalsy();
+      expect(this.testedDirective.openshiftConsoleUrl).toEqual('');
+    });
   });
 
   it('should only display pipelines within the current space', function(this: TestingContext) {

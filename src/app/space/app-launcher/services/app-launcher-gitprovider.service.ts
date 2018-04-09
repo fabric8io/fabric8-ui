@@ -119,12 +119,12 @@ export class AppLauncherGitproviderService implements GitProviderService {
             this.gitHubUserLogin = user.login;
             orgs.push(this.gitHubUserLogin);
             let gitHubDetails = {
-              authenticated: this.isPageRedirect() ? true : false,
+              authenticated: true,
               avatar: user.avatarUrl,
               login: user.login,
               organizations: orgs
             } as GitHubDetails;
-            return this.isPageRedirect() ? Observable.of(gitHubDetails) : Observable.empty();
+            return Observable.of(gitHubDetails);
           } else {
             return Observable.empty();
           }
@@ -133,7 +133,6 @@ export class AppLauncherGitproviderService implements GitProviderService {
         return Observable.empty();
       }
     });
-
   }
 
   /**
@@ -200,11 +199,6 @@ export class AppLauncherGitproviderService implements GitProviderService {
   }
 
   // Private
-
-  private isPageRedirect(): boolean {
-    let result = this.getRequestParam('selection'); // simulate Github auth redirect
-    return (result !== null);
-  }
 
   private getRequestParam(name: string): string {
     let param = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(window.location.search);

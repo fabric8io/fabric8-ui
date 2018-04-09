@@ -9,19 +9,17 @@ import { Profile, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
 import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
-import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { ContextService } from '../../shared/context.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
-import { SpaceWizardComponent } from './space-wizard.component';
+import { AddSpaceOverlayComponent } from './add-space-overlay.component';
 
 
-describe('SpaceWizardComponent', () => {
+describe('AddSpaceOverlayComponent', () => {
 
-  let fixture: ComponentFixture<SpaceWizardComponent>;
+  let fixture: ComponentFixture<AddSpaceOverlayComponent>;
   let component: DebugNode['componentInstance'];
   let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast']);
-  let mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockSpaceTemplateService: any = {
     getSpaceTemplates: () => {
@@ -117,15 +115,6 @@ describe('SpaceWizardComponent', () => {
     type: NotificationType.DANGER
   };
 
-  let mockFeature: Feature = {
-    'attributes': {
-      'name': 'mock-attribute',
-      'enabled': true,
-      'user-enabled': true
-    }
-  };
-
-  mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
   mockSpaceNamespaceService.updateConfigMap = {};
   mockSpaceService.create.and.returnValue(Observable.of(mockSpace));
   mockSpacesService.addRecent.and.returnValue(mockSubject);
@@ -136,10 +125,9 @@ describe('SpaceWizardComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
-      declarations: [SpaceWizardComponent],
+      declarations: [AddSpaceOverlayComponent],
       providers: [
         { provide: Broadcaster, useValue: mockBroadcaster },
-        { provide: FeatureTogglesService, useValue: mockFeatureTogglesService },
         { provide: Router, useValue: mockRouter },
         { provide: SpaceTemplateService, useValue: mockSpaceTemplateService },
         { provide: SpaceService, useValue: mockSpaceService },
@@ -153,50 +141,11 @@ describe('SpaceWizardComponent', () => {
         { provide: ErrorHandler, useValue: mockErrorHandler }
       ]
     });
-    fixture = TestBed.createComponent(SpaceWizardComponent);
+    fixture = TestBed.createComponent(AddSpaceOverlayComponent);
     component = fixture.debugElement.componentInstance;
   });
 
   describe('#createSpace', () => {
-    it('should create a transient space if the space doesn\'t currently exist', () => {
-      component.space = null;
-      component.createSpace();
-      expect(component.space).toBeDefined();
-    });
-
-    it('should ignore any errors from SpaceNamespaceService and continue', () => {
-      component.space = mockSpace;
-      spyOn(mockSpaceNamespaceService, 'updateConfigMap').and.returnValue('not-a-configMap');
-      spyOn(mockSpacesService.addRecent, 'next').and.returnValue(mockSpace);
-      spyOn(component, 'finish');
-      component.createSpace();
-      expect(mockNotifications.message).toHaveBeenCalledWith(mockMessage);
-      expect(component.finish).toHaveBeenCalled();
-    });
-
-    it('should navigate to the created space upon successful completion', () => {
-      component.space = mockSpace;
-      spyOn(mockSpaceNamespaceService, 'updateConfigMap').and.returnValue(Observable.of(mockSpace));
-      spyOn(mockSpacesService.addRecent, 'next').and.returnValue(mockSpace);
-      spyOn(component, 'finish');
-      component.createSpace();
-      expect(mockRouter.navigate).toHaveBeenCalledWith([mockSpace.relationalData.creator.attributes.username, mockSpace.attributes.name]);
-      expect(component.finish).toHaveBeenCalled();
-    });
-
-    it('should show a notification if failed to create a space', () => {
-      component.space = mockSpace;
-      component.createSpace();
-      expect(component.notifications.message).toHaveBeenCalledWith(mockMessage);
-    });
-
-    it('should call finish() upon completion', () => {
-      component.space = mockSpace;
-      spyOn(component, 'finish');
-      component.createSpace();
-      expect(component.finish).toHaveBeenCalled();
-    });
-
     it('should add space template if available', () => {
       component.selectedTemplate = mockSpaceTemplates[1];
       component.createSpace();
@@ -204,33 +153,6 @@ describe('SpaceWizardComponent', () => {
         .toBeTruthy();
       expect(component.space.relationships['space-template'].data.id)
         .toBe('template-02');
-    });
-  });
-
-  describe('#finish', () => {
-    it('should emit the space\'s name from the onSelect EventEmitter', () => {
-      let mockEmit = {
-        flow: 'selectFlow',
-        space: component.space.attributes.name
-      };
-      spyOn(component.onSelect, 'emit');
-      component.finish();
-      expect(component.onSelect.emit).toHaveBeenCalledWith(mockEmit);
-    });
-  });
-
-  describe('#cancel', () => {
-    it('should emit an empty object from the onCancel EventEmitter', () => {
-      spyOn(component.onCancel, 'emit');
-      component.cancel();
-      expect(component.onCancel.emit).toHaveBeenCalledWith({});
-    });
-  });
-
-  describe('#showAddSpaceOverlay', () => {
-    it('should broadcast the overlay as described', () => {
-      component.showAddSpaceOverlay();
-      expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
     });
   });
 

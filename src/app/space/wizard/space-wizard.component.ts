@@ -10,15 +10,14 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
-import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
-import { ProcessTemplate } from 'ngx-fabric8-wit';
+import { Context, ProcessTemplate, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
 import { ContextService } from 'app/shared/context.service';
-import { DummyService } from 'app/shared/dummy.service';
 import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
+import { SpaceTemplateService } from 'app/shared/space-template.service';
 import { SpacesService } from 'app/shared/spaces.service';
 
 import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
@@ -35,7 +34,7 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
 
   appLauncherEnabled: boolean = false;
   spaceTemplates: ProcessTemplate[];
-  selectedTemplate: ProcessTemplate;
+  selectedTemplate: ProcessTemplate = null;
   space: Space;
   subscriptions: Subscription[] = [];
   currentSpace: Space;
@@ -44,18 +43,18 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
     private broadcaster: Broadcaster,
     private featureTogglesService: FeatureTogglesService,
     private router: Router,
-    public dummy: DummyService,
     private spaceService: SpaceService,
     private notifications: Notifications,
     private userService: UserService,
     private spaceNamespaceService: SpaceNamespaceService,
     private spaceNamePipe: SpaceNamePipe,
     private spacesService: SpacesService,
+    private spaceTemplateService: SpaceTemplateService,
     private context: ContextService,
     private logger: Logger,
     private errorHandler: ErrorHandler
   ) {
-    this.spaceTemplates = dummy.processTemplates;
+    this.spaceTemplates = [];
     this.space = this.createTransientSpace();
     this.subscriptions.push(featureTogglesService.getFeature('AppLauncher').subscribe((feature) => {
       this.appLauncherEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
@@ -90,6 +89,15 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
       this.space = this.createTransientSpace();
     }
     this.space.attributes.name = this.space.name.replace(/ /g, '_');
+    if (this.selectedTemplate !== null &&
+      this.selectedTemplate.id !== '0') {
+      this.space.relationships['space-template'] = {
+        data: {
+          id: this.selectedTemplate.id,
+          type: this.selectedTemplate.type
+        }
+      };
+    }
 
     this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
     this.spaceService.create(this.space)
@@ -120,16 +128,26 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const srumTemplates = this.spaceTemplates.filter(template => template.name === 'Scenario Driven Planning');
-    if (srumTemplates && srumTemplates.length > 0) {
-      this.selectedTemplate = srumTemplates[0];
-    }
     this.context.current.subscribe((ctx: Context) => {
       if (ctx.space) {
         this.currentSpace = ctx.space;
         console.log(`ForgeWizardComponent::The current space has been updated to ${this.currentSpace.attributes.name}`);
       }
     });
+    this.spaceTemplateService.getSpaceTemplates()
+      .subscribe((templates: ProcessTemplate[]) => {
+        this.spaceTemplates = templates.filter(t => t.attributes['can-construct']);
+        this.selectedTemplate = !!this.spaceTemplates.length ? this.spaceTemplates[0] : null;
+      }, () => {
+        this.spaceTemplates = [{
+          id: '0',
+          attributes: {
+            name: 'Default template',
+            description: 'This is a default space template'
+          }
+        } as ProcessTemplate];
+        this.selectedTemplate = this.spaceTemplates[0];
+      });
   }
 
   finish() {
@@ -154,7 +172,6 @@ export class SpaceWizardComponent implements OnInit, OnDestroy {
     space.attributes.name = space.name;
     space.type = 'spaces';
     space.privateSpace = false;
-    space.process = { name: '', description: '' };
     space.relationships = {
       areas: {
         links: {

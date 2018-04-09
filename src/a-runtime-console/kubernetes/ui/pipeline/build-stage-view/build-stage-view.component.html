@@ -6,7 +6,7 @@
 <!--
         <a [routerLink]="[build.buildConfigName, 'builds', build.name]" title="view build">Build #{{build.buildNumber}}</a>
 -->
-        <a [href]="build.openShiftConsoleUrl" target="openshift" title="view build in the OpenShift console">Build #{{build.buildNumber}}</a>
+        <a id="build-number" [href]="build.openShiftConsoleUrl" target="openshift" title="view build in the OpenShift console">Build #{{build.buildNumber}}</a>
       </div>
       <span class="build-timestamp">
                         {{build.creationTimestamp | amTimeAgo}}
@@ -18,13 +18,13 @@
     <div class="pipeline-container">
       <div class="pipeline" *ngIf="!build.pipelineStages.length">
         <div class="pipeline-stage no-stages">
-          <div class="pipeline-stage-name">No stages have started.</div>
+          <div id="pipeine-stage-name-no-stages" class="pipeline-stage-name">No stages have started.</div>
         </div>
       </div>
       <div class="pipeline" *ngIf="build.pipelineStages.length">
         <div class="pipeline-stage " *ngFor='let stage of displayStages'>
           <div column="" class="pipeline-stage-column">
-            <div class="pipeline-stage-name {{build.statusPhase}}"
+            <div id="pipeine-stage-name" class="pipeline-stage-name {{build.statusPhase}}"
                  title="stage status: {{stage.status}}">
               {{stage.name}} &nbsp;
               <span class="open-service-icon" *ngIf="stage.serviceUrl">

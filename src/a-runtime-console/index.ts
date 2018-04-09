@@ -9,11 +9,6 @@ export {
   filterPipelines,
   findBuildConfigByID
 } from './kubernetes/model/buildconfig.model';
-export {
-  AppEnvironmentDetails,
-  AppDeployments,
-  EnvironmentDeployments
-} from './kubernetes/model/app-env.model';
 
 export { BuildConfigStore } from './kubernetes/store/buildconfig.store';
 export { BuildStore } from './kubernetes/store/build.store';

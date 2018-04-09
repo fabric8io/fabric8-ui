@@ -11,6 +11,8 @@ import { SelectedItemsPipe } from './pipes/selected-items.pipe';
 import { VisibleItemsPipe } from './pipes/visible-items.pipe';
 import { SpaceWizardComponent } from './space-wizard.component';
 
+import { SpaceTemplateService } from 'app/shared/space-template.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { SpaceWizardComponent } from './space-wizard.component';
     UniqueSpaceNameValidatorDirective
   ],
   providers: [
-    CodebasesService
+    CodebasesService,
+    SpaceTemplateService
   ]
 })
 

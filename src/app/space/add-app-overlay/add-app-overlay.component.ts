@@ -22,8 +22,10 @@ import { DependencyCheckService } from 'ngx-forge';
 })
 export class AddAppOverlayComponent implements OnDestroy, OnInit {
   currentSpace: Space;
+  isProjectNameValid: boolean;
   loggedInUser: User;
   projectName: string = '';
+  selectedFlow: string = '';
   spaces: Space[] = [];
   subscriptions: Subscription[] = [];
 
@@ -58,22 +60,27 @@ export class AddAppOverlayComponent implements OnDestroy, OnInit {
   }
 
   /**
-   * Helper to route to create app
+   * Helper to update launcher selection
    */
-  routeToCreateApp(): void {
+  updateLauncherFlowSelection(selLaunch: string): void {
+    this.selectedFlow = selLaunch;
+  }
+
+  /**
+   * Helper to route to create/import app
+   */
+  routeToLaunchApp(): void {
     this.router.navigate(['/',
       this.loggedInUser.attributes.username, this.currentSpace.attributes.name,
-      'applauncher', 'createapp', this.projectName]);
+      'applauncher', this.selectedFlow, this.projectName]);
     this.hideAddAppOverlay();
   }
 
   /**
-   * Helper to route to create app
+   * Validate the application name
    */
-  routeToImportApp(): void {
-    this.router.navigate(['/',
-      this.loggedInUser.attributes.username, this.currentSpace.attributes.name,
-      'applauncher', 'importapp', this.projectName]);
-    this.hideAddAppOverlay();
+  validateProjectName(): void {
+    this.isProjectNameValid =
+      this.dependencyCheckService.validateProjectName(this.projectName);
   }
 }

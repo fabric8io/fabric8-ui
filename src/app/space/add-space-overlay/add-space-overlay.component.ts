@@ -13,8 +13,8 @@ import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
 import { ContextService } from 'app/shared/context.service';
-import { DummyService } from 'app/shared/dummy.service';
 import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
+import { SpaceTemplateService } from 'app/shared/space-template.service';
 import { SpacesService } from 'app/shared/spaces.service';
 
 @Component({
@@ -25,34 +25,44 @@ import { SpacesService } from 'app/shared/spaces.service';
 })
 export class AddSpaceOverlayComponent implements OnInit {
   currentSpace: Space;
-  selectedTemplate: ProcessTemplate;
+  selectedTemplate: ProcessTemplate = null;
   spaceTemplates: ProcessTemplate[];
   space: Space;
 
   constructor(private router: Router,
-              public dummy: DummyService,
               private spaceService: SpaceService,
               private notifications: Notifications,
               private userService: UserService,
               private spaceNamespaceService: SpaceNamespaceService,
               private spaceNamePipe: SpaceNamePipe,
               private spacesService: SpacesService,
+              private spaceTemplateService: SpaceTemplateService,
               private context: ContextService,
               private broadcaster: Broadcaster) {
-    this.spaceTemplates = dummy.processTemplates;
+    this.spaceTemplates = [];
     this.space = this.createTransientSpace();
   }
 
   ngOnInit() {
-    const srumTemplates = this.spaceTemplates.filter(template => template.name === 'Scenario Driven Planning');
-    if (srumTemplates && srumTemplates.length > 0) {
-      this.selectedTemplate = srumTemplates[0];
-    }
     this.context.current.subscribe((ctx: Context) => {
       if (ctx.space) {
         this.currentSpace = ctx.space;
       }
     });
+    this.spaceTemplateService.getSpaceTemplates()
+      .subscribe((templates: ProcessTemplate[]) => {
+        this.spaceTemplates = templates.filter(t => t.attributes['can-construct']);
+        this.selectedTemplate = !!this.spaceTemplates.length ? this.spaceTemplates[0] : null;
+      }, () => {
+        this.spaceTemplates = [{
+          id: '0',
+          attributes: {
+            name: 'Default template',
+            description: 'This is a default space template'
+          }
+        } as ProcessTemplate];
+        this.selectedTemplate = this.spaceTemplates[0];
+      });
   }
 
   /*
@@ -64,6 +74,15 @@ export class AddSpaceOverlayComponent implements OnInit {
       this.space = this.createTransientSpace();
     }
     this.space.attributes.name = this.space.name.replace(/ /g, '_');
+    if (this.selectedTemplate !== null &&
+        this.selectedTemplate.id !== '0') {
+      this.space.relationships['space-template'] = {
+        data: {
+          id: this.selectedTemplate.id,
+          type: this.selectedTemplate.type
+        }
+      };
+    }
     this.userService.getUser()
       .switchMap(user => {
         this.space.relationships['owned-by'].data.id = user.id;
@@ -109,7 +128,6 @@ export class AddSpaceOverlayComponent implements OnInit {
     space.attributes.name = space.name;
     space.type = 'spaces';
     space.privateSpace = false;
-    space.process = { name: '', description: '' };
     space.relationships = {
       areas: {
         links: {

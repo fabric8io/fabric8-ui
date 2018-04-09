@@ -398,6 +398,24 @@ module.exports = function (options) {
       new CheckerPlugin(),
 
       /*
+       * Plugin: ModuleConcatenationPlugin
+       * Description: Hoist modules into one closure for performance.
+       *
+       * See: https://webpack.js.org/plugins/module-concatenation-plugin/
+       */
+      new webpack.optimize.ModuleConcatenationPlugin(),
+
+      /*
+       * Plugin: HashedModuleIdsPlugin
+       * Description: This plugin will cause hashes to be based on the relative path of the module,
+       * generating a four character string as the module id.
+       * Prevents busting the cache prematurely due to default internal module ID generation.
+       *
+       * See: https://webpack.js.org/plugins/hashed-module-ids-plugin/
+       */
+      new webpack.HashedModuleIdsPlugin(),
+
+      /*
        * Plugin: CommonsChunkPlugin
        * Description: Shares common code between the pages.
        * It identifies common modules and put them into a commons chunk.
