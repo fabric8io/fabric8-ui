@@ -29,6 +29,18 @@ f8-feature-footer .tooltip-inner {
   background: @color-pf-black-150;
   color: @color-pf-black-600;
   border-color: @color-pf-black-700;
+  box-shadow: 0 0 3px @color-pf-black-600;
+  ul {
+    list-style: none;
+    list-style-type: none;
+    padding: 0;
+    li {
+      span {
+        padding-right: 8px;
+        color: @color-pf-blue-300;
+      }
+    }
+  }
 }
 
 f8-feature-footer .tooltip-arrow {
@@ -42,6 +54,7 @@ f8-feature-footer .arrow {
 
 .empty {
   .round-button(@color-pf-black-400;);
+  color: @color-pf-black-600;
 }
 
 // INTERNAL

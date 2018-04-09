@@ -39,6 +39,7 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
        if (feature.id.indexOf('.') === -1) {
          mainFeature = feature;
        }
+       feature.attributes.name = feature.id.replace('.', ' ');
        switch (feature.attributes['enablement-level']) {
          case 'beta': {
            if (feature.attributes['enabled'] && feature.attributes['user-enabled']) {
