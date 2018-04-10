@@ -484,7 +484,7 @@ module.exports = function (options) {
         syntax: 'less',
         context: 'src',
         files: '**/*.less',
-        lintDirtyModulesOnly: true,
+        lintDirtyModulesOnly: false,
         failOnError: true,
         emitErrors: true,
         quiet: false,

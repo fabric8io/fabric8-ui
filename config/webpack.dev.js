@@ -245,9 +245,9 @@ module.exports = function (options) {
         context: 'src',
         files: '**/*.less',
         lintDirtyModulesOnly: true,
-        failOnError: false,
+        failOnError: true,
         emitErrors: true,
-        quiet: true,
+        quiet: false,
       })
 
     ],
