@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import {
   HttpModule,
+  RequestMethod,
   Response,
   ResponseOptions,
   ResponseType,
@@ -77,6 +78,7 @@ describe('DeploymentApiService', () => {
         ]
       };
       mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId/environments');
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
         connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
@@ -115,6 +117,7 @@ describe('DeploymentApiService', () => {
         }
       };
       mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId');
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
         connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
@@ -152,6 +155,7 @@ describe('DeploymentApiService', () => {
         }
       };
       mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Get);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2';
         expect(connection.request.url).toEqual(expectedUrl);
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
@@ -186,6 +190,7 @@ describe('DeploymentApiService', () => {
         }
       };
       mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Get);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats';
         expect(connection.request.url).toEqual(expectedUrl);
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
@@ -202,6 +207,7 @@ describe('DeploymentApiService', () => {
   describe('#deleteDeployment', () => {
     it('should return response', (done: DoneFn): void => {
       mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Delete);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env';
         expect(connection.request.url).toEqual(expectedUrl);
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
@@ -218,6 +224,7 @@ describe('DeploymentApiService', () => {
   describe('#scalePods', () => {
     it('should return response', (done: DoneFn): void => {
       mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Put);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5';
         expect(connection.request.url).toEqual(expectedUrl);
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
