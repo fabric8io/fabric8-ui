@@ -40,6 +40,14 @@ export const routes: Routes = [
       title: 'Getting Started'
     }
   },
+  //verify Email
+  {
+    path: '_verifyEmail',
+    loadChildren: './profile/email-verification/email-verification.module#EmailVerificationModule',
+    data: {
+      title: 'Verify'
+    }
+  },
   // Error Pages
   {
     path: '_error',

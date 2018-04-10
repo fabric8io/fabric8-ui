@@ -29,6 +29,7 @@ import { DeploymentsResourceUsageComponent } from './resource-usage/deployments-
 import { LoadingUtilizationBarComponent } from './resource-usage/loading-utilization-bar.component';
 import { ResourceCardComponent } from './resource-usage/resource-card.component';
 import { UtilizationBarComponent } from './resource-usage/utilization-bar.component';
+import { DeploymentApiService } from './services/deployment-api.service';
 import {
   DeploymentsService,
   TIMER_TOKEN,
@@ -71,6 +72,7 @@ const DEPLOYMENTS_SERVICE_POLL_TIMER = Observable
   ],
   providers: [
     BsDropdownConfig,
+    DeploymentApiService,
     { provide: TIMER_TOKEN, useValue: DEPLOYMENTS_SERVICE_POLL_TIMER },
     { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 15 }
   ]
