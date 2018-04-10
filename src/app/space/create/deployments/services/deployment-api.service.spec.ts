@@ -199,4 +199,36 @@ describe('DeploymentApiService', () => {
     });
   });
 
+  describe('#deleteDeployment', () => {
+    it('should return response', (done: DoneFn): void => {
+      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env';
+        expect(connection.request.url).toEqual(expectedUrl);
+        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+        connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
+      });
+      svc.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
+        .subscribe((resp: Response): void => {
+          expect(resp.status).toEqual(200);
+          done();
+        });
+    });
+  });
+
+  describe('#scalePods', () => {
+    it('should return response', (done: DoneFn): void => {
+      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5';
+        expect(connection.request.url).toEqual(expectedUrl);
+        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+        connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
+      });
+      svc.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
+        .subscribe((resp: Response): void => {
+          expect(resp.status).toEqual(200);
+          done();
+        });
+    });
+  });
+
 });

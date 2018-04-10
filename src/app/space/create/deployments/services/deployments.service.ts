@@ -297,17 +297,8 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged();
   }
 
-  scalePods(
-    spaceId: string,
-    environmentName: string,
-    applicationId: string,
-    desiredReplicas: number
-  ): Observable<string> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
-    return this.http.put(url, '', { headers: this.headers })
+  scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<string> {
+    return this.apiService.scalePods(spaceId, environmentName, applicationId, desiredReplicas)
       .map((r: Response) => `Successfully scaled ${applicationId}`)
       .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
@@ -404,11 +395,7 @@ export class DeploymentsService implements OnDestroy {
   }
 
   deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
-    return this.http.delete(url, { headers: this.headers })
+    return this.apiService.deleteDeployment(spaceId, environmentName, applicationId)
       .map((r: Response) => `Deployment has successfully deleted`)
       .catch(err => Observable.throw(`Failed to delete ${applicationId} in ${spaceId} (${environmentName})`));
   }
