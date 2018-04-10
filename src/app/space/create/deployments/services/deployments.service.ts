@@ -6,11 +6,7 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import {
-  Headers,
-  Http,
-  Response
-} from '@angular/http';
+import { Response } from '@angular/http';
 
 import {
   Observable,
@@ -18,10 +14,6 @@ import {
   Subject,
   Subscription
 } from 'rxjs';
-
-import { AuthenticationService } from 'ngx-login-client';
-
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import {
@@ -201,9 +193,6 @@ export class DeploymentsService implements OnDestroy {
   static readonly FRONT_LOAD_SAMPLES: number = 15;
   static readonly FRONT_LOAD_WINDOW_WIDTH: number = DeploymentsService.FRONT_LOAD_SAMPLES * DeploymentsService.POLL_RATE_MS;
 
-  private readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
-  private readonly apiUrl: string;
-
   private readonly appsObservables: Map<string, Observable<Application[]>> = new Map<string, Observable<Application[]>>();
   private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
   private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData[]>> = new Map<string, Subject<TimeseriesData[]>>();
@@ -211,21 +200,13 @@ export class DeploymentsService implements OnDestroy {
   private readonly serviceSubscriptions: Subscription[] = [];
 
   constructor(
-    private readonly http: Http,
     private readonly apiService: DeploymentApiService,
-    private readonly auth: AuthenticationService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler,
     private readonly notifications: NotificationsService,
-    @Inject(WIT_API_URL) private readonly witUrl: string,
     @Inject(TIMER_TOKEN) private readonly pollTimer: Observable<void>,
     @Inject(TIMESERIES_SAMPLES_TOKEN) private readonly timeseriesSamples: number
-  ) {
-    if (this.auth.getToken() != null) {
-      this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
-    }
-    this.apiUrl = witUrl + 'deployments/spaces/';
-  }
+  ) { }
 
   ngOnDestroy(): void {
     this.serviceSubscriptions.forEach((sub: Subscription) => {
