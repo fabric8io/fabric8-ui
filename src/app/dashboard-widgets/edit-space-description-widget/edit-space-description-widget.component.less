@@ -67,7 +67,7 @@
     }
     &-text {
       display: inline-flex;
-      width: ~"calc(70% - 20px)";
+      width: ~'calc(70% - 20px)';
       padding-right: 10px;
       padding-left: 10px;
       &-title {
@@ -90,11 +90,13 @@
     }
   }
 }
+
 .truncate {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .truncate-multiline {
   position: relative;
   max-height: 4.4em;
@@ -102,6 +104,7 @@
   margin-right: -1em;
   padding-right: 1em;
   overflow: hidden;
+
   /* need to configure dynamically to add '...' at the end of the paragraph */
   // &:before {
   //   content: '...';
@@ -119,6 +122,7 @@
   //   background: @color-pf-black-900;
   // }
 }
+
 .edit-space-description {
   &-widget {
     display: flex;
@@ -134,7 +138,6 @@
       line-height: 1.5;
     }
   }
-
   &-btn {
     margin-left: 5px;
     text-align: center;
@@ -143,7 +146,6 @@
     padding-left: 5px !important; /* stylelint-disable-line declaration-no-important */
     .pointer;
   }
-
   &-pencil {
     line-height: 1.5;
     &:hover {

@@ -132,7 +132,9 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
       '&projectName=' + summary.dependencyCheck.projectName +
       '&projectVersion=' + summary.dependencyCheck.projectVersion +
       '&groupId=' + summary.dependencyCheck.groupId +
-      '&artifactId=' + summary.dependencyCheck.mavenArtifact +
+      /* artifactId has to be same as projectName in OSIO to get correct links for
+       stage/prod to be shown in pipelines view */
+      '&artifactId=' + summary.dependencyCheck.projectName +
       '&spacePath=' + spaceName +
       '&gitRepository=' + summary.gitHubDetails.repository +
       '&spaceId=' + spaceId;

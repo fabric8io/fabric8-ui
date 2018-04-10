@@ -122,7 +122,8 @@ export class AppLauncherGitproviderService implements GitProviderService {
               authenticated: true,
               avatar: user.avatarUrl,
               login: user.login,
-              organizations: orgs
+              organizations: orgs,
+              organization: user.login
             } as GitHubDetails;
             return Observable.of(gitHubDetails);
           } else {
