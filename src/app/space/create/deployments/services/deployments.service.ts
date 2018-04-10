@@ -44,6 +44,8 @@ import { Pods as ModelPods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
 
+import { DeploymentApiService } from './deployment-api.service';
+
 export interface NetworkStat {
   sent: ScaledNetworkStat;
   received: ScaledNetworkStat;
@@ -210,6 +212,7 @@ export class DeploymentsService implements OnDestroy {
 
   constructor(
     private readonly http: Http,
+    private readonly apiService: DeploymentApiService,
     private readonly auth: AuthenticationService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler,
@@ -412,12 +415,10 @@ export class DeploymentsService implements OnDestroy {
 
   private getApplicationsResponse(spaceId: string): Observable<Application[]> {
     if (!this.appsObservables.has(spaceId)) {
-      const encSpaceId = encodeURIComponent(spaceId);
       const subject = new ReplaySubject<Application[]>(1);
       const observable = this.pollTimer
         .concatMap(() =>
-          this.http.get(this.apiUrl + encSpaceId, { headers: this.headers })
-            .map((response: Response) => (response.json() as ApplicationsResponse).data.attributes.applications)
+          this.apiService.getApplications(spaceId)
             .catch((err: Response) => this.handleHttpError(err))
         );
       this.serviceSubscriptions.push(observable.subscribe(subject));
@@ -442,12 +443,10 @@ export class DeploymentsService implements OnDestroy {
 
   private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {
     if (!this.envsObservables.has(spaceId)) {
-      const encSpaceId = encodeURIComponent(spaceId);
       const subject = new ReplaySubject<EnvironmentStat[]>(1);
       const observable = this.pollTimer
         .concatMap(() =>
-          this.http.get(this.apiUrl + encSpaceId + '/environments', { headers: this.headers })
-            .map((response: Response) => (response.json() as EnvironmentsResponse).data)
+          this.apiService.getEnvironments(spaceId)
             .catch((err: Response) => this.handleHttpError(err))
         );
       this.serviceSubscriptions.push(observable.subscribe(subject));
@@ -504,12 +503,7 @@ export class DeploymentsService implements OnDestroy {
         if (!deployed) {
           return Observable.empty();
         }
-        const encSpaceId = encodeURIComponent(spaceId);
-        const encEnvironmentName = encodeURIComponent(environmentName);
-        const encApplicationId = encodeURIComponent(applicationId);
-        const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries?start=${startTime}&end=${endTime}`;
-        return this.http.get(url, { headers: this.headers })
-          .map((response: Response) => (response.json() as MultiTimeseriesResponse).data)
+        return this.apiService.getTimeseriesData(spaceId, environmentName, applicationId, startTime, endTime)
           .catch((err: Response) => this.handleHttpError(err))
           .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t))
           .concatMap((t: MultiTimeseriesData) => {
@@ -548,10 +542,6 @@ export class DeploymentsService implements OnDestroy {
         if (!deployed) {
           return Observable.empty();
         }
-        const encSpaceId = encodeURIComponent(spaceId);
-        const encEnvironmentName = encodeURIComponent(environmentName);
-        const encApplicationId = encodeURIComponent(applicationId);
-        const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
         /* piggyback on getApplicationsResponse rather than pollTimer directly in order to
         * establish a happens-before relationship between applications updates and timeseries
         * updates within each poll cycle, so that we can detect a deployment disappearing and
@@ -563,8 +553,7 @@ export class DeploymentsService implements OnDestroy {
               .filter((deployed: boolean): boolean => !deployed)
           )
           .concatMap(() =>
-            this.http.get(url, { headers: this.headers })
-              .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes)
+            this.apiService.getLatestTimeseriesData(spaceId, environmentName, applicationId)
               .catch((err: Response) => this.handleHttpError(err))
               .filter((t: TimeseriesData) => !!t && !isEmpty(t))
           );
