@@ -67,7 +67,24 @@ export class FeatureTogglesService {
         return this.handleError(error);
       });
   }
+  /**
+   * Check if a given list of feature ids are enabled (retrieve user-enabled and enabled).
+   * @param ids An arrays of feature Id.
+   * @returns {Observable<Feature>}
+   */
+  getFeaturesPerPage(group: string): Observable<Feature[]> {
+    let url = Location.stripTrailingSlash(this.featureTogglesUrl || '') + '/features';
+    let params = [];
+    params['group'] = group;
 
+    return this.http.get(url, { headers: this.headers, params: params })
+      .map((response) => {
+        return response.json().data as Feature[];
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+  }
   private handleError(error: any) {
     this.logger.error(error);
     this.errorHandler.handleError(error);

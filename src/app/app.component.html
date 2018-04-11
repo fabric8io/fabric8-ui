@@ -7,16 +7,11 @@
 </pfng-toast-notification-list>
 <f8-add-space-overlay class="launcher fade in" *ngIf="showAddSpaceOverlay"></f8-add-space-overlay>
 <f8-add-app-overlay class="code-imports fade in" *ngIf="showAddAppOverlay"></f8-add-app-overlay>
-<main class="">
-  <div class="">
-    <router-outlet name="action"></router-outlet>
-    <div [hidden]="!isExperimentalFeature && featureEnablementLevel!='released'"> <!--if not exp feature oe exp feature of released state, hide-->
-      <f8-feature-banner level="{{featureEnablementLevel}}" [featureName]="featureName">
-      </f8-feature-banner>
-    </div>
-    <div [hidden]="isExperimentalFeature && !experimentalFeatureEnabled">
-      <router-outlet></router-outlet>
-    </div>
+
+<main>
+  <div>
+    <router-outlet></router-outlet>
+    <f8-feature-footer [featurePageConfig]="featureConfig"></f8-feature-footer>
   </div>
 </main>
 

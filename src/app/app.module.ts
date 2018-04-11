@@ -55,13 +55,10 @@ import { AppComponent }                from './app.component';
 import { APP_RESOLVER_PROVIDERS }      from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
-// Footer & Header
-import { FeatureBannerComponent } from './feature-flag/banner/feature-banner.component';
+// Header
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
-import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { featureTogglesApiUrlProvider, FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
 
-import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { MenusService }    from './layout/header/menus.service';
 
@@ -109,6 +106,7 @@ import { AddSpaceOverlayModule } from './space/add-space-overlay/add-space-overl
 // About Modal
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
+import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 import { RavenExceptionHandler } from './shared/exception.handler';
 import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
@@ -142,6 +140,7 @@ export type StoreType = {
     BsDropdownModule.forRoot(),
     EffectsModule.forRoot([]),
     EmptyStateModule,
+    FeatureFooterModule,
     FormsModule,
     HttpModule,
     KubernetesRestangularModule,
@@ -167,9 +166,7 @@ export type StoreType = {
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
-    FooterComponent,
-    HeaderComponent,
-    FeatureBannerComponent
+    HeaderComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
@@ -215,7 +212,6 @@ export type StoreType = {
       provide: OnLogin,
       useClass: Fabric8UIOnLogin
     },
-    FeatureAcknowledgementService,
     forgeApiUrlProvider,
     GettingStartedService,
     HttpService,
