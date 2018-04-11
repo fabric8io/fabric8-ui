@@ -29,13 +29,24 @@ export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges() {
     if (this.featurePageConfig) {
       this.userLevel = this.featurePageConfig['user-level'] || 'released';
-      this.noFeaturesInBeta = this.featurePageConfig.featuresPerLevel.beta.length === 0;
-      this.noFeaturesInExperimental = this.noFeaturesInBeta && this.featurePageConfig.featuresPerLevel.experimental.length === 0;
-      this.noFeaturesInInternal = this.noFeaturesInExperimental && this.featurePageConfig.featuresPerLevel.internal.length === 0;
+      if (this.featurePageConfig.featuresPerLevel
+        && this.featurePageConfig.featuresPerLevel.beta
+        && this.featurePageConfig.featuresPerLevel.beta.length > 0) {
+        this.noFeaturesInBeta = false;
+      }
+      if (this.featurePageConfig.featuresPerLevel
+        && this.featurePageConfig.featuresPerLevel.experimental
+        && this.featurePageConfig.featuresPerLevel.experimental.length > 0) {
+        this.noFeaturesInExperimental = false;
+      }
+      if (this.featurePageConfig.featuresPerLevel
+        && this.featurePageConfig.featuresPerLevel.internal
+        && this.featurePageConfig.featuresPerLevel.internal.length > 0) {
+        this.noFeaturesInInternal = false;
+      }
     } else {
       this.userLevel = 'released';
     }
-
   }
 
   ngOnDestroy() {
