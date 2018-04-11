@@ -44,7 +44,7 @@ describe('FeatureFooterComponent', () => {
     hostComponent = hostFixture.componentInstance;
   });
 
-  fit('should render internal icon when user level is internal', async(() => {
+  it('should render internal icon when user level is internal', async(() => {
     // given
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
@@ -79,7 +79,7 @@ describe('FeatureFooterComponent with error', () => {
     hostComponent = hostFixture.componentInstance;
   });
 
-  fit('should render not render internal icon when user level is internal', async(() => {
+  it('should render not render internal icon when user level is internal', async(() => {
     // given
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
