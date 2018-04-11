@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Logger } from 'ngx-base';
-import { AuthenticationService } from 'ngx-login-client';
+import {AuthenticationService, UserService} from 'ngx-login-client';
 import { Feature, FeatureTogglesService } from '../service/feature-toggles.service';
 
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
@@ -12,11 +12,13 @@ describe('FeatureFlag resolver: it', () => {
   let mockLog: any;
   let mockRouter: any;
   let mockTogglesService: any;
+  let mockUserService: any;
   let resolver: FeatureFlagResolver;
   let mockActivatedRoute: any;
   beforeEach(() => {
     mockLog = jasmine.createSpyObj('Logger', ['log']);
-    mockTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
+    mockTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeaturesPerPage']);
+    mockUserService = jasmine.createSpy('UserService');
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     mockActivatedRoute = jasmine.createSpy('ActivatedRouteSnapshot');
     TestBed.configureTestingModule({
@@ -30,8 +32,8 @@ describe('FeatureFlag resolver: it', () => {
           useValue: mockRouter
         },
         {
-          provide: Router,
-          useValue: mockRouter
+          provide: UserService,
+          useValue: mockUserService
         },
         {
           provide: FeatureTogglesService,
@@ -47,23 +49,38 @@ describe('FeatureFlag resolver: it', () => {
     // given
     let route = new ActivatedRouteSnapshot();
     route.data = {featureName: 'Deployment'};
+    mockUserService.currentLoggedInUser = {
+      attributes: {
+        featureLevel: 'internal'
+      }
+    };
     let feature = {id: 'Deployment', attributes: {
       enabled: true,
       'user-enabled': true,
       'enablement-level': 'internal'
     }} as Feature;
     const expected = {
-      name: 'Deployment',
-      showBanner: 'internal',
-      enabled: true
+      'user-level': 'internal',
+      featuresPerLevel: {
+        internal: [{
+          id: 'Deployment',
+          attributes: {
+            enabled: true,
+            'user-enabled': true,
+            'enablement-level': 'internal'
+          }
+        }],
+        experimental: [],
+        beta: []
+      }
     } as FeatureFlagConfig;
-    mockTogglesService.getFeature.and.returnValue(Observable.of(feature));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
     // when
     resolver.resolve(route as ActivatedRouteSnapshot, null).subscribe(val => {
       // then
-      expect(val.name).toEqual(expected.name);
-      expect(val.showBanner).toEqual(expected.showBanner);
-      expect(val.enabled).toEqual(expected.enabled);
+      expect(val.featuresPerLevel.internal.length).toEqual(1);
+      expect(val.featuresPerLevel.internal[0].id).toEqual(expected.featuresPerLevel.internal[0].id);
+      expect(val['user-level']).toEqual(expected['user-level']);
     });
   });
 
@@ -71,12 +88,17 @@ describe('FeatureFlag resolver: it', () => {
     // given
     let route = new ActivatedRouteSnapshot();
     route.data = {featureName: 'Deployment'};
+    mockUserService.currentLoggedInUser = {
+      attributes: {
+        featureLevel: 'internal'
+      }
+    };
     let feature = {id: 'Deployment', attributes: {
       enabled: false,
       'user-enabled': true,
       'enablement-level': 'internal'
     }} as Feature;
-    mockTogglesService.getFeature.and.returnValue(Observable.of(feature));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
     // when
     resolver.resolve(route, null).subscribe(val => {
       // then
@@ -85,20 +107,28 @@ describe('FeatureFlag resolver: it', () => {
     });
   });
 
-  it('should route to error when requested feature is not-user-enabled', () => {
+  it('should route to opt-in when requested feature is not-user-enabled', () => {
     // given
     let route = new ActivatedRouteSnapshot();
     route.data = {featureName: 'Deployment'};
+    mockUserService.currentLoggedInUser = {
+      attributes: {
+        featureLevel: 'beta'
+      }
+    };
     let feature = {id: 'Deployment', attributes: {
       enabled: true,
-      'user-enabled': false
+      'user-enabled': false,
+       'enablement-level': 'internal'
     }} as Feature;
-    mockTogglesService.getFeature.and.returnValue(Observable.of(feature));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
     // when
     resolver.resolve(route, null).subscribe(val => {
       // then
       expect(val).toBeNull();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/_error']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/_featureflag'], {queryParams: {
+          showBanner: 'internal'
+        }});
     });
   });
 });
