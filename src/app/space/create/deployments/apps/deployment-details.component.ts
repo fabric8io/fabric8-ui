@@ -135,10 +135,10 @@ export class DeploymentDetailsComponent {
   cpuVal: number;
   cpuMax: number;
   memVal: number;
-  memUnits: string;
   memMax: number;
+  memUnits: string = 'MB';
   netVal: number;
-  netUnits: string;
+  netUnits: string = 'bytes';
 
   cpuLabelClass: string;
   memLabelClass: string;
@@ -260,8 +260,8 @@ export class DeploymentDetailsComponent {
       this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment, this.applicationId).subscribe((stats: NetworkStat[]) => {
         const last: NetworkStat = stats[stats.length - 1];
         const netTotal: ScaledNetStat = new ScaledNetStat(this.getNetStatValue(last).sent + this.getNetStatValue(last).received);
+        const decimals: number = netTotal.units === 'bytes' ? 0 : 1;
         this.netUnits = netTotal.units;
-        const decimals = this.netUnits === 'bytes' ? 0 : 1;
         this.netVal = round(netTotal.used, decimals);
         this.netData.xData = [this.netData.xData[0], ...stats.map((stat: NetworkStat) => stat.received.timestamp)];
         this.netData.yData[0] = [this.netData.yData[0][0], ...stats.map((stat: NetworkStat) => round(this.getNetStatValue(stat).sent, decimals))];
