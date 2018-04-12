@@ -38,7 +38,7 @@
     <ng-template #tooltipTemplateInternalEmpty>
       <div><strong>There are no internal features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInInternal" tooltip]="tooltipTemplateInternalEmpty" class="empty">
+    <div *ngIf="noFeaturesInInternal" [tooltip]="tooltipTemplateInternalEmpty" class="empty">
       <i class="fa fa-lock fa-1x"></i>
     </div>
   </div>
