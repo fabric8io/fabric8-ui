@@ -263,9 +263,8 @@ export class ContextService implements Contexts {
       .switchMap(val => {
         return this.toggleService.getFeatures([
             'AppLauncher',
-            'Applications',
+            'Analyze',
             'Deployments',
-            'Environments',
             'Planner'
           ]).map(features => {
           val.user.features = features;

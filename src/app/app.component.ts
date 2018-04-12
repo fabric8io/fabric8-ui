@@ -1,6 +1,4 @@
-/*
- * Angular 2 decorators and services
- */
+import { Location } from '@angular/common';
 import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -32,10 +30,7 @@ import { NotificationsService } from './shared/notifications.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  public experimentalFeatureEnabled: boolean;
-  public featureName: string;
-  public isExperimentalFeature: boolean;
-  public featureEnablementLevel: string;
+  public featureConfig: FeatureFlagConfig;
   public disconnectedStateConfig: EmptyStateConfig;
   private lastPageToTryGitHub: string;
   private showAddAppOverlay: boolean = false;
@@ -55,6 +50,7 @@ export class AppComponent {
     private authService: AuthenticationService,
     private broadcaster: Broadcaster,
     private router: Router,
+    private location: Location,
     private titleService: Title,
     private brandingService: BrandingService,
     private modalService: BsModalService,
@@ -70,15 +66,17 @@ export class AppComponent {
       this.loginService.login();
     });
 
+    // preserve an invalid URL in the browser's history while routing to the 404 page
+    this.router.events
+      .filter(event => event instanceof NavigationEnd && event.urlAfterRedirects === '/_error')
+      .subscribe((event: NavigationEnd) => this.location.replaceState(event.url));
+
     this.router.events
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
       .map(route => {
         // reset all experimental feature flag properties
-        this.experimentalFeatureEnabled = false;
-        this.isExperimentalFeature = false;
-        this.featureEnablementLevel = '';
-        this.featureName = undefined;
+        this.featureConfig = null;
         while (route.firstChild) {
           route = route.firstChild;
         }
@@ -99,10 +97,7 @@ export class AppComponent {
 
         if (event['featureFlagConfig'] || featureFlagsInTree) {
           let featureFlagConfig = event['featureFlagConfig'] as FeatureFlagConfig || featureFlagsInTree;
-          this.experimentalFeatureEnabled = featureFlagConfig.enabled;
-          this.isExperimentalFeature = true;
-          this.featureEnablementLevel = featureFlagConfig.showBanner;
-          this.featureName = featureFlagConfig.name;
+          this.featureConfig = featureFlagConfig;
         }
         let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
         this.titleService.setTitle(title);
@@ -134,12 +129,6 @@ export class AppComponent {
       title: 'GitHub Disconnected',
       info: 'You must be connected to GitHub in order to add to or create a Space'
     } as EmptyStateConfig;
-  }
-
-  updateFeatureEnabled($event: boolean) {
-    if ($event) {
-      this.experimentalFeatureEnabled = $event;
-    }
   }
 
   handleAction($event: any): void {

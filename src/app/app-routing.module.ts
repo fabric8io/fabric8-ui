@@ -40,6 +40,14 @@ export const routes: Routes = [
       title: 'Getting Started'
     }
   },
+  //verify Email
+  {
+    path: '_verifyEmail',
+    loadChildren: './profile/email-verification/email-verification.module#EmailVerificationModule',
+    data: {
+      title: 'Verify'
+    }
+  },
   // Error Pages
   {
     path: '_error',
@@ -83,11 +91,13 @@ export const routes: Routes = [
   {
     path: ':entity/:space',
     resolve: {
-      context: ContextResolver
+      context: ContextResolver,
+      featureFlagConfig: FeatureFlagResolver
     },
     loadChildren: './space/analyze/analyze.module#AnalyzeModule',
     data: {
-      title: 'Analyze'
+      title: 'Analyze',
+      featureName: 'Analyze'
     }
   },
 
