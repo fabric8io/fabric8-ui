@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -49,6 +50,7 @@ export class AppComponent {
     private authService: AuthenticationService,
     private broadcaster: Broadcaster,
     private router: Router,
+    private location: Location,
     private titleService: Title,
     private brandingService: BrandingService,
     private modalService: BsModalService,
@@ -63,6 +65,11 @@ export class AppComponent {
     this.activatedRoute.params.subscribe(() => {
       this.loginService.login();
     });
+
+    // preserve an invalid URL in the browser's history while routing to the 404 page
+    this.router.events
+      .filter(event => event instanceof NavigationEnd && event.urlAfterRedirects === '/_error')
+      .subscribe((event: NavigationEnd) => this.location.replaceState(event.url));
 
     this.router.events
       .filter(event => event instanceof NavigationEnd)
