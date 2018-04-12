@@ -10,8 +10,8 @@
           width="100"
           height="100" 
           [src]="verified===true 
-          ? '../../../assets/images/trophy.png' 
-          : '../../../assets/images/neutralface.png'" />
+          ? 'assets/images/trophy.png' 
+          : 'assets/images/neutralface.png'" />
         <h1>
           {{ message }}
         </h1>
@@ -21,7 +21,8 @@
       </div>
       <div class="blank-slate-pf-main-action">
         <button type="button"
-          class="btn btn-primary btn-lg">
+          class="btn btn-primary btn-lg"
+          (click)="goHome()">
           Continue to my dashboard
         </button>
       </div>
