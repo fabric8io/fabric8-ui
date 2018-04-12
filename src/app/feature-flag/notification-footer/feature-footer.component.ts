@@ -6,6 +6,7 @@ import {
 import { Subscription } from 'rxjs';
 import 'rxjs/operators/map';
 import { FeatureFlagConfig } from '../../models/feature-flag-config';
+import { Feature } from '../service/feature-toggles.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -22,26 +23,22 @@ export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
   noFeaturesInExperimental: boolean = true;
   noFeaturesInInternal: boolean = true;
 
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngOnChanges() {
     if (this.featurePageConfig) {
       this.userLevel = this.featurePageConfig['user-level'] || 'released';
-      if (this.featurePageConfig.featuresPerLevel
-        && this.featurePageConfig.featuresPerLevel.beta
-        && this.featurePageConfig.featuresPerLevel.beta.length > 0) {
+      if (this.isNotEmpty('beta')) {
         this.noFeaturesInBeta = false;
       }
-      if (this.featurePageConfig.featuresPerLevel
-        && this.featurePageConfig.featuresPerLevel.experimental
-        && this.featurePageConfig.featuresPerLevel.experimental.length > 0) {
+      if (this.isNotEmpty('experimental')) {
         this.noFeaturesInExperimental = false;
       }
-      if (this.featurePageConfig.featuresPerLevel
-        && this.featurePageConfig.featuresPerLevel.internal
-        && this.featurePageConfig.featuresPerLevel.internal.length > 0) {
+      if (this.isNotEmpty('internal')) {
         this.noFeaturesInInternal = false;
       }
     } else {
@@ -55,4 +52,35 @@ export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  isNotEmpty(level: string): boolean {
+    switch (level) {
+      case 'beta': {
+        return this.featurePageConfig.featuresPerLevel
+          && this.featurePageConfig.featuresPerLevel.beta
+          && this.featurePageConfig.featuresPerLevel.beta.length > 0;
+      }
+      case 'experimental': {
+        return (this.featurePageConfig.featuresPerLevel
+          && this.featurePageConfig.featuresPerLevel.experimental
+          && this.featurePageConfig.featuresPerLevel.experimental.length > 0)
+          || (this.featurePageConfig.featuresPerLevel
+            && this.featurePageConfig.featuresPerLevel.beta
+            && this.featurePageConfig.featuresPerLevel.beta.length > 0);
+      }
+      case 'internal': {
+        return (this.featurePageConfig.featuresPerLevel
+          && this.featurePageConfig.featuresPerLevel.beta
+          && this.featurePageConfig.featuresPerLevel.beta.length > 0)
+          || (this.featurePageConfig.featuresPerLevel
+            && this.featurePageConfig.featuresPerLevel.experimental
+            && this.featurePageConfig.featuresPerLevel.experimental.length > 0)
+          || (this.featurePageConfig.featuresPerLevel
+            && this.featurePageConfig.featuresPerLevel.internal
+            && this.featurePageConfig.featuresPerLevel.internal.length > 0);
+      }
+      default: {
+        return true;
+      }
+    }
+  }
 }

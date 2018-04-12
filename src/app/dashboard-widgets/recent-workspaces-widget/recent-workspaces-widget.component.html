@@ -1,0 +1,35 @@
+<div class="recent-workspaces-card card-pf f8-card-lg">
+  <div class="card-pf-heading f8-card-heading">
+    <h2 class="card-pf-title">
+      Recent Workspaces
+    </h2>
+  </div>
+  <div class="card-pf-body f8-card-body">
+    <div class="f8-blank-slate-card" *ngIf="workspaces.length === 0">
+      <h3>Create a workspace</h3>
+      <p>Learn how to
+        <a href="https://docs.openshift.io/user-guide.html#importing_a_codebase" target="top">
+          create a workspace
+        </a>
+        by importing a codebase.
+      </p>
+    </div>
+    <!-- A list of the 5 most recent Workspaces will be displayed in place of the Blank Slate. -->
+    <div class="f8-home-space-list-result" *ngIf="workspaces.length > 0">
+      <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
+        <li class="list-group-item" *ngFor="let workspace of workspaces">
+          <div class="list-view-pf-main-info">
+            <div class="list-view-pf-body">
+              <div class="list-view-pf-description">
+                <div class="list-group-item-text">
+                  <a placement="bottom" tooltip="{{workspace.attributes.description || workspace.attributes.name}}"
+                     (click)="openWorkspace(workspace)">{{workspace.attributes.name}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
