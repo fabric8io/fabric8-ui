@@ -6,11 +6,7 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import {
-  Headers,
-  Http,
-  Response
-} from '@angular/http';
+import { Response } from '@angular/http';
 
 import {
   Observable,
@@ -18,10 +14,6 @@ import {
   Subject,
   Subscription
 } from 'rxjs';
-
-import { AuthenticationService } from 'ngx-login-client';
-
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import {
@@ -43,6 +35,8 @@ import { MemoryStat } from '../models/memory-stat';
 import { Pods as ModelPods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
+
+import { DeploymentApiService } from './deployment-api.service';
 
 export interface NetworkStat {
   sent: ScaledNetworkStat;
@@ -199,9 +193,6 @@ export class DeploymentsService implements OnDestroy {
   static readonly FRONT_LOAD_SAMPLES: number = 15;
   static readonly FRONT_LOAD_WINDOW_WIDTH: number = DeploymentsService.FRONT_LOAD_SAMPLES * DeploymentsService.POLL_RATE_MS;
 
-  private readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
-  private readonly apiUrl: string;
-
   private readonly appsObservables: Map<string, Observable<Application[]>> = new Map<string, Observable<Application[]>>();
   private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
   private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData[]>> = new Map<string, Subject<TimeseriesData[]>>();
@@ -209,20 +200,13 @@ export class DeploymentsService implements OnDestroy {
   private readonly serviceSubscriptions: Subscription[] = [];
 
   constructor(
-    private readonly http: Http,
-    private readonly auth: AuthenticationService,
+    private readonly apiService: DeploymentApiService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler,
     private readonly notifications: NotificationsService,
-    @Inject(WIT_API_URL) private readonly witUrl: string,
     @Inject(TIMER_TOKEN) private readonly pollTimer: Observable<void>,
     @Inject(TIMESERIES_SAMPLES_TOKEN) private readonly timeseriesSamples: number
-  ) {
-    if (this.auth.getToken() != null) {
-      this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
-    }
-    this.apiUrl = witUrl + 'deployments/spaces/';
-  }
+  ) { }
 
   ngOnDestroy(): void {
     this.serviceSubscriptions.forEach((sub: Subscription) => {
@@ -294,17 +278,8 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged();
   }
 
-  scalePods(
-    spaceId: string,
-    environmentName: string,
-    applicationId: string,
-    desiredReplicas: number
-  ): Observable<string> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
-    return this.http.put(url, '', { headers: this.headers })
+  scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<string> {
+    return this.apiService.scalePods(spaceId, environmentName, applicationId, desiredReplicas)
       .map((r: Response) => `Successfully scaled ${applicationId}`)
       .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
@@ -401,23 +376,17 @@ export class DeploymentsService implements OnDestroy {
   }
 
   deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
-    return this.http.delete(url, { headers: this.headers })
+    return this.apiService.deleteDeployment(spaceId, environmentName, applicationId)
       .map((r: Response) => `Deployment has successfully deleted`)
       .catch(err => Observable.throw(`Failed to delete ${applicationId} in ${spaceId} (${environmentName})`));
   }
 
   private getApplicationsResponse(spaceId: string): Observable<Application[]> {
     if (!this.appsObservables.has(spaceId)) {
-      const encSpaceId = encodeURIComponent(spaceId);
       const subject = new ReplaySubject<Application[]>(1);
       const observable = this.pollTimer
         .concatMap(() =>
-          this.http.get(this.apiUrl + encSpaceId, { headers: this.headers })
-            .map((response: Response) => (response.json() as ApplicationsResponse).data.attributes.applications)
+          this.apiService.getApplications(spaceId)
             .catch((err: Response) => this.handleHttpError(err))
         );
       this.serviceSubscriptions.push(observable.subscribe(subject));
@@ -442,12 +411,10 @@ export class DeploymentsService implements OnDestroy {
 
   private getEnvironmentsResponse(spaceId: string): Observable<EnvironmentStat[]> {
     if (!this.envsObservables.has(spaceId)) {
-      const encSpaceId = encodeURIComponent(spaceId);
       const subject = new ReplaySubject<EnvironmentStat[]>(1);
       const observable = this.pollTimer
         .concatMap(() =>
-          this.http.get(this.apiUrl + encSpaceId + '/environments', { headers: this.headers })
-            .map((response: Response) => (response.json() as EnvironmentsResponse).data)
+          this.apiService.getEnvironments(spaceId)
             .catch((err: Response) => this.handleHttpError(err))
         );
       this.serviceSubscriptions.push(observable.subscribe(subject));
@@ -504,12 +471,7 @@ export class DeploymentsService implements OnDestroy {
         if (!deployed) {
           return Observable.empty();
         }
-        const encSpaceId = encodeURIComponent(spaceId);
-        const encEnvironmentName = encodeURIComponent(environmentName);
-        const encApplicationId = encodeURIComponent(applicationId);
-        const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries?start=${startTime}&end=${endTime}`;
-        return this.http.get(url, { headers: this.headers })
-          .map((response: Response) => (response.json() as MultiTimeseriesResponse).data)
+        return this.apiService.getTimeseriesData(spaceId, environmentName, applicationId, startTime, endTime)
           .catch((err: Response) => this.handleHttpError(err))
           .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t))
           .concatMap((t: MultiTimeseriesData) => {
@@ -548,10 +510,6 @@ export class DeploymentsService implements OnDestroy {
         if (!deployed) {
           return Observable.empty();
         }
-        const encSpaceId = encodeURIComponent(spaceId);
-        const encEnvironmentName = encodeURIComponent(environmentName);
-        const encApplicationId = encodeURIComponent(applicationId);
-        const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
         /* piggyback on getApplicationsResponse rather than pollTimer directly in order to
         * establish a happens-before relationship between applications updates and timeseries
         * updates within each poll cycle, so that we can detect a deployment disappearing and
@@ -563,8 +521,7 @@ export class DeploymentsService implements OnDestroy {
               .filter((deployed: boolean): boolean => !deployed)
           )
           .concatMap(() =>
-            this.http.get(url, { headers: this.headers })
-              .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes)
+            this.apiService.getLatestTimeseriesData(spaceId, environmentName, applicationId)
               .catch((err: Response) => this.handleHttpError(err))
               .filter((t: TimeseriesData) => !!t && !isEmpty(t))
           );
