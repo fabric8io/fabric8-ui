@@ -34,6 +34,7 @@ import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetworkStat } from '../models/scaled-network-stat';
+import { DeploymentApiService } from './deployment-api.service';
 import {
   DeploymentsService,
   NetworkStat,
@@ -96,6 +97,7 @@ describe('DeploymentsService', () => {
         {
           provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3
         },
+        DeploymentApiService,
         DeploymentsService
       ]
     });

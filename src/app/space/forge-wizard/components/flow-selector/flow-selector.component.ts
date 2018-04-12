@@ -11,7 +11,7 @@ import { FeatureTogglesService } from '../../../../feature-flag/service/feature-
   styleUrls: ['./flow-selector.component.less']
 })
 export class FlowSelectorComponent implements OnDestroy {
-  @Input() space: string;
+  @Input() space: any;
   @Output('onSelect') onSelect = new EventEmitter();
   @Output('onCancel') onCancel = new EventEmitter();
 

@@ -1,9 +1,11 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { async, TestBed, RouterTestingModule } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+
 import { EmailVerificationComponent } from './email-verification.component';
 
 describe('Email Verification Component', () => {
@@ -13,7 +15,13 @@ describe('Email Verification Component', () => {
   let routeMock: any;
 
   beforeEach(() => {
-    routeMock = jasmine.createSpy('ActivatedRoute');
+    routeMock = {
+      snapshot: {
+        queryParams: {
+          verified: true
+        }
+      }
+    };
 
     TestBed.configureTestingModule({
       imports: [FormsModule, HttpModule, RouterTestingModule.withRoutes([])],
@@ -22,9 +30,9 @@ describe('Email Verification Component', () => {
         {
           provide: ActivatedRoute, useValue: routeMock
         }
-      ],
+      ]
       // Tells the compiler not to error on unknown elements and attributes
-      schemas: [NO_ERRORS_SCHEMA]
+      // schemas: [NO_ERRORS_SCHEMA]
     });
     email_true = {
       attributes: {
@@ -45,24 +53,23 @@ describe('Email Verification Component', () => {
 
   it('should verify email is verified', async(() => {
     let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
+    let element = fixture.debugElement.nativeElement;
     comp.email_true = email_true;
     fixture.detectChanges();
-    let element = debug.queryAll();
     fixture.whenStable().then(() => {
-      console.log(element.find('img').prop('src'));
-      expect(element.find('img').prop('src')).toEqual('../../../assets/images/trophy.png');
+      expect(element.querySelector('img').getAttribute('src'))
+        .toEqual('../../../assets/images/Logotype_RH_OpenShift-io_RGB_RedGray.png');
     });
   }));
+
   it('should verify email has already been used', async(() => {
     let comp = fixture.componentInstance;
-    let debug = fixture.debugElement;
-    comp.email_false = email_false;
+    let element = fixture.debugElement.nativeElement;
+    comp.email_true = email_true;
     fixture.detectChanges();
-    let element = debug.queryAll();
     fixture.whenStable().then(() => {
-      console.log(element.find('img').prop('src'));
-      expect(element.find('img').prop('src')).toEqual('../../../assets/images/neutralface.png');
+      expect(element.querySelectorAll('img')[1].getAttribute('src'))
+        .toEqual('../../../assets/images/neutralface.png');
     });
   }));
 });

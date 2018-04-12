@@ -70,6 +70,22 @@ export class DeploymentApiService {
       .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes);
   }
 
+  deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<Response> {
+    const encSpaceId = encodeURIComponent(spaceId);
+    const encEnvironmentName = encodeURIComponent(environmentName);
+    const encApplicationId = encodeURIComponent(applicationId);
+    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
+    return this.http.delete(url, { headers: this.headers });
+  }
+
+  scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<Response> {
+    const encSpaceId = encodeURIComponent(spaceId);
+    const encEnvironmentName = encodeURIComponent(environmentName);
+    const encApplicationId = encodeURIComponent(applicationId);
+    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
+    return this.http.put(url, '', { headers: this.headers });
+  }
+
   private httpGet(url: string): Observable<Response> {
     return this.http.get(url, { headers: this.headers });
   }
