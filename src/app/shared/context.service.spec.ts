@@ -193,4 +193,28 @@ describe('Context Service:', () => {
       expect((val.user as any).features).toBeNull();
     });
   });
+
+  it('emits error when requested user contains reserved characters', (done: DoneFn) => {
+    const navigation = Observable.of({
+      space: 'TEST',
+      url: '/_user/TEST',
+      user: '_user'
+    });
+    contextService.changeContext(navigation).subscribe(
+      () => done.fail('should have errored'),
+      () => done()
+    );
+  });
+
+  it('emits error when requested space contains reserved characters', (done: DoneFn) => {
+    const navigation = Observable.of({
+      space: '_TEST',
+      url: '/user/_TEST',
+      user: 'user'
+    });
+    contextService.changeContext(navigation).subscribe(
+      () => done.fail('should have errored'),
+      () => done()
+    );
+  });
 });
