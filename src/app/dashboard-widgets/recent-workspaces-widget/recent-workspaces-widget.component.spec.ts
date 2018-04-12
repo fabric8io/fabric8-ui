@@ -14,21 +14,22 @@ import { Observable } from 'rxjs';
 import { ContextService } from '../../shared/context.service';
 import { spaceMock } from '../../shared/context.service.mock';
 
-import { Codebase } from '../../space/create/codebases/services/codebase';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { WindowService } from '../../space/create/codebases/services/window.service';
-import { Workspace } from '../../space/create/codebases/services/workspace';
+import { Workspace, WorkspaceLinks } from '../../space/create/codebases/services/workspace';
 import { WorkspacesService } from '../../space/create/codebases/services/workspaces.service';
-import { RecentWorkspacesWidgetComponent } from './recent-workspaces-widget.component';
+import { ExtCodebase, RecentWorkspacesWidgetComponent} from './recent-workspaces-widget.component';
 
-describe('Recent Workspaces Widget:', () => {
+describe('RecentWorkspacesWidgetComponent', () => {
   let comp: RecentWorkspacesWidgetComponent;
   let fixture: ComponentFixture<RecentWorkspacesWidgetComponent>;
-  let codebase: Codebase;
-  let codebases: Codebase[];
+  let codebase: ExtCodebase;
+  let codebases: ExtCodebase[];
   let component: DebugNode['componentInstance'];
   let workspace: Workspace;
   let workspaces: Workspace[];
+  let workspaceLinks: WorkspaceLinks;
+
   let mockCodebasesService: any;
   let mockContextService: any;
   let mockSpaceService: any;
@@ -44,7 +45,7 @@ describe('Recent Workspaces Widget:', () => {
     mockSpaceService.getSpaceByName.and.returnValue(Observable.of(spaceMock));
     mockNotifications = jasmine.createSpy('Notifications');
     mockWindowService = jasmine.createSpyObj('WindowService', ['open']);
-    mockWorkspacesService = jasmine.createSpyObj('WorkspacesService', ['getWorkspaces']);
+    mockWorkspacesService = jasmine.createSpyObj('WorkspacesService', ['getWorkspaces', 'openWorkspace']);
 
     TestBed.configureTestingModule({
       imports: [
@@ -76,7 +77,7 @@ describe('Recent Workspaces Widget:', () => {
         'url': 'https://github.com/fabric8-ui/fabric8-ui.git'
       },
       'type': 'codebases'
-    } as Codebase;
+    } as ExtCodebase;
     codebases = [codebase];
     mockCodebasesService.getCodebases.and.returnValue(Observable.of(codebases));
 
@@ -90,6 +91,11 @@ describe('Recent Workspaces Widget:', () => {
     };
     workspaces = [workspace];
     mockWorkspacesService.getWorkspaces.and.returnValue(Observable.of(workspaces));
+
+    workspaceLinks = {
+      links: { open: 'url' }
+    };
+    mockWorkspacesService.openWorkspace.and.returnValue(Observable.of(workspaceLinks));
 
     mockWindowService.open.and.returnValue({location: { href: 'url'}});
 
