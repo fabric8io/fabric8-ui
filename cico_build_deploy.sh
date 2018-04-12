@@ -15,7 +15,7 @@ export BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M:%S`+00:00
 set -x
 
 # We need to disable selinux for now, XXX
-/usr/sbin/setenforce 0
+/usr/sbin/setenforce 0 || :
 
 # Get all the deps in
 yum -y install docker
@@ -24,7 +24,14 @@ service docker start
 
 # Build builder image
 docker build -t fabric8-ui-builder -f Dockerfile.builder .
-mkdir -p dist && docker run --detach=true --name=fabric8-ui-builder -t -v $(pwd)/dist:/dist:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN -e FABRIC8_BRANDING=openshiftio -e FABRIC8_REALM=fabric8 fabric8-ui-builder
+
+if [ ! -d dist ]; then
+  mkdir dist
+  docker run --detach=true --name=fabric8-ui-builder -t  -v $(pwd)/dist:/dist:Z
+    -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL \
+    -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN \
+    -e FABRIC8_BRANDING=openshiftio -e FABRIC8_REALM=fabric8 fabric8-ui-builder
+fi
 
 # In order to run semantic-release we need a non detached HEAD, see https://github.com/semantic-release/semantic-release/issues/329
 docker exec fabric8-ui-builder git checkout master
@@ -34,57 +41,50 @@ docker exec fabric8-ui-builder npm install
 
 ## Exec unit tests
 docker exec fabric8-ui-builder ./run_unit_tests.sh
+echo 'CICO: unit tests OK'
 
-  if [ $? -eq 0 ]; then
-    echo 'CICO: unit tests OK'
-    ./upload_to_codecov.sh
-else
-  echo 'CICO: unit tests FAIL'
-  exit 1
-fi
+./upload_to_codecov.sh
 
 ## Exec functional tests
 docker exec fabric8-ui-builder ./run_functional_tests.sh
 
 ## Run the prod build
 docker exec fabric8-ui-builder npm run build:prod
+echo 'CICO: functional tests OK'
 
-set +e
-if [ $? -eq 0 ]; then
-  echo 'CICO: functional tests OK'
-  docker exec fabric8-ui-builder npm run semantic-release
-  docker exec -u root fabric8-ui-builder cp -r /home/fabric8/fabric8-ui/dist /
-  ## All ok, deploy
-  if [ $? -eq 0 ]; then
-    echo 'CICO: build OK'
+docker exec fabric8-ui-builder npm run semantic-release
+docker exec -u root fabric8-ui-builder cp -r /home/fabric8/fabric8-ui/dist /
+docler rm fabric8-ui-builder
 
-    TAG=$(echo $GIT_COMMIT | cut -c1-${DEVSHIFT_TAG_LEN})
-    REGISTRY="push.registry.devshift.net"
+echo 'CICO: build OK'
 
-    if [ -n "${DEVSHIFT_USERNAME}" -a -n "${DEVSHIFT_PASSWORD}" ]; then
-      docker login -u ${DEVSHIFT_USERNAME} -p ${DEVSHIFT_PASSWORD} ${REGISTRY}
-    else
-      echo "Could not login, missing credentials for the registry"
-    fi
+TAG=$(echo $GIT_COMMIT | cut -c1-${DEVSHIFT_TAG_LEN})
 
-    docker build -t fabric8-ui-deploy -f Dockerfile.deploy . && \
-    docker tag fabric8-ui-deploy ${REGISTRY}/fabric8-ui/fabric8-ui:$TAG && \
-    docker push ${REGISTRY}/fabric8-ui/fabric8-ui:$TAG && \
-    docker tag fabric8-ui-deploy ${REGISTRY}/fabric8-ui/fabric8-ui:latest && \
-    docker push ${REGISTRY}/fabric8-ui/fabric8-ui:latest
-    if [ $? -eq 0 ]; then
-      echo 'CICO: image pushed, npmjs published, ready to update deployed app'
-      exit 0
-    else
-      echo 'CICO: Image push to registry failed'
-      exit 2
-    fi
-  else
-    echo 'CICO: app tests Failed'
-    exit 1
-  fi
+REGISTRY=${DOCKER_REGISTRY:-"push.registry.devshift.net/osio-prod"}
+
+if [ -n "${DEVSHIFT_USERNAME}" -a -n "${DEVSHIFT_PASSWORD}" ]; then
+  docker login -u ${DEVSHIFT_USERNAME} -p ${DEVSHIFT_PASSWORD} ${REGISTRY}
 else
-  echo 'CICO: functional tests FAIL'
+  echo "Could not login, missing credentials for the registry"
   exit 1
 fi
 
+if [ "$TARGET" = "rhel" ]; then
+  DOCKERFILE_DEPLOY="Dockerfile.deploy.rhel"
+  IMAGE_URI=${REGISTRY}/osio-prod/fabric8-ui/fabric8-ui
+else
+  DOCKERFILE_DEPLOY="Dockerfile.deploy"
+  IMAGE_URI=${REGISTRY}/fabric8-ui/fabric8-ui
+fi
+
+docker build -t fabric8-ui-deploy -f ${DOCKERFILE_DEPLOY} .
+
+docker tag fabric8-ui-deploy ${IMAGE_URI}:$TAG
+docker tag fabric8-ui-deploy ${IMAGE_URI}:latest
+
+docker push ${IMAGE_URI}:$TAG
+docker push ${IMAGE_URI}:latest
+
+echo 'CICO: image pushed, npmjs published, ready to update deployed app'
+
+exit 0

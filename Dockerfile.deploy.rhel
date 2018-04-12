@@ -1,0 +1,11 @@
+FROM FROM registry.devshift.net/osio-prod/base/nginx:latest
+MAINTAINER "Devtools <devtools@redhat.com>"
+
+USER root
+
+RUN rm -rf /usr/share/nginx/html/
+COPY dist /usr/share/nginx/html
+RUN chmod -R 777 /usr/share/nginx/html/
+
+
+USER ${FABRIC8_USER_NAME}
