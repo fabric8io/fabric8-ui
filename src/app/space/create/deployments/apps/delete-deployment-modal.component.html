@@ -5,12 +5,10 @@
   </button>
 </div>
 <div class="modal-body">
-  <p>You are about to delete the <b>{{ applicationId }}</b> deployment
-    from the <b>{{ environmentName }}</b> environment.
-    This action is not reversible. Are you sure you want to delete this
-    deployment?</p>
+  <p>Are you sure you want to delete the <span class="application-id">{{ applicationId }}</span>
+    deployment from the <span class="environment-name">{{ environmentName }}</span> environment?</p>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-default margin-right-5" (click)="host.hide()">Cancel</button>
-  <button class="btn btn-danger" (click)="confirmDeletion()">Delete Deployment</button>
+  <button class="btn btn-default" (click)="host.hide()">Cancel</button>
+  <button class="btn btn-danger" (click)="confirmDeletion()">Delete</button>
 </div>

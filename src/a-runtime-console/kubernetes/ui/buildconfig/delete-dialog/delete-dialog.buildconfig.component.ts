@@ -5,7 +5,8 @@ import { BuildConfigStore } from '../../../store/buildconfig.store';
 
 @Component({
   selector: 'delete-buildconfig-dialog',
-  templateUrl: './delete-dialog.buildconfig.component.html'
+  templateUrl: './delete-dialog.buildconfig.component.html',
+  styleUrls: ['./delete-dialog.buildconfig.component.less']
 })
 export class BuildConfigDeleteDialog {
   buildconfig: BuildConfig = new BuildConfig();

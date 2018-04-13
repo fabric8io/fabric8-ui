@@ -1,9 +1,10 @@
-<div>
-  <p>You are about to delete <b>{{buildconfig.name}}</b></p>
-  <p>This will only delete the resource from OpenShift it will not delete the git repository</p>
-  <hr/>
+<div class="modal-body">
+  <p>Are you sure you want to delete <span class="build-config-name">{{ buildconfig.name }}</span>?
+  This will only delete the resource from OpenShift.io, it will not delete the git repository.</p>
 </div>
-<div class="col-md-12 col-sm-12 col-xs-12">
-  <button class="btn btn-danger" type="submit" value="0" (click)="ok()">Delete</button>
-  <button class="btn btn-default pull-right" autofocus (click)="close()">Cancel</button>
+<div class="col-xs-12">
+  <div class="pull-right">
+    <button class="btn btn-default" autofocus (click)="close()">Cancel</button>
+    <button class="btn btn-danger delete-button" type="submit" value="0" (click)="ok()">Delete</button>
+  </div>
 </div>

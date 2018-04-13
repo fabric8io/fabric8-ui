@@ -7,7 +7,8 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
   },
   encapsulation: ViewEncapsulation.None,
   selector: 'delete-deployment-modal',
-  templateUrl: './delete-deployment-modal.component.html'
+  templateUrl: './delete-deployment-modal.component.html',
+  styleUrls: ['./delete-deployment-modal.component.less']
 })
 export class DeleteDeploymentModal {
 

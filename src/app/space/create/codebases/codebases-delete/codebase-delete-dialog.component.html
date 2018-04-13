@@ -5,8 +5,9 @@
   </button>
 </div>
 <div class="modal-body">
-    <span>You are about to remove codebase <b>{{codebase.name}}</b> from your space.
-      Please, verify this action by clicking Remove below.</span>
+  <p>Are you sure you want to remove <span class="codebase-name">{{ codebase.name }}</span>?
+    This will only remove the codebase from OpenShift.io, and will not delete your code from
+    your git repository.</p>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" (click)="cancel()">Cancel</button>
