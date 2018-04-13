@@ -10,6 +10,7 @@ import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { FeatureFlagModule } from '../feature-flag/feature-flag.module';
 
 import { RecentPipelinesWidgetModule } from '../dashboard-widgets/recent-pipelines-widget/recent-pipelines-widget.module';
+import { RecentWorkspacesWidgetModule } from '../dashboard-widgets/recent-workspaces-widget/recent-workspaces-widget.module';
 import { AddSpaceOverlayModule } from '../space/add-space-overlay/add-space-overlay.module';
 import { ForgeWizardModule } from '../space/forge-wizard/forge-wizard.module';
 import { SpaceWizardModule } from '../space/wizard/space-wizard.module';
@@ -27,6 +28,7 @@ import { WorkItemWidgetModule } from './work-item-widget/work-item-widget.module
     FeatureFlagModule,
     WorkItemWidgetModule,
     RecentPipelinesWidgetModule,
+    RecentWorkspacesWidgetModule,
     CarouselModule.forRoot(),
     ModalModule.forRoot(),
     TooltipModule.forRoot()
