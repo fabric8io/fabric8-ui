@@ -13,7 +13,10 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
-    "baseUrl": "",
+    "baseUrl": ".",
+    "paths": {
+      "fabric8-analytics-dep-editor": ["node_modules/ngx-forge/node_modules/fabric8-analytics-dep-editor"]
+    },
     "mapRoot": "",
     "rootDir": ".",
     "outDir": "lib",
