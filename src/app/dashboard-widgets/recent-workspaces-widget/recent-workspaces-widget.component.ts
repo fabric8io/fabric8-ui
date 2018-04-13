@@ -15,7 +15,7 @@ import { WorkspacesService } from '../../space/create/codebases/services/workspa
 
 // Adds an extra workspaces property
 export class ExtCodebase extends Codebase {
-  workspaces: Workspace[];
+  workspaces?: Workspace[];
 }
 
 // Adds an extra codebases property
@@ -57,8 +57,10 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
       private workspacesService: WorkspacesService) {
     // Get workspaces from recent workspaces
     this.subscriptions.push(this.fetchRecentSpaces().subscribe((recent: ExtSpace[]) => {
-      this.recent = recent;
-      this.initWorkspaces();
+      if (recent !== undefined) {
+        this.recent = recent;
+        this.initWorkspaces();
+      }
     }));
   }
 
