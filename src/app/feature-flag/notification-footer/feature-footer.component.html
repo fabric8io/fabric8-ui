@@ -3,32 +3,31 @@
   <div *ngSwitchCase="'internal'">
     <ng-template #tooltipTemplateInternal>
       <div>
-          <span *ngIf="featurePageConfig?.featuresPerLevel?.internal?.length !== 0">
-            <strong>There are {{featurePageConfig?.featuresPerLevel?.internal?.length}} internal feature(s) on this page.</strong>
-            <ul>
-              <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.internal">
-                <span class="pficon pficon-info"></span>
-                {{feature.attributes.name}}
-              </li>
-            </ul>
-          </span>
+        <span *ngIf="featurePageConfig?.featuresPerLevel?.internal?.length !== 0">
+          <strong>There {{internalFeatureText}} on this page.</strong>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.internal">
+              <span class="pficon pficon-info"></span>
+              {{feature.attributes.name}}
+            </li>
+          </ul>
+        </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.experimental?.length !== 0">
-            <strong>There are {{featurePageConfig?.featuresPerLevel?.experimental?.length}} experimental feature(s) on this page.</strong>
-            <ul>
-              <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">
-                <span class="pficon pficon-info"></span>
-                {{feature.attributes.name}}
-              </li>
-            </ul>
-          </span>
+          <strong>There {{experimentalFeatureText}} on this page.</strong>            <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">
+              <span class="pficon pficon-info"></span>
+              {{feature.attributes.name}}
+            </li>
+          </ul>
+        </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">
-            <strong>There are {{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.</strong>
-            <ul>
-              <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">
-                <span class="pficon pficon-info"></span>
-                {{feature.attributes.name}}
-              </li>
-            </ul>
+          <strong>There {{betaFeatureText}} on this page.</strong>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">
+              <span class="pficon pficon-info"></span>
+              {{feature.attributes.name}}
+            </li>
+          </ul>
           </span>
       </div>
     </ng-template>
@@ -47,16 +46,16 @@
     <ng-template #tooltipTemplateExperimental>
       <div>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.experimental?.length !== 0">
-            <strong>There are {{featurePageConfig?.featuresPerLevel?.experimental?.length}} experimental feature(s) on this page.</strong>
-            <ul>
-              <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">
-                <span class="pficon pficon-info"></span>
-                {{feature.attributes.name}}
-              </li>
-            </ul>
-          </span>
+          <strong>There {{experimentalFeatureText}} on this page.</strong>
+          <ul>
+            <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.experimental">
+              <span class="pficon pficon-info"></span>
+              {{feature.attributes.name}}
+            </li>
+          </ul>
+        </span>
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">
-            <strong>There are {{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.</strong>
+          <strong>There {{betaFeatureText}} on this page.</strong>
             <ul>
               <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">
                 <span class="pficon pficon-info"></span>
@@ -81,9 +80,8 @@
     <ng-template #tooltipTemplateBeta>
       <div *ngIf="!noFeaturesInBeta">
         <span *ngIf="featurePageConfig?.featuresPerLevel?.beta?.length !== 0">
-          <strong>There are {{featurePageConfig?.featuresPerLevel?.beta?.length}} beta feature(s) on this page.</strong>
+          <strong>There {{betaFeatureText}} on this page.</strong>
           <ul>
-
             <li *ngFor="let feature of featurePageConfig?.featuresPerLevel?.beta">
               <span class="pficon pficon-info"></span>
               {{feature.attributes.name}}

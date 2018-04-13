@@ -23,19 +23,23 @@ export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
   noFeaturesInExperimental: boolean = true;
   noFeaturesInInternal: boolean = true;
 
-  constructor() {
-  }
+  betaFeatureText = '';
+  experimentalFeatureText = '';
+  internalFeatureText = '';
 
-  ngOnInit() {
-  }
+  constructor() {}
+
+  ngOnInit() {}
 
   ngOnChanges() {
     if (this.featurePageConfig) {
-      this.userLevel = this.featurePageConfig['user-level'] || 'released';
       // re-init the boolean values
       this.noFeaturesInInternal = true;
       this.noFeaturesInBeta = true;
       this.noFeaturesInExperimental = true;
+
+      this.descriptionPerLevel();
+
       if (this.isNotEmpty('beta')) {
         this.noFeaturesInBeta = false;
       }
@@ -47,6 +51,28 @@ export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
       }
     } else {
       this.userLevel = 'released';
+    }
+  }
+
+  descriptionPerLevel() {
+    this.betaFeatureText = '';
+    this.experimentalFeatureText = '';
+    this.internalFeatureText = '';
+    this.userLevel = this.featurePageConfig['user-level'] || 'released';
+    if (this.featurePageConfig.featuresPerLevel && this.featurePageConfig.featuresPerLevel.beta.length === 1) {
+      this.betaFeatureText = `is 1 beta feature`;
+    } else if (this.featurePageConfig.featuresPerLevel && this.featurePageConfig.featuresPerLevel.beta.length > 1) {
+      this.betaFeatureText = `are ${this.featurePageConfig.featuresPerLevel.beta.length} beta features`;
+    }
+    if (this.featurePageConfig.featuresPerLevel && this.featurePageConfig.featuresPerLevel.experimental.length === 1) {
+      this.experimentalFeatureText = `is 1 experimental feature`;
+    } else if (this.featurePageConfig.featuresPerLevel && this.featurePageConfig.featuresPerLevel.experimental.length > 1) {
+      this.experimentalFeatureText = `are ${this.featurePageConfig.featuresPerLevel.experimental.length} experimental features`;
+    }
+    if (this.featurePageConfig.featuresPerLevel && this.featurePageConfig.featuresPerLevel.internal.length === 1) {
+      this.internalFeatureText = `is 1 internal feature`;
+    } else if (this.featurePageConfig.featuresPerLevel && this.featurePageConfig.featuresPerLevel.internal.length > 1) {
+      this.internalFeatureText = `are ${this.featurePageConfig.featuresPerLevel.internal.length} internal features`;
     }
   }
 

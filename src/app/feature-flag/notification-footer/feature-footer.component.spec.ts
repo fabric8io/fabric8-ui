@@ -107,6 +107,22 @@ describe('FeatureFooterComponent', () => {
     hostComponent.featurePageConfig = config;
   });
 
+  it('should display feature descriptions', async(() => {
+    hostComponent.descriptionPerLevel();
+    expect(hostComponent.experimentalFeatureText).toEqual('is 1 experimental feature');
+    expect(hostComponent.internalFeatureText).toEqual('is 1 internal feature');
+    expect(hostComponent.betaFeatureText).toEqual('is 1 beta feature');
+    config.featuresPerLevel.beta.push({'attributes':
+      {'description': 'Planner menu',
+        'enabled': true,
+        'enablement-level': 'beta',
+        'user-enabled': true,
+        'name': 'Planner featureC'},
+      'id': 'Planner.featureC'});
+    hostComponent.descriptionPerLevel();
+    expect(hostComponent.betaFeatureText).toEqual('are 2 beta features');
+  }));
+
   it('should not be empty for internal when there are features for exp, beta and internal', async(() => {
     expect(hostComponent.isNotEmpty('internal')).toBeTruthy();
   }));
