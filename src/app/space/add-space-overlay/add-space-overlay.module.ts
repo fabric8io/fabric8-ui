@@ -5,9 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { Fabric8WitModule, UniqueSpaceNameValidatorDirective, ValidSpaceNameValidatorDirective } from 'ngx-fabric8-wit';
 
 import { CodebasesService } from '../create/codebases/services/codebases.service';
-import { TrustHtmlPipe, TrustStylePipe } from '../wizard/pipes/safe-html.pipe';
-import { SelectedItemsPipe } from '../wizard/pipes/selected-items.pipe';
-import { VisibleItemsPipe } from '../wizard/pipes/visible-items.pipe';
 import { AddSpaceOverlayComponent } from './add-space-overlay.component';
 
 import { SpaceTemplateService } from 'app/shared/space-template.service';
@@ -19,10 +16,14 @@ import { SpaceTemplateService } from 'app/shared/space-template.service';
     Fabric8WitModule
   ],
   declarations: [
-    AddSpaceOverlayComponent
+    AddSpaceOverlayComponent,
+    UniqueSpaceNameValidatorDirective,
+    ValidSpaceNameValidatorDirective
   ],
   exports: [
-    AddSpaceOverlayComponent
+    AddSpaceOverlayComponent,
+    UniqueSpaceNameValidatorDirective,
+    ValidSpaceNameValidatorDirective
   ],
   providers: [
     CodebasesService,
