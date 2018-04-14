@@ -174,7 +174,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
       }
       for (let i = 0; i < space.codebases.length; i++) {
         let codebase = space.codebases[i];
-        if (codebase.workspaces === undefined) {
+        if (!codebase.workspaces) { // This could be null
           continue;
         }
         for (let k = 0; k < codebase.workspaces.length && this._workspaces.length < this.limit; k++) {

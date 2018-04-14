@@ -50,7 +50,7 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
    * @param  {boolean} isImport
    * @returns Observable
    */
-  setup(summary: Summary, spaceId: string, spaceName: string, isImport: boolean): Observable<boolean> {
+  setup(summary: Summary, spaceId: string, spaceName: string, isImport: boolean): Observable<any> {
     let summaryEndPoint = '';
     let payload = '';
     if (isImport) {

@@ -13,6 +13,7 @@ import { EditSpaceDescriptionWidgetModule } from '../../../dashboard-widgets/edi
 import { EnvironmentWidgetComponent } from '../../../dashboard-widgets/environment-widget/environment-widget.component';
 import { EnvironmentWidgetModule } from '../../../dashboard-widgets/environment-widget/environment-widget.module';
 import { PipelinesWidgetModule } from '../../../dashboard-widgets/pipelines-widget/pipelines-widget.module';
+import { WorkItemWidgetModule } from '../../../dashboard-widgets/work-item-widget/work-item-widget.module';
 import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
 import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module';
 import { AnalyzeOverviewComponent } from './analyze-overview.component';
@@ -30,7 +31,8 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
     PipelinesWidgetModule,
     EnvironmentWidgetModule,
     ForgeWizardModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    WorkItemWidgetModule
   ],
   declarations: [AnalyzeOverviewComponent],
   entryComponents: [EnvironmentWidgetComponent]

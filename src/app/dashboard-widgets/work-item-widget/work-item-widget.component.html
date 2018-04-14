@@ -1,0 +1,68 @@
+<div id="spacehome-workitems-card" class="create-work-item-widget card-pf f8-card" user-level>
+  <div class="card-pf-heading f8-card-heading">
+    <h2 class="card-pf-title">
+      Work Item Overview
+    </h2>
+  </div>
+  <div class="card-pf-body f8-card-body">
+    <div class="f8-blank-slate-card" *ngIf="(myWorkItemsCount | async) === 0">
+      <h3>Create Work Items</h3>
+      <p>
+        Planner will help you to create different types of work-items, allows you to assign team members and iterations.
+      </p>
+      <div class="f8-blank-slate-main-action">
+        <button id="spacehome-workitems-create-button" class="btn btn-primary btn-lg"
+                [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
+      </div>
+    </div>
+    <div class="f8-card-body-grid" *ngIf="(myWorkItemsCount | async) > 0">
+      <div class="f8-work-item-card-data">
+        <div class="f8-work-item-card-data-totals">
+          <h1 class="f8-work-item-card-data-totals--overview" id="total">{{myWorkItemsCount | async}}</h1>
+          <p class="f8-work-item-card-data-totals--overview-subtitle">Total work items</p>
+          <p class="f8-work-item-card-data-totals--link">
+            <a [routerLink]="[contextPath | async, 'plan']">View Planner</a>
+          </p>
+        </div>
+        <div class="f8-work-item-card-data-status">
+          <div class="f8-work-item-card-data-status--resolved">
+            <div class="f8-work-item-card-data-status--resolved_color">
+              <span class="pficon pficon-resources-full"></span>
+            </div>
+            <div class="f8-work-item-card-data-status--resolved_color" id="resolved">
+              {{myWorkItemsResolved}}
+            </div>
+            <div>
+              Resolved
+            </div>
+          </div>
+          <div class="f8-work-item-card-data-status--in-progress">
+            <div class="f8-work-item-card-data-status--in-progress_color">
+              <span class="pficon pficon-resources-almost-full"></span>
+            </div>
+            <div class="f8-work-item-card-data-status--in-progress_color" id="in-progress">
+              {{myWorkItemsInProgress}}
+            </div>
+            <div>
+              In progress
+            </div>
+          </div>
+          <div class="f8-work-item-card-data-status--open">
+            <div class="f8-work-item-card-data-status--open_color">
+              <span class="fa fa-fire"></span>
+            </div>
+            <div class="f8-work-item-card-data-status--open_color" id="open">
+              {{myWorkItemsOpen}}
+            </div>
+            <div>
+              Open
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="f8-work-item-card-chart">
+        <fabric8-work-item-barchart [config]="chartConfig" [chartData]="chartData"></fabric8-work-item-barchart>
+      </div>
+    </div>
+  </div>
+</div>

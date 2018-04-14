@@ -91,7 +91,7 @@ input,
           box-shadow: 0 1px 6px rgba(255, 255, 255, .35);
         }
         .codebase-card-container {
-          height: 200px;
+          min-height: 200px;
           display: flex;
           align-items: center;
           &-radio {
@@ -99,11 +99,14 @@ input,
             &-input {
               display: flex;
               align-items: center;
-              height: 70%;
+              height: 100px;
             }
           }
           &-desp {
             height: 100%;
+            .card-pf-item {
+              font-size: 1em;
+            }
           }
         }
       }
