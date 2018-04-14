@@ -37,7 +37,7 @@ export class BaseApiLocatorService {
   }
 
   get realm(): string {
-    return this.envVars.get('realm') || 'fabric8';
+    return this.config.realm || 'fabric8';
   }
 
   get branding(): string {
