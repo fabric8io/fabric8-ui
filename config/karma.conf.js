@@ -1,7 +1,7 @@
 /**
  * @author: @AngularClass
  */
-
+require('karma-chrome-launcher'),
 module.exports = function (config) {
   var testWebpackConfig = require('./webpack.test.js')({ env: 'test' });
 
@@ -15,8 +15,11 @@ module.exports = function (config) {
      *
      * available frameworks: https://npmjs.org/browse/keyword/karma-adapter
      */
-    frameworks: ['jasmine'],
-
+    frameworks: ['jasmine', 'pact'],
+    pact: {
+      dir: 'pacts',
+      cors: true
+    },
     // list of files to exclude
     exclude: [],
 
@@ -91,37 +94,18 @@ module.exports = function (config) {
      * start these browsers
      * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
      */
-    /*
-        browsers: [
-          'Chrome'
-        ],
+      browsers: [
+        'ChromeNoSandboxHeadless'
+      ],
 
-        customLaunchers: {
-          ChromeTravisCi: {
-            base: 'Chrome',
-            flags: ['--no-sandbox']
-          }
-        },
-    */
-    browsers: ['PhantomJS_custom'],
-    customLaunchers: {
-      'PhantomJS_custom': {
-        base: 'PhantomJS',
-        options: {
-          windowName: 'alm-window',
-          settings: {
-            webSecurityEnabled: false
-          },
-        },
-        flags: ['--load-images=true'],
-        debug: false
-      }
-    },
-    phantomjsLauncher: {
-      // Have phantomjs exit if a ResourceError is encountered
-      // (useful if karma exits without killing phantom)
-      exitOnResourceError: true
-    },
+      customLaunchers: {
+        ChromeNoSandboxHeadless: {
+          base: 'ChromeCanary',
+          flags: ['--headless',
+          '--disable-gpu',
+          ' --remote-debugging-port=9222']
+        }
+      },
 
     /*
      * Continuous Integration mode
@@ -129,12 +113,6 @@ module.exports = function (config) {
      */
     singleRun: true
   };
-
-  if (process.env.TRAVIS) {
-    configuration.browsers = [
-      'ChromeTravisCi'
-    ];
-  }
 
   config.set(configuration);
 };
