@@ -1,10 +1,9 @@
-<form role="form" #collaboratorsForm="ngForm" (ngSubmit)="addCollaborators()" novalidate>
-  <header>
-    <h3 class="add-dialog-header">
-      <b>Add collaborators</b>
-    </h3>
-  </header>
-  <section>
+<div class="modal-header">
+  <b>Add collaborators</b>
+</div>
+
+<div class="modal-body">
+  <form role="form" #collaboratorsForm="ngForm" (ngSubmit)="addCollaborators()" novalidate>
     <div class="form">
       <fieldset class="add-fieldset">
         <div class="form-group">
@@ -22,13 +21,14 @@
         </div>
       </fieldset>
     </div>
-  </section>
-  <footer>
-    <div class="add-footer">
-      <div>
-        <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
-        <button class="btn btn-primary" [disabled]="!collaboratorsForm.form.valid" type="submit">Add</button>
+    <div class="modal-footer">
+      <div class="add-footer">
+        <div>
+          <button class="btn btn-default margin-right-5" type="button" (click)="cancel()">Cancel</button>
+          <button class="btn btn-primary" [disabled]="!collaboratorsForm.form.valid" type="submit">Add</button>
+        </div>
       </div>
     </div>
-  </footer>
-</form>
+  </form>
+</div>
+

@@ -9,7 +9,6 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
 import { Navigation } from '../../models/navigation';
-import { DummyService } from '../../shared/dummy.service';
 import { LoginService } from '../../shared/login.service';
 import { MenuedContextType } from './menued-context-type';
 
@@ -27,6 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   title = 'Almighty';
   imgLoaded: Boolean = false;
   statusListVisible = false;
+  documentationListVisible: Boolean = false;
   modalRef: BsModalRef;
   isIn = false;   // store state
   toggleState() { // click handler
@@ -38,6 +38,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.statusListVisible = flag;
   }
 
+  onDocumentationListVisible = (flag: boolean) => {
+    this.documentationListVisible = flag;
+  }
 
   menuCallbacks = new Map<String, MenuHiddenCallback>([
     [
@@ -74,7 +77,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private logger: Logger,
     public loginService: LoginService,
     private broadcaster: Broadcaster,
-    public dummy: DummyService,
     private contexts: Contexts,
     private modalService: BsModalService,
     private authentication: AuthenticationService
@@ -130,6 +132,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   login() {
+    this.loginService.redirectUrl = this.router.url;
     this.broadcaster.broadcast('login');
     this.loginService.redirectToAuth();
   }
@@ -160,14 +163,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.modalRef.hide();
   }
 
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  }
+
   selectFlow($event) {
     this.selectedFlow = $event.flow;
     this.space = $event.space;
   }
 
   get context(): Context {
-    if (this.router.url.startsWith('/_home')) {
+    if (this.router.url.startsWith('/_home') || this.router.url.startsWith('/_featureflag')) {
       return this._defaultContext;
+    } else if (this.router.url.startsWith('/_error')) {
+      return null;
     } else {
       return this._context;
     }
@@ -175,6 +184,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   get isGettingStartedPage(): boolean {
     return (this.router.url.indexOf('_gettingstarted') !== -1);
+  }
+
+  get isAppLauncherPage(): boolean {
+    return (this.router.url.indexOf('applauncher') !== -1);
+  }
+
+  private stripQueryFromUrl(url: string) {
+    if (url.indexOf('?q=') !== -1) {
+      url = url.substring(0, url.indexOf('?q='));
+    }
+    return url;
   }
 
   private updateMenus() {
@@ -191,7 +211,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // /namespace/space/create instead of /namespace/space/create/pipelines
         // as the 'Create' page matches to the 'Codebases' page
         let subMenus = (n.menus || []).slice().reverse();
-        if (subMenus) {
+        if (subMenus && subMenus.length > 0) {
           for (let o of subMenus) {
             // Clear the menu's active state
             o.active = false;
@@ -231,7 +251,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               }
             }
           }
-        } else if (!foundPath && n.fullPath === this.router.url) {
+        } else if (!foundPath && n.fullPath === this.stripQueryFromUrl(this.router.url)) {
           n.active = true;
           foundPath = true;
         }

@@ -6,7 +6,7 @@
           <i class="fa fa-lock fa-5x"></i>
           <h2>Internal Features Opt-in</h2>
           <p>These features are only available to Red Hat users and have no guarantee of performance or stability.
-            Use theses at your own risk.</p>
+            Use these at your own risk.</p>
           <button class="btn btn-lg btn-feature-level" [routerLink]="profileLink">Opt-in to Internal Features</button>
          </div>
       </div>
@@ -19,7 +19,7 @@
           <i class="fa fa-flask fa-5x"></i>
           <h2>Experimental Features Opt-in</h2>
           <p>These features are currently in beta testing and have no guarantee of performance or stability.
-            Use theses at your own risk.</p>
+            Use these at your own risk.</p>
             <button class="btn btn-lg btn-feature-level" [routerLink]="profileLink">Opt-in to Experimental Features</button>
         </div>
       </div>
@@ -32,7 +32,7 @@
           <i class="fa fa-5x">&Beta;</i>
           <h2>Beta Features Opt-in</h2>
           <p>These features are currently in beta testing and have no guarantee of performance or stability.
-            Use theses at your own risk.</p>
+            Use these at your own risk.</p>
           <button class="btn btn-lg btn-feature-level" [routerLink]="profileLink">Opt-in to Beta Features</button>
         </div>
       </div>
@@ -45,17 +45,6 @@
           <i class="fa fa-flask fa-5x"></i>
           <h2>Ooops</h2>
           <p>This feature has been disabled by your admin page.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div *ngSwitchCase="'notLoggedIn'">
-    <div class="container-fluid content padding-top-15 internal-page not-logged-in-border">
-      <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 feature-content">
-        <div class="col-xs-12">
-          <i class="fa fa-flask fa-5x"></i>
-          <h2>Pre-production Features</h2>
-          <p>This feature is marked as either experimental or beta. To match your level of pre-production more accurately, please log in.</p>
         </div>
       </div>
     </div>

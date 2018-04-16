@@ -6,29 +6,29 @@ import {
 } from '@angular/core';
 
 import { cloneDeep } from 'lodash';
+import { Filter, FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
-  Filter,
-  FilterEvent,
-  SortEvent,
-  SortField
-} from 'patternfly-ng';
-import { Observable, Subscription } from 'rxjs';
+  Observable,
+  Subscription
+} from 'rxjs';
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
-import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployments-apps',
-  templateUrl: 'deployments-apps.component.html'
+  templateUrl: 'deployments-apps.component.html',
+  styleUrls: ['./deployments-apps.component.less']
 })
 export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
-  @Input() public applications: Observable<string[]>;
-  @Input() public environments: Observable<Environment[]>;
-  @Input() public spaceId: Observable<string>;
+  @Input() applications: Observable<string[]>;
+  @Input() environments: Observable<string[]>;
+  @Input() spaceId: Observable<string>;
 
-  public filteredApplicationsList: string[];
-  public resultsCount: number = 0;
+  filteredApplicationsList: string[];
+  resultsCount: number = 0;
+  hasLoaded: Observable<boolean>;
 
   private applicationsList: string[];
   private currentFilters: Filter[];
@@ -36,29 +36,30 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   private isAscendingSort: boolean = true;
   private subscriptions: Subscription[] = [];
 
-  public constructor() { }
-
   ngOnInit(): void {
-    this.subscriptions.push(this.applications.subscribe(applications => {
-      this.applicationsList = applications;
-      this.applyFilters();
-    }));
+    this.hasLoaded = Observable.forkJoin(this.applications.first(), this.environments.first()).map(() => true);
+    this.subscriptions.push(
+      this.applications.subscribe((applications: string[]) => {
+        this.applicationsList = applications;
+        this.applyFilters();
+      })
+    );
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
   }
 
-  filterChange($event: FilterEvent): void {
-    this.currentFilters = $event.appliedFilters;
+  filterChange(event: FilterEvent): void {
+    this.currentFilters = event.appliedFilters;
     this.applyFilters();
 
     this.sortApplications();
   }
 
-  sortChange($event: SortEvent): void {
-    this.currentSortField = $event.field;
-    this.isAscendingSort = $event.isAscending;
+  sortChange(event: SortEvent): void {
+    this.currentSortField = event.field;
+    this.isAscendingSort = event.isAscending;
 
     this.sortApplications();
   }

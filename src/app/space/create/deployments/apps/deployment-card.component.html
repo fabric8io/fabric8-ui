@@ -1,7 +1,7 @@
 <ng-container *ngIf="active">
-  <div class="card-pf" (click)="toggleCollapsed()">
-    <div class="card-pf-body">
-      <div class="row mini-card-content">
+  <div class="card-pf" (click)="toggleCollapsed($event)">
+    <div class="card-pf-body" *ngIf="!deleting; else deletingTemplate">
+      <div class="row mini-card-content" [ngClass]="cardStatusClass">
         <div class="col-sm-2">
           <deployment-status-icon [iconClass]="iconClass" [toolTip]="toolTip"></deployment-status-icon>
         </div>
@@ -12,19 +12,21 @@
           <span id="versionLabel">{{ version | async }}</span>
         </div>
         <div class="col-sm-2">
-          <div class="dropdown-kebab-pf dropdown" (click)="$event.stopPropagation()" dropdown>
-            <button class="btn btn-link pull-right dropdown-toggle" id="kebab" type="button" aria-haspopup="true" aria-expanded="true"
-              data-toggle="dropdown" dropdownToggle>
+          <div class="dropdown-kebab-pf dropdown" dropdown>
+            <button class="btn btn-link pull-right dropdown-toggle" id="kebab"
+              type="button" aria-haspopup="true" aria-expanded="true" dropdownToggle
+              (click)="$event.preventDefault()">
               <span class="fa fa-ellipsis-v"></span>
             </button>
-            <ul class="dropdown-menu-right dropdown-menu deployment-dropdown" aria-labelledby="kebab" role="menu" *dropdownMenu>
+            <ul class="dropdown-menu-right dropdown-menu deployment-dropdown" aria-labelledby="kebab"
+              role="menu" *dropdownMenu (click)="$event.stopPropagation()">
               <li>
                 <a class="menu-item" [attr.href]="logsUrl | async" target="_blank">View logs</a>
               </li>
               <li>
                 <a class="menu-item" [attr.href]="consoleUrl | async" target="_blank">View OpenShift Console</a>
               </li>
-              <ng-container *ngIf="appUrl | async; let appUrl">
+              <ng-container *ngIf="appUrl | async as appUrl">
                 <li role="separator" class="divider"></li>
                 <li>
                   <a class="menu-item" [attr.href]="appUrl" target="_blank">Open Application</a>
@@ -32,14 +34,33 @@
               </ng-container>
               <li role="separator" class="divider"></li>
               <li>
-                <a class="menu-item" (click)="delete()">Delete</a>
+                <a class="menu-item" (click)="openModal()">Delete</a>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <deployment-details (click)="$event.stopPropagation()" [collapsed]="collapsed" [active]="detailsActive"
+      <deployment-details (click)="$event.preventDefault()" [collapsed]="collapsed" [active]="detailsActive"
         [applicationId]="applicationId" [environment]="environment" [spaceId]="spaceId"></deployment-details>
     </div>
+    <ng-template #deletingTemplate>
+      <div div class="card-pf-body">
+          <div class="spinner delete-spinner"></div>
+          <p class="delete-msg">Deleting deployment...</p>
+      </div>
+    </ng-template>
   </div>
 </ng-container>
+
+<div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <delete-deployment-modal #deleteDeploymentModal
+      (deleteEvent)="delete()"
+      [host]="modal"
+      [applicationId]="applicationId"
+      [environmentName]="environment"
+      ></delete-deployment-modal>
+    </div>
+  </div>
+</div>

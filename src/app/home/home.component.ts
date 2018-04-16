@@ -15,6 +15,8 @@ import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
 import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 
+import { FeatureTogglesService } from '../feature-flag/service/feature-toggles.service';
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-home',
@@ -38,6 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private space: string;
 
   constructor(
+    private featureTogglesService: FeatureTogglesService,
     private userService: UserService,
     private spaceService: SpaceService,
     private router: Router,
@@ -63,7 +66,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this._defaultContext = val;
       this.initSpaces();
     });
-
     this.brandInformation = new BrandInformation();
     if (this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === 'fabric8') {
       this.brandInformation.logo = fabric8Logo;
@@ -108,6 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return this._context;
     }
   }
+
   openForgeWizard(addSpace: TemplateRef<any>) {
     if (this.authentication.getGitHubToken()) {
       this.selectedFlow = 'start';
@@ -126,5 +129,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.space = $event.space;
   }
 
-
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  }
 }

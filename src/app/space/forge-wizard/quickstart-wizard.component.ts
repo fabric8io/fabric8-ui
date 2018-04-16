@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
-import { Notifications } from 'ngx-base';
+import { Broadcaster, Notifications } from 'ngx-base';
 import { ForgeService } from 'ngx-forge';
 import { Gui, Input } from 'ngx-forge';
 
@@ -20,8 +20,9 @@ export class ForgeQuickstartComponent extends AbstractWizard {
   constructor(forgeService: ForgeService,
               codebasesService: CodebasesService,
               context: ContextService,
-              notifications: Notifications) {
-    super(forgeService, codebasesService, context, notifications);
+              notifications: Notifications,
+              broadcaster: Broadcaster) {
+    super(forgeService, broadcaster, codebasesService, context, notifications);
     this.endPoint = 'fabric8-new-project';
     this.steps = configureSteps();
     this.isLoading = true;

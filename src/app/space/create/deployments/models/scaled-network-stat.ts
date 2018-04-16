@@ -6,11 +6,12 @@ export class ScaledNetworkStat {
 
   private static readonly UNITS = ['bytes', 'KB', 'MB', 'GB'];
 
-  public raw: number;
-  public units: MemoryUnit;
+  public readonly raw: number;
+  public readonly units: MemoryUnit;
 
   constructor(
-    public used: number
+    public readonly used: number,
+    public readonly timestamp?: number
   ) {
     this.raw = used;
     let scale = 0;

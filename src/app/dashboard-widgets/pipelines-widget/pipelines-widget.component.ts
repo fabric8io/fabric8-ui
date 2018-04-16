@@ -6,7 +6,9 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { Observable } from 'rxjs/Rx';
+import {
+  Observable
+} from 'rxjs/Rx';
 
 import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
@@ -25,23 +27,25 @@ export class PipelinesWidgetComponent implements OnInit {
 
   @Output() addToSpace = new EventEmitter();
 
-  buildConfigs: Observable<BuildConfigs>;
-  buildConfigsCount: Observable<number>;
   contextPath: Observable<string>;
+  buildConfigs: Observable<BuildConfigs>;
+  buildConfigsCount: number = 0;
 
   constructor(
     private context: Contexts,
     private broadcaster: Broadcaster,
     private pipelinesService: PipelinesService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.contextPath = this.context.current.map(context => context.path);
-    let bcs = this.pipelinesService.current
-      .publish();
-    this.buildConfigs = bcs;
-    this.buildConfigsCount = bcs.map(buildConfigs => buildConfigs.length);
-    bcs.connect();
+    this.buildConfigs = this.pipelinesService.current.share();
+    // buildConfigsCount triggers changes in the DOM; force Angular Change Detection
+    // via setTimeout encapsulation
+    this.buildConfigs
+      .map(buildConfigs => buildConfigs.length)
+      .share()
+      .subscribe(length => setTimeout(() => this.buildConfigsCount = length));
   }
 
 }

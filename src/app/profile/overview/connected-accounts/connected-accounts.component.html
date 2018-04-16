@@ -61,8 +61,8 @@
                   </div>
                   <div class="list-view-pf-additional-info">
                     <div class="list-view-pf-additional-info-item">
-                      <span *ngIf="openShiftLinked">{{contextUserName}}</span>
-                      <span *ngIf="!openShiftLinked" class="account-disconnected">Not Connected</span>
+                      <span *ngIf="openShiftLinked">{{openShiftUserName}}</span>
+                      <span *ngIf="!openShiftLinked" class="account-disconnected">{{openShiftError}}</span>
                       <button class="btn btn-link" type="button" (click)="refreshOpenShift()">
                         <span class="fa fa-refresh"></span>
                       </button>

@@ -64,6 +64,14 @@ export class ProviderService {
       });
   }
 
+  getOpenShiftStatus(cluster: string): Observable<any> {
+    let tokenUrl = this.apiUrl + 'token?force_pull=true&for=' + cluster;
+    return this.http.get(tokenUrl)
+      .map((response) => {
+        return response.json();
+      });
+  }
+
   disconnectOpenShift(cluster: string): Observable<any> {
     let tokenUrl = this.apiUrl + 'token?for=' + cluster;
     return this.http

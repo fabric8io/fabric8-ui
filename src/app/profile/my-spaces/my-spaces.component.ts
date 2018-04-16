@@ -6,23 +6,19 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { cloneDeep, findIndex, has } from 'lodash';
-import { Logger } from 'ngx-base';
+import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
-import {
-  Action,
-  ActionConfig,
-  EmptyStateConfig,
-  Filter,
-  FilterEvent,
-  ListConfig,
-  SortEvent,
-  SortField
-} from 'patternfly-ng';
-import { Subscription } from 'rxjs';
+import { AuthenticationService, User, UserService } from 'ngx-login-client';
+
+import { Action, ActionConfig } from 'patternfly-ng/action';
+import { EmptyStateConfig } from 'patternfly-ng/empty-state';
+import { Filter, FilterEvent } from 'patternfly-ng/filter';
+import { ListConfig } from 'patternfly-ng/list';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
 
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { EventService } from '../../shared/event.service';
@@ -38,6 +34,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   listConfig: ListConfig;
   showSpaces: boolean = false;
+  resultsCount: number = 0;
 
   private _spaces: Space[] = [];
   private appliedFilters: Filter[];
@@ -50,7 +47,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   private modalRef: BsModalRef;
   private pageName = 'myspaces';
   private pageSize: number = 2000;
-  private resultsCount: number = 0;
   private selectedFlow: string = 'start';
   private space: string = '';
   private spaceToDelete: Space;
@@ -61,9 +57,11 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     private eventService: EventService,
     private gettingStartedService: GettingStartedService,
     private logger: Logger,
+    private broadcaster: Broadcaster,
     private modalService: BsModalService,
     private spaceService: SpaceService,
-    private userService: UserService
+    private userService: UserService,
+    private authentication: AuthenticationService
   ) {
     this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
@@ -270,8 +268,12 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   }
 
   openForgeWizard(addSpace: TemplateRef<any>) {
-    this.selectedFlow = 'start';
-    this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    if (this.authentication.getGitHubToken()) {
+      this.selectedFlow = 'start';
+      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
+    } else {
+      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
+    }
   }
 
   selectFlow($event) {

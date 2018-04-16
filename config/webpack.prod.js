@@ -1,7 +1,7 @@
 /**
  * @author: @AngularClass
  */
-
+const webpack = require('webpack');
 const helpers = require('./helpers');
 const branding = require('./branding');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
@@ -12,16 +12,14 @@ const stringify = require('json-stringify');
  * Webpack Plugins
  */
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
+// const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
-const WebpackMd5Hash = require('webpack-md5-hash');
 const ngtools = require('@ngtools/webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const OfflinePlugin = require('offline-plugin');
@@ -46,6 +44,9 @@ const BUILD_TIMESTAMP = process.env.BUILD_TIMESTAMP;
 const BUILD_VERSION = process.env.BUILD_VERSION;
 const FABRIC8_BRANDING = process.env.FABRIC8_BRANDING || 'fabric8';
 
+const ANALYTICS_RECOMMENDER_URL = process.env.ANALYTICS_RECOMMENDER_URL;
+const ANALYTICS_LICENSE_URL = process.env.ANALYTICS_LICENSE_URL;
+
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
@@ -66,14 +67,40 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   BUILD_NUMBER: BUILD_NUMBER,
   BUILD_TIMESTAMP: BUILD_TIMESTAMP,
   BUILD_VERSION: BUILD_VERSION,
-  FABRIC8_BRANDING: FABRIC8_BRANDING
+  FABRIC8_BRANDING: FABRIC8_BRANDING,
+  ANALYTICS_RECOMMENDER_URL: ANALYTICS_RECOMMENDER_URL,
+  ANALYTICS_LICENSE_URL: ANALYTICS_LICENSE_URL
 });
 
 module.exports = function (env) {
   // stringify can't cope with undefined
   console.log('The env from the webpack.prod config: ' + (env ? stringify(env, null, 2) : env));
   console.log('The merged metadata:', METADATA);
-  return webpackMerge(commonConfig({ env: ENV }), {
+  return webpackMerge({
+    plugins: [
+      /**
+       * Plugin: ModuleConcatenationPlugin
+       * Description: Hoist modules into one closure for performance.
+       *
+       * See: https://webpack.js.org/plugins/module-concatenation-plugin/
+       */
+      new webpack.optimize.ModuleConcatenationPlugin(),
+
+      /**
+       * Plugin: HashedModuleIdsPlugin
+       * Description: This plugin will cause hashes to be based on the relative path of the module,
+       * generating a four character string as the module id.
+       * Prevents busting the cache prematurely due to default internal module ID generation.
+       *
+       * See: https://webpack.js.org/plugins/hashed-module-ids-plugin/
+       */
+      new webpack.HashedModuleIdsPlugin(),
+    ]
+  },
+
+  commonConfig({ env: ENV }),
+
+  {
 
     /**
      * Developer tool to enhance debugging
@@ -83,7 +110,7 @@ module.exports = function (env) {
      */
 
     // PROD VALUE
-    devtool: 'cheap-module-source-map',
+    devtool: 'source-map',
 
     // DEBUG VALUE
     //devtool: 'inline-source-map',
@@ -154,13 +181,6 @@ module.exports = function (env) {
        // genDir: 'aot'
      }),
 */
-      /**
-       * Plugin: WebpackMd5Hash
-       * Description: Plugin to replace a standard webpack chunkhash with md5.
-       *
-       * See: https://www.npmjs.com/package/webpack-md5-hash
-       */
-      new WebpackMd5Hash(),
 
       /**
        * Webpack plugin and CLI utility that represents bundle content as convenient interactive zoomable treemap
@@ -211,7 +231,9 @@ module.exports = function (env) {
           'BUILD_NUMBER': stringify(METADATA.BUILD_NUMBER),
           'BUILD_TIMESTAMP': stringify(METADATA.BUILD_TIMESTAMP),
           'BUILD_VERSION': stringify(METADATA.BUILD_VERSION),
-          'FABRIC8_BRANDING': stringify(METADATA.FABRIC8_BRANDING)
+          'FABRIC8_BRANDING': stringify(METADATA.FABRIC8_BRANDING),
+          'ANALYTICS_RECOMMENDER_URL': stringify(METADATA.ANALYTICS_RECOMMENDER_URL),
+          'ANALYTICS_LICENSE_URL': stringify(METADATA.ANALYTICS_LICENSE_URL)
         }
       }),
 

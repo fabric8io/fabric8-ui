@@ -7,8 +7,6 @@ import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-
 import { AUTH_API_URL, Profile, User , UserService } from 'ngx-login-client';
 import { ConnectableObservable, Observable } from 'rxjs';
 
-import { DummyService } from '../shared/dummy.service';
-
 export class ExtUser extends User {
   attributes: ExtProfile;
 }
@@ -29,7 +27,6 @@ export class ProfileService {
   private _profile: ConnectableObservable<ExtProfile>;
 
   constructor(
-    private dummy: DummyService,
     private router: Router,
     private broadcaster: Broadcaster,
     userService: UserService,

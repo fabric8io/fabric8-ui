@@ -1,6 +1,7 @@
 @import (reference) '../../../../../assets/stylesheets/shared/osio.less';
+
 .pipeline-list {
-  background-color: white;
+  background-color: @color-pf-white;
   padding-left: 40px;
   padding-bottom: 20px;
 }
@@ -31,7 +32,7 @@ h4 {
 @keyframes flexShrink {
   to {
     flex-basis: 1;
-    flex-grow: .000001;
+    flex-grow: .001;
     flex-shrink: 1;
   }
 }
@@ -40,7 +41,6 @@ h4 {
   from {
     width: 0;
   }
-
   to {
     width: 100%;
   }
@@ -56,7 +56,6 @@ h4 {
   from {
     transform: rotate(0);
   }
-
   to {
     transform: rotate(180deg);
   }
@@ -66,7 +65,6 @@ h4 {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -76,7 +74,6 @@ h4 {
   from {
     background-color: #d1d1d1;
   }
-
   to {
     background-color: transparent;
   }
@@ -179,7 +176,6 @@ h4 {
     padding-bottom: 15px;
     width: 50%;
   }
-
   .pipeline .pipeline-stage:before {
     bottom: auto;
     content: '\2192';
@@ -194,7 +190,6 @@ h4 {
     flex-direction: row;
     display: flex;
   }
-
   .build-pipeline .build-name {
     white-space: nowrap;
   }
@@ -202,7 +197,7 @@ h4 {
 
 @media (min-width: 992px) {
   .pipeline .pipeline-stage {
-    width: 33.333333%;
+    width: 33.333%;
   }
 }
 

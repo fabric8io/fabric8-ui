@@ -1,9 +1,12 @@
 @import (reference) '../../../../assets/stylesheets/shared/osio.less';
+
 .blank-slate-pf { margin-top: 20px; }
+
 .areas-header {
   margin-top: 50px;
   margin-bottom: 30px;
 }
+
 .table-action-heading {
   .pointer;
   float: right;
@@ -11,4 +14,11 @@
   padding-right: 32px;
   .pficon { color: @color-pf-blue-300; }
 }
-.list-pf-item { background-color: @color-pf-white; }
+
+/* Override angular-tree-component */
+.list-pf tree-viewport {
+  overflow: initial;
+  .tree-children {
+    overflow: initial;
+  }
+}

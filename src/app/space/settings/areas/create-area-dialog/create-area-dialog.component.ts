@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
-
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaAttributes, AreaService, Context } from 'ngx-fabric8-wit';
-import { Modal } from 'ngx-modal';
 import { Subscription } from 'rxjs';
 
 import { AreaError } from '../../../../models/area-error';
@@ -16,15 +16,18 @@ import { ContextService } from '../../../../shared/context.service';
   templateUrl: './create-area-dialog.component.html',
   styleUrls: ['./create-area-dialog.component.less']
 })
-export class CreateAreaDialogComponent implements OnInit, OnDestroy {
+export class CreateAreaDialogComponent implements OnInit {
 
-  @Input() host: Modal;
+  @Input() host: ModalDirective;
   @Input() parentId: string;
   @Input() areas: Area[];
   @Output() onAdded = new EventEmitter<Area>();
+  @ViewChild('areaForm') areaForm: NgForm;
+
+  @ViewChild('rawInputField') rawInputField: ElementRef;
+  @ViewChild('inputModel') inputModel: NgModel;
 
   private context: Context;
-  private openSubscription: Subscription;
   private name: string;
   private errors: AreaError;
 
@@ -34,15 +37,29 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
     this.contexts.current.subscribe(val => this.context = val);
   }
 
-  ngOnInit() {
-    this.openSubscription = this.host.onOpen.subscribe(() => {
-      this.name = '';
-      this.errors = null;
-    });
+  public onOpen() {
+    this.focus();
   }
 
-  ngOnDestroy() {
-    this.openSubscription.unsubscribe();
+  public onClose() {
+    this.clearField();
+    this.resetErrors();
+  }
+
+  focus() {
+    this.rawInputField.nativeElement.focus();
+  }
+
+  ngOnInit() {
+    this.errors = {uniqueValidationFailure: false};
+  }
+
+  clearField() {
+    this.inputModel.reset();
+  }
+
+  resetErrors() {
+    this.errors = {uniqueValidationFailure: false};
   }
 
   createArea() {
@@ -52,7 +69,7 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
     area.type = 'areas';
     this.areaService.create(this.parentId, area).subscribe(newArea => {
       this.onAdded.emit(newArea);
-      this.host.close();
+      this.host.hide();
     }, error => {
       this.handleError(error.json());
     });
@@ -68,16 +85,14 @@ export class CreateAreaDialogComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.host.close();
+    this.host.hide();
   }
 
   handleError(error: any) {
     if (error.errors.length) {
       error.errors.forEach(error => {
         if (error.status === '409') {
-          this.errors = {
-            uniqueValidationFailure: true
-          };
+          this.errors.uniqueValidationFailure = true;
         }
       });
     }

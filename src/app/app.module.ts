@@ -1,4 +1,4 @@
-import { ApplicationRef, NgModule } from '@angular/core';
+import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,6 +8,8 @@ import { RouterModule } from '@angular/router';
 import './rxjs-extensions';
 
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
@@ -28,14 +30,11 @@ import {
   UserService
 } from 'ngx-login-client';
 import { WidgetsModule } from 'ngx-widgets';
-import {
-  ActionModule,
-  ChartModule,
-  EmptyStateModule,
-  ListModule,
-  PatternFlyNgModule,
-  TreeListComponent
-} from 'patternfly-ng';
+
+import { ActionModule } from 'patternfly-ng/action';
+import { EmptyStateModule } from 'patternfly-ng/empty-state';
+import { NotificationModule } from 'patternfly-ng/notification';
+
 import {
   // Base functionality for the runtime console
   KubernetesRestangularModule,
@@ -47,7 +46,6 @@ import {
 /*
  * Platform and Environment providers/directives/pipes
  */
-import { featureTogglesApiUrlProvider } from '../a-runtime-console/shared/feature-toggles.provider';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ENV_PROVIDERS }    from './environment';
@@ -57,13 +55,10 @@ import { AppComponent }                from './app.component';
 import { APP_RESOLVER_PROVIDERS }      from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
-// Footer & Header
-import { FeatureBannerComponent } from './feature-flag/banner/feature-banner.component';
+// Header
 import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
-import { FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
-import { FeatureWarningPageComponent } from './feature-flag/warning-page/feature-warning-page.component';
+import { featureTogglesApiUrlProvider, FeatureTogglesService } from './feature-flag/service/feature-toggles.service';
 
-import { FooterComponent } from './layout/footer/footer.component';
 import { HeaderComponent } from './layout/header/header.component';
 import { MenusService }    from './layout/header/menus.service';
 
@@ -80,7 +75,6 @@ import { fabric8UIConfigProvider }       from './shared/config/fabric8-ui-config
 import { ContextCurrentUserGuard }       from './shared/context-current-user-guard.service';
 import { ContextResolver }               from './shared/context-resolver.service';
 import { ContextService }                from './shared/context.service';
-import { DummyService }                  from './shared/dummy.service';
 import { EventService }                  from './shared/event.service';
 import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
@@ -103,12 +97,18 @@ import { witApiUrlProvider }             from './shared/wit-api.provider';
 import { ConfigStore }               from './base/config.store';
 import { ErrorService }              from './layout/error/error.service';
 import { ProfileService }            from './profile/profile.service';
-import { SpaceWizardModule }         from './space/wizard/space-wizard.module';
+import { SpaceWizardModule } from './space/wizard/space-wizard.module';
+
+// App launcher
+import { AddAppOverlayModule }   from './space/add-app-overlay/add-app-overlay.module';
+import { AddSpaceOverlayModule } from './space/add-space-overlay/add-space-overlay.module';
 
 // About Modal
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
+import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
+import { RavenExceptionHandler } from './shared/exception.handler';
 import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
 
 
@@ -133,22 +133,25 @@ export type StoreType = {
     // needed by the components in this module
     AboutModalModule,
     ActionModule,
+    AddAppOverlayModule,
+    AddSpaceOverlayModule,
     BrowserAnimationsModule,
     BrowserModule,
     BsDropdownModule.forRoot(),
-    ChartModule,
+    EffectsModule.forRoot([]),
     EmptyStateModule,
+    FeatureFooterModule,
     FormsModule,
     HttpModule,
     KubernetesRestangularModule,
     KubernetesStoreModule,
-    ListModule,
     LocalStorageModule.withConfig({
       prefix: 'fabric8',
       storageType: 'localStorage'
     }),
     ModalModule.forRoot(),
     MomentModule,
+    NotificationModule,
     ReactiveFormsModule,
     RestangularModule,
     RouterModule,
@@ -156,17 +159,14 @@ export type StoreType = {
     ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,
-    PatternFlyNgModule,
     StatusListModule,
+    StoreModule.forRoot({}),
     // AppRoutingModule must appear last
     AppRoutingModule
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
-    FooterComponent,
-    HeaderComponent,
-    FeatureWarningPageComponent,
-    FeatureBannerComponent
+    HeaderComponent
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
@@ -193,7 +193,10 @@ export type StoreType = {
       provide: Contexts,
       useExisting: ContextService
     },
-    DummyService,
+    {
+      provide: ErrorHandler,
+      useClass: RavenExceptionHandler
+    },
     ErrorService,
     FeatureFlagResolver,
     FeatureTogglesService,
@@ -237,7 +240,6 @@ export type StoreType = {
       useClass: Fabric8UISpaceNamespace
     },
     ssoApiUrlProvider,
-    TreeListComponent,
     UserService,
     witApiUrlProvider,
     realmProvider

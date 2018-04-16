@@ -44,6 +44,7 @@ export class ContextService implements Contexts {
   private _addRecent: Subject<Context>;
   private _deleteFromRecent: Subject<Context>;
   private _currentUser: string;
+  private _currentContextUser: string;
 
   constructor(
     private router: Router,
@@ -260,7 +261,12 @@ export class ContextService implements Contexts {
       })
       // Get the list of features enabled for this given user to know whether we should display feature menu.
       .switchMap(val => {
-        return this.toggleService.getFeatures(['Applications', 'Deployments', 'Environments', 'Planner']).map(features => {
+        return this.toggleService.getFeatures([
+            'AppLauncher',
+            'Analyze',
+            'Deployments',
+            'Planner'
+          ]).map(features => {
           val.user.features = features;
           return val;
         }).catch(err => {
@@ -278,6 +284,7 @@ export class ContextService implements Contexts {
       .do(val => {
         if (val) {
           console.log('Context Changed to', val);
+          this._currentContextUser = val.user.attributes.username;
           this.broadcaster.broadcast('contextChanged', val);
         }
       })
@@ -300,7 +307,7 @@ export class ContextService implements Contexts {
   }
 
   viewingOwnContext(): boolean {
-      return this.extractUser() === this._currentUser;
+    return this._currentContextUser === this._currentUser;
   }
 
   private buildContext(val: RawContext) {

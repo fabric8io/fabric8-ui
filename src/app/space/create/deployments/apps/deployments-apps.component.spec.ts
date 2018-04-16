@@ -1,16 +1,20 @@
 import {
   Component,
+  DebugElement,
   EventEmitter,
   Input,
   Output
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { FilterEvent, SortEvent } from 'patternfly-ng';
+import { FilterEvent } from 'patternfly-ng/filter';
+import { SortEvent } from 'patternfly-ng/sort';
 import { Observable } from 'rxjs';
-import { initContext, TestContext } from 'testing/test-context';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 
-import { Environment } from '../models/environment';
 import { DeploymentsAppsComponent } from './deployments-apps.component';
 
 @Component({
@@ -24,7 +28,7 @@ class HostComponent { }
 })
 class FakeDeploymentCardContainerComponent {
   @Input() spaceId: string;
-  @Input() environments: Observable<Environment[]>;
+  @Input() environments: Observable<string[]>;
   @Input() application: string;
 }
 
@@ -33,34 +37,37 @@ class FakeDeploymentCardContainerComponent {
   template: ''
 })
 class FakeDeploymentsToolbarComponent {
-  @Output('onFilterChange') public onFilterChange: EventEmitter<FilterEvent> = new EventEmitter<FilterEvent>();
-  @Output('onSortChange') public onSortChange: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
-  @Input() public resultsCount: number;
+  @Output('onFilterChange') onFilterChange: EventEmitter<FilterEvent> = new EventEmitter<FilterEvent>();
+  @Output('onSortChange') onSortChange: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
+  @Input() resultsCount: number;
 }
 
 describe('DeploymentsAppsComponent', () => {
   type Context = TestContext<DeploymentsAppsComponent, HostComponent>;
 
-  let environments = [ { name: 'envId1' }, { name: 'envId2' } ];
-  let applications = ['first', 'second'];
-  let spaceId = Observable.of('spaceId');
-  let mockEnvironments = Observable.of(environments);
-  let mockApplications = Observable.of(applications);
+  const environments: string[] = ['envId1', 'envId2'];
+  const applications: string[] = ['first', 'second'];
+  const spaceId: Observable<string> = Observable.of('spaceId');
+  const mockEnvironments: Observable<string[]> = Observable.of(environments);
+  const mockApplications: Observable<string[]> = Observable.of(applications);
 
   initContext(DeploymentsAppsComponent, HostComponent,
-    { declarations: [FakeDeploymentCardContainerComponent, FakeDeploymentsToolbarComponent] },
-    component => {
+    {
+      declarations: [FakeDeploymentCardContainerComponent, FakeDeploymentsToolbarComponent]
+    },
+    (component: DeploymentsAppsComponent) => {
       component.spaceId = spaceId;
       component.environments = mockEnvironments;
       component.applications = mockApplications;
     });
 
   it('should created children components with proper objects', function(this: Context) {
-    let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
+    const arrayOfComponents: DebugElement[] =
+      this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
     expect(arrayOfComponents.length).toEqual(applications.length);
 
-    applications.forEach((appName, index) => {
-      let container = arrayOfComponents[index].componentInstance;
+    applications.forEach((appName: string, index: number) => {
+      const container = arrayOfComponents[index].componentInstance;
       expect(container.application).toEqual(appName);
       expect(container.environments).toEqual(mockEnvironments);
     });

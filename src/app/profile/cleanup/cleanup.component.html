@@ -6,7 +6,7 @@
         <strong>{{notificationTitle}}</strong> {{notificationText}}
       </div>
       <h3 *ngIf="cleanupStatus === 'notstarted'">
-        <strong>You are about to erase all of your OpenShift.io spaces</strong>, reverting your OpenShift.io environment to it's default state.
+        <strong>You are about to erase all of your OpenShift.io spaces</strong>, reverting your OpenShift.io environment to its default state.
         This action will not affect your GitHub account or repositories associated with OpenShift.io.
       </h3>
       <h3 *ngIf="cleanupStatus === 'notstarted'">Your account will be reset and the following spaces will be removed.</h3>
@@ -54,7 +54,7 @@
             [config]="listConfig"
             [itemTemplate]="itemTemplate"
             [items]="spaces" >
-            <template #itemTemplate let-item="item" let-index="index">
+            <ng-template #itemTemplate let-item="item" let-index="index">
               <div class="list-pf-content-wrapper">
                 <div class="list-pf-main-content">
                   <span *ngIf="item.statusIcon" class="cleanup-status-icon {{item.statusIcon}}"></span>
@@ -62,7 +62,7 @@
                   <div class="list-pf-progress-results">{{item.progress}}</div>
                 </div>
               </div>
-            </template>
+            </ng-template>
           </pfng-list>
         </div>
       </div>

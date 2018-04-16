@@ -2,19 +2,19 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@ang
 import { Router } from '@angular/router';
 
 import { Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
-import { ListConfig } from 'patternfly-ng';
+import { ListConfig } from 'patternfly-ng/list';
 import { Observable, Subscription } from 'rxjs';
 
 import { EventService } from '../../shared/event.service';
 import { IModalHost } from '../../space/wizard/models/modal-host';
-import { TenentService } from '../services/tenent.service';
+import { TenantService } from '../services/tenant.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-cleanup',
   templateUrl: 'cleanup.component.html',
   styleUrls: ['./cleanup.component.less'],
-  providers: [ TenentService ]
+  providers: [ TenantService ]
 })
 export class CleanupComponent implements OnInit, OnDestroy {
   spaces: Space[] = [];
@@ -38,7 +38,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
 
   constructor(private contexts: Contexts,
                private spaceService: SpaceService,
-               private tenantService: TenentService,
+               private tenantService: TenantService,
                private eventService: EventService,
                private router: Router) {
   }
@@ -123,7 +123,7 @@ export class CleanupComponent implements OnInit, OnDestroy {
     //join all space delete observables and wait for completion before running tenant cleanup
     Observable.forkJoin(...observableArray).subscribe((result) => {
       if (!tenantCleanError) {
-        this.tenantService.updateTenent().subscribe(() => {
+        this.tenantService.updateTenant().subscribe(() => {
           if (!spaceDeleteError) {
             this.showSuccessNotification();
           }

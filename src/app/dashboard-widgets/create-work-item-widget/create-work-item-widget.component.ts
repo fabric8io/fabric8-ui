@@ -7,6 +7,10 @@ import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 
+import { Subscription } from 'rxjs';
+
+import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
+
 import { DummyService } from './../shared/dummy.service';
 
 class WorkItemFilter {
@@ -34,7 +38,7 @@ export class CreateWorkItemWidgetComponent implements OnInit {
     private workItemService: WorkItemService,
     private userService: UserService,
     private contexts: Contexts
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.contextPath = this.contexts.current.map(context => context.path);

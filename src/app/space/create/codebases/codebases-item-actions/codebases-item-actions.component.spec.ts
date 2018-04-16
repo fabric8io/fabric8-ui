@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { Broadcaster, Notifications } from 'ngx-base';
+import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 
 import { CodebasesService } from '../services/codebases.service';
@@ -24,7 +25,7 @@ describe('Codebases Item Actions Component', () => {
 
   beforeEach(() => {
     gitHubServiceMock = jasmine.createSpy('GitHubService');
-    dialogMock = jasmine.createSpyObj('IModalHost', ['open', 'close']);
+    dialogMock = jasmine.createSpyObj('bs-modal', ['show', 'hide']);
     notificationMock = jasmine.createSpyObj('Notifications', ['message']);
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
     windowServiceMock = jasmine.createSpyObj('WindowService', ['open']);
@@ -32,7 +33,7 @@ describe('Codebases Item Actions Component', () => {
     codebasesServiceMock = jasmine.createSpyObj('CodebasesService', ['deleteCodebase']);
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule, HttpModule, ModalModule.forRoot()],
       declarations: [CodebasesItemActionsComponent],
       providers: [
         {

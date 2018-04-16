@@ -26,16 +26,14 @@
     padding-top: 30px;
   }
   &-row {
-    background-color: white;
+    background-color: @color-pf-white;
     margin-bottom: 30px;
     &-header {
       padding-top: 5px;
       padding-left: 10px;
     }
     &-account-icon {
-      /* stylelint-disable */
-      border-color: @color-pf-black-200 !important;
-      /* stylelint-enable */
+      border-color: @color-pf-black-200 !important; /* stylelint-disable-line declaration-no-important */
       background-color: @color-pf-black-200;
     }
     .list-view-pf-view {
@@ -59,6 +57,7 @@
     color: @color-pf-black-400;
   }
 }
+
 .clean-modal-warning {
   margin: 0;
 }

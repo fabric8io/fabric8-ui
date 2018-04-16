@@ -19,9 +19,11 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   subscriptions: Subscription[] = [];
 
   gitHubLinked: boolean = false;
-  openShiftLinked: boolean = false;
   gitHubUserName: string;
   gitHubError: string;
+  openShiftLinked: boolean = false;
+  openShiftUserName: string;
+  openShiftError: string;
 
   userName: string;
   contextUserName: string;
@@ -56,6 +58,7 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.userName = '';
     this.updateGitHubStatus();
+    this.updateOpenShiftStatus();
   }
 
   public disconnectGitHub(): void {
@@ -91,6 +94,16 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     }, (error) => {
       this.gitHubError = 'Disconnected';
       this.gitHubLinked = false;
+    });
+  }
+
+  private updateOpenShiftStatus(): void {
+    this.providerService.getOpenShiftStatus(this.cluster).subscribe((result) => {
+      this.openShiftLinked = true;
+      this.openShiftUserName = result.username;
+    }, (error) => {
+      this.openShiftError = 'Not Connected';
+      this.openShiftLinked = false;
     });
   }
 }

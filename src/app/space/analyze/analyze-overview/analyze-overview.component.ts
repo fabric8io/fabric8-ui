@@ -7,6 +7,8 @@ import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
+import { FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
+
 import { IWorkflow } from './models/workflow';
 
 @Component({

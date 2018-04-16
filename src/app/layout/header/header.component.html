@@ -1,4 +1,4 @@
-<div *ngIf="isGettingStartedPage; then showGettingStartedHeader else showHeader"></div>
+<div *ngIf="isGettingStartedPage || isAppLauncherPage; then showGettingStartedHeader else showHeader"></div>
 <ng-template #showGettingStartedHeader>
   <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
     <img src="../../../assets/images/openshift-io_white.png" class="navbar-getting-started-logo" />
@@ -36,7 +36,8 @@
   </nav>
 </ng-template>
 <ng-template #showHeader>
-  <nav class="navbar navbar-default navbar-inverse navbar-pf navbar-fixed-top" role="navigation" *ngIf="context">
+  <nav class="navbar navbar-default navbar-inverse navbar-pf navbar-fixed-top" role="navigation"
+       *ngIf="context">
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" (click)="toggleState()">
@@ -82,6 +83,7 @@
               <li class="divider"></li>
               <li id="header_createSpace">
                 <a (click)="openForgeWizard(spaceWizard)">
+                <!-- <a  (click)="showAddSpaceOverlay()"> -->
                 <span class="nav-item-icon">
                   <i class="pficon pficon-add-circle-o"></i>
                 </span>
@@ -118,7 +120,7 @@
         </ul>
         <!-- user profile dropdown -->
         <ul id="header_rightDropdown" class="nav navbar-nav navbar-right">
-          <li id="header_status" dropdown class="dropdown status-dropdown" placement="top" tooltip="Status: Ok" (onShown)="onStatusListVisible(true)" (onClose)="onStatusListVisible(false)">
+          <li id="header_status" dropdown class="dropdown icon-dropdown icon-dropdown-status" placement="top" tooltip="Status: Ok" (onShown)="onStatusListVisible(true)" (onClose)="onStatusListVisible(false)">
             <a (onHidden)="onStatusList(false)" class="dropdown-toggle" dropdownToggle>
               <span class="pficon pficon-ok pficon-white"></span>
             </a>
@@ -126,6 +128,28 @@
               <div class="arrow"></div>
               <ul class="list-group" *ngIf="statusListVisible">
                 <fabric8-status-list></fabric8-status-list>
+              </ul>
+            </div>
+          </li>
+          <li id="header_documentation" dropdown class="dropdown icon-dropdown icon-dropdown-documentation" placement="top" tooltip="Documentation" (onShown)="onDocumentationListVisible(true)" (onClose)="onDocumentationListVisible(false)">
+            <a (onHidden)="onDocumentationList(false)" class="dropdown-toggle" dropdownToggle>
+              <span class="pficon pficon-help pficon-white"></span>
+            </a>
+            <div class="dropdown-menu infotip bottom-right" *dropdownMenu>
+              <div class="arrow"></div>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <span>
+                    <a href="https://docs.openshift.io" target="_blank">Documentation</a>
+                  </span>
+                </li>
+                <li id="header_loggedinAbout" class="list-group-item">
+                  <span>
+                    <a (click)="aboutModal.open()" class="pointer">
+                      About OpenShift.io
+                    </a>
+                  </span>
+                </li>
               </ul>
             </div>
           </li>
@@ -154,20 +178,9 @@
                   Profile
                 </a>
               </li>
-              <li id="header_loggedinAbout">
-                <a (click)="aboutModal.open()" class="pointer">
-                  About
-                </a>
-              </li>
               <li id="header_loggedinChat">
                 <a href="https://chat.openshift.io/developers/channels/town-square" target="top" class="pointer">
                   Chat
-                </a>
-              </li>
-              <li class="divider"></li>
-              <li id="header_loggedinHelp">
-                <a href="https://docs.openshift.io" target="top" class="pointer">
-                  Documentation
                 </a>
               </li>
               <li class="divider"></li>

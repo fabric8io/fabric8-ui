@@ -28,6 +28,7 @@ import 'ngx-bootstrap';
 /* tslint:disable:ordered-imports */
 import '../node_modules/patternfly/dist/css/patternfly.min.css';
 import '../node_modules/patternfly/dist/css/patternfly-additions.min.css';
+import '../node_modules/patternfly-ng/dist/css/patternfly-ng.min.css';
 
 if ('production' === ENV) {
   // Production

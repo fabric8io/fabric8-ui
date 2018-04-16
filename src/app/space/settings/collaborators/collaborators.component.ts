@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { find } from 'lodash';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService, Context } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
-import { EmptyStateConfig, ListConfig } from 'patternfly-ng';
+import { EmptyStateConfig } from 'patternfly-ng/empty-state';
+import { ListConfig } from 'patternfly-ng/list';
 import { Subscription } from 'rxjs';
 
 import { ContextService } from '../../../shared/context.service';
-import { IModalHost } from '../../wizard/models/modal-host';
+import { AddCollaboratorsDialogComponent } from './add-collaborators-dialog/add-collaborators-dialog.component';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -23,8 +25,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   private contextSubscription: Subscription;
   private collaboratorSubscription: Subscription;
   private userToRemove: User;
-  @ViewChild('addCollaborators') addCollaboratorsModal: IModalHost;
-  @ViewChild('removeCollaborator') removeCollaborator: IModalHost;
+  @ViewChild('addCollabDialog') addCollabDialog: AddCollaboratorsDialogComponent;
+  @ViewChild('modalAdd') modalAdd: ModalDirective;
+  @ViewChild('modalDelete') modalDelete: ModalDirective;
 
   constructor(
     private contexts: ContextService,
@@ -73,19 +76,19 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   launchAddCollaborators() {
-    this.addCollaboratorsModal.open();
+    this.modalAdd.show();
   }
 
   confirmUserRemove(user: User): void {
     this.userToRemove = user;
-    this.removeCollaborator.open();
+    this.modalDelete.show();
   }
 
   removeUser() {
     this.collaboratorService.removeCollaborator(this.context.space.id, this.userToRemove.id).subscribe(() => {
       this.collaborators.splice(this.collaborators.indexOf(this.userToRemove), 1);
       this.userToRemove = null;
-      this.removeCollaborator.close();
+      this.modalDelete.hide();
     });
   }
 
@@ -98,5 +101,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.collaborators.push(user);
       }
     });
+  }
+
+  onShowHandler() {
+    this.addCollabDialog.onOpen();
   }
 }

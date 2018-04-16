@@ -11,14 +11,14 @@ import { ExtProfile, GettingStartedService } from '../../getting-started/service
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
-import { TenentService } from '../services/tenent.service';
+import { TenantService } from '../services/tenant.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-update',
   templateUrl: 'tenant.component.html',
   styleUrls: ['./tenant.component.less'],
-  providers: [CopyService, GettingStartedService, GitHubService, ProviderService, TenentService]
+  providers: [CopyService, GettingStartedService, GitHubService, ProviderService, TenantService]
 })
 export class TenantComponent implements AfterViewInit, OnInit {
   @ViewChild('_jenkinsVersion') jenkinsVersionElement: HTMLElement;
@@ -69,7 +69,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
       private contexts: Contexts,
       private notifications: Notifications,
       private router: Router,
-      private tenentService: TenentService,
+      private tenantService: TenantService,
       private userService: UserService) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
 
@@ -177,7 +177,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.setUserProperties(user);
 
-      this.subscriptions.push(this.tenentService.updateTenent()
+      this.subscriptions.push(this.tenantService.updateTenant()
         .subscribe(res => {
           this.notifications.message({
             message: `Tenant Updated!`,
@@ -185,7 +185,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
           } as Notification);
           this.routeToProfile();
         }, error => {
-          this.handleError('Failed to update tenent', NotificationType.DANGER);
+          this.handleError('Failed to update tenant', NotificationType.DANGER);
         }));
 
     }, error => {

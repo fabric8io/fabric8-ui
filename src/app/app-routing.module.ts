@@ -40,13 +40,28 @@ export const routes: Routes = [
       title: 'Getting Started'
     }
   },
-
+  //verify Email
+  {
+    path: '_verifyEmail',
+    loadChildren: './profile/email-verification/email-verification.module#EmailVerificationModule',
+    data: {
+      title: 'Verify'
+    }
+  },
   // Error Pages
   {
     path: '_error',
     loadChildren: './layout/error/error.module#ErrorModule',
     data: {
       title: 'Error'
+    }
+  },
+  // Feature Flag
+  {
+    path: '_featureflag',
+    loadChildren: './feature-flag/feature-flag.module#FeatureFlagModule',
+    data: {
+      title: 'Feature Flag'
     }
   },
   // Profile
@@ -76,11 +91,13 @@ export const routes: Routes = [
   {
     path: ':entity/:space',
     resolve: {
-      context: ContextResolver
+      context: ContextResolver,
+      featureFlagConfig: FeatureFlagResolver
     },
     loadChildren: './space/analyze/analyze.module#AnalyzeModule',
     data: {
-      title: 'Analyze'
+      title: 'Analyze',
+      featureName: 'Analyze'
     }
   },
 
@@ -149,6 +166,21 @@ export const routes: Routes = [
       title: 'Areas'
     }
   },
+
+  // App Launcher
+  {
+    path: ':entity/:space/applauncher',
+    resolve: {
+      context: ContextResolver,
+      featureFlagConfig: FeatureFlagResolver
+    },
+    loadChildren: './space/app-launcher/app-launcher.module#AppLauncherModule',
+    data: {
+      title: 'App Launcher',
+      featureName: 'AppLauncher'
+    }
+  },
+
   {
     path: '**',
     redirectTo: '/_error'

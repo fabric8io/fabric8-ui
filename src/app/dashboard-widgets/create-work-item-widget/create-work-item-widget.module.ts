@@ -7,15 +7,18 @@ import { NgArrayPipesModule } from 'angular-pipes';
 import { PlannerListModule, WorkItemDetailAddTypeSelectorModule, WorkItemDetailModule } from 'fabric8-planner';
 import { WidgetsModule } from 'ngx-widgets';
 
-import { CreateWorkItemOverlayComponent } from './create-work-item-overlay/create-work-item-overlay.component';
+import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
+
+import { CreateWorkItemOverlayModule } from './create-work-item-overlay/create-work-item-overlay.module';
 import { CreateWorkItemWidgetRoutingModule } from './create-work-item-widget-routing.module';
 import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
-
 
 @NgModule({
   imports: [
     RouterModule,
     CommonModule,
+    CreateWorkItemOverlayModule,
+    FeatureFlagModule,
     FormsModule,
     WidgetsModule,
     PlannerListModule,
@@ -24,7 +27,7 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
     WorkItemDetailModule,
     WorkItemDetailAddTypeSelectorModule
   ],
-  declarations: [CreateWorkItemWidgetComponent, CreateWorkItemOverlayComponent],
+  declarations: [CreateWorkItemWidgetComponent],
   exports: [CreateWorkItemWidgetComponent]
 })
 export class CreateWorkItemWidgetModule { }

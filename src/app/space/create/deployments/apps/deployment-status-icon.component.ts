@@ -1,16 +1,7 @@
 import {
   Component,
-  Input,
-  OnDestroy,
-  OnInit
+  Input
 } from '@angular/core';
-
-import {
-  Observable,
-  Subscription
-} from 'rxjs';
-
-import { CpuStat } from '../models/cpu-stat';
 
 enum CLASSES {
   ICON_OK = 'pficon-ok',
@@ -18,16 +9,13 @@ enum CLASSES {
   ICON_ERR = 'pficon-error-circle-o'
 }
 
-const STAT_THRESHOLD = .6;
 @Component({
   selector: 'deployment-status-icon',
   templateUrl: 'deployment-status-icon.component.html'
 })
 export class DeploymentStatusIconComponent {
+  static readonly CLASSES = CLASSES;
 
   @Input() iconClass: String;
   @Input() toolTip: String;
-
-  public static readonly CLASSES = CLASSES;
-
 }

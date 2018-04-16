@@ -9,15 +9,9 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import {
-  FilterConfig,
-  FilterEvent,
-  FilterField,
-  FilterType,
-  SortConfig,
-  SortEvent,
-  ToolbarConfig
-} from 'patternfly-ng';
+import { FilterConfig, FilterEvent, FilterField, FilterType } from 'patternfly-ng/filter';
+import { SortConfig, SortEvent } from 'patternfly-ng/sort';
+import { ToolbarConfig } from 'patternfly-ng/toolbar';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -28,30 +22,18 @@ export class DeploymentsToolbarComponent implements OnChanges, OnInit {
 
   public static readonly APPLICATION_ID: string = 'applicationId';
 
-  public filterConfig: FilterConfig;
-  public isAscendingSort: boolean = true;
+  @Input() public resultsCount: number;
 
   @Output('onFilterChange') public onFilterChange: EventEmitter<FilterEvent> = new EventEmitter<FilterEvent>();
   @Output('onSortChange') public onSortChange: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
 
-  @Input() public resultsCount: number;
+  filterConfig: FilterConfig;
+  isAscendingSort: boolean = true;
 
   private sortConfig: SortConfig;
   private toolbarConfig: ToolbarConfig;
 
-  public constructor() { }
-
-  public filterChange($event: FilterEvent): void {
-    this.onFilterChange.emit($event);
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.resultsCount && this.filterConfig) {
-      this.filterConfig.resultsCount = changes.resultsCount.currentValue;
-    }
-  }
-
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.filterConfig = {
       appliedFilters: [],
       fields: [{
@@ -79,8 +61,18 @@ export class DeploymentsToolbarComponent implements OnChanges, OnInit {
     };
   }
 
-  public sortChange($event: SortEvent): void {
-    this.onSortChange.emit($event);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.resultsCount && this.filterConfig) {
+      this.filterConfig.resultsCount = changes.resultsCount.currentValue;
+    }
+  }
+
+  filterChange(event: FilterEvent): void {
+    this.onFilterChange.emit(event);
+  }
+
+  sortChange(event: SortEvent): void {
+    this.onSortChange.emit(event);
   }
 
 }

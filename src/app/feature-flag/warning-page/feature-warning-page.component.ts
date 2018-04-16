@@ -1,13 +1,10 @@
 import {
   Component,
-  EventEmitter,
   Input,
   OnDestroy,
-  OnInit,
-  Output
+  OnInit
 } from '@angular/core';
 
-import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 import 'rxjs/operators/map';

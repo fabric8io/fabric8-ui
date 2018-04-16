@@ -1,11 +1,21 @@
 import { Location } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { ErrorHandler, Inject, Injectable, OpaqueToken } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-//import { FABRIC8_FEATURE_TOGGLES_API_URL } from '../../../a-runtime-console/shared/feature-toggles.provider';
+
+export let FABRIC8_FEATURE_TOGGLES_API_URL = new OpaqueToken('fabric8.feature.toggles.api.url');
+
+let featureTogglesApiUrlFactory = () => {
+  return process.env.FABRIC8_FEATURE_TOGGLES_API_URL;
+};
+
+export let featureTogglesApiUrlProvider = {
+  provide: FABRIC8_FEATURE_TOGGLES_API_URL,
+  useFactory: featureTogglesApiUrlFactory
+};
 
 @Injectable()
 export class FeatureTogglesService {
@@ -15,8 +25,8 @@ export class FeatureTogglesService {
   constructor(
     private http: Http,
     private logger: Logger,
+    private errorHandler: ErrorHandler,
     private auth: AuthenticationService,
-    //@Inject(FABRIC8_FEATURE_TOGGLES_API_URL) apiUrl: string) {
     @Inject(WIT_API_URL) apiUrl: string) {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
@@ -57,9 +67,27 @@ export class FeatureTogglesService {
         return this.handleError(error);
       });
   }
+  /**
+   * Check if a given list of feature ids are enabled (retrieve user-enabled and enabled).
+   * @param ids An arrays of feature Id.
+   * @returns {Observable<Feature>}
+   */
+  getFeaturesPerPage(group: string): Observable<Feature[]> {
+    let url = Location.stripTrailingSlash(this.featureTogglesUrl || '') + '/features';
+    let params = [];
+    params['group'] = group;
 
+    return this.http.get(url, { headers: this.headers, params: params })
+      .map((response) => {
+        return response.json().data as Feature[];
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+  }
   private handleError(error: any) {
     this.logger.error(error);
+    this.errorHandler.handleError(error);
     return Observable.throw(error.message || error);
   }
 }

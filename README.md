@@ -26,6 +26,8 @@ source environments/local-cluster.sh
 
 ### Build and Run
 
+Requires `node` version 8.3.0 and `npm` 5.3.0. Consider using [Node Version Manager](https://github.com/creationix/nvm).
+
 Run `npm install`. 
 This will download all the required dependencies to be able to start the UI.
 
@@ -36,7 +38,8 @@ Run `npm start`. This will start the UI with live reload enabled. Then navigate 
 
 Run `ext install EditorConfig` to read the .editorconfig file
 
-
+### Feature flag
+To learn how to toggle your work in progress development, read our [wiki page on fabric8-toggles](https://github.com/fabric8-ui/fabric8-ui/wiki/fabric8-toggles).
 ## HTML, CSS and Less
 | [Code Guidelines](https://fabric8-ui.github.io/fabric8-ux/code-guidelines)
 

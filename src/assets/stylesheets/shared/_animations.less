@@ -1,17 +1,11 @@
-/*
-** link animation
-*/
+// link animation
 a {
   color: @color-pf-blue-400;
   transition: all .3s;
-  &:hover {
-    color: @color-pf-blue-500;
-  }
+  &:hover { color: @color-pf-blue-500; }
 }
 
-/*
-**tab animation - changes on click
-*/
+// tab animation - changes on click
 .nav-tabs>li {
   &>a {
     border: 1px solid transparent;
@@ -26,11 +20,11 @@ a {
   }
 }
 
-/*
-** header navigation animation
-** dropdown menus
-** hover effect on list items
-*/
+//
+// header navigation animation
+// dropdown menus
+// hover effect on list items
+//
 .navbar-pf {
   .navbar-primary>li {
     background-color: #000;
@@ -46,7 +40,6 @@ a {
       background-color: #1d1d1d;
     }
   }
-
   .dropdown-menu {
     -webkit-transform-origin: top;
     transform-origin: top;
@@ -71,5 +64,22 @@ a {
   .dropup .dropdown-menu {
     -webkit-transform-origin: bottom;
     transform-origin: bottom;
+  }
+}
+
+/*
+** Create Space Launcher Overlay
+*/
+.launcher.in {
+  .launcher-dialog {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+}
+
+.launcher.fade.in {
+  .launcher-dialog {
+    -webkit-transition: webkit-transform .3s ease out;
+    transition: .3s ease-out;
   }
 }

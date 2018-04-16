@@ -1,6 +1,4 @@
-/*
- * Angular 2 decorators and services
- */
+import { Location } from '@angular/common';
 import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -9,7 +7,8 @@ import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Spaces } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { ActionConfig, EmptyStateConfig } from 'patternfly-ng';
+import { ActionConfig } from 'patternfly-ng/action';
+import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 
 import { OnLogin } from '../a-runtime-console/index';
 import { FeatureFlagConfig } from './models/feature-flag-config';
@@ -31,11 +30,12 @@ import { NotificationsService } from './shared/notifications.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  public experimentalFeatureEnabled: boolean;
-  public isExperimentalFeature: boolean;
-  public featureEnablementLevel: string;
+  public featureConfig: FeatureFlagConfig;
   public disconnectedStateConfig: EmptyStateConfig;
   private lastPageToTryGitHub: string;
+  private showAddAppOverlay: boolean = false;
+  private showAddSpaceOverlay: boolean = false;
+
   @ViewChild('connectToGithubModal') connectToGithubModal: TemplateRef<any>;
 
   constructor(
@@ -50,6 +50,7 @@ export class AppComponent {
     private authService: AuthenticationService,
     private broadcaster: Broadcaster,
     private router: Router,
+    private location: Location,
     private titleService: Title,
     private brandingService: BrandingService,
     private modalService: BsModalService,
@@ -65,14 +66,17 @@ export class AppComponent {
       this.loginService.login();
     });
 
+    // preserve an invalid URL in the browser's history while routing to the 404 page
+    this.router.events
+      .filter(event => event instanceof NavigationEnd && event.urlAfterRedirects === '/_error')
+      .subscribe((event: NavigationEnd) => this.location.replaceState(event.url));
+
     this.router.events
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
       .map(route => {
         // reset all experimental feature flag properties
-        this.experimentalFeatureEnabled = false;
-        this.isExperimentalFeature = false;
-        this.featureEnablementLevel = '';
+        this.featureConfig = null;
         while (route.firstChild) {
           route = route.firstChild;
         }
@@ -93,9 +97,7 @@ export class AppComponent {
 
         if (event['featureFlagConfig'] || featureFlagsInTree) {
           let featureFlagConfig = event['featureFlagConfig'] as FeatureFlagConfig || featureFlagsInTree;
-          this.experimentalFeatureEnabled = featureFlagConfig.enabled;
-          this.isExperimentalFeature = true;
-          this.featureEnablementLevel = featureFlagConfig.showBanner;
+          this.featureConfig = featureFlagConfig;
         }
         let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
         this.titleService.setTitle(title);
@@ -104,6 +106,14 @@ export class AppComponent {
     this.broadcaster.on('showDisconnectedFromGitHub').subscribe((event) => {
       this.lastPageToTryGitHub = event['location'];
       this.showGitHubConnectModal();
+    });
+
+    this.broadcaster.on('showAddSpaceOverlay').subscribe((show: boolean) => {
+      this.showAddSpaceOverlay = show;
+    });
+
+    this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
+      this.showAddAppOverlay = show;
     });
 
     this.disconnectedStateConfig = {
@@ -119,12 +129,6 @@ export class AppComponent {
       title: 'GitHub Disconnected',
       info: 'You must be connected to GitHub in order to add to or create a Space'
     } as EmptyStateConfig;
-  }
-
-  updateFeatureEnabled($event: boolean) {
-    if ($event) {
-      this.experimentalFeatureEnabled = $event;
-    }
   }
 
   handleAction($event: any): void {

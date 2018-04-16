@@ -1,10 +1,15 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 
-import { debounce, isNumber } from 'lodash';
+import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
 import { Observable } from 'rxjs';
 
-import { Environment } from '../models/environment';
+import { PodPhase } from '../models/pod-phase';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { Pods } from '../models/pods';
@@ -21,7 +26,7 @@ export class DeploymentsDonutComponent implements OnInit {
   @Input() mini: boolean;
   @Input() spaceId: string;
   @Input() applicationId: string;
-  @Input() environment: Environment;
+  @Input() environment: string;
 
   isIdled = false;
   scalable = true;
@@ -29,7 +34,7 @@ export class DeploymentsDonutComponent implements OnInit {
   desiredReplicas: number = 1;
   debounceScale = debounce(this.scale, 650);
 
-  colors = {
+  colors: { [s in PodPhase]: string} = {
     'Empty': '#fafafa', // pf-black-100
     'Running': '#00b9e4', // pf-light-blue-400
     'Not Ready': '#beedf9', // pf-light-blue-100
@@ -51,7 +56,7 @@ export class DeploymentsDonutComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.pods = this.deploymentsService.getPods(this.spaceId, this.applicationId, this.environment.name);
+    this.pods = this.deploymentsService.getPods(this.spaceId, this.environment,  this.applicationId);
     this.pods.subscribe(pods => {
       this.replicas = pods.total;
       if (!this.scaleRequestPending) {
@@ -89,7 +94,7 @@ export class DeploymentsDonutComponent implements OnInit {
 
   private scale(): void {
     this.deploymentsService.scalePods(
-      this.spaceId, this.environment.name, this.applicationId, this.desiredReplicas
+      this.spaceId, this.environment, this.applicationId, this.desiredReplicas
     ).first().subscribe(
       success => {
         this.scaleRequestPending = false;

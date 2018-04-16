@@ -1,21 +1,28 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
+
 .transform-translate(@x, @y) {
   -webkit-transform: translate(@x, @y);
   -ms-transform: translate(@x, @y);
   transform: translate(@x, @y);
 }
+
 .recommender-selector {
   @media (min-width: @screen-sm-min) { float: right; }
   @media (max-width: @screen-xs-min) { clear: right; }
 }
+
 .card-pf {
   &.analytical-report-widget {
+    padding: 0;
+    .card-pf-heading {
+      padding: 0 20px;
+      margin: 0;
+    }
     position: relative;
     .fifty-shades-of-grey {
       color: @color-pf-black-500;
     }
     .fabric8-stack-analysis {
-      margin-top: 5px;
       height: 370px;
       @media (max-width: @screen-xs-min) { height: 335px; }
       overflow-y: scroll;

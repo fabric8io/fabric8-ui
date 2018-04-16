@@ -8,15 +8,13 @@ import {
 
 import { createMock } from 'testing/mock';
 
-import {
-  BehaviorSubject,
-  Observable,
-  Subject
- } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
-import { Environment } from '../models/environment';
-import { MemoryStat } from '../models/memory-stat';
+import {
+  MemoryStat,
+  MemoryUnit
+} from '../models/memory-stat';
 import { Stat } from '../models/stat';
 import { DeploymentsService } from '../services/deployments.service';
 import { ResourceCardComponent } from './resource-card.component';
@@ -36,38 +34,47 @@ class FakeUtilizationBarComponent {
   @Input() stat: Observable<Stat>;
 }
 
+@Component({
+  selector: 'loading-utilization-bar',
+  template: ''
+})
+class FakeLoadingUtilizationBarComponent {
+  @Input() resourceTitle: string;
+  @Input() resourceUnit: string;
+}
+
+
 describe('ResourceCardComponent', () => {
   type Context = TestContext<ResourceCardComponent, HostComponent>;
 
-  let mockResourceTitle = 'resource title';
+  let mockResourceTitle: string = 'resource title';
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  let cpuStatMock = Observable.of({ used: 1, quota: 2 } as CpuStat);
-  let memoryStatMock = Observable.of({ used: 3, quota: 4, units: 'GB' } as MemoryStat);
-  let active: Subject<boolean> = new BehaviorSubject<boolean>(true);
+  let cpuStatMock: Observable<CpuStat> = Observable.of({ used: 1, quota: 2 });
+  let memoryStatMock: Observable<MemoryStat> = Observable.of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  });
 
   beforeEach(() => {
     mockSvc = createMock(DeploymentsService);
     mockSvc.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
-    mockSvc.getEnvironments.and.returnValue(Observable.of([
-      { name: 'stage' } as Environment,
-      { name: 'prod' } as Environment
-    ]));
+    mockSvc.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
     mockSvc.getEnvironmentCpuStat.and.returnValue(cpuStatMock);
     mockSvc.getEnvironmentMemoryStat.and.returnValue(memoryStatMock);
-    mockSvc.isDeployedInEnvironment.and.returnValue(active);
   });
 
-  initContext(ResourceCardComponent, HostComponent, {
-    declarations: [FakeUtilizationBarComponent],
-    providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
-  },
-    component => {
+  initContext(ResourceCardComponent, HostComponent,
+    {
+      declarations: [FakeUtilizationBarComponent, FakeLoadingUtilizationBarComponent],
+      providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
+    },
+    (component: ResourceCardComponent) => {
       component.spaceId = 'spaceId';
-      component.environment = { name: 'stage' } as Environment;
-    });
+      component.environment = 'stage';
+    }
+  );
 
-  it('should be active', function(this: Context) {
-    expect(this.testedDirective.active).toBeTruthy();
+
+  it('should correctly request the deployed environment data', function(this: Context) {
+    expect(mockSvc.getEnvironmentCpuStat).toHaveBeenCalledWith('spaceId', 'stage');
+    expect(mockSvc.getEnvironmentMemoryStat).toHaveBeenCalledWith('spaceId', 'stage');
   });
 
   it('should have its children passed the proper values', function(this: Context) {
@@ -84,13 +91,4 @@ describe('ResourceCardComponent', () => {
     expect(memoryUtilBar.resourceUnit).toEqual('GB');
     expect(memoryUtilBar.stat).toEqual(memoryStatMock);
   });
-
-  describe('inactive environment', () => {
-    it('should not display', function(this: Context) {
-        active.next(false);
-        this.detectChanges();
-        expect(this.testedDirective.active).toBeFalsy();
-    });
-  });
-
 });

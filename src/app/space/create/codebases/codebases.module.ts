@@ -5,7 +5,9 @@ import { Http } from '@angular/http';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-import { ActionModule, EmptyStateModule, ListModule } from 'patternfly-ng';
+import { ActionModule } from 'patternfly-ng/action';
+import { EmptyStateModule } from 'patternfly-ng/empty-state';
+import { ListModule } from 'patternfly-ng/list';
 
 import { CodebasesAddModule } from './codebases-add/codebases-add.module';
 import { CodebaseDeleteDialogModule } from './codebases-delete/codebase-delete-dialog.module';

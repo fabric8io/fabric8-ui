@@ -1,4 +1,6 @@
 {
+  "analytics_recommender_url": "{{ .Env.ANALYTICS_RECOMMENDER_URL }}",
+  "analytics_license_url": "{{ .Env.ANALYTICS_LICENSE_URL }}",
   "api_server": "{{ .Env.WS_K8S_API_SERVER }}",
   "api_server_base_path": "{{ .Env.K8S_API_SERVER_BASE_PATH }}",
   "api_server_protocol": "{{ .Env.K8S_API_SERVER_PROTOCOL }}",

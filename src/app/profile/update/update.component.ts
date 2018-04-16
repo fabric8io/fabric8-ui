@@ -11,7 +11,7 @@ import { ExtProfile, GettingStartedService } from '../../getting-started/service
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
-import { TenentService } from '../services/tenent.service';
+import { TenantService } from '../services/tenant.service';
 
 export enum TenantUpdateStatus {
   NoAction,
@@ -25,7 +25,7 @@ export enum TenantUpdateStatus {
   selector: 'alm-update',
   templateUrl: 'update.component.html',
   styleUrls: ['./update.component.less'],
-  providers: [CopyService, GettingStartedService, GitHubService, TenentService]
+  providers: [CopyService, GettingStartedService, GitHubService, TenantService]
 })
 export class UpdateComponent implements AfterViewInit, OnInit {
   // Required for usage of enums in the template.
@@ -45,6 +45,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   companyInvalid: boolean = false;
   context: Context;
   email: string;
+  emailPrivate: boolean = true;
   emailVerified: boolean;
   emailInvalid: boolean = false;
   featureLevel: string;
@@ -76,7 +77,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
       private providerService: ProviderService,
       private renderer: Renderer2,
       private router: Router,
-      private tenentService: TenentService,
+      private tenantService: TenantService,
       private userService: UserService) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
 
@@ -226,11 +227,8 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     profile.featureLevel = this.featureLevel;
 
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
+      this.userService.currentLoggedInUser = user;
       this.setUserProperties(user);
-      this.userService.loggedInUser.map(loggedInUser => {
-        // make sure the update of profile (deep clone of user) also get the logged-in user updated
-        (loggedInUser.attributes as any).featureLevel = (user.attributes as any).featureLevel;
-      }).publish().connect();
       this.notifications.message({
         message: `Profile updated!`,
         type: NotificationType.SUCCESS
@@ -246,11 +244,11 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * Update tenent
+   * Update tenant
    */
-  updateTenent(): void {
+  updateTenant(): void {
     this.updateTenantStatus = TenantUpdateStatus.Updating;
-    this.subscriptions.push(this.tenentService.updateTenent()
+    this.subscriptions.push(this.tenantService.updateTenant()
       .subscribe(res => {
         if (res.status === 200) {
           this.updateTenantStatus = TenantUpdateStatus.Success;
@@ -282,7 +280,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    * Validate email
    */
   validateEmail(): void {
-    this.emailInvalid = !this.isEmailValid();
+    this.emailInvalid = !this.isEmailValid(this.email);
   }
 
   /**
@@ -322,8 +320,11 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   private getTransientProfile(): ExtProfile {
     let profile = this.gettingStartedService.createTransientProfile();
+    // Delete extra information that make the update fails if present
     delete profile.username;
-
+    if (profile) {
+      delete profile['registrationCompleted'];
+    }
     if (this.bio !== undefined && this.bio.length > 0) {
       profile.bio = this.bio.trim();
     }
@@ -342,6 +343,9 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (this.url !== undefined && this.url.length > 0) {
       profile.url = this.url.trim();
     }
+    if (this.emailPrivate !== undefined) {
+      profile.emailPrivate = this.emailPrivate;
+    }
     return profile;
   }
 
@@ -350,12 +354,10 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    *
    * @returns {boolean}
    */
-  private isEmailValid(): boolean {
-    if (this.email !== undefined && this.email.trim().length > 0) {
-      return (this.email.trim().indexOf('@') !== -1);
-    } else {
-      return (this.email.trim().length > 0);
-    }
+  public isEmailValid(email: string): boolean {
+    // Email validation regex modified from: http://emailregex.com/
+    const emailRegex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return emailRegex.test(email.trim());
   }
 
   /**
@@ -397,6 +399,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.bio = (user.attributes.bio !== undefined) ? user.attributes.bio : '';
     this.company = (user.attributes.company !== undefined) ? user.attributes.company : '';
     this.email = (user.attributes.email !== undefined) ? user.attributes.email : '';
+    this.emailPrivate = (user.attributes.emailPrivate !== undefined) ? user.attributes.emailPrivate : true;
     this.emailVerified = ((user as any).attributes.emailVerified !== undefined) ?
       (user as any).attributes.emailVerified : false;
     this.fullName = (user.attributes.fullName !== undefined) ? user.attributes.fullName : '';

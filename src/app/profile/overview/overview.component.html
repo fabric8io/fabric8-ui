@@ -21,13 +21,13 @@
         <hr>
         <div *ngIf="(context.user.attributes.email !== undefined && context.user.attributes.email.length !== 0); then showEmail else addEmail"></div>
         <ng-template #showEmail>
-          <p class="col-sm-12 profile-wrapper-email truncate">
+          <p class="col-sm-12 profile-wrapper-email truncate" *ngIf="!context.user.attributes.emailPrivate">
             <span class="fa fa-envelope"></span>
             <a href="mailto:{{context.user.attributes.email}}" class="margin-left-5 margin-right-5">{{context.user.attributes.email}}</a>
           </p>
         </ng-template>
         <ng-template #addEmail>
-          <p class="col-sm-12 profile-wrapper-email">
+          <p class="col-sm-12 profile-wrapper-email" *ngIf="!context.user.attributes.emailPrivate">
             <span class="fa fa-envelope"></span>
             <a href="javascript:void(0)"
                [routerLink]="['/', context?.user?.attributes?.username, '_update']"
@@ -52,7 +52,7 @@
         </ng-template>
         <div *ngIf="(context.user.attributes.bio !== undefined && context.user.attributes.bio.length !== 0); then showBio else addBio"></div>
         <ng-template #showBio>
-          <p class="col-sm-12 profile-wrapper-bio">{{context.user.attributes.bio}}</p>
+          <p class="col-sm-12 profile-wrapper-bio" lang="en">{{context.user.attributes.bio}}</p>
         </ng-template>
         <ng-template #addBio>
           <p class="col-sm-12 profile-wrapper-bio">
@@ -61,7 +61,9 @@
                [queryParams]="{ bio: true }">Add a bio</a>
           </p>
         </ng-template>
-        <button class="col-xs-12 btn btn-lg btn-default profile-update-button margin-bottom-15" (click)="routeToUpdateProfile()">
+        <button class="col-xs-12 btn btn-lg btn-default profile-update-button margin-bottom-15"
+          *ngIf="viewingOwnAccount"
+          (click)="routeToUpdateProfile()">
           Update Profile
         </button>
       </div>

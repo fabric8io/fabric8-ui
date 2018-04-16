@@ -1,0 +1,79 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+
+.feature-footer {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+}
+
+.round-button(@color-for-feature) {
+  display: block;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 50%;
+  color: @color-pf-black-100;
+  text-align: center;
+  background: @color-for-feature;
+  box-shadow: 0 0 3px @color-pf-black-600;
+  font-size: 20px;
+  font-weight: 700;
+  float: right;
+  margin-right: 40px;
+  &:hover {
+    background: darken((@color-for-feature), 10%);
+  }
+}
+
+f8-feature-footer .tooltip-inner {
+  width: 20em;
+  background: @color-pf-black-150;
+  color: @color-pf-black-600;
+  border-color: @color-pf-black-700;
+  box-shadow: 0 0 3px @color-pf-black-600;
+  ul {
+    list-style: none;
+    list-style-type: none;
+    padding: 0;
+    li {
+      span {
+        padding-right: 8px;
+        color: @color-pf-blue-300;
+      }
+    }
+  }
+}
+
+f8-feature-footer .tooltip-arrow {
+  display: none;
+}
+
+
+f8-feature-footer .arrow {
+  display: none;
+}
+
+.empty {
+  .round-button(@color-pf-black-400;);
+  color: @color-pf-black-600;
+}
+
+// INTERNAL
+.internal {
+  .round-button(@color-internal);
+}
+
+// EXPERIMENTAL
+.experimental {
+  .round-button(@color-experimental);
+}
+
+// BETA
+.beta {
+  .round-button(@color-beta);
+}
+
+// RELEASED
+.released {
+  .round-button(@color-system-error);
+}

@@ -40,6 +40,10 @@ export FABRIC8_SSO_API_URL="https://`oc get route keycloak --template={{.spec.ho
 export FABRIC8_WIT_API_URL="https://`oc get route wit --template={{.spec.host}}`/api/"
 export FABRIC8_FORGE_API_URL="https://`oc get route forge --template={{.spec.host}}`/"
 
+# Below variables have to be set explicitly during development
+export ANALYTICS_RECOMMENDER_URL=""
+export ANALYTICS_LICENSE_URL=""
+
 echo ""
 echo "WS_K8S_API_SERVER:             ${WS_K8S_API_SERVER}"
 echo "K8S_API_SERVER_PROTOCOL:       ${K8S_API_SERVER_PROTOCOL}"
@@ -54,4 +58,6 @@ echo "FABRIC8_SSO_API_URL            ${FABRIC8_SSO_API_URL}"
 echo "FABRIC8_WIT_API_URL            ${FABRIC8_WIT_API_URL}"
 echo "FABRIC8_REALM                  ${FABRIC8_REALM}"
 echo "FABRIC8_FORGE_API_URL          ${FABRIC8_FORGE_API_URL}"
+echo "ANALYTICS_RECOMMENDER_URL     ${ANALYTICS_RECOMMENDER_URL}"
+echo "ANALYTICS_LICENSE_URL         ${ANALYTICS_LICENSE_URL}"
 echo ""
