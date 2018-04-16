@@ -8,10 +8,10 @@ import { PlannerListModule, WorkItemDetailAddTypeSelectorModule, WorkItemDetailM
 import { WidgetsModule } from 'ngx-widgets';
 
 import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
-
-import { CreateWorkItemOverlayModule } from './create-work-item-overlay/create-work-item-overlay.module';
-import { CreateWorkItemWidgetRoutingModule } from './create-work-item-widget-routing.module';
-import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
+import { CreateWorkItemOverlayModule } from '../create-work-item-widget/create-work-item-overlay/create-work-item-overlay.module';
+import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
+import { WorkItemWidgetRoutingModule } from './work-item-widget-routing.module';
+import { WorkItemWidgetComponent } from './work-item-widget.component';
 
 @NgModule({
   imports: [
@@ -23,11 +23,12 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
     WidgetsModule,
     PlannerListModule,
     NgArrayPipesModule,
-    CreateWorkItemWidgetRoutingModule,
+    WorkItemBarchartModule,
+    WorkItemWidgetRoutingModule,
     WorkItemDetailModule,
     WorkItemDetailAddTypeSelectorModule
   ],
-  declarations: [CreateWorkItemWidgetComponent],
-  exports: [CreateWorkItemWidgetComponent]
+  declarations: [WorkItemWidgetComponent],
+  exports: [WorkItemWidgetComponent]
 })
-export class CreateWorkItemWidgetModule { }
+export class WorkItemWidgetModule { }

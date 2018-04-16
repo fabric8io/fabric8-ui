@@ -1,0 +1,60 @@
+@import (reference) '../../../assets/stylesheets/shared/osio.less';
+
+.f8-card-body-grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.f8-work-item-card {
+  &-data-totals {
+    &--overview {
+      margin-bottom: 0;
+      font-weight: 500;
+      &-subtitle {
+        margin-bottom: 0;
+      }
+    }
+    &--link {
+      .btn-link {
+        padding: 0;
+      }
+    }
+  }
+  &-data-status {
+    display: grid;
+    grid-template-columns: 1fr;
+    &--resolved {
+      display: grid;
+      grid-template-columns: 20px 35px 1fr;
+      height: 30px;
+      align-items: center;
+      &_color {
+        color: @color-pf-green-400;
+      }
+    }
+    &--in-progress {
+      display: grid;
+      grid-template-columns: 20px 35px 1fr;
+      height: 30px;
+      align-items: center;
+      &_color {
+        color: @color-pf-orange-400;
+      }
+    }
+    &--open {
+      display: grid;
+      grid-template-columns: 20px 35px 1fr;
+      height: 30px;
+      align-items: center;
+      &_color {
+        color: @color-pf-red-100;
+      }
+    }
+  }
+  &-chart {
+    display: grid;
+    grid-template-columns: 75px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+}
