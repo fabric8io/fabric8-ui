@@ -34,7 +34,8 @@
                         </div>
                         <div *ngSwitchCase="'action'" class="action">
                             <!-- Action -->
-                            <span *ngIf="!comp?.workItem?.isWorkItemCreated" (click)="handleAction($event, comp)" [innerText]="comp?.action || '-----'" class="not-created"></span>
+                            <span *ngIf="!comp?.workItem?.isWorkItemCreated && comp?.action" (click)="handleAction($event, comp)" [innerText]="comp?.action" class="not-created"></span>
+                            <span *ngIf="!comp?.workItem?.isWorkItemCreated && !comp?.action" [innerText]="'-----'"></span>
                             <span *ngIf="comp?.workItem?.isWorkItemCreated">
                                 Work item created
                                 <a class="created" target="_blank" href="{{comp?.workItem?.url}}">View here</a>
