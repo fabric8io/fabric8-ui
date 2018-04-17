@@ -118,7 +118,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.runtimePipelinesService.current.combineLatest(
         this.pipelinesService.getOpenshiftConsoleUrl().do((url: string) => {
-          if (url !== '') {
+          if (url) {
             this.consoleAvailable = true;
           } else {
             this.consoleAvailable = false;
@@ -135,7 +135,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   }
 
   private setupBuildConfigLinks(buildConfigs: BuildConfig[], consoleUrl: string): BuildConfig[] {
-    if (consoleUrl && consoleUrl !== '') {
+    if (consoleUrl) {
       for (let build of buildConfigs) {
         build.openShiftConsoleUrl = consoleUrl + '/' + build.name;
         build.editPipelineUrl = build.openShiftConsoleUrl.replace('browse', 'edit');
