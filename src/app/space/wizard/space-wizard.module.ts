@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { Fabric8WitModule, UniqueSpaceNameValidatorDirective, ValidSpaceNameValidatorDirective } from 'ngx-fabric8-wit';
+import { Fabric8WitModule } from 'ngx-fabric8-wit';
 
 import { AddSpaceOverlayModule } from '../add-space-overlay/add-space-overlay.module';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
@@ -15,22 +15,20 @@ import { SpaceTemplateService } from 'app/shared/space-template.service';
 
 @NgModule({
   imports: [
+    AddSpaceOverlayModule,
     CommonModule,
     FormsModule,
     Fabric8WitModule
   ],
   declarations: [
     SpaceWizardComponent,
-    UniqueSpaceNameValidatorDirective,
-    ValidSpaceNameValidatorDirective,
     SelectedItemsPipe,
     VisibleItemsPipe,
     TrustHtmlPipe,
     TrustStylePipe
   ],
   exports: [
-    SpaceWizardComponent,
-    UniqueSpaceNameValidatorDirective
+    SpaceWizardComponent
   ],
   providers: [
     CodebasesService,

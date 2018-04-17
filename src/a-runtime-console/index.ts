@@ -28,7 +28,6 @@ export { DeploymentView, DeploymentViews } from './kubernetes/view/deployment.vi
 export { AbstractWatchComponent } from './kubernetes/support/abstract-watch.component';
 
 export { PipelineModule } from './kubernetes/ui/pipeline/pipeline.module';
-export { StatusListModule } from './kubernetes/ui/status/status-list.module';
 
 export { KubernetesStoreModule } from './kubernetes/kubernetes.store.module';
 

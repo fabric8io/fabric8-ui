@@ -17,7 +17,8 @@ export class EmailVerificationComponent implements OnInit {
   'You can now continue to use Openshift.io';
 
   constructor(
-    private route: ActivatedRoute) {}
+    private route: ActivatedRoute,
+    private router: Router) {}
 
   ngOnInit(): void {
     const queryParams = this.route.snapshot.queryParams;
@@ -29,5 +30,8 @@ export class EmailVerificationComponent implements OnInit {
         'You can reset your e-mail on your Profile Page';
       }
     }
+  }
+  goHome(): void {
+    this.router.navigate(['/', '_home']);
   }
 }

@@ -21,27 +21,13 @@ export PROXIED_K8S_API_SERVER="${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_P
 # This is our proxy that we will connect to
 export K8S_API_SERVER="localhost:3000"
 
-if [ -z "${OAUTH_ISSUER}" ]; then
-  export OAUTH_ISSUER="https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"
-fi
-if [ -z "${OAUTH_SCOPE}" ]; then
-  export OAUTH_SCOPE="user:full"
-fi
-if [ -z "${OAUTH_CLIENT_ID}" ]; then
-  export OAUTH_CLIENT_ID="fabric8"
-fi
-if [ -z "${K8S_API_SERVER_PROTOCOL}" ]; then
-  export K8S_API_SERVER_PROTOCOL="http"
-fi
-if [ -z "${K8S_API_SERVER_BASE_PATH}" ]; then
-  export K8S_API_SERVER_BASE_PATH="/_p/oso"
-fi
-if [ -z "${WS_K8S_API_SERVER}" ]; then
-  export WS_K8S_API_SERVER=${PROXIED_K8S_API_SERVER}
-fi
-if [ -z "${FABRIC8_PIPELINES_NAMESPACE}" ]; then
-  export FABRIC8_PIPELINES_NAMESPACE="-development"
-fi
+export OAUTH_ISSUER=${OAUTH_ISSUER:-"https://${KUBERNETES_SERVICE_HOST}:${KUBERNETES_SERVICE_PORT}"}
+export OAUTH_SCOPE=${OAUTH_SCOPE:-"user:full"}
+export OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID:-"fabric8"}
+export K8S_API_SERVER_PROTOCOL=${K8S_API_SERVER_PROTOCOL:-"http"}
+export K8S_API_SERVER_BASE_PATH=${K8S_API_SERVER_BASE_PATH:-"/_p/oso"}
+export WS_K8S_API_SERVER=${WS_K8S_API_SERVER:-${PROXIED_K8S_API_SERVER}}
+export FABRIC8_PIPELINES_NAMESPACE=${FABRIC8_PIPELINES_NAMESPACE:-"-development"}
 
 echo "Configured to connect to kubernetes cluster at https://${PROXIED_K8S_API_SERVER}/"
 

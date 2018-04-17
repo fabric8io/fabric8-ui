@@ -40,7 +40,7 @@ import {
   KubernetesRestangularModule,
   KubernetesStoreModule,
   OnLogin,
-  SpaceNamespace, StatusListModule
+  SpaceNamespace
 } from '../a-runtime-console/index';
 
 /*
@@ -159,7 +159,6 @@ export type StoreType = {
     ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,
-    StatusListModule,
     StoreModule.forRoot({}),
     // AppRoutingModule must appear last
     AppRoutingModule

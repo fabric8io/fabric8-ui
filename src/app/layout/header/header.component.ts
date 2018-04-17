@@ -25,17 +25,12 @@ interface MenuHiddenCallback {
 export class HeaderComponent implements OnInit, OnDestroy {
   title = 'Almighty';
   imgLoaded: Boolean = false;
-  statusListVisible = false;
   documentationListVisible: Boolean = false;
   modalRef: BsModalRef;
   isIn = false;   // store state
   toggleState() { // click handler
       let bool = this.isIn;
       this.isIn = bool === false ? true : false;
-  }
-
-  onStatusListVisible = (flag: boolean) => {
-    this.statusListVisible = flag;
   }
 
   onDocumentationListVisible = (flag: boolean) => {
