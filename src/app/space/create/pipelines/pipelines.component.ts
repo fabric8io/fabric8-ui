@@ -137,11 +137,11 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   private setupBuildConfigLinks(buildConfigs: BuildConfig[], consoleUrl: string): BuildConfig[] {
     if (consoleUrl) {
       for (let build of buildConfigs) {
-        build.openShiftConsoleUrl = consoleUrl + '/' + build.name;
+        build.openShiftConsoleUrl = `${consoleUrl}/${build.name}`;
         build.editPipelineUrl = build.openShiftConsoleUrl.replace('browse', 'edit');
         if (build.interestingBuilds) {
           for (let b of build.interestingBuilds) {
-            b.openShiftConsoleUrl = build.openShiftConsoleUrl + '/' + build.name + '-' + b.buildNumber;
+            b.openShiftConsoleUrl = `${build.openShiftConsoleUrl}/${build.name}-${b.buildNumber}`;
           }
         }
       }
