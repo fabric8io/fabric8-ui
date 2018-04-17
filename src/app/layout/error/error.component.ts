@@ -5,7 +5,6 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import 'rxjs/operators/map';
 import { Subscription } from 'rxjs/Subscription';
@@ -28,16 +27,11 @@ export class ErrorComponent implements OnDestroy {
     private errorService: ErrorService,
     private userService: UserService,
     private authService: AuthenticationService,
-    private notifications: Notifications,
     private location: Location
   ) {
     this.subscriptions.push(
       this.errorService.failedRoute$.subscribe((route: string): void => {
         if (route) {
-          this.notifications.message({
-            message: `${route} not found`,
-            type: NotificationType.WARNING
-          } as Notification);
           this.location.replaceState(route);
         }
       })

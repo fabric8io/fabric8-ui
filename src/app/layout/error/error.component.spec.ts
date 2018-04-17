@@ -12,10 +12,6 @@ import {
 } from 'testing/test-context';
 
 import {
-  Notifications,
-  NotificationType
-} from 'ngx-base';
-import {
   AuthenticationService,
   UserService
 } from 'ngx-login-client';
@@ -45,13 +41,6 @@ describe('ErrorComponent', () => {
         }
       },
       {
-        provide: Notifications, useFactory: () => {
-          const notifications: jasmine.SpyObj<Notifications> = createMock(Notifications);
-          notifications.message.and.stub();
-          return notifications;
-        }
-      },
-      {
         provide: Location, useFactory: () => {
           const location: jasmine.SpyObj<Location> = createMock(Location);
           location.replaceState.and.stub();
@@ -60,25 +49,6 @@ describe('ErrorComponent', () => {
       }
     ],
     schemas: [ NO_ERRORS_SCHEMA ]
-  });
-
-  it('should send a notification if a failed route is available', function(this: TestContext<ErrorComponent, HostComponent>) {
-    const notifications: Notifications = TestBed.get(Notifications);
-    const errorService: ErrorService = TestBed.get(ErrorService);
-    expect(notifications.message).not.toHaveBeenCalled();
-    errorService.updateFailedRoute('/foo/path');
-    expect(notifications.message).toHaveBeenCalledWith({
-      message: '/foo/path not found',
-      type: NotificationType.WARNING
-    });
-  });
-
-  it('should not send a notification if failed route is unavailable', function(this: TestContext<ErrorComponent, HostComponent>) {
-    const notifications: Notifications = TestBed.get(Notifications);
-    const errorService: ErrorService = TestBed.get(ErrorService);
-    expect(notifications.message).not.toHaveBeenCalled();
-    errorService.updateFailedRoute('');
-    expect(notifications.message).not.toHaveBeenCalled();
   });
 
   it('should replace location state if a failed route is available', function(this: TestContext<ErrorComponent, HostComponent>) {
