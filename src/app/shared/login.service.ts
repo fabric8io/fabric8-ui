@@ -6,9 +6,6 @@ import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-
 import { AUTH_API_URL, AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
-import { ErrorService } from '../layout/error/error.service';
-import { ContextService } from './context.service';
-
 @Injectable()
 export class LoginService {
 
@@ -28,9 +25,7 @@ export class LoginService {
     private localStorage: LocalStorageService,
     @Inject(AUTH_API_URL) private apiUrl: string,
     private broadcaster: Broadcaster,
-    private errorService: ErrorService,
     private authService: AuthenticationService,
-    private contextService: ContextService,
     private notifications: Notifications,
     private userService: UserService
   ) {
@@ -85,8 +80,6 @@ export class LoginService {
     });
     if (result['error']) {
       this.notifications.message({ message: result['error'], type: NotificationType.DANGER } as Notification);
-      // this.errorService.updateMessage('Error logging in');
-      // this.router.navigate(['_error']);
     } else if (result['token_json']) {
       // Handle the case that this is a login
       this.authService.logIn(result['token_json']);
