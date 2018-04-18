@@ -22,18 +22,16 @@ import {
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
-import { ScaledNetworkStat } from '../models/scaled-network-stat';
+import { ScaledNetStat } from '../models/scaled-net-stat';
 import { Stat } from '../models/stat';
 import {
   DeploymentStatusService,
   Status,
   StatusType
 } from '../services/deployment-status.service';
-import {
-  DeploymentsService,
-  NetworkStat
-} from '../services/deployments.service';
+import { DeploymentsService } from '../services/deployments.service';
 
 import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
 import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
@@ -257,13 +255,13 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment, this.applicationId).subscribe((stats: NetworkStat[]) => {
         const last: NetworkStat = stats[stats.length - 1];
-        const netTotal: ScaledNetworkStat = new ScaledNetworkStat(last.received.raw + last.sent.raw);
+        const netTotal: ScaledNetStat = new ScaledNetStat(this.getNetStatValue(last).sent + this.getNetStatValue(last).received);
         this.netUnits = netTotal.units;
         const decimals = this.netUnits === 'bytes' ? 0 : 1;
         this.netVal = round(netTotal.used, decimals);
         this.netData.xData = [this.netData.xData[0], ...stats.map((stat: NetworkStat) => stat.received.timestamp)];
-        this.netData.yData[0] = [this.netData.yData[0][0], ...stats.map((stat: NetworkStat) => round(stat.sent.raw, decimals))];
-        this.netData.yData[1] = [this.netData.yData[1][0], ...stats.map((stat: NetworkStat) => round(stat.received.raw, decimals))];
+        this.netData.yData[0] = [this.netData.yData[0][0], ...stats.map((stat: NetworkStat) => round(this.getNetStatValue(stat).sent, decimals))];
+        this.netData.yData[1] = [this.netData.yData[1][0], ...stats.map((stat: NetworkStat) => round(this.getNetStatValue(stat).received, decimals))];
       })
     );
   }
@@ -318,6 +316,16 @@ export class DeploymentDetailsComponent {
       .map((stat: Stat): number => stat.quota)
       .reduce((acc: number, next: number): number => Math.max(acc, next));
     return Math.max(largestUsage, largestQuota);
+  }
+
+  private getNetStatValue(stat: NetworkStat): { sent: number, received: number } {
+    let sent: number = stat.sent.used;
+    let received: number = stat.received.used;
+    if ((stat.received instanceof ScaledNetStat) && (stat.sent instanceof ScaledNetStat)) {
+      sent = stat.sent.raw;
+      received = stat.received.raw;
+    }
+    return { sent, received };
   }
 
 }

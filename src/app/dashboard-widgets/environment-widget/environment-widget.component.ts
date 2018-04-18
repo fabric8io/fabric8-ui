@@ -5,10 +5,10 @@ import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscripti
 
 import { Context, Contexts, Spaces } from 'ngx-fabric8-wit';
 
+import { Space } from '../../../app/space/create/deployments/services/deployment-api.service';
 import {
   ApplicationAttributesOverview,
-  DeploymentsService,
-  Space
+  DeploymentsService
 } from '../../../app/space/create/deployments/services/deployments.service';
 
 @Component({

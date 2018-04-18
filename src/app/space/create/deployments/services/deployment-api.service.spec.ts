@@ -22,13 +22,13 @@ import { createMock } from 'testing/mock';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
-import { DeploymentApiService } from './deployment-api.service';
 import {
   Application,
+  DeploymentApiService,
   EnvironmentStat,
   MultiTimeseriesData,
   TimeseriesData
-} from './deployments.service';
+} from './deployment-api.service';
 
 describe('DeploymentApiService', () => {
   let mockBackend: MockBackend;
