@@ -32,53 +32,24 @@ import {
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
-import { Pods as ModelPods } from '../models/pods';
+import { NetworkStat } from '../models/network-stat';
+import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
-import { ScaledNetworkStat } from '../models/scaled-network-stat';
-
-import { DeploymentApiService } from './deployment-api.service';
-
-export interface NetworkStat {
-  sent: ScaledNetworkStat;
-  received: ScaledNetworkStat;
-}
-
-export interface ApplicationsResponse {
-  data: Space;
-}
-
-export interface Space {
-  attributes: SpaceAttributes;
-  id: string;
-  type: string;
-}
-
-export interface SpaceAttributes {
-  applications: Application[];
-}
-
-export interface EnvironmentsResponse {
-  data: EnvironmentStat[];
-}
-
-export interface TimeseriesResponse {
-  data: DeploymentStats;
-}
-
-export interface MultiTimeseriesResponse {
-  data: MultiTimeseriesData;
-}
-
-export interface Application {
-  attributes: ApplicationAttributes;
-  id: string;
-  type: string;
-}
-
-export interface ApplicationAttributes {
-  name: string;
-  deployments: Deployment[];
-}
+import { ScaledNetStat } from '../models/scaled-net-stat';
+import {
+  Application,
+  ApplicationAttributes,
+  CoresSeries,
+  Deployment,
+  DeploymentApiService,
+  DeploymentAttributes,
+  EnvironmentAttributes,
+  EnvironmentStat,
+  MemorySeries,
+  MultiTimeseriesData,
+  PodsQuota,
+  TimeseriesData
+} from './deployment-api.service';
 
 export interface ApplicationAttributesOverview {
   appName: string;
@@ -89,96 +60,6 @@ export interface DeploymentPreviewInfo {
   name: string;
   version: string;
   url: string;
-}
-
-export interface Deployment {
-  attributes: DeploymentAttributes;
-  links: Links;
-  id: string;
-  type: string;
-}
-
-export interface DeploymentAttributes {
-  name: string;
-  pod_total: number;
-  pods: [[string, string]];
-  pods_quota: PodsQuota;
-  version: string;
-}
-
-export interface Links {
-  application: string;
-  console: string;
-  logs: string;
-}
-
-export interface Environment {
-  name: string;
-  pods: Pods;
-  version: string;
-}
-
-export interface EnvironmentStat {
-  attributes: EnvironmentAttributes;
-  id: string;
-  type: string;
-}
-
-export interface EnvironmentAttributes {
-  name: string;
-  quota: Quota;
-}
-
-export interface Quota {
-  cpucores: CpuStat;
-  memory: MemoryStat;
-}
-
-export interface Pods {
-  running: number;
-  starting: number;
-  stopping: number;
-  total: number;
-}
-
-export interface PodsQuota {
-  cpucores: number;
-  memory: number;
-}
-
-export interface DeploymentStats {
-  attributes: TimeseriesData;
-  id: string;
-  type: string;
-}
-
-export interface TimeseriesData {
-  cores: CoresSeries;
-  memory: MemorySeries;
-  net_tx: NetworkSentSeries;
-  net_rx: NetworkReceivedSeries;
-}
-
-export interface MultiTimeseriesData {
-  cores: CoresSeries[];
-  memory: MemorySeries[];
-  net_tx: NetworkSentSeries[];
-  net_rx: NetworkReceivedSeries[];
-  start: number;
-  end: number;
-}
-
-export interface CoresSeries extends SeriesData { }
-
-export interface MemorySeries extends SeriesData { }
-
-export interface NetworkSentSeries extends SeriesData { }
-
-export interface NetworkReceivedSeries extends SeriesData { }
-
-export interface SeriesData {
-  time: number;
-  value: number;
 }
 
 export const TIMER_TOKEN: InjectionToken<Observable<void>> = new InjectionToken<Observable<void>>('DeploymentsServiceTimer');
@@ -284,7 +165,7 @@ export class DeploymentsService implements OnDestroy {
       .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
 
-  getPods(spaceId: string, environmentName: string, applicationId: string): Observable<ModelPods> {
+  getPods(spaceId: string, environmentName: string, applicationId: string): Observable<Pods> {
     return this.getDeployment(spaceId, environmentName, applicationId)
       .map((deployment: Deployment) => deployment.attributes)
       .map((attrs: DeploymentAttributes) => {
@@ -298,7 +179,7 @@ export class DeploymentsService implements OnDestroy {
         return {
           total: attrs.pod_total,
           pods: pods
-        } as ModelPods;
+        } as Pods;
       })
       .distinctUntilChanged(deepEqual);
   }
@@ -344,9 +225,9 @@ export class DeploymentsService implements OnDestroy {
       .map((t: TimeseriesData[]) =>
         t.map((s: TimeseriesData) =>
         ({
-          sent: new ScaledNetworkStat(s.net_tx.value, s.net_tx.time),
-          received: new ScaledNetworkStat(s.net_rx.value, s.net_rx.time)
-        } as NetworkStat))
+          sent: new ScaledNetStat(s.net_tx.value, s.net_tx.time),
+          received: new ScaledNetStat(s.net_rx.value, s.net_rx.time)
+        }))
       );
   }
 

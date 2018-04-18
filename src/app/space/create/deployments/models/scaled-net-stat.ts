@@ -1,8 +1,10 @@
 import { MemoryUnit } from './memory-stat';
+import { NetStat } from './network-stat';
+import { ScaledStat } from './scaled-stat';
 
 import { round } from 'lodash';
 
-export class ScaledNetworkStat {
+export class ScaledNetStat implements NetStat, ScaledStat {
 
   private static readonly UNITS = ['bytes', 'KB', 'MB', 'GB'];
 
@@ -15,11 +17,11 @@ export class ScaledNetworkStat {
   ) {
     this.raw = used;
     let scale = 0;
-    while (this.used > 1024 && scale < ScaledNetworkStat.UNITS.length) {
+    while (this.used > 1024 && scale < ScaledNetStat.UNITS.length) {
       this.used /= 1024;
       scale++;
     }
     this.used = round(this.used, 1);
-    this.units = ScaledNetworkStat.UNITS[scale] as MemoryUnit;
+    this.units = ScaledNetStat.UNITS[scale] as MemoryUnit;
   }
 }

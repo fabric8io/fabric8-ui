@@ -12,16 +12,122 @@ import { Observable } from 'rxjs';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
-import {
-  Application,
-  ApplicationsResponse,
-  EnvironmentsResponse,
-  EnvironmentStat,
-  MultiTimeseriesData,
-  MultiTimeseriesResponse,
-  TimeseriesData,
-  TimeseriesResponse
-} from './deployments.service';
+import { CpuStat } from '../models/cpu-stat';
+import { MemoryStat } from '../models/memory-stat';
+
+export interface ApplicationsResponse {
+  data: Space;
+}
+
+export interface Space {
+  attributes: SpaceAttributes;
+  id: string;
+  type: string;
+}
+
+export interface SpaceAttributes {
+  applications: Application[];
+}
+
+export interface Application {
+  attributes: ApplicationAttributes;
+  id: string;
+  type: string;
+}
+
+export interface ApplicationAttributes {
+  name: string;
+  deployments: Deployment[];
+}
+
+export interface Deployment {
+  attributes: DeploymentAttributes;
+  links: Links;
+  id: string;
+  type: string;
+}
+
+export interface DeploymentAttributes {
+  name: string;
+  pod_total: number;
+  pods: [[string, string]];
+  pods_quota: PodsQuota;
+  version: string;
+}
+
+export interface Links {
+  application: string;
+  console: string;
+  logs: string;
+}
+
+export interface PodsQuota {
+  cpucores: number;
+  memory: number;
+}
+
+export interface EnvironmentsResponse {
+  data: EnvironmentStat[];
+}
+
+export interface EnvironmentStat {
+  attributes: EnvironmentAttributes;
+  id: string;
+  type: string;
+}
+
+export interface EnvironmentAttributes {
+  name: string;
+  quota: Quota;
+}
+
+export interface Quota {
+  cpucores: CpuStat;
+  memory: MemoryStat;
+}
+
+export interface TimeseriesResponse {
+  data: DeploymentStats;
+}
+
+export interface MultiTimeseriesResponse {
+  data: MultiTimeseriesData;
+}
+
+export interface DeploymentStats {
+  attributes: TimeseriesData;
+  id: string;
+  type: string;
+}
+
+export interface TimeseriesData {
+  cores: CoresSeries;
+  memory: MemorySeries;
+  net_tx: NetworkSentSeries;
+  net_rx: NetworkReceivedSeries;
+}
+
+export interface MultiTimeseriesData {
+  cores: CoresSeries[];
+  memory: MemorySeries[];
+  net_tx: NetworkSentSeries[];
+  net_rx: NetworkReceivedSeries[];
+  start: number;
+  end: number;
+}
+
+export interface CoresSeries extends SeriesData { }
+
+export interface MemorySeries extends SeriesData { }
+
+export interface NetworkSentSeries extends SeriesData { }
+
+export interface NetworkReceivedSeries extends SeriesData { }
+
+export interface SeriesData {
+  time: number;
+  value: number;
+}
 
 @Injectable()
 export class DeploymentApiService {

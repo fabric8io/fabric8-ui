@@ -32,12 +32,12 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { NetworkStat } from '../models/network-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
-import { ScaledNetworkStat } from '../models/scaled-network-stat';
+import { ScaledNetStat } from '../models/scaled-net-stat';
 import { DeploymentApiService } from './deployment-api.service';
 import {
   DeploymentsService,
-  NetworkStat,
   TIMER_TOKEN,
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
@@ -1590,9 +1590,9 @@ describe('DeploymentsService', () => {
         .first()
         .subscribe((stats: NetworkStat[]) => {
           expect(stats).toEqual([
-            { sent: new ScaledNetworkStat(7, 7), received: new ScaledNetworkStat(5, 5) },
-            { sent: new ScaledNetworkStat(8, 8), received: new ScaledNetworkStat(6, 6) },
-            { sent: new ScaledNetworkStat(11, 11), received: new ScaledNetworkStat(12, 12) }
+            { sent: new ScaledNetStat(7, 7), received: new ScaledNetStat(5, 5) },
+            { sent: new ScaledNetStat(8, 8), received: new ScaledNetStat(6, 6) },
+            { sent: new ScaledNetStat(11, 11), received: new ScaledNetStat(12, 12) }
           ]);
           subscription.unsubscribe();
           done();

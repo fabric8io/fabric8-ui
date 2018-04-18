@@ -20,17 +20,15 @@ import {
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
-import { ScaledNetworkStat } from '../models/scaled-network-stat';
+import { ScaledNetStat } from '../models/scaled-net-stat';
 import {
   DeploymentStatusService,
   Status,
   StatusType
 } from '../services/deployment-status.service';
-import {
-  DeploymentsService,
-  NetworkStat
-} from '../services/deployments.service';
+import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentDetailsComponent } from './deployment-details.component';
 
 // Makes patternfly charts available
@@ -114,8 +112,8 @@ describe('DeploymentDetailsComponent', () => {
 
     const mb = Math.pow(1024, 2);
     netStatObservable = new BehaviorSubject([{
-      sent: new ScaledNetworkStat(1 * mb, 1),
-      received: new ScaledNetworkStat(2 * mb, 1)
+      sent: new ScaledNetStat(1 * mb, 1),
+      received: new ScaledNetStat(2 * mb, 1)
     }] as NetworkStat[]);
 
     podsObservable = new BehaviorSubject(
@@ -354,12 +352,12 @@ describe('DeploymentDetailsComponent', () => {
       const mb = Math.pow(1024, 2);
       netStatObservable.next([
         {
-          sent: new ScaledNetworkStat(1 * mb, 1),
-          received: new ScaledNetworkStat(2 * mb, 1)
+          sent: new ScaledNetStat(1 * mb, 1),
+          received: new ScaledNetStat(2 * mb, 1)
         },
         {
-          sent: new ScaledNetworkStat(100.567, 2),
-          received: new ScaledNetworkStat(200.234, 2)
+          sent: new ScaledNetStat(100.567, 2),
+          received: new ScaledNetStat(200.234, 2)
         }
       ] as NetworkStat[]);
       this.detectChanges();
@@ -375,12 +373,12 @@ describe('DeploymentDetailsComponent', () => {
       const mb = Math.pow(1024, 2);
       netStatObservable.next([
         {
-          sent: new ScaledNetworkStat(1 * mb, 1),
-          received: new ScaledNetworkStat(2 * mb, 1)
+          sent: new ScaledNetStat(1 * mb, 1),
+          received: new ScaledNetStat(2 * mb, 1)
         },
         {
-          sent: new ScaledNetworkStat(12.34 * 1024, 2),
-          received: new ScaledNetworkStat(45.67 * 1024, 2)
+          sent: new ScaledNetStat(12.34 * 1024, 2),
+          received: new ScaledNetStat(45.67 * 1024, 2)
         }
       ] as NetworkStat[]);
       this.detectChanges();
