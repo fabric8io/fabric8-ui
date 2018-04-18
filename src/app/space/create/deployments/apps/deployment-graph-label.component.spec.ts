@@ -4,7 +4,7 @@ import { DeploymentGraphLabelComponent } from './deployment-graph-label.componen
 
 describe('DeploymentGraphLabel', () => {
   const emptyChanges: SimpleChanges = {};
-  let component = new DeploymentGraphLabelComponent();
+  const component: DeploymentGraphLabelComponent = new DeploymentGraphLabelComponent();
   component.ngOnChanges(emptyChanges);
 
   it('should have an N/A label by default', () => {

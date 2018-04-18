@@ -26,7 +26,7 @@
           <pfng-chart-sparkline class="chart-sparkline" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
         </div>
         <div class="chart-column-right">
-          <deployment-graph-label [dataMeasure]="memUnits" type="Memory" [ngClass]="memLabelClass" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
+          <deployment-graph-label [ngClass]="memLabelClass" type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>
         </div>
       </div>
 
