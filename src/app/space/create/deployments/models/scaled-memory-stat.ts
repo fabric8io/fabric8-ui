@@ -2,13 +2,15 @@ import {
   MemoryStat,
   MemoryUnit
 } from './memory-stat';
+import { ScaledStat } from './scaled-stat';
 
 import { round } from 'lodash';
 
-export class ScaledMemoryStat implements MemoryStat {
+export class ScaledMemoryStat implements MemoryStat, ScaledStat {
 
   private static readonly UNITS = ['bytes', 'KB', 'MB', 'GB'];
 
+  public readonly raw: number;
   public readonly units: MemoryUnit;
 
   constructor(
@@ -16,6 +18,7 @@ export class ScaledMemoryStat implements MemoryStat {
     public readonly quota: number,
     public readonly timestamp?: number
   ) {
+    this.raw = used;
     let scale = 0;
     if (this.used !== 0) {
       while (this.used > 1024 && scale < ScaledMemoryStat.UNITS.length) {

@@ -1,9 +1,10 @@
 import { MemoryUnit } from './memory-stat';
 import { NetStat } from './network-stat';
+import { ScaledStat } from './scaled-stat';
 
 import { round } from 'lodash';
 
-export class ScaledNetStat implements NetStat {
+export class ScaledNetStat implements NetStat, ScaledStat {
 
   private static readonly UNITS = ['bytes', 'KB', 'MB', 'GB'];
 

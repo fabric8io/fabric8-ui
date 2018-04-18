@@ -25,6 +25,10 @@ import { MemoryStat } from '../models/memory-stat';
 import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetStat } from '../models/scaled-net-stat';
+import {
+  instanceOfScaledStat,
+  ScaledStat
+} from '../models/scaled-stat';
 import { Stat } from '../models/stat';
 import {
   DeploymentStatusService,
@@ -321,7 +325,7 @@ export class DeploymentDetailsComponent {
   private getNetStatValue(stat: NetworkStat): { sent: number, received: number } {
     let sent: number = stat.sent.used;
     let received: number = stat.received.used;
-    if ((stat.received instanceof ScaledNetStat) && (stat.sent instanceof ScaledNetStat)) {
+    if (instanceOfScaledStat(stat.sent) && instanceOfScaledStat(stat.received)) {
       sent = stat.sent.raw;
       received = stat.received.raw;
     }
