@@ -53,7 +53,9 @@ export class ApplicationOverviewService implements OnDestroy {
             const appName: string = app.attributes.name;
             const deploymentsInfo: DeploymentPreviewInfo[] = app.attributes.deployments.map(
               (dep: Deployment): DeploymentPreviewInfo => ({
-                name: dep.attributes.name, version: dep.attributes.version, url: dep.links.application
+                name: dep.attributes.name,
+                version: dep.attributes.version,
+                url: dep.attributes.pod_total > 0 ? dep.links.application : null
               })
             ).sort((a: DeploymentPreviewInfo, b: DeploymentPreviewInfo): number => a.name.localeCompare(b.name));
             return { appName, deploymentsInfo };

@@ -34,7 +34,8 @@ describe('ApplicationOverviewService', () => {
             {
               attributes: {
                 name: 'stage',
-                version: '1'
+                version: '1',
+                pod_total: 1
               },
               links: {
                 application: 'foo-app-stage-url'
@@ -50,7 +51,8 @@ describe('ApplicationOverviewService', () => {
             {
               attributes: {
                 name: 'run',
-                version: '2'
+                version: '2',
+                pod_total: 0
               },
               links: {
                 application: 'bar-app-run-url'
@@ -73,7 +75,7 @@ describe('ApplicationOverviewService', () => {
                 {
                   name: 'run',
                   version: '2',
-                  url: 'bar-app-run-url'
+                  url: null
                 }
               ]
             },
