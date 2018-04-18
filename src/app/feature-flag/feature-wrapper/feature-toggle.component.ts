@@ -11,7 +11,6 @@ import { Feature, FeatureTogglesService } from '../service/feature-toggles.servi
 })
 export class FeatureToggleComponent implements OnInit {
   @Input() featureName: string;
-  @Input() restricted = 'prod';
   isEnabled = false;
   currentUrl = window.location.href;
 
@@ -23,12 +22,7 @@ export class FeatureToggleComponent implements OnInit {
     }
 
     this.featureService.getFeature(this.featureName).subscribe((f: Feature) => {
-        let localHost = this.currentUrl.indexOf('localhost') > -1;
-        if (this.restricted.toLowerCase() === 'dev') {
-          this.isEnabled = f.attributes.enabled && f.attributes['user-enabled'] && localHost;
-        } else {
-          this.isEnabled = f.attributes.enabled && f.attributes['user-enabled'];
-        }
+        this.isEnabled = f.attributes.enabled && f.attributes['user-enabled'];
       },
       err => {
         this.isEnabled = false;
