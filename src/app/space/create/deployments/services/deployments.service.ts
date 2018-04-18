@@ -51,17 +51,6 @@ import {
   TimeseriesData
 } from './deployment-api.service';
 
-export interface ApplicationAttributesOverview {
-  appName: string;
-  deploymentsInfo: DeploymentPreviewInfo[];
-}
-
-export interface DeploymentPreviewInfo {
-  name: string;
-  version: string;
-  url: string;
-}
-
 export const TIMER_TOKEN: InjectionToken<Observable<void>> = new InjectionToken<Observable<void>>('DeploymentsServiceTimer');
 export const TIMESERIES_SAMPLES_TOKEN: InjectionToken<number> = new InjectionToken<number>('DeploymentsServiceTimeseriesSamples');
 
@@ -113,24 +102,6 @@ export class DeploymentsService implements OnDestroy {
         .map((env: EnvironmentAttributes) => env.name)
       )
       .distinctUntilChanged((p: string[], q: string[]) => deepEqual(new Set<string>(p), new Set<string>(q)));
-  }
-
-  getAppsAndEnvironments(spaceId: string): Observable<ApplicationAttributesOverview[]> {
-    return this.getApplicationsResponse(spaceId)
-      .map((apps: Application[]) => apps || [])
-      .map((apps: Application[]) => apps.map((app: Application) => {
-        const appName = app.attributes.name;
-        const deploymentNamesAndVersions = app.attributes.deployments.map(
-          (dep: Deployment) => ({
-            name: dep.attributes.name, version: dep.attributes.version, url: dep.links.application
-          })
-        );
-
-        return {
-          appName: appName,
-          deploymentsInfo: deploymentNamesAndVersions as DeploymentPreviewInfo[]
-        } as ApplicationAttributesOverview;
-      }));
   }
 
   isApplicationDeployedInEnvironment(spaceId: string, environmentName: string, applicationId: string):

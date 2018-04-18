@@ -125,10 +125,10 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     if (summary && summary.mission && summary.runtime && summary.pipeline
       && summary.dependencyCheck && summary.gitHubDetails && summary.runtime.version) {
       payload =
-      'missionId=' + summary.mission.id +
-      '&runtimeId=' + summary.runtime.id +
+      'mission=' + summary.mission.id +
+      '&runtime=' + summary.runtime.id +
       '&runtimeVersion=' + summary.runtime.version.id +
-      '&pipelineId=' + summary.pipeline.id +
+      '&pipeline=' + summary.pipeline.id +
       '&projectName=' + summary.dependencyCheck.projectName +
       '&projectVersion=' + summary.dependencyCheck.projectVersion +
       '&groupId=' + summary.dependencyCheck.groupId +
@@ -137,7 +137,7 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
       '&artifactId=' + summary.dependencyCheck.projectName +
       '&spacePath=' + spaceName +
       '&gitRepository=' + summary.gitHubDetails.repository +
-      '&spaceId=' + spaceId;
+      '&space=' + spaceId;
       if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
         payload += '&gitOrganization=' + summary.gitHubDetails.organization;
       }
@@ -149,11 +149,11 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     let payload = '';
     if (summary && summary.dependencyCheck && summary.pipeline && summary.gitHubDetails) {
       payload =
-      '&pipelineId=' + summary.pipeline.id +
+      '&pipeline=' + summary.pipeline.id +
       '&projectName=' + summary.dependencyCheck.projectName +
       '&spacePath=' + spaceName +
       '&gitRepository=' + summary.gitHubDetails.repository +
-      '&spaceId=' + spaceId;
+      '&space=' + spaceId;
       if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
         payload += '&gitOrganization=' + summary.gitHubDetails.organization;
       }
