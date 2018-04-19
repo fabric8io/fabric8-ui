@@ -19,7 +19,10 @@ import {
 } from 'testing/test-context';
 
 import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
+import {
+  MemoryStat,
+  MemoryUnit
+} from '../models/memory-stat';
 import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetStat } from '../models/scaled-net-stat';
@@ -324,26 +327,59 @@ describe('DeploymentDetailsComponent', () => {
         {
           used: 1,
           quota: 100,
-          units: 'MB'
+          units: MemoryUnit.MB
         },
         {
           used: 2,
           quota: 200,
-          units: 'MB'
+          units: MemoryUnit.MB
         },
         {
           used: 150,
           quota: 200,
-          units: 'MB'
+          units: MemoryUnit.MB
         },
         {
           used: 75,
           quota: 100,
-          units: 'MB'
+          units: MemoryUnit.MB
         }
       ]);
       this.detectChanges();
       expect(this.testedDirective.memConfig.axis.y.max).toEqual(200);
+    });
+
+    it('should select and use the largest memory unit over the interval', function(this: Context) {
+      memStatObservable.next([
+        {
+          used: 1,
+          quota: 2,
+          units: MemoryUnit.GB
+        },
+        {
+          used: 768,
+          quota: 1024,
+          units: MemoryUnit.MB
+        },
+        {
+          used: 256,
+          quota: 512,
+          units: MemoryUnit.MB
+        },
+        {
+          used: 2048,
+          quota: 4 * Math.pow(1024, 2),
+          units: MemoryUnit.KB
+        }
+      ]);
+      this.detectChanges();
+      expect(this.testedDirective.memData.yData).toEqual([
+        'Memory',
+        1,
+        0.8,
+        0.3,
+        0
+      ]);
     });
   });
 

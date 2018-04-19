@@ -21,9 +21,13 @@ import {
 } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
+import {
+  MemoryStat,
+  MemoryUnit
+} from '../models/memory-stat';
 import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
+import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
 import {
   instanceOfScaledStat,
@@ -245,14 +249,16 @@ export class DeploymentDetailsComponent {
 
     this.subscriptions.push(
       this.memStat.subscribe((stats: MemoryStat[]) => {
-        const last: MemoryStat = stats[stats.length - 1];
+        const intervalUnit: MemoryUnit = this.getIntervalUnit(stats);
+        const scaledStats: ScaledMemoryStat[] = stats.map((stat: MemoryStat): ScaledMemoryStat => ScaledMemoryStat.from(stat, intervalUnit));
+        const last: ScaledMemoryStat = scaledStats[scaledStats.length - 1];
         this.memVal = last.used;
         this.memMax = last.quota;
         this.memData.total = last.quota;
-        this.memConfig.axis.y.max = this.getChartYAxisMax(stats);
+        this.memConfig.axis.y.max = this.getChartYAxisMax(scaledStats);
         this.memUnits = last.units;
         this.memData.xData = [this.memData.xData[0], ...stats.map((stat: MemoryStat) => stat.timestamp)];
-        this.memData.yData = [this.memData.yData[0], ...stats.map((stat: MemoryStat) => stat.used)];
+        this.memData.yData = [this.memData.yData[0], ...scaledStats.map((stat: ScaledMemoryStat) => stat.used)];
       })
     );
 
@@ -330,6 +336,14 @@ export class DeploymentDetailsComponent {
       received = stat.received.raw;
     }
     return { sent, received };
+  }
+
+  private getIntervalUnit(stats: MemoryStat[]): MemoryUnit {
+    const ordinal: number = stats
+      .map((stat: MemoryStat): MemoryUnit => stat.units)
+      .map((stat: MemoryUnit): number => Object.keys(MemoryUnit).indexOf(stat))
+      .reduce((acc: number, next: number): number => Math.max(acc, next));
+    return MemoryUnit[Object.keys(MemoryUnit)[ordinal]];
   }
 
 }

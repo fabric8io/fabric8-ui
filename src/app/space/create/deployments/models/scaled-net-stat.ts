@@ -6,8 +6,6 @@ import { round } from 'lodash';
 
 export class ScaledNetStat implements NetStat, ScaledStat {
 
-  private static readonly UNITS = ['bytes', 'KB', 'MB', 'GB'];
-
   public readonly raw: number;
   public readonly units: MemoryUnit;
 
@@ -17,11 +15,11 @@ export class ScaledNetStat implements NetStat, ScaledStat {
   ) {
     this.raw = used;
     let scale = 0;
-    while (this.used > 1024 && scale < ScaledNetStat.UNITS.length) {
+    while (this.used > 1024 && scale < Object.keys(MemoryUnit).length) {
       this.used /= 1024;
       scale++;
     }
     this.used = round(this.used, 1);
-    this.units = ScaledNetStat.UNITS[scale] as MemoryUnit;
+    this.units = MemoryUnit[Object.keys(MemoryUnit)[scale]];
   }
 }
