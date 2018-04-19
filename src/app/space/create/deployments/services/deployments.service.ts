@@ -31,7 +31,11 @@ import {
 } from 'lodash';
 
 import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
+import {
+  MemoryStat,
+  MemoryUnit,
+  ordinal
+} from '../models/memory-stat';
 import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
@@ -184,10 +188,17 @@ export class DeploymentsService implements OnDestroy {
     const quota = this.getPodsQuota(spaceId, environmentName, applicationId)
       .map((podsQuota: PodsQuota) => podsQuota.memory)
       .distinctUntilChanged();
-    return Observable.combineLatest(series, quota, (series: MemorySeries[], quota: number) =>
-      series.map((s: MemorySeries) => new ScaledMemoryStat(s.value, quota, s.time)
-      )
-    );
+    return Observable.combineLatest(series, quota, (memSeries: MemorySeries[], quota: number) => {
+      const rawStats: ScaledMemoryStat[] = memSeries
+        .map((s: MemorySeries) => new ScaledMemoryStat(s.value, quota, s.time));
+      const greatestOrdinal: number = rawStats
+        .map((stat: ScaledMemoryStat): MemoryUnit => stat.units)
+        .map((unit: MemoryUnit): number => ordinal(unit))
+        .reduce((acc: number, next: number): number => Math.max(acc, next));
+      const greatestUnit: MemoryUnit = MemoryUnit[Object.keys(MemoryUnit)[greatestOrdinal]];
+      return rawStats
+        .map((stat: ScaledMemoryStat): ScaledMemoryStat => ScaledMemoryStat.from(stat, greatestUnit));
+    });
   }
 
   getDeploymentNetworkStat(spaceId: string, environmentName: string, applicationId: string, maxSamples: number = this.timeseriesSamples): Observable<NetworkStat[]> {

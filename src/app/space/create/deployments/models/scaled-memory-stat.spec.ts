@@ -44,13 +44,12 @@ describe('ScaledMemoryStat', () => {
         units: MemoryUnit.MB
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.MB);
-      expect(converted).toEqual({
+      expect(converted).toEqual(jasmine.objectContaining({
         raw: 100,
         used: 100,
         quota: 200,
-        units: MemoryUnit.MB,
-        timestamp: undefined
-      });
+        units: MemoryUnit.MB
+      }));
     });
 
     it('should scale units down if target unit is larger than original', () => {
@@ -60,13 +59,12 @@ describe('ScaledMemoryStat', () => {
         units: MemoryUnit.MB
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.GB);
-      expect(converted).toEqual({
+      expect(converted).toEqual(jasmine.objectContaining({
         raw: 100,
         used: 0.1,
         quota: 0.2,
-        units: MemoryUnit.GB,
-        timestamp: undefined
-      });
+        units: MemoryUnit.GB
+      }));
     });
 
     it('should scale units down if target unit is much larger than original', () => {
@@ -76,13 +74,12 @@ describe('ScaledMemoryStat', () => {
         units: MemoryUnit.B
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.GB);
-      expect(converted).toEqual({
+      expect(converted).toEqual(jasmine.objectContaining({
         raw: 100,
         used: 0,
         quota: 0,
-        units: MemoryUnit.GB,
-        timestamp: undefined
-      });
+        units: MemoryUnit.GB
+      }));
     });
 
     it('should scale units up if target unit is smaller than original', () => {
@@ -92,13 +89,12 @@ describe('ScaledMemoryStat', () => {
         units: MemoryUnit.KB
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.B);
-      expect(converted).toEqual({
+      expect(converted).toEqual(jasmine.objectContaining({
         raw: 1,
         used: 1024,
         quota: 2048,
-        units: MemoryUnit.B,
-        timestamp: undefined
-      });
+        units: MemoryUnit.B
+      }));
     });
 
     it('should scale units up if target unit is much smaller than original', () => {
@@ -108,13 +104,12 @@ describe('ScaledMemoryStat', () => {
         units: MemoryUnit.GB
       };
       const converted: ScaledMemoryStat = ScaledMemoryStat.from(original, MemoryUnit.KB);
-      expect(converted).toEqual({
+      expect(converted).toEqual(jasmine.objectContaining({
         raw: 1,
         used: 1 * Math.pow(1024, 2),
         quota: 2 * Math.pow(1024, 2),
-        units: MemoryUnit.KB,
-        timestamp: undefined
-      });
+        units: MemoryUnit.KB
+      }));
     });
   });
 

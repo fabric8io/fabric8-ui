@@ -31,7 +31,10 @@ import { AuthenticationService } from 'ngx-login-client';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
+import {
+  MemoryStat,
+  MemoryUnit
+} from '../models/memory-stat';
 import { NetworkStat } from '../models/network-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
@@ -1382,6 +1385,125 @@ describe('DeploymentsService', () => {
             new ScaledMemoryStat(4, 3, 4),
             new ScaledMemoryStat(10, 3, 10)
           ]);
+          subscription.unsubscribe();
+          done();
+        });
+      serviceUpdater.next();
+      serviceUpdater.next();
+
+      it('should have queried the pods quota with the correct arguments', () => {
+        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
+      });
+    });
+
+    it('should scale results to the sample with greatest unit', (done: DoneFn) => {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 0, time: 0 },
+            { value: 0, time: 1 }
+          ],
+          net_rx: [
+            { value: 0, time: 0 },
+            { value: 0, time: 1 }
+          ],
+          net_tx: [
+            { value: 0, time: 0 },
+            { value: 0, time: 1 }
+          ],
+          memory: [
+            { time: 0, value: 800 * Math.pow(1024, 1) },
+            { time: 1, value: 100 * Math.pow(1024, 2) }
+          ],
+          start: 0,
+          end: 1
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 0, value: 0
+            },
+            net_tx: {
+              time: 0, value: 0
+            },
+            net_rx: {
+              time: 0, value: 0
+            },
+            memory: {
+              time: 2, value: 110 * Math.pow(1024, 2)
+            }
+          }
+        }
+      };
+      const deploymentResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env',
+                        pods_quota: {
+                          cpucores: 0,
+                          memory: 512 * Math.pow(1024, 2)
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
+        }
+
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
+        .subscribe((stats: MemoryStat[]) => {
+          expect(stats).toEqual([
+            jasmine.objectContaining({
+              used: 0.8,
+              quota: 512,
+              units: MemoryUnit.MB
+            }),
+            jasmine.objectContaining({
+              used: 100,
+              quota: 512,
+              units: MemoryUnit.MB
+            }),
+            jasmine.objectContaining({
+              used: 110,
+              quota: 512,
+              units: MemoryUnit.MB
+            })
+          ] as any[]);
           subscription.unsubscribe();
           done();
         });
