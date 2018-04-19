@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -30,7 +31,8 @@ export class CreateWorkItemOverlayComponent implements OnInit, AfterViewInit {
     private router: Router,
     private spaces: Spaces,
     private broadcaster: Broadcaster,
-    private workItemService: WorkItemService
+    private workItemService: WorkItemService,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -43,7 +45,7 @@ export class CreateWorkItemOverlayComponent implements OnInit, AfterViewInit {
   }
 
   onClose() {
-    this.router.navigateByUrl(removeAction(this.router.url));
+    this.location.back();
   }
 
   onSelect(workItemType: WorkItemType) {

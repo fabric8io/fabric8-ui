@@ -1,8 +1,9 @@
 import {
   Component,
+  DebugNode,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -61,6 +62,8 @@ describe('HeaderComponent', () => {
   mockBroadcaster.broadcast.and.stub();
 
   let testRouter: Router;
+  let fixture: ComponentFixture<HeaderComponent>;
+  let component: DebugNode['componentInstance'];
 
   initContext(HeaderComponent, HostComponent, {
     imports: [
@@ -94,6 +97,8 @@ describe('HeaderComponent', () => {
 
   beforeEach(() => {
     testRouter = TestBed.get(Router);
+    fixture = TestBed.createComponent(HeaderComponent);
+    component = fixture.debugElement.componentInstance;
   });
 
   it('should return default context when in _home state', function(this: TestingContext, done: DoneFn) {
@@ -137,4 +142,25 @@ describe('HeaderComponent', () => {
       });
     });
   });
+
+  describe('#formatUrl', () => {
+    it('should remove an action outlet from the end of the url', () => {
+      let url: string = 'create/(action:add-codebase)';
+      let result = component.formatUrl(url);
+      expect(result).toEqual('create');
+    });
+
+    it('should remove an action outlet that contains a nested route', () => {
+      let url: string = 'create/(pipelines//action:add-codebase)';
+      let result = component.formatUrl(url);
+      expect(result).toEqual('create/pipelines');
+    });
+
+    it('should remove a query from the url', () => {
+      let url: string = 'space/plan?q=(space:1234567890)&showTree=true';
+      let result = component.formatUrl(url);
+      expect(result).toEqual('space/plan');
+    });
+  });
+
 });
