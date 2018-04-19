@@ -2,10 +2,6 @@ import { Location } from '@angular/common';
 import { ErrorHandler, Inject, Injectable, OpaqueToken } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import {
-  flatten,
-  has,
-  includes,
-  isEmpty,
   isEqual as deepEqual,
   sortBy
 } from 'lodash';
