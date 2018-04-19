@@ -109,6 +109,47 @@ service, and call the `message()` method, passing in a [Notification](https://gi
 the result of `message()` to observe any [NotificationAction](https://github.com/fabric8-ui/ngx-base/blob/master/src/app/notifications/notification-action.ts)s that result
 from the notification.
 
+#### Working with multi-level depenendencies
+
+Let's consider a scenario wher you have an NPM module 'C' which sits inside another NPM module 'B' which is included in the parent module 'A'.
+During development, it is very common to use npm link to create a symlink and test the changes automatically.
+In this case, there is a high possbility for the parent module 'A' to be totally unaware of the existence of npm module 'C' as the symlinks don't get propagated all the way up.
+As a result, you might end up seeing the following error in the parent module 'A':
+
+```
+Module not found: Error: Can't resolve 'C' in ...
+```
+
+To address this, we can make the parent module 'A' be aware of the existence of 'C', by making changes in
+```
+tsconfig.json
+```
+of the parent module 'A'.
+
+Inside "compilerOptions", 
+Add an object key, "baseUrl" which basically identifies the base of the project and all the other urls are relative to this.
+Add an object key, "paths" as below
+
+```
+{
+  "compilerOptions": {
+    .
+    .
+    .
+    "baseUrl": ".",
+    "paths": {
+      .
+      .
+      .
+      "C": ["node_modules/B/node_modules/C"] //relative to the base url
+    }
+  }
+}
+```
+
+By doing this, parent module A now is aware of the existence of the grand child 'C'. This can be modified for n-level dependencies.
+If your project builds using AOT or in other words if your project uses tsconfig-aot.json or similar, same things can be handled over there as well.
+
 ## Continuous Delivery & Semantic Releases
 
 In ngx-fabric8-wit we use the
