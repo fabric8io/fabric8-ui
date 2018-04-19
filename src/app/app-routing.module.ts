@@ -26,9 +26,13 @@ export const routes: Routes = [
   // Home
   {
     path: '_home',
+    resolve: {
+      featureFlagConfig: FeatureFlagResolver
+    },
     loadChildren: './home/home.module#HomeModule',
     data: {
-      title: 'Home'
+      title: 'Analyze',
+      featureName: 'Analyze'
     }
   },
 
