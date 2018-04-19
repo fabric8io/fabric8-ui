@@ -23,7 +23,7 @@
               <a [href]="envInfo.url" title="View the app in this environment" target="app" class="app-version-link" *ngIf="envInfo.url">
                 {{envInfo.name}} - {{envInfo.version}}
               </a>
-              <span *ngIf="!envInfo.url">
+              <span title="This deployment has no running pods" *ngIf="!envInfo.url">
                 {{envInfo.name}} - {{envInfo.version}}
               </span>
             </span>
