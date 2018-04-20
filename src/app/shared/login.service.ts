@@ -78,9 +78,12 @@ export class LoginService {
       let item: any = part.split('=');
       result[item[0]] = decodeURIComponent(item[1]);
     });
+
     if (result['error']) {
       this.notifications.message({ message: result['error'], type: NotificationType.DANGER } as Notification);
-    } else if (result['token_json']) {
+    }
+
+    if (result['token_json']) {
       // Handle the case that this is a login
       this.authService.logIn(result['token_json']);
       this.authService
