@@ -31,10 +31,8 @@ import { AuthenticationService } from 'ngx-login-client';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { CpuStat } from '../models/cpu-stat';
-import {
-  MemoryStat,
-  MemoryUnit
-} from '../models/memory-stat';
+import { MemoryStat } from '../models/memory-stat';
+import { MemoryUnit } from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
@@ -2046,7 +2044,7 @@ describe('DeploymentsService', () => {
       doMockHttpTest({
         url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
         response: httpResponse,
-        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB),
+        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB) as MemoryStat,
         observable: svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'),
         done: done
       });
@@ -2071,7 +2069,7 @@ describe('DeploymentsService', () => {
       doMockHttpTest({
         url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
         response: httpResponse,
-        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB),
+        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB) as MemoryStat,
         observable: svc.getEnvironmentMemoryStat('foo-spaceId+', 'stage'),
         done: done
       });

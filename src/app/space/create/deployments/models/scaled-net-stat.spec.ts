@@ -1,4 +1,4 @@
-import { MemoryUnit } from './memory-stat';
+import { MemoryUnit } from './memory-unit';
 import { NetStat } from './network-stat';
 import { ScaledNetStat } from './scaled-net-stat';
 

@@ -1,4 +1,4 @@
-import { MemoryUnit } from './memory-stat';
+import { MemoryUnit } from './memory-unit';
 
 export interface NetworkStat {
   readonly sent: NetStat;

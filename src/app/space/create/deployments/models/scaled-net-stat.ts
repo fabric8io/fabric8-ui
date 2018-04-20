@@ -1,7 +1,7 @@
 import {
   MemoryUnit,
   ordinal
-} from './memory-stat';
+} from './memory-unit';
 import { NetStat } from './network-stat';
 import { ScaledStat } from './scaled-stat';
 

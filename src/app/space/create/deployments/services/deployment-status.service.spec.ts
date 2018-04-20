@@ -7,10 +7,8 @@ import {
 import { createMock } from 'testing/mock';
 
 import { CpuStat } from '../models/cpu-stat';
-import {
-  MemoryStat,
-  MemoryUnit
-} from '../models/memory-stat';
+import { MemoryStat } from '../models/memory-stat';
+import { MemoryUnit } from '../models/memory-unit';
 import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
 import {

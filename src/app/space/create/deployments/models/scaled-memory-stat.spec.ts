@@ -1,7 +1,5 @@
-import {
-  MemoryStat,
-  MemoryUnit
-} from './memory-stat';
+import { MemoryStat } from './memory-stat';
+import { MemoryUnit } from './memory-unit';
 import { ScaledMemoryStat } from './scaled-memory-stat';
 
 describe('ScaledMemoryStat', () => {

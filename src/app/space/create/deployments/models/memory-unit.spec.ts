@@ -1,9 +1,9 @@
 import {
   MemoryUnit,
   ordinal
-} from './memory-stat';
+} from './memory-unit';
 
-describe('MemoryStat', () => {
+describe('MemoryUnit', () => {
   describe('ordinal', () => {
     it('should be 0 for B', () => {
       expect(ordinal(MemoryUnit.B)).toBe(0);

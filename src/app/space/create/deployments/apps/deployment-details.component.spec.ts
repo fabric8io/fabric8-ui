@@ -19,10 +19,8 @@ import {
 } from 'testing/test-context';
 
 import { CpuStat } from '../models/cpu-stat';
-import {
-  MemoryStat,
-  MemoryUnit
-} from '../models/memory-stat';
+import { MemoryStat } from '../models/memory-stat';
+import { MemoryUnit } from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
 import { ScaledNetStat } from '../models/scaled-net-stat';

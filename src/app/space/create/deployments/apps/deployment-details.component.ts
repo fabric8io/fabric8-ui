@@ -21,12 +21,12 @@ import {
 } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
+import { MemoryStat } from '../models/memory-stat';
 import {
   fromOrdinal,
-  MemoryStat,
   MemoryUnit,
   ordinal
-} from '../models/memory-stat';
+} from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';

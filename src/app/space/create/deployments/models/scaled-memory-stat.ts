@@ -1,8 +1,8 @@
+import { MemoryStat } from './memory-stat';
 import {
-  MemoryStat,
   MemoryUnit,
   ordinal
-} from './memory-stat';
+} from './memory-unit';
 import { ScaledStat } from './scaled-stat';
 
 import { round } from 'lodash';
