@@ -7,9 +7,9 @@ import { Broadcaster, Notifications } from 'ngx-base';
 import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 
+import { WindowService } from 'app/shared/window.service';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
-import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
 import { CodebasesItemActionsComponent } from './codebases-item-actions.component';
 
