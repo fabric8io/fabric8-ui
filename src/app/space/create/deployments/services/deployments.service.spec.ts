@@ -1726,6 +1726,118 @@ describe('DeploymentsService', () => {
         expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
       });
     });
+
+    it('should scale results to the sample with greatest unit', (done: DoneFn) => {
+      const initialTimeseriesResponse = {
+        data: {
+          cores: [
+            { value: 0, time: 0 },
+            { value: 0, time: 1 }
+          ],
+          net_rx: [
+            { value: 800 * Math.pow(1024, 1), time: 0 },
+            { value: 1.2 * Math.pow(1024, 2), time: 1 }
+          ],
+          net_tx: [
+            { value: 500 * Math.pow(1024, 2), time: 0 },
+            { value: 1.2 * Math.pow(1024, 3), time: 1 }
+          ],
+          memory: [
+            { value: 0, time: 0 },
+            { value: 0, time: 1 }
+          ],
+          start: 0,
+          end: 1
+        }
+      };
+      const streamingTimeseriesResponse = {
+        data: {
+          attributes: {
+            cores: {
+              time: 0, value: 0
+            },
+            net_tx: {
+              time: 2, value: 1 * Math.pow(1024, 3)
+            },
+            net_rx: {
+              time: 2, value: 750 * Math.pow(1024, 2)
+            },
+            memory: {
+              time: 0, value: 0
+            }
+          }
+        }
+      };
+      const deploymentResponse = {
+        data: {
+          attributes: {
+            applications: [
+              {
+                attributes: {
+                  name: 'foo-app',
+                  deployments: [
+                    {
+                      attributes: {
+                        name: 'foo-env',
+                        pods_quota: {
+                          cpucores: 0,
+                          memory: 0
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      };
+
+      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
+        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
+        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
+        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
+        const requestUrl: string = connection.request.url;
+        let responseBody: any;
+        if (initialTimeseriesRegex.test(requestUrl)) {
+          responseBody = initialTimeseriesResponse;
+        } else if (streamingTimeseriesRegex.test(requestUrl)) {
+          responseBody = streamingTimeseriesResponse;
+        } else if (deploymentRegex.test(requestUrl)) {
+          responseBody = deploymentResponse;
+        }
+
+        connection.mockRespond(new Response(
+          new ResponseOptions({
+            body: JSON.stringify(responseBody),
+            status: 200
+          })
+        ));
+      });
+
+      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
+        .subscribe((stats: NetworkStat[]) => {
+          expect(stats).toEqual([
+            {
+              sent: jasmine.objectContaining({ used: 0.5, units: MemoryUnit.GB }),
+              received: jasmine.objectContaining({ used: 0, units: MemoryUnit.GB })
+            },
+            {
+              sent: jasmine.objectContaining({ used: 1.2, units: MemoryUnit.GB }),
+              received: jasmine.objectContaining({ used: 0, units: MemoryUnit.GB })
+            },
+            {
+              sent: jasmine.objectContaining({ used: 1, units: MemoryUnit.GB }),
+              received: jasmine.objectContaining({ used: 0.7, units: MemoryUnit.GB })
+            }
+          ] as any[]);
+          subscription.unsubscribe();
+          done();
+        });
+      serviceUpdater.next();
+      serviceUpdater.next();
+    });
   });
 
   describe('#getTimeseriesData', () => {

@@ -210,7 +210,20 @@ export class DeploymentsService implements OnDestroy {
           sent: new ScaledNetStat(s.net_tx.value, s.net_tx.time),
           received: new ScaledNetStat(s.net_rx.value, s.net_rx.time)
         }))
-      );
+      )
+      .map((stats: NetworkStat[]): NetworkStat[] => {
+        const greatestOrdinal: number = stats
+          .map((stat: NetworkStat): [MemoryUnit, MemoryUnit] => [stat.sent.units, stat.received.units])
+          .map((units: [MemoryUnit, MemoryUnit]): number => Math.max(ordinal(units[0]), ordinal(units[1])))
+          .reduce((acc: number, next: number): number => Math.max(acc, next));
+        const greatestUnit: MemoryUnit = MemoryUnit[Object.keys(MemoryUnit)[greatestOrdinal]];
+
+        return stats
+          .map((stat: NetworkStat): NetworkStat => ({
+            sent: ScaledNetStat.from(stat.sent, greatestUnit),
+            received: ScaledNetStat.from(stat.received, greatestUnit)
+          }));
+      });
   }
 
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {

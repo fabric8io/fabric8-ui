@@ -389,8 +389,9 @@ describe('DeploymentDetailsComponent', () => {
       expect(detailsComponent.netVal).toEqual(58);
       expect(detailsComponent.netData.xData).toEqual(['time', 1, 2]);
       expect(detailsComponent.netData.yData.length).toEqual(2);
-      expect(detailsComponent.netData.yData[0][2]).toEqual(12636.2);
-      expect(detailsComponent.netData.yData[1][2]).toEqual(46766.1);
+      expect(detailsComponent.netData.yData[0][2]).toEqual(12.3);
+      expect(detailsComponent.netData.yData[1][2]).toEqual(45.7);
+      expect(detailsComponent.netUnits).toEqual(MemoryUnit.KB);
     });
   });
 

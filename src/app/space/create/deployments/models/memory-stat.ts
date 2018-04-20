@@ -13,6 +13,10 @@ export function ordinal(unit: MemoryUnit): number {
     .indexOf(unit);
 }
 
+export function fromOrdinal(ordinal: number): MemoryUnit {
+  return MemoryUnit[Object.keys(MemoryUnit)[ordinal]];
+}
+
 export interface MemoryStat extends Stat {
   readonly units: MemoryUnit;
 }

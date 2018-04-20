@@ -20,13 +20,13 @@ export class ScaledMemoryStat implements MemoryStat, ScaledStat {
     this._raw = this._used;
     let scale = 0;
     if (this._used !== 0) {
-      while (this._used > 1024 && scale < Object.keys(MemoryUnit).length) {
+      while (this._used >= 1024 && scale < Object.keys(MemoryUnit).length) {
         this._used /= 1024;
         this._quota /= 1024;
         scale++;
       }
     } else {
-      while (this._quota > 1024 && scale < Object.keys(MemoryUnit).length) {
+      while (this._quota >= 1024 && scale < Object.keys(MemoryUnit).length) {
         this._quota /= 1024;
         scale++;
       }
