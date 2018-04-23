@@ -117,20 +117,24 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.runtimePipelinesService.current.combineLatest(
-        this.pipelinesService.getOpenshiftConsoleUrl().do((url: string) => {
-          if (url) {
-            this.consoleAvailable = true;
-          } else {
-            this.consoleAvailable = false;
-          }
-          this.openshiftConsoleUrl = url;
-        }),
+        this.pipelinesService.getOpenshiftConsoleUrl(),
         this.setupBuildConfigLinks)
         .subscribe((buildConfigs: BuildConfig[]) => {
           this._allPipelines = buildConfigs;
           this.applyFilters();
           this.applySort();
         })
+    );
+
+    this.subscriptions.push(
+      this.pipelinesService.getOpenshiftConsoleUrl().subscribe((url: string) => {
+        if (url) {
+          this.consoleAvailable = true;
+        } else {
+          this.consoleAvailable = false;
+        }
+        this.openshiftConsoleUrl = url;
+      })
     );
   }
 
