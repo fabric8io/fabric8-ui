@@ -125,7 +125,7 @@ export class OAuthConfigStore {
         this.notifications.message({
           type: NotificationType.DANGER,
           header: 'Error: Configuration setup',
-          message: 'Could not find OAuth configuration at' + configUri
+          message: 'Could not find OAuth configuration at ' + configUri
         } as Notification);
         _currentOAuthConfig.next(_latestOAuthConfig);
         _loadingOAuthConfig.next(false);

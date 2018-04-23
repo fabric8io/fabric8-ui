@@ -135,17 +135,15 @@ describe('OauthConfigStore', () => {
       });
     });
 
-    it('should eventually set openshift console on init', (done: DoneFn) => {
+    it('should set openshift console on init', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
 
       oauthStore.loading.subscribe((val: boolean) => {
         if (!val) {
           oauthStore.resource.subscribe((config: OAuthConfig) => {
             expect(config.loaded).toBeTruthy();
-            if (config.openshiftConsoleUrl) {
-              expect(config.openshiftConsoleUrl).toEqual('http://console.example.com/cluster/console');
-              done();
-            }
+            expect(config.openshiftConsoleUrl).toEqual('http://console.example.com/cluster/console');
+            done();
           });
         }
       });
@@ -206,12 +204,11 @@ describe('OauthConfigStore', () => {
     it('should notify on user service error', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
       oauthStore.loading.subscribe((val: boolean) => {
-        if (!val) {
-          expect(mockLogger.error).toHaveBeenCalled();
-          expect(mockErrorHandler.handleError).toHaveBeenCalled();
-          expect(mockNotificationsService.message).toHaveBeenCalled();
-          done();
-        }
+        expect(val).toBeFalsy();
+        expect(mockLogger.error).toHaveBeenCalled();
+        expect(mockErrorHandler.handleError).toHaveBeenCalled();
+        expect(mockNotificationsService.message).toHaveBeenCalled();
+        done();
       });
     });
   });
