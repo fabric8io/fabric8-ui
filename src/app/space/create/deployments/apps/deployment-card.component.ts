@@ -86,6 +86,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
           this.active = active;
 
           if (active) {
+            this.deleting = false;
+
             this.version =
               this.deploymentsService.getVersion(this.spaceId, this.environment, this.applicationId);
 

@@ -243,6 +243,7 @@ describe('DeploymentCardComponent', () => {
     mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
     mockSvc.getDeploymentCpuStat.and.returnValue(mockCpuData);
     mockSvc.getDeploymentMemoryStat.and.returnValue(mockMemoryData);
+    mockSvc.deleteDeployment.and.returnValue(Observable.of(true));
     mockStatusSvc = createMock(DeploymentStatusService);
     mockStatusSvc.getAggregateStatus.and.returnValue(mockStatus);
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
@@ -282,6 +283,26 @@ describe('DeploymentCardComponent', () => {
   it('should be active', function(this: Context) {
     let detailsComponent = this.testedDirective;
     expect(detailsComponent.active).toBeTruthy();
+  });
+
+  it('should clear "deleting" flag if card becomes re-activated', function(this: Context) {
+    expect(this.testedDirective.active).toBeTruthy();
+    expect(this.testedDirective.deleting).toBeFalsy();
+
+    this.testedDirective.delete();
+
+    expect(this.testedDirective.active).toBeTruthy();
+    expect(this.testedDirective.deleting).toBeTruthy();
+
+    active.next(false);
+
+    expect(this.testedDirective.active).toBeFalsy();
+    expect(this.testedDirective.deleting).toBeTruthy();
+
+    active.next(true);
+
+    expect(this.testedDirective.active).toBeTruthy();
+    expect(this.testedDirective.deleting).toBeFalsy();
   });
 
   it('should set versionLabel from mockSvc.getVersion result', function(this: Context) {
