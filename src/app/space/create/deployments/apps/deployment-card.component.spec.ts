@@ -228,8 +228,9 @@ describe('DeploymentCardComponent async tests', () => {
 });
 
 describe('DeploymentCardComponent', () => {
-  type Context =  TestContext<DeploymentCardComponent, HostComponent>;
+  type Context = TestContext<DeploymentCardComponent, HostComponent>;
   let active: Subject<boolean>;
+  let deleting: Subject<string> = new Subject<string>();
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
   let mockStatus: Subject<Status> = new BehaviorSubject({ type: StatusType.WARN, message: 'warning message' });
@@ -243,7 +244,7 @@ describe('DeploymentCardComponent', () => {
     mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
     mockSvc.getDeploymentCpuStat.and.returnValue(mockCpuData);
     mockSvc.getDeploymentMemoryStat.and.returnValue(mockMemoryData);
-    mockSvc.deleteDeployment.and.returnValue(Observable.of(true));
+    mockSvc.deleteDeployment.and.returnValue(deleting);
     mockStatusSvc = createMock(DeploymentStatusService);
     mockStatusSvc.getAggregateStatus.and.returnValue(mockStatus);
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
@@ -285,24 +286,32 @@ describe('DeploymentCardComponent', () => {
     expect(detailsComponent.active).toBeTruthy();
   });
 
-  it('should clear "deleting" flag if card becomes re-activated', function(this: Context) {
-    expect(this.testedDirective.active).toBeTruthy();
-    expect(this.testedDirective.deleting).toBeFalsy();
+  describe('#delete', () => {
+    it('should clear "deleting" flag when request completes successfully', function(this: Context) {
+      expect(this.testedDirective.active).toBeTruthy();
+      expect(this.testedDirective.deleting).toBeFalsy();
 
-    this.testedDirective.delete();
+      this.testedDirective.delete();
+      expect(this.testedDirective.active).toBeTruthy();
+      expect(this.testedDirective.deleting).toBeTruthy();
 
-    expect(this.testedDirective.active).toBeTruthy();
-    expect(this.testedDirective.deleting).toBeTruthy();
+      deleting.next('delete success');
+      expect(this.testedDirective.active).toBeFalsy();
+      expect(this.testedDirective.deleting).toBeFalsy();
+    });
 
-    active.next(false);
+    it('should clear "deleting" flag when request completes with error', function(this: Context) {
+      expect(this.testedDirective.active).toBeTruthy();
+      expect(this.testedDirective.deleting).toBeFalsy();
 
-    expect(this.testedDirective.active).toBeFalsy();
-    expect(this.testedDirective.deleting).toBeTruthy();
+      this.testedDirective.delete();
+      expect(this.testedDirective.active).toBeTruthy();
+      expect(this.testedDirective.deleting).toBeTruthy();
 
-    active.next(true);
-
-    expect(this.testedDirective.active).toBeTruthy();
-    expect(this.testedDirective.deleting).toBeFalsy();
+      deleting.error('delete failure');
+      expect(this.testedDirective.active).toBeTruthy();
+      expect(this.testedDirective.deleting).toBeFalsy();
+    });
   });
 
   it('should set versionLabel from mockSvc.getVersion result', function(this: Context) {
