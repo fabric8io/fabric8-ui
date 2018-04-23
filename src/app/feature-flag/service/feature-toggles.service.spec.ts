@@ -157,31 +157,7 @@ describe('FeatureToggles service: it', () => {
     });
   });
 
-  it('should retrieve from cache if list of features has not changed server side (order does not matter)', () => {
-    // given
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockRespond(new Response(
-        new ResponseOptions({
-          body: JSON.stringify(expectedResponse1_2),
-          status: 200
-        })
-      ));
-    });
-    // when
-    togglesService._featureFlagCache.set('Deployments', features1_2);
-    togglesService.getFeaturesPerPage('Deployments').subscribe((features: any) => {
-      // then
-      expect(togglesService._featureFlagCache.get('Deployments')).toEqual(features1_2);
-    });
-    // when
-    togglesService._featureFlagCache.set('Deployments', features2_1);
-    togglesService.getFeaturesPerPage('Deployments').subscribe((features: any) => {
-      // then
-      expect(togglesService._featureFlagCache.get('Deployments')).toEqual(features2_1);
-    });
-  });
-
-  it('should update cache if list of features has changed server side', () => {
+  it('should update cache', () => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -212,7 +188,7 @@ describe('FeatureToggles service: it', () => {
     });
   });
 
-  it('should tell whether the feature is enabled without cached value', () => {
+  it('should tell whether the feature is enabled', () => {
     // given
     const expectedResponse = {
       data: {

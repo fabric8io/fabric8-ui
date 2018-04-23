@@ -103,14 +103,7 @@ export class FeatureTogglesService {
       })
       // Update features cache if required
       .map(features => {
-        const cachedFeatures = this._featureFlagCache.get(group);
-        // compare with cached values, not taking order into account
-        const sortedFeatures = sortBy(features, ['id']);
-        const sortedCachedFeatures = sortBy(cachedFeatures, ['id']);
-        if (!deepEqual(sortedFeatures, sortedCachedFeatures)) {
-          // cache need to be updated
-          this._featureFlagCache.set(group, features);
-        }
+        this._featureFlagCache.set(group, features);
         return features;
       })
       .catch((error) => {
