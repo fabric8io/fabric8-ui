@@ -43,10 +43,11 @@ export class PipelineStage {
             this.environmentName = name;
             let urlMap = se.serviceUrls;
             this.serviceUrlMap = urlMap;
-
-            let buildConfigName = build.buildConfigName;
-            if (buildConfigName) {
-              this.serviceUrl = urlMap[buildConfigName] || '';
+            let serviceUrlKeys: string[] = Object.keys(urlMap);
+            if (serviceUrlKeys && serviceUrlKeys[0]) {
+              this.serviceUrl = urlMap[serviceUrlKeys[0]];
+            } else {
+              this.serviceUrl = '';
             }
           }
         }
