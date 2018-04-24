@@ -1,13 +1,5 @@
 @import (reference) '../../../../assets/stylesheets/shared/osio.less';
 
-#feature-opt-in-special-icon,.feature-title,.feature-description {
-  font-family: 'Open Sans';
-}
-
-#feature-opt-in-special-icon {
-  line-height: 1.2;
-}
-
 .feature-title {
   font-weight: bold;
   font-size: @font-size-base;
@@ -19,8 +11,15 @@
   font-size: .85em;
 }
 
-.feature-opt-in-label {
-  display: block;
-  margin-bottom: 0;
-  font-weight: normal;
+.checkbox {
+  border-right: 1px solid @color-pf-black-300;
+  float: left;
+  margin-bottom: 20px;
+  margin-right: 15px;
+  margin-top: 20px;
+  padding: 3px 10px 3px 0;
+}
+
+.list-pf-container {
+  padding: 5px 5px 0 30px;
 }

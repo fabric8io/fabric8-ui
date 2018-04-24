@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { NgModel } from '@angular/forms';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
-import { Context } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
+import { UserService } from 'ngx-login-client';
+import { ListConfig } from 'patternfly-ng';
 import { Subscription } from 'rxjs';
+import { Feature } from '../../../feature-flag/service/feature-toggles.service';
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
-
-import { ProviderService } from '../../../shared/account/provider.service';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 @Component({
@@ -19,20 +17,58 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
 
   public featureLevel: string;
   private subscriptions: Subscription[] = [];
+  private features: Feature[];
+  listConfig: ListConfig;
+  private items = [
+    {
+      name: 'released',
+      icon: 'fa-globe',
+      title: 'Production Only Features',
+      description: 'This is the default and current release version of the product.',
+      features: this.features
+    },
+    {
+      name: 'beta',
+      icon: 'fa-flask',
+      title: 'Beta Features',
+      description: 'Experience various features that are ready for beta testing',
+      features: this.features
+    },
+    {
+      name: 'experimental',
+      icon: 'fa-flask',
+      title: 'Experimental Features',
+      description: 'These features are still considered experimental and have no guarantee of stability.',
+      features: this.features
+    },
+    {
+      name: 'internal',
+      icon: 'fa-lock',
+      title: 'Internal Experimental Features',
+      description: 'These experimental features are released to internal employees only.',
+      features: this.features
+    }
+  ];
+
 
   constructor(
     private gettingStartedService: GettingStartedService,
     private notifications: Notifications,
     private userService: UserService
-  ) {}
+  ) {
+    this.features = [{id: 'feat1'}] as Feature[];
+    this.listConfig = {
+      dblClick: false,
+      multiSelect: false,
+      selectItems: false,
+      selectionMatchProp: 'name',
+      showCheckbox: false,
+      useExpandItems: false
+    } as ListConfig;
+  }
 
   updateProfile(): void {
     let profile = this.getTransientProfile();
-    if (!profile.contextInformation) {
-      profile.contextInformation = {};
-    }
-    profile.featureLevel = this.featureLevel;
-
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.userService.currentLoggedInUser = user;
       this.notifications.message({
@@ -46,6 +82,12 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
 
   private getTransientProfile(): ExtProfile {
     let profile = this.gettingStartedService.createTransientProfile();
+    if (!profile.contextInformation) {
+      profile.contextInformation = {};
+    }
+    if (this.featureLevel) {
+      profile.featureLevel = this.featureLevel;
+    }
     // Delete extra information that make the update fail if present
     delete profile.username;
     if (profile) {
@@ -53,27 +95,6 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
     }
 
     return profile;
-  }
-
-  private setFeatureLevel(level) {
-    switch (level) {
-      case 'beta': {
-        this.featureLevel = 'beta';
-        break;
-      }
-      case 'experimental': {
-        this.featureLevel = 'experimental';
-        break;
-      }
-      case 'internal': {
-        this.featureLevel = 'internal';
-        break;
-      }
-      default: {
-        this.featureLevel = 'released';
-        break;
-      }
-    }
   }
 
   private handleError(error: string, type: NotificationType) {
@@ -84,7 +105,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.featureLevel = this.gettingStartedService.createTransientProfile().featureLevel;
+    this.featureLevel =  (this.userService.currentLoggedInUser.attributes as ExtProfile).featureLevel;
   }
 
   ngOnDestroy(): void {
