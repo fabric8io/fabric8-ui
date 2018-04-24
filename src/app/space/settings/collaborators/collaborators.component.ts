@@ -18,23 +18,25 @@ import { AddCollaboratorsDialogComponent } from './add-collaborators-dialog/add-
   styleUrls: ['./collaborators.component.less']
 })
 export class CollaboratorsComponent implements OnInit, OnDestroy {
-  private context: Context;
-  private collaborators: User[];
+
   private emptyStateConfig: EmptyStateConfig;
   private listConfig: ListConfig;
-  private contextSubscription: Subscription;
-  private collaboratorSubscription: Subscription;
+  private subscriptions: Subscription[] = [];
   private userToRemove: User;
+
   @ViewChild('addCollabDialog') addCollabDialog: AddCollaboratorsDialogComponent;
   @ViewChild('modalAdd') modalAdd: ModalDirective;
   @ViewChild('modalDelete') modalDelete: ModalDirective;
 
+  context: Context;
+  collaborators: User[];
+
   constructor(
     private contexts: ContextService,
     private collaboratorService: CollaboratorService) {
-    this.contextSubscription = this.contexts.current.subscribe(val => {
+    this.subscriptions.push(this.contexts.current.subscribe(val => {
       this.context = val;
-    });
+    }));
   }
 
   ngOnInit() {
@@ -54,25 +56,28 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
     let pageSize = event.pageSize;
     console.log('event size from page', pageSize);
     pageSize = 20;
-    this.collaboratorSubscription = this.collaboratorService.getInitialBySpaceId(this.context.space.id, pageSize).subscribe(collaborators => {
+    this.subscriptions.push(this.collaboratorService.getInitialBySpaceId(this.context.space.id, pageSize).subscribe(collaborators => {
       this.collaborators = collaborators;
-    });
+      this.sortCollaborators();
+    }));
   }
 
   fetchMoreCollaborators($event): void {
-    this.collaboratorService.getNextCollaborators()
-      .subscribe(collaborators => {
-        if (collaborators) {
-          this.collaborators = this.collaborators.concat(collaborators);
-        }
-        }, err => {
-        console.log(err);
-      });
+    this.subscriptions.push(
+      this.collaboratorService.getNextCollaborators()
+        .subscribe(collaborators => {
+          if (collaborators) {
+            this.collaborators = this.collaborators.concat(collaborators);
+            this.sortCollaborators();
+          }
+          }, err => {
+          console.log(err);
+        })
+    );
   }
 
   ngOnDestroy() {
-    this.contextSubscription.unsubscribe();
-    this.collaboratorSubscription.unsubscribe();
+    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
 
   launchAddCollaborators() {
@@ -101,9 +106,14 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
         this.collaborators.push(user);
       }
     });
+    this.sortCollaborators();
   }
 
   onShowHandler() {
     this.addCollabDialog.onOpen();
+  }
+
+  private sortCollaborators(): void {
+    this.collaborators.sort((a: User, b: User): number => a.attributes.username.localeCompare(b.attributes.username));
   }
 }
