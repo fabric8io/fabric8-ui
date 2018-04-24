@@ -18,7 +18,7 @@ export class FeatureWarningPageComponent implements OnInit, OnDestroy {
 
   enableFeatures: boolean;
   @Input() level: string;
-  profileLink: string;
+  profileSettingsLink: string;
   private userSubscription: Subscription;
 
   constructor(private userService: UserService,
@@ -26,11 +26,11 @@ export class FeatureWarningPageComponent implements OnInit, OnDestroy {
     if (authService.isLoggedIn()) {
       this.userSubscription = userService.loggedInUser.subscribe(val => {
         if (val.id) {
-          this.profileLink = '/' + val.attributes.username + '/_update';
+          this.profileSettingsLink = '/' + val.attributes.username + '/_settings/feature-opt-in';
         }
       });
     } else {
-      this.profileLink = '/_home';
+      this.profileSettingsLink = '/_home';
     }
   }
 

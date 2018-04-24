@@ -36,8 +36,17 @@
                 <span class="fa fa-ellipsis-v"></span>
               </button>
               <ul class="dropdown-menu-right dropdown-menu" aria-labelledby="dropdownKebab" *dropdownMenu>
-                <li role="menuitem"><a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a></li>
-                <li role="menuitem"><a href="javascript:void(0)" class="secondary-action" (click)="confirmUserRemove(item)">Remove from space</a></li>
+                <li role="menuitem">
+                  <a [routerLink]="['/', item.attributes.username]" class="secondary-action">View user</a>
+                </li>
+                <li *ngIf="item.id !== context.space.relationships['owned-by'].data.id; else cannotRemove" role="menuitem">
+                  <a class="secondary-action menu-item" (click)="confirmUserRemove(item)">Remove from space</a>
+                </li>
+                <ng-template #cannotRemove>
+                  <li class="disabled" title="Cannot remove owner of space">
+                    <a class="secondary-action">Remove from space</a>
+                  </li>
+                </ng-template>
               </ul>
             </span>
           </ng-template>
