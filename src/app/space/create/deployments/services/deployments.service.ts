@@ -32,6 +32,10 @@ import {
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import {
+  MemoryUnit,
+  ordinal
+} from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
@@ -184,10 +188,17 @@ export class DeploymentsService implements OnDestroy {
     const quota = this.getPodsQuota(spaceId, environmentName, applicationId)
       .map((podsQuota: PodsQuota) => podsQuota.memory)
       .distinctUntilChanged();
-    return Observable.combineLatest(series, quota, (series: MemorySeries[], quota: number) =>
-      series.map((s: MemorySeries) => new ScaledMemoryStat(s.value, quota, s.time)
-      )
-    );
+    return Observable.combineLatest(series, quota, (memSeries: MemorySeries[], quota: number) => {
+      const rawStats: ScaledMemoryStat[] = memSeries
+        .map((s: MemorySeries) => new ScaledMemoryStat(s.value, quota, s.time));
+      const greatestOrdinal: number = rawStats
+        .map((stat: ScaledMemoryStat): MemoryUnit => stat.units)
+        .map((unit: MemoryUnit): number => ordinal(unit))
+        .reduce((acc: number, next: number): number => Math.max(acc, next));
+      const greatestUnit: MemoryUnit = MemoryUnit[Object.keys(MemoryUnit)[greatestOrdinal]];
+      return rawStats
+        .map((stat: ScaledMemoryStat): ScaledMemoryStat => ScaledMemoryStat.from(stat, greatestUnit));
+    });
   }
 
   getDeploymentNetworkStat(spaceId: string, environmentName: string, applicationId: string, maxSamples: number = this.timeseriesSamples): Observable<NetworkStat[]> {
@@ -199,7 +210,20 @@ export class DeploymentsService implements OnDestroy {
           sent: new ScaledNetStat(s.net_tx.value, s.net_tx.time),
           received: new ScaledNetStat(s.net_rx.value, s.net_rx.time)
         }))
-      );
+      )
+      .map((stats: NetworkStat[]): NetworkStat[] => {
+        const greatestOrdinal: number = stats
+          .map((stat: NetworkStat): [MemoryUnit, MemoryUnit] => [stat.sent.units, stat.received.units])
+          .map((units: [MemoryUnit, MemoryUnit]): number => Math.max(ordinal(units[0]), ordinal(units[1])))
+          .reduce((acc: number, next: number): number => Math.max(acc, next));
+        const greatestUnit: MemoryUnit = MemoryUnit[Object.keys(MemoryUnit)[greatestOrdinal]];
+
+        return stats
+          .map((stat: NetworkStat): NetworkStat => ({
+            sent: ScaledNetStat.from(stat.sent, greatestUnit),
+            received: ScaledNetStat.from(stat.received, greatestUnit)
+          }));
+      });
   }
 
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {

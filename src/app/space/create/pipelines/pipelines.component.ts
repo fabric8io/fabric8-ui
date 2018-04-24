@@ -116,21 +116,41 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       }));
 
     this.subscriptions.push(
-      this.runtimePipelinesService.current.subscribe((buildConfigs: BuildConfig[]) => {
-        this._allPipelines = buildConfigs;
-        this.applyFilters();
-        this.applySort();
-      }));
+      this.runtimePipelinesService.current.combineLatest(
+        this.pipelinesService.getOpenshiftConsoleUrl(),
+        this.setupBuildConfigLinks)
+        .subscribe((buildConfigs: BuildConfig[]) => {
+          this._allPipelines = buildConfigs;
+          this.applyFilters();
+          this.applySort();
+        })
+    );
 
     this.subscriptions.push(
       this.pipelinesService.getOpenshiftConsoleUrl().subscribe((url: string) => {
-        if (url !== '') {
+        if (url) {
           this.consoleAvailable = true;
         } else {
           this.consoleAvailable = false;
         }
         this.openshiftConsoleUrl = url;
-    }));
+      })
+    );
+  }
+
+  private setupBuildConfigLinks(buildConfigs: BuildConfig[], consoleUrl: string): BuildConfig[] {
+    if (consoleUrl) {
+      for (let build of buildConfigs) {
+        build.openShiftConsoleUrl = `${consoleUrl}/${build.name}`;
+        build.editPipelineUrl = build.openShiftConsoleUrl.replace('browse', 'edit');
+        if (build.interestingBuilds) {
+          for (let b of build.interestingBuilds) {
+            b.openShiftConsoleUrl = `${build.openShiftConsoleUrl}/${build.name}-${b.buildNumber}`;
+          }
+        }
+      }
+    }
+    return buildConfigs;
   }
 
   ngOnDestroy(): void {

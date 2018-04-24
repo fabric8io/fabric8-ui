@@ -11,10 +11,8 @@ import { createMock } from 'testing/mock';
 import { Observable } from 'rxjs';
 
 import { CpuStat } from '../models/cpu-stat';
-import {
-  MemoryStat,
-  MemoryUnit
-} from '../models/memory-stat';
+import { MemoryStat } from '../models/memory-stat';
+import { MemoryUnit } from '../models/memory-unit';
 import { Stat } from '../models/stat';
 import { DeploymentsService } from '../services/deployments.service';
 import { ResourceCardComponent } from './resource-card.component';
