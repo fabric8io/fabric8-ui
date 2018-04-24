@@ -96,6 +96,30 @@
   border-right-color: @color-pf-black-600;
 }
 
+#header_createSpace {
+  display: block;
+  .create-space-anchor {
+    background-color: #fff;
+    transition: all .3s;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 1px 0;
+    padding: 1px 10px;
+    display: block;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.667;
+    color: @color-pf-black-800;
+    white-space: nowrap;
+    &:hover {
+      border-color: @color-pf-blue-100;
+      background-color: @color-pf-blue-50;
+      text-decoration: none;
+      color: @color-pf-black-700;
+    }
+  }
+}
+
 .recent-items-toggle {
   width: 273px;
   &-text {

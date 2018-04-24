@@ -60,4 +60,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     this.selectedFlow = $event.flow;
   }
 
+  showAddAppOverlay(): void {
+    this.broadcaster.broadcast('showAddAppOverlay', true);
+  }
 }

@@ -82,13 +82,22 @@
               </li>
               <li class="divider"></li>
               <li id="header_createSpace">
-                <a (click)="openForgeWizard(spaceWizard)">
-                <!-- <a  (click)="showAddSpaceOverlay()"> -->
-                <span class="nav-item-icon">
-                  <i class="pficon pficon-add-circle-o"></i>
-                </span>
-                  Create space
-                </a>
+                <f8-feature-toggle featureName="AppLauncher">
+                  <a class="create-space-anchor" (click)="showAddSpaceOverlay()" user-level>
+                    <!-- <a  (click)="showAddSpaceOverlay()"> -->
+                    <span class="nav-item-icon">
+                      <i class="pficon pficon-add-circle-o"></i>
+                    </span>
+                      Create space
+                  </a>
+                  <a class="create-space-anchor" (click)="openForgeWizard(spaceWizard)" default-level>
+                    <!-- <a  (click)="showAddSpaceOverlay()"> -->
+                    <span class="nav-item-icon">
+                      <i class="pficon pficon-add-circle-o"></i>
+                    </span>
+                      Create space
+                  </a>
+                </f8-feature-toggle>
               </li>
               <li id="header_mySpaces">
                 <a [routerLink]="[loggedInUser.attributes.username,'_myspaces']">

@@ -107,6 +107,7 @@ import { AddSpaceOverlayModule } from './space/add-space-overlay/add-space-overl
 // About Modal
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
+import { FeatureFlagModule } from './feature-flag/feature-flag.module';
 import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 import { RavenExceptionHandler } from './shared/exception.handler';
@@ -157,6 +158,7 @@ export type StoreType = {
     RestangularModule,
     RouterModule,
     SpaceWizardModule,
+    FeatureFlagModule,
     ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,
