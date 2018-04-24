@@ -102,13 +102,23 @@ describe('PipelinesComponent', () => {
       current: new BehaviorSubject<any[]>([
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
         },
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -116,6 +126,7 @@ describe('PipelinesComponent', () => {
         },
         {
           id: 'app3',
+          name: 'app3',
           gitUrl: 'https://example.com/app3.git',
           labels: {
             space: 'space2'
@@ -151,12 +162,45 @@ describe('PipelinesComponent', () => {
 
   describe('Pipelines component with url', () => {
     beforeAll(() => {
-      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(Observable.of('http://example.com/openshift'));
+      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(Observable.of('http://example.com/browse/openshift'));
     });
 
     it('should set OpenShift Console URL', function(this: TestingContext) {
       expect(this.testedDirective.consoleAvailable).toBeTruthy();
-      expect(this.testedDirective.openshiftConsoleUrl).toEqual('http://example.com/openshift');
+      expect(this.testedDirective.openshiftConsoleUrl).toEqual('http://example.com/browse/openshift');
+    });
+
+    it('should set correct urls', function(this: TestingContext) {
+      expect(this.testedDirective.pipelines as any[]).toContain({
+        id: 'app',
+        name: 'app',
+        gitUrl: 'https://example.com/app.git',
+        interestingBuilds: [
+          {
+            buildNumber: 1,
+            openShiftConsoleUrl: 'http://example.com/browse/openshift/app/app-1'
+          },
+          {
+            buildNumber: 2,
+            openShiftConsoleUrl: 'http://example.com/browse/openshift/app/app-2'
+          }
+        ],
+        labels: {
+          space: 'space'
+        },
+        openShiftConsoleUrl: 'http://example.com/browse/openshift/app',
+        editPipelineUrl: 'http://example.com/edit/openshift/app'
+      });
+      expect(this.testedDirective.pipelines as any[]).toContain({
+        id: 'app2',
+        name: 'app2',
+        gitUrl: 'https://example.com/app2.git',
+        labels: {
+          space: 'space'
+        },
+        openShiftConsoleUrl: 'http://example.com/browse/openshift/app2',
+        editPipelineUrl: 'http://example.com/edit/openshift/app2'
+      });
     });
   });
 
@@ -170,18 +214,55 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.consoleAvailable).toBeFalsy();
       expect(this.testedDirective.openshiftConsoleUrl).toEqual('');
     });
+
+    it('should not set urls', function(this: TestingContext) {
+      expect(this.testedDirective.pipelines as any[]).toContain({
+        id: 'app',
+        name: 'app',
+        gitUrl: 'https://example.com/app.git',
+        interestingBuilds: [
+          {
+            buildNumber: 1
+          },
+          {
+            buildNumber: 2
+          }
+        ],
+        labels: {
+          space: 'space'
+        }
+      });
+      expect(this.testedDirective.pipelines as any[]).toContain({
+        id: 'app2',
+        name: 'app2',
+        gitUrl: 'https://example.com/app2.git',
+        labels: {
+          space: 'space'
+        }
+      });
+    });
   });
 
   it('should only display pipelines within the current space', function(this: TestingContext) {
     expect(this.testedDirective.pipelines as any[]).toContain({
       id: 'app',
+      name: 'app',
       gitUrl: 'https://example.com/app.git',
+      interestingBuilds: [
+        {
+          buildNumber: 1
+        },
+        {
+          buildNumber: 2
+        }
+      ],
       labels: {
         space: 'space'
       }
     });
     expect(this.testedDirective.pipelines as any[]).toContain({
       id: 'app2',
+      name: 'app2',
       gitUrl: 'https://example.com/app2.git',
       labels: {
         space: 'space'
@@ -189,6 +270,7 @@ describe('PipelinesComponent', () => {
     });
     expect(this.testedDirective.pipelines as any[]).not.toContain({
       id: 'app3',
+      name: 'app3',
       gitUrl: 'https://example.com/app3.git',
       labels: {
         space: 'space2'
@@ -215,6 +297,7 @@ describe('PipelinesComponent', () => {
       );
       expect(this.testedDirective.pipelines as any[]).toEqual([{
         id: 'app2',
+        name: 'app2',
         gitUrl: 'https://example.com/app2.git',
         labels: {
           space: 'space'
@@ -241,6 +324,7 @@ describe('PipelinesComponent', () => {
       );
       expect(this.testedDirective.pipelines as any[]).toEqual([{
         id: 'app2',
+        name: 'app2',
         gitUrl: 'https://example.com/app2.git',
         labels: {
           space: 'space'
@@ -267,6 +351,7 @@ describe('PipelinesComponent', () => {
       );
       expect(this.testedDirective.pipelines as any[]).toEqual([{
         id: 'app2',
+        name: 'app2',
         gitUrl: 'https://example.com/app2.git',
         labels: {
           space: 'space'
@@ -276,6 +361,7 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -283,7 +369,16 @@ describe('PipelinesComponent', () => {
         },
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
@@ -306,6 +401,7 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -313,7 +409,16 @@ describe('PipelinesComponent', () => {
         },
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
@@ -333,13 +438,23 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
         },
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -360,6 +475,7 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -367,7 +483,16 @@ describe('PipelinesComponent', () => {
         },
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
@@ -387,13 +512,23 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
         },
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -414,13 +549,23 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
         },
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -440,6 +585,7 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -447,7 +593,16 @@ describe('PipelinesComponent', () => {
         },
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
@@ -473,6 +628,7 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -487,6 +643,7 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
+          name: 'app2',
           gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
@@ -494,7 +651,16 @@ describe('PipelinesComponent', () => {
         },
         {
           id: 'app',
+          name: 'app',
           gitUrl: 'https://example.com/app.git',
+          interestingBuilds: [
+            {
+              buildNumber: 1
+            },
+            {
+              buildNumber: 2
+            }
+          ],
           labels: {
             space: 'space'
           }
