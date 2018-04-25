@@ -68,3 +68,5 @@ dist-watch/
 # NPM #
 
 npm-debug.log*
+
+.history

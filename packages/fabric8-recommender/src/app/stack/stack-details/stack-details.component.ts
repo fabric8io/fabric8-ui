@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, ViewChild, ViewEncapsulation, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Modal } from 'ngx-modal';
 
 import { StackAnalysesService } from '../stack-analyses.service';
 import { getStackReportModel } from '../utils/stack-api-utils';
@@ -39,7 +40,7 @@ export class StackDetailsComponent implements OnChanges, OnInit {
     @Input() showFlags;
     @Input() openStackModalFromCard: string;
 
-    @ViewChild('stackModule') modalStackModule: any;
+    @ViewChild('stackModule') modalStackModule: Modal;
 
 
     /**
@@ -107,6 +108,7 @@ export class StackDetailsComponent implements OnChanges, OnInit {
      */
     public handleModalClose(): void {
         this.resetFields();
+        SaveState.isModalOpened = false;
     }
 
 
@@ -202,10 +204,13 @@ export class StackDetailsComponent implements OnChanges, OnInit {
     }
 
     ngOnInit() {
-        this.commonService.inshortCardClicked
-        .subscribe(response => {
-            this.showStackModal(null);
-        });
+        if (SaveState.isModalOpened === false) {
+            SaveState.isModalOpened = true;
+            this.commonService.inshortCardClicked
+            .subscribe(response => {
+                this.showStackModal(null);
+            });
+        }
     }
 
     public handleChangeFilter(filterBy: any): void {
@@ -264,7 +269,6 @@ export class StackDetailsComponent implements OnChanges, OnInit {
         this.cacheResponse = {};
         SaveState.ELEMENTS = [];
         this.openStackModalFromCard = 'false';
-        // this.dataLoaded = false;
     }
 
     private handleResponse(data: any): void {
