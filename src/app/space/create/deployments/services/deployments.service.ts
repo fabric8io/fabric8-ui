@@ -27,7 +27,8 @@ import {
   has,
   includes,
   isEmpty,
-  isEqual as deepEqual
+  isEqual as deepEqual,
+  round
 } from 'lodash';
 
 import { CpuStat } from '../models/cpu-stat';
@@ -176,7 +177,7 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged();
     return Observable.combineLatest(series, quota, (series: CoresSeries[], quota: number) =>
       series.map((s: CoresSeries) =>
-        ({ used: s.value, quota: quota, timestamp: s.time } as CpuStat)
+        ({ used: round(s.value, 4), quota: quota, timestamp: s.time } as CpuStat)
       )
     );
   }
