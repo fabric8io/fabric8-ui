@@ -11,32 +11,84 @@ export class AddWorkFlowService {
 
   private stackWorkItemUrl;
 
-  private headers: Headers = new Headers({'Content-Type': 'application/json'});
+  private headers: Headers = new Headers({ 'Content-Type': 'application/json' });
   private workItemsRoute: string = 'workitems';
   private spacesString: string = 'spaces';
   private spaceId: string;
+  private bugId: string;
+  private fallBackBugId: string;
 
   constructor(
     private http: Http,
-    @Inject(WIT_API_URL) apiUrl: string,
+    @Inject(WIT_API_URL) private apiUrl: string,
     private auth: AuthenticationService,
     private context: Contexts
   ) {
-      if (this.auth.getToken() !== null) {
-        this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
-      }
+    if (this.auth.getToken() !== null) {
+      this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+    }
+    this.setMetaInformation();
+  }
 
-      if (this.context && this.context.current) {
-        this.context.current.subscribe(currentContext => {
-          if (currentContext.space) {
-            this.spaceId = currentContext.space.id;
-            this.stackWorkItemUrl = apiUrl + this.spacesString + '/' + this.spaceId + '/' + this.workItemsRoute;
+  setMetaInformation(): void {
+    let api: string = this.apiUrl;
+    if (this.context && this.context.current) {
+      this.context.current.subscribe(currentContext => {
+        if (currentContext.space) {
+          this.spaceId = currentContext.space.id;
+          this.stackWorkItemUrl = api + this.spacesString + '/' + this.spaceId + '/' + this.workItemsRoute;
+          if (currentContext.space.relationships && currentContext.space.relationships.workitemtypes && currentContext.space.relationships.workitemtypes.links) {
+            this.fetchBugId(currentContext.space.relationships.workitemtypes.links.related);
           }
-        });
+        }
+      });
+    }
+  }
+
+  fetchBugId(url: string): void {
+    let options = new RequestOptions({ headers: this.headers });
+    this.http.get(url, options)
+      .catch(this.handleError)
+      .subscribe((response) => {
+        try {
+          if (response) {
+            this.setBugId(response.json());
+          }
+        } catch (error) {
+          console.log('Error converting response to JSON');
+        }
+      });
+  }
+
+  setBugId(response: any): void {
+    if (response && response.data) {
+      let data: Array<any> = response.data;
+      let dataItem: any;
+      for (let i in data) {
+        if (data.hasOwnProperty(i)) {
+          dataItem = data[i];
+          if (dataItem) {
+            if (dataItem.attributes) {
+              let id: string = dataItem.id;
+              let attributes: any = dataItem.attributes;
+              if (attributes && attributes['can-construct'] === true) {
+                if (!this.fallBackBugId) {
+                  this.fallBackBugId = id;
+                }
+              }
+              if (attributes && attributes.name === 'Bug') {
+                this.bugId = id;
+                break;
+              }
+            }
+          }
+        }
       }
     }
+  }
 
   addWorkFlow(workItemData: any): Observable<any> {
+    workItemData.data.relationships.baseType.data.id = this.bugId || this.fallBackBugId;
     let options = new RequestOptions({ headers: this.headers });
     let body = JSON.stringify(workItemData);
     return this.http.post(this.stackWorkItemUrl, body, options)

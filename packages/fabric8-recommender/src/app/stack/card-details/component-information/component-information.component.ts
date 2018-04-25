@@ -90,8 +90,8 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
         let workItems = [];
         let message: string = '';
         let codebase = {
-            'repository': 'Test_Repo',
-            'branch': 'task-1234',
+            'repository': '',
+            'branch': '',
             'filename': this.component['manifestFilePath'],
             'linenumber': 1
         };
@@ -129,8 +129,10 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
         message += '\n\n **Line Number:**' + codebase['linenumber'];
         let item: any = {
             title: titleHdr,
-            description: message,
-            markup: 'Markdown',
+            description: {
+                content: message,
+                markup: 'Markdown'
+            },
             codebase: codebase,
             key: key
         };
@@ -153,7 +155,6 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
         let workItemData = {
             'data': {
                 'attributes': {
-                    'system.state': 'open',
                     'system.title': '',
                     'system.codebase': ''
                 },
@@ -161,7 +162,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
                 'relationships': {
                     'baseType': {
                         'data': {
-                            'id': '26787039-b68f-4e28-8814-c2f93be1ef4e',
+                            'id': '',
                             'type': 'workitemtypes'
                         }
                     }
