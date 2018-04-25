@@ -1,5 +1,6 @@
 import {
   Component,
+  ErrorHandler,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -61,6 +62,7 @@ describe('CollaboratorsComponent', () => {
           return collaboratorService;
         }
       },
+      { provide: ErrorHandler, useValue: createMock(ErrorHandler) },
       { provide: Logger, useValue: createMock(Logger) }
     ],
     schemas: [ NO_ERRORS_SCHEMA ]
@@ -122,9 +124,12 @@ describe('CollaboratorsComponent', () => {
       ] as any[]);
     });
 
-    it('should log errors', function(this: Ctx) {
+    it('should handle errors', function(this: Ctx) {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.getInitialBySpaceId.and.returnValue(Observable.throw('some_error'));
+
+      const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
+      errorHandler.handleError.and.stub();
 
       const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       logger.error.and.stub();
@@ -133,6 +138,7 @@ describe('CollaboratorsComponent', () => {
 
       expect(collaboratorService.getInitialBySpaceId).toHaveBeenCalled();
       expect(this.testedDirective.collaborators).toEqual([]);
+      expect(errorHandler.handleError).toHaveBeenCalledWith('some_error');
       expect(logger.error).toHaveBeenCalledWith('some_error');
     });
   });
@@ -196,9 +202,12 @@ describe('CollaboratorsComponent', () => {
       ] as any[]);
     });
 
-    it('should log errors', function(this: Ctx) {
+    it('should handle errors', function(this: Ctx) {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.getNextCollaborators.and.returnValue(Observable.throw('some_error'));
+
+      const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
+      errorHandler.handleError.and.stub();
 
       const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       logger.error.and.stub();
@@ -207,6 +216,7 @@ describe('CollaboratorsComponent', () => {
 
       expect(collaboratorService.getNextCollaborators).toHaveBeenCalled();
       expect(this.testedDirective.collaborators).toEqual([]);
+      expect(errorHandler.handleError).toHaveBeenCalledWith('some_error');
       expect(logger.error).toHaveBeenCalledWith('some_error');
     });
   });
@@ -285,9 +295,12 @@ describe('CollaboratorsComponent', () => {
       expect(collaboratorService.removeCollaborator).toHaveBeenCalledWith('fake-space-id', '1');
     });
 
-    it('should log errors', function(this: Ctx) {
+    it('should handle errors', function(this: Ctx) {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.removeCollaborator.and.returnValue(Observable.throw('some_error'));
+
+      const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
+      errorHandler.handleError.and.stub();
 
       const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       logger.error.and.stub();
@@ -301,6 +314,7 @@ describe('CollaboratorsComponent', () => {
       this.testedDirective.removeUser();
 
       expect(collaboratorService.removeCollaborator).toHaveBeenCalled();
+      expect(errorHandler.handleError).toHaveBeenCalledWith('some_error');
       expect(logger.error).toHaveBeenCalledWith('some_error');
     });
   });

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ErrorHandler, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { find } from 'lodash';
 import { Logger } from 'ngx-base';
@@ -35,6 +35,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   constructor(
     private contexts: ContextService,
     private collaboratorService: CollaboratorService,
+    private errorHandler: ErrorHandler,
     private logger: Logger
   ) {
     this.subscriptions.push(this.contexts.current.subscribe(val => {
@@ -65,6 +66,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
           this.sortCollaborators();
         },
         (err: any): void => {
+          this.errorHandler.handleError(err);
           this.logger.error(err);
         }
       )
@@ -82,6 +84,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
             }
           },
           (err: any): void => {
+            this.errorHandler.handleError(err);
             this.logger.error(err);
           }
         )
@@ -111,6 +114,7 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
             this.modalDelete.hide();
           },
           (err: any): void => {
+            this.errorHandler.handleError(err);
             this.logger.error(err);
           }
         )
