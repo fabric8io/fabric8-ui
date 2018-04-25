@@ -10,7 +10,6 @@ import { DialogModule } from 'ngx-widgets';
 
 import { CodebaseDeleteDialogModule } from '../codebases-delete/codebase-delete-dialog.module';
 import { CodebasesService } from '../services/codebases.service';
-import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
 import { CodebasesItemActionsComponent } from './codebases-item-actions.component';
 
@@ -26,7 +25,7 @@ import { CodebasesItemActionsComponent } from './codebases-item-actions.componen
   ],
   declarations: [ CodebasesItemActionsComponent ],
   exports: [ CodebasesItemActionsComponent ],
-  providers: [ BsDropdownConfig, CodebasesService, TooltipConfig, WindowService, WorkspacesService ]
+  providers: [ BsDropdownConfig, CodebasesService, TooltipConfig, WorkspacesService ]
 })
 export class CodebasesItemActionsModule {
   constructor(http: Http) {}

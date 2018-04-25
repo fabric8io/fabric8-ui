@@ -91,6 +91,7 @@ import { PipelinesService }              from './shared/runtime-console/pipeline
 import { SpaceNamespaceService }         from './shared/runtime-console/space-namespace.service';
 import { SpacesService }                 from './shared/spaces.service';
 import { ssoApiUrlProvider }             from './shared/sso-api.provider';
+import { WindowService }                 from './shared/window.service';
 import { witApiUrlProvider }             from './shared/wit-api.provider';
 
 // Component Services
@@ -240,6 +241,7 @@ export type StoreType = {
     },
     ssoApiUrlProvider,
     UserService,
+    WindowService,
     witApiUrlProvider,
     realmProvider
   ],

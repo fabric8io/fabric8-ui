@@ -8,6 +8,7 @@ import { createMock } from 'testing/mock';
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { MemoryUnit } from '../models/memory-unit';
 import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
 import {
@@ -33,7 +34,7 @@ describe('DeploymentStatusService', (): void => {
     deploymentsService = createMock(DeploymentsService);
 
     cpuSubject = new BehaviorSubject<CpuStat[]>([{ used: 3, quota: 10 }]);
-    memorySubject = new BehaviorSubject<MemoryStat[]>([{ used: 4, quota: 10, units: 'GB' }]);
+    memorySubject = new BehaviorSubject<MemoryStat[]>([{ used: 4, quota: 10, units: MemoryUnit.GB }]);
     podsSubject = new BehaviorSubject<Pods>({ total: 1, pods: [[PodPhase.RUNNING, 1]] });
 
     deploymentsService.getDeploymentCpuStat.and.returnValue(cpuSubject);
@@ -69,7 +70,7 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return combined status when multiple stats are nearing quota', (done: DoneFn): void => {
       cpuSubject.next([{ used: 9, quota: 10 }]);
-      memorySubject.next([{ used: 9, quota: 10, units: 'MB' }]);
+      memorySubject.next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
       svc.getAggregateStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -81,7 +82,7 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return combined status when multiple stats are nearing or at quota', (done: DoneFn): void => {
       cpuSubject.next([{ used: 9, quota: 10 }]);
-      memorySubject.next([{ used: 10, quota: 10, units: 'MB' }]);
+      memorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       svc.getAggregateStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -169,7 +170,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return WARN status when nearing quota', (done: DoneFn): void => {
-      memorySubject.next([{ used: 9, quota: 10, units: 'MB' }]);
+      memorySubject.next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
       svc.getMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -180,7 +181,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return ERR status when at quota', (done: DoneFn): void => {
-      memorySubject.next([{ used: 10, quota: 10, units: 'MB' }]);
+      memorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       svc.getMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -191,14 +192,14 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return OK status after scaling down to 0 pods', (done: DoneFn): void => {
-      memorySubject.next([{ used: 10, quota: 10, units: 'MB' }]);
+      memorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       svc.getMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('Memory usage has reached capacity.');
           podsSubject.next({ total: 0, pods: [] });
-          memorySubject.next([{ used: 0, quota: 0, units: 'MB' }]);
+          memorySubject.next([{ used: 0, quota: 0, units: MemoryUnit.MB }]);
           svc.getMemoryStatus('foo', 'bar', 'baz')
             .first()
             .subscribe((status: Status): void => {

@@ -3,8 +3,8 @@ import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
 
+import { WindowService } from 'app/shared/window.service';
 import { Codebase } from '../services/codebase';
-import { WindowService } from '../services/window.service';
 import { Workspace } from '../services/workspace';
 import { WorkspacesService } from '../services/workspaces.service';
 

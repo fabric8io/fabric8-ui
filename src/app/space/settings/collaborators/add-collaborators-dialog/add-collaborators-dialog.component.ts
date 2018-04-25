@@ -1,12 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import { IMultiSelectOption, IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectOption, IMultiSelectSettings, MultiselectDropdown } from 'angular-2-dropdown-multiselect';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CollaboratorService, Context } from 'ngx-fabric8-wit';
+import { CollaboratorService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
-
-import { ContextService } from '../../../../shared/context.service';
 
 @Component({
   host: {
@@ -21,25 +19,21 @@ export class AddCollaboratorsDialogComponent implements OnInit {
 
   @Input() host: ModalDirective;
   @Input() spaceId: string;
-  @Input() collaborators: User[];
+
   @Output() onAdded = new EventEmitter<User[]>();
-  @ViewChild('typeahead') typeahead: any;
+
+  @ViewChild('dropdown') dropdown: MultiselectDropdown;
 
   public dropdownOptions: IMultiSelectOption[] = [];
   public dropdownModel: User[];
   public dropdownSettings: IMultiSelectSettings;
-  private context: Context;
-  private openSubscription: Subscription;
 
   constructor(
-    private contexts: ContextService,
     private userService: UserService,
-    private collaboratorService: CollaboratorService) {
-    this.contexts.current.subscribe(val => this.context = val);
-  }
+    private collaboratorService: CollaboratorService
+  ) { }
 
   ngOnInit() {
-
     this.dropdownSettings = {
       pullRight: false,
       enableSearch: true,
@@ -52,22 +46,22 @@ export class AddCollaboratorsDialogComponent implements OnInit {
       dynamicTitleMaxItems: 3,
       maxHeight: '300px'
     };
-
   }
 
   public onOpen() {
-    this.dropdownModel = [];
+    this.reset();
   }
 
   addCollaborators() {
     this.collaboratorService.addCollaborators(this.spaceId, this.dropdownModel).subscribe(() => {
       this.onAdded.emit(this.dropdownModel as User[]);
+      this.reset();
       this.host.hide();
     });
   }
 
   changed(enteredValue: any) {
-    let searchValue = this.typeahead.filterControl.value;
+    let searchValue = this.dropdown.filterControl.value;
     this.userService.getUsersBySearchString(searchValue).subscribe((users) => {
       this.dropdownOptions = [];
       users.forEach(user => {
@@ -80,6 +74,14 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   }
 
   cancel() {
+    this.reset();
     this.host.hide();
+  }
+
+  private reset() {
+    this.dropdown.uncheckAll();
+    this.dropdown.clearSearch(new CustomEvent('clear'));
+    this.dropdownOptions = [];
+    this.dropdownModel = [];
   }
 }

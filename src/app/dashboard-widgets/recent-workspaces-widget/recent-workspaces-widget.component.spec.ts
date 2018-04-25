@@ -14,11 +14,11 @@ import { Observable } from 'rxjs';
 import { ContextService } from '../../shared/context.service';
 import { spaceMock } from '../../shared/context.service.mock';
 
+import { WindowService } from 'app/shared/window.service';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
-import { WindowService } from '../../space/create/codebases/services/window.service';
 import { Workspace, WorkspaceLinks } from '../../space/create/codebases/services/workspace';
 import { WorkspacesService } from '../../space/create/codebases/services/workspaces.service';
-import { ExtCodebase, RecentWorkspacesWidgetComponent} from './recent-workspaces-widget.component';
+import { ExtCodebase, RecentWorkspacesWidgetComponent } from './recent-workspaces-widget.component';
 
 describe('RecentWorkspacesWidgetComponent', () => {
   let comp: RecentWorkspacesWidgetComponent;
