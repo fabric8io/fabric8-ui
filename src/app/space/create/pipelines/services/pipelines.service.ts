@@ -68,15 +68,19 @@ export class PipelinesService {
   }
 
   getCurrentPipelines(): Observable<BuildConfig[]> {
-    return this.runtimePipelinesService.current.combineLatest(
+    return Observable.combineLatest(
+      this.runtimePipelinesService.current.distinctUntilChanged(),
       this.getOpenshiftConsoleUrl(),
-      this.setupBuildConfigLinks);
+      this.setupBuildConfigLinks
+    );
   }
 
   getRecentPipelines(): Observable<BuildConfig[]> {
-    return this.runtimePipelinesService.recentPipelines.combineLatest(
+    return Observable.combineLatest(
+      this.runtimePipelinesService.recentPipelines.distinctUntilChanged(),
       this.getOpenshiftConsoleUrl(),
-      this.setupBuildConfigLinks);
+      this.setupBuildConfigLinks
+    );
   }
 
   getOpenshiftConsoleUrl(): Observable<string> {
