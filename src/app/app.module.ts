@@ -158,13 +158,13 @@ export type StoreType = {
     RestangularModule,
     RouterModule,
     SpaceWizardModule,
-    FeatureFlagModule,
     ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,
     StoreModule.forRoot({}),
-    // AppRoutingModule must appear last
-    AppRoutingModule
+    AppRoutingModule,
+    // Must be at the end
+    FeatureFlagModule
   ],
   declarations: [ // declare which components, directives and pipes belong to the module
     AppComponent,
