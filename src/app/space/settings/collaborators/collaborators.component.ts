@@ -102,17 +102,19 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   removeUser() {
-    this.collaboratorService.removeCollaborator(this.context.space.id, this.userToRemove.id)
-      .subscribe(
-        () => {
-          this.collaborators.splice(this.collaborators.indexOf(this.userToRemove), 1);
-          this.userToRemove = null;
-          this.modalDelete.hide();
-        },
-        (err: any): void => {
-          this.logger.error(err);
-        }
-      );
+    this.subscriptions.push(
+      this.collaboratorService.removeCollaborator(this.context.space.id, this.userToRemove.id)
+        .subscribe(
+          () => {
+            this.collaborators.splice(this.collaborators.indexOf(this.userToRemove), 1);
+            this.userToRemove = null;
+            this.modalDelete.hide();
+          },
+          (err: any): void => {
+            this.logger.error(err);
+          }
+        )
+    );
   }
 
   addCollaboratorsToParent(addedUsers: User[]) {
