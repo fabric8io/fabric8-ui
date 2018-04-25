@@ -43,7 +43,7 @@ export class PipelinesWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.contextPath = this.context.current.map(context => context.path);
-    this.buildConfigs = this.pipelinesService.getCurrentPipelines();
+    this.buildConfigs = this.pipelinesService.getCurrentPipelines().share();
     // buildConfigsCount triggers changes in the DOM; force Angular Change Detection
     // via setTimeout encapsulation
     this.buildConfigs
