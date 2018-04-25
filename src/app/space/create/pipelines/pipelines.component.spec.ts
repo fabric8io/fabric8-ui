@@ -66,7 +66,6 @@ describe('PipelinesComponent', () => {
 
   let contexts: Contexts;
   let authenticationService: jasmine.SpyObj<AuthenticationService>;
-  let runtimePipelinesService: { current: Observable<BuildConfig[]> };
   let f8uiConfig: { openshiftConsoleUrl: string };
   let broadcaster: { broadcast: Function };
 
@@ -98,8 +97,8 @@ describe('PipelinesComponent', () => {
     authenticationService = createMock(AuthenticationService);
     authenticationService.getGitHubToken.and.returnValue('some-token');
 
-    runtimePipelinesService = {
-      current: new BehaviorSubject<any[]>([
+    pipelinesService.getCurrentPipelines.and.returnValue(
+      Observable.of([
         {
           id: 'app',
           name: 'app',
@@ -133,7 +132,7 @@ describe('PipelinesComponent', () => {
           }
         }
       ])
-    };
+    );
     broadcaster = { broadcast: jasmine.createSpy('broadcast') };
   });
 
@@ -154,7 +153,6 @@ describe('PipelinesComponent', () => {
       TooltipConfig,
       { provide: Contexts, useFactory: () => contexts },
       { provide: AuthenticationService, useFactory: () => authenticationService },
-      { provide: RuntimePipelinesService, useFactory: () => runtimePipelinesService },
       { provide: PipelinesService, useFactory: () => pipelinesService },
       { provide: Broadcaster, useFactory: () => broadcaster }
     ]
@@ -169,39 +167,6 @@ describe('PipelinesComponent', () => {
       expect(this.testedDirective.consoleAvailable).toBeTruthy();
       expect(this.testedDirective.openshiftConsoleUrl).toEqual('http://example.com/browse/openshift');
     });
-
-    it('should set correct urls', function(this: TestingContext) {
-      expect(this.testedDirective.pipelines as any[]).toContain({
-        id: 'app',
-        name: 'app',
-        gitUrl: 'https://example.com/app.git',
-        interestingBuilds: [
-          {
-            buildNumber: 1,
-            openShiftConsoleUrl: 'http://example.com/browse/openshift/app/app-1'
-          },
-          {
-            buildNumber: 2,
-            openShiftConsoleUrl: 'http://example.com/browse/openshift/app/app-2'
-          }
-        ],
-        labels: {
-          space: 'space'
-        },
-        openShiftConsoleUrl: 'http://example.com/browse/openshift/app',
-        editPipelineUrl: 'http://example.com/edit/openshift/app'
-      });
-      expect(this.testedDirective.pipelines as any[]).toContain({
-        id: 'app2',
-        name: 'app2',
-        gitUrl: 'https://example.com/app2.git',
-        labels: {
-          space: 'space'
-        },
-        openShiftConsoleUrl: 'http://example.com/browse/openshift/app2',
-        editPipelineUrl: 'http://example.com/edit/openshift/app2'
-      });
-    });
   });
 
 
@@ -213,33 +178,6 @@ describe('PipelinesComponent', () => {
     it('should hide OpenShift Console URL', function(this: TestingContext) {
       expect(this.testedDirective.consoleAvailable).toBeFalsy();
       expect(this.testedDirective.openshiftConsoleUrl).toEqual('');
-    });
-
-    it('should not set urls', function(this: TestingContext) {
-      expect(this.testedDirective.pipelines as any[]).toContain({
-        id: 'app',
-        name: 'app',
-        gitUrl: 'https://example.com/app.git',
-        interestingBuilds: [
-          {
-            buildNumber: 1
-          },
-          {
-            buildNumber: 2
-          }
-        ],
-        labels: {
-          space: 'space'
-        }
-      });
-      expect(this.testedDirective.pipelines as any[]).toContain({
-        id: 'app2',
-        name: 'app2',
-        gitUrl: 'https://example.com/app2.git',
-        labels: {
-          space: 'space'
-        }
-      });
     });
   });
 
