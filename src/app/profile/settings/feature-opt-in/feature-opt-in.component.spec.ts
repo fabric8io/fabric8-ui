@@ -1,17 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, DebugElement, NgModule } from '@angular/core';
-import { ComponentFixture, fakeAsync, flush, flushMicrotasks, TestBed } from '@angular/core/testing';
-import { FormsModule, NgModel } from '@angular/forms';
-import { By } from '@angular/platform-browser';
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { Notifications } from 'ngx-base';
 import { UserService } from 'ngx-login-client';
-import { AuthenticationService } from 'ngx-login-client';
+import { ListModule } from 'patternfly-ng';
 import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import {
   ExtProfile,
-  ExtUser,
   GettingStartedService
 } from '../../../getting-started/services/getting-started.service';
 import { FeatureOptInComponent } from './feature-opt-in.component';
@@ -33,12 +31,13 @@ describe('FeatureOptInComponent', () => {
   let featureOptInComponent: FeatureOptInComponent;
   let gettingStartedServiceMock: jasmine.SpyObj<GettingStartedService>;
   let notificationsMock: jasmine.SpyObj<Notifications>;
-  let userServiceMock: jasmine.SpyObj<UserService>;
+  let userServiceMock: any;
 
   beforeEach(() => {
     gettingStartedServiceMock = createMock(GettingStartedService);
     notificationsMock = createMock(Notifications);
     userServiceMock = createMock(UserService);
+    userServiceMock.currentLoggedInUser = {attributes: {featureLevel: 'beta'}};
     gettingStartedServiceMock.createTransientProfile.and.returnValue({ featureLevel: 'beta' } as ExtProfile);
     gettingStartedServiceMock.update.and.returnValue(Observable.of({}));
     notificationsMock.message.and.returnValue(Observable.of({}));
@@ -47,7 +46,8 @@ describe('FeatureOptInComponent', () => {
   initContext(FeatureOptInComponent, HostComponent, {
     imports: [
       CommonModule,
-      FormsModule
+      FormsModule,
+      ListModule
     ],
     providers: [
       { provide: GettingStartedService, useFactory: () => gettingStartedServiceMock },
