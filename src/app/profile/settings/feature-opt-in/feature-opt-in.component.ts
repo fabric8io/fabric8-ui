@@ -3,7 +3,7 @@ import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { UserService } from 'ngx-login-client';
 import { ListConfig } from 'patternfly-ng';
 import { Subscription } from 'rxjs';
-import { Feature } from '../../../feature-flag/service/feature-toggles.service';
+import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
@@ -17,7 +17,6 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
 
   public featureLevel: string;
   private subscriptions: Subscription[] = [];
-  private features: Feature[];
   listConfig: ListConfig;
   private items = [
     {
@@ -25,28 +24,32 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
       icon: 'fa-globe',
       title: 'Production Only Features',
       description: 'This is the default and current release version of the product.',
-      features: this.features
+      features: [],
+      displayed: true
     },
     {
       name: 'beta',
       icon: 'fa-flask',
       title: 'Beta Features',
-      description: 'Experience various features that are ready for beta testing',
-      features: this.features
+      description: 'Experience various features that are ready for beta testing.',
+      features: [],
+      displayed: true
     },
     {
       name: 'experimental',
       icon: 'fa-flask',
       title: 'Experimental Features',
       description: 'These features are still considered experimental and have no guarantee of stability.',
-      features: this.features
+      features: [],
+      displayed: true
     },
     {
       name: 'internal',
       icon: 'fa-lock',
       title: 'Internal Experimental Features',
       description: 'These experimental features are released to internal employees only.',
-      features: this.features
+      features: [],
+      displayed:  this.userService.currentLoggedInUser.attributes.email.endsWith('redhat.com') && (this.userService.currentLoggedInUser.attributes as any).emailVerified
     }
   ];
 
@@ -54,9 +57,9 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   constructor(
     private gettingStartedService: GettingStartedService,
     private notifications: Notifications,
-    private userService: UserService
+    private userService: UserService,
+    private toggleService: FeatureTogglesService
   ) {
-    this.features = [{id: 'feat1'}] as Feature[];
     this.listConfig = {
       dblClick: false,
       multiSelect: false,
@@ -106,8 +109,68 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.featureLevel =  (this.userService.currentLoggedInUser.attributes as ExtProfile).featureLevel;
+    // TODO replace this service call with new endpoint Xavier is implementing
+    this.subscriptions.push(this.toggleService.getFeatures([
+      'AppLauncher',
+      'Analyze',
+      'Deployments',
+      'Planner'
+    ]).map(features => {
+      let featurePerLevel = this.featureByLevel(features);
+      for (let item of this.items) {
+        item.features = featurePerLevel[item.name];
+      }
+      return features;
+      })
+      .subscribe(features => {
+      // log
+    }));
   }
 
+  featureByLevel(features: Feature[]): any {
+    let released: Feature[] = [];
+    let internal: Feature[] = [];
+    let experimental: Feature[] = [];
+    let beta: Feature[] = [];
+    for (let feature of features) {
+      feature.attributes.name = feature.id.replace('.', ' ');
+      switch (feature.attributes['enablement-level']) {
+        case 'released': {
+          if (feature.attributes['enabled']) {
+            released.push(feature);
+          }
+          break;
+        }
+        case 'beta': {
+          if (feature.attributes['enabled']) {
+            beta.push(feature);
+          }
+          break;
+        }
+        case 'experimental': {
+          if (feature.attributes['enabled']) {
+            experimental.push(feature);
+          }
+          break;
+        }
+        case 'internal': {
+          if (feature.attributes['enabled']) {
+            internal.push(feature);
+          }
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    }
+    return {
+      internal,
+      experimental,
+      beta,
+      released
+    };
+  }
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
