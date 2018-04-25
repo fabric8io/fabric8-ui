@@ -23,10 +23,12 @@ import { ComponentFeedbackService } from './component-feedback.service';
 export class ComponentFeedbackComponent implements OnChanges {
     @Input() feedback: MComponentFeedback;
     feedbackMessages: Array<any> = [];
+    feedbackColorTypeUp: boolean = false;
+    feedbackColorTypeDown: boolean = false;
 
     constructor(private feedbackService: ComponentFeedbackService) {}
 
-    public handleFeedback(event: MouseEvent, type: boolean): void {
+    public handleFeedback(event: MouseEvent, type: boolean, colorType: boolean): void {
         event.stopPropagation();
         if (this.feedback && this.feedback.feedbackTemplate) {
             this.feedback.feedbackTemplate.feedback_type = type;
@@ -38,6 +40,15 @@ export class ComponentFeedbackComponent implements OnChanges {
                         iconClass: 'pficon-ok'
                     });
                 });
+            }
+        }
+        if (type) {
+            if (colorType) {
+                this.feedbackColorTypeDown = false;
+            }
+        } else {
+            if (colorType) {
+                this.feedbackColorTypeUp = false;
             }
         }
     }
