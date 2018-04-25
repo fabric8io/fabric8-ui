@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { find } from 'lodash';
+import { Logger } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService, Context } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
@@ -33,7 +34,9 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
 
   constructor(
     private contexts: ContextService,
-    private collaboratorService: CollaboratorService) {
+    private collaboratorService: CollaboratorService,
+    private logger: Logger
+  ) {
     this.subscriptions.push(this.contexts.current.subscribe(val => {
       this.context = val;
     }));
@@ -54,25 +57,34 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
 
   initCollaborators(event: any): void {
     let pageSize = event.pageSize;
-    console.log('event size from page', pageSize);
     pageSize = 20;
-    this.subscriptions.push(this.collaboratorService.getInitialBySpaceId(this.context.space.id, pageSize).subscribe(collaborators => {
-      this.collaborators = collaborators;
-      this.sortCollaborators();
-    }));
+    this.subscriptions.push(this.collaboratorService.getInitialBySpaceId(this.context.space.id, pageSize)
+      .subscribe(
+        (collaborators: User[]): void => {
+          this.collaborators = collaborators;
+          this.sortCollaborators();
+        },
+        (err: any): void => {
+          this.logger.error(err);
+        }
+      )
+    );
   }
 
   fetchMoreCollaborators($event): void {
     this.subscriptions.push(
       this.collaboratorService.getNextCollaborators()
-        .subscribe(collaborators => {
-          if (collaborators) {
-            this.collaborators = this.collaborators.concat(collaborators);
-            this.sortCollaborators();
+        .subscribe(
+          (collaborators: User[]): void => {
+            if (collaborators) {
+              this.collaborators = this.collaborators.concat(collaborators);
+              this.sortCollaborators();
+            }
+          },
+          (err: any): void => {
+            this.logger.error(err);
           }
-          }, err => {
-          console.log(err);
-        })
+        )
     );
   }
 
@@ -90,11 +102,17 @@ export class CollaboratorsComponent implements OnInit, OnDestroy {
   }
 
   removeUser() {
-    this.collaboratorService.removeCollaborator(this.context.space.id, this.userToRemove.id).subscribe(() => {
-      this.collaborators.splice(this.collaborators.indexOf(this.userToRemove), 1);
-      this.userToRemove = null;
-      this.modalDelete.hide();
-    });
+    this.collaboratorService.removeCollaborator(this.context.space.id, this.userToRemove.id)
+      .subscribe(
+        () => {
+          this.collaborators.splice(this.collaborators.indexOf(this.userToRemove), 1);
+          this.userToRemove = null;
+          this.modalDelete.hide();
+        },
+        (err: any): void => {
+          this.logger.error(err);
+        }
+      );
   }
 
   addCollaboratorsToParent(addedUsers: User[]) {

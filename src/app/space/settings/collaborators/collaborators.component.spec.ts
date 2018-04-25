@@ -11,6 +11,7 @@ import {
 } from 'testing/test-context';
 
 import { ContextService } from 'app/shared/context.service';
+import { Logger } from 'ngx-base';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import {
@@ -53,7 +54,14 @@ describe('CollaboratorsComponent', () => {
           })
         })
       },
-      { provide: CollaboratorService, useValue: createMock(CollaboratorService) }
+      {
+        provide: CollaboratorService,
+        useFactory: (): jasmine.SpyObj<CollaboratorService> => {
+          const collaboratorService: jasmine.SpyObj<CollaboratorService> = createMock(CollaboratorService);
+          return collaboratorService;
+        }
+      },
+      { provide: Logger, useValue: createMock(Logger) }
     ],
     schemas: [ NO_ERRORS_SCHEMA ]
   });
@@ -112,6 +120,20 @@ describe('CollaboratorsComponent', () => {
           }
         }
       ] as any[]);
+    });
+
+    it('should log errors', function(this: Ctx) {
+      const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
+      collaboratorService.getInitialBySpaceId.and.returnValue(Observable.throw('some_error'));
+
+      const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
+      logger.error.and.stub();
+
+      this.testedDirective.initCollaborators({});
+
+      expect(collaboratorService.getInitialBySpaceId).toHaveBeenCalled();
+      expect(this.testedDirective.collaborators).toEqual([]);
+      expect(logger.error).toHaveBeenCalledWith('some_error');
     });
   });
 
@@ -173,6 +195,20 @@ describe('CollaboratorsComponent', () => {
         }
       ] as any[]);
     });
+
+    it('should log errors', function(this: Ctx) {
+      const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
+      collaboratorService.getNextCollaborators.and.returnValue(Observable.throw('some_error'));
+
+      const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
+      logger.error.and.stub();
+
+      this.testedDirective.fetchMoreCollaborators({});
+
+      expect(collaboratorService.getNextCollaborators).toHaveBeenCalled();
+      expect(this.testedDirective.collaborators).toEqual([]);
+      expect(logger.error).toHaveBeenCalledWith('some_error');
+    });
   });
 
   describe('#addCollaboratorsToParent', () => {
@@ -223,6 +259,49 @@ describe('CollaboratorsComponent', () => {
           }
         }
       ] as any[]);
+    });
+  });
+
+  describe('removeUser', () => {
+    it('should send remove request to service', function(this: Ctx) {
+      const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
+      collaboratorService.removeCollaborator.and.returnValue(Observable.of('unused'));
+
+      spyOn(this.testedDirective.modalDelete, 'show');
+      spyOn(this.testedDirective.modalDelete, 'hide');
+
+      expect(this.testedDirective.modalDelete.show).not.toHaveBeenCalled();
+      this.testedDirective.confirmUserRemove({
+        id: '1',
+        attributes: {
+          username: 'userA'
+        }
+      } as User);
+      expect(this.testedDirective.modalDelete.show).toHaveBeenCalled();
+
+      expect(this.testedDirective.modalDelete.hide).not.toHaveBeenCalled();
+      this.testedDirective.removeUser();
+      expect(this.testedDirective.modalDelete.hide).toHaveBeenCalled();
+      expect(collaboratorService.removeCollaborator).toHaveBeenCalledWith('fake-space-id', '1');
+    });
+
+    it('should log errors', function(this: Ctx) {
+      const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
+      collaboratorService.removeCollaborator.and.returnValue(Observable.throw('some_error'));
+
+      const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
+      logger.error.and.stub();
+
+      this.testedDirective.confirmUserRemove({
+        id: '1',
+        attributes: {
+          username: 'userA'
+        }
+      } as User);
+      this.testedDirective.removeUser();
+
+      expect(collaboratorService.removeCollaborator).toHaveBeenCalled();
+      expect(logger.error).toHaveBeenCalledWith('some_error');
     });
   });
 
