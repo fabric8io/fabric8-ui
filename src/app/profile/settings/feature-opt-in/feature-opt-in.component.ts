@@ -118,8 +118,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
       'Analyze.newHomeDashboard',
       'Analyze.newSpaceDashboard',
       'Deployments',
-      'Planner',
-      'Test'
+      'Planner'
     ]).map(features => {
       let featurePerLevel = this.featureByLevel(features);
       for (let item of this.items) {

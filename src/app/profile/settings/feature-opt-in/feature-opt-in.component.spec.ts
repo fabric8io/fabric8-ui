@@ -8,7 +8,7 @@ import { ListModule } from 'patternfly-ng';
 import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
-import {Feature, FeatureTogglesService} from '../../../feature-flag/service/feature-toggles.service';
+import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import {
   ExtProfile,
   GettingStartedService
