@@ -22,7 +22,6 @@ import { PipelinesService } from '../../space/create/pipelines/services/pipeline
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-pipelines-widget',
   templateUrl: './pipelines-widget.component.html',
-  styleUrls: ['./pipelines-widget.component.less'],
   providers: [
     PipelinesService
   ]

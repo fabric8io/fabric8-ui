@@ -2,16 +2,14 @@
 
 .applications-widget {
   .f8-card-applications-list {
-    display: grid;
-    grid-template-columns: 50% 50%;
     height: 58vh;
-    &-step,
-    &-name {
-      margin-top: 25px;
+    h4 {
+      margin-top: 0;
     }
-    .f8-card-applications-list-name {
+    &-name {
       .list-group {
         border-top-color: transparent;
+        margin-right: 20px;
         .list-view-pf-checkbox {
           border-right: transparent;
         }
@@ -26,10 +24,18 @@
       }
     }
     &-stage {
-      border-right: 1px solid @color-pf-black-400;
+      @media (min-width: @screen-lg-min) {
+        border-right: 1px solid @color-pf-black-400;
+        min-height: 58vh;
+      }
+    }
+    &-step {
+      padding-top: 25px;
     }
     &-run {
-      padding-left: 20px;
+      @media (min-width: @screen-lg-min) {
+        padding-left: 20px;
+      }
     }
   }
 }

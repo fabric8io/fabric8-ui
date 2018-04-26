@@ -17,10 +17,9 @@
           <fabric8-work-item-widget></fabric8-work-item-widget>
         </div>
         <div class="col-xs-12 col-md-8">
-          <!-- <fabric8-environment-widget></fabric8-environment-widget> -->
           <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-pipelines-widget (addToSpace)="openForgeWizard(addSpace)" default-level></fabric8-pipelines-widget>
-            <fabric8-pipelines-widget (addToSpace)="showAddAppOverlay()" user-level></fabric8-pipelines-widget>
+            <fabric8-applications-widget (addToSpace)="openForgeWizard(addSpace)" default-level></fabric8-applications-widget>
+            <fabric8-applications-widget (addToSpace)="showAddAppOverlay()" user-level></fabric8-applications-widget>
           </f8-feature-toggle>
         </div>
       </div>
@@ -77,7 +76,6 @@
         </div>
         <div class="col-xs-12 col-md-4">
           <fabric8-environment-widget></fabric8-environment-widget>
-          <!--<f8-feature-toggle-loader featureName="Test"></f8-feature-toggle-loader>-->
         </div>
       </div>
     </div>
