@@ -64,12 +64,18 @@ describe('OauthConfigStore', () => {
 
   let data = {};
 
-  let subscription: Subscription;
+  let subscriptions: Subscription[] = [];
 
   beforeEach(() => {
     mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);
     mockErrorHandler = jasmine.createSpyObj<ErrorHandler>('ErrorHandler', ['handleError']);
     mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
+  });
+
+  afterEach(() => {
+    subscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
+    });
   });
 
   describe('success state', () => {
@@ -125,28 +131,28 @@ describe('OauthConfigStore', () => {
     it('should load and set latest oauthconfig on init', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
 
-      oauthStore.loading.subscribe((val: boolean) => {
+      subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
         if (!val) {
-          oauthStore.resource.subscribe((config: OAuthConfig) => {
+          subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
             expect(config.loaded).toBeTruthy();
             done();
-          });
+          }));
         }
-      });
+      }));
     });
 
     it('should set openshift console on init', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
 
-      oauthStore.loading.subscribe((val: boolean) => {
+      subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
         if (!val) {
-          oauthStore.resource.subscribe((config: OAuthConfig) => {
+          subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
             expect(config.loaded).toBeTruthy();
             expect(config.openshiftConsoleUrl).toEqual('http://console.example.com/cluster/console');
             done();
-          });
+          }));
         }
-      });
+      }));
     });
   });
 
@@ -203,13 +209,13 @@ describe('OauthConfigStore', () => {
 
     it('should notify on user service error', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
-      oauthStore.loading.subscribe((val: boolean) => {
+      subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
         expect(val).toBeFalsy();
         expect(mockLogger.error).toHaveBeenCalled();
         expect(mockErrorHandler.handleError).toHaveBeenCalled();
         expect(mockNotificationsService.message).toHaveBeenCalled();
         done();
-      });
+      }));
     });
   });
 
@@ -267,14 +273,14 @@ describe('OauthConfigStore', () => {
 
     it('should notify on config http error', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
-      oauthStore.loading.subscribe((val: boolean) => {
+      subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
         if (!val) {
           expect(mockLogger.error).toHaveBeenCalled();
           expect(mockErrorHandler.handleError).toHaveBeenCalled();
           expect(mockNotificationsService.message).toHaveBeenCalled();
           done();
         }
-      });
+      }));
     });
   });
 });
