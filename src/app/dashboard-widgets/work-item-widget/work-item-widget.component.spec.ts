@@ -8,6 +8,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Contexts } from 'ngx-fabric8-wit';
 
+import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
+import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 
@@ -46,9 +48,19 @@ describe('WorkItemWidgetComponent', () => {
 
   let mockActivatedRoute: any = jasmine.createSpy('ActivatedRoute');
   let mockContexts: any = jasmine.createSpy('Contexts');
+  let mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
   let mockLocationStrategy: any = jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']);
   let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
   let mockWorkItemService: any = jasmine.createSpyObj('WorkItemService', ['getWorkItems']);
+
+  let mockFeature: Feature = {
+    'attributes': {
+      'name': 'mock-attribute',
+      'enabled': true,
+      'user-enabled': true
+    }
+  };
+  mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
 
   beforeEach(() => {
     workItem1.attributes['system.state'] = 'open';
@@ -65,11 +77,13 @@ describe('WorkItemWidgetComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [
-        WorkItemBarchartModule,
-        RouterModule
+        FeatureFlagModule,
+        RouterModule,
+        WorkItemBarchartModule
       ],
       declarations: [WorkItemWidgetComponent],
       providers: [
+        { provide: FeatureTogglesService, useValue: mockFeatureTogglesService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: Contexts, useFactory: () => mockContexts },
         { provide: LocationStrategy, useValue: mockLocationStrategy },
