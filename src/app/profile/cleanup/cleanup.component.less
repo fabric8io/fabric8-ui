@@ -1,6 +1,7 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 
 .cleanup {
+  overflow-y: auto;
   &-list-results {
     background-color: @color-pf-black-200;
     padding: 30px;
@@ -35,6 +36,9 @@
     &-account-icon {
       border-color: @color-pf-black-200 !important; /* stylelint-disable-line declaration-no-important */
       background-color: @color-pf-black-200;
+    }
+    &-action-confirm {
+      padding-bottom: 30px;
     }
     .list-view-pf-view {
       margin-top: 5px;
