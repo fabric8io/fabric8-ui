@@ -1,12 +1,17 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 
 .applications-widget {
+  .f8-card-body {
+    @media (min-width: @screen-lg-min) {
+      overflow-y: hidden;
+    }
+  }
   .f8-card-applications-list {
-    height: 58vh;
     h4 {
       margin-top: 0;
     }
     &-name {
+      height: 325px;
       .list-group {
         border-top-color: transparent;
         margin-right: 20px;
@@ -22,11 +27,14 @@
           font-size: .8em;
         }
       }
+      @media (min-width: @screen-lg-min) {
+        overflow-y: auto;
+      }
     }
     &-stage {
       @media (min-width: @screen-lg-min) {
         border-right: 1px solid @color-pf-black-400;
-        min-height: 58vh;
+        padding-right: 20px;
       }
     }
     &-step {
