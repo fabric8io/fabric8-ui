@@ -1,5 +1,5 @@
 <div class="container-fluid container-cards-pf">
-  <div class="col-xs-10 col-sm-12">
+  <div class="col-xs-12 col-sm-12">
       <pfng-list
         [config]="listConfig"
         [expandTemplate]="untoggledTemplate"
@@ -23,10 +23,8 @@
               <span *ngIf="item.name !== 'beta'" class="fa {{item.icon}} list-pf-icon list-pf-icon-bordered list-pf-icon-small"></span>
             </div>
             <div class="list-pf-main-content">
-              <div>
-                <p class="feature-title">{{item.title}}</p>
-                <p class="feature-description">{{item.description}}</p>
-              </div>
+              <p class="feature-title">{{item.title}}</p>
+              <p class="feature-description">{{item.description}}</p>
             </div>
           </div>
         </ng-template>
@@ -34,7 +32,7 @@
         <ng-template #untoggledTemplate let-item="item" let-index="index">
           <div *ngIf="item.expandId === 'released'">
             <div class="col-sm-1">
-              <span class="fa {{item.icon}} list-pf-icon icon-big"></span>
+              <span class="fa fa-2x  {{item.icon}} list-pf-icon"></span>
             </div>
             <div class="col-sm-4">
               <div class="feature-details-title">
@@ -44,10 +42,10 @@
                 These features have been just been relased and are part of the product release.
               </div>
             </div>
-            <div class="col-xs-9 col-sm-5">
+            <div class="col-xs-12 col-sm-7">
               <div class="feature-details-description">
-                <ul *ngFor="let feature of item.features">
-                  <li><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+                <ul>
+                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
                 </ul>
               </div>
             </div>
@@ -55,7 +53,7 @@
 
           <div *ngIf="item.expandId === 'beta'">
             <div class="col-sm-1">
-              <span class="fa list-pf-icon icon-big" style="font-weight: bold"> ß </span>
+              <span class="fa fa-2x  list-pf-icon" style="font-weight: bold"> ß </span>
             </div>
             <div class="col-sm-4">
               <div class="feature-details-title">
@@ -66,10 +64,10 @@
                 Use these at your own risk.
               </div>
             </div>
-            <div class="col-xs-9 col-sm-5">
+            <div class="col-xs-12 col-sm-7">
               <div class="feature-details-description">
-                <ul *ngFor="let feature of item.features">
-                  <li><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+                <ul>
+                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
                 </ul>
               </div>
             </div>
@@ -77,7 +75,7 @@
 
           <div *ngIf="item.expandId === 'experimental'">
             <div class="col-sm-1">
-              <span class="fa {{item.icon}} list-pf-icon icon-big"></span>
+              <span class="fa fa-2x {{item.icon}} list-pf-icon"></span>
             </div>
             <div class="col-sm-4">
               <div class="feature-details-title">
@@ -88,10 +86,10 @@
                 Use these at your own risk.
               </div>
             </div>
-            <div class="col-xs-9 col-sm-5">
+            <div class="col-xs-12 col-sm-7">
               <div class="feature-details-description">
-                <ul *ngFor="let feature of item.features">
-                  <li><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+                <ul>
+                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
                 </ul>
               </div>
             </div>
@@ -99,7 +97,7 @@
 
           <div *ngIf="item.expandId === 'internal'">
             <div class="col-sm-1">
-              <span class="fa {{item.icon}} list-pf-icon icon-big"></span>
+              <span class="fa fa-2x {{item.icon}} list-pf-icon"></span>
             </div>
             <div class="col-sm-4">
               <div class="feature-details-title">
@@ -110,10 +108,10 @@
                 Use these at your own risk.
               </div>
             </div>
-            <div class="col-xs-9 col-sm-5">
+            <div class="col-xs-12 col-sm-7">
               <div class="feature-details-description">
-                <ul *ngFor="let feature of item.features">
-                  <li><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+                <ul>
+                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
                 </ul>
               </div>
             </div>
