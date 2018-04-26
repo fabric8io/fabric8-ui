@@ -12,6 +12,8 @@ import { PipelineModule } from 'a-runtime-console/index';
 import { ForgeWizardModule } from '../../forge-wizard/forge-wizard.module';
 import { PipelinesRoutingModule } from './pipelines-routing.module';
 import { PipelinesComponent } from './pipelines.component';
+import { PipelinesService } from './services/pipelines.service';
+
 
 @NgModule({
   imports: [

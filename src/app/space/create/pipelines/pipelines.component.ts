@@ -25,7 +25,6 @@ import {
   Space
 } from 'ngx-fabric8-wit';
 import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
-import { PipelinesService as RuntimePipelinesService } from '../../../shared/runtime-console/pipelines.service';
 import { PipelinesService } from './services/pipelines.service';
 import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
 
@@ -67,7 +66,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     private modalService: BsModalService,
     private contexts: Contexts,
     private authService: AuthenticationService,
-    private runtimePipelinesService: RuntimePipelinesService,
     private pipelinesService: PipelinesService,
     private broadcaster: Broadcaster
   ) {
@@ -116,9 +114,7 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       }));
 
     this.subscriptions.push(
-      this.runtimePipelinesService.current.combineLatest(
-        this.pipelinesService.getOpenshiftConsoleUrl(),
-        this.setupBuildConfigLinks)
+      this.pipelinesService.getCurrentPipelines()
         .subscribe((buildConfigs: BuildConfig[]) => {
           this._allPipelines = buildConfigs;
           this.applyFilters();
@@ -136,21 +132,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
         this.openshiftConsoleUrl = url;
       })
     );
-  }
-
-  private setupBuildConfigLinks(buildConfigs: BuildConfig[], consoleUrl: string): BuildConfig[] {
-    if (consoleUrl) {
-      for (let build of buildConfigs) {
-        build.openShiftConsoleUrl = `${consoleUrl}/${build.name}`;
-        build.editPipelineUrl = build.openShiftConsoleUrl.replace('browse', 'edit');
-        if (build.interestingBuilds) {
-          for (let b of build.interestingBuilds) {
-            b.openShiftConsoleUrl = `${build.openShiftConsoleUrl}/${build.name}-${b.buildNumber}`;
-          }
-        }
-      }
-    }
-    return buildConfigs;
   }
 
   ngOnDestroy(): void {

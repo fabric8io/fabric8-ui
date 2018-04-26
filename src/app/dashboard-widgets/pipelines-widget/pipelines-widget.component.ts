@@ -14,14 +14,18 @@ import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 
 import { BuildConfigs } from '../../../a-runtime-console/index';
-import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 import { DummyService } from './../shared/dummy.service';
+
+import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-pipelines-widget',
   templateUrl: './pipelines-widget.component.html',
-  styleUrls: ['./pipelines-widget.component.less']
+  styleUrls: ['./pipelines-widget.component.less'],
+  providers: [
+    PipelinesService
+  ]
 })
 export class PipelinesWidgetComponent implements OnInit {
 
@@ -39,12 +43,11 @@ export class PipelinesWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.contextPath = this.context.current.map(context => context.path);
-    this.buildConfigs = this.pipelinesService.current.share();
+    this.buildConfigs = this.pipelinesService.getCurrentPipelines().share();
     // buildConfigsCount triggers changes in the DOM; force Angular Change Detection
     // via setTimeout encapsulation
     this.buildConfigs
       .map(buildConfigs => buildConfigs.length)
-      .share()
       .subscribe(length => setTimeout(() => this.buildConfigsCount = length));
   }
 

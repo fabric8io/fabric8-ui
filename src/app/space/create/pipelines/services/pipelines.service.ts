@@ -24,6 +24,10 @@ import { AuthenticationService } from 'ngx-login-client';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 
+import { BuildConfig } from 'a-runtime-console/index';
+
+import { PipelinesService as RuntimePipelinesService } from '../../../../shared/runtime-console/pipelines.service';
+
 export interface UserServiceResponse {
   data: UserServiceData;
 }
@@ -51,6 +55,7 @@ export class PipelinesService {
   constructor(
     private readonly http: Http,
     private readonly auth: AuthenticationService,
+    private readonly runtimePipelinesService: RuntimePipelinesService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler,
     private readonly notifications: NotificationsService,
@@ -60,6 +65,22 @@ export class PipelinesService {
       this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
     this.apiUrl = witUrl + 'user/services';
+  }
+
+  getCurrentPipelines(): Observable<BuildConfig[]> {
+    return Observable.combineLatest(
+      this.runtimePipelinesService.current.distinctUntilChanged(),
+      this.getOpenshiftConsoleUrl(),
+      this.setupBuildConfigLinks
+    );
+  }
+
+  getRecentPipelines(): Observable<BuildConfig[]> {
+    return Observable.combineLatest(
+      this.runtimePipelinesService.recentPipelines.distinctUntilChanged(),
+      this.getOpenshiftConsoleUrl(),
+      this.setupBuildConfigLinks
+    );
   }
 
   getOpenshiftConsoleUrl(): Observable<string> {
@@ -76,6 +97,21 @@ export class PipelinesService {
 
         return '';
       });
+  }
+
+  private setupBuildConfigLinks(buildConfigs: BuildConfig[], consoleUrl: string): BuildConfig[] {
+    if (consoleUrl) {
+      for (let build of buildConfigs) {
+        build.openShiftConsoleUrl = `${consoleUrl}/${build.name}`;
+        build.editPipelineUrl = build.openShiftConsoleUrl.replace('browse', 'edit');
+        if (build.interestingBuilds) {
+          for (let b of build.interestingBuilds) {
+            b.openShiftConsoleUrl = `${build.openShiftConsoleUrl}/${build.name}-${b.buildNumber}`;
+          }
+        }
+      }
+    }
+    return buildConfigs;
   }
 
   private handleHttpError(response: Response): Observable<any> {
