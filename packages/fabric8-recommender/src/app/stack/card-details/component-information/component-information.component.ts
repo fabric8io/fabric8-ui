@@ -206,7 +206,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
                     inputUrlArr = data.links.self.split('/api/');
                     let hostString = inputUrlArr[0] ? inputUrlArr[0].replace('api.', '') : '';
                     let baseUrl: string = hostString +
-                        `/${this.userName}/${this.spaceName}/plan/detail/` +
+                        `/${this.userName}/${this.getSpaceName(this.spaceName)}/plan/detail/` +
                         data.data.attributes['system.number'];
                     comp.workItem.url = baseUrl;
                     this.displayWorkItemResponse(baseUrl, data.data.attributes['system.number']);
@@ -216,6 +216,11 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
                 }
             }
         });
+    }
+
+    private getSpaceName(spaceName: string) {
+        spaceName = spaceName.replace(/\s/g, '_');
+        return spaceName;
     }
 
     /**
