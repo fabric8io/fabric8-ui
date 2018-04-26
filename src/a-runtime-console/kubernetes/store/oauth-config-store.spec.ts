@@ -24,12 +24,9 @@ import {
 import { createMock } from 'testing/mock';
 
 import {
-  Logger,
-  Notification,
-  NotificationType
+  Logger
 } from 'ngx-base';
 import {
-  Profile,
   User,
   UserService
 } from 'ngx-login-client';
