@@ -55,13 +55,8 @@ if [ ! -d dist ]; then
   ## Exec unit tests
   docker exec "${BUILDER_CONT}" ./run_unit_tests.sh
 
-  if [ $? -eq 0 ]; then
-    echo 'CICO: unit tests OK'
-    ./upload_to_codecov.sh
-  else
-    echo 'CICO: unit tests FAIL'
-    exit 1
-  fi
+  echo 'CICO: unit tests OK'
+  ./upload_to_codecov.sh
 
   ## Exec functional tests
   docker exec "${BUILDER_CONT}" ./run_functional_tests.sh
