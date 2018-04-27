@@ -19,22 +19,20 @@
           </div>
           <div *ngIf="item.displayed" class="list-pf-main-content">
             <div class="list-pf-left">
-              <span *ngIf="item.name === 'beta'" class="fa list-pf-icon list-pf-icon-bordered list-pf-icon-small" > ß </span>
-              <span *ngIf="item.name !== 'beta'" class="fa {{item.icon}} list-pf-icon list-pf-icon-bordered list-pf-icon-small"></span>
+              <span class="fa fa-flask list-pf-icon list-pf-icon-small icon-{{item.name}}" ></span>
             </div>
             <div class="list-pf-main-content">
-              <p class="feature-title">{{item.title}}</p>
-              <p class="feature-description">{{item.description}}</p>
+              <div>
+                <p class="feature-title">{{item.title}}</p>
+                <p class="feature-description">{{item.description}}</p>
+              </div>
             </div>
           </div>
         </ng-template>
 
         <ng-template #untoggledTemplate let-item="item" let-index="index">
           <div *ngIf="item.expandId === 'released'">
-            <div class="col-sm-1">
-              <span class="fa fa-2x  {{item.icon}} list-pf-icon"></span>
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
               <div class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
               </div>
@@ -52,10 +50,7 @@
           </div>
 
           <div *ngIf="item.expandId === 'beta'">
-            <div class="col-sm-1">
-              <span class="fa fa-2x  list-pf-icon" style="font-weight: bold"> ß </span>
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
               <div class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
               </div>
@@ -74,10 +69,7 @@
           </div>
 
           <div *ngIf="item.expandId === 'experimental'">
-            <div class="col-sm-1">
-              <span class="fa fa-2x {{item.icon}} list-pf-icon"></span>
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
               <div class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
               </div>
@@ -96,10 +88,7 @@
           </div>
 
           <div *ngIf="item.expandId === 'internal'">
-            <div class="col-sm-1">
-              <span class="fa fa-2x {{item.icon}} list-pf-icon"></span>
-            </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
               <div class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
               </div>
