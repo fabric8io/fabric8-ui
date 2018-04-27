@@ -32,7 +32,7 @@ objects:
           service: f8ui
       spec:
         containers:
-        - image: ${IMAGE}:${IMAGE_TAG}
+        - image: registry.devshift.net/fabric8-ui/fabric8-ui:${IMAGE_TAG}
           imagePullPolicy: Always
           name: f8ui
           ports:
@@ -162,8 +162,6 @@ objects:
     wildcardPolicy: None
   status: {}
 parameters:
-- name: IMAGE
-  value: registry.devshift.net/fabric8-ui/fabric8-ui
 - name: IMAGE_TAG
   value: latest
 - name: k8s_api_server_base_path
