@@ -1,7 +1,16 @@
-import { Injectable } from '@angular/core';
+import { ErrorHandler, Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+
 import { BehaviorSubject, Observable } from 'rxjs';
-import { UserService } from 'ngx-login-client';
+
+import {
+  Logger,
+  Notification,
+  NotificationType
+} from 'ngx-base';
+import { User, UserService } from 'ngx-login-client';
+
+import { NotificationsService } from 'app/shared/notifications.service';
 
 export class OAuthConfig {
   public authorizeUri: string;
@@ -64,11 +73,8 @@ export class OAuthConfig {
  */
 var _latestOAuthConfig: OAuthConfig = new OAuthConfig(null);
 
-var _startedLoadingOAuthConfig = false;
-
 let _currentOAuthConfig: BehaviorSubject<OAuthConfig> = new BehaviorSubject(_latestOAuthConfig);
 let _loadingOAuthConfig: BehaviorSubject<boolean> = new BehaviorSubject(true);
-
 
 export function currentOAuthConfig() {
   return _latestOAuthConfig;
@@ -77,7 +83,13 @@ export function currentOAuthConfig() {
 @Injectable()
 export class OAuthConfigStore {
 
-  constructor(private http: Http, private userService: UserService) {
+  constructor(
+    private readonly http: Http,
+    private readonly userService: UserService,
+    private readonly logger: Logger,
+    private readonly errorHandler: ErrorHandler,
+    private readonly notifications: NotificationsService
+  ) {
     this.load();
   }
 
@@ -104,16 +116,23 @@ export class OAuthConfigStore {
     return answer;
   }
 
-  load() {
-    // we only need to load once really on startup
-    if (_startedLoadingOAuthConfig) {
-      return;
-    }
-    _startedLoadingOAuthConfig = true;
+  private load() {
     let configUri = '/_config/oauth.json';
     this.http.get(configUri)
+      .catch((error: Response) => {
+        this.errorHandler.handleError(error);
+        this.logger.error(error);
+        this.notifications.message({
+          type: NotificationType.DANGER,
+          header: 'Error: Configuration setup',
+          message: 'Could not find OAuth configuration at ' + configUri
+        } as Notification);
+        _currentOAuthConfig.next(_latestOAuthConfig);
+        _loadingOAuthConfig.next(false);
+        return Observable.empty();
+      })
       .subscribe(
-        (res) => {
+        (res: Response) => {
           let data = res.json();
           for (let key in data) {
             let value = data[key];
@@ -122,16 +141,25 @@ export class OAuthConfigStore {
             }
           }
           _latestOAuthConfig = new OAuthConfig(data);
-          if (this.userService.currentLoggedInUser.attributes) {
-            let cluster = this.userService.currentLoggedInUser.attributes.cluster;
-            let console = cluster.replace('api', 'console');
-            _latestOAuthConfig.openshiftConsoleUrl = console + 'console';
-          }
-          _currentOAuthConfig.next(_latestOAuthConfig);
-          _loadingOAuthConfig.next(false);
-        },
-        (error) => {
-          console.log('Could not find OAuth configuration at " + configUri + ": ' + error);
+          this.userService.loggedInUser
+            .first((user: User) => user.attributes !== null && user.attributes.cluster !== null)
+            .subscribe(
+              (user: User) => {
+                let cluster = user.attributes.cluster;
+                _latestOAuthConfig.openshiftConsoleUrl = cluster.replace('api', 'console') + 'console';
+                _currentOAuthConfig.next(_latestOAuthConfig);
+              },
+              (error) => {
+                this.errorHandler.handleError(error);
+                this.logger.error(error);
+                this.notifications.message({
+                  type: NotificationType.DANGER,
+                  header: 'Error: Configuration setup',
+                  message: 'Could not acquire user credentials for oauthconfig setup'
+                } as Notification);
+                _currentOAuthConfig.next(_latestOAuthConfig);
+              }
+            );
           _currentOAuthConfig.next(_latestOAuthConfig);
           _loadingOAuthConfig.next(false);
         });
