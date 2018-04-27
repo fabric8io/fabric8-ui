@@ -1,13 +1,5 @@
 @import (reference) '../../../../assets/stylesheets/shared/osio.less';
 
-#feature-opt-in-special-icon,.feature-title,.feature-description {
-  font-family: 'Open Sans';
-}
-
-#feature-opt-in-special-icon {
-  line-height: 1.2;
-}
-
 .feature-title {
   font-weight: bold;
   font-size: @font-size-base;
@@ -19,8 +11,48 @@
   font-size: .85em;
 }
 
-.feature-opt-in-label {
-  display: block;
-  margin-bottom: 0;
-  font-weight: normal;
+.feature-details-title {
+  margin-bottom: 7px;
+  font-size: @font-size-base;
+  font-weight: 600;
+}
+
+.feature-details-description {
+  margin-bottom: 1em;
+  font-size: @font-size-small;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    line-height: 2em;
+  }
+}
+
+.checkbox {
+  border-right: 1px solid @color-pf-black-300;
+  float: left;
+  margin-top: 20px;
+  margin-right: 15px;
+  margin-bottom: 20px;
+  padding: 3px 10px 3px 0;
+}
+
+.list-pf-container {
+  padding: 5px 5px 0 30px;
+}
+
+.icon-internal {
+  color: @color-internal;
+}
+
+.icon-experimental {
+  color: @color-experimental;
+}
+
+.icon-beta {
+  color: @color-beta;
+}
+
+.icon-released {
+  color: @color-released;
 }

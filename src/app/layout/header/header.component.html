@@ -81,13 +81,12 @@
                 </a>
               </li>
               <li class="divider"></li>
-              <li id="header_createSpace">
-                <a (click)="openForgeWizard(spaceWizard)">
-                <!-- <a  (click)="showAddSpaceOverlay()"> -->
-                <span class="nav-item-icon">
-                  <i class="pficon pficon-add-circle-o"></i>
-                </span>
-                  Create space
+              <li class="header_createSpace">
+                <a class="create-space-anchor" (click)="showAddSpaceOverlay(spaceWizard)">
+                  <span class="nav-item-icon">
+                    <i class="pficon pficon-add-circle-o"></i>
+                  </span>
+                    Create space
                 </a>
               </li>
               <li id="header_mySpaces">

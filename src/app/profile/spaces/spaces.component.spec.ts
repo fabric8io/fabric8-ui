@@ -10,6 +10,7 @@ import { AuthenticationService } from 'ngx-login-client';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 
+import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { EventService } from '../../shared/event.service';
 import { SpaceWizardComponent } from '../../space/wizard/space-wizard.component';
 import { SpacesComponent } from './spaces.component';
@@ -17,6 +18,7 @@ import { SpacesComponent } from './spaces.component';
 
 describe('SpacesComponent', () => {
 
+  let featureServiceMock: any;
   let fixture: ComponentFixture<SpacesComponent>;
   let component: DebugNode['componentInstance'];
   let mockRouter: any = jasmine.createSpy('Router');
@@ -45,10 +47,12 @@ describe('SpacesComponent', () => {
   mockSpaceService.getMoreSpacesByUser = {};
 
   beforeEach(() => {
+    featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
     TestBed.configureTestingModule({
       imports: [Fabric8WitModule],
       declarations: [SpacesComponent],
       providers: [
+        { provide: FeatureTogglesService, useValue: featureServiceMock },
         { provide: Router, useValue: mockRouter },
         { provide: SpaceService, useValue: mockSpaceService },
         { provide: Logger, useValue: mockLogger },

@@ -32,13 +32,13 @@
       </div>
     </ng-template>
     <div *ngIf="!noFeaturesInInternal" [tooltip]="tooltipTemplateInternal" class="internal">
-      <i class="fa fa-lock fa-1x"></i>
+      <i class="fa fa-flask fa-1x"></i>
     </div>
     <ng-template #tooltipTemplateInternalEmpty>
       <div><strong>There are no internal features on this page.</strong></div>
     </ng-template>
     <div *ngIf="noFeaturesInInternal" [tooltip]="tooltipTemplateInternalEmpty" class="empty">
-      <i class="fa fa-lock fa-1x"></i>
+      <i class="fa fa-flask fa-1x"></i>
     </div>
   </div>
 
@@ -91,13 +91,13 @@
       </div>
     </ng-template>
     <div *ngIf="!noFeaturesInBeta" [tooltip]="tooltipTemplateBeta" class="beta">
-      <i class="fa fa-1x">&Beta;</i>
+      <i class="fa fa-flask fa-1x"></i>
     </div>
     <ng-template #tooltipTemplateBetaEmpty>
       <div><strong>There are no beta features on this page.</strong></div>
     </ng-template>
     <div *ngIf="noFeaturesInBeta" [tooltip]="tooltipTemplateBetaEmpty" class="empty">
-      <i class="fa fa-1x">&Beta;</i>
+      <i class="fa fa-flask fa-1x"></i>
     </div>
   </div>
   <div *ngSwitchCase="'released'">

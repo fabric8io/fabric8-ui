@@ -28,6 +28,7 @@ import {
   UserService
 } from 'ngx-login-client';
 
+import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { LoginService } from '../../shared/login.service';
 
 import { HeaderComponent } from './header.component';
@@ -41,6 +42,17 @@ class HostComponent { }
   template: ''
 })
 class MockRoutedComponent { }
+
+class MockFeatureToggleService {
+  getFeature(featureName: string): Observable<any> {
+    return Observable.of({
+      attributes: {
+        enabled: true,
+        userEnabled: true
+      }
+    });
+  }
+}
 
 describe('HeaderComponent', () => {
   type TestingContext = TestContext<HeaderComponent, HostComponent>;
@@ -62,6 +74,7 @@ describe('HeaderComponent', () => {
     ],
     declarations: [ MockRoutedComponent ],
     providers: [
+      { provide: FeatureTogglesService, useClass: MockFeatureToggleService },
       { provide: UserService, useValue: { loggedInUser: Observable.never() } },
       { provide: Logger, useValue: createMock(Logger) },
       { provide: LoginService, useValue: jasmine.createSpyObj('LoginService', ['login']) },
