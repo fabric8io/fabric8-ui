@@ -8,20 +8,21 @@
 
 .round-button(@color-for-feature) {
   display: block;
+  opacity: .3;
   width: 50px;
   height: 50px;
   line-height: 50px;
   border-radius: 50%;
-  color: @color-pf-black-100;
+  color: @color-for-feature;
   text-align: center;
-  background: @color-for-feature;
+  background: @color-pf-black-100;
   box-shadow: 0 0 3px @color-pf-black-600;
   font-size: 20px;
   font-weight: 700;
   float: right;
   margin-right: 40px;
   &:hover {
-    background: darken((@color-for-feature), 10%);
+    opacity: 1;
   }
 }
 

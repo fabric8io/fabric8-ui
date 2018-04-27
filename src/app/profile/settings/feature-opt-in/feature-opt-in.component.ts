@@ -21,7 +21,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   private items = [
     {
       name: 'released',
-      icon: 'fa-globe',
+      color: '',
       title: 'Production Only Features',
       description: 'This is the default and current release version of the product.',
       features: [],
@@ -29,7 +29,6 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
     },
     {
       name: 'beta',
-      icon: 'fa-flask',
       title: 'Beta Features',
       description: 'Experience various features that are ready for beta testing.',
       features: [],
@@ -37,7 +36,6 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
     },
     {
       name: 'experimental',
-      icon: 'fa-flask',
       title: 'Experimental Features',
       description: 'These features are still considered experimental and have no guarantee of stability.',
       features: [],
@@ -45,7 +43,6 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
     },
     {
       name: 'internal',
-      icon: 'fa-lock',
       title: 'Internal Experimental Features',
       description: 'These experimental features are released to internal employees only.',
       features: [],
