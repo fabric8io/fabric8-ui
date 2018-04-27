@@ -32,15 +32,15 @@ describe('FeatureOptInComponent', () => {
   let featureOptInComponent: FeatureOptInComponent;
   let gettingStartedServiceMock: jasmine.SpyObj<GettingStartedService>;
   let notificationsMock: jasmine.SpyObj<Notifications>;
-  let userServiceMock: any;
-  let toggleServiceMock: any;
+  let userServiceMock: jasmine.SpyObj<UserService>;
+  let toggleServiceMock: jasmine.SpyObj<FeatureTogglesService>;
 
   beforeEach(() => {
     gettingStartedServiceMock = createMock(GettingStartedService);
     toggleServiceMock = createMock(FeatureTogglesService);
     notificationsMock = createMock(Notifications);
     userServiceMock = createMock(UserService);
-    userServiceMock.currentLoggedInUser = {
+    (userServiceMock as any).currentLoggedInUser = {
       attributes: {
         featureLevel: 'beta',
         email: 'somebody@email.com',
