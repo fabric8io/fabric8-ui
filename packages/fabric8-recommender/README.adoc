@@ -90,7 +90,7 @@ Here are some of the most useful/frequently used scripts you may need to run:
 == Building the app
 
 === Production build
-
+ 
 To generate production build, set API URL and run build script as follows:
 
 ----
