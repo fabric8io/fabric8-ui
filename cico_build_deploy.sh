@@ -41,41 +41,35 @@ docker build -t "${BUILDER_CONT}" -f Dockerfile.builder .
 docker ps | grep -q "${BUILDER_CONT}" && docker stop "${BUILDER_CONT}"
 docker ps -a | grep -q "${BUILDER_CONT}" && docker rm "${BUILDER_CONT}"
 
-mkdir -p dist && docker run --detach=true --name="${BUILDER_CONT}" -t -v $(pwd)/dist:/dist:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN -e FABRIC8_BRANDING=openshiftio -e FABRIC8_REALM=fabric8 "${BUILDER_CONT}"
+if [ ! -d dist ]; then
+  mkdir dist
 
-# In order to run semantic-release we need a non detached HEAD, see https://github.com/semantic-release/semantic-release/issues/329
-docker exec "${BUILDER_CONT}" git checkout master
+  docker run --detach=true --name="${BUILDER_CONT}" -t -v $(pwd)/dist:/dist:Z -e BUILD_NUMBER -e BUILD_URL -e BUILD_TIMESTAMP -e JENKINS_URL -e GIT_BRANCH -e "CI=true" -e GH_TOKEN -e NPM_TOKEN -e FABRIC8_BRANDING=openshiftio -e FABRIC8_REALM=fabric8 "${BUILDER_CONT}"
 
-# Build almigty-ui
-docker exec "${BUILDER_CONT}" npm install
+  # In order to run semantic-release we need a non detached HEAD, see https://github.com/semantic-release/semantic-release/issues/329
+  docker exec "${BUILDER_CONT}" git checkout master
 
-## Exec unit tests
-docker exec "${BUILDER_CONT}" ./run_unit_tests.sh
+  # Build almigty-ui
+  docker exec "${BUILDER_CONT}" npm install
 
-  if [ $? -eq 0 ]; then
-    echo 'CICO: unit tests OK'
-    ./upload_to_codecov.sh
-else
-  echo 'CICO: unit tests FAIL'
-  exit 1
+  ## Exec unit tests
+  docker exec "${BUILDER_CONT}" ./run_unit_tests.sh
+
+  echo 'CICO: unit tests OK'
+  ./upload_to_codecov.sh
+
+  ## Exec functional tests
+  docker exec "${BUILDER_CONT}" ./run_functional_tests.sh
+
+  ## Run the prod build
+  docker exec "${BUILDER_CONT}" npm run build:prod
+
+  echo 'CICO: functional tests OK'
+  docker exec "${BUILDER_CONT}" npm run semantic-release
+  docker exec -u root "${BUILDER_CONT}" cp -r /home/fabric8/fabric8-ui/dist /
 fi
-
-## Exec functional tests
-docker exec "${BUILDER_CONT}" ./run_functional_tests.sh
-
-## Run the prod build
-docker exec "${BUILDER_CONT}" npm run build:prod
 
 set +e
-
-echo 'CICO: functional tests OK'
-docker exec "${BUILDER_CONT}" npm run semantic-release
-docker exec -u root "${BUILDER_CONT}" cp -r /home/fabric8/fabric8-ui/dist /
-
-if [ $? -ne 0 ]; then
-  echo 'CICO: app tests Failed'
-  exit 1
-fi
 
 ## Deploy
 echo 'CICO: build OK'
