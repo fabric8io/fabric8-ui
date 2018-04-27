@@ -58,7 +58,7 @@ describe('FeatureFooterComponent', () => {
   it('should render internal icon when user level is internal', async(() => {
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
-      expect(hostFixture.nativeElement.querySelector('.fa-lock').attributes['class'].value).toEqual('fa fa-lock fa-1x');
+      expect(hostFixture.nativeElement.querySelector('.fa-flask').attributes['class'].value).toEqual('fa fa-flask fa-1x');
     });
   }));
 });
