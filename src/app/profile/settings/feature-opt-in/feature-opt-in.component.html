@@ -33,9 +33,9 @@
         <ng-template #untoggledTemplate let-item="item" let-index="index">
           <div *ngIf="item.expandId === 'released'">
             <div class="col-sm-5">
-              <div class="feature-details-title">
+              <h1 class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
-              </div>
+              </h1>
               <div class="feature-details-description">
                 These features have been just been relased and are part of the product release.
               </div>
@@ -51,9 +51,9 @@
 
           <div *ngIf="item.expandId === 'beta'">
             <div class="col-sm-5">
-              <div class="feature-details-title">
+              <h1 class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
-              </div>
+              </h1>
               <div class="feature-details-description">
                 These features are currently in beta testing and have no guarantee of performance or stability.<br/>
                 Use these at your own risk.
@@ -70,9 +70,9 @@
 
           <div *ngIf="item.expandId === 'experimental'">
             <div class="col-sm-5">
-              <div class="feature-details-title">
+              <h1 class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
-              </div>
+              </h1>
               <div class="feature-details-description">
                 These features are currently in experimental testing and have no guarantee of performance or stability.<br/>
                 Use these at your own risk.
@@ -89,9 +89,9 @@
 
           <div *ngIf="item.expandId === 'internal'">
             <div class="col-sm-5">
-              <div class="feature-details-title">
+              <h1 class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
-              </div>
+              </h1>
               <div class="feature-details-description">
                 These features are currently in internal testing and have no guarantee of performance or stability.<br/>
                 Use these at your own risk.
