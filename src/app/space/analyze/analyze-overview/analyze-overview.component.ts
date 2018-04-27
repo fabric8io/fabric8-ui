@@ -72,9 +72,9 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     this.broadcaster.broadcast('showAddAppOverlay', true);
   }
 
-  isInOtherUsersSpace(): boolean {
+  userOwnsSpace(): boolean {
     if (this.context && this.loggedInUser) {
-      return !(this.context.space.relationships['owned-by'].data.id === this.loggedInUser.id);
+      return this.context.space.relationships['owned-by'].data.id === this.loggedInUser.id;
     }
     return false;
   }
