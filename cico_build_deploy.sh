@@ -59,7 +59,7 @@ if [ ! -d dist ]; then
   ./upload_to_codecov.sh
 
   ## Exec functional tests
-  docker exec "${BUILDER_CONT}" ./run_functional_tests.sh
+  #docker exec "${BUILDER_CONT}" ./run_functional_tests.sh
 
   ## Run the prod build
   docker exec "${BUILDER_CONT}" npm run build:prod
