@@ -239,7 +239,7 @@ module.exports = function (options) {
       ]
     },
 
-     /**
+    /**
      * Add additional plugins to the compiler.
      *
      * See: http://webpack.github.io/docs/configuration.html#plugins
@@ -283,7 +283,7 @@ module.exports = function (options) {
         path.resolve(__dirname, 'src') // location of your src
       ),
 
-       /**
+      /**
        * Plugin LoaderOptionsPlugin (experimental)
        *
        * See: https://gist.github.com/sokra/27b24881210b56bbaff7

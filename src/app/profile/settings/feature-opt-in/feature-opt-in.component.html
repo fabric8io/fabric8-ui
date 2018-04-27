@@ -1,86 +1,113 @@
 <div class="container-fluid container-cards-pf">
-  <div class="col-xs-10 col-sm-6">
-    <div class="card-pf list-group form-group list-view-pf list-view-pf-view">
-      <label class="feature-opt-in-label" for="released">
-        <div class="row">
-          <div class="list-group-item">
-            <div class="list-view-pf-checkbox">
-              <input id="released" type="radio" name="No Pre-Production Features" value="released" [(ngModel)]="featureLevel" (ngModelChange)="updateProfile()">
+  <div class="col-xs-12 col-sm-12">
+      <pfng-list
+        [config]="listConfig"
+        [expandTemplate]="untoggledTemplate"
+        [items]="items"
+        [itemTemplate]="itemTemplate">
+
+
+        <ng-template #itemTemplate let-item="item">
+          <div *ngIf="item.displayed" class="list-pf-left list-pf-content-flex">
+            <pfng-list-expand-toggle [expandId]="item.name" [item]="item" [template]="betaFeatureTemplate">
+              <ng-template #betaFeatureTemplate>
+              </ng-template>
+            </pfng-list-expand-toggle>
+          </div>
+          <div *ngIf="item.displayed" class="checkbox list-pf-left list-pf-content-flex">
+            <input id="{{item.name}}" type="radio" name="{{item.title}}" value="{{item.name}}" [(ngModel)]="featureLevel" (ngModelChange)="updateProfile()">
+          </div>
+          <div *ngIf="item.displayed" class="list-pf-main-content">
+            <div class="list-pf-left">
+              <span class="fa fa-flask list-pf-icon list-pf-icon-small icon-{{item.name}}" ></span>
             </div>
-            <div class="list-view-pf-main-info">
-              <div class="list-view-pf-left">
-                <span class="fa fa-globe list-view-pf-icon-sm"></span>
-              </div>
-              <div class="list-view-pf-body">
-                <div>
-                  <p class="feature-title">Production Only Features</p>
-                  <p class="feature-description">This is the default and current release version of the product.</p>
-                </div>
+            <div class="list-pf-main-content">
+              <div>
+                <p class="feature-title">{{item.title}}</p>
+                <p class="feature-description">{{item.description}}</p>
               </div>
             </div>
           </div>
-        </div>
-      </label>
-      <label class="feature-opt-in-label" for="beta">
-        <div class="row">
-          <div class="list-group-item">
-            <div class="list-view-pf-checkbox">
-              <input id="beta" type="radio" name="Beta Features" value="beta" [(ngModel)]="featureLevel" (ngModelChange)="updateProfile()">
-            </div>
-            <div class="list-view-pf-main-info">
-              <div class="list-view-pf-left">
-                <span class="fa list-view-pf-icon-sm" id="feature-opt-in-special-icon"> ß </span>
-              </div>
-              <div class="list-view-pf-body">
-                <div>
-                  <p class="feature-title">Beta Features</p>
-                  <p class="feature-description">Experience various features that are ready for beta testing.</p>
-                </div>
+        </ng-template>
+
+        <ng-template #untoggledTemplate let-item="item" let-index="index">
+          <div *ngIf="item.expandId === 'released'">
+            <div class="col-sm-5">
+              <h1 class="feature-details-title">
+                There are currently {{item.features.length}} {{item.name}} features
+              </h1>
+              <div class="feature-details-description">
+                These features have been just been relased and are part of the product release.
               </div>
             </div>
-          </div>
-        </div>
-      </label>
-      <label class="feature-opt-in-label" for="experimental">
-        <div class="row">
-          <div class="list-group-item">
-            <div class="list-view-pf-checkbox">
-              <input id="experimental" type="radio" name="Experimental Features" value="experimental" [(ngModel)]="featureLevel" (ngModelChange)="updateProfile()">
-            </div>
-            <div class="list-view-pf-main-info">
-              <div class="list-view-pf-left">
-                <span class="fa fa-flask list-view-pf-icon-sm"></span>
-              </div>
-              <div class="list-view-pf-body">
-                <div>
-                  <p class="feature-title">Experimental Features</p>
-                  <p class="feature-description">This is the default and current release version of the product.</p>
-                </div>
+            <div class="col-xs-12 col-sm-7">
+              <div class="feature-details-description">
+                <ul>
+                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+                </ul>
               </div>
             </div>
           </div>
-        </div>
-      </label>
-      <label class="feature-opt-in-label" for="internal">
-        <div class="row">
-          <div class="list-group-item">
-            <div class="list-view-pf-checkbox">
-              <input id="internal" type="radio" name="Internal Features" value="internal" [(ngModel)]="featureLevel" (ngModelChange)="updateProfile()">
-            </div>
-            <div class="list-view-pf-main-info">
-              <div class="list-view-pf-left">
-                <span class="fa fa-lock list-view-pf-icon-sm"></span>
+
+          <div *ngIf="item.expandId === 'beta'">
+            <div class="col-sm-5">
+              <h1 class="feature-details-title">
+                There are currently {{item.features.length}} {{item.name}} features
+              </h1>
+              <div class="feature-details-description">
+                These features are currently in beta testing and have no guarantee of performance or stability.<br/>
+                Use these at your own risk.
               </div>
-              <div class="list-view-pf-body">
-                <div>
-                  <p class="feature-title">Internal Experimental Features</p>
-                  <p class="feature-description">These experimental features are released to internal employees only.</p>
-                </div>
+            </div>
+            <div class="col-xs-12 col-sm-7">
+              <div class="feature-details-description">
+                <ul>
+                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+                </ul>
               </div>
             </div>
           </div>
-        </div>
-      </label>
-    </div>
+
+          <div *ngIf="item.expandId === 'experimental'">
+            <div class="col-sm-5">
+              <h1 class="feature-details-title">
+                There are currently {{item.features.length}} {{item.name}} features
+              </h1>
+              <div class="feature-details-description">
+                These features are currently in experimental testing and have no guarantee of performance or stability.<br/>
+                Use these at your own risk.
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-7">
+              <div class="feature-details-description">
+                <ul>
+                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="item.expandId === 'internal'">
+            <div class="col-sm-5">
+              <h1 class="feature-details-title">
+                There are currently {{item.features.length}} {{item.name}} features
+              </h1>
+              <div class="feature-details-description">
+                These features are currently in internal testing and have no guarantee of performance or stability.<br/>
+                Use these at your own risk.
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-7">
+              <div class="feature-details-description">
+                <ul>
+                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </pfng-list>
   </div>
 </div>
+
+
