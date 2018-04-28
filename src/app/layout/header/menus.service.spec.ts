@@ -62,12 +62,12 @@ describe('MenuService service: it', () => {
             'name':  'Backlog',
             'path':  '',
             'fullPath':  '/ckrych@redhat.com/test2/plan'
-          },
-          {
-            'name':  'Board',
-            'path':  'board',
-            'fullPath':  '/ckrych@redhat.com/test2/plan/board'
           }
+          // {
+          //   'name':  'Board',
+          //   'path':  'board',
+          //   'fullPath':  '/ckrych@redhat.com/test2/plan/board'
+          // }
         ],
         'fullPath':  '/ckrych@redhat.com/test2/plan'
       },

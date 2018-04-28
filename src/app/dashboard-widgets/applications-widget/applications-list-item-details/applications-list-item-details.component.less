@@ -1,0 +1,104 @@
+@import (reference) '../../../../assets/stylesheets/shared/osio.less';
+
+.pipeline {
+  border-top: 1px solid @color-pf-black-200;
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100%;
+  a {
+    &.stack-reports-btn {
+      display: none;
+    }
+  }
+}
+
+.pipeline .pipeline-stage {
+  flex: 0 0 auto;
+  min-height: 96px;
+  padding: 15px 10px 30px;
+  position: relative;
+  width: 100%;
+  &.pipeline-stage-min {
+    padding: 51px 10px 30px;
+  }
+}
+
+.pipeline .pipeline-stage:before {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  line-height: 1;
+  font-size: 22px;
+  text-align: center;
+  color: @color-pf-black-400; // was #c4c4c4;
+  content: '\2193';
+}
+
+.pipeline .pipeline-stage:last-child:before {
+  display: none;
+}
+
+.pipeline .pipeline-stage.no-stages {
+  align-items: center;
+  display: flex;
+  /* stylelint-disable */
+  width: auto !important;
+  /* stylelint-enable */
+}
+
+.pipeline .pipeline-stage.no-stages:before {
+  display: none;
+}
+
+.pipeline .pipeline-stage.no-stages .pipeline-stage-name {
+  margin-bottom: 0;
+}
+
+.pipeline-current-stage,
+.pipeline-stage-name,
+.pipeline-time,
+.pipeline-actions {
+  font-size: .857em;
+  text-align: center;
+}
+
+.pipeline-current-stage,
+.pipeline-stage-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: initial;
+  margin-bottom: 15px;
+}
+
+.pipeline-current-stage {
+  padding-top: 15px;
+}
+
+@media (min-width: @screen-xs-min) {
+  .pipeline .pipeline-stage {
+    padding-right: 52px;
+    padding-bottom: 15px;
+    width: 200px;
+    &.pipeline-stage-min {
+      margin-left: 10px;
+      padding-right: 60px;
+      width: 50px;
+    }
+  }
+  .pipeline .pipeline-stage:before {
+    bottom: auto;
+    left: auto;
+    right: 10px;
+    top: 37%;
+    content: '\2192';
+  }
+}
+
+@media (min-width: 1400px) {
+  .pipeline {
+    margin-left: 95px;
+    margin-right: 20px;
+  }
+}
