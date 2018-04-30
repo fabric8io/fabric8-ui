@@ -142,7 +142,7 @@ export class OAuthConfigStore {
           }
           _latestOAuthConfig = new OAuthConfig(data);
           this.userService.loggedInUser
-            .first((user: User) => user.attributes !== null && user.attributes.cluster !== null)
+            .first((user: User) => user.attributes != null && user.attributes.cluster != null)
             .subscribe(
               (user: User) => {
                 let cluster = user.attributes.cluster;

@@ -16,6 +16,7 @@ import {
 } from '@angular/http/testing';
 
 import {
+  EmptyError,
   Observable,
   Subscription
 } from 'rxjs';
@@ -132,6 +133,10 @@ describe('OauthConfigStore', () => {
         if (!val) {
           subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
             expect(config.loaded).toBeTruthy();
+
+            expect(mockLogger.error).not.toHaveBeenCalled();
+            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
+            expect(mockNotificationsService.message).not.toHaveBeenCalled();
             done();
           }));
         }
@@ -146,6 +151,10 @@ describe('OauthConfigStore', () => {
           subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
             expect(config.loaded).toBeTruthy();
             expect(config.openshiftConsoleUrl).toEqual('http://console.example.com/cluster/console');
+
+            expect(mockLogger.error).not.toHaveBeenCalled();
+            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
+            expect(mockNotificationsService.message).not.toHaveBeenCalled();
             done();
           }));
         }
@@ -153,6 +162,75 @@ describe('OauthConfigStore', () => {
     });
   });
 
+  describe('user service empty', () => {
+    beforeEach(() => {
+      mockUserService = createMock(UserService);
+      mockUserService.loggedInUser = Observable.of({} as User).publish();
+
+      TestBed.configureTestingModule({
+        imports: [HttpModule],
+        providers: [
+          {
+            provide: XHRBackend, useClass: MockBackend
+          },
+          {
+            provide: UserService, useClass: mockUserService
+          },
+          {
+            provide: Logger, useValue: mockLogger
+          },
+          {
+            provide: ErrorHandler, useValue: mockErrorHandler
+          },
+          {
+            provide: NotificationsService, useValue: mockNotificationsService
+          },
+          {
+            // provide OAuthConfigStore with a factory inside the fakeAsync zone
+            // so the mockBackend can catch http requests made inside the constructor
+            provide: OAuthConfigStore, useFactory: fakeAsync((
+              http: Http,
+              mockBackend: MockBackend,
+              logger: Logger,
+              errorHandler: ErrorHandler,
+              notifications: NotificationsService
+            ) => {
+              mockBackend.connections.subscribe((connection: MockConnection) => {
+                connection.mockRespond(new Response(new ResponseOptions({
+                  body: JSON.stringify(data),
+                  status: 200
+                })));
+              });
+              return new OAuthConfigStore(http, mockUserService, logger, errorHandler, notifications);
+            }),
+            deps: [Http, XHRBackend, Logger, ErrorHandler, NotificationsService]
+          }
+        ]
+      });
+
+      mockBackend = TestBed.get(XHRBackend);
+      oauthStore = TestBed.get(OAuthConfigStore);
+    });
+
+    it('should continue', (done: DoneFn) => {
+      mockUserService.loggedInUser.connect();
+
+      subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
+        if (!val) {
+          subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
+            expect(config.loaded).toBeTruthy();
+            expect(config.openshiftConsoleUrl).toBeUndefined();
+
+            // In test runs an EmptyError is thrown but during actual runs, no error is thrown
+            expect(mockLogger.error).toHaveBeenCalledWith(new EmptyError());
+            expect(mockErrorHandler.handleError).toHaveBeenCalledWith(new EmptyError());
+            expect(mockNotificationsService.message).toHaveBeenCalled();
+            done();
+          }));
+        }
+      }));
+    });
+  });
 
   describe('user service error', () => {
     beforeEach(() => {
