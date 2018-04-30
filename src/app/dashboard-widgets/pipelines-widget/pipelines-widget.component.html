@@ -1,9 +1,16 @@
 <div id="spacehome-pipelines-card" class="pipelines-widget card-pf f8-card">
   <div class="card-pf-heading f8-card-heading">
     <div class="card-pf-heading-details f8-card-heading-details">
-      <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
-        <i class="pficon pficon-add-circle-o"></i>
-      </a>
+      <div *ngIf="userOwnsSpace(); else cannotAddToSpace">
+        <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
+          <i class="pficon pficon-add-circle-o"></i>
+        </a>
+      </div>
+      <ng-template #cannotAddToSpace>
+        <a class="disabled btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
+          <i class="pficon pficon-add-circle-o"></i>
+        </a>
+      </ng-template>
     </div>
     <h2 class="card-pf-title">
       <a id="spacehome-pipelines-title" [routerLink]="[contextPath, 'create', 'pipelines']">Pipelines</a>
@@ -17,7 +24,8 @@
         Pipelines run when you commit and build your code base.
       </p>
       <div class="f8-blank-slate-main-action">
-        <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to Space</button>
+        <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg" [disabled]="!userOwnsSpace()" [title]="userOwnsSpace() ? 'Add to space' : 'You cannot add to another user\'s space'"
+          (click)="addToSpace.emit()">Add to Space</button>
       </div>
     </div>
     <ng-template #pipeAvailable>

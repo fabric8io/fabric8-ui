@@ -7,6 +7,8 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
+import { User, UserService } from 'ngx-login-client';
+
 import {
   Observable,
   Subscription
@@ -36,13 +38,16 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
 
   contextPath: string;
   buildConfigs: BuildConfigs;
+  private loggedInUser: User;
+  private ctx: Context;
   buildConfigsCount: number = 0;
 
   constructor(
     private context: Contexts,
     private broadcaster: Broadcaster,
-    private pipelinesService: PipelinesService
-  ) {}
+    private pipelinesService: PipelinesService,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
     // these values changing asynchronously triggers changes in the DOM;
@@ -63,6 +68,10 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
         });
       }
     ));
+
+    this.subscriptions.push(this.userService.loggedInUser.subscribe((user: User) => {
+      this.loggedInUser = user;
+    }));
   }
 
   ngOnDestroy() {
@@ -71,4 +80,10 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
     });
   }
 
+  userOwnsSpace(): boolean {
+    if (this.context && this.loggedInUser) {
+      return this.ctx.space.relationships['owned-by'].data.id === this.loggedInUser.id;
+    }
+    return false;
+  }
 }
