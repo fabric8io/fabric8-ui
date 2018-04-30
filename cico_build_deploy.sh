@@ -65,7 +65,7 @@ if [ ! -d dist ]; then
   docker exec "${BUILDER_CONT}" npm run build:prod
 
   echo 'CICO: functional tests OK'
-  #docker exec "${BUILDER_CONT}" npm run semantic-release
+  docker exec "${BUILDER_CONT}" npm run semantic-release || :
   docker exec -u root "${BUILDER_CONT}" cp -r /home/fabric8/fabric8-ui/dist /
 fi
 
