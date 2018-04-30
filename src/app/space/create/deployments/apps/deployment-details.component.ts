@@ -3,6 +3,7 @@ import {
   Input
 } from '@angular/core';
 
+import { ChartAPI } from 'c3';
 import {
   round,
   uniqueId
@@ -100,12 +101,7 @@ export class DeploymentDetailsComponent {
     chartId: uniqueId('cpu-chart'),
     chartHeight: 60,
     axis: {
-      type: 'timeseries',
-      y: {
-        min: 0,
-        max: 1,
-        padding: 0
-      }
+      type: 'timeseries'
     },
     tooltip: this.getTooltipContents(),
     units: 'Cores'
@@ -116,12 +112,7 @@ export class DeploymentDetailsComponent {
     chartId: uniqueId('mem-chart'),
     chartHeight: 60,
     axis: {
-      type: 'timeseries',
-      y: {
-        min: 0,
-        max: 1,
-        padding: 0
-      }
+      type: 'timeseries'
     },
     tooltip: this.getTooltipContents()
   };
@@ -152,6 +143,14 @@ export class DeploymentDetailsComponent {
   cpuChartClass: string;
   memChartClass: string;
 
+  private cpuChart: ChartAPI;
+  private memChart: ChartAPI;
+  private netChart: ChartAPI;
+
+  private cpuChartLoad: Subject<void> = new ReplaySubject<void>();
+  private memChartLoad: Subject<void> = new ReplaySubject<void>();
+  private netChartLoad: Subject<void> = new ReplaySubject<void>();
+
   constructor(
     private deploymentsService: DeploymentsService,
     private deploymentStatusService: DeploymentStatusService,
@@ -180,54 +179,47 @@ export class DeploymentDetailsComponent {
 
     this.subscriptions.push(
       this.deploymentStatusService.getCpuStatus(this.spaceId, this.environment, this.applicationId)
+        .skipUntil(this.cpuChartLoad)
         .subscribe((status: Status): void => {
+          let color: string;
           if (status.type === StatusType.OK) {
             this.cpuChartClass = '';
             this.cpuLabelClass = '';
+            color = '#0088ce'; // pf-blue
           } else if (status.type === StatusType.WARN) {
             this.cpuChartClass = ChartClass.WARN;
             this.cpuLabelClass = LabelClass.WARN;
-            this.cpuConfig['color'] = {
-              pattern: [
-                '#ec7a08' // pf-orange-400
-              ]
-            };
+            color = '#ec7a08'; // pf-orange-400
           } else if (status.type === StatusType.ERR) {
             this.cpuChartClass = ChartClass.ERR;
             this.cpuLabelClass = LabelClass.ERR;
-            this.cpuConfig['color'] = {
-              pattern: [
-                '#cc0000' // pf-red-100
-              ]
-            };
+            color = '#cc0000'; // pf-red-100
           }
+          this.cpuChart.data.colors({ CPU: color });
+          this.cpuChart.flush();
         })
     );
 
     this.subscriptions.push(
       this.deploymentStatusService.getMemoryStatus(this.spaceId, this.environment, this.applicationId)
+        .skipUntil(this.memChartLoad)
         .subscribe((status: Status): void => {
+          let color: string;
           if (status.type === StatusType.OK) {
             this.memChartClass = '';
             this.memLabelClass = '';
-            this.memConfig['color'] = this.chartDefaults.getDefaultSparklineColor();
+            color = '#0088ce'; // pf-blue
           } else if (status.type === StatusType.WARN) {
             this.memChartClass = ChartClass.WARN;
             this.memLabelClass = LabelClass.WARN;
-            this.memConfig['color'] = {
-              pattern: [
-                '#ec7a08' // pf-orange-400
-              ]
-            };
+            color = '#ec7a08'; // pf-orange-400
           } else if (status.type === StatusType.ERR) {
             this.memChartClass = ChartClass.ERR;
             this.memLabelClass = LabelClass.ERR;
-            this.memConfig['color'] = {
-              pattern: [
-                '#cc0000' // pf-red-100
-              ]
-            };
+            color = '#cc0000'; // pf-red-100
           }
+          this.memChart.data.colors({ Memory: color });
+          this.memChart.flush();
         })
     );
 
@@ -238,46 +230,83 @@ export class DeploymentDetailsComponent {
       this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.environment, this.applicationId);
 
     this.subscriptions.push(
-      this.cpuStat.subscribe((stats: CpuStat[]) => {
-        const last: CpuStat = stats[stats.length - 1];
-        this.cpuVal = last.used;
-        this.cpuMax = last.quota;
-        this.cpuData.total = last.quota;
-        this.cpuConfig.axis.y.max = this.getChartYAxisMax(stats);
-        this.cpuData.xData = [this.cpuData.xData[0], ...stats.map((stat: CpuStat) => stat.timestamp)];
-        this.cpuData.yData = [this.cpuData.yData[0], ...stats.map((stat: CpuStat) => stat.used)];
-      })
+      this.cpuStat
+        .skipUntil(this.cpuChartLoad)
+        .subscribe((stats: CpuStat[]) => {
+          const last: CpuStat = stats[stats.length - 1];
+          this.cpuVal = last.used;
+          this.cpuMax = last.quota;
+          this.cpuData.total = last.quota;
+          this.cpuData.xData = [this.cpuData.xData[0], ...stats.map((stat: CpuStat) => stat.timestamp)];
+          this.cpuData.yData = [this.cpuData.yData[0], ...stats.map((stat: CpuStat) => stat.used)];
+          this.cpuChart.axis.max({ y: this.getChartYAxisMax(stats) });
+          this.cpuChart.flush();
+        })
     );
 
     this.subscriptions.push(
-      this.memStat.subscribe((stats: MemoryStat[]) => {
-        const last: MemoryStat = stats[stats.length - 1];
-        this.memVal = last.used;
-        this.memMax = last.quota;
-        this.memData.total = last.quota;
-        this.memConfig.axis.y.max = this.getChartYAxisMax(stats);
-        this.memUnits = last.units;
-        this.memData.xData = [this.memData.xData[0], ...stats.map((stat: MemoryStat) => stat.timestamp)];
-        this.memData.yData = [this.memData.yData[0], ...stats.map((stat: MemoryStat) => stat.used)];
-      })
+      this.memStat
+        .skipUntil(this.memChartLoad)
+        .subscribe((stats: MemoryStat[]) => {
+          const last: MemoryStat = stats[stats.length - 1];
+          this.memVal = last.used;
+          this.memMax = last.quota;
+          this.memData.total = last.quota;
+          this.memUnits = last.units;
+          this.memData.xData = [this.memData.xData[0], ...stats.map((stat: MemoryStat) => stat.timestamp)];
+          this.memData.yData = [this.memData.yData[0], ...stats.map((stat: MemoryStat) => stat.used)];
+          this.memChart.axis.max({ y: this.getChartYAxisMax(stats) });
+          this.memChart.flush();
+        })
     );
 
     this.subscriptions.push(
-      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment, this.applicationId).subscribe((stats: NetworkStat[]) => {
-        const last: NetworkStat = stats[stats.length - 1];
-        this.netUnits = fromOrdinal(Math.max(ordinal(last.sent.units), ordinal(last.received.units)));
-        this.netConfig.units = this.netUnits;
-        const decimals: number = this.netUnits === 'bytes' ? 0 : 1;
-        this.netVal = round(last.sent.used + last.received.used, decimals);
-        this.netData.xData = [this.netData.xData[0], ...stats.map((stat: NetworkStat) => stat.received.timestamp)];
-        this.netData.yData[0] = [this.netData.yData[0][0], ...stats.map((stat: NetworkStat) => round(stat.sent.used, decimals))];
-        this.netData.yData[1] = [this.netData.yData[1][0], ...stats.map((stat: NetworkStat) => round(stat.received.used, decimals))];
-      })
+      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment, this.applicationId)
+        .skipUntil(this.netChartLoad)
+        .subscribe((stats: NetworkStat[]) => {
+          const last: NetworkStat = stats[stats.length - 1];
+          this.netUnits = fromOrdinal(Math.max(ordinal(last.sent.units), ordinal(last.received.units)));
+          this.netConfig.units = this.netUnits;
+          const decimals: number = this.netUnits === 'bytes' ? 0 : 1;
+          this.netVal = round(last.sent.used + last.received.used, decimals);
+          this.netData.xData = [this.netData.xData[0], ...stats.map((stat: NetworkStat) => stat.received.timestamp)];
+          this.netData.yData[0] = [this.netData.yData[0][0], ...stats.map((stat: NetworkStat) => round(stat.sent.used, decimals))];
+          this.netData.yData[1] = [this.netData.yData[1][0], ...stats.map((stat: NetworkStat) => round(stat.received.used, decimals))];
+          this.netChart.flush();
+        })
     );
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
+
+    if (this.cpuChart) {
+      this.cpuChart.destroy();
+    }
+    if (this.memChart) {
+      this.memChart.destroy();
+    }
+    if (this.netChart) {
+      this.netChart.destroy();
+    }
+  }
+
+  cpuChartLoaded(cpuChart: ChartAPI): void {
+    this.cpuChart = cpuChart;
+    this.cpuChartLoad.next();
+    this.cpuChartLoad.complete();
+  }
+
+  memChartLoaded(memChart: ChartAPI): void {
+    this.memChart = memChart;
+    this.memChartLoad.next();
+    this.memChartLoad.complete();
+  }
+
+  netChartLoaded(netChart: ChartAPI): void {
+    this.netChart = netChart;
+    this.netChartLoad.next();
+    this.netChartLoad.complete();
   }
 
   private getTooltipContents(): any {
