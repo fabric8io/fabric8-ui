@@ -1,0 +1,41 @@
+<f8-feature-toggle featureName="ApplicationsCard">
+  <div class="applications-widget card-pf f8-card" user-level>
+    <div class="card-pf-heading f8-card-heading">
+      <h2 class="card-pf-title">
+        Applications
+      </h2>
+    </div>
+    <div class="card-pf-body f8-card-body">
+      <div class="f8-blank-slate-card" *ngIf="buildConfigsAvailable !== true; else appsAvailable">
+        <h3>This space has no applications</h3>
+        <p>
+          Applications are shown once you deploy your code through a pipeline onto the defined environments.
+        </p>
+        <div class="f8-blank-slate-main-action">
+          <button id="spacehome-applications-add-button" class="btn btn-primary btn-lg"
+                  (click)="addToSpace.emit()">Create an Application</button>
+        </div>
+      </div>
+      <ng-template #appsAvailable>
+        <div id="spacehome-applications-list" class="f8-card-applications-list" *ngIf="buildConfigsAvailable === true">
+          <div class="col-md-12 col-lg-6 padding-none">
+            <div class="f8-card-applications-list-stage">
+              <h4 class="f8-card-applications-list-step">Stage</h4>
+              <div class="f8-card-applications-list-name">
+                <fabric8-applications-list [buildConfigs]="stageBuildConfigs"></fabric8-applications-list>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 col-lg-6 padding-none">
+            <div class="f8-card-applications-list-run">
+              <h4 class="f8-card-applications-list-step">Run</h4>
+              <div class="f8-card-applications-list-name">
+                <fabric8-applications-list [buildConfigs]="runBuildConfigs"></fabric8-applications-list>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</f8-feature-toggle>

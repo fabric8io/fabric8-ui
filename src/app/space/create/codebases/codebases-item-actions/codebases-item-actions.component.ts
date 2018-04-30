@@ -5,10 +5,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Dialog } from 'ngx-widgets';
 import { Subscription } from 'rxjs';
 
+import { WindowService } from 'app/shared/window.service';
 import { CodebaseDeleteDialogComponent } from '../codebases-delete/codebase-delete-dialog.component';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
-import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
 
 @Component({

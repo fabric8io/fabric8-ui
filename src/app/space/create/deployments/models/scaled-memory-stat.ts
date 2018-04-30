@@ -1,39 +1,70 @@
+import { MemoryStat } from './memory-stat';
 import {
-  MemoryStat,
-  MemoryUnit
-} from './memory-stat';
+  MemoryUnit,
+  ordinal
+} from './memory-unit';
 import { ScaledStat } from './scaled-stat';
 
 import { round } from 'lodash';
 
 export class ScaledMemoryStat implements MemoryStat, ScaledStat {
 
-  private static readonly UNITS = ['bytes', 'KB', 'MB', 'GB'];
-
-  public readonly raw: number;
-  public readonly units: MemoryUnit;
+  private _raw: number;
+  private _units: MemoryUnit;
 
   constructor(
-    public readonly used: number,
-    public readonly quota: number,
-    public readonly timestamp?: number
+    private _used: number,
+    private _quota: number,
+    private _timestamp?: number
   ) {
-    this.raw = used;
+    this._raw = this._used;
     let scale = 0;
-    if (this.used !== 0) {
-      while (this.used > 1024 && scale < ScaledMemoryStat.UNITS.length) {
-        this.used /= 1024;
-        this.quota /= 1024;
+    if (this._used !== 0) {
+      while (this._used >= 1024 && scale < Object.keys(MemoryUnit).length) {
+        this._used /= 1024;
+        this._quota /= 1024;
         scale++;
       }
     } else {
-      while (this.quota > 1024 && scale < ScaledMemoryStat.UNITS.length) {
-        this.quota /= 1024;
+      while (this._quota >= 1024 && scale < Object.keys(MemoryUnit).length) {
+        this._quota /= 1024;
         scale++;
       }
     }
-    this.used = round(this.used, 1);
-    this.quota = round(this.quota, 1);
-    this.units = ScaledMemoryStat.UNITS[scale] as MemoryUnit;
+    this._used = round(this._used, 1);
+    this._quota = round(this._quota, 1);
+    this._units = MemoryUnit[Object.keys(MemoryUnit)[scale]];
+  }
+
+  get raw(): number {
+    return this._raw;
+  }
+
+  get units(): MemoryUnit {
+    return this._units;
+  }
+
+  get used(): number {
+    return this._used;
+  }
+
+  get quota(): number {
+    return this._quota;
+  }
+
+  get timestamp(): number {
+    return this._timestamp;
+  }
+
+  static from(stat: MemoryStat, unit: MemoryUnit): ScaledMemoryStat {
+    const fromPower: number = ordinal(stat.units);
+    const toPower: number = ordinal(unit);
+    const scaleFactor: number = Math.pow(1024, fromPower - toPower);
+
+    const res: ScaledMemoryStat = new ScaledMemoryStat(stat.used, stat.quota, stat.timestamp);
+    res._used = round(stat.used * scaleFactor, 1);
+    res._quota = round(stat.quota * scaleFactor, 1);
+    res._units = unit;
+    return res;
   }
 }

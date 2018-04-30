@@ -119,19 +119,19 @@ export const routes: Routes = [
     }
   },
 
-  // Plan board
-  {
-    path: ':entity/:space/plan/board',
-    resolve: {
-      context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver
-    },
-    loadChildren: './space/plan/board/board.module#BoardModule',
-    data: {
-      title: 'Plan: Board',
-      featureName: 'Planner'
-    }
-  },
+  // // Plan board
+  // {
+  //   path: ':entity/:space/plan/board',
+  //   resolve: {
+  //     context: ContextResolver,
+  //     featureFlagConfig: FeatureFlagResolver
+  //   },
+  //   loadChildren: './space/plan/board/board.module#BoardModule',
+  //   data: {
+  //     title: 'Plan: Board',
+  //     featureName: 'Planner'
+  //   }
+  // },
 
   // Plan details
   {

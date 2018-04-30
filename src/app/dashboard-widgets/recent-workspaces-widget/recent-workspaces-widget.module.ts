@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 
-import { WindowService } from '../../space/create/codebases/services/window.service';
 import { WorkspacesService } from '../../space/create/codebases/services/workspaces.service';
 import { RecentWorkspacesWidgetComponent } from './recent-workspaces-widget.component';
 
@@ -16,6 +15,6 @@ import { RecentWorkspacesWidgetComponent } from './recent-workspaces-widget.comp
   ],
   declarations: [RecentWorkspacesWidgetComponent],
   exports: [RecentWorkspacesWidgetComponent],
-  providers: [TooltipConfig, WindowService, WorkspacesService]
+  providers: [TooltipConfig, WorkspacesService]
 })
 export class RecentWorkspacesWidgetModule { }

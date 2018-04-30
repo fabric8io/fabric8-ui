@@ -6,6 +6,8 @@ import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-
 import { AUTH_API_URL, AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
+import { WindowService } from './window.service';
+
 @Injectable()
 export class LoginService {
 
@@ -15,12 +17,13 @@ export class LoginService {
   static readonly BANNED_REDIRECT_URLS = ['/'];
   static readonly LOGIN_URL = '/';
 
-
+  private window: Window;
   private authUrl: string;  // URL to web api
 
   public openShiftToken: string;
 
   constructor(
+    windowService: WindowService,
     private router: Router,
     private localStorage: LocalStorageService,
     @Inject(AUTH_API_URL) private apiUrl: string,
@@ -29,6 +32,7 @@ export class LoginService {
     private notifications: Notifications,
     private userService: UserService
   ) {
+    this.window = windowService.getNativeWindow();
     // Removed ?link=true in favor of getting started page
     this.authUrl = apiUrl + 'login';
     this.broadcaster.on('authenticationError').subscribe(() => {
@@ -47,9 +51,9 @@ export class LoginService {
     var authUrl = this.authUrl;
     if (authUrl.indexOf('?') < 0) {
       // lets ensure there's a redirect parameter to avoid WIT barfing
-      authUrl += '?redirect=' + window.location.href;
+      authUrl += '?redirect=' + this.window.location.href;
     }
-    window.location.href = authUrl;
+    this.window.location.href = authUrl;
   }
 
   public redirectAfterLogin() {
@@ -63,24 +67,27 @@ export class LoginService {
   public redirectToLogin(currentUrl: string) {
     console.log('Please login to access ' + currentUrl);
     this.redirectUrl = currentUrl;
-    window.location.href = LoginService.LOGIN_URL;
+    this.window.location.href = LoginService.LOGIN_URL;
   }
 
   public logout() {
     this.authService.logout();
-    window.location.href = this.apiUrl + 'logout?redirect=' + encodeURIComponent(window.location.origin);
+    this.window.location.href = this.apiUrl + 'logout?redirect=' + encodeURIComponent(this.window.location.origin);
   }
 
   public login() {
-    let query = window.location.search.substr(1);
+    let query = this.window.location.search.substr(1);
     let result: any = {};
     query.split('&').forEach(function(part) {
       let item: any = part.split('=');
       result[item[0]] = decodeURIComponent(item[1]);
     });
+
     if (result['error']) {
       this.notifications.message({ message: result['error'], type: NotificationType.DANGER } as Notification);
-    } else if (result['token_json']) {
+    }
+
+    if (result['token_json']) {
       // Handle the case that this is a login
       this.authService.logIn(result['token_json']);
       this.authService

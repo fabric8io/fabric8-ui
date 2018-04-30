@@ -8,6 +8,8 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
+import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
+
 import { Navigation } from '../../models/navigation';
 import { LoginService } from '../../shared/login.service';
 import { MenuedContextType } from './menued-context-type';
@@ -56,6 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ]);
 
   recent: Context[];
+  appLauncherEnabled: boolean = false;
   loggedInUser: User;
   private _context: Context;
   private _defaultContext: Context;
@@ -74,7 +77,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private broadcaster: Broadcaster,
     private contexts: Contexts,
     private modalService: BsModalService,
-    private authentication: AuthenticationService
+    private authentication: AuthenticationService,
+    private featureTogglesService: FeatureTogglesService
   ) {
     this.space = '';
     this.selectedFlow = 'start';
@@ -158,8 +162,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.modalRef.hide();
   }
 
-  showAddSpaceOverlay(): void {
-    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  showAddSpaceOverlay(addSpace: TemplateRef<any>): void {
+    this.featureTogglesService.getFeature('AppLauncher').subscribe((feature) => {
+      this.appLauncherEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
+      if (this.appLauncherEnabled) {
+        this.broadcaster.broadcast('showAddSpaceOverlay', true);
+      } else {
+        this.openForgeWizard(addSpace);
+      }
+    });
   }
 
   selectFlow($event) {

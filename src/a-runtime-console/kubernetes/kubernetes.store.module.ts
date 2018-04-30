@@ -31,7 +31,6 @@ import { DeploymentStore } from './store/deployment.store';
 import { DeploymentConfigStore } from './store/deploymentconfig.store';
 import { EventStore } from './store/event.store';
 import { NamespaceStore } from './store/namespace.store';
-import { OAuthConfigStore } from './store/oauth-config-store';
 import { PodStore } from './store/pod.store';
 import { ReplicaSetStore } from './store/replicaset.store';
 import { ReplicationControllerStore } from './store/replicationcontroller.store';
@@ -77,8 +76,6 @@ import {BrowserModule} from "@angular/platform-browser";
     EventStore,
     NamespaceService,
     NamespaceStore,
-    // TODO Move to app.module
-    OAuthConfigStore,
     // TODO Move to app.module
     OAuthService,
     PodService,

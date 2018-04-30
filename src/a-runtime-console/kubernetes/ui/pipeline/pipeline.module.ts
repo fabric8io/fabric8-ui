@@ -65,6 +65,7 @@ const routes: Routes = [
   entryComponents: [
   ],
   exports: [
+    InputActionDialog,
     PipelinesListComponent,
     PipelinesListToolbarComponent
   ],

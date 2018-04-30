@@ -6,7 +6,6 @@ import { Http } from '@angular/http';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 
-import { WindowService } from '../services/window.service';
 import { WorkspacesService } from '../services/workspaces.service';
 import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.component';
 
@@ -19,7 +18,7 @@ import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.co
   ],
   declarations: [ CodebasesItemWorkspacesComponent ],
   exports: [ CodebasesItemWorkspacesComponent ],
-  providers: [ BsDropdownConfig, TooltipConfig, WindowService, WorkspacesService ]
+  providers: [ BsDropdownConfig, TooltipConfig, WorkspacesService ]
 })
 export class CodebasesItemWorkspacesModule {
   constructor(http: Http) {}

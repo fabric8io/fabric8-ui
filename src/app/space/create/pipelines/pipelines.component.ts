@@ -25,7 +25,6 @@ import {
   Space
 } from 'ngx-fabric8-wit';
 import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
-import { PipelinesService as RuntimePipelinesService } from '../../../shared/runtime-console/pipelines.service';
 import { PipelinesService } from './services/pipelines.service';
 import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
 
@@ -67,7 +66,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     private modalService: BsModalService,
     private contexts: Contexts,
     private authService: AuthenticationService,
-    private runtimePipelinesService: RuntimePipelinesService,
     private pipelinesService: PipelinesService,
     private broadcaster: Broadcaster
   ) {
@@ -116,21 +114,24 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       }));
 
     this.subscriptions.push(
-      this.runtimePipelinesService.current.subscribe((buildConfigs: BuildConfig[]) => {
-        this._allPipelines = buildConfigs;
-        this.applyFilters();
-        this.applySort();
-      }));
+      this.pipelinesService.getCurrentPipelines()
+        .subscribe((buildConfigs: BuildConfig[]) => {
+          this._allPipelines = buildConfigs;
+          this.applyFilters();
+          this.applySort();
+        })
+    );
 
     this.subscriptions.push(
       this.pipelinesService.getOpenshiftConsoleUrl().subscribe((url: string) => {
-        if (url !== '') {
+        if (url) {
           this.consoleAvailable = true;
         } else {
           this.consoleAvailable = false;
         }
         this.openshiftConsoleUrl = url;
-    }));
+      })
+    );
   }
 
   ngOnDestroy(): void {

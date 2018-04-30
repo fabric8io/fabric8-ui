@@ -1,19 +1,25 @@
 @import (reference) '../../../assets/stylesheets/shared/osio.less';
 
 .applications-widget {
-  .f8-card-applications-list {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    height: 58vh;
-    &-step,
-    &-name {
-      margin-top: 25px;
+  .f8-card-body {
+    @media (min-width: @screen-lg-min) {
+      overflow-y: hidden;
     }
-    .f8-card-applications-list-name {
+  }
+  .f8-card-applications-list {
+    h4 {
+      margin-top: 0;
+    }
+    &-name {
+      height: 325px;
       .list-group {
         border-top-color: transparent;
+        margin-right: 20px;
         .list-view-pf-checkbox {
           border-right: transparent;
+        }
+        .list-view-pf-description {
+          width: 100%;
         }
         .list-group-item-heading {
           font-weight: 500;
@@ -24,12 +30,23 @@
           font-size: .8em;
         }
       }
+      @media (min-width: @screen-lg-min) {
+        overflow-y: auto;
+      }
     }
     &-stage {
-      border-right: 1px solid @color-pf-black-400;
+      @media (min-width: @screen-lg-min) {
+        border-right: 1px solid @color-pf-black-400;
+        padding-right: 20px;
+      }
+    }
+    &-step {
+      padding-top: 25px;
     }
     &-run {
-      padding-left: 20px;
+      @media (min-width: @screen-lg-min) {
+        padding-left: 20px;
+      }
     }
   }
 }

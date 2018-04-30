@@ -7,14 +7,7 @@ import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 
-import { Subscription } from 'rxjs';
-
-import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
-
-import { DummyService } from './../shared/dummy.service';
-
 class WorkItemFilter {
-
   paramKey: string;
   value: string;
   active: boolean;
@@ -23,8 +16,7 @@ class WorkItemFilter {
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-create-work-item-widget',
-  templateUrl: './create-work-item-widget.component.html',
-  styleUrls: ['./create-work-item-widget.component.less']
+  templateUrl: './create-work-item-widget.component.html'
 })
 export class CreateWorkItemWidgetComponent implements OnInit {
 

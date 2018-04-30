@@ -36,7 +36,7 @@ Thumbs.db
 npm-debug.log
 
 #ignore npm 5 auto package inclusion until openshift support confirmed
-.package-lock.json
+#.package-lock.json
 
 # Coverage #
 /coverage/
@@ -68,8 +68,5 @@ npm-debug.log
 # NPM #
 
 npm-debug.log*
-
-#ignore npm 5 auto package lock inclusion untill openshift support confirmed
-package-lock.json
 
 .history

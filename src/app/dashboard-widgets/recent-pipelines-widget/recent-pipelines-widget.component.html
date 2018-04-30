@@ -39,17 +39,17 @@
     <div class="card-pf-heading f8-card-heading">
       <h2 class="card-pf-title">
         Recent Active Pipelines
-        <span id="recent-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount | async}}</span>
+        <span id="recent-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount}}</span>
       </h2>
     </div>
     <div class="card-pf-body f8-card-body">
-      <div class="f8-blank-slate-card blank-slate-recent-pipelines-card" *ngIf="!(buildConfigsCount | async)">
+      <div class="f8-blank-slate-card blank-slate-recent-pipelines-card" *ngIf="!(buildConfigsCount)">
         <h3>Pipelines reflect integration and deployment stages that code goes through</h3>
         <p>
           Pipelines display here when you commit and build your codebase.
         </p>
       </div>
-      <ul id="recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount | async) > 0">
+      <ul id="recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount) > 0">
         <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async">
           <div class="f8-card__pipeline-column">
             <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>

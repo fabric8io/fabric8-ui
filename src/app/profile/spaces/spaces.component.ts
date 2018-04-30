@@ -7,6 +7,7 @@ import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { Subject } from 'rxjs';
 
+import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { EventService } from '../../shared/event.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class SpacesComponent implements OnInit {
   private space: string;
 
   constructor(
+    private featureTogglesService: FeatureTogglesService,
     private router: Router,
     private spaceService: SpaceService,
     private logger: Logger,
@@ -143,4 +145,9 @@ export class SpacesComponent implements OnInit {
     this.selectedFlow = $event.flow;
     this.space = $event.space;
   }
+
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  }
+
 }
