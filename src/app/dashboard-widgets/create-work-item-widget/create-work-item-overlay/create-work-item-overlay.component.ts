@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ import { WorkItemService } from 'fabric8-planner/app/services/work-item.service'
   selector: 'fabric8-create-work-item-overlay',
   templateUrl: './create-work-item-overlay.component.html'
 })
-export class CreateWorkItemOverlayComponent implements OnDestroy, OnInit, AfterViewInit {
+export class CreateWorkItemOverlayComponent implements OnDestroy, OnInit {
   workItemSubscription: Subscription;
   workItemTypes: Observable<any[]>;
   space: Space;
@@ -37,18 +37,13 @@ export class CreateWorkItemOverlayComponent implements OnDestroy, OnInit, AfterV
   }
 
   ngOnInit() {
+    this.overlay.panelState = 'in';
   }
 
   ngOnDestroy(): void {
     if (this.workItemSubscription !== undefined) {
       this.workItemSubscription.unsubscribe();
     }
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.overlay.open();
-    }, 10);
   }
 
   onClose() {
