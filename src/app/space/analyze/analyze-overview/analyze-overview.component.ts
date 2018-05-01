@@ -24,13 +24,14 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   private selectedFlow: string;
   private space: Space;
   modalRef: BsModalRef;
+  private _myWorkItemsCard: boolean = false;
 
-  constructor(private modalService: BsModalService,
-    private broadcaster: Broadcaster,
-    private authentication: AuthenticationService,
-    private contexts: Contexts,
-    private userService: UserService
-  ) {
+  constructor(private authentication: AuthenticationService,
+              private broadcaster: Broadcaster,
+              private contexts: Contexts,
+              private featureTogglesService: FeatureTogglesService,
+              private modalService: BsModalService,
+              private userService: UserService) {
     this.selectedFlow = 'selectFlow';
   }
 
@@ -42,6 +43,12 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.userService.loggedInUser.subscribe((user: User) => {
       this.loggedInUser = user;
+    }));
+
+    this.subscriptions.push(this.featureTogglesService.getFeature('MyWorkItemsCard').subscribe((feature) => {
+      if (feature.attributes['enabled'] && feature.attributes['user-enabled']) {
+        this._myWorkItemsCard = true;
+      }
     }));
   }
 
@@ -77,5 +84,9 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
       return this.context.space.relationships['owned-by'].data.id === this.loggedInUser.id;
     }
     return false;
+  }
+
+  get myWorkItemsCard(): boolean {
+    return this._myWorkItemsCard;
   }
 }
