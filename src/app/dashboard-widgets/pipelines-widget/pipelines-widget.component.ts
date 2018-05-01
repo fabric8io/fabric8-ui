@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -25,13 +26,10 @@ import { PipelinesService } from '../../space/create/pipelines/services/pipeline
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-pipelines-widget',
-  templateUrl: './pipelines-widget.component.html',
-  providers: [
-    PipelinesService
-  ]
+  templateUrl: './pipelines-widget.component.html'
 })
 export class PipelinesWidgetComponent implements OnInit, OnDestroy {
-
+  @Input() userOwnsSpace: boolean;
   @Output() addToSpace = new EventEmitter();
 
   private subscriptions: Subscription[] = [];
@@ -78,12 +76,5 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub: Subscription) => {
       sub.unsubscribe();
     });
-  }
-
-  userOwnsSpace(): boolean {
-    if (this.context && this.loggedInUser) {
-      return this.ctx.space.relationships['owned-by'].data.id === this.loggedInUser.id;
-    }
-    return false;
   }
 }

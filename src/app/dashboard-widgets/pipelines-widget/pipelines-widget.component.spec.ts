@@ -28,22 +28,8 @@ class HostComponent { }
 describe('PipelinesWidgetComponent', () => {
   type TestingContext = TestContext<PipelinesWidgetComponent, HostComponent>;
 
-  let modalService: jasmine.SpyObj<BsModalService>;
-  let broadcaster: jasmine.SpyObj<Broadcaster>;
-  let pipelinesService: jasmine.SpyObj<PipelinesService>;
-  let authentication: jasmine.SpyObj<AuthenticationService>;
-  let ctxSubj: Subject<Context> = new Subject();
-
-  let mockRouter;
-  let mockActivatedRoute;
-  let mockLocationStrategy;
-
+  let ctxSubj: Subject<Context> = new Subject<Context>();
   let fakeUserObs: Subject<User> = new Subject<User>();
-
-  let mockRouterEvent: any = {
-    'id': 1,
-    'url': 'mock-url'
-  };
 
   initContext(PipelinesWidgetComponent, HostComponent, {
     imports: [HttpModule, RouterModule],
@@ -52,26 +38,29 @@ describe('PipelinesWidgetComponent', () => {
       { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
       { provide: Broadcaster, useValue: createMock(Broadcaster) },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
+      { provide: UserService, useValue: ({ loggedInUser: fakeUserObs }) },
       {
         provide: PipelinesService, useFactory: () => {
-          pipelinesService = createMock(PipelinesService);
+          let pipelinesService: jasmine.SpyObj<PipelinesService> = createMock(PipelinesService);
           pipelinesService.getCurrentPipelines.and.returnValue(Observable.of([{}] as BuildConfig[]));
           return pipelinesService;
         }
       },
       {
         provide: AuthenticationService, useFactory: (): jasmine.SpyObj<AuthenticationService> => {
-          authentication = createMock(AuthenticationService);
+          let authentication: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
           authentication.isLoggedIn.and.returnValue(true);
           return authentication;
         }
       },
       {
-        provide: UserService, useValue: ({ loggedInUser: fakeUserObs })
-      },
-      {
         provide: Router, useFactory: (): jasmine.SpyObj<Router> => {
-          mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
+          let mockRouterEvent: any = {
+            'id': 1,
+            'url': 'mock-url'
+          };
+
+          let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
           mockRouter.events = Observable.of(mockRouterEvent);
 
           return mockRouter;
@@ -83,71 +72,29 @@ describe('PipelinesWidgetComponent', () => {
     ]
   });
 
-
-  it('should disable the button if user service unavailable', function(this: TestingContext) {
-    fakeUserObs.next(null as User);
+  it('should enable button if the user owns the space', function(this: TestingContext) {
+    this.testedDirective.userOwnsSpace = true;
     this.detectChanges();
 
-    expect(this.testedDirective.userOwnsSpace()).toBe(false);
+    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button')).properties.disabled).toBe(false);
   });
 
-  it('should disable the button if context service unavailable', function(this: TestingContext) {
+  it('should disable button if the user does not own the space', function(this: TestingContext) {
+    this.testedDirective.userOwnsSpace = false;
     this.detectChanges();
-    expect(this.testedDirective.userOwnsSpace()).toBe(false);
+
+    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button')).properties.disabled).toBe(true);
   });
 
-  it('should disable the button if both services are unavailable', function(this: TestingContext) {
-    fakeUserObs.next(null as User);
+  it('should not show the add button if the user does not own the space', function(this: TestingContext) {
+    this.testedDirective.userOwnsSpace = false;
     this.detectChanges();
-
-    expect(this.testedDirective.userOwnsSpace()).toBe(false);
+    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).toBeNull;
   });
 
-  it('should recognize that the user owns the space', function(this: TestingContext) {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
-    fakeUserObs.next({
-      id: 'loggedInUser'
-    } as User);
-
-    ctxSubj.next({
-      space: {
-        relationships: {
-          'owned-by': {
-            data: {
-              id: 'loggedInUser'
-            }
-          }
-        }
-      } as Space
-    } as Context);
-
+  it('should show the add button if the user owns the space', function(this: TestingContext) {
+    this.testedDirective.userOwnsSpace = true;
     this.detectChanges();
-
-    expect(this.testedDirective.userOwnsSpace()).toBe(true);
-  });
-
-  it('should recognize that the user does not own the space', function(this: TestingContext) {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
-    fakeUserObs.next({
-      id: 'loggedInUser'
-    } as User);
-
-    ctxSubj.next({
-      space: {
-        relationships: {
-          'owned-by': {
-            data: {
-              id: 'someOtherUser'
-            }
-          }
-        }
-      } as Space
-    } as Context);
-
-    this.detectChanges();
-
-    expect(this.testedDirective.userOwnsSpace()).toBe(false);
+    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).not.toBeNull;
   });
 });
