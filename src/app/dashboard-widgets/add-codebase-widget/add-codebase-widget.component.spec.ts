@@ -14,6 +14,7 @@ import {
   Contexts
 } from 'ngx-fabric8-wit';
 
+import { By } from '@angular/platform-browser';
 import { Codebase } from '../../space/create/codebases/services/codebase';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
@@ -89,6 +90,30 @@ describe('AddCodebaseWidgetComponent', () => {
 
   it('should listen for codebaseDeleted events', function(this: TestingContext) {
     expect(mockBroadcaster.on).toHaveBeenCalledWith('codebaseDeleted');
+  });
+
+  it('should enable buttons if the user owns the space', function(this: TestingContext) {
+    this.testedDirective.userOwnsSpace = true;
+    this.detectChanges();
+
+    expect(this.fixture.debugElement.query(By.css('#default-level-spacehome-my-codebases-create-button'))).not.toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#user-level-spacehome-my-codebases-create-button'))).not.toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#default-level-spacehome-codebases-create-button'))).not.toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#user-level-spacehome-codebases-create-button'))).not.toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#default-level-add-to-space-btn'))).not.toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#user-level-add-to-space-btn'))).not.toBeNull();
+  });
+
+  it('should disable buttons if the user does not own the space', function(this: TestingContext) {
+    this.testedDirective.userOwnsSpace = false;
+    this.detectChanges();
+
+    expect(this.fixture.debugElement.query(By.css('#default-level-spacehome-my-codebases-create-button'))).toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#user-level-spacehome-my-codebases-create-button'))).toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#default-level-spacehome-codebases-create-button'))).toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#user-level-spacehome-codebases-create-button'))).toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#default-level-add-to-space-btn'))).toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#user-level-add-to-space-btn'))).toBeNull();
   });
 
   it('should listen for context space changes', function(this: TestingContext) {
