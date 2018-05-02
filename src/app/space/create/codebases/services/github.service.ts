@@ -246,6 +246,32 @@ export class GitHubService implements OnDestroy {
     }
   }
 
+  getUserOrgs(userName: string): Observable<string[]> {
+    let url = `${this.gitHubUrl}/users/${userName}/orgs`;
+    if (this.cache.has(url)) {
+      return this.cache.get(url);
+    } else {
+      let res = this.getHeaders()
+        .switchMap(newHeaders => this.http
+          .get(url, { headers: newHeaders }))
+        .map(response => {
+          let orgs = [];
+          let res = response.json() as any[];
+          for (let i = 0; i < res.length; i++) {
+            orgs.push(res[i].login);
+          }
+          return orgs;
+        })
+        .publishReplay(1)
+        .refCount()
+        .catch((error) => {
+          return this.handleError(error);
+        });
+        this.cache.set(url, res);
+        return res;
+      }
+  }
+
   /**
    * Get authenticate GitHub user
    *

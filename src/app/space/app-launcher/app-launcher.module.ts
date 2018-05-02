@@ -18,6 +18,8 @@ import { ImportAppModule } from './import-app/import-app.module';
 import { AuthAPIProvider } from './services/app-launcher-authprovider.service';
 import { NewForgeConfig } from './shared/new-forge.config';
 
+import { GitHubService } from '../create/codebases/services/github.service';
+
 @NgModule({
   imports: [
     AppLauncherRoutingModule,
@@ -26,6 +28,7 @@ import { NewForgeConfig } from './shared/new-forge.config';
     ImportAppModule
   ],
   providers: [
+    GitHubService,
     HelperService,
     { provide: Config, useClass: NewForgeConfig },
     {
