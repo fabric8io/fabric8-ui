@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Broadcaster } from 'ngx-base';
 import { Space, Spaces } from 'ngx-fabric8-wit';
@@ -19,27 +19,31 @@ import { WorkItemService } from 'fabric8-planner/app/services/work-item.service'
   selector: 'fabric8-create-work-item-overlay',
   templateUrl: './create-work-item-overlay.component.html'
 })
-export class CreateWorkItemOverlayComponent implements OnInit, AfterViewInit {
-
+export class CreateWorkItemOverlayComponent implements OnDestroy, OnInit {
+  workItemSubscription: Subscription;
   workItemTypes: Observable<any[]>;
   space: Space;
 
   @ViewChild('detailAddTypeSelector') overlay: WorkItemDetailAddTypeSelectorWidgetComponent;
 
-  constructor(
-    private router: Router,
-    private spaces: Spaces,
-    private broadcaster: Broadcaster,
-    private workItemService: WorkItemService
-  ) { }
-
-  ngOnInit() {
-    this.spaces.current.subscribe(space => this.space = space);
-    this.workItemTypes = this.workItemService.getWorkItemTypes();
+  constructor(private router: Router,
+              private spaces: Spaces,
+              private broadcaster: Broadcaster,
+              private workItemService: WorkItemService) {
+    this.workItemSubscription = this.spaces.current.subscribe(space => {
+      this.space = space;
+      this.workItemTypes = this.workItemService.getWorkItemTypes2(this.space.relationships.workitemtypes.links.related);
+    });
   }
 
-  ngAfterViewInit() {
-    this.overlay.open();
+  ngOnInit() {
+    this.overlay.panelState = 'in';
+  }
+
+  ngOnDestroy(): void {
+    if (this.workItemSubscription !== undefined) {
+      this.workItemSubscription.unsubscribe();
+    }
   }
 
   onClose() {
