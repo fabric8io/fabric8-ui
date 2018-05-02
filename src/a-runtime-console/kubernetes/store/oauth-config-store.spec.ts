@@ -16,8 +16,9 @@ import {
 } from '@angular/http/testing';
 
 import {
-  EmptyError,
+  BehaviorSubject,
   Observable,
+  ReplaySubject,
   Subscription
 } from 'rxjs';
 
@@ -79,7 +80,7 @@ describe('OauthConfigStore', () => {
   describe('success state', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = Observable.of(user).publish();
+      mockUserService.loggedInUser = new BehaviorSubject(user).multicast(() => new ReplaySubject(1));
 
       TestBed.configureTestingModule({
         imports: [HttpModule],
@@ -126,26 +127,8 @@ describe('OauthConfigStore', () => {
       oauthStore = TestBed.get(OAuthConfigStore);
     });
 
-    it('should load and set latest oauthconfig on init', (done: DoneFn) => {
+    it('should load and set oauthconfig with openshift console on init', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
-
-      subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
-        if (!val) {
-          subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
-            expect(config.loaded).toBeTruthy();
-
-            expect(mockLogger.error).not.toHaveBeenCalled();
-            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
-            expect(mockNotificationsService.message).not.toHaveBeenCalled();
-            done();
-          }));
-        }
-      }));
-    });
-
-    it('should set openshift console on init', (done: DoneFn) => {
-      mockUserService.loggedInUser.connect();
-
       subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
         if (!val) {
           subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
@@ -165,7 +148,7 @@ describe('OauthConfigStore', () => {
   describe('user service empty', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = Observable.of({} as User).publish();
+      mockUserService.loggedInUser = new BehaviorSubject({} as User).multicast(() => new ReplaySubject(1));
 
       TestBed.configureTestingModule({
         imports: [HttpModule],
@@ -214,17 +197,15 @@ describe('OauthConfigStore', () => {
 
     it('should continue', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
-
       subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
         if (!val) {
           subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
             expect(config.loaded).toBeTruthy();
             expect(config.openshiftConsoleUrl).toBeUndefined();
 
-            // In test runs an EmptyError is thrown but during actual runs, no error is thrown
-            expect(mockLogger.error).toHaveBeenCalledWith(new EmptyError());
-            expect(mockErrorHandler.handleError).toHaveBeenCalledWith(new EmptyError());
-            expect(mockNotificationsService.message).toHaveBeenCalled();
+            expect(mockLogger.error).not.toHaveBeenCalled();
+            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
+            expect(mockNotificationsService.message).not.toHaveBeenCalled();
             done();
           }));
         }
@@ -235,7 +216,7 @@ describe('OauthConfigStore', () => {
   describe('user service error', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = Observable.throw({error : 'error'}).publish();
+      mockUserService.loggedInUser = Observable.throw({error : 'error'}).multicast(() => new ReplaySubject(1));
 
       TestBed.configureTestingModule({
         imports: [HttpModule],
@@ -297,7 +278,7 @@ describe('OauthConfigStore', () => {
   describe('config request error', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = Observable.of(user).publish();
+      mockUserService.loggedInUser = new BehaviorSubject(user).multicast(() => new ReplaySubject(1));
 
       TestBed.configureTestingModule({
         imports: [HttpModule],
