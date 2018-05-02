@@ -82,10 +82,7 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   }
 
   public refreshOpenShift(): void {
-    this.connectGitHub();
-    this.providerService.disconnectOpenShift(this.cluster).subscribe(() => {
-      this.connectOpenShift();
-    });
+    this.connectOpenShift();
   }
 
   private updateGitHubStatus(): void {
