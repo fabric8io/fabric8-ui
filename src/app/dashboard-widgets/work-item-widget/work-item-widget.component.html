@@ -7,13 +7,13 @@
     </div>
     <div class="card-pf-body f8-card-body">
       <div class="f8-blank-slate-card" *ngIf="(myWorkItemsCount | async) === 0">
-        <h3>Create Work Items</h3>
+        <h3>View planner</h3>
         <p>
           Planner will help you to create different types of work-items, allows you to assign team members and iterations.
         </p>
         <div class="f8-blank-slate-main-action">
           <button id="spacehome-workitems-create-button" class="btn btn-primary btn-lg"
-                  [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
+                  [routerLink]="[contextPath | async, 'plan']">View planner</button>
         </div>
       </div>
       <div class="f8-card-body-grid" *ngIf="(myWorkItemsCount | async) > 0">
