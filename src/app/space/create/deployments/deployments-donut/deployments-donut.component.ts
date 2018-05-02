@@ -1,18 +1,23 @@
 import {
   Component,
   Input,
+  OnDestroy,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
 
 import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
 
 import { PodPhase } from '../models/pod-phase';
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import { Pods } from '../models/pods';
+import { Stat } from '../models/stat';
 import { DeploymentsService } from '../services/deployments.service';
 
 @Component({
@@ -28,11 +33,13 @@ export class DeploymentsDonutComponent implements OnInit {
   @Input() applicationId: string;
   @Input() environment: string;
 
-  isIdled = false;
-  scalable = true;
+  atQuota: boolean = false;
+  isIdled: boolean = false;
   pods: Observable<Pods>;
   desiredReplicas: number = 1;
   debounceScale = debounce(this.scale, 650);
+
+  private subscriptions: Subscription[] = [];
 
   colors: { [s in PodPhase]: string} = {
     'Empty': '#fafafa', // pf-black-100
@@ -57,18 +64,31 @@ export class DeploymentsDonutComponent implements OnInit {
 
   ngOnInit(): void {
     this.pods = this.deploymentsService.getPods(this.spaceId, this.environment,  this.applicationId);
-    this.pods.subscribe(pods => {
-      this.replicas = pods.total;
-      if (!this.scaleRequestPending) {
-        this.desiredReplicas = this.replicas;
-      }
-    });
+
+    this.subscriptions.push(
+      this.pods.subscribe(pods => {
+        this.replicas = pods.total;
+        if (!this.scaleRequestPending) {
+          this.desiredReplicas = this.replicas;
+        }
+      })
+    );
+
+    this.subscriptions.push(
+      Observable.combineLatest(
+        this.deploymentsService.getEnvironmentCpuStat(this.spaceId, this.environment),
+        this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment)
+      ).subscribe((stats: Stat[]): void => {
+        this.atQuota = stats.some((stat: Stat): boolean => stat.used >= stat.quota);
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
 
   scaleUp(): void {
-    if (!this.scalable) {
-      return;
-    }
     let desired = this.desiredReplicas;
     this.desiredReplicas = desired + 1;
 
@@ -77,10 +97,6 @@ export class DeploymentsDonutComponent implements OnInit {
   }
 
   scaleDown(): void {
-    if (!this.scalable) {
-      return;
-    }
-
     if (this.desiredReplicas === 0) {
       return;
     }
@@ -93,19 +109,21 @@ export class DeploymentsDonutComponent implements OnInit {
   }
 
   private scale(): void {
-    this.deploymentsService.scalePods(
-      this.spaceId, this.environment, this.applicationId, this.desiredReplicas
-    ).first().subscribe(
-      success => {
-        this.scaleRequestPending = false;
-      },
-      error => {
-        this.scaleRequestPending = false;
-        this.notifications.message({
-          type: NotificationType.WARNING,
-          message: error
-        });
-      }
+    this.subscriptions.push(
+      this.deploymentsService.scalePods(
+        this.spaceId, this.environment, this.applicationId, this.desiredReplicas
+      ).first().subscribe(
+        success => {
+          this.scaleRequestPending = false;
+        },
+        error => {
+          this.scaleRequestPending = false;
+          this.notifications.message({
+            type: NotificationType.WARNING,
+            message: error
+          });
+        }
+      )
     );
   }
 }

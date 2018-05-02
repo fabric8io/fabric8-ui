@@ -2,16 +2,21 @@
 </deployments-donut-chart>
 <div column class="deployments-donut-scale-controls fade-inline" *ngIf="!isIdled && !mini">
   <div>
-    <a id="scaleUp" (click)="$event.preventDefault(); scaleUp()" [ngClass]="{ disabled: !scalable }" [attr.title]="!scalable ? undefined : 'Scale up'"
-      [attr.aria-disabled]="!scalable ? 'true' : undefined" role="button">
+    <a id="scaleUp" title="Scale up" role="button" (click)="$event.preventDefault(); scaleUp()" *ngIf="!atQuota; else scaleUpDisabled">
       <i class="fa fa-chevron-up"></i>
       <span class="sr-only">Scale up</span>
     </a>
+    <ng-template #scaleUpDisabled>
+      <a class="disabled" title="You don't have enough resources. Scale down the number of pods on another deployment to make resources available." aria-disabled="true" role="button">
+        <i class="fa fa-chevron-up"></i>
+        <span class="sr-only">Scale up</span>
+      </a>
+    </ng-template>
   </div>
   <div>
     <!-- Remove the title when disabled because the not-allowed styled cursor overlaps the tooltip on some browsers. -->
-    <a id="scaleDown" (click)="$event.preventDefault(); scaleDown()" [ngClass]="{ disabled: !scalable || desiredReplicas === 0 }" [attr.title]="!scalable || desiredReplicas === 0 ? undefined : 'Scale down'"
-      [attr.aria-disabled]="!scalable || desiredReplicas === 0 ? 'true' : undefined" role="button">
+    <a id="scaleDown" (click)="$event.preventDefault(); scaleDown()" [ngClass]="{ disabled: desiredReplicas === 0 }" [attr.title]="desiredReplicas === 0 ? undefined : 'Scale down'"
+      [attr.aria-disabled]="desiredReplicas === 0 ? 'true' : undefined" role="button">
       <i class="fa fa-chevron-down"></i>
       <span class="sr-only">Scale down</span>
     </a>
