@@ -7,15 +7,12 @@ import { MomentModule } from 'angular2-moment';
 
 import { PipelinesWidgetComponent } from './pipelines-widget.component';
 
-import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     RouterModule,
-    MomentModule,
-    FeatureFlagModule
+    MomentModule
   ],
   declarations: [PipelinesWidgetComponent],
   exports: [PipelinesWidgetComponent]

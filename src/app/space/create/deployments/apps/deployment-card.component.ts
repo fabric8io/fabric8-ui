@@ -86,6 +86,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
           this.active = active;
 
           if (active) {
+            this.deleting = false;
+
             this.version =
               this.deploymentsService.getVersion(this.spaceId, this.environment, this.applicationId);
 
@@ -151,12 +153,16 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
         this.spaceId,
         this.environment,
         this.applicationId
-        ).subscribe(
+        )
+        .first()
+        .finally(() => this.deleting = false)
+        .subscribe(
           (success: string) => {
             this.notifications.message({
               type: NotificationType.SUCCESS,
               message: success
             });
+            this.active = false;
           },
           (error: any) => {
             this.notifications.message({
@@ -166,7 +172,6 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
           }
         )
     );
-
     this.lockAndDelete();
   }
 

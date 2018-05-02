@@ -8,7 +8,6 @@ import { PlannerListModule, WorkItemDetailAddTypeSelectorModule, WorkItemDetailM
 import { WidgetsModule } from 'ngx-widgets';
 
 import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
-
 import { CreateWorkItemOverlayModule } from './create-work-item-overlay/create-work-item-overlay.module';
 import { CreateWorkItemWidgetRoutingModule } from './create-work-item-widget-routing.module';
 import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';

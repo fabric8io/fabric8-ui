@@ -6,7 +6,10 @@ import {
 import { fakeAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subject
+} from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -14,6 +17,9 @@ import {
 } from 'testing/test-context';
 
 import { NotificationsService } from 'app/shared/notifications.service';
+import { CpuStat } from '../models/cpu-stat';
+import { MemoryStat } from '../models/memory-stat';
+import { MemoryUnit } from '../models/memory-unit';
 import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
 import { DeploymentsService } from '../services/deployments.service';
@@ -42,6 +48,10 @@ describe('DeploymentsDonutComponent', () => {
   let notifications: jasmine.SpyObj<NotificationsService> =
     jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
+
+  let environmentCpuSubject: Subject<CpuStat> = new Subject<CpuStat>();
+  let environmentMemSubject: Subject<MemoryStat> = new Subject<MemoryStat>();
+
   beforeEach(fakeAsync(() => {
     mockSvc = createMock(DeploymentsService);
     mockSvc.scalePods.and.returnValue(
@@ -50,6 +60,8 @@ describe('DeploymentsDonutComponent', () => {
     mockSvc.getPods.and.returnValue(
       Observable.of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
     );
+    mockSvc.getEnvironmentCpuStat.and.returnValue(environmentCpuSubject);
+    mockSvc.getEnvironmentMemoryStat.and.returnValue(environmentMemSubject);
   }));
 
   initContext(DeploymentsDonutComponent, HostComponent,
@@ -163,6 +175,36 @@ describe('DeploymentsDonutComponent', () => {
     expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
     expect(notifications.message).not.toHaveBeenCalled();
   });
+
+  describe('atQuota', () => {
+    it('should default to "false"', function(this: Context) {
+      expect(this.testedDirective.atQuota).toBeFalsy();
+    });
+
+    it('should be "false" when both stats are below quota', function(this: Context) {
+      environmentCpuSubject.next({ used: 0, quota: 2 });
+      environmentMemSubject.next({ used: 0, quota: 2, units: MemoryUnit.GB });
+      expect(this.testedDirective.atQuota).toBeFalsy();
+    });
+
+    it('should be "true" when CPU usage reaches quota', function(this: Context) {
+      environmentCpuSubject.next({ used: 2, quota: 2 });
+      environmentMemSubject.next({ used: 1, quota: 2, units: MemoryUnit.GB });
+      expect(this.testedDirective.atQuota).toBeTruthy();
+    });
+
+    it('should be "true" when Memory usage reaches quota', function(this: Context) {
+      environmentCpuSubject.next({ used: 1, quota: 2 });
+      environmentMemSubject.next({ used: 2, quota: 2, units: MemoryUnit.GB });
+      expect(this.testedDirective.atQuota).toBeTruthy();
+    });
+
+    it('should be "true" when both stats usage reaches quota', function(this: Context) {
+      environmentCpuSubject.next({ used: 2, quota: 2 });
+      environmentMemSubject.next({ used: 2, quota: 2, units: MemoryUnit.GB });
+      expect(this.testedDirective.atQuota).toBeTruthy();
+    });
+  });
 });
 
 describe('DeploymentsDonutComponent error handling', () => {
@@ -179,6 +221,8 @@ describe('DeploymentsDonutComponent error handling', () => {
     mockSvc.getPods.and.returnValue(
       Observable.of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
     );
+    mockSvc.getEnvironmentCpuStat.and.returnValue(Observable.never());
+    mockSvc.getEnvironmentMemoryStat.and.returnValue(Observable.never());
   }));
 
   initContext(DeploymentsDonutComponent, HostComponent,
