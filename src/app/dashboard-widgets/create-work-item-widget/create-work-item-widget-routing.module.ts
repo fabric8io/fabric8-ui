@@ -6,8 +6,7 @@ import { CreateWorkItemOverlayComponent } from './create-work-item-overlay/creat
 const routes: Routes = [
   {
     path: 'add-work-item',
-    component: CreateWorkItemOverlayComponent,
-    outlet: 'action'
+    component: CreateWorkItemOverlayComponent
   }
 ];
 
