@@ -141,6 +141,10 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   connectToGithub(): void {
     this.providerService.linkGitHub(window.location.href);
   }
+
+  showAddAppOverlay(): void {
+    this.broadcaster.broadcast('showAddAppOverlay', true);
+  }
   // Filter
 
   applyFilters(filters: Filter[]): void {

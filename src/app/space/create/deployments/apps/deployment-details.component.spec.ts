@@ -97,6 +97,17 @@ class FakeDeploymentsLinechart {
   @Input() chartData: SparklineData;
 }
 
+interface ChartMock {
+  axis: {
+    max: jasmine.Spy
+  };
+  data: {
+    colors: jasmine.Spy
+  };
+  destroy: jasmine.Spy;
+  flush: jasmine.Spy;
+}
+
 describe('DeploymentDetailsComponent', () => {
   type Context = TestContext<DeploymentDetailsComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
@@ -106,6 +117,9 @@ describe('DeploymentDetailsComponent', () => {
   let memStatObservable: BehaviorSubject<MemoryStat[]>;
   let netStatObservable: BehaviorSubject<NetworkStat[]>;
   let podsObservable: BehaviorSubject<Pods>;
+  let cpuChart: ChartMock;
+  let memChart: ChartMock;
+  let netChart: ChartMock;
 
   beforeEach(() => {
     cpuStatObservable = new BehaviorSubject([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]);
@@ -137,6 +151,37 @@ describe('DeploymentDetailsComponent', () => {
     mockStatusSvc.getAggregateStatus.and.returnValue(status);
     mockStatusSvc.getCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
     mockStatusSvc.getMemoryStatus.and.returnValue(Observable.of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
+
+    cpuChart = {
+      axis: {
+        max: jasmine.createSpy('max')
+      },
+      data: {
+        colors: jasmine.createSpy('colors')
+      },
+      destroy: jasmine.createSpy('destroy'),
+      flush: jasmine.createSpy('flush')
+    };
+    memChart = {
+      axis: {
+        max: jasmine.createSpy('max')
+      },
+      data: {
+        colors: jasmine.createSpy('colors')
+      },
+      destroy: jasmine.createSpy('destroy'),
+      flush: jasmine.createSpy('flush')
+    };
+    netChart = {
+      axis: {
+        max: jasmine.createSpy('max')
+      },
+      data: {
+        colors: jasmine.createSpy('colors')
+      },
+      destroy: jasmine.createSpy('destroy'),
+      flush: jasmine.createSpy('flush')
+    };
   });
 
   initContext(DeploymentDetailsComponent, HostComponent, {
@@ -152,6 +197,10 @@ describe('DeploymentDetailsComponent', () => {
       { provide: DeploymentStatusService, useFactory: () => mockStatusSvc },
       { provide: ChartDefaults, useValue: { getDefaultSparklineColor: () => ({}) } }
     ]
+  }, (component: DeploymentDetailsComponent): void => {
+    component.cpuChartLoaded(cpuChart as any);
+    component.memChartLoaded(memChart as any);
+    component.netChartLoaded(netChart as any);
   });
 
   it('should correctly call deployments service functions with the correct arguments', function(this: Context) {
@@ -209,6 +258,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should be set to OK (empty) class status', function(this: Context) {
+      expect(cpuChart.data.colors).toHaveBeenCalledWith({ CPU: '#0088ce' });
       expect(this.testedDirective.cpuLabelClass).toEqual('');
       expect(this.testedDirective.cpuChartClass).toEqual('');
     });
@@ -237,6 +287,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should be set to WARN class status', function(this: Context) {
+      expect(memChart.data.colors).toHaveBeenCalledWith({ Memory: '#ec7a08' });
       expect(this.testedDirective.memLabelClass).toEqual('label-warn');
       expect(this.testedDirective.memChartClass).toEqual('chart-warn');
     });
@@ -290,7 +341,7 @@ describe('DeploymentDetailsComponent', () => {
 
   describe('sparkline data', () => {
     it('should set CPU Y axis max to quota', function(this: Context) {
-      expect(this.testedDirective.cpuConfig.axis.y.max).toEqual(2);
+      expect(cpuChart.axis.max).toHaveBeenCalledWith({ y: 2 });
     });
 
     it('should set CPU Y axis max to maximum value or maximum quota', function(this: Context) {
@@ -313,11 +364,11 @@ describe('DeploymentDetailsComponent', () => {
         }
       ]);
       this.detectChanges();
-      expect(this.testedDirective.cpuConfig.axis.y.max).toEqual(200);
+      expect(cpuChart.axis.max).toHaveBeenCalledWith({ y: 200 });
     });
 
     it('should set Memory Y axis max to quota', function(this: Context) {
-      expect(this.testedDirective.memConfig.axis.y.max).toEqual(4);
+      expect(memChart.axis.max).toHaveBeenCalledWith({ y: 4 });
     });
 
     it('should set Memory Y axis max to maximum value or maximum quota', function(this: Context) {
@@ -344,7 +395,7 @@ describe('DeploymentDetailsComponent', () => {
         }
       ]);
       this.detectChanges();
-      expect(this.testedDirective.memConfig.axis.y.max).toEqual(200);
+      expect(memChart.axis.max).toHaveBeenCalledWith({ y: 200 });
     });
   });
 

@@ -6,7 +6,7 @@
       (onSortChange)="sortChange($event)">
     <ng-template #addCodebaseTemplate>
       <span class="with-cursor-pointer" placement="top" tooltip="Add a Codebase"
-           [routerLink]="[{ outlets: { action: 'add-codebase' } }]">
+        (click)="addToSpace.emit()">
         <span class="add-codebase-tooltip">
           <i class="pficon pficon-add-circle-o margin-top-4"></i>
           Add Codebase

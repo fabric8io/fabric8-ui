@@ -125,7 +125,7 @@
     "angular2-websocket": "0.9.5",
     "chunk-manifest-webpack2-plugin": "1.0.1",
     "core-js": "2.5.1",
-    "fabric8-planner": "0.45.6",
+    "fabric8-planner": "0.45.12",
     "fabric8-stack-analysis-ui": "0.12.4",
     "http-server": "0.10.0",
     "ie-shim": "0.1.0",
@@ -156,6 +156,7 @@
   "devDependencies": {
     "@krux/condition-jenkins": "1.0.1",
     "@ngtools/webpack": "1.7.4",
+    "@types/c3": "^0.6.0",
     "@types/jasmine": "2.6.2",
     "@types/js-yaml": "3.9.1",
     "@types/lodash": "4.14.80",

@@ -26,6 +26,7 @@ export class CodebasesToolbarComponent implements OnChanges, OnInit {
 
   @Output('onFilterChange') onFilterChange = new EventEmitter();
   @Output('onSortChange') onSortChange = new EventEmitter();
+  @Output() addToSpace = new EventEmitter();
 
   @ViewChild('addCodebaseTemplate') addCodebaseTemplate: TemplateRef<any>;
 

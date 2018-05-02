@@ -1,25 +1,40 @@
 <f8-feature-toggle featureName="Analyze.newSpaceDashboard">
   <div id="spacehome-codebases" class="add-codebase-widget card-pf f8-card" user-level>
     <div class="card-pf-heading f8-card-heading">
-      <div class="card-pf-heading-details f8-card-heading-details">
-        <a id="spacehome-codebases-add-space-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
-          <i class="pficon pficon-add-circle-o"></i>
-        </a>
-      </div>
+      <f8-feature-toggle featureName="AppLauncher">
+        <div class="card-pf-heading-details f8-card-heading-details" default-level>
+          <a id="spacehome-codebases-add-space-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
+            <i class="pficon pficon-add-circle-o"></i>
+          </a>
+        </div>
+        <div class="card-pf-heading-details f8-card-heading-details" user-level>
+            <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
+                <i class="pficon pficon-add-circle-o"></i>
+            </a>
+        </div>
+      </f8-feature-toggle>
       <h2 class="card-pf-title">
         <span id="spacehome-codebases-card-title">Codebases</span>
       </h2>
     </div>
     <div class="card-pf-body f8-card-body">
-      <div class="f8-blank-slate-card" *ngIf="codebases.length === 0">
-        <h3>This Space has no Codebases</h3>
-        <div class="f8-blank-slate-main-action">
-          <button id="spacehome-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
+      <f8-feature-toggle featureName="AppLauncher">
+        <div class="f8-blank-slate-card" *ngIf="codebases.length === 0" default-level>
+            <h3>This Space has no Codebases</h3>
+            <div class="f8-blank-slate-main-action">
+              <button id="spacehome-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
+            </div>
+            <div class="f8-blank-slate-main-action">
+              <button id="spacehome-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
+            </div>
         </div>
-        <div class="f8-blank-slate-main-action">
-          <button id="spacehome-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
+        <div class="f8-blank-slate-card" *ngIf="codebases.length === 0" user-level>
+            <h3>This Space has no Codebases</h3>
+            <div class="f8-blank-slate-main-action">
+              <button class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
+            </div>
         </div>
-      </div>
+      </f8-feature-toggle>
       <div id="spacehome-codebases-card-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped" *ngIf="codebases.length > 0">
         <div class="list-group-item list-view-pf-stacked list-view-pf-top-align" *ngFor="let codebase of codebases">
           <div class="list-view-pf-checkbox f8-card-list-view-pf-checkbox-icon">
@@ -43,26 +58,41 @@
   </div>
   <div id="spacehome-codebases-card" class="add-codebase-widget card-pf f8-card" default-level>
     <div class="card-pf-heading f8-card-heading">
-      <div class="card-pf-heading-details f8-card-heading-details">
-        <a id="spacehome-codebases-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
-          <i class="pficon pficon-add-circle-o"></i>
-        </a>
-      </div>
+      <f8-feature-toggle featureName="AppLauncher">
+          <div class="card-pf-heading-details f8-card-heading-details" default-level>
+            <a id="spacehome-codebases-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
+              <i class="pficon pficon-add-circle-o"></i>
+            </a>
+          </div>
+          <div class="card-pf-heading-details f8-card-heading-details" user-level>
+              <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
+                  <i class="pficon pficon-add-circle-o"></i>
+              </a>
+            </div>
+          </f8-feature-toggle>
       <h2 class="card-pf-title">
         <a id="spacehome-codebases-title" href="#" [routerLink]="[contextPath, 'create']">Codebases</a>
         <span id="spacehome-codebases-badge" class="badge f8-card-badge">{{codebases.length}}</span>
       </h2>
     </div>
     <div class="card-pf-body f8-card-body">
-      <div class="f8-blank-slate-card" *ngIf="codebases.length === 0">
-        <h3>This Space has no Codebases</h3>
-        <div class="f8-blank-slate-main-action">
-          <button id="spacehome-my-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
+      <f8-feature-toggle featureName="AppLauncher">
+        <div class="f8-blank-slate-card" *ngIf="codebases.length === 0" default-level>
+          <h3>This Space has no Codebases</h3>
+          <div class="f8-blank-slate-main-action">
+            <button id="spacehome-my-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
+          </div>
+          <div class="f8-blank-slate-main-action">
+            <button id="spacehome-my-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
+          </div>
         </div>
-        <div class="f8-blank-slate-main-action">
-          <button id="spacehome-my-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
+        <div class="f8-blank-slate-card" *ngIf="codebases.length === 0" user-level>
+          <h3>This Space has no Codebases</h3>
+          <div class="f8-blank-slate-main-action">
+            <button class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
+          </div>
         </div>
-      </div>
+      </f8-feature-toggle>
       <ul id="spacehome-codebases-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped" *ngIf="codebases.length > 0">
         <li class="list-group-item" *ngFor="let codebase of codebases">
           <div class="list-view-pf-main-info">
