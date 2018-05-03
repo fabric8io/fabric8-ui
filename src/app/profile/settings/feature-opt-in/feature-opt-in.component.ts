@@ -63,7 +63,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
       selectItems: false,
       selectionMatchProp: 'name',
       showCheckbox: false,
-      useExpandItems: false
+      useExpandItems: true
     } as ListConfig;
   }
 

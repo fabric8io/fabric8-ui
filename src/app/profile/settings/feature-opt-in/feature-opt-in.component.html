@@ -6,14 +6,7 @@
         [items]="items"
         [itemTemplate]="itemTemplate">
 
-
         <ng-template #itemTemplate let-item="item">
-          <div *ngIf="item.displayed" class="list-pf-left list-pf-content-flex">
-            <pfng-list-expand-toggle [expandId]="item.name" [item]="item" [template]="betaFeatureTemplate">
-              <ng-template #betaFeatureTemplate>
-              </ng-template>
-            </pfng-list-expand-toggle>
-          </div>
           <div *ngIf="item.displayed" class="checkbox list-pf-left list-pf-content-flex">
             <input id="{{item.name}}" type="radio" name="{{item.title}}" value="{{item.name}}" [(ngModel)]="featureLevel" (ngModelChange)="updateProfile()">
           </div>
@@ -31,7 +24,7 @@
         </ng-template>
 
         <ng-template #untoggledTemplate let-item="item" let-index="index">
-          <div *ngIf="item.expandId === 'released'">
+          <div *ngIf="item.name === 'released'">
             <div class="col-sm-5">
               <h1 class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
@@ -49,7 +42,7 @@
             </div>
           </div>
 
-          <div *ngIf="item.expandId === 'beta'">
+          <div *ngIf="item.name === 'beta'">
             <div class="col-sm-5">
               <h1 class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
@@ -68,7 +61,7 @@
             </div>
           </div>
 
-          <div *ngIf="item.expandId === 'experimental'">
+          <div *ngIf="item.name === 'experimental'">
             <div class="col-sm-5">
               <h1 class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
@@ -87,7 +80,7 @@
             </div>
           </div>
 
-          <div *ngIf="item.expandId === 'internal'">
+          <div *ngIf="item.name === 'internal'">
             <div class="col-sm-5">
               <h1 class="feature-details-title">
                 There are currently {{item.features.length}} {{item.name}} features
