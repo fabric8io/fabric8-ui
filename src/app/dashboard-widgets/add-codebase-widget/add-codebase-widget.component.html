@@ -3,7 +3,7 @@
     <div class="card-pf-heading f8-card-heading">
       <f8-feature-toggle featureName="AppLauncher">
         <div class="card-pf-heading-details f8-card-heading-details" default-level>
-          <a id="spacehome-codebases-add-space-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
+          <a id="spacehome-codebases-add-space-button" class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
             <i class="pficon pficon-add-circle-o"></i>
           </a>
         </div>
@@ -23,9 +23,6 @@
             <h3>This Space has no Codebases</h3>
             <div class="f8-blank-slate-main-action">
               <button id="spacehome-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
-            </div>
-            <div class="f8-blank-slate-main-action">
-              <button id="spacehome-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
             </div>
         </div>
         <div class="f8-blank-slate-card" *ngIf="codebases.length === 0" user-level>
@@ -60,7 +57,7 @@
     <div class="card-pf-heading f8-card-heading">
       <f8-feature-toggle featureName="AppLauncher">
           <div class="card-pf-heading-details f8-card-heading-details" default-level>
-            <a id="spacehome-codebases-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath, 'create', { outlets: { action: 'add-codebase' } }]">
+            <a id="spacehome-codebases-add-button" class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
               <i class="pficon pficon-add-circle-o"></i>
             </a>
           </div>
@@ -81,9 +78,6 @@
           <h3>This Space has no Codebases</h3>
           <div class="f8-blank-slate-main-action">
             <button id="spacehome-my-codebases-create-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add Codebase</button>
-          </div>
-          <div class="f8-blank-slate-main-action">
-            <button id="spacehome-my-codebases-import-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-codebase' } }]">Import Codebase</button>
           </div>
         </div>
         <div class="f8-blank-slate-card" *ngIf="codebases.length === 0" user-level>
