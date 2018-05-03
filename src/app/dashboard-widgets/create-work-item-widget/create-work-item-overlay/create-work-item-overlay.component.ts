@@ -34,8 +34,11 @@ export class CreateWorkItemOverlayComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.spaces.current.subscribe(space => this.space = space);
-    this.workItemTypes = this.workItemService.getWorkItemTypes();
+    this.spaces.current.subscribe(space => {
+      this.space = space;
+      this.workItemTypes =
+        this.workItemService.getWorkItemTypes2(this.space.links.workitemtypes);
+    });
   }
 
   ngAfterViewInit() {
