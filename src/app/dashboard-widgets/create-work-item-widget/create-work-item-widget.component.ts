@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { ConnectableObservable, Observable } from 'rxjs';
 
@@ -22,12 +22,13 @@ class WorkItemFilter {
 })
 export class CreateWorkItemWidgetComponent implements OnInit {
 
+  @Input() userOwnsSpace: boolean;
+
   private _myWorkItems: ConnectableObservable<WorkItem[]>;
   myWorkItemsCount: Observable<number>;
   contextPath: Observable<string>;
 
   constructor(
-    private context: Contexts,
     private broadcaster: Broadcaster,
     private workItemService: WorkItemService,
     private userService: UserService,
