@@ -35,9 +35,11 @@ export class AddAppOverlayComponent implements OnDestroy, OnInit {
               private userService: UserService,
               private router: Router) {
     this.loggedInUser = this.userService.currentLoggedInUser;
-    this.subscriptions.push(context.current.subscribe((ctx: Context) => {
-      this.currentSpace = ctx.space;
-    }));
+    if (context && context.current) {
+      this.subscriptions.push(context.current.subscribe((ctx: Context) => {
+        this.currentSpace = ctx.space;
+      }));
+    }
   }
 
   ngOnDestroy(): void {
@@ -80,6 +82,7 @@ export class AddAppOverlayComponent implements OnDestroy, OnInit {
    * Validate the application name
    */
   validateProjectName(): void {
+    this.projectName = this.projectName.toLowerCase();
     this.isProjectNameValid =
       this.dependencyCheckService.validateProjectName(this.projectName);
   }

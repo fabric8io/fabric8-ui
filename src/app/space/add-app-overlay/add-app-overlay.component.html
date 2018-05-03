@@ -27,7 +27,7 @@
                   </h1>
                   <span class="code-imports--step_pencil">
                     <input id="projectName" name="projectName" type="text" class="form-control code-imports--step_input col-sm-5" placeholder="Enter Application Name"
-                      aria-label="Application Name Input" required [(ngModel)]="projectName" (keyup)="validateProjectName()">
+                      aria-label="Application Name Input" required [(ngModel)]="projectName" [value]="projectName | lowercase" (keyup)="validateProjectName()">
                   </span>
                   <ng-template #namingTemplate>
                     Names must:
