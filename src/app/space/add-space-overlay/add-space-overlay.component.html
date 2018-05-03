@@ -42,8 +42,7 @@
                 </div>
                 <div class="form-group">
                   <label for="description" class="control-label">Description</label>
-                  <div contenteditable="true" id="description" name="description" type="text" class="form-control create-launcher-description" placeholder="Enter a Space Description">
-                  </div>
+                  <input id="description" name="description" type="text" class="form-control create-launcher-description" placeholder="Enter a Space Description" #description/>
                 </div>
                 <div class="form-group">
                   <p *ngIf="selectedTemplate?.attributes.description">

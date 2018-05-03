@@ -1,6 +1,8 @@
 import {
   Component,
+  ElementRef,
   OnInit,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
@@ -29,6 +31,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   spaceTemplates: ProcessTemplate[];
   space: Space;
   canSubmit: Boolean = true;
+  @ViewChild('description') description: ElementRef;
 
   constructor(private router: Router,
               private spaceService: SpaceService,
@@ -75,6 +78,7 @@ export class AddSpaceOverlayComponent implements OnInit {
       this.space = this.createTransientSpace();
     }
     this.space.attributes.name = this.space.name.replace(/ /g, '_');
+    this.space.attributes.description = this.description.nativeElement.value;
     if (this.selectedTemplate !== null &&
         this.selectedTemplate.id !== '0') {
       this.space.relationships['space-template'] = {
