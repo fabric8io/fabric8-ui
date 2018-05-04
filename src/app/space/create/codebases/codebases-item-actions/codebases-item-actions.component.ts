@@ -4,6 +4,7 @@ import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Dialog } from 'ngx-widgets';
 import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs/Rx';
 import { CheService } from '../services/che.service';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
@@ -41,6 +42,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+    this.workspaceBusy = false;
   }
 
   // Actions
@@ -79,10 +81,12 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
           });
       } else {
         // display error message
+        this.workspaceBusy = false;
         this.notifications.message({
           message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
           type: NotificationType.DANGER
         } as Notification);
+        return Observable.of({});
       }
     }).subscribe());
   }

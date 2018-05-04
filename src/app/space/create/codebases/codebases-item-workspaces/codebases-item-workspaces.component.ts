@@ -48,6 +48,10 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
+
+    this.workspaceBusy = false;
+    this.workspacesAvailable = false;
+
     if (this.codebase === undefined) {
       return;
     }
@@ -93,11 +97,14 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
             }
           });
       } else {
+        this.workspaceBusy = false;
+        this.workspacesAvailable = false;
         // display error message
         this.notifications.message({
           message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
           type: NotificationType.DANGER
         } as Notification);
+        return Observable.of({});
       }
     }).subscribe());
   }
