@@ -19,8 +19,10 @@
         Pipelines run when you commit and build your code base.
       </p>
       <div class="f8-blank-slate-main-action">
-        <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg" [disabled]="!userOwnsSpace" [title]="userOwnsSpace ? 'Add to space' : 'You cannot add to another user\'s space'"
+      <div *ngIf="userOwnsSpace">
+        <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg"
           (click)="addToSpace.emit()">Add to Space</button>
+        </div>
       </div>
     </div>
     <ng-template #pipeAvailable>

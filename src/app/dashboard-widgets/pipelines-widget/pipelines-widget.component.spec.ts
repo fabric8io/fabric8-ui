@@ -76,25 +76,25 @@ describe('PipelinesWidgetComponent', () => {
     this.testedDirective.userOwnsSpace = true;
     this.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button')).properties.disabled).toBe(false);
+    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).not.toBeNull();
   });
 
   it('should disable button if the user does not own the space', function(this: TestingContext) {
     this.testedDirective.userOwnsSpace = false;
     this.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button')).properties.disabled).toBe(true);
+    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).toBeNull();
   });
 
   it('should not show the add button if the user does not own the space', function(this: TestingContext) {
     this.testedDirective.userOwnsSpace = false;
     this.detectChanges();
-    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).toBeNull;
+    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).toBeNull();
   });
 
   it('should show the add button if the user owns the space', function(this: TestingContext) {
     this.testedDirective.userOwnsSpace = true;
     this.detectChanges();
-    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).not.toBeNull;
+    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).not.toBeNull();
   });
 });
