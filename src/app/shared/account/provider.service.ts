@@ -33,7 +33,7 @@ export class ProviderService {
     // after linking github, proceed with linking openshift-v3,
     // hence passing openshift linking url as a redirect.
     this.linkOpenShift(cluster, redirectToGithubLinkURL);
-}
+  }
 
   /**
    * Link a GitHub account to the user account

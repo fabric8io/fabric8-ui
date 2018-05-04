@@ -16,8 +16,8 @@
             </div>
             <div class="account-text-box col-xs-6">
               <span class="account-title">GitHub</span>
-              <span class="word-wrap" *ngIf="gitHubLinked; else errorName">{{gitHubUserName}}</span>
-              <ng-template #errorName>
+              <span class="word-wrap" *ngIf="gitHubLinked; else githubErrorName">{{gitHubUserName}}</span>
+              <ng-template #githubErrorName>
                 <span>{{gitHubError}}</span>
               </ng-template>
               <button class="btn btn-link" type="button" (click)="refreshGitHub()">
@@ -37,10 +37,16 @@
             </div>
             <div class="account-text-box col-xs-10">
               <span class="account-title">OpenShift</span>
-              <span class="word-wrap">{{openShiftUserName}}</span>
+              <span class="word-wrap" *ngIf="openShiftLinked; else openShiftErrorName">{{openShiftUserName}}</span>
+              <ng-template #openShiftErrorName>
+                <span>{{openShiftError}}</span>
+              </ng-template>
               <button class="btn btn-link" type="button" (click)="refreshOpenShift()">
                 <span class="fa fa-refresh"></span>
               </button>
+            </div>
+            <div class="col-xs-4">
+              <button *ngIf="!openShiftLinked" class="btn btn-primary pull-right" (click)="connectOpenShift()">Connect Account</button>
             </div>
           </div>
         </div>
