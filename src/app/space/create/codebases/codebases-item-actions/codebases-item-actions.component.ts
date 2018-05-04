@@ -80,7 +80,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
       } else {
         // display error message
         this.notifications.message({
-          message: `Workspace capacity is reached, new workspace cannot be started.`,
+          message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
           type: NotificationType.DANGER
         } as Notification);
       }
