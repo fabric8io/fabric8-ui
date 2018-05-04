@@ -106,7 +106,13 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
         } as Notification);
         return Observable.of({});
       }
-    }).subscribe());
+    }).subscribe(() => {},
+      err => {
+        this.notifications.message({
+          message: `Workspace error during creation.`,
+          type: NotificationType.DANGER
+        } as Notification);
+      }));
   }
 
   /**

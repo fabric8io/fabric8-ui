@@ -93,14 +93,28 @@ describe('Codebases Item Actions Component', () => {
     expect(broadcasterMock.broadcast).toHaveBeenCalled();
   }));
 
-  xit('Create And Open Workspace in error', async(() => {
+  it('Create And Open Workspace in error', async(() => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     workspacesServiceMock.createWorkspace.and.returnValue(Observable.throw('ERROR'));
     const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
-    //broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
+    broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
+    fixture.detectChanges();
+    // when
+    comp.createAndOpenWorkspace();
+    fixture.detectChanges();
+    // then
+    expect(notificationMock.message).toHaveBeenCalled();
+  }));
+
+  it('Create And Open Workspace with capacity full', async(() => {
+    // given
+    let comp = fixture.componentInstance;
+    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
+    const notificationAction = { name: 'ERROR' };
+    notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();
     // when
     comp.createAndOpenWorkspace();
