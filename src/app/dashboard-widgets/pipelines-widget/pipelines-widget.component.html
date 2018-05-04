@@ -6,7 +6,7 @@
       </a>
     </div>
     <h2 class="card-pf-title">
-      <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, 'create', 'pipelines']">Pipelines</a>
+      <a id="spacehome-pipelines-title" [routerLink]="[contextPath, 'create', 'pipelines']">Pipelines</a>
       <span id="spacehome-pipelines-badge" class="badge f8-card-badge">{{buildConfigsCount}}</span>
     </h2>
   </div>
@@ -22,11 +22,11 @@
     </div>
     <ng-template #pipeAvailable>
       <ul id="spacehome-pipelines-list" class="list-group">
-        <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async">
+        <li class="list-group-item" *ngFor="let buildconfig of buildConfigs">
           <div class="f8-card__pipeline-column">
             <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
             <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
-            <a [routerLink]="[contextPath | async, 'create', 'pipelines']" class="f8-card__pipeline-column-name">
+            <a [routerLink]="[contextPath, 'create', 'pipelines']" class="f8-card__pipeline-column-name">
               {{buildconfig.name}}
             </a>
             <span>|</span>
