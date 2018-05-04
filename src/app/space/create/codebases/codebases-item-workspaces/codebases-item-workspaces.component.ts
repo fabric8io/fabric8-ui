@@ -126,15 +126,28 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * Open workspace in editor
    */
   openWorkspace(): void {
-    let workspaceWindow = this.windowService.open('about:blank', '_blank');
     this.workspaceBusy = true;
-    this.subscriptions.push(this.workspacesService.openWorkspace(this.workspaceUrl)
-      .subscribe(workspaceLinks => {
+    this.subscriptions.push(this.cheService.getState().switchMap(che => {
+      if (!che.clusterFull) {
+        // create
+        return this.workspacesService.openWorkspace(this.workspaceUrl).map(workspaceLinks => {
+          this.workspaceBusy = false;
+          let workspaceWindow = this.windowService.open('about:blank', '_blank');
+          if (workspaceLinks != undefined) {
+            workspaceWindow.location.href = workspaceLinks.links.open;
+          }
+        });
+      } else {
         this.workspaceBusy = false;
-        if (workspaceLinks != undefined) {
-          workspaceWindow.location.href = workspaceLinks.links.open;
-        }
-      }, error => {
+        // display error message
+        this.notifications.message({
+          message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+          type: NotificationType.DANGER
+        } as Notification);
+        return Observable.of({});
+      }
+    }).subscribe(() => {},
+      err => {
         this.workspaceBusy = false;
         this.handleError('Failed to open workspace', NotificationType.DANGER);
       }));
