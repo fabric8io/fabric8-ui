@@ -4,6 +4,7 @@ import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-
 import { Observable, Subscription } from 'rxjs';
 
 import { WindowService } from 'app/shared/window.service';
+import { CheService } from '../services/che.service';
 import { Codebase } from '../services/codebase';
 import { Workspace } from '../services/workspace';
 import { WorkspacesService } from '../services/workspaces.service';
@@ -36,6 +37,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
       private broadcaster: Broadcaster,
       private notifications: Notifications,
       private windowService: WindowService,
+      private cheService: CheService,
       private workspacesService: WorkspacesService) {
   }
 
@@ -66,25 +68,38 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    */
   createAndOpenWorkspace(): void {
     this.workspaceBusy = true;
-    this.subscriptions.push(this.workspacesService.createWorkspace(this.codebase.id)
-      .subscribe(workspaceLinks => {
-        this.workspaceBusy = false;
-        if (workspaceLinks != undefined) {
-          let name = this.getWorkspaceName(workspaceLinks.links.open);
-          this.windowService.open(workspaceLinks.links.open, name);
-
-          this.notifications.message({
-            message: `Workspace created!`,
-            type: NotificationType.SUCCESS
-          } as Notification);
-
-          // Poll for new workspaces
-          this.updateWorkspacesPoll(name);
-        }
-      }, error => {
-        this.workspaceBusy = false;
-        this.handleError('Failed to create workspace', NotificationType.DANGER);
-      }));
+    this.subscriptions.push(this.cheService.getState().switchMap(che => {
+      if (!che.clusterFull) {
+        // create
+        return this.workspacesService
+          .createWorkspace(this.codebase.id)
+          .map(workspaceLinks => {
+            this.workspaceBusy = false;
+            if (workspaceLinks != undefined) {
+              let name = this.getWorkspaceName(workspaceLinks.links.open);
+              this.windowService.open(workspaceLinks.links.open, name);
+              this.notifications.message({
+                message: `Workspace created!`,
+                type: NotificationType.SUCCESS
+              } as Notification);
+              // Poll for new workspaces
+              this.updateWorkspacesPoll(name);
+            } else {
+              // display error message
+              this.notifications.message({
+                message: `Workspace error during creation.`,
+                type: NotificationType.DANGER
+              } as Notification);
+            }
+          });
+      } else {
+        // display error message
+        this.notifications.message({
+          message: `Workspace capacity is reached, new workspace cannot be started.`,
+          type: NotificationType.DANGER
+        } as Notification);
+      }
+    }).subscribe());
   }
 
   /**
