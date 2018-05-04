@@ -2,15 +2,13 @@ import { CommonModule, LocationStrategy } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
+import { Context, Contexts } from 'ngx-fabric8-wit';
 import { BehaviorSubject, Observable } from 'rxjs';
-
 import { initContext, TestContext } from 'testing/test-context';
 
-import { Context, Contexts } from 'ngx-fabric8-wit';
-
 import { Build } from '../../../../a-runtime-console/index';
+
 import { InputActionDialog } from '../../../../a-runtime-console/kubernetes/ui/pipeline/input-action-dialog/input-action-dialog.component';
-import { ApplicationsStackReportComponent } from '../applications-stack-report/applications-stack-report.component';
 import { ApplicationsListItemComponent } from './applications-list-item.component';
 
 @Component({
@@ -18,14 +16,6 @@ import { ApplicationsListItemComponent } from './applications-list-item.componen
   template: ''
 })
 class FakeApplicationsListItemDetailsComponent {
-  @Input() build: Build;
-}
-
-@Component({
-  selector: 'fabric8-applications-stack-report',
-  template: ''
-})
-class FakeApplicationsStackReportComponent {
   @Input() build: Build;
 }
 
@@ -124,7 +114,6 @@ describe('ApplicationsListItemComponent', () => {
     ],
     declarations: [
       FakeApplicationsListItemDetailsComponent,
-      FakeApplicationsStackReportComponent,
       FakeInputActionDialogComponent
     ],
     providers: [
@@ -162,14 +151,6 @@ describe('ApplicationsListItemComponent', () => {
 
     it('Should set stage name', function(this: TestingContext) {
       expect(this.testedDirective.promoteBuildInput.stage.name).toEqual('Rollout to Run');
-    });
-
-    it('Should call showStackReport', function(this: TestingContext) {
-      let mockStackReport = jasmine.createSpyObj('ApplicationsStackReportComponent', ['showStackReport']);
-
-      this.testedDirective.stackReport = mockStackReport;
-      this.testedDirective.showStackReport(null);
-      expect(mockStackReport.showStackReport).toHaveBeenCalled();
     });
 
     it('Should call proceed', function(this: TestingContext) {
