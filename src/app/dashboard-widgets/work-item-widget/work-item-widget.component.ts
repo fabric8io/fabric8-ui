@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { ConnectableObservable, Observable } from 'rxjs';
 
@@ -17,6 +17,8 @@ import { uniqueId } from 'lodash';
   styleUrls: ['./work-item-widget.component.less']
 })
 export class WorkItemWidgetComponent implements OnInit {
+
+  @Input() userOwnsSpace: boolean;
   private _myWorkItems: ConnectableObservable<WorkItem[]>;
   myWorkItemsCount: Observable<number>;
   myWorkItemsResolved: number = 0;
