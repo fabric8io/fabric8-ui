@@ -90,7 +90,6 @@ export class ApplicationsListItemComponent implements DoCheck, OnInit {
       this.inputActionDialog.proceed();
     }
   }
-
   /**
    * Open the stack report module from fabric8-stack-analysis-ui
    */

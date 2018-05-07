@@ -39,7 +39,7 @@ export class InputActionDialog {
 
   proceed() {
     console.log('Proceeding pipeline ' + this.build.name);
-    return this.invokeUrl(this.inputAction.proceedUrl);
+    this.checkIfJenkinsIsUpAndProceedURL();
   }
 
   abort() {
@@ -84,4 +84,26 @@ export class InputActionDialog {
   close() {
     this.modal.close();
   }
+
+  checkIfJenkinsIsUpAndProceedURL() {
+    let url = 'https://jenkins.openshift.io';
+    this.http.get(url)
+      .subscribe((response) => {
+        if (response.status == 200) {
+          console.log('Got ' + response.status + ', Jenkins is up and running...');
+          this.invokeUrl(this.inputAction.proceedUrl);
+          return;
+        } else if (response.status == 307 || response.status == 302) {
+          console.log('Got ' + response.status + ', Jenkins Proxy is logging you in...');
+        } else if (response.status == 503) {
+          console.log('Got ' + response.status + ', Cluster resources capacity is full. waiting along..');
+        } else if (response.status == 202) {
+          console.log('Got 202, Jenkins is currently idled. Please wait while we start it. waiting along..');
+        } else {
+          console.error ('Got status ' + response.status);
+          return;
+        }
+        setTimeout (this.checkIfJenkinsIsUpAndProceedURL(), 10000);
+      });
+    }
 }
