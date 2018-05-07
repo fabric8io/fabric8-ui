@@ -4,6 +4,7 @@ import { AuthenticationService } from 'ngx-login-client';
 
 import { FABRIC8_FORGE_API_URL } from 'app/shared/runtime-console/fabric8-ui-forge-api';
 
+import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { OnLogin } from '../../../../shared/onlogin.service';
 import { Build, PendingInputAction } from '../../../model/build.model';
 import { PipelineStage } from '../../../model/pipelinestage.model';
@@ -22,6 +23,7 @@ export class InputActionDialog {
   @ViewChild('inputModal') modal: any;
 
   constructor(private http: Http,
+              private notifications: Notifications,
               private authService: AuthenticationService,
               @Inject(FABRIC8_FORGE_API_URL) private forgeApiUrl: string
   ) {
@@ -90,20 +92,36 @@ export class InputActionDialog {
     this.http.get(url)
       .subscribe((response) => {
         if (response.status == 200) {
-          console.log('Got ' + response.status + ', Jenkins is up and running...');
+          this.notifications.message({
+            message: `Got ${response.status}, Jenkins is up and running...`,
+            type: NotificationType.SUCCESS
+          } as Notification);
           this.invokeUrl(this.inputAction.proceedUrl);
           return;
         } else if (response.status == 307 || response.status == 302) {
-          console.log('Got ' + response.status + ', Jenkins Proxy is logging you in...');
+          this.notifications.message({
+            message: `Got ${response.status}, Connecting to Jenkins...`,
+            type: NotificationType.INFO
+          } as Notification);
         } else if (response.status == 503) {
-          console.log('Got ' + response.status + ', Cluster resources capacity is full. waiting along..');
+          this.notifications.message({
+            message: `Got ${response.status}, Cluster resources capacity is full. waiting along...`,
+            type: NotificationType.INFO
+          } as Notification);
         } else if (response.status == 202) {
-          console.log('Got 202, Jenkins is currently idled. Please wait while we start it. waiting along..');
+          this.notifications.message({
+            message: `Got ${response.status}, Jenkins is currently idled. Please wait while we start it. waiting along...`,
+            type: NotificationType.WARNING
+          } as Notification);
         } else {
-          console.error ('Got status ' + response.status);
+          this.notifications.message({
+            message: `Got status ${response.status}`,
+            type: NotificationType.DANGER
+          } as Notification);
           return;
         }
         setTimeout (this.checkIfJenkinsIsUpAndProceedURL(), 10000);
       });
-    }
+    this.close();
+  }
 }
