@@ -31,17 +31,6 @@
           <a id="pipeline" class="dropdown-item secondary-action"
              [routerLink]="[contextPath | async, 'create', 'pipelines', buildConfig.id, 'history']">View Pipeline</a>
         </li>
-        <li [attr.role]="'separator'" class="divider"></li>
-        <li [attr.role]="'menuitem'"
-            [ngClass]="{'disabled': pipelineAvailable !== true}">
-          <a id="stackReport" class="dropdown-item secondary-action"
-             href="javascript:void(0)"
-             (click)="showStackReport($event)"
-             *ngIf="pipelineAvailable === true">View Stack Report</a>
-          <a class="dropdown-item secondary-action" disabled
-             href="javascript:void(0)"
-             *ngIf="pipelineAvailable !== true">View Stack Report</a>
-        </li>
       </ul>
     </div>
   </div>
@@ -70,6 +59,5 @@
 </div>
 <ng-container *ngFor='let build of buildConfig.interestingBuilds'>
   <fabric8-applications-list-item-details [build]="build" *ngIf="expanded === true"></fabric8-applications-list-item-details>
-  <fabric8-applications-stack-report [build]="build" #stackReport></fabric8-applications-stack-report>
 </ng-container>
 <input-action-dialog></input-action-dialog>
