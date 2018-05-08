@@ -27,8 +27,8 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
    * @returns boolean
    */
   validateProjectName(projectName: string): boolean {
-    // allows only '-'
-    const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-_\s]{2,62}[a-zA-Z0-9]$/;
+    // allows only '-', '_', ' ' and 4-40 characters (must start and end with alphanumeric)
+    const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-_\s]{2,38}[a-zA-Z0-9]$/;
     return pattern.test(projectName);
   }
 
