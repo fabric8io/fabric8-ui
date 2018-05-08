@@ -12,8 +12,9 @@
           Applications are shown once you deploy your code through a pipeline onto the defined environments.
         </p>
         <div class="f8-blank-slate-main-action">
-          <button id="spacehome-applications-add-button" class="btn btn-primary btn-lg"
-                  (click)="addToSpace.emit()">Create an Application</button>
+          <div *ngIf="userOwnsSpace">
+            <button id="spacehome-applications-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Create an Application</button>
+          </div>
         </div>
       </div>
       <ng-template #appsAvailable>

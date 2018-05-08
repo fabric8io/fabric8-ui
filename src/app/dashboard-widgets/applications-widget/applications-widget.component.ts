@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -20,6 +21,7 @@ import { cloneDeep, isEmpty, orderBy } from 'lodash';
   styleUrls: ['./applications-widget.component.less']
 })
 export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
+  @Input() userOwnsSpace: boolean;
   @Output() addToSpace = new EventEmitter();
 
   buildConfigs: BuildConfig[];

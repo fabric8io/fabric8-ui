@@ -3,31 +3,27 @@ import {
   Component,
   Input
 } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { initContext, TestContext } from 'testing/test-context';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
+import { createMock } from 'testing/mock';
 
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 import { ApplicationsWidgetComponent } from './applications-widget.component';
 
+import { FeatureToggleComponent } from '../../feature-flag/feature-wrapper/feature-toggle.component';
+import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 @Component({
   selector: 'fabric8-applications-list',
   template: ''
 })
 class FakeApplicationsListComponent {
   @Input() buildConfigs: BuildConfig[];
-}
-
-@Component({
-  selector: 'f8-feature-toggle',
-  template: ''
-})
-class FakeFeatureToggleComponent {
-  @Input() featureName: string = 'ApplicationsCard';
 }
 
 @Component({
@@ -79,7 +75,7 @@ describe('ApplicationsWidgetComponent', () => {
 
   let buildConfig2 = {
     id: 'app2',
-      name: 'app2',
+    name: 'app2',
     gitUrl: 'https://example.com/app2.git',
     interestingBuilds: [{
       buildNumber: '1',
@@ -109,8 +105,8 @@ describe('ApplicationsWidgetComponent', () => {
       statusPhase: 'Complete'
     }],
     labels: {
-    space: 'space2'
-  },
+      space: 'space2'
+    },
     serviceUrls: [{
       environmentName: 'Stage',
       name: 'app2',
@@ -189,11 +185,21 @@ describe('ApplicationsWidgetComponent', () => {
     ],
     declarations: [
       FakeApplicationsListComponent,
-      FakeFeatureToggleComponent
+      FeatureToggleComponent
     ],
     providers: [
       { provide: Contexts, useFactory: () => contexts },
-      { provide: PipelinesService, useFactory: () => pipelinesService }
+      { provide: PipelinesService, useFactory: () => pipelinesService },
+      {
+        provide: FeatureTogglesService, useFactory: () => {
+          let mock = createMock(FeatureTogglesService);
+          mock.getFeature.and.returnValue(Observable.of({
+            attributes: { enabled: true, 'user-enabled': true }
+          } as Feature));
+
+          return mock;
+        }
+      }
     ]
   });
 
@@ -226,6 +232,27 @@ describe('ApplicationsWidgetComponent', () => {
 
     it('Run build configs to be sorted', function(this: TestingContext) {
       expect(this.testedDirective.runBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3]);
+    });
+  });
+
+  describe('Applications widget without build configs', () => {
+
+    it('should enable buttons if the user owns the space', function(this: TestingContext) {
+      this.testedDirective.userOwnsSpace = true;
+      this.testedDirective.runBuildConfigs.length = 0;
+      this.testedDirective.stageBuildConfigs.length = 0;
+      this.detectChanges();
+
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
+    });
+
+    it('should disable buttons if the user does not own the space', function(this: TestingContext) {
+      this.testedDirective.userOwnsSpace = false;
+      this.testedDirective.runBuildConfigs.length = 0;
+      this.testedDirective.stageBuildConfigs.length = 0;
+      this.detectChanges();
+
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
     });
   });
 });
