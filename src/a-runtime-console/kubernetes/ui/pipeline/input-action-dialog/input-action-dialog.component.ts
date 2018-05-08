@@ -98,8 +98,9 @@ export class InputActionDialog {
               message: `Got ${response.status}, Jenkins is up and running...`,
               type: NotificationType.SUCCESS
             };
+            this.notifications.message(notification as Notification);
             this.invokeUrl(this.inputAction.proceedUrl);
-            break;
+            return;
           case 307:
           case 302:
             notification = {
@@ -130,7 +131,8 @@ export class InputActionDialog {
               message: `Got status ${response.status}`,
               type: NotificationType.DANGER
             };
-            break;
+            this.notifications.message(notification as Notification);
+            return;
         }
         this.notifications.message(notification as Notification);
         setTimeout (this.checkIfJenkinsIsUpAndProceedURL(), 10000);
