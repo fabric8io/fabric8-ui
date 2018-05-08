@@ -123,7 +123,7 @@ export class InputActionDialog {
             break;
           case 202:
             notification = {
-              message: `Got ${response.status}, Jenkins is currently idled. Please wait while we start it. waiting along...`,
+              message: `Got ${response.status}, Jenkins is currently idled. Please wait while we start it. waiting along.`,
               type: NotificationType.WARNING
             };
             break;
@@ -143,10 +143,10 @@ export class InputActionDialog {
 
   callJenkins(): Observable<Response> {
     const token_json = {
-      'access_token': this.authService.getToken(),
-      'token_type': 'Bearer'
+      access_token: this.authService.getToken(),
+      token_type: 'Bearer'
     };
-    let url = this.build.jenkinsBuildURL + JSON.stringify(token_json);
+    let url = this.build.jenkinsBuildURL + '?token_json=' + JSON.stringify(token_json);
     return this.http
       .get(url)
       .map((response: Response) => {
