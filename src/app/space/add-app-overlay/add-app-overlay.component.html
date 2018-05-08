@@ -33,14 +33,14 @@
                     Names must:
                     <ul>
                       <li>Be Unique</li>
-                      <li>Contain 4-65 characters</li>
+                      <li>Contain 4-40 characters</li>
                       <li>Contain only letters, numbers, spaces, underscores, or hyphens</li>
                       <li>Not start or end with spaces, underscores, or hyphens</li>
                     </ul>
                   </ng-template>
                   <span class="code-imports--step_tooltip-label" [popover]="namingTemplate" popoverTitle="Naming Requirements" placement="bottom" triggers="mouseenter:mouseleave">Naming Requirements<span class="pficon pficon-info"></span></span>
                   <span class="help-block code-imports--step_help-block" *ngIf="isProjectNameValid === false">
-                    Names may not start or end with spaces, underscores, or hyphens.
+                    Invalid name. See a full list of naming requirements below the input field.
                   </span>
                 </div>
               </form>
