@@ -89,38 +89,50 @@ export class InputActionDialog {
 
   checkIfJenkinsIsUpAndProceedURL() {
     let url = 'https://jenkins.prod-preview.openshift.io';
-    console.log(this.build);
+    let notification;
     this.http.get(url)
       .subscribe((response) => {
-        if (response.status == 200) {
-          this.notifications.message({
-            message: `Got ${response.status}, Jenkins is up and running...`,
-            type: NotificationType.SUCCESS
-          } as Notification);
-          this.invokeUrl(this.inputAction.proceedUrl);
-          return;
-        } else if (response.status == 307 || response.status == 302) {
-          this.notifications.message({
-            message: `Got ${response.status}, Connecting to Jenkins...`,
-            type: NotificationType.INFO
-          } as Notification);
-        } else if (response.status == 503) {
-          this.notifications.message({
-            message: `Got ${response.status}, Cluster resources capacity is full. waiting along...`,
-            type: NotificationType.INFO
-          } as Notification);
-        } else if (response.status == 202) {
-          this.notifications.message({
-            message: `Got ${response.status}, Jenkins is currently idled. Please wait while we start it. waiting along...`,
-            type: NotificationType.WARNING
-          } as Notification);
-        } else {
-          this.notifications.message({
-            message: `Got status ${response.status}`,
-            type: NotificationType.DANGER
-          } as Notification);
-          return;
+        switch (response.status) {
+          case 200:
+            notification = {
+              message: `Got ${response.status}, Jenkins is up and running...`,
+              type: NotificationType.SUCCESS
+            };
+            this.invokeUrl(this.inputAction.proceedUrl);
+            break;
+          case 307:
+          case 302:
+            notification = {
+              message: `Got ${response.status}, Connecting to Jenkins.`,
+              type: NotificationType.INFO
+            };
+            break;
+          case 503:
+            notification = {
+              message: `Got ${response.status}, Cluster resources capacity is full. Waiting along.`,
+              type: NotificationType.INFO
+            };
+            break;
+          case 504:
+            notification = {
+              message: `Got ${response.status}, Request timed out. Trying again.`,
+              type: NotificationType.INFO
+            };
+            break;
+          case 202:
+            notification = {
+              message: `Got ${response.status}, Jenkins is currently idled. Please wait while we start it. waiting along...`,
+              type: NotificationType.WARNING
+            };
+            break;
+          default:
+            notification = {
+              message: `Got status ${response.status}`,
+              type: NotificationType.DANGER
+            };
+            break;
         }
+        this.notifications.message(notification as Notification);
         setTimeout (this.checkIfJenkinsIsUpAndProceedURL(), 10000);
       });
     this.close();
