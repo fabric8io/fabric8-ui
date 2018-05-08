@@ -88,7 +88,7 @@ export class InputActionDialog {
   }
 
   checkIfJenkinsIsUpAndProceedURL() {
-    let url = 'https://jenkins.openshift.io';
+    let url = 'https://jenkins.prod-preview.openshift.io';
     this.http.get(url)
       .subscribe((response) => {
         if (response.status == 200) {
