@@ -96,7 +96,7 @@ export class InputActionDialog {
         switch (response.status) {
           case 200:
             notification = {
-              message: `Got ${response.status}, Jenkins is up and running...`,
+              message: `Got ${response.status}, Jenkins is up and running.`,
               type: NotificationType.SUCCESS
             };
             this.notifications.message(notification as Notification);
@@ -118,7 +118,7 @@ export class InputActionDialog {
           case 504:
             notification = {
               message: `Got ${response.status}, Request timed out. Trying again.`,
-              type: NotificationType.INFO
+              type: NotificationType.WARNING
             };
             break;
           case 202:
