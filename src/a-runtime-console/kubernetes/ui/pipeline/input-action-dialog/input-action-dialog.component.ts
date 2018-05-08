@@ -1,5 +1,5 @@
 import { Component, Inject, ViewChild } from '@angular/core';
-import { Headers, Http, RequestOptions } from '@angular/http';
+import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { AuthenticationService } from 'ngx-login-client';
 
 import { FABRIC8_FORGE_API_URL } from 'app/shared/runtime-console/fabric8-ui-forge-api';
@@ -9,6 +9,8 @@ import { OnLogin } from '../../../../shared/onlogin.service';
 import { Build, PendingInputAction } from '../../../model/build.model';
 import { PipelineStage } from '../../../model/pipelinestage.model';
 import { pathJoin } from '../../../model/utils';
+
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'input-action-dialog',
@@ -89,7 +91,7 @@ export class InputActionDialog {
 
   checkIfJenkinsIsUpAndProceedURL() {
     let notification;
-    this.http.get(this.build.jenkinsBuildURL)
+    this.callJenkins()
       .subscribe((response) => {
         switch (response.status) {
           case 200:
@@ -137,5 +139,25 @@ export class InputActionDialog {
         setTimeout (this.checkIfJenkinsIsUpAndProceedURL(), 10000);
       });
     this.close();
+  }
+
+  callJenkins(): Observable<Response> {
+    const token_json = {
+      'access_token': this.authService.getToken(),
+      'token_type': 'Bearer'
+    };
+    let url = this.build.jenkinsBuildURL + JSON.stringify(token_json);
+    return this.http
+      .get(url)
+      .map((response: Response) => {
+        return response;
+      })
+      .catch((error) => {
+        this.notifications.message({
+          message: 'There seems to be a problem with Jenkins',
+          type: NotificationType.DANGER
+        } as Notification);
+        return Observable.throw(error.message || error);
+      });
   }
 }
