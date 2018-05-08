@@ -146,7 +146,7 @@ export class InputActionDialog {
       access_token: this.authService.getToken(),
       token_type: 'Bearer'
     };
-    let url = this.build.jenkinsBuildURL + '?token_json=' + JSON.stringify(token_json);
+    let url = this.build.jenkinsBuildURL + '?token_json=' + encodeURIComponent(JSON.stringify(token_json));
     return this.http
       .get(url)
       .map((response: Response) => {
