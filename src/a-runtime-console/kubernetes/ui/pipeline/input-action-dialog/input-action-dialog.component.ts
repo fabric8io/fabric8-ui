@@ -103,7 +103,6 @@ export class InputActionDialog {
             this.invokeUrl(this.inputAction.proceedUrl);
             return;
           case 307:
-          case 302:
             notification = {
               message: `Got ${response.status}, Connecting to Jenkins.`,
               type: NotificationType.INFO
@@ -123,7 +122,7 @@ export class InputActionDialog {
             break;
           case 202:
             notification = {
-              message: `Got ${response.status}, Jenkins is currently idled. Please wait while we start it. waiting along.`,
+              message: `Got ${response.status}, Jenkins is currently idled. Please wait while it starts.`,
               type: NotificationType.WARNING
             };
             break;
@@ -133,6 +132,7 @@ export class InputActionDialog {
               type: NotificationType.DANGER
             };
             this.notifications.message(notification as Notification);
+            this.close();
             return;
         }
         this.notifications.message(notification as Notification);
@@ -149,12 +149,9 @@ export class InputActionDialog {
     let url = this.build.jenkinsBuildURL + '?token_json=' + encodeURIComponent(JSON.stringify(token_json));
     return this.http
       .get(url)
-      .map((response: Response) => {
-        return response;
-      })
       .catch((error) => {
         this.notifications.message({
-          message: 'There seems to be a problem with Jenkins',
+          message: 'There is a problem accessing Jenkins.',
           type: NotificationType.DANGER
         } as Notification);
         return Observable.throw(error.message || error);
