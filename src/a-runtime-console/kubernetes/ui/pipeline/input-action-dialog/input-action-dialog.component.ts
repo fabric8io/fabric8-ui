@@ -132,11 +132,10 @@ export class InputActionDialog {
               type: NotificationType.DANGER
             };
             this.notifications.message(notification as Notification);
-            this.close();
             return;
         }
         this.notifications.message(notification as Notification);
-        setTimeout (this.checkIfJenkinsIsUpAndProceedURL(), 10000);
+        setTimeout(this.checkIfJenkinsIsUpAndProceedURL(), 10000);
       });
     this.close();
   }
