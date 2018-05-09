@@ -4,12 +4,10 @@
         [config]="listConfig"
         [expandTemplate]="untoggledTemplate"
         [items]="items"
-        [itemTemplate]="itemTemplate">
+        [itemTemplate]="itemTemplate"
+        (onSelectionChange)="updateProfile($event)">
 
         <ng-template #itemTemplate let-item="item">
-          <div *ngIf="item.displayed" class="checkbox list-pf-left list-pf-content-flex">
-            <input id="{{item.name}}" type="radio" name="{{item.title}}" value="{{item.name}}" [(ngModel)]="featureLevel" (ngModelChange)="updateProfile()">
-          </div>
           <div *ngIf="item.displayed" class="list-pf-main-content">
             <div class="list-pf-left">
               <span class="fa fa-flask list-pf-icon list-pf-icon-small icon-{{item.name}}" ></span>
