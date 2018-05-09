@@ -1,16 +1,13 @@
 import { Component, Inject, ViewChild } from '@angular/core';
-import { Headers, Http, RequestOptions, Response } from '@angular/http';
+import { Headers, Http, RequestOptions } from '@angular/http';
 import { AuthenticationService } from 'ngx-login-client';
 
 import { FABRIC8_FORGE_API_URL } from 'app/shared/runtime-console/fabric8-ui-forge-api';
 
-import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { OnLogin } from '../../../../shared/onlogin.service';
 import { Build, PendingInputAction } from '../../../model/build.model';
 import { PipelineStage } from '../../../model/pipelinestage.model';
 import { pathJoin } from '../../../model/utils';
-
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'input-action-dialog',
@@ -25,7 +22,6 @@ export class InputActionDialog {
   @ViewChild('inputModal') modal: any;
 
   constructor(private http: Http,
-              private notifications: Notifications,
               private authService: AuthenticationService,
               @Inject(FABRIC8_FORGE_API_URL) private forgeApiUrl: string
   ) {
@@ -43,7 +39,7 @@ export class InputActionDialog {
 
   proceed() {
     console.log('Proceeding pipeline ' + this.build.name);
-    this.checkIfJenkinsIsUpAndProceedURL();
+    return this.invokeUrl(this.inputAction.proceedUrl);
   }
 
   abort() {
@@ -87,73 +83,5 @@ export class InputActionDialog {
 
   close() {
     this.modal.close();
-  }
-
-  checkIfJenkinsIsUpAndProceedURL() {
-    let notification;
-    this.callJenkins()
-      .subscribe((response) => {
-        switch (response.status) {
-          case 200:
-            notification = {
-              message: `Got ${response.status}, Jenkins is up and running.`,
-              type: NotificationType.SUCCESS
-            };
-            this.notifications.message(notification as Notification);
-            this.invokeUrl(this.inputAction.proceedUrl);
-            return;
-          case 307:
-            notification = {
-              message: `Got ${response.status}, Connecting to Jenkins.`,
-              type: NotificationType.INFO
-            };
-            break;
-          case 503:
-            notification = {
-              message: `Got ${response.status}, Cluster resources capacity is full. Waiting along.`,
-              type: NotificationType.INFO
-            };
-            break;
-          case 504:
-            notification = {
-              message: `Got ${response.status}, Request timed out. Trying again.`,
-              type: NotificationType.WARNING
-            };
-            break;
-          case 202:
-            notification = {
-              message: `Got ${response.status}, Jenkins is currently idled. Please wait while it starts.`,
-              type: NotificationType.WARNING
-            };
-            break;
-          default:
-            notification = {
-              message: `Got status ${response.status}`,
-              type: NotificationType.DANGER
-            };
-            this.notifications.message(notification as Notification);
-            return;
-        }
-        this.notifications.message(notification as Notification);
-        setTimeout(this.checkIfJenkinsIsUpAndProceedURL(), 10000);
-      });
-    this.close();
-  }
-
-  callJenkins(): Observable<Response> {
-    const token_json = {
-      access_token: this.authService.getToken(),
-      token_type: 'Bearer'
-    };
-    let url = this.build.jenkinsBuildURL + '?token_json=' + encodeURIComponent(JSON.stringify(token_json));
-    return this.http
-      .get(url)
-      .catch((error) => {
-        this.notifications.message({
-          message: 'There is a problem accessing Jenkins.',
-          type: NotificationType.DANGER
-        } as Notification);
-        return Observable.throw(error.message || error);
-      });
   }
 }
