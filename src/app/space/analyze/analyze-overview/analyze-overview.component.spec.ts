@@ -19,6 +19,7 @@ import {
   initContext,
   TestContext
 } from 'testing/test-context';
+import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 
 import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
 import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
@@ -58,8 +59,22 @@ describe('AnalyzeOverviewComponent', () => {
       { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },
       { provide: AuthenticationService, useValue: ({ isLoggedIn: () => true }) },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
+<<<<<<< HEAD
       { provide: FeatureTogglesService, useValue: mockFeatureTogglesService },
       { provide: UserService, useValue: ({ loggedInUser: fakeUserObs }) }
+=======
+      { provide: UserService, useValue: ({ loggedInUser: fakeUserObs }) },
+      {
+        provide: FeatureTogglesService, useFactory: () => {
+          let mock = createMock(FeatureTogglesService);
+          mock.getFeature.and.returnValue(Observable.of({
+            attributes: { enabled: true, 'user-enabled': true }
+          } as Feature));
+
+          return mock;
+        }
+      }
+>>>>>>> fix(analyze-overview): Hide button in foreign user space
     ],
     schemas: [
       NO_ERRORS_SCHEMA
