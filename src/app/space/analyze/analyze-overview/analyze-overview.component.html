@@ -49,12 +49,12 @@
       </div>
       <div class="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-0">
         <f8-feature-toggle featureName="AppLauncher">
-          <button *ngIf="this.authentication.isLoggedIn()" id="analyze-overview-add-to-space-button" [disabled]="!userOwnsSpace()"
-            [title]="userOwnsSpace() ? 'Add to space' : 'You cannot add to another user\'s space'" class="btn btn-primary btn-lg pull-right"
-            (click)="openForgeWizard(addSpace)" default-level> Add to space </button>
-          <button *ngIf="this.authentication.isLoggedIn()" class="btn btn-primary btn-lg pull-right" [disabled]="!userOwnsSpace()"
-            [title]="userOwnsSpace() ? 'Add to space' : 'You cannot add to another user\'s space'" (click)="showAddAppOverlay()"
-            user-level> Add to space </button>
+          <ng-container *ngIf="userOwnsSpace()">
+            <button *ngIf="this.authentication.isLoggedIn()" id="analyze-overview-add-to-space-button" class="btn btn-primary btn-lg pull-right"
+              (click)="openForgeWizard(addSpace)" default-level> Add to space </button>
+            <button *ngIf="this.authentication.isLoggedIn()" class="btn btn-primary btn-lg pull-right" (click)="showAddAppOverlay()"
+              user-level> Add to space </button>
+          </ng-container>
         </f8-feature-toggle>
       </div>
     </div>
