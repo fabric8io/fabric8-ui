@@ -21,9 +21,11 @@ import {
 } from 'testing/test-context';
 
 @Component({
-  template: '<fabric8-create-work-item-widget></fabric8-create-work-item-widget>'
+  template: '<fabric8-create-work-item-widget [userOwnsSpace]="userOwnsSpace"></fabric8-create-work-item-widget>'
 })
-class HostComponent { }
+class HostComponent {
+  userOwnsSpace: boolean;
+}
 
 describe('CreateWorkItemWidgetComponent', () => {
   type TestingContext = TestContext<CreateWorkItemWidgetComponent, HostComponent>;
@@ -82,7 +84,7 @@ describe('CreateWorkItemWidgetComponent', () => {
   });
 
   it('should enable buttons if the user owns the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = true;
+    this.hostComponent.userOwnsSpace = true;
     this.testedDirective.myWorkItemsCount = Observable.of(0);
     this.detectChanges();
 
@@ -92,7 +94,7 @@ describe('CreateWorkItemWidgetComponent', () => {
   });
 
   it('should disable buttons if the user does not own the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = false;
+    this.hostComponent.userOwnsSpace = false;
     this.testedDirective.myWorkItemsCount = Observable.of(0);
     this.detectChanges();
 
