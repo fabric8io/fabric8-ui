@@ -143,13 +143,9 @@ export class DeploymentDetailsComponent {
   cpuChartClass: string;
   memChartClass: string;
 
-  private cpuChart: ChartAPI;
-  private memChart: ChartAPI;
-  private netChart: ChartAPI;
-
-  private cpuChartLoad: Subject<void> = new ReplaySubject<void>();
-  private memChartLoad: Subject<void> = new ReplaySubject<void>();
-  private netChartLoad: Subject<void> = new ReplaySubject<void>();
+  private cpuChart: Subject<ChartAPI> = new ReplaySubject<ChartAPI>();
+  private memChart: Subject<ChartAPI> = new ReplaySubject<ChartAPI>();
+  private netChart: Subject<ChartAPI> = new ReplaySubject<ChartAPI>();
 
   constructor(
     private deploymentsService: DeploymentsService,
@@ -162,6 +158,16 @@ export class DeploymentDetailsComponent {
       this.deploymentsService.getPods(this.spaceId, this.environment, this.applicationId)
         .map((p: Pods) => p.total > 0)
         .subscribe(this.hasPods)
+    );
+
+    this.subscriptions.push(
+      this.hasPods.subscribe((hasPods: boolean): void => {
+        if (!hasPods) {
+          this.cpuChart.next(null);
+          this.memChart.next(null);
+          this.netChart.next(null);
+        }
+      })
     );
 
     this.subscriptions.push(
@@ -178,9 +184,15 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.deploymentStatusService.getCpuStatus(this.spaceId, this.environment, this.applicationId)
-        .skipUntil(this.cpuChartLoad)
-        .subscribe((status: Status): void => {
+      this.cpuChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
+        if (chart) {
+          return Observable.combineLatest(Observable.of(chart), this.deploymentStatusService.getCpuStatus(this.spaceId, this.environment, this.applicationId));
+        }
+        return Observable.empty();
+      })
+        .subscribe((v: [ChartAPI, Status]): void => {
+          const chart: ChartAPI = v[0];
+          const status: Status = v[1];
           let color: string;
           if (status.type === StatusType.OK) {
             this.cpuChartClass = '';
@@ -195,15 +207,21 @@ export class DeploymentDetailsComponent {
             this.cpuLabelClass = LabelClass.ERR;
             color = '#cc0000'; // pf-red-100
           }
-          this.cpuChart.data.colors({ CPU: color });
-          this.cpuChart.flush();
+          chart.data.colors({ CPU: color });
+          chart.flush();
         })
     );
 
     this.subscriptions.push(
-      this.deploymentStatusService.getMemoryStatus(this.spaceId, this.environment, this.applicationId)
-        .skipUntil(this.memChartLoad)
-        .subscribe((status: Status): void => {
+      this.memChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
+        if (chart) {
+          return Observable.combineLatest(Observable.of(chart), this.deploymentStatusService.getMemoryStatus(this.spaceId, this.environment, this.applicationId));
+        }
+        return Observable.empty();
+      })
+        .subscribe((v: [ChartAPI, Status]): void => {
+          const chart: ChartAPI = v[0];
+          const status: Status = v[1];
           let color: string;
           if (status.type === StatusType.OK) {
             this.memChartClass = '';
@@ -218,8 +236,8 @@ export class DeploymentDetailsComponent {
             this.memLabelClass = LabelClass.ERR;
             color = '#cc0000'; // pf-red-100
           }
-          this.memChart.data.colors({ Memory: color });
-          this.memChart.flush();
+          chart.data.colors({ Memory: color });
+          chart.flush();
         })
     );
 
@@ -230,24 +248,42 @@ export class DeploymentDetailsComponent {
       this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.environment, this.applicationId);
 
     this.subscriptions.push(
-      this.cpuStat
-        .skipUntil(this.cpuChartLoad)
-        .subscribe((stats: CpuStat[]) => {
+      this.cpuChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, CpuStat[]]> => {
+        if (chart) {
+          return Observable.combineLatest(
+            Observable.of(chart),
+            this.cpuStat
+          );
+        }
+        return Observable.empty();
+      })
+        .subscribe((v: [ChartAPI, CpuStat[]]): void => {
+          const chart: ChartAPI = v[0];
+          const stats: CpuStat[] = v[1];
           const last: CpuStat = stats[stats.length - 1];
           this.cpuVal = last.used;
           this.cpuMax = last.quota;
           this.cpuData.total = last.quota;
           this.cpuData.xData = [this.cpuData.xData[0], ...stats.map((stat: CpuStat) => stat.timestamp)];
           this.cpuData.yData = [this.cpuData.yData[0], ...stats.map((stat: CpuStat) => stat.used)];
-          this.cpuChart.axis.max({ y: this.getChartYAxisMax(stats) });
-          this.cpuChart.flush();
+          chart.axis.max({ y: this.getChartYAxisMax(stats) });
+          chart.flush();
         })
     );
 
     this.subscriptions.push(
-      this.memStat
-        .skipUntil(this.memChartLoad)
-        .subscribe((stats: MemoryStat[]) => {
+      this.memChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, MemoryStat[]]> => {
+        if (chart) {
+          return Observable.combineLatest(
+            Observable.of(chart),
+            this.memStat
+          );
+        }
+        return Observable.empty();
+      })
+        .subscribe((v: [ChartAPI, MemoryStat[]]): void => {
+          const chart: ChartAPI = v[0];
+          const stats: MemoryStat[] = v[1];
           const last: MemoryStat = stats[stats.length - 1];
           this.memVal = last.used;
           this.memMax = last.quota;
@@ -255,15 +291,24 @@ export class DeploymentDetailsComponent {
           this.memUnits = last.units;
           this.memData.xData = [this.memData.xData[0], ...stats.map((stat: MemoryStat) => stat.timestamp)];
           this.memData.yData = [this.memData.yData[0], ...stats.map((stat: MemoryStat) => stat.used)];
-          this.memChart.axis.max({ y: this.getChartYAxisMax(stats) });
-          this.memChart.flush();
+          chart.axis.max({ y: this.getChartYAxisMax(stats) });
+          chart.flush();
         })
     );
 
     this.subscriptions.push(
-      this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment, this.applicationId)
-        .skipUntil(this.netChartLoad)
-        .subscribe((stats: NetworkStat[]) => {
+      this.memChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, NetworkStat[]]> => {
+        if (chart) {
+          return Observable.combineLatest(
+            Observable.of(chart),
+            this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment, this.applicationId)
+          );
+        }
+        return Observable.empty();
+      })
+        .subscribe((v: [ChartAPI, NetworkStat[]]): void => {
+          const chart: ChartAPI = v[0];
+          const stats: NetworkStat[] = v[1];
           const last: NetworkStat = stats[stats.length - 1];
           this.netUnits = fromOrdinal(Math.max(ordinal(last.sent.units), ordinal(last.received.units)));
           this.netConfig.units = this.netUnits;
@@ -272,41 +317,37 @@ export class DeploymentDetailsComponent {
           this.netData.xData = [this.netData.xData[0], ...stats.map((stat: NetworkStat) => stat.received.timestamp)];
           this.netData.yData[0] = [this.netData.yData[0][0], ...stats.map((stat: NetworkStat) => round(stat.sent.used, decimals))];
           this.netData.yData[1] = [this.netData.yData[1][0], ...stats.map((stat: NetworkStat) => round(stat.received.used, decimals))];
-          this.netChart.flush();
+          chart.flush();
         })
     );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
+    this.subscriptions.forEach((sub: Subscription): void => sub.unsubscribe());
 
-    if (this.cpuChart) {
-      this.cpuChart.destroy();
-    }
-    if (this.memChart) {
-      this.memChart.destroy();
-    }
-    if (this.netChart) {
-      this.netChart.destroy();
-    }
+    Observable.combineLatest(
+      this.cpuChart,
+      this.memChart,
+      this.netChart
+    ).first().subscribe((charts: ChartAPI[]): void =>
+      charts.forEach((chart: ChartAPI): void => {
+        if (chart) {
+          chart.destroy();
+        }
+      })
+    );
   }
 
   cpuChartLoaded(cpuChart: ChartAPI): void {
-    this.cpuChart = cpuChart;
-    this.cpuChartLoad.next();
-    this.cpuChartLoad.complete();
+    this.cpuChart.next(cpuChart);
   }
 
   memChartLoaded(memChart: ChartAPI): void {
-    this.memChart = memChart;
-    this.memChartLoad.next();
-    this.memChartLoad.complete();
+    this.memChart.next(memChart);
   }
 
   netChartLoaded(netChart: ChartAPI): void {
-    this.netChart = netChart;
-    this.netChartLoad.next();
-    this.netChartLoad.complete();
+    this.netChart.next(netChart);
   }
 
   private getTooltipContents(): any {
