@@ -74,7 +74,7 @@ const DEPLOYMENTS_SERVICE_POLL_TIMER = Observable
     BsDropdownConfig,
     DeploymentApiService,
     { provide: TIMER_TOKEN, useValue: DEPLOYMENTS_SERVICE_POLL_TIMER },
-    { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 15 }
+    { provide: TIMESERIES_SAMPLES_TOKEN, useValue: DeploymentsService.FRONT_LOAD_SAMPLES }
   ]
 })
 export class DeploymentsModule {

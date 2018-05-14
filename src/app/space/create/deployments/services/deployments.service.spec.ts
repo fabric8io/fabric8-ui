@@ -1123,6 +1123,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1230,6 +1232,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1337,6 +1341,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env+',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1446,6 +1452,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1553,6 +1561,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 0,
                           memory: 512 * Math.pow(1024, 2)
@@ -1672,6 +1682,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env+',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1781,7 +1793,9 @@ describe('DeploymentsService', () => {
                   deployments: [
                     {
                       attributes: {
-                        name: 'foo-env'
+                        name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1
                       }
                     }
                   ]
@@ -1884,6 +1898,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 0,
                           memory: 0
@@ -2000,7 +2016,8 @@ describe('DeploymentsService', () => {
                         name: 'foo-env',
                         pods_quota: {
                           cpucores: 3
-                        }
+                        },
+                        pods: [['Running', '1']]
                       }
                     }
                   ]
