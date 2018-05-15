@@ -172,6 +172,10 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.bio = $event;
   }
 
+  handleOverCharsMaxLimit($event): void {
+    this.bio = this.bio.substring(0, 255);
+  }
+
   linkImageUrl(): void {
     this.subscriptions.push(this.gitHubService.getUser().subscribe(user => {
       if (user.avatar_url !== undefined && user.avatar_url.length > 0) {
