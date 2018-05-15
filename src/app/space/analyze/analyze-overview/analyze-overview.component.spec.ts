@@ -20,6 +20,11 @@ import {
   TestContext
 } from 'testing/test-context';
 
+import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
+import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
+import {RouterModule} from "@angular/router";
+import {WorkItemBarchartModule} from "../../../dashboard-widgets/work-item-widget/work-item-barchart/work-item-barchart.module";
+
 @Component({
   template: '<alm-analyzeOverview></alm-analyzeOverview>'
 })
@@ -34,12 +39,26 @@ describe('AnalyzeOverviewComponent', () => {
   let ctxSubj: Subject<Context> = new Subject<Context>();
   let fakeUserObs: Subject<User> = new Subject<User>();
 
+  let mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
+  let mockFeature: Feature = {
+    'attributes': {
+      'name': 'mock-attribute',
+      'enabled': true,
+      'user-enabled': true
+    }
+  };
+  mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
+
   initContext(AnalyzeOverviewComponent, HostComponent, {
+    imports: [
+      FeatureFlagModule
+    ],
     providers: [
       { provide: BsModalService, useFactory: (): jasmine.SpyObj<BsModalService> => createMock(BsModalService) },
       { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },
       { provide: AuthenticationService, useValue: ({ isLoggedIn: () => true }) },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
+      { provide: FeatureTogglesService, useValue: mockFeatureTogglesService },
       { provide: UserService, useValue: ({ loggedInUser: fakeUserObs }) }
     ],
     schemas: [
