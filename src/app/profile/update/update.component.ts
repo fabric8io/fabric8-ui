@@ -172,7 +172,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.bio = $event;
   }
 
-  handleOverCharsMaxLimit($event): void {
+  handleOverCharsMaxLimit(): void {
     this.bio = this.bio.substring(0, 255);
   }
 
@@ -328,7 +328,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
       delete profile['registrationCompleted'];
     }
     if (this.bio !== undefined && this.bio.length > 0) {
-      profile.bio = this.bio.trim();
+      profile.bio = this.bio.trim().substring(0, 255);
     }
     if (this.company !== undefined && this.company.length > 0) {
       profile.company = this.company.trim();
