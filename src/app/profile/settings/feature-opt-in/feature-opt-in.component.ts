@@ -83,8 +83,8 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         name: 'released',
         selected: this.featureLevel === 'released',
         color: '',
-        title: 'Production Only Features',
-        description: 'This is the default and current release version of the product.',
+        title: 'Production-Only Features',
+        description: 'Use the generally available version of OpenShift.io.',
         features: [],
         displayed: true
       },
@@ -92,7 +92,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         name: 'beta',
         selected: this.featureLevel === 'beta',
         title: 'Beta Features',
-        description: 'Experience various features that are ready for beta testing.',
+        description: 'Enable early access to beta features that are stable but still being tested.',
         features: [],
         displayed: true
       },
@@ -100,7 +100,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         name: 'experimental',
         selected: this.featureLevel === 'experimental',
         title: 'Experimental Features',
-        description: 'These features are still considered experimental and have no guarantee of stability.',
+        description: 'Enable access to experimental features that are in the early stages of testing and may not work as expected.',
         features: [],
         displayed: true
       },
@@ -108,7 +108,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         name: 'internal',
         selected: this.featureLevel === 'internal',
         title: 'Internal Experimental Features',
-        description: 'These experimental features are released to internal employees only.',
+        description: 'Enable access to experimental features that are only available to internal Red Hat users.',
         features: [],
         displayed:  this.userService.currentLoggedInUser.attributes.email.endsWith('redhat.com') && (this.userService.currentLoggedInUser.attributes as any).emailVerified
       }
