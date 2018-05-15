@@ -73,6 +73,7 @@ export class BaseApiLocatorService {
     if (this.envVars.get(key)) {
       return this.envVars.get(key);
     }
+
     // Simple check to trim www
     let domainname = window.location.hostname;
     if (domainname.startsWith('www')) {

@@ -138,9 +138,11 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
       '&spacePath=' + spaceName +
       '&gitRepository=' + summary.gitHubDetails.repository +
       '&space=' + spaceId;
-      summary.dependencyEditor.dependencySnapshot.forEach(i => {
-        payload += '&dependency=' + i.package + ':' + i.version;
-      });
+      if (summary.dependencyEditor && summary.dependencyEditor.dependencySnapshot) {
+        summary.dependencyEditor.dependencySnapshot.forEach(i => {
+          payload += '&dependency=' + i.package + ':' + i.version;
+        });
+      }
       if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
         payload += '&gitOrganization=' + summary.gitHubDetails.organization;
       }
