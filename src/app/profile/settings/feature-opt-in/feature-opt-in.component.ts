@@ -18,37 +18,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   public featureLevel: string;
   private subscriptions: Subscription[] = [];
   listConfig: ListConfig;
-  private items = [
-    {
-      name: 'released',
-      color: '',
-      title: 'Production Only Features',
-      description: 'This is the default and current release version of the product.',
-      features: [],
-      displayed: true
-    },
-    {
-      name: 'beta',
-      title: 'Beta Features',
-      description: 'Experience various features that are ready for beta testing.',
-      features: [],
-      displayed: true
-    },
-    {
-      name: 'experimental',
-      title: 'Experimental Features',
-      description: 'These features are still considered experimental and have no guarantee of stability.',
-      features: [],
-      displayed: true
-    },
-    {
-      name: 'internal',
-      title: 'Internal Experimental Features',
-      description: 'These experimental features are released to internal employees only.',
-      features: [],
-      displayed:  this.userService.currentLoggedInUser.attributes.email.endsWith('redhat.com') && (this.userService.currentLoggedInUser.attributes as any).emailVerified
-    }
-  ];
+  private items;
 
 
   constructor(
@@ -63,11 +33,13 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
       selectItems: false,
       selectionMatchProp: 'name',
       showCheckbox: false,
-      useExpandItems: false
+      showRadioButton: true,
+      useExpandItems: true
     } as ListConfig;
   }
 
-  updateProfile(): void {
+  updateProfile(event): void {
+    this.featureLevel = event.item.name;
     let profile = this.getTransientProfile();
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
       this.userService.currentLoggedInUser = user;
@@ -106,6 +78,41 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.featureLevel =  (this.userService.currentLoggedInUser.attributes as ExtProfile).featureLevel;
+    this.items = [
+      {
+        name: 'released',
+        selected: this.featureLevel === 'released',
+        color: '',
+        title: 'Production Only Features',
+        description: 'This is the default and current release version of the product.',
+        features: [],
+        displayed: true
+      },
+      {
+        name: 'beta',
+        selected: this.featureLevel === 'beta',
+        title: 'Beta Features',
+        description: 'Experience various features that are ready for beta testing.',
+        features: [],
+        displayed: true
+      },
+      {
+        name: 'experimental',
+        selected: this.featureLevel === 'experimental',
+        title: 'Experimental Features',
+        description: 'These features are still considered experimental and have no guarantee of stability.',
+        features: [],
+        displayed: true
+      },
+      {
+        name: 'internal',
+        selected: this.featureLevel === 'internal',
+        title: 'Internal Experimental Features',
+        description: 'These experimental features are released to internal employees only.',
+        features: [],
+        displayed:  this.userService.currentLoggedInUser.attributes.email.endsWith('redhat.com') && (this.userService.currentLoggedInUser.attributes as any).emailVerified
+      }
+    ];
     // TODO replace this service call with new endpoint
     // https://github.com/openshiftio/openshift.io/issues/3316
     // to avoid to have to list all features

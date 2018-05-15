@@ -2,7 +2,7 @@
   <div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf f8-card" user-level>
     <div class="card-pf-heading f8-card-heading">
       <div class="card-pf-heading-details f8-card-heading-details">
-        <a id="spacehome-my-workitems-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">
+        <a id="spacehome-my-workitems-add-button" class="btn btn-link f8-card-heading-btn-link" [routerLink]="[contextPath | async, 'plan']">
           <i class="pficon pficon-add-circle-o"></i>
         </a>
       </div>
@@ -18,7 +18,7 @@
           Planner will help you to create different types of work-items, allows you to assign team members and iterations.
         </p>
         <div class="f8-blank-slate-main-action">
-          <button id="spacehome-my-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
+          <button id="spacehome-my-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[contextPath | async, 'plan']">Create work item</button>
         </div>
       </div>
       <ul id="spacehome-my-workitems-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped f8-card-list"

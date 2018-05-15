@@ -16,7 +16,9 @@ import {
 } from '@angular/http/testing';
 
 import {
+  BehaviorSubject,
   Observable,
+  ReplaySubject,
   Subscription
 } from 'rxjs';
 
@@ -78,7 +80,7 @@ describe('OauthConfigStore', () => {
   describe('success state', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = Observable.of(user).publish();
+      mockUserService.loggedInUser = new BehaviorSubject(user).multicast(() => new ReplaySubject(1));
 
       TestBed.configureTestingModule({
         imports: [HttpModule],
@@ -125,27 +127,17 @@ describe('OauthConfigStore', () => {
       oauthStore = TestBed.get(OAuthConfigStore);
     });
 
-    it('should load and set latest oauthconfig on init', (done: DoneFn) => {
+    it('should load and set oauthconfig with openshift console on init', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
-
-      subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
-        if (!val) {
-          subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
-            expect(config.loaded).toBeTruthy();
-            done();
-          }));
-        }
-      }));
-    });
-
-    it('should set openshift console on init', (done: DoneFn) => {
-      mockUserService.loggedInUser.connect();
-
       subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
         if (!val) {
           subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
             expect(config.loaded).toBeTruthy();
             expect(config.openshiftConsoleUrl).toEqual('http://console.example.com/cluster/console');
+
+            expect(mockLogger.error).not.toHaveBeenCalled();
+            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
+            expect(mockNotificationsService.message).not.toHaveBeenCalled();
             done();
           }));
         }
@@ -153,11 +145,78 @@ describe('OauthConfigStore', () => {
     });
   });
 
+  describe('user service empty', () => {
+    beforeEach(() => {
+      mockUserService = createMock(UserService);
+      mockUserService.loggedInUser = new BehaviorSubject({} as User).multicast(() => new ReplaySubject(1));
+
+      TestBed.configureTestingModule({
+        imports: [HttpModule],
+        providers: [
+          {
+            provide: XHRBackend, useClass: MockBackend
+          },
+          {
+            provide: UserService, useClass: mockUserService
+          },
+          {
+            provide: Logger, useValue: mockLogger
+          },
+          {
+            provide: ErrorHandler, useValue: mockErrorHandler
+          },
+          {
+            provide: NotificationsService, useValue: mockNotificationsService
+          },
+          {
+            // provide OAuthConfigStore with a factory inside the fakeAsync zone
+            // so the mockBackend can catch http requests made inside the constructor
+            provide: OAuthConfigStore, useFactory: fakeAsync((
+              http: Http,
+              mockBackend: MockBackend,
+              logger: Logger,
+              errorHandler: ErrorHandler,
+              notifications: NotificationsService
+            ) => {
+              mockBackend.connections.subscribe((connection: MockConnection) => {
+                connection.mockRespond(new Response(new ResponseOptions({
+                  body: JSON.stringify(data),
+                  status: 200
+                })));
+              });
+              return new OAuthConfigStore(http, mockUserService, logger, errorHandler, notifications);
+            }),
+            deps: [Http, XHRBackend, Logger, ErrorHandler, NotificationsService]
+          }
+        ]
+      });
+
+      mockBackend = TestBed.get(XHRBackend);
+      oauthStore = TestBed.get(OAuthConfigStore);
+    });
+
+    it('should continue', (done: DoneFn) => {
+      mockUserService.loggedInUser.connect();
+      subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
+        if (!val) {
+          subscriptions.push(oauthStore.resource.subscribe((config: OAuthConfig) => {
+            expect(config.loaded).toBeTruthy();
+            expect(config.openshiftConsoleUrl).toBeUndefined();
+
+            expect(mockLogger.error).not.toHaveBeenCalled();
+            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
+            expect(mockNotificationsService.message).not.toHaveBeenCalled();
+            done();
+          }));
+        }
+      }));
+    });
+  });
 
   describe('user service error', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = Observable.throw({error : 'error'}).publish();
+      mockUserService.loggedInUser = Observable.throw({error : 'error'}).multicast(() => new ReplaySubject(1));
 
       TestBed.configureTestingModule({
         imports: [HttpModule],
@@ -219,7 +278,7 @@ describe('OauthConfigStore', () => {
   describe('config request error', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = Observable.of(user).publish();
+      mockUserService.loggedInUser = new BehaviorSubject(user).multicast(() => new ReplaySubject(1));
 
       TestBed.configureTestingModule({
         imports: [HttpModule],

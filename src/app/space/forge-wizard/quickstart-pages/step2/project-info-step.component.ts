@@ -16,7 +16,7 @@ export class ProjectInfoStepComponent implements OnInit {
   repoName: GuiInput;
   groupId: GuiInput;
   repoVersion: GuiInput;
-  MAX_LENGTH = 63;
+  MAX_LENGTH = 40;
   MIN_LENGTH = 2;
 
   constructor() {}

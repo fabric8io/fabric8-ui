@@ -88,7 +88,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     if (this.gitHubConnected) {
-      this.cheState = {running: false, multiTenant: false};
+      this.cheState = {clusterFull: false, running: false, multiTenant: false};
       this.updateCodebases();
       this.startIdleChe();
 
