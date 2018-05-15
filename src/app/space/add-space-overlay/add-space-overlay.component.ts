@@ -28,6 +28,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   selectedTemplate: ProcessTemplate = null;
   spaceTemplates: ProcessTemplate[];
   space: Space;
+  canSubmit: Boolean = true;
 
   constructor(private router: Router,
               private spaceService: SpaceService,
@@ -83,6 +84,7 @@ export class AddSpaceOverlayComponent implements OnInit {
         }
       };
     }
+    this.canSubmit = false;
     this.userService.getUser()
       .switchMap(user => {
         this.space.relationships['owned-by'].data.id = user.id;
@@ -105,6 +107,7 @@ export class AddSpaceOverlayComponent implements OnInit {
           this.hideAddSpaceOverlay();
         },
         err => {
+          this.canSubmit = true;
           this.notifications.message(<Notification> {
             message: `Failed to create "${this.space.name}"`,
             type: NotificationType.DANGER

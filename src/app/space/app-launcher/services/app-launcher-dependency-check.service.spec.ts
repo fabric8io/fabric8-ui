@@ -67,6 +67,16 @@ describe('Service: AppLauncherDependencyCheckService', () => {
     expect(valProjectName).toBeFalsy();
   });
 
+  it('validate Project Name to be falsy as length is not satisfied', () => {
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('12345678901234567890123456789012345678901');
+    expect(valProjectName).toBeFalsy();
+  });
+
+  it('validate Project Name to be truthy as length is satisfied', () => {
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('1234567890123456789012345678901234567890');
+    expect(valProjectName).toBeTruthy();
+  });
+
   it('validate Artifact Id to be truthy', () => {
     let valArtifactId = appLauncherDependencyCheckService.validateArtifactId(dependencyCheck.mavenArtifact);
     expect(valArtifactId).toBeTruthy();

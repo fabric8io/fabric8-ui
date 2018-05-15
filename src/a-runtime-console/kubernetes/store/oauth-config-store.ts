@@ -141,8 +141,14 @@ export class OAuthConfigStore {
             }
           }
           _latestOAuthConfig = new OAuthConfig(data);
+          /**
+           * openshiftConsoleUrl is set late and another emission occurs
+           * so users who do not need it are not blocked from continuing.
+           * Users who do need it should subscribe and wait for the
+           * emission that contains the property.
+           */
           this.userService.loggedInUser
-            .first((user: User) => user.attributes !== null && user.attributes.cluster !== null)
+            .first((user: User) => user.attributes != null && user.attributes.cluster != null)
             .subscribe(
               (user: User) => {
                 let cluster = user.attributes.cluster;

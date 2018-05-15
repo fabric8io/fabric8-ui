@@ -7,12 +7,14 @@ import { Broadcaster, Notifications } from 'ngx-base';
 import { Observable } from 'rxjs';
 
 import { WindowService } from 'app/shared/window.service';
+import { CheService } from '../services/che.service';
 import { WorkspacesService } from '../services/workspaces.service';
 import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.component';
 
 describe('Codebases Item Details Component', () => {
   let broadcasterMock: any;
   let windowServiceMock: any;
+  let cheServiceMock: any;
   let workspacesServiceMock: any;
   let notificationMock: any;
   let fixture, comp;
@@ -21,6 +23,7 @@ describe('Codebases Item Details Component', () => {
   beforeEach(() => {
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['on']);
     windowServiceMock = jasmine.createSpyObj('WindowService', ['open']);
+    cheServiceMock = jasmine.createSpyObj('CheService', ['getState']);
     workspacesServiceMock = jasmine.createSpyObj('WorkspacesService', ['getWorkspaces', 'createWorkspace', 'openWorkspace']);
     notificationMock = jasmine.createSpyObj('Notifications', ['message']);
 
@@ -33,6 +36,9 @@ describe('Codebases Item Details Component', () => {
         },
         {
           provide: WindowService, useValue: windowServiceMock
+        },
+        {
+          provide: CheService, useValue: cheServiceMock
         },
         {
           provide: WorkspacesService, useValue: workspacesServiceMock
@@ -60,6 +66,7 @@ describe('Codebases Item Details Component', () => {
       codebase: { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8', attributes: { type: 'git', url: 'toto/toto' } },
       workspaceName: 'MyWorkspace'
     };
+    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: false, multiTenant: true, running: true}));
     workspacesServiceMock.getWorkspaces.and.returnValue(Observable.of(expectedWorkspaces));
     broadcasterMock.on.and.returnValue(Observable.of(workspaceCreatedEvent));
     spyOn(comp, 'updateWorkspacesPoll');
@@ -93,6 +100,20 @@ describe('Codebases Item Details Component', () => {
     expect(notificationMock.message).toHaveBeenCalled();
   }));
 
+  it('Create And Open Workspace with capacity full', async(() => {
+    // given
+    let comp = fixture.componentInstance;
+    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
+    const notificationAction = { name: 'ERROR' };
+    notificationMock.message.and.returnValue(Observable.of(notificationAction));
+    fixture.detectChanges();
+    // when
+    comp.createAndOpenWorkspace();
+    fixture.detectChanges();
+    // then
+    expect(notificationMock.message).toHaveBeenCalled();
+  }));
+
   it('Open workspace', async(() => {
     // given
     const workspaceLinks = {
@@ -112,5 +133,19 @@ describe('Codebases Item Details Component', () => {
 
     // then
     expect(workspacesServiceMock.openWorkspace).toHaveBeenCalled();
+  }));
+
+  it('Open workspace with capacity full', async(() => {
+    // given
+    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
+    const notificationAction = { name: 'ERROR' };
+    notificationMock.message.and.returnValue(Observable.of(notificationAction));
+    fixture.detectChanges();
+
+    // when
+    comp.openWorkspace();
+
+    // then
+    expect(notificationMock.message).toHaveBeenCalled();
   }));
 });

@@ -11,7 +11,24 @@ import { SigninComponent } from './signin/signin.component';
 
 
 export function removeAction(url: string) {
-  return trimEnd(url.replace(/\(action:[a-z-]*\)/, ''), '/');
+  const nestedOutletRegex: RegExp = (/^(.*\([A-z-]*?)\/{0,2}action:[A-z-]*\)$/);
+  if (url.indexOf('action:') !== -1) {
+    if (nestedOutletRegex.test(url)) {
+      // if the action outlet contains the current page
+      // e.g., /${user}/${space}/create/(pipelines//action:add-codebase)
+      url = url.match(nestedOutletRegex)[1];
+      let i = url.lastIndexOf('(');
+      url = url.substring(0, i) + url.substring(i + 1);
+      if ((url.lastIndexOf('/') + 1) === url.length) {
+       url = url.slice(0, -1); // trim trailing '/' if applicable
+      }
+    } else {
+      // if the outlet is isolated at the end of the url
+      // e.g., /${user}/${space}/create/(action:add-codebase)
+      url = trimEnd(url.replace(/\(action:[a-z-]*\)/, ''), '/');
+    }
+  }
+  return url;
 }
 
 export const routes: Routes = [

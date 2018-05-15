@@ -8,6 +8,7 @@
   bottom: 0;
   left: 0;
   background-color: rgba(0, 0, 0, .8);
+  overflow-y: auto;
   .create-launcher {
     color: @color-pf-white;
     .alert-danger {
@@ -44,6 +45,9 @@
         border-radius: 0;
         font-size: 1.2em;
         color: @color-pf-white;
+        option {
+          color: @color-pf-black;
+        }
         &:focus {
           border-bottom-color: @color-pf-blue;
           box-shadow: none;

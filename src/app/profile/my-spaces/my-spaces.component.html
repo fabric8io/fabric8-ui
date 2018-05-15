@@ -19,10 +19,10 @@
             (onPinChange)="handlePinChange($event.item)"
             *ngIf="showSpaces">
           <ng-template #itemHeadingTemplate>
-            <my-spaces-item-heading class="space-item"></my-spaces-item-heading>
+            <my-spaces-item-heading></my-spaces-item-heading>
           </ng-template>
           <ng-template #itemTemplate let-item="item" let-index="index">
-            <my-spaces-item [space]="item" class="space-item"></my-spaces-item>
+            <my-spaces-item [space]="item"></my-spaces-item>
           </ng-template>
           <ng-template #actionHeadingTemplate>
             <!-- Extra margin for kebab -->

@@ -7,6 +7,8 @@ import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 
+import { filterOutClosedItems } from '../../../shared/workitem-utils';
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-work-items',
@@ -103,6 +105,7 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
       .switchMap(filters => this.workItemService
         .getWorkItems(100000, filters))
       .map(val => val.workItems)
+      .map(workItems => filterOutClosedItems(workItems))
       // Resolve the work item type, creator and area
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
       .do(workItems => workItems.forEach(workItem => {

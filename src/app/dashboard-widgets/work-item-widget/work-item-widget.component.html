@@ -13,7 +13,7 @@
         </p>
         <div class="f8-blank-slate-main-action">
           <button id="spacehome-workitems-create-button" class="btn btn-primary btn-lg"
-                  [routerLink]="[{ outlets: { action: 'add-work-item' } }]">Create work item</button>
+                  [routerLink]="[contextPath | async, 'plan']">Create work item</button>
         </div>
       </div>
       <div class="f8-card-body-grid" *ngIf="(myWorkItemsCount | async) > 0">

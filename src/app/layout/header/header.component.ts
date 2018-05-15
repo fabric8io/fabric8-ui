@@ -8,6 +8,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
+import { removeAction } from '../../app-routing.module';
 import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 
 import { Navigation } from '../../models/navigation';
@@ -196,6 +197,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return (this.router.url.indexOf('applauncher') !== -1);
   }
 
+  formatUrl(url: string) {
+    url = this.stripQueryFromUrl(url);
+    url = removeAction(url);
+    return url;
+  }
+
   private stripQueryFromUrl(url: string) {
     if (url.indexOf('?q=') !== -1) {
       url = url.substring(0, url.indexOf('?q='));
@@ -206,6 +213,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private updateMenus() {
     if (this.context && this.context.type && this.context.type.hasOwnProperty('menus')) {
       let foundPath = false;
+      let url = this.formatUrl(this.router.url);
       let menus = (this.context.type as MenuedContextType).menus;
       for (let n of menus) {
         // Clear the menu's active state
@@ -221,7 +229,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           for (let o of subMenus) {
             // Clear the menu's active state
             o.active = false;
-            if (!foundPath && o.fullPath === decodeURIComponent(this.router.url)) {
+            if (!foundPath && o.fullPath === decodeURIComponent(url)) {
               foundPath = true;
               o.active = true;
               n.active = true;
@@ -233,7 +241,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           if (!foundPath) {
             // lets check if the URL matches part of the path
             for (let o of subMenus) {
-              if (!foundPath && decodeURIComponent(this.router.url).startsWith(o.fullPath + '/')) {
+              if (!foundPath && decodeURIComponent(url).startsWith(o.fullPath + '/')) {
                 foundPath = true;
                 o.active = true;
                 n.active = true;
@@ -257,7 +265,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
               }
             }
           }
-        } else if (!foundPath && n.fullPath === this.stripQueryFromUrl(this.router.url)) {
+        } else if (!foundPath && n.fullPath === url) {
           n.active = true;
           foundPath = true;
         }
