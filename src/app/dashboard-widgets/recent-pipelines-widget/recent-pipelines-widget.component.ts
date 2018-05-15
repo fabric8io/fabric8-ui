@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs/Rx';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Context, Contexts } from 'ngx-fabric8-wit';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { BuildConfigs } from '../../../a-runtime-console/index';
 
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
@@ -14,11 +14,13 @@ import { PipelinesService } from '../../space/create/pipelines/services/pipeline
     PipelinesService
   ]
 })
-export class RecentPipelinesWidgetComponent implements OnInit {
+export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
 
-  contextPath: Observable<string>;
-  buildConfigs: Observable<BuildConfigs>;
+  contextPath: string;
+  buildConfigs: BuildConfigs;
   buildConfigsCount: number;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private context: Contexts,
@@ -26,13 +28,29 @@ export class RecentPipelinesWidgetComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.contextPath = this.context.default.map(context => context.path);
-    this.buildConfigs = this.pipelinesService.getRecentPipelines().share();
-    // buildConfigsCount triggers changes in the DOM; force Angular Change Detection
-    // via setTimeout encapsulation
-    this.buildConfigs
-      .map(buildConfigs => buildConfigs.length)
-      .subscribe(length => setTimeout(() => this.buildConfigsCount = length));
+    // these values changing asynchronously triggers changes in the DOM;
+    // force Angular Change Detection via setTimeout encapsulation
+    this.subscriptions.push(this.context.current.subscribe(
+      (ctx: Context) => {
+        setTimeout(() => {
+          this.contextPath = ctx.path;
+        });
+      }));
+
+    this.subscriptions.push(this.pipelinesService.getRecentPipelines().share().subscribe(
+      (configs: BuildConfigs) => {
+        setTimeout(() => {
+          this.buildConfigsCount = configs.length;
+          this.buildConfigs = configs;
+        });
+      }
+    ));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub: Subscription) => {
+      sub.unsubscribe();
+    });
   }
 
 }
