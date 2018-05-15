@@ -42,6 +42,8 @@ import {
 } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
+import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
+import { FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { ProviderService } from '../../../shared/account/provider.service';
 import { Che } from './services/che';
 import { CheService } from './services/che.service';
@@ -102,6 +104,17 @@ class FakeCodebasesItemDetails {
   template: '<codebases></codebases>'
 })
 class HostComponent { }
+
+class MockFeatureToggleService {
+  getFeature(featureName: string): Observable<any> {
+    return Observable.of({
+      attributes: {
+        enabled: true,
+        userEnabled: true
+      }
+    });
+  }
+}
 
 describe('CodebasesComponent', () => {
   type TestingContext = TestContext<CodebasesComponent, HostComponent>;
@@ -198,7 +211,8 @@ describe('CodebasesComponent', () => {
       { provide: Contexts, useFactory: () => contexts },
       { provide: Notifications, useFactory: () => notifications },
       { provide: AuthenticationService, useFactory: () => authenticationService },
-      { provide: ProviderService, useFactory: () => providerService }
+      { provide: ProviderService, useFactory: () => providerService },
+      { provide: FeatureTogglesService, useClass: MockFeatureToggleService }
     ],
     declarations: [
       FakeCodebasesToolbar,
@@ -210,6 +224,7 @@ describe('CodebasesComponent', () => {
     imports: [
       ActionModule,
       EmptyStateModule,
+      FeatureFlagModule,
       ListModule,
       RouterTestingModule.withRoutes([])
     ]

@@ -9,6 +9,7 @@ import { ActionModule } from 'patternfly-ng/action';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
 import { ListModule } from 'patternfly-ng/list';
 
+import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
 import { CodebasesAddModule } from './codebases-add/codebases-add.module';
 import { CodebaseDeleteDialogModule } from './codebases-delete/codebase-delete-dialog.module';
 import { CodebasesItemActionsModule } from './codebases-item-actions/codebases-item-actions.module';
@@ -37,7 +38,8 @@ import { CodebasesComponent } from './codebases.component';
     EmptyStateModule,
     FormsModule,
     ListModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    FeatureFlagModule
   ],
   declarations: [ CodebasesComponent ],
   exports: [ CodebasesComponent ],

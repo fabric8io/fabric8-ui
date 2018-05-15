@@ -72,7 +72,7 @@ describe('FeatureOptInComponent', () => {
 
     expect(this.testedDirective.featureLevel).toBe('beta');
     this.testedDirective.featureLevel = 'experimental';
-    this.testedDirective.updateProfile();
+    this.testedDirective.updateProfile({item: {name: 'experimental'}});
 
     expect(gettingStartedService.update).toHaveBeenCalledWith({ featureLevel: 'experimental', contextInformation: Object({  }) } as ExtProfile);
   });
@@ -117,7 +117,7 @@ describe('FeatureOptInComponent', () => {
   it('should call gettingStartedService when updateUser is called', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
     const gettingStartedService: GettingStartedService = TestBed.get(GettingStartedService);
 
-    this.testedDirective.updateProfile();
+    this.testedDirective.updateProfile({item: {name: 'beta'}});
     expect(gettingStartedService.update).toHaveBeenCalled();
   });
 

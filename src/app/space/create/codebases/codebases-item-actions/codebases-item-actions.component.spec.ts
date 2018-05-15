@@ -8,6 +8,7 @@ import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 
 import { WindowService } from 'app/shared/window.service';
+import { CheService } from '../services/che.service';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
 import { WorkspacesService } from '../services/workspaces.service';
@@ -20,6 +21,7 @@ describe('Codebases Item Actions Component', () => {
   let fixture;
   let broadcasterMock: any;
   let windowServiceMock: any;
+  let cheServiceMock: any;
   let workspacesServiceMock: any;
   let codebasesServiceMock: any;
 
@@ -29,6 +31,7 @@ describe('Codebases Item Actions Component', () => {
     notificationMock = jasmine.createSpyObj('Notifications', ['message']);
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
     windowServiceMock = jasmine.createSpyObj('WindowService', ['open']);
+    cheServiceMock = jasmine.createSpyObj('CheService', ['getState']);
     workspacesServiceMock = jasmine.createSpyObj('WorkspacesService', ['createWorkspace']);
     codebasesServiceMock = jasmine.createSpyObj('CodebasesService', ['deleteCodebase']);
 
@@ -41,6 +44,9 @@ describe('Codebases Item Actions Component', () => {
         },
         {
           provide: WindowService, useValue: windowServiceMock
+        },
+        {
+          provide: CheService, useValue: cheServiceMock
         },
         {
           provide: WorkspacesService, useValue: workspacesServiceMock
@@ -59,6 +65,7 @@ describe('Codebases Item Actions Component', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(CodebasesItemActionsComponent);
+    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: false, multiTenant: true, running: true}));
   });
 
   it('Create And Open Workspace successfully', async(() => {
@@ -94,6 +101,20 @@ describe('Codebases Item Actions Component', () => {
     const notificationAction = { name: 'ERROR' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
+    fixture.detectChanges();
+    // when
+    comp.createAndOpenWorkspace();
+    fixture.detectChanges();
+    // then
+    expect(notificationMock.message).toHaveBeenCalled();
+  }));
+
+  it('Create And Open Workspace with capacity full', async(() => {
+    // given
+    let comp = fixture.componentInstance;
+    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
+    const notificationAction = { name: 'ERROR' };
+    notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();
     // when
     comp.createAndOpenWorkspace();

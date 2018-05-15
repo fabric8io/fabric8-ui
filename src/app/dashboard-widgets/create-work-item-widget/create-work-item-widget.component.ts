@@ -7,6 +7,8 @@ import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 
+import { filterOutClosedItems } from '../../shared/workitem-utils';
+
 class WorkItemFilter {
   paramKey: string;
   value: string;
@@ -46,6 +48,7 @@ export class CreateWorkItemWidgetComponent implements OnInit {
       .switchMap(filters => this.workItemService
         .getWorkItems(100000, filters))
       .map(val => val.workItems)
+      .map(workItems => filterOutClosedItems(workItems))
       // Resolve the work item type, creator and area
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveAreaForWorkItem(workItem)))

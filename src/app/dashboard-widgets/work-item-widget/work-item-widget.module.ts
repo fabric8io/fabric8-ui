@@ -8,23 +8,19 @@ import { PlannerListModule, WorkItemDetailAddTypeSelectorModule, WorkItemDetailM
 import { WidgetsModule } from 'ngx-widgets';
 
 import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
-import { CreateWorkItemOverlayModule } from '../create-work-item-widget/create-work-item-overlay/create-work-item-overlay.module';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
-import { WorkItemWidgetRoutingModule } from './work-item-widget-routing.module';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 
 @NgModule({
   imports: [
     RouterModule,
     CommonModule,
-    CreateWorkItemOverlayModule,
     FeatureFlagModule,
     FormsModule,
     WidgetsModule,
     PlannerListModule,
     NgArrayPipesModule,
     WorkItemBarchartModule,
-    WorkItemWidgetRoutingModule,
     WorkItemDetailModule,
     WorkItemDetailAddTypeSelectorModule
   ],

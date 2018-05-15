@@ -1,6 +1,7 @@
 import { DebugNode, ErrorHandler } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
@@ -153,6 +154,25 @@ describe('AddSpaceOverlayComponent', () => {
         .toBeTruthy();
       expect(component.space.relationships['space-template'].data.id)
         .toBe('template-02');
+    });
+
+    it('should disable submit', () => {
+      mockUserService.getUser.and.returnValue(Observable.empty());
+      component.context = {
+        current: Observable.of(mockSpace)
+      };
+      component.ngOnInit();
+
+      const submitBtnEl = fixture.debugElement.query(By.css('button[type=submit]'));
+
+      expect(submitBtnEl.nativeElement.disabled).toBeFalsy();
+      expect(component.canSubmit).toBe(true);
+
+      component.createSpace();
+
+      expect(component.canSubmit).toBe(false);
+      fixture.detectChanges();
+      expect(submitBtnEl.nativeElement.disabled).toBeTruthy();
     });
   });
 

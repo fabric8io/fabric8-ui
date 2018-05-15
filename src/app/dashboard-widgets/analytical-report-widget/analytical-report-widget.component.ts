@@ -62,7 +62,9 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
       if (this.pipelines.length !== 0) {
         if (this.currentPipeline !== this.pipelines[0].id) {
           this.currentPipeline = this.pipelines[0].id;
-          this.selectedPipeline();
+          if (!this.currentBuild) {
+            this.selectedPipeline();
+          }
         }
       } else {
         this.currentPipeline = 'default';
