@@ -50,11 +50,11 @@
         </p>
       </div>
       <ul id="recent-pipelines-list" class="list-group" *ngIf="(buildConfigsCount) > 0">
-        <li class="list-group-item" *ngFor="let buildconfig of buildConfigs | async">
+        <li class="list-group-item" *ngFor="let buildconfig of buildConfigs">
           <div class="f8-card__pipeline-column">
             <span class="{{buildconfig.iconStyle}} fa-spin" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle === 'pficon-running'"></span>
             <span class="{{buildconfig.iconStyle}}" title="{{buildconfig.statusPhase}}" *ngIf="buildconfig.iconStyle !== 'pficon-running'"></span>
-            <a id="spacehome-pipelines-title" [routerLink]="[contextPath | async, buildconfig.labels['space'], 'create', 'pipelines']"
+            <a id="spacehome-pipelines-title" [routerLink]="[contextPath, buildconfig.labels['space'], 'create', 'pipelines']"
               class="f8-card__pipeline-column-name">
               {{buildconfig.name}}
             </a>

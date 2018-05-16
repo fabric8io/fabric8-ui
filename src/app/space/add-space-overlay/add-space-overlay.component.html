@@ -20,7 +20,7 @@
                 </div>
                 <div class="form-group">
                   <label for="name" class="control-label">Space Name</label>
-                  <input id="name" name="name" type="text" class="form-control" placeholder="Enter a unique name for your space" [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName/>
+                  <input id="add-space-overlay-name" name="name" type="text" class="form-control" placeholder="Enter a unique name for your space" [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName/>
                   <div *ngIf="name.errors && name.dirty" class="alert-danger">
                     <div [hidden]="!name.errors.required">
                       Space Name is required to create a Space.
@@ -42,8 +42,7 @@
                 </div>
                 <div class="form-group">
                   <label for="description" class="control-label">Description</label>
-                  <div contenteditable="true" id="description" name="description" type="text" class="form-control create-launcher-description" placeholder="Enter a Space Description">
-                  </div>
+                  <input id="add-space-overlay-description" name="description" type="text" class="form-control create-launcher-description" placeholder="Enter a Space Description" #description/>
                 </div>
                 <div class="form-group">
                   <p *ngIf="selectedTemplate?.attributes.description">

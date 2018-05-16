@@ -37,6 +37,7 @@ describe('AddSpaceOverlayComponent', () => {
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
   let mockSubject: any = jasmine.createSpy('Subject');
+  let mockElementRef: any = jasmine.createSpyObj('ElementRef', ['nativeElement']);
 
   let mockProfile: Profile = {
     fullName: 'mock-fullName',
@@ -116,6 +117,7 @@ describe('AddSpaceOverlayComponent', () => {
     type: NotificationType.DANGER
   };
 
+  mockElementRef.nativeElement.value = {};
   mockSpaceNamespaceService.updateConfigMap = {};
   mockSpaceService.create.and.returnValue(Observable.of(mockSpace));
   mockSpacesService.addRecent.and.returnValue(mockSubject);
@@ -173,6 +175,13 @@ describe('AddSpaceOverlayComponent', () => {
       expect(component.canSubmit).toBe(false);
       fixture.detectChanges();
       expect(submitBtnEl.nativeElement.disabled).toBeTruthy();
+    });
+
+    it('should save the description', () => {
+      mockElementRef.nativeElement.value = 'mock-description';
+      component.description = mockElementRef;
+      component.createSpace();
+      expect(component.space.attributes.description).toBe('mock-description');
     });
   });
 
