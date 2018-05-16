@@ -15,4 +15,5 @@ export class DeploymentCardContainerComponent {
   @Input() spaceId: string;
   @Input() environments: Observable<string[]>;
   @Input() application: string;
+  collapsed: boolean = true;
 }

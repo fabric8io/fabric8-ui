@@ -1,7 +1,9 @@
 import {
   Component,
   DebugElement,
-  Input
+  EventEmitter,
+  Input,
+  Output
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -27,6 +29,8 @@ class FakeDeploymentCardComponent {
   @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: string;
+  @Input() collapsed: boolean;
+  @Output() collapsedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 }
 
 describe('DeploymentCardContainer', () => {
