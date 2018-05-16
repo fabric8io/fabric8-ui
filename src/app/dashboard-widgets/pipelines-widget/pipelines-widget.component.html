@@ -1,11 +1,11 @@
 <div id="spacehome-pipelines-card" class="pipelines-widget card-pf f8-card">
   <div class="card-pf-heading f8-card-heading">
     <div class="card-pf-heading-details f8-card-heading-details">
-      <div *ngIf="userOwnsSpace">
+      <ng-container *ngIf="userOwnsSpace">
         <a class="btn btn-link f8-card-heading-btn-link" (click)="addToSpace.emit()">
           <i id="pipelines-add-to-space-icon" class="pficon pficon-add-circle-o"></i>
         </a>
-      </div>
+      </ng-container>
     </div>
     <h2 class="card-pf-title">
       <a id="spacehome-pipelines-title" [routerLink]="[contextPath, 'create', 'pipelines']">Pipelines</a>
@@ -19,10 +19,9 @@
         Pipelines run when you commit and build your code base.
       </p>
       <div class="f8-blank-slate-main-action">
-      <div *ngIf="userOwnsSpace">
-        <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg"
-          (click)="addToSpace.emit()">Add to Space</button>
-        </div>
+        <ng-container *ngIf="userOwnsSpace">
+          <button id="spacehome-pipelines-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Add to Space</button>
+        </ng-container>
       </div>
     </div>
     <ng-template #pipeAvailable>
