@@ -335,7 +335,7 @@ export class DeploymentsService implements OnDestroy {
     return Observable.combineLatest(
       this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId),
       this.getPods(spaceId, environmentName, applicationId).map((p: Pods): number => p.total),
-      this.pollTimer
+      this.pollTimer.startWith(null)
     )
       .startWith([false, 0, null])
       .pairwise()
