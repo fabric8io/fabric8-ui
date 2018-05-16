@@ -2,7 +2,7 @@
   <div id="analyze-overview-dashboard" class="container-fluid analyze-overview-wrapper" user-level>
     <div class="row f8-dashboard-masthead">
       <div class="col-sm-10">
-        <fabric8-edit-space-description-widget></fabric8-edit-space-description-widget>
+        <fabric8-edit-space-description-widget [userOwnsSpace]='userOwnsSpace()'></fabric8-edit-space-description-widget>
       </div>
       <div class="col-sm-2">
         <f8-feature-toggle featureName="AppLauncher">

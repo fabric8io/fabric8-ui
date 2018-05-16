@@ -3,16 +3,19 @@
     <div>
       <span class="f8-space-masthead-name">{{space?.attributes.name | spaceName}}</span> <span class="f8-space-masthead-owner">bobross_925</span>
     </div>
-    <div>
-      <span class="pficon pficon-users fa-lg"></span> 59
+    <span class="pficon pficon-users fa-lg"></span> 59
+    <ng-container *ngIf='userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo'>
       <span class="f8-space-masthead-vertical-divider-collab"></span>
       <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
-    </div>
+    </ng-container>
+    <ng-template #userDoesNotOwnSpaceHeaderInfo>
+      <span id="space-description-collaborators-placeholder">Collaborators</span>
+    </ng-template>
   </div>
-  <div class="f8-space-masthead-vertical-divider"></div>
+  <div *ngIf="userOwnsSpace || space?.attributes.description" class="f8-space-masthead-vertical-divider"></div>
   <div class="col-sm-9 f8-space-masthead-description">
     <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
-    <div class="form-group">
+    <div *ngIf="userOwnsSpace; else userDoesNotOwnSpaceDescription" class="form-group">
       <div class="f8-space-masthead-description-title"></div>
       <textarea row="3"
                 placeholder="Description goes here"
@@ -38,5 +41,8 @@
         {{space?.attributes.description || "Enter a description"}}
       </p>
     </div>
+    <ng-template #userDoesNotOwnSpaceDescription>
+      <p>{{ space?.attributes.description }}</p>
+    </ng-template>
   </div>
 </div>
