@@ -9,10 +9,12 @@ import { Environment } from '../models/environment';
 
 @Component({
   selector: 'deployment-card-container',
-  templateUrl: 'deployment-card-container.component.html'
+  templateUrl: 'deployment-card-container.component.html',
+  styleUrls: ['./deployment-card-container.component.less']
 })
 export class DeploymentCardContainerComponent {
   @Input() spaceId: string;
   @Input() environments: Observable<string[]>;
   @Input() application: string;
+  collapsed: boolean = true;
 }

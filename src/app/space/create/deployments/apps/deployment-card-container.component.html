@@ -2,7 +2,9 @@
   <div class="row row-cards-pf">
     <div class="col-xs-6 col-sm-4 col-md-2">
       <h4 id="deploymentCardApplicationTitle">
-        {{application}}
+        <a class="application-title" (click)="collapsed = !collapsed">
+          <span [ngClass]="collapsed ? 'fa fa-angle-right' : 'fa fa-angle-down'"></span>&nbsp;&nbsp;{{application}}
+        </a>
       </h4>
     </div>
     <deployment-card class="col-xs-6 col-sm-4 col-md-3"
@@ -10,6 +12,7 @@
       [spaceId]="spaceId"
       [applicationId]="application"
       [environment]="environment"
+      [(collapsed)]="collapsed"
     ></deployment-card>
   </div>
 </div>

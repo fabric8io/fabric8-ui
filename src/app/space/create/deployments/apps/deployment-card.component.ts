@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild
 } from '@angular/core';
 
@@ -40,11 +42,11 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   @Input() spaceId: string;
   @Input() applicationId: string;
   @Input() environment: string;
+  @Output() collapsedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @ViewChild(DeleteDeploymentModal) deleteDeploymentModal: DeleteDeploymentModal;
 
   active: boolean = false;
   detailsActive: boolean = false;
-  collapsed: boolean = true;
   deleting: boolean = false;
   version: Observable<string>;
   logsUrl: Observable<string>;
@@ -56,6 +58,8 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   iconClass: string;
   toolTip: string;
 
+  private _collapsed: boolean;
+
   private readonly subscriptions: Array<Subscription> = [];
 
   private readonly debouncedUpdateDetails = debounce(this.updateDetails, DeploymentCardComponent.DEBOUNCE_TIME, { maxWait: DeploymentCardComponent.MAX_DEBOUNCE_TIME });
@@ -65,6 +69,18 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     private statusService: DeploymentStatusService,
     private notifications: NotificationsService
   ) { }
+
+  @Input() set collapsed(collapsed: boolean) {
+    this._collapsed = collapsed;
+    if (!this._collapsed) {
+      this.detailsActive = true;
+    }
+    this.collapsedChange.emit(this.collapsed);
+  }
+
+  get collapsed() {
+    return this._collapsed;
+  }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
@@ -176,7 +192,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   private lockAndDelete(): void {
-    this.collapsed = true;
+    this._collapsed = true;
     this.deleting = true;
   }
 }
