@@ -9,49 +9,16 @@ import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
-import {
-  ExtProfile,
-  GettingStartedService
-} from '../../../getting-started/services/getting-started.service';
+import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 import { FeatureOptInComponent } from './feature-opt-in.component';
 
 @Component({
   template: `<alm-feature-opt-in></alm-feature-opt-in>`
 })
-class HostComponent {
-  collapsed: boolean = false;
-  applicationId: string = 'mockAppId';
-  environment: string = 'mockEnvironment';
-  spaceId: string = 'mockSpaceId';
-  detailsActive: boolean = true;
-}
+class HostComponent {}
 
 describe('FeatureOptInComponent', () => {
   type Context = TestContext<FeatureOptInComponent, HostComponent>;
-
-  let featureOptInComponent: FeatureOptInComponent;
-  let gettingStartedServiceMock: jasmine.SpyObj<GettingStartedService>;
-  let notificationsMock: jasmine.SpyObj<Notifications>;
-  let userServiceMock: jasmine.SpyObj<UserService>;
-  let toggleServiceMock: jasmine.SpyObj<FeatureTogglesService>;
-
-  beforeEach(() => {
-    gettingStartedServiceMock = createMock(GettingStartedService);
-    toggleServiceMock = createMock(FeatureTogglesService);
-    notificationsMock = createMock(Notifications);
-    userServiceMock = createMock(UserService);
-    (userServiceMock as any).currentLoggedInUser = {
-      attributes: {
-        featureLevel: 'beta',
-        email: 'somebody@email.com',
-        emailVerified: true
-      }
-    };
-    toggleServiceMock.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
-    gettingStartedServiceMock.createTransientProfile.and.returnValue({ featureLevel: 'beta' } as ExtProfile);
-    gettingStartedServiceMock.update.and.returnValue(Observable.of({}));
-    notificationsMock.message.and.returnValue(Observable.of({}));
-  });
 
   initContext(FeatureOptInComponent, HostComponent, {
     imports: [
@@ -60,14 +27,37 @@ describe('FeatureOptInComponent', () => {
       ListModule
     ],
     providers: [
-      { provide: GettingStartedService, useFactory: () => gettingStartedServiceMock },
-      { provide: Notifications, useFactory: () => notificationsMock },
-      { provide: UserService, useFactory: () => userServiceMock },
-      { provide: FeatureTogglesService, useFactory: () => toggleServiceMock }
+      { provide: GettingStartedService, useFactory: (): jasmine.SpyObj<GettingStartedService> => {
+        const mock: jasmine.SpyObj<GettingStartedService> = createMock(GettingStartedService);
+        mock.createTransientProfile.and.returnValue({ featureLevel: 'beta' } as ExtProfile);
+        mock.update.and.returnValue(Observable.of({}));
+        return mock;
+      }},
+      { provide: Notifications, useFactory: (): jasmine.SpyObj<Notifications> => {
+        const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
+        mock.message.and.returnValue(Observable.of({}));
+        return mock;
+      }},
+      { provide: UserService, useFactory: (): jasmine.SpyObj<UserService> => {
+        const mock: jasmine.SpyObj<UserService> = createMock(UserService);
+        (mock as any).currentLoggedInUser = {
+          attributes: {
+            featureLevel: 'beta',
+            email: 'somebody@email.com',
+            emailVerified: true
+          }
+        };
+        return mock;
+      }},
+      { provide: FeatureTogglesService, useFactory: (): jasmine.SpyObj<FeatureTogglesService> => {
+        const mock: jasmine.SpyObj<FeatureTogglesService> = createMock(FeatureTogglesService);
+        mock.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
+        return mock;
+      }}
     ]
   });
 
-  it('should sort feature per level', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
+  it('should sort feature per level', function(this: Context) {
     const features = [   {
       'attributes': {
         'description': 'main dashboard view',
@@ -105,7 +95,7 @@ describe('FeatureOptInComponent', () => {
   });
 
   describe('updateProfile', () => {
-    it('should call GettingStartedService#update and send a notification', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
+    it('should call GettingStartedService#update and send a notification', function(this: Context) {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
@@ -117,7 +107,7 @@ describe('FeatureOptInComponent', () => {
       expect(notifications.message).toHaveBeenCalled();
     });
 
-    it('should update the feature level', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
+    it('should update the feature level', function(this: Context) {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
@@ -135,7 +125,7 @@ describe('FeatureOptInComponent', () => {
       }));
     });
 
-    it('should cancel events deselecting a feature level', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
+    it('should cancel events deselecting a feature level', function(this: Context) {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
