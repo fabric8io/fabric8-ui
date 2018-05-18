@@ -3,6 +3,7 @@ import {
   DebugElement,
   EventEmitter,
   Input,
+  NO_ERRORS_SCHEMA,
   Output
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -29,8 +30,9 @@ class HostComponent { }
 })
 class FakeDeploymentCardContainerComponent {
   @Input() spaceId: string;
+  @Input() spaceName: string;
+  @Input() applications: string[];
   @Input() environments: Observable<string[]>;
-  @Input() application: string;
 }
 
 @Component({
@@ -51,6 +53,7 @@ describe('DeploymentsAppsComponent', () => {
   const environments: string[] = ['envId1', 'envId2'];
   const applications: string[] = ['first', 'second'];
   const spaceId: Observable<string> = Observable.of('spaceId');
+  const spaceName: Observable<string> = Observable.of('spaceName');
   const mockEnvironments: Observable<string[]> = Observable.of(environments);
   const mockApplications: Observable<string[]> = Observable.of(applications);
 
@@ -59,24 +62,23 @@ describe('DeploymentsAppsComponent', () => {
       declarations: [FakeDeploymentCardContainerComponent, FakeDeploymentsToolbarComponent],
       providers: [
         { provide: Broadcaster, useValue: mockBroadcaster }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     },
     (component: DeploymentsAppsComponent) => {
       component.spaceId = spaceId;
+      component.spaceName = spaceName;
       component.environments = mockEnvironments;
       component.applications = mockApplications;
     });
 
-  it('should created children components with proper objects', function(this: Context) {
+  it('should create a single container to hold application and environment cards', function(this: Context) {
     const arrayOfComponents: DebugElement[] =
       this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
-    expect(arrayOfComponents.length).toEqual(applications.length);
+    expect(arrayOfComponents.length).toEqual(1);
 
-    applications.forEach((appName: string, index: number) => {
-      const container = arrayOfComponents[index].componentInstance;
-      expect(container.application).toEqual(appName);
-      expect(container.environments).toEqual(mockEnvironments);
-    });
+    expect(arrayOfComponents[0].componentInstance.applications).toEqual(applications);
+    expect(arrayOfComponents[0].componentInstance.environments).toEqual(mockEnvironments);
   });
 
   describe('#showAddAppOverlay', () => {

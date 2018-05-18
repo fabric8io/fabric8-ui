@@ -2494,6 +2494,111 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
     });
   });
 
+  describe('#hasDeployments', () => {
+
+    const environments: string[] = ['stage', 'run'];
+
+    it('should return true if there are deployed applications', (done: DoneFn): void => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      apiSvc.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app-1',
+            deployments: [
+              {
+                attributes: {
+                  name: 'stage'
+                }
+              },
+              {
+                attributes: {
+                  name: 'run'
+                }
+              }
+            ]
+          }
+        },
+        {
+          attributes: {
+            name: 'foo-app-2',
+            deployments: [
+              {
+                attributes: {
+                  name: 'stage'
+                }
+              },
+              {
+                attributes: {
+                  name: 'run'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
+        expect(bool).toEqual(true);
+        done();
+      });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return true if there are is at least one deployed application', (done: DoneFn) => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      apiSvc.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app-1',
+            deployments: [
+              {
+                attributes: {
+                  name: 'stage'
+                }
+              }
+            ]
+          }
+        },
+        {
+          attributes: {
+            name: 'foo-app-2',
+            deployments: []
+          }
+        }
+      ]));
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
+        expect(bool).toEqual(true);
+        done();
+      });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return false if there are no deployed applications', (done: DoneFn) => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      apiSvc.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app-1',
+            deployments: []
+          }
+        },
+        {
+          attributes: {
+            name: 'foo-app-2',
+            deployments: []
+          }
+        }
+      ]));
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
+        expect(bool).toEqual(false);
+        done();
+      });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
   describe('getDeploymentCpuStat', () => {
     it('should return data', (done: DoneFn): void => {
       const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);

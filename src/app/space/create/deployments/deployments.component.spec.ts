@@ -1,6 +1,7 @@
 import {
   Component,
-  Input
+  Input,
+  NO_ERRORS_SCHEMA
 } from '@angular/core';
 import {
   async,
@@ -75,7 +76,8 @@ describe('DeploymentsComponent', () => {
     ],
     providers: [
       { provide: Spaces, useValue: spaces }
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
   });
 
   it('should set service result to applications property', function(this: Context, done: DoneFn) {
