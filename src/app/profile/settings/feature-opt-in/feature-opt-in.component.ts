@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { UserService } from 'ngx-login-client';
-import { ListConfig } from 'patternfly-ng';
+import { ListComponent, ListConfig } from 'patternfly-ng';
 import { Subscription } from 'rxjs';
 import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
@@ -15,11 +15,12 @@ import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 })
 export class FeatureOptInComponent implements OnInit, OnDestroy {
 
+  @ViewChild(ListComponent) listComponent: ListComponent;
+
   public featureLevel: string;
   private subscriptions: Subscription[] = [];
   listConfig: ListConfig;
   private items;
-
 
   constructor(
     private gettingStartedService: GettingStartedService,
@@ -39,6 +40,12 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   }
 
   updateProfile(event): void {
+    if (event.selectedItems.length === 0) {
+      // Do not allow item deselection events - one item should always be selected. If a
+      // deselection occurs, re-select the item and ignore the event.
+      this.listComponent.selectItem(event.item, true);
+      return;
+    }
     this.featureLevel = event.item.name;
     let profile = this.getTransientProfile();
     this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { Notifications } from 'ngx-base';
+import { Notifications, NotificationType } from 'ngx-base';
 import { UserService } from 'ngx-login-client';
 import { ListModule } from 'patternfly-ng';
 import { Observable } from 'rxjs';
@@ -67,16 +67,6 @@ describe('FeatureOptInComponent', () => {
     ]
   });
 
-  it('should call update profile with the appropriate feature level', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
-    const gettingStartedService: GettingStartedService = TestBed.get(GettingStartedService);
-
-    expect(this.testedDirective.featureLevel).toBe('beta');
-    this.testedDirective.featureLevel = 'experimental';
-    this.testedDirective.updateProfile({item: {name: 'experimental'}});
-
-    expect(gettingStartedService.update).toHaveBeenCalledWith({ featureLevel: 'experimental', contextInformation: Object({  }) } as ExtProfile);
-  });
-
   it('should sort feature per level', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
     const features = [   {
       'attributes': {
@@ -114,11 +104,48 @@ describe('FeatureOptInComponent', () => {
     expect(result.experimental[0].attributes.name).toEqual('Analyze newSpaceDashboard');
   });
 
-  it('should call gettingStartedService when updateUser is called', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
-    const gettingStartedService: GettingStartedService = TestBed.get(GettingStartedService);
+  describe('updateProfile', () => {
+    it('should call GettingStartedService#update and send a notification', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
+      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
-    this.testedDirective.updateProfile({item: {name: 'beta'}});
-    expect(gettingStartedService.update).toHaveBeenCalled();
+      this.testedDirective.updateProfile({
+        item: { name: 'beta' },
+        selectedItems: [ { name: 'beta' } ]
+      });
+      expect(gettingStartedService.update).toHaveBeenCalled();
+      expect(notifications.message).toHaveBeenCalled();
+    });
+
+    it('should update the feature level', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
+      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
+
+      expect(this.testedDirective.featureLevel).toBe('beta');
+      this.testedDirective.featureLevel = 'experimental';
+      this.testedDirective.updateProfile({
+        item: { name: 'experimental' },
+        selectedItems: [{ name: 'experimental' }]
+      });
+
+      expect(gettingStartedService.update).toHaveBeenCalledWith({ featureLevel: 'experimental', contextInformation: Object({}) } as ExtProfile);
+      expect(notifications.message).toHaveBeenCalledWith(jasmine.objectContaining({
+        message: 'Profile updated!',
+        type: NotificationType.SUCCESS
+      }));
+    });
+
+    it('should cancel events deselecting a feature level', function(this: TestContext<FeatureOptInComponent, HostComponent>) {
+      const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
+
+      this.testedDirective.updateProfile({
+        item: { name: 'beta' },
+        selectedItems: []
+      });
+      expect(gettingStartedService.update).not.toHaveBeenCalled();
+      expect(notifications.message).not.toHaveBeenCalled();
+    });
   });
 
 });
