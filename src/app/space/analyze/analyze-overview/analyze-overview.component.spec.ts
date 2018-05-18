@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
@@ -20,10 +21,9 @@ import {
   TestContext
 } from 'testing/test-context';
 
+import { WorkItemBarchartModule } from '../../../dashboard-widgets/work-item-widget/work-item-barchart/work-item-barchart.module';
 import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
 import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
-import {RouterModule} from "@angular/router";
-import {WorkItemBarchartModule} from "../../../dashboard-widgets/work-item-widget/work-item-barchart/work-item-barchart.module";
 
 @Component({
   template: '<alm-analyzeOverview></alm-analyzeOverview>'

@@ -3,8 +3,13 @@ import { Observable } from 'rxjs';
 
 import { DependencyCheck, DependencyCheckService } from 'ngx-forge';
 
+import { Application, DeploymentApiService } from '../../create/deployments/services/deployment-api.service';
+
 @Injectable()
 export class AppLauncherDependencyCheckService implements DependencyCheckService {
+
+  constructor(private deploymentApiService: DeploymentApiService) {}
+
   /**
    * Returns project dependencies
    *
@@ -18,6 +23,16 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
       projectVersion: '1.0.0',
       spacePath: '/myspace'
     });
+  }
+
+  /**
+   * Returns available projects in a space
+   *
+   * @param  {string} spaceId
+   * @returns Observable
+   */
+  getApplicationsInASpace(spaceId: string): Observable<Application[]> {
+    return this.deploymentApiService.getApplications(spaceId);
   }
 
   /**

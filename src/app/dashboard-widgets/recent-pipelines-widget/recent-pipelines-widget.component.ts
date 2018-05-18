@@ -25,7 +25,7 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
   constructor(
     private context: Contexts,
     private pipelinesService: PipelinesService
-  ) {}
+  ) { }
 
   ngOnInit() {
     // these values changing asynchronously triggers changes in the DOM;
@@ -52,5 +52,4 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
       sub.unsubscribe();
     });
   }
-
 }

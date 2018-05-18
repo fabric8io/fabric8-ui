@@ -25,9 +25,11 @@ import {
 } from 'testing/test-context';
 
 @Component({
-  template: '<fabric8-add-codebase-widget></fabric8-add-codebase-widget>'
+  template: '<fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace"></fabric8-add-codebase-widget>'
 })
-class HostComponent { }
+class HostComponent {
+  userOwnsSpace: boolean;
+}
 
 describe('AddCodebaseWidgetComponent', () => {
   type TestingContext = TestContext<AddCodebaseWidgetComponent, HostComponent>;

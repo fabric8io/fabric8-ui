@@ -97,7 +97,7 @@ export class DeploymentsService implements OnDestroy {
   }
 
   getEnvironments(spaceId: string): Observable<string[]> {
-    // Note: Sorting and filtering out test should ideally be moved to the backend
+    // Note: Sorting and filtering out "test" should ideally be moved to the backend
     return this.getEnvironmentsResponse(spaceId)
       .map((envs: EnvironmentStat[]) => envs || [])
       .map((envs: EnvironmentStat[]) => envs.map((env: EnvironmentStat) => env.attributes))
@@ -308,100 +308,86 @@ export class DeploymentsService implements OnDestroy {
   }
 
   private getTimeseriesData(spaceId: string, environmentName: string, applicationId: string, maxSamples: number): Observable<TimeseriesData[]> {
-    return this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId)
-      .first()
-      .flatMap((deployed: boolean) => {
-        if (!deployed) {
-          return Observable.never();
+    const key = `${spaceId}:${applicationId}:${environmentName}`;
+    if (!this.timeseriesSubjects.has(key)) {
+      const subject = new ReplaySubject<TimeseriesData[]>(this.timeseriesSamples);
+
+      const now = +Date.now();
+      const seriesData = this.getStreamingTimeseriesData(spaceId, environmentName, applicationId, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now)
+        .finally(() => {
+          this.timeseriesSubjects.delete(key);
+        })
+        .bufferCount(this.timeseriesSamples, 1);
+
+      this.serviceSubscriptions.push(seriesData.subscribe(subject));
+      this.timeseriesSubjects.set(key, subject);
+    }
+    return this.timeseriesSubjects.get(key)
+      .map((data: TimeseriesData[]) => {
+        if (maxSamples >= data.length) {
+          return data;
         }
-        const key = `${spaceId}:${applicationId}:${environmentName}`;
-        if (!this.timeseriesSubjects.has(key)) {
-          const subject = new ReplaySubject<TimeseriesData[]>(this.timeseriesSamples);
+        return data.slice(data.length - maxSamples);
+      });
+  }
 
-          const now = +Date.now();
-          const frontLoadedUpdates = this.getInitialTimeseriesData(spaceId, environmentName, applicationId, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now);
+  private getStreamingTimeseriesData(spaceId: string, environmentName: string, applicationId: string, startTime: number, endTime: number): Observable<TimeseriesData> {
+    return Observable.combineLatest(
+      this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId),
+      this.getPods(spaceId, environmentName, applicationId).map((p: Pods): number => p.total),
+      this.pollTimer.startWith(null)
+    )
+      .startWith([false, 0, null])
+      .pairwise()
+      .concatMap((status: [[boolean, number, void], [boolean, number, void]]): Observable<TimeseriesData> => {
+        const prev: [boolean, number, void] = status[0];
+        const curr: [boolean, number, void] = status[1];
 
-          const polledUpdates = this.getStreamingTimeseriesData(spaceId, environmentName, applicationId);
+        const isDeployed: boolean = curr[0] && curr[1] > 0;
+        const wasDeployed: boolean = prev[0] && prev[1] > 0;
 
-          const seriesData = Observable.concat(frontLoadedUpdates, polledUpdates)
-            .finally(() => {
-              this.timeseriesSubjects.delete(key);
-            })
-            .bufferCount(this.timeseriesSamples, 1);
-          this.serviceSubscriptions.push(seriesData.subscribe(subject));
-          this.timeseriesSubjects.set(key, subject);
+        if (!isDeployed) {
+          return Observable.empty();
         }
-        return this.timeseriesSubjects.get(key)
-          .map((data: TimeseriesData[]) => {
-            if (maxSamples >= data.length) {
-              return data;
-            }
-            return data.slice(data.length - maxSamples);
-          });
+
+        if (!wasDeployed) {
+          return this.getInitialTimeseriesData(spaceId, environmentName, applicationId, startTime, endTime);
+        } else {
+          return this.apiService.getLatestTimeseriesData(spaceId, environmentName, applicationId)
+            .catch((err: Response) => this.handleHttpError(err))
+            .filter((t: TimeseriesData) => !!t && !isEmpty(t));
+        }
       });
   }
 
   private getInitialTimeseriesData(spaceId: string, environmentName: string,  applicationId: string, startTime: number, endTime: number): Observable<TimeseriesData> {
-    return this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId)
-      .first()
-      .flatMap((deployed: boolean) => {
-        if (!deployed) {
-          return Observable.empty();
-        }
-        return this.apiService.getTimeseriesData(spaceId, environmentName, applicationId, startTime, endTime)
-          .catch((err: Response) => this.handleHttpError(err))
-          .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t))
-          .concatMap((t: MultiTimeseriesData) => {
-            const results: TimeseriesData[] = [];
-            const numSamples = t.cores.length;
-            for (let i = 0; i < numSamples; i++) {
-              results.push({
-                cores: {
-                  time: t.cores[i].time,
-                  value: t.cores[i].value
-                },
-                memory: {
-                  time: t.memory[i].time,
-                  value: t.memory[i].value
-                },
-                net_tx: {
-                  time: t.net_tx[i].time,
-                  value: t.net_tx[i].value
-                },
-                net_rx: {
-                  time: t.net_rx[i].time,
-                  value: t.net_rx[i].value
-                }
-              });
+    return this.apiService.getTimeseriesData(spaceId, environmentName, applicationId, startTime, endTime)
+      .catch((err: Response) => this.handleHttpError(err))
+      .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t))
+      .concatMap((t: MultiTimeseriesData) => {
+        const results: TimeseriesData[] = [];
+        const numSamples = t.cores.length;
+        for (let i = 0; i < numSamples; i++) {
+          results.push({
+            cores: {
+              time: t.cores[i].time,
+              value: t.cores[i].value
+            },
+            memory: {
+              time: t.memory[i].time,
+              value: t.memory[i].value
+            },
+            net_tx: {
+              time: t.net_tx[i].time,
+              value: t.net_tx[i].value
+            },
+            net_rx: {
+              time: t.net_rx[i].time,
+              value: t.net_rx[i].value
             }
-            return Observable.from(results);
           });
-      }
-      );
-  }
-
-  private getStreamingTimeseriesData(spaceId: string, environmentName: string, applicationId: string): Observable<TimeseriesData> {
-    return this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId)
-      .first()
-      .flatMap((deployed: boolean) => {
-        if (!deployed) {
-          return Observable.empty();
         }
-        /* piggyback on getApplicationsResponse rather than pollTimer directly in order to
-        * establish a happens-before relationship between applications updates and timeseries
-        * updates within each poll cycle, so that we can detect a deployment disappearing and
-        * cancel upcoming timeseries queries
-        */
-        return this.getApplicationsResponse(spaceId)
-          .takeUntil(
-            this.isApplicationDeployedInEnvironment(spaceId, environmentName, applicationId)
-              .filter((deployed: boolean): boolean => !deployed)
-          )
-          .concatMap(() =>
-            this.apiService.getLatestTimeseriesData(spaceId, environmentName, applicationId)
-              .catch((err: Response) => this.handleHttpError(err))
-              .filter((t: TimeseriesData) => !!t && !isEmpty(t))
-          );
+        return Observable.from(results);
       });
   }
 

@@ -3,7 +3,7 @@
     <b>{{space?.attributes.name | spaceName}}</b>
   </h2>
   <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
-  <div class="form-group">
+  <div *ngIf="userOwnsSpace; else userDoesNotOwnSpace" class="form-group">
     <textarea row="2" placeholder="Description goes here" class="space-description form-control" *ngIf="isEditing && (isEditable() | async)"
       (keyup.enter)="onUpdateDescription(description.value)" (keydown.enter)="preventDef($event)" #description>{{space?.attributes.description}}</textarea>
     <div *ngIf="isEditing">
@@ -20,3 +20,6 @@
     </span>
   </div>
 </div>
+<ng-template #userDoesNotOwnSpace>
+  <p>{{ space?.attributes.description }}</p>
+</ng-template>

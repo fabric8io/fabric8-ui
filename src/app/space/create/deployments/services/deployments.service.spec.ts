@@ -36,7 +36,10 @@ import { MemoryUnit } from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
-import { DeploymentApiService } from './deployment-api.service';
+import {
+  Application,
+  DeploymentApiService
+} from './deployment-api.service';
 import {
   DeploymentsService,
   TIMER_TOKEN,
@@ -1123,6 +1126,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1230,6 +1235,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1337,6 +1344,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env+',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1446,6 +1455,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1553,6 +1564,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 0,
                           memory: 512 * Math.pow(1024, 2)
@@ -1672,6 +1685,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env+',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 3,
                           memory: 3
@@ -1781,7 +1796,9 @@ describe('DeploymentsService', () => {
                   deployments: [
                     {
                       attributes: {
-                        name: 'foo-env'
+                        name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1
                       }
                     }
                   ]
@@ -1884,6 +1901,8 @@ describe('DeploymentsService', () => {
                     {
                       attributes: {
                         name: 'foo-env',
+                        pods: [['Running', '1']],
+                        pod_total: 1,
                         pods_quota: {
                           cpucores: 0,
                           memory: 0
@@ -2000,7 +2019,8 @@ describe('DeploymentsService', () => {
                         name: 'foo-env',
                         pods_quota: {
                           cpucores: 3
-                        }
+                        },
+                        pods: [['Running', '1']]
                       }
                     }
                   ]
@@ -2483,6 +2503,268 @@ describe('DeploymentsService', () => {
         expected: 'http://example.com/application',
         observable: svc.getAppUrl('foo-space', 'foo-env', 'foo-app'),
         done: done
+      });
+    });
+  });
+
+});
+
+describe('DeploymentsService with mock DeploymentApiService', () => {
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: DeploymentApiService,
+          useFactory: (): jasmine.SpyObj<DeploymentApiService> => createMock(DeploymentApiService)
+        },
+        { provide: Logger, useValue: createMock(Logger) },
+        { provide: ErrorHandler, useValue: createMock(ErrorHandler) },
+        { provide: NotificationsService, useValue: jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']) },
+        { provide: TIMER_TOKEN, useValue: new Subject<void>() },
+        { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3 },
+        DeploymentsService
+      ]
+    });
+  });
+
+  describe('getDeploymentCpuStat', () => {
+    it('should return data', (done: DoneFn): void => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      apiSvc.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      apiSvc.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      apiSvc.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
+        }
+      }));
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').first().subscribe((stats: CpuStat[]): void => {
+        expect(stats).toEqual([
+          { used: 1, quota: 3, timestamp: 1 },
+          { used: 2, quota: 3, timestamp: 2 },
+          { used: 9, quota: 3, timestamp: 9 }
+        ]);
+        done();
+      });
+      TestBed.get(TIMER_TOKEN).next();
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return nothing when application is not deployed in environment', (done: DoneFn): void => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      apiSvc.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'bar-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]));
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').subscribe((stats: CpuStat[]): void => {
+        done.fail('should not have emitted');
+      });
+      TestBed.get(TIMER_TOKEN).next();
+      TestBed.get(TIMER_TOKEN).next();
+
+      Observable.timer(500).first().subscribe(() => done());
+    });
+
+    it('should return nothing when application has no pods', (done: DoneFn): void => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      apiSvc.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env',
+                  pods: [],
+                  pod_total: 0,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]));
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').subscribe((stats: CpuStat[]): void => {
+        done.fail('should not have emitted');
+      });
+      TestBed.get(TIMER_TOKEN).next();
+      TestBed.get(TIMER_TOKEN).next();
+
+      Observable.timer(500).first().subscribe(() => done());
+    });
+
+    it('should emit updates when deployment reappears', (done: DoneFn): void => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      apiSvc.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env',
+                  pods: [],
+                  pod_total: 0,
+                  pods_quota: {
+                    cpucores: 1,
+                    memory: 1
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      apiSvc.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
+        }
+      }));
+      apiSvc.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+
+      let delayPassed: boolean = false;
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').first().subscribe((stats: CpuStat[]): void => {
+        if (!delayPassed) {
+          done.fail('should not have emitted before delay passed');
+        }
+        expect(stats).toEqual([
+          { used: 1, quota: 2, timestamp: 1 },
+          { used: 2, quota: 2, timestamp: 2 },
+          { used: 9, quota: 2, timestamp: 9 }
+        ]);
+        done();
+      });
+      TestBed.get(TIMER_TOKEN).next();
+      TestBed.get(TIMER_TOKEN).next();
+
+      Observable.timer(500).first().subscribe(() => {
+        delayPassed = true;
+
+        apiSvc.getApplications.and.returnValue(Observable.of([
+          {
+            attributes: {
+              name: 'foo-app',
+              deployments: [
+                {
+                  attributes: {
+                    name: 'foo-env',
+                    pods: [['Running', '1']],
+                    pod_total: 1,
+                    pods_quota: {
+                      cpucores: 2,
+                      memory: 2
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]));
+
+        TestBed.get(TIMER_TOKEN).next();
+        TestBed.get(TIMER_TOKEN).next();
       });
     });
   });

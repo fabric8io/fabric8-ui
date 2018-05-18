@@ -1,13 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
+import { Observable } from 'rxjs/Observable';
 
 import {
     DependencyCheck
 } from 'ngx-forge';
 
+import { DeploymentApiService } from '../../create/deployments/services/deployment-api.service';
 import { AppLauncherDependencyCheckService } from './app-launcher-dependency-check.service';
 
+let mockDeploymentApiService: any = {
+  getApplications(): Observable<any[]> {
+      return Observable.of([{
+          attributes: {name: 'app-apr-10-2018-4-25'}
+      }, {
+          attributes: {name: 'app-may-11-2018'}
+      }, {
+          attributes: {name: 'app-may-14-1-04'}
+      }]);
+  }
+};
 
 function initTestBed() {
   TestBed.configureTestingModule({
@@ -16,7 +29,8 @@ function initTestBed() {
         AppLauncherDependencyCheckService,
         {
             provide: XHRBackend, useClass: MockBackend
-        }
+        },
+        { provide: DeploymentApiService, useValue: mockDeploymentApiService }
     ]
   });
 }
