@@ -16,6 +16,7 @@ import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespac
 import { ContextService } from '../../shared/context.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
+import { Application, DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
 
 describe ('AddAppOverlayComponent', () => {
@@ -35,13 +36,23 @@ describe ('AddAppOverlayComponent', () => {
     let mockSpaceNamespaceService: any = jasmine.createSpy('SpaceNamespaceService');
     let mockSpaceNamePipe: any = jasmine.createSpy('SpaceNamePipe');
     let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent']);
-    let mockContextService: any = jasmine.createSpy('ContextService');
     let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
     let mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
     let mockSubject: any = jasmine.createSpy('Subject');
     let mockDependencyCheckService: any = {
         getDependencyCheck(): Observable<any> {
-            return Observable.of([]);
+            return Observable.of({
+                mavenArtifact: 'd4-345',
+                groupId: 'io.openshift.booster',
+                projectName: 'app-test-1',
+                projectVersion: '1.0.0-SNAPSHOT',
+                spacePath: '/myspace'
+              });
+        },
+        validateProjectName(projectName: string): boolean {
+            // allows only '-', '_', ' ' and 4-40 characters (must start and end with alphanumeric)
+            const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-_\s]{2,38}[a-zA-Z0-9]$/;
+            return pattern.test(projectName);
         }
     };
 
@@ -123,6 +134,37 @@ describe ('AddAppOverlayComponent', () => {
         type: NotificationType.DANGER
     };
 
+    let mockDeploymentApiService: any = {
+        getApplications(): Observable<any[]> {
+            return Observable.of([{
+                attributes: {name: 'app-apr-10-2018-4-25'}
+            }, {
+                attributes: {name: 'app-may-11-2018'}
+            }, {
+                attributes: {name: 'app-may-14-1-04'}
+            }]);
+        }
+    };
+
+    class mockContextService {
+        get current(): Observable<any> {
+            return Observable.of({
+                name: 'my-space-apr24-4-43',
+                path: '/user/my-space-apr24-4-43',
+                space: {
+                    id: 'c814a58b-6220-4670-80cf-a2196899a59d',
+                    attributes: {
+                        'created-at': '2018-04-24T11:15:59.164872Z',
+                        'description': '',
+                        'name': 'my-space-apr24-4-43',
+                        'updated-at': '2018-04-24T11:15:59.164872Z',
+                        'version' : 0
+                    }
+                }
+            });
+        }
+    }
+
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
@@ -134,6 +176,7 @@ describe ('AddAppOverlayComponent', () => {
                 AddAppOverlayComponent
             ],
             providers: [
+                { provide: DeploymentApiService, useValue: mockDeploymentApiService },
                 { provide: DependencyCheckService, useValue: mockDependencyCheckService },
                 PopoverConfig,
                 { provide: Broadcaster, useValue: mockBroadcaster },
@@ -145,7 +188,7 @@ describe ('AddAppOverlayComponent', () => {
                 { provide: SpaceNamespaceService, useValue: mockSpaceNamespaceService },
                 { provide: SpaceNamePipe, useValue: mockSpaceNamePipe },
                 { provide: SpacesService, useValue: mockSpacesService },
-                { provide: ContextService, useValue: mockContextService },
+                { provide: ContextService, useClass: mockContextService },
                 { provide: Logger, useValue: mockLogger },
                 { provide: ErrorHandler, useValue: mockErrorHandler }
             ]
@@ -160,5 +203,29 @@ describe ('AddAppOverlayComponent', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('application is not available', () => {
+        component.projectName = 'app-may-11-2018';
+        component.validateProjectName();
+        expect(component.isProjectNameAvailable).toBeFalsy();
+    });
+
+    it('application is available', () => {
+        component.projectName = 'app-may-11-2018-1';
+        component.validateProjectName();
+        expect(component.isProjectNameAvailable).toBeTruthy();
+    });
+
+    it('application is not valid', () => {
+        component.projectName = '#app-may-11-2018-1';
+        component.validateProjectName();
+        expect(component.isProjectNameValid).toBeFalsy();
+    });
+
+    it('application is valid', () => {
+        component.projectName = 'app-may-11-2018-1';
+        component.validateProjectName();
+        expect(component.isProjectNameValid).toBeTruthy();
     });
 });

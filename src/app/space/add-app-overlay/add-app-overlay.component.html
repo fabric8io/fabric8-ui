@@ -21,7 +21,7 @@
           <div class="row row-cards-pf">
             <div class="col-sm-10 col-md-8 col-md-offset-2">
               <form>
-                <div class="form-group" [ngClass]="{'has-error': isProjectNameValid === false}">
+                <div class="form-group" [ngClass]="{'has-error': isProjectNameValid === false || isProjectNameAvailable === false}">
                   <h1 class="code-imports--step_title">
                     Name your application
                   </h1>
@@ -41,6 +41,9 @@
                   <span class="code-imports--step_tooltip-label" [popover]="namingTemplate" popoverTitle="Naming Requirements" placement="bottom" triggers="mouseenter:mouseleave">Naming Requirements<span class="pficon pficon-info"></span></span>
                   <span class="help-block code-imports--step_help-block" *ngIf="isProjectNameValid === false">
                     Invalid name. See a full list of naming requirements below the input field.
+                  </span>
+                  <span class="help-block code-imports--step_help-block" *ngIf="isProjectNameAvailable === false">
+                    Application name is already used in your current Space. Please enter a new one.
                   </span>
                 </div>
               </form>
@@ -119,7 +122,7 @@
       <footer class="container-fluid">
         <div class="row">
           <div class="col-sm-12 code-imports--step_toolbar">
-            <button id="cancelImportsButton" class="btn btn-primary" aria-label="Continue" [disabled]="selectedFlow === '' || projectName === '' || isProjectNameValid === false"
+            <button id="cancelImportsButton" class="btn btn-primary" aria-label="Continue" [disabled]="selectedFlow === '' || projectName === '' || isProjectNameValid === false || isProjectNameAvailable === false"
               (click)="routeToLaunchApp()">Continue</button>
           </div>
         </div>

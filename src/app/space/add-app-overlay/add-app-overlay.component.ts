@@ -13,6 +13,7 @@ import { User, UserService } from 'ngx-login-client';
 
 import { ContextService } from 'app/shared/context.service';
 import { DependencyCheckService } from 'ngx-forge';
+import { Application, DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -28,12 +29,15 @@ export class AddAppOverlayComponent implements OnDestroy, OnInit {
   selectedFlow: string = '';
   spaces: Space[] = [];
   subscriptions: Subscription[] = [];
+  applications: string[] = [];
+  isProjectNameAvailable: boolean;
 
   constructor(private context: ContextService,
               private dependencyCheckService: DependencyCheckService,
               private broadcaster: Broadcaster,
               private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              private deploymentApiService: DeploymentApiService) {
     this.loggedInUser = this.userService.currentLoggedInUser;
     if (context && context.current) {
       this.subscriptions.push(context.current.subscribe((ctx: Context) => {
@@ -52,6 +56,13 @@ export class AddAppOverlayComponent implements OnDestroy, OnInit {
     this.subscriptions.push(this.dependencyCheckService.getDependencyCheck().subscribe((val) => {
       this.projectName = val.projectName;
     }));
+    this.subscriptions.push(this.deploymentApiService.getApplications(this.currentSpace.id)
+      .subscribe((response: Application[]) => {
+        const applications: string[] = response.map(app => {
+          return app.attributes.name ? app.attributes.name.toLowerCase() : '';
+        });
+        this.applications = applications;
+      }));
   }
 
   /**
@@ -85,5 +96,6 @@ export class AddAppOverlayComponent implements OnDestroy, OnInit {
     this.projectName = this.projectName.toLowerCase();
     this.isProjectNameValid =
       this.dependencyCheckService.validateProjectName(this.projectName);
+    this.isProjectNameAvailable = this.applications.indexOf(this.projectName) === -1 ? true : false;
   }
 }

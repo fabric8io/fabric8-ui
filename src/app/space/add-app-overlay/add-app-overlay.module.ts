@@ -8,6 +8,7 @@ import { DependencyCheckService } from 'ngx-forge';
 
 import { AppLauncherDependencyCheckService } from '../app-launcher/services/app-launcher-dependency-check.service';
 import { CodebasesService } from '../create/codebases/services/codebases.service';
+import { DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
 
 @NgModule({
@@ -25,7 +26,8 @@ import { AddAppOverlayComponent } from './add-app-overlay.component';
   ],
   providers: [
     CodebasesService,
-    { provide: DependencyCheckService, useClass: AppLauncherDependencyCheckService }
+    { provide: DependencyCheckService, useClass: AppLauncherDependencyCheckService },
+    DeploymentApiService
   ]
 })
 
