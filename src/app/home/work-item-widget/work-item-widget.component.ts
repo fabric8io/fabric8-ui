@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { WorkItem, WorkItemService } from 'fabric8-planner';
-import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { Space, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
 
 import { filterOutClosedItems } from '../../shared/workitem-utils';
 
@@ -12,8 +11,7 @@ import { filterOutClosedItems } from '../../shared/workitem-utils';
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-work-item-widget',
   templateUrl: './work-item-widget.component.html',
-  styleUrls: ['./work-item-widget.component.less'],
-  providers: [SpaceService]
+  styleUrls: ['./work-item-widget.component.less']
 })
 export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   currentSpace: Space;
@@ -22,21 +20,14 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   recentSpaces: Space[] = [];
   recentSpaceIndex: number = 0;
   subscriptions: Subscription[] = [];
-  spaces: Space[] = [];
   workItems: WorkItem[] = [];
 
   constructor(
       private spacesService: Spaces,
-      private spaceService: SpaceService,
       private workItemService: WorkItemService,
       private userService: UserService) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
-      if (user.attributes) {
-        this.subscriptions.push(spaceService.getSpacesByUser(user.attributes.username, 10).subscribe(spaces => {
-          this.spaces = spaces;
-        }));
-      }
     }));
     this.subscriptions.push(spacesService.recent.subscribe(spaces => {
       this.recentSpaces = spaces;
@@ -58,25 +49,6 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
    */
   fetchWorkItems(): void {
     this.fetchWorkItemsBySpace(this.getSpaceById(this.currentSpaceId));
-  }
-
-  /**
-   * Fetch space for current space ID
-   *
-   * @returns {Observable<Space>}
-   */
-  get space(): Observable<Space> {
-    return this.userService.loggedInUser
-      .map(user => this.spaceService.getSpacesByUser(user.attributes.username, 10))
-      .switchMap(spaces => spaces)
-      .map(spaces => {
-        for (let i = 0; i < spaces.length; i++) {
-          if (this.currentSpaceId === spaces[i].id) {
-            return spaces[i];
-          }
-        }
-        return <Space> {};
-      });
   }
 
   // Private
@@ -130,9 +102,9 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
    * @returns {Space} Returns null if space cannot be found
    */
   private getSpaceById(id: string): Space {
-    for (let i = 0; i < this.spaces.length; i++) {
-      if (id === this.spaces[i].id) {
-        return this.spaces[i];
+    for (let i = 0; i < this.recentSpaces.length; i++) {
+      if (id === this.recentSpaces[i].id) {
+        return this.recentSpaces[i];
       }
     }
     return null;

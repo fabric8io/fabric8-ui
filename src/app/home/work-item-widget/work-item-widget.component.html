@@ -3,13 +3,13 @@
     <div class="card-pf-heading-bg">
       <div class="card-pf-heading f8-card-heading">
         <h2 class="card-pf-title">My Work Items
-        <span *ngIf="spaces.length !== 0">
+        <span *ngIf="recentSpaces.length !== 0">
           <select class="col-xs-3 col-sm-6 form-control work-item-combobox"
-              [disabled]="spaces.length === 0"
+              [disabled]="recentSpaces.length === 0"
               [(ngModel)]="currentSpaceId"
               (ngModelChange)="fetchWorkItems()">
             <option value="default">Select a space to work with...</option>
-            <option *ngFor="let space of spaces" [value]="space.id">
+            <option *ngFor="let space of recentSpaces" [value]="space.id">
               {{space.attributes.name | spaceName}}
             </option>
           </select>
@@ -37,7 +37,7 @@
                       <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} f8-list-group-item-icon"></span>
                       <span>{{workItem.attributes['system.number']}}</span>
                       <span class="work-item-title" *ngIf="workItem.attributes">
-                        <a [routerLink]="['/', loggedInUser.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.id]" class="f8-list-group-item-link">
+                        <a [routerLink]="['/', currentSpace.relationalData.creator.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.attributes['system.number']]" class="f8-list-group-item-link">
                           {{workItem.attributes['system.title']}}
                         </a>
                       </span>
@@ -55,11 +55,13 @@
     <div class="card-pf-heading-bg">
       <div class="card-pf-heading f8-card-heading">
         <h2 class="card-pf-title">My Work Items
-          <span *ngIf="spaces.length !== 0">
-            <select class="col-xs-3 col-sm-6 form-control work-item-combobox" [disabled]="spaces.length === 0" [(ngModel)]="currentSpaceId"
-              (ngModelChange)="fetchWorkItems()">
+          <span *ngIf="recentSpaces.length !== 0">
+            <select class="col-xs-3 col-sm-6 form-control work-item-combobox"
+                    [disabled]="recentSpaces.length === 0"
+                    [(ngModel)]="currentSpaceId"
+                    (ngModelChange)="fetchWorkItems()">
               <option value="default">Select a space to work with...</option>
-              <option *ngFor="let space of spaces" [value]="space.id">
+              <option *ngFor="let space of recentSpaces" [value]="space.id">
                 {{space.attributes.name | spaceName}}
               </option>
             </select>
@@ -87,7 +89,7 @@
                       <span class="color-grey pull-left fa {{workItem.relationships?.baseType?.data?.attributes?.icon}} f8-list-group-item-icon"></span>
                       <span>{{workItem.attributes['system.number']}}</span>
                       <span class="work-item-title" *ngIf="workItem.attributes">
-                        <a [routerLink]="['/', loggedInUser.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.attributes['system.number']]" class="f8-list-group-item-link">
+                        <a [routerLink]="['/', currentSpace.relationalData.creator.attributes.username, currentSpace.attributes.name, 'plan', 'detail', workItem.attributes['system.number']]" class="f8-list-group-item-link">
                           {{workItem.attributes['system.title']}}
                         </a>
                       </span>
