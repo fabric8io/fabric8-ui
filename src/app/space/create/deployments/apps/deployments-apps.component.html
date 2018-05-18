@@ -2,38 +2,40 @@
 </deployments-toolbar>
 
 <div *ngIf="(hasLoaded | async); else loading">
-  <div class="cards-pf">
-    <div class="row row-cards-pf">
-      <div class="col-xs-12 col-sm-4 col-md-2">
-        <h3>
-          <b>Applications</b>
-        </h3>
-      </div>
-      <div class="col-xs-12 col-sm-4 col-md-2">
-        <h3>
-          <b>Environments</b>
-        </h3>
-      </div>
-    </div>
-  </div>
-
-  <div class="cards-pf">
-    <div class="row row-cards-pf">
-      <div class="col-xs-12 col-sm-4 col-md-2"></div>
-      <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
-        <h4 class="env-card-title">
-          {{environment}}
-        </h4>
+  <div *ngIf="applicationsList.length > 0; else emptystate">
+    <div class="cards-pf">
+      <div class="row row-cards-pf">
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <h3>
+            <b>Applications</b>
+          </h3>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-2">
+          <h3>
+            <b>Environments</b>
+          </h3>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div *ngFor="let application of filteredApplicationsList">
-    <deployment-card-container
-      [spaceId]="spaceId | async"
-      [application]="application"
-      [environments]="environments"
-    ></deployment-card-container>
+    <div class="cards-pf">
+      <div class="row row-cards-pf">
+        <div class="col-xs-12 col-sm-4 col-md-2"></div>
+        <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
+          <h4 class="env-card-title">
+            {{environment}}
+          </h4>
+        </div>
+      </div>
+    </div>
+
+    <div *ngFor="let application of filteredApplicationsList">
+      <deployment-card-container
+        [spaceId]="spaceId | async"
+        [application]="application"
+        [environments]="environments"
+      ></deployment-card-container>
+    </div>
   </div>
 </div>
 
@@ -65,6 +67,27 @@
         </div>
       </div>
       <br>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #emptystate>
+  <div class="container-fluid applications-empty-state">
+    <div class="col-sm-4 col-sm-offset-4">
+      <div class="row">
+        <img src="../../../../../assets/images/deployments_emptystate_noapplications.png"/>
+        <div class="applications-empty-state-text">
+          <h2 class="applications-empty-state-text-heading">
+            You don't have any applications to deploy.
+          </h2>
+          <p>
+            Deployments give you a view of the applications you have deployed, and the environments they are running in.
+          </p>
+          <p>
+            <a (click)="showAddAppOverlay()">Add an application</a> to get started.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>
