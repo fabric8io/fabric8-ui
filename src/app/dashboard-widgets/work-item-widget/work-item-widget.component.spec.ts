@@ -120,4 +120,20 @@ describe('WorkItemWidgetComponent', () => {
     let elements = fixture.debugElement.queryAll(By.css('fabric8-work-item-barchart div'));
     expect(elements.length).toBe(1);
   });
+
+  it('should enable buttons if the user owns the space', () => {
+    component.userOwnsSpace = true;
+    component.myWorkItemsCount = Observable.of(0);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('#spacehome-workitems-create-button'))).not.toBeNull();
+  });
+
+  it('should disable buttons if the user does not own the space', () => {
+    component.userOwnsSpace = false;
+    component.myWorkItemsCount = Observable.of(0);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('#spacehome-workitems-create-button'))).toBeNull();
+  });
 });

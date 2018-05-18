@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
@@ -15,6 +15,7 @@ import { DummyService } from './../shared/dummy.service';
 })
 export class EditSpaceDescriptionWidgetComponent implements OnInit {
 
+  @Input() userOwnsSpace: boolean;
   space: Space;
 
   private _descriptionUpdater: Subject<string> = new Subject();

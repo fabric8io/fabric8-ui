@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
@@ -14,6 +14,8 @@ import { DummyService } from './../shared/dummy.service';
   styleUrls: ['./edit-space-description-widget-old.component.less']
 })
 export class EditSpaceDescriptionWidgetOldComponent implements OnInit {
+
+  @Input() userOwnsSpace: boolean;
 
   space: Space;
 
