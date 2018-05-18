@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+import { Broadcaster } from 'ngx-base';
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
 import { Observable } from 'rxjs';
@@ -43,6 +44,8 @@ class FakeDeploymentsToolbarComponent {
 }
 
 describe('DeploymentsAppsComponent', () => {
+  let mockBroadcaster: jasmine.SpyObj<Broadcaster> = jasmine.createSpyObj('Broadcaster', ['broadcast']);
+
   type Context = TestContext<DeploymentsAppsComponent, HostComponent>;
 
   const environments: string[] = ['envId1', 'envId2'];
@@ -53,7 +56,10 @@ describe('DeploymentsAppsComponent', () => {
 
   initContext(DeploymentsAppsComponent, HostComponent,
     {
-      declarations: [FakeDeploymentCardContainerComponent, FakeDeploymentsToolbarComponent]
+      declarations: [FakeDeploymentCardContainerComponent, FakeDeploymentsToolbarComponent],
+      providers: [
+        { provide: Broadcaster, useValue: mockBroadcaster }
+      ]
     },
     (component: DeploymentsAppsComponent) => {
       component.spaceId = spaceId;
@@ -70,6 +76,13 @@ describe('DeploymentsAppsComponent', () => {
       const container = arrayOfComponents[index].componentInstance;
       expect(container.application).toEqual(appName);
       expect(container.environments).toEqual(mockEnvironments);
+    });
+  });
+
+  describe('#showAddAppOverlay', () => {
+    it('should delegate to Broadcaster to display the launcher', function(this: Context) {
+      this.testedDirective.showAddAppOverlay();
+      expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddAppOverlay', true);
     });
   });
 

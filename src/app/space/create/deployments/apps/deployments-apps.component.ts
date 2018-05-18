@@ -1,11 +1,14 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
+  Output
 } from '@angular/core';
 
 import { cloneDeep } from 'lodash';
+import { Broadcaster } from 'ngx-base';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
@@ -25,6 +28,7 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   @Input() applications: Observable<string[]>;
   @Input() environments: Observable<string[]>;
   @Input() spaceId: Observable<string>;
+  @Output() addToSpace = new EventEmitter();
 
   filteredApplicationsList: string[];
   resultsCount: number = 0;
@@ -35,6 +39,8 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   private currentSortField: SortField;
   private isAscendingSort: boolean = true;
   private subscriptions: Subscription[] = [];
+
+  constructor(private broadcaster: Broadcaster) {}
 
   ngOnInit(): void {
     this.hasLoaded = Observable.forkJoin(this.applications.first(), this.environments.first()).map(() => true);
@@ -109,4 +115,9 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
     return match;
   }
+
+  showAddAppOverlay(): void {
+    this.broadcaster.broadcast('showAddAppOverlay', true);
+  }
+
 }
