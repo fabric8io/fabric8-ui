@@ -7,6 +7,16 @@ import { Feature, FeatureTogglesService } from '../../../feature-flag/service/fe
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
+interface FeatureLevel {
+  name: string;
+  selected: boolean;
+  title: string;
+  description: string;
+  detailDescription: string;
+  features: any[];
+  displayed: boolean;
+}
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-feature-opt-in',
@@ -20,7 +30,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   public featureLevel: string;
   private subscriptions: Subscription[] = [];
   listConfig: ListConfig;
-  private items;
+  private items: FeatureLevel[];
 
   constructor(
     private gettingStartedService: GettingStartedService,
@@ -55,7 +65,10 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         type: NotificationType.SUCCESS
       } as Notification);
     }, error => {
-      this.handleError('Failed to update profile', NotificationType.DANGER);
+      this.notifications.message({
+        message: 'Failed to update profile',
+        type: NotificationType.DANGER
+      } as Notification);
     }));
   }
 
@@ -76,22 +89,15 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
     return profile;
   }
 
-  private handleError(error: string, type: NotificationType) {
-    this.notifications.message({
-      message: error,
-      type: type
-    } as Notification);
-  }
-
   ngOnInit(): void {
     this.featureLevel =  (this.userService.currentLoggedInUser.attributes as ExtProfile).featureLevel;
     this.items = [
       {
         name: 'released',
         selected: this.featureLevel === 'released',
-        color: '',
         title: 'Production-Only Features',
         description: 'Use the generally available version of OpenShift.io.',
+        detailDescription: 'These features have been released and are part of the product release.',
         features: [],
         displayed: true
       },
@@ -100,6 +106,9 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         selected: this.featureLevel === 'beta',
         title: 'Beta Features',
         description: 'Enable early access to beta features that are stable but still being tested.',
+        detailDescription: `
+                These features are currently in beta testing and have no guarantee of performance or stability.<br/>
+                Use these at your own risk.`,
         features: [],
         displayed: true
       },
@@ -108,6 +117,9 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         selected: this.featureLevel === 'experimental',
         title: 'Experimental Features',
         description: 'Enable access to experimental features that are in the early stages of testing and may not work as expected.',
+        detailDescription: `
+                These features are currently in experimental testing and have no guarantee of performance or stability.<br/>
+                Use these at your own risk.`,
         features: [],
         displayed: true
       },
@@ -116,20 +128,21 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         selected: this.featureLevel === 'internal',
         title: 'Internal Experimental Features',
         description: 'Enable access to experimental features that are only available to internal Red Hat users.',
+        detailDescription: `
+                These features are currently in internal testing and have no guarantee of performance or stability.<br/>
+                Use these at your own risk.`,
         features: [],
         displayed:  this.userService.currentLoggedInUser.attributes.email.endsWith('redhat.com') && (this.userService.currentLoggedInUser.attributes as any).emailVerified
       }
     ];
 
     this.subscriptions.push(this.toggleService.getAllFeaturesEnabledByLevel()
-      .map(features => {
+      .subscribe(features => {
       let featurePerLevel = this.featureByLevel(features);
       for (let item of this.items) {
         item.features = featurePerLevel[item.name];
       }
-      return features;
-      })
-      .subscribe(() => {}));
+    }));
   }
 
   featureByLevel(features: Feature[]): any {
@@ -176,9 +189,11 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
       released
     };
   }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
   }
+
 }
