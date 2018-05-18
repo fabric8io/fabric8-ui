@@ -1,11 +1,14 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
   ViewEncapsulation
 } from '@angular/core';
+
+import { User, UserService } from 'ngx-login-client';
 
 import {
   Observable,
@@ -23,26 +26,26 @@ import { PipelinesService } from '../../space/create/pipelines/services/pipeline
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-pipelines-widget',
-  templateUrl: './pipelines-widget.component.html',
-  providers: [
-    PipelinesService
-  ]
+  templateUrl: './pipelines-widget.component.html'
 })
 export class PipelinesWidgetComponent implements OnInit, OnDestroy {
-
+  @Input() userOwnsSpace: boolean;
   @Output() addToSpace = new EventEmitter();
 
   private subscriptions: Subscription[] = [];
 
   contextPath: string;
   buildConfigs: BuildConfigs;
+  private loggedInUser: User;
+  private ctx: Context;
   buildConfigsCount: number = 0;
 
   constructor(
     private context: Contexts,
     private broadcaster: Broadcaster,
-    private pipelinesService: PipelinesService
-  ) {}
+    private pipelinesService: PipelinesService,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
     // these values changing asynchronously triggers changes in the DOM;
@@ -63,6 +66,10 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
         });
       }
     ));
+
+    this.subscriptions.push(this.userService.loggedInUser.subscribe((user: User) => {
+      this.loggedInUser = user;
+    }));
   }
 
   ngOnDestroy() {
@@ -70,5 +77,4 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
       sub.unsubscribe();
     });
   }
-
 }
