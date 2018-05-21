@@ -1,9 +1,8 @@
 <div class="edit-space-description-widget">
   <div class="col-sm-3 f8-space-masthead-space-info">
     <div>
-      <span class="f8-space-masthead-name">{{space?.attributes.name | spaceName}}</span> <span class="f8-space-masthead-owner">bobross_925</span>
+      <span class="f8-space-masthead-name">{{space?.attributes.name | spaceName}}</span>
     </div>
-    <span class="pficon pficon-users fa-lg"></span> 59
     <ng-container *ngIf='userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo'>
       <span class="f8-space-masthead-vertical-divider-collab"></span>
       <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
