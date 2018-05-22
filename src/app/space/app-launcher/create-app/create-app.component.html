@@ -1,5 +1,15 @@
 <div class="content">
-  <f8launcher
+  <f8-feature-toggle featureName="AppLauncher.DependencyEditor">
+
+    <f8launcher
+      [depEditorFlag]="false"
       (onCancel)="cancel()"
-      (onComplete)="complete()"></f8launcher>
+      (onComplete)="complete()" default-level></f8launcher>
+
+    <f8launcher
+      [depEditorFlag]="true"
+      (onCancel)="cancel()"
+      (onComplete)="complete()" user-level></f8launcher>
+
+  </f8-feature-toggle>
 </div>

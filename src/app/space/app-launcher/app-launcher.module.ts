@@ -5,8 +5,10 @@ import { Http } from '@angular/http';
 import {
   AuthHelperService,
   Config,
+  DependencyEditorTokenProvider,
   HelperService,
-  TokenProvider
+  TokenProvider,
+  URLProvider
 } from 'ngx-forge';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 
@@ -16,6 +18,7 @@ import { AppLauncherComponent } from './app-launcher.component';
 import { CreateAppModule } from './create-app/create-app.module';
 import { ImportAppModule } from './import-app/import-app.module';
 import { AuthAPIProvider } from './services/app-launcher-authprovider.service';
+import { AnalyticsUrlService } from './shared/analytics-url.service';
 import { NewForgeConfig } from './shared/new-forge.config';
 
 @NgModule({
@@ -37,7 +40,9 @@ import { NewForgeConfig } from './shared/new-forge.config';
       provide: AuthHelperService,
       useFactory: (AUTH_API_URL) => new AuthAPIProvider(AUTH_API_URL),
       deps: [AUTH_API_URL]
-    }
+    },
+    { provide: URLProvider, useClass: AnalyticsUrlService },
+    { provide: DependencyEditorTokenProvider, useExisting: TokenProvider }
   ],
   declarations: [ AppLauncherComponent ]
 })
