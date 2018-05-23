@@ -47,7 +47,7 @@ describe('FeatureOptInComponent', () => {
         emailVerified: true
       }
     };
-    toggleServiceMock.getFeatures.and.returnValue(Observable.of([]));
+    toggleServiceMock.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
     gettingStartedServiceMock.createTransientProfile.and.returnValue({ featureLevel: 'beta' } as ExtProfile);
     gettingStartedServiceMock.update.and.returnValue(Observable.of({}));
     notificationsMock.message.and.returnValue(Observable.of({}));

@@ -114,6 +114,50 @@ describe('FeatureToggles service: it', () => {
     });
   });
 
+  it('should retrieve all features for the strategy `enableByLevel`', () => {
+    // given
+    const expectedResponse = {
+      data: [
+        {
+          attributes: {
+            'user-enabled': true,
+            'enabled': true,
+            'enablement-level': 'beta',
+            'description': 'boo',
+            'name': 'Deployments'
+          },
+          id: 'Deployments'
+        },
+        {
+          attributes: {
+            'user-enabled': true,
+            'enabled': true,
+            'enablement-level': 'beta',
+            'description': 'boo',
+            'name': 'Environments'
+          },
+          id: 'Environments'
+        }
+      ]};
+    mockService.connections.subscribe((connection: any) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          body: JSON.stringify(expectedResponse),
+          status: 200
+        })
+      ));
+    });
+    // when
+    togglesService.getAllFeaturesEnabledByLevel().subscribe((features: any) => {
+      // then
+      expect(features.length).toEqual(2);
+      expect((features[0] as Feature).id).toEqual(expectedResponse.data[0].id);
+      expect((features[0] as Feature).attributes['name']).
+      toEqual(expectedResponse.data[0].attributes['name']);
+    });
+  });
+
+
   it('should retrieve all features per page', () => {
     // given
     const expectedResponse = {

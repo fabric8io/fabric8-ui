@@ -45,8 +45,8 @@ describe('Context Service:', () => {
     mockSpaceNamePipe = jasmine.createSpyObj('SpaceNamePipe', ['transform']);
     mockSpaceNamePipe.transform.and.returnValue('SPACE');
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
-    mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getFeatures']);
-    mockFeatureTogglesService.getFeatures.and.returnValue(Observable.of([]));
+    mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getAllFeaturesEnabledByLevel']);
+    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
     TestBed.configureTestingModule({
       imports: [HttpModule],
       providers: [
@@ -164,7 +164,7 @@ describe('Context Service:', () => {
           enabled: false
         }
       }];
-    mockFeatureTogglesService.getFeatures.and.returnValue(Observable.of(features));
+    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of(features));
     const navigation = Observable.of({
       space: 'TEST',
       url: '/user_name/TEST',
@@ -180,7 +180,7 @@ describe('Context Service:', () => {
 
   it('Feature-flag - getFeatures return an error', () => {
     // given
-    mockFeatureTogglesService.getFeatures.and.throwError({});
+    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.throwError({});
     const navigation = Observable.of({
       space: 'TEST',
       url: '/user_name/TEST',

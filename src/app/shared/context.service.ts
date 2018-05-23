@@ -112,24 +112,6 @@ export class ContextService implements Contexts {
           return {} as Context;
         }
       })
-      // Ensure the menus are built
-      // .do(val => {
-      //   if (val.type) {
-      //     this.menus.attach(val);
-      //   }
-      // })
-      // .do(val => {
-      //   if (val.type) {
-      //     console.log('Default Context Changed to', val);
-      //     this.broadcaster.broadcast('defaultContextChanged', val);
-      //   }
-      // })
-      // .do(val => {
-      //   if (val.type) {
-      //     // Add to the recent contexts
-      //     this._addRecent.next(val);
-      //   }
-      // })
       .multicast(() => new ReplaySubject(1));
 
     // Create the recent space list
@@ -156,7 +138,6 @@ export class ContextService implements Contexts {
     this._recent.connect();
     this.loadRecent().subscribe(
       val => {
-        var toto = val;
         val.forEach(space => this._addRecent.next(space));
       }
     );
@@ -232,12 +213,8 @@ export class ContextService implements Contexts {
       })
       // Get the list of features enabled for this given user to know whether we should display feature menu.
       .switchMap(val => {
-        return this.toggleService.getFeatures([
-            'AppLauncher',
-            'Analyze',
-            'Deployments',
-            'Planner'
-          ]).map(features => {
+        return this.toggleService.getAllFeaturesEnabledByLevel()
+          .map(features => {
           val.user.features = features;
           return val;
         }).catch(err => {

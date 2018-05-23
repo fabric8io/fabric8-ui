@@ -113,17 +113,9 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         displayed:  this.userService.currentLoggedInUser.attributes.email.endsWith('redhat.com') && (this.userService.currentLoggedInUser.attributes as any).emailVerified
       }
     ];
-    // TODO replace this service call with new endpoint
-    // https://github.com/openshiftio/openshift.io/issues/3316
-    // to avoid to have to list all features
-    this.subscriptions.push(this.toggleService.getFeatures([
-      'AppLauncher',
-      'Analyze',
-      'Analyze.newHomeDashboard',
-      'Analyze.newSpaceDashboard',
-      'Deployments',
-      'Planner'
-    ]).map(features => {
+
+    this.subscriptions.push(this.toggleService.getAllFeaturesEnabledByLevel()
+      .map(features => {
       let featurePerLevel = this.featureByLevel(features);
       for (let item of this.items) {
         item.features = featurePerLevel[item.name];
