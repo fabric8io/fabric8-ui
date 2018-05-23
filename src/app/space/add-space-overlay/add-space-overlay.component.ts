@@ -11,8 +11,8 @@ import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-
 import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
-import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { User, UserService } from 'ngx-login-client';
+import { Observable, Subscription } from 'rxjs';
 
 import { ContextService } from 'app/shared/context.service';
 import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
@@ -27,9 +27,11 @@ import { SpacesService } from 'app/shared/spaces.service';
 })
 export class AddSpaceOverlayComponent implements OnInit {
   currentSpace: Space;
+  loggedInUser: User;
   selectedTemplate: ProcessTemplate = null;
   spaceTemplates: ProcessTemplate[];
   space: Space;
+  subscriptions: Subscription[] = [];
   canSubmit: Boolean = true;
   @ViewChild('description') description: ElementRef;
 
@@ -45,15 +47,18 @@ export class AddSpaceOverlayComponent implements OnInit {
               private broadcaster: Broadcaster) {
     this.spaceTemplates = [];
     this.space = this.createTransientSpace();
+    this.subscriptions.push(this.userService.loggedInUser.subscribe(user => {
+      this.loggedInUser = user;
+    }));
   }
 
   ngOnInit() {
-    this.context.current.subscribe((ctx: Context) => {
+    this.subscriptions.push(this.context.current.subscribe((ctx: Context) => {
       if (ctx.space) {
         this.currentSpace = ctx.space;
       }
-    });
-    this.spaceTemplateService.getSpaceTemplates()
+    }));
+    this.subscriptions.push(this.spaceTemplateService.getSpaceTemplates()
       .subscribe((templates: ProcessTemplate[]) => {
         this.spaceTemplates = templates.filter(t => t.attributes['can-construct']);
         this.selectedTemplate = !!this.spaceTemplates.length ? this.spaceTemplates[0] : null;
@@ -66,7 +71,13 @@ export class AddSpaceOverlayComponent implements OnInit {
           }
         } as ProcessTemplate];
         this.selectedTemplate = this.spaceTemplates[0];
-      });
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   /*
@@ -88,12 +99,11 @@ export class AddSpaceOverlayComponent implements OnInit {
         }
       };
     }
+
     this.canSubmit = false;
-    this.userService.getUser()
-      .switchMap(user => {
-        this.space.relationships['owned-by'].data.id = user.id;
-        return this.spaceService.create(this.space);
-      })
+    this.space.relationships['owned-by'].data.id = this.loggedInUser.id;
+
+    this.subscriptions.push(this.spaceService.create(this.space)
       .do(createdSpace => {
         this.spacesService.addRecent.next(createdSpace);
       })
@@ -105,18 +115,17 @@ export class AddSpaceOverlayComponent implements OnInit {
           .catch(err => Observable.of(createdSpace));
       })
       .subscribe(createdSpace => {
-          this.router.navigate([createdSpace.relationalData.creator.attributes.username,
-            createdSpace.attributes.name]);
-          this.showAddAppOverlay();
-          this.hideAddSpaceOverlay();
-        },
-        err => {
-          this.canSubmit = true;
-          this.notifications.message(<Notification> {
-            message: `Failed to create "${this.space.name}"`,
-            type: NotificationType.DANGER
-          });
-        });
+        this.router.navigate([createdSpace.relationalData.creator.attributes.username,
+          createdSpace.attributes.name]);
+        this.showAddAppOverlay();
+        this.hideAddSpaceOverlay();
+      },
+      err => {
+        this.notifications.message(<Notification> {
+          message: `Failed to create "${this.space.name}"`,
+          type: NotificationType.DANGER
+      });
+    }));
   }
 
   hideAddSpaceOverlay(): void {
