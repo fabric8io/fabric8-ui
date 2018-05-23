@@ -2357,38 +2357,6 @@ describe('DeploymentsService', () => {
   // TODO: re-enable error propagation.
   // See https://github.com/openshiftio/openshift.io/issues/2360#issuecomment-368915994
   xdescribe('HTTP error handling', () => {
-    it('should report errors to global ErrorHandler', (done: DoneFn) => {
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })),
-        expectedError: 404,
-        observable: svc.getApplications('foo-spaceId')
-          .do(() => done.fail('should hit error handler'),
-            () => expect(mockErrorHandler.handleError).toHaveBeenCalled()),
-        done: done
-      });
-    });
-
-    it('should log errors', (done: DoneFn) => {
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })),
-        expectedError: 404,
-        observable: svc.getApplications('foo-spaceId')
-          .do(() => done.fail('should hit error handler'),
-            () => expect(mockLogger.error).toHaveBeenCalled()),
-        done: done
-      });
-    });
-
     it('should notify on errors', (done: DoneFn) => {
       doMockHttpTest({
         url: 'http://example.com/deployments/spaces/foo-spaceId',
@@ -2518,8 +2486,6 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
           provide: DeploymentApiService,
           useFactory: (): jasmine.SpyObj<DeploymentApiService> => createMock(DeploymentApiService)
         },
-        { provide: Logger, useValue: createMock(Logger) },
-        { provide: ErrorHandler, useValue: createMock(ErrorHandler) },
         { provide: NotificationsService, useValue: jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']) },
         { provide: TIMER_TOKEN, useValue: new Subject<void>() },
         { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3 },

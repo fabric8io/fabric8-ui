@@ -17,7 +17,6 @@ import {
 
 import { NotificationsService } from 'app/shared/notifications.service';
 import {
-  Logger,
   Notification,
   NotificationType
 } from 'ngx-base';
@@ -76,8 +75,6 @@ export class DeploymentsService implements OnDestroy {
 
   constructor(
     private readonly apiService: DeploymentApiService,
-    private readonly logger: Logger,
-    private readonly errorHandler: ErrorHandler,
     private readonly notifications: NotificationsService,
     @Inject(TIMER_TOKEN) private readonly pollTimer: Observable<void>,
     @Inject(TIMESERIES_SAMPLES_TOKEN) private readonly timeseriesSamples: number
@@ -392,8 +389,6 @@ export class DeploymentsService implements OnDestroy {
   }
 
   private handleHttpError(response: Response): Observable<any> {
-    this.errorHandler.handleError(response);
-    this.logger.error(response);
     this.notifications.message({
       type: NotificationType.DANGER,
       header: `Request failed: ${response.status} (${response.statusText})`,
