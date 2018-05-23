@@ -16,6 +16,7 @@ import { filterOutClosedItems } from '../../shared/workitem-utils';
 export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   currentSpace: Space;
   currentSpaceId: string = 'default';
+  loading: boolean = true;
   loggedInUser: User;
   recentSpaces: Space[] = [];
   recentSpaceIndex: number = 0;
@@ -32,6 +33,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
     this.subscriptions.push(spacesService.recent.subscribe(spaces => {
       this.recentSpaces = spaces;
       this.fetchRecentSpace();
+      this.loading = false;
     }));
   }
 
