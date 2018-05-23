@@ -10,7 +10,8 @@ import { ToggleBarComponent } from './toggle-bar.component';
   imports: [
     NotificationsRoutingModule
   ],
-  declarations: [ NotificationsComponent, ToggleBarComponent]
+  declarations: [ NotificationsComponent, ToggleBarComponent],
+  exports: [ToggleBarComponent]
 })
 export class NotificationsModule {
   constructor(http: Http) {}

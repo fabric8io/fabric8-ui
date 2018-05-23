@@ -1,5 +1,4 @@
-<div [ngSwitch]="userLevel" class="feature-footer">
-
+<div *ngIf="show" [ngSwitch]="userLevel" class="feature-footer">
   <div *ngSwitchCase="'internal'">
     <ng-template #tooltipTemplateInternal>
       <div>
@@ -31,14 +30,14 @@
           </span>
       </div>
     </ng-template>
-    <div *ngIf="!noFeaturesInInternal" [tooltip]="tooltipTemplateInternal" class="internal">
-      <i class="fa fa-flask fa-1x"></i>
+    <div *ngIf="!noFeaturesInInternal" triggers="click" placement="top" [tooltip]="tooltipTemplateInternal" class="internal">
+      <i class="fa fa-1x"></i>
     </div>
     <ng-template #tooltipTemplateInternalEmpty>
       <div><strong>There are no internal features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInInternal" [tooltip]="tooltipTemplateInternalEmpty" class="empty">
-      <i class="fa fa-flask fa-1x"></i>
+    <div *ngIf="noFeaturesInInternal" triggers="click" placement="top" [tooltip]="tooltipTemplateInternalEmpty" class="empty">
+      <i class="fa fa-1x"></i>
     </div>
   </div>
 
@@ -65,14 +64,14 @@
           </span>
       </div>
     </ng-template>
-    <div *ngIf="!noFeaturesInExperimental" [tooltip]="tooltipTemplateExperimental" class="experimental">
-      <i class="fa fa-flask fa-1x"></i>
+    <div *ngIf="!noFeaturesInExperimental" triggers="click" placement="top" [tooltip]="tooltipTemplateExperimental" class="experimental">
+      <i class="fa fa-1x"></i>
     </div>
     <ng-template #tooltipTemplateExperimentalEmpty>
       <div><strong>There are no experimental features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInExperimental" [tooltip]="tooltipTemplateExperimentalEmpty" class="empty">
-      <i class="fa fa-flask fa-1x"></i>
+    <div *ngIf="noFeaturesInExperimental" triggers="click" placement="top" [tooltip]="tooltipTemplateExperimentalEmpty" class="empty">
+      <i class="fa fa-1x"></i>
     </div>
   </div>
 
@@ -90,14 +89,14 @@
         </span>
       </div>
     </ng-template>
-    <div *ngIf="!noFeaturesInBeta" [tooltip]="tooltipTemplateBeta" class="beta">
-      <i class="fa fa-flask fa-1x"></i>
+    <div *ngIf="!noFeaturesInBeta" triggers="click" placement="top" [tooltip]="tooltipTemplateBeta" class="beta">
+      <i class="fa fa-1x"></i>
     </div>
     <ng-template #tooltipTemplateBetaEmpty>
       <div><strong>There are no beta features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInBeta" [tooltip]="tooltipTemplateBetaEmpty" class="empty">
-      <i class="fa fa-flask fa-1x"></i>
+    <div *ngIf="noFeaturesInBeta" triggers="click" placement="top" [tooltip]="tooltipTemplateBetaEmpty" class="empty">
+      <i class="fa fa-1x"></i>
     </div>
   </div>
   <div *ngSwitchCase="'released'">
