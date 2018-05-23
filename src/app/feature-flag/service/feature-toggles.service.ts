@@ -43,6 +43,7 @@ export class FeatureTogglesService {
   /**
    * Check if a given feature id is user-enabled for a given user (the user identity being carried with auth token).
    * It also return if the feature is enabled for any users.
+   * @deprecated
    * @returns {Observable<Feature>}
    */
   getFeature(id: string): Observable<Feature> {
@@ -66,6 +67,7 @@ export class FeatureTogglesService {
         return this.handleError(error);
       });
   }
+
   /**
    * Check if a given list of feature ids are enabled (retrieve user-enabled and enabled).
    * @param ids An arrays of feature Id.
@@ -84,6 +86,7 @@ export class FeatureTogglesService {
         return this.handleError(error);
       });
   }
+
   /**
    * Check if a given list of feature ids are enabled (retrieve user-enabled and enabled).
    * This method is called by FeatureFlagResolver each time a user changed menu (when the menu
@@ -105,6 +108,26 @@ export class FeatureTogglesService {
       .map(features => {
         this._featureFlagCache.set(group, features);
         return features;
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+  }
+
+  /**
+   * Retrieve the list of features that used the strategy `enableByLevel` on unleash server.
+   * This method is called by FeatureFlagResolver each time a user changed menu (when the menu
+   * contains feature-flag).
+   * @returns {Observable<Feature>}
+   */
+  getAllFeaturesEnabledByLevel(): Observable<Feature[]> {
+    let url = Location.stripTrailingSlash(this.featureTogglesUrl || '') + '/features';
+    let params = [];
+    params['strategy'] = 'enableByLevel';
+
+    return this.http.get(url, { headers: this.headers, params: params })
+      .map((response) => {
+        return response.json().data as Feature[];
       })
       .catch((error) => {
         return this.handleError(error);
