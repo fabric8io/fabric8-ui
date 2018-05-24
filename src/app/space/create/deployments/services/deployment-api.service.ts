@@ -138,11 +138,11 @@ export class DeploymentApiService {
   private readonly apiUrl: string;
 
   constructor(
-    private http: Http,
-    @Inject(WIT_API_URL) private witUrl: string,
-    private auth: AuthenticationService,
+    private readonly http: Http,
+    @Inject(WIT_API_URL) private readonly witUrl: string,
+    private readonly auth: AuthenticationService,
     private readonly logger: Logger,
-    private readonly errorHandler: ErrorHandler,
+    private readonly errorHandler: ErrorHandler
   ) {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
