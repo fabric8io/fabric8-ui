@@ -91,6 +91,10 @@ module.exports = function (options) {
      */
     resolve: {
 
+      alias: {
+        "fabric8-analytics-dependency-editor": path.resolve(__dirname, "../node_modules/ngx-forge/node_modules/fabric8-analytics-dependency-editor")
+      },
+
       /**
        * An array that automatically resolve certain extensions.
        * Which is what enables users to leave off the extension when importing.

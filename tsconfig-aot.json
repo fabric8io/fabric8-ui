@@ -15,7 +15,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "baseUrl": ".",
     "paths": {
-      "fabric8-analytics-dep-editor": ["node_modules/ngx-forge/node_modules/fabric8-analytics-dep-editor"]
+      "fabric8-analytics-dependency-editor": ["node_modules/ngx-forge/node_modules/fabric8-analytics-dependency-editor"]
     },
     "mapRoot": "",
     "rootDir": ".",
