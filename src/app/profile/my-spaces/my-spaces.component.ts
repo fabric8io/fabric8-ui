@@ -3,7 +3,6 @@ import {
   OnDestroy,
   OnInit,
   TemplateRef,
-  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -30,7 +29,6 @@ import { EventService } from '../../shared/event.service';
   styleUrls: ['./my-spaces.component.less']
 })
 export class MySpacesComponent implements OnDestroy, OnInit {
-  @ViewChild('createSpace') createSpaceTemplate: TemplateRef<any>;
 
   listConfig: ListConfig;
   showSpaces: boolean = false;
@@ -116,12 +114,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   }
 
   // Events
-
-  handleAction($event: Action): void {
-    if ($event.id === 'createSpace') {
-      this.openForgeWizard(this.createSpaceTemplate);
-    }
-  }
 
   handlePinChange($event: any): void {
     let index: any = findIndex(this.allSpaces, (obj) => {
@@ -267,13 +259,8 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     this.modalRef.hide();
   }
 
-  openForgeWizard(addSpace: TemplateRef<any>) {
-    if (this.authentication.getGitHubToken()) {
-      this.selectedFlow = 'start';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
-    }
+  showAddSpaceOverlay() {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 
   selectFlow($event) {
