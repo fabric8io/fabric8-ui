@@ -471,6 +471,13 @@ describe('MySpacesComponent', () => {
 
   });
 
+  describe('#showAddSpaceOverlay', () => {
+    it('should broadcast an event to open the new Space overlay', () => {
+      component.showAddSpaceOverlay();
+      expect(component.broadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
+    });
+  });
+
   describe('#selectFlow', () => {
     it('should set the flow and space from the passed $event', () => {
       component.selectFlow(mockEvent);

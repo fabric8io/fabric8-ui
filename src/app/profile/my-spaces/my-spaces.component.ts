@@ -276,6 +276,10 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     }
   }
 
+  showAddSpaceOverlay() {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  }
+
   selectFlow($event) {
     this.selectedFlow = $event.flow;
     this.space = $event.space;

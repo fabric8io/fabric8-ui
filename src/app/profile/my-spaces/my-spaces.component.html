@@ -1,10 +1,16 @@
 <div class="my-spaces-page">
-  <my-spaces-toolbar
-      (onCreateSpace)="openForgeWizard(createSpace)"
-      (onFilterChange)="filterChange($event)"
-      (onSortChange)="sortChange($event)"
-      [resultsCount]="resultsCount">
-  </my-spaces-toolbar>
+  <f8-feature-toggle featureName="AppLauncher">
+    <my-spaces-toolbar default-level
+        (onCreateSpace)="openForgeWizard(createSpace)"
+        (onFilterChange)="filterChange($event)"
+        (onSortChange)="sortChange($event)"
+        [resultsCount]="resultsCount"></my-spaces-toolbar>
+    <my-spaces-toolbar user-level
+        (onCreateSpace)="showAddSpaceOverlay()"
+        (onFilterChange)="filterChange($event)"
+        (onSortChange)="sortChange($event)"
+        [resultsCount]="resultsCount"></my-spaces-toolbar>
+  </f8-feature-toggle>
   <div class="container-fluid margin-bottom-20">
     <div class="row">
       <div class="col-sm-12">
