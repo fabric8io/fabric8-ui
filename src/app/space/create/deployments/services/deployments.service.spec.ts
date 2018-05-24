@@ -19,12 +19,18 @@ import { createMock } from 'testing/mock';
 import {
   Observable,
   Subject,
-  Subscription
+  Subscription,
+  VirtualTimeScheduler
 } from 'rxjs';
+import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
 
 import { Logger } from 'ngx-base';
 
 import { NotificationsService } from 'app/shared/notifications.service';
+import {
+  Notification,
+  NotificationType
+} from 'ngx-base';
 
 import { AuthenticationService } from 'ngx-login-client';
 
@@ -2354,26 +2360,6 @@ describe('DeploymentsService', () => {
     });
   });
 
-  // TODO: re-enable error propagation.
-  // See https://github.com/openshiftio/openshift.io/issues/2360#issuecomment-368915994
-  xdescribe('HTTP error handling', () => {
-    it('should notify on errors', (done: DoneFn) => {
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })),
-        expectedError: 404,
-        observable: svc.getApplications('foo-spaceId')
-          .do(() => done.fail('should hit error handler'),
-            () => expect(mockNotificationsService.message).toHaveBeenCalled()),
-        done: done
-      });
-    });
-  });
-
   describe('application links', () => {
     it('should provide logs URL', (done: DoneFn) => {
       const httpResponse = {
@@ -2479,14 +2465,17 @@ describe('DeploymentsService', () => {
 
 describe('DeploymentsService with mock DeploymentApiService', () => {
 
+  let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
+
   beforeEach(() => {
+    mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
     TestBed.configureTestingModule({
       providers: [
         {
           provide: DeploymentApiService,
           useFactory: (): jasmine.SpyObj<DeploymentApiService> => createMock(DeploymentApiService)
         },
-        { provide: NotificationsService, useValue: jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']) },
+        { provide: NotificationsService, useValue: mockNotificationsService },
         { provide: TIMER_TOKEN, useValue: new Subject<void>() },
         { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3 },
         DeploymentsService
@@ -2495,7 +2484,6 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
   });
 
   describe('#hasDeployments', () => {
-
     const environments: string[] = ['stage', 'run'];
 
     it('should return true if there are deployed applications', (done: DoneFn): void => {
@@ -2599,7 +2587,333 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
     });
   });
 
+  describe('getApplications', () => {
+    function testApplicationsError(status: number, expectedMessage: Notification) {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      const error: Response & Error = new Response(new ResponseOptions({
+        type: ResponseType.Error,
+        body: JSON.stringify('Mock HTTP Error'),
+        status: status
+      })) as Response & Error;
+
+      const vs = new VirtualTimeScheduler(VirtualAction);
+
+      apiSvc.getApplications.and.returnValue(
+        Observable.throw(error, vs)
+      );
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.getApplications('spaceId').first().subscribe(
+        () => fail('should not emit'),
+        () => fail('should not emit'),
+        () => fail('should not emit')
+      );
+
+      TestBed.get(TIMER_TOKEN).next();
+      vs.flush();
+
+      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+    }
+
+    it('should notify on 401', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.DANGER,
+        header: 'Cannot get applications',
+        message: 'Not authorized to access service'
+      };
+      testApplicationsError(401, expectedMessage);
+    });
+
+    it('should notify on 403', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.DANGER,
+        header: 'Cannot get applications',
+        message: 'Not authorized to access service'
+      };
+      testApplicationsError(403, expectedMessage);
+    });
+
+    it('should notify on 404', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.WARNING,
+        header: 'Cannot get applications',
+        message: 'Service unavailable. Please try again later'
+      };
+      testApplicationsError(404, expectedMessage);
+    });
+
+    it('should notify on 500', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.WARNING,
+        header: 'Cannot get applications',
+        message: 'Service error. Please try again later'
+      };
+      testApplicationsError(500, expectedMessage);
+    });
+
+    it('should notify on unknown', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.DANGER,
+        header: 'Cannot get applications',
+        message: 'Unknown error. Please try again later'
+      };
+      testApplicationsError(411, expectedMessage);
+    });
+  });
+
+  describe('getEnvironments', () => {
+    function testEnvironmentsError(status: number, expectedMessage: Notification) {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      const error: Response & Error = new Response(new ResponseOptions({
+        type: ResponseType.Error,
+        body: JSON.stringify('Mock HTTP Error'),
+        status: status
+      })) as Response & Error;
+
+      const vs = new VirtualTimeScheduler(VirtualAction);
+
+      apiSvc.getEnvironments.and.returnValue(
+        Observable.throw(error, vs)
+      );
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      svc.getEnvironments('spaceId').first().subscribe(
+        () => fail('should not emit'),
+        () => fail('should not emit'),
+        () => fail('should not emit')
+      );
+
+      TestBed.get(TIMER_TOKEN).next();
+      vs.flush();
+
+      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+    }
+
+    it('should notify on 401', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.DANGER,
+        header: 'Cannot get environments',
+        message: 'Not authorized to access service'
+      };
+      testEnvironmentsError(401, expectedMessage);
+    });
+
+    it('should notify on 403', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.DANGER,
+        header: 'Cannot get environments',
+        message: 'Not authorized to access service'
+      };
+      testEnvironmentsError(403, expectedMessage);
+    });
+
+    it('should notify on 404', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.WARNING,
+        header: 'Cannot get environments',
+        message: 'Service unavailable. Please try again later'
+      };
+      testEnvironmentsError(404, expectedMessage);
+    });
+
+    it('should notify on 500', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.WARNING,
+        header: 'Cannot get environments',
+        message: 'Service error. Please try again later'
+      };
+      testEnvironmentsError(500, expectedMessage);
+    });
+
+    it('should notify on unknown', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.DANGER,
+        header: 'Cannot get environments',
+        message: 'Unknown error. Please try again later'
+      };
+      testEnvironmentsError(411, expectedMessage);
+    });
+  });
+
   describe('getDeploymentCpuStat', () => {
+    function setupErrorTests() {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+      apiSvc.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]));
+
+      apiSvc.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+
+      apiSvc.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
+        }
+      }));
+    }
+
+    function testGetTimeSeriesError(status: number, expectedMessage: Notification) {
+      setupErrorTests();
+      const error: Response & Error = new Response(new ResponseOptions({
+        type: ResponseType.Error,
+        body: JSON.stringify('Mock HTTP Error'),
+        status: status
+      })) as Response & Error;
+
+      const vs = new VirtualTimeScheduler(VirtualAction);
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+
+      apiSvc.getTimeseriesData.and.returnValue(
+        Observable.throw(error)
+      );
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').first().subscribe(
+        () => fail('should not emit'),
+        () => fail('should not emit'),
+        () => fail('should not emit')
+      );
+
+      TestBed.get(TIMER_TOKEN).next();
+      vs.flush();
+
+      TestBed.get(TIMER_TOKEN).next();
+      vs.flush();
+
+      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+    }
+
+    function testGetLatestTimeSeriesError(status: number, expectedMessage: Notification) {
+      setupErrorTests();
+      const error: Response & Error = new Response(new ResponseOptions({
+        type: ResponseType.Error,
+        body: JSON.stringify('Mock HTTP Error'),
+        status: status
+      })) as Response & Error;
+
+      const vs = new VirtualTimeScheduler(VirtualAction);
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+
+      apiSvc.getLatestTimeseriesData.and.returnValue(
+        Observable.throw(error)
+      );
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').first().subscribe(
+        () => fail('should not emit'),
+        () => fail('should not emit'),
+        () => fail('should not emit')
+      );
+
+      TestBed.get(TIMER_TOKEN).next();
+      vs.flush();
+
+      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+    }
+
+    function testGetApplicationsError(status: number, expectedMessage: Notification) {
+      setupErrorTests();
+      const error: Response & Error = new Response(new ResponseOptions({
+        type: ResponseType.Error,
+        body: JSON.stringify('Mock HTTP Error'),
+        status: status
+      })) as Response & Error;
+
+      const vs = new VirtualTimeScheduler(VirtualAction);
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+
+      apiSvc.getApplications.and.returnValue(
+        Observable.throw(error)
+      );
+
+      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+
+      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').first().subscribe(
+        () => fail('should not emit'),
+        () => fail('should not emit'),
+        () => fail('should not emit')
+      );
+
+      TestBed.get(TIMER_TOKEN).next();
+      vs.flush();
+
+      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+    }
+
+    it('should notify on unknown', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.DANGER,
+        header: 'Cannot get initial application statistics',
+        message: 'Unknown error. Please try again later'
+      };
+
+      testGetTimeSeriesError(411, expectedMessage);
+    });
+
+    it('should notify on 404', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.WARNING,
+        header: 'Cannot get latest application statistics',
+        message: 'Service unavailable. Please try again later'
+      };
+      testGetLatestTimeSeriesError(404, expectedMessage);
+    });
+
+    it('should notify on 500', (): void => {
+      const expectedMessage: Notification = {
+        type: NotificationType.WARNING,
+        header: 'Cannot get applications',
+        message: 'Service error. Please try again later'
+      };
+      testGetApplicationsError(500, expectedMessage);
+    });
+
     it('should return data', (done: DoneFn): void => {
       const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
       apiSvc.getApplications.and.returnValue(Observable.of([

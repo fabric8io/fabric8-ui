@@ -267,7 +267,10 @@ export class DeploymentsService implements OnDestroy {
       const observable = this.pollTimer
         .concatMap(() =>
           this.apiService.getApplications(spaceId)
-            .catch((err: Response) => this.handleHttpError(err))
+            .catch((err: Response) => {
+              let header: string = 'Cannot get applications';
+              return this.handleHttpError(header, err);
+            })
         );
       this.serviceSubscriptions.push(observable.subscribe(subject));
       this.appsObservables.set(spaceId, subject);
@@ -295,7 +298,10 @@ export class DeploymentsService implements OnDestroy {
       const observable = this.pollTimer
         .concatMap(() =>
           this.apiService.getEnvironments(spaceId)
-            .catch((err: Response) => this.handleHttpError(err))
+            .catch((err: Response) => {
+              let header: string = 'Cannot get environments';
+              return this.handleHttpError(header, err);
+            })
         );
       this.serviceSubscriptions.push(observable.subscribe(subject));
       this.envsObservables.set(spaceId, subject);
@@ -357,7 +363,10 @@ export class DeploymentsService implements OnDestroy {
           return this.getInitialTimeseriesData(spaceId, environmentName, applicationId, startTime, endTime);
         } else {
           return this.apiService.getLatestTimeseriesData(spaceId, environmentName, applicationId)
-            .catch((err: Response) => this.handleHttpError(err))
+            .catch((err: Response) => {
+              let header: string = 'Cannot get latest application statistics';
+              return this.handleHttpError(header, err);
+            })
             .filter((t: TimeseriesData) => !!t && !isEmpty(t));
         }
       });
@@ -365,7 +374,10 @@ export class DeploymentsService implements OnDestroy {
 
   private getInitialTimeseriesData(spaceId: string, environmentName: string,  applicationId: string, startTime: number, endTime: number): Observable<TimeseriesData> {
     return this.apiService.getTimeseriesData(spaceId, environmentName, applicationId, startTime, endTime)
-      .catch((err: Response) => this.handleHttpError(err))
+      .catch((err: Response) => {
+        let header: string = 'Cannot get initial application statistics';
+        return this.handleHttpError(header, err);
+      })
       .filter((t: MultiTimeseriesData) => !!t && !isEmpty(t))
       .concatMap((t: MultiTimeseriesData) => {
         const results: TimeseriesData[] = [];
@@ -394,11 +406,28 @@ export class DeploymentsService implements OnDestroy {
       });
   }
 
-  private handleHttpError(response: Response): Observable<any> {
+  private handleHttpError(header: string, response: Response): Observable<any> {
+    let message: string;
+    let type: NotificationType;
+
+    if (response.status === 403 || response.status === 401) {
+      message = 'Not authorized to access service';
+      type = NotificationType.DANGER;
+    } else if (response.status === 404) {
+      message = 'Service unavailable. Please try again later';
+      type = NotificationType.WARNING;
+    } else if (response.status === 500) {
+      message = 'Service error. Please try again later';
+      type = NotificationType.WARNING;
+    } else {
+      message = 'Unknown error. Please try again later';
+      type = NotificationType.DANGER;
+    }
+
     this.notifications.message({
-      type: NotificationType.DANGER,
-      header: `Request failed: ${response.status} (${response.statusText})`,
-      message: response.text()
+      type: type,
+      header: header,
+      message: message
     } as Notification);
     return Observable.empty();
   }
