@@ -142,22 +142,6 @@ describe('MySpacesComponent', () => {
    * Events
    */
 
-  describe('#handleAction', () => {
-    it('should delegate to the forge wizard if the action is to create a space', () => {
-      let mockAction = { id: 'createSpace' };
-      spyOn(component, 'openForgeWizard');
-      component.handleAction(mockAction);
-      expect(component.openForgeWizard).toHaveBeenCalled();
-    });
-
-    it('should do nothing if the action is not createSpace', () => {
-      let mockAction = { id: 'not-createSpace' };
-      spyOn(component, 'openForgeWizard');
-      component.handleAction(mockAction);
-      expect(component.openForgeWizard).toHaveBeenCalledTimes(0);
-    });
-  });
-
   describe('#handlePinChange', () => {
     it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', () => {
       spyOn(component, 'savePins').and.callFake(() => {});
@@ -451,24 +435,6 @@ describe('MySpacesComponent', () => {
       component.closeModal(mockEvent);
       expect(component.modalRef.hide).toHaveBeenCalled();
     });
-  });
-
-  describe('#openForgeWizard', () => {
-    it('should open a large modal and set the flow to \'start\' if there exists GitHub token', () => {
-      let mockTemplateRef = jasmine.createSpy('TemplateRef');
-      spyOn(component.authentication, 'getGitHubToken').and.returnValue('mock-token');
-      component.openForgeWizard(mockTemplateRef);
-      expect(component.selectedFlow).toBe('start');
-      expect(component.modalService.show).toHaveBeenCalledWith(mockTemplateRef, {class: 'modal-lg'});
-    });
-
-    it('should broadcast an event indicating a disconnection from GitHub if no token', () => {
-      let mockTemplateRef = jasmine.createSpy('TemplateRef');
-      spyOn(component.authentication, 'getGitHubToken').and.returnValue('');
-      component.openForgeWizard(mockTemplateRef);
-      expect(component.broadcaster.broadcast).toHaveBeenCalled();
-    });
-
   });
 
   describe('#showAddSpaceOverlay', () => {
