@@ -1,4 +1,5 @@
 import {
+  ErrorHandler,
   Inject,
   Injectable
 } from '@angular/core';
@@ -9,6 +10,7 @@ import {
 } from '@angular/http';
 import { Observable } from 'rxjs';
 
+import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
@@ -136,9 +138,11 @@ export class DeploymentApiService {
   private readonly apiUrl: string;
 
   constructor(
-    private http: Http,
-    @Inject(WIT_API_URL) private witUrl: string,
-    private auth: AuthenticationService
+    private readonly http: Http,
+    @Inject(WIT_API_URL) private readonly witUrl: string,
+    private readonly auth: AuthenticationService,
+    private readonly logger: Logger,
+    private readonly errorHandler: ErrorHandler
   ) {
     if (this.auth.getToken() != null) {
       this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
@@ -181,7 +185,8 @@ export class DeploymentApiService {
     const encEnvironmentName = encodeURIComponent(environmentName);
     const encApplicationId = encodeURIComponent(applicationId);
     const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, { headers: this.headers })
+      .catch((err: Response) => this.handleHttpError(err));
   }
 
   scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<Response> {
@@ -189,11 +194,19 @@ export class DeploymentApiService {
     const encEnvironmentName = encodeURIComponent(environmentName);
     const encApplicationId = encodeURIComponent(applicationId);
     const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
-    return this.http.put(url, '', { headers: this.headers });
+    return this.http.put(url, '', { headers: this.headers })
+      .catch((err: Response) => this.handleHttpError(err));
   }
 
   private httpGet(url: string): Observable<Response> {
-    return this.http.get(url, { headers: this.headers });
+    return this.http.get(url, { headers: this.headers })
+      .catch((err: Response) => this.handleHttpError(err));
+  }
+
+  private handleHttpError(response: Response): Observable<Response> {
+    this.errorHandler.handleError(response);
+    this.logger.error(response);
+    return Observable.throw(response);
   }
 
 }

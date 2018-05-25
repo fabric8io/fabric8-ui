@@ -1,3 +1,4 @@
+import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   HttpModule,
@@ -19,6 +20,7 @@ import {
 
 import { createMock } from 'testing/mock';
 
+import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
@@ -32,11 +34,17 @@ import {
 
 describe('DeploymentApiService', () => {
   let mockBackend: MockBackend;
+  let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
+  let mockLogger: jasmine.SpyObj<Logger>;
+
   let svc: DeploymentApiService;
 
   beforeEach(() => {
     const mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
     mockAuthService.getToken.and.returnValue('mock-auth-token');
+
+    mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);
+    mockErrorHandler = jasmine.createSpyObj<ErrorHandler>('ErrorHandler', ['handleError']);
 
     TestBed.configureTestingModule({
       imports: [HttpModule],
@@ -46,6 +54,12 @@ describe('DeploymentApiService', () => {
         },
         {
           provide: AuthenticationService, useValue: mockAuthService
+        },
+        {
+          provide: ErrorHandler, useValue: mockErrorHandler
+        },
+        {
+          provide: Logger, useValue: mockLogger
         },
         {
           provide: WIT_API_URL, useValue: 'http://example.com/'
@@ -89,6 +103,29 @@ describe('DeploymentApiService', () => {
           done();
         });
     });
+
+    it('should report errors', (done: DoneFn) => {
+      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId/environments');
+        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+        connection.mockError(new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })) as Response & Error);
+      });
+
+      svc.getEnvironments('foo spaceId')
+      .subscribe(
+        (resp) => done.fail('should throw error'),
+        () => {
+          expect(mockErrorHandler.handleError).toHaveBeenCalled();
+          expect(mockLogger.error).toHaveBeenCalled();
+          done();
+        }
+      );
+    });
   });
 
   describe('#getApplications', () => {
@@ -127,6 +164,29 @@ describe('DeploymentApiService', () => {
           expect(apps as any[]).toEqual(httpResponse.data.attributes.applications);
           done();
         });
+    });
+
+    it('should report errors', (done: DoneFn) => {
+      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId');
+        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+        connection.mockError(new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })) as Response & Error);
+      });
+
+      svc.getApplications('foo spaceId')
+      .subscribe(
+        (resp) => done.fail('should throw error'),
+        () => {
+          expect(mockErrorHandler.handleError).toHaveBeenCalled();
+          expect(mockLogger.error).toHaveBeenCalled();
+          done();
+        }
+      );
     });
   });
 
@@ -167,6 +227,30 @@ describe('DeploymentApiService', () => {
           done();
         });
     });
+
+    it('should report errors', (done: DoneFn) => {
+      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2';
+        expect(connection.request.url).toEqual(expectedUrl);
+        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+        connection.mockError(new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })) as Response & Error);
+      });
+
+      svc.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
+      .subscribe(
+        (resp) => done.fail('should throw error'),
+        () => {
+          expect(mockErrorHandler.handleError).toHaveBeenCalled();
+          expect(mockLogger.error).toHaveBeenCalled();
+          done();
+        }
+      );
+    });
   });
 
   describe('#getLatestTimeseriesData', () => {
@@ -202,6 +286,30 @@ describe('DeploymentApiService', () => {
           done();
         });
     });
+
+    it('should report errors', (done: DoneFn) => {
+      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Get);
+        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats';
+        expect(connection.request.url).toEqual(expectedUrl);
+        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+        connection.mockError(new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })) as Response & Error);
+      });
+
+      svc.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
+      .subscribe(
+        (resp) => done.fail('should throw error'),
+        () => {
+          expect(mockErrorHandler.handleError).toHaveBeenCalled();
+          expect(mockLogger.error).toHaveBeenCalled();
+          done();
+        }
+      );
+    });
   });
 
   describe('#deleteDeployment', () => {
@@ -218,6 +326,30 @@ describe('DeploymentApiService', () => {
           expect(resp.status).toEqual(200);
           done();
         });
+    });
+
+    it('should report errors', (done: DoneFn) => {
+      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Delete);
+        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env';
+        expect(connection.request.url).toEqual(expectedUrl);
+        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+        connection.mockError(new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })) as Response & Error);
+      });
+
+      svc.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
+      .subscribe(
+        (resp) => done.fail('should throw error'),
+        () => {
+          expect(mockErrorHandler.handleError).toHaveBeenCalled();
+          expect(mockLogger.error).toHaveBeenCalled();
+          done();
+        }
+      );
     });
   });
 
@@ -236,6 +368,29 @@ describe('DeploymentApiService', () => {
           done();
         });
     });
-  });
 
+    it('should report errors', (done: DoneFn) => {
+      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+        expect(connection.request.method).toEqual(RequestMethod.Put);
+        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5';
+        expect(connection.request.url).toEqual(expectedUrl);
+        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+        connection.mockError(new Response(new ResponseOptions({
+          type: ResponseType.Error,
+          body: JSON.stringify('Mock HTTP Error'),
+          status: 404
+        })) as Response & Error);
+      });
+
+      svc.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
+      .subscribe(
+        (resp) => done.fail('should throw error'),
+        () => {
+          expect(mockErrorHandler.handleError).toHaveBeenCalled();
+          expect(mockLogger.error).toHaveBeenCalled();
+          done();
+        }
+      );
+    });
+  });
 });

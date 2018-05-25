@@ -2,16 +2,18 @@
   <div class="container-fluid container-cards-pf f8-home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes" user-level>
     <div class="row row-cards-pf">
       <section class="card-pf card-pf-view f8-home-banner">
-        <div class="row f8-home-banner-whats-new"> <!-- this expands to show what is new. If nothing new, then should be collapsed and not show the carousel -->
+        <!-- this is commented out until features are added
+        <!-- this expands to show what is new. If nothing new, then should be collapsed and not show the carousel
+        <div class="row f8-home-banner-whats-new">
           <div class="col-sm-12">
             <span class="badge">
-              2 <!-- fixed number, based on the slide below -->
+              2 <!-- based on the slide below
             </span>
             <span>
               What's New? <span class="fa fa-angle-down"></span>
             </span>
           </div>
-        </div>
+        </div> -->
         <div class="row">
           <!-- slides are fixed and updated manually -->
           <carousel [interval]="0" [noWrap]="true">
@@ -19,27 +21,25 @@
               <div class="carousel-background"></div>
               <img src="../../assets/images/whatsnew_custom-space-avatars.png" class="f8-home-carousel-image" width="20%" height="75%">
               <div class="carousel-caption d-none d-md-block">
-                <h1>Custom Space Avatars!</h1>
+                <h1>Custom User Avatars!</h1>
                 <p>
-                  Breathe life into your spaces with custom space avatars. A mountain? A city skyline? It's up to you!
+                  Breathe life into your user profile with custom avatars. A favorite picture? A whimsical image? It's up to you!
                 </p>
                 <p>
                   <a href="https://docs.openshift.io" target="_blank" class="btn btn-primary">Learn more</a>
-                  <button class="btn btn-link">No thanks</button> <!-- this should hide this slide when clicked -->
                 </p>
               </div>
             </slide>
             <slide>
               <div class="carousel-background"></div>
-              <img src="../../assets/images/whatsnew_space-dashboard.png" class="f8-home-carousel-image" width="20%" height="75%">
+              <img src="../../assets/images/whatsnew_usersettings.png" class="f8-home-carousel-image" width="20%" height="75%">
               <div class="carousel-caption d-none d-md-block">
-                <h1>New Space Dashboard!</h1>
+                <h1>Feature Opt-in!</h1>
                 <p>
-                  View a complete overview of your OpenShift.io Space.
+                  Decide which level of features you’d like to use.  You can stay safe with production, be on the edge with beta, or venture on the wild side with our experimental features!
                 </p>
                 <p>
                   <a href="https://docs.openshift.io" target="_blank" class="btn btn-primary">Learn more</a> <!-- where does this link to? -->
-                  <button class="btn btn-link">No thanks</button> <!-- this should hide this slide when clicked -->
                 </p>
               </div>
             </slide>

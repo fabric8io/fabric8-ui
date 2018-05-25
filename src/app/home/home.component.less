@@ -112,6 +112,7 @@
         display: block;
         height: 200px;
         width: 100%;
+        margin-top: 15px;
       }
       &-control {
         &.carousel-control-prev,
@@ -132,6 +133,26 @@
         text-align: left;
         padding-top: 0;
         padding-bottom: 0;
+
+        /*
+        ** custom paragraph styling for carousel body
+        ** hide the informational paragraph on smaller screens
+        */
+        @media (max-width: @screen-md-min) {
+          p:first-of-type {
+            display: none;
+          }
+        }
+
+        /*
+        ** custom sizing for carousel header
+        ** prevents header from overflowing onto image
+        */
+        @media (max-width: 1650px) {
+          h1 {
+            max-width: 225px;
+          }
+        }
 
         /* Small devices (tablets, 768px and up) */
         @media (min-width: @screen-sm-min) {
@@ -160,6 +181,9 @@
         }
       }
       &-indicators {
+        @media screen and (min-width: 768px) {
+          bottom: 0;
+        }
         &.active {
           margin-top: 1px;
           margin-right: 5px;
@@ -167,13 +191,21 @@
           margin-left: 5px;
         }
         li {
-          width: 35px;
+          width: 10px;
           height: 6px;
           margin-top: 1px;
           margin-right: 5px;
           margin-bottom: 1px;
           margin-left: 5px;
-          border-radius: 0;
+          border-radius: 4px;
+          border: 0;
+          background-color: @color-pf-black-600;
+          opacity: .5;
+          transition: all .3s;
+          &:hover {
+            box-shadow: 0 0 2px 1px @color-pf-black-500;
+            background-color: @color-pf-black-700;
+          }
           &.active {
             width: 35px;
             height: 5px;
@@ -181,6 +213,10 @@
             margin-right: 5px;
             margin-left: 5px;
             margin-bottom: 1px;
+            background-color: @color-pf-white;
+            border: 1px solid;
+            border-color: @color-pf-white;
+            opacity: 1;
           }
         }
       }

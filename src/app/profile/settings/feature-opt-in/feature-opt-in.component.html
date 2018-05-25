@@ -22,78 +22,17 @@
         </ng-template>
 
         <ng-template #untoggledTemplate let-item="item" let-index="index">
-          <div *ngIf="item.name === 'released'">
-            <div class="col-sm-5">
-              <h1 class="feature-details-title">
-                There are currently {{item.features.length}} {{item.name}} features
-              </h1>
-              <div class="feature-details-description">
-                These features have been just been released and are part of the product release.
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-7">
-              <div class="feature-details-description">
-                <ul>
-                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
-                </ul>
-              </div>
-            </div>
+          <div class="col-sm-5">
+            <h1 class="feature-details-title">
+              There are currently {{item.features.length}} {{item.name}} features
+            </h1>
+            <div class="feature-details-description" [innerHTML]="item.detailDescription"></div>
           </div>
-
-          <div *ngIf="item.name === 'beta'">
-            <div class="col-sm-5">
-              <h1 class="feature-details-title">
-                There are currently {{item.features.length}} {{item.name}} features
-              </h1>
-              <div class="feature-details-description">
-                These features are currently in beta testing and have no guarantee of performance or stability.<br/>
-                Use these at your own risk.
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-7">
-              <div class="feature-details-description">
-                <ul>
-                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="item.name === 'experimental'">
-            <div class="col-sm-5">
-              <h1 class="feature-details-title">
-                There are currently {{item.features.length}} {{item.name}} features
-              </h1>
-              <div class="feature-details-description">
-                These features are currently in experimental testing and have no guarantee of performance or stability.<br/>
-                Use these at your own risk.
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-7">
-              <div class="feature-details-description">
-                <ul>
-                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="item.name === 'internal'">
-            <div class="col-sm-5">
-              <h1 class="feature-details-title">
-                There are currently {{item.features.length}} {{item.name}} features
-              </h1>
-              <div class="feature-details-description">
-                These features are currently in internal testing and have no guarantee of performance or stability.<br/>
-                Use these at your own risk.
-              </div>
-            </div>
-            <div class="col-xs-12 col-sm-7">
-              <div class="feature-details-description">
-                <ul>
-                  <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
-                </ul>
-              </div>
+          <div class="col-xs-12 col-sm-7">
+            <div class="feature-details-description">
+              <ul>
+                <li *ngFor="let feature of item.features"><strong>{{feature?.attributes?.name}}</strong>: {{feature?.attributes?.description}}.</li>
+              </ul>
             </div>
           </div>
         </ng-template>
