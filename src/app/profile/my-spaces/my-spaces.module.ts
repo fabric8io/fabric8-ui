@@ -7,8 +7,6 @@ import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule } from 'ngx-widgets';
 import { ListModule } from 'patternfly-ng/list';
 
-import { ForgeWizardModule } from '../../space/forge-wizard/forge-wizard.module';
-import { SpaceWizardModule } from '../../space/wizard/space-wizard.module';
 import { MySpacesItemActionsModule } from './my-spaces-item-actions/my-spaces-item-actions.module';
 import { MySpacesItemHeadingModule } from './my-spaces-item-heading/my-spaces-item-heading.module';
 import { MySpacesItemModule } from './my-spaces-item/my-spaces-item.module';
@@ -20,7 +18,6 @@ import { MySpacesComponent }     from './my-spaces.component';
   imports: [
     CommonModule,
     Fabric8WitModule,
-    ForgeWizardModule,
     InfiniteScrollModule,
     ListModule,
     ModalModule.forRoot(),
@@ -28,8 +25,7 @@ import { MySpacesComponent }     from './my-spaces.component';
     MySpacesItemActionsModule,
     MySpacesItemHeadingModule,
     MySpacesToolbarModule,
-    MySpacesRoutingModule,
-    SpaceWizardModule
+    MySpacesRoutingModule
   ],
   declarations: [ MySpacesComponent ]
 })

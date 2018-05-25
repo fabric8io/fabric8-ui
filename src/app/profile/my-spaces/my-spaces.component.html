@@ -1,9 +1,9 @@
 <div class="my-spaces-page">
   <my-spaces-toolbar
-      (onCreateSpace)="openForgeWizard(createSpace)"
-      (onFilterChange)="filterChange($event)"
-      (onSortChange)="sortChange($event)"
-      [resultsCount]="resultsCount">
+    (onCreateSpace)="showAddSpaceOverlay()"
+    (onFilterChange)="filterChange($event)"
+    (onSortChange)="sortChange($event)"
+    [resultsCount]="resultsCount">
   </my-spaces-toolbar>
   <div class="container-fluid margin-bottom-20">
     <div class="row">
@@ -15,7 +15,6 @@
             [items]="spaces"
             [itemHeadingTemplate]="itemHeadingTemplate"
             [itemTemplate]="itemTemplate"
-            (onActionSelect)="handleAction($event)"
             (onPinChange)="handlePinChange($event.item)"
             *ngIf="showSpaces">
           <ng-template #itemHeadingTemplate>
@@ -38,14 +37,6 @@
     </div>
   </div>
 </div>
-
-<!-- Create Space modal -->
-<ng-template #createSpace>
-  <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
-  <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space" [style.display]="selectedFlow !== 'selectFlow' ? 'none': ''"></flow-selector>
-  <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
-  <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
-</ng-template>
 
 <!-- Delete Space modal -->
 <ng-template #deleteSpace title="Remove the space">

@@ -1,3 +1,5 @@
+
+
 import {
   Component,
   NO_ERRORS_SCHEMA
@@ -14,6 +16,7 @@ import {
   Contexts
 } from 'ngx-fabric8-wit';
 
+import { By } from '@angular/platform-browser';
 import { Codebase } from '../../space/create/codebases/services/codebase';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
@@ -89,6 +92,26 @@ describe('AddCodebaseWidgetComponent', () => {
 
   it('should listen for codebaseDeleted events', function(this: TestingContext) {
     expect(mockBroadcaster.on).toHaveBeenCalledWith('codebaseDeleted');
+  });
+
+  it('should enable buttons if the user owns the space', function(this: TestingContext) {
+    this.testedDirective.userOwnsSpace = true;
+    this.detectChanges();
+
+    expect(this.fixture.debugElement.query(By.css('#test-add-codebase-circle-button'))).not.toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#test-add-codebase-button'))).not.toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#spacehome-codebases-add-button'))).not.toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#spacehome-my-codebases-create-button'))).not.toBeNull();
+  });
+
+  it('should disable buttons if the user does not own the space', function(this: TestingContext) {
+    this.testedDirective.userOwnsSpace = false;
+    this.detectChanges();
+
+    expect(this.fixture.debugElement.query(By.css('#test-add-codebase-circle-button'))).toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#test-add-codebase-button'))).toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#spacehome-codebases-add-button'))).toBeNull();
+    expect(this.fixture.debugElement.query(By.css('#spacehome-my-codebases-create-button'))).toBeNull();
   });
 
   it('should listen for context space changes', function(this: TestingContext) {

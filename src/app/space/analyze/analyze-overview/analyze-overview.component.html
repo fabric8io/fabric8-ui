@@ -62,8 +62,8 @@
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">
           <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-add-codebase-widget (addToSpace)="openForgeWizard(addSpace)" default-level></fabric8-add-codebase-widget>
-            <fabric8-add-codebase-widget (addToSpace)="showAddAppOverlay()" user-level></fabric8-add-codebase-widget>
+            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="openForgeWizard(addSpace)" default-level></fabric8-add-codebase-widget>
+            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()"  (addToSpace)="showAddAppOverlay()" user-level></fabric8-add-codebase-widget>
           </f8-feature-toggle>
         </div>
         <div class="col-xs-12 col-md-8">
