@@ -10,7 +10,8 @@ import {
   fakeAsync,
   flush,
   flushMicrotasks,
-  TestBed
+  TestBed,
+  tick
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
@@ -185,6 +186,7 @@ describe('DeploymentCardComponent async tests', () => {
       de.triggerEventHandler('click', new CustomEvent('click'));
 
       fixture.detectChanges();
+      tick();
 
       const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
       menuItems = menu.queryAll(By.css('li'));
