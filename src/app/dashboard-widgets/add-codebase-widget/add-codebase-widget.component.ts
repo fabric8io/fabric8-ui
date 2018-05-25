@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -30,6 +31,8 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
   context: Context;
   contextPath: string;
   subscriptions: Subscription[] = [];
+
+  @Input() userOwnsSpace: boolean;
   @Output() addToSpace = new EventEmitter();
 
   constructor(
