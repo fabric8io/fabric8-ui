@@ -41,14 +41,14 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
     this.viewingOwnAccount = this.contextService.viewingOwnContext();
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     if (this.context.user.attributes) {
-      this.subscriptions.push(spaceService.getSpacesByUser(this.context.user.attributes.username, 10).subscribe(spaces => {
+      this.subscriptions.push(spaceService.getSpacesByUser(this.context.user.attributes.username).subscribe(spaces => {
         this.spaces = spaces;
       }));
     }
     this.subscriptions.push(this.broadcaster.on('contextChanged').subscribe(val => {
       this.context = val as Context;
       if (this.context.user.attributes) {
-        this.subscriptions.push(spaceService.getSpacesByUser(this.context.user.attributes.username, 10).subscribe(spaces => {
+        this.subscriptions.push(spaceService.getSpacesByUser(this.context.user.attributes.username).subscribe(spaces => {
           this.spaces = spaces;
         }));
       }
@@ -62,7 +62,7 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
   ngOnInit(): void {
     if (this.viewingOwnAccount && this.userService.currentLoggedInUser.attributes) {
       this.loggedInUser = this.userService.currentLoggedInUser;
-      this.subscriptions.push(this.spaceService.getSpacesByUser(this.loggedInUser.attributes.username, 10).subscribe(spaces => {
+      this.subscriptions.push(this.spaceService.getSpacesByUser(this.loggedInUser.attributes.username).subscribe(spaces => {
         this.spaces = spaces;
       }));
     }
@@ -183,7 +183,9 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
       return;
     }
     if (workItems !== undefined && workItems.length !== 0) {
-      this.currentSpaceId = this.recentSpaces[this.recentSpaceIndex].id;
+      if (this.recentSpaces[this.recentSpaceIndex]) {
+        this.currentSpaceId = this.recentSpaces[this.recentSpaceIndex].id;
+      }
       this.recentSpaceIndex = -1;
     } else {
       this.recentSpaceIndex++;
