@@ -154,7 +154,6 @@ module.exports = function (options) {
             helpers.nodeModulePath("angular2-flash-messages"),
             helpers.nodeModulePath("ngx-dropdown"),
             helpers.nodeModulePath("ngx-modal"),
-            helpers.nodeModulePath("ngx-modal"),
             helpers.nodeModulePath("ng2-dnd"),
             helpers.nodeModulePath("jw-bootstrap-switch-ng2"),
             helpers.nodeModulePath("ng2-truncate"),
