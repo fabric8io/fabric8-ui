@@ -31,7 +31,7 @@ export class AddAppOverlayComponent implements OnDestroy {
   applications: string[] = [];
   isProjectNameAvailable: boolean;
 
-  constructor(private context: ContextService,
+  constructor(private contextService: ContextService,
               private dependencyCheckService: DependencyCheckService,
               private broadcaster: Broadcaster,
               private userService: UserService,
@@ -41,9 +41,9 @@ export class AddAppOverlayComponent implements OnDestroy {
     this.subscriptions.push(this.dependencyCheckService.getDependencyCheck().subscribe((val) => {
       this.projectName = val.projectName;
     }));
-    if (this.context && this.context.current) {
+    if (this.contextService && this.contextService.current) {
       this.subscriptions.push(
-        this.context.current
+        this.contextService.current
           .map((ctx: Context) => ctx.space)
           .switchMap(space => {
             if (space) {
