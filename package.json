@@ -141,7 +141,7 @@
     "ngx-base": "2.3.1",
     "ngx-bootstrap": "1.8.0",
     "ngx-fabric8-wit": "6.20.3",
-    "ngx-forge": "0.1.6",
+    "ngx-forge": "0.1.12",
     "ngx-login-client": "1.4.1",
     "ngx-modal": "0.0.29",
     "ngx-widgets": "2.4.1",
