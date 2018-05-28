@@ -11,7 +11,8 @@ import { DeploymentsService } from '../services/deployments.service';
 
 @Component({
   selector: 'resource-card',
-  templateUrl: 'resource-card.component.html'
+  templateUrl: 'resource-card.component.html',
+  styleUrls: ['./resource-card.component.less']
 })
 export class ResourceCardComponent implements OnInit {
 
