@@ -3,13 +3,13 @@
     <div class="card-pf-heading-bg">
       <div class="card-pf-heading f8-card-heading">
         <h2 class="card-pf-title">My Work Items
-        <span *ngIf="recentSpaces.length !== 0">
+        <span *ngIf="spaces.length !== 0">
           <select class="col-xs-3 col-sm-6 form-control work-item-combobox"
-              [disabled]="recentSpaces.length === 0"
+              [disabled]="spaces.length === 0"
               [(ngModel)]="currentSpaceId"
               (ngModelChange)="fetchWorkItems()">
             <option value="default">Select a space to work with...</option>
-            <option *ngFor="let space of recentSpaces" [value]="space.id">
+            <option *ngFor="let space of spaces" [value]="space.id">
               {{space.attributes.name | spaceName}}
             </option>
           </select>
@@ -57,13 +57,13 @@
     <div class="card-pf-heading-bg">
       <div class="card-pf-heading f8-card-heading">
         <h2 class="card-pf-title">My Work Items
-          <span *ngIf="recentSpaces.length !== 0">
+          <span *ngIf="spaces.length !== 0">
             <select class="col-xs-3 col-sm-6 form-control work-item-combobox"
-                    [disabled]="recentSpaces.length === 0"
+                    [disabled]="spaces.length === 0"
                     [(ngModel)]="currentSpaceId"
                     (ngModelChange)="fetchWorkItems()">
               <option value="default">Select a space to work with...</option>
-              <option *ngFor="let space of recentSpaces" [value]="space.id">
+              <option *ngFor="let space of spaces" [value]="space.id">
                 {{space.attributes.name | spaceName}}
               </option>
             </select>

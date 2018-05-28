@@ -10,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
 
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Broadcaster } from 'ngx-base';
-import { Context, Contexts, Fabric8WitModule, Spaces } from 'ngx-fabric8-wit';
+import { Context, Contexts, Fabric8WitModule, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 
 import { cloneDeep } from 'lodash';
@@ -31,7 +31,7 @@ class HostComponent {}
 describe('WorkItemWidgetComponent', () => {
   type TestingContext = TestContext<WorkItemWidgetComponent, HostComponent>;
 
-  let fakeUser: Observable<User> = Observable.of({
+  let fakeUser: User = {
     id: 'fakeId',
     type: 'fakeType',
     attributes: {
@@ -39,7 +39,7 @@ describe('WorkItemWidgetComponent', () => {
       imageURL: 'null',
       username: 'fakeUserName'
     }
-  } as User);
+  };
 
   let fakeWorkItem: WorkItem = {
     attributes: {
@@ -76,6 +76,12 @@ describe('WorkItemWidgetComponent', () => {
     workItems: fakeWorkItems
   });
 
+  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['getSpacesByUser']);
+  mockSpaceService.getSpacesByUser.and.returnValue(Observable.of([spaceMock]));
+
+  let mockUserService: any = jasmine.createSpy('UserService');
+  mockUserService.currentLoggedInUser = fakeUser;
+
   initContext(WorkItemWidgetComponent, HostComponent, {
     imports: [
       Fabric8WitModule,
@@ -88,13 +94,9 @@ describe('WorkItemWidgetComponent', () => {
       { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
       { provide: Broadcaster, useValue: createMock(Broadcaster) },
       { provide: Contexts, useValue: ({ current: new Subject<Context>() }) },
-      { provide: UserService, useFactory: () => {
-          let userService = createMock(UserService);
-          userService.getUser.and.returnValue(fakeUser);
-          userService.loggedInUser = fakeUser.publish() as ConnectableObservable<User> & jasmine.Spy;
-          return userService;
-        }
-      }, {
+      { provide: SpaceService, useValue: mockSpaceService },
+      { provide: UserService, useValue: mockUserService },
+      {
         provide: WorkItemService, useFactory: () => {
           let workItemServiceMock = createMock(WorkItemService);
 
@@ -134,6 +136,11 @@ describe('WorkItemWidgetComponent', () => {
     expect(this.fixture.debugElement.query(By.css('.f8-blank-slate-card'))).not.toBeNull();
   });
 
+  it('Should show work items', function(this: TestingContext) {
+    expect(this.testedDirective.workItems.length).toBe(5);
+    expect(this.fixture.debugElement.query(By.css('.f8-blank-slate-card'))).toBeNull();
+  });
+
   it('Should have logged in user', function(this: TestingContext) {
     expect(this.testedDirective.loggedInUser).not.toBeNull();
   });
@@ -141,6 +148,11 @@ describe('WorkItemWidgetComponent', () => {
   it('Should have recent space', function(this: TestingContext) {
     expect(this.testedDirective.recentSpaces.length).toBe(1);
     expect(this.testedDirective.recentSpaces[0].name).toBe('space1');
+  });
+
+  it('Should have retrieved a list of the user\'s spaces', function(this: TestingContext) {
+    expect(this.testedDirective.spaces.length).toEqual(1);
+    expect(this.testedDirective.spaces[0].name).toEqual('space1');
   });
 
   it('Should have select element', function(this: TestingContext) {
@@ -167,7 +179,6 @@ describe('WorkItemWidgetComponent', () => {
   });
 
   describe('#fetchWorkItems', () => {
-
     it('should fetch the correct work items', function(this: TestingContext) {
       this.testedDirective.workItems.length = 0;
       this.testedDirective.fetchWorkItems();
