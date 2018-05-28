@@ -55,6 +55,20 @@ describe('AddAppOverlayComponent', () => {
       return pattern.test(projectName);
     }
   };
+  let mockDeploymentApiService: any = jasmine.createSpyObj('DeploymentApiService', ['getApplications']);
+  mockDeploymentApiService.getApplications.and.returnValue(
+    Observable.of([{
+      attributes: { name: 'app-apr-10-2018-4-25' }
+    }, {
+      attributes: { name: 'app-may-11-2018' }
+    }, {
+      attributes: { name: 'app-may-14-1-04' }
+    }])
+  );
+
+  let mockApplications: string[] = ['app-apr-10-2018-4-25', 'app-may-11-2018', 'app-may-14-1-04'];
+
+  let mockContext: any;
 
   let mockProfile: Profile = {
     fullName: 'mock-fullName',
@@ -134,38 +148,26 @@ describe('AddAppOverlayComponent', () => {
     type: NotificationType.DANGER
   };
 
-  let mockDeploymentApiService: any = {
-    getApplications(): Observable<any[]> {
-      return Observable.of([{
-        attributes: { name: 'app-apr-10-2018-4-25' }
-      }, {
-        attributes: { name: 'app-may-11-2018' }
-      }, {
-        attributes: { name: 'app-may-14-1-04' }
-      }]);
-    }
-  };
-
   class mockContextService {
-    get current(): Observable<any> {
-      return Observable.of({
-        name: 'my-space-apr24-4-43',
-        path: '/user/my-space-apr24-4-43',
-        space: {
-          id: 'c814a58b-6220-4670-80cf-a2196899a59d',
-          attributes: {
-            'created-at': '2018-04-24T11:15:59.164872Z',
-            'description': '',
-            'name': 'my-space-apr24-4-43',
-            'updated-at': '2018-04-24T11:15:59.164872Z',
-            'version': 0
-          }
-        }
-      });
-    }
+    get current(): Observable<Context> { return Observable.of(mockContext); }
   }
 
-  beforeEach(async(() => {
+  beforeEach(() => {
+    mockContext = {
+      name: 'my-space-apr24-4-43',
+      path: '/user/my-space-apr24-4-43',
+      space: {
+        id: 'c814a58b-6220-4670-80cf-a2196899a59d',
+        attributes: {
+          'created-at': '2018-04-24T11:15:59.164872Z',
+          'description': '',
+          'name': 'my-space-apr24-4-43',
+          'updated-at': '2018-04-24T11:15:59.164872Z',
+          'version': 0
+        }
+      }
+    };
+
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
@@ -192,46 +194,70 @@ describe('AddAppOverlayComponent', () => {
         { provide: Logger, useValue: mockLogger },
         { provide: ErrorHandler, useValue: mockErrorHandler }
       ]
-    }).compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AddAppOverlayComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('#constructor', () => {
+    it('should not have applications if the current space is not defined', () => {
+      mockContext.space = null;
+      fixture = TestBed.createComponent(AddAppOverlayComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      expect(mockDeploymentApiService.getApplications).toHaveBeenCalledTimes(0);
+      expect(component.applications).toEqual([]);
+    });
+
+    it('should retieve applications if the current space is defined', () => {
+      mockContext.space.id = 'mock-space-id';
+      fixture = TestBed.createComponent(AddAppOverlayComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+      expect(mockDeploymentApiService.getApplications).toHaveBeenCalledTimes(1);
+      expect(mockDeploymentApiService.getApplications).toHaveBeenCalledWith('mock-space-id');
+      expect(component.applications).toEqual(mockApplications);
+    });
   });
 
-  it('continue button is disabled on load', () => {
-    const element: HTMLElement = fixture.debugElement.nativeElement;
-    let btnElem = element.querySelector('.code-imports--step_toolbar > button');
-    expect(btnElem.hasAttribute('disabled')).toBeTruthy();
+  describe('component', () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(AddAppOverlayComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('continue button is disabled on load', () => {
+      const element: HTMLElement = fixture.debugElement.nativeElement;
+      let btnElem = element.querySelector('.code-imports--step_toolbar > button');
+      expect(btnElem.hasAttribute('disabled')).toBeTruthy();
+    });
+
+    it('application is not available', () => {
+      component.projectName = 'app-may-11-2018';
+      component.validateProjectName();
+      expect(component.isProjectNameAvailable).toBeFalsy();
+    });
+
+    it('application is available', () => {
+      component.projectName = 'app-may-11-2018-1';
+      component.validateProjectName();
+      expect(component.isProjectNameAvailable).toBeTruthy();
+    });
+
+    it('application is not valid', () => {
+      component.projectName = '#app-may-11-2018-1';
+      component.validateProjectName();
+      expect(component.isProjectNameValid).toBeFalsy();
+    });
+
+    it('application is valid', () => {
+      component.projectName = 'app-may-11-2018-1';
+      component.validateProjectName();
+      expect(component.isProjectNameValid).toBeTruthy();
+    });
   });
 
-  it('application is not available', () => {
-    component.projectName = 'app-may-11-2018';
-    component.validateProjectName();
-    expect(component.isProjectNameAvailable).toBeFalsy();
-  });
-
-  it('application is available', () => {
-    component.projectName = 'app-may-11-2018-1';
-    component.validateProjectName();
-    expect(component.isProjectNameAvailable).toBeTruthy();
-  });
-
-  it('application is not valid', () => {
-    component.projectName = '#app-may-11-2018-1';
-    component.validateProjectName();
-    expect(component.isProjectNameValid).toBeFalsy();
-  });
-
-  it('application is valid', () => {
-    component.projectName = 'app-may-11-2018-1';
-    component.validateProjectName();
-    expect(component.isProjectNameValid).toBeTruthy();
-  });
 });
