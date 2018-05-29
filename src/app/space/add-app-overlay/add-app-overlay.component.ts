@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   OnDestroy,
   ViewEncapsulation
 } from '@angular/core';
@@ -21,6 +22,10 @@ import { Application, DeploymentApiService } from '../create/deployments/service
   templateUrl: './add-app-overlay.component.html'
 })
 export class AddAppOverlayComponent implements OnDestroy {
+  @HostListener('document:keyup.escape', ['$event']) onKeydownHandler(evt: KeyboardEvent) {
+    this.hideAddAppOverlay();
+  }
+
   currentSpace: Space;
   isProjectNameValid: boolean;
   loggedInUser: User;
