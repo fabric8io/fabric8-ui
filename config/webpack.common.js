@@ -56,7 +56,7 @@ module.exports = function (options) {
    * The following is needed to make sure the symlinked fabric8-analytics-dependency-editor works fine on both npm link and normal way.
    */
   var depEditorPath = path.resolve(__dirname, "../node_modules/fabric8-analytics-dependency-editor");
-  if (!fs.statSync(depEditorPath)) {
+  if (!fs.existsSync(depEditorPath)) {
     depEditorPath = path.resolve(__dirname, "../node_modules/ngx-forge/node_modules/fabric8-analytics-dependency-editor");
   }
 
