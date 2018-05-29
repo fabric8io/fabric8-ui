@@ -3,10 +3,14 @@
 .application-title {
   color: @color-pf-black-900;
   cursor: pointer;
-}
-
-.application-title:hover {
-  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
+  &-empty-state {
+    color: @color-pf-black-900;
+    cursor: default;
+    text-decoration: none;
+  }
 }
 
 .deployments-empty-state {
