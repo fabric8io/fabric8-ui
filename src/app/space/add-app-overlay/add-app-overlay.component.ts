@@ -46,14 +46,16 @@ export class AddAppOverlayComponent implements OnDestroy {
         this.context.current
           .subscribe((ctx: Context) => {
             this.currentSpace = ctx.space;
-            this.subscriptions.push(
-              this.deploymentApiService.getApplications(this.currentSpace.id)
-                .subscribe((response: Application[]) => {
-                  const applications: string[] = response.map(app => {
-                    return app.attributes.name ? app.attributes.name.toLowerCase() : '';
-                  });
-                  this.applications = applications;
-                }));
+            if (this.currentSpace && this.currentSpace.id) {
+              this.subscriptions.push(
+                this.deploymentApiService.getApplications(this.currentSpace.id)
+                  .subscribe((response: Application[]) => {
+                    const applications: string[] = response.map(app => {
+                      return app.attributes.name ? app.attributes.name.toLowerCase() : '';
+                    });
+                    this.applications = applications;
+                  }));
+            }
           })
       );
     }
