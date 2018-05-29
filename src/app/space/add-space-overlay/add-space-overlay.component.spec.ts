@@ -123,8 +123,7 @@ describe('AddSpaceOverlayComponent', () => {
     mockSpaceService.create.and.returnValue(Observable.of(mockSpace));
     mockSpacesService.addRecent.and.returnValue(mockSubject);
     mockSpacesService.addRecent.next = {};
-    mockUserService.currentLoggedInUser = { 'id': 'mock-user' };
-    mockUserService.loggedInUser = Observable.of(mockUser);
+    mockUserService.currentLoggedInUser = mockUser;
 
     TestBed.configureTestingModule({
       imports: [FormsModule],
@@ -159,7 +158,7 @@ describe('AddSpaceOverlayComponent', () => {
     });
 
     it('should disable submit', () => {
-      mockUserService.loggedInUser = Observable.empty();
+      mockUserService.currentLoggedInUser = {};
       component.context = {
         current: Observable.of(mockSpace)
       };

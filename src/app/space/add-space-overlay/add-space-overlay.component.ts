@@ -27,7 +27,6 @@ import { SpacesService } from 'app/shared/spaces.service';
 })
 export class AddSpaceOverlayComponent implements OnInit {
   currentSpace: Space;
-  loggedInUser: User;
   selectedTemplate: ProcessTemplate = null;
   spaceTemplates: ProcessTemplate[];
   space: Space;
@@ -47,9 +46,6 @@ export class AddSpaceOverlayComponent implements OnInit {
               private broadcaster: Broadcaster) {
     this.spaceTemplates = [];
     this.space = this.createTransientSpace();
-    this.subscriptions.push(this.userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-    }));
   }
 
   ngOnInit() {
@@ -85,6 +81,14 @@ export class AddSpaceOverlayComponent implements OnInit {
    * by invoking the spaceService
    */
   createSpace() {
+    if (!this.userService.currentLoggedInUser && !this.userService.currentLoggedInUser.id) {
+      this.notifications.message(<Notification> {
+        message: `Failed to create "${this.space.name}". Invalid user: "${this.userService.currentLoggedInUser}"`,
+        type: NotificationType.DANGER
+      });
+      return;
+    }
+
     if (!this.space) {
       this.space = this.createTransientSpace();
     }
@@ -101,7 +105,7 @@ export class AddSpaceOverlayComponent implements OnInit {
     }
 
     this.canSubmit = false;
-    this.space.relationships['owned-by'].data.id = this.loggedInUser.id;
+    this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
 
     this.subscriptions.push(this.spaceService.create(this.space)
       .do(createdSpace => {
@@ -115,16 +119,16 @@ export class AddSpaceOverlayComponent implements OnInit {
           .catch(err => Observable.of(createdSpace));
       })
       .subscribe(createdSpace => {
-        this.router.navigate([createdSpace.relationalData.creator.attributes.username,
-          createdSpace.attributes.name]);
-        this.showAddAppOverlay();
-        this.hideAddSpaceOverlay();
-      },
-      err => {
-        this.notifications.message(<Notification> {
-          message: `Failed to create "${this.space.name}"`,
-          type: NotificationType.DANGER
-      });
+          this.router.navigate([createdSpace.relationalData.creator.attributes.username,
+            createdSpace.attributes.name]);
+          this.showAddAppOverlay();
+          this.hideAddSpaceOverlay();
+        },
+        err => {
+          this.notifications.message(<Notification> {
+            message: `Failed to create "${this.space.name}"`,
+            type: NotificationType.DANGER
+        });
     }));
   }
 
