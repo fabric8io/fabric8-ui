@@ -48,7 +48,6 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-
     this.workspaceBusy = false;
     this.workspacesAvailable = false;
 
@@ -68,9 +67,9 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   // Actions
 
   /**
-   * Create workspace and open in editor
+   * Create workspace
    */
-  createAndOpenWorkspace(): void {
+  createWorkspace(): void {
     this.workspaceBusy = true;
     this.subscriptions.push(this.cheService.getState().switchMap(che => {
       if (!che.clusterFull) {
@@ -81,7 +80,6 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
             this.workspaceBusy = false;
             if (workspaceLinks != undefined) {
               let name = this.getWorkspaceName(workspaceLinks.links.open);
-              this.windowService.open(workspaceLinks.links.open, name);
               this.notifications.message({
                 message: `Workspace created!`,
                 type: NotificationType.SUCCESS
@@ -123,16 +121,16 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   }
 
   /**
-   * Open workspace in editor
+   * Opens Eclipse Che workspace in a new tab
    */
   openWorkspace(): void {
+    let workspaceWindow = this.windowService.open('about:blank', '_blank');
     this.workspaceBusy = true;
     this.subscriptions.push(this.cheService.getState().switchMap(che => {
       if (!che.clusterFull) {
         // create
         return this.workspacesService.openWorkspace(this.workspaceUrl).map(workspaceLinks => {
           this.workspaceBusy = false;
-          let workspaceWindow = this.windowService.open('about:blank', '_blank');
           if (workspaceLinks != undefined) {
             workspaceWindow.location.href = workspaceLinks.links.open;
           }
@@ -153,6 +151,9 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
       }));
   }
 
+  /**
+   * When combobox element is selected, sets the selected workspace
+   */
   setWorkspaceSelected(): void {
     this.workspaceSelected = (this.workspaceUrl !== undefined && this.workspaceUrl.length !== 0
       && this.workspaceUrl !== 'default');
