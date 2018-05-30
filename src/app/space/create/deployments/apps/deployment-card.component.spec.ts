@@ -134,7 +134,7 @@ describe('DeploymentCardComponent async tests', () => {
     mockSvc = initMockSvc();
     mockSvc.isApplicationDeployedInEnvironment.and.returnValue(active);
     mockStatusSvc = createMock(DeploymentStatusService);
-    mockStatusSvc.getAggregateStatus.and.returnValue(Observable.never());
+    mockStatusSvc.getDeploymentAggregateStatus.and.returnValue(Observable.never());
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     TestBed.configureTestingModule({
@@ -248,7 +248,7 @@ describe('DeploymentCardComponent', () => {
     mockSvc.getDeploymentMemoryStat.and.returnValue(mockMemoryData);
     mockSvc.deleteDeployment.and.returnValue(deleting);
     mockStatusSvc = createMock(DeploymentStatusService);
-    mockStatusSvc.getAggregateStatus.and.returnValue(mockStatus);
+    mockStatusSvc.getDeploymentAggregateStatus.and.returnValue(mockStatus);
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
     flush();
@@ -338,7 +338,7 @@ describe('DeploymentCardComponent', () => {
   }));
 
   it('should set icon status from DeploymentStatusService aggregate', function(this: Context) {
-    expect(mockStatusSvc.getAggregateStatus).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
+    expect(mockStatusSvc.getDeploymentAggregateStatus).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     expect(this.testedDirective.toolTip).toEqual('warning message');
     expect(this.testedDirective.iconClass).toEqual('pficon-warning-triangle-o');
     expect(this.testedDirective.cardStatusClass).toEqual('status-ribbon-warn');

@@ -29,7 +29,7 @@ export class DeploymentStatusService {
 
   constructor(private readonly deploymentsService: DeploymentsService) { }
 
-  getCpuStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentCpuStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
     return this.adjustStatusForPods(
       this.deploymentsService.getPods(spaceId, environmentName, applicationName),
       this.deploymentsService.getDeploymentCpuStat(spaceId, environmentName, applicationName, 1)
@@ -37,7 +37,7 @@ export class DeploymentStatusService {
     );
   }
 
-  getMemoryStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentMemoryStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
     return this.adjustStatusForPods(
       this.deploymentsService.getPods(spaceId, environmentName, applicationName),
       this.deploymentsService.getDeploymentMemoryStat(spaceId, environmentName, applicationName, 1)
@@ -45,10 +45,10 @@ export class DeploymentStatusService {
     );
   }
 
-  getAggregateStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentAggregateStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
     return Observable.combineLatest(
-      this.getCpuStatus(spaceId, environmentName, applicationName),
-      this.getMemoryStatus(spaceId, environmentName, applicationName)
+      this.getDeploymentCpuStatus(spaceId, environmentName, applicationName),
+      this.getDeploymentMemoryStatus(spaceId, environmentName, applicationName)
     ).map((statuses: [Status, Status]): Status => {
       const type: StatusType = statuses
         .map((status: Status): StatusType => status.type)

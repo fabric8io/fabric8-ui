@@ -44,9 +44,9 @@ describe('DeploymentStatusService', (): void => {
     svc = new DeploymentStatusService(deploymentsService);
   });
 
-  describe('#getAggregateStatus', (): void => {
+  describe('#getDeploymentAggregateStatus', (): void => {
     it('should return OK status with no message when no stats are nearing quota', (done: DoneFn): void => {
-      svc.getAggregateStatus('foo', 'bar', 'baz')
+      svc.getDeploymentAggregateStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.OK);
@@ -58,8 +58,8 @@ describe('DeploymentStatusService', (): void => {
     it('should mirror single status when one stat is nearing quota', (done: DoneFn): void => {
       cpuSubject.next([{ used: 9, quota: 10 }]);
       Observable.combineLatest(
-        svc.getCpuStatus('foo', 'bar', 'baz'),
-        svc.getAggregateStatus('foo', 'bar', 'baz')
+        svc.getDeploymentCpuStatus('foo', 'bar', 'baz'),
+        svc.getDeploymentAggregateStatus('foo', 'bar', 'baz')
       )
         .first()
         .subscribe((statuses: [Status, Status]): void => {
@@ -71,7 +71,7 @@ describe('DeploymentStatusService', (): void => {
     it('should return combined status when multiple stats are nearing quota', (done: DoneFn): void => {
       cpuSubject.next([{ used: 9, quota: 10 }]);
       memorySubject.next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
-      svc.getAggregateStatus('foo', 'bar', 'baz')
+      svc.getDeploymentAggregateStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.WARN);
@@ -83,7 +83,7 @@ describe('DeploymentStatusService', (): void => {
     it('should return combined status when multiple stats are nearing or at quota', (done: DoneFn): void => {
       cpuSubject.next([{ used: 9, quota: 10 }]);
       memorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
-      svc.getAggregateStatus('foo', 'bar', 'baz')
+      svc.getDeploymentAggregateStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
@@ -93,15 +93,15 @@ describe('DeploymentStatusService', (): void => {
     });
   });
 
-  describe('#getCpuStatus', (): void => {
+  describe('#getDeploymentCpuStatus', (): void => {
     it('should correctly invoke the deployments service', () => {
-      svc.getCpuStatus(spaceId, environmentName, applicationName);
+      svc.getDeploymentCpuStatus(spaceId, environmentName, applicationName);
       expect(deploymentsService.getPods).toHaveBeenCalledWith(spaceId, environmentName, applicationName);
       expect(deploymentsService.getDeploymentCpuStat).toHaveBeenCalledWith(spaceId, environmentName, applicationName, 1);
     });
 
     it('should return OK status when not nearing quota', (done: DoneFn): void => {
-      svc.getCpuStatus('foo', 'bar', 'baz')
+      svc.getDeploymentCpuStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.OK);
@@ -112,7 +112,7 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return WARN status when nearing quota', (done: DoneFn): void => {
       cpuSubject.next([{ used: 9, quota: 10 }]);
-      svc.getCpuStatus('foo', 'bar', 'baz')
+      svc.getDeploymentCpuStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.WARN);
@@ -123,7 +123,7 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return ERR status when at quota', (done: DoneFn): void => {
       cpuSubject.next([{ used: 10, quota: 10 }]);
-      svc.getCpuStatus('foo', 'bar', 'baz')
+      svc.getDeploymentCpuStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
@@ -134,14 +134,14 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return OK status after scaling down to 0 pods', (done: DoneFn): void => {
       cpuSubject.next([{ used: 10, quota: 10 }]);
-      svc.getCpuStatus('foo', 'bar', 'baz')
+      svc.getDeploymentCpuStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('CPU usage has reached capacity.');
           podsSubject.next({ total: 0, pods: [] });
           cpuSubject.next([{ used: 0, quota: 0 }]);
-          svc.getCpuStatus('foo', 'bar', 'baz')
+          svc.getDeploymentCpuStatus('foo', 'bar', 'baz')
             .first()
             .subscribe((status: Status): void => {
               expect(status.type).toEqual(StatusType.OK);
@@ -152,15 +152,15 @@ describe('DeploymentStatusService', (): void => {
     });
   });
 
-  describe('#getMemoryStatus', (): void => {
+  describe('#getDeploymentMemoryStatus', (): void => {
     it('should correctly invoke the deployments service', () => {
-      svc.getMemoryStatus(spaceId, environmentName, applicationName);
+      svc.getDeploymentMemoryStatus(spaceId, environmentName, applicationName);
       expect(deploymentsService.getPods).toHaveBeenCalledWith(spaceId, environmentName, applicationName);
       expect(deploymentsService.getDeploymentMemoryStat).toHaveBeenCalledWith(spaceId, environmentName, applicationName, 1);
     });
 
     it('should return OK status when not nearing quota', (done: DoneFn): void => {
-      svc.getMemoryStatus('foo', 'bar', 'baz')
+      svc.getDeploymentMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.OK);
@@ -171,7 +171,7 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return WARN status when nearing quota', (done: DoneFn): void => {
       memorySubject.next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
-      svc.getMemoryStatus('foo', 'bar', 'baz')
+      svc.getDeploymentMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.WARN);
@@ -182,7 +182,7 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return ERR status when at quota', (done: DoneFn): void => {
       memorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
-      svc.getMemoryStatus('foo', 'bar', 'baz')
+      svc.getDeploymentMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
@@ -193,14 +193,14 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return OK status after scaling down to 0 pods', (done: DoneFn): void => {
       memorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
-      svc.getMemoryStatus('foo', 'bar', 'baz')
+      svc.getDeploymentMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('Memory usage has reached capacity.');
           podsSubject.next({ total: 0, pods: [] });
           memorySubject.next([{ used: 0, quota: 0, units: MemoryUnit.MB }]);
-          svc.getMemoryStatus('foo', 'bar', 'baz')
+          svc.getDeploymentMemoryStatus('foo', 'bar', 'baz')
             .first()
             .subscribe((status: Status): void => {
               expect(status.type).toEqual(StatusType.OK);
