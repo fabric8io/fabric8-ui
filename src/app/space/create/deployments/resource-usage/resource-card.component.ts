@@ -7,6 +7,7 @@ import {
 import { Observable } from 'rxjs';
 
 import { MemoryStat } from 'app/space/create/deployments/models/memory-stat';
+import { DeploymentStatusService } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 
 @Component({
@@ -22,7 +23,8 @@ export class ResourceCardComponent implements OnInit {
   memUnit: Observable<string>;
 
   constructor(
-    private deploymentsService: DeploymentsService
+    private deploymentsService: DeploymentsService,
+    private deploymentStatusService: DeploymentStatusService
   ) { }
 
   ngOnInit(): void {

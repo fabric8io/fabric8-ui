@@ -23,8 +23,7 @@ export interface Status {
 @Injectable()
 export class DeploymentStatusService {
 
-  static readonly WARNING_THRESHOLD: number = .6;
-
+  private static readonly WARNING_THRESHOLD: number = .6;
   private static readonly OK_STATUS: Status = { type: StatusType.OK, message: '' };
 
   constructor(private readonly deploymentsService: DeploymentsService) { }
@@ -59,6 +58,18 @@ export class DeploymentStatusService {
         .trim();
       return { type, message };
     });
+  }
+
+  getEnvironmentCpuStatus(spaceId: string, environmentName: string): Observable<Status> {
+    return this.deploymentsService
+      .getEnvironmentCpuStat(spaceId, environmentName)
+      .map((stat: CpuStat): Status => this.getStatStatus(stat, 'CPU'));
+  }
+
+  getEnvironmentMemoryStatus(spaceId: string, environmentName: string): Observable<Status> {
+    return this.deploymentsService
+      .getEnvironmentMemoryStat(spaceId, environmentName)
+      .map((stat: MemoryStat): Status => this.getStatStatus(stat, 'Memory'));
   }
 
   private adjustStatusForPods(pods: Observable<Pods>, status: Observable<Status>): Observable<Status> {
