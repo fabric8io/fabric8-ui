@@ -13,6 +13,7 @@ import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Fabric8WitModule, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 
+import { cloneDeep } from 'lodash';
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -25,9 +26,7 @@ import { WorkItemWidgetComponent } from './work-item-widget.component';
 @Component({
   template: '<alm-work-item-widget></alm-work-item-widget>'
 })
-class HostComponent {
-  userOwnsSpace: boolean;
-}
+class HostComponent {}
 
 describe('WorkItemWidgetComponent', () => {
   type TestingContext = TestContext<WorkItemWidgetComponent, HostComponent>;
@@ -58,8 +57,23 @@ describe('WorkItemWidgetComponent', () => {
     type: 'workitems'
   };
 
-  let fakeWorkItems: Observable<{workItems: WorkItem[]}> = Observable.of({
-    workItems: [fakeWorkItem]
+  let fakeWorkItem1 = cloneDeep(fakeWorkItem);
+  let fakeWorkItem2 = cloneDeep(fakeWorkItem);
+  let fakeWorkItem3 = cloneDeep(fakeWorkItem);
+  let fakeWorkItem4 = cloneDeep(fakeWorkItem);
+  let fakeWorkItem5 = cloneDeep(fakeWorkItem);
+
+  fakeWorkItem1.attributes['system.state'] = 'open';
+  fakeWorkItem2.attributes['system.state'] = 'open';
+  fakeWorkItem2.relationalData = {parent: fakeWorkItem3};
+  fakeWorkItem3.attributes['system.state'] = 'in progress';
+  fakeWorkItem4.attributes['system.state'] = 'resolved';
+  fakeWorkItem5.attributes['system.state'] = 'new';
+
+  let fakeWorkItems: WorkItem[] = [fakeWorkItem1, fakeWorkItem2, fakeWorkItem3, fakeWorkItem4, fakeWorkItem5];
+
+  let fakeWorkItemsObs: Observable<{workItems: WorkItem[]}> = Observable.of({
+    workItems: fakeWorkItems
   });
 
   initContext(WorkItemWidgetComponent, HostComponent, {
@@ -82,9 +96,14 @@ describe('WorkItemWidgetComponent', () => {
         }
       }, {
         provide: WorkItemService, useFactory: () => {
-          let workItemServiceMock = jasmine.createSpyObj('WorkItemService', ['buildUserIdMap', 'getWorkItems']);
-          workItemServiceMock.buildUserIdMap.and.returnValue(fakeUser);
-          workItemServiceMock.getWorkItems.and.returnValue([] as WorkItem[]);
+          let workItemServiceMock = createMock(WorkItemService);
+
+          workItemServiceMock.buildUserIdMap.and.stub();
+          workItemServiceMock.resolveType.and.stub();
+          workItemServiceMock.resolveAreaForWorkItem.and.stub();
+          workItemServiceMock.resolveCreator.and.stub();
+          workItemServiceMock.getWorkItems.and.returnValue(fakeWorkItemsObs);
+
           return workItemServiceMock;
         }
       }, {
@@ -109,8 +128,9 @@ describe('WorkItemWidgetComponent', () => {
     ]
   });
 
-  it('Should show blank state', function(this: TestingContext) {
-    expect(this.testedDirective.workItems.length).toBe(0);
+  it('Should show blank state if there are no workitems', function(this: TestingContext) {
+    this.testedDirective.workItems.length = 0;
+    this.detectChanges();
     expect(this.fixture.debugElement.query(By.css('.f8-blank-slate-card'))).not.toBeNull();
   });
 
@@ -121,7 +141,6 @@ describe('WorkItemWidgetComponent', () => {
   it('Should have recent space', function(this: TestingContext) {
     expect(this.testedDirective.recentSpaces.length).toBe(1);
     expect(this.testedDirective.recentSpaces[0].name).toBe('space1');
-    expect(this.testedDirective.recentSpaceIndex).toBe(0);
   });
 
   it('Should have select element', function(this: TestingContext) {
@@ -132,5 +151,36 @@ describe('WorkItemWidgetComponent', () => {
   it('Should have select element options', function(this: TestingContext) {
     let options = this.fixture.debugElement.queryAll(By.css('.work-item-combobox option'));
     expect(options.length).toBe(4);
+  });
+
+  it('should have set the index after sifting through spaces', function(this: TestingContext) {
+    expect(this.testedDirective.recentSpaceIndex).toBe(-1);
+  });
+
+  it('should fetch the correct work items', function(this: TestingContext) {
+    this.testedDirective.workItems.length = 0;
+    this.testedDirective.fetchWorkItems();
+    expect(this.testedDirective.workItems).toEqual(fakeWorkItems);
+  });
+
+  it('should update the recentSpaceIndex when it filters through all the work items', function(this: TestingContext) {
+    this.testedDirective.workItems.length = 0;
+    this.testedDirective.fetchWorkItems();
+    expect(this.testedDirective.recentSpaceIndex).toBe(-1);
+  });
+
+  it('should not fetch closed workitems', function(this: TestingContext) {
+    fakeWorkItem1.attributes['system.state'] = 'closed';
+    this.testedDirective.fetchWorkItems();
+    expect(this.testedDirective.workItems).toEqual(fakeWorkItems.slice(1));
+  });
+
+  it('should set relational data to an empty obj if it does not exist prior', function(this: TestingContext) {
+    expect(fakeWorkItem1.relationalData).toBeDefined();
+    expect(fakeWorkItem1.relationalData).toEqual({});
+  });
+
+  it('should not overwrite pre-existing relational data', function(this: TestingContext) {
+    expect(fakeWorkItem2.relationalData).toEqual({parent: fakeWorkItem3});
   });
 });
