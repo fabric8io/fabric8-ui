@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _loggedInUserSubscription: Subscription;
   private _contextSubscription: Subscription;
   private _contextDefaultSubscription: Subscription;
+  private loading: boolean = true;
   private selectedFlow: string;
   private space: string;
 
@@ -93,10 +94,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   initSpaces() {
     if (this.context && this.context.user) {
+      this.loading = true;
       this.spaceService
         .getSpacesByUser(this.context.user.attributes.username, 5)
         .subscribe(spaces => {
           this._spaces = spaces;
+          this.loading = false;
         });
     } else {
       this.logger.error('Failed to retrieve list of spaces owned by user');

@@ -1,82 +1,121 @@
-<div class="container-fluid content padding-top-15">
-  <div class="row">
-    <div class="col-xs-12 col-md-2 col-md-offset-1">
-      <div>
-        <div *ngIf="(context.user.attributes.imageURL !== undefined && context.user.attributes.imageURL.length !== 0); then showImageURL else addImageURL"></div>
-        <ng-template #showImageURL>
-          <img src="{{context.user.attributes.imageURL}}" class="img-responsive profile-img icon-user">
-        </ng-template>
-        <ng-template #addImageURL>
-          <a href="javascript:void(0)"
-              [routerLink]="['/', context?.user?.attributes?.username, '_update']"
-              [queryParams]="{ imageUrl: true }">
-            <img src="../../../assets/images/profile-user.png" class="img-responsive profile-img-none">
-            <span class="pficon pficon-edit edit-profile-img"></span>
-          </a>
-        </ng-template>
-        <h3 class="col-sm-12 profile-wrapper-username">{{context?.user?.attributes?.fullName}}</h3>
-        <p class="col-sm-12 profile-wrapper-username">
-          {{context?.user?.attributes?.username}}
+<div class="container-fluid content">
+  <div *ngIf="!context.user.attributes.emailVerified && viewingOwnAccount"
+    class="row email-alert padding-top-20">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="alert alert-warning">
+        <span class="pficon pficon-warning-triangle-o"></span>
+        <strong>Your email address is unverified.</strong> Please verify your email address by clicking the link we sent you.
+        <a href="javascript:void(0)" (click)="sendEmailVerificationLink()" class="alert-link pull-right">Resend verification link</a>
+      </div>
+    </div>
+  </div>
+  <div class="row profile-overview-masthead">
+    <div class="col-xs-4 col-md-1">
+      <div *ngIf="(context.user.attributes.imageURL !== undefined && context.user.attributes.imageURL.length !== 0); then showImageURL else addImageURL"></div>
+      <ng-template #showImageURL>
+        <img src="{{context.user.attributes.imageURL}}" class="img-responsive icon-user">
+      </ng-template>
+      <ng-template #addImageURL>
+        <a href="javascript:void(0)"
+            *ngIf="viewingOwnAccount"
+            [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+            [queryParams]="{ imageUrl: true }">
+          <img src="../../../assets/images/profile-user.png" class="img-responsive profile-img-none">
+          <span class="pficon pficon-edit edit-profile-img"></span>
+        </a>
+      </ng-template>
+    </div>
+    <div class="col-xs-12 col-md-2">
+      <p class="profile-wrapper-name">{{context?.user?.attributes?.fullName}}</p>
+      <p class="profile-wrapper-username">{{context?.user?.attributes?.username}}</p>
+      <div *ngIf="(context.user.attributes.email !== undefined && context.user.attributes.email.length !== 0); then showEmail else addEmail"></div>
+      <ng-template #showEmail>
+        <p class="profile-wrapper-email truncate" *ngIf="!context.user.attributes.emailPrivate">
+          <a href="mailto:{{context.user.attributes.email}}">{{context.user.attributes.email}}</a>
         </p>
-        <hr>
-        <div *ngIf="(context.user.attributes.email !== undefined && context.user.attributes.email.length !== 0); then showEmail else addEmail"></div>
-        <ng-template #showEmail>
-          <p class="col-sm-12 profile-wrapper-email truncate" *ngIf="!context.user.attributes.emailPrivate">
-            <span class="fa fa-envelope"></span>
-            <a href="mailto:{{context.user.attributes.email}}" class="margin-left-5 margin-right-5">{{context.user.attributes.email}}</a>
-          </p>
-        </ng-template>
-        <ng-template #addEmail>
-          <p class="col-sm-12 profile-wrapper-email" *ngIf="!context.user.attributes.emailPrivate">
-            <span class="fa fa-envelope"></span>
-            <a href="javascript:void(0)"
-               [routerLink]="['/', context?.user?.attributes?.username, '_update']"
-               [queryParams]="{ email: true }">Add an email</a>
-          </p>
-        </ng-template>
-        <div *ngIf="(context.user.attributes.url !== undefined && context.user.attributes.url.length !== 0); then showUrl else addUrl"></div>
-        <ng-template #showUrl>
-          <p class="col-sm-12 profile-wrapper-url truncate">
-            <span class="fa fa-external-link"></span>
-            <a href="{{context.user.attributes.url}}" target="_blank"
-               class="margin-left-5 margin-right-5">{{context.user.attributes.url}}</a>
-          </p>
-        </ng-template>
-        <ng-template #addUrl>
-          <p class="col-sm-12 profile-wrapper-url">
-            <span class="fa fa-globe"></span>
-            <a href="javascript:void(0)"
-               [routerLink]="['/', context?.user?.attributes?.username, '_update']"
-               [queryParams]="{ url: true }">Add a url</a>
-          </p>
-        </ng-template>
+      </ng-template>
+      <ng-template #addEmail>
+        <p class="profile-wrapper-email" *ngIf="!context.user.attributes.emailPrivate && viewingOwnAccount">
+          <a href="javascript:void(0)"
+            [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+            [queryParams]="{ email: true }">Add an email</a>
+        </p>
+      </ng-template>
+      <div *ngIf="(context.user.attributes.url !== undefined && context.user.attributes.url.length !== 0); then showUrl else addUrl"></div>
+      <ng-template #showUrl>
+        <p class="profile-wrapper-url truncate">
+          <a href="{{context.user.attributes.url}}" target="_blank">{{context.user.attributes.url}}</a>
+        </p>
+      </ng-template>
+      <ng-template #addUrl>
+        <p class="profile-wrapper-url" *ngIf="viewingOwnAccount">
+          <a href="javascript:void(0)"
+            [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+            [queryParams]="{ url: true }">Add a url</a>
+        </p>
+      </ng-template>
+      <button class="col-sm-12 col-md-6 btn btn-primary profile-update-button"
+        *ngIf="viewingOwnAccount"
+        (click)="routeToUpdateProfile()">
+        Edit Profile
+      </button>
+    </div>
+    <div class="col-xs-12 col-md-6 padding-top-5">
+      <!-- Commenting out the part with work items details since design and APIs are not final yet. -->
+      <!-- <div class="row">
+        <p class="col-md-4">
+          <span class="fa fa-check-circle work-item-icon">&nbsp;49&nbsp;</span>
+          <span class="work-item-label">Work Items Completed</span>
+        </p>
+        <p class="col-md-4">
+          <span class="fa fa-pencil work-item-icon">&nbsp;7&nbsp;</span>
+          <span class="work-item-label">Assigned Work Items</span>
+        </p>
+        <p class="col-md-4">
+          <span class="fa fa-clock-o work-item-icon">&nbsp;115.5 hr&nbsp;</span>
+          <span class="work-item-label">Time Spent Painting</span>
+        </p>
+      </div>
+      <hr class="col-sm-12 line-break"> -->
+      <div class="row profile-bio">
         <div *ngIf="(context.user.attributes.bio !== undefined && context.user.attributes.bio.length !== 0); then showBio else addBio"></div>
         <ng-template #showBio>
           <p class="col-sm-12 profile-wrapper-bio" lang="en">{{context.user.attributes.bio}}</p>
         </ng-template>
         <ng-template #addBio>
-          <p class="col-sm-12 profile-wrapper-bio">
+          <p class="col-sm-12 profile-wrapper-bio" *ngIf="viewingOwnAccount">
             <a href="javascript:void(0)"
-               [routerLink]="['/', context?.user?.attributes?.username, '_update']"
-               [queryParams]="{ bio: true }">Add a bio</a>
+                [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+                [queryParams]="{ bio: true }">Add a bio</a>
           </p>
         </ng-template>
-        <button class="col-xs-12 btn btn-lg btn-default profile-update-button margin-bottom-15"
-          *ngIf="viewingOwnAccount"
-          (click)="routeToUpdateProfile()">
-          Update Profile
-        </button>
-      </div>
-    </div>
-    <div class="col-xs-12 col-md-8">
-      <div class="row">
-        <div class="col-xs-12 col-md-6">
-          <alm-spaces></alm-spaces>
-        </div>
-        <div class="col-xs-12 col-md-6">
-          <alm-work-items></alm-work-items>
-        </div>
       </div>
     </div>
   </div>
+
+  <div class="row profile-overview-nav">
+    <div class="col-md-10 col-md-offset-1">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li [ngClass]="{active: selectedTab === 1}" (click)="changeTab(1)">
+          <a href="javascript:void(0)">
+            {{ viewingOwnAccount ? 'My' : context.user.attributes.fullName + '\'s'}} Work Items
+          </a>
+        </li>
+        <li [ngClass]="{active: selectedTab === 2}" (click)="changeTab(2)">
+          <a href="javascript:void(0)">
+            {{ viewingOwnAccount ? 'My' : context.user.attributes.fullName + '\'s'}} Spaces
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row padding-top-15 padding-left-10 padding-right-10">
+    <div class="col-xs-12 col-md-10 col-md-offset-1" *ngIf="selectedTab === 1">
+      <alm-work-items></alm-work-items>
+    </div>
+    <div class="col-xs-12 col-md-10 col-md-offset-1" *ngIf="selectedTab === 2">
+      <alm-spaces></alm-spaces>
+    </div>
+  </div>
 </div>
+

@@ -18,37 +18,26 @@
       </div>
     </div>
 
-    <div class="cards-pf">
-      <div class="row row-cards-pf">
-        <div class="col-xs-12 col-sm-4 col-md-2"></div>
-        <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
-          <h4 class="env-card-title">
-            {{environment}}
-          </h4>
-        </div>
-      </div>
-    </div>
+    <deployment-card-container
+      [spaceId]="spaceId | async"
+      [spaceName]="spaceName | async"
+      [applications]="applicationsList"
+      [environments]="environments"
+    ></deployment-card-container>
 
-    <div *ngFor="let application of filteredApplicationsList">
-      <deployment-card-container
-        [spaceId]="spaceId | async"
-        [application]="application"
-        [environments]="environments"
-      ></deployment-card-container>
-    </div>
   </div>
 </div>
 
 <ng-template #loading>
   <div>
     <div class="cards-pf">
-        <div class="row row-cards-pf">
-          <div>
-            <div class="spinner"></div>
-            <h3 class="loading-msg">Loading Deployments...</h3>
-          </div>
+      <div class="row row-cards-pf">
+        <div>
+          <div class="spinner"></div>
+          <h3 class="loading-msg">Loading Deployments...</h3>
         </div>
       </div>
+    </div>
 
     <div class="cards-pf">
       <div class="row row-cards-pf">

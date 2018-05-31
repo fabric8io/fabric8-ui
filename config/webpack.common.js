@@ -474,7 +474,7 @@ module.exports = function (options) {
 
       extractCSS,
 
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      new webpack.IgnorePlugin(/^\.\/locale$/, /[^-]moment$/),
 
       /*
        * StyleLintPlugin
