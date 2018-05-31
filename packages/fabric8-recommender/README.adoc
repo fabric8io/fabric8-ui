@@ -2,7 +2,7 @@
 
 image:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic%20release-b4d455.svg[Semantic Release, link="https://github.com/semantic-release/semantic-release"]
 
-**Fabric8 Recommender is a stack analysis feature.** 
+**Fabric8 Recommender is a stack analysis feature.**
 
 == Running the app
 
@@ -90,7 +90,7 @@ Here are some of the most useful/frequently used scripts you may need to run:
 == Building the app
 
 === Production build
- 
+
 To generate production build, set API URL and run build script as follows:
 
 ----
@@ -126,7 +126,7 @@ Step 1: Run `npm run watch:library` in the source directory::
 This will build fabric8-stack-analysis-ui as a library and then set up a watch task to
 rebuild any ts, html and scss files you change.
 
-Step 2: Run `npm link <path to fabric8-stack-analysis-ui>/dist-watch`::
+Step 2: Run `npm link <path to fabric8-stack-analysis-ui>/dist-watch --production`::
 In the webapp into which you are embedding. This will create a symlink from
 `node_modules/fabric8-stack-analysis-ui` to the `dist-watch` directory and install that
 symlinked node module into your webapp.
@@ -148,14 +148,14 @@ of the shadow dom, so you will normally want to place your styles in the
 `.component.LESS` file next to the html and the typescript.
 
 We use mixins to avoid polluting components with uncessary style classes, and to avoid
-an explosion of shared files.  
+an explosion of shared files.
 
 The `src/assets/stylesheets/` directory includes a `shared` directory. These are
 shared global styles that we will refactor out in to a shared library at some point.
 Only update these styles if you are making a truly global style, and are going to
-synchronise your changes across all the various UI projects.  
+synchronise your changes across all the various UI projects.
 
 == Contributing to the app
 
-The development guide is part of the link:./CONTRIBUTING.adoc[contributors' 
-instructions]. Please check it out in order to contribute to this project. 
+The development guide is part of the link:./CONTRIBUTING.adoc[contributors'
+instructions]. Please check it out in order to contribute to this project.
