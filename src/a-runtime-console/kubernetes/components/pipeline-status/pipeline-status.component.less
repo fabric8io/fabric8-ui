@@ -1,4 +1,71 @@
-@import (reference) '../../../../assets/stylesheets/shared/osio.less';
+@import (reference) "../../../../assets/stylesheets/shared/osio.less";
+
+@keyframes progress-line {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes progress-rail {
+  to {
+    transform: translateX(400%);
+  }
+}
+
+@keyframes progress {
+  from {
+    -webkit-transform: rotate(0);
+    transform: rotate(0);
+  }
+  to {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    background-color: #d1d1d1;
+  }
+  to {
+    background-color: transparent;
+  }
+}
+@keyframes fadeInSuccess {
+  to {
+    background-color: #3f9c35;
+  }
+}
+@keyframes fadeInFailed {
+  to {
+    background-color: #c00;
+  }
+}
+@keyframes fadeInProgress {
+  to {
+    background-color: #0088ce;
+  }
+}
+@keyframes fadeInAborted {
+  to {
+    background-color: #d1d1d1;
+  }
+}
+@keyframes fadeInNotExecuted {
+  to {
+    background-color: #d1d1d1;
+  }
+}
 
 .console-os .top-header,
 .pipeline-status-bar {
@@ -94,31 +161,6 @@
 }
 
 /** we have animations on in progress stages */
-.pipeline-status-bar.IN_PROGRESS .clip1:before,
-.pipeline-status-bar.IN_PROGRESS .clip2:before,
-.pipeline-status-bar.IN_PROGRESS .inner-circle-fill {
-  background-color: #0088ce;
-}
-
-.pipeline-status-bar.IN_PROGRESS .pipeline-circle {
-  animation: 0s .7s linear forwards;
-}
-
-.pipeline-status-bar.IN_PROGRESS .pipeline-circle:after {
-  content: '\f021';
-}
-
-.pipeline-status-bar.IN_PROGRESS .pipeline-line {
-  overflow: hidden;
-}
-
-.pipeline-status-bar.IN_PROGRESS .pipeline-line:before {
-  animation: 5s .5s linear infinite;
-  background-color: #0088ce;
-  transform: translateX(-100%);
-  width: 25%;
-}
-
 .pipeline-status-bar {
   display: flex;
   -webkit-align-items: center;
@@ -129,19 +171,36 @@
   -ms-flex-direction: column;
   flex-direction: column;
   margin-bottom: -9px;
-}
-
-.pipeline-status-bar .pipeline-line {
-  position: relative;
-  width: 100%;
-  height: 4px;
-  background: #d1d1d1;
-}
-
-.pipeline-status-bar .pipeline-line:before {
-  content: '';
-  position: absolute;
-  height: 100%;
+  .pipeline-line {
+    position: relative;
+    width: 100%;
+    height: 4px;
+    background: #d1d1d1;
+  }
+  .pipeline-line:before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    animation: progress-line .35s ease-in forwards;
+  }
+  &.IN_PROGRESS .pipeline-line {
+    overflow: hidden;
+    &:before {
+      animation: progress-rail 5s .5s linear infinite;
+      background-color: #0088ce;
+      transform: translateX(-100%);
+      width: 25%;
+    }
+  }
+  &.IN_PROGRESS {
+    .pipeline-circle {
+      animation: fadeInProgress 0s .7s linear forwards;
+      &:after {
+        content: '\f021';
+        opacity: 1;
+      }
+    }
+  }
 }
 
 .pipeline-circle {
@@ -152,63 +211,48 @@
   margin-top: -11px;
   background: #d1d1d1;
   transform: rotate(-90deg);
-}
-
-.pipeline-circle:after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-family: FontAwesome;
-  font-size: 12px;
-  transform: translate(-50%, -50%) rotate(90deg);
-  color: #fff;
-  opacity: 0;
-}
-
-.pipeline-circle .clip1:before,
-.pipeline-circle .clip2:before {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  transform: rotate(360deg);
-  border-radius: 9px;
-  content: '';
-}
-
-.pipeline-circle .clip1 {
-  position: absolute;
-  clip: rect(0, 18px, 18px, 9px);
-  z-index: -9;
-}
-
-.pipeline-circle .clip1:before {
-  clip: rect(0, 9px, 18px, 0);
-}
-
-.pipeline-circle .clip2 {
-  position: absolute;
-  clip: rect(0, 9px, 18px, 0);
-  z-index: -9;
-}
-
-.pipeline-circle .clip2:before {
-  clip: rect(0, 18px, 18px, 9px);
-}
-
-.pipeline-circle .inner-circle {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  height: 10px;
-  width: 10px;
-  border-radius: 9px;
-  background-color: #fff;
-}
-
-.pipeline-circle .inner-circle .inner-circle-fill {
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-  border-radius: 50%;
-  opacity: 0;
+  .clip1 {
+    position: absolute;
+    clip: rect(0, 18px, 18px, 9px);
+    z-index: -9;
+    &:before {
+      clip: rect(0, 9px, 18px, 0);
+      animation: progress 175ms .35s linear forwards;
+    }
+  }
+  .clip2 {
+    position: absolute;
+    clip: rect(0, 9px, 18px, 0);
+    z-index: -9;
+    &:before {
+      clip: rect(0, 18px, 18px, 9px);
+      animation: progress 175ms 525ms linear forwards;
+    }
+  }
+  &:after {
+    position: absolute;
+    color: #fff;
+    font-family: FontAwesome;
+    font-size: 12px;
+    transform: translate(-50%, -50%) rotate(90deg);
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    animation: fadeIn .1s 875ms linear forwards;
+  }
+  .inner-circle {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    height: 10px;
+    width: 10px;
+    border-radius: 9px;
+    .inner-circle-fill {
+      box-sizing: border-box;
+      height: 100%;
+      width: 100%;
+      border-radius: 50%;
+      opacity: 0;
+    }
+  }
 }

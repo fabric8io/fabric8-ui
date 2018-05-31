@@ -3,8 +3,27 @@
 .application-title {
   color: @color-pf-black-900;
   cursor: pointer;
+  &:hover {
+    text-decoration: none;
+  }
+  &-empty-state {
+    color: @color-pf-black-900;
+    cursor: default;
+    text-decoration: none;
+  }
 }
 
-.application-title:hover {
-  text-decoration: none;
+.deployments-empty-state {
+  text-align: center;
+  margin-top: 60px;
+  margin-bottom: 80px;
+}
+
+.deployments-empty-state-text-heading {
+  font-weight: 500;
+}
+
+.not-deployed-application-title {
+  margin-top: 30px;
+  margin-bottom: 30px;
 }

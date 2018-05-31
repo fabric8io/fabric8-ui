@@ -44,6 +44,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
   codebases: Codebase[] = [];
   contextPath: Observable<string>;
   limit: number = 5; // the number of workspaces to display
+  loading: boolean = true;
   recent: ExtSpace[];
   subscriptions: Subscription[] = [];
   _workspaces: Workspace[] = [];
@@ -60,6 +61,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
       if (recent !== undefined) {
         this.recent = recent;
         this.initWorkspaces();
+        this.loading = false;
       }
     }));
   }

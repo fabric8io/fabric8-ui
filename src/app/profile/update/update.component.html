@@ -1,171 +1,192 @@
-<div id="overview" class="container-fluid content padding-top-15">
-  <div class="row profile-edit">
-    <!-- left column -->
-    <div class="col-xs-12 col-sm-5 col-sm-offset-1">
-      <h1>Edit Profile</h1>
-      <form role="form" #profileForm="ngForm">
-        <div class="form-group">
-          <p class="help-block">The fields marked with <span class="required-pf">*</span> are required.</p>
-        </div>
-        <div class="form-group">
-          <label for="fullName" class="control-label">Name</label>
-          <div [ngClass]="{'has-error': fullNameInvalid}">
-            <input type="text" class="form-control" id="fullName" name="fullName"
-                    placeholder="Enter your full name"
-                    [maxLength]="80"
-                    [(ngModel)]="fullName">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="email" class="control-label required-pf email-alignment-label">Email</label>
-          <div [ngClass]="{'has-error': emailInvalid}" class="email-alignment">
-            <input type="email" class="form-control" id="email" name="email" #_email
-                    placeholder="name@gmail.com"
-                    [maxLength]="255"
-                    [(ngModel)]="email"
-                    (change)="validateEmail()">
-            <div class="radio email-alignment_settings">
-              <label>
-                <input type="radio" name="emailVisibility" id="emailPrivate"
-                        [(ngModel)]="emailPrivate"
-                        [value]="true"
-                        [checked]="emailPrivate">
-                Private
-              </label>
-              <label class="margin-left-30">
-                <input type="radio" name="emailVisibility" id="emailPublic"
-                        [(ngModel)]="emailPrivate"
-                        [value]="false"
-                        [checked]="!emailPrivate">
-                Public
-              </label>
-
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="company" class="control-label">Company</label>
-          <div [ngClass]="{'has-error': companyInvalid}">
-            <input type="text" class="form-control" id="company" name="company"
-                    placeholder="Enter your company's name"
-                    [maxLength]="80"
-                    [(ngModel)]="company">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="previewImg" class="control-label padding-left-none">Profile photo</label>
-          <div class="col-xs-12 preview-cont padding-left-none">
-            <img src="{{imageUrl}}" class="col-xs-2 preview-img icon-user padding-left-none padding-right-none margin-right-10"
-                *ngIf="imageUrl !== undefined && imageUrl.length > 0">
-            <img src="../../../assets/images/profile-user.png" class="col-xs-2 preview-img-none"
-                *ngIf="imageUrl === undefined || imageUrl.length === 0">
-            <span class="col-xs-8 col-sm-7 preview-field" [ngClass]="{'has-error': imageUrlInvalid}">
-              <input type="text" class="form-control" id="imageUrl" name="imageUrl" #_imageUrl
-                    placeholder="http://www.myphoto.com"
-                    [maxLength]="255"
-                    [(ngModel)]="imageUrl"
-                    (change)="validateImageUrl()">
-            </span>
-            <button class="col-xs-2 col-sm-3 btn btn-default preview-btn" id="linkImageUrl"
-                    [disabled]="imageUrlInvalid"
-                    (click)="linkImageUrl()">
-              <i class="pficon pficon-arrow"></i> Link Profile Photo
-            </button>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="url" class="control-label">URL</label>
-          <div [ngClass]="{'has-error': urlInvalid}">
-            <input type="text" class="form-control" id="url" name="url" #_url
-                  placeholder="http://www.myprofile.com"
-                  [maxLength]="255"
-                  [(ngModel)]="url"
-                  (change)="validateUrl()">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="bioInput">Bio</label>
-          <textarea class="form-control" id="bioInput" name="bioInput" rows="5" #_bio
-                    placeholder="Enter your bio"
-                    [blockInputAtMaxLimit]="true"
-                    [charsMaxLimit]="255"
-                    [charsRemainingElement]="remainingCountElement"
-                    [charsRemainingWarning]="5"
-                    (onOverCharsMaxLimit)="handleOverCharsMaxLimit()"
-                    [(ngModel)]="bio"
-                    pfng-remaining-chars-count>
-          </textarea>
-          <span class="pull-right chars-remaining-pf">
-            <span #remainingCountElement></span>
-            <span class="fields-status-pf">characters remaining</span>
-          </span>
-        </div>
-        <div class="form-group">
-          <button class="btn btn-default" id="passwordReset" (click)="resetPasswordUrl()">
-            Change password <i class="fa fa-external-link"></i>
-          </button>
-        </div>
-      </form>
-    </div>
-    <!-- right column -->
-    <div class="col-xs-12 col-sm-4 col-sm-offset-1">
-      <form #advancedForm="ngForm">
-        <div class="form-divider"></div>
-        <div class="form-group">
-          <h2>Advanced</h2>
-        </div>
-        <div class="form-group">
-          <label for="token" class="control-label margin-top-15">Personal Access Token</label>
-          <div class="panel panel-default" id="token">
-            <div class="panel-heading token-heading-cont">
-              <i class="padding-top-13 fa"
-                [ngClass]="{'fa-angle-down': tokenPanelOpen, 'fa-angle-right': !tokenPanelOpen}"
-                (click)="toggleTokenPanel()"></i>
-              <p class="token-heading padding-top-10 padding-right-15 margin-right-5"
-                [ngClass]="{'padding-left-11': tokenPanelOpen, 'padding-left-15': !tokenPanelOpen}">{{token}}</p>
-              <button class="btn btn-lg btn-default"
-                      (click)="copyTokenToClipboard()">Copy</button>
-            </div>
-            <div class="panel-body margin-left-15 margin-right-15" *ngIf="tokenPanelOpen">
-              <p class="token-body padding-left-5 padding-right-5">{{token}}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="container-fluid pull-right">
-          <div class="row">
-            <div class="col">
-              <button class="btn btn-lg btn-default" (click)="updateTenant()" [disabled]="updateTenantStatus === TenantUpdateStatus.Updating">Update Tenant</button>
-              <button class="btn btn-lg btn-default" (click)="cleanupTenant()">Reset Environment</button>
-            </div>
-            <div class="update-tenant-status" *ngIf="updateTenantStatus !== TenantUpdateStatus.NoAction">
-              <div *ngIf="updateTenantStatus === TenantUpdateStatus.Updating">
-                <span class="spinner spinner-xs spinner-inline fa-spin"></span>
-                <span class="">Updating tenant</span>
-              </div>
-              <div *ngIf="updateTenantStatus === TenantUpdateStatus.Success">
-                <div class="text-success">
-                  <span class="fa fa-check update-icon-padding"></span>Updated tenant
-                </div>
-              </div>
-              <div *ngIf="updateTenantStatus === TenantUpdateStatus.Failure">
-                <div class="text-danger">
-                  <span class="pficon-close update-icon-padding"></span>Failed to update tenant
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+<div id="overview" class="container-fluid content">
+  <div *ngIf="!emailVerified"
+    class="row email-alert padding-top-20">
+    <div class="col-xs-12 col-md-10 col-md-offset-1">
+      <div class="alert alert-warning">
+        <span class="pficon pficon-warning-triangle-o"></span>
+        <strong>Your email address is unverified.</strong> Please verify your email address by clicking the link we sent you.
+        <a href="javascript:void(0)" (click)="sendEmailVerificationLink()" class="alert-link pull-right">Resend verification link</a>
+      </div>
     </div>
   </div>
-  <div class="profile-bar">
-    <div class="profile-bar-buttons col-sm-12">
-      <button class="btn btn-primary btn-update btn-lg col-sm-3 col-md-2 col-lg-1 col-sm-offset-3 col-md-offset-4 col-lg-offset-5"
-              [disabled]="isUpdateProfileDisabled"
-              (click)="updateProfile()">Update</button>
-      <button class="btn btn-cancel btn-default btn-lg col-sm-3 col-md-2 col-lg-1"
-        (click)="routeToProfile()">Cancel</button>
+  <div class="row profile-edit">
+    <div class="col-xs-4 col-md-1">
+        <div *ngIf="(imageUrl !== undefined && imageUrl.length !== 0); then showImageUrl else addImageUrl"></div>
+      <ng-template #showImageUrl>
+        <img src="{{imageUrl}}" class="img-responsive profile-img icon-user">
+      </ng-template>
+      <ng-template #addImageUrl>
+        <img src="../../../assets/images/profile-user.png" class="img-responsive profile-img-none icon-user">
+      </ng-template>
+    </div>
+
+    <div class="col-xs-12 col-md-11">
+      <div class="row padding-bottom-15">
+        <p class="col-xs-12"><label for="previewImg" class="control-label padding-left-none">Profile photo</label></p>
+        <p class="col-md-3 link-profile-photo">
+          <a href="javascript:void(0)" (click)="linkGravatarImageUrl()">
+            <span class="fa fa-gravatar"></span> Import from Gravatar
+          </a>
+        </p>
+        <p class="col-md-3 link-profile-photo">
+          <a href="javascript:void(0)" (click)="linkGithubImageUrl()">
+            <span class="fa fa-github"></span> Import from Github
+          </a>
+        </p>
       </div>
+      <div class="row">
+        <form role="form" #profileForm="ngForm">
+          <div class="col-xs-12 col-md-4">
+            <div class="form-group">
+              <label for="fullName" class="control-label">Name</label>
+              <div [ngClass]="{'has-error': fullNameInvalid}">
+                <input type="text" class="form-control" id="fullName" name="fullName"
+                        placeholder="Enter your full name"
+                        [maxLength]="80"
+                        [(ngModel)]="fullName">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email" class="control-label required-pf email-alignment-label">Email</label>
+              <div [ngClass]="{'has-error': emailInvalid}" class="email-alignment">
+                <input type="email" class="form-control" id="email" name="email" #_email
+                        placeholder="name@gmail.com"
+                        [maxLength]="255"
+                        [(ngModel)]="email"
+                        (change)="validateEmail()">
+                <div class="radio email-alignment_settings">
+                  <label>
+                    <input type="radio" name="emailVisibility" id="emailPrivate"
+                            [(ngModel)]="emailPrivate"
+                            [value]="true"
+                            [checked]="emailPrivate">
+                    Private
+                  </label>
+                  <label class="margin-left-30">
+                    <input type="radio" name="emailVisibility" id="emailPublic"
+                            [(ngModel)]="emailPrivate"
+                            [value]="false"
+                            [checked]="!emailPrivate">
+                    Public
+                  </label>
+
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="company" class="control-label">Company</label>
+              <div [ngClass]="{'has-error': companyInvalid}">
+                <input type="text" class="form-control" id="company" name="company"
+                        placeholder="Enter your company's name"
+                        [maxLength]="80"
+                        [(ngModel)]="company">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="url" class="control-label">URL</label>
+              <div [ngClass]="{'has-error': urlInvalid}">
+                <input type="text" class="form-control" id="url" name="url" #_url
+                      placeholder="http://www.myprofile.com"
+                      [maxLength]="255"
+                      [(ngModel)]="url"
+                      (change)="validateUrl()">
+              </div>
+            </div>
+            <div class="padding-top-20">
+              <button class="btn btn-primary btn-default col-md-3"
+                [disabled]="isUpdateProfileDisabled"
+                (click)="updateProfile()">Update</button>
+              <button class="btn btn-cancel btn-default col-md-3"
+                (click)="routeToProfile()">Cancel</button>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-4">
+            <div class="form-group">
+              <label for="bioInput">Bio</label>
+              <textarea class="form-control" id="bioInput" name="bioInput" rows="8" #_bio
+                        placeholder="Enter your bio"
+                        [blockInputAtMaxLimit]="true"
+                        [charsMaxLimit]="255"
+                        [charsRemainingElement]="remainingCountElement"
+                        [charsRemainingWarning]="5"
+                        [(ngModel)]="bio"
+                        pfng-remaining-chars-count>
+              </textarea>
+              <span class="pull-right chars-remaining-pf">
+                <span #remainingCountElement></span>
+                <span class="fields-status-pf">characters remaining</span>
+              </span>
+            </div>
+            <div class="form-group">
+              <label for="forPassword">Password</label>
+              <button class="db btn btn-default" id="passwordReset" (click)="resetPasswordUrl()">
+                Change password
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <form role="form" #advancedForm="ngForm">
+          <div class="col-xs-12 col-md-3">
+            <div class="form-group">
+              <label for="token" class="control-label">Personal Access Token</label>
+              <div class="panel panel-default" id="token">
+                <div class="panel-heading token-heading-cont">
+                  <i class="padding-top-13 fa"
+                    [ngClass]="{'fa-angle-down': tokenPanelOpen, 'fa-angle-right': !tokenPanelOpen}"
+                    (click)="toggleTokenPanel()"></i>
+                  <p class="token-heading padding-top-10 padding-right-15 margin-right-5"
+                    [ngClass]="{'padding-left-11': tokenPanelOpen, 'padding-left-15': !tokenPanelOpen}">{{token}}</p>
+                  <button class="btn btn-lg btn-default"
+                          (click)="copyTokenToClipboard()">Copy</button>
+                </div>
+                <div class="panel-body margin-left-15 margin-right-15" *ngIf="tokenPanelOpen">
+                  <p class="token-body padding-left-5 padding-right-5">{{token}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <button class="btn btn-default" (click)="updateTenant()" [disabled]="updateTenantStatus === TenantUpdateStatus.Updating">Update Tenant</button>
+                <button class="btn btn-default" (click)="cleanupTenant()">Reset Environment</button>
+              </div>
+              <div class="col-xs-12 update-tenant-status padding-top-20" *ngIf="updateTenantStatus !== TenantUpdateStatus.NoAction">
+                <div *ngIf="updateTenantStatus === TenantUpdateStatus.Updating">
+                  <span class="spinner spinner-xs spinner-inline fa-spin"></span>
+                  <span class="">Updating tenant</span>
+                </div>
+                <div *ngIf="updateTenantStatus === TenantUpdateStatus.Success">
+                  <div class="text-success">
+                    <span class="fa fa-check update-icon-padding"></span>Updated tenant
+                  </div>
+                </div>
+                <div *ngIf="updateTenantStatus === TenantUpdateStatus.Failure">
+                  <div class="text-danger">
+                    <span class="pficon-close update-icon-padding"></span>Failed to update tenant
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row profile-overview-nav">
+    <div class="col-md-10 col-md-offset-1">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li [ngClass]="{active: selectedTab === 1}" (click)="changeTab(1)"><a href="javascript:void(0)">My Work Items</a></li>
+        <li [ngClass]="{active: selectedTab === 2}" (click)="changeTab(2)"><a href="javascript:void(0)">My Spaces</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="row padding-top-15 padding-left-10 padding-right-10">
+    <div class="col-xs-12 col-md-10 col-md-offset-1" *ngIf="selectedTab === 1">
+      <alm-work-items></alm-work-items>
+    </div>
+    <div class="col-xs-12 col-md-10 col-md-offset-1" *ngIf="selectedTab === 2">
+      <alm-spaces></alm-spaces>
+    </div>
   </div>
 </div>

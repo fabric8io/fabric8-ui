@@ -1,5 +1,5 @@
 import { DebugNode } from '@angular/core';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 
 import { FormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { ContextService } from '../../shared/context.service';
 import { spaceMock } from '../../shared/context.service.mock';
 
 import { WindowService } from 'app/shared/window.service';
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { Workspace, WorkspaceLinks } from '../../space/create/codebases/services/workspace';
 import { WorkspacesService } from '../../space/create/codebases/services/workspaces.service';
@@ -52,6 +53,7 @@ describe('RecentWorkspacesWidgetComponent', () => {
         BrowserAnimationsModule,
         FormsModule,
         HttpModule,
+        LoadingWidgetModule,
         TooltipModule.forRoot()
       ],
       declarations: [RecentWorkspacesWidgetComponent],
