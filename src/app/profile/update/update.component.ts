@@ -13,6 +13,8 @@ import { GitHubService } from '../../space/create/codebases/services/github.serv
 import { CopyService } from '../services/copy.service';
 import { TenantService } from '../services/tenant.service';
 
+import { gravatar } from '../../shared/gravatar/gravatar';
+
 export enum TenantUpdateStatus {
   NoAction,
   Updating,
@@ -65,6 +67,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
 
   url: string;
   urlInvalid: boolean = false;
+  selectedTab: number = 1;
 
   constructor(
       private auth: AuthenticationService,
@@ -176,7 +179,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.bio = this.bio.substring(0, 255);
   }
 
-  linkImageUrl(): void {
+  linkGithubImageUrl(): void {
     this.subscriptions.push(this.gitHubService.getUser().subscribe(user => {
       if (user.avatar_url !== undefined && user.avatar_url.length > 0) {
         this.profileForm.form.markAsDirty();
@@ -187,6 +190,16 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     }, error => {
       this.handleError('Unable to link image', NotificationType.WARNING);
     }));
+  }
+
+  linkGravatarImageUrl(): void {
+    const avatar_url = gravatar(this.email);
+    if (avatar_url !== undefined && avatar_url.length > 0) {
+      this.profileForm.form.markAsDirty();
+      this.imageUrl = avatar_url;
+    } else {
+      this.handleError('No image found', NotificationType.INFO);
+    }
   }
 
   /**
@@ -283,6 +296,25 @@ export class UpdateComponent implements AfterViewInit, OnInit {
    */
   validateEmail(): void {
     this.emailInvalid = !this.isEmailValid(this.email);
+  }
+
+  sendEmailVerificationLink(): void {
+    this.subscriptions.push(this.userService.sendEmailVerificationLink()
+      .subscribe(res => {
+        if (res.status === 204) {
+          this.notifications.message({
+            message: `Email Verification link sent!`,
+            type: NotificationType.SUCCESS
+          } as Notification);
+        } else {
+          this.notifications.message({
+            message: `Error sending email verification link!`,
+            type: NotificationType.DANGER
+          } as Notification);
+        }
+      }, error => {
+        this.handleError('Unexpected error sending link!', NotificationType.DANGER);
+      }));
   }
 
   /**
@@ -408,6 +440,10 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     this.imageUrl = (user.attributes.imageURL !== undefined) ? user.attributes.imageURL : '';
     this.url = (user.attributes.url !== undefined) ? user.attributes.url : '';
     this.username = (user.attributes.username !== undefined) ? user.attributes.username : '';
+  }
+
+  changeTab(tab): void {
+    this.selectedTab = tab;
   }
 
   private handleError(error: string, type: NotificationType) {
