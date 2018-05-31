@@ -20,7 +20,9 @@
     <div class="card-pf-body f8-card-body">
       <div *ngIf="workItems.length !== 0; then showWorkItems else showBlankState"></div>
       <ng-template #showBlankState>
-        <div class="f8-blank-slate-card">
+        <fabric8-loading-widget message="Please wait while we load your work items"
+                                *ngIf="loading === true"></fabric8-loading-widget>
+        <div class="f8-blank-slate-card" *ngIf="loading !== true">
           <h3>Work items reflect the work to be done within a space</h3>
           <p>Once you create or join a space, work items that you create or are assigned to display here.</p>
         </div>
@@ -72,7 +74,9 @@
     <div class="card-pf-body f8-card-body">
       <div *ngIf="workItems.length !== 0; then showWorkItems else showBlankState"></div>
       <ng-template #showBlankState>
-        <div class="f8-blank-slate-card">
+        <fabric8-loading-widget message="Please wait while we load your work items"
+                                *ngIf="loading === true"></fabric8-loading-widget>
+        <div class="f8-blank-slate-card" *ngIf="loading !== true">
           <h3>Work items reflect the work to be done within a space</h3>
           <p>Once you create or join a space, work items that you create or are assigned to display here.</p>
         </div>

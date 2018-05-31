@@ -126,6 +126,12 @@ export class DeploymentsService implements OnDestroy {
       .distinctUntilChanged();
   }
 
+  hasDeployments(spaceId: string, environments: string[]): Observable<boolean> {
+    return Observable.combineLatest(
+      environments.map(environment => this.isDeployedInEnvironment(spaceId, environment))
+    ).map((deployed: boolean[]): boolean => deployed.some(b => b));
+  }
+
   getVersion(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
     return this.getDeployment(spaceId, environmentName, applicationId)
       .map((deployment: Deployment) => deployment.attributes.version)

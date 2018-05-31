@@ -5,7 +5,9 @@
     </h2>
   </div>
   <div class="card-pf-body f8-card-body">
-    <div class="f8-blank-slate-card" *ngIf="workspaces.length === 0">
+    <fabric8-loading-widget message="Please wait while we load your recent workspaces"
+                            *ngIf="loading === true"></fabric8-loading-widget>
+    <div class="f8-blank-slate-card" *ngIf="workspaces.length === 0 && loading !== true">
       <h3>Create a workspace</h3>
       <p>Learn how to
         <a href="https://docs.openshift.io/user-guide.html#importing_a_codebase" target="top">
@@ -15,7 +17,7 @@
       </p>
     </div>
     <!-- A list of the 5 most recent Workspaces will be displayed in place of the Blank Slate. -->
-    <div class="f8-home-space-list-result" *ngIf="workspaces.length > 0">
+    <div class="f8-home-space-list-result" *ngIf="workspaces.length > 0 && loading !== true">
       <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
         <li class="list-group-item" *ngFor="let workspace of workspaces">
           <div class="list-view-pf-main-info">

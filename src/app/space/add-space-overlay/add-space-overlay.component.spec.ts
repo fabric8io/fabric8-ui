@@ -29,7 +29,7 @@ describe('AddSpaceOverlayComponent', () => {
   };
   let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['create']);
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
-  let mockUserService: any = jasmine.createSpyObj('UserService', ['getUser']);
+  let mockUserService: any = jasmine.createSpy('UserService');
   let mockSpaceNamespaceService: any = jasmine.createSpy('SpaceNamespaceService');
   let mockSpaceNamePipe: any = jasmine.createSpy('SpaceNamePipe');
   let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent']);
@@ -117,15 +117,14 @@ describe('AddSpaceOverlayComponent', () => {
     type: NotificationType.DANGER
   };
 
-  mockElementRef.nativeElement.value = {};
-  mockSpaceNamespaceService.updateConfigMap = {};
-  mockSpaceService.create.and.returnValue(Observable.of(mockSpace));
-  mockSpacesService.addRecent.and.returnValue(mockSubject);
-  mockSpacesService.addRecent.next = {};
-  mockUserService.currentLoggedInUser = { 'id': 'mock-user' };
-  mockUserService.getUser.and.returnValue(Observable.of(mockUser));
-
   beforeEach(() => {
+    mockElementRef.nativeElement.value = {};
+    mockSpaceNamespaceService.updateConfigMap = {};
+    mockSpaceService.create.and.returnValue(Observable.of(mockSpace));
+    mockSpacesService.addRecent.and.returnValue(mockSubject);
+    mockSpacesService.addRecent.next = {};
+    mockUserService.currentLoggedInUser = mockUser;
+
     TestBed.configureTestingModule({
       imports: [FormsModule],
       declarations: [AddSpaceOverlayComponent],
@@ -159,7 +158,7 @@ describe('AddSpaceOverlayComponent', () => {
     });
 
     it('should disable submit', () => {
-      mockUserService.getUser.and.returnValue(Observable.empty());
+      mockUserService.currentLoggedInUser = {};
       component.context = {
         current: Observable.of(mockSpace)
       };
