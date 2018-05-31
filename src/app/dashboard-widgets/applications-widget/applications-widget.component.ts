@@ -7,7 +7,11 @@ import {
   Output,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs/Rx';
+import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs/Rx';
+
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { User, UserService } from 'ngx-login-client';
 
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
@@ -24,7 +28,10 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
   @Input() userOwnsSpace: boolean;
   @Output() addToSpace = new EventEmitter();
 
+  contextPath: Observable<string>;
+  currentSpace: Space;
   loading: boolean = true;
+  loggedInUser: User;
 
   buildConfigs: BuildConfig[];
   runBuildConfigs: BuildConfig[] = [];
@@ -32,7 +39,10 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private pipelinesService: PipelinesService) {
+  constructor(private context: Contexts,
+              private pipelinesService: PipelinesService,
+              private router: Router,
+              private userService: UserService) {
     // Fetch pipeline build configs and filter based on application deployment stage
     this.subscriptions.push(
       this.pipelinesService.current.subscribe((buildConfigs: BuildConfig[]) => {
@@ -43,6 +53,12 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
         this.alignBuildConfigs();
         this.loading = false;
       }));
+    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
+      this.loggedInUser = user;
+    }));
+    this.subscriptions.push(context.current.subscribe((ctx: Context) => {
+      this.currentSpace = ctx.space;
+    }));
   }
 
   ngOnDestroy(): void {
@@ -54,8 +70,24 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
   }
 
+  get applicationsInProgress(): number {
+    let result = 0;
+    if (this.buildConfigsAvailable) {
+      result = this.buildConfigs.length - (this.stageBuildConfigs.length + this.runBuildConfigs.length);
+    }
+    return result;
+  }
+
   get buildConfigsAvailable(): boolean {
-    return !(isEmpty(this.runBuildConfigs) && isEmpty(this.stageBuildConfigs));
+    return !(isEmpty(this.buildConfigs));
+  }
+
+  get runConfigsAvailable(): boolean {
+    return !(isEmpty(this.runBuildConfigs));
+  }
+
+  get stageConfigsAvailable(): boolean {
+    return !(isEmpty(this.stageBuildConfigs));
   }
 
   // Private
