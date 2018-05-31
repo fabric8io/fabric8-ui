@@ -2,5 +2,5 @@
   <div class="spinner spinner-lg"></div>
   <h3 *ngIf="title !== undefined">{{title}}</h3>
   <p *ngIf="message !== undefined">{{message}}</p>
-  <a *ngIf="hyperlinkText !== undefined" (click)="handleLinkAction($event)">{{hyperlinkText}}</a>
+  <ng-content></ng-content>
 </div>

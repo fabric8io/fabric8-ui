@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, LocationStrategy } from '@angular/common';
 import {
   Component,
   Input
@@ -211,6 +211,7 @@ describe('ApplicationsWidgetComponent', () => {
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
+      { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']); },
       { provide: PipelinesService, useFactory: () => pipelinesService },
       {
         provide: FeatureTogglesService, useFactory: () => {
@@ -242,7 +243,7 @@ describe('ApplicationsWidgetComponent', () => {
           userService.loggedInUser = fakeUser.publish() as ConnectableObservable<User> & jasmine.Spy;
           return userService;
         }
-      },
+      }
     ]
   });
 
@@ -276,6 +277,30 @@ describe('ApplicationsWidgetComponent', () => {
     it('Run build configs to be sorted', function(this: TestingContext) {
       expect(this.testedDirective.runBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3]);
     });
+
+    it('Empty build configs to not show empty state', function(this: TestingContext) {
+      this.hostComponent.userOwnsSpace = true;
+      this.detectChanges();
+      expect(this.fixture.debugElement.query(By.css('#test-applications-add-button'))).toBeNull();
+    });
+
+    it('Empty build configs to show empty state', function(this: TestingContext) {
+      this.hostComponent.userOwnsSpace = true;
+      this.testedDirective.buildConfigs.length = 0;
+      this.detectChanges();
+      expect(this.fixture.debugElement.query(By.css('#test-applications-add-button'))).not.toBeNull();
+    });
+
+    it('Empty stage and run build configs to show empty state', function(this: TestingContext) {
+      this.testedDirective.runBuildConfigs.length = 0;
+      this.testedDirective.stageBuildConfigs.length = 0;
+      this.detectChanges();
+      expect(this.fixture.debugElement.query(By.css('#test-applications-pipelines-link'))).toBeNull();
+    });
+
+    it('Stage or run build configs to show empty state', function(this: TestingContext) {
+      expect(this.fixture.debugElement.query(By.css('#test-applications-pipelines-link'))).not.toBeNull();
+    });
   });
 
   describe('Applications widget without build configs', () => {
@@ -285,7 +310,7 @@ describe('ApplicationsWidgetComponent', () => {
       this.testedDirective.buildConfigs.length = 0;
       this.detectChanges();
 
-      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#test-applications-add-button'))).not.toBeNull();
     });
 
     it('should disable buttons if the user does not own the space', function(this: TestingContext) {
@@ -293,7 +318,7 @@ describe('ApplicationsWidgetComponent', () => {
       this.testedDirective.buildConfigs.length = 0;
       this.detectChanges();
 
-      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#test-applications-add-button'))).toBeNull();
     });
   });
 });

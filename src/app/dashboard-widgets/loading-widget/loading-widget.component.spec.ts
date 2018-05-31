@@ -7,7 +7,7 @@ import { initContext, TestContext } from 'testing/test-context';
 import { LoadingWidgetComponent } from './loading-widget.component';
 
 @Component({
-  template: '<fabric8-loading-widget [message]="\'test1\'" [title]="\'test2\'" [hyperlinkText]="\'test3\'"></fabric8-loading-widget>'
+  template: '<fabric8-loading-widget [message]="\'test1\'" [title]="\'test2\'"></fabric8-loading-widget>'
 })
 class HostComponent {
 }
@@ -33,11 +33,6 @@ describe('LoadingWidgetComponent', () => {
     it('Should have message title', function(this: TestingContext) {
       this.detectChanges();
       expect(this.testedDirective.title).toEqual('test2');
-    });
-
-    it('Should have hyperlink text', function(this: TestingContext) {
-      this.detectChanges();
-      expect(this.testedDirective.hyperlinkText).toEqual('test3');
     });
   });
 });

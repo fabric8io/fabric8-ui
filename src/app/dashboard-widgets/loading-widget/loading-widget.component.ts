@@ -20,34 +20,13 @@ export class LoadingWidgetComponent implements OnInit {
   @Input() message: string;
 
   /**
-   * The hyperlink text
-   */
-  @Input() hyperlinkText: string;
-
-  /**
    * The message title
    */
   @Input() title: string;
-
-  /**
-   * The event emitted when hyperlink has been clicked
-   */
-  @Output('onHyperlinkClick') onHyperlinkClick = new EventEmitter();
-
-  /**
-   * The router URL
-   */
-  @Input() routerUrl: string;
 
   constructor() {
   }
 
   ngOnInit(): void {
-  }
-
-  // Private
-
-  private handleLinkAction($event: MouseEvent): void {
-    this.onHyperlinkClick.emit();
   }
 }
