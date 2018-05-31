@@ -157,24 +157,6 @@ describe('WorkItemWidgetComponent', () => {
     expect(this.testedDirective.recentSpaceIndex).toBe(-1);
   });
 
-  it('should fetch the correct work items', function(this: TestingContext) {
-    this.testedDirective.workItems.length = 0;
-    this.testedDirective.fetchWorkItems();
-    expect(this.testedDirective.workItems).toEqual(fakeWorkItems);
-  });
-
-  it('should update the recentSpaceIndex when it filters through all the work items', function(this: TestingContext) {
-    this.testedDirective.workItems.length = 0;
-    this.testedDirective.fetchWorkItems();
-    expect(this.testedDirective.recentSpaceIndex).toBe(-1);
-  });
-
-  it('should not fetch closed workitems', function(this: TestingContext) {
-    fakeWorkItem1.attributes['system.state'] = 'closed';
-    this.testedDirective.fetchWorkItems();
-    expect(this.testedDirective.workItems).toEqual(fakeWorkItems.slice(1));
-  });
-
   it('should set relational data to an empty obj if it does not exist prior', function(this: TestingContext) {
     expect(fakeWorkItem1.relationalData).toBeDefined();
     expect(fakeWorkItem1.relationalData).toEqual({});
@@ -182,5 +164,26 @@ describe('WorkItemWidgetComponent', () => {
 
   it('should not overwrite pre-existing relational data', function(this: TestingContext) {
     expect(fakeWorkItem2.relationalData).toEqual({parent: fakeWorkItem3});
+  });
+
+  describe('#fetchWorkItems', () => {
+
+    it('should fetch the correct work items', function(this: TestingContext) {
+      this.testedDirective.workItems.length = 0;
+      this.testedDirective.fetchWorkItems();
+      expect(this.testedDirective.workItems).toEqual(fakeWorkItems);
+    });
+
+    it('should update the recentSpaceIndex when it filters through all the work items', function(this: TestingContext) {
+      this.testedDirective.workItems.length = 0;
+      this.testedDirective.fetchWorkItems();
+      expect(this.testedDirective.recentSpaceIndex).toBe(-1);
+    });
+
+    it('should not fetch closed workitems', function(this: TestingContext) {
+      fakeWorkItem1.attributes['system.state'] = 'closed';
+      this.testedDirective.fetchWorkItems();
+      expect(this.testedDirective.workItems).toEqual(fakeWorkItems.slice(1));
+    });
   });
 });
