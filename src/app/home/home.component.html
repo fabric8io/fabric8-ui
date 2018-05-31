@@ -67,7 +67,9 @@
               </h2>
             </div>
             <div class="card-pf-body f8-card-body">
-              <div class="f8-blank-slate-card" *ngIf="_spaces.length === 0">
+              <fabric8-loading-widget message="Please wait while we load your recent spaces"
+                                      *ngIf="loading === true"></fabric8-loading-widget>
+              <div class="f8-blank-slate-card" *ngIf="_spaces.length === 0 && loading !== true">
                 <h3>Create a space</h3>
                 <p>Learn how to get started
                   <a href="https://docs.openshift.io/user-guide.html#getting_started_with_openshift_io" target="top">
@@ -82,7 +84,7 @@
                 </div>
               </div>
               <!-- A list of the 5 most recent Spaces will be displayed in place of the Blank Slate. -->
-              <div class="f8-home-space-list-result" *ngIf="_spaces.length > 0">
+              <div class="f8-home-space-list-result" *ngIf="_spaces.length > 0 && loading !== true">
                 <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
                   <li class="list-group-item" *ngFor="let space of recent">
                     <div class="list-view-pf-main-info">
@@ -191,7 +193,9 @@
               </h2>
             </div>
             <div class="card-pf-body f8-card-body">
-              <div class="f8-blank-slate-card" *ngIf="_spaces.length === 0">
+              <fabric8-loading-widget message="Please wait while we load your recent spaces"
+                                      *ngIf="loading === true"></fabric8-loading-widget>
+              <div class="f8-blank-slate-card" *ngIf="_spaces.length === 0 && loading !== true">
                 <h3>Create a space</h3>
                 <p>Learn how to get started
                   <a href="https://docs.openshift.io" target="top">
@@ -206,7 +210,7 @@
                 </div>
               </div>
               <!-- A list of the 5 most recent Spaces will be displayed in place of the Blank Slate. Additional Spaces are viewed by using the 'See All' button in the Card footer -->
-              <div class="home-space-list-result" *ngIf="_spaces.length > 0">
+              <div class="home-space-list-result" *ngIf="_spaces.length > 0 && loading !== true">
                 <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
                   <li class="list-group-item" *ngFor="let space of recent">
                     <div class="list-view-pf-main-info">
