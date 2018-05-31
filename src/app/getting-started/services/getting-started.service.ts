@@ -100,7 +100,6 @@ export class GettingStartedService implements OnDestroy {
   }
 
   // Private
-
   protected handleError(error: any) {
     this.logger.error(error);
     return Observable.throw(error.message || error);
