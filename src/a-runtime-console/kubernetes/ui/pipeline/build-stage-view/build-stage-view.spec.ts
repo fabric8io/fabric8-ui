@@ -9,9 +9,9 @@ import { MomentModule } from 'angular2-moment';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { ModalModule } from 'ngx-modal';
 
-import { FABRIC8_FORGE_API_URL } from 'app/shared/runtime-console/fabric8-ui-forge-api';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 
+import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
 import { InputActionDialog } from '../input-action-dialog/input-action-dialog.component';
 import { BuildStatusIconComponent } from './../../../components/build-status-icon/build-status-icon.component';
 import { PipelineStatusComponent } from './../../../components/pipeline-status/pipeline-status.component';

@@ -37,7 +37,7 @@ import {
 import { AuthenticationService } from 'ngx-login-client';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
 
-import { BuildConfig } from 'a-runtime-console/index';
+import { BuildConfig } from '../../../../a-runtime-console/index';
 import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
 import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { PipelinesService as RuntimePipelinesService } from '../../../shared/runtime-console/pipelines.service';

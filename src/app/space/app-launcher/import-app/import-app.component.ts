@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 
-import { ContextService } from 'app/shared/context.service';
+import { ContextService } from '../../../shared/context.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

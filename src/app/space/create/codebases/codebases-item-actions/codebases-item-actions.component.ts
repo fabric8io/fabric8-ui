@@ -1,5 +1,4 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { WindowService } from 'app/shared/window.service';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Dialog } from 'ngx-widgets';
@@ -9,6 +8,8 @@ import { CheService } from '../services/che.service';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
 import { WorkspacesService } from '../services/workspaces.service';
+
+import { WindowService } from '../../../../shared/window.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

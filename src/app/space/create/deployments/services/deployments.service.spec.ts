@@ -24,10 +24,8 @@ import {
 } from 'rxjs';
 import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
 
-import { Logger } from 'ngx-base';
-
-import { NotificationsService } from 'app/shared/notifications.service';
 import {
+  Logger,
   Notification,
   NotificationType
 } from 'ngx-base';
@@ -36,6 +34,7 @@ import { AuthenticationService } from 'ngx-login-client';
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
+import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { MemoryUnit } from '../models/memory-unit';

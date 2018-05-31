@@ -10,7 +10,7 @@ import {
 } from 'ngx-base';
 import { User, UserService } from 'ngx-login-client';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../app/shared/notifications.service';
 
 export class OAuthConfig {
   public authorizeUri: string;

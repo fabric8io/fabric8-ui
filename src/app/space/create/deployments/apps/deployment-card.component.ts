@@ -12,7 +12,7 @@ import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../../shared/notifications.service';
 import {
   DeploymentStatusService,
   Status,

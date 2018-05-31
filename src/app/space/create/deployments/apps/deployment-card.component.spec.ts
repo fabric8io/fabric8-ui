@@ -36,7 +36,7 @@ import {
 } from 'rxjs';
 import { createMock } from 'testing/mock';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import {
