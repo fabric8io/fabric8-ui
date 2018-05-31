@@ -110,27 +110,7 @@ module.exports = function (options) {
        *
        * See: https://webpack.js.org/configuration/resolve/#resolve-extensions
        */
-      extensions: ['.ts', '.js', '.json'],
-
-      /**
-       * Tell webpack what directories should be searched when resolving modules.
-       *
-       * We enable this in dev as it allows npm link to work
-       *
-       * See: https://webpack.js.org/configuration/resolve/#resolve-modules
-       */
-      modules: [helpers.root('src'), helpers.root('node_modules'),
-        // Todo: fabric8-stack-analysis-ui/src/app/stack/overview/chart-component.js cannot locate c3
-        helpers.root("node_modules/patternfly/node_modules/c3"),
-        helpers.root("node_modules/patternfly/node_modules/d3")
-      // ],
-      //
-      // plugins: [
-      //   new TsConfigPathsPlugin( {
-      //     baseUrl: helpers.root('src'),
-      //     configFileName: 'tsconfig.json'
-      //   })
-      ]
+      extensions: ['.ts', '.js', '.json']
     },
 
     /*
