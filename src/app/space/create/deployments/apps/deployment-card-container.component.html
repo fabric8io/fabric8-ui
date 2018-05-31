@@ -1,18 +1,54 @@
-<div class="cards-pf container-fluid container-cards-pf">
-  <div class="row row-cards-pf">
-    <div class="col-xs-6 col-sm-4 col-md-2">
-      <h4 id="deploymentCardApplicationTitle">
-        <a class="application-title" (click)="collapsed = !collapsed">
-          <span [ngClass]="collapsed ? 'fa fa-angle-right' : 'fa fa-angle-down'"></span>&nbsp;&nbsp;{{application}}
-        </a>
-      </h4>
+<div *ngIf="(hasDeployments | async); else emptystate">
+  <div class="cards-pf">
+    <div class="row row-cards-pf">
+      <div class="col-xs-12 col-sm-4 col-md-2"></div>
+      <div class="col-xs-12 col-sm-4 col-md-3" *ngFor="let environment of environments | async">
+        <h4 class="env-card-title">
+          {{environment}}
+        </h4>
+      </div>
     </div>
-    <deployment-card class="col-xs-6 col-sm-4 col-md-3"
-      *ngFor="let environment of environments | async"
-      [spaceId]="spaceId"
-      [applicationId]="application"
-      [environment]="environment"
-      [(collapsed)]="collapsed"
-    ></deployment-card>
+  </div>
+  <div class="cards-pf container-fluid container-cards-pf" *ngFor="let application of applications">
+    <div class="row row-cards-pf">
+      <div class="col-xs-6 col-sm-4 col-md-2">
+        <h4 id="deploymentCardApplicationTitle">
+          <a class="application-title" (click)="collapsed[application] = !collapsed[application]">
+            <span [ngClass]="collapsed[application] ? 'fa fa-angle-right' : 'fa fa-angle-down'"></span>&nbsp;&nbsp;{{application}}
+          </a>
+        </h4>
+      </div>
+      <deployment-card class="col-xs-6 col-sm-4 col-md-3"
+        *ngFor="let environment of environments | async"
+        [spaceId]="spaceId"
+        [applicationId]="application"
+        [environment]="environment"
+        [(collapsed)]="collapsed[application]"
+      ></deployment-card>
+    </div>
   </div>
 </div>
+
+<ng-template #emptystate>
+  <div class="cards-pf container-fluid container-cards-pf">
+    <div class="col-xs-6 col-sm-4 col-md-2">
+      <div class="row row-cards-pf" *ngFor="let application of applications">
+        <h4 class="not-deployed-application-title">
+          <a class="application-title-empty-state">
+            &nbsp;&nbsp;{{application}}
+          </a>
+        </h4>
+      </div>
+    </div>
+    <div class="deployments-empty-state col-sm-4 col-sm-offset-2">
+      <img src="../../../../../assets/images/deployments_emptystate_nodeployments.png"/>
+      <div class="deployments-empty-state-text">
+        <h2 class="deployments-empty-state-text-heading">None of your applications have been deployed yet.</h2>
+        <p>
+          Check for upcoming deployments on the <a [routerLink]="[spacePath | async, 'create', 'pipelines']">Pipelines</a> page,
+          and use the <a [routerLink]="['/', username | async, '_settings', 'resources']">Resource Usage panel</a> to verify you have the space for another deployment.
+        </p>
+      </div>
+    </div>
+  </div>
+</ng-template>

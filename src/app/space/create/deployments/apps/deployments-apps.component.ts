@@ -28,6 +28,7 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   @Input() applications: Observable<string[]>;
   @Input() environments: Observable<string[]>;
   @Input() spaceId: Observable<string>;
+  @Input() spaceName: Observable<string>;
   @Output() addToSpace = new EventEmitter();
 
   filteredApplicationsList: string[];

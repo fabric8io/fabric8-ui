@@ -19,6 +19,7 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
   contextPath: string;
   buildConfigs: BuildConfigs;
   buildConfigsCount: number;
+  loading: boolean = true;
 
   private subscriptions: Subscription[] = [];
 
@@ -42,6 +43,7 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.buildConfigsCount = configs.length;
           this.buildConfigs = configs;
+          this.loading = false;
         });
       }
     ));

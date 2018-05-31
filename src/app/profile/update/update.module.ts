@@ -10,6 +10,9 @@ import { OwnerGuard } from '../../shared/owner-guard.service';
 import { UpdateRoutingModule } from './update-routing.module';
 import { UpdateComponent } from './update.component';
 
+import { SpacesModule } from '../overview/spaces/spaces.module';
+import { WorkItemsModule } from '../overview/work-items/work-items.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +20,9 @@ import { UpdateComponent } from './update.component';
     HttpModule,
     JWBootstrapSwitchModule,
     RemainingCharsCountModule,
-    UpdateRoutingModule
+    UpdateRoutingModule,
+    SpacesModule,
+    WorkItemsModule
   ],
   declarations: [ UpdateComponent ],
   providers: [ OwnerGuard ]

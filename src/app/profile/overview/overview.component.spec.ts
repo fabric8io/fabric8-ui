@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { Broadcaster } from 'ngx-base';
+import { Notifications } from 'ngx-base/src/app/notifications/notifications';
 import { Contexts } from 'ngx-fabric8-wit';
 import { SpaceService } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
@@ -21,6 +22,7 @@ describe('OverviewComponent', () => {
   let mockUserService: any = jasmine.createSpy('UserService');
   let mockContextService: any = jasmine.createSpyObj('ContextService', ['viewingOwnContext']);
   let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['on']);
+  let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockRouter: any = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
   let mockActivatedRoute: any = jasmine.createSpy('ActivatedRoute');
   let mockLocationStrategy: any = jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']);
@@ -66,6 +68,7 @@ describe('OverviewComponent', () => {
         { provide: SpaceService, useValue: mockSpaceService },
         { provide: UserService, useValue: mockUserService },
         { provide: ContextService, useValue: mockContextService },
+        { provide: Notifications, useValue: mockNotifications },
         { provide: Broadcaster, useValue: mockBroadcaster },
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },

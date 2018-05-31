@@ -19,6 +19,7 @@ import { DeploymentsService } from './services/deployments.service';
 export class DeploymentsComponent implements OnDestroy, OnInit {
 
   spaceId: Observable<string>;
+  spaceName: Observable<string>;
   environments: Observable<string[]>;
   applications: Observable<string[]>;
 
@@ -29,6 +30,7 @@ export class DeploymentsComponent implements OnDestroy, OnInit {
     private deploymentsService: DeploymentsService
   ) {
     this.spaceId = this.spaces.current.first().map(space => space.id);
+    this.spaceName = this.spaces.current.first().map(space => space.attributes.name);
   }
 
   ngOnDestroy(): void {

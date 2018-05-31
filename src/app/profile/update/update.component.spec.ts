@@ -196,7 +196,7 @@ describe('UpdateComponent', () => {
       spyOn(component.gitHubService, 'getUser').and.returnValue(Observable.of({
         'avatar_url': 'mock-image'
       }));
-      component.linkImageUrl();
+      component.linkGithubImageUrl();
       expect(component.imageUrl).toBe('mock-image');
     });
 
@@ -206,7 +206,7 @@ describe('UpdateComponent', () => {
         type: NotificationType.INFO
       };
       spyOn(component.gitHubService, 'getUser').and.returnValue(Observable.of({}));
-      component.linkImageUrl();
+      component.linkGithubImageUrl();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
 
@@ -218,7 +218,7 @@ describe('UpdateComponent', () => {
       spyOn(component.gitHubService, 'getUser').and.returnValue(
         Observable.throw('error')
       );
-      component.linkImageUrl();
+      component.linkGithubImageUrl();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
   });

@@ -27,7 +27,11 @@
                   </h1>
                   <span class="code-imports--step_pencil">
                     <input id="projectName" name="projectName" type="text" class="form-control code-imports--step_input col-sm-5" placeholder="Enter Application Name"
-                      aria-label="Application Name Input" required [(ngModel)]="projectName" [value]="projectName | lowercase" (keyup)="validateProjectName()">
+                           aria-label="Application Name Input" required
+                           [(ngModel)]="projectName"
+                           [value]="projectName | lowercase"
+                           (keyup)="validateProjectName()"
+                           (keyup.enter)="cancelImportsButton.click()">
                   </span>
                   <ng-template #namingTemplate>
                     Names must:
@@ -122,7 +126,7 @@
       <footer class="container-fluid">
         <div class="row">
           <div class="col-sm-12 code-imports--step_toolbar">
-            <button id="cancelImportsButton" class="btn btn-primary" aria-label="Continue" [disabled]="selectedFlow === '' || projectName === '' || isProjectNameValid === false || isProjectNameAvailable === false || isProjectNameValid === undefined || isProjectNameAvailable === undefined"
+            <button #cancelImportsButton id="cancelImportsButton" class="btn btn-primary" aria-label="Continue" [disabled]="selectedFlow === '' || projectName === '' || isProjectNameValid === false || isProjectNameAvailable === false || isProjectNameValid === undefined || isProjectNameAvailable === undefined"
               (click)="routeToLaunchApp()">Continue</button>
           </div>
         </div>
