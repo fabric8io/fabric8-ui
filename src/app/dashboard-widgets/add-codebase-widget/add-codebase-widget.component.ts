@@ -30,6 +30,7 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
   codebases: Codebase[] = [];
   context: Context;
   contextPath: string;
+  loading: boolean = true;
   subscriptions: Subscription[] = [];
 
   @Input() userOwnsSpace: boolean;
@@ -81,6 +82,7 @@ export class AddCodebaseWidgetComponent implements OnInit, OnDestroy {
       this.codebaseService.getCodebases(this.context.space.id).subscribe((codebases) => {
         this.codebases = codebases;
         this.sortCodebases();
+        this.loading = false;
       })
     );
   }

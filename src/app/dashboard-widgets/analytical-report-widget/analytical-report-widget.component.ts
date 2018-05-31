@@ -26,7 +26,7 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
 
   currentPipeline: string;
   currentPipelineBuilds: Array<Build>;
-
+  loading: boolean = true;
   pipelines: BuildConfigs;
 
   stackUrl: string;
@@ -70,6 +70,7 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
         this.currentPipeline = 'default';
       }
       this.buildConfigsCount = this.pipelines.length;
+      this.loading = false;
     });
     bcs.connect();
   }

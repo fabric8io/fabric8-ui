@@ -12,20 +12,25 @@
     </h2>
   </div>
   <div class="card-pf-body f8-card-body">
-    <div *ngIf="buildConfigsCount > 0">
+    <ng-container *ngIf="buildConfigsCount > 0; then showReport else showBlankState"></ng-container>
+    <ng-template #showBlankState>
+      <fabric8-loading-widget message="Please wait while we load your applications"
+                              *ngIf="loading === true"></fabric8-loading-widget>
+      <div class="card-pf-body f8-card-body pipelines-absent" *ngIf="loading !== true">
+        <div class="f8-blank-slate-card">
+          <h3>No results found</h3>
+          <p>
+            When you run a build, a stack analysis is run that will provide insights around your technology stack.
+          </p>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #showReport>
       <div class="fabric8-stack-analysis">
         <div *ngIf="currentBuild && currentBuild.annotations && currentBuild.annotations['fabric8.io/bayesian.analysisUrl']">
           <stack-report-inshort *ngIf="stackUrl !== ''" [buildNumber]="currentBuild.buildNumber" [appName]="currentBuild.buildConfigName" [repoInfo]="currentBuild && currentBuild.repositoryInformation" [stackUrl]="stackUrl && stackUrl" [pipeline]="currentPipeline && currentPipeline"></stack-report-inshort>
         </div>
       </div>
-    </div>
-    <div *ngIf="buildConfigsCount === 0" class="card-pf-body f8-card-body pipelines-absent">
-      <div class="f8-blank-slate-card">
-        <h3>No results found</h3>
-        <p>
-          When you run a build, a stack analysis is run that will provide insights around your technology stack.
-        </p>
-      </div>
-    </div>
+    </ng-template>
   </div>
 </div>

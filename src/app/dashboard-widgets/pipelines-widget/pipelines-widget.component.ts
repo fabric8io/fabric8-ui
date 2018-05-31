@@ -39,6 +39,7 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
   private loggedInUser: User;
   private ctx: Context;
   buildConfigsCount: number = 0;
+  loading: boolean = true;
 
   constructor(
     private context: Contexts,
@@ -63,6 +64,7 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.buildConfigsCount = configs.length;
           this.buildConfigs = configs;
+          this.loading = false;
         });
       }
     ));

@@ -13,6 +13,7 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { createMock } from 'testing/mock';
 
 import { BuildConfig } from '../../../a-runtime-console/index';
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 import { ApplicationsWidgetComponent } from './applications-widget.component';
 
@@ -183,7 +184,8 @@ describe('ApplicationsWidgetComponent', () => {
 
   initContext(ApplicationsWidgetComponent, HostComponent, {
     imports: [
-      CommonModule
+      CommonModule,
+      LoadingWidgetModule
     ],
     declarations: [
       FakeApplicationsListComponent,

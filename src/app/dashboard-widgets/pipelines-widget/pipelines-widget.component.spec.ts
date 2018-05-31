@@ -18,6 +18,7 @@ import {
   TestContext
 } from 'testing/test-context';
 import { BuildConfig } from '../../../a-runtime-console/index';
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
 
 @Component({
@@ -32,7 +33,7 @@ describe('PipelinesWidgetComponent', () => {
   let fakeUserObs: Subject<User> = new Subject<User>();
 
   initContext(PipelinesWidgetComponent, HostComponent, {
-    imports: [HttpModule, RouterModule],
+    imports: [HttpModule, LoadingWidgetModule, RouterModule],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
       { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
@@ -74,6 +75,7 @@ describe('PipelinesWidgetComponent', () => {
 
   it('should enable button if the user owns the space', function(this: TestingContext) {
     this.testedDirective.userOwnsSpace = true;
+    this.testedDirective.loading = false;
     this.detectChanges();
 
     expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).not.toBeNull();
@@ -94,6 +96,7 @@ describe('PipelinesWidgetComponent', () => {
 
   it('should show the add button if the user owns the space', function(this: TestingContext) {
     this.testedDirective.userOwnsSpace = true;
+    this.testedDirective.loading = false;
     this.detectChanges();
     expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).not.toBeNull();
   });

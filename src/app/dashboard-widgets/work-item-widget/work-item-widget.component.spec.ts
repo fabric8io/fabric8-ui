@@ -8,6 +8,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Contexts } from 'ngx-fabric8-wit';
 
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
 import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
@@ -78,6 +79,7 @@ describe('WorkItemWidgetComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         FeatureFlagModule,
+        LoadingWidgetModule,
         RouterModule,
         WorkItemBarchartModule
       ],

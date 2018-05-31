@@ -10,7 +10,6 @@ import { LoadingWidgetComponent } from './loading-widget.component';
   template: '<fabric8-loading-widget message="test"></fabric8-loading-widget>'
 })
 class HostComponent {
-  userOwnsSpace: boolean;
 }
 
 describe('LoadingWidgetComponent', () => {

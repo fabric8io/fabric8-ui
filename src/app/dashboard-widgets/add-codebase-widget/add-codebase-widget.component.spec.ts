@@ -17,6 +17,8 @@ import {
 } from 'ngx-fabric8-wit';
 
 import { By } from '@angular/platform-browser';
+
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { Codebase } from '../../space/create/codebases/services/codebase';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
@@ -74,6 +76,7 @@ describe('AddCodebaseWidgetComponent', () => {
   });
 
   initContext(AddCodebaseWidgetComponent, HostComponent, {
+    imports: [ LoadingWidgetModule ],
     providers: [
       { provide: Broadcaster, useFactory: () => mockBroadcaster },
       { provide: Contexts, useFactory: () => mockContexts },
@@ -96,6 +99,7 @@ describe('AddCodebaseWidgetComponent', () => {
 
   it('should enable buttons if the user owns the space', function(this: TestingContext) {
     this.testedDirective.userOwnsSpace = true;
+    this.testedDirective.loading = false;
     this.detectChanges();
 
     expect(this.fixture.debugElement.query(By.css('#test-add-codebase-circle-button'))).not.toBeNull();
@@ -106,6 +110,7 @@ describe('AddCodebaseWidgetComponent', () => {
 
   it('should disable buttons if the user does not own the space', function(this: TestingContext) {
     this.testedDirective.userOwnsSpace = false;
+    this.testedDirective.loading = false;
     this.detectChanges();
 
     expect(this.fixture.debugElement.query(By.css('#test-add-codebase-circle-button'))).toBeNull();

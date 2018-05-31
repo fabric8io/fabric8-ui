@@ -24,6 +24,8 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
   @Input() userOwnsSpace: boolean;
   @Output() addToSpace = new EventEmitter();
 
+  loading: boolean = true;
+
   buildConfigs: BuildConfig[];
   runBuildConfigs: BuildConfig[] = [];
   stageBuildConfigs: BuildConfig[] = [];
@@ -39,6 +41,7 @@ export class ApplicationsWidgetComponent implements OnDestroy, OnInit {
         this.filterStageBuildConfigs();
         this.sortBuildConfigs();
         this.alignBuildConfigs();
+        this.loading = false;
       }));
   }
 

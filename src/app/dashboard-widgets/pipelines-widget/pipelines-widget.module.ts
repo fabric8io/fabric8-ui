@@ -7,7 +7,7 @@ import { MomentModule } from 'angular2-moment';
 
 import { PipelinesWidgetComponent } from './pipelines-widget.component';
 
-import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
 
@@ -15,6 +15,7 @@ import { PipelinesService } from '../../space/create/pipelines/services/pipeline
   imports: [
     CommonModule,
     FormsModule,
+    LoadingWidgetModule,
     RouterModule,
     MomentModule
   ],

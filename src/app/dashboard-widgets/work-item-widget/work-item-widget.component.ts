@@ -25,6 +25,7 @@ export class WorkItemWidgetComponent implements OnInit {
   myWorkItemsInProgress: number = 0;
   myWorkItemsOpen: number = 0;
   contextPath: Observable<string>;
+  loading: boolean = true;
 
   LABEL_RESOLVED: string = 'Resolved';
   LABEL_IN_PROGRESS: string = 'In Progress';
@@ -73,6 +74,7 @@ export class WorkItemWidgetComponent implements OnInit {
       .publishReplay(1);
     this._myWorkItems.connect();
     this.myWorkItemsCount = this._myWorkItems.map(workItems => workItems.length);
+    this.loading = false;
   }
 
   get myWorkItems(): Observable<WorkItem[]> {
