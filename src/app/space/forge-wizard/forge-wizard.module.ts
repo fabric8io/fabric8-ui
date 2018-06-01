@@ -23,8 +23,6 @@ import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quick
 import { ProjectInfoStepComponent } from './quickstart-pages/step2/project-info-step.component';
 import { FormatNameValidationPipe } from './quickstart-pages/step2/project-name-validation.pipe';
 import { PipelineQuickstartStepComponent } from './quickstart-pages/step3/pipeline-quickstart-step.component';
-import { ForgeConfig } from './service/forge-config';
-import { KeycloakTokenProvider } from './service/token-provider';
 
 @NgModule({
   imports: [
@@ -48,16 +46,6 @@ import { KeycloakTokenProvider } from './service/token-provider';
     PipelineQuickstartStepComponent,
     ChooseQuickstartComponent,
     ForgeExceptionComponent
-  ],
-  providers: [
-    {
-      provide: Config, useClass: ForgeConfig
-    },
-    {
-      provide: TokenProvider,
-      useFactory: (auth: AuthenticationService) => new KeycloakTokenProvider(auth),
-      deps: [AuthenticationService]
-    }
   ]
 })
 
