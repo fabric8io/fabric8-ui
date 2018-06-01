@@ -18,7 +18,6 @@ import { AuthenticationService } from 'ngx-login-client';
 import { FilterModule } from 'patternfly-ng/filter';
 import { WizardModule } from 'patternfly-ng/wizard';
 
-import { FlowSelectorComponent } from './components/flow-selector/flow-selector.component';
 import { SingleInputComponent } from './components/single-input/single-input.component';
 import { OrganisationComponent } from './import-pages/step1/organisation-step.component';
 import { RepositoriesComponent } from './import-pages/step2/repositories-step.component';
@@ -50,7 +49,6 @@ import { KeycloakTokenProvider } from './service/token-provider';
     PipelineViewComponent,
     SingleInputComponent,
     ForgeErrorsComponent,
-    FlowSelectorComponent,
     SpinnerComponent,
     SelectedItemsPipe,
     VisibleItemsPipe,
@@ -67,8 +65,7 @@ import { KeycloakTokenProvider } from './service/token-provider';
   ],
   exports: [
     ForgeImportWizardComponent,
-    ForgeQuickstartComponent,
-    FlowSelectorComponent
+    ForgeQuickstartComponent
   ],
   providers: [
     {
