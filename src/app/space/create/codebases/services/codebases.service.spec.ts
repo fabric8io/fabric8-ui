@@ -137,7 +137,6 @@ describe('Codebase: CodebasesService', () => {
       // then
       expect(data.length).toEqual(expectedResponse.data.length);
       // TODO(corinne): do we want this name/url formatting for https clone?
-      // formatting is also done in component CodebasesAddComponent
       expect(data[0].name).toEqual('https://github.com/airbnb/enzyme');
       expect(data[0].url).toEqual('https///github.com/airbnb/enzyme');
       expect(data[1].name).toEqual('fabric8-services/fabric8-wit');
