@@ -8,7 +8,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule, WidgetsModule } from 'ngx-widgets';
 
-import { ForgeWizardModule } from '../../../space/forge-wizard/forge-wizard.module';
 import { SpacesComponent } from './spaces.component';
 
 @NgModule({
@@ -20,8 +19,7 @@ import { SpacesComponent } from './spaces.component';
     InfiniteScrollModule,
     ModalModule.forRoot(),
     WidgetsModule,
-    NgArrayPipesModule,
-    ForgeWizardModule
+    NgArrayPipesModule
   ],
   declarations: [SpacesComponent],
   exports: [SpacesComponent]

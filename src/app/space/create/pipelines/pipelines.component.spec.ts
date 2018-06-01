@@ -42,7 +42,6 @@ import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
 import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { PipelinesService as RuntimePipelinesService } from '../../../shared/runtime-console/pipelines.service';
 
-import { ForgeWizardModule } from '../../forge-wizard/forge-wizard.module';
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesService } from './services/pipelines.service';
 
@@ -157,7 +156,6 @@ describe('PipelinesComponent', () => {
       BsDropdownModule.forRoot(),
       CommonModule,
       ToolbarModule,
-      ForgeWizardModule,
       FeatureFlagModule,
       ModalModule.forRoot(),
       TooltipModule.forRoot()
