@@ -49,6 +49,5 @@
 
 <!-- Forge wizard modal -->
 <ng-template #updateSpace>
-  <import-wizard (onCancel)="closeModal()" *ngIf="selectedFlow === 'import'"></import-wizard>
   <quickstart-wizard (onCancel)="closeModal()" *ngIf="selectedFlow === 'quickstart'"></quickstart-wizard>
 </ng-template>

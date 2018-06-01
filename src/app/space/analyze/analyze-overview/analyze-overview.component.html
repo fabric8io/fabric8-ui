@@ -94,6 +94,5 @@
 
 <!-- Forge wizard modal -->
 <ng-template #addSpace>
-  <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
   <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
 </ng-template>
