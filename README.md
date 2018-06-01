@@ -256,4 +256,26 @@ This reverts commit 667ecc1654a317a13331b17617d973392f415f02.
 Commitizen helps you craft correct commit messages. Install it using `npm install commitizen -g`. Then run `git cz` rather than `git commit`.
 
 
+### Running End-to-End (E2E) Tests
+
+A set of E2E tests have been written to verify the operation of major features 
+such as the creation of a build pipeline. 
+
+These E2E tests are configured to be run locally in a shell, locally in a docker container, 
+and in a docker container in Centos CI. The tests can be run against a local or remote server by specifying
+the server's URL as a parameter to the tests.
+
+The E2E tests are available in this repo: https://github.com/fabric8io/fabric8-test
+
+The full set of instructions on installing and executing the E2E tests are avalable here: https://github.com/fabric8io/fabric8-test/blob/master/ee_tests/README.md
+
+
+
+
+
+
+
+
+
+
 
