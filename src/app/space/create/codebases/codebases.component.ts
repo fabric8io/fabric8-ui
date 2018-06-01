@@ -134,10 +134,6 @@ export class CodebasesComponent implements OnDestroy, OnInit {
 
   // Actions
 
-  openAddCodebasePanel(): void {
-    this.router.navigate([`${this.context.path}/create`, { outlets: { action: 'add-codebase' }}]);
-  }
-
   connectToGithub(): void {
     this.providerService.linkGitHub(window.location.href);
   }
