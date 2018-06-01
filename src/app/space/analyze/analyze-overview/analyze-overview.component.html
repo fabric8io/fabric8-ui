@@ -8,7 +8,7 @@
         <f8-feature-toggle featureName="AppLauncher">
           <div *ngIf="userOwnsSpace()">
             <button *ngIf="this.authentication.isLoggedIn()" id="default-level-analyze-overview-dashboard-create-space-button" class="btn btn-primary btn-lg f8-dashboard-masthead-create-application pull-right"
-              (click)="openForgeWizard(addSpace)" default-level> Create an Application </button>
+              (click)="showAddAppOverlay()" default-level> Create an Application </button>
             <button *ngIf="this.authentication.isLoggedIn()" id="user-level-analyze-overview-dashboard-create-space-button" class="btn btn-primary btn-lg f8-dashboard-masthead-create-application pull-right"
               (click)="showAddAppOverlay()" user-level> Create an Application </button>
           </div>
@@ -22,7 +22,7 @@
         </div>
         <div class="col-xs-12 col-md-8">
           <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-applications-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="openForgeWizard(addSpace)" default-level></fabric8-applications-widget>
+            <fabric8-applications-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" default-level></fabric8-applications-widget>
             <fabric8-applications-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" user-level></fabric8-applications-widget>
           </f8-feature-toggle>
         </div>
@@ -32,7 +32,7 @@
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">
           <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="openForgeWizard(addSpace)" default-level></fabric8-add-codebase-widget>
+            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" default-level></fabric8-add-codebase-widget>
             <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" user-level></fabric8-add-codebase-widget>
           </f8-feature-toggle>
         </div>
@@ -51,7 +51,7 @@
         <f8-feature-toggle featureName="AppLauncher">
           <ng-container *ngIf="userOwnsSpace()">
             <button *ngIf="this.authentication.isLoggedIn()" id="analyze-overview-add-to-space-button" class="btn btn-primary btn-lg pull-right"
-              (click)="openForgeWizard(addSpace)" default-level> Add to space </button>
+              (click)="showAddAppOverlay()" default-level> Add to space </button>
             <button *ngIf="this.authentication.isLoggedIn()" class="btn btn-primary btn-lg pull-right" (click)="showAddAppOverlay()"
               user-level> Add to space </button>
           </ng-container>
@@ -62,7 +62,7 @@
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">
           <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="openForgeWizard(addSpace)" default-level></fabric8-add-codebase-widget>
+            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" default-level></fabric8-add-codebase-widget>
             <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()"  (addToSpace)="showAddAppOverlay()" user-level></fabric8-add-codebase-widget>
           </f8-feature-toggle>
         </div>
@@ -79,7 +79,7 @@
         <div class="col-xs-12"
              [ngClass]="{'col-md-4': myWorkItemsCard, 'col-md-6': !myWorkItemsCard}">
           <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-pipelines-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="openForgeWizard(addSpace)" default-level></fabric8-pipelines-widget>
+            <fabric8-pipelines-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" default-level></fabric8-pipelines-widget>
             <fabric8-pipelines-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" user-level></fabric8-pipelines-widget>
           </f8-feature-toggle>
         </div>

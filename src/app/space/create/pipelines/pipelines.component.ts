@@ -148,15 +148,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     this.broadcaster.broadcast('showAddAppOverlay', true);
   }
 
-  openForgeWizard(addSpace: TemplateRef<any>): void {
-    if (this.authService.getGitHubToken()) {
-      this.selectedFlow = '';
-      this.modalRef = this.modalService.show(addSpace, { class: 'modal-lg' });
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', { 'location': window.location.href });
-    }
-  }
-
   closeModal(): void {
     this.modalRef.hide();
   }

@@ -124,15 +124,6 @@ export class SpacesComponent implements OnInit {
     this.searchTermStream.next(searchText);
   }
 
-  openForgeWizard(addSpace: TemplateRef<any>) {
-    if (this.authentication.getGitHubToken()) {
-      this.selectedFlow = 'start';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
-    }
-  }
-
   closeModal($event: any): void {
     this.modalRef.hide();
   }

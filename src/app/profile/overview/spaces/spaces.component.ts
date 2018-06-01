@@ -107,13 +107,8 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   //   this.modalRef = this.modalService.show(deleteSpace, { class: 'modal-lg' });
   // }
 
-  openForgeWizard(addSpace: TemplateRef<any>) {
-    if (this.authentication.getGitHubToken()) {
-      this.selectedFlow = 'start';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
-    }
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 
   closeModal($event: any): void {

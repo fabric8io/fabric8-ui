@@ -626,7 +626,7 @@ describe('PipelinesComponent', () => {
     });
   });
 
-  it('should trigger showAddAppOverlay on click, if toggles is on and user-enabled on', function(this: TestingContext) {
+  it('should trigger showAddAppOverlay on click', function(this: TestingContext) {
     // given
     feature.attributes.enabled = true;
     feature.attributes['user-enabled'] = true;
@@ -636,19 +636,6 @@ describe('PipelinesComponent', () => {
       expect(this.fixture.nativeElement.querySelector('#appLauncherAnchor')).toBeDefined();
       this.fixture.nativeElement.querySelector('#appLauncherAnchor').click();
       expect(this.testedDirective.showAddAppOverlay).toHaveBeenCalled();
-    });
-  });
-
-  it('should trigger openForgeWizard on click, if toggles is on and user-enabled off', function(this: TestingContext) {
-    // given
-    feature.attributes.enabled = true;
-    feature.attributes['user-enabled'] = false;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
-    this.fixture.detectChanges();
-    this.fixture.whenStable().then(() => {
-      expect(this.fixture.nativeElement.querySelector('#appWizardAnchor')).toBeDefined();
-      this.fixture.nativeElement.querySelector('#appWizardAnchor').click();
-      expect(this.testedDirective.openForgeWizard).toHaveBeenCalled();
     });
   });
 

@@ -150,28 +150,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.imgLoaded = false;
   }
 
-  openForgeWizard(addSpace: TemplateRef<any>) {
-    if (this.authentication.getGitHubToken()) {
-      this.selectedFlow = 'start';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
-    }
-  }
-
   closeModal($event: any): void {
     this.modalRef.hide();
   }
 
   showAddSpaceOverlay(addSpace: TemplateRef<any>): void {
-    this.featureTogglesService.getFeature('AppLauncher').subscribe((feature) => {
-      this.appLauncherEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
-      if (this.appLauncherEnabled) {
-        this.broadcaster.broadcast('showAddSpaceOverlay', true);
-      } else {
-        this.openForgeWizard(addSpace);
-      }
-    });
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 
   selectFlow($event) {

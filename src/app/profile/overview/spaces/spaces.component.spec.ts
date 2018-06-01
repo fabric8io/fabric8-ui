@@ -113,23 +113,6 @@ describe('SpacesComponent', () => {
 
   // describe('#confirmDeleteSpace', () => {});
 
-  describe('#openForgeWizard', () => {
-    it('should show the modal if there exists a GitHub token for the user', () => {
-      let addSpace = jasmine.createSpy('TemplateRef');
-      mockAuthenticationService.getGitHubToken.and.returnValue('gh-test-user');
-      component.openForgeWizard(addSpace);
-      expect(component.selectedFlow).toBe('start');
-      expect(component.modalService.show).toHaveBeenCalled();
-    });
-
-    it('should broadcast an event indicating a disconnection from GitHub if no token', () => {
-      let addSpace = jasmine.createSpy('TemplateRef');
-      mockAuthenticationService.getGitHubToken.and.returnValue('');
-      component.openForgeWizard(addSpace);
-      expect(component.broadcaster.broadcast).toHaveBeenCalled();
-    });
-  });
-
   describe('#closeModal', () => {
     it('should hide the modal', () => {
       component.modalRef = mockModalRef;
