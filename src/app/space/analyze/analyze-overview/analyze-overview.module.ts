@@ -28,6 +28,7 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
     FormsModule,
     EditSpaceDescriptionWidgetOldModule,
     EditSpaceDescriptionWidgetModule,
+    EnvironmentWidgetModule,
     AnalyticalReportWidgetModule,
     CreateWorkItemWidgetModule,
     AddCodebaseWidgetModule,

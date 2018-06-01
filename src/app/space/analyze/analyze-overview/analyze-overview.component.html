@@ -5,14 +5,10 @@
         <fabric8-edit-space-description-widget [userOwnsSpace]='userOwnsSpace()'></fabric8-edit-space-description-widget>
       </div>
       <div class="col-sm-2">
-        <f8-feature-toggle featureName="AppLauncher">
-          <div *ngIf="userOwnsSpace()">
-            <button *ngIf="this.authentication.isLoggedIn()" id="default-level-analyze-overview-dashboard-create-space-button" class="btn btn-primary btn-lg f8-dashboard-masthead-create-application pull-right"
-              (click)="showAddAppOverlay()" default-level> Create an Application </button>
-            <button *ngIf="this.authentication.isLoggedIn()" id="user-level-analyze-overview-dashboard-create-space-button" class="btn btn-primary btn-lg f8-dashboard-masthead-create-application pull-right"
-              (click)="showAddAppOverlay()" user-level> Create an Application </button>
-          </div>
-        </f8-feature-toggle>
+        <div *ngIf="userOwnsSpace()">
+          <button *ngIf="this.authentication.isLoggedIn()" id="user-level-analyze-overview-dashboard-create-space-button" class="btn btn-primary btn-lg f8-dashboard-masthead-create-application pull-right"
+            (click)="showAddAppOverlay()"> Create an Application </button>
+        </div>
       </div>
     </div>
     <div class="cards-pf">
@@ -21,20 +17,14 @@
           <fabric8-work-item-widget [userOwnsSpace]="userOwnsSpace()"></fabric8-work-item-widget>
         </div>
         <div class="col-xs-12 col-md-8">
-          <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-applications-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" default-level></fabric8-applications-widget>
-            <fabric8-applications-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" user-level></fabric8-applications-widget>
-          </f8-feature-toggle>
+          <fabric8-applications-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()"></fabric8-applications-widget>
         </div>
       </div>
     </div>
     <div class="cards-pf">
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">
-          <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" default-level></fabric8-add-codebase-widget>
-            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" user-level></fabric8-add-codebase-widget>
-          </f8-feature-toggle>
+          <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()"></fabric8-add-codebase-widget>
         </div>
         <div class="col-xs-12 col-md-8">
           <fabric8-analytical-report-widget></fabric8-analytical-report-widget>
@@ -48,23 +38,16 @@
         <fabric8-edit-space-description-widget-old [userOwnsSpace]="userOwnsSpace()"></fabric8-edit-space-description-widget-old>
       </div>
       <div class="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-0">
-        <f8-feature-toggle featureName="AppLauncher">
-          <ng-container *ngIf="userOwnsSpace()">
-            <button *ngIf="this.authentication.isLoggedIn()" id="analyze-overview-add-to-space-button" class="btn btn-primary btn-lg pull-right"
-              (click)="showAddAppOverlay()" default-level> Add to space </button>
-            <button *ngIf="this.authentication.isLoggedIn()" class="btn btn-primary btn-lg pull-right" (click)="showAddAppOverlay()"
-              user-level> Add to space </button>
-          </ng-container>
-        </f8-feature-toggle>
+        <ng-container *ngIf="userOwnsSpace()">
+          <button *ngIf="this.authentication.isLoggedIn()" id="analyze-overview-add-to-space-button" class="btn btn-primary btn-lg pull-right"
+            (click)="showAddAppOverlay()"> Add to space </button>
+        </ng-container>
       </div>
     </div>
     <div class="cards-pf">
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">
-          <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" default-level></fabric8-add-codebase-widget>
-            <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()"  (addToSpace)="showAddAppOverlay()" user-level></fabric8-add-codebase-widget>
-          </f8-feature-toggle>
+          <fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()"></fabric8-add-codebase-widget>
         </div>
         <div class="col-xs-12 col-md-8">
           <fabric8-analytical-report-widget></fabric8-analytical-report-widget>
@@ -78,10 +61,7 @@
         </div>
         <div class="col-xs-12"
              [ngClass]="{'col-md-4': myWorkItemsCard, 'col-md-6': !myWorkItemsCard}">
-          <f8-feature-toggle featureName="AppLauncher">
-            <fabric8-pipelines-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" default-level></fabric8-pipelines-widget>
-            <fabric8-pipelines-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()" user-level></fabric8-pipelines-widget>
-          </f8-feature-toggle>
+          <fabric8-pipelines-widget [userOwnsSpace]="userOwnsSpace()" (addToSpace)="showAddAppOverlay()"></fabric8-pipelines-widget>
         </div>
         <div class="col-xs-12"
              [ngClass]="{'col-md-4': myWorkItemsCard, 'col-md-6': !myWorkItemsCard}">
