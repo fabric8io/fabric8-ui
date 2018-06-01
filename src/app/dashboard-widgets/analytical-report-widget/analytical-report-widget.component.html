@@ -14,7 +14,7 @@
   <div class="card-pf-body f8-card-body">
     <ng-container *ngIf="buildConfigsCount > 0; then showReport else showBlankState"></ng-container>
     <ng-template #showBlankState>
-      <fabric8-loading-widget message="Please wait while we load your applications"
+      <fabric8-loading-widget message="Please wait while we load your stack report recommendations"
                               *ngIf="loading === true"></fabric8-loading-widget>
       <div class="card-pf-body f8-card-body pipelines-absent" *ngIf="loading !== true">
         <div class="f8-blank-slate-card">
