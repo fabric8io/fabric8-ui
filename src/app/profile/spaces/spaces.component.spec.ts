@@ -184,16 +184,4 @@ describe('SpacesComponent', () => {
     });
   });
 
-  describe('#selectFlow', () => {
-    it('should set the flow and space from the passed $event', () => {
-      let mockEvent = {
-        'flow': 'mock-flow',
-        'space': 'mock-space'
-      };
-      component.selectFlow(mockEvent);
-      expect(component.selectedFlow).toBe('mock-flow');
-      expect(component.space).toBe('mock-space');
-    });
-  });
-
 });

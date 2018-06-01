@@ -38,16 +38,13 @@ import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
   ]
 })
 export class PipelinesComponent implements OnInit, OnDestroy {
-
   toolbarConfig: ToolbarConfig;
   consoleAvailable: boolean = false;
   openshiftConsoleUrl: string;
 
   private _context: Context;
-
   private _filteredPipelines: BuildConfig[] = [];
   private _allPipelines: BuildConfig[] = [];
-
   private _appliedFilters: Filter[] = [];
   private _ascending: boolean;
   private _currentSortField: SortField = {
@@ -55,15 +52,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     title: 'Application',
     sortType: 'alpha'
   } as SortField;
-
-  private selectedFlow: string;
   private space: Space;
-  private modalRef: BsModalRef;
-
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private modalService: BsModalService,
     private contexts: Contexts,
     private authService: AuthenticationService,
     private pipelinesService: PipelinesService,
@@ -146,14 +138,6 @@ export class PipelinesComponent implements OnInit, OnDestroy {
 
   showAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', true);
-  }
-
-  closeModal(): void {
-    this.modalRef.hide();
-  }
-
-  selectFlow($event: any): void {
-    this.selectedFlow = $event.flow;
   }
 
   filterChange($event: FilterEvent): void {

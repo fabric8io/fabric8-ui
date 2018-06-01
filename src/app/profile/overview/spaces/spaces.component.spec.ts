@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 
 import { Broadcaster, Logger } from 'ngx-base';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { Contexts, Fabric8WitModule, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
@@ -52,7 +51,6 @@ describe('SpacesComponent', () => {
         { provide: Logger, useValue: mockLogger },
         { provide: SpaceService, useValue: mockSpaceService },
         { provide: UserService, useValue: mockUserService},
-        { provide: BsModalService, useValue: mockModalService },
         { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: Broadcaster, useValue: mockBroadcaster },
         { provide: WIT_API_URL, useValue: 'http://example.com' }
@@ -112,33 +110,5 @@ describe('SpacesComponent', () => {
   // describe('#removeSpace', () => {});
 
   // describe('#confirmDeleteSpace', () => {});
-
-  describe('#closeModal', () => {
-    it('should hide the modal', () => {
-      component.modalRef = mockModalRef;
-      component.closeModal(mockEvent);
-      expect(component.modalRef.hide).toHaveBeenCalled();
-    });
-  });
-
-  describe('#cancel', () => {
-    it('should hide the modal', () => {
-      component.modalRef = mockModalRef;
-      component.cancel();
-      expect(component.modalRef.hide).toHaveBeenCalled();
-    });
-  });
-
-  describe('#selectFlow', () => {
-    it('should set the flow and space from the passed $event', () => {
-      let mockEvent = {
-        'flow': 'mock-flow',
-        'space': 'mock-space'
-      };
-      component.selectFlow(mockEvent);
-      expect(component.selectedFlow).toBe('mock-flow');
-      expect(component.space).toBe('mock-space');
-    });
-  });
 
 });

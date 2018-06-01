@@ -26,7 +26,6 @@ export class SpacesComponent implements OnInit {
   searchTermStream = new Subject<string>();
   context: Context;
   spaceToDelete: Space;
-  private selectedFlow: string;
   private space: string;
 
   constructor(
@@ -41,7 +40,6 @@ export class SpacesComponent implements OnInit {
     private broadcaster: Broadcaster
   ) {
     this.space = '';
-    this.selectedFlow = 'start';
     this.contexts.current.subscribe(val => this.context = val);
   }
 
@@ -130,11 +128,6 @@ export class SpacesComponent implements OnInit {
 
   cancel() {
     this.modalRef.hide();
-  }
-
-  selectFlow($event) {
-    this.selectedFlow = $event.flow;
-    this.space = $event.space;
   }
 
   showAddSpaceOverlay(): void {
