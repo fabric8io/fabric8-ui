@@ -52,5 +52,4 @@
 <!-- Launch Space Wizard -->
 <ng-template #spaceWizard>
   <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
-  <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
 </ng-template>

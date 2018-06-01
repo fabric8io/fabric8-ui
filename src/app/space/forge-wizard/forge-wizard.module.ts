@@ -28,7 +28,6 @@ import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quick
 import { ProjectInfoStepComponent } from './quickstart-pages/step2/project-info-step.component';
 import { FormatNameValidationPipe } from './quickstart-pages/step2/project-name-validation.pipe';
 import { PipelineQuickstartStepComponent } from './quickstart-pages/step3/pipeline-quickstart-step.component';
-import { ForgeQuickstartComponent } from './quickstart-wizard.component';
 import { ForgeConfig } from './service/forge-config';
 import { KeycloakTokenProvider } from './service/token-provider';
 
@@ -41,7 +40,6 @@ import { KeycloakTokenProvider } from './service/token-provider';
     NgxForgeModule
   ],
   declarations: [
-    ForgeQuickstartComponent,
     SingleSelectionDropDownComponent,
     MultipleSelectionListComponent,
     PipelineViewComponent,
@@ -60,9 +58,6 @@ import { KeycloakTokenProvider } from './service/token-provider';
     ReviewStepComponent,
     ChooseQuickstartComponent,
     ForgeExceptionComponent
-  ],
-  exports: [
-    ForgeQuickstartComponent
   ],
   providers: [
     {
