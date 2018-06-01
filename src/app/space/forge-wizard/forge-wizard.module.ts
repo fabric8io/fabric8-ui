@@ -19,11 +19,6 @@ import { FilterModule } from 'patternfly-ng/filter';
 import { WizardModule } from 'patternfly-ng/wizard';
 
 import { SingleInputComponent } from './components/single-input/single-input.component';
-import { OrganisationComponent } from './import-pages/step1/organisation-step.component';
-import { RepositoriesComponent } from './import-pages/step2/repositories-step.component';
-import { PipelineStepComponent } from './import-pages/step3/pipeline-step.component';
-import { BuildConfigStepComponent } from './import-pages/step4/build-config-step.component';
-import { ReviewStepComponent } from './import-pages/step5/review-step.component';
 import { ChooseQuickstartComponent } from './quickstart-pages/step1/choose-quickstart.component';
 import { ProjectInfoStepComponent } from './quickstart-pages/step2/project-info-step.component';
 import { FormatNameValidationPipe } from './quickstart-pages/step2/project-name-validation.pipe';
@@ -50,12 +45,7 @@ import { KeycloakTokenProvider } from './service/token-provider';
     VisibleItemsPipe,
     FormatNameValidationPipe,
     ProjectInfoStepComponent,
-    OrganisationComponent,
-    RepositoriesComponent,
-    BuildConfigStepComponent,
-    PipelineStepComponent,
     PipelineQuickstartStepComponent,
-    ReviewStepComponent,
     ChooseQuickstartComponent,
     ForgeExceptionComponent
   ],
