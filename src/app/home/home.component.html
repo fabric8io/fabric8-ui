@@ -240,8 +240,3 @@
     </div>
   </div>
 </f8-feature-toggle>
-
-<!-- Create Space modal -->
-<ng-template #createSpace>
-  <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
-</ng-template>

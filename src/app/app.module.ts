@@ -100,7 +100,6 @@ import { witApiUrlProvider }             from './shared/wit-api.provider';
 import { ConfigStore }               from './base/config.store';
 import { ErrorService }              from './layout/error/error.service';
 import { ProfileService }            from './profile/profile.service';
-import { SpaceWizardModule } from './space/wizard/space-wizard.module';
 
 // App launcher
 import { AddAppOverlayModule }   from './space/add-app-overlay/add-app-overlay.module';
@@ -160,7 +159,6 @@ export type StoreType = {
     ReactiveFormsModule,
     RestangularModule,
     RouterModule,
-    SpaceWizardModule,
     ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,

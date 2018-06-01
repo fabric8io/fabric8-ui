@@ -56,11 +56,6 @@
 
 </div>
 
-<!-- Create Space modal -->
-<ng-template #createSpace>
-  <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
-</ng-template>
-
 <!-- Delete Space modal -->
 <ng-template #deleteSpace title="Remove the space">
   <div class="modal-header">

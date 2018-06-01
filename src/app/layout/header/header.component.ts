@@ -154,7 +154,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.modalRef.hide();
   }
 
-  showAddSpaceOverlay(addSpace: TemplateRef<any>): void {
+  showAddSpaceOverlay(): void {
     this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 

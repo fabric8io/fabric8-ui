@@ -12,7 +12,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { EventService } from '../../shared/event.service';
-import { SpaceWizardComponent } from '../../space/wizard/space-wizard.component';
 import { SpacesComponent } from './spaces.component';
 
 
