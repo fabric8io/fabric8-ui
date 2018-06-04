@@ -1,3 +1,5 @@
 export interface AreaError {
-    uniqueValidationFailure: boolean;
+  uniqueValidationFailure: boolean;
+  emptyNameFailure: boolean;
+  exceedLengthFailure: boolean;
 }

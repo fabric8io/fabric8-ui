@@ -51,7 +51,7 @@ export class CreateAreaDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.errors = {uniqueValidationFailure: false};
+    this.resetErrors();
   }
 
   clearField() {
@@ -59,13 +59,27 @@ export class CreateAreaDialogComponent implements OnInit {
   }
 
   resetErrors() {
-    this.errors = {uniqueValidationFailure: false};
+    this.errors = {
+      uniqueValidationFailure: false,
+      emptyNameFailure: false,
+      exceedLengthFailure: false
+    };
+  }
+
+  validateAreaName(): void {
+    this.resetErrors();
+    if (this.name.trim().length === 0) {
+      this.errors.emptyNameFailure = true;
+    }
+    if (this.name.trim().length > 63) {
+      this.errors.exceedLengthFailure = true;
+    }
   }
 
   createArea() {
     let area = {} as Area;
     area.attributes = new AreaAttributes();
-    area.attributes.name = this.name;
+    area.attributes.name = this.name.trim();
     area.type = 'areas';
     this.areaService.create(this.parentId, area).subscribe(newArea => {
       this.onAdded.emit(newArea);
