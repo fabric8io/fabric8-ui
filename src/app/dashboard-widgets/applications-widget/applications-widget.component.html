@@ -4,7 +4,7 @@
       <div class="card-pf-heading-details"
            *ngIf="applicationsInProgress > 0 && (stageConfigsAvailable || runConfigsAvailable)">
         <p>
-          Setting up {{applicationsInProgress}} applications.
+          Setting up {{applicationsInProgress}} application{{applicationsInProgress > 1 ? 's' : ''}}.
           <a [routerLink]="['/', loggedInUser?.attributes?.username, this.currentSpace?.attributes?.name, 'create', 'pipelines']">View progress.</a>
         </p>
       </div>
@@ -24,7 +24,7 @@
           </p>
           <div class="f8-blank-slate-main-action">
             <div *ngIf="userOwnsSpace">
-              <button id="spacehome-applications-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Create an Application</button>
+              <button id="test-applications-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Create an Application</button>
             </div>
           </div>
         </div>

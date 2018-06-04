@@ -211,7 +211,7 @@ describe('ApplicationsWidgetComponent', () => {
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
-      { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']); },
+      { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
       { provide: PipelinesService, useFactory: () => pipelinesService },
       {
         provide: FeatureTogglesService, useFactory: () => {
