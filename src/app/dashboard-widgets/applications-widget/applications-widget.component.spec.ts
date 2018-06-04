@@ -295,11 +295,11 @@ describe('ApplicationsWidgetComponent', () => {
       this.testedDirective.runBuildConfigs.length = 0;
       this.testedDirective.stageBuildConfigs.length = 0;
       this.detectChanges();
-      expect(this.fixture.debugElement.query(By.css('#test-applications-pipelines-link'))).toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#test-applications-pipelines-link'))).not.toBeNull();
     });
 
-    it('Stage or run build configs to show empty state', function(this: TestingContext) {
-      expect(this.fixture.debugElement.query(By.css('#test-applications-pipelines-link'))).not.toBeNull();
+    it('Stage or run build configs not to show empty state', function(this: TestingContext) {
+      expect(this.fixture.debugElement.query(By.css('#test-applications-pipelines-link'))).toBeNull();
     });
   });
 
