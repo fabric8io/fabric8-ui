@@ -57,19 +57,19 @@ import {
 
 export const TIMER_TOKEN: InjectionToken<Observable<void>> = new InjectionToken<Observable<void>>('DeploymentsServiceTimer');
 export const TIMESERIES_SAMPLES_TOKEN: InjectionToken<number> = new InjectionToken<number>('DeploymentsServiceTimeseriesSamples');
+export const POLL_RATE_TOKEN: InjectionToken<number> = new InjectionToken<number>('DeploymentsServicePollRate');
 
 @Injectable()
 export class DeploymentsService implements OnDestroy {
 
-  static readonly INITIAL_UPDATE_DELAY: number = 0;
-  static readonly POLL_RATE_MS: number = 60000;
-
-  static readonly FRONT_LOAD_SAMPLES: number = 15;
-  static readonly FRONT_LOAD_WINDOW_WIDTH: number = DeploymentsService.FRONT_LOAD_SAMPLES * DeploymentsService.POLL_RATE_MS;
+  static readonly DEFAULT_INITIAL_UPDATE_DELAY: number = 0;
+  static readonly DEFAULT_POLL_RATE_MS: number = 60000;
+  static readonly DEFAULT_FRONT_LOAD_SAMPLES: number = 15;
 
   private readonly appsObservables: Map<string, Observable<Application[]>> = new Map<string, Observable<Application[]>>();
   private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
   private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData[]>> = new Map<string, Subject<TimeseriesData[]>>();
+  private readonly frontLoadWindowWidth: number;
 
   private readonly serviceSubscriptions: Subscription[] = [];
 
@@ -77,8 +77,11 @@ export class DeploymentsService implements OnDestroy {
     private readonly apiService: DeploymentApiService,
     private readonly notifications: NotificationsService,
     @Inject(TIMER_TOKEN) private readonly pollTimer: Observable<void>,
-    @Inject(TIMESERIES_SAMPLES_TOKEN) private readonly timeseriesSamples: number
-  ) { }
+    @Inject(TIMESERIES_SAMPLES_TOKEN) private readonly timeseriesSamples: number,
+    @Inject(POLL_RATE_TOKEN) private readonly pollRate: number
+  ) {
+    this.frontLoadWindowWidth = timeseriesSamples * pollRate;
+  }
 
   ngOnDestroy(): void {
     this.serviceSubscriptions.forEach((sub: Subscription) => {
@@ -322,7 +325,7 @@ export class DeploymentsService implements OnDestroy {
       const subject = new ReplaySubject<TimeseriesData[]>(this.timeseriesSamples);
 
       const now = +Date.now();
-      const seriesData = this.getStreamingTimeseriesData(spaceId, environmentName, applicationId, now - DeploymentsService.FRONT_LOAD_WINDOW_WIDTH, now)
+      const seriesData = this.getStreamingTimeseriesData(spaceId, environmentName, applicationId, now - this.frontLoadWindowWidth, now)
         .finally(() => {
           this.timeseriesSubjects.delete(key);
         })
