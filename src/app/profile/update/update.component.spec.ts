@@ -360,10 +360,12 @@ describe('UpdateComponent', () => {
 
   describe('#validateUrl', () => {
     it('should verify not-a-real-url to be an invalid url', () => {
-      let url: string = 'htt:/not-a-real-url.some-thing.';
-      component.url = url;
-      component.validateUrl();
-      expect(component.urlInvalid).toBeTruthy();
+      let urls: string[] = ['not-a-real-url', 'http://', '.com', 'htt:/not-a-real-url.some-thing.'];
+      urls.forEach(url => {
+        component.url = url;
+        component.validateUrl();
+        expect(component.urlInvalid).toBeTruthy();
+      });
     });
 
     it('should verify https://fabric8.io/ to be a valid url', () => {
