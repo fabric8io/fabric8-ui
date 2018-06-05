@@ -1,11 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Area, AreaAttributes, AreaService, Context } from 'ngx-fabric8-wit';
+import { Area, AreaAttributes, AreaService } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 
 import { AreaError } from '../../../../models/area-error';
-import { ContextService } from '../../../../shared/context.service';
 
 @Component({
   host: {
@@ -27,14 +26,11 @@ export class CreateAreaDialogComponent implements OnInit {
   @ViewChild('rawInputField') rawInputField: ElementRef;
   @ViewChild('inputModel') inputModel: NgModel;
 
-  private context: Context;
   private name: string;
   private errors: AreaError;
 
   constructor(
-    private contexts: ContextService,
     private areaService: AreaService) {
-    this.contexts.current.subscribe(val => this.context = val);
   }
 
   public onOpen() {
