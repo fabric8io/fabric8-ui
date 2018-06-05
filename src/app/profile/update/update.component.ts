@@ -318,13 +318,6 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * Validate image URL
-   */
-  validateImageUrl(): void {
-    this.imageUrlInvalid = !this.isImageUrlValid();
-  }
-
-  /**
    * Validate URL
    */
   validateUrl(): void {
@@ -359,10 +352,10 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (profile) {
       delete profile['registrationCompleted'];
     }
-    if (this.bio !== undefined && this.bio.length > 0) {
+    if (this.bio !== undefined) {
       profile.bio = this.bio.trim().substring(0, 255);
     }
-    if (this.company !== undefined && this.company.length > 0) {
+    if (this.company !== undefined) {
       profile.company = this.company.trim();
     }
     if (this.email !== undefined && this.email.trim().length > 0) {
@@ -374,7 +367,7 @@ export class UpdateComponent implements AfterViewInit, OnInit {
     if (this.imageUrl !== undefined && this.imageUrl.length > 0) {
       profile.imageURL = this.imageUrl.trim();
     }
-    if (this.url !== undefined && this.url.length > 0) {
+    if (this.url !== undefined) {
       profile.url = this.url.trim();
     }
     if (this.emailPrivate !== undefined) {
@@ -395,26 +388,14 @@ export class UpdateComponent implements AfterViewInit, OnInit {
   }
 
   /**
-   * Helper to test if image URL is valid
-   *
-   * @returns {boolean}
-   */
-  private isImageUrlValid(): boolean {
-    if (this.imageUrl !== undefined && this.imageUrl.trim().length > 0) {
-      return (this.imageUrl.trim().indexOf('http') === 0);
-    } else {
-      return true;
-    }
-  }
-
-  /**
    * Helper to test if URL is valid
    *
    * @returns {boolean}
    */
   private isUrlValid(): boolean {
+    const urlRegex: RegExp = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/;
     if (this.url !== undefined && this.url.trim().length > 0) {
-      return (this.url.trim().indexOf('http') === 0);
+      return urlRegex.test(this.url.trim());
     } else {
       return true;
     }
