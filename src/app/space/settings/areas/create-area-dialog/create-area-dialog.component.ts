@@ -26,8 +26,8 @@ export class CreateAreaDialogComponent implements OnInit {
   @ViewChild('rawInputField') rawInputField: ElementRef;
   @ViewChild('inputModel') inputModel: NgModel;
 
-  private name: string;
-  private errors: AreaError;
+  name: string;
+  errors: AreaError;
 
   constructor(
     private areaService: AreaService) {
