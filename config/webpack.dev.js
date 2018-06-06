@@ -159,7 +159,8 @@ module.exports = function (options) {
             helpers.nodeModulePath("jw-bootstrap-switch-ng2"),
             helpers.nodeModulePath("ng2-truncate"),
             helpers.nodeModulePath("angular-2-dropdown-multiselect"),
-            helpers.nodeModulePath("@angular")
+            helpers.nodeModulePath("@angular"),
+            helpers.nodeModulePath("fabric8-analytics-dependency-editor")
           ],
           use: ["source-map-loader"],
           enforce: "pre"
