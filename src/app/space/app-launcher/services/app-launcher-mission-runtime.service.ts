@@ -3,15 +3,14 @@ import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import {
+  Catalog,
   HelperService,
-  Mission,
   MissionRuntimeService,
-  Runtime,
   TokenProvider
 } from 'ngx-forge';
 
 @Injectable()
-export class AppLauncherMissionRuntimeService implements MissionRuntimeService {
+export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
 
   private END_POINT: string = '';
   private API_BASE: string = 'booster-catalog/';
@@ -22,10 +21,9 @@ export class AppLauncherMissionRuntimeService implements MissionRuntimeService {
     private helperService: HelperService,
     private tokenProvider: TokenProvider
   ) {
-    if (this.helperService) {
-      this.END_POINT = this.helperService.getBackendUrl();
-      this.ORIGIN = this.helperService.getOrigin();
-    }
+    super();
+    this.END_POINT = this.helperService.getBackendUrl();
+    this.ORIGIN = this.helperService.getOrigin();
   }
 
   private get options(): Observable<RequestOptions> {
@@ -39,22 +37,10 @@ export class AppLauncherMissionRuntimeService implements MissionRuntimeService {
     }));
   }
 
-   getMissions(): Observable<Mission[]> {
-    let missionEndPoint: string = this.END_POINT + this.API_BASE + 'missions';
-    missionEndPoint += `?runsOn=${this.ORIGIN}`;
-    return this.options.flatMap((option) => {
-      return this.http.get(missionEndPoint, option)
-        .map(response => response.json() as Mission[])
-        .catch(this.handleError);
-    });
-  }
-
-   getRuntimes(): Observable<Runtime[]> {
-    let runtimeEndPoint: string = this.END_POINT + this.API_BASE + 'runtimes';
-    runtimeEndPoint += `?runsOn=${this.ORIGIN}`;
-    return this.options.flatMap((option) => {
-      return this.http.get(runtimeEndPoint, option)
-        .map(response => response.json() as Runtime[])
+  getCatalog(): Observable<Catalog> {
+    return this.options.flatMap(option => {
+      return this.http.get(this.END_POINT + this.API_BASE, option)
+        .map(response => response.json() as Catalog)
         .catch(this.handleError);
     });
   }
