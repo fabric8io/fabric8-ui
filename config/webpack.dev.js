@@ -159,6 +159,7 @@ module.exports = function (options) {
             helpers.nodeModulePath("ng2-dnd"),
             helpers.nodeModulePath("ng2-truncate"),
             helpers.nodeModulePath("ngx-dropdown"),
+            helpers.nodeModulePath("ngx-forge"),
             helpers.nodeModulePath("ngx-modal")
           ],
           use: ["source-map-loader"],
