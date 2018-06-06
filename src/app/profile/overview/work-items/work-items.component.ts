@@ -15,8 +15,7 @@ import { filterOutClosedItems } from '../../../shared/workitem-utils';
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-work-items',
   templateUrl: './work-items.component.html',
-  styleUrls: ['./work-items.component.less'],
-  providers: [SpaceService]
+  styleUrls: ['./work-items.component.less']
 })
 export class WorkItemsComponent implements OnDestroy, OnInit  {
   context: Context;
