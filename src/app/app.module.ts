@@ -118,7 +118,6 @@ import { FeatureAcknowledgementService } from './feature-flag/service/feature-ac
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 import { RavenExceptionHandler } from './shared/exception.handler';
 
-
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
