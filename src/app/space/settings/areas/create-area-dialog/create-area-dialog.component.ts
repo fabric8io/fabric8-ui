@@ -4,7 +4,12 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaAttributes, AreaService } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 
-import { AreaError } from '../../../../models/area-error';
+export enum AreaCreationStatus {
+  OK,
+  EMPTY_NAME_FAILURE,
+  EXCEED_LENGTH_FAILURE,
+  UNIQUE_VALIDATION_FAILURE
+}
 
 @Component({
   host: {
@@ -15,6 +20,7 @@ import { AreaError } from '../../../../models/area-error';
   templateUrl: './create-area-dialog.component.html',
   styleUrls: ['./create-area-dialog.component.less']
 })
+
 export class CreateAreaDialogComponent implements OnInit {
 
   @Input() host: ModalDirective;
@@ -26,8 +32,11 @@ export class CreateAreaDialogComponent implements OnInit {
   @ViewChild('rawInputField') rawInputField: ElementRef;
   @ViewChild('inputModel') inputModel: NgModel;
 
+  // Declare the enum for usage in the template
+  AreaCreationStatus: typeof AreaCreationStatus = AreaCreationStatus;
+
   name: string;
-  errors: AreaError;
+  private _areaCreationStatus: AreaCreationStatus;
 
   constructor(
     private areaService: AreaService) {
@@ -55,20 +64,16 @@ export class CreateAreaDialogComponent implements OnInit {
   }
 
   resetErrors() {
-    this.errors = {
-      uniqueValidationFailure: false,
-      emptyNameFailure: false,
-      exceedLengthFailure: false
-    };
+    this._areaCreationStatus = AreaCreationStatus.OK;
   }
 
   validateAreaName(): void {
     this.resetErrors();
     if (this.name.trim().length === 0) {
-      this.errors.emptyNameFailure = true;
+      this._areaCreationStatus = AreaCreationStatus.EMPTY_NAME_FAILURE;
     }
     if (this.name.trim().length > 63) {
-      this.errors.exceedLengthFailure = true;
+      this._areaCreationStatus = AreaCreationStatus.EXCEED_LENGTH_FAILURE;
     }
   }
 
@@ -102,9 +107,14 @@ export class CreateAreaDialogComponent implements OnInit {
     if (error.errors.length) {
       error.errors.forEach(error => {
         if (error.status === '409') {
-          this.errors.uniqueValidationFailure = true;
+          this._areaCreationStatus = AreaCreationStatus.UNIQUE_VALIDATION_FAILURE;
         }
       });
     }
   }
+
+  get areaCreationStatus(): AreaCreationStatus {
+    return this._areaCreationStatus;
+  }
+
 }
