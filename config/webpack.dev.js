@@ -149,17 +149,18 @@ module.exports = function (options) {
           exclude: [
             // Example helpers.nodeModulePath("fabric8-planner"),
             // Exclude any problematic sourcemaps
+            helpers.nodeModulePath("@angular"),
+            helpers.nodeModulePath("angular-2-dropdown-multiselect"),
+            helpers.nodeModulePath("angular2-flash-messages"),
+            helpers.nodeModulePath("fabric8-analytics-dependency-editor"),
+            helpers.nodeModulePath("jw-bootstrap-switch-ng2"),
             helpers.nodeModulePath("mydatepicker"),
             helpers.nodeModulePath("ng2-completer"),
-            helpers.nodeModulePath("angular2-flash-messages"),
-            helpers.nodeModulePath("ngx-dropdown"),
-            helpers.nodeModulePath("ngx-modal"),
-            helpers.nodeModulePath("ngx-modal"),
             helpers.nodeModulePath("ng2-dnd"),
-            helpers.nodeModulePath("jw-bootstrap-switch-ng2"),
             helpers.nodeModulePath("ng2-truncate"),
-            helpers.nodeModulePath("angular-2-dropdown-multiselect"),
-            helpers.nodeModulePath("@angular")
+            helpers.nodeModulePath("ngx-dropdown"),
+            helpers.nodeModulePath("ngx-forge"),
+            helpers.nodeModulePath("ngx-modal")
           ],
           use: ["source-map-loader"],
           enforce: "pre"

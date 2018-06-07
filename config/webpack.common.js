@@ -8,6 +8,7 @@ const ngtools = require('@ngtools/webpack');
 const branding = require('./branding');
 var path = require('path');
 var stringify = require('json-stringify');
+var fs = require('fs');
 
 /*
  * Webpack Plugins
@@ -51,6 +52,14 @@ module.exports = function (options) {
   const aotMode = false;//options && options.aot !== undefined;
   console.log('The options from the webpack config: ' + stringify(options, null, 2));
 
+  /**
+   * The following is needed to make sure the symlinked fabric8-analytics-dependency-editor works fine on both npm link and normal way.
+   */
+  var depEditorPath = path.resolve(__dirname, "../node_modules/fabric8-analytics-dependency-editor");
+  if (!fs.existsSync(depEditorPath)) {
+    depEditorPath = path.resolve(__dirname, "../node_modules/ngx-forge/node_modules/fabric8-analytics-dependency-editor");
+  }
+
   // ExtractTextPlugin
   const extractCSS = new ExtractTextPlugin({
     filename: '_assets/stylesheets/[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
@@ -90,6 +99,10 @@ module.exports = function (options) {
      * See: https://webpack.js.org/configuration/resolve
      */
     resolve: {
+
+      alias: {
+        "fabric8-analytics-dependency-editor": depEditorPath
+      },
 
       /**
        * An array that automatically resolve certain extensions.
