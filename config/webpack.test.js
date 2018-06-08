@@ -56,13 +56,7 @@ module.exports = function (options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
-      extensions: ['.ts', '.js'],
-
-      modules: [helpers.root('src'), helpers.root('node_modules'),
-        // Todo: fabric8-stack-analysis-ui/src/app/stack/overview/chart-component.js cannot locate c3
-        helpers.root("node_modules/patternfly/node_modules/c3"),
-        helpers.root("node_modules/patternfly/node_modules/d3")
-      ]
+      extensions: ['.ts', '.js']
     },
 
     /**
