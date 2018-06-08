@@ -51,6 +51,10 @@ module.exports = function (options) {
      */
     resolve: {
 
+      alias: {
+        "testing": path.resolve(__dirname, "../src/testing")
+      },
+
       /**
        * An array of extensions that should be used to resolve modules.
        *
