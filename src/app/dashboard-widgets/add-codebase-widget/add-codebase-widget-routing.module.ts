@@ -1,10 +1,16 @@
 import { NgModule }  from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
 
-import { codebasesAddRoutes } from '../../space/create/codebases/codebases-add/codebases-add-routing.module';
+const routes: Routes = [
+  {
+    path: '',
+    component: AddCodebaseWidgetComponent
+  }
+];
 
 @NgModule({
-  imports: [ RouterModule.forChild(codebasesAddRoutes) ],
+  imports: [ RouterModule.forChild(routes) ],
   exports: [ RouterModule ]
 })
 export class AddCodebaseWidgetRoutingModule {}

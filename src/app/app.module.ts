@@ -100,7 +100,6 @@ import { witApiUrlProvider }             from './shared/wit-api.provider';
 import { ConfigStore }               from './base/config.store';
 import { ErrorService }              from './layout/error/error.service';
 import { ProfileService }            from './profile/profile.service';
-import { SpaceWizardModule } from './space/wizard/space-wizard.module';
 
 // App launcher
 import { AddAppOverlayModule }   from './space/add-app-overlay/add-app-overlay.module';
@@ -113,7 +112,6 @@ import { FeatureFlagModule } from './feature-flag/feature-flag.module';
 import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 import { RavenExceptionHandler } from './shared/exception.handler';
-import { ForgeWizardModule } from './space/forge-wizard/forge-wizard.module';
 
 
 // Application wide providers
@@ -160,8 +158,6 @@ export type StoreType = {
     ReactiveFormsModule,
     RestangularModule,
     RouterModule,
-    SpaceWizardModule,
-    ForgeWizardModule,
     StackDetailsModule,
     WidgetsModule,
     StoreModule.forRoot({}),

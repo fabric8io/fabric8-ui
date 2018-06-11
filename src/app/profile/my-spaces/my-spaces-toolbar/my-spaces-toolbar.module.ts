@@ -6,7 +6,6 @@ import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
 
-import { SpaceWizardModule } from '../../space/wizard/space-wizard.module';
 import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
 
 @NgModule({

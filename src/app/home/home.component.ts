@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Broadcaster, Logger } from 'ngx-base';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
@@ -28,7 +27,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   brandInformation: BrandInformation;
   loggedInUser: User;
   recent: Space[];
-  modalRef: BsModalRef;
   private _context: Context;
   private _defaultContext: Context;
   private _spaces: Space[] = [];
@@ -37,7 +35,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _contextSubscription: Subscription;
   private _contextDefaultSubscription: Subscription;
   private loading: boolean = true;
-  private selectedFlow: string;
   private space: string;
 
   constructor(
@@ -49,12 +46,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     private spaces: Spaces,
     private logger: Logger,
     private fabric8UIConfig: Fabric8UIConfig,
-    private modalService: BsModalService,
     private authentication: AuthenticationService,
     private broadcaster: Broadcaster
   ) {
     this.space = '';
-    this.selectedFlow = 'start';
     this._spaceSubscription = spaces.recent.subscribe(val => this.recent = val);
   }
 
@@ -112,24 +107,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       return this._context;
     }
-  }
-
-  openForgeWizard(addSpace: TemplateRef<any>) {
-    if (this.authentication.getGitHubToken()) {
-      this.selectedFlow = 'start';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
-    }
-  }
-
-  closeModal($event: any): void {
-    this.modalRef.hide();
-  }
-
-  selectFlow($event) {
-    this.selectedFlow = $event.flow;
-    this.space = $event.space;
   }
 
   showAddSpaceOverlay(): void {

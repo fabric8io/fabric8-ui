@@ -28,10 +28,7 @@
               </div>
             </div>
             <div class="col-sm-2">
-              <f8-feature-toggle featureName="AppLauncher">
-                <button class="btn btn-primary" type="button" (click)="openForgeWizard(createSpace)" default-level>New</button>
-                <button class="btn btn-primary" type="button" (click)="showAddSpaceOverlay()" user-level>New</button>
-              </f8-feature-toggle>
+              <button class="btn btn-primary" type="button" (click)="showAddSpaceOverlay()">New</button>
             </div>
           </div>
         </div>
@@ -55,14 +52,6 @@
   </main>
 
 </div>
-
-<!-- Create Space modal -->
-<ng-template #createSpace>
-  <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
-  <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space" [style.display]="selectedFlow !== 'selectFlow' ? 'none': ''"></flow-selector>
-  <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
-  <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
-</ng-template>
 
 <!-- Delete Space modal -->
 <ng-template #deleteSpace title="Remove the space">

@@ -82,7 +82,7 @@
               </li>
               <li class="divider"></li>
               <li class="header_createSpace">
-                <a class="create-space-anchor" (click)="showAddSpaceOverlay(spaceWizard)">
+                <a class="create-space-anchor" (click)="showAddSpaceOverlay()">
                   <span class="nav-item-icon">
                     <i class="pficon pficon-add-circle-o"></i>
                   </span>
@@ -208,12 +208,6 @@
       </div> <!-- .navbar-collapse -->
     </div> <!-- /.container-fluid -->
   </nav>
-  <ng-template #spaceWizard>
-    <space-wizard (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [style.display]="selectedFlow !== 'start' ? 'none': ''"></space-wizard>
-    <flow-selector (onSelect)="selectFlow($event)" (onCancel)="closeModal()" [space]="space" [style.display]="selectedFlow !== 'selectFlow' ? 'none': ''"></flow-selector>
-    <import-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'import' ? 'none': ''"></import-wizard>
-    <quickstart-wizard (onCancel)="closeModal()" [style.display]="selectedFlow !== 'quickstart' ? 'none': ''"></quickstart-wizard>
-  </ng-template>
   <fab-about-modal #aboutModal>
   </fab-about-modal>
 </ng-template>

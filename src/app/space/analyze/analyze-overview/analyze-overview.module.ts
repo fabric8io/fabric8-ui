@@ -5,7 +5,6 @@ import { Http } from '@angular/http';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 
-import { ForgeWizardModule } from 'app/space/forge-wizard/forge-wizard.module';
 import { AddCodebaseWidgetModule } from '../../../dashboard-widgets/add-codebase-widget/add-codebase-widget.module';
 import { AnalyticalReportWidgetModule } from '../../../dashboard-widgets/analytical-report-widget/analytical-report-widget.module';
 import { ApplicationsWidgetModule } from '../../../dashboard-widgets/applications-widget/applications-widget.module';
@@ -29,12 +28,12 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
     FormsModule,
     EditSpaceDescriptionWidgetOldModule,
     EditSpaceDescriptionWidgetModule,
+    EnvironmentWidgetModule,
     AnalyticalReportWidgetModule,
     CreateWorkItemWidgetModule,
     AddCodebaseWidgetModule,
     PipelinesWidgetModule,
-    EnvironmentWidgetModule,
-    ForgeWizardModule,
+
     ModalModule.forRoot(),
     WorkItemWidgetModule
   ],
