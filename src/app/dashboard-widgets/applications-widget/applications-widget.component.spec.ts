@@ -281,25 +281,25 @@ describe('ApplicationsWidgetComponent', () => {
     it('Empty build configs to not show empty state', function(this: TestingContext) {
       this.hostComponent.userOwnsSpace = true;
       this.detectChanges();
-      expect(this.fixture.debugElement.query(By.css('#test-applications-add-button'))).toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
     });
 
     it('Empty build configs to show empty state', function(this: TestingContext) {
       this.hostComponent.userOwnsSpace = true;
       this.testedDirective.buildConfigs.length = 0;
       this.detectChanges();
-      expect(this.fixture.debugElement.query(By.css('#test-applications-add-button'))).not.toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
     });
 
     it('Empty stage and run build configs to show empty state', function(this: TestingContext) {
       this.testedDirective.runBuildConfigs.length = 0;
       this.testedDirective.stageBuildConfigs.length = 0;
       this.detectChanges();
-      expect(this.fixture.debugElement.query(By.css('#test-applications-pipelines-link'))).not.toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).not.toBeNull();
     });
 
     it('Stage or run build configs not to show empty state', function(this: TestingContext) {
-      expect(this.fixture.debugElement.query(By.css('#test-applications-pipelines-link'))).toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).toBeNull();
     });
   });
 
@@ -310,7 +310,7 @@ describe('ApplicationsWidgetComponent', () => {
       this.testedDirective.buildConfigs.length = 0;
       this.detectChanges();
 
-      expect(this.fixture.debugElement.query(By.css('#test-applications-add-button'))).not.toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
     });
 
     it('should disable buttons if the user does not own the space', function(this: TestingContext) {
@@ -318,7 +318,7 @@ describe('ApplicationsWidgetComponent', () => {
       this.testedDirective.buildConfigs.length = 0;
       this.detectChanges();
 
-      expect(this.fixture.debugElement.query(By.css('#test-applications-add-button'))).toBeNull();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
     });
   });
 });

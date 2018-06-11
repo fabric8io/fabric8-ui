@@ -24,7 +24,7 @@
           </p>
           <div class="f8-blank-slate-main-action">
             <div *ngIf="userOwnsSpace">
-              <button id="test-applications-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Create an Application</button>
+              <button id="spacehome-applications-add-button" class="btn btn-primary btn-lg" (click)="addToSpace.emit()">Create an Application</button>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@
           <fabric8-loading-widget
               [title]="'Application Setup In Progress'"
               [message]="'This may take a few minutes. Once setup is complete, you\'ll see your deployed applications here.'">
-            <a id="test-applications-pipelines-link"
+            <a id="spacehome-applications-pipelines-link"
                [routerLink]="['/', loggedInUser?.attributes?.username, this.currentSpace?.attributes?.name, 'create', 'pipelines']">View setup progress</a>
           </fabric8-loading-widget>
         </ng-template>
