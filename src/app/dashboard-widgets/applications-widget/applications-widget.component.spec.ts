@@ -1,16 +1,19 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, LocationStrategy } from '@angular/common';
 import {
   Component,
   Input
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs';
-
-import { initContext, TestContext } from 'testing/test-context';
+import { ConnectableObservable, Subject } from 'rxjs/Rx';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
+import { User, UserService } from 'ngx-login-client';
+
 import { createMock } from 'testing/mock';
+import { initContext, TestContext } from 'testing/test-context';
 
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
@@ -19,6 +22,7 @@ import { ApplicationsWidgetComponent } from './applications-widget.component';
 
 import { FeatureToggleComponent } from '../../feature-flag/feature-wrapper/feature-toggle.component';
 import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
+
 @Component({
   selector: 'fabric8-applications-list',
   template: ''
@@ -39,6 +43,16 @@ describe('ApplicationsWidgetComponent', () => {
 
   let contexts: Contexts;
   let pipelinesService: { current: Observable<BuildConfig[]> };
+
+  let fakeUser: Observable<User> = Observable.of({
+    id: 'fakeId',
+    type: 'fakeType',
+    attributes: {
+      fullName: 'fakeName',
+      imageURL: 'null',
+      username: 'fakeUserName'
+    }
+  } as User);
 
   let buildConfig1 = {
     id: 'app1',
@@ -162,6 +176,8 @@ describe('ApplicationsWidgetComponent', () => {
     }]
   };
 
+  let ctxSubj: Subject<Context> = new Subject<Context>();
+
   beforeEach(() => {
     contexts = {
       current: new BehaviorSubject<Context>({
@@ -185,14 +201,17 @@ describe('ApplicationsWidgetComponent', () => {
   initContext(ApplicationsWidgetComponent, HostComponent, {
     imports: [
       CommonModule,
-      LoadingWidgetModule
+      LoadingWidgetModule,
+      RouterModule
     ],
     declarations: [
       FakeApplicationsListComponent,
       FeatureToggleComponent
     ],
     providers: [
-      { provide: Contexts, useFactory: () => contexts },
+      { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
+      { provide: Contexts, useValue: ({ current: ctxSubj }) },
+      { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
       { provide: PipelinesService, useFactory: () => pipelinesService },
       {
         provide: FeatureTogglesService, useFactory: () => {
@@ -202,6 +221,27 @@ describe('ApplicationsWidgetComponent', () => {
           } as Feature));
 
           return mock;
+        }
+      },
+      {
+        provide: Router, useFactory: (): jasmine.SpyObj<Router> => {
+          let mockRouterEvent: any = {
+            'id': 1,
+            'url': 'mock-url'
+          };
+
+          let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
+          mockRouter.events = Observable.of(mockRouterEvent);
+
+          return mockRouter;
+        }
+      },
+      {
+        provide: UserService, useFactory: () => {
+          let userService = createMock(UserService);
+          userService.getUser.and.returnValue(fakeUser);
+          userService.loggedInUser = fakeUser.publish() as ConnectableObservable<User> & jasmine.Spy;
+          return userService;
         }
       }
     ]
@@ -237,14 +277,37 @@ describe('ApplicationsWidgetComponent', () => {
     it('Run build configs to be sorted', function(this: TestingContext) {
       expect(this.testedDirective.runBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3]);
     });
+
+    it('Empty build configs to not show empty state', function(this: TestingContext) {
+      this.hostComponent.userOwnsSpace = true;
+      this.detectChanges();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
+    });
+
+    it('Empty build configs to show empty state', function(this: TestingContext) {
+      this.hostComponent.userOwnsSpace = true;
+      this.testedDirective.buildConfigs.length = 0;
+      this.detectChanges();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
+    });
+
+    it('Empty stage and run build configs to show empty state', function(this: TestingContext) {
+      this.testedDirective.runBuildConfigs.length = 0;
+      this.testedDirective.stageBuildConfigs.length = 0;
+      this.detectChanges();
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).not.toBeNull();
+    });
+
+    it('Stage or run build configs not to show empty state', function(this: TestingContext) {
+      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).toBeNull();
+    });
   });
 
   describe('Applications widget without build configs', () => {
 
     it('should enable buttons if the user owns the space', function(this: TestingContext) {
       this.hostComponent.userOwnsSpace = true;
-      this.testedDirective.runBuildConfigs.length = 0;
-      this.testedDirective.stageBuildConfigs.length = 0;
+      this.testedDirective.buildConfigs.length = 0;
       this.detectChanges();
 
       expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
@@ -252,8 +315,7 @@ describe('ApplicationsWidgetComponent', () => {
 
     it('should disable buttons if the user does not own the space', function(this: TestingContext) {
       this.hostComponent.userOwnsSpace = false;
-      this.testedDirective.runBuildConfigs.length = 0;
-      this.testedDirective.stageBuildConfigs.length = 0;
+      this.testedDirective.buildConfigs.length = 0;
       this.detectChanges();
 
       expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();

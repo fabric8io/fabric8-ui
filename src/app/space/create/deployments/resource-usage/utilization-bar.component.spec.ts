@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subject
+} from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
 
 import { Stat } from '../models/stat';
+import {
+  Status,
+  StatusType
+} from '../services/deployment-status.service';
 import { UtilizationBarComponent } from './utilization-bar.component';
 
 @Component({
@@ -20,6 +27,7 @@ describe('UtilizationBarComponent', () => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
       component.stat = Observable.of({ used: 1, quota: 4 } as Stat);
+      component.status = Observable.of({ type: StatusType.OK, message: '' });
     });
 
     it('should have proper stat fields set', function(this: Context) {
@@ -57,6 +65,7 @@ describe('UtilizationBarComponent', () => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
       component.stat = Observable.of({ used: 3, quota: 4 } as Stat);
+      component.status = Observable.of({ type: StatusType.WARN, message: '' });
     });
 
     it('should have proper stat fields set', function(this: Context) {
@@ -94,13 +103,7 @@ describe('UtilizationBarComponent', () => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
       component.stat = Observable.of({ used: 2, quota: 0 } as Stat);
-    });
-
-    it('should have backup values in case it has a zero total', function(this: Context) {
-      expect(this.testedDirective.used).toEqual(2);
-      expect(this.testedDirective.total).toEqual(0);
-      expect(this.testedDirective.usedPercent).toEqual(0);
-      expect(this.testedDirective.unusedPercent).toEqual(100);
+      component.status = Observable.of({ type: StatusType.ERR, message: '' });
     });
 
     it('should have a properly set title', function(this: Context) {
@@ -113,6 +116,31 @@ describe('UtilizationBarComponent', () => {
       let de = this.fixture.debugElement.query(By.css('#resourceCardLabel'));
       let el = de.nativeElement;
       expect(el.textContent.trim()).toEqual('2 of 0');
+    });
+  });
+
+  describe('status', () => {
+    const status: Subject<Status> = new Subject<Status>();
+    initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
+      component.resourceTitle = 'someTitle';
+      component.resourceUnit = 'someUnit';
+      component.stat = Observable.empty();
+      component.status = status;
+    });
+
+    it('should not warn on OK status', function(this: Context) {
+      status.next({ type: StatusType.OK, message: '' });
+      expect(this.testedDirective.warn).toBeFalsy();
+    });
+
+    it('should warn on WARN status', function(this: Context) {
+      status.next({ type: StatusType.WARN, message: '' });
+      expect(this.testedDirective.warn).toBeTruthy();
+    });
+
+    it('should warn on ERR status', function(this: Context) {
+      status.next({ type: StatusType.ERR, message: '' });
+      expect(this.testedDirective.warn).toBeTruthy();
     });
   });
 });

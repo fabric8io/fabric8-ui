@@ -148,9 +148,9 @@ describe('DeploymentDetailsComponent', () => {
 
     status = new BehaviorSubject<Status>({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' });
     mockStatusSvc = createMock(DeploymentStatusService);
-    mockStatusSvc.getAggregateStatus.and.returnValue(status);
-    mockStatusSvc.getCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
-    mockStatusSvc.getMemoryStatus.and.returnValue(Observable.of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
+    mockStatusSvc.getDeploymentAggregateStatus.and.returnValue(status);
+    mockStatusSvc.getDeploymentCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
+    mockStatusSvc.getDeploymentMemoryStatus.and.returnValue(Observable.of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
 
     cpuChart = {
       axis: {

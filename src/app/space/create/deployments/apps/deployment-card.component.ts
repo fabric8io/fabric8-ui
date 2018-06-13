@@ -91,7 +91,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.toolTip = DeploymentCardComponent.OK_TOOLTIP;
 
     this.subscriptions.push(
-      this.statusService.getAggregateStatus(this.spaceId, this.environment, this.applicationId)
+      this.statusService.getDeploymentAggregateStatus(this.spaceId, this.environment, this.applicationId)
         .subscribe((status: Status): void => this.changeStatus(status))
     );
 
