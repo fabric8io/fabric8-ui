@@ -173,7 +173,7 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.deploymentStatusService.getAggregateStatus(this.spaceId, this.environment, this.applicationId)
+      this.deploymentStatusService.getDeploymentAggregateStatus(this.spaceId, this.environment, this.applicationId)
         .subscribe((status: Status): void => {
           if (status.type === StatusType.OK) {
             this.usageMessage = '';
@@ -190,7 +190,7 @@ export class DeploymentDetailsComponent {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
           return Observable.empty();
         }
-        return Observable.combineLatest(Observable.of(chart), this.deploymentStatusService.getCpuStatus(this.spaceId, this.environment, this.applicationId));
+        return Observable.combineLatest(Observable.of(chart), this.deploymentStatusService.getDeploymentCpuStatus(this.spaceId, this.environment, this.applicationId));
       })
         .subscribe((v: [ChartAPI, Status]): void => {
           const chart: ChartAPI = v[0];
@@ -219,7 +219,7 @@ export class DeploymentDetailsComponent {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
           return Observable.empty();
         }
-        return Observable.combineLatest(Observable.of(chart), this.deploymentStatusService.getMemoryStatus(this.spaceId, this.environment, this.applicationId));
+        return Observable.combineLatest(Observable.of(chart), this.deploymentStatusService.getDeploymentMemoryStatus(this.spaceId, this.environment, this.applicationId));
       })
         .subscribe((v: [ChartAPI, Status]): void => {
           const chart: ChartAPI = v[0];

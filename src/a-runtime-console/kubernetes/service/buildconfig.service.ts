@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 import { BuildConfig, BuildConfigs } from '../model/buildconfig.model';
 import { pathJoin } from '../model/utils';
 import { APIsStore, isOpenShift } from '../store/apis.store';

@@ -38,7 +38,7 @@ import {
   OAuthConfigStore
 } from './oauth-config-store';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../app/shared/notifications.service';
 
 describe('OauthConfigStore', () => {
 

@@ -12,8 +12,8 @@ import { DependencyCheckService } from 'ngx-forge';
 import { Profile, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
-import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
 import { ContextService } from '../../shared/context.service';
+import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
 import { Application, DeploymentApiService } from '../create/deployments/services/deployment-api.service';

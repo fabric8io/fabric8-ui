@@ -24,7 +24,7 @@ import {
 
 import { Logger } from 'ngx-base';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../../shared/notifications.service';
 import { PipelinesService } from '../../../../shared/runtime-console/pipelines.service';
 
 import { AuthenticationService } from 'ngx-login-client';

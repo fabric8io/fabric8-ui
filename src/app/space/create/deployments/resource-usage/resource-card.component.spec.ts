@@ -14,6 +14,11 @@ import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { MemoryUnit } from '../models/memory-unit';
 import { Stat } from '../models/stat';
+import {
+  DeploymentStatusService,
+  Status,
+  StatusType
+} from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 import { ResourceCardComponent } from './resource-card.component';
 
@@ -30,6 +35,7 @@ class FakeUtilizationBarComponent {
   @Input() resourceTitle: string;
   @Input() resourceUnit: string;
   @Input() stat: Observable<Stat>;
+  @Input() status: Observable<Status>;
 }
 
 @Component({
@@ -47,6 +53,7 @@ describe('ResourceCardComponent', () => {
 
   let mockResourceTitle: string = 'resource title';
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
+  let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
   let cpuStatMock: Observable<CpuStat> = Observable.of({ used: 1, quota: 2 });
   let memoryStatMock: Observable<MemoryStat> = Observable.of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  });
 
@@ -56,12 +63,19 @@ describe('ResourceCardComponent', () => {
     mockSvc.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
     mockSvc.getEnvironmentCpuStat.and.returnValue(cpuStatMock);
     mockSvc.getEnvironmentMemoryStat.and.returnValue(memoryStatMock);
+
+    mockStatusSvc = createMock(DeploymentStatusService);
+    mockStatusSvc.getEnvironmentCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
+    mockStatusSvc.getEnvironmentMemoryStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
   });
 
   initContext(ResourceCardComponent, HostComponent,
     {
       declarations: [FakeUtilizationBarComponent, FakeLoadingUtilizationBarComponent],
-      providers: [{ provide: DeploymentsService, useFactory: () => mockSvc }]
+      providers: [
+        { provide: DeploymentsService, useFactory: () => mockSvc },
+        { provide: DeploymentStatusService, useFactory: () => mockStatusSvc }
+      ]
     },
     (component: ResourceCardComponent) => {
       component.spaceId = 'spaceId';

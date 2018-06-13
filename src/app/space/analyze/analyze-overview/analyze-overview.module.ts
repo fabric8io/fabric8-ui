@@ -16,6 +16,7 @@ import { EnvironmentWidgetModule } from '../../../dashboard-widgets/environment-
 import { PipelinesWidgetModule } from '../../../dashboard-widgets/pipelines-widget/pipelines-widget.module';
 import { WorkItemWidgetModule } from '../../../dashboard-widgets/work-item-widget/work-item-widget.module';
 import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
+import { ForgeWizardModule } from '../../forge-wizard/forge-wizard.module';
 import { AnalyzeOverviewRoutingModule } from './analyze-overview-routing.module';
 import { AnalyzeOverviewComponent } from './analyze-overview.component';
 

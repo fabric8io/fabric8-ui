@@ -40,7 +40,7 @@ import {
   Subject
 } from 'rxjs';
 
-import { OnLogin } from 'a-runtime-console';
+import { OnLogin } from '../a-runtime-console';
 import { AboutService } from './shared/about.service';
 import { ProviderService } from './shared/account/provider.service';
 import { AnalyticService } from './shared/analytics.service';

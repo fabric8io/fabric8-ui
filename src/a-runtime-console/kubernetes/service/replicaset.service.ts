@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 import { ReplicaSet, ReplicaSets } from '../model/replicaset.model';
 import { apisExtensionsNamespacesUrl } from './deployment.service';
 import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';

@@ -14,7 +14,12 @@
     "noStrictGenericChecks": true,
     "baseUrl": "./src",
     "paths": {
-      "fabric8-analytics-dependency-editor": ["../node_modules/ngx-forge/node_modules/fabric8-analytics-dependency-editor"]
+      "@angular/*": [
+        "../node_modules/@angular/*"
+      ],
+      "rxjs": [
+        "../node_modules/rxjs"
+      ]
     },
     "lib": [
       "dom",

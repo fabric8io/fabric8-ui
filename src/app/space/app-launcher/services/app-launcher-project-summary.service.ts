@@ -18,7 +18,7 @@ import {
   TokenProvider
 } from 'ngx-forge';
 
-import { ContextService } from 'app/shared/context.service';
+import { ContextService } from '../../../shared/context.service';
 
 @Injectable()
 export class AppLauncherProjectSummaryService implements ProjectSummaryService {

@@ -15,7 +15,6 @@ import {
   Subscription
 } from 'rxjs';
 
-import { NotificationsService } from 'app/shared/notifications.service';
 import {
   Notification,
   NotificationType
@@ -30,6 +29,7 @@ import {
   round
 } from 'lodash';
 
+import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import {

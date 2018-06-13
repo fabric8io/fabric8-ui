@@ -13,7 +13,6 @@ import { StoreModule } from '@ngrx/store';
 import { LocalStorageModule } from 'angular-2-local-storage';
 import { MomentModule } from 'angular2-moment';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
-import { RestangularModule } from 'ng2-restangular';
 import { Logger, Notifications } from 'ngx-base';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -29,6 +28,7 @@ import {
   HttpService,
   UserService
 } from 'ngx-login-client';
+import { RestangularModule } from 'ngx-restangular';
 import { WidgetsModule } from 'ngx-widgets';
 
 import { ActionModule } from 'patternfly-ng/action';

@@ -12,7 +12,7 @@ import {
 } from 'ngx-forge';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 
-import { ApiLocatorService } from 'app/shared/api-locator.service';
+import { ApiLocatorService } from '../../shared/api-locator.service';
 import { Fabric8UIHttpService } from '../../shared/fabric8-ui-http.service';
 import { AppLauncherRoutingModule } from './app-launcher-routing.module';
 import { AppLauncherComponent } from './app-launcher.component';

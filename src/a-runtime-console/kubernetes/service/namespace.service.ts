@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 import { Namespace, Namespaces } from '../model/namespace.model';
 import { isOpenShift } from '../store/apis.store';
 import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';

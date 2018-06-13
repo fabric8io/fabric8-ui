@@ -14,8 +14,8 @@ import { Observable } from 'rxjs';
 import { ContextService } from '../../shared/context.service';
 import { spaceMock } from '../../shared/context.service.mock';
 
-import { WindowService } from 'app/shared/window.service';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
+import { WindowService } from '../../shared/window.service';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { Workspace, WorkspaceLinks } from '../../space/create/codebases/services/workspace';
 import { WorkspacesService } from '../../space/create/codebases/services/workspaces.service';

@@ -5,7 +5,7 @@ import { BaseRequestOptions, Http, RequestOptions } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MomentModule } from 'angular2-moment';
-import { RestangularModule } from 'ng2-restangular';
+import { RestangularModule } from 'ngx-restangular';
 import { ModalModule } from 'ngx-modal';
 import { TestAppModule } from '../../../../app.test.module';
 import { Fabric8CommonModule } from '../../../../common/common.module';

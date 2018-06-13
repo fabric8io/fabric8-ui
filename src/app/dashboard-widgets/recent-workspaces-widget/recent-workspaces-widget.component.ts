@@ -6,8 +6,8 @@ import { Space, Spaces } from 'ngx-fabric8-wit';
 import { RelationalData, SpaceAttributes, SpaceLink, SpaceRelationships } from 'ngx-fabric8-wit/src/app/models/space';
 import { Team } from 'ngx-fabric8-wit/src/app/models/team';
 
-import { WindowService } from 'app/shared/window.service';
 import { ContextService } from '../../shared/context.service';
+import { WindowService } from '../../shared/window.service';
 import { Codebase } from '../../space/create/codebases/services/codebase';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { Workspace } from '../../space/create/codebases/services/workspace';

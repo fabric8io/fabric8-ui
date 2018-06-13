@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgArrayPipesModule } from 'angular-pipes';
-import { PlannerListModule, WorkItemDetailAddTypeSelectorModule, WorkItemDetailModule } from 'fabric8-planner';
+import { PlannerListModule, WorkItemDetailModule } from 'fabric8-planner';
 import { WidgetsModule } from 'ngx-widgets';
 
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
@@ -23,8 +23,7 @@ import { WorkItemWidgetComponent } from './work-item-widget.component';
     PlannerListModule,
     NgArrayPipesModule,
     WorkItemBarchartModule,
-    WorkItemDetailModule,
-    WorkItemDetailAddTypeSelectorModule
+    WorkItemDetailModule
   ],
   declarations: [WorkItemWidgetComponent],
   exports: [WorkItemWidgetComponent]
