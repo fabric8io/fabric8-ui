@@ -163,7 +163,7 @@ objects:
   status: {}
 parameters:
 - name: IMAGE
-  value: registry.devshift.net/fabric8-ui/fabric8-ui
+  value: quay.io/openshiftio/rhel-fabric8-ui-fabric8-ui
 - name: IMAGE_TAG
   value: latest
 - name: k8s_api_server_base_path

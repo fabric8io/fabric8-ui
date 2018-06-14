@@ -8,9 +8,17 @@ set -e
 
 # Export needed vars
 set +x
-for var in BUILD_NUMBER BUILD_URL JENKINS_URL GIT_BRANCH GH_TOKEN NPM_TOKEN GIT_COMMIT DEVSHIFT_USERNAME DEVSHIFT_PASSWORD DEVSHIFT_TAG_LEN; do
-  export $(grep ${var} jenkins-env | xargs)
-done
+eval "$(./env-toolkit load -f jenkins-env.json \
+        BUILD_NUMBER \
+        BUILD_URL \
+        JENKINS_URL \
+        GIT_BRANCH \
+        GH_TOKEN \
+        NPM_TOKEN \
+        GIT_COMMIT \
+        QUAY_USERNAME \
+        QUAY_PASSWORD \
+        DEVSHIFT_TAG_LEN)"
 export BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M:%S`+00:00
 set -x
 
@@ -25,25 +33,24 @@ yum -y install \
 service docker start
 echo "Docker Started: $(date) $line"
 
-REGISTRY="push.registry.devshift.net"
-PULLREGISTRY="registry.devshift.net"
+REGISTRY="quay.io"
 TAG="1.0.0"
 
 # Build builder image
-if [ -n "${DEVSHIFT_USERNAME}" -a -n "${DEVSHIFT_PASSWORD}" ]; then
-  docker login -u ${DEVSHIFT_USERNAME} -p ${DEVSHIFT_PASSWORD} ${REGISTRY}
+if [ -n "${QUAY_USERNAME}" -a -n "${QUAY_PASSWORD}" ]; then
+  docker login -u ${QUAY_USERNAME} -p ${QUAY_PASSWORD} ${REGISTRY}
 else
   echo "Could not login, missing credentials for the registry"
 fi
 
 mkdir -p dist
-docker run --detach=true --name=fabric8-ui-builder -t -v $(pwd)/dist:/dist:Z ${PULLREGISTRY}/fabric8-ui/fabric8-ui-builder:${TAG}
+docker run --detach=true --name=fabric8-ui-builder -t -v $(pwd)/dist:/dist:Z ${REGISTRY}/openshiftio/rhel-fabric8-ui-fabric8-ui-builder:${TAG}
 
 if [[ $? -ne 0 ]]; then
   docker build -t fabric8-ui-builder -f Dockerfile.builder . && \
-  docker tag fabric8-ui-builder ${REGISTRY}/fabric8-ui/fabric8-ui-builder:${TAG} && \
-  docker push ${REGISTRY}/fabric8-ui/fabric8-ui-builder:${TAG}
-  docker run --detach=true --name=fabric8-ui-builder -t -v $(pwd)/dist:/dist:Z ${PULLREGISTRY}/fabric8-ui/fabric8-ui-builder:${TAG}
+  docker tag fabric8-ui-builder ${REGISTRY}/openshiftio/fabric8-ui-fabric8-ui-builder:${TAG} && \
+  docker push ${REGISTRY}/openshiftio/fabric8-ui-fabric8-ui-builder:${TAG}
+  docker run --detach=true --name=fabric8-ui-builder -t -v $(pwd)/dist:/dist:Z ${REGISTRY}/openshiftio/rhel-fabric8-ui-fabric8-ui-builder:${TAG}
 fi
 
 echo "NPM Install starting: $(date) $line"
