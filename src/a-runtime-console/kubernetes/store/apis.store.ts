@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { KUBERNETES_RESTANGULAR } from './../service/kubernetes.restangular';
 

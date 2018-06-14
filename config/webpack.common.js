@@ -52,14 +52,6 @@ module.exports = function (options) {
   const aotMode = false;//options && options.aot !== undefined;
   console.log('The options from the webpack config: ' + stringify(options, null, 2));
 
-  /**
-   * The following is needed to make sure the symlinked fabric8-analytics-dependency-editor works fine on both npm link and normal way.
-   */
-  var depEditorPath = path.resolve(__dirname, "../node_modules/fabric8-analytics-dependency-editor");
-  if (!fs.existsSync(depEditorPath)) {
-    depEditorPath = path.resolve(__dirname, "../node_modules/ngx-forge/node_modules/fabric8-analytics-dependency-editor");
-  }
-
   // ExtractTextPlugin
   const extractCSS = new ExtractTextPlugin({
     filename: '_assets/stylesheets/[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
@@ -100,37 +92,13 @@ module.exports = function (options) {
      */
     resolve: {
 
-      alias: {
-        "fabric8-analytics-dependency-editor": depEditorPath
-      },
-
       /**
        * An array that automatically resolve certain extensions.
        * Which is what enables users to leave off the extension when importing.
        *
        * See: https://webpack.js.org/configuration/resolve/#resolve-extensions
        */
-      extensions: ['.ts', '.js', '.json'],
-
-      /**
-       * Tell webpack what directories should be searched when resolving modules.
-       *
-       * We enable this in dev as it allows npm link to work
-       *
-       * See: https://webpack.js.org/configuration/resolve/#resolve-modules
-       */
-      modules: [helpers.root('src'), helpers.root('node_modules'),
-        // Todo: fabric8-stack-analysis-ui/src/app/stack/overview/chart-component.js cannot locate c3
-        helpers.root("node_modules/patternfly/node_modules/c3"),
-        helpers.root("node_modules/patternfly/node_modules/d3")
-      // ],
-      //
-      // plugins: [
-      //   new TsConfigPathsPlugin( {
-      //     baseUrl: helpers.root('src'),
-      //     configFileName: 'tsconfig.json'
-      //   })
-      ]
+      extensions: ['.ts', '.js', '.json']
     },
 
     /*

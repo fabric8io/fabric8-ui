@@ -1,6 +1,6 @@
 import { NgModule, OpaqueToken } from '@angular/core';
 import { OAuthService } from 'angular2-oauth2/oauth-service';
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 import { AuthenticationService } from 'ngx-login-client';
 import { LoginService } from '../../shared/login.service';
 import { OnLogin } from '../../shared/onlogin.service';

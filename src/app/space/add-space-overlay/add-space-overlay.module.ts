@@ -7,7 +7,7 @@ import { Fabric8WitModule, UniqueSpaceNameValidatorDirective, ValidSpaceNameVali
 import { CodebasesService } from '../create/codebases/services/codebases.service';
 import { AddSpaceOverlayComponent } from './add-space-overlay.component';
 
-import { SpaceTemplateService } from 'app/shared/space-template.service';
+import { SpaceTemplateService } from '../../shared/space-template.service';
 
 @NgModule({
   imports: [

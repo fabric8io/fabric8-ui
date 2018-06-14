@@ -130,7 +130,8 @@ module.exports = function (options) {
        */
       sourceMapFilename: '[name].map',
 
-      /** The filename of non-entry chunks as relative path
+      /**
+       * The filename of non-entry chunks as relative path
        * inside the output.path directory.
        *
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
@@ -142,25 +143,37 @@ module.exports = function (options) {
       libraryTarget: 'var'
     },
 
+    resolve: {
+
+      /**
+       * Whether to resolve symlinks to their symlinked location.
+       *
+       * Needed for dev to allow `npm link` to work correctly.
+       *
+       * See: https://webpack.js.org/configuration/resolve/#resolve-symlinks
+       */
+      symlinks: false
+    },
+
     module: {
       rules: [
         {
           test: /\.js$/,
           exclude: [
-            // Example helpers.nodeModulePath("fabric8-planner"),
+            // Example \/\fabric8-planner/,
             // Exclude any problematic sourcemaps
-            helpers.nodeModulePath("@angular"),
-            helpers.nodeModulePath("angular-2-dropdown-multiselect"),
-            helpers.nodeModulePath("angular2-flash-messages"),
-            helpers.nodeModulePath("fabric8-analytics-dependency-editor"),
-            helpers.nodeModulePath("jw-bootstrap-switch-ng2"),
-            helpers.nodeModulePath("mydatepicker"),
-            helpers.nodeModulePath("ng2-completer"),
-            helpers.nodeModulePath("ng2-dnd"),
-            helpers.nodeModulePath("ng2-truncate"),
-            helpers.nodeModulePath("ngx-dropdown"),
-            helpers.nodeModulePath("ngx-forge"),
-            helpers.nodeModulePath("ngx-modal")
+            /\/@angular/,
+            /\/angular-2-dropdown-multiselect/,
+            /\/angular2-flash-messages/,
+            /\/fabric8-analytics-dependency-editor/,
+            /\/jw-bootstrap-switch-ng2/,
+            /\/mydatepicker/,
+            /\/ng2-completer/,
+            /\/ng2-dnd/,
+            /\/ng2-truncate/,
+            /\/ngx-dropdown/,
+            /\/ngx-forge/,
+            /\/ngx-modal/
           ],
           use: ["source-map-loader"],
           enforce: "pre"

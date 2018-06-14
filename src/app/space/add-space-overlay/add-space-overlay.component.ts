@@ -15,10 +15,10 @@ import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Observable, Subscription } from 'rxjs';
 
-import { ContextService } from 'app/shared/context.service';
-import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
-import { SpaceTemplateService } from 'app/shared/space-template.service';
-import { SpacesService } from 'app/shared/spaces.service';
+import { ContextService } from '../../shared/context.service';
+import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
+import { SpaceTemplateService } from '../../shared/space-template.service';
+import { SpacesService } from '../../shared/spaces.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

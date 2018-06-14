@@ -2,7 +2,7 @@ import { Inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 
 import { RESTService } from '../../store/entity/rest.service';
 import { KubernetesResource } from '../model/kubernetesresource.model';

@@ -6,7 +6,7 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { MemoryStat } from 'app/space/create/deployments/models/memory-stat';
+import { MemoryStat } from '../models/memory-stat';
 import { DeploymentStatusService } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
 
