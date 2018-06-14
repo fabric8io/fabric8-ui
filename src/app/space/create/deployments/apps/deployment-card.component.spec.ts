@@ -3,6 +3,7 @@ import {
   DebugElement,
   EventEmitter,
   Input,
+  NO_ERRORS_SCHEMA,
   Output
 } from '@angular/core';
 import {
@@ -14,10 +15,6 @@ import {
   tick
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import {
@@ -35,6 +32,10 @@ import {
   Subject
 } from 'rxjs';
 import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
@@ -53,17 +54,6 @@ import { DeploymentCardComponent } from './deployment-card.component';
 class HostComponent { }
 
 @Component({
-  selector: 'deployments-donut',
-  template: ''
-})
-class FakeDeploymentsDonutComponent {
-  @Input() mini: boolean;
-  @Input() spaceId: string;
-  @Input() applicationId: string;
-  @Input() environment: string;
-}
-
-@Component({
   selector: 'delete-deployment-modal',
   template: ''
 })
@@ -72,38 +62,6 @@ class FakeDeleteDeploymentModal {
   @Input() applicationId: string;
   @Input() environmentName: string;
   @Output() deleteEvent = new EventEmitter();
-}
-
-@Component({
-  selector: 'deployment-graph-label',
-  template: ''
-})
-class FakeDeploymentGraphLabelComponent {
-  @Input() type: any;
-  @Input() dataMeasure: any;
-  @Input() value: any;
-  @Input() valueUpperBound: any;
-}
-
-@Component({
-  selector: 'deployment-status-icon',
-  template: ''
-})
-class FakeDeploymentStatusIconComponent {
-  @Input() iconClass: string;
-  @Input() toolTip: string;
-}
-
-@Component({
-  selector: 'deployment-details',
-  template: ''
-})
-class FakeDeploymentDetailsComponent {
-  @Input() collapsed: boolean;
-  @Input() applicationId: string;
-  @Input() environment: string;
-  @Input() spaceId: string;
-  @Input() active: boolean;
 }
 
 function initMockSvc(): jasmine.SpyObj<DeploymentsService> {
@@ -121,9 +79,7 @@ function initMockSvc(): jasmine.SpyObj<DeploymentsService> {
 }
 
 describe('DeploymentCardComponent async tests', () => {
-
-  let component: DeploymentCardComponent;
-  let fixture: ComponentFixture<DeploymentCardComponent>;
+  type Context = TestContext<DeploymentCardComponent, HostComponent>;
   let mockSvc: jasmine.SpyObj<DeploymentsService>;
   let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
   let notifications: any;
@@ -137,41 +93,32 @@ describe('DeploymentCardComponent async tests', () => {
     mockStatusSvc.getDeploymentAggregateStatus.and.returnValue(Observable.never());
     notifications = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
-    TestBed.configureTestingModule({
-      declarations: [
-        DeploymentCardComponent,
-        FakeDeploymentsDonutComponent,
-        FakeDeploymentGraphLabelComponent,
-        FakeDeploymentDetailsComponent,
-        FakeDeploymentStatusIconComponent,
-        FakeDeleteDeploymentModal
-      ],
-      imports: [
-        BsDropdownModule.forRoot(),
-        CollapseModule.forRoot(),
-        ChartModule,
-        ModalModule.forRoot()
-      ],
-      providers: [
-        BsDropdownConfig,
-        { provide: NotificationsService, useValue: notifications },
-        { provide: DeploymentsService, useValue: mockSvc },
-        { provide: DeploymentStatusService, useValue: mockStatusSvc }
-      ]
-    });
-
-    fixture = TestBed.createComponent(DeploymentCardComponent);
-    component = fixture.componentInstance;
-
-    component.spaceId = 'mockSpaceId';
-    component.applicationId = 'mockAppId';
-    component.environment = 'mockEnvironment';
-
-    spyOn(component, 'openModal');
-    fixture.detectChanges();
     flush();
     flushMicrotasks();
   }));
+
+  initContext(DeploymentCardComponent, HostComponent, {
+    declarations: [FakeDeleteDeploymentModal],
+    imports: [
+      BsDropdownModule.forRoot(),
+      CollapseModule.forRoot(),
+      ChartModule,
+      ModalModule.forRoot()
+    ],
+    providers: [
+      BsDropdownConfig,
+      { provide: NotificationsService, useFactory: () => notifications },
+      { provide: DeploymentsService, useFactory: () => mockSvc },
+      { provide: DeploymentStatusService, useFactory: () => mockStatusSvc }
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
+  },
+    (component: DeploymentCardComponent) => {
+      spyOn(component, 'openModal');
+      component.spaceId = 'mockSpaceId';
+      component.applicationId = 'mockAppId';
+      component.environment = 'mockEnvironment';
+    });
 
   describe('dropdown menus', () => {
     let menuItems: DebugElement[];
@@ -181,39 +128,39 @@ describe('DeploymentCardComponent async tests', () => {
         .filter((item: DebugElement) => item.nativeElement.textContent.includes(label))[0];
     }
 
-    beforeEach(fakeAsync(() => {
-      const de: DebugElement = fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
+    beforeEach(fakeAsync(function(this: Context) {
+      const de: DebugElement = this.fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
       de.triggerEventHandler('click', new CustomEvent('click'));
 
-      fixture.detectChanges();
+      this.fixture.detectChanges();
       tick();
 
-      const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
+      const menu: DebugElement = this.fixture.debugElement.query(By.css('.dropdown-menu'));
       menuItems = menu.queryAll(By.css('li'));
     }));
 
-    it('should not display appUrl if none available', fakeAsync(() => {
-      component.appUrl = Observable.of('');
+    it('should not display appUrl if none available', fakeAsync(function(this: Context) {
+      this.testedDirective.appUrl = Observable.of('');
 
-      fixture.detectChanges();
+      this.fixture.detectChanges();
 
-      const menu: DebugElement = fixture.debugElement.query(By.css('.dropdown-menu'));
+      const menu: DebugElement = this.fixture.debugElement.query(By.css('.dropdown-menu'));
       menuItems = menu.queryAll(By.css('li'));
       const item: DebugElement = getItemByLabel('Open Application');
       expect(item).toBeFalsy();
     }));
 
-    it('should call the delete modal open method', fakeAsync(()  => {
+    it('should call the delete modal open method', fakeAsync(function(this: Context) {
       const item: DebugElement = getItemByLabel('Delete');
       expect(item).toBeTruthy();
       item.query(By.css('a')).triggerEventHandler('click', new CustomEvent('click'));
-      fixture.detectChanges();
+      this.fixture.detectChanges();
 
-      expect(component.openModal).toHaveBeenCalled();
+      expect(this.testedDirective.openModal).toHaveBeenCalled();
     }));
 
-    it('should call the delete service method when the modal event fires', fakeAsync(() => {
-      const de: DebugElement = fixture.debugElement.query(By.directive(FakeDeleteDeploymentModal));
+    it('should call the delete service method when the modal event fires', fakeAsync(function(this: Context) {
+      const de: DebugElement = this.fixture.debugElement.query(By.directive(FakeDeleteDeploymentModal));
       expect(mockSvc.deleteDeployment).not.toHaveBeenCalled();
       de.componentInstance.deleteEvent.emit();
       expect(mockSvc.deleteDeployment).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
@@ -221,11 +168,11 @@ describe('DeploymentCardComponent async tests', () => {
 
   });
 
-  it('should not display inactive environments', fakeAsync(() => {
+  it('should not display inactive environments', fakeAsync(function(this: Context) {
     active.next(false);
-    fixture.detectChanges();
+    this.fixture.detectChanges();
 
-    expect(component.active).toBeFalsy();
+    expect(this.testedDirective.active).toBeFalsy();
   }));
 });
 
@@ -256,14 +203,7 @@ describe('DeploymentCardComponent', () => {
   }));
 
   initContext(DeploymentCardComponent, HostComponent, {
-    declarations: [
-      DeploymentCardComponent,
-      FakeDeploymentsDonutComponent,
-      FakeDeploymentGraphLabelComponent,
-      FakeDeploymentDetailsComponent,
-      FakeDeploymentStatusIconComponent,
-      FakeDeleteDeploymentModal
-    ],
+    declarations: [FakeDeleteDeploymentModal],
     imports: [
       BsDropdownModule.forRoot(),
       CollapseModule.forRoot(),
@@ -275,7 +215,8 @@ describe('DeploymentCardComponent', () => {
       { provide: NotificationsService, useFactory: () => notifications },
       { provide: DeploymentsService, useFactory: () => mockSvc },
       { provide: DeploymentStatusService, useFactory: () => mockStatusSvc }
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
   },
     (component: DeploymentCardComponent) => {
       component.spaceId = 'mockSpaceId';
