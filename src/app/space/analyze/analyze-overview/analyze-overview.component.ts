@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, DoCheck, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
@@ -21,6 +21,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   context: Context;
   private space: Space;
   private _myWorkItemsCard: boolean = false;
+  private _userOwnsSpace: boolean = false;
 
   constructor(private authentication: AuthenticationService,
               private broadcaster: Broadcaster,
@@ -43,6 +44,13 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
         this._myWorkItemsCard = true;
       }
     }));
+
+    this._userOwnsSpace = this.checkSpaceOwner();
+  }
+
+  ngDoCheck() {
+    // Must re-evaluate whenever user redirects from one space to another
+    this._userOwnsSpace = this.checkSpaceOwner();
   }
 
   ngOnDestroy() {
@@ -51,12 +59,11 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     });
   }
 
-
   showAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', true);
   }
 
-  userOwnsSpace(): boolean {
+  checkSpaceOwner(): boolean {
     if (this.context && this.loggedInUser) {
       return this.context.space.relationships['owned-by'].data.id === this.loggedInUser.id;
     }
@@ -65,5 +72,9 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
 
   get myWorkItemsCard(): boolean {
     return this._myWorkItemsCard;
+  }
+
+  get userOwnsSpace(): boolean {
+    return this._userOwnsSpace;
   }
 }
