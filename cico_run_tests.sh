@@ -36,6 +36,7 @@ echo "Docker Started: $(date)"
 
 REGISTRY="quay.io"
 TAG="1.0.0"
+BUILDER_IMAGE=${REGISTRY}/openshiftio/fabric8-ui-fabric8-ui-builder:${TAG}
 
 # Build builder image
 if [ -n "${QUAY_USERNAME}" -a -n "${QUAY_PASSWORD}" ]; then
@@ -46,15 +47,15 @@ fi
 
 mkdir -p dist
 
-if ! docker pull ${REGISTRY}/openshiftio/rhel-fabric8-ui-fabric8-ui-builder:${TAG}; then
+if ! docker pull $BUILDER_IMAGE; then
   docker build -t fabric8-ui-builder -f Dockerfile.builder .
-  docker tag fabric8-ui-builder ${REGISTRY}/openshiftio/fabric8-ui-fabric8-ui-builder:${TAG}
-  docker push ${REGISTRY}/openshiftio/fabric8-ui-fabric8-ui-builder:${TAG}
+  docker tag fabric8-ui-builder $BUILDER_IMAGE
+  docker push $BUILDER_IMAGE
 fi
 
 docker run --detach=true --name=fabric8-ui-builder -t \
   -v $(pwd)/dist:/dist:Z \
-  ${REGISTRY}/openshiftio/rhel-fabric8-ui-fabric8-ui-builder:${TAG}
+  $BUILDER_IMAGE
 
 echo "NPM Install starting: $(date)"
 
