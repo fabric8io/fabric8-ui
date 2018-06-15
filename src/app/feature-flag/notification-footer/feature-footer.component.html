@@ -36,7 +36,7 @@
     <ng-template #tooltipTemplateInternalEmpty>
       <div><strong>There are no internal features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInInternal" triggers="click" placement="top" [tooltip]="tooltipTemplateInternalEmpty" class="empty">
+    <div *ngIf="noFeaturesInInternal" triggers="click" placement="top" [tooltip]="tooltipTemplateInternalEmpty" class="internal">
       <i class="fa fa-1x"></i>
     </div>
   </div>
@@ -70,7 +70,7 @@
     <ng-template #tooltipTemplateExperimentalEmpty>
       <div><strong>There are no experimental features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInExperimental" triggers="click" placement="top" [tooltip]="tooltipTemplateExperimentalEmpty" class="empty">
+    <div *ngIf="noFeaturesInExperimental" triggers="click" placement="top" [tooltip]="tooltipTemplateExperimentalEmpty" class="experimental">
       <i class="fa fa-1x"></i>
     </div>
   </div>
@@ -95,7 +95,7 @@
     <ng-template #tooltipTemplateBetaEmpty>
       <div><strong>There are no beta features on this page.</strong></div>
     </ng-template>
-    <div *ngIf="noFeaturesInBeta" triggers="click" placement="top" [tooltip]="tooltipTemplateBetaEmpty" class="empty">
+    <div *ngIf="noFeaturesInBeta" triggers="click" placement="top" [tooltip]="tooltipTemplateBetaEmpty" class="beta">
       <i class="fa fa-1x"></i>
     </div>
   </div>
