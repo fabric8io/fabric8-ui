@@ -67,7 +67,7 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should call to check the user space', function(this: TestingContext) {
-    spyOn(this.testedDirective, 'userOwnsSpace');
+    spyOn(this.testedDirective, 'checkSpaceOwner');
 
     fakeUserObs.next({
       id: 'loggedInUser'
@@ -86,26 +86,26 @@ describe('AnalyzeOverviewComponent', () => {
     } as Context);
 
     this.detectChanges();
-    expect(this.testedDirective.userOwnsSpace).toHaveBeenCalled();
+    expect(this.testedDirective.checkSpaceOwner).toHaveBeenCalled();
   });
 
   it('should disable the button if user service unavailable', function(this: TestingContext) {
     fakeUserObs.next(null as User);
     this.detectChanges();
 
-    expect(this.testedDirective.userOwnsSpace()).toBe(false);
+    expect(this.testedDirective.checkSpaceOwner()).toBe(false);
   });
 
   it('should disable the button if context service unavailable', function(this: TestingContext) {
     this.detectChanges();
-    expect(this.testedDirective.userOwnsSpace()).toBe(false);
+    expect(this.testedDirective.checkSpaceOwner()).toBe(false);
   });
 
   it('should disable the button if both services are unavailable', function(this: TestingContext) {
     fakeUserObs.next(null as User);
     this.detectChanges();
 
-    expect(this.testedDirective.userOwnsSpace()).toBe(false);
+    expect(this.testedDirective.checkSpaceOwner()).toBe(false);
   });
 
   it('should recognize that the user owns the space', function(this: TestingContext) {
@@ -129,9 +129,8 @@ describe('AnalyzeOverviewComponent', () => {
 
     this.detectChanges();
 
-    expect(this.testedDirective.userOwnsSpace()).toBe(true);
+    expect(this.testedDirective.checkSpaceOwner()).toBe(true);
   });
-
 
   it('should recognize that the user does not own the space', function(this: TestingContext) {
     const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
@@ -154,6 +153,54 @@ describe('AnalyzeOverviewComponent', () => {
 
     this.detectChanges();
 
-    expect(this.testedDirective.userOwnsSpace()).toBe(false);
+    expect(this.testedDirective.checkSpaceOwner()).toBe(false);
+  });
+
+  it('should show the Create an Application button if the user owns the space', function(this: TestingContext) {
+    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
+
+    fakeUserObs.next({
+      id: 'loggedInUser'
+    } as User);
+
+    ctxSubj.next({
+      space: {
+        relationships: {
+          'owned-by': {
+            data: {
+              id: 'loggedInUser'
+            }
+          }
+        }
+      } as Space
+    } as Context);
+
+    this.detectChanges();
+
+    expect(this.fixture.debugElement.query(By.css('#user-level-analyze-overview-dashboard-create-space-button'))).not.toBeNull();
+  });
+
+  it('should hide the Create an Application button if the user does not own the space', function(this: TestingContext) {
+    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
+
+    fakeUserObs.next({
+      id: 'loggedInUser'
+    } as User);
+
+    ctxSubj.next({
+      space: {
+        relationships: {
+          'owned-by': {
+            data: {
+              id: 'someOtherUser'
+            }
+          }
+        }
+      } as Space
+    } as Context);
+
+    this.detectChanges();
+
+    expect(this.fixture.debugElement.query(By.css('#user-level-analyze-overview-dashboard-create-space-button'))).toBeNull();
   });
 });

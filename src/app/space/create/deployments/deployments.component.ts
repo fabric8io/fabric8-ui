@@ -4,7 +4,12 @@ import { Spaces } from 'ngx-fabric8-wit';
 import { Observable, Subscription } from 'rxjs';
 
 import { DeploymentStatusService } from './services/deployment-status.service';
-import { DeploymentsService } from './services/deployments.service';
+import {
+  DeploymentsService,
+  POLL_RATE_TOKEN,
+  TIMER_TOKEN,
+  TIMESERIES_SAMPLES_TOKEN
+} from './services/deployments.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -13,7 +18,14 @@ import { DeploymentsService } from './services/deployments.service';
   styleUrls: ['./deployments.component.less'],
   providers: [
     DeploymentStatusService,
-    DeploymentsService
+    DeploymentsService,
+    {
+      provide: TIMER_TOKEN, useValue: Observable
+        .timer(DeploymentsService.DEFAULT_INITIAL_UPDATE_DELAY, DeploymentsService.DEFAULT_POLL_RATE_MS)
+        .share()
+    },
+    { provide: TIMESERIES_SAMPLES_TOKEN, useValue: DeploymentsService.DEFAULT_FRONT_LOAD_SAMPLES },
+    { provide: POLL_RATE_TOKEN, useValue: DeploymentsService.DEFAULT_POLL_RATE_MS }
   ]
 })
 export class DeploymentsComponent implements OnDestroy, OnInit {
