@@ -91,6 +91,16 @@ describe('Service: AppLauncherDependencyCheckService', () => {
     expect(valProjectName).toBeTruthy();
   });
 
+  it('should return false if the project name has continous hyphens (-)', () => {
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('app_name--name');
+    expect(valProjectName).toBeFalsy();
+  });
+
+  it('should return false if the project name has continous underscores (_)', () => {
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('app_name__name');
+    expect(valProjectName).toBeFalsy();
+  });
+
   it('validate Artifact Id to be truthy', () => {
     let valArtifactId = appLauncherDependencyCheckService.validateArtifactId(dependencyCheck.mavenArtifact);
     expect(valArtifactId).toBeTruthy();

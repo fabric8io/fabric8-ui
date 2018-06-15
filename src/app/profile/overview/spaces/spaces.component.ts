@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import { Broadcaster, Logger } from 'ngx-base';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
@@ -21,8 +20,6 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   subscriptions: Subscription[] = [];
   // spaceToDelete: Space;
   spaces: Space[] = [];
-  modalRef: BsModalRef;
-  private selectedFlow: string;
   private space: string;
 
   constructor(
@@ -30,12 +27,10 @@ export class SpacesComponent implements OnDestroy, OnInit  {
       private logger: Logger,
       private spaceService: SpaceService,
       private userService: UserService,
-      private modalService: BsModalService,
       private authentication: AuthenticationService,
       private broadcaster: Broadcaster
   ) {
     this.space = '';
-    this.selectedFlow = 'start';
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     this.subscriptions.push(this.broadcaster.on('contextChanged').subscribe(val => {
       this.context = val as Context;
@@ -107,26 +102,8 @@ export class SpacesComponent implements OnDestroy, OnInit  {
   //   this.modalRef = this.modalService.show(deleteSpace, { class: 'modal-lg' });
   // }
 
-  openForgeWizard(addSpace: TemplateRef<any>) {
-    if (this.authentication.getGitHubToken()) {
-      this.selectedFlow = 'start';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
-    }
-  }
-
-  closeModal($event: any): void {
-    this.modalRef.hide();
-  }
-
-  cancel() {
-    this.modalRef.hide();
-  }
-
-  selectFlow($event) {
-    this.selectedFlow = $event.flow;
-    this.space = $event.space;
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 
 }

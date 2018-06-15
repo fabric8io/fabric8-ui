@@ -1,11 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { Logger } from 'ngx-base';
-import {AuthenticationService, UserService} from 'ngx-login-client';
-import { Feature, FeatureTogglesService } from '../service/feature-toggles.service';
-
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
+
+import { Logger } from 'ngx-base';
+import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
+
 import { FeatureFlagConfig } from '../../models/feature-flag-config';
+import { Feature, FeatureTogglesService } from '../service/feature-toggles.service';
 import { FeatureFlagResolver } from './feature-flag.resolver';
 
 describe('FeatureFlag resolver: it', () => {

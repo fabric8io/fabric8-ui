@@ -4,7 +4,6 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { Broadcaster, Logger } from 'ngx-base';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
@@ -29,7 +28,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   title = 'Almighty';
   imgLoaded: Boolean = false;
   documentationListVisible: Boolean = false;
-  modalRef: BsModalRef;
   isIn = false;   // store state
   toggleState() { // click handler
       let bool = this.isIn;
@@ -77,12 +75,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     public loginService: LoginService,
     private broadcaster: Broadcaster,
     private contexts: Contexts,
-    private modalService: BsModalService,
     private authentication: AuthenticationService,
     private featureTogglesService: FeatureTogglesService
   ) {
     this.space = '';
-    this.selectedFlow = 'start';
     router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         this.broadcaster.broadcast('navigate', { url: val.url } as Navigation);
@@ -119,7 +115,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.eventListeners.forEach(e => e.unsubscribe());
   }
 
-
   listenToEvents() {
     this.eventListeners.push(
       this.route.queryParams.subscribe(params => {
@@ -150,33 +145,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.imgLoaded = false;
   }
 
-  openForgeWizard(addSpace: TemplateRef<any>) {
-    if (this.authentication.getGitHubToken()) {
-      this.selectedFlow = 'start';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
-    }
-  }
-
-  closeModal($event: any): void {
-    this.modalRef.hide();
-  }
-
-  showAddSpaceOverlay(addSpace: TemplateRef<any>): void {
-    this.featureTogglesService.getFeature('AppLauncher').subscribe((feature) => {
-      this.appLauncherEnabled = feature.attributes['enabled'] && feature.attributes['user-enabled'];
-      if (this.appLauncherEnabled) {
-        this.broadcaster.broadcast('showAddSpaceOverlay', true);
-      } else {
-        this.openForgeWizard(addSpace);
-      }
-    });
-  }
-
-  selectFlow($event) {
-    this.selectedFlow = $event.flow;
-    this.space = $event.space;
+  showAddSpaceOverlay(): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 
   get context(): Context {

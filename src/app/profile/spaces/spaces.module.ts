@@ -7,8 +7,6 @@ import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule } from 'ngx-widgets';
 
 import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
-import { ForgeWizardModule } from '../../space/forge-wizard/forge-wizard.module';
-import { SpaceWizardModule } from '../../space/wizard/space-wizard.module';
 import { SpacesRoutingModule } from './spaces-routing.module';
 import { SpacesComponent }     from './spaces.component';
 
@@ -17,12 +15,11 @@ import { SpacesComponent }     from './spaces.component';
     CommonModule,
     SpacesRoutingModule,
     ModalModule.forRoot(),
-    ForgeWizardModule,
-    SpaceWizardModule,
     InfiniteScrollModule,
     Fabric8WitModule,
     // Must be at the end
-    FeatureFlagModule ],
+    FeatureFlagModule
+  ],
   declarations: [ SpacesComponent ]
 })
 export class SpacesModule {

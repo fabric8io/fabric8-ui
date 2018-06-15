@@ -358,29 +358,14 @@ describe('UpdateComponent', () => {
     });
   });
 
-  describe('#validateImageUrl', () => {
-    // Wrongfully fails
-    xit('should verify https://fabric8.io/ to be an invalid image url', () => {
-      let url: string = 'https://fabric8.io/';
-      component.imageUrl = url;
-      component.validateImageUrl();
-      expect(component.imageUrlInvalid).toBeTruthy();
-    });
-
-    it('should verify http://design.jboss.org/fabric8/logo/final/fabric8_logo_600px.png to be a valid image url', () => {
-      let url: string = 'http://design.jboss.org/fabric8/logo/final/fabric8_logo_600px.png';
-      component.imageUrl = url;
-      component.validateImageUrl();
-      expect(component.imageUrlInvalid).toBeFalsy();
-    });
-  });
-
   describe('#validateUrl', () => {
     it('should verify not-a-real-url to be an invalid url', () => {
-      let url: string = 'not-a-real-url';
-      component.url = url;
-      component.validateUrl();
-      expect(component.urlInvalid).toBeTruthy();
+      let urls: string[] = ['not-a-real-url', 'http://', '.com', 'htt:/not-a-real-url.some-thing.'];
+      urls.forEach(url => {
+        component.url = url;
+        component.validateUrl();
+        expect(component.urlInvalid).toBeTruthy();
+      });
     });
 
     it('should verify https://fabric8.io/ to be a valid url', () => {

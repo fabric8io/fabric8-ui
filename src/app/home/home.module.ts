@@ -12,8 +12,6 @@ import { FeatureFlagModule } from '../feature-flag/feature-flag.module';
 import { LoadingWidgetModule } from '../dashboard-widgets/loading-widget/loading-widget.module';
 import { RecentPipelinesWidgetModule } from '../dashboard-widgets/recent-pipelines-widget/recent-pipelines-widget.module';
 import { RecentWorkspacesWidgetModule } from '../dashboard-widgets/recent-workspaces-widget/recent-workspaces-widget.module';
-import { ForgeWizardModule } from '../space/forge-wizard/forge-wizard.module';
-import { SpaceWizardModule } from '../space/wizard/space-wizard.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
 import { WorkItemWidgetModule } from './work-item-widget/work-item-widget.module';
@@ -23,8 +21,6 @@ import { WorkItemWidgetModule } from './work-item-widget/work-item-widget.module
     CommonModule,
     HomeRoutingModule,
     LoadingWidgetModule,
-    SpaceWizardModule,
-    ForgeWizardModule,
     Fabric8WitModule,
     FeatureFlagModule,
     WorkItemWidgetModule,

@@ -22,9 +22,9 @@ import {
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../../shared/notifications.service';
 
-import { BuildConfig } from 'a-runtime-console/index';
+import { BuildConfig } from '../../../../../a-runtime-console/index';
 
 import { PipelinesService as RuntimePipelinesService } from '../../../../shared/runtime-console/pipelines.service';
 

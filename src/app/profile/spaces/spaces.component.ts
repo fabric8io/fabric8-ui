@@ -26,7 +26,6 @@ export class SpacesComponent implements OnInit {
   searchTermStream = new Subject<string>();
   context: Context;
   spaceToDelete: Space;
-  private selectedFlow: string;
   private space: string;
 
   constructor(
@@ -41,7 +40,6 @@ export class SpacesComponent implements OnInit {
     private broadcaster: Broadcaster
   ) {
     this.space = '';
-    this.selectedFlow = 'start';
     this.contexts.current.subscribe(val => this.context = val);
   }
 
@@ -124,26 +122,12 @@ export class SpacesComponent implements OnInit {
     this.searchTermStream.next(searchText);
   }
 
-  openForgeWizard(addSpace: TemplateRef<any>) {
-    if (this.authentication.getGitHubToken()) {
-      this.selectedFlow = 'start';
-      this.modalRef = this.modalService.show(addSpace, {class: 'modal-lg'});
-    } else {
-      this.broadcaster.broadcast('showDisconnectedFromGitHub', {'location': window.location.href });
-    }
-  }
-
   closeModal($event: any): void {
     this.modalRef.hide();
   }
 
   cancel() {
     this.modalRef.hide();
-  }
-
-  selectFlow($event) {
-    this.selectedFlow = $event.flow;
-    this.space = $event.space;
   }
 
   showAddSpaceOverlay(): void {

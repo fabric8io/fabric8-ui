@@ -1,4 +1,4 @@
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 import { Observable, Subscription } from 'rxjs';
 import { KubernetesResource } from '../model/kubernetesresource.model';
 import { pathJoin } from '../model/utils';

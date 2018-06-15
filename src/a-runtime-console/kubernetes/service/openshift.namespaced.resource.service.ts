@@ -1,4 +1,4 @@
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { KubernetesResource } from '../model/kubernetesresource.model';
 import { isOpenShift } from '../store/apis.store';

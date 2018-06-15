@@ -12,7 +12,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { EventService } from '../../shared/event.service';
-import { SpaceWizardComponent } from '../../space/wizard/space-wizard.component';
 import { SpacesComponent } from './spaces.component';
 
 
@@ -169,23 +168,6 @@ describe('SpacesComponent', () => {
     });
   });
 
-  describe('#openForgeWizard', () => {
-    it('should show the modal if there exists a GitHub token for the user', () => {
-      let addSpace = jasmine.createSpy('TemplateRef');
-      spyOn(component.authentication, 'getGitHubToken').and.returnValue('mock-token');
-      component.openForgeWizard(addSpace);
-      expect(component.selectedFlow).toBe('start');
-      expect(component.modalService.show).toHaveBeenCalled();
-    });
-
-    it('should broadcast an event indicating a disconnection from GitHub if no token', () => {
-      let addSpace = jasmine.createSpy('TemplateRef');
-      spyOn(component.authentication, 'getGitHubToken').and.returnValue('');
-      component.openForgeWizard(addSpace);
-      expect(component.broadcaster.broadcast).toHaveBeenCalled();
-    });
-  });
-
   describe('#closeModal', () => {
     it('should hide the modal', () => {
       component.modalRef = mockModalRef;
@@ -199,18 +181,6 @@ describe('SpacesComponent', () => {
       component.modalRef = mockModalRef;
       component.cancel();
       expect(component.modalRef.hide).toHaveBeenCalled();
-    });
-  });
-
-  describe('#selectFlow', () => {
-    it('should set the flow and space from the passed $event', () => {
-      let mockEvent = {
-        'flow': 'mock-flow',
-        'space': 'mock-space'
-      };
-      component.selectFlow(mockEvent);
-      expect(component.selectedFlow).toBe('mock-flow');
-      expect(component.space).toBe('mock-space');
     });
   });
 

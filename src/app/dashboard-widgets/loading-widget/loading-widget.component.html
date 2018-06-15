@@ -1,4 +1,6 @@
 <div class="f8-loading f8-blank-slate-card">
   <div class="spinner spinner-lg"></div>
-  <p>{{message}}</p>
+  <h3 *ngIf="title !== undefined">{{title}}</h3>
+  <p *ngIf="message !== undefined">{{message}}</p>
+  <ng-content></ng-content>
 </div>

@@ -13,6 +13,14 @@
     "skipLibCheck": true,
     "noStrictGenericChecks": true,
     "baseUrl": "./src",
+    "paths": {
+      "@angular/*": [
+        "../node_modules/@angular/*"
+      ],
+      "rxjs": [
+        "../node_modules/rxjs"
+      ]
+    },
     "lib": [
       "dom",
       "es6"

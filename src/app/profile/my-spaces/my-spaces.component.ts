@@ -45,7 +45,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   private modalRef: BsModalRef;
   private pageName = 'myspaces';
   private pageSize: number = 2000;
-  private selectedFlow: string = 'start';
   private space: string = '';
   private spaceToDelete: Space;
   private subscriptions: Subscription[] = [];
@@ -261,11 +260,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   showAddSpaceOverlay() {
     this.broadcaster.broadcast('showAddSpaceOverlay', true);
-  }
-
-  selectFlow($event) {
-    this.selectedFlow = $event.flow;
-    this.space = $event.space;
   }
 
   // Pinned items

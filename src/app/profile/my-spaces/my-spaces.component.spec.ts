@@ -444,14 +444,6 @@ describe('MySpacesComponent', () => {
     });
   });
 
-  describe('#selectFlow', () => {
-    it('should set the flow and space from the passed $event', () => {
-      component.selectFlow(mockEvent);
-      expect(component.selectedFlow).toBe(mockEvent.flow);
-      expect(component.space).toBe(mockEvent.space);
-    });
-  });
-
   /**
    * Pinned Items
    */

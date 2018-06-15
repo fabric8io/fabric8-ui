@@ -6,7 +6,7 @@ import { HttpModule } from '@angular/http';
 import { Broadcaster, Notifications } from 'ngx-base';
 import { Observable } from 'rxjs';
 
-import { WindowService } from 'app/shared/window.service';
+import { WindowService } from '../../../../shared/window.service';
 import { CheService } from '../services/che.service';
 import { WorkspacesService } from '../services/workspaces.service';
 import { CodebasesItemWorkspacesComponent } from './codebases-item-workspaces.component';
