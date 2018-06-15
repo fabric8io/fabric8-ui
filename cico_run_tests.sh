@@ -32,7 +32,7 @@ date
 yum -y install docker make git
 
 systemctl start docker
-echo "Docker Started: $(date) $line"
+echo "Docker Started: $(date)"
 
 REGISTRY="quay.io"
 TAG="1.0.0"
@@ -74,4 +74,4 @@ echo 'CICO: functional tests OK'
 
 ## All ok, build prod version
 docker exec fabric8-ui-builder npm run build:prod
-echo "Build Complete: $(date) $line"
+echo "Build Complete: $(date)"
