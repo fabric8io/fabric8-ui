@@ -15,19 +15,17 @@ export class DeleteDeploymentModal {
   @Input() host: ModalDirective;
   @Input() applicationId: string = '';
   @Input() environmentName: string = '';
-  @Output() deleteEvent = new EventEmitter();
+  @Output() deleteEvent: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor() {}
-
-  public openModal(): void {
+  openModal(): void {
     this.host.show();
   }
 
-  public closeModal(): void {
+  closeModal(): void {
     this.host.hide();
   }
 
-  public confirmDeletion() {
+  confirmDeletion(): void {
     this.deleteEvent.emit();
     this.host.hide();
   }

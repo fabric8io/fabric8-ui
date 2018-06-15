@@ -47,6 +47,7 @@ import {
 } from './deployment-api.service';
 import {
   DeploymentsService,
+  POLL_RATE_TOKEN,
   TIMER_TOKEN,
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
@@ -105,6 +106,9 @@ describe('DeploymentsService', () => {
         },
         {
           provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3
+        },
+        {
+          provide: POLL_RATE_TOKEN, useValue: 1
         },
         DeploymentApiService,
         DeploymentsService
@@ -2477,6 +2481,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         { provide: NotificationsService, useValue: mockNotificationsService },
         { provide: TIMER_TOKEN, useValue: new Subject<void>() },
         { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3 },
+        { provide: POLL_RATE_TOKEN, useValue: 1 },
         DeploymentsService
       ]
     });
