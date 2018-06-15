@@ -3,6 +3,7 @@ import {
   DebugElement,
   Input
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { fakeAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -45,31 +46,25 @@ class FakeDeploymentsDonutChartComponent {
 describe('DeploymentsDonutComponent', () => {
   type Context = TestContext<DeploymentsDonutComponent, HostComponent>;
 
-  let notifications: jasmine.SpyObj<NotificationsService> =
-    jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
-  let mockSvc: jasmine.SpyObj<DeploymentsService>;
-
-  let environmentCpuSubject: Subject<CpuStat> = new Subject<CpuStat>();
-  let environmentMemSubject: Subject<MemoryStat> = new Subject<MemoryStat>();
-
-  beforeEach(fakeAsync(() => {
-    mockSvc = createMock(DeploymentsService);
-    mockSvc.scalePods.and.returnValue(
-      Observable.of('scalePods')
-    );
-    mockSvc.getPods.and.returnValue(
-      Observable.of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
-    );
-    mockSvc.getEnvironmentCpuStat.and.returnValue(environmentCpuSubject);
-    mockSvc.getEnvironmentMemoryStat.and.returnValue(environmentMemSubject);
-  }));
-
   initContext(DeploymentsDonutComponent, HostComponent,
     {
       declarations: [FakeDeploymentsDonutChartComponent],
       providers: [
-        { provide: DeploymentsService, useFactory: () => mockSvc },
-        { provide: NotificationsService, useValue: notifications }
+        {
+          provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
+            const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
+            svc.scalePods.and.returnValue(
+              Observable.of('scalePods')
+            );
+            svc.getPods.and.returnValue(
+              Observable.of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
+            );
+            svc.getEnvironmentCpuStat.and.returnValue(new Subject<CpuStat>());
+            svc.getEnvironmentMemoryStat.and.returnValue(new Subject<MemoryStat>());
+            return svc;
+          }
+        },
+        { provide: NotificationsService, useValue: jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']) }
       ]
     },
     (component: DeploymentsDonutComponent) => {
@@ -80,7 +75,7 @@ describe('DeploymentsDonutComponent', () => {
     });
 
   it('should get the pods with the correct arguments', function(this: Context) {
-    expect(mockSvc.getPods).toHaveBeenCalledWith('space', 'environmentName', 'application');
+    expect(TestBed.get(DeploymentsService).getPods).toHaveBeenCalledWith('space', 'environmentName', 'application');
   });
 
   it('should use pods data for initial desired replicas', function(this: Context) {
@@ -138,7 +133,7 @@ describe('DeploymentsDonutComponent', () => {
 
     el.click();
     this.testedDirective.debounceScale.flush();
-    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
+    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
   });
 
   it('should call scalePods when scaling down', function(this: Context) {
@@ -147,10 +142,11 @@ describe('DeploymentsDonutComponent', () => {
 
     el.click();
     this.testedDirective.debounceScale.flush();
-    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 1);
+    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 1);
   });
 
   it('should not call scalePods when scaling below 0', function(this: Context) {
+    const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
     let de: DebugElement = this.fixture.debugElement.query(By.css('#scaleDown'));
     let el: any = de.nativeElement;
 
@@ -172,8 +168,8 @@ describe('DeploymentsDonutComponent', () => {
     this.detectChanges();
     this.testedDirective.debounceScale.flush();
 
-    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
-    expect(notifications.message).not.toHaveBeenCalled();
+    expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
+    expect(TestBed.get(NotificationsService).message).not.toHaveBeenCalled();
   });
 
   describe('atQuota', () => {
@@ -182,26 +178,30 @@ describe('DeploymentsDonutComponent', () => {
     });
 
     it('should be "false" when both stats are below quota', function(this: Context) {
-      environmentCpuSubject.next({ used: 0, quota: 2 });
-      environmentMemSubject.next({ used: 0, quota: 2, units: MemoryUnit.GB });
+      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+      mockSvc.getEnvironmentCpuStat().next({ used: 0, quota: 2 });
+      mockSvc.getEnvironmentMemoryStat().next({ used: 0, quota: 2, units: MemoryUnit.GB });
       expect(this.testedDirective.atQuota).toBeFalsy();
     });
 
     it('should be "true" when CPU usage reaches quota', function(this: Context) {
-      environmentCpuSubject.next({ used: 2, quota: 2 });
-      environmentMemSubject.next({ used: 1, quota: 2, units: MemoryUnit.GB });
+      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+      mockSvc.getEnvironmentCpuStat().next({ used: 2, quota: 2 });
+      mockSvc.getEnvironmentMemoryStat().next({ used: 1, quota: 2, units: MemoryUnit.GB });
       expect(this.testedDirective.atQuota).toBeTruthy();
     });
 
     it('should be "true" when Memory usage reaches quota', function(this: Context) {
-      environmentCpuSubject.next({ used: 1, quota: 2 });
-      environmentMemSubject.next({ used: 2, quota: 2, units: MemoryUnit.GB });
+      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+      mockSvc.getEnvironmentCpuStat().next({ used: 1, quota: 2 });
+      mockSvc.getEnvironmentMemoryStat().next({ used: 2, quota: 2, units: MemoryUnit.GB });
       expect(this.testedDirective.atQuota).toBeTruthy();
     });
 
     it('should be "true" when both stats usage reaches quota', function(this: Context) {
-      environmentCpuSubject.next({ used: 2, quota: 2 });
-      environmentMemSubject.next({ used: 2, quota: 2, units: MemoryUnit.GB });
+      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+      mockSvc.getEnvironmentCpuStat().next({ used: 2, quota: 2 });
+      mockSvc.getEnvironmentMemoryStat().next({ used: 2, quota: 2, units: MemoryUnit.GB });
       expect(this.testedDirective.atQuota).toBeTruthy();
     });
   });
