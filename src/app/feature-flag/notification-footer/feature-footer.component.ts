@@ -1,22 +1,28 @@
 import {
-  Component, Input, OnChanges,
+  Component, ElementRef, Input, OnChanges,
   OnDestroy,
-  OnInit, ViewEncapsulation
+  OnInit, ViewChild, ViewEncapsulation
 } from '@angular/core';
+import { TooltipDirective } from 'ngx-bootstrap/tooltip/tooltip.directive';
 import { Subscription } from 'rxjs';
 import 'rxjs/operators/map';
 import { FeatureFlagConfig } from '../../models/feature-flag-config';
-import { Feature } from '../service/feature-toggles.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'f8-feature-footer',
   templateUrl: './feature-footer.component.html',
-  styleUrls: ['./feature-footer.component.less']
+  styleUrls: ['./feature-footer.component.less'],
+  host: {
+    '(document:click)': 'onClick($event)'
+  }
 })
 export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() featurePageConfig: FeatureFlagConfig;
+  @Input() show: boolean;
+  @ViewChild(TooltipDirective) tooltip: TooltipDirective;
+
   private userSubscription: Subscription;
   userLevel: string = 'released';
   noFeaturesInBeta: boolean = true;
@@ -27,9 +33,16 @@ export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
   experimentalFeatureText = '';
   internalFeatureText = '';
 
-  constructor() {}
+  constructor(private _eref: ElementRef) {}
 
   ngOnInit() {}
+
+  onClick(event) {
+    // Dismiss the tooltip when clicking outside the icon component
+    if (!this._eref.nativeElement.contains(event.target) && this.tooltip) {
+      this.tooltip.hide();
+    }
+  }
 
   ngOnChanges() {
     if (this.featurePageConfig) {

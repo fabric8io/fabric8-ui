@@ -1,5 +1,11 @@
 @import (reference) '../../../../assets/stylesheets/shared/osio.less';
 
+.feature-entry-title {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: 700;
+}
+
 .feature-title {
   font-weight: bold;
   font-size: @font-size-base;
@@ -28,18 +34,34 @@
   }
 }
 
-.icon-internal {
+.feature {
+  .list-pf {
+    padding-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.icon-level(@color-for-feature, @level) {
   color: @color-internal;
+  background: url('/assets/images/flask_@{level}.svg') no-repeat center;
 }
 
+// INTERNAL
+.icon-internal {
+  .icon-level(@color-internal, 'internal');
+}
+
+// EXPERIMENTAL
 .icon-experimental {
-  color: @color-experimental;
+  .icon-level(@color-experimental, 'experimental');
 }
 
+// BETA
 .icon-beta {
-  color: @color-beta;
+  .icon-level(@color-beta, 'beta');
 }
 
+// RELEASED
 .icon-released {
-  color: @color-released;
+  .icon-level(@color-released, 'released');
 }
