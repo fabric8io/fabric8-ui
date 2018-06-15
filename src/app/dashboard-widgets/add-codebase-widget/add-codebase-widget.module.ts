@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
 
-import { CodebasesAddModule } from '../../space/create/codebases/codebases-add/codebases-add.module';
 import { AddCodebaseWidgetRoutingModule } from './add-codebase-widget-routing.module';
 import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
 
@@ -15,7 +14,6 @@ import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
     CommonModule,
     FormsModule,
     AddCodebaseWidgetRoutingModule,
-    CodebasesAddModule,
     FeatureFlagModule,
     LoadingWidgetModule
   ],

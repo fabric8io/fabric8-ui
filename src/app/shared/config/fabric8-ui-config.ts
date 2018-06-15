@@ -3,6 +3,8 @@ export class Fabric8UIConfig {
   analyticsWriteKey: string;
   branding: string;
   forgeApiUrl: string;
+  analyticsRecommenderUrl: string;
+  analyticsLicenseUrl; string;
   openshiftConsoleUrl: string;
   pipelinesNamespace: string;
   recommenderApiUrl: string;

@@ -15,7 +15,7 @@ import {
 
 import { PodPhase } from '../models/pod-phase';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../../shared/notifications.service';
 import { Pods } from '../models/pods';
 import { Stat } from '../models/stat';
 import { DeploymentsService } from '../services/deployments.service';

@@ -87,8 +87,18 @@ describe('Service: AppLauncherDependencyCheckService', () => {
   });
 
   it('validate Project Name to be truthy as length is satisfied', () => {
-    let valProjectName = appLauncherDependencyCheckService.validateProjectName('1234567890123456789012345678901234567890');
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('a123456789012345678901234567890123456789');
     expect(valProjectName).toBeTruthy();
+  });
+
+  it('should return false if the project name has continous hyphens (-)', () => {
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('app_name--name');
+    expect(valProjectName).toBeFalsy();
+  });
+
+  it('should return false if the project name has continous underscores (_)', () => {
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('app_name__name');
+    expect(valProjectName).toBeFalsy();
   });
 
   it('validate Artifact Id to be truthy', () => {
@@ -134,6 +144,16 @@ describe('Service: AppLauncherDependencyCheckService', () => {
   it('validate ProjectVersion to be falsy as length is not satisfied', () => {
     let valProjectVersion = appLauncherDependencyCheckService.validateProjectVersion('v.');
     expect(valProjectVersion).toBeFalsy();
+  });
+
+  it('should not allow project name with spaces', () => {
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('app_name name');
+    expect(valProjectName).toBeFalsy();
+  });
+
+  it('should not allow project name starting with a number', () => {
+    let valProjectName = appLauncherDependencyCheckService.validateProjectName('1app_namename');
+    expect(valProjectName).toBeFalsy();
   });
 
 });

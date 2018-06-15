@@ -9,8 +9,8 @@ import { ProcessTemplate, Space, SpaceNamePipe, SpaceService } from 'ngx-fabric8
 import { Profile, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
-import { SpaceNamespaceService } from 'app/shared/runtime-console/space-namespace.service';
 import { ContextService } from '../../shared/context.service';
+import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
 import { AddSpaceOverlayComponent } from './add-space-overlay.component';

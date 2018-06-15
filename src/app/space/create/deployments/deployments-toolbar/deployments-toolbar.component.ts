@@ -16,7 +16,8 @@ import { ToolbarConfig } from 'patternfly-ng/toolbar';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'deployments-toolbar',
-  templateUrl: './deployments-toolbar.component.html'
+  templateUrl: './deployments-toolbar.component.html',
+  styleUrls: ['./deployments-toolbar.component.less']
 })
 export class DeploymentsToolbarComponent implements OnChanges, OnInit {
 

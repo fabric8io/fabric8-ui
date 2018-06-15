@@ -13,7 +13,15 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "suppressImplicitAnyIndexErrors": true,
-    "baseUrl": "",
+    "baseUrl": ".",
+    "paths": {
+      "@angular/*": [
+        "./node_modules/@angular/*"
+      ],
+      "rxjs": [
+        "./node_modules/rxjs"
+      ]
+    },
     "mapRoot": "",
     "rootDir": ".",
     "outDir": "lib",

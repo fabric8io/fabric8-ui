@@ -16,7 +16,7 @@ import {
   TestContext
 } from 'testing/test-context';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { MemoryUnit } from '../models/memory-unit';

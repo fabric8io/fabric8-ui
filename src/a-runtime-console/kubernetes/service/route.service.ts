@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { Restangular } from 'ng2-restangular';
+import { Restangular } from 'ngx-restangular';
 import { Route, Routes } from '../model/route.model';
 import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
 import { NamespaceScope } from './namespace.scope';

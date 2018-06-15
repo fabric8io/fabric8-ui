@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
@@ -13,7 +14,8 @@ import { ApplicationsWidgetComponent } from './applications-widget.component';
     CommonModule,
     FeatureFlagModule,
     FormsModule,
-    LoadingWidgetModule
+    LoadingWidgetModule,
+    RouterModule
   ],
   declarations: [ApplicationsWidgetComponent],
   exports: [ApplicationsWidgetComponent]

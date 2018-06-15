@@ -11,7 +11,6 @@ import {
   TestContext
 } from 'testing/test-context';
 
-import { ContextService } from 'app/shared/context.service';
 import { Logger } from 'ngx-base';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -26,6 +25,7 @@ import {
   Subject
 } from 'rxjs';
 
+import { ContextService } from '../../../shared/context.service';
 import { CollaboratorsComponent } from './collaborators.component';
 
 @Component({

@@ -7,7 +7,7 @@ import { Broadcaster, Notifications } from 'ngx-base';
 import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 
-import { WindowService } from 'app/shared/window.service';
+import { WindowService } from '../../../../shared/window.service';
 import { CheService } from '../services/che.service';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';

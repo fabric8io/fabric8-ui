@@ -5,7 +5,6 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 
-import { WindowService } from 'app/shared/window.service';
 import {
   Broadcaster,
   Notifications
@@ -17,6 +16,7 @@ import {
 } from 'ngx-login-client';
 
 import { LoginService } from './login.service';
+import { WindowService } from './window.service';
 
 describe('LoginService', () => {
   beforeEach(() => {

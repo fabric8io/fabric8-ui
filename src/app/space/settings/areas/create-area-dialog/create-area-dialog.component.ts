@@ -1,11 +1,15 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Area, AreaAttributes, AreaService, Context } from 'ngx-fabric8-wit';
+import { Area, AreaAttributes, AreaService } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
 
-import { AreaError } from '../../../../models/area-error';
-import { ContextService } from '../../../../shared/context.service';
+export enum AreaCreationStatus {
+  OK,
+  EMPTY_NAME_FAILURE,
+  EXCEED_LENGTH_FAILURE,
+  UNIQUE_VALIDATION_FAILURE
+}
 
 @Component({
   host: {
@@ -16,6 +20,7 @@ import { ContextService } from '../../../../shared/context.service';
   templateUrl: './create-area-dialog.component.html',
   styleUrls: ['./create-area-dialog.component.less']
 })
+
 export class CreateAreaDialogComponent implements OnInit {
 
   @Input() host: ModalDirective;
@@ -27,14 +32,14 @@ export class CreateAreaDialogComponent implements OnInit {
   @ViewChild('rawInputField') rawInputField: ElementRef;
   @ViewChild('inputModel') inputModel: NgModel;
 
-  private context: Context;
-  private name: string;
-  private errors: AreaError;
+  // Declare the enum for usage in the template
+  AreaCreationStatus: typeof AreaCreationStatus = AreaCreationStatus;
+
+  name: string;
+  private _areaCreationStatus: AreaCreationStatus;
 
   constructor(
-    private contexts: ContextService,
     private areaService: AreaService) {
-    this.contexts.current.subscribe(val => this.context = val);
   }
 
   public onOpen() {
@@ -51,7 +56,7 @@ export class CreateAreaDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.errors = {uniqueValidationFailure: false};
+    this.resetErrors();
   }
 
   clearField() {
@@ -59,13 +64,23 @@ export class CreateAreaDialogComponent implements OnInit {
   }
 
   resetErrors() {
-    this.errors = {uniqueValidationFailure: false};
+    this._areaCreationStatus = AreaCreationStatus.OK;
+  }
+
+  validateAreaName(): void {
+    this.resetErrors();
+    if (this.name.trim().length === 0) {
+      this._areaCreationStatus = AreaCreationStatus.EMPTY_NAME_FAILURE;
+    }
+    if (this.name.trim().length > 63) {
+      this._areaCreationStatus = AreaCreationStatus.EXCEED_LENGTH_FAILURE;
+    }
   }
 
   createArea() {
     let area = {} as Area;
     area.attributes = new AreaAttributes();
-    area.attributes.name = this.name;
+    area.attributes.name = this.name.trim();
     area.type = 'areas';
     this.areaService.create(this.parentId, area).subscribe(newArea => {
       this.onAdded.emit(newArea);
@@ -92,9 +107,14 @@ export class CreateAreaDialogComponent implements OnInit {
     if (error.errors.length) {
       error.errors.forEach(error => {
         if (error.status === '409') {
-          this.errors.uniqueValidationFailure = true;
+          this._areaCreationStatus = AreaCreationStatus.UNIQUE_VALIDATION_FAILURE;
         }
       });
     }
   }
+
+  get areaCreationStatus(): AreaCreationStatus {
+    return this._areaCreationStatus;
+  }
+
 }

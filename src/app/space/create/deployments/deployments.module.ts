@@ -30,15 +30,6 @@ import { LoadingUtilizationBarComponent } from './resource-usage/loading-utiliza
 import { ResourceCardComponent } from './resource-usage/resource-card.component';
 import { UtilizationBarComponent } from './resource-usage/utilization-bar.component';
 import { DeploymentApiService } from './services/deployment-api.service';
-import {
-  DeploymentsService,
-  TIMER_TOKEN,
-  TIMESERIES_SAMPLES_TOKEN
-} from './services/deployments.service';
-
-const DEPLOYMENTS_SERVICE_POLL_TIMER = Observable
-  .timer(DeploymentsService.INITIAL_UPDATE_DELAY, DeploymentsService.POLL_RATE_MS)
-  .share();
 
 @NgModule({
   imports: [
@@ -72,9 +63,7 @@ const DEPLOYMENTS_SERVICE_POLL_TIMER = Observable
   ],
   providers: [
     BsDropdownConfig,
-    DeploymentApiService,
-    { provide: TIMER_TOKEN, useValue: DEPLOYMENTS_SERVICE_POLL_TIMER },
-    { provide: TIMESERIES_SAMPLES_TOKEN, useValue: DeploymentsService.FRONT_LOAD_SAMPLES }
+    DeploymentApiService
   ]
 })
 export class DeploymentsModule {

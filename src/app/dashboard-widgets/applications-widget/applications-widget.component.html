@@ -1,13 +1,20 @@
 <f8-feature-toggle featureName="ApplicationsCard">
   <div class="applications-widget card-pf f8-card" user-level>
     <div class="card-pf-heading f8-card-heading">
+      <div class="card-pf-heading-details"
+           *ngIf="applicationsInProgress > 0 && (stageConfigsAvailable || runConfigsAvailable)">
+        <p>
+          Setting up {{applicationsInProgress}} application{{applicationsInProgress > 1 ? 's' : ''}}.
+          <a [routerLink]="['/', loggedInUser?.attributes?.username, this.currentSpace?.attributes?.name, 'create', 'pipelines']">View progress.</a>
+        </p>
+      </div>
       <h2 class="card-pf-title">
         Applications
       </h2>
     </div>
     <div class="card-pf-body f8-card-body">
-      <ng-container *ngIf="buildConfigsAvailable; then showApplications else showBlankState"></ng-container>
-      <ng-template #showBlankState>
+      <ng-container *ngIf="buildConfigsAvailable; then showApplications else showEmptyState"></ng-container>
+      <ng-template #showEmptyState>
         <fabric8-loading-widget message="Please wait while we load your applications"
                                 *ngIf="loading === true"></fabric8-loading-widget>
         <div class="f8-blank-slate-card" *ngIf="loading !== true">
@@ -23,24 +30,34 @@
         </div>
       </ng-template>
       <ng-template #showApplications>
-        <div id="spacehome-applications-list" class="f8-card-applications-list">
-          <div class="col-md-12 col-lg-6 padding-none">
-            <div class="f8-card-applications-list-stage">
-              <h4 class="f8-card-applications-list-step">Stage</h4>
-              <div class="f8-card-applications-list-name">
-                <fabric8-applications-list [buildConfigs]="stageBuildConfigs"></fabric8-applications-list>
+        <ng-container *ngIf="stageConfigsAvailable || runConfigsAvailable; else showInProgress">
+          <div id="spacehome-applications-list" class="f8-card-applications-list">
+            <div class="col-md-12 col-lg-6 padding-none">
+              <div class="f8-card-applications-list-stage">
+                <h4 class="f8-card-applications-list-step">Stage</h4>
+                <div class="f8-card-applications-list-name">
+                  <fabric8-applications-list [buildConfigs]="stageBuildConfigs"></fabric8-applications-list>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-6 padding-none">
+              <div class="f8-card-applications-list-run">
+                <h4 class="f8-card-applications-list-step">Run</h4>
+                <div class="f8-card-applications-list-name">
+                  <fabric8-applications-list [buildConfigs]="runBuildConfigs"></fabric8-applications-list>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-12 col-lg-6 padding-none">
-          <div class="f8-card-applications-list-run">
-            <h4 class="f8-card-applications-list-step">Run</h4>
-            <div class="f8-card-applications-list-name">
-              <fabric8-applications-list [buildConfigs]="runBuildConfigs"></fabric8-applications-list>
-            </div>
-          </div>
-        </div>
+        </ng-container>
+        <ng-template #showInProgress>
+          <fabric8-loading-widget
+              [title]="'Application Setup In Progress'"
+              [message]="'This may take a few minutes. Once setup is complete, you\'ll see your deployed applications here.'">
+            <a id="spacehome-applications-pipelines-link"
+               [routerLink]="['/', loggedInUser?.attributes?.username, this.currentSpace?.attributes?.name, 'create', 'pipelines']">View setup progress</a>
+          </fabric8-loading-widget>
+        </ng-template>
       </ng-template>
     </div>
   </div>

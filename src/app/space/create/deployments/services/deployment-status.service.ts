@@ -23,13 +23,12 @@ export interface Status {
 @Injectable()
 export class DeploymentStatusService {
 
-  static readonly WARNING_THRESHOLD: number = .6;
-
+  private static readonly WARNING_THRESHOLD: number = .6;
   private static readonly OK_STATUS: Status = { type: StatusType.OK, message: '' };
 
   constructor(private readonly deploymentsService: DeploymentsService) { }
 
-  getCpuStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentCpuStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
     return this.adjustStatusForPods(
       this.deploymentsService.getPods(spaceId, environmentName, applicationName),
       this.deploymentsService.getDeploymentCpuStat(spaceId, environmentName, applicationName, 1)
@@ -37,7 +36,7 @@ export class DeploymentStatusService {
     );
   }
 
-  getMemoryStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentMemoryStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
     return this.adjustStatusForPods(
       this.deploymentsService.getPods(spaceId, environmentName, applicationName),
       this.deploymentsService.getDeploymentMemoryStat(spaceId, environmentName, applicationName, 1)
@@ -45,10 +44,10 @@ export class DeploymentStatusService {
     );
   }
 
-  getAggregateStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
+  getDeploymentAggregateStatus(spaceId: string, environmentName: string, applicationName: string): Observable<Status> {
     return Observable.combineLatest(
-      this.getCpuStatus(spaceId, environmentName, applicationName),
-      this.getMemoryStatus(spaceId, environmentName, applicationName)
+      this.getDeploymentCpuStatus(spaceId, environmentName, applicationName),
+      this.getDeploymentMemoryStatus(spaceId, environmentName, applicationName)
     ).map((statuses: [Status, Status]): Status => {
       const type: StatusType = statuses
         .map((status: Status): StatusType => status.type)
@@ -59,6 +58,18 @@ export class DeploymentStatusService {
         .trim();
       return { type, message };
     });
+  }
+
+  getEnvironmentCpuStatus(spaceId: string, environmentName: string): Observable<Status> {
+    return this.deploymentsService
+      .getEnvironmentCpuStat(spaceId, environmentName)
+      .map((stat: CpuStat): Status => this.getStatStatus(stat, 'CPU'));
+  }
+
+  getEnvironmentMemoryStatus(spaceId: string, environmentName: string): Observable<Status> {
+    return this.deploymentsService
+      .getEnvironmentMemoryStat(spaceId, environmentName)
+      .map((stat: MemoryStat): Status => this.getStatStatus(stat, 'Memory'));
   }
 
   private adjustStatusForPods(pods: Observable<Pods>, status: Observable<Status>): Observable<Status> {

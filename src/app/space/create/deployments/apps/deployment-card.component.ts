@@ -12,7 +12,7 @@ import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
 import { Observable, Subscription } from 'rxjs';
 
-import { NotificationsService } from 'app/shared/notifications.service';
+import { NotificationsService } from '../../../../shared/notifications.service';
 import {
   DeploymentStatusService,
   Status,
@@ -91,7 +91,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.toolTip = DeploymentCardComponent.OK_TOOLTIP;
 
     this.subscriptions.push(
-      this.statusService.getAggregateStatus(this.spaceId, this.environment, this.applicationId)
+      this.statusService.getDeploymentAggregateStatus(this.spaceId, this.environment, this.applicationId)
         .subscribe((status: Status): void => this.changeStatus(status))
     );
 

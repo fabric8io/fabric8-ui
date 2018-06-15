@@ -6,7 +6,7 @@ import { Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
-import { GitHubRepoCommit } from 'app/create/codebases/services/github';
+import { GitHubRepoCommit } from './github';
 import { GitHubService } from './github.service';
 import { ContextsMock, expectedGitHubRepo, expectedGitHubRepoCommit, expectedGitHubRepoDetails, expectedGitHubRepoLicense } from './github.service.mock';
 

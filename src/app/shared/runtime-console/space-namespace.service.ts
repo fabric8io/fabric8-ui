@@ -7,8 +7,8 @@ import { Space, Spaces } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
-import { DevNamespaceScope } from 'a-runtime-console/kubernetes/service/devnamespace.scope';
 import { ConfigMap, ConfigMapService } from '../../../a-runtime-console/index';
+import { DevNamespaceScope } from '../../../a-runtime-console/kubernetes/service/devnamespace.scope';
 import { Fabric8UIConfig } from './../config/fabric8-ui-config';
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 

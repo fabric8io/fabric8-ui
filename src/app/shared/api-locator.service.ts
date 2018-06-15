@@ -6,6 +6,8 @@ const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(
   [
     ['wit', 'FABRIC8_WIT_API_URL'],
     ['recommender', 'FABRIC8_RECOMMENDER_API_URL'],
+    ['analyticsRecommender', 'ANALYTICS_RECOMMENDER_URL'],
+    ['analyticsLicense', 'ANALYTICS_LICENSE_URL'],
     ['sso', 'FABRIC8_SSO_API_URL'],
     ['realm', 'FABRIC8_REALM'],
     ['branding', 'BRANDING'],
@@ -18,6 +20,8 @@ const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(
 const DEFAULT_API_PREFIXES = new Map<string, string>([
   ['wit', 'api'],
   ['recommender', 'recommender'],
+  ['analyticsRecommender', 'recommender.api'],
+  ['analyticsLicense', 'license-analysis.api'],
   ['sso', 'sso'],
   ['forge', 'forge.api'],
   ['auth', 'auth']
@@ -62,6 +66,14 @@ export class BaseApiLocatorService {
 
   get recommenderApiUrl(): string {
     return this.config.recommenderApiUrl || this.buildApiUrl('recommender');
+  }
+
+  get analyticsRecommenderApiUrl(): string {
+    return this.config.analyticsRecommenderUrl || this.buildApiUrl('analyticsRecommender');
+  }
+
+  get analyticsLicenseApiUrl(): string {
+    return this.config.analyticsLicenseUrl || this.buildApiUrl('analyticsLicense');
   }
 
   protected loadEnvVar(key: string): void {

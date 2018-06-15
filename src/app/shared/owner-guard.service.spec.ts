@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { AuthenticationService } from 'ngx-login-client';
 import { cloneDeep } from 'lodash';
+import { AuthenticationService } from 'ngx-login-client';
+
 import { ContextService } from './context.service';
 import { LoginService } from './login.service';
 import { OwnerGuard } from './owner-guard.service';

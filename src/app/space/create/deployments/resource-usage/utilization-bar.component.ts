@@ -8,7 +8,10 @@ import {
 import { Observable, Subscription } from 'rxjs';
 
 import { Stat } from '../models/stat';
-import { DeploymentStatusService } from '../services/deployment-status.service';
+import {
+  Status,
+  StatusType
+} from '../services/deployment-status.service';
 
 @Component({
   selector: 'utilization-bar',
@@ -20,6 +23,7 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
   @Input() resourceTitle: string;
   @Input() resourceUnit: string;
   @Input() stat: Observable<Stat>;
+  @Input() status: Observable<Status>;
 
   warn: boolean = false;
 
@@ -28,21 +32,28 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
   usedPercent: number;
   unusedPercent: number;
 
-  private statSubscription: Subscription;
+  private readonly subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
-    this.statSubscription = this.stat.subscribe((val: Stat): void => {
-      this.used = val.used;
-      this.total = val.quota;
-      this.usedPercent = (this.total !== 0) ? Math.floor(this.used / this.total * 100) : 0;
-      this.unusedPercent = 100 - this.usedPercent;
+    this.subscriptions.push(
+      this.stat.subscribe((val: Stat): void => {
+        this.used = val.used;
+        this.total = val.quota;
 
-      this.warn = val.used / val.quota >= DeploymentStatusService.WARNING_THRESHOLD;
-    });
+        this.usedPercent = (this.total !== 0) ? Math.floor(this.used / this.total * 100) : 0;
+        this.unusedPercent = 100 - this.usedPercent;
+      })
+    );
+
+    this.subscriptions.push(
+      this.status.subscribe((status: Status): void => {
+        this.warn = status.type != StatusType.OK;
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    this.statSubscription.unsubscribe();
+    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
 
 }

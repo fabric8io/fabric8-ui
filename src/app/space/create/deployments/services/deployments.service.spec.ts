@@ -24,10 +24,8 @@ import {
 } from 'rxjs';
 import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
 
-import { Logger } from 'ngx-base';
-
-import { NotificationsService } from 'app/shared/notifications.service';
 import {
+  Logger,
   Notification,
   NotificationType
 } from 'ngx-base';
@@ -36,6 +34,7 @@ import { AuthenticationService } from 'ngx-login-client';
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 
+import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { MemoryUnit } from '../models/memory-unit';
@@ -48,6 +47,7 @@ import {
 } from './deployment-api.service';
 import {
   DeploymentsService,
+  POLL_RATE_TOKEN,
   TIMER_TOKEN,
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
@@ -106,6 +106,9 @@ describe('DeploymentsService', () => {
         },
         {
           provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3
+        },
+        {
+          provide: POLL_RATE_TOKEN, useValue: 1
         },
         DeploymentApiService,
         DeploymentsService
@@ -2478,6 +2481,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         { provide: NotificationsService, useValue: mockNotificationsService },
         { provide: TIMER_TOKEN, useValue: new Subject<void>() },
         { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3 },
+        { provide: POLL_RATE_TOKEN, useValue: 1 },
         DeploymentsService
       ]
     });
