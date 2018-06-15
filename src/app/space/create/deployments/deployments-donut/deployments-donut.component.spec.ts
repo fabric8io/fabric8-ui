@@ -205,48 +205,18 @@ describe('DeploymentsDonutComponent', () => {
       expect(this.testedDirective.atQuota).toBeTruthy();
     });
   });
-});
 
-describe('DeploymentsDonutComponent error handling', () => {
-  type Context = TestContext<DeploymentsDonutComponent, HostComponent>;
+  describe('error handling', () => {
+    it('should notify if scaling pods has an error', function(this: Context) {
+      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+      mockSvc.scalePods.and.returnValue(Observable.throw('scalePods error'));
 
-  let notifications: jasmine.SpyObj<NotificationsService> =
-    jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
-  let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  beforeEach(fakeAsync(() => {
-    mockSvc = createMock(DeploymentsService);
-    mockSvc.scalePods.and.returnValue(
-      Observable.throw('scalePods error')
-    );
-    mockSvc.getPods.and.returnValue(
-      Observable.of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
-    );
-    mockSvc.getEnvironmentCpuStat.and.returnValue(Observable.never());
-    mockSvc.getEnvironmentMemoryStat.and.returnValue(Observable.never());
-  }));
+      this.testedDirective.scaleUp();
+      this.detectChanges();
+      this.testedDirective.debounceScale.flush();
 
-  initContext(DeploymentsDonutComponent, HostComponent,
-    {
-      declarations: [FakeDeploymentsDonutChartComponent],
-      providers: [
-        { provide: DeploymentsService, useFactory: () => mockSvc },
-        { provide: NotificationsService, useValue: notifications }
-      ]
-    },
-    (component: DeploymentsDonutComponent) => {
-      component.mini = false;
-      component.spaceId = 'space';
-      component.applicationId = 'application';
-      component.environment = 'environmentName';
+      expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalled();
     });
-
-
-  it('should notify if scaling pods has an error', function(this: Context) {
-    this.testedDirective.scaleUp();
-    this.detectChanges();
-    this.testedDirective.debounceScale.flush();
-
-    expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
-    expect(notifications.message).toHaveBeenCalled();
   });
 });
