@@ -3,6 +3,7 @@ import {
   Input,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import {
@@ -45,30 +46,28 @@ class FakeUtilizationBarComponent {
 describe('ResourceCardComponent', () => {
   type Context = TestContext<ResourceCardComponent, HostComponent>;
 
-  let mockResourceTitle: string = 'resource title';
-  let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
-  let cpuStatMock: Observable<CpuStat> = Observable.of({ used: 1, quota: 2 });
-  let memoryStatMock: Observable<MemoryStat> = Observable.of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  });
-
-  beforeEach(() => {
-    mockSvc = createMock(DeploymentsService);
-    mockSvc.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
-    mockSvc.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
-    mockSvc.getEnvironmentCpuStat.and.returnValue(cpuStatMock);
-    mockSvc.getEnvironmentMemoryStat.and.returnValue(memoryStatMock);
-
-    mockStatusSvc = createMock(DeploymentStatusService);
-    mockStatusSvc.getEnvironmentCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
-    mockStatusSvc.getEnvironmentMemoryStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
-  });
-
   initContext(ResourceCardComponent, HostComponent,
     {
       declarations: [FakeUtilizationBarComponent],
       providers: [
-        { provide: DeploymentsService, useFactory: () => mockSvc },
-        { provide: DeploymentStatusService, useFactory: () => mockStatusSvc }
+        {
+          provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
+            const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
+            svc.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
+            svc.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
+            svc.getEnvironmentCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
+            svc.getEnvironmentMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  }));
+            return svc;
+          }
+        },
+        {
+          provide: DeploymentStatusService, useFactory: (): jasmine.SpyObj<DeploymentStatusService> => {
+            const svc: jasmine.SpyObj<DeploymentStatusService> = createMock(DeploymentStatusService);
+            svc.getEnvironmentCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
+            svc.getEnvironmentMemoryStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
+            return svc;
+          }
+        }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     },
@@ -78,24 +77,25 @@ describe('ResourceCardComponent', () => {
     }
   );
 
-
   it('should correctly request the deployed environment data', function(this: Context) {
+    const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
     expect(mockSvc.getEnvironmentCpuStat).toHaveBeenCalledWith('spaceId', 'stage');
     expect(mockSvc.getEnvironmentMemoryStat).toHaveBeenCalledWith('spaceId', 'stage');
   });
 
   it('should have its children passed the proper values', function(this: Context) {
+    const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
     let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
     expect(arrayOfComponents.length).toEqual(2);
 
     let cpuUtilBar = arrayOfComponents[0].componentInstance;
     expect(cpuUtilBar.resourceTitle).toEqual('CPU');
     expect(cpuUtilBar.resourceUnit).toEqual('Cores');
-    expect(cpuUtilBar.stat).toEqual(cpuStatMock);
+    expect(cpuUtilBar.stat).toEqual(mockSvc.getEnvironmentCpuStat());
 
     let memoryUtilBar = arrayOfComponents[1].componentInstance;
     expect(memoryUtilBar.resourceTitle).toEqual('Memory');
     expect(memoryUtilBar.resourceUnit).toEqual('GB');
-    expect(memoryUtilBar.stat).toEqual(memoryStatMock);
+    expect(memoryUtilBar.stat).toEqual(mockSvc.getEnvironmentMemoryStat());
   });
 });
