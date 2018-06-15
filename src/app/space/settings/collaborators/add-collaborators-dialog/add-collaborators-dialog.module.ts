@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
-import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { AddCollaboratorsDialogComponent } from './add-collaborators-dialog.component';
 
 @NgModule({
-  imports:      [ CommonModule, ModalModule.forRoot(), FormsModule, MultiselectDropdownModule ],
+  imports:      [ CommonModule, ModalModule.forRoot(), FormsModule,  NgSelectModule ],
   declarations: [ AddCollaboratorsDialogComponent ],
   exports: [ AddCollaboratorsDialogComponent, ModalModule ]
 })

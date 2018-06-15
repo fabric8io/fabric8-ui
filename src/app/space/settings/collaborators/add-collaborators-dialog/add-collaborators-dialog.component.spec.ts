@@ -7,10 +7,7 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import {
-  IMultiSelectOption,
-  IMultiSelectSettings
-} from 'angular-2-dropdown-multiselect';
+
 import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
@@ -32,20 +29,6 @@ import { AddCollaboratorsDialogComponent } from './add-collaborators-dialog.comp
 })
 class HostComponent { }
 
-@Component({
-  selector: 'ss-multiselect-dropdown',
-  template: ''
-})
-class FakeMultiselectDropdown {
-  @Output('keyup') keyup = new EventEmitter<void>();
-  @Input('options') options: IMultiSelectOption;
-  @Input('settings') settings: IMultiSelectSettings;
-  public dropdownModel: any[] = [];
-
-  public clearSearch: jasmine.Spy = jasmine.createSpy('clearSearch');
-  public uncheckAll: jasmine.Spy = jasmine.createSpy('uncheckAll');
-}
-
 describe('AddCollaboratorsDialog', () => {
   type Context = TestContext<AddCollaboratorsDialogComponent, HostComponent>;
 
@@ -55,7 +38,7 @@ describe('AddCollaboratorsDialog', () => {
       { provide: UserService, useValue: createMock(UserService) },
       { provide: CollaboratorService, useValue: createMock(CollaboratorService) }
     ],
-    declarations: [ FakeMultiselectDropdown ],
+    declarations: [ ],
     schemas: [NO_ERRORS_SCHEMA]
   }, (component: AddCollaboratorsDialogComponent): void => {
     component.spaceId = 'fake-space-id';
@@ -73,35 +56,23 @@ describe('AddCollaboratorsDialog', () => {
     const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
     collaboratorService.addCollaborators.and.returnValue(Observable.of(true));
 
-    expect(this.testedDirective.dropdown.clearSearch).not.toHaveBeenCalled();
-    expect(this.testedDirective.dropdown.uncheckAll).not.toHaveBeenCalled();
     expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-    this.testedDirective.dropdownModel = [{ id: 'foo-user' } as User];
-    this.testedDirective.dropdownOptions = [{} as IMultiSelectOption];
+    this.testedDirective.selectedCollaborators = [{ id: 'foo-user' } as User];
 
     this.testedDirective.addCollaborators();
 
     expect(collaboratorService.addCollaborators).toHaveBeenCalledWith('fake-space-id', [{ id: 'foo-user' }]);
-    expect(this.testedDirective.dropdown.clearSearch).toHaveBeenCalled();
-    expect(this.testedDirective.dropdown.uncheckAll).toHaveBeenCalled();
     expect(this.testedDirective.host.hide).toHaveBeenCalled();
-    expect(this.testedDirective.dropdownModel).toEqual([]);
-    expect(this.testedDirective.dropdownOptions).toEqual([]);
+    expect(this.testedDirective.selectedCollaborators).toEqual([]);
   });
 
   it('should reset state on cancel', function(this: Context) {
-    expect(this.testedDirective.dropdown.clearSearch).not.toHaveBeenCalled();
-    expect(this.testedDirective.dropdown.uncheckAll).not.toHaveBeenCalled();
     expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-    this.testedDirective.dropdownModel = [{} as User];
-    this.testedDirective.dropdownOptions = [{} as IMultiSelectOption];
+    this.testedDirective.selectedCollaborators = [{} as User];
 
     this.testedDirective.cancel();
 
-    expect(this.testedDirective.dropdown.clearSearch).toHaveBeenCalled();
-    expect(this.testedDirective.dropdown.uncheckAll).toHaveBeenCalled();
     expect(this.testedDirective.host.hide).toHaveBeenCalled();
-    expect(this.testedDirective.dropdownModel).toEqual([]);
-    expect(this.testedDirective.dropdownOptions).toEqual([]);
+    expect(this.testedDirective.selectedCollaborators).toEqual([]);
   });
 });
