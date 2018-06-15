@@ -1,4 +1,8 @@
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  Input,
+  NO_ERRORS_SCHEMA
+} from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import {
@@ -38,16 +42,6 @@ class FakeUtilizationBarComponent {
   @Input() status: Observable<Status>;
 }
 
-@Component({
-  selector: 'loading-utilization-bar',
-  template: ''
-})
-class FakeLoadingUtilizationBarComponent {
-  @Input() resourceTitle: string;
-  @Input() resourceUnit: string;
-}
-
-
 describe('ResourceCardComponent', () => {
   type Context = TestContext<ResourceCardComponent, HostComponent>;
 
@@ -71,11 +65,12 @@ describe('ResourceCardComponent', () => {
 
   initContext(ResourceCardComponent, HostComponent,
     {
-      declarations: [FakeUtilizationBarComponent, FakeLoadingUtilizationBarComponent],
+      declarations: [FakeUtilizationBarComponent],
       providers: [
         { provide: DeploymentsService, useFactory: () => mockSvc },
         { provide: DeploymentStatusService, useFactory: () => mockStatusSvc }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     },
     (component: ResourceCardComponent) => {
       component.spaceId = 'spaceId';
