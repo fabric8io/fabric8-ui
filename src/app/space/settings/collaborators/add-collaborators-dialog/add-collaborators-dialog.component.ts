@@ -34,9 +34,9 @@ export class AddCollaboratorsDialogComponent implements OnInit {
 
   ngOnInit() {
     this.searchTerm.pipe(
-      tap(() => this.loading = true),
-      distinctUntilChanged(),
       debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => this.loading = true),
       switchMap(term => this.userService.getUsersBySearchString(term))
     ).subscribe(users => {
       this.collaborators = users;
