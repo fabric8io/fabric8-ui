@@ -1,7 +1,8 @@
+import { TestBed } from '@angular/core/testing';
+
 import {
   BehaviorSubject,
-  Observable,
-  Subject
+  Observable
 } from 'rxjs';
 
 import { createMock } from 'testing/mock';
@@ -30,15 +31,25 @@ describe('DeploymentStatusService', (): void => {
   const applicationName: string = 'mockAppName';
 
   beforeEach(function(this: TestContext): void {
-    this.deploymentsService = createMock(DeploymentsService);
+    TestBed.configureTestingModule({
+      providers: [
+        DeploymentStatusService,
+        {
+          provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
+            const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
+            svc.getDeploymentCpuStat.and.returnValue(new BehaviorSubject<CpuStat[]>([{ used: 3, quota: 10 }]));
+            svc.getDeploymentMemoryStat.and.returnValue(new BehaviorSubject<MemoryStat[]>([{ used: 4, quota: 10, units: MemoryUnit.GB }]));
+            svc.getPods.and.returnValue(new BehaviorSubject<Pods>({ total: 1, pods: [[PodPhase.RUNNING, 1]] }));
+            svc.getEnvironmentCpuStat.and.returnValue(new BehaviorSubject<CpuStat>({ used: 3, quota: 10 }));
+            svc.getEnvironmentMemoryStat.and.returnValue(new BehaviorSubject<MemoryStat>({ used: 4, quota: 10, units: MemoryUnit.GB }));
+            return svc;
+          }
+        }
+      ]
+    });
 
-    this.deploymentsService.getDeploymentCpuStat.and.returnValue(new BehaviorSubject<CpuStat[]>([{ used: 3, quota: 10 }]));
-    this.deploymentsService.getDeploymentMemoryStat.and.returnValue(new BehaviorSubject<MemoryStat[]>([{ used: 4, quota: 10, units: MemoryUnit.GB }]));
-    this.deploymentsService.getPods.and.returnValue(new BehaviorSubject<Pods>({ total: 1, pods: [[PodPhase.RUNNING, 1]] }));
-    this.deploymentsService.getEnvironmentCpuStat.and.returnValue(new BehaviorSubject<CpuStat>({ used: 3, quota: 10 }));
-    this.deploymentsService.getEnvironmentMemoryStat.and.returnValue(new BehaviorSubject<MemoryStat>({ used: 4, quota: 10, units: MemoryUnit.GB }));
-
-    this.service = new DeploymentStatusService(this.deploymentsService);
+    this.deploymentsService = TestBed.get(DeploymentsService);
+    this.service = TestBed.get(DeploymentStatusService);
   });
 
   describe('#getDeploymentAggregateStatus', (): void => {
