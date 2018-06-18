@@ -25,31 +25,18 @@ type TestContext = {
 
 describe('DeploymentStatusService', (): void => {
 
-  const spaceId = 'mockSpaceId';
-  const environmentName = 'mockEnvName';
-  const applicationName = 'mockAppName';
-
-  let deploymentCpuSubject: Subject<CpuStat[]>;
-  let deploymentMemorySubject: Subject<MemoryStat[]>;
-  let environmentCpuSubject: Subject<CpuStat>;
-  let environmentMemorySubject: Subject<MemoryStat>;
-  let podsSubject: Subject<Pods>;
+  const spaceId: string = 'mockSpaceId';
+  const environmentName: string = 'mockEnvName';
+  const applicationName: string = 'mockAppName';
 
   beforeEach(function(this: TestContext): void {
     this.deploymentsService = createMock(DeploymentsService);
 
-    deploymentCpuSubject = new BehaviorSubject<CpuStat[]>([{ used: 3, quota: 10 }]);
-    deploymentMemorySubject = new BehaviorSubject<MemoryStat[]>([{ used: 4, quota: 10, units: MemoryUnit.GB }]);
-    podsSubject = new BehaviorSubject<Pods>({ total: 1, pods: [[PodPhase.RUNNING, 1]] });
-
-    environmentCpuSubject = new BehaviorSubject<CpuStat>({ used: 3, quota: 10 });
-    environmentMemorySubject = new BehaviorSubject<MemoryStat>({ used: 4, quota: 10, units: MemoryUnit.GB });
-
-    this.deploymentsService.getDeploymentCpuStat.and.returnValue(deploymentCpuSubject);
-    this.deploymentsService.getDeploymentMemoryStat.and.returnValue(deploymentMemorySubject);
-    this.deploymentsService.getPods.and.returnValue(podsSubject);
-    this.deploymentsService.getEnvironmentCpuStat.and.returnValue(environmentCpuSubject);
-    this.deploymentsService.getEnvironmentMemoryStat.and.returnValue(environmentMemorySubject);
+    this.deploymentsService.getDeploymentCpuStat.and.returnValue(new BehaviorSubject<CpuStat[]>([{ used: 3, quota: 10 }]));
+    this.deploymentsService.getDeploymentMemoryStat.and.returnValue(new BehaviorSubject<MemoryStat[]>([{ used: 4, quota: 10, units: MemoryUnit.GB }]));
+    this.deploymentsService.getPods.and.returnValue(new BehaviorSubject<Pods>({ total: 1, pods: [[PodPhase.RUNNING, 1]] }));
+    this.deploymentsService.getEnvironmentCpuStat.and.returnValue(new BehaviorSubject<CpuStat>({ used: 3, quota: 10 }));
+    this.deploymentsService.getEnvironmentMemoryStat.and.returnValue(new BehaviorSubject<MemoryStat>({ used: 4, quota: 10, units: MemoryUnit.GB }));
 
     this.service = new DeploymentStatusService(this.deploymentsService);
   });
@@ -66,7 +53,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should mirror single status when one stat is nearing quota', function(this: TestContext, done: DoneFn): void {
-      deploymentCpuSubject.next([{ used: 9, quota: 10 }]);
+      this.deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
       Observable.combineLatest(
         this.service.getDeploymentCpuStatus('foo', 'bar', 'baz'),
         this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz')
@@ -79,8 +66,8 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return combined status when multiple stats are nearing quota', function(this: TestContext, done: DoneFn): void {
-      deploymentCpuSubject.next([{ used: 9, quota: 10 }]);
-      deploymentMemorySubject.next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
+      this.deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
+      this.deploymentsService.getDeploymentMemoryStat().next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
       this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -91,8 +78,8 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return combined status when multiple stats are nearing or at quota', function(this: TestContext, done: DoneFn): void {
-      deploymentCpuSubject.next([{ used: 9, quota: 10 }]);
-      deploymentMemorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
+      this.deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
+      this.deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -121,7 +108,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return WARN status when nearing quota', function(this: TestContext, done: DoneFn): void {
-      deploymentCpuSubject.next([{ used: 9, quota: 10 }]);
+      this.deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
       this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -132,7 +119,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return ERR status when at quota', function(this: TestContext, done: DoneFn): void {
-      deploymentCpuSubject.next([{ used: 10, quota: 10 }]);
+      this.deploymentsService.getDeploymentCpuStat().next([{ used: 10, quota: 10 }]);
       this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -143,14 +130,14 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return OK status after scaling down to 0 pods', function(this: TestContext, done: DoneFn): void {
-      deploymentCpuSubject.next([{ used: 10, quota: 10 }]);
+      this.deploymentsService.getDeploymentCpuStat().next([{ used: 10, quota: 10 }]);
       this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('CPU usage has reached capacity.');
-          podsSubject.next({ total: 0, pods: [] });
-          deploymentCpuSubject.next([{ used: 0, quota: 0 }]);
+          this.deploymentsService.getPods().next({ total: 0, pods: [] });
+          this.deploymentsService.getDeploymentCpuStat().next([{ used: 0, quota: 0 }]);
           this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
             .first()
             .subscribe((status: Status): void => {
@@ -180,7 +167,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return WARN status when nearing quota', function(this: TestContext, done: DoneFn): void {
-      deploymentMemorySubject.next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
+      this.deploymentsService.getDeploymentMemoryStat().next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
       this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -191,7 +178,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return ERR status when at quota', function(this: TestContext, done: DoneFn): void {
-      deploymentMemorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
+      this.deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
@@ -202,14 +189,14 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return OK status after scaling down to 0 pods', function(this: TestContext, done: DoneFn): void {
-      deploymentMemorySubject.next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
+      this.deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
         .first()
         .subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('Memory usage has reached capacity.');
-          podsSubject.next({ total: 0, pods: [] });
-          deploymentMemorySubject.next([{ used: 0, quota: 0, units: MemoryUnit.MB }]);
+          this.deploymentsService.getPods().next({ total: 0, pods: [] });
+          this.deploymentsService.getDeploymentMemoryStat().next([{ used: 0, quota: 0, units: MemoryUnit.MB }]);
           this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
             .first()
             .subscribe((status: Status): void => {
@@ -238,7 +225,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return WARN status when nearing quota', function(this: TestContext, done: DoneFn): void {
-      environmentCpuSubject.next({ used: 9, quota: 10 });
+      this.deploymentsService.getEnvironmentCpuStat().next({ used: 9, quota: 10 });
       this.service.getEnvironmentCpuStatus('foo', 'bar')
         .first()
         .subscribe((status: Status): void => {
@@ -249,7 +236,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return ERR status when at quota', function(this: TestContext, done: DoneFn): void {
-      environmentCpuSubject.next({ used: 10, quota: 10 });
+      this.deploymentsService.getEnvironmentCpuStat().next({ used: 10, quota: 10 });
       this.service.getEnvironmentCpuStatus('foo', 'bar')
         .first()
         .subscribe((status: Status): void => {
@@ -277,7 +264,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return WARN status when nearing quota', function(this: TestContext, done: DoneFn): void {
-      environmentMemorySubject.next({ used: 9, quota: 10, units: MemoryUnit.GB });
+      this.deploymentsService.getEnvironmentMemoryStat().next({ used: 9, quota: 10, units: MemoryUnit.GB });
       this.service.getEnvironmentMemoryStatus('foo', 'bar')
         .first()
         .subscribe((status: Status): void => {
@@ -288,7 +275,7 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return ERR status when at quota', function(this: TestContext, done: DoneFn): void {
-      environmentMemorySubject.next({ used: 10, quota: 10, units: MemoryUnit.GB });
+      this.deploymentsService.getEnvironmentMemoryStat().next({ used: 10, quota: 10, units: MemoryUnit.GB });
       this.service.getEnvironmentMemoryStatus('foo', 'bar')
         .first()
         .subscribe((status: Status): void => {
