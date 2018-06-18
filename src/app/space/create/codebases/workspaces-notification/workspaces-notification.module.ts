@@ -3,15 +3,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
 
-import { NotificationModule } from 'patternfly-ng/notification';
-
 import { WorkspacesNotificationComponent } from './workspaces-notification.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
-    NotificationModule
+    FormsModule
   ],
   declarations: [ WorkspacesNotificationComponent ],
   exports: [ WorkspacesNotificationComponent ]

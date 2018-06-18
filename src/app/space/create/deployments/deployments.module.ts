@@ -9,7 +9,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { ChartModule } from 'patternfly-ng/chart';
+import { SparklineChartModule } from 'patternfly-ng/chart';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 import { DeleteDeploymentModal } from './apps/delete-deployment-modal.component';
@@ -38,9 +38,9 @@ import { DeploymentApiService } from './services/deployment-api.service';
     AccordionModule.forRoot(),
     TooltipModule.forRoot(),
     CommonModule,
-    ChartModule,
     DeploymentsRoutingModule,
     ModalModule.forRoot(),
+    SparklineChartModule,
     ToolbarModule
   ],
   declarations: [

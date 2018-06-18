@@ -1,6 +1,6 @@
-import { ChartConfig } from 'patternfly-ng/chart';
+import { ChartConfigBase } from 'patternfly-ng/chart';
 
-export class WorkItemBarchartConfig extends ChartConfig {
+export class WorkItemBarchartConfig extends ChartConfigBase {
   axis?: any;
 
   grid?: any;
