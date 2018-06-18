@@ -2,14 +2,14 @@
 
 BUILDER_CONT="fabric8-ui-builder"
 DEPLOY_CONT="fabric8-ui-deploy"
-REGISTRY="push.registry.devshift.net"
+REGISTRY="quay.io"
 
 if [ "$TARGET" = "rhel" ]; then
   DOCKERFILE_DEPLOY="Dockerfile.deploy.rhel"
-  REGISTRY_URL=${REGISTRY}/osio-prod/fabric8-ui/fabric8-ui
+  REGISTRY_URL=${REGISTRY}/openshiftio/rhel-fabric8-ui-fabric8-ui
 else
   DOCKERFILE_DEPLOY="Dockerfile.deploy"
-  REGISTRY_URL=${REGISTRY}/fabric8-ui/fabric8-ui
+  REGISTRY_URL=${REGISTRY}/openshiftio/fabric8-ui-fabric8-ui
 fi
 
 # Show command before executing
@@ -20,9 +20,17 @@ set -e
 
 # Export needed vars
 set +x
-for var in BUILD_NUMBER BUILD_URL JENKINS_URL GIT_BRANCH GH_TOKEN NPM_TOKEN GIT_COMMIT DEVSHIFT_USERNAME DEVSHIFT_PASSWORD DEVSHIFT_TAG_LEN; do
-  export $(grep ${var} jenkins-env | xargs)
-done
+eval "$(./env-toolkit load -f jenkins-env.json \
+        BUILD_NUMBER \
+        BUILD_URL \
+        JENKINS_URL \
+        GIT_BRANCH \
+        GH_TOKEN \
+        NPM_TOKEN \
+        GIT_COMMIT \
+        QUAY_USERNAME \
+        QUAY_PASSWORD \
+        DEVSHIFT_TAG_LEN)"
 export BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M:%S`+00:00
 set -x
 
@@ -76,8 +84,8 @@ echo 'CICO: build OK'
 
 TAG=$(echo $GIT_COMMIT | cut -c1-${DEVSHIFT_TAG_LEN})
 
-if [ -n "${DEVSHIFT_USERNAME}" -a -n "${DEVSHIFT_PASSWORD}" ]; then
-  docker login -u ${DEVSHIFT_USERNAME} -p ${DEVSHIFT_PASSWORD} ${REGISTRY}
+if [ -n "${QUAY_USERNAME}" -a -n "${QUAY_PASSWORD}" ]; then
+  docker login -u ${QUAY_USERNAME} -p ${QUAY_PASSWORD} ${REGISTRY}
 else
   echo "Could not login, missing credentials for the registry"
 fi
