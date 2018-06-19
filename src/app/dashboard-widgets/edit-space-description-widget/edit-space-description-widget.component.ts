@@ -1,11 +1,9 @@
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
-import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Observable, Subject } from 'rxjs';
-import { Subscription } from 'rxjs';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
-import { DummyService } from './../shared/dummy.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -17,6 +15,8 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
 
   @Input() userOwnsSpace: boolean;
   space: Space;
+  spaceOwner: Observable<string>;
+  collaboratorCount: Observable<number>;
 
   private _descriptionUpdater: Subject<string> = new Subject();
 
@@ -31,12 +31,20 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
     private userService: UserService,
     private broadcaster: Broadcaster,
     private spaceService: SpaceService,
-    private spaceNamespaceService: SpaceNamespaceService
+    private spaceNamespaceService: SpaceNamespaceService,
+    private collaboratorService: CollaboratorService
   ) {
-    spaces.current.subscribe(val => {
-      this.space = val;
-      console.log('newspace', val);
-    });
+    spaces.current
+      .subscribe(space => {
+        this.space = space;
+        if (space) {
+          this.collaboratorCount = this.collaboratorService.getInitialBySpaceId(space.id).map(c => c.length);
+          this.spaceOwner = this.userService.getUserByUserId(space.relationships['owned-by'].data.id).map(u => u.attributes.username);
+        } else {
+          this.collaboratorCount = Observable.empty();
+          this.spaceOwner = Observable.empty();
+        }
+      });
     userService.loggedInUser.subscribe(val => this.loggedInUser = val);
   }
 
@@ -59,7 +67,6 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
       .switchMap(patch => this.spaceService
         .update(patch)
         .do(val => {
-          console.log('updatedspace', val);
           this.isEditing = false;
           if (this.space && val) {
             this.space.attributes.description = val.attributes.description;
