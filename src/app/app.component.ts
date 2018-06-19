@@ -10,7 +10,9 @@ import { ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Observable } from 'rxjs';
 
+import { Subscription } from 'rxjs/Rx';
 import { OnLogin } from '../a-runtime-console/index';
+import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { ErrorService } from './layout/error/error.service';
 import { FeatureFlagConfig } from './models/feature-flag-config';
 import { AboutService } from './shared/about.service';
@@ -36,6 +38,8 @@ export class AppComponent {
   private lastPageToTryGitHub: string;
   private showAddAppOverlay: boolean = false;
   private showAddSpaceOverlay: boolean = false;
+  private show: boolean;
+  protected subscriptions: Subscription[] = [];
 
   @ViewChild('connectToGithubModal') connectToGithubModal: TemplateRef<any>;
 
@@ -56,19 +60,30 @@ export class AppComponent {
     private modalService: BsModalService,
     private providerService: ProviderService,
     private errorService: ErrorService,
-    private logger: Logger
+    private logger: Logger,
+    private toggleAckService: FeatureAcknowledgementService
   ) {
+
   }
 
   ngOnInit() {
     console.log('Welcome to Fabric8!');
     console.log('This is', this.about.buildVersion,
       '(Build', '#' + this.about.buildNumber, 'and was built on', this.about.buildTimestamp, ')');
-    this.activatedRoute.params.subscribe(() => {
+    this.subscriptions.push(this.activatedRoute.params.subscribe(() => {
       this.loginService.login();
-    });
-
-    Observable.merge(
+    }));
+    // initial value
+    if (this.toggleAckService.showIconChanged) {
+      this.subscriptions.push(this.toggleAckService.getToggle().subscribe(val => {
+        this.show = val;
+      }));
+      // subscribe for changes
+      this.subscriptions.push(this.toggleAckService.showIconChanged.subscribe(val => {
+        this.show = val.value;
+      }));
+    }
+    this.subscriptions.push(Observable.merge(
       this.router.events
         .filter((event: Event): boolean => event instanceof NavigationEnd)
         .filter((event: NavigationEnd): boolean => event.url !== '/_error')
@@ -77,11 +92,11 @@ export class AppComponent {
       this.router.events
         .filter((event: Event): boolean => event instanceof NavigationError)
         .map((event: NavigationError): string => event.url)
-    ).subscribe((url: string): void => this.handleNavigationError(url));
+    ).subscribe((url: string): void => this.handleNavigationError(url)));
 
     this.router.errorHandler = this.logger.error;
 
-    this.router.events
+    this.subscriptions.push(this.router.events
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
       .map(route => {
@@ -111,20 +126,20 @@ export class AppComponent {
         }
         let title = event['title'] ? `${event['title']} - ${this.brandingService.name}` : this.brandingService.name;
         this.titleService.setTitle(title);
-      });
+      }));
 
-    this.broadcaster.on('showDisconnectedFromGitHub').subscribe((event) => {
+    this.subscriptions.push(this.broadcaster.on('showDisconnectedFromGitHub').subscribe((event) => {
       this.lastPageToTryGitHub = event['location'];
       this.showGitHubConnectModal();
-    });
+    }));
 
-    this.broadcaster.on('showAddSpaceOverlay').subscribe((show: boolean) => {
+    this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((show: boolean) => {
       this.showAddSpaceOverlay = show;
-    });
+    }));
 
-    this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
+    this.subscriptions.push(this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {
       this.showAddAppOverlay = show;
-    });
+    }));
 
     this.disconnectedStateConfig = {
       actions: {
@@ -139,6 +154,12 @@ export class AppComponent {
       title: 'GitHub Disconnected',
       info: 'You must be connected to GitHub in order to add to or create a Space'
     } as EmptyStateConfig;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
   handleAction($event: any): void {

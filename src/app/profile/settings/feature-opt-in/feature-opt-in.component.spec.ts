@@ -2,12 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2/dist/index';
 import { Notifications, NotificationType } from 'ngx-base';
 import { UserService } from 'ngx-login-client';
 import { ListModule } from 'patternfly-ng';
 import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
+import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
 import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 import { FeatureOptInComponent } from './feature-opt-in.component';
@@ -20,11 +22,35 @@ class HostComponent {}
 describe('FeatureOptInComponent', () => {
   type Context = TestContext<FeatureOptInComponent, HostComponent>;
 
+  let gettingStartedServiceMock: jasmine.SpyObj<GettingStartedService>;
+  let notificationsMock: jasmine.SpyObj<Notifications>;
+  let userServiceMock: jasmine.SpyObj<UserService>;
+  let toggleServiceMock: jasmine.SpyObj<FeatureTogglesService>;
+  let toggleAckServiceMock: jasmine.SpyObj<FeatureAcknowledgementService>;
+
+  beforeEach(() => {
+    gettingStartedServiceMock = createMock(GettingStartedService);
+    toggleServiceMock = createMock(FeatureTogglesService);
+    toggleAckServiceMock = createMock(FeatureAcknowledgementService);
+    notificationsMock = createMock(Notifications);
+    userServiceMock = createMock(UserService);
+    (userServiceMock as any).currentLoggedInUser = {
+      attributes: {
+        featureLevel: 'beta',
+        email: 'somebody@email.com',
+        emailVerified: true
+      }
+    };
+    toggleServiceMock.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
+    toggleAckServiceMock.getToggle.and.returnValue(Observable.of(true));
+  });
+
   initContext(FeatureOptInComponent, HostComponent, {
     imports: [
       CommonModule,
       FormsModule,
-      ListModule
+      ListModule,
+      JWBootstrapSwitchModule
     ],
     providers: [
       { provide: GettingStartedService, useFactory: (): jasmine.SpyObj<GettingStartedService> => {
@@ -53,7 +79,8 @@ describe('FeatureOptInComponent', () => {
         const mock: jasmine.SpyObj<FeatureTogglesService> = createMock(FeatureTogglesService);
         mock.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
         return mock;
-      }}
+      }},
+      { provide: FeatureAcknowledgementService, useFactory: () => toggleAckServiceMock }
     ]
   });
 

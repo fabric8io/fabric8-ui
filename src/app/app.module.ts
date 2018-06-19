@@ -110,6 +110,7 @@ import { AboutModalModule } from './layout/about-modal/about-modal.module';
 
 import { FeatureFlagModule } from './feature-flag/feature-flag.module';
 import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
+import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 import { RavenExceptionHandler } from './shared/exception.handler';
 
@@ -200,6 +201,7 @@ export type StoreType = {
     ErrorService,
     FeatureFlagResolver,
     FeatureTogglesService,
+    FeatureAcknowledgementService,
     featureTogglesApiUrlProvider,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,

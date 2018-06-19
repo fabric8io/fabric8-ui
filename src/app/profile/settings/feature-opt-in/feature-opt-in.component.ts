@@ -3,6 +3,7 @@ import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { UserService } from 'ngx-login-client';
 import { ListComponent, ListConfig } from 'patternfly-ng';
 import { Subscription } from 'rxjs';
+import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
 import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
@@ -32,11 +33,14 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   listConfig: ListConfig;
   private items: FeatureLevel[];
 
+  state: boolean;
+
   constructor(
     private gettingStartedService: GettingStartedService,
     private notifications: Notifications,
     private userService: UserService,
-    private toggleService: FeatureTogglesService
+    private toggleService: FeatureTogglesService,
+    private toggleServiceAck: FeatureAcknowledgementService
   ) {
     this.listConfig = {
       dblClick: false,
@@ -90,6 +94,9 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.toggleServiceAck.getToggle().subscribe(val => {
+      this.state = val;
+    });
     this.featureLevel =  (this.userService.currentLoggedInUser.attributes as ExtProfile).featureLevel;
     this.items = [
       {
@@ -143,6 +150,10 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
         item.features = featurePerLevel[item.name];
       }
     }));
+  }
+
+  onChange(event: {previousValue: boolean, currentValue: boolean}): void {
+    this.toggleServiceAck.setToggle(event.currentValue);
   }
 
   featureByLevel(features: Feature[]): any {
