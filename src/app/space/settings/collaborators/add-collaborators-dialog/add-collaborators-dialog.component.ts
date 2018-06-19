@@ -64,6 +64,7 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   }
 
   private reset() {
+    this.collaborators = [];
     this.selectedCollaborators = [];
   }
 }

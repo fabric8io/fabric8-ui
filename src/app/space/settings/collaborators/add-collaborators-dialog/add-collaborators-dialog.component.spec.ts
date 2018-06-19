@@ -57,22 +57,26 @@ describe('AddCollaboratorsDialog', () => {
     collaboratorService.addCollaborators.and.returnValue(Observable.of(true));
 
     expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
+    this.testedDirective.collaborators = [{ id: 'foo-user' } as User, { id: 'bar-user' } as User];
     this.testedDirective.selectedCollaborators = [{ id: 'foo-user' } as User];
 
     this.testedDirective.addCollaborators();
 
     expect(collaboratorService.addCollaborators).toHaveBeenCalledWith('fake-space-id', [{ id: 'foo-user' }]);
     expect(this.testedDirective.host.hide).toHaveBeenCalled();
+    expect(this.testedDirective.collaborators).toEqual([]);
     expect(this.testedDirective.selectedCollaborators).toEqual([]);
   });
 
   it('should reset state on cancel', function(this: Context) {
     expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-    this.testedDirective.selectedCollaborators = [{} as User];
+    this.testedDirective.collaborators = [{ id: 'foo-user' } as User, { id: 'bar-user' } as User];
+    this.testedDirective.selectedCollaborators = [{ id: 'foo-user' } as User];
 
     this.testedDirective.cancel();
 
     expect(this.testedDirective.host.hide).toHaveBeenCalled();
+    expect(this.testedDirective.collaborators).toEqual([]);
     expect(this.testedDirective.selectedCollaborators).toEqual([]);
   });
 });
