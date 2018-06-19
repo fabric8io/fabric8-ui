@@ -7,11 +7,16 @@ import {
   NO_ERRORS_SCHEMA,
   Output
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { Observable } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable
+} from 'rxjs';
 
 import { Contexts } from 'ngx-fabric8-wit';
+import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
@@ -41,36 +46,40 @@ class FakeDeploymentCardComponent {
 describe('DeploymentCardContainer', () => {
   type Context = TestContext<DeploymentCardContainerComponent, HostComponent>;
   const environments: string[] = ['envId1', 'envId2'];
-  let mockDeploymentsService: jasmine.SpyObj<DeploymentsService>;
-  let mockContexts: any = jasmine.createSpy('Contexts');
-  let current = {
-    path: 'mock-path',
-    user: {
-      attributes: {
-        username: 'mock-username'
-      }
-    }
-  };
-  mockContexts.current = Observable.of(current);
+
+  initContext(DeploymentCardContainerComponent, HostComponent,
+    {
+      declarations: [FakeDeploymentCardComponent],
+      providers: [
+        {
+          provide: Contexts, useValue: {
+            current: Observable.of({
+              path: 'mock-path',
+              user: {
+                attributes: {
+                  username: 'mock-username'
+                }
+              }
+            })
+          }
+        },
+        {
+          provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
+            const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
+            svc.hasDeployments.and.returnValue(new BehaviorSubject<boolean>(true));
+            return svc;
+          }
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    },
+    (component: DeploymentCardContainerComponent) => {
+      component.spaceId = 'space';
+      component.environments = Observable.of(environments);
+      component.applications = ['app'];
+    });
 
   describe('User has deployed applications', () => {
-    mockDeploymentsService = jasmine.createSpyObj('DeploymentsService', ['hasDeployments']);
-    mockDeploymentsService.hasDeployments.and.returnValue(Observable.of(true));
-    initContext(DeploymentCardContainerComponent, HostComponent,
-      {
-        declarations: [FakeDeploymentCardComponent],
-        providers: [
-          { provide: Contexts, useValue: mockContexts },
-          { provide: DeploymentsService, useValue: mockDeploymentsService }
-        ],
-        schemas: [NO_ERRORS_SCHEMA]
-      },
-      (component: DeploymentCardContainerComponent) => {
-        component.spaceId = 'space';
-        component.environments = Observable.of(environments);
-        component.applications = ['app'];
-      });
-
     it('should create child components with proper inputs', function(this: Context) {
       const arrayOfComponents: DebugElement[] =
         this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
@@ -90,22 +99,10 @@ describe('DeploymentCardContainer', () => {
   });
 
   describe('Empty State', () => {
-    mockDeploymentsService = jasmine.createSpyObj('DeploymentsService', ['hasDeployments']);
-    mockDeploymentsService.hasDeployments.and.returnValue(Observable.of(false));
-    initContext(DeploymentCardContainerComponent, HostComponent,
-      {
-        declarations: [FakeDeploymentCardComponent],
-        providers: [
-          { provide: Contexts, useValue: mockContexts },
-          { provide: DeploymentsService, useValue: mockDeploymentsService }
-        ],
-        schemas: [NO_ERRORS_SCHEMA]
-      },
-      (component: DeploymentCardContainerComponent) => {
-        component.spaceId = 'space';
-        component.environments = Observable.of(environments);
-        component.applications = ['app'];
-      });
+    beforeEach(function(this: Context): void {
+      TestBed.get(DeploymentsService).hasDeployments().next(false);
+      this.detectChanges();
+    });
 
     it('should display the empty state template', function(this: Context) {
       const el: any = this.fixture.debugElement.query(By.css('.deployments-empty-state')).nativeElement;

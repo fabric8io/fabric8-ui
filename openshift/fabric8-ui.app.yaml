@@ -65,6 +65,8 @@ objects:
               value: ${k8s_api_server_base_path}
             - name: FABRIC8_FEATURE_TOGGLES_API_URL
               value: ${fabric8_feature_toggles_api_url}
+            - name: FABRIC8_JENKINS_API_URL
+              value: ${fabric8_jenkins_api_url}
             - name: OAUTH_ISSUER
               valueFrom:
                 configMapKeyRef:
@@ -171,4 +173,6 @@ parameters:
 - name: ws_k8s_api_server
   value: ''
 - name: fabric8_feature_toggles_api_url
+  value: ''
+- name: fabric8_jenkins_api_url
   value: ''

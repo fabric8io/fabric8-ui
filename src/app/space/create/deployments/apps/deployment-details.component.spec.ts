@@ -1,8 +1,10 @@
 import {
   Component,
   DebugElement,
-  Input
+  Input,
+  NO_ERRORS_SCHEMA
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -79,24 +81,6 @@ class FakeDeploymentGraphLabelComponent {
   @Input() valueUpperBound: any;
 }
 
-@Component({
-  selector: 'pfng-chart-sparkline',
-  template: ''
-})
-class FakePfngChartSparkline {
-  @Input() config: any;
-  @Input() chartData: any;
-}
-
-@Component({
-  selector: 'f8-deployments-linechart',
-  template: ''
-})
-class FakeDeploymentsLinechart {
-  @Input() config: SparklineConfig;
-  @Input() chartData: SparklineData;
-}
-
 interface ChartMock {
   axis: {
     max: jasmine.Spy
@@ -110,48 +94,11 @@ interface ChartMock {
 
 describe('DeploymentDetailsComponent', () => {
   type Context = TestContext<DeploymentDetailsComponent, HostComponent>;
-  let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  let mockStatusSvc: jasmine.SpyObj<DeploymentStatusService>;
-  let status: Subject<Status>;
-  let cpuStatObservable: BehaviorSubject<CpuStat[]>;
-  let memStatObservable: BehaviorSubject<MemoryStat[]>;
-  let netStatObservable: BehaviorSubject<NetworkStat[]>;
-  let podsObservable: BehaviorSubject<Pods>;
   let cpuChart: ChartMock;
   let memChart: ChartMock;
   let netChart: ChartMock;
 
   beforeEach(() => {
-    cpuStatObservable = new BehaviorSubject([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]);
-    memStatObservable = new BehaviorSubject([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]);
-
-    const mb = Math.pow(1024, 2);
-    netStatObservable = new BehaviorSubject([{
-      sent: new ScaledNetStat(1 * mb, 1),
-      received: new ScaledNetStat(2 * mb, 1)
-    }] as NetworkStat[]);
-
-    podsObservable = new BehaviorSubject(
-      { total: 1, pods: [['Running', 1], ['Starting', 0], ['Stopping', 0]] } as Pods
-    );
-
-    mockSvc = createMock(DeploymentsService);
-    mockSvc.getVersion.and.returnValue(Observable.of('1.2.3'));
-    mockSvc.getDeploymentCpuStat.and.returnValue(cpuStatObservable);
-    mockSvc.getDeploymentMemoryStat.and.returnValue(memStatObservable);
-    mockSvc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
-    mockSvc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
-    mockSvc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
-    mockSvc.deleteDeployment.and.returnValue(Observable.of('mockDeletedMessage'));
-    mockSvc.getDeploymentNetworkStat.and.returnValue(netStatObservable);
-    mockSvc.getPods.and.returnValue(podsObservable);
-
-    status = new BehaviorSubject<Status>({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' });
-    mockStatusSvc = createMock(DeploymentStatusService);
-    mockStatusSvc.getDeploymentAggregateStatus.and.returnValue(status);
-    mockStatusSvc.getDeploymentCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
-    mockStatusSvc.getDeploymentMemoryStatus.and.returnValue(Observable.of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
-
     cpuChart = {
       axis: {
         max: jasmine.createSpy('max')
@@ -188,22 +135,55 @@ describe('DeploymentDetailsComponent', () => {
     imports: [CollapseModule.forRoot()],
     declarations: [
       FakeDeploymentsDonutComponent,
-      FakeDeploymentGraphLabelComponent,
-      FakePfngChartSparkline,
-      FakeDeploymentsLinechart
+      FakeDeploymentGraphLabelComponent
     ],
     providers: [
-      { provide: DeploymentsService, useFactory: () => mockSvc },
-      { provide: DeploymentStatusService, useFactory: () => mockStatusSvc },
+      {
+        provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
+          const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
+          svc.getVersion.and.returnValue(Observable.of('1.2.3'));
+          svc.getDeploymentCpuStat.and.returnValue(new BehaviorSubject([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]));
+          svc.getDeploymentMemoryStat.and.returnValue(new BehaviorSubject([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]));
+          svc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
+          svc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
+          svc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
+          svc.deleteDeployment.and.returnValue(Observable.of('mockDeletedMessage'));
+          svc.getDeploymentNetworkStat.and.returnValue(
+            new BehaviorSubject([{
+              sent: new ScaledNetStat(1 * Math.pow(1024, 2), 1),
+              received: new ScaledNetStat(2 * Math.pow(1024, 2), 1)
+            }] as NetworkStat[])
+          );
+          svc.getPods.and.returnValue(
+            new BehaviorSubject(
+              { total: 1, pods: [['Running', 1], ['Starting', 0], ['Stopping', 0]] } as Pods
+            )
+          );
+          return svc;
+        }
+      },
+      {
+        provide: DeploymentStatusService, useFactory: (): jasmine.SpyObj<DeploymentStatusService> => {
+          const svc: jasmine.SpyObj<DeploymentStatusService> = createMock(DeploymentStatusService);
+          svc.getDeploymentAggregateStatus.and.returnValue(new BehaviorSubject<Status>({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
+          svc.getDeploymentCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
+          svc.getDeploymentMemoryStatus.and.returnValue(Observable.of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
+          return svc;
+        }
+      },
       { provide: ChartDefaults, useValue: { getDefaultSparklineColor: () => ({}) } }
-    ]
-  }, (component: DeploymentDetailsComponent): void => {
-    component.cpuChartLoaded(cpuChart as any);
-    component.memChartLoaded(memChart as any);
-    component.netChartLoaded(netChart as any);
-  });
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
+  },
+    (component: DeploymentDetailsComponent): void => {
+      component.cpuChartLoaded(cpuChart as any);
+      component.memChartLoaded(memChart as any);
+      component.netChartLoaded(netChart as any);
+    });
 
   it('should correctly call deployments service functions with the correct arguments', function(this: Context) {
+    const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+
     expect(mockSvc.getPods).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     expect(mockSvc.getDeploymentCpuStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     expect(mockSvc.getDeploymentMemoryStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
@@ -225,7 +205,7 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   it('should set hasPods to false for state without pods', function(this: Context, done: DoneFn) {
-    podsObservable.next({ total: 0, pods: [] });
+    TestBed.get(DeploymentsService).getPods().next({ total: 0, pods: [] });
     this.testedDirective.hasPods.subscribe((b: boolean) => {
       expect(b).toBeFalsy();
       done();
@@ -242,6 +222,8 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should be called with the proper arguments', () => {
+      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+
       expect(mockSvc.getDeploymentCpuStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     });
 
@@ -274,6 +256,8 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should use units from service result', () => {
+      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+
       expect(mockSvc.getDeploymentMemoryStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
       expect(de.componentInstance.dataMeasure).toEqual('GB');
     });
@@ -295,20 +279,23 @@ describe('DeploymentDetailsComponent', () => {
 
   describe('usage message', () => {
     it('should be an empty string when status is OK', function(this: Context) {
+      const status: Subject<Status> = TestBed.get(DeploymentStatusService).getDeploymentAggregateStatus();
+
       status.next({ type: StatusType.OK, message: '' });
-      this.detectChanges();
       expect(this.testedDirective.usageMessage).toEqual('');
     });
 
     it('should be "Nearing quota" when status is WARN', function(this: Context) {
+      const status: Subject<Status> = TestBed.get(DeploymentStatusService).getDeploymentAggregateStatus();
+
       status.next({ type: StatusType.WARN, message: '' });
-      this.detectChanges();
       expect(this.testedDirective.usageMessage).toEqual('Nearing quota');
     });
 
     it('should be "Reached quota" when status is WARN', function(this: Context) {
+      const status: Subject<Status> = TestBed.get(DeploymentStatusService).getDeploymentAggregateStatus();
+
       status.next({ type: StatusType.ERR, message: '' });
-      this.detectChanges();
       expect(this.testedDirective.usageMessage).toEqual('Reached quota');
     });
   });
@@ -323,6 +310,8 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should call to service', () => {
+      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
+
       expect(mockSvc.getDeploymentNetworkStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     });
 
@@ -345,7 +334,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should set CPU Y axis max to maximum value or maximum quota', function(this: Context) {
-      cpuStatObservable.next([
+      TestBed.get(DeploymentsService).getDeploymentCpuStat().next([
         {
           used: 1,
           quota: 100
@@ -363,7 +352,6 @@ describe('DeploymentDetailsComponent', () => {
           quota: 100
         }
       ]);
-      this.detectChanges();
       expect(cpuChart.axis.max).toHaveBeenCalledWith({ y: 200 });
     });
 
@@ -372,7 +360,7 @@ describe('DeploymentDetailsComponent', () => {
     });
 
     it('should set Memory Y axis max to maximum value or maximum quota', function(this: Context) {
-      memStatObservable.next([
+      TestBed.get(DeploymentsService).getDeploymentMemoryStat().next([
         {
           used: 1,
           quota: 100,
@@ -394,53 +382,46 @@ describe('DeploymentDetailsComponent', () => {
           units: MemoryUnit.MB
         }
       ]);
-      this.detectChanges();
       expect(memChart.axis.max).toHaveBeenCalledWith({ y: 200 });
     });
   });
 
   describe('linechart data', () => {
     it('should be rounded to whole numbers when units are bytes', function(this: Context) {
-      const mb = Math.pow(1024, 2);
-      netStatObservable.next([
+      TestBed.get(DeploymentsService).getDeploymentNetworkStat().next([
         {
-          sent: new ScaledNetStat(1 * mb, 1),
-          received: new ScaledNetStat(2 * mb, 1)
+          sent: new ScaledNetStat(1 * Math.pow(1024, 2), 1),
+          received: new ScaledNetStat(2 * Math.pow(1024, 2), 1)
         },
         {
           sent: new ScaledNetStat(100.567, 2),
           received: new ScaledNetStat(200.234, 2)
         }
       ] as NetworkStat[]);
-      this.detectChanges();
-      const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-      expect(detailsComponent.netVal).toEqual(301);
-      expect(detailsComponent.netData.xData).toEqual(['time', 1, 2]);
-      expect(detailsComponent.netData.yData.length).toEqual(2);
-      expect(detailsComponent.netData.yData[0][2]).toEqual(101);
-      expect(detailsComponent.netData.yData[1][2]).toEqual(200);
+      expect(this.testedDirective.netVal).toEqual(301);
+      expect(this.testedDirective.netData.xData).toEqual(['time', 1, 2]);
+      expect(this.testedDirective.netData.yData.length).toEqual(2);
+      expect(this.testedDirective.netData.yData[0][2]).toEqual(101);
+      expect(this.testedDirective.netData.yData[1][2]).toEqual(200);
     });
 
     it('should be rounded to tenths when units are larger than bytes', function(this: Context) {
-      const mb = Math.pow(1024, 2);
-      netStatObservable.next([
+      TestBed.get(DeploymentsService).getDeploymentNetworkStat().next([
         {
-          sent: new ScaledNetStat(1 * mb, 1),
-          received: new ScaledNetStat(2 * mb, 1)
+          sent: new ScaledNetStat(1 * Math.pow(1024, 2), 1),
+          received: new ScaledNetStat(2 * Math.pow(1024, 2), 1)
         },
         {
           sent: new ScaledNetStat(12.34 * 1024, 2),
           received: new ScaledNetStat(45.67 * 1024, 2)
         }
       ] as NetworkStat[]);
-      this.detectChanges();
-      const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
-      expect(detailsComponent.netVal).toEqual(58);
-      expect(detailsComponent.netData.xData).toEqual(['time', 1, 2]);
-      expect(detailsComponent.netData.yData.length).toEqual(2);
-      expect(detailsComponent.netData.yData[0][2]).toEqual(12.3);
-      expect(detailsComponent.netData.yData[1][2]).toEqual(45.7);
-      expect(detailsComponent.netUnits).toEqual(MemoryUnit.KB);
+      expect(this.testedDirective.netVal).toEqual(58);
+      expect(this.testedDirective.netData.xData).toEqual(['time', 1, 2]);
+      expect(this.testedDirective.netData.yData.length).toEqual(2);
+      expect(this.testedDirective.netData.yData[0][2]).toEqual(12.3);
+      expect(this.testedDirective.netData.yData[1][2]).toEqual(45.7);
+      expect(this.testedDirective.netUnits).toEqual(MemoryUnit.KB);
     });
   });
 
