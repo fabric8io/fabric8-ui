@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  NO_ERRORS_SCHEMA,
   Output
 } from '@angular/core';
 
@@ -22,25 +23,15 @@ import { DeploymentsToolbarComponent } from './deployments-toolbar.component';
   `
 })
 class TestHostComponent {
-  public resultsCount: number = 0;
-  public filterChange(event: FilterEvent): void { }
-  public sortChange(event: SortEvent): void { }
-}
-
-@Component({
-  selector: 'pfng-toolbar',
-  template: ''
-})
-class FakePfngToolbarComponent {
-  @Input() config: any;
-  @Output() onFilterChange = new EventEmitter<FilterEvent>();
-  @Output() onSortChange = new EventEmitter<SortEvent>();
+  resultsCount: number = 0;
+  filterChange(event: FilterEvent): void { }
+  sortChange(event: SortEvent): void { }
 }
 
 describe('DeploymentsToolbarComponent', () => {
   type Context = TestContext<DeploymentsToolbarComponent, TestHostComponent>;
   initContext(DeploymentsToolbarComponent, TestHostComponent, {
-    declarations: [FakePfngToolbarComponent]
+    schemas: [NO_ERRORS_SCHEMA]
   });
 
   it('should update filterConfig resultsCount', function(this: Context) {
