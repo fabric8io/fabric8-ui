@@ -22,7 +22,7 @@ export class ExtProfile extends Profile {
 export class GettingStartedService implements OnDestroy {
   private headers = new Headers({ 'Content-Type': 'application/json' });
   private loggedInUser: User;
-  subscriptions: Subscription[] = [];
+  protected subscriptions: Subscription[] = [];
   private usersUrl: string;
 
   constructor(

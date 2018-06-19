@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import {
   Component,
   Injectable,
@@ -11,8 +10,6 @@ import {
 } from '@angular/core/testing';
 import {
   ActivatedRouteSnapshot,
-  NavigationEnd,
-  NavigationError,
   Resolve,
   Router,
   RouterStateSnapshot
@@ -49,8 +46,8 @@ import { LoginService } from './shared/login.service';
 import { NotificationsService } from './shared/notifications.service';
 
 import { AppComponent } from './app.component';
+import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { ErrorService } from './layout/error/error.service';
-import { ContextResolver } from './shared/context-resolver.service';
 
 @Component({
   template: '<f8-app></f8-app>'
@@ -72,7 +69,6 @@ class MockContextResolver implements Resolve<Context> {
 }
 
 describe('AppComponent', () => {
-
   initContext(AppComponent, HostComponent, {
     imports: [
       RouterTestingModule.withRoutes([
@@ -106,6 +102,7 @@ describe('AppComponent', () => {
       { provide: BrandingService, useValue: createMock(BrandingService) },
       { provide: BsModalService, useValue: createMock(BsModalService) },
       { provide: ProviderService, useValue: createMock(ProviderService) },
+      { provide: FeatureAcknowledgementService, useValue: jasmine.createSpyObj('FeatureAcknowledgementService', ['getToggle'])},
       {
         provide: Broadcaster, useFactory: () => {
           const broadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
