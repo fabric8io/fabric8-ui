@@ -3,6 +3,7 @@
 // rc2 workaround
 import { ApplicationRef, enableProdMode } from '@angular/core';
 import { enableDebugTools } from '@angular/platform-browser';
+import { StaticInjector } from 'ngx-forge';
 
 // Environment Providers
 let PROVIDERS: any[] = [
@@ -17,6 +18,12 @@ if ('production' === ENV) {
   // Production
   // disableDebugTools(); // https://github.com/qdouble/angular-webpack2-starter/issues/263
   enableProdMode();
+
+  /* Below code is needed to get the broadcaster instance from AppModule which is
+  used in `ngx-launcher` to broadcast events for telemetry */
+  _decorateModuleRef = (modRef: any) => {
+    StaticInjector.setInjector(modRef.injector);
+  };
 
   PROVIDERS = [
     ...PROVIDERS
@@ -33,6 +40,11 @@ if ('production' === ENV) {
     enableDebugTools(cmpRef);
     (<any> window).ng.probe = _ng.probe;
     (<any> window).ng.coreTokens = _ng.coreTokens;
+
+    /* Below line is needed to get the broadcaster instance from AppModule which is
+    used in `ngx-launcher` to broadcast events for telemetry */
+    StaticInjector.setInjector(modRef.injector);
+
     return modRef;
   };
 
