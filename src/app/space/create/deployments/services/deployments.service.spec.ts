@@ -164,74 +164,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#scalePods', () => {
-    it('should return success message on success', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockRespond(new Response(
-          new ResponseOptions({ status: 200 })
-        ));
-      });
-
-      svc.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
-        .subscribe(
-          (msg: string) => {
-            expect(msg).toEqual('Successfully scaled vertx-hello');
-            subscription.unsubscribe();
-            done();
-          },
-          (err: string) => {
-            done.fail(err);
-          }
-        );
-    });
-
-    it('should return failure message on error', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(new Response(
-          new ResponseOptions({
-            type: ResponseType.Error,
-            status: 400
-          })
-        ) as Response & Error);
-      });
-
-      svc.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
-        .subscribe(
-          (msg: string) => {
-            done.fail(msg);
-          },
-          (err: string) => {
-            expect(err).toEqual('Failed to scale vertx-hello');
-            subscription.unsubscribe();
-            done();
-          }
-        );
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        expect(connection.request.url)
-          .toEqual('http://example.com/deployments/spaces/foo-spaceId%2B/applications/vertx-hello%2B/deployments/stage%2B?podCount=2');
-        connection.mockRespond(new Response(
-          new ResponseOptions({ status: 200 })
-        ));
-      });
-
-      svc.scalePods('foo-spaceId+', 'stage+', 'vertx-hello+', 2)
-        .subscribe(
-          (msg: string) => {
-            expect(msg).toEqual('Successfully scaled vertx-hello+');
-            subscription.unsubscribe();
-            done();
-          },
-          (err: string) => {
-            done.fail(err);
-          }
-        );
-    });
-
-  });
-
   describe('#getPods', () => {
     it('should return pods for an existing deployment', (done: DoneFn) => {
       const httpResponse = {
@@ -2239,6 +2171,36 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
           done();
         });
       TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#scalePods', () => {
+    it('should return success message on success', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).scalePods.and.returnValue(Observable.of({}));
+      TestBed.get(DeploymentsService).scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
+        .subscribe(
+          (msg: string) => {
+            expect(msg).toEqual('Successfully scaled vertx-hello');
+            done();
+          },
+          (err: string) => {
+            done.fail(err);
+          }
+        );
+    });
+
+    it('should return failure message on error', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).scalePods.and.returnValue(Observable.throw('fail'));
+      TestBed.get(DeploymentsService).scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
+        .subscribe(
+          (msg: string) => {
+            done.fail(msg);
+          },
+          (err: string) => {
+            expect(err).toEqual('Failed to scale vertx-hello');
+            done();
+          }
+        );
     });
   });
 
