@@ -58,4 +58,26 @@ describe('CodebasesToolbarComponent', () => {
 
     expect(this.testedDirective.filterConfig.resultsCount).toBe(nextCount);
   });
+
+  it('should emit filterChange event', function(this: Context) {
+    spyOn(this.hostComponent, 'filterChange');
+    this.testedDirective.filterChange({});
+    expect(this.hostComponent.filterChange).toHaveBeenCalledWith({});
+  });
+
+  it('should emit sortChange event', function(this: Context) {
+    spyOn(this.hostComponent, 'sortChange');
+    this.testedDirective.sortChange({
+      field: {
+        sortType: 'alphanumeric'
+      },
+      isAscending: false
+    });
+    expect(this.hostComponent.sortChange).toHaveBeenCalledWith({
+      field: {
+        sortType: 'alphanumeric'
+      },
+      isAscending: false
+    });
+  });
 });
