@@ -165,335 +165,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#getDeploymentCpuStat', () => {
-    it('should combine timeseries and quota data', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
-        }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
-          attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 3,
-                          memory: 3
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
-        .first()
-        .subscribe((stats: CpuStat[]) => {
-          expect(stats).toEqual([
-            { used: 1, quota: 3, timestamp: 1 },
-            { used: 2, quota: 3, timestamp: 2 },
-            { used: 9, quota: 3, timestamp: 9 }
-          ]);
-          subscription.unsubscribe();
-          done();
-        });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
-      });
-    });
-
-    it('should round usage data points', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 0.0001, time: 1 },
-            { value: 0.00001, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
-        }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
-          attributes: {
-            cores: {
-              time: 9, value: 0.00015
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 3,
-                          memory: 3
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
-        .first()
-        .subscribe((stats: CpuStat[]) => {
-          expect(stats).toEqual([
-            { used: 0.0001, quota: 3, timestamp: 1 },
-            { used: 0, quota: 3, timestamp: 2 },
-            { used: 0.0002, quota: 3, timestamp: 9 }
-          ]);
-          subscription.unsubscribe();
-          done();
-        });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
-        }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
-          attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app+',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env+',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 3,
-                          memory: 3
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space%2B$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentCpuStat('foo-space+', 'foo-env+', 'foo-app+', 3)
-        .first()
-        .subscribe((stats: CpuStat[]) => {
-          expect(stats).toEqual([
-            { used: 1, quota: 3, timestamp: 1 },
-            { used: 2, quota: 3, timestamp: 2 },
-            { used: 9, quota: 3, timestamp: 9 }
-          ]);
-          subscription.unsubscribe();
-          done();
-        });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space+', 'foo-env+', 'foo-app+');
-      });
-    });
-  });
-
   describe('#getDeploymentMemoryStat', () => {
     it('should combine timeseries and quota data', (done: DoneFn) => {
       const initialTimeseriesResponse = {
@@ -2145,6 +1816,146 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
           } as Pods);
           done();
         });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#getDeploymentCpuStat', () => {
+    it('should combine timeseries and quota data', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      TestBed.get(DeploymentApiService).getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
+        }
+      }));
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
+        .subscribe((stats: CpuStat[]) => {
+          expect(stats).toEqual([
+            { used: 1, quota: 3, timestamp: 1 },
+            { used: 2, quota: 3, timestamp: 2 },
+            { used: 9, quota: 3, timestamp: 9 }
+          ]);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should round usage data points', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 0.0001, time: 1 },
+          { value: 0.00001, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      TestBed.get(DeploymentApiService).getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 0.00015
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
+        }
+      }));
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
+        .subscribe((stats: CpuStat[]) => {
+          expect(stats).toEqual([
+            { used: 0.0001, quota: 3, timestamp: 1 },
+            { used: 0, quota: 3, timestamp: 2 },
+            { used: 0.0002, quota: 3, timestamp: 9 }
+          ]);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
       TestBed.get(TIMER_TOKEN).next();
     });
   });
