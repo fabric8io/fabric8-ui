@@ -164,70 +164,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#getVersion', () => {
-    it('should return 1.0.2', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        version: '1.0.2'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: '1.0.2',
-        observable: svc.getVersion('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        version: '1.0.2'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: '1.0.2',
-        observable: svc.getVersion('foo-spaceId+', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-  });
-
   describe('#scalePods', () => {
     it('should return success message on success', (done: DoneFn) => {
       const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
@@ -2274,6 +2210,32 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       TestBed.get(DeploymentsService).isDeployedInEnvironment('foo-spaceId', 'stage')
         .subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#getVersion', () => {
+    it('should return 1.0.2', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: [
+              {
+                attributes: {
+                  name: 'stage',
+                  version: '1.0.2'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getVersion('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((version: string): void => {
+          expect(version).toEqual('1.0.2');
           done();
         });
       TestBed.get(TIMER_TOKEN).next();
