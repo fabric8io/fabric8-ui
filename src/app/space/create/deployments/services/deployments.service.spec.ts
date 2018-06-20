@@ -39,6 +39,7 @@ import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { MemoryUnit } from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
+import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
 import {
@@ -163,165 +164,6 @@ describe('DeploymentsService', () => {
     serviceUpdater.next();
   }
 
-
-  describe('#getPods', () => {
-    it('should return pods for an existing deployment', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 2,
-                        pods: [
-                          ['Running', '1'],
-                          ['Starting', '0'],
-                          ['Stopping', '1']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run',
-                        pod_total: 1,
-                        pods: [
-                          ['Running', '0'],
-                          ['Starting', '0'],
-                          ['Stopping', '1']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const expectedResponse = {
-        total: 2,
-        pods: [
-          ['Running', 1],
-          ['Starting', 0],
-          ['Stopping', 1]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-
-    it('should return pods when there are multiple deployments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 2,
-                        pods: [
-                          ['Running', '1'],
-                          ['Starting', '0'],
-                          ['Stopping', '1']
-                        ]
-                      }
-                    },
-                    {
-                      attributes: {
-                        name: 'run',
-                        pod_total: 6,
-                        pods: [
-                          ['Running', '3'],
-                          ['Starting', '2'],
-                          ['Stopping', '1']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const expectedResponse = {
-        total: 6,
-        pods: [
-          ['Running', 3],
-          ['Starting', 2],
-          ['Stopping', 1]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'run', 'vertx-hello'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 1,
-                        pods: [
-                          ['Running', '1']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const expectedResponse = {
-        total: 1,
-        pods: [
-          ['Running', 1]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId+', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-  });
 
   describe('#getDeploymentCpuStat', () => {
     it('should combine timeseries and quota data', (done: DoneFn) => {
@@ -2201,6 +2043,109 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
             done();
           }
         );
+    });
+  });
+
+  describe('#getPods', () => {
+    it('should return pods for an existing deployment', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: [
+              {
+                attributes: {
+                  name: 'stage',
+                  pod_total: 2,
+                  pods: [
+                    ['Running', '1'],
+                    ['Starting', '0'],
+                    ['Stopping', '1']
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'run',
+                  pod_total: 1,
+                  pods: [
+                    ['Running', '0'],
+                    ['Starting', '0'],
+                    ['Stopping', '1']
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getPods('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((pods: Pods): void => {
+          expect(pods).toEqual({
+            total: 2,
+            pods: [
+              ['Running', 1],
+              ['Starting', 0],
+              ['Stopping', 1]
+            ]
+          } as Pods);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return pods when there are multiple deployments', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: [
+              {
+                attributes: {
+                  name: 'stage',
+                  pod_total: 2,
+                  pods: [
+                    ['Running', '1'],
+                    ['Starting', '0'],
+                    ['Stopping', '1']
+                  ]
+                }
+              },
+              {
+                attributes: {
+                  name: 'run',
+                  pod_total: 6,
+                  pods: [
+                    ['Running', '3'],
+                    ['Starting', '2'],
+                    ['Stopping', '1']
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getPods('foo-spaceId', 'run', 'vertx-hello')
+        .subscribe((pods: Pods): void => {
+          expect(pods).toEqual({
+            total: 6,
+            pods: [
+              ['Running', 3],
+              ['Starting', 2],
+              ['Stopping', 1]
+            ]
+          } as Pods);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
     });
   });
 
