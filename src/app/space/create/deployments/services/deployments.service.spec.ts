@@ -165,226 +165,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#getDeploymentNetworkStat', () => {
-    it('should return scaled timeseries data', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
-        }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
-          attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
-        .first()
-        .subscribe((stats: NetworkStat[]) => {
-          expect(stats).toEqual([
-            { sent: new ScaledNetStat(7, 7), received: new ScaledNetStat(5, 5) },
-            { sent: new ScaledNetStat(8, 8), received: new ScaledNetStat(6, 6) },
-            { sent: new ScaledNetStat(11, 11), received: new ScaledNetStat(12, 12) }
-          ]);
-          subscription.unsubscribe();
-          done();
-        });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
-      });
-    });
-
-    it('should scale results to the sample with greatest unit', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 0, time: 0 },
-            { value: 0, time: 1 }
-          ],
-          net_rx: [
-            { value: 800 * Math.pow(1024, 1), time: 0 },
-            { value: 1.2 * Math.pow(1024, 2), time: 1 }
-          ],
-          net_tx: [
-            { value: 500 * Math.pow(1024, 2), time: 0 },
-            { value: 1.2 * Math.pow(1024, 3), time: 1 }
-          ],
-          memory: [
-            { value: 0, time: 0 },
-            { value: 0, time: 1 }
-          ],
-          start: 0,
-          end: 1
-        }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
-          attributes: {
-            cores: {
-              time: 0, value: 0
-            },
-            net_tx: {
-              time: 2, value: 1 * Math.pow(1024, 3)
-            },
-            net_rx: {
-              time: 2, value: 750 * Math.pow(1024, 2)
-            },
-            memory: {
-              time: 0, value: 0
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 0,
-                          memory: 0
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
-        .first()
-        .subscribe((stats: NetworkStat[]) => {
-          expect(stats).toEqual([
-            {
-              sent: jasmine.objectContaining({ used: 0.5, units: MemoryUnit.GB }),
-              received: jasmine.objectContaining({ used: 0, units: MemoryUnit.GB })
-            },
-            {
-              sent: jasmine.objectContaining({ used: 1.2, units: MemoryUnit.GB }),
-              received: jasmine.objectContaining({ used: 0, units: MemoryUnit.GB })
-            },
-            {
-              sent: jasmine.objectContaining({ used: 1, units: MemoryUnit.GB }),
-              received: jasmine.objectContaining({ used: 0.7, units: MemoryUnit.GB })
-            }
-          ] as any[]);
-          subscription.unsubscribe();
-          done();
-        });
-      serviceUpdater.next();
-      serviceUpdater.next();
-    });
-  });
-
   describe('#getTimeseriesData', () => {
     it('should complete without errors if the deployment disappears', (done: DoneFn) => {
       const initialTimeseriesResponse = {
@@ -1762,6 +1542,151 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
               quota: 512,
               units: MemoryUnit.MB
             })
+          ] as any[]);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#getDeploymentNetworkStat', () => {
+    it('should return scaled timeseries data', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      TestBed.get(DeploymentApiService).getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
+        }
+      }));
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
+        .subscribe((stats: NetworkStat[]) => {
+          expect(stats).toEqual([
+            { sent: new ScaledNetStat(7, 7), received: new ScaledNetStat(5, 5) },
+            { sent: new ScaledNetStat(8, 8), received: new ScaledNetStat(6, 6) },
+            { sent: new ScaledNetStat(11, 11), received: new ScaledNetStat(12, 12) }
+          ]);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should scale results to the sample with greatest unit', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 0, time: 0 },
+          { value: 0, time: 1 }
+        ],
+        net_rx: [
+          { value: 800 * Math.pow(1024, 1), time: 0 },
+          { value: 1.2 * Math.pow(1024, 2), time: 1 }
+        ],
+        net_tx: [
+          { value: 500 * Math.pow(1024, 2), time: 0 },
+          { value: 1.2 * Math.pow(1024, 3), time: 1 }
+        ],
+        memory: [
+          { value: 0, time: 0 },
+          { value: 0, time: 1 }
+        ],
+        start: 0,
+        end: 1
+      }));
+      TestBed.get(DeploymentApiService).getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 0, value: 0
+        },
+        net_tx: {
+          time: 2, value: 1 * Math.pow(1024, 3)
+        },
+        net_rx: {
+          time: 2, value: 750 * Math.pow(1024, 2)
+        },
+        memory: {
+          time: 0, value: 0
+        }
+      }));
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 0,
+                    memory: 0
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
+        .first()
+        .subscribe((stats: NetworkStat[]) => {
+          expect(stats).toEqual([
+            {
+              sent: jasmine.objectContaining({ used: 0.5, units: MemoryUnit.GB }),
+              received: jasmine.objectContaining({ used: 0, units: MemoryUnit.GB })
+            },
+            {
+              sent: jasmine.objectContaining({ used: 1.2, units: MemoryUnit.GB }),
+              received: jasmine.objectContaining({ used: 0, units: MemoryUnit.GB })
+            },
+            {
+              sent: jasmine.objectContaining({ used: 1, units: MemoryUnit.GB }),
+              received: jasmine.objectContaining({ used: 0.7, units: MemoryUnit.GB })
+            }
           ] as any[]);
           done();
         });
