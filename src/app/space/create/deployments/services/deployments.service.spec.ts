@@ -164,94 +164,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#getEnvironments', () => {
-    it('should publish faked, filtered and sorted environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: [
-          {
-            attributes: {
-              name: 'run'
-            }
-          }, {
-            attributes: {
-              name: 'test'
-            }
-          }, {
-            attributes: {
-              name: 'stage'
-            }
-          }
-        ]
-      };
-      const expectedResponse = ['stage', 'run'];
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getEnvironments('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should return singleton array result', (done: DoneFn) => {
-      const httpResponse = {
-        data: [
-          {
-            attributes: {
-              name: 'stage'
-            }
-          }
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: ['stage'],
-        observable: svc.getEnvironments('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should return empty array if no environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: []
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getEnvironments('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should return empty array for null environments response', (done: DoneFn) => {
-      const httpResponse = {
-        data: null
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getEnvironments('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: null
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getEnvironments('foo-spaceId+'),
-        done: done
-      });
-    });
-  });
-
   describe('#isApplicationDeployedInEnvironment', () => {
     it('should be true for included deployments', (done: DoneFn) => {
       const httpResponse = {
@@ -2437,6 +2349,64 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       TestBed.get(DeploymentsService).getApplications('foo-spaceId')
         .subscribe((applications: string[]): void => {
           expect(applications).toEqual([]);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#getEnvironments', () => {
+    it('should publish faked, filtered and sorted environments', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getEnvironments.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'run'
+          }
+        }, {
+          attributes: {
+            name: 'test'
+          }
+        }, {
+          attributes: {
+            name: 'stage'
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getEnvironments('foo-spaceId')
+        .subscribe((environments: string[]): void => {
+          expect(environments).toEqual(['stage', 'run']);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return singleton array result', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getEnvironments.and.returnValue(Observable.of([
+        { attributes: { name: 'stage' } }
+      ]));
+      TestBed.get(DeploymentsService).getEnvironments('foo-spaceId')
+        .subscribe((environments: string[]): void => {
+          expect(environments).toEqual(['stage']);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return empty array if no environments', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getEnvironments.and.returnValue(Observable.of([]));
+      TestBed.get(DeploymentsService).getEnvironments('foo-spaceId')
+        .subscribe((environments: string[]): void => {
+          expect(environments).toEqual([]);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return empty array for null environments response', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getEnvironments.and.returnValue(Observable.of(null));
+      TestBed.get(DeploymentsService).getEnvironments('foo-spaceId')
+        .subscribe((environments: string[]): void => {
+          expect(environments).toEqual([]);
           done();
         });
       TestBed.get(TIMER_TOKEN).next();
