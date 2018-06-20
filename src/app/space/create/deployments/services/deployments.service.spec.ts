@@ -163,110 +163,6 @@ describe('DeploymentsService', () => {
     serviceUpdater.next();
   }
 
-  describe('#getApplications', () => {
-    it('should publish faked application names', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello'
-                }
-              },
-              {
-                attributes: {
-                  name: 'vertx-paint'
-                }
-              },
-              {
-                attributes: {
-                  name: 'vertx-wiki'
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: ['vertx-hello', 'vertx-paint', 'vertx-wiki'],
-        observable: svc.getApplications('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should return empty array if no applications', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: []
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getApplications('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should return singleton array result', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [{
-              attributes: { name: 'vertx-hello' }
-            }]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: ['vertx-hello'],
-        observable: svc.getApplications('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should return empty array for null applications response', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: null
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getApplications('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: null
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getApplications('foo-spaceId+'),
-        done: done
-      });
-    });
-  });
 
   describe('#getEnvironments', () => {
     it('should publish faked, filtered and sorted environments', (done: DoneFn) => {
@@ -2484,6 +2380,66 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         { provide: POLL_RATE_TOKEN, useValue: 1 },
         DeploymentsService
       ]
+    });
+  });
+
+  describe('#getApplications', () => {
+    it('should publish faked application names', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello'
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-paint'
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-wiki'
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getApplications('foo-spaceId')
+        .subscribe((applications: string[]): void => {
+          expect(applications).toEqual(['vertx-hello', 'vertx-paint', 'vertx-wiki']);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return empty array if no applications', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([]));
+      TestBed.get(DeploymentsService).getApplications('foo-spaceId')
+        .subscribe((applications: string[]): void => {
+          expect(applications).toEqual([]);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return singleton array result', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([{
+        attributes: { name: 'vertx-hello' }
+      }]));
+      TestBed.get(DeploymentsService).getApplications('foo-spaceId')
+        .subscribe((applications: string[]): void => {
+          expect(applications).toEqual(['vertx-hello']);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return empty array for null applications response', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of(null));
+      TestBed.get(DeploymentsService).getApplications('foo-spaceId')
+        .subscribe((applications: string[]): void => {
+          expect(applications).toEqual([]);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
     });
   });
 
