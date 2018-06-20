@@ -33,7 +33,10 @@ import { WidgetsModule } from 'ngx-widgets';
 
 import { ActionModule } from 'patternfly-ng/action';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
-import { NotificationModule } from 'patternfly-ng/notification';
+import {
+  NotificationService,
+  ToastNotificationListModule
+} from 'patternfly-ng/notification';
 
 import { BootstrapModule } from './bootstrap/bootstrap.module';
 
@@ -155,7 +158,7 @@ export type StoreType = {
     }),
     ModalModule.forRoot(),
     MomentModule,
-    NotificationModule,
+    ToastNotificationListModule,
     ReactiveFormsModule,
     RestangularModule,
     RouterModule,
@@ -220,6 +223,7 @@ export type StoreType = {
     Logger,
     LoginService,
     MenusService,
+    NotificationService,
     NotificationsService,
     {
       provide: Notifications,

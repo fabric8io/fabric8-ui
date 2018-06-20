@@ -14,7 +14,7 @@
 
       <div class="deployment-chart" [ngClass]="cpuChartClass">
         <div class="chart-column-left">
-          <pfng-chart-sparkline class="chart-sparkline" (chartLoaded)="cpuChartLoaded($event)" [config]="cpuConfig" [chartData]="cpuData"></pfng-chart-sparkline>
+          <pfng-sparkline-chart class="chart-sparkline" (chartLoaded)="cpuChartLoaded($event)" [config]="cpuConfig" [chartData]="cpuData"></pfng-sparkline-chart>
         </div>
         <div class="chart-column-right">
           <deployment-graph-label [ngClass]="cpuLabelClass" type="CPU" dataMeasure="Cores" [value]="cpuVal" [valueUpperBound]="cpuMax"></deployment-graph-label>
@@ -23,7 +23,7 @@
 
       <div class="deployment-chart" [ngClass]="memChartClass">
         <div class="chart-column-left">
-          <pfng-chart-sparkline class="chart-sparkline" (chartLoaded)="memChartLoaded($event)" [config]="memConfig" [chartData]="memData"></pfng-chart-sparkline>
+          <pfng-sparkline-chart class="chart-sparkline" (chartLoaded)="memChartLoaded($event)" [config]="memConfig" [chartData]="memData"></pfng-sparkline-chart>
         </div>
         <div class="chart-column-right">
           <deployment-graph-label [ngClass]="memLabelClass" type="Memory" [dataMeasure]="memUnits" [value]="memVal" [valueUpperBound]="memMax"></deployment-graph-label>

@@ -1,6 +1,6 @@
-import { ChartConfig } from 'patternfly-ng/chart';
+import { ChartConfigBase } from 'patternfly-ng/chart';
 
-export class DeploymentsLinechartConfig extends ChartConfig {
+export class DeploymentsLinechartConfig extends ChartConfigBase {
   axis?: any;
 
   grid?: any;
