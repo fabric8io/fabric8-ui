@@ -164,237 +164,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#isDeployedInEnvironment', () => {
-    it('should be true for included environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: true,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'run'),
-        done: done
-      });
-    });
-
-    it('should be true if included in multiple applications and environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    },
-                    {
-                      attributes: {
-                        name: 'test'
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                attributes: {
-                  name: 'vertx-wiki',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    },
-                    {
-                      attributes: {
-                        name: 'stage'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: true,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'run'),
-        done: done
-      });
-    });
-
-    it('should be false for excluded environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                attributes: {
-                  name: 'vertx-wiki',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'test'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should be false if no environments are deployed', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: []
-                }
-              },
-              {
-                attributes: {
-                  name: 'vertx-wiki',
-                  deployments: []
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should be false if no applications exist', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: []
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should be false if applications are null', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: null
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should be false if deployments is null', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: null
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: null
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId+', 'stage'),
-        done: done
-      });
-    });
-  });
-
   describe('#getVersion', () => {
     it('should return 1.0.2', (done: DoneFn) => {
       const httpResponse = {
@@ -2339,6 +2108,170 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         }
       ]));
       TestBed.get(DeploymentsService).isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#isDeployedInEnvironment', () => {
+    it('should be true for included environments', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: [
+              {
+                attributes: {
+                  name: 'run'
+                }
+              }
+            ]
+          }
+        }]));
+      TestBed.get(DeploymentsService).isDeployedInEnvironment('foo-spaceId', 'run')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(true);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should be true if included in multiple applications and environments', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: [
+              {
+                attributes: {
+                  name: 'run'
+                }
+              },
+              {
+                attributes: {
+                  name: 'test'
+                }
+              }
+            ]
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-wiki',
+            deployments: [
+              {
+                attributes: {
+                  name: 'run'
+                }
+              },
+              {
+                attributes: {
+                  name: 'stage'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).isDeployedInEnvironment('foo-spaceId', 'run')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(true);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should be false for excluded environments', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: [
+              {
+                attributes: {
+                  name: 'run'
+                }
+              }
+            ]
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-wiki',
+            deployments: [
+              {
+                attributes: {
+                  name: 'test'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should be false if no environments are deployed', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: []
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-wiki',
+            deployments: []
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should be false if no applications exist', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([]));
+      TestBed.get(DeploymentsService).isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should be false if applications are null', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of(null));
+      TestBed.get(DeploymentsService).isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should be false if deployments is null', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: null
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).isDeployedInEnvironment('foo-spaceId', 'stage')
         .subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
