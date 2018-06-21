@@ -2,17 +2,10 @@ import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import {
-  HttpModule,
   Response,
   ResponseOptions,
-  ResponseType,
-  XHRBackend
+  ResponseType
 } from '@angular/http';
-
-import {
-  MockBackend,
-  MockConnection
-} from '@angular/http/testing';
 
 import { createMock } from 'testing/mock';
 
@@ -29,10 +22,6 @@ import {
   Notification,
   NotificationType
 } from 'ngx-base';
-
-import { AuthenticationService } from 'ngx-login-client';
-
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
@@ -52,120 +41,6 @@ import {
   TIMER_TOKEN,
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
-
-interface MockHttpParams<U> {
-  url: string;
-  response: { data: {} } | Response;
-  expected?: U;
-  expectedError?: any;
-  observable: Observable<U>;
-  done: DoneFn;
-}
-
-describe('DeploymentsService', () => {
-
-  let serviceUpdater: Subject<void>;
-  let mockBackend: MockBackend;
-  let mockLogger: jasmine.SpyObj<Logger>;
-  let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
-  let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
-  let svc: DeploymentsService;
-
-  beforeEach(() => {
-    serviceUpdater = new Subject<void>();
-
-    const mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
-    mockAuthService.getToken.and.returnValue('mock-auth-token');
-
-    mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);
-    mockErrorHandler = jasmine.createSpyObj<ErrorHandler>('ErrorHandler', ['handleError']);
-    mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
-
-    TestBed.configureTestingModule({
-      imports: [HttpModule],
-      providers: [
-        {
-          provide: XHRBackend, useClass: MockBackend
-        },
-        {
-          provide: AuthenticationService, useValue: mockAuthService
-        },
-        {
-          provide: WIT_API_URL, useValue: 'http://example.com/'
-        },
-        {
-          provide: Logger, useValue: mockLogger
-        },
-        {
-          provide: ErrorHandler, useValue: mockErrorHandler
-        },
-        {
-          provide: NotificationsService, useValue: mockNotificationsService
-        },
-        {
-          provide: TIMER_TOKEN, useValue: serviceUpdater
-        },
-        {
-          provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3
-        },
-        {
-          provide: POLL_RATE_TOKEN, useValue: 1
-        },
-        DeploymentApiService,
-        DeploymentsService
-      ]
-    });
-    svc = TestBed.get(DeploymentsService);
-    spyOn(svc, 'getPodsQuota').and.callThrough();
-    mockBackend = TestBed.get(XHRBackend);
-  });
-
-  function doMockHttpTest<U>(params: MockHttpParams<U>): void {
-    if (params.expected !== undefined && params.expectedError !== undefined) {
-      throw 'Cannot have both expected value and expected error';
-    }
-    if (params.expected === undefined && params.expectedError === undefined) {
-      throw 'Must have either an expected value or an expected error';
-    }
-
-    let response: Response;
-    if (params.response instanceof Response) {
-      response = params.response;
-    } else {
-      response = new Response(new ResponseOptions({ body: params.response }));
-    }
-
-    const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-      const unexpectedEmissionHandler = (v: any) => {
-        subscription.unsubscribe();
-        params.done.fail(JSON.stringify(v));
-      };
-      const testBody = (expected: U, actual: U) => {
-        subscription.unsubscribe();
-        expect(connection.request.url).toEqual(params.url);
-        expect(actual).toEqual(expected);
-        params.done();
-      };
-
-      if (params.expected !== undefined) {
-        connection.mockRespond(response);
-        params.observable.subscribe(
-          (data: U) => testBody(params.expected, data),
-          unexpectedEmissionHandler
-        );
-      } else if (params.expectedError !== undefined) {
-        connection.mockError(response as Response & Error);
-        params.observable.subscribe(
-          unexpectedEmissionHandler,
-          (err: any) => testBody(params.expectedError, err)
-        );
-      }
-    });
-    serviceUpdater.next();
-  }
-
-
-});
 
 describe('DeploymentsService with mock DeploymentApiService', () => {
 
