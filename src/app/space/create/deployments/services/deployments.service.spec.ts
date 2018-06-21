@@ -165,59 +165,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#deleteDeployment', () => {
-    it('should delete a deployment with the correct URL', (done: DoneFn) => {
-      const spaceId = 'someSpace-Id';
-      const environmentId = 'some Stage';
-      const appId = 'someApp Name';
-      const encSpaceId = encodeURIComponent(spaceId);
-      const encEnvironmentId = encodeURIComponent(environmentId);
-      const encAppId = encodeURIComponent(appId);
-      const expectedUrl = `http://example.com/deployments/spaces/${encSpaceId}/applications/${encAppId}/deployments/${encEnvironmentId}`;
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        expect(connection.request.url).toEqual(expectedUrl);
-        connection.mockRespond(new Response(
-          new ResponseOptions({ status: 200 })
-        ));
-      });
-
-      svc.deleteDeployment(spaceId, environmentId, appId)
-        .subscribe(
-          (msg: string) => {
-            expect(msg).toEqual('Deployment has successfully deleted');
-            subscription.unsubscribe();
-            done();
-          },
-          (err: string) => {
-            done.fail(err);
-          }
-        );
-    });
-
-    it('should throw an error if it cannot delete', (done: DoneFn) => {
-      const spaceId = 'someSpaceId';
-      const environmentId = 'someStage';
-      const appId = 'someAppName';
-      const expectedErrorMsg = `Failed to delete ${appId} in ${spaceId} (${environmentId})`;
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(new Error('someError'));
-      });
-
-      svc.deleteDeployment(spaceId, environmentId, appId)
-        .subscribe(
-          (msg: string) => {
-            done.fail();
-          },
-          (err: string) => {
-            expect(err).toEqual(expectedErrorMsg);
-            done();
-          }
-        );
-    });
-  });
-
   describe('#getPods', () => {
     it('should return pods array', (done: DoneFn) => {
       const httpResponse = {
@@ -1600,6 +1547,47 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
           done();
         });
       TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#deleteDeployment', () => {
+    it('should delete a deployment with the correct URL', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).deleteDeployment.and.returnValue(Observable.of('OK'));
+      expect(TestBed.get(DeploymentApiService).deleteDeployment).not.toHaveBeenCalled();
+      TestBed.get(DeploymentsService).deleteDeployment('spaceId', 'envId', 'appId')
+        .subscribe(
+          (msg: string) => {
+            expect(msg).toEqual('Deployment has successfully deleted');
+            expect(TestBed.get(DeploymentApiService).deleteDeployment).toHaveBeenCalledWith(
+              'spaceId', 'envId', 'appId'
+            );
+            done();
+          },
+          (err: string) => {
+            done.fail(err);
+          }
+        );
+    });
+
+    it('should throw an error if it cannot delete', (done: DoneFn) => {
+      const spaceId: string = 'someSpaceId';
+      const environmentId: string = 'someStage';
+      const appId: string = 'someAppName';
+      TestBed.get(DeploymentApiService).deleteDeployment.and.returnValue(Observable.throw('FAIL'));
+      expect(TestBed.get(DeploymentApiService).deleteDeployment).not.toHaveBeenCalled();
+      TestBed.get(DeploymentsService).deleteDeployment(spaceId, environmentId, appId)
+        .subscribe(
+          (msg: string) => {
+            done.fail();
+          },
+          (err: string) => {
+            expect(err).toEqual(`Failed to delete ${appId} in ${spaceId} (${environmentId})`);
+            expect(TestBed.get(DeploymentApiService).deleteDeployment).toHaveBeenCalledWith(
+              spaceId, environmentId, appId
+            );
+            done();
+          }
+        );
     });
   });
 
