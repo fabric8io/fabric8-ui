@@ -22,11 +22,11 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
   context: Context;
   currentSpace: Space;
   currentSpaceId: string = 'default';
-  loggedInUser: User;
   recentSpaces: Space[] = [];
   recentSpaceIndex: number = 0;
   subscriptions: Subscription[] = [];
   spaces: Space[] = [];
+  user: User;
   workItems: WorkItem[] = [];
   viewingOwnAccount: Boolean;
 
@@ -38,7 +38,6 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
       private broadcaster: Broadcaster,
       private userService: UserService,
       private contextService: ContextService) {
-    this.viewingOwnAccount = this.contextService.viewingOwnContext();
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
     if (this.context.user.attributes) {
       this.subscriptions.push(spaceService.getSpacesByUser(this.context.user.attributes.username, 10).subscribe(spaces => {
@@ -47,9 +46,17 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
     }
     this.subscriptions.push(this.broadcaster.on('contextChanged').subscribe(val => {
       this.context = val as Context;
+      this.user = this.context.user;
       if (this.context.user.attributes) {
         this.subscriptions.push(spaceService.getSpacesByUser(this.context.user.attributes.username, 10).subscribe(spaces => {
           this.spaces = spaces;
+        }));
+        this.subscriptions.push(spacesService.recent.subscribe(spaces => {
+          this.recentSpaceIndex = 0; // reset the index for finding work items in recent spaces
+          this.recentSpaces = [];
+          this.workItems = [];
+          this.recentSpaces = spaces;
+          this.fetchRecentSpace();
         }));
       }
     }));
@@ -60,12 +67,10 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
   }
 
   ngOnInit(): void {
-    if (this.viewingOwnAccount && this.userService.currentLoggedInUser.attributes) {
-      this.loggedInUser = this.userService.currentLoggedInUser;
-      this.subscriptions.push(this.spaceService.getSpacesByUser(this.loggedInUser.attributes.username, 10).subscribe(spaces => {
+    this.user = this.context.user;
+    this.subscriptions.push(this.spaceService.getSpacesByUser(this.user.attributes.username, 10).subscribe(spaces => {
         this.spaces = spaces;
-      }));
-    }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -87,9 +92,7 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
    * @returns {Observable<Space>}
    */
   get space(): Observable<Space> {
-    return this.userService.loggedInUser
-      .map(user => this.spaceService.getSpacesByUser(user.attributes.username, 10))
-      .switchMap(spaces => spaces)
+    return this.spaceService.getSpacesByUser(this.user.attributes.username, 10)
       .map(spaces => {
         for (let i = 0; i < spaces.length; i++) {
           if (this.currentSpaceId === spaces[i].id) {
@@ -109,39 +112,37 @@ export class WorkItemsComponent implements OnDestroy, OnInit  {
    */
   private fetchWorkItemsBySpace(space: Space): void {
     this.currentSpace = space;
-    this.subscriptions.push(this.userService
-      .getUser()
+    this.subscriptions.push(this.contextService.current
       .do(() => this.workItemService._currentSpace = space)
       .do(() => this.workItemService.buildUserIdMap())
-      .switchMap(() => this.userService.loggedInUser)
-      .map(user => [{
+      .map(context => [{
         paramKey: 'filter[assignee]',
-        value: user.id,
+        value: context.user.id,
         active: true
       }])
       .switchMap(filters => this.workItemService
         .getWorkItems(100000, filters))
       .map(val => val.workItems)
       .map(workItems => filterOutClosedItems(workItems))
-      // Resolve the work item type, creator and area
-      .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
       .do(workItems => workItems.forEach(workItem => {
+        this.workItemService.resolveType(workItem);
         try {
           this.workItemService.resolveAreaForWorkItem(workItem);
-        } catch (error) { /* No space */ }
+        } catch (error) {
+          /* No space */
+        }
+        if (workItem.relationalData === undefined) {
+          workItem.relationalData = {};
+        }
+        this.workItemService.resolveCreator(workItem);
       }))
-      .do(workItems => {
-        workItems.forEach(workItem => {
-          if (workItem.relationalData === undefined) {
-            workItem.relationalData = {};
-          }
-        });
-      })
-      .do(workItems => workItems.forEach(workItem => this.workItemService.resolveCreator(workItem)))
       .subscribe(workItems => {
-        this.workItems = workItems;
-        this.selectRecentSpace(workItems);
-      }));
+        if (workItems.length > 0) {
+          this.workItems = workItems;
+          this.selectRecentSpace(workItems);
+        }
+      })
+    );
   }
 
   /**
