@@ -165,58 +165,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#getEnvironmentMemoryStat', () => {
-    it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', (done: DoneFn) => {
-      const GB = Math.pow(1024, 3);
-      const httpResponse = {
-        data: [{
-          attributes: {
-            name: 'stage',
-            quota: {
-              memory: {
-                used: 0.5 * GB,
-                quota: 1 * GB,
-                units: 'bytes'
-              }
-            }
-          }
-        }]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB) as MemoryStat,
-        observable: svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const GB = Math.pow(1024, 3);
-      const httpResponse = {
-        data: [{
-          attributes: {
-            name: 'stage',
-            quota: {
-              memory: {
-                used: 0.5 * GB,
-                quota: 1 * GB,
-                units: 'bytes'
-              }
-            }
-          }
-        }]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
-        response: httpResponse,
-        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB) as MemoryStat,
-        observable: svc.getEnvironmentMemoryStat('foo-spaceId+', 'stage'),
-        done: done
-      });
-    });
-  });
-
   describe('#deleteDeployment', () => {
     it('should delete a deployment with the correct URL', (done: DoneFn) => {
       const spaceId = 'someSpace-Id';
@@ -1623,6 +1571,32 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       TestBed.get(DeploymentsService).getEnvironmentCpuStat('foo-spaceId', 'stage')
         .subscribe((cpuStat: CpuStat): void => {
           expect(cpuStat).toEqual({ quota: 10, used: 8 });
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#getEnvironmentMemoryStat', () => {
+    it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', (done: DoneFn) => {
+      const GB: number = Math.pow(1024, 3);
+      TestBed.get(DeploymentApiService).getEnvironments.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              memory: {
+                used: 0.5 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getEnvironmentMemoryStat('foo-spaceId', 'stage')
+        .subscribe((memoryStat: MemoryStat): void => {
+          expect(memoryStat).toEqual(new ScaledMemoryStat(0.5 * GB, 1 * GB));
           done();
         });
       TestBed.get(TIMER_TOKEN).next();
