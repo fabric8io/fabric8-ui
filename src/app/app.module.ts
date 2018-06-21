@@ -33,7 +33,10 @@ import { WidgetsModule } from 'ngx-widgets';
 
 import { ActionModule } from 'patternfly-ng/action';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
-import { NotificationModule } from 'patternfly-ng/notification';
+import {
+  NotificationService,
+  ToastNotificationListModule
+} from 'patternfly-ng/notification';
 
 import { BootstrapModule } from './bootstrap/bootstrap.module';
 
@@ -80,6 +83,7 @@ import { ContextService }                from './shared/context.service';
 import { EventService }                  from './shared/event.service';
 import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
+import { jenkinsApiUrlProvider }           from './shared/jenkins-api.provider';
 import { LoginService }                  from './shared/login.service';
 import { NotificationsService }          from './shared/notifications.service';
 import { ProfileResolver }               from './shared/profile-resolver.service';
@@ -155,7 +159,7 @@ export type StoreType = {
     }),
     ModalModule.forRoot(),
     MomentModule,
-    NotificationModule,
+    ToastNotificationListModule,
     ReactiveFormsModule,
     RestangularModule,
     RouterModule,
@@ -217,9 +221,11 @@ export type StoreType = {
     forgeApiUrlProvider,
     GettingStartedService,
     HttpService,
+    jenkinsApiUrlProvider,
     Logger,
     LoginService,
     MenusService,
+    NotificationService,
     NotificationsService,
     {
       provide: Notifications,

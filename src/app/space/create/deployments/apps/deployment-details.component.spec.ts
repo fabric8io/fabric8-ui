@@ -35,11 +35,7 @@ import { DeploymentsService } from '../services/deployments.service';
 import { DeploymentDetailsComponent } from './deployment-details.component';
 
 // Makes patternfly charts available
-import {
-  ChartDefaults,
-  SparklineConfig,
-  SparklineData
-} from 'patternfly-ng/chart';
+import { ChartDefaults } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 
 @Component({

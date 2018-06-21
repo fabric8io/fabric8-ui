@@ -51,6 +51,7 @@ export class PipelinesService {
 
   private readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
   private readonly apiUrl: string;
+  private loggedIn: boolean = false;
 
   constructor(
     private readonly http: Http,
@@ -61,8 +62,10 @@ export class PipelinesService {
     private readonly notifications: NotificationsService,
     @Inject(WIT_API_URL) private readonly witUrl: string
   ) {
-    if (this.auth.getToken() != null) {
-      this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
+    let token: string = this.auth.getToken();
+    if (token != null && token != '') {
+      this.headers.set('Authorization', `Bearer ${token}`);
+      this.loggedIn = true;
     }
     this.apiUrl = witUrl + 'user/services';
   }
@@ -115,6 +118,10 @@ export class PipelinesService {
   }
 
   private handleHttpError(response: Response): Observable<any> {
+    // If it's a 401 and they are not logged in, don't trigger an error
+    if (response.status === 401 && !this.loggedIn) {
+      return Observable.empty();
+    }
     this.errorHandler.handleError(response);
     this.logger.error(response);
     this.notifications.message({

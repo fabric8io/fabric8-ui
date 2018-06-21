@@ -6,6 +6,7 @@ import {
   Response
 } from '@angular/http';
 
+import _ from 'lodash';
 import { Observable } from 'rxjs';
 
 import {
@@ -35,10 +36,8 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     private helperService: HelperService,
     private tokenProvider: TokenProvider
   ) {
-    if (this.helperService) {
-      this.END_POINT = this.helperService.getBackendUrl();
-      this.ORIGIN = this.helperService.getOrigin();
-    }
+    this.END_POINT = this.helperService.getBackendUrl();
+    this.ORIGIN = this.helperService.getOrigin();
   }
 
   /**
@@ -50,45 +49,27 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
    * @param  {boolean} isImport
    * @returns Observable
    */
-  setup(summary: Summary, spaceId: string, spaceName: string, isImport: boolean): Observable<any> {
-    let summaryEndPoint = '';
-    let payload = '';
-    if (isImport) {
-      summaryEndPoint = this.END_POINT + this.API_BASE_IMPORT;
-      payload = this.getImportPayload(summary, spaceId, spaceName);
-    } else {
-      summaryEndPoint = this.END_POINT + this.API_BASE_CREATE;
-      payload = this.getCreatePayload(summary, spaceId, spaceName);
-    }
-    return this.options.flatMap((option) => {
-      return this.http.post(summaryEndPoint, payload, option)
-        .map(response => {
-          if (response) {
-            return response.json();
-          }
-        })
-        .catch(this.handleError);
+  setup(summary: Summary, retry?: number): Observable<any> {
+    return this.context.current.flatMap(c => {
+      let summaryEndPoint = this.END_POINT + (summary.mission ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
+      let payload = this.getPayload(summary, c.space ? c.space.id : '', c.name);
+      return this.options(retry).flatMap((option) => {
+        return this.http.post(summaryEndPoint, payload, option)
+          .map(response => {
+            if (response) {
+              return response.json();
+            }
+          })
+          .catch(this.handleError);
+      });
     });
   }
 
-  /**
-   * Get the current context details
-   *
-   * @returns {Observable<Context>}
-   */
-  getCurrentContext(): Observable<Context> {
-    if (this.context) {
-      return this.context.current;
-    } else {
-      return Observable.of(<Context> {});
-    }
-  }
-
-  private get options(): Observable<RequestOptions> {
+  private options(retry?: number): Observable<RequestOptions> {
     let headers = new Headers();
     headers.append('X-App', this.ORIGIN);
     headers.append('X-Git-Provider', 'GitHub');
-    headers.append('X-Execution-Step-Index', '0');
+    headers.append('X-Execution-Step-Index', String(retry || 0));
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
     if (this.tokenProvider) {
       return Observable.fromPromise(this.tokenProvider.token.then((token) => {
@@ -120,50 +101,30 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     return Observable.throw(errMsg);
   }
 
-  private getCreatePayload(summary: Summary, spaceId: string, spaceName: string) {
+  private getPayload(summary: Summary, spaceId: string, spaceName: string) {
     let payload = '';
-    if (summary && summary.mission && summary.runtime && summary.pipeline
-      && summary.dependencyCheck && summary.gitHubDetails && summary.runtime.version) {
-      payload =
-      'mission=' + summary.mission.id +
-      '&runtime=' + summary.runtime.id +
-      '&runtimeVersion=' + summary.runtime.version.id +
-      '&pipeline=' + summary.pipeline.id +
-      '&projectName=' + summary.dependencyCheck.projectName +
-      '&projectVersion=' + summary.dependencyCheck.projectVersion +
-      '&groupId=' + summary.dependencyCheck.groupId +
-      /* artifactId has to be same as projectName in OSIO to get correct links for
-       stage/prod to be shown in pipelines view */
-      '&artifactId=' + summary.dependencyCheck.projectName +
-      '&spacePath=' + spaceName +
-      '&gitRepository=' + summary.gitHubDetails.repository +
-      '&space=' + spaceId;
-      if (summary.dependencyEditor && summary.dependencyEditor.dependencySnapshot) {
-        summary.dependencyEditor.dependencySnapshot.forEach(i => {
-          payload += '&dependency=' + i.package + ':' + i.version;
-        });
-      }
-      if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
-        payload += '&gitOrganization=' + summary.gitHubDetails.organization;
-      }
+    payload += 'mission=' + _.get(summary, 'mission.id', '');
+    payload += '&runtime=' + _.get(summary, 'runtime.id', '');
+    payload += '&runtimeVersion=' + _.get(summary, 'runtime.version.id', '');
+    payload += '&pipeline=' + _.get(summary, 'pipeline.id', '');
+    payload += '&projectName=' + _.get(summary, 'dependencyCheck.projectName', '');
+    payload += '&projectVersion=' + _.get(summary, 'dependencyCheck.projectVersion', '');
+    payload += '&gitRepository=' + _.get(summary, 'gitHubDetails.repository', '');
+    payload += '&groupId=' + _.get(summary, 'dependencyCheck.groupId', '');
+    /* artifactId has to be same as projectName in OSIO to get correct links for
+      stage/prod to be shown in pipelines view */
+    payload += '&artifactId=' + _.get(summary, 'dependencyCheck.projectName', '');
+    payload += '&spacePath=' + spaceName;
+    payload += '&space=' + spaceId;
+    if (summary.dependencyEditor && summary.dependencyEditor.dependencySnapshot) {
+      summary.dependencyEditor.dependencySnapshot.forEach(i => {
+        payload += '&dependency=' + i.package + ':' + i.version;
+      });
     }
+    if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
+      payload += '&gitOrganization=' + summary.gitHubDetails.organization;
+    }
+
     return payload;
   }
-
-  private getImportPayload(summary: Summary, spaceId: string, spaceName: string) {
-    let payload = '';
-    if (summary && summary.dependencyCheck && summary.pipeline && summary.gitHubDetails) {
-      payload =
-      '&pipeline=' + summary.pipeline.id +
-      '&projectName=' + summary.dependencyCheck.projectName +
-      '&spacePath=' + spaceName +
-      '&gitRepository=' + summary.gitHubDetails.repository +
-      '&space=' + spaceId;
-      if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
-        payload += '&gitOrganization=' + summary.gitHubDetails.organization;
-      }
-    }
-    return payload;
-  }
-
 }

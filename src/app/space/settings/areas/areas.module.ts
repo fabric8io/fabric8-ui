@@ -7,7 +7,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 
 import { ActionModule } from 'patternfly-ng/action';
-import { ListModule } from 'patternfly-ng/list';
+import { TreeListModule } from 'patternfly-ng/list';
 
 import { AreasRoutingModule } from './areas-routing.module';
 import { AreasToolbarModule } from './areas-toolbar/areas-toolbar.module';
@@ -23,7 +23,7 @@ import { CreateAreaDialogModule } from './create-area-dialog/create-area-dialog.
     CommonModule,
     CreateAreaDialogModule,
     Fabric8WitModule,
-    ListModule,
+    TreeListModule,
     ModalModule.forRoot()
   ],
   declarations: [

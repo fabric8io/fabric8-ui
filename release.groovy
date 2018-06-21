@@ -8,6 +8,7 @@ def ci (){
         export FABRIC8_FORGE_API_URL="https://forge.api.prod-preview.openshift.io"
         export FABRIC8_SSO_API_URL="https://sso.prod-preview.openshift.io/"
         export FABRIC8_AUTH_API_URL="https://auth.prod-preview.openshift.io/api/"
+        export FABRIC8_JENKINS_API_URL="https://jenkins.api.prod-preview.openshift.io"
         export FABRIC8_REALM="fabric8"
 
         npm run build:prod

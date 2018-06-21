@@ -3,12 +3,14 @@ import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http
 import { MockBackend } from '@angular/http/testing';
 import { Observable } from 'rxjs/Observable';
 
+import { Context } from 'ngx-fabric8-wit';
 import {
     DependencyCheck
 } from 'ngx-forge';
 
 import { DeploymentApiService } from '../../create/deployments/services/deployment-api.service';
 import { AppLauncherDependencyCheckService } from './app-launcher-dependency-check.service';
+import { ContextService } from '../../../shared/context.service';
 
 let mockDeploymentApiService: any = {
   getApplications(): Observable<any[]> {
@@ -30,9 +32,29 @@ function initTestBed() {
         {
             provide: XHRBackend, useClass: MockBackend
         },
+        { provide: ContextService, useClass: mockContextService },
         { provide: DeploymentApiService, useValue: mockDeploymentApiService }
     ]
   });
+}
+
+let mockContext = <Context>{
+  name: 'my-space-apr24-4-43',
+  path: '/user/my-space-apr24-4-43',
+  space: {
+    id: 'c814a58b-6220-4670-80cf-a2196899a59d',
+    attributes: {
+      'created-at': '2018-04-24T11:15:59.164872Z',
+      'description': '',
+      'name': 'my-space-apr24-4-43',
+      'updated-at': '2018-04-24T11:15:59.164872Z',
+      'version': 0
+    }
+  }
+};
+
+class mockContextService {
+  get current(): Observable<Context> { return Observable.of(mockContext); }
 }
 
 describe('Service: AppLauncherDependencyCheckService', () => {
@@ -43,7 +65,7 @@ describe('Service: AppLauncherDependencyCheckService', () => {
     groupId: 'io.openshift.booster',
     projectName: '',
     projectVersion: '1.0.0',
-    spacePath: '/myspace'
+    spacePath: '/c814a58b-6220-4670-80cf-a2196899a59d'
   } as DependencyCheck;
 
   beforeEach(() => {
