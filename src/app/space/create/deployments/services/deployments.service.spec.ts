@@ -165,54 +165,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#getEnvironmentCpuStat', () => {
-    it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn) => {
-      const httpResponse = {
-        data: [{
-          attributes: {
-            name: 'stage',
-            quota: {
-              cpucores: {
-                quota: 10,
-                used: 8
-              }
-            }
-          }
-        }]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: httpResponse.data[0].attributes.quota.cpucores,
-        observable: svc.getEnvironmentCpuStat('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: [{
-          attributes: {
-            name: 'stage',
-            quota: {
-              cpucores: {
-                quota: 10,
-                used: 8
-              }
-            }
-          }
-        }]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
-        response: httpResponse,
-        expected: httpResponse.data[0].attributes.quota.cpucores,
-        observable: svc.getEnvironmentCpuStat('foo-spaceId+', 'stage'),
-        done: done
-      });
-    });
-  });
-
   describe('#getEnvironmentMemoryStat', () => {
     it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', (done: DoneFn) => {
       const GB = Math.pow(1024, 3);
@@ -1649,6 +1601,30 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
             done();
           }
         );
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
+  describe('#getEnvironmentCpuStat', () => {
+    it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getEnvironments.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                quota: 10,
+                used: 8
+              }
+            }
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getEnvironmentCpuStat('foo-spaceId', 'stage')
+        .subscribe((cpuStat: CpuStat): void => {
+          expect(cpuStat).toEqual({ quota: 10, used: 8 });
+          done();
+        });
       TestBed.get(TIMER_TOKEN).next();
     });
   });
