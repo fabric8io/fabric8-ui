@@ -26,11 +26,9 @@ export class AnalyticService {
     private notificationsService: NotificationsService,
     private spaces: Spaces
   ) {
-    if ('production' === ENV) {
-        if (this.fabric8UIConfig.analyticsWriteKey) {
-          this.initialize(this.fabric8UIConfig.analyticsWriteKey);
-          this.track();
-        }
+    if (this.fabric8UIConfig.analyticsWriteKey) {
+      this.initialize(this.fabric8UIConfig.analyticsWriteKey);
+      this.track();
     }
   }
 
