@@ -26,6 +26,7 @@ const FABRIC8_WIT_API_URL = process.env.FABRIC8_WIT_API_URL;
 const FABRIC8_REALM = process.env.FABRIC8_REALM || 'fabric8';
 const FABRIC8_RECOMMENDER_API_URL = process.env.FABRIC8_RECOMMENDER_API_URL || 'http://api-bayesian.dev.rdu2c.fabric8.io/api/v1/';
 const FABRIC8_PIPELINES_NAMESPACE = process.env.FABRIC8_PIPELINES_NAMESPACE || '-development';
+const FABRIC8_JENKINS_API_URL = process.env.FABRIC8_JENKINS_API_URL;
 const FABRIC8_BRANDING = 'fabric8';
 
 /**
@@ -263,6 +264,7 @@ module.exports = function (options) {
           'FABRIC8_WIT_API_URL': stringify(FABRIC8_WIT_API_URL),
           'FABRIC8_REALM': stringify(FABRIC8_REALM),
           'FABRIC8_RECOMMENDER_API_URL' : stringify(FABRIC8_RECOMMENDER_API_URL),
+          'FABRIC8_JENKINS_API_URL': stringify(FABRIC8_JENKINS_API_URL),
           'NODE_ENV': stringify(ENV),
           'HMR': false
         }

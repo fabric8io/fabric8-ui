@@ -5,6 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { MomentModule } from 'angular2-moment';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-modal';
+
+import { JenkinsService } from '../../../../app/shared/jenkins.service';
 import { Fabric8CommonModule } from '../../../common/common.module';
 import { KubernetesComponentsModule } from '../../components/components.module';
 import { BuildConfigDialogsModule } from '../buildconfig/delete-dialog/buildconfig.dialogs.module';
@@ -26,6 +28,7 @@ import { PipelineViewComponent } from './view/view.pipeline.component';
 
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { InputActionDialog } from './input-action-dialog/input-action-dialog.component';
+
 
 const routes: Routes = [
   { path: ':id/history', component: PipelinesHistoryPage }
@@ -70,7 +73,8 @@ const routes: Routes = [
     PipelinesListToolbarComponent
   ],
   providers: [
-    BsDropdownConfig
+    BsDropdownConfig,
+    JenkinsService
   ]
 })
 export class PipelineModule {

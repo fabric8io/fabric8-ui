@@ -13,6 +13,7 @@ const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(
     ['branding', 'BRANDING'],
     ['forge', 'FABRIC8_FORGE_API_URL'],
     ['auth', 'FABRIC8_AUTH_API_URL'],
+    ['jenkins', 'FABRIC8_JENKINS_API_URL'],
     ['toggles', 'FABRIC8_FEATURE_TOGGLES_API_URL']
   ]
 );
@@ -24,7 +25,8 @@ const DEFAULT_API_PREFIXES = new Map<string, string>([
   ['analyticsLicense', 'license-analysis.api'],
   ['sso', 'sso'],
   ['forge', 'forge.api'],
-  ['auth', 'auth']
+  ['auth', 'auth'],
+  ['jenkins', 'jenkins.api']
 ]);
 
 const DEFAULT_API_PATHS = new Map<string, string>([
@@ -74,6 +76,10 @@ export class BaseApiLocatorService {
 
   get analyticsLicenseApiUrl(): string {
     return this.config.analyticsLicenseUrl || this.buildApiUrl('analyticsLicense');
+  }
+
+  get jenkinsApiUrl(): string {
+    return this.config.jenkinsApiUrl || this.buildApiUrl('jenkins');
   }
 
   protected loadEnvVar(key: string): void {

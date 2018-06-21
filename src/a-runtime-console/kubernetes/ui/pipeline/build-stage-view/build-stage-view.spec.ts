@@ -8,10 +8,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MomentModule } from 'angular2-moment';
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 import { ModalModule } from 'ngx-modal';
+import { Observable } from 'rxjs';
 
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
-
+import { JenkinsService } from '../../../../../app/shared/jenkins.service';
 import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
+import { FABRIC8_JENKINS_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-jenkins-api';
 import { InputActionDialog } from '../input-action-dialog/input-action-dialog.component';
 import { BuildStatusIconComponent } from './../../../components/build-status-icon/build-status-icon.component';
 import { PipelineStatusComponent } from './../../../components/pipeline-status/pipeline-status.component';
@@ -90,6 +92,15 @@ describe('BuildStageViewComponent', () => {
     'pipelineStages': []
 };
 
+  let mockJenkinsService = {
+    getJenkinsStatus(): Observable<any> {
+      let jenkinsStatus = Observable.of([<any> {
+        'data': {'state': 'idled'}
+      }]);
+      return jenkinsStatus;
+    }
+  };
+
   beforeEach(async(() => {
     fakeAuthService = {
       getToken: function() {
@@ -134,6 +145,12 @@ describe('BuildStageViewComponent', () => {
             },
             {
               provide: FABRIC8_FORGE_API_URL, useValue: 'http://fabric8.forge.api.url/'
+            },
+            {
+              provide: FABRIC8_JENKINS_API_URL, useValue: 'http://fabric8.jenkins.api.url/'
+            },
+            {
+              provide: JenkinsService, useValue: mockJenkinsService
             }
        ]
     })

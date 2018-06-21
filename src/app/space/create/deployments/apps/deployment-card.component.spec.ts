@@ -24,7 +24,6 @@ import {
 } from 'ngx-bootstrap/dropdown';
 import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 
-import { ChartModule } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,
@@ -72,7 +71,6 @@ describe('DeploymentCardComponent', () => {
     imports: [
       BsDropdownModule.forRoot(),
       CollapseModule.forRoot(),
-      ChartModule,
       ModalModule.forRoot()
     ],
     providers: [

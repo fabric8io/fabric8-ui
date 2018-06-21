@@ -14,5 +14,6 @@ export class Fabric8UIConfig {
   tenantApiUrl: string;
   kubernetesMode: string;
   authApiUrl: string;
+  jenkinsApiUrl: string;
 
 }

@@ -5,6 +5,7 @@ window.Fabric8UIEnv = {
   "analyticsLicenseUrl": "{{ .Env.ANALYTICS_LICENSE_URL }}",
   "branding": "{{ .Env.BRANDING }}",
   "forgeApiUrl": "{{ .Env.FABRIC8_FORGE_API_URL }}",
+  "jenkinsApiUrl": "{{ .Env.FABRIC8_JENKINS_API_URL }}",
   "openshiftConsoleUrl": "{{ .Env.OPENSHIFT_CONSOLE_URL }}",
   "openshiftProxiedApiServer": "{{ .Env.PROXIED_K8S_API_SERVER }}",
   "pipelinesNamespace": "{{ .Env.FABRIC8_PIPELINES_NAMESPACE }}",

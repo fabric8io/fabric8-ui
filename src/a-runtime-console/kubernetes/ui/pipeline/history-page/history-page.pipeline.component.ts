@@ -12,7 +12,8 @@ import { BuildConfigStore } from '../../../store/buildconfig.store';
 
 @Component({
   selector: 'fabric8-pipelines-history-page',
-  templateUrl: './history-page.pipeline.component.html'
+  templateUrl: './history-page.pipeline.component.html',
+  styleUrls: ['./history-page.pipeline.component.less']
 })
 export class PipelinesHistoryPage implements OnInit {
   private readonly pipelines: Observable<BuildConfigs>;
