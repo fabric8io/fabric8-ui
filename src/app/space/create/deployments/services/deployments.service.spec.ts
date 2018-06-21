@@ -44,17 +44,21 @@ import {
 
 describe('DeploymentsService', () => {
 
-  let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
-
   beforeEach(() => {
-    mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
     TestBed.configureTestingModule({
       providers: [
         {
-          provide: DeploymentApiService,
-          useFactory: (): jasmine.SpyObj<DeploymentApiService> => createMock(DeploymentApiService)
+          provide: DeploymentApiService, useFactory: (): jasmine.SpyObj<DeploymentApiService> => {
+            const svc: jasmine.SpyObj<DeploymentApiService> = createMock(DeploymentApiService);
+            return svc;
+          }
         },
-        { provide: NotificationsService, useValue: mockNotificationsService },
+        {
+          provide: NotificationsService, useFactory: (): jasmine.SpyObj<NotificationsService> => {
+            const notifications: jasmine.SpyObj<NotificationsService> = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
+            return notifications;
+          }
+        },
         {
           provide: Logger, useFactory: (): jasmine.SpyObj<Logger> => {
             const logger: jasmine.SpyObj<Logger> = createMock(Logger);
@@ -1517,7 +1521,7 @@ describe('DeploymentsService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
     it('should notify on 401', (): void => {
@@ -1591,7 +1595,7 @@ describe('DeploymentsService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
     it('should notify on 401', (): void => {
@@ -1730,7 +1734,7 @@ describe('DeploymentsService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
     function testGetLatestTimeSeriesError(status: number, expectedMessage: Notification) {
@@ -1759,7 +1763,7 @@ describe('DeploymentsService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
     function testGetApplicationsError(status: number, expectedMessage: Notification) {
@@ -1788,7 +1792,7 @@ describe('DeploymentsService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
     it('should notify on unknown', (): void => {
