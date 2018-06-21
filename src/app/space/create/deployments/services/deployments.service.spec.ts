@@ -165,107 +165,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('application links', () => {
-    it('should provide logs URL', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env'
-                      },
-                      links: {
-                        logs: 'http://example.com/logs'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-space',
-        response: httpResponse,
-        expected: 'http://example.com/logs',
-        observable: svc.getLogsUrl('foo-space', 'foo-env', 'foo-app'),
-        done: done
-      });
-    });
-
-    it('should provide console URL', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env'
-                      },
-                      links: {
-                        console: 'http://example.com/console'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-space',
-        response: httpResponse,
-        expected: 'http://example.com/console',
-        observable: svc.getConsoleUrl('foo-space', 'foo-env', 'foo-app'),
-        done: done
-      });
-    });
-
-    it('should provide application URL', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env'
-                      },
-                      links: {
-                        application: 'http://example.com/application'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-space',
-        response: httpResponse,
-        expected: 'http://example.com/application',
-        observable: svc.getAppUrl('foo-space', 'foo-env', 'foo-app'),
-        done: done
-      });
-    });
-  });
-
 });
 
 describe('DeploymentsService with mock DeploymentApiService', () => {
@@ -1532,6 +1431,87 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         );
     });
   });
+
+  describe('application links', () => {
+    it('should provide logs URL', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env'
+                },
+                links: {
+                  logs: 'http://example.com/logs'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getLogsUrl('foo-space', 'foo-env', 'foo-app')
+        .subscribe((url: string): void => {
+          expect(url).toEqual('http://example.com/logs');
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should provide console URL', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env'
+                },
+                links: {
+                  console: 'http://example.com/console'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getConsoleUrl('foo-space', 'foo-env', 'foo-app')
+        .subscribe((url: string): void => {
+          expect(url).toEqual('http://example.com/console');
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should provide application URL', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env'
+                },
+                links: {
+                  application: 'http://example.com/application'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getAppUrl('foo-space', 'foo-env', 'foo-app')
+        .subscribe((url: string): void => {
+          expect(url).toEqual('http://example.com/application');
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+  });
+
 
   describe('#hasDeployments', () => {
     const environments: string[] = ['stage', 'run'];
