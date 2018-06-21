@@ -165,104 +165,6 @@ describe('DeploymentsService', () => {
   }
 
 
-  describe('#getPods', () => {
-    it('should return pods array', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 15,
-                        pods: [
-                          ['Terminating', 5],
-                          ['Stopping', '3'],
-                          ['Running', '1'],
-                          ['Not Running', 4],
-                          ['Starting', '2']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const expectedResponse = {
-        total: 15,
-        pods: [
-          ['Not Running', 4],
-          ['Running', 1],
-          ['Starting', 2],
-          ['Stopping', 3],
-          ['Terminating', 5]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 15,
-                        pods: [
-                          ['Terminating', 5],
-                          ['Stopping', '3'],
-                          ['Running', '1'],
-                          ['Not Running', 4],
-                          ['Starting', '2']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const expectedResponse = {
-        total: 15,
-        pods: [
-          ['Not Running', 4],
-          ['Running', 1],
-          ['Starting', 2],
-          ['Stopping', 3],
-          ['Terminating', 5]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId+', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-  });
-
   describe('application links', () => {
     it('should provide logs URL', (done: DoneFn) => {
       const httpResponse = {
@@ -970,6 +872,46 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
               ['Running', 3],
               ['Starting', 2],
               ['Stopping', 1]
+            ]
+          } as Pods);
+          done();
+        });
+      TestBed.get(TIMER_TOKEN).next();
+    });
+
+    it('should return pods array', (done: DoneFn) => {
+      TestBed.get(DeploymentApiService).getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: [
+              {
+                attributes: {
+                  name: 'stage',
+                  pod_total: 15,
+                  pods: [
+                    ['Terminating', 5],
+                    ['Stopping', '3'],
+                    ['Running', '1'],
+                    ['Not Running', 4],
+                    ['Starting', '2']
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      TestBed.get(DeploymentsService).getPods('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((pods: Pods): void => {
+          expect(pods).toEqual({
+            total: 15,
+            pods: [
+              ['Not Running', 4],
+              ['Running', 1],
+              ['Starting', 2],
+              ['Stopping', 3],
+              ['Terminating', 5]
             ]
           } as Pods);
           done();
