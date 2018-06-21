@@ -12,7 +12,6 @@ import { createMock } from 'testing/mock';
 import {
   Observable,
   Subject,
-  Subscription,
   VirtualTimeScheduler
 } from 'rxjs';
 import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
@@ -31,10 +30,7 @@ import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
-import {
-  Application,
-  DeploymentApiService
-} from './deployment-api.service';
+import { DeploymentApiService } from './deployment-api.service';
 import {
   DeploymentsService,
   POLL_RATE_TOKEN,
