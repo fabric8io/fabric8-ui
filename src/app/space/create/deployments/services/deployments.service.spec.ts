@@ -42,7 +42,7 @@ import {
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
 
-describe('DeploymentsService with mock DeploymentApiService', () => {
+describe('DeploymentsService', () => {
 
   let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
 
