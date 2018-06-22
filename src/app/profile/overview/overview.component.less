@@ -106,6 +106,31 @@
 }
 
 .profile-overview-nav {
+  padding: 4px 0 0;
+  margin-left: -48px;
   background-color: @color-pf-black-150;
   border-bottom: 1px solid @color-pf-black-300;
+  ul {
+    list-style-type: none;
+    padding-left: 25px;
+    li {
+      a.active-link {
+        color: @color-pf-blue;
+        border-bottom: 3px solid @color-pf-blue;
+        padding-bottom: 9px;
+        text-decoration: none;
+      }
+    }
+  }
+  li {
+    padding-right: 10px;
+    display: inline-block;
+  }
+  a {
+    color: @color-pf-black;
+    text-decoration: none;
+  }
+  a:hover {
+    color: @color-pf-blue;
+  }
 }
