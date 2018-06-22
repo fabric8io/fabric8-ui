@@ -136,6 +136,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
           }
         });
       } else {
+        workspaceWindow.close();
         this.workspaceBusy = false;
         // display error message
         this.notifications.message({
