@@ -13,6 +13,10 @@ describe('Service: Provider Service', () => {
     let broadcaster: Broadcaster;
     let fakeAuthService: any;
 
+    class BroadcasterTestProvider {
+      static broadcaster = new Broadcaster();
+    }
+
     beforeEach(() => {
         fakeAuthService = {
             getToken: function() {
@@ -42,7 +46,10 @@ describe('Service: Provider Service', () => {
                 provide: AuthenticationService,
                 useValue: fakeAuthService
             },
-            Broadcaster,
+            {
+              provide: Broadcaster,
+              useValue: BroadcasterTestProvider.broadcaster
+            },
             Logger
           ]
         });
