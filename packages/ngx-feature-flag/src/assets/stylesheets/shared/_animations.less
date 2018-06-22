@@ -1,0 +1,84 @@
+@import (reference) 'main.less';
+
+@keyframes pulse {
+  0%,
+  100% {
+    border-bottom-color: @color-pf-blue;
+  }
+  50% {
+    border-bottom-color: @color-pf-green;
+  }
+}
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes animatebackground {
+  0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+@keyframes slidein {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes stay {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(0); }
+}
+.animation {
+  background: @color-pf-black-700;
+  width: 250px;
+  height: calc(100% - 1.5em);
+  transform-origin: left center;
+}
+.a3 {
+  animation-duration: .3s;
+  animation-timing-function: linear;
+  animation-name: slidein;
+}
+.animated-background-color {
+  background: linear-gradient(-90deg, #23a6d5, @color-pf-black-900, @color-pf-black-900, #23a6d5);
+  animation: animatebackground 3s ease;
+  -webkit-animation: animatebackground 3s ease;
+	-moz-animation: animatebackground 3s ease;
+  background-size: 400% 400%;
+  width: 250px;
+}
+.gradient-animation( @start, @end, @transTime ) {
+  background-size: 100%;
+  background-image: linear-gradient(-90deg, @start, @end);
+  position: relative;
+  z-index: 100;
+  &:before {
+    background-image: linear-gradient(-90deg, @end, @start);
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    width: 100%;
+    z-index: -100;
+    transition: opacity @transTime;
+  }
+  &:hover {
+     &:before {
+       opacity: 1;
+     }
+  }
+}

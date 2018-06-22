@@ -1,0 +1,40 @@
+@import (reference) 'main.less';
+
+.view-container {
+  position: relative;
+  >.view {
+    &:extend(.fill-container);
+    &.with-rows {
+      padding-left: @grid-gutter-width/2;
+      padding-right: @grid-gutter-width/2;
+    }
+    >main,
+    section,
+    aside {
+      padding: @content-padding;
+      overflow: auto;
+    }
+    >.view-content {
+      position: relative;
+      padding-top: @content-padding;
+    }
+  }
+}
+.dropdown {
+  a {
+    color: @color-pf-white;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+.btn { min-width: 90px; }
+//remove toolbar box shadow
+/* stylelint-disable */
+.toolbar-pf { box-shadow: none !important; }
+/* stylelint-enable */
+// add border top to filter results
+.toolbar-pf-results {
+  border-top : 1px solid;
+  border-top-color: @color-pf-black-300;
+}

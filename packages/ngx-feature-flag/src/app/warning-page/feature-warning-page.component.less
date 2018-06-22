@@ -1,0 +1,43 @@
+@import (reference) '../../assets/stylesheets/shared/main.less';
+
+.feature-level(@color-for-feature) {
+  &-page {
+    height: 100vh;
+    color: @color-pf-black-100;
+    background-color: @color-pf-black-800;
+    text-align: center;
+    .feature-content {
+      margin-top: 5%;
+      i {
+        color: @color-for-feature;
+      }
+      .btn-feature-level {
+        &:extend(.btn-default);
+        color: @color-pf-black-100;
+        border-color: @color-for-feature;
+        background-color: @color-for-feature;
+        background-image: linear-gradient(to bottom, @color-for-feature 0, @color-for-feature 100%);
+        &:hover {
+          background-color: @color-for-feature;
+          background-image: none;
+          border-color: darken((@color-for-feature), 10%);
+        }
+      }
+    }
+  }
+}
+
+// EXPERIMENTAL
+.experimental {
+  .feature-level(@color-experimental);
+}
+
+// BETA
+.beta {
+  .feature-level(@color-beta);
+}
+
+// INTERNAL
+.internal {
+  .feature-level(@color-internal);
+}
