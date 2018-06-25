@@ -6,7 +6,7 @@
     <span class="pficon pficon-users fa-lg"></span> {{collaboratorCount | async}}
     <ng-container *ngIf='userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo'>
       <span class="f8-space-masthead-vertical-divider-collab"></span>
-      <a [routerLink]="['/', loggedInUser?.attributes?.username, space?.attributes.name, 'settings', 'collaborators']">
+      <a class="add-collaborators-link" [routerLink]="['/', loggedInUser?.attributes?.username, space?.attributes.name, 'settings', 'collaborators']">
         <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
       </a>
     </ng-container>
