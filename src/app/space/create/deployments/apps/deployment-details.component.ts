@@ -10,8 +10,8 @@ import {
 } from 'lodash';
 import {
   ChartDefaults,
-  SparklineConfig,
-  SparklineData
+  SparklineChartConfig,
+  SparklineChartData
 } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
@@ -76,13 +76,13 @@ export class DeploymentDetailsComponent {
 
   private readonly subscriptions: Array<Subscription> = [];
 
-  cpuData: SparklineData = {
+  cpuData: SparklineChartData = {
     dataAvailable: true,
     xData: ['time'],
     yData: ['CPU']
   };
 
-  memData: SparklineData = {
+  memData: SparklineChartData = {
     dataAvailable: true,
     xData: ['time'],
     yData: ['Memory']
@@ -96,7 +96,7 @@ export class DeploymentDetailsComponent {
     ]
   };
 
-  cpuConfig: SparklineConfig = {
+  cpuConfig: SparklineChartConfig = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('cpu-chart'),
     chartHeight: 60,
@@ -107,7 +107,7 @@ export class DeploymentDetailsComponent {
     units: 'Cores'
   };
 
-  memConfig: SparklineConfig = {
+  memConfig: SparklineChartConfig = {
     // Seperate charts must have unique IDs, otherwise only one will appear
     chartId: uniqueId('mem-chart'),
     chartHeight: 60,

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import { IMultiSelectOption, IMultiSelectSettings, MultiselectDropdown } from 'angular-2-dropdown-multiselect';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   host: {
@@ -22,11 +22,10 @@ export class AddCollaboratorsDialogComponent implements OnInit {
 
   @Output() onAdded = new EventEmitter<User[]>();
 
-  @ViewChild('dropdown') dropdown: MultiselectDropdown;
-
-  public dropdownOptions: IMultiSelectOption[] = [];
-  public dropdownModel: User[];
-  public dropdownSettings: IMultiSelectSettings;
+  collaborators: User[] = [];
+  selectedCollaborators: User[];
+  loading: Boolean = false;
+  searchTerm = new Subject<string>();
 
   constructor(
     private userService: UserService,
@@ -34,18 +33,17 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.dropdownSettings = {
-      pullRight: false,
-      enableSearch: true,
-      checkedStyle: 'checkboxes',
-      buttonClasses: 'btn btn-default',
-      selectionLimit: 0,
-      closeOnSelect: false,
-      showCheckAll: false,
-      showUncheckAll: false,
-      dynamicTitleMaxItems: 3,
-      maxHeight: '300px'
-    };
+    this.searchTerm.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => this.loading = true),
+      switchMap(term => this.userService.getUsersBySearchString(term))
+    ).subscribe(users => {
+      this.collaborators = users;
+      this.loading = false;
+    }, () => {
+      this.collaborators = [];
+    });
   }
 
   public onOpen() {
@@ -53,23 +51,10 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   }
 
   addCollaborators() {
-    this.collaboratorService.addCollaborators(this.spaceId, this.dropdownModel).subscribe(() => {
-      this.onAdded.emit(this.dropdownModel as User[]);
+    this.collaboratorService.addCollaborators(this.spaceId, this.selectedCollaborators).subscribe(() => {
+      this.onAdded.emit(this.selectedCollaborators as User[]);
       this.reset();
       this.host.hide();
-    });
-  }
-
-  changed(enteredValue: any) {
-    let searchValue = this.dropdown.filterControl.value;
-    this.userService.getUsersBySearchString(searchValue).subscribe((users) => {
-      this.dropdownOptions = [];
-      users.forEach(user => {
-        this.dropdownOptions.push({
-          id: user,
-          name: user.attributes.fullName
-        });
-      });
     });
   }
 
@@ -79,9 +64,7 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   }
 
   private reset() {
-    this.dropdown.uncheckAll();
-    this.dropdown.clearSearch(new CustomEvent('clear'));
-    this.dropdownOptions = [];
-    this.dropdownModel = [];
+    this.collaborators = [];
+    this.selectedCollaborators = [];
   }
 }

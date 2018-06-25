@@ -25,17 +25,12 @@ interface MenuHiddenCallback {
   providers: []
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  title = 'Almighty';
   imgLoaded: Boolean = false;
-  documentationListVisible: Boolean = false;
   isIn = false;   // store state
+
   toggleState() { // click handler
       let bool = this.isIn;
       this.isIn = bool === false ? true : false;
-  }
-
-  onDocumentationListVisible = (flag: boolean) => {
-    this.documentationListVisible = flag;
   }
 
   menuCallbacks = new Map<String, MenuHiddenCallback>([

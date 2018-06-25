@@ -2,24 +2,16 @@ import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import {
-  HttpModule,
   Response,
   ResponseOptions,
-  ResponseType,
-  XHRBackend
+  ResponseType
 } from '@angular/http';
-
-import {
-  MockBackend,
-  MockConnection
-} from '@angular/http/testing';
 
 import { createMock } from 'testing/mock';
 
 import {
   Observable,
   Subject,
-  Subscription,
   VirtualTimeScheduler
 } from 'rxjs';
 import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
@@ -30,21 +22,15 @@ import {
   NotificationType
 } from 'ngx-base';
 
-import { AuthenticationService } from 'ngx-login-client';
-
-import { WIT_API_URL } from 'ngx-fabric8-wit';
-
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { MemoryUnit } from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
+import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
-import {
-  Application,
-  DeploymentApiService
-} from './deployment-api.service';
+import { DeploymentApiService } from './deployment-api.service';
 import {
   DeploymentsService,
   POLL_RATE_TOKEN,
@@ -52,822 +38,512 @@ import {
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
 
-interface MockHttpParams<U> {
-  url: string;
-  response: { data: {} } | Response;
-  expected?: U;
-  expectedError?: any;
-  observable: Observable<U>;
-  done: DoneFn;
-}
+type TestContext = {
+  service: DeploymentsService;
+  apiService: jasmine.SpyObj<DeploymentApiService>;
+  notifications: jasmine.SpyObj<NotificationsService>;
+  logger: jasmine.SpyObj<Logger>;
+  errorHandler: jasmine.SpyObj<ErrorHandler>;
+  timer: Subject<void>;
+};
 
 describe('DeploymentsService', () => {
 
-  let serviceUpdater: Subject<void>;
-  let mockBackend: MockBackend;
-  let mockLogger: jasmine.SpyObj<Logger>;
-  let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
-  let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
-  let svc: DeploymentsService;
-
-  beforeEach(() => {
-    serviceUpdater = new Subject<void>();
-
-    const mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
-    mockAuthService.getToken.and.returnValue('mock-auth-token');
-
-    mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);
-    mockErrorHandler = jasmine.createSpyObj<ErrorHandler>('ErrorHandler', ['handleError']);
-    mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
-
+  beforeEach(function(this: TestContext): void {
     TestBed.configureTestingModule({
-      imports: [HttpModule],
       providers: [
         {
-          provide: XHRBackend, useClass: MockBackend
+          provide: DeploymentApiService, useFactory: (): jasmine.SpyObj<DeploymentApiService> => {
+            const svc: jasmine.SpyObj<DeploymentApiService> = createMock(DeploymentApiService);
+            return svc;
+          }
         },
         {
-          provide: AuthenticationService, useValue: mockAuthService
+          provide: NotificationsService, useFactory: (): jasmine.SpyObj<NotificationsService> => {
+            const notifications: jasmine.SpyObj<NotificationsService> = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
+            return notifications;
+          }
         },
         {
-          provide: WIT_API_URL, useValue: 'http://example.com/'
+          provide: Logger, useFactory: (): jasmine.SpyObj<Logger> => {
+            const logger: jasmine.SpyObj<Logger> = createMock(Logger);
+            return logger;
+          }
         },
         {
-          provide: Logger, useValue: mockLogger
+          provide: ErrorHandler, useFactory: (): jasmine.SpyObj<ErrorHandler> => {
+            const handler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
+            return handler;
+          }
         },
-        {
-          provide: ErrorHandler, useValue: mockErrorHandler
-        },
-        {
-          provide: NotificationsService, useValue: mockNotificationsService
-        },
-        {
-          provide: TIMER_TOKEN, useValue: serviceUpdater
-        },
-        {
-          provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3
-        },
-        {
-          provide: POLL_RATE_TOKEN, useValue: 1
-        },
-        DeploymentApiService,
+        { provide: TIMER_TOKEN, useValue: new Subject<void>() },
+        { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3 },
+        { provide: POLL_RATE_TOKEN, useValue: 1 },
         DeploymentsService
       ]
     });
-    svc = TestBed.get(DeploymentsService);
-    spyOn(svc, 'getPodsQuota').and.callThrough();
-    mockBackend = TestBed.get(XHRBackend);
+
+    this.service = TestBed.get(DeploymentsService);
+    this.apiService = TestBed.get(DeploymentApiService);
+    this.notifications = TestBed.get(NotificationsService);
+    this.logger = TestBed.get(Logger);
+    this.errorHandler = TestBed.get(ErrorHandler);
+    this.timer = TestBed.get(TIMER_TOKEN);
   });
 
-  function doMockHttpTest<U>(params: MockHttpParams<U>): void {
-    if (params.expected !== undefined && params.expectedError !== undefined) {
-      throw 'Cannot have both expected value and expected error';
-    }
-    if (params.expected === undefined && params.expectedError === undefined) {
-      throw 'Must have either an expected value or an expected error';
-    }
-
-    let response: Response;
-    if (params.response instanceof Response) {
-      response = params.response;
-    } else {
-      response = new Response(new ResponseOptions({ body: params.response }));
-    }
-
-    const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-      const unexpectedEmissionHandler = (v: any) => {
-        subscription.unsubscribe();
-        params.done.fail(JSON.stringify(v));
-      };
-      const testBody = (expected: U, actual: U) => {
-        subscription.unsubscribe();
-        expect(connection.request.url).toEqual(params.url);
-        expect(actual).toEqual(expected);
-        params.done();
-      };
-
-      if (params.expected !== undefined) {
-        connection.mockRespond(response);
-        params.observable.subscribe(
-          (data: U) => testBody(params.expected, data),
-          unexpectedEmissionHandler
-        );
-      } else if (params.expectedError !== undefined) {
-        connection.mockError(response as Response & Error);
-        params.observable.subscribe(
-          unexpectedEmissionHandler,
-          (err: any) => testBody(params.expectedError, err)
-        );
-      }
-    });
-    serviceUpdater.next();
-  }
-
   describe('#getApplications', () => {
-    it('should publish faked application names', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should publish faked application names', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello'
-                }
-              },
-              {
-                attributes: {
-                  name: 'vertx-paint'
-                }
-              },
-              {
-                attributes: {
-                  name: 'vertx-wiki'
-                }
-              }
-            ]
+            name: 'vertx-hello'
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-paint'
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-wiki'
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: ['vertx-hello', 'vertx-paint', 'vertx-wiki'],
-        observable: svc.getApplications('foo-spaceId'),
-        done: done
-      });
+      ]));
+      this.service.getApplications('foo-spaceId')
+        .subscribe((applications: string[]): void => {
+          expect(applications).toEqual(['vertx-hello', 'vertx-paint', 'vertx-wiki']);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should return empty array if no applications', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: []
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getApplications('foo-spaceId'),
-        done: done
-      });
+    it('should return empty array if no applications', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([]));
+      this.service.getApplications('foo-spaceId')
+        .subscribe((applications: string[]): void => {
+          expect(applications).toEqual([]);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should return singleton array result', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [{
-              attributes: { name: 'vertx-hello' }
-            }]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: ['vertx-hello'],
-        observable: svc.getApplications('foo-spaceId'),
-        done: done
-      });
+    it('should return singleton array result', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([{
+        attributes: { name: 'vertx-hello' }
+      }]));
+      this.service.getApplications('foo-spaceId')
+        .subscribe((applications: string[]): void => {
+          expect(applications).toEqual(['vertx-hello']);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should return empty array for null applications response', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: null
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getApplications('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: null
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getApplications('foo-spaceId+'),
-        done: done
-      });
+    it('should return empty array for null applications response', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of(null));
+      this.service.getApplications('foo-spaceId')
+        .subscribe((applications: string[]): void => {
+          expect(applications).toEqual([]);
+          done();
+        });
+      this.timer.next();
     });
   });
 
   describe('#getEnvironments', () => {
-    it('should publish faked, filtered and sorted environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: [
-          {
-            attributes: {
-              name: 'run'
-            }
-          }, {
-            attributes: {
-              name: 'test'
-            }
-          }, {
-            attributes: {
-              name: 'stage'
-            }
+    it('should publish faked, filtered and sorted environments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'run'
           }
-        ]
-      };
-      const expectedResponse = ['stage', 'run'];
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getEnvironments('foo-spaceId'),
-        done: done
-      });
-    });
-
-    it('should return singleton array result', (done: DoneFn) => {
-      const httpResponse = {
-        data: [
-          {
-            attributes: {
-              name: 'stage'
-            }
+        }, {
+          attributes: {
+            name: 'test'
           }
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: ['stage'],
-        observable: svc.getEnvironments('foo-spaceId'),
-        done: done
-      });
+        }, {
+          attributes: {
+            name: 'stage'
+          }
+        }
+      ]));
+      this.service.getEnvironments('foo-spaceId')
+        .subscribe((environments: string[]): void => {
+          expect(environments).toEqual(['stage', 'run']);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should return empty array if no environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: []
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getEnvironments('foo-spaceId'),
-        done: done
-      });
+    it('should return singleton array result', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(Observable.of([
+        { attributes: { name: 'stage' } }
+      ]));
+      this.service.getEnvironments('foo-spaceId')
+        .subscribe((environments: string[]): void => {
+          expect(environments).toEqual(['stage']);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should return empty array for null environments response', (done: DoneFn) => {
-      const httpResponse = {
-        data: null
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getEnvironments('foo-spaceId'),
-        done: done
-      });
+    it('should return empty array if no environments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(Observable.of([]));
+      this.service.getEnvironments('foo-spaceId')
+        .subscribe((environments: string[]): void => {
+          expect(environments).toEqual([]);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: null
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
-        response: httpResponse,
-        expected: [],
-        observable: svc.getEnvironments('foo-spaceId+'),
-        done: done
-      });
+    it('should return empty array for null environments response', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(Observable.of(null));
+      this.service.getEnvironments('foo-spaceId')
+        .subscribe((environments: string[]): void => {
+          expect(environments).toEqual([]);
+          done();
+        });
+      this.timer.next();
     });
   });
 
   describe('#isApplicationDeployedInEnvironment', () => {
-    it('should be true for included deployments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be true for included deployments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    }
-                  ]
+                  name: 'run'
                 }
               }
             ]
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: true,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello'),
-        done: done
-      });
+      ]));
+      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(true);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be true if included in multiple deployments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be true if included in multiple deployments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    },
-                    {
-                      attributes: {
-                        name: 'stage'
-                      }
-                    }
-                  ]
+                  name: 'run'
+                }
+              },
+              {
+                attributes: {
+                  name: 'stage'
                 }
               }
             ]
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: true,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello'),
-        done: done
-      });
+      ]));
+      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(true);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be false for excluded deployments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be false for excluded deployments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    }
-                  ]
+                  name: 'run'
                 }
               }
             ]
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
+      ]));
+      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be false if excluded in multiple deployments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be false if excluded in multiple deployments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    },
-                    {
-                      attributes: {
-                        name: 'test'
-                      }
-                    }
-                  ]
+                  name: 'run'
+                }
+              },
+              {
+                attributes: {
+                  name: 'test'
                 }
               }
             ]
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
+      ]));
+      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be false if no deployments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be false if no deployments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: []
-                }
-              }
-            ]
+            name: 'vertx-hello',
+            deployments: []
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
+      ]));
+      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be false if deployments is null', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be false if deployments is null', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: null
-                }
-              }
-            ]
+            name: 'vertx-hello',
+            deployments: null
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: null
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isApplicationDeployedInEnvironment('foo-spaceId+', 'stage', 'vertx-hello'),
-        done: done
-      });
+      ]));
+      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
   });
 
   describe('#isDeployedInEnvironment', () => {
-    it('should be true for included environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be true for included environments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    }
-                  ]
+                  name: 'run'
                 }
               }
             ]
           }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: true,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'run'),
-        done: done
-      });
+        }]));
+      this.service.isDeployedInEnvironment('foo-spaceId', 'run')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(true);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be true if included in multiple applications and environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be true if included in multiple applications and environments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    },
-                    {
-                      attributes: {
-                        name: 'test'
-                      }
-                    }
-                  ]
+                  name: 'run'
                 }
               },
               {
                 attributes: {
-                  name: 'vertx-wiki',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    },
-                    {
-                      attributes: {
-                        name: 'stage'
-                      }
-                    }
-                  ]
+                  name: 'test'
                 }
               }
             ]
           }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: true,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'run'),
-        done: done
-      });
-    });
-
-    it('should be false for excluded environments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+        },
+        {
           attributes: {
-            applications: [
+            name: 'vertx-wiki',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run'
-                      }
-                    }
-                  ]
+                  name: 'run'
                 }
               },
               {
                 attributes: {
-                  name: 'vertx-wiki',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'test'
-                      }
-                    }
-                  ]
+                  name: 'stage'
                 }
               }
             ]
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
+      ]));
+      this.service.isDeployedInEnvironment('foo-spaceId', 'run')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(true);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be false if no environments are deployed', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be false for excluded environments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: []
+                  name: 'run'
                 }
-              },
+              }
+            ]
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-wiki',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-wiki',
-                  deployments: []
+                  name: 'test'
                 }
               }
             ]
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
+      ]));
+      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be false if no applications exist', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be false if no environments are deployed', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: []
+            name: 'vertx-hello',
+            deployments: []
+          }
+        },
+        {
+          attributes: {
+            name: 'vertx-wiki',
+            deployments: []
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
+      ]));
+      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be false if applications are null', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: null
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
+    it('should be false if no applications exist', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([]));
+      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should be false if deployments is null', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: null
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId', 'stage'),
-        done: done
-      });
+    it('should be false if applications are null', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of(null));
+      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should be false if deployments is null', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: null
+            name: 'vertx-hello',
+            deployments: null
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: false,
-        observable: svc.isDeployedInEnvironment('foo-spaceId+', 'stage'),
-        done: done
-      });
+      ]));
+      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
+        .subscribe((deployed: boolean): void => {
+          expect(deployed).toEqual(false);
+          done();
+        });
+      this.timer.next();
     });
   });
 
   describe('#getVersion', () => {
-    it('should return 1.0.2', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should return 1.0.2', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        version: '1.0.2'
-                      }
-                    }
-                  ]
+                  name: 'stage',
+                  version: '1.0.2'
                 }
               }
             ]
           }
         }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: '1.0.2',
-        observable: svc.getVersion('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        version: '1.0.2'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: '1.0.2',
-        observable: svc.getVersion('foo-spaceId+', 'stage', 'vertx-hello'),
-        done: done
-      });
+      ]));
+      this.service.getVersion('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((version: string): void => {
+          expect(version).toEqual('1.0.2');
+          done();
+        });
+      this.timer.next();
     });
   });
 
   describe('#scalePods', () => {
-    it('should return success message on success', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockRespond(new Response(
-          new ResponseOptions({ status: 200 })
-        ));
-      });
-
-      svc.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
+    it('should return success message on success', function(this: TestContext, done: DoneFn): void {
+      this.apiService.scalePods.and.returnValue(Observable.of({}));
+      this.service.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
         .subscribe(
           (msg: string) => {
             expect(msg).toEqual('Successfully scaled vertx-hello');
-            subscription.unsubscribe();
             done();
           },
           (err: string) => {
@@ -876,304 +552,221 @@ describe('DeploymentsService', () => {
         );
     });
 
-    it('should return failure message on error', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(new Response(
-          new ResponseOptions({
-            type: ResponseType.Error,
-            status: 400
-          })
-        ) as Response & Error);
-      });
-
-      svc.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
+    it('should return failure message on error', function(this: TestContext, done: DoneFn): void {
+      this.apiService.scalePods.and.returnValue(Observable.throw('fail'));
+      this.service.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
         .subscribe(
           (msg: string) => {
             done.fail(msg);
           },
           (err: string) => {
             expect(err).toEqual('Failed to scale vertx-hello');
-            subscription.unsubscribe();
             done();
           }
         );
     });
-
-    it('should encode url', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        expect(connection.request.url)
-          .toEqual('http://example.com/deployments/spaces/foo-spaceId%2B/applications/vertx-hello%2B/deployments/stage%2B?podCount=2');
-        connection.mockRespond(new Response(
-          new ResponseOptions({ status: 200 })
-        ));
-      });
-
-      svc.scalePods('foo-spaceId+', 'stage+', 'vertx-hello+', 2)
-        .subscribe(
-          (msg: string) => {
-            expect(msg).toEqual('Successfully scaled vertx-hello+');
-            subscription.unsubscribe();
-            done();
-          },
-          (err: string) => {
-            done.fail(err);
-          }
-        );
-    });
-
   });
 
   describe('#getPods', () => {
-    it('should return pods for an existing deployment', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should return pods for an existing deployment', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 2,
-                        pods: [
-                          ['Running', '1'],
-                          ['Starting', '0'],
-                          ['Stopping', '1']
-                        ]
-                      }
-                    }
+                  name: 'stage',
+                  pod_total: 2,
+                  pods: [
+                    ['Running', '1'],
+                    ['Starting', '0'],
+                    ['Stopping', '1']
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'run',
+                  pod_total: 1,
+                  pods: [
+                    ['Running', '0'],
+                    ['Starting', '0'],
+                    ['Stopping', '1']
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      this.service.getPods('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((pods: Pods): void => {
+          expect(pods).toEqual({
+            total: 2,
+            pods: [
+              ['Running', 1],
+              ['Starting', 0],
+              ['Stopping', 1]
+            ]
+          } as Pods);
+          done();
+        });
+      this.timer.next();
+    });
+
+    it('should return pods when there are multiple deployments', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'vertx-hello',
+            deployments: [
+              {
+                attributes: {
+                  name: 'stage',
+                  pod_total: 2,
+                  pods: [
+                    ['Running', '1'],
+                    ['Starting', '0'],
+                    ['Stopping', '1']
                   ]
                 }
               },
               {
                 attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'run',
-                        pod_total: 1,
-                        pods: [
-                          ['Running', '0'],
-                          ['Starting', '0'],
-                          ['Stopping', '1']
-                        ]
-                      }
-                    }
+                  name: 'run',
+                  pod_total: 6,
+                  pods: [
+                    ['Running', '3'],
+                    ['Starting', '2'],
+                    ['Stopping', '1']
                   ]
                 }
               }
             ]
           }
         }
-      };
-      const expectedResponse = {
-        total: 2,
-        pods: [
-          ['Running', 1],
-          ['Starting', 0],
-          ['Stopping', 1]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
+      ]));
+      this.service.getPods('foo-spaceId', 'run', 'vertx-hello')
+        .subscribe((pods: Pods): void => {
+          expect(pods).toEqual({
+            total: 6,
+            pods: [
+              ['Running', 3],
+              ['Starting', 2],
+              ['Stopping', 1]
+            ]
+          } as Pods);
+          done();
+        });
+      this.timer.next();
     });
 
-    it('should return pods when there are multiple deployments', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
+    it('should return pods array', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            applications: [
+            name: 'vertx-hello',
+            deployments: [
               {
                 attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 2,
-                        pods: [
-                          ['Running', '1'],
-                          ['Starting', '0'],
-                          ['Stopping', '1']
-                        ]
-                      }
-                    },
-                    {
-                      attributes: {
-                        name: 'run',
-                        pod_total: 6,
-                        pods: [
-                          ['Running', '3'],
-                          ['Starting', '2'],
-                          ['Stopping', '1']
-                        ]
-                      }
-                    }
+                  name: 'stage',
+                  pod_total: 15,
+                  pods: [
+                    ['Terminating', 5],
+                    ['Stopping', '3'],
+                    ['Running', '1'],
+                    ['Not Running', 4],
+                    ['Starting', '2']
                   ]
                 }
               }
             ]
           }
         }
-      };
-      const expectedResponse = {
-        total: 6,
-        pods: [
-          ['Running', 3],
-          ['Starting', 2],
-          ['Stopping', 1]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'run', 'vertx-hello'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 1,
-                        pods: [
-                          ['Running', '1']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
+      ]));
+      this.service.getPods('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((pods: Pods): void => {
+          expect(pods).toEqual({
+            total: 15,
+            pods: [
+              ['Not Running', 4],
+              ['Running', 1],
+              ['Starting', 2],
+              ['Stopping', 3],
+              ['Terminating', 5]
             ]
-          }
-        }
-      };
-      const expectedResponse = {
-        total: 1,
-        pods: [
-          ['Running', 1]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId+', 'stage', 'vertx-hello'),
-        done: done
-      });
+          } as Pods);
+          done();
+        });
+      this.timer.next();
     });
   });
 
   describe('#getDeploymentCpuStat', () => {
-    it('should combine timeseries and quota data', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
+    it('should combine timeseries and quota data', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      this.apiService.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
         }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
+      }));
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
+            name: 'foo-app',
+            deployments: [
               {
                 attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 3,
-                          memory: 3
-                        }
-                      }
-                    }
-                  ]
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
                 }
               }
             ]
           }
         }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
+      ]));
+      this.service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: CpuStat[]) => {
           expect(stats).toEqual([
@@ -1181,108 +774,68 @@ describe('DeploymentsService', () => {
             { used: 2, quota: 3, timestamp: 2 },
             { used: 9, quota: 3, timestamp: 9 }
           ]);
-          subscription.unsubscribe();
           done();
         });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
-      });
+      this.timer.next();
+      this.timer.next();
     });
 
-    it('should round usage data points', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 0.0001, time: 1 },
-            { value: 0.00001, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
+    it('should round usage data points', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 0.0001, time: 1 },
+          { value: 0.00001, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      this.apiService.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 0.00015
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
         }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
+      }));
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            cores: {
-              time: 9, value: 0.00015
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
+            name: 'foo-app',
+            deployments: [
               {
                 attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 3,
-                          memory: 3
-                        }
-                      }
-                    }
-                  ]
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
                 }
               }
             ]
           }
         }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
+      ]));
+      this.service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: CpuStat[]) => {
           expect(stats).toEqual([
@@ -1290,219 +843,70 @@ describe('DeploymentsService', () => {
             { used: 0, quota: 3, timestamp: 2 },
             { used: 0.0002, quota: 3, timestamp: 9 }
           ]);
-          subscription.unsubscribe();
           done();
         });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
-        }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
-          attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app+',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env+',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 3,
-                          memory: 3
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space%2B$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentCpuStat('foo-space+', 'foo-env+', 'foo-app+', 3)
-        .first()
-        .subscribe((stats: CpuStat[]) => {
-          expect(stats).toEqual([
-            { used: 1, quota: 3, timestamp: 1 },
-            { used: 2, quota: 3, timestamp: 2 },
-            { used: 9, quota: 3, timestamp: 9 }
-          ]);
-          subscription.unsubscribe();
-          done();
-        });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space+', 'foo-env+', 'foo-app+');
-      });
+      this.timer.next();
+      this.timer.next();
     });
   });
 
   describe('#getDeploymentMemoryStat', () => {
-    it('should combine timeseries and quota data', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
+    it('should combine timeseries and quota data', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      this.apiService.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
         }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
+      }));
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
+            name: 'foo-app',
+            deployments: [
               {
                 attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 3,
-                          memory: 3
-                        }
-                      }
-                    }
-                  ]
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 3,
+                    memory: 3
+                  }
                 }
               }
             ]
           }
         }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3)
+      ]));
+      this.service.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: MemoryStat[]) => {
           expect(stats).toEqual([
@@ -1510,108 +914,68 @@ describe('DeploymentsService', () => {
             new ScaledMemoryStat(4, 3, 4),
             new ScaledMemoryStat(10, 3, 10)
           ]);
-          subscription.unsubscribe();
           done();
         });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
-      });
+      this.timer.next();
+      this.timer.next();
     });
 
-    it('should scale results to the sample with greatest unit', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 0, time: 0 },
-            { value: 0, time: 1 }
-          ],
-          net_rx: [
-            { value: 0, time: 0 },
-            { value: 0, time: 1 }
-          ],
-          net_tx: [
-            { value: 0, time: 0 },
-            { value: 0, time: 1 }
-          ],
-          memory: [
-            { time: 0, value: 800 * Math.pow(1024, 1) },
-            { time: 1, value: 100 * Math.pow(1024, 2) }
-          ],
-          start: 0,
-          end: 1
+    it('should scale results to the sample with greatest unit', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 0, time: 0 },
+          { value: 0, time: 1 }
+        ],
+        net_rx: [
+          { value: 0, time: 0 },
+          { value: 0, time: 1 }
+        ],
+        net_tx: [
+          { value: 0, time: 0 },
+          { value: 0, time: 1 }
+        ],
+        memory: [
+          { time: 0, value: 800 * Math.pow(1024, 1) },
+          { time: 1, value: 100 * Math.pow(1024, 2) }
+        ],
+        start: 0,
+        end: 1
+      }));
+      this.apiService.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 0, value: 0
+        },
+        net_tx: {
+          time: 0, value: 0
+        },
+        net_rx: {
+          time: 0, value: 0
+        },
+        memory: {
+          time: 2, value: 110 * Math.pow(1024, 2)
         }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
+      }));
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            cores: {
-              time: 0, value: 0
-            },
-            net_tx: {
-              time: 0, value: 0
-            },
-            net_rx: {
-              time: 0, value: 0
-            },
-            memory: {
-              time: 2, value: 110 * Math.pow(1024, 2)
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
+            name: 'foo-app',
+            deployments: [
               {
                 attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 0,
-                          memory: 512 * Math.pow(1024, 2)
-                        }
-                      }
-                    }
-                  ]
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 0,
+                    memory: 512 * Math.pow(1024, 2)
+                  }
                 }
               }
             ]
           }
         }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3)
+      ]));
+      this.service.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: MemoryStat[]) => {
           expect(stats).toEqual([
@@ -1631,215 +995,66 @@ describe('DeploymentsService', () => {
               units: MemoryUnit.MB
             })
           ] as any[]);
-          subscription.unsubscribe();
           done();
         });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
-      });
+      this.timer.next();
+      this.timer.next();
     });
-
-    it('should encode url', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
-        }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
-          attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app+',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env+',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 3,
-                          memory: 3
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space%2B\/applications\/foo-app%2B\/deployments\/foo-env%2B\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space%2B$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentMemoryStat('foo-space+', 'foo-env+', 'foo-app+', 3)
-        .first()
-        .subscribe((stats: MemoryStat[]) => {
-          expect(stats).toEqual([
-            new ScaledMemoryStat(3, 3, 3),
-            new ScaledMemoryStat(4, 3, 4),
-            new ScaledMemoryStat(10, 3, 10)
-          ]);
-          subscription.unsubscribe();
-          done();
-        });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space+', 'foo-env+', 'foo-app+');
-      });
-    });
-
   });
 
   describe('#getDeploymentNetworkStat', () => {
-    it('should return scaled timeseries data', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
+    it('should return scaled timeseries data', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      this.apiService.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
         }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
+      }));
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
+            name: 'foo-app',
+            deployments: [
               {
                 attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1
-                      }
-                    }
-                  ]
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1
                 }
               }
             ]
           }
         }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
+      ]));
+      this.service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: NetworkStat[]) => {
           expect(stats).toEqual([
@@ -1847,108 +1062,68 @@ describe('DeploymentsService', () => {
             { sent: new ScaledNetStat(8, 8), received: new ScaledNetStat(6, 6) },
             { sent: new ScaledNetStat(11, 11), received: new ScaledNetStat(12, 12) }
           ]);
-          subscription.unsubscribe();
           done();
         });
-      serviceUpdater.next();
-      serviceUpdater.next();
-
-      it('should have queried the pods quota with the correct arguments', () => {
-        expect(svc.getPodsQuota).toHaveBeenCalledWith('foo-space', 'foo-env', 'foo-app');
-      });
+      this.timer.next();
+      this.timer.next();
     });
 
-    it('should scale results to the sample with greatest unit', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 0, time: 0 },
-            { value: 0, time: 1 }
-          ],
-          net_rx: [
-            { value: 800 * Math.pow(1024, 1), time: 0 },
-            { value: 1.2 * Math.pow(1024, 2), time: 1 }
-          ],
-          net_tx: [
-            { value: 500 * Math.pow(1024, 2), time: 0 },
-            { value: 1.2 * Math.pow(1024, 3), time: 1 }
-          ],
-          memory: [
-            { value: 0, time: 0 },
-            { value: 0, time: 1 }
-          ],
-          start: 0,
-          end: 1
+    it('should scale results to the sample with greatest unit', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 0, time: 0 },
+          { value: 0, time: 1 }
+        ],
+        net_rx: [
+          { value: 800 * Math.pow(1024, 1), time: 0 },
+          { value: 1.2 * Math.pow(1024, 2), time: 1 }
+        ],
+        net_tx: [
+          { value: 500 * Math.pow(1024, 2), time: 0 },
+          { value: 1.2 * Math.pow(1024, 3), time: 1 }
+        ],
+        memory: [
+          { value: 0, time: 0 },
+          { value: 0, time: 1 }
+        ],
+        start: 0,
+        end: 1
+      }));
+      this.apiService.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 0, value: 0
+        },
+        net_tx: {
+          time: 2, value: 1 * Math.pow(1024, 3)
+        },
+        net_rx: {
+          time: 2, value: 750 * Math.pow(1024, 2)
+        },
+        memory: {
+          time: 0, value: 0
         }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
+      }));
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            cores: {
-              time: 0, value: 0
-            },
-            net_tx: {
-              time: 2, value: 1 * Math.pow(1024, 3)
-            },
-            net_rx: {
-              time: 2, value: 750 * Math.pow(1024, 2)
-            },
-            memory: {
-              time: 0, value: 0
-            }
-          }
-        }
-      };
-      const deploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
+            name: 'foo-app',
+            deployments: [
               {
                 attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods: [['Running', '1']],
-                        pod_total: 1,
-                        pods_quota: {
-                          cpucores: 0,
-                          memory: 0
-                        }
-                      }
-                    }
-                  ]
+                  name: 'foo-env',
+                  pods: [['Running', '1']],
+                  pod_total: 1,
+                  pods_quota: {
+                    cpucores: 0,
+                    memory: 0
+                  }
                 }
               }
             ]
           }
         }
-      };
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          responseBody = streamingTimeseriesResponse;
-        } else if (deploymentRegex.test(requestUrl)) {
-          responseBody = deploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
+      ]));
+      this.service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
         .first()
         .subscribe((stats: NetworkStat[]) => {
           expect(stats).toEqual([
@@ -1965,157 +1140,102 @@ describe('DeploymentsService', () => {
               received: jasmine.objectContaining({ used: 0.7, units: MemoryUnit.GB })
             }
           ] as any[]);
-          subscription.unsubscribe();
           done();
         });
-      serviceUpdater.next();
-      serviceUpdater.next();
+      this.timer.next();
+      this.timer.next();
     });
   });
 
   describe('#getTimeseriesData', () => {
-    it('should complete without errors if the deployment disappears', (done: DoneFn) => {
-      const initialTimeseriesResponse = {
-        data: {
-          cores: [
-            { value: 1, time: 1 },
-            { value: 2, time: 2 }
-          ],
-          memory: [
-            { value: 3, time: 3 },
-            { value: 4, time: 4 }
-          ],
-          net_rx: [
-            { value: 5, time: 5 },
-            { value: 6, time: 6 }
-          ],
-          net_tx: [
-            { value: 7, time: 7 },
-            { value: 8, time: 8 }
-          ],
-          start: 1,
-          end: 8
+    it('should complete without errors if the deployment disappears', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getTimeseriesData.and.returnValue(Observable.of({
+        cores: [
+          { value: 1, time: 1 },
+          { value: 2, time: 2 }
+        ],
+        memory: [
+          { value: 3, time: 3 },
+          { value: 4, time: 4 }
+        ],
+        net_rx: [
+          { value: 5, time: 5 },
+          { value: 6, time: 6 }
+        ],
+        net_tx: [
+          { value: 7, time: 7 },
+          { value: 8, time: 8 }
+        ],
+        start: 1,
+        end: 8
+      }));
+      this.apiService.getLatestTimeseriesData.and.returnValue(Observable.of({
+        cores: {
+          time: 9, value: 9
+        },
+        memory: {
+          time: 10, value: 10
+        },
+        net_tx: {
+          time: 11, value: 11
+        },
+        net_rx: {
+          time: 12, value: 12
         }
-      };
-      const streamingTimeseriesResponse = {
-        data: {
+      }));
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
           attributes: {
-            cores: {
-              time: 9, value: 9
-            },
-            memory: {
-              time: 10, value: 10
-            },
-            net_tx: {
-              time: 11, value: 11
-            },
-            net_rx: {
-              time: 12, value: 12
-            }
-          }
-        }
-      };
-      const initialDeploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
+            name: 'foo-app',
+            deployments: [
               {
                 attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env',
-                        pods_quota: {
-                          cpucores: 3
-                        },
-                        pods: [['Running', '1']]
-                      }
-                    }
-                  ]
+                  name: 'foo-env',
+                  pods_quota: {
+                    cpucores: 3
+                  },
+                  pod_total: 1,
+                  pods: [['Running', '1']]
                 }
               }
             ]
           }
         }
-      };
-      const updatedDeploymentResponse = {
-        data: {
-          attributes: {
-            applications: [
+      ]));
+      this.service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
+        .takeUntil(Observable.timer(1000))
+        .subscribe(
+          (stat: NetworkStat[]): void => {
+            this.apiService.getApplications.and.returnValue(Observable.of([
               {
                 attributes: {
                   name: 'foo-app',
                   deployments: []
                 }
               }
-            ]
-          }
-        }
-      };
-
-      let deploymentStatus: boolean = false;
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        const initialTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/statseries\?start=\d+&end=\d+$/;
-        const streamingTimeseriesRegex: RegExp = /\/deployments\/spaces\/foo-space\/applications\/foo-app\/deployments\/foo-env\/stats$/;
-        const deploymentRegex: RegExp = /\/deployments\/spaces\/foo-space$/;
-        const requestUrl: string = connection.request.url;
-        let responseBody: any;
-        if (initialTimeseriesRegex.test(requestUrl)) {
-          responseBody = initialTimeseriesResponse;
-        } else if (streamingTimeseriesRegex.test(requestUrl)) {
-          if (!deploymentStatus) {
-            responseBody = streamingTimeseriesResponse;
-          } else {
-            connection.mockError(new Response(
-              new ResponseOptions({
-                body: 'Generic error message',
-                status: 404
-              })
-            ) as Response & Error);
-            return;
-          }
-        } else if (deploymentRegex.test(requestUrl) && !deploymentStatus) {
-          responseBody = initialDeploymentResponse;
-        } else if (deploymentRegex.test(requestUrl) && deploymentStatus) {
-          responseBody = updatedDeploymentResponse;
-        }
-
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(responseBody),
-            status: 200
-          })
-        ));
-      });
-
-      svc.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3)
-        .takeUntil(Observable.timer(2000))
-        .subscribe(
-          (stat: NetworkStat[]): void => {
-            deploymentStatus = true;
-            serviceUpdater.next();
+            ]));
+            this.apiService.getLatestTimeseriesData.and.returnValue(Observable.throw('Generic error message'));
+            this.timer.next();
           },
           err => {
             done.fail(err.message || err);
             return Observable.empty();
           },
           () => {
-            expect(mockLogger.error).not.toHaveBeenCalled();
-            expect(mockNotificationsService.message).not.toHaveBeenCalled();
-            expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
-            subscription.unsubscribe();
+            expect(this.logger.error).not.toHaveBeenCalled();
+            expect(this.notifications.message).not.toHaveBeenCalled();
+            expect(this.errorHandler.handleError).not.toHaveBeenCalled();
             done();
           }
         );
-      serviceUpdater.next();
+      this.timer.next();
     });
   });
 
   describe('#getEnvironmentCpuStat', () => {
-    it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn) => {
-      const httpResponse = {
-        data: [{
+    it('should return a "used" value of 8 and a "quota" value of 10', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(Observable.of([
+        {
           attributes: {
             name: 'stage',
             quota: {
@@ -2125,46 +1245,22 @@ describe('DeploymentsService', () => {
               }
             }
           }
-        }]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: httpResponse.data[0].attributes.quota.cpucores,
-        observable: svc.getEnvironmentCpuStat('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: [{
-          attributes: {
-            name: 'stage',
-            quota: {
-              cpucores: {
-                quota: 10,
-                used: 8
-              }
-            }
-          }
-        }]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
-        response: httpResponse,
-        expected: httpResponse.data[0].attributes.quota.cpucores,
-        observable: svc.getEnvironmentCpuStat('foo-spaceId+', 'stage'),
-        done: done
-      });
+        }
+      ]));
+      this.service.getEnvironmentCpuStat('foo-spaceId', 'stage')
+        .subscribe((cpuStat: CpuStat): void => {
+          expect(cpuStat).toEqual({ quota: 10, used: 8 });
+          done();
+        });
+      this.timer.next();
     });
   });
 
   describe('#getEnvironmentMemoryStat', () => {
-    it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', (done: DoneFn) => {
-      const GB = Math.pow(1024, 3);
-      const httpResponse = {
-        data: [{
+    it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', function(this: TestContext, done: DoneFn): void {
+      const GB: number = Math.pow(1024, 3);
+      this.apiService.getEnvironments.and.returnValue(Observable.of([
+        {
           attributes: {
             name: 'stage',
             quota: {
@@ -2175,65 +1271,28 @@ describe('DeploymentsService', () => {
               }
             }
           }
-        }]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId/environments',
-        response: httpResponse,
-        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB) as MemoryStat,
-        observable: svc.getEnvironmentMemoryStat('foo-spaceId', 'stage'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const GB = Math.pow(1024, 3);
-      const httpResponse = {
-        data: [{
-          attributes: {
-            name: 'stage',
-            quota: {
-              memory: {
-                used: 0.5 * GB,
-                quota: 1 * GB,
-                units: 'bytes'
-              }
-            }
-          }
-        }]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B/environments',
-        response: httpResponse,
-        expected: new ScaledMemoryStat(0.5 * GB, 1 * GB) as MemoryStat,
-        observable: svc.getEnvironmentMemoryStat('foo-spaceId+', 'stage'),
-        done: done
-      });
+        }
+      ]));
+      this.service.getEnvironmentMemoryStat('foo-spaceId', 'stage')
+        .subscribe((memoryStat: MemoryStat): void => {
+          expect(memoryStat).toEqual(new ScaledMemoryStat(0.5 * GB, 1 * GB));
+          done();
+        });
+      this.timer.next();
     });
   });
 
   describe('#deleteDeployment', () => {
-    it('should delete a deployment with the correct URL', (done: DoneFn) => {
-      const spaceId = 'someSpace-Id';
-      const environmentId = 'some Stage';
-      const appId = 'someApp Name';
-      const encSpaceId = encodeURIComponent(spaceId);
-      const encEnvironmentId = encodeURIComponent(environmentId);
-      const encAppId = encodeURIComponent(appId);
-      const expectedUrl = `http://example.com/deployments/spaces/${encSpaceId}/applications/${encAppId}/deployments/${encEnvironmentId}`;
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        expect(connection.request.url).toEqual(expectedUrl);
-        connection.mockRespond(new Response(
-          new ResponseOptions({ status: 200 })
-        ));
-      });
-
-      svc.deleteDeployment(spaceId, environmentId, appId)
+    it('should delete a deployment with the correct URL', function(this: TestContext, done: DoneFn): void {
+      this.apiService.deleteDeployment.and.returnValue(Observable.of('OK'));
+      expect(this.apiService.deleteDeployment).not.toHaveBeenCalled();
+      this.service.deleteDeployment('spaceId', 'envId', 'appId')
         .subscribe(
           (msg: string) => {
             expect(msg).toEqual('Deployment has successfully deleted');
-            subscription.unsubscribe();
+            expect(this.apiService.deleteDeployment).toHaveBeenCalledWith(
+              'spaceId', 'envId', 'appId'
+            );
             done();
           },
           (err: string) => {
@@ -2242,256 +1301,114 @@ describe('DeploymentsService', () => {
         );
     });
 
-    it('should throw an error if it cannot delete', (done: DoneFn) => {
-      const spaceId = 'someSpaceId';
-      const environmentId = 'someStage';
-      const appId = 'someAppName';
-      const expectedErrorMsg = `Failed to delete ${appId} in ${spaceId} (${environmentId})`;
-
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(new Error('someError'));
-      });
-
-      svc.deleteDeployment(spaceId, environmentId, appId)
+    it('should throw an error if it cannot delete', function(this: TestContext, done: DoneFn): void {
+      const spaceId: string = 'someSpaceId';
+      const environmentId: string = 'someStage';
+      const appId: string = 'someAppName';
+      this.apiService.deleteDeployment.and.returnValue(Observable.throw('FAIL'));
+      expect(this.apiService.deleteDeployment).not.toHaveBeenCalled();
+      this.service.deleteDeployment(spaceId, environmentId, appId)
         .subscribe(
           (msg: string) => {
             done.fail();
           },
           (err: string) => {
-            expect(err).toEqual(expectedErrorMsg);
+            expect(err).toEqual(`Failed to delete ${appId} in ${spaceId} (${environmentId})`);
+            expect(this.apiService.deleteDeployment).toHaveBeenCalledWith(
+              spaceId, environmentId, appId
+            );
             done();
           }
         );
     });
   });
 
-  describe('#getPods', () => {
-    it('should return pods array', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 15,
-                        pods: [
-                          ['Terminating', 5],
-                          ['Stopping', '3'],
-                          ['Running', '1'],
-                          ['Not Running', 4],
-                          ['Starting', '2']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const expectedResponse = {
-        total: 15,
-        pods: [
-          ['Not Running', 4],
-          ['Running', 1],
-          ['Starting', 2],
-          ['Stopping', 3],
-          ['Terminating', 5]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-
-    it('should encode url', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'vertx-hello',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'stage',
-                        pod_total: 15,
-                        pods: [
-                          ['Terminating', 5],
-                          ['Stopping', '3'],
-                          ['Running', '1'],
-                          ['Not Running', 4],
-                          ['Starting', '2']
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      const expectedResponse = {
-        total: 15,
-        pods: [
-          ['Not Running', 4],
-          ['Running', 1],
-          ['Starting', 2],
-          ['Stopping', 3],
-          ['Terminating', 5]
-        ]
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-spaceId%2B',
-        response: httpResponse,
-        expected: expectedResponse,
-        observable: svc.getPods('foo-spaceId+', 'stage', 'vertx-hello'),
-        done: done
-      });
-    });
-  });
-
   describe('application links', () => {
-    it('should provide logs URL', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env'
-                      },
-                      links: {
-                        logs: 'http://example.com/logs'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-space',
-        response: httpResponse,
-        expected: 'http://example.com/logs',
-        observable: svc.getLogsUrl('foo-space', 'foo-env', 'foo-app'),
-        done: done
-      });
-    });
-
-    it('should provide console URL', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env'
-                      },
-                      links: {
-                        console: 'http://example.com/console'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-space',
-        response: httpResponse,
-        expected: 'http://example.com/console',
-        observable: svc.getConsoleUrl('foo-space', 'foo-env', 'foo-app'),
-        done: done
-      });
-    });
-
-    it('should provide application URL', (done: DoneFn) => {
-      const httpResponse = {
-        data: {
-          attributes: {
-            applications: [
-              {
-                attributes: {
-                  name: 'foo-app',
-                  deployments: [
-                    {
-                      attributes: {
-                        name: 'foo-env'
-                      },
-                      links: {
-                        application: 'http://example.com/application'
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      };
-      doMockHttpTest({
-        url: 'http://example.com/deployments/spaces/foo-space',
-        response: httpResponse,
-        expected: 'http://example.com/application',
-        observable: svc.getAppUrl('foo-space', 'foo-env', 'foo-app'),
-        done: done
-      });
-    });
-  });
-
-});
-
-describe('DeploymentsService with mock DeploymentApiService', () => {
-
-  let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
-
-  beforeEach(() => {
-    mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
-    TestBed.configureTestingModule({
-      providers: [
+    it('should provide logs URL', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
         {
-          provide: DeploymentApiService,
-          useFactory: (): jasmine.SpyObj<DeploymentApiService> => createMock(DeploymentApiService)
-        },
-        { provide: NotificationsService, useValue: mockNotificationsService },
-        { provide: TIMER_TOKEN, useValue: new Subject<void>() },
-        { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3 },
-        { provide: POLL_RATE_TOKEN, useValue: 1 },
-        DeploymentsService
-      ]
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env'
+                },
+                links: {
+                  logs: 'http://example.com/logs'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      this.service.getLogsUrl('foo-space', 'foo-env', 'foo-app')
+        .subscribe((url: string): void => {
+          expect(url).toEqual('http://example.com/logs');
+          done();
+        });
+      this.timer.next();
+    });
+
+    it('should provide console URL', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env'
+                },
+                links: {
+                  console: 'http://example.com/console'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      this.service.getConsoleUrl('foo-space', 'foo-env', 'foo-app')
+        .subscribe((url: string): void => {
+          expect(url).toEqual('http://example.com/console');
+          done();
+        });
+      this.timer.next();
+    });
+
+    it('should provide application URL', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getApplications.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'foo-app',
+            deployments: [
+              {
+                attributes: {
+                  name: 'foo-env'
+                },
+                links: {
+                  application: 'http://example.com/application'
+                }
+              }
+            ]
+          }
+        }
+      ]));
+      this.service.getAppUrl('foo-space', 'foo-env', 'foo-app')
+        .subscribe((url: string): void => {
+          expect(url).toEqual('http://example.com/application');
+          done();
+        });
+      this.timer.next();
     });
   });
+
 
   describe('#hasDeployments', () => {
     const environments: string[] = ['stage', 'run'];
 
-    it('should return true if there are deployed applications', (done: DoneFn): void => {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+    it('should return true if there are deployed applications', function(this: TestContext, done: DoneFn): void {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
       apiSvc.getApplications.and.returnValue(Observable.of([
         {
           attributes: {
@@ -2528,16 +1445,16 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
           }
         }
       ]));
-      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      const svc: DeploymentsService = this.service;
       svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
         expect(bool).toEqual(true);
         done();
       });
-      TestBed.get(TIMER_TOKEN).next();
+      this.timer.next();
     });
 
-    it('should return true if there are is at least one deployed application', (done: DoneFn) => {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+    it('should return true if there are is at least one deployed application', function(this: TestContext, done: DoneFn): void {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
       apiSvc.getApplications.and.returnValue(Observable.of([
         {
           attributes: {
@@ -2558,16 +1475,16 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
           }
         }
       ]));
-      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      const svc: DeploymentsService = this.service;
       svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
         expect(bool).toEqual(true);
         done();
       });
-      TestBed.get(TIMER_TOKEN).next();
+      this.timer.next();
     });
 
-    it('should return false if there are no deployed applications', (done: DoneFn) => {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+    it('should return false if there are no deployed applications', function(this: TestContext, done: DoneFn): void {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
       apiSvc.getApplications.and.returnValue(Observable.of([
         {
           attributes: {
@@ -2582,12 +1499,12 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
           }
         }
       ]));
-      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      const svc: DeploymentsService = this.service;
       svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
         expect(bool).toEqual(false);
         done();
       });
-      TestBed.get(TIMER_TOKEN).next();
+      this.timer.next();
     });
   });
 
@@ -2616,10 +1533,10 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
-    it('should notify on 401', (): void => {
+    it('should notify on 401', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get applications',
@@ -2628,7 +1545,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testApplicationsError(401, expectedMessage);
     });
 
-    it('should notify on 403', (): void => {
+    it('should notify on 403', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get applications',
@@ -2637,7 +1554,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testApplicationsError(403, expectedMessage);
     });
 
-    it('should notify on 404', (): void => {
+    it('should notify on 404', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get applications',
@@ -2646,7 +1563,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testApplicationsError(404, expectedMessage);
     });
 
-    it('should notify on 500', (): void => {
+    it('should notify on 500', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get applications',
@@ -2655,7 +1572,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testApplicationsError(500, expectedMessage);
     });
 
-    it('should notify on unknown', (): void => {
+    it('should notify on unknown', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get applications',
@@ -2690,10 +1607,10 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
-    it('should notify on 401', (): void => {
+    it('should notify on 401', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get environments',
@@ -2702,7 +1619,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testEnvironmentsError(401, expectedMessage);
     });
 
-    it('should notify on 403', (): void => {
+    it('should notify on 403', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get environments',
@@ -2711,7 +1628,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testEnvironmentsError(403, expectedMessage);
     });
 
-    it('should notify on 404', (): void => {
+    it('should notify on 404', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get environments',
@@ -2720,7 +1637,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testEnvironmentsError(404, expectedMessage);
     });
 
-    it('should notify on 500', (): void => {
+    it('should notify on 500', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get environments',
@@ -2729,7 +1646,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testEnvironmentsError(500, expectedMessage);
     });
 
-    it('should notify on unknown', (): void => {
+    it('should notify on unknown', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get environments',
@@ -2829,7 +1746,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
     function testGetLatestTimeSeriesError(status: number, expectedMessage: Notification) {
@@ -2858,7 +1775,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
     function testGetApplicationsError(status: number, expectedMessage: Notification) {
@@ -2887,10 +1804,10 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       TestBed.get(TIMER_TOKEN).next();
       vs.flush();
 
-      expect(mockNotificationsService.message).toHaveBeenCalledWith(expectedMessage);
+      expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
-    it('should notify on unknown', (): void => {
+    it('should notify on unknown', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get initial application statistics',
@@ -2900,7 +1817,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testGetTimeSeriesError(411, expectedMessage);
     });
 
-    it('should notify on 404', (): void => {
+    it('should notify on 404', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get latest application statistics',
@@ -2909,7 +1826,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testGetLatestTimeSeriesError(404, expectedMessage);
     });
 
-    it('should notify on 500', (): void => {
+    it('should notify on 500', function(this: TestContext): void {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get applications',
@@ -2918,8 +1835,8 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
       testGetApplicationsError(500, expectedMessage);
     });
 
-    it('should return data', (done: DoneFn): void => {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+    it('should return data', function(this: TestContext, done: DoneFn): void {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
       apiSvc.getApplications.and.returnValue(Observable.of([
         {
           attributes: {
@@ -2975,7 +1892,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         }
       }));
 
-      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      const svc: DeploymentsService = this.service;
       svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').first().subscribe((stats: CpuStat[]): void => {
         expect(stats).toEqual([
           { used: 1, quota: 3, timestamp: 1 },
@@ -2984,12 +1901,12 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         ]);
         done();
       });
-      TestBed.get(TIMER_TOKEN).next();
-      TestBed.get(TIMER_TOKEN).next();
+      this.timer.next();
+      this.timer.next();
     });
 
-    it('should return nothing when application is not deployed in environment', (done: DoneFn): void => {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+    it('should return nothing when application is not deployed in environment', function(this: TestContext, done: DoneFn): void {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
       apiSvc.getApplications.and.returnValue(Observable.of([
         {
           attributes: {
@@ -3011,18 +1928,18 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         }
       ]));
 
-      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      const svc: DeploymentsService = this.service;
       svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').subscribe((stats: CpuStat[]): void => {
         done.fail('should not have emitted');
       });
-      TestBed.get(TIMER_TOKEN).next();
-      TestBed.get(TIMER_TOKEN).next();
+      this.timer.next();
+      this.timer.next();
 
       Observable.timer(500).first().subscribe(() => done());
     });
 
-    it('should return nothing when application has no pods', (done: DoneFn): void => {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+    it('should return nothing when application has no pods', function(this: TestContext, done: DoneFn): void {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
       apiSvc.getApplications.and.returnValue(Observable.of([
         {
           attributes: {
@@ -3044,18 +1961,18 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         }
       ]));
 
-      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      const svc: DeploymentsService = this.service;
       svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').subscribe((stats: CpuStat[]): void => {
         done.fail('should not have emitted');
       });
-      TestBed.get(TIMER_TOKEN).next();
-      TestBed.get(TIMER_TOKEN).next();
+      this.timer.next();
+      this.timer.next();
 
       Observable.timer(500).first().subscribe(() => done());
     });
 
-    it('should emit updates when deployment reappears', (done: DoneFn): void => {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
+    it('should emit updates when deployment reappears', function(this: TestContext, done: DoneFn): void {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
       apiSvc.getApplications.and.returnValue(Observable.of([
         {
           attributes: {
@@ -3113,7 +2030,7 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
 
       let delayPassed: boolean = false;
 
-      const svc: DeploymentsService = TestBed.get(DeploymentsService);
+      const svc: DeploymentsService = this.service;
       svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').first().subscribe((stats: CpuStat[]): void => {
         if (!delayPassed) {
           done.fail('should not have emitted before delay passed');
@@ -3125,8 +2042,8 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
         ]);
         done();
       });
-      TestBed.get(TIMER_TOKEN).next();
-      TestBed.get(TIMER_TOKEN).next();
+      this.timer.next();
+      this.timer.next();
 
       Observable.timer(500).first().subscribe(() => {
         delayPassed = true;
@@ -3151,9 +2068,8 @@ describe('DeploymentsService with mock DeploymentApiService', () => {
             }
           }
         ]));
-
-        TestBed.get(TIMER_TOKEN).next();
-        TestBed.get(TIMER_TOKEN).next();
+        this.timer.next();
+        this.timer.next();
       });
     });
   });

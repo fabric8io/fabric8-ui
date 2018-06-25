@@ -12,11 +12,6 @@ import {
   MockBackend,
   MockConnection
 } from '@angular/http/testing';
-import {
-  Observable,
-  Subject,
-  Subscription
-} from 'rxjs';
 
 import { createMock } from 'testing/mock';
 
@@ -32,20 +27,14 @@ import {
   TimeseriesData
 } from './deployment-api.service';
 
+type TestContext = {
+  service: DeploymentApiService;
+  backend: MockBackend;
+};
+
 describe('DeploymentApiService', () => {
-  let mockBackend: MockBackend;
-  let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
-  let mockLogger: jasmine.SpyObj<Logger>;
 
-  let svc: DeploymentApiService;
-
-  beforeEach(() => {
-    const mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
-    mockAuthService.getToken.and.returnValue('mock-auth-token');
-
-    mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);
-    mockErrorHandler = jasmine.createSpyObj<ErrorHandler>('ErrorHandler', ['handleError']);
-
+  beforeEach(function(this: TestContext): void {
     TestBed.configureTestingModule({
       imports: [HttpModule],
       providers: [
@@ -53,13 +42,25 @@ describe('DeploymentApiService', () => {
           provide: XHRBackend, useClass: MockBackend
         },
         {
-          provide: AuthenticationService, useValue: mockAuthService
+          provide: AuthenticationService, useFactory: (): jasmine.SpyObj<AuthenticationService> => {
+            const authSvc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
+            authSvc.getToken.and.returnValue('mock-auth-token');
+            return authSvc;
+          }
         },
         {
-          provide: ErrorHandler, useValue: mockErrorHandler
+          provide: ErrorHandler, useFactory: (): jasmine.SpyObj<ErrorHandler> => {
+            const handler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
+            handler.handleError.and.stub();
+            return handler;
+          }
         },
         {
-          provide: Logger, useValue: mockLogger
+          provide: Logger, useFactory: (): jasmine.SpyObj<Logger> => {
+            const logger: jasmine.SpyObj<Logger> = createMock(Logger);
+            logger.error.and.stub();
+            return logger;
+          }
         },
         {
           provide: WIT_API_URL, useValue: 'http://example.com/'
@@ -67,12 +68,12 @@ describe('DeploymentApiService', () => {
         DeploymentApiService
       ]
     });
-    mockBackend = TestBed.get(XHRBackend);
-    svc = TestBed.get(DeploymentApiService);
+    this.backend = TestBed.get(XHRBackend);
+    this.service = TestBed.get(DeploymentApiService);
   });
 
   describe('#getEnvironments', () => {
-    it('should return result', (done: DoneFn): void => {
+    it('should return result', function(this: TestContext, done: DoneFn): void {
       const httpResponse = {
         data: [
           {
@@ -91,21 +92,21 @@ describe('DeploymentApiService', () => {
           }
         ]
       };
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId/environments');
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
         connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
       });
-      svc.getEnvironments('foo spaceId')
+      this.service.getEnvironments('foo spaceId')
         .subscribe((envs: EnvironmentStat[]): void => {
           expect(envs as any[]).toEqual(httpResponse.data);
           done();
         });
     });
 
-    it('should report errors', (done: DoneFn) => {
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+    it('should report errors', function(this: TestContext, done: DoneFn): void {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId/environments');
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
@@ -116,12 +117,12 @@ describe('DeploymentApiService', () => {
         })) as Response & Error);
       });
 
-      svc.getEnvironments('foo spaceId')
+      this.service.getEnvironments('foo spaceId')
       .subscribe(
         (resp) => done.fail('should throw error'),
         () => {
-          expect(mockErrorHandler.handleError).toHaveBeenCalled();
-          expect(mockLogger.error).toHaveBeenCalled();
+          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+          expect(TestBed.get(Logger).error).toHaveBeenCalled();
           done();
         }
       );
@@ -129,7 +130,7 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#getApplications', () => {
-    it('should return result', (done: DoneFn): void => {
+    it('should return result', function(this: TestContext, done: DoneFn): void {
       const httpResponse = {
         data: {
           attributes: {
@@ -153,21 +154,21 @@ describe('DeploymentApiService', () => {
           }
         }
       };
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId');
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
         connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
       });
-      svc.getApplications('foo spaceId')
+      this.service.getApplications('foo spaceId')
         .subscribe((apps: Application[]): void => {
           expect(apps as any[]).toEqual(httpResponse.data.attributes.applications);
           done();
         });
     });
 
-    it('should report errors', (done: DoneFn) => {
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+    it('should report errors', function(this: TestContext, done: DoneFn): void {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId');
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
@@ -178,12 +179,12 @@ describe('DeploymentApiService', () => {
         })) as Response & Error);
       });
 
-      svc.getApplications('foo spaceId')
+      this.service.getApplications('foo spaceId')
       .subscribe(
         (resp) => done.fail('should throw error'),
         () => {
-          expect(mockErrorHandler.handleError).toHaveBeenCalled();
-          expect(mockLogger.error).toHaveBeenCalled();
+          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+          expect(TestBed.get(Logger).error).toHaveBeenCalled();
           done();
         }
       );
@@ -191,7 +192,7 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#getTimeseriesData', () => {
-    it('should return result', (done: DoneFn): void => {
+    it('should return result', function(this: TestContext, done: DoneFn): void {
       const httpResponse = {
         data: {
           cores: [
@@ -214,22 +215,22 @@ describe('DeploymentApiService', () => {
           end: 2
         }
       };
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2';
         expect(connection.request.url).toEqual(expectedUrl);
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
         connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
       });
-      svc.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
+      this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
         .subscribe((data: MultiTimeseriesData): void => {
           expect(data).toEqual(httpResponse.data);
           done();
         });
     });
 
-    it('should report errors', (done: DoneFn) => {
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+    it('should report errors', function(this: TestContext, done: DoneFn): void {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2';
         expect(connection.request.url).toEqual(expectedUrl);
@@ -241,12 +242,12 @@ describe('DeploymentApiService', () => {
         })) as Response & Error);
       });
 
-      svc.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
+      this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
       .subscribe(
         (resp) => done.fail('should throw error'),
         () => {
-          expect(mockErrorHandler.handleError).toHaveBeenCalled();
-          expect(mockLogger.error).toHaveBeenCalled();
+          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+          expect(TestBed.get(Logger).error).toHaveBeenCalled();
           done();
         }
       );
@@ -254,7 +255,7 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#getLatestTimeseriesData', () => {
-    it('should return result', (done: DoneFn): void => {
+    it('should return result', function(this: TestContext, done: DoneFn): void {
       const httpResponse = {
         data: {
           attributes: {
@@ -273,22 +274,22 @@ describe('DeploymentApiService', () => {
           }
         }
       };
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats';
         expect(connection.request.url).toEqual(expectedUrl);
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
         connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
       });
-      svc.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
+      this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
         .subscribe((data: TimeseriesData): void => {
           expect(data).toEqual(httpResponse.data.attributes);
           done();
         });
     });
 
-    it('should report errors', (done: DoneFn) => {
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+    it('should report errors', function(this: TestContext, done: DoneFn): void {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Get);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats';
         expect(connection.request.url).toEqual(expectedUrl);
@@ -300,12 +301,12 @@ describe('DeploymentApiService', () => {
         })) as Response & Error);
       });
 
-      svc.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
+      this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
       .subscribe(
         (resp) => done.fail('should throw error'),
         () => {
-          expect(mockErrorHandler.handleError).toHaveBeenCalled();
-          expect(mockLogger.error).toHaveBeenCalled();
+          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+          expect(TestBed.get(Logger).error).toHaveBeenCalled();
           done();
         }
       );
@@ -313,23 +314,23 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#deleteDeployment', () => {
-    it('should return response', (done: DoneFn): void => {
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+    it('should return response', function(this: TestContext, done: DoneFn): void {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Delete);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env';
         expect(connection.request.url).toEqual(expectedUrl);
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
         connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
       });
-      svc.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
+      this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
         .subscribe((resp: Response): void => {
           expect(resp.status).toEqual(200);
           done();
         });
     });
 
-    it('should report errors', (done: DoneFn) => {
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+    it('should report errors', function(this: TestContext, done: DoneFn): void {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Delete);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env';
         expect(connection.request.url).toEqual(expectedUrl);
@@ -341,12 +342,12 @@ describe('DeploymentApiService', () => {
         })) as Response & Error);
       });
 
-      svc.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
+      this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
       .subscribe(
         (resp) => done.fail('should throw error'),
         () => {
-          expect(mockErrorHandler.handleError).toHaveBeenCalled();
-          expect(mockLogger.error).toHaveBeenCalled();
+          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+          expect(TestBed.get(Logger).error).toHaveBeenCalled();
           done();
         }
       );
@@ -354,23 +355,23 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#scalePods', () => {
-    it('should return response', (done: DoneFn): void => {
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+    it('should return response', function(this: TestContext, done: DoneFn): void {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Put);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5';
         expect(connection.request.url).toEqual(expectedUrl);
         expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
         connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
       });
-      svc.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
+      this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
         .subscribe((resp: Response): void => {
           expect(resp.status).toEqual(200);
           done();
         });
     });
 
-    it('should report errors', (done: DoneFn) => {
-      mockBackend.connections.first().subscribe((connection: MockConnection): void => {
+    it('should report errors', function(this: TestContext, done: DoneFn): void {
+      this.backend.connections.first().subscribe((connection: MockConnection): void => {
         expect(connection.request.method).toEqual(RequestMethod.Put);
         const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5';
         expect(connection.request.url).toEqual(expectedUrl);
@@ -382,12 +383,12 @@ describe('DeploymentApiService', () => {
         })) as Response & Error);
       });
 
-      svc.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
+      this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
       .subscribe(
         (resp) => done.fail('should throw error'),
         () => {
-          expect(mockErrorHandler.handleError).toHaveBeenCalled();
-          expect(mockLogger.error).toHaveBeenCalled();
+          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+          expect(TestBed.get(Logger).error).toHaveBeenCalled();
           done();
         }
       );

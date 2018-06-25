@@ -41,6 +41,8 @@ export FABRIC8_AUTH_API_URL=https://auth.prod-preview.openshift.io/api/
 
 export FABRIC8_FORGE_API_URL="https://forge.api.prod-preview.openshift.io"
 
+export FABRIC8_JENKINS_API_URL="https://jenkins.api.prod-preview.openshift.io"
+
 # Below variables have to be set explicitly during development
 export ANALYTICS_RECOMMENDER_URL=""
 export ANALYTICS_LICENSE_URL=""
@@ -72,4 +74,5 @@ echo "WS_K8S_API_SERVER              ${WS_K8S_API_SERVER}"
 echo "BRANDING                       ${BRANDING}"
 echo "ANALYTICS_RECOMMENDER_URL     ${ANALYTICS_RECOMMENDER_URL}"
 echo "ANALYTICS_LICENSE_URL         ${ANALYTICS_LICENSE_URL}"
+echo "FABRIC8_JENKINS_API_URL        ${FABRIC8_JENKINS_API_URL}"
 echo ""

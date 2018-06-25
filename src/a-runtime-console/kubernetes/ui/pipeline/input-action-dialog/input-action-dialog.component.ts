@@ -1,9 +1,10 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Headers, Http, RequestOptions } from '@angular/http';
 import { AuthenticationService } from 'ngx-login-client';
+import { Observable, Subscription } from 'rxjs';
 
+import { JenkinsService } from '../../../../../app/shared/jenkins.service';
 import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
-
 import { OnLogin } from '../../../../shared/onlogin.service';
 import { Build, PendingInputAction } from '../../../model/build.model';
 import { PipelineStage } from '../../../model/pipelinestage.model';
@@ -14,17 +15,26 @@ import { pathJoin } from '../../../model/utils';
   templateUrl: './input-action-dialog.component.html',
   styleUrls: ['./input-action-dialog.component.less']
 })
-export class InputActionDialog {
+export class InputActionDialog implements OnDestroy {
   build: Build = new Build();
   stage: PipelineStage = null;
   inputAction: PendingInputAction = new PendingInputAction();
 
   @ViewChild('inputModal') modal: any;
 
+  private _jenkinsSubscription: Subscription;
+  private _jenkinsTimerSubscription: Subscription;
+  private jenkinsStatus: any;
+
   constructor(private http: Http,
               private authService: AuthenticationService,
+              private jenkinsService: JenkinsService,
               @Inject(FABRIC8_FORGE_API_URL) private forgeApiUrl: string
   ) {
+  }
+
+  ngOnDestroy() {
+    this.unsubscribeJenkinsSubscription();
   }
 
   get messageLines(): string[] {
@@ -33,6 +43,7 @@ export class InputActionDialog {
   }
 
   open() {
+    this.checkJenkinsStatus();
     console.log('opening the dialog for ' + this.build.name + ' on modal ' + this.modal);
     this.modal.open();
   }
@@ -83,5 +94,36 @@ export class InputActionDialog {
 
   close() {
     this.modal.close();
+  }
+
+  checkJenkinsStatus() {
+    this.jenkinsStatus = false;
+    this.unsubscribeJenkinsSubscription();
+    this._jenkinsTimerSubscription = Observable.timer(0, 20000).subscribe(t => {
+      // stop polling after 6 minutes
+      if (t <= 17) {
+      this._jenkinsSubscription = this.jenkinsService.getJenkinsStatus()
+      .subscribe(status => {
+          if (status && status.data && status.data.state === 'running') {
+            this.jenkinsStatus = true;
+            this.unsubscribeJenkinsSubscription();
+          } else {
+            this.jenkinsStatus = false;
+          }
+      });
+    } else {
+      this.unsubscribeJenkinsSubscription();
+    }
+
+    });
+  }
+
+  unsubscribeJenkinsSubscription() {
+    if (this._jenkinsSubscription) {
+      this._jenkinsSubscription.unsubscribe();
+    }
+    if (this._jenkinsTimerSubscription) {
+      this._jenkinsTimerSubscription.unsubscribe();
+    }
   }
 }

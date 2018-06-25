@@ -28,9 +28,7 @@ class FakeResourceCardComponent {
 describe('DeploymentsResourceUsageComponent', () => {
   type Context = TestContext<DeploymentsResourceUsageComponent, HostComponent>;
 
-  let spaceIdObservable: Observable<string> = Observable.of('spaceId');
-  let mockEnvironmentData: string[] = ['envId1', 'envId2'];
-  let mockEnvironments: Observable<string[]> = Observable.of(mockEnvironmentData);
+  const mockEnvironmentData: string[] = ['envId1', 'envId2'];
 
   initContext(DeploymentsResourceUsageComponent, HostComponent,
     {
@@ -38,8 +36,8 @@ describe('DeploymentsResourceUsageComponent', () => {
       declarations: [FakeResourceCardComponent]
     },
     (component: DeploymentsResourceUsageComponent) => {
-      component.environments = mockEnvironments;
-      component.spaceId = spaceIdObservable;
+      component.environments = Observable.of(mockEnvironmentData);
+      component.spaceId = Observable.of('spaceId');
     }
   );
 

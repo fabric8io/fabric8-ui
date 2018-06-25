@@ -6,6 +6,7 @@ import {
   NO_ERRORS_SCHEMA,
   Output
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Broadcaster } from 'ngx-base';
@@ -35,39 +36,25 @@ class FakeDeploymentCardContainerComponent {
   @Input() environments: Observable<string[]>;
 }
 
-@Component({
-  selector: 'deployments-toolbar',
-  template: ''
-})
-class FakeDeploymentsToolbarComponent {
-  @Output('onFilterChange') onFilterChange: EventEmitter<FilterEvent> = new EventEmitter<FilterEvent>();
-  @Output('onSortChange') onSortChange: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
-  @Input() resultsCount: number;
-}
-
 describe('DeploymentsAppsComponent', () => {
-  let mockBroadcaster: jasmine.SpyObj<Broadcaster> = jasmine.createSpyObj('Broadcaster', ['broadcast']);
-
   type Context = TestContext<DeploymentsAppsComponent, HostComponent>;
 
   const environments: string[] = ['envId1', 'envId2'];
   const applications: string[] = ['first', 'second'];
-  const spaceId: Observable<string> = Observable.of('spaceId');
-  const spaceName: Observable<string> = Observable.of('spaceName');
   const mockEnvironments: Observable<string[]> = Observable.of(environments);
   const mockApplications: Observable<string[]> = Observable.of(applications);
 
   initContext(DeploymentsAppsComponent, HostComponent,
     {
-      declarations: [FakeDeploymentCardContainerComponent, FakeDeploymentsToolbarComponent],
+      declarations: [FakeDeploymentCardContainerComponent],
       providers: [
-        { provide: Broadcaster, useValue: mockBroadcaster }
+        { provide: Broadcaster, useValue: jasmine.createSpyObj('Broadcaster', ['broadcast']) }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     },
     (component: DeploymentsAppsComponent) => {
-      component.spaceId = spaceId;
-      component.spaceName = spaceName;
+      component.spaceId = Observable.of('spaceId');
+      component.spaceName = Observable.of('spaceName');
       component.environments = mockEnvironments;
       component.applications = mockApplications;
     });
@@ -84,7 +71,7 @@ describe('DeploymentsAppsComponent', () => {
   describe('#showAddAppOverlay', () => {
     it('should delegate to Broadcaster to display the launcher', function(this: Context) {
       this.testedDirective.showAddAppOverlay();
-      expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddAppOverlay', true);
+      expect(TestBed.get(Broadcaster).broadcast).toHaveBeenCalledWith('showAddAppOverlay', true);
     });
   });
 

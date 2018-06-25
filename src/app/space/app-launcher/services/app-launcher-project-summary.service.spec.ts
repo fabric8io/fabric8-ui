@@ -60,7 +60,7 @@ describe('Service: AppLauncherProjectSummaryService', () => {
             })
           ));
       });
-      service.setup(summaryData).subscribe((val: any) => {
+      service.setup(summaryData, 3).subscribe((val: any) => {
           expect(val).toBeDefined();
           expect(val.uuid).toEqual('e6daff35-5d93-4c38-965a-6a975cf80be1');
       });

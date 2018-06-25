@@ -1,5 +1,5 @@
 import { LocationStrategy } from '@angular/common';
-import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
@@ -13,6 +13,17 @@ import { Observable } from 'rxjs/Observable';
 import { ContextService } from '../../shared/context.service';
 import { OverviewComponent } from './overview.component';
 
+@Component({
+  selector: 'alm-work-items',
+  template: ''
+})
+class MockWorkItemsComponent { }
+
+@Component({
+  selector: 'alm-spaces',
+  template: ''
+})
+class MockSpacesComponent { }
 
 describe('OverviewComponent', () => {
   let fixture: ComponentFixture<OverviewComponent>;
@@ -61,8 +72,33 @@ describe('OverviewComponent', () => {
     mockSpaceService.getSpacesByUser.and.returnValue(Observable.of([mockSpace]));
 
     TestBed.configureTestingModule({
-      imports: [RouterModule],
-      declarations: [OverviewComponent],
+      imports: [
+        RouterModule.forRoot([
+          {
+            path: '',
+            component: OverviewComponent,
+            children: [
+              {
+                path: '',
+                redirectTo: '_workitems'
+              },
+              {
+                path: '_workitems',
+                component: MockWorkItemsComponent
+              },
+              {
+                path: '_spaces',
+                component: MockSpacesComponent
+              }
+            ]
+          }
+        ])
+      ],
+      declarations: [
+        OverviewComponent,
+        MockWorkItemsComponent,
+        MockSpacesComponent
+      ],
       providers: [
         { provide: Contexts, useValue: mockContexts },
         { provide: SpaceService, useValue: mockSpaceService },

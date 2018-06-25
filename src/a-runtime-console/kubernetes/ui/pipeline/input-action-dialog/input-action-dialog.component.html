@@ -4,18 +4,31 @@
   </modal-header>
 
   <modal-content>
-    <div class="input-action-message-panel">
-      <div *ngFor="let message of messageLines" class="input-action-message">
-        <p>{{message}}</p>
+    <ng-container *ngIf="this.jenkinsStatus; else jenkinsIdled">
+      <div class="input-action-message-panel">
+        <div *ngFor="let message of messageLines" class="input-action-message">
+          <p>{{message}}</p>
+        </div>
       </div>
-    </div>
-    <div *ngIf="build.lastPipelineStageWithService" class="test-service-panel text-center">
-      <a [href]="build.lastPipelineStageWithService.serviceUrl" target="test"
-         title="Open a browser on the running the {{build.buildConfigName}} application in the {{build.lastPipelineStageWithService.environmentName}} environment">
-        View application on {{build.lastPipelineStageWithService.environmentName}} &nbsp;
-        <i class="fa fa-external-link" aria-hidden="true"></i>
-      </a>
-    </div>
+      <div *ngIf="build.lastPipelineStageWithService" class="test-service-panel text-center">
+        <a [href]="build.lastPipelineStageWithService.serviceUrl" target="test"
+          title="Open a browser on the running the {{build.buildConfigName}} application in the {{build.lastPipelineStageWithService.environmentName}} environment">
+          View application on {{build.lastPipelineStageWithService.environmentName}} &nbsp;
+          <i class="fa fa-external-link" aria-hidden="true"></i>
+        </a>
+      </div>
+    </ng-container>
+    <ng-template #jenkinsIdled>
+      <div class="jenkins-idled-refresh row">
+        <div class="col-sm-1">
+          <span class="fa fa-refresh fa-spin"></span>
+        </div>
+        <div class="col-sm-11">
+          <span>Setting up your Jenkins.</span><br/>
+          <span>This may take few minutes to complete.</span>
+        </div>
+      </div>
+    </ng-template>
   </modal-content>
 
   <modal-footer>
@@ -31,10 +44,10 @@
       Close
     </button>
     <button class="btn btn-danger" type="submit" value="1" (click)="abort()" *ngIf="inputAction.abortUrl"
-            title="Abort this pipeline">
+            [disabled]="!jenkinsStatus" title="Abort this pipeline">
       Abort
     </button>
-    <button class="btn btn-primary" type="submit" value="0" (click)="proceed()"
+    <button class="btn btn-primary" type="submit" value="0" (click)="proceed()" [disabled]="!jenkinsStatus"
             title="Promote this version to the next environment">
       Promote
     </button>

@@ -466,7 +466,7 @@ module.exports = function (options) {
         context: 'src',
         files: '**/*.less',
         lintDirtyModulesOnly: false,
-        failOnError: true,
+        failOnError: false,
         emitErrors: true,
         quiet: false,
       })
