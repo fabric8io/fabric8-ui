@@ -97,16 +97,12 @@ export class DeploymentsService implements OnDestroy {
   }
 
   getEnvironments(spaceId: string): Observable<string[]> {
-    // Note: Sorting and filtering out "test" should ideally be moved to the backend
     return this.getEnvironmentsResponse(spaceId)
       .map((envs: EnvironmentStat[]) => envs || [])
       .map((envs: EnvironmentStat[]) => envs.map((env: EnvironmentStat) => env.attributes))
-      .map((envs: EnvironmentAttributes[]) => envs.sort((a, b) => -1 * a.name.localeCompare(b.name)))
-      .map((envs: EnvironmentAttributes[]) => envs
-        .filter((env: EnvironmentAttributes) => env.name !== 'test')
-        .map((env: EnvironmentAttributes) => env.name)
-      )
-      .distinctUntilChanged((p: string[], q: string[]) => deepEqual(new Set<string>(p), new Set<string>(q)));
+      .map((envs: EnvironmentAttributes[]) => envs.map((env: EnvironmentAttributes) => env.name))
+      .map((envs: string[]): string[] => envs.sort((a: string, b: string): number => b.localeCompare(a)))
+      .distinctUntilChanged(deepEqual);
   }
 
   isApplicationDeployedInEnvironment(spaceId: string, environmentName: string, applicationId: string):
