@@ -1,7 +1,13 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  ViewEncapsulation
+} from '@angular/core';
 
-import { Spaces } from 'ngx-fabric8-wit';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Space,
+  Spaces
+} from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
 
 import { DeploymentStatusService } from './services/deployment-status.service';
 import {
@@ -28,43 +34,21 @@ import {
     { provide: POLL_RATE_TOKEN, useValue: DeploymentsService.DEFAULT_POLL_RATE_MS }
   ]
 })
-export class DeploymentsComponent implements OnDestroy, OnInit {
+export class DeploymentsComponent {
 
   spaceId: Observable<string>;
   spaceName: Observable<string>;
   environments: Observable<string[]>;
   applications: Observable<string[]>;
 
-  private subscriptions: Subscription[] = [];
-
   constructor(
-    private spaces: Spaces,
-    private deploymentsService: DeploymentsService
+    private readonly spaces: Spaces,
+    private readonly deploymentsService: DeploymentsService
   ) {
-    this.spaceId = this.spaces.current.first().map(space => space.id);
-    this.spaceName = this.spaces.current.first().map(space => space.attributes.name);
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((sub: Subscription) => {
-      sub.unsubscribe();
-    });
-  }
-
-  ngOnInit(): void {
-    this.updateResources();
-  }
-
-  private updateResources(): void {
-    this.subscriptions.push(
-      this.spaceId.subscribe(spaceId => {
-        this.environments =
-          this.deploymentsService.getEnvironments(spaceId);
-
-        this.applications =
-          this.deploymentsService.getApplications(spaceId);
-      })
-    );
+    this.spaceId = this.spaces.current.first().map((space: Space): string => space.id);
+    this.spaceName = this.spaces.current.first().map((space: Space): string => space.attributes.name);
+    this.environments = this.spaceId.flatMap((spaceId: string): Observable<string[]> => this.deploymentsService.getEnvironments(spaceId));
+    this.applications = this.spaceId.flatMap((spaceId: string): Observable<string[]> => this.deploymentsService.getApplications(spaceId));
   }
 
 }
