@@ -254,10 +254,13 @@ export class AnalyticService {
       });
     this.broadcaster
       .on('stepIndicatorClicked')
-      .subscribe((id: string) => {
-        this.analytics.track('step indicator clicked', {
-          step: id
-        });
+      .subscribe((data: any) => {
+        this.analytics.track('step indicator clicked', data);
+      });
+    this.broadcaster
+      .on('stepIndicatorProjectInputClicked')
+      .subscribe((data: any) => {
+        this.analytics.track('step indicator project name clicked');
       });
   }
 
