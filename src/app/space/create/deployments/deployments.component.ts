@@ -17,6 +17,13 @@ import {
   TIMESERIES_SAMPLES_TOKEN
 } from './services/deployments.service';
 
+export function timerFactory(): Observable<void> {
+  return Observable
+    .timer(DeploymentsService.DEFAULT_INITIAL_UPDATE_DELAY, DeploymentsService.DEFAULT_POLL_RATE_MS)
+    .map((unused: number): void => null)
+    .share();
+}
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-apps',
@@ -25,11 +32,7 @@ import {
   providers: [
     DeploymentStatusService,
     DeploymentsService,
-    {
-      provide: TIMER_TOKEN, useValue: Observable
-        .timer(DeploymentsService.DEFAULT_INITIAL_UPDATE_DELAY, DeploymentsService.DEFAULT_POLL_RATE_MS)
-        .share()
-    },
+    { provide: TIMER_TOKEN, useFactory: timerFactory },
     { provide: TIMESERIES_SAMPLES_TOKEN, useValue: DeploymentsService.DEFAULT_FRONT_LOAD_SAMPLES },
     { provide: POLL_RATE_TOKEN, useValue: DeploymentsService.DEFAULT_POLL_RATE_MS }
   ]
