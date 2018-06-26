@@ -152,15 +152,11 @@ describe('DeploymentsService', () => {
   });
 
   describe('#getEnvironments', () => {
-    it('should publish faked, filtered and sorted environments', function(this: TestContext, done: DoneFn): void {
+    it('should sort environments', function(this: TestContext, done: DoneFn): void {
       this.apiService.getEnvironments.and.returnValue(Observable.of([
         {
           attributes: {
             name: 'run'
-          }
-        }, {
-          attributes: {
-            name: 'test'
           }
         }, {
           attributes: {
@@ -173,6 +169,36 @@ describe('DeploymentsService', () => {
           expect(environments).toEqual(['stage', 'run']);
           done();
         });
+      this.timer.next();
+    });
+
+    it('should only emit on change', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(Observable.of([
+        {
+          attributes: {
+            name: 'run'
+          }
+        }, {
+          attributes: {
+            name: 'stage'
+          }
+        }
+      ]));
+      let callCount: number = 0;
+      this.service.getEnvironments('foo-spaceId')
+        .takeUntil(Observable.timer(1000))
+        .subscribe(
+          (environments: string[]): void => {
+            expect(environments).toEqual(['stage', 'run']);
+            callCount++;
+            if (callCount > 1) {
+              return done.fail('should only have been called once');
+            }
+            this.timer.next();
+          },
+          err => done.fail(err),
+          () => done()
+        );
       this.timer.next();
     });
 
