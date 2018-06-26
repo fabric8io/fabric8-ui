@@ -2,8 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { Observable } from 'rxjs';
-
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
