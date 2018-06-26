@@ -37,18 +37,18 @@ describe('DeleteDeploymentModal', (): void => {
     expect(this.testedDirective).toBeTruthy();
   });
 
-  describe('#openModal', (): void => {
+  describe('#show', (): void => {
     it('should call host.show()', function(this: TestingContext): void {
       expect(this.testedDirective.host.show).not.toHaveBeenCalled();
-      this.testedDirective.openModal();
+      this.testedDirective.show();
       expect(this.testedDirective.host.show).toHaveBeenCalled();
     });
   });
 
-  describe('#closeModal', (): void => {
+  describe('#hide', (): void => {
     it('should call host.hide()', function(this: TestingContext): void {
       expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-      this.testedDirective.closeModal();
+      this.testedDirective.hide();
       expect(this.testedDirective.host.hide).toHaveBeenCalled();
     });
   });

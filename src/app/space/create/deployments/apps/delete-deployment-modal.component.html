@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title pull-left">Delete Deployment</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeModal()">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="hide()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -12,7 +12,7 @@
           deployment from the <span class="environment-name">{{ environmentName }}</span> environment?</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" (click)="closeModal()">Cancel</button>
+        <button class="btn btn-default" (click)="hide()">Cancel</button>
         <button class="btn btn-danger" (click)="confirmDeletion()">Delete</button>
       </div>
     </div>

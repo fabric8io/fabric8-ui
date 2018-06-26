@@ -160,7 +160,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   openModal(): void {
-    this.deleteDeploymentModal.openModal();
+    this.deleteDeploymentModal.show();
   }
 
   delete(): void {

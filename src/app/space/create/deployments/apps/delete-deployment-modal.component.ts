@@ -18,16 +18,16 @@ export class DeleteDeploymentModal {
 
   @ViewChild('modal') host: ModalDirective;
 
-  openModal(): void {
+  show(): void {
     this.host.show();
   }
 
-  closeModal(): void {
+  hide(): void {
     this.host.hide();
   }
 
   confirmDeletion(): void {
     this.deleteEvent.emit();
-    this.host.hide();
+    this.hide();
   }
 }
