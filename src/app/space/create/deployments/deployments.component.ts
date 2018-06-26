@@ -39,10 +39,10 @@ export function timerFactory(): Observable<void> {
 })
 export class DeploymentsComponent {
 
-  spaceId: Observable<string>;
-  spaceName: Observable<string>;
-  environments: Observable<string[]>;
-  applications: Observable<string[]>;
+  readonly spaceId: Observable<string>;
+  readonly spaceName: Observable<string>;
+  readonly environments: Observable<string[]>;
+  readonly applications: Observable<string[]>;
 
   constructor(
     private readonly spaces: Spaces,
