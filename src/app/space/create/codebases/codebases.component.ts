@@ -167,12 +167,6 @@ export class CodebasesComponent implements OnDestroy, OnInit {
 
     if (filter.field.id === 'name') {
       match = codebase.name.match(filter.value) !== null;
-    } else if (filter.field.id === 'createdAt') {
-      let date = this.datePipe.transform(codebase.gitHubRepo.createdAt, 'medium');
-      match = date.match(filter.value) !== null;
-    } else if (filter.field.id === 'pushedAt') {
-      let date = this.datePipe.transform(codebase.gitHubRepo.pushedAt, 'medium');
-      match = date.match(filter.value) !== null;
     }
     return match;
   }

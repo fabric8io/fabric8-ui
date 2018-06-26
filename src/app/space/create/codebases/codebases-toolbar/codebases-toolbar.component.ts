@@ -53,16 +53,6 @@ export class CodebasesToolbarComponent implements OnChanges, OnInit {
         title: 'Name',
         placeholder: 'Filter by Name...',
         type: 'text'
-      }, {
-        id: 'createdAt',
-        title: 'Created Date',
-        placeholder: 'Filter by Created Date...',
-        type: 'text'
-      }, {
-        id: 'pushedAt',
-        title: 'Last Commit',
-        placeholder: 'Filter by Last Commit Date...',
-        type: 'text'
       }] as FilterField[],
       appliedFilters: [],
       resultsCount: 0,
