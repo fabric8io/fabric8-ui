@@ -145,7 +145,8 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   matchesFilter(space: Space, filter: Filter): boolean {
     let match = true;
     if (filter.field.id === 'name') {
-      match = space.attributes.name.match(filter.value) !== null;
+      let re = new RegExp(filter.value, 'i');
+      match = space.attributes.name.match(re) !== null;
     }
     return match;
   }
