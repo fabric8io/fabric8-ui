@@ -94,6 +94,10 @@ export class AddAppOverlayComponent implements OnDestroy {
    * Helper to route to create/import app
    */
   routeToLaunchApp(): void {
+    this.broadcaster.broadcast('clickContinueAppOverlay', {
+      appName: this.projectName,
+      flow: this.selectedFlow
+    });
     this.router.navigate(['/',
       this.loggedInUser.attributes.username, this.currentSpace.attributes.name,
       'applauncher', this.selectedFlow, this.projectName]);

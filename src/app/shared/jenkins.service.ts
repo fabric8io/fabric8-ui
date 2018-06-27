@@ -23,7 +23,7 @@ export class JenkinsService {
    */
     getJenkinsStatus(): Observable<any> {
         let jenkinsUrl = this.jenkinsApiUrl;
-        let url = jenkinsUrl + '/api/jenkins/start/';
+        let url = jenkinsUrl + '/api/jenkins/start';
         let token = this.authService.getToken();
         console.log('about to invoke ' + url);
         let options = new RequestOptions();
