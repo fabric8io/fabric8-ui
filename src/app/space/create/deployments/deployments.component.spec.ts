@@ -1,14 +1,11 @@
 import {
   Component,
-  Input,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
 import {
   async,
-  ComponentFixture,
   TestBed
 } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { Spaces } from 'ngx-fabric8-wit';
@@ -19,27 +16,9 @@ import {
   initContext,
   TestContext
 } from 'testing/test-context';
+
 import { DeploymentsComponent } from './deployments.component';
 import { DeploymentsService } from './services/deployments.service';
-
-@Component({
-  selector: 'deployments-resource-usage',
-  template: ''
-})
-class FakeDeploymentsResourceUsageComponent {
-  @Input() spaceId: Observable<string>;
-  @Input() environments: Observable<string[]>;
-}
-
-@Component({
-  selector: 'deployments-apps',
-  template: ''
-})
-class FakeDeploymentAppsComponent {
-  @Input() spaceId: Observable<string>;
-  @Input() environments: Observable<string[]>;
-  @Input() applications: Observable<string[]>;
-}
 
 @Component({
   template: '<alm-apps></alm-apps>'
@@ -47,66 +26,44 @@ class FakeDeploymentAppsComponent {
 class HostComponent { }
 
 describe('DeploymentsComponent', () => {
-  type Context = TestContext<DeploymentsComponent, HostComponent>;
+  type Context = TestContext<DeploymentsComponent, HostComponent> & {
+    service: jasmine.SpyObj<DeploymentsService>;
+  };
 
-  let component: DeploymentsComponent;
-  let fixture: ComponentFixture<DeploymentsComponent>;
-
-  let mockSvc: jasmine.SpyObj<DeploymentsService>;
-  let spaces = { current: Observable.of({ id: 'fake-spaceId' }) };
-  let mockApplications = Observable.of(['foo-app', 'bar-app']);
-  let mockEnvironments = Observable.of(['stage', 'prod']);
-
-  beforeAll(() => {
-    mockSvc = createMock(DeploymentsService);
-    mockSvc.getApplications.and.returnValue(mockApplications);
-    mockSvc.getEnvironments.and.returnValue(mockEnvironments);
-    mockSvc.ngOnDestroy.and.callThrough();
-  });
-
-  beforeEach(async(() => {
-    TestBed.overrideProvider(DeploymentsService, { useFactory: () => mockSvc, deps: [] });
+  beforeEach(async(function(this: Context): void {
+    this.service = createMock(DeploymentsService);
+    this.service.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
+    this.service.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
+    this.service.ngOnDestroy.and.callThrough();
+    TestBed.overrideProvider(DeploymentsService, { useValue: this.service });
   }));
 
   initContext(DeploymentsComponent, HostComponent, {
     imports: [CollapseModule.forRoot()],
-    declarations: [
-      FakeDeploymentAppsComponent,
-      FakeDeploymentsResourceUsageComponent
-    ],
     providers: [
-      { provide: Spaces, useValue: spaces }
+      {
+        provide: Spaces, useValue: (
+          { current: Observable.of({ id: 'fake-spaceId' }) }
+        )
+      }
     ],
     schemas: [NO_ERRORS_SCHEMA]
   });
 
   it('should set service result to applications property', function(this: Context, done: DoneFn) {
-    expect(mockSvc.getApplications).toHaveBeenCalledWith('fake-spaceId');
     this.testedDirective.applications.subscribe(applications => {
+      expect(this.service.getApplications).toHaveBeenCalledWith('fake-spaceId');
       expect(applications).toEqual(['foo-app', 'bar-app']);
       done();
     });
   });
 
   it('should set service result to environments property', function(this: Context, done: DoneFn) {
-    expect(mockSvc.getEnvironments).toHaveBeenCalledWith('fake-spaceId');
     this.testedDirective.environments.subscribe(environments => {
+      expect(this.service.getEnvironments).toHaveBeenCalledWith('fake-spaceId');
       expect(environments).toEqual(['stage', 'prod']);
       done();
     });
-  });
-
-  it('should pass values to children resource usage components', function(this: Context) {
-    let resourceUsageComponents = this.tested.queryAll(By.directive(FakeDeploymentsResourceUsageComponent));
-    expect(resourceUsageComponents.length).toEqual(1);
-    let resourceUsageComponent = resourceUsageComponents[0].componentInstance;
-    expect(resourceUsageComponent.environments).toBe(mockEnvironments);
-
-    let appsComponents = this.tested.queryAll(By.directive(FakeDeploymentAppsComponent));
-    expect(appsComponents.length).toEqual(1);
-    let appsComponent = appsComponents[0].componentInstance;
-    expect(appsComponent.environments).toBe(mockEnvironments);
-    expect(appsComponent.applications).toBe(mockApplications);
   });
 
 });

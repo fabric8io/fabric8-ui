@@ -26,11 +26,9 @@ export class AnalyticService {
     private notificationsService: NotificationsService,
     private spaces: Spaces
   ) {
-    if ('production' === ENV) {
-        if (this.fabric8UIConfig.analyticsWriteKey) {
-          this.initialize(this.fabric8UIConfig.analyticsWriteKey);
-          this.track();
-        }
+    if (this.fabric8UIConfig.analyticsWriteKey) {
+      this.initialize(this.fabric8UIConfig.analyticsWriteKey);
+      this.track();
     }
   }
 
@@ -105,6 +103,9 @@ export class AnalyticService {
     this.broadcaster
       .on('item_filter')
       .subscribe(val => this.analytics.track('add filter', JSON.stringify(val)));
+
+    // App Launcher
+    this.activateLauncherEventListeners();
   }
 
   private initialize(apiWriteKey: string) {
@@ -171,6 +172,96 @@ export class AnalyticService {
     this.analytics.
       identify(
       user.id, traits);
+  }
+
+  private activateLauncherEventListeners(): void {
+    this.broadcaster
+      .on('showAddAppOverlay')
+      .subscribe((val) => {
+        if (val === true) {
+          this.analytics.track('add app opened');
+        } else {
+          this.analytics.track('add app closed');
+        }
+      });
+    this.broadcaster
+      .on('clickContinueAppOverlay')
+      .subscribe((data) => {
+        this.analytics.track('click continue app overlay', data);
+      });
+    this.broadcaster
+      .on('showCreateApp')
+      .subscribe((val) => {
+        if (val === true) {
+          this.analytics.track('create app opened');
+        } else {
+          this.analytics.track('create app closed');
+        }
+      });
+    this.broadcaster
+      .on('showImportApp')
+      .subscribe((val) => {
+        if (val === true) {
+          this.analytics.track('import app opened');
+        } else {
+          this.analytics.track('import app closed');
+        }
+      });
+    this.broadcaster
+      .on('completeMissionRuntimeStep')
+      .subscribe((data: any) => {
+        this.analytics.track('mission runtime completed', data);
+      });
+    this.broadcaster
+      .on('completeDependencyEditorStep')
+      .subscribe((data: any) => {
+        this.analytics.track('dependency editor completed', data);
+      });
+    this.broadcaster
+      .on('completePipelineStep_Create')
+      .subscribe((data: any) => {
+        this.analytics.track('pipeline completed in create', data);
+      });
+    this.broadcaster
+      .on('completeGitProviderStep_Create')
+      .subscribe((data: any) => {
+        this.analytics.track('git provider completed in create', data);
+      });
+    this.broadcaster
+      .on('completeSummaryStep_Create')
+      .subscribe((data: any) => {
+        this.analytics.track('summary completed in create', data);
+      });
+    this.broadcaster
+      .on('completePipelineStep_Import')
+      .subscribe((data: any) => {
+        this.analytics.track('pipeline completed in import', data);
+      });
+    this.broadcaster
+      .on('completeGitProviderStep_Import')
+      .subscribe((data: any) => {
+        this.analytics.track('git provider completed in import', data);
+      });
+    this.broadcaster
+      .on('completeSummaryStep_Import')
+      .subscribe((data: any) => {
+        this.analytics.track('summary completed in import', data);
+      });
+    this.broadcaster
+      .on('viewApplicationButtonClicked')
+      .subscribe(() => {
+        this.analytics.track('view application button clicked');
+      });
+    this.broadcaster
+      .on('stepIndicatorClicked')
+      .subscribe((data: any) => {
+        this.analytics.track('step indicator clicked', data);
+      });
+    this.broadcaster
+      .on('stepIndicatorProjectInputClicked')
+      .subscribe((data: any) => {
+        this.analytics.track('step indicator project name clicked');
+      });
   }
 
 }
