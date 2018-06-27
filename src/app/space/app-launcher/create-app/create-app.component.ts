@@ -7,6 +7,7 @@ import {
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { Broadcaster } from 'ngx-base';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 
@@ -25,7 +26,8 @@ export class CreateAppComponent implements OnDestroy, OnInit {
 
   constructor(private context: ContextService,
               private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              private broadcaster: Broadcaster) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
     }));
@@ -41,6 +43,7 @@ export class CreateAppComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.broadcaster.broadcast('showCreateApp', true);
   }
 
   /**
@@ -48,6 +51,7 @@ export class CreateAppComponent implements OnDestroy, OnInit {
    */
   cancel($event: any): void {
     this.router.navigate(['/', this.loggedInUser.attributes.username, this.currentSpace.attributes.name]);
+    this.broadcaster.broadcast('showCreateApp', false);
   }
 
   /**

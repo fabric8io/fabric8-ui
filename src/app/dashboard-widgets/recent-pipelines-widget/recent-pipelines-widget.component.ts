@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Rx';
 import { BuildConfigs } from '../../../a-runtime-console/index';
-
+import { ContextService } from '../../shared/context.service';
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
 
 @Component({
@@ -24,20 +23,13 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private context: Contexts,
-    private pipelinesService: PipelinesService
+    private pipelinesService: PipelinesService,
+    private contextService: ContextService
   ) { }
 
   ngOnInit() {
     // these values changing asynchronously triggers changes in the DOM;
     // force Angular Change Detection via setTimeout encapsulation
-    this.subscriptions.push(this.context.current.subscribe(
-      (ctx: Context) => {
-        setTimeout(() => {
-          this.contextPath = ctx.path;
-        });
-      }));
-
     this.subscriptions.push(this.pipelinesService.getRecentPipelines().share().subscribe(
       (configs: BuildConfigs) => {
         setTimeout(() => {
@@ -47,6 +39,7 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
         });
       }
     ));
+    this.contextPath = this.contextService.currentUser;
   }
 
   ngOnDestroy() {
