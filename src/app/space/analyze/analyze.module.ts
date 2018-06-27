@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 
 import { AnalyzeRoutingModule } from './analyze-routing.module';
 import { AnalyzeComponent } from './analyze.component';

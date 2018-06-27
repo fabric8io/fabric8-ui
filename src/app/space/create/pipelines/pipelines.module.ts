@@ -8,8 +8,8 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { PipelineModule } from '../../../../a-runtime-console/index';
-import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
 import { PipelinesRoutingModule } from './pipelines-routing.module';
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesService } from './services/pipelines.service';

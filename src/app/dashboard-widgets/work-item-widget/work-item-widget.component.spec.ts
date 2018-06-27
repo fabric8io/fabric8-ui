@@ -8,9 +8,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Contexts } from 'ngx-fabric8-wit';
 
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
-import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
-import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 

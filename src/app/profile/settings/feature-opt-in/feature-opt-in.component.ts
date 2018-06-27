@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
 import { ListComponent, ListConfig } from 'patternfly-ng';
 import { Subscription } from 'rxjs';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
-import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 

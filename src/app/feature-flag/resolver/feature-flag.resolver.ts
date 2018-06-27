@@ -6,10 +6,9 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { Logger } from 'ngx-base';
+import { Feature, FeatureFlagConfig, FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-import { FeatureFlagConfig } from '../../../app/models/feature-flag-config';
-import { Feature, FeatureTogglesService } from '../service/feature-toggles.service';
 
 enum FeatureLevel {
   internal = 'internal',

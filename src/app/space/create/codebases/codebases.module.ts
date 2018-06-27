@@ -9,7 +9,7 @@ import { ActionModule } from 'patternfly-ng/action';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
 import { ListModule } from 'patternfly-ng/list';
 
-import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { CodebaseDeleteDialogModule } from './codebases-delete/codebase-delete-dialog.module';
 import { CodebasesItemActionsModule } from './codebases-item-actions/codebases-item-actions.module';
 import { CodebasesItemDetailsModule } from './codebases-item-details/codebases-item-details.module';

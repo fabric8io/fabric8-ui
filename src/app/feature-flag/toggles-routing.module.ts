@@ -1,6 +1,6 @@
 import { NgModule }  from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FeatureFlagHomeComponent } from './home/feature-flag-home.component';
+import { FeatureFlagHomeComponent } from 'ngx-feature-flag';
 
 const routes: Routes = [
   {
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [ RouterModule.forChild(routes) ],
   exports: [ RouterModule ]
 })
-export class FeatureFlagRoutingModule {}
+export class TogglesRoutingModule {}

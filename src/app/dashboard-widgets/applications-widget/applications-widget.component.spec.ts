@@ -20,8 +20,8 @@ import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/load
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 import { ApplicationsWidgetComponent } from './applications-widget.component';
 
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { FeatureToggleComponent } from '../../feature-flag/feature-wrapper/feature-toggle.component';
-import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 
 @Component({
   selector: 'fabric8-applications-list',

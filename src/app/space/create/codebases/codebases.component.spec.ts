@@ -47,7 +47,7 @@ import {
 } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
-import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { ProviderService } from '../../../shared/account/provider.service';
 import { Che } from './services/che';
