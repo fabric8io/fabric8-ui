@@ -18,7 +18,7 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
   contextPath: string;
   buildConfigs: BuildConfigs;
   buildConfigsCount: number;
-  loading: boolean = true;
+  loading: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -32,6 +32,7 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
     // force Angular Change Detection via setTimeout encapsulation
     this.subscriptions.push(this.pipelinesService.getRecentPipelines().share().subscribe(
       (configs: BuildConfigs) => {
+        this.loading = true;
         setTimeout(() => {
           this.buildConfigsCount = configs.length;
           this.buildConfigs = configs;
