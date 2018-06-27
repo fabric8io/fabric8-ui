@@ -37,12 +37,36 @@
               </div>
             </ng-template>
             <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                <span class="ng-value-label"><img [src]="item.attributes.imageURL" width="20px" height="20px"> {{item.attributes.fullName}}</span>
+                <span *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); then showImageUrl else defaultImageUrl"></span>
+                <ng-template #showImageUrl>
+                  <span class="ng-value-label">
+                    <img [src]="item.attributes.imageURL" class="icon-user" width="20px" height="20px">
+                    {{item.attributes.fullName}} ({{item.attributes.username}})
+                  </span>
+                </ng-template>
+                <ng-template #defaultImageUrl>
+                  <span class="ng-value-label">
+                    <img src="../../../../../assets/images/profile-user.png" class="icon-user" width="20px" height="20px">
+                    {{item.attributes.fullName}} ({{item.attributes.username}})
+                  </span>
+                </ng-template>
                 <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
             </ng-template>
 
             <ng-template ng-option-tmp let-item="item">
-                <img [src]="item.attributes.imageURL" width="20px" height="20px"> {{item.attributes.fullName}} ({{item.attributes.username}})
+              <span *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); then showImageUrl else defaultImageUrl"></span>
+              <ng-template #showImageUrl>
+                <span class="ng-value-label">
+                  <img [src]="item.attributes.imageURL" class="icon-user" width="20px" height="20px">
+                  {{item.attributes.fullName}} ({{item.attributes.username}})
+                </span>
+              </ng-template>
+              <ng-template #defaultImageUrl>
+                <span class="ng-value-label">
+                  <img src="../../../../../assets/images/profile-user.png" class="icon-user" width="20px" height="20px">
+                  {{item.attributes.fullName}} ({{item.attributes.username}})
+                </span>
+              </ng-template>
             </ng-template>
           </ng-select>
         </div>
