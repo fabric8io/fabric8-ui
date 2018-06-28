@@ -1,7 +1,5 @@
-import { Component, InjectionToken, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { ResourceService, UsageSeverityEnvironmentStat } from '../services/resource.service';
 

@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import {
-  ConnectableObservable,
   Observable
 } from 'rxjs';
 

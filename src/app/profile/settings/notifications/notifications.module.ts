@@ -1,6 +1,5 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http, HttpModule } from '@angular/http';
+import { Http } from '@angular/http';
 
 import { NotificationsRoutingModule } from './notifications-routing.module';
 import { NotificationsComponent } from './notifications.component';

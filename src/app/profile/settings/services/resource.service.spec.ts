@@ -3,7 +3,6 @@ import { ResourceService, UsageSeverityEnvironmentStat } from './resource.servic
 import { User, UserService } from 'ngx-login-client';
 import { createMock } from 'testing/mock';
 
-import { ScaledMemoryStat } from '../../../space/create/deployments/models/scaled-memory-stat';
 import { DeploymentApiService, EnvironmentStat } from '../../../space/create/deployments/services/deployment-api.service';
 
 describe('ResourceService', (): void => {

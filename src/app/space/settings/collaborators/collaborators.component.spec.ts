@@ -22,7 +22,6 @@ import {
 import { User } from 'ngx-login-client';
 import {
   Observable,
-  Subject
 } from 'rxjs';
 
 import { ContextService } from '../../../shared/context.service';

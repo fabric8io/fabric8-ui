@@ -10,9 +10,6 @@ import _ from 'lodash';
 import { Observable } from 'rxjs';
 
 import {
-  Context
-} from 'ngx-fabric8-wit';
-import {
   HelperService,
   ProjectSummaryService,
   Summary,

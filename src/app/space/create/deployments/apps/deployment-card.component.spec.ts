@@ -7,10 +7,7 @@ import {
   Output
 } from '@angular/core';
 import {
-  ComponentFixture,
   fakeAsync,
-  flush,
-  flushMicrotasks,
   TestBed,
   tick
 } from '@angular/core/testing';

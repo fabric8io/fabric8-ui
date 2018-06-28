@@ -1,17 +1,13 @@
 import {
   Component,
   DebugElement,
-  EventEmitter,
   Input,
-  NO_ERRORS_SCHEMA,
-  Output
+  NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Broadcaster } from 'ngx-base';
-import { FilterEvent } from 'patternfly-ng/filter';
-import { SortEvent } from 'patternfly-ng/sort';
 import { Observable } from 'rxjs';
 import {
   initContext,

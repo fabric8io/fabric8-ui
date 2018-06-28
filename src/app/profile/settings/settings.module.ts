@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http, HttpModule } from '@angular/http';
+import { Http } from '@angular/http';
 
 import { DeploymentApiService } from '../../space/create/deployments/services/deployment-api.service';
 import { SettingsRoutingModule } from './settings-routing.module';

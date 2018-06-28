@@ -2,17 +2,15 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
 
 import { LocationStrategy } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Broadcaster } from 'ngx-base';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Subscription } from 'rxjs';
+import { User, UserService } from 'ngx-login-client';
+import { ConnectableObservable } from 'rxjs';
 import { Observable, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {

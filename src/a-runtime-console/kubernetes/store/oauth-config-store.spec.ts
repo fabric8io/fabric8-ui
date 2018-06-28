@@ -1,5 +1,5 @@
 import { ErrorHandler } from '@angular/core';
-import { fakeAsync, inject, TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed } from '@angular/core/testing';
 
 import {
   Http,

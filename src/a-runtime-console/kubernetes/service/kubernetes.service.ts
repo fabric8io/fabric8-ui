@@ -1,13 +1,9 @@
-import { Inject } from '@angular/core';
-
 import { Observable } from 'rxjs';
 
 import { Restangular } from 'ngx-restangular';
 
 import { RESTService } from '../../store/entity/rest.service';
 import { KubernetesResource } from '../model/kubernetesresource.model';
-import { KUBERNETES_RESTANGULAR } from './kubernetes.restangular';
-import { Watcher } from './watcher';
 import { WatcherFactory } from './watcher-factory.service';
 
 export abstract class KubernetesService<T extends KubernetesResource, L extends Array<T>> extends RESTService<T, L> {

@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Restangular } from 'ngx-restangular';
 import { Build, Builds } from '../model/build.model';
-import { pathJoin } from '../model/utils';
 import { APIsStore } from '../store/apis.store';
 import { getOpenShiftBuildUriPrefix } from './buildconfig.service';
 import { DevNamespaceScope } from './devnamespace.scope';

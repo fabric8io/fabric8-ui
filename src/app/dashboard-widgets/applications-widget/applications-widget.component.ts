@@ -16,7 +16,7 @@ import { User, UserService } from 'ngx-login-client';
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 
-import { cloneDeep, isEmpty, orderBy } from 'lodash';
+import { isEmpty, orderBy } from 'lodash';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

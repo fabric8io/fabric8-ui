@@ -57,7 +57,7 @@ export class BuildStageViewComponent implements OnDestroy {
     if (!build) {
       return;
     }
-    let inputAction = build.firstPendingInputAction;
+    let inputAction: PendingInputAction = build.firstPendingInputAction;
     if (isValidInputAction(inputAction) && build.jenkinsNamespace) {
       this.inputActionDialog.build = build;
       this.inputActionDialog.inputAction = inputAction;

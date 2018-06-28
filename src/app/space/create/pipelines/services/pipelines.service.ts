@@ -10,8 +10,7 @@ import {
 } from '@angular/http';
 
 import {
-  Observable,
-  Subscription
+  Observable
 } from 'rxjs';
 
 import {

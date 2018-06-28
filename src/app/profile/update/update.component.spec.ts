@@ -1,4 +1,4 @@
-import { Component, DebugNode, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
+import { DebugNode, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -11,7 +11,6 @@ import { Contexts, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
-import { initContext, TestContext } from '../../../testing/test-context';
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';

@@ -11,7 +11,6 @@ import { FeatureFlagModule } from 'ngx-feature-flag';
 import { PipelineModule } from '../../../../a-runtime-console/index';
 import { PipelinesRoutingModule } from './pipelines-routing.module';
 import { PipelinesComponent } from './pipelines.component';
-import { PipelinesService } from './services/pipelines.service';
 
 
 @NgModule({

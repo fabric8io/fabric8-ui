@@ -1,8 +1,7 @@
 import { ErrorHandler } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
@@ -16,7 +15,7 @@ import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
-import { Application, DeploymentApiService } from '../create/deployments/services/deployment-api.service';
+import { DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
 
 describe('AddAppOverlayComponent', () => {

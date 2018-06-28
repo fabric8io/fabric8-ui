@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Http, HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
+import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 
 import { cloneDeep } from 'lodash';

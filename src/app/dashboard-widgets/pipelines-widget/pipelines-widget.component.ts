@@ -11,15 +11,13 @@ import {
 import { User, UserService } from 'ngx-login-client';
 
 import {
-  Observable,
   Subscription
 } from 'rxjs/Rx';
 
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 
-import { BuildConfig, BuildConfigs } from '../../../a-runtime-console/index';
-import { DummyService } from './../shared/dummy.service';
+import { BuildConfigs } from '../../../a-runtime-console/index';
 
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
 

@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
 import { Broadcaster, Logger } from 'ngx-base';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { Contexts, Fabric8WitModule, Space, SpaceService } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService } from 'ngx-login-client';

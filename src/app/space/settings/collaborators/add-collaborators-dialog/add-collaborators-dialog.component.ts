@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService } from 'ngx-fabric8-wit';
