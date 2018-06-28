@@ -7,6 +7,7 @@ import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { Action } from 'patternfly-ng/action';
 import { Observable } from 'rxjs/Observable';
 
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
@@ -180,6 +181,13 @@ describe('MySpacesComponent', () => {
     });
   });
 
+  describe('#handleCreateSpaceAction', () => {
+    it('should broadcast event when create space is clicked', () => {
+        component.handleAction({ id: 'createSpace'} as Action);
+        expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
+    });
+  });
+
   /**
    * Filter
    */
@@ -283,9 +291,7 @@ describe('MySpacesComponent', () => {
     });
 
     it('should retrieve the user\'s space information and show all spaces', () => {
-      expect(component.showSpaces).toBeFalsy();
       component.initSpaces(mockEvent);
-      expect(component.showSpaces).toBeTruthy();
       expect(component.allSpaces).toEqual([spaceMock1, spaceMock2]);
     });
 
