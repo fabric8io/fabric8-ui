@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import {ErrorHandler, Inject, Injectable, InjectionToken} from '@angular/core';
+import { ErrorHandler, Inject, Injectable, InjectionToken } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';

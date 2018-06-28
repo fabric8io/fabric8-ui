@@ -1,6 +1,6 @@
 {
   "name": "ngx-feature-flag",
-  "version": "0.1.0-development",
+  "version": "0.1.1-development",
   "description": "feature flag component and services for angular applications",
   "main": "index.js",
   "module": "index.js",
@@ -53,9 +53,6 @@
   },
   "dependencies": {
     "lodash": "^4.17.10",
-    "ngx-base": "^2.3.2",
-    "ngx-login-client": "^1.2.0",
-    "ngx-bootstrap": "^2.0.5",
     "patternfly": "^3.30.1",
     "patternfly-ng": "^3.10.3"
   },
@@ -133,6 +130,8 @@
     "less-plugin-autoprefix": "1.5.1",
     "mocha": "3.2.0",
     "npm-run-all": "4.0.2",
+    "ngx-base": "^2.3.2",
+    "ngx-login-client": "^1.2.0",
     "optimize-js-plugin": "0.0.4",
     "phantomjs-prebuilt": "2.1.14",
     "precss": "2.0.0",

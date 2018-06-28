@@ -14,8 +14,7 @@
     "rootDir": ".",
     "paths": {
       "@angular/*": ["node_modules/@angular/*"],
-      "rxjs/*": ["node_modules/rxjs/*"],
-      "fabric8-analytics-dependency-editor": ["node_modules/fabric8-analytics-dependency-editor"]
+      "rxjs/*": ["node_modules/rxjs/*"]
     }
   },
 

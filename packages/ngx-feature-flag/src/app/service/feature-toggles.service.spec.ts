@@ -3,13 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 import { cloneDeep } from 'lodash';
-import { Logger } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
 import { FABRIC8_FEATURE_TOGGLES_API_URL, FeatureTogglesService} from './feature-toggles.service';
 import { Feature } from '../models/feature';
 
 describe('FeatureToggles service:', () => {
-  let mockLog: any;
   let mockAuthService: any;
   let mockErrorHandler: any;
   let mockService: MockBackend;
@@ -39,15 +37,10 @@ describe('FeatureToggles service:', () => {
 
 
   beforeEach(() => {
-    mockLog = jasmine.createSpyObj('Logger', ['log']);
-    mockLog = jasmine.createSpy('ErrorHandler');
     mockAuthService = jasmine.createSpyObj('AuthenticationService', ['getToken']);
     TestBed.configureTestingModule({
       imports: [HttpModule],
       providers: [
-        {
-          provide: Logger, useValue: mockLog
-        },
         {
           provide: XHRBackend, useClass: MockBackend
         },
