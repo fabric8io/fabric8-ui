@@ -1,10 +1,6 @@
 import { Location } from '@angular/common';
 import {ErrorHandler, Inject, Injectable, InjectionToken} from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import {
-  isEqual as deepEqual,
-  sortBy
-} from 'lodash';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 import { Feature } from '../models/feature';
@@ -90,7 +86,8 @@ export class FeatureTogglesService {
    * This method is called by FeatureFlagResolver each time a user changed menu (when the menu
    * contains feature-flag). In this method, the feature flags used for components are cached
    * per page.
-   * @param ids An arrays of feature Id.
+   * @param group An string to represent the logical page grouping of the feature.
+   * For example a feature name Analyze.dashboard, culd be retrieve with group = Analyse.
    * @returns {Observable<Feature>}
    */
   getFeaturesPerPage(group: string): Observable<Feature[]> {

@@ -50,7 +50,7 @@ describe('FeatureContainerComponent', () => {
 
 
   beforeEach(() => {
-    featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
+    featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['getFeatures']);
     featureFlagMappingMock = jasmine.createSpyObj('FeatureFlagMapping', ['convertFeatureNameToComponent']);
 
     TestBed.configureTestingModule({
@@ -73,7 +73,7 @@ describe('FeatureContainerComponent', () => {
 
   it('should render content if toggles is on and user-enabled on', async(() => {
     // given
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.getFeatures.and.returnValue(Observable.of([feature]));
     featureFlagMappingMock.convertFeatureNameToComponent.and.returnValue(MyFeatureCompomentUnderDevComponent);
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
@@ -85,7 +85,7 @@ describe('FeatureContainerComponent', () => {
     // given
     feature.attributes.enabled = false;
     feature.attributes['user-enabled'] = true;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.getFeatures.and.returnValue(Observable.of([feature]));
     featureFlagMappingMock.convertFeatureNameToComponent.and.returnValue(MyFeatureCompomentUnderDevComponent);
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
@@ -97,7 +97,7 @@ describe('FeatureContainerComponent', () => {
     // given
     feature.attributes.enabled = true;
     feature.attributes['user-enabled'] = false;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.getFeatures.and.returnValue(Observable.of([feature]));
     featureFlagMappingMock.convertFeatureNameToComponent.and.returnValue(MyFeatureCompomentUnderDevComponent);
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
@@ -109,7 +109,7 @@ describe('FeatureContainerComponent', () => {
     // given
     feature.attributes.enabled = false;
     feature.attributes['user-enabled'] = false;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.getFeatures.and.returnValue(Observable.of([feature]));
     featureFlagMappingMock.convertFeatureNameToComponent.and.returnValue(MyFeatureCompomentUnderDevComponent);
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {

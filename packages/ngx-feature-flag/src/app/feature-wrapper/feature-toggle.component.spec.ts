@@ -30,7 +30,7 @@ describe('FeatureToggleComponent', () => {
   class TestHostComponent {
   }
   beforeEach(() => {
-    featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
+    featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['getFeatures']);
 
     TestBed.configureTestingModule({
       imports: [FormsModule, HttpModule],
@@ -48,7 +48,7 @@ describe('FeatureToggleComponent', () => {
 
   it('should render content if toggles is on and user-enabled on', async(() => {
     // given
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.getFeatures.and.returnValue(Observable.of([feature]));
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
       expect(hostFixture.nativeElement.querySelector('div').innerText).toEqual('My content here');
@@ -59,7 +59,7 @@ describe('FeatureToggleComponent', () => {
     // given
     feature.attributes.enabled = false;
     feature.attributes['user-enabled'] = true;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.getFeatures.and.returnValue(Observable.of([feature]));
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
       expect(hostFixture.nativeElement.querySelector('div')).toBeNull();
@@ -70,7 +70,7 @@ describe('FeatureToggleComponent', () => {
     // given
     feature.attributes.enabled = true;
     feature.attributes['user-enabled'] = false;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.getFeatures.and.returnValue(Observable.of([feature]));
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
       expect(hostFixture.nativeElement.querySelector('div')).toBeNull();
@@ -81,7 +81,7 @@ describe('FeatureToggleComponent', () => {
     // given
     feature.attributes.enabled = false;
     feature.attributes['user-enabled'] = false;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.getFeatures.and.returnValue(Observable.of([feature]));
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
       expect(hostFixture.nativeElement.querySelector('div')).toBeNull();

@@ -13,7 +13,6 @@ import { Feature } from '../models/feature';
 export class FeatureToggleComponent implements OnInit {
   @Input() featureName: string;
   isEnabled = false;
-  currentUrl = window.location.href;
 
   constructor(private featureService: FeatureTogglesService) {}
 
@@ -21,14 +20,15 @@ export class FeatureToggleComponent implements OnInit {
     if (!this.featureName) {
       throw new Error('Attribute `featureName` should not be null or empty');
     }
-
-    this.featureService.getFeature(this.featureName).subscribe((f: Feature) => {
-        this.isEnabled = f.attributes.enabled && f.attributes['user-enabled'];
-      },
-      err => {
-        this.isEnabled = false;
-        console.log('This feature is not accessible in fabric8-toggles-service' + err);
-      });
+    this.featureService.getFeatures([this.featureName]).subscribe((f: Feature[]) => {
+       if (f && f.length > 0) {
+         this.isEnabled = f[0].attributes.enabled && f[0].attributes['user-enabled'];
+       }
+    },
+    err => {
+      this.isEnabled = false;
+      console.log('This feature is not accessible in fabric8-toggles-service' + err);
+    });
   }
 
 }
