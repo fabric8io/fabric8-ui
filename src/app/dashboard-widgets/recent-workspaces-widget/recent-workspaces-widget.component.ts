@@ -140,11 +140,13 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
         return this.fetchCodebases(space.id)
           .map(codebases => {
             space.codebases = codebases;
-            this.loading = false;
             return space;
           })
           .catch((error) => {
             return Observable.of([]);
+          })
+          .do(() => {
+            this.loading = false;
           });
         })
       );

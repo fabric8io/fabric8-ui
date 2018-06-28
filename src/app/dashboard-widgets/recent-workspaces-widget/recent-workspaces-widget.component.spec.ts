@@ -117,4 +117,9 @@ describe('RecentWorkspacesWidgetComponent', () => {
     fixture.detectChanges();
     expect(mockWindowService.open).toHaveBeenCalled();
   }));
+
+  it('Loading should be not be shown by default', async(() => {
+    let loading = fixture.debugElement.query(By.css('.f8-loading'));
+    expect(loading).toBeNull();
+  }));
 });
