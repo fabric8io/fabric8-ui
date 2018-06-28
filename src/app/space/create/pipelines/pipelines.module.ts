@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -33,5 +32,5 @@ import { PipelinesService } from './services/pipelines.service';
   ]
 })
 export class PipelinesModule {
-  constructor(http: Http) { }
+  constructor() { }
 }

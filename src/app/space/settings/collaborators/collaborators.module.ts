@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -31,5 +30,5 @@ import { CollaboratorsComponent } from './collaborators.component';
   ]
 })
 export class CollaboratorsModule {
-  constructor(http: Http) { }
+  constructor() { }
 }

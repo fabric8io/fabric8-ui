@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Http } from '@angular/http';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 
@@ -42,5 +41,5 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
   entryComponents: [EnvironmentWidgetComponent]
 })
 export class AnalyzeOverviewModule {
-  constructor(http: Http) { }
+  constructor() { }
 }

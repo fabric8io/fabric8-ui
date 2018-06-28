@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { FeatureFlagModule } from 'ngx-feature-flag';
 
@@ -18,5 +17,5 @@ import { AnalyzeOverviewModule } from './analyze-overview/analyze-overview.modul
   declarations: [AnalyzeComponent]
 })
 export class AnalyzeModule {
-  constructor(http: Http) { }
+  constructor() { }
 }

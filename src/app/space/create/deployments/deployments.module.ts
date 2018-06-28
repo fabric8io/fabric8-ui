@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -65,5 +64,5 @@ import { DeploymentApiService } from './services/deployment-api.service';
   ]
 })
 export class DeploymentsModule {
-  constructor(http: Http) { }
+  constructor() { }
 }

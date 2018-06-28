@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Http } from '@angular/http';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -44,5 +43,5 @@ import { CodebasesComponent } from './codebases.component';
   providers: [ BsDropdownConfig, TooltipConfig ]
 })
 export class CodebasesModule {
-  constructor(http: Http) { }
+  constructor() { }
 }
