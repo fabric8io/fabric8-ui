@@ -91,10 +91,10 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
         });
       })
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveCreator(workItem)))
+      .do(() => this.loading = false)
       .subscribe(workItems => {
         this.workItems = workItems;
         this.selectRecentSpace(workItems);
-        this.loading = false;
       }));
   }
 
