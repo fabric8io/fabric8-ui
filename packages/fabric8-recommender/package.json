@@ -19,7 +19,7 @@
     "functests": "npm-run-all -p webdriver-start testserver-start protractor",
     "lint": "find src -name '*.ts' | xargs tslint -c tslint.json --force",
     "protractor": "sleep 15 && ./node_modules/protractor/bin/protractor protractor.config.js",
-    "reinstall": "npm run clean && npm install",
+    "reinstall": "npm cache verify && npm install",
     "remove-dist": "rimraf dist dist-watch",
     "rimraf": "rimraf",
     "setup": "npm install && npm run validate",
