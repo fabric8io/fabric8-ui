@@ -11,12 +11,12 @@ import {
   SpaceNamePipe,
   SpaceService
 } from 'ngx-fabric8-wit';
+import { FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
 import { Observable, Scheduler } from 'rxjs';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
-import { FeatureTogglesService } from '../feature-flag/service/feature-toggles.service';
 import { MenusService } from '../layout/header/menus.service';
 import { Navigation } from '../models/navigation';
 import { ExtProfile, ProfileService } from '../profile/profile.service';

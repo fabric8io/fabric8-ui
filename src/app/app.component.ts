@@ -10,11 +10,11 @@ import { ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Observable } from 'rxjs';
 
+import { FeatureFlagConfig } from 'ngx-feature-flag';
 import { Subscription } from 'rxjs/Rx';
 import { OnLogin } from '../a-runtime-console/index';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { ErrorService } from './layout/error/error.service';
-import { FeatureFlagConfig } from './models/feature-flag-config';
 import { AboutService } from './shared/about.service';
 import { ProviderService } from './shared/account/provider.service';
 import { AnalyticService } from './shared/analytics.service';

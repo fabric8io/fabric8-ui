@@ -1,7 +1,8 @@
 import { CommonModule, LocationStrategy } from '@angular/common';
 import {
   Component,
-  Input
+  Input,
+  NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -19,9 +20,6 @@ import { BuildConfig } from '../../../a-runtime-console/index';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 import { ApplicationsWidgetComponent } from './applications-widget.component';
-
-import { FeatureToggleComponent } from '../../feature-flag/feature-wrapper/feature-toggle.component';
-import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 
 @Component({
   selector: 'fabric8-applications-list',
@@ -204,25 +202,12 @@ describe('ApplicationsWidgetComponent', () => {
       LoadingWidgetModule,
       RouterModule
     ],
-    declarations: [
-      FakeApplicationsListComponent,
-      FeatureToggleComponent
-    ],
+    declarations: [ FakeApplicationsListComponent ],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
       { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
       { provide: PipelinesService, useFactory: () => pipelinesService },
-      {
-        provide: FeatureTogglesService, useFactory: () => {
-          let mock = createMock(FeatureTogglesService);
-          mock.getFeature.and.returnValue(Observable.of({
-            attributes: { enabled: true, 'user-enabled': true }
-          } as Feature));
-
-          return mock;
-        }
-      },
       {
         provide: Router, useFactory: (): jasmine.SpyObj<Router> => {
           let mockRouterEvent: any = {
@@ -244,7 +229,8 @@ describe('ApplicationsWidgetComponent', () => {
           return userService;
         }
       }
-    ]
+    ],
+    schemas: [ NO_ERRORS_SCHEMA ]
   });
 
   describe('Applications widget with build configs', () => {

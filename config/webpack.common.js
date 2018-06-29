@@ -79,8 +79,8 @@ module.exports = function (options) {
      * See: https://webpack.js.org/configuration/entry-context/#entry
      */
     entry: {
-      'polyfills': './src/polyfills.browser.ts',
       'vendor': './src/vendor.browser.ts',
+      'polyfills': './src/polyfills.browser.ts',
       // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
       'main': './src/main.browser.ts'
     },
@@ -387,7 +387,22 @@ module.exports = function (options) {
        * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
        */
       new CommonsChunkPlugin({
-        name: ['polyfills', 'vendor'].reverse()
+        name: 'polyfills',
+        minChunks: Infinity,
+      }),
+      new CommonsChunkPlugin({
+        name: 'vendor',
+        async: true,
+        minChunks: Infinity,
+      }),
+      new CommonsChunkPlugin({
+        name: 'main',
+        async: true,
+        minChunks: 2,
+      }),
+      new CommonsChunkPlugin({
+        name: 'manifest',
+        minChunks: Infinity,
       }),
 
       /*
@@ -431,7 +446,10 @@ module.exports = function (options) {
       new HtmlWebpackPlugin({
         template: 'src/index.ejs',
         title: branding.assets[METADATA.FABRIC8_BRANDING].title.prefix,
-        chunksSortMode: 'dependency',
+        chunksSortMode: function (a, b) {
+          const entryPoints = ["manifest", "polyfills", "vendor", "main"];
+          return entryPoints.indexOf(a.names[0]) - entryPoints.indexOf(b.names[0]);
+        },
         metadata: METADATA
       }),
 

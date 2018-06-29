@@ -80,7 +80,7 @@ export const routes: Routes = [
   // Feature Flag
   {
     path: '_featureflag',
-    loadChildren: './feature-flag/feature-flag.module#FeatureFlagModule',
+    loadChildren: './feature-flag/toggles.module#TogglesModule',
     data: {
       title: 'Feature Flag'
     }
