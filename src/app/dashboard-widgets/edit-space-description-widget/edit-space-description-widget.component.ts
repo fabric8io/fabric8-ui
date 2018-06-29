@@ -33,22 +33,18 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
     private spaceService: SpaceService,
     private spaceNamespaceService: SpaceNamespaceService,
     private collaboratorService: CollaboratorService
-  ) {
-    spaces.current
+  ) { }
+
+  ngOnInit() {
+    this.userService.loggedInUser.subscribe(val => this.loggedInUser = val);
+    this.spaces.current
       .subscribe(space => {
         this.space = space;
         if (space) {
           this.collaboratorCount = this.collaboratorService.getInitialBySpaceId(space.id).map(c => c.length);
           this.spaceOwner = this.userService.getUserByUserId(space.relationships['owned-by'].data.id).map(u => u.attributes.username);
-        } else {
-          this.collaboratorCount = Observable.empty();
-          this.spaceOwner = Observable.empty();
         }
       });
-    userService.loggedInUser.subscribe(val => this.loggedInUser = val);
-  }
-
-  ngOnInit() {
     this._descriptionUpdater
       .debounceTime(1000)
       .map(description => {
@@ -59,7 +55,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
             version: this.space ? this.space.attributes.version : ''
           },
           type: 'spaces',
-          id: this.space.id
+          id: this.space ? this.space.id : ''
         } as Space;
         return patch;
       })
