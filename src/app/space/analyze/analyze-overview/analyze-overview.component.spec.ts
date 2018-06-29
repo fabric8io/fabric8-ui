@@ -8,22 +8,17 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Subscription } from 'rxjs';
 import { Observable, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
-import { WorkItemBarchartModule } from '../../../dashboard-widgets/work-item-widget/work-item-barchart/work-item-barchart.module';
-import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
-import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 
 @Component({
   template: '<alm-analyzeOverview></alm-analyzeOverview>'
@@ -50,9 +45,6 @@ describe('AnalyzeOverviewComponent', () => {
   mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
 
   initContext(AnalyzeOverviewComponent, HostComponent, {
-    imports: [
-      FeatureFlagModule
-    ],
     providers: [
       { provide: BsModalService, useFactory: (): jasmine.SpyObj<BsModalService> => createMock(BsModalService) },
       { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },

@@ -24,12 +24,12 @@ import {
 } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Contexts } from 'ngx-fabric8-wit';
+import { FeatureTogglesService } from 'ngx-feature-flag';
 import {
   AuthenticationService,
   UserService
 } from 'ngx-login-client';
 
-import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { LoginService } from '../../shared/login.service';
 
 import { HeaderComponent } from './header.component';

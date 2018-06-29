@@ -6,8 +6,8 @@ import { RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
 import { PlannerListModule, WorkItemDetailModule } from 'fabric8-planner';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { WidgetsModule } from 'ngx-widgets';
-import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
 
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { WorkItemWidgetRoutingModule } from './work-item-widget-routing.module';

@@ -17,7 +17,7 @@ import {
   TokenProvider
 } from 'ngx-forge';
 
-import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
 import { AppLauncherDependencyEditorService } from '../services/app-launcher-dependency-editor.service';
 import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovider.service';

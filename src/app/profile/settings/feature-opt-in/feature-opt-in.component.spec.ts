@@ -4,13 +4,13 @@ import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2/dist/index';
 import { Notifications, NotificationType } from 'ngx-base';
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
 import { ListModule } from 'patternfly-ng';
 import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
-import { Feature, FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 import { FeatureOptInComponent } from './feature-opt-in.component';
 

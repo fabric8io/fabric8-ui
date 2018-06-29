@@ -1,16 +1,15 @@
 import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Contexts, Fabric8WitModule, Space, SpaceService } from 'ngx-fabric8-wit';
+import { FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService } from 'ngx-login-client';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 
-import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { EventService } from '../../shared/event.service';
 import { SpacesComponent } from './spaces.component';
 

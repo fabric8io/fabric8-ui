@@ -6,8 +6,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
-
-import { FeatureFlagModule } from '../feature-flag/feature-flag.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 
 import { LoadingWidgetModule } from '../dashboard-widgets/loading-widget/loading-widget.module';
 import { RecentPipelinesWidgetModule } from '../dashboard-widgets/recent-pipelines-widget/recent-pipelines-widget.module';

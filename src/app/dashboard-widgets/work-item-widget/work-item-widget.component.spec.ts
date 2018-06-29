@@ -1,5 +1,5 @@
 import { LocationStrategy } from '@angular/common';
-import { DebugNode } from '@angular/core';
+import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
@@ -8,9 +8,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Contexts } from 'ngx-fabric8-wit';
 
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
-import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
-import { Feature, FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 
@@ -78,7 +77,6 @@ describe('WorkItemWidgetComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [
-        FeatureFlagModule,
         LoadingWidgetModule,
         RouterModule,
         WorkItemBarchartModule
@@ -91,7 +89,8 @@ describe('WorkItemWidgetComponent', () => {
         { provide: LocationStrategy, useValue: mockLocationStrategy },
         { provide: Router, useValue: mockRouter },
         { provide: WorkItemService, useValue: mockWorkItemService }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(WorkItemWidgetComponent);
     component = fixture.debugElement.componentInstance;
