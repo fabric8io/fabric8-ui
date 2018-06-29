@@ -122,7 +122,6 @@ import { GettingStartedService } from './getting-started/services/getting-starte
 import { RavenExceptionHandler } from './shared/exception.handler';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
 
-
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
