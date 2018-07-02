@@ -57,6 +57,7 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
    */
   setToggle(value: boolean): void {
     let profile = this.getTransientProfile();
+    delete profile.featureLevel;
     profile.contextInformation.featureAcknowledgement = value;
 
     this.subscriptions.push(this.update(profile).subscribe(() => {
