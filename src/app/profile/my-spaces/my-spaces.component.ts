@@ -31,7 +31,6 @@ import { EventService } from '../../shared/event.service';
 export class MySpacesComponent implements OnDestroy, OnInit {
 
   listConfig: ListConfig;
-  showSpaces: boolean = false;
   resultsCount: number = 0;
 
   private _spaces: Space[] = [];
@@ -185,7 +184,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       this.spaceService
         .getSpacesByUser(this.context.user.attributes.username, this.pageSize)
         .subscribe(spaces => {
-          this.showSpaces = true;
           this.allSpaces = spaces;
           this.restorePins();
           this.updateSpaces();
@@ -305,6 +303,12 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     }, error => {
       this.logger.error('Failed to save pinned items');
     }));
+  }
+
+  handleAction($event: Action): void {
+    if ($event.id === 'createSpace') {
+      this.showAddSpaceOverlay();
+    }
   }
 
   /**

@@ -7,7 +7,7 @@ import { NgArrayPipesModule } from 'angular-pipes';
 import { PlannerListModule, WorkItemDetailModule } from 'fabric8-planner';
 import { WidgetsModule } from 'ngx-widgets';
 
-import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
 
 @NgModule({

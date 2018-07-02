@@ -6,7 +6,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule } from 'ngx-widgets';
 
-import { FeatureFlagModule } from '../../feature-flag/feature-flag.module';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { SpacesRoutingModule } from './spaces-routing.module';
 import { SpacesComponent }     from './spaces.component';
 

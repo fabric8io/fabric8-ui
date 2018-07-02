@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ModalModule } from 'ngx-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { FeatureFlagConfig } from '../../models/feature-flag-config';
+import { FeatureFlagConfig } from 'ngx-feature-flag';
 import { FeatureFooterComponent } from './feature-footer.component';
 import { FeatureFooterModule } from './feature-footer.module';
 

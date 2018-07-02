@@ -9,7 +9,6 @@ import {
   ComponentFixture,
   TestBed
 } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import {
@@ -47,8 +46,7 @@ import {
 } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
-import { FeatureFlagModule } from '../../../feature-flag/feature-flag.module';
-import { FeatureTogglesService } from '../../../feature-flag/service/feature-toggles.service';
+import { FeatureFlagModule, FeatureTogglesService } from 'ngx-feature-flag';
 import { ProviderService } from '../../../shared/account/provider.service';
 import { Che } from './services/che';
 import { CheService } from './services/che.service';

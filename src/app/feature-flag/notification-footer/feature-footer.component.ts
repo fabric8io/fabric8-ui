@@ -4,9 +4,9 @@ import {
   OnInit, ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { TooltipDirective } from 'ngx-bootstrap/tooltip/tooltip.directive';
+import { FeatureFlagConfig } from 'ngx-feature-flag';
 import { Subscription } from 'rxjs';
 import 'rxjs/operators/map';
-import { FeatureFlagConfig } from '../../models/feature-flag-config';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -37,7 +37,7 @@ export class FeatureFooterComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {}
 
-  onClick(event) {
+  onClick(event: any) {
     // Dismiss the tooltip when clicking outside the icon component
     if (!this._eref.nativeElement.contains(event.target) && this.tooltip) {
       this.tooltip.hide();

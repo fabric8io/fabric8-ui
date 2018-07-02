@@ -11,10 +11,9 @@ import { BrandInformation } from '../models/brand-information';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 // use url-loader for images
+import { FeatureTogglesService } from 'ngx-feature-flag';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
 import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
-
-import { FeatureTogglesService } from '../feature-flag/service/feature-toggles.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

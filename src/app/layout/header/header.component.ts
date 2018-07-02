@@ -8,8 +8,8 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
 import { removeAction } from '../../app-routing.module';
-import { FeatureTogglesService } from '../../feature-flag/service/feature-toggles.service';
 
+import { FeatureTogglesService } from 'ngx-feature-flag';
 import { Navigation } from '../../models/navigation';
 import { LoginService } from '../../shared/login.service';
 import { MenuedContextType } from './menued-context-type';
