@@ -1,6 +1,6 @@
 {
   "name": "ngx-feature-flag",
-  "version": "0.1.1-development",
+  "version": "0.0.0-development",
   "description": "feature flag component and services for angular applications",
   "main": "index.js",
   "module": "index.js",
