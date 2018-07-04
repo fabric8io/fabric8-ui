@@ -10,4 +10,3 @@ run_unit_tests
 
 build_project
 
-release
