@@ -33,6 +33,17 @@ npm install
 npm test
 ```
  
+## Demo
+
+* build and run
+```
+npm run build:demo
+npm run start:demo
+
+```
+* see
+Go to http://localhost:8001 
+
 ## Release
 
 * pre-requisites
