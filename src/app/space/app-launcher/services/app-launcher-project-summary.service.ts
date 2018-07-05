@@ -103,7 +103,13 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
 
   private getPayload(summary: Summary, spaceId: string, spaceName: string) {
     let payload = '';
-    payload += 'mission=' + _.get(summary, 'mission.id', '');
+    let missionId: string = _.get(summary, 'mission.id', '');
+    let blankMissionId: string = 'blank-mission';
+    if (missionId === blankMissionId) {
+      missionId = _.get(summary, 'mission.meta', '');
+      payload += 'emptyGitRepository=true&';
+    }
+    payload += 'mission=' + missionId;
     payload += '&runtime=' + _.get(summary, 'runtime.id', '');
     payload += '&runtimeVersion=' + _.get(summary, 'runtime.version.id', '');
     payload += '&pipeline=' + _.get(summary, 'pipeline.id', '');

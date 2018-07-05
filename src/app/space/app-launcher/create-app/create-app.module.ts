@@ -5,6 +5,7 @@ import { Http } from '@angular/http';
 
 import {
   DependencyCheckService,
+  DependencyEditorService,
   GitProviderService,
   HelperService,
   LauncherModule,
@@ -18,6 +19,7 @@ import {
 
 import { FeatureFlagModule } from 'ngx-feature-flag';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
+import { AppLauncherDependencyEditorService } from '../services/app-launcher-dependency-editor.service';
 import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovider.service';
 import { AppLauncherMissionRuntimeService } from '../services/app-launcher-mission-runtime.service';
 import { AppLauncherPipelineService } from '../services/app-launcher-pipeline.service';
@@ -39,6 +41,7 @@ import { CreateAppComponent } from './create-app.component';
   providers: [
     HelperService,
     { provide: DependencyCheckService, useClass: AppLauncherDependencyCheckService},
+    { provide: DependencyEditorService, useClass: AppLauncherDependencyEditorService},
     { provide: GitProviderService, useClass: AppLauncherGitproviderService},
     { provide: MissionRuntimeService, useClass: AppLauncherMissionRuntimeService },
     { provide: PipelineService, useClass: AppLauncherPipelineService },

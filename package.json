@@ -142,7 +142,7 @@
     "ngx-bootstrap": "1.9.3",
     "ngx-fabric8-wit": "6.20.4",
     "ngx-feature-flag": "0.1.1-development",
-    "ngx-forge": "0.5.3",
+    "ngx-forge": "0.6.0",
     "ngx-login-client": "1.4.3",
     "ngx-modal": "0.0.29",
     "ngx-restangular": "1.0.13",
