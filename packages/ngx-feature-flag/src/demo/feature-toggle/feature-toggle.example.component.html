@@ -1,0 +1,73 @@
+<div class="padding-15">
+  <div class="row">
+    <div class="col-sm-12">
+      <h4>f8-feature-toggle example</h4>
+      <hr/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <p>Warning: This example is for development testing purposes. It is not an official pattern and subject to change</p>
+        <p>This is provided as a starting point for contributors</p>
+
+        <f8-feature-toggle featureName="Test">
+          <div style="background-color: green; opacity: .5" user-level>
+            <h1>
+                😀 🤪
+            </h1>
+            <h2>Yay activated</h2>
+          </div>
+          <div style="background-color: red;opacity: .5" default-level>
+            <h1>😢 😭 Not activated</h1>
+          </div>
+        </f8-feature-toggle>
+
+      </div>
+    </div>
+  </div>
+  <div class="row padding-top-10">
+    <div class="col-sm-12">
+      <h4 class="actions-label">Settings</h4>
+      <hr/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 sample-form">
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label class="control-label" for="FeatureFlagName">FeatureFlagName: </label>
+          <input id="FeatureFlagName" name="FeatureFlagName" type="text" [(ngModel)]="featureFlagName" (click)="refresh()"/>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="FeatureFlagEnablementLevel">FeatureFlagEnablementLevel: </label>
+          <input id="FeatureFlagEnablementLevel" name="FeatureFlagEnablementLevel" type="text" [(ngModel)]="featureFlagEnablementLevel" (click)="refresh()"/>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="FeatureFlagEnable">FeatureFlagEnable: </label>
+        <input id="FeatureFlagEnable" name="FeatureFlagEnable" type="checkbox" [(ngModel)]="featureFlagEnable" (click)="refresh()"/>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="UserLevel">UserLevel: </label>
+          <input id="UserLevel" name="UserLevel" type="text" [(ngModel)]="userLevel" (click)="refresh()"/>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row padding-top-10">
+    <div class="col-sm-12">
+      <h4>Code</h4>
+      <hr/>
+    </div>
+  </div>
+  <div>
+    <tabset>
+      <tab heading="html">
+        <include-content src="src/demo/feature-toggle/feature-toggle.example.component.html"></include-content>
+      </tab>
+      <tab heading="typescript">
+        <include-content src="src/demo/feature-toggle/feature-toggle.example.component.ts"></include-content>
+      </tab>
+    </tabset>
+  </div>
+</div>

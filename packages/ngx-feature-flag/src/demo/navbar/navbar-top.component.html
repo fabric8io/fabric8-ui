@@ -1,0 +1,30 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" (click)="toggleNavbar($event)">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" id="logo" title="" routerLink="/" routerLinkActive="active">PatternFly NG</a>
+    </div>
+    <div class="navbar-collapse navbar-collapse-pf-site collapse">
+      <ul id="menu-primary" class="nav navbar-nav navbar-right">
+        <li [ngClass]="{'active': isNavItemSelected('getstarted')}">
+          <a (click)="selectNavItem($event, 'getstarted')">Get Started</a>
+        </li>
+        <li [ngClass]="{'active': isNavItemSelected('components')}">
+          <a (click)="selectNavItem($event, 'components')">Components</a>
+        </li>
+        <li [ngClass]="{'active': isNavItemSelected('services')}">
+          <a (click)="selectNavItem($event, 'services')">Services</a>
+        </li>
+        <li>
+          <a href="https://github.com/patternfly/patternfly-ng" target="_blank">GitHub</a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>

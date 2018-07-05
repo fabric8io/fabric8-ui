@@ -13,6 +13,10 @@ import { FeatureFlagModule } from '../app/feature-flag.module';
 import { FABRIC8_FEATURE_TOGGLES_API_URL, FeatureTogglesService } from '../app/service/feature-toggles.service';
 import { AUTH_API_URL, AuthenticationService, REALM, SSO_API_URL } from 'ngx-login-client';
 import { Broadcaster } from 'ngx-base';
+import { DemoComponentsModule } from './welcome/demo-components.module';
+import { NavbarModule } from './navbar/navbar.module';
+import { FeatureToggleExampleModule } from './feature-toggle/feature-toggle.example.module';
+import { FeatureTogglesServiceMock } from './service/feature-toggles-mock.service';
 
 @NgModule({
   imports: [
@@ -21,7 +25,10 @@ import { Broadcaster } from 'ngx-base';
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
-    FeatureFlagModule
+    DemoComponentsModule,
+    NavbarModule,
+    FeatureFlagModule,
+    FeatureToggleExampleModule
   ],
   declarations: [
     AppComponent,
@@ -34,7 +41,8 @@ import { Broadcaster } from 'ngx-base';
     {provide: FABRIC8_FEATURE_TOGGLES_API_URL, useValue: 'https://api.prod-preview.openshift.io/api/'},
     Broadcaster,
     AuthenticationService,
-    FeatureTogglesService
+    // FeatureTogglesService //uncomment if you want to use prod-preview service
+    {provide: FeatureTogglesService, useClass: FeatureTogglesServiceMock}
   ],
   bootstrap: [AppComponent]
 })

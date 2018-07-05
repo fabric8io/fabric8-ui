@@ -11,6 +11,15 @@ var gulp = require('gulp'),
 
 var appSrc = 'src';
 var libraryDist = 'dist';
+var demoDist = 'dist-demo';
+
+// Copy given files to demo directory
+function copyToDemo(srcArr) {
+    return gulp.src(srcArr)
+        .pipe(gulp.dest(function (file) {
+            return demoDist + file.base.slice(__dirname.length); // save directly to demo
+        }));
+}
 
 // copies files to the libraryDist directory.
 function copyToDist(srcArr) {
@@ -108,7 +117,14 @@ gulp.task('copy-html', function () {
     '!src/demo.html'
   ]);
 });
-
+// copies the template html files to libraryDist.
+gulp.task('copy-demo', function () {
+    return copyToDemo([
+        'README.md',
+        'src/**/*.ts',
+        'src/**/*.html'
+    ]);
+});
 // copies images to libraryDist.
 gulp.task('copy-images', function () {
   return copyToDist([
@@ -128,7 +144,7 @@ gulp.task('copy-css', ['transpile'], function () {
 gulp.task('copy-static-assets', function () {
   return gulp.src([
     'LICENSE',
-    'README.adoc',
+    'README.md',
     'package.json',
   ]).pipe(gulp.dest(libraryDist));
 });
@@ -143,5 +159,7 @@ gulp.task('build:library',
   'bundle',
   'copy-static-assets'
 ]);
+gulp.task('copy-html-demo', shell.task('npm run bundle-webpack'));
+gulp.task('build:demo',  ['copy-demo']);
 
 
