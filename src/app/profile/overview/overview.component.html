@@ -97,12 +97,12 @@
     <div class="col-md-10 col-md-offset-1">
       <ul>
         <li>
-          <a [routerLink]="['/', context?.user?.attributes?.username, '_workitems']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+          <a [routerLink]="['/', context?.user?.attributes?.username, '_profile', 'workitems']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
             {{ viewingOwnAccount ? 'My' : context.user.attributes.fullName + '\'s'}} Work Items
           </a>
         </li>
         <li>
-          <a [routerLink]="['/', context?.user?.attributes?.username, '_spaces']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+          <a [routerLink]="['/', context?.user?.attributes?.username, '_profile', 'spaces']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
             {{ viewingOwnAccount ? 'My' : context.user.attributes.fullName + '\'s'}} Spaces
           </a>
         </li>

@@ -40,8 +40,8 @@ import { CreateAppComponent } from './create-app.component';
   declarations: [ CreateAppComponent ],
   providers: [
     HelperService,
-    { provide: DependencyEditorService, useClass: AppLauncherDependencyEditorService },
     { provide: DependencyCheckService, useClass: AppLauncherDependencyCheckService},
+    { provide: DependencyEditorService, useClass: AppLauncherDependencyEditorService},
     { provide: GitProviderService, useClass: AppLauncherGitproviderService},
     { provide: MissionRuntimeService, useClass: AppLauncherMissionRuntimeService },
     { provide: PipelineService, useClass: AppLauncherPipelineService },

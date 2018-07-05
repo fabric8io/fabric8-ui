@@ -40,7 +40,31 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
   getCatalog(): Observable<Catalog> {
     return this.options.flatMap(option => {
       return this.http.get(this.END_POINT + this.API_BASE, option)
-        .map(response => response.json() as Catalog)
+        .map(response => {
+          let mock = response.json();
+          let blank = {
+            description: 'Creates a customized mission',
+            id: 'blank-mission',
+            metadata: {},
+            name: 'Blank Mission'
+          };
+          mock.missions.push(blank);
+
+          mock.runtimes.forEach(function(r) {
+            r.versions.forEach(v => {
+              let run = {
+                description: `Runs a blank mission for ${r.name}`,
+                name: `${r.name} Blank Booster`,
+                mission: 'blank-mission',
+                runtime: r.id,
+                version: v.id
+              };
+              mock.boosters.push(run);
+            });
+          });
+
+          return mock as Catalog;
+        })
         .catch(this.handleError);
     });
   }
