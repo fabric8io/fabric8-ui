@@ -4,11 +4,12 @@ import {
   OnInit, ViewChild
 } from '@angular/core';
 
-import {FeatureTogglesService} from '../../app/service/feature-toggles.service';
-import {FeatureToggleComponent} from '../../app/feature-wrapper/feature-toggle.component';
+import { FeatureTogglesService } from '../../app/service/feature-toggles.service';
+import { FeatureContainerComponent } from '../../app/feature-loader/feature-loader.component';
+
 
 @Component({
-  selector: 'feature-toggle-example',
+  selector: 'feature-toggle-loader-example',
   styles: [`
     .sample-form .form-horizontal .form-group {
       margin-left: 0px;
@@ -20,12 +21,12 @@ import {FeatureToggleComponent} from '../../app/feature-wrapper/feature-toggle.c
       padding-bottom: 15px;
     }
   `],
-  templateUrl: './feature-toggle.example.component.html'
+  templateUrl: './feature-toggle-loader.example.component.html'
 })
-export class FeatureToggleExampleComponent implements OnInit {
+export class FeatureToggleLoaderExampleComponent implements OnInit {
   // we need a reference to refresh the component depending on mock values, on this demo page.
   // not needed usually
-  @ViewChild(FeatureToggleComponent) toggleComponent: FeatureToggleComponent;
+  @ViewChild(FeatureContainerComponent) toggleComponent: FeatureContainerComponent;
   featureFlagName: string = 'Test';
   featureFlagEnable: boolean = true;
   featureFlagEnablementLevel: string = 'beta';

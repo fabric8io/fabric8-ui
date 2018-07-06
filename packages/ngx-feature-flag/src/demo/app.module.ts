@@ -17,6 +17,8 @@ import { DemoComponentsModule } from './welcome/demo-components.module';
 import { NavbarModule } from './navbar/navbar.module';
 import { FeatureToggleExampleModule } from './feature-toggle/feature-toggle.example.module';
 import { FeatureTogglesServiceMock } from './service/feature-toggles-mock.service';
+import { FeatureToggleLoaderExampleModule } from './feature-toggle-loader/feature-toggle-loader.example.module';
+import { FeatureToggleServiceExampleModule } from './feature-toggle-service/feature-toggle-service.example.module';
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { FeatureTogglesServiceMock } from './service/feature-toggles-mock.servic
     DemoComponentsModule,
     NavbarModule,
     FeatureFlagModule,
-    FeatureToggleExampleModule
+    FeatureToggleExampleModule,
+    FeatureToggleLoaderExampleModule,
+    FeatureToggleServiceExampleModule
   ],
   declarations: [
     AppComponent,

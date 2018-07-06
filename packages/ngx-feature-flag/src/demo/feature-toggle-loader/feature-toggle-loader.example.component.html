@@ -8,7 +8,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="form-group">
-        <div>With `f8-feature-toggle`, you can activate a feature depending on the level your user consent. It uses
+        <div>With `f8-feature-toggle-loader`, you can activate a feature depending on the level your user consent. It uses
           `enableByLevel` strategy. It allows to tag a feature for a particular level. Feature flag level are: <i>internal</i>, <i>experimental</i>, <i>beta</i>, <i>released</i>.
           <ul>
             <li><strong>internal</strong> will only show it to accounts with an @redhat.com email. It will have a notification on the screen:
@@ -20,22 +20,15 @@
 
           <p>NOTE: Anonymous user can only see the `released` state. For other level, you need to be logged-in.</p>
 
+          This use case could be while the feature is under development and you want to make sure loading the component will not break the whole UI.
+
+          For example, let's dynamically load `EnvironmentWidgetComponent` to carry-on with the same example.
+           But now we don't want to just hide the component, we want to make sure the component code is not loaded at all (this could be useful if for some reasons the component code ma cause runtime failure).
+
 
         </div>
-        <f8-feature-toggle featureName="Test">
-          <div style="background-color: green; opacity: .5" user-level>
-            <h1>
-              😀 🤪
-            </h1>
-            <h2>Yay activated just for you</h2>
-          </div>
-          <div style="background-color: red;opacity: .5" default-level>
-            <h1>
-              😢 😭
-            </h1>
-            <h2>Not activated for your user!</h2>
-          </div>
-        </f8-feature-toggle>
+
+        <strong>TODO!!!!</strong>
 
       </div>
     </div>
@@ -79,10 +72,10 @@
 <div>
   <tabset>
     <tab heading="html">
-      <include-content src="src/demo/feature-toggle/feature-toggle.example.component.html"></include-content>
+      <include-content src="src/demo/feature-toggle-loader/feature-toggle-loader.example.component.html"></include-content>
     </tab>
     <tab heading="typescript">
-      <include-content src="src/demo/feature-toggle/feature-toggle.example.component.ts"></include-content>
+      <include-content src="src/demo/feature-toggle-loader/feature-toggle-loader.example.component.ts"></include-content>
     </tab>
   </tabset>
 </div>

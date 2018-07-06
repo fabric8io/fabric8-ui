@@ -123,7 +123,7 @@ For example, let's hide `EnvironmentWidgetComponent`.
 export class EnvironmentWidgetModule { }
 ```
 
-> NOTE: the component is hidden but still initializaed.
+> NOTE: the component is hidden but still initialized.
 
 #### use case 2: My feature is a refactored component I want to hide/show
 Similar to precedent section. You put the new code in the HTML element that content `user-level` and the old code in `default-level`.

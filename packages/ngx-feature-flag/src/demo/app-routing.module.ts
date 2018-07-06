@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { WelcomeComponent } from './welcome/welcome.component';
-import {FeatureToggleExampleComponent} from './feature-toggle/feature-toggle.example.component';
+import { FeatureToggleExampleComponent } from './feature-toggle/feature-toggle.example.component';
+import { FeatureToggleLoaderExampleComponent } from './feature-toggle-loader/feature-toggle-loader.example.component';
+import { FeatureToggleServiceExampleComponent } from './feature-toggle-service/feature-toggle-service.example.component';
 
 const routes: Routes = [{
     path: '',
@@ -16,10 +18,10 @@ const routes: Routes = [{
     component: FeatureToggleExampleComponent
   }, {
     path: 'f8-feature-toggle-loader',
-    component: WelcomeComponent
+    component: FeatureToggleLoaderExampleComponent
   }, {
     path: 'FeatureTogglesService',
-    component: WelcomeComponent
+    component: FeatureToggleServiceExampleComponent
   }];
 
 @NgModule({
