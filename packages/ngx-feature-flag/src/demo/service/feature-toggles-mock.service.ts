@@ -45,6 +45,9 @@ export class FeatureTogglesServiceMock  {
       id: this.featureFlagName
     } as Feature;
     let mock = [feature];
-    return Observable.of(mock);
+    if (ids[0] === this.featureFlagName) {
+      return Observable.of(mock);
+    }
+    return Observable.of([]);
   }
 }

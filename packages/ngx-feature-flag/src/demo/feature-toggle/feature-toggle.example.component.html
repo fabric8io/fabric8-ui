@@ -53,7 +53,7 @@
     <form class="form-horizontal">
       <div class="form-group">
         <label class="control-label" for="FeatureFlagName">FeatureFlagName: </label>
-        <input id="FeatureFlagName" name="FeatureFlagName" type="text" [(ngModel)]="featureFlagName" (change)="refresh($event)"/>
+        <input readonly disabled id="FeatureFlagName" name="FeatureFlagName" type="text" [(ngModel)]="featureFlagName"/>
       </div>
       <div class="form-group">
         <label class="control-label" for="FeatureFlagEnablementLevel">FeatureFlagEnablementLevel: </label>
