@@ -1,15 +1,17 @@
 <div class="edit-space-description-widget">
   <div class="col-sm-3 f8-space-masthead-space-info">
     <div>
-      <span class="f8-space-masthead-name">{{space?.attributes.name | spaceName}}</span> <span class="f8-space-masthead-owner">bobross_925</span>
+      <span class="f8-space-masthead-name">{{space?.attributes.name | spaceName}}</span> <span class="f8-space-masthead-owner">{{spaceOwner | async}}</span>
     </div>
-    <span class="pficon pficon-users fa-lg"></span> 59
+    <span class="pficon pficon-users fa-lg"></span> {{collaboratorCount | async}}
     <ng-container *ngIf='userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo'>
       <span class="f8-space-masthead-vertical-divider-collab"></span>
-      <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
+      <a class="add-collaborators-link" [routerLink]="['/', loggedInUser?.attributes?.username, space?.attributes.name, 'settings', 'collaborators']">
+        <span class="pficon pficon-add-circle-o fa-lg"></span> Add Collaborator
+      </a>
     </ng-container>
     <ng-template #userDoesNotOwnSpaceHeaderInfo>
-      <span id="space-description-collaborators-placeholder">Collaborators</span>
+      <span id="space-description-collaborators-placeholder">Collaborator{{(collaboratorCount | async) > 1 ? 's' : ''}}</span>
     </ng-template>
   </div>
   <div *ngIf="userOwnsSpace || space?.attributes.description" class="f8-space-masthead-vertical-divider"></div>

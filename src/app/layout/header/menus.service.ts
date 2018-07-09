@@ -45,10 +45,10 @@ export class MenusService {
                 name: 'Backlog',
                 path: ''
               }
-              // , {
-              //   name: 'Board',
-              //   path: 'board'
-              // }
+              , {
+                name: 'Board',
+                path: 'board'
+              }
             ]
           }, {
             name: 'Create',

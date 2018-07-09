@@ -21,8 +21,15 @@
             <div class="list-pf-content-wrapper">
               <div class="list-pf-main-content">
                 <div class="list-pf-title">
-                  <img [src]="item.attributes.imageURL" class="icon-user" height="40"/>
+                  <span *ngIf="(item.attributes.imageURL !== undefined && item.attributes.imageURL.length !== 0); then showImageUrl else defaultImageUrl"></span>
+                  <ng-template #showImageUrl>
+                    <img [src]="item.attributes.imageURL" class="icon-user" height="40">
+                  </ng-template>
+                  <ng-template #defaultImageUrl>
+                    <img src="../../../../assets/images/profile-user.png" class="icon-user" height="40">
+                  </ng-template>
                   <span class="margin-left-40">{{item.attributes.fullName}}</span>
+                  <span class="collab-username">{{item.attributes.username}}</span>
                 </div>
                 <div class="list-pf-description">
                   {{item.attributes.email}}

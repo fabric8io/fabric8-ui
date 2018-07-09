@@ -6,7 +6,8 @@ import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import {
     DependencyEditorService,
     HelperService,
-    TokenProvider
+    TokenProvider,
+    URLProvider
 } from 'ngx-forge';
 
 @Injectable()
@@ -15,15 +16,20 @@ export class AppLauncherDependencyEditorService implements DependencyEditorServi
   private END_POINT: string = '';
   private API_BASE: string = 'booster-catalog/';
   private ORIGIN: string = '';
+  private ANALYTICS_END_POINT: string = '';
 
   constructor(
     private http: Http,
     private helperService: HelperService,
-    private tokenProvider: TokenProvider
+    private tokenProvider: TokenProvider,
+    private urlProvider: URLProvider
   ) {
     if (this.helperService) {
       this.END_POINT = this.helperService.getBackendUrl();
       this.ORIGIN = this.helperService.getOrigin();
+    }
+    if (this.urlProvider) {
+      this.ANALYTICS_END_POINT = this.urlProvider.getRecommenderAPIUrl();
     }
   }
 
@@ -38,16 +44,17 @@ export class AppLauncherDependencyEditorService implements DependencyEditorServi
     }));
   }
 
-  getBoosterInfo(missionId: string, runtimeId: string, runtimeVersion: string): Observable<any> {
-    if (missionId && runtimeId) {
-      let boosterInfoEndPoint: string = this.END_POINT + this.API_BASE + 'booster';
-      boosterInfoEndPoint += `?mission=${missionId}&runtime=${runtimeId}&runtimeVersion=${runtimeVersion}`;
+  getCoreDependencies(runtimeId: string): Observable<any> {
+    if (runtimeId) {
+      let coreDependenciesEndPoint: string = this.ANALYTICS_END_POINT + `/api/v1/get-core-dependencies/${runtimeId}`;
       return this.options.flatMap((option) => {
-        return this.http.get(boosterInfoEndPoint, option)
+        option.headers.delete('X-App');
+        return this.http.get(coreDependenciesEndPoint, option)
                     .map(response => response.json() as any)
                     .catch(this.handleError);
       });
     }
+    return Observable.empty();
   }
 
   private handleError(error: Response | any) {

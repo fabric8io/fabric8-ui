@@ -12,15 +12,24 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '_workitems'
+        redirectTo: '_profile'
       },
       {
-        path: '_workitems',
-        component: WorkItemsComponent
-      },
-      {
-        path: '_spaces',
-        component: SpacesComponent
+        path: '_profile',
+        children: [
+          {
+            path: '',
+            redirectTo: 'workitems'
+          },
+          {
+            path: 'workitems',
+            component: WorkItemsComponent
+          },
+          {
+            path: 'spaces',
+            component: SpacesComponent
+          }
+        ]
       }
     ]
   }
