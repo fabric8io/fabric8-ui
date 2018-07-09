@@ -63,6 +63,7 @@ describe('Codebase: CodebasesService', () => {
         'last_used_workspace': '',
         'stackId': '',
         'type': 'git',
+        'cve-scan': true,
         'url': 'https://github.com/airbnb/enzyme.git'
       },
       'id': 'c071bc6b-a241-41e4-8db1-83a3db12c4a1',
@@ -216,6 +217,36 @@ describe('Codebase: CodebasesService', () => {
       // then
       fail('List paginated codebases in error');
     }, error => expect(error).toEqual('some error'));
+  });
+
+  it('Update codebase with CVE alert notification', () => {
+    // given
+    const expectedResponse = {'data': [githubData]};
+    mockService.connections.subscribe((connection: any) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          body: JSON.stringify(expectedResponse),
+          status: 200
+        })
+      ));
+    });
+    // when
+    codebasesService.updateCodebases(codebase).subscribe((data: any) => {
+      // then
+      expect(data.length).toEqual(expectedResponse.data.length);
+    });
+  });
+
+  it('Update codebase with CVE alert notification in error', () => {
+    // given
+    mockService.connections.subscribe((connection: any) => {
+      connection.mockError(new Error('some error'));
+    });
+    // when
+    codebasesService.updateCodebases(codebase).subscribe((data: any) => {
+      fail('Update codebases in error');
+    }, // then
+    error => expect(error).toEqual('some error'));
   });
 
   it('Update codebases', () => {

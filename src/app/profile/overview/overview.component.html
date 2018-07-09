@@ -95,14 +95,14 @@
 
   <div class="row profile-overview-nav" role="navigation">
     <div class="col-md-10 col-md-offset-1">
-      <ul>
-        <li>
-          <a [routerLink]="['/', context?.user?.attributes?.username, '_profile', 'workitems']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <a [routerLink]="['/', context?.user?.attributes?.username, '_profile', 'workitems']">
             {{ viewingOwnAccount ? 'My' : context.user.attributes.fullName + '\'s'}} Work Items
           </a>
         </li>
-        <li>
-          <a [routerLink]="['/', context?.user?.attributes?.username, '_profile', 'spaces']" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <a [routerLink]="['/', context?.user?.attributes?.username, '_profile', 'spaces']">
             {{ viewingOwnAccount ? 'My' : context.user.attributes.fullName + '\'s'}} Spaces
           </a>
         </li>
