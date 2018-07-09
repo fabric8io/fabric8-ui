@@ -4,7 +4,6 @@ import {
   Input
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { fakeAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import {

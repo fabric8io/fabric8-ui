@@ -5,7 +5,6 @@ import { Observable, Subscription } from 'rxjs';
 
 import { JenkinsService } from '../../../../../app/shared/jenkins.service';
 import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
-import { OnLogin } from '../../../../shared/onlogin.service';
 import { Build, PendingInputAction } from '../../../model/build.model';
 import { PipelineStage } from '../../../model/pipelinestage.model';
 import { pathJoin } from '../../../model/utils';

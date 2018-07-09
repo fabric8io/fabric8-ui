@@ -15,6 +15,7 @@
       </div>
       <div class="list-pf-description">Unavailable</div>
       <div class="list-pf-description">Unavailable</div>
+      <div class="list-pf-description">Unavailable</div>
     </ng-template>
     <ng-template #valid>
       <div class="list-pf-title">
@@ -22,9 +23,16 @@
       </div>
       <div class="list-pf-description">{{codebase.gitHubRepo.createdAt | date:'medium'}}</div>
       <div class="list-pf-description">{{codebase.gitHubRepo.pushedAt | date:'medium'}}</div>
+      <div class="list-pf-description">
+          <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running && codebase.gitHubRepo"></codebases-item-workspaces>
+        </div>
     </ng-template>
   </div>
   <div class="list-pf-additional-content">
-    <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running && codebase.gitHubRepo"></codebases-item-workspaces>
+    <bSwitch
+      [(ngModel)]="codebase.attributes['cve-scan']"
+      [switch-readonly]="false"
+      (onChangeState)="onChangeSubscribe($event, codebase)">
+    </bSwitch>
   </div>
 </div>

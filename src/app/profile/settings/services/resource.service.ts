@@ -1,16 +1,10 @@
 import {
-  ErrorHandler,
-  Inject,
-  Injectable,
-  OnDestroy
+  Injectable
 } from '@angular/core';
 
-import { User, UserService } from 'ngx-login-client';
+import { UserService } from 'ngx-login-client';
 import {
-  Observable,
-  ReplaySubject,
-  Subject,
-  Subscription
+  Observable
 } from 'rxjs';
 
 import { ScaledMemoryStat } from '../../../space/create/deployments/models/scaled-memory-stat';

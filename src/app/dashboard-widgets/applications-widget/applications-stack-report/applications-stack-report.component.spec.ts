@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 

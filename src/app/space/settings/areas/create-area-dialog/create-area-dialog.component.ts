@@ -2,7 +2,6 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, 
 import { NgForm, NgModel } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Area, AreaAttributes, AreaService } from 'ngx-fabric8-wit';
-import { Subscription } from 'rxjs';
 
 export enum AreaCreationStatus {
   OK,

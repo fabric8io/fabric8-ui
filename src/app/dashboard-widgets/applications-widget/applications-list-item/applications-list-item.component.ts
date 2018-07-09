@@ -16,7 +16,7 @@ import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pi
 import { InputActionDialog } from '../../../../a-runtime-console/kubernetes/ui/pipeline/input-action-dialog/input-action-dialog.component';
 import { ApplicationsStackReportComponent } from '../applications-stack-report/applications-stack-report.component';
 
-import { cloneDeep, isEmpty, isEqual } from 'lodash';
+import { isEmpty } from 'lodash';
 
 export class BuildInput {
   build: Build;

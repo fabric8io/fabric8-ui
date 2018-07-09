@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { Logger } from 'ngx-base';
 import { Feature, FeatureFlagConfig, FeatureTogglesService } from 'ngx-feature-flag';
-import { AuthenticationService, UserService } from 'ngx-login-client';
+import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 import { FeatureFlagResolver } from './feature-flag.resolver';
 

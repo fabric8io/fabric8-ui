@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Broadcaster } from 'ngx-base';
-// import { UserService } from 'ngx-login-client';
-
-import { Observable } from 'rxjs/Observable';
 
 import { OAuthConfigStore } from '../../a-runtime-console/index';
 

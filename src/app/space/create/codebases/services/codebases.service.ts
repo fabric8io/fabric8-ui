@@ -100,6 +100,25 @@ export class CodebasesService {
    * @param codebase
    * @returns {Observable<Codebase>}
    */
+  updateCodebases(codebase: Codebase): Observable<Codebase> {
+    let url = `${this.codebasesUrl}/${codebase.id}`;
+    let payload = JSON.stringify({ data: codebase });
+    return this.http
+      .patch(url, payload, { headers: this.headers })
+      .map(response => {
+        return response.json().data as Codebase;
+      })
+      .catch((error) => {
+        return this.handleError(error);
+      });
+  }
+
+  /**
+   * Update codebase
+   *
+   * @param codebase
+   * @returns {Observable<Codebase>}
+   */
   update(codebase: Codebase): Observable<Codebase> {
     let url = `${this.spacesUrl}/${codebase.id}`;
     let payload = JSON.stringify({ data: codebase });

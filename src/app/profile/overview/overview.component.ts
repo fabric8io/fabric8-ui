@@ -7,7 +7,6 @@ import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
-import { ExtProfile } from '../../getting-started/services/getting-started.service';
 import { ContextService } from '../../shared/context.service';
 
 @Component({

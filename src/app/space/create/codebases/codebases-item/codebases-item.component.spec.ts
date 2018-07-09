@@ -3,27 +3,34 @@ import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
-
+import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2/dist/index';
 import { Broadcaster, Notifications } from 'ngx-base';
 import { Observable } from 'rxjs';
 
-import { GitHubService } from '../services/github.service';
-import { expectedGitHubRepoDetails } from '../services/github.service.mock';
+import { CodebasesService } from '../services/codebases.service';
 import { CodebasesItemComponent } from './codebases-item.component';
 
 describe('Codebases Item Component', () => {
   let broadcasterMock: any;
   let fixture, codebases, codebase;
+  let mockNotifications: any;
+  let mockCodebasesService: any;
 
   beforeEach(() => {
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['on']);
+    mockNotifications = jasmine.createSpy('Notifications');
+    mockCodebasesService = jasmine.createSpy('CodebasesService');
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule, HttpModule, JWBootstrapSwitchModule],
       declarations: [CodebasesItemComponent],
       providers: [
+        { provide: Notifications, useValue: mockNotifications },
         {
           provide: Broadcaster, useValue: broadcasterMock
+        },
+        {
+          provide: CodebasesService, useValue: mockCodebasesService
         }
       ],
       // Tells the compiler not to error on unknown elements and attributes
@@ -34,6 +41,7 @@ describe('Codebases Item Component', () => {
         'createdAt': '2017-04-28T09:28:22.224442Z',
         'last_used_workspace': '',
         'stackId': '',
+        'cve-scan': true,
         'type': 'git',
         'url': 'https://github.com/fabric8-services/fabric8-wit.git'
       },

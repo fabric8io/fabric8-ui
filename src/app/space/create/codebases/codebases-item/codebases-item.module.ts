@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Http } from '@angular/http';
+import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2';
 
 import { CodebasesItemWorkspacesModule } from '../codebases-item-workspaces/codebases-item-workspaces.module';
 import { CodebasesService } from '../services/codebases.service';
@@ -12,7 +13,8 @@ import { CodebasesItemComponent } from './codebases-item.component';
   imports: [
     CodebasesItemWorkspacesModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    JWBootstrapSwitchModule
   ],
   declarations: [ CodebasesItemComponent ],
   exports: [ CodebasesItemComponent ],

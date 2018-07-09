@@ -1,13 +1,12 @@
-import { Component, DoCheck, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { FeatureTogglesService } from 'ngx-feature-flag';
 
-import { IWorkflow } from './models/workflow';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

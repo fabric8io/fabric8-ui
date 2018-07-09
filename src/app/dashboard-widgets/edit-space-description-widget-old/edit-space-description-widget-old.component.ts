@@ -3,9 +3,7 @@ import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Observable, Subject } from 'rxjs';
-import { Subscription } from 'rxjs';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
-import { DummyService } from './../shared/dummy.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

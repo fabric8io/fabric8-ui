@@ -18,7 +18,6 @@ import { createMock } from 'testing/mock';
 
 import {
   Observable,
-  Subject,
   Subscription
 } from 'rxjs';
 

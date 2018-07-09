@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Broadcaster, Logger } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';

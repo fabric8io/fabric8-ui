@@ -2,8 +2,6 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
 
 import {
   Component,
-  DebugElement,
-  Input,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';

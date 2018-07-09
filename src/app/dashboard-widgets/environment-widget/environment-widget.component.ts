@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { BehaviorSubject, ConnectableObservable, Observable, Subject, Subscription } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Rx';
 
-import { Context, Contexts, Spaces } from 'ngx-fabric8-wit';
+import { Contexts, Spaces } from 'ngx-fabric8-wit';
 
-import { Space } from '../../../app/space/create/deployments/services/deployment-api.service';
 import {
   ApplicationAttributesOverview,
   ApplicationOverviewService

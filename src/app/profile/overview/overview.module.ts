@@ -4,7 +4,6 @@ import { Http } from '@angular/http';
 
 import { TabsModule } from 'ngx-bootstrap';
 
-import { NotificationsPageModule } from './notifications/notifications-page.module';
 import { OverviewRoutingModule } from './overview-routing.module';
 import { OverviewComponent } from './overview.component';
 import { SpacesModule } from './spaces/spaces.module';

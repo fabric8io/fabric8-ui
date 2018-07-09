@@ -6,7 +6,6 @@ import { ListComponent, ListConfig } from 'patternfly-ng';
 import { Subscription } from 'rxjs';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
 import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
-import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 interface FeatureLevel {
   name: string;

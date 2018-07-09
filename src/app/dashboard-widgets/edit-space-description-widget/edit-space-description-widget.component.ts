@@ -1,11 +1,9 @@
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
-import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Observable, Subject } from 'rxjs';
-import { Subscription } from 'rxjs';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
-import { DummyService } from './../shared/dummy.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -17,6 +15,8 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
 
   @Input() userOwnsSpace: boolean;
   space: Space;
+  spaceOwner: Observable<string>;
+  collaboratorCount: Observable<number>;
 
   private _descriptionUpdater: Subject<string> = new Subject();
 
@@ -31,16 +31,20 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
     private userService: UserService,
     private broadcaster: Broadcaster,
     private spaceService: SpaceService,
-    private spaceNamespaceService: SpaceNamespaceService
-  ) {
-    spaces.current.subscribe(val => {
-      this.space = val;
-      console.log('newspace', val);
-    });
-    userService.loggedInUser.subscribe(val => this.loggedInUser = val);
-  }
+    private spaceNamespaceService: SpaceNamespaceService,
+    private collaboratorService: CollaboratorService
+  ) { }
 
   ngOnInit() {
+    this.userService.loggedInUser.subscribe(val => this.loggedInUser = val);
+    this.spaces.current
+      .subscribe(space => {
+        this.space = space;
+        if (space) {
+          this.collaboratorCount = this.collaboratorService.getInitialBySpaceId(space.id).map(c => c.length);
+          this.spaceOwner = this.userService.getUserByUserId(space.relationships['owned-by'].data.id).map(u => u.attributes.username);
+        }
+      });
     this._descriptionUpdater
       .debounceTime(1000)
       .map(description => {
@@ -51,7 +55,7 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
             version: this.space ? this.space.attributes.version : ''
           },
           type: 'spaces',
-          id: this.space.id
+          id: this.space ? this.space.id : ''
         } as Space;
         return patch;
       })
@@ -59,7 +63,6 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
       .switchMap(patch => this.spaceService
         .update(patch)
         .do(val => {
-          console.log('updatedspace', val);
           this.isEditing = false;
           if (this.space && val) {
             this.space.attributes.description = val.attributes.description;
