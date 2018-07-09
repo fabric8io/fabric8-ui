@@ -17,14 +17,14 @@ Admin consoles are available here:
 * [Prod UI](http://admin-dsaas-production.09b5.dsaas.openshiftapps.com/toggles/)
 * [Preview UI](http://admin-dsaas-preview.b6ff.rh-idev.openshiftapps.com/toggles/)
 
-> NOTE: atm, we dont have any sync mechanism between the 2 instances. This is 2 separate DB.
+> NOTE: atm, we don't have any sync mechanism between the 2 instances. This is 2 separate DB.
 
 
 ### How to login?
 To login to toggles admin console, we use GitHub authentication and we provide some authorisation checking that your user is part of some organisation.
 * You will be prompted to authenticate though GH.
-* If not yet part of the [RHDT organisation](https://github.com/rhdt-dev), please open a house keeping issues (under VPN)
-* If you're already part of the [RHDT organisation](https://github.com/rhdt-dev) but not a member of either [prod-preview](https://github.com/orgs/rhdt-dev/teams/toggles-admin-preprod/members) or [prod team](https://github.com/orgs/rhdt-dev/teams/toggles-admin-prod/members), contact some admins in mattermost #fabric8-platform and ask them to add you. you will need to be an internal user to be granted access. Once granted, try again.
+* If not yet part of the [RHDT organization](https://github.com/rhdt-dev), please open a house keeping issues (under VPN)
+* If you're already part of the [RHDT organization](https://github.com/rhdt-dev) but not a member of either [prod-preview](https://github.com/orgs/rhdt-dev/teams/toggles-admin-preprod/members) or [prod team](https://github.com/orgs/rhdt-dev/teams/toggles-admin-prod/members), contact some admins in mattermost #fabric8-platform and ask them to add you. You will need to be an internal user to be granted access. Once granted, try again.
 
 ### How to logout?
 Search for `Sign out` in the admin console. You will be logged out of fabric8-toggles admin ui but not logged out of GH. If you want to login with a different GH account, logout of GH.
@@ -98,7 +98,7 @@ Atm we have 2 rollout strategies to use with `fabric8-toggles-service`:
 * Enable by emails.
 `enableByEmails` is used for a work in progress feature. You can create a feature with the strategy `emableByEmails` and then list the different users' emails of the other developers you want to collaborate with on this WIP feature.
 
-For example, while working on `new dashboard` feature, Adam wanted to share the new dashboard only with a group of UI developers. Easy way is to used the `enableByEmails`. Once the feature is ready, Adam could removes the strategy `enableByEmails and replace it with a strategy `enableByLevel` with a level of `internal` to start with.
+For example, while working on `new dashboard` feature, Adam wanted to share the new dashboard only with a group of UI developers. Easy way is to used the `enableByEmails`. Once the feature is ready, Adam could remove the strategy `enableByEmails` and replace it with a strategy `enableByLevel` with a level of `internal` to start with.
 
 ### Compoment
 `ngx-feature-flag` provides 2 components to help you hide and show your features under feature-flag.
@@ -144,7 +144,7 @@ For example:
 #### use case 3: My feature is a component I want to dynamically load
 This use case could be while the feature is under development and you want to make sure loading the component will not break the whole UI.
 
-For example, let's dynamically load `EnvironmentWidgetComponent` to carry-on with the same example. but now we don't want to just hide the component, we want to make sure the component code is not loaded at all (this could be useful if for some reasons the component code ma cause runtime failure).
+For example, let's dynamically load `EnvironmentWidgetComponent` to carry-on with the same example. but now we don't want to just hide the component, we want to make sure the component code is not loaded at all (this could be useful if for some reasons the component code may cause runtime failure).
 * In unleash admin ui, add your new feature with a `featureName` (here `Test`), associate a `enableByLevel` strategy, enter the `level` parameter (`internal`, `experimental`, `beta`, `released`). If this level (for ex: experimental) is below your user-consent level (for ex: beta), you won't see the component. 
 * In `analyze-overview.component.html` template, replace `<fabric8-environment-widget />` by `<f8-feature-toggle-loader featureName="Test"></f8-feature-toggle-loader>` where `Test` is the name of the feature. Choose an meaningful name like: `env.widget`. For test purpose here we reuse `Test`.
 * In the module associated to your dynamically loaded component add an `entryComponents`. For ex, in `analyze-overview.module.ts`:

@@ -1,6 +1,5 @@
 import {
-  Component,
-  OnInit
+  Component
 } from '@angular/core';
 
 import {FeatureTogglesService} from '../../app/service/feature-toggles.service';
@@ -22,15 +21,10 @@ import {FeatureTogglesService} from '../../app/service/feature-toggles.service';
   templateUrl: './feature-toggle-service.example.component.html',
   providers: [FeatureTogglesService]
 })
-export class FeatureToggleServiceExampleComponent implements OnInit {
+export class FeatureToggleServiceExampleComponent {
 
   getAllFeaturesOutput: string;
-  constructor(private featureToggleService: FeatureTogglesService) {
-  }
-
-  ngOnInit(): void {
-  }
-
+  constructor(private featureToggleService: FeatureTogglesService) {}
 
   getAllFeaturesEnabledByLevel() {
     this.featureToggleService.getAllFeaturesEnabledByLevel().subscribe(val => {

@@ -63,6 +63,5 @@ export class FeatureToggleExampleComponent implements OnInit {
     (this.featureToggleService as any).userLevel = this.userLevel;
     this.cd.detectChanges();
     this.toggleComponent.ngOnInit();
-    console.log('re-render');
   }
 }
