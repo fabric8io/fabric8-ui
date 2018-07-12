@@ -85,7 +85,7 @@ describe('Codebases Item Details Component', () => {
     expect(broadcasterMock.on).toHaveBeenCalled();
   }));
 
-  it('Create and open workspace', async(() => {
+  it('Create workspace', async(() => {
     // given
     workspacesServiceMock.createWorkspace.and.returnValue(Observable.of(expectedWorkspace));
     const notificationAction = { name: 'created' };
@@ -93,14 +93,14 @@ describe('Codebases Item Details Component', () => {
     fixture.detectChanges();
 
     // when
-    comp.createAndOpenWorkspace();
+    comp.createWorkspace();
 
     // then
     expect(workspacesServiceMock.createWorkspace).toHaveBeenCalled();
     expect(notificationMock.message).toHaveBeenCalled();
   }));
 
-  it('Create And Open Workspace with capacity full', async(() => {
+  it('Create Workspace with capacity full', async(() => {
     // given
     let comp = fixture.componentInstance;
     cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
@@ -108,31 +108,28 @@ describe('Codebases Item Details Component', () => {
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();
     // when
-    comp.createAndOpenWorkspace();
+    comp.createWorkspace();
     fixture.detectChanges();
     // then
     expect(notificationMock.message).toHaveBeenCalled();
   }));
 
-  it('Open workspace', async(() => {
+  it('Open workspace with valid url', async(() => {
     // given
     const workspaceLinks = {
       links: {
         open: 'http://somewhere.com'
       }
     };
-    workspacesServiceMock.getWorkspaces.and.returnValue(Observable.of(expectedWorkspaces));
     workspacesServiceMock.openWorkspace.and.returnValue(Observable.of(workspaceLinks));
     windowServiceMock.open.and.returnValue({location: { href: 'test'}});
-    const notificationAction = { name: 'created' };
-    notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();
 
     // when
     comp.openWorkspace();
 
     // then
-    expect(workspacesServiceMock.openWorkspace).toHaveBeenCalled();
+    expect(windowServiceMock.open).toHaveBeenCalled();
   }));
 
   it('Open workspace with capacity full', async(() => {
