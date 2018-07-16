@@ -1,11 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { Broadcaster, Logger } from 'ngx-base';
-import { Context, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { User, UserService } from 'ngx-login-client';
 
 import { BrandInformation } from '../models/brand-information';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
@@ -25,41 +22,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   brandInformation: BrandInformation;
   loggedInUser: User;
-  recent: Space[];
-  private _context: Context;
-  private _defaultContext: Context;
-  private _spaces: Space[] = [];
-  private _spaceSubscription: Subscription;
   private _loggedInUserSubscription: Subscription;
-  private _contextSubscription: Subscription;
-  private _contextDefaultSubscription: Subscription;
-  private space: string;
 
   constructor(
     private featureTogglesService: FeatureTogglesService,
     private userService: UserService,
-    private spaceService: SpaceService,
-    private router: Router,
-    private contexts: Contexts,
-    private spaces: Spaces,
-    private logger: Logger,
-    private fabric8UIConfig: Fabric8UIConfig,
-    private authentication: AuthenticationService,
-    private broadcaster: Broadcaster
-  ) {
-    this.space = '';
-    this._spaceSubscription = spaces.recent.subscribe(val => this.recent = val);
-  }
+    private fabric8UIConfig: Fabric8UIConfig
+  ) { }
 
   ngOnInit() {
     this._loggedInUserSubscription = this.userService.loggedInUser.subscribe(val => this.loggedInUser = val);
-    this._contextSubscription = this.contexts.current.subscribe(val => {
-      this._context = val;
-    });
-    this._contextDefaultSubscription = this.contexts.default.subscribe(val => {
-      this._defaultContext = val;
-      this.initSpaces();
-    });
     this.brandInformation = new BrandInformation();
     if (this.fabric8UIConfig.branding && this.fabric8UIConfig.branding === 'fabric8') {
       this.brandInformation.logo = fabric8Logo;
@@ -79,33 +51,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._spaceSubscription.unsubscribe();
     this._loggedInUserSubscription.unsubscribe();
-    this._contextSubscription.unsubscribe();
-    this._contextDefaultSubscription.unsubscribe();
-  }
-
-  initSpaces() {
-    if (this.context && this.context.user) {
-      this.spaceService
-        .getSpacesByUser(this.context.user.attributes.username, 5)
-        .subscribe(spaces => {
-          this._spaces = spaces;
-        });
-    } else {
-      this.logger.error('Failed to retrieve list of spaces owned by user');
-    }
-  }
-
-  get context(): Context {
-    if (this.router.url.startsWith('/_home')) {
-      return this._defaultContext;
-    } else {
-      return this._context;
-    }
-  }
-
-  showAddSpaceOverlay(): void {
-    this.broadcaster.broadcast('showAddSpaceOverlay', true);
   }
 }

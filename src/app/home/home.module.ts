@@ -13,6 +13,7 @@ import { RecentPipelinesWidgetModule } from '../dashboard-widgets/recent-pipelin
 import { RecentWorkspacesWidgetModule } from '../dashboard-widgets/recent-workspaces-widget/recent-workspaces-widget.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
+import { RecentSpacesWidgetModule } from './recent-spaces-widget/recent-spaces-widget.module';
 import { WorkItemWidgetModule } from './work-item-widget/work-item-widget.module';
 
 @NgModule({
@@ -24,6 +25,7 @@ import { WorkItemWidgetModule } from './work-item-widget/work-item-widget.module
     FeatureFlagModule,
     WorkItemWidgetModule,
     RecentPipelinesWidgetModule,
+    RecentSpacesWidgetModule,
     RecentWorkspacesWidgetModule,
     CarouselModule.forRoot(),
     ModalModule.forRoot(),
