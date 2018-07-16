@@ -35,7 +35,7 @@ export WS_K8S_API_SERVER_PROTOCOL="wss"
 export WS_K8S_API_SERVER_BASE_PATH=""
 
 export FABRIC8_SSO_API_URL=https://sso.openshift.io/
-export FABRIC8_WIT_API_URL=https://api.openshift.io/api/
+export FABRIC8_WIT_API_URL=https://openshift.io/api/
 export FABRIC8_AUTH_API_URL=https://auth.openshift.io/api/
 
 
