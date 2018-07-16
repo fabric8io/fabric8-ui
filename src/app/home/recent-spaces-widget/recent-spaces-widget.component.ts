@@ -6,7 +6,10 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
 
 import {
   Broadcaster,
@@ -30,8 +33,6 @@ export class RecentSpacesWidget implements OnInit, OnDestroy {
 
   _spaces: Space[] = [];
   recent: Space[] = [];
-  private _defaultContext: Context;
-  private _context: Context;
 
   private readonly subscriptions: Subscription[] = [];
 
@@ -45,40 +46,26 @@ export class RecentSpacesWidget implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    (this.router.url.startsWith('/_home') ? this.contexts.default : this.contexts.current)
+      .first()
+      .subscribe((context: Context): void => {
+        if (context && context.user) {
+          this.spaceService
+            .getSpacesByUser(context.user.attributes.username, 5)
+            .subscribe(spaces => {
+              this._spaces = spaces;
+            });
+        } else {
+          this.logger.error('Failed to retrieve list of spaces owned by user');
+        }
+      });
     this.subscriptions.concat([
-      this.spaces.recent.subscribe(val => this.recent = val),
-      this.contexts.current.subscribe(val => {
-        this._context = val;
-      }),
-      this.contexts.default.subscribe(val => {
-        this._defaultContext = val;
-        this.initSpaces();
-      })
+      this.spaces.recent.subscribe(val => this.recent = val)
     ]);
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
-  }
-
-  initSpaces() {
-    if (this.context && this.context.user) {
-      this.spaceService
-        .getSpacesByUser(this.context.user.attributes.username, 5)
-        .subscribe(spaces => {
-          this._spaces = spaces;
-        });
-    } else {
-      this.logger.error('Failed to retrieve list of spaces owned by user');
-    }
-  }
-
-  get context(): Context {
-    if (this.router.url.startsWith('/_home')) {
-      return this._defaultContext;
-    } else {
-      return this._context;
-    }
   }
 
   showAddSpaceOverlay(): void {
