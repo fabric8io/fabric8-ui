@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 
 import {
   Observable,
+  ReplaySubject,
+  Subject,
   Subscription
 } from 'rxjs';
 
@@ -31,7 +33,7 @@ export class RecentSpacesWidget implements OnInit, OnDestroy {
 
   @Input() cardSizeClass: string;
 
-  _spaces: Space[] = [];
+  readonly userHasSpaces: Subject<boolean> = new ReplaySubject<boolean>(1);
   recent: Space[] = [];
 
   private readonly subscriptions: Subscription[] = [];
@@ -48,17 +50,23 @@ export class RecentSpacesWidget implements OnInit, OnDestroy {
   ngOnInit(): void {
     (this.router.url.startsWith('/_home') ? this.contexts.default : this.contexts.current)
       .first()
-      .subscribe((context: Context): void => {
+      .flatMap((context: Context): Observable<Context> => {
         if (context && context.user) {
-          this.spaceService
-            .getSpacesByUser(context.user.attributes.username, 5)
-            .subscribe(spaces => {
-              this._spaces = spaces;
-            });
+          return Observable.of(context);
         } else {
-          this.logger.error('Failed to retrieve list of spaces owned by user');
+          return Observable.throw('Failed to retrieve list of spaces owned by user');
         }
-      });
+      })
+      .flatMap((context: Context): Observable<boolean> => this.spaceService
+        .getSpacesByUser(context.user.attributes.username)
+        .map((spaces: Space[]): boolean => spaces.length > 0)
+      )
+      .catch((error: any): Observable<any> => {
+        this.logger.error(error);
+        return Observable.empty();
+      })
+      .subscribe(this.userHasSpaces);
+
     this.subscriptions.concat([
       this.spaces.recent.subscribe(val => this.recent = val)
     ]);

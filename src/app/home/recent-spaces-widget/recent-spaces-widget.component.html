@@ -11,7 +11,7 @@
   </div>
   <div class="card-pf-body f8-card-body">
 
-    <div *ngIf="_spaces.length === 0 then emptyState; else spaceList"></div>
+    <div *ngIf="(userHasSpaces | async) then spaceList; else emptyState"></div>
     <ng-template #emptyState>
       <div class="f8-blank-slate-card">
         <h3>Create a space</h3>
