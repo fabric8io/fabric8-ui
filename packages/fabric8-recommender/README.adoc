@@ -158,4 +158,4 @@ synchronise your changes across all the various UI projects.
 == Contributing to the app
 
 The development guide is part of the link:./CONTRIBUTING.adoc[contributors'
-instructions]. Please check it out in order to contribute to this project.
+instructions]. Please check it out in order to contribute to this project. 
