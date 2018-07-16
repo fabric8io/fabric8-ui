@@ -30,11 +30,10 @@ export class RecentSpacesWidget implements OnInit, OnDestroy {
 
   _spaces: Space[] = [];
   recent: Space[] = [];
-  private _spaceSubscription: Subscription;
   private _defaultContext: Context;
-  private _contextDefaultSubscription: Subscription;
   private _context: Context;
-  private _contextSubscription: Subscription;
+
+  private readonly subscriptions: Subscription[] = [];
 
   constructor(
     private contexts: Contexts,
@@ -43,24 +42,23 @@ export class RecentSpacesWidget implements OnInit, OnDestroy {
     private router: Router,
     private broadcaster: Broadcaster,
     private logger: Logger
-  ) {
-    this._spaceSubscription = this.spaces.recent.subscribe(val => this.recent = val);
-  }
+  ) { }
 
   ngOnInit(): void {
-    this._contextSubscription = this.contexts.current.subscribe(val => {
-      this._context = val;
-    });
-    this._contextDefaultSubscription = this.contexts.default.subscribe(val => {
-      this._defaultContext = val;
-      this.initSpaces();
-    });
+    this.subscriptions.concat([
+      this.spaces.recent.subscribe(val => this.recent = val),
+      this.contexts.current.subscribe(val => {
+        this._context = val;
+      }),
+      this.contexts.default.subscribe(val => {
+        this._defaultContext = val;
+        this.initSpaces();
+      })
+    ]);
   }
 
   ngOnDestroy(): void {
-    this._spaceSubscription.unsubscribe();
-    this._contextSubscription.unsubscribe();
-    this._contextDefaultSubscription.unsubscribe();
+    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
 
   initSpaces() {
