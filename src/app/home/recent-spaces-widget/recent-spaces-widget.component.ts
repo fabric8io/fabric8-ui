@@ -1,16 +1,13 @@
 import {
   Component,
   Input,
-  OnDestroy,
   OnInit
 } from '@angular/core';
 import { Router } from '@angular/router';
-
 import {
   Observable,
   ReplaySubject,
-  Subject,
-  Subscription
+  Subject
 } from 'rxjs';
 
 import {
@@ -29,23 +26,23 @@ import {
   selector: 'fabric8-recent-spaces-widget',
   templateUrl: './recent-spaces-widget.component.html'
 })
-export class RecentSpacesWidget implements OnInit, OnDestroy {
+export class RecentSpacesWidget implements OnInit {
 
   @Input() cardSizeClass: string;
 
   readonly userHasSpaces: Subject<boolean> = new ReplaySubject<boolean>(1);
-  recent: Space[] = [];
-
-  private readonly subscriptions: Subscription[] = [];
+  readonly recentSpaces: Observable<Space[]>;
 
   constructor(
     private contexts: Contexts,
-    private spaces: Spaces,
+    spaces: Spaces,
     private spaceService: SpaceService,
     private router: Router,
     private broadcaster: Broadcaster,
     private logger: Logger
-  ) { }
+  ) {
+    this.recentSpaces = spaces.recent;
+  }
 
   ngOnInit(): void {
     (this.router.url.startsWith('/_home') ? this.contexts.default : this.contexts.current)
@@ -66,14 +63,6 @@ export class RecentSpacesWidget implements OnInit, OnDestroy {
         return Observable.empty();
       })
       .subscribe(this.userHasSpaces);
-
-    this.subscriptions.concat([
-      this.spaces.recent.subscribe(val => this.recent = val)
-    ]);
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
 
   showAddSpaceOverlay(): void {
