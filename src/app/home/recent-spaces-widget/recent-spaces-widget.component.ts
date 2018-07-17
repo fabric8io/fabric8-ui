@@ -1,5 +1,6 @@
 import {
   Component,
+  ErrorHandler,
   Input,
   OnInit
 } from '@angular/core';
@@ -38,6 +39,7 @@ export class RecentSpacesWidget implements OnInit {
     spaces: Spaces,
     private spaceService: SpaceService,
     private router: Router,
+    private errorHandler: ErrorHandler,
     private broadcaster: Broadcaster,
     private logger: Logger
   ) {
@@ -60,6 +62,7 @@ export class RecentSpacesWidget implements OnInit {
       )
       .catch((error: any): Observable<any> => {
         this.logger.error(error);
+        this.errorHandler.handleError(error);
         return Observable.empty();
       })
       .subscribe(this.userHasSpaces);
