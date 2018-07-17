@@ -34,4 +34,3 @@ import { CreateAreaDialogModule } from './create-area-dialog/create-area-dialog.
 export class AreasModule {
   constructor() { }
 }
-getComputedStyle(gst)

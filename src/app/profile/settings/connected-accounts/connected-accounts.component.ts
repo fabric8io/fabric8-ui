@@ -6,7 +6,6 @@ import { UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
 import { ProviderService } from '../../../shared/account/provider.service';
-import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

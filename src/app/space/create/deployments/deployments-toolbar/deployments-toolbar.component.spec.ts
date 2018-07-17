@@ -1,9 +1,6 @@
 import {
   Component,
-  EventEmitter,
-  Input,
-  NO_ERRORS_SCHEMA,
-  Output
+  NO_ERRORS_SCHEMA
 } from '@angular/core';
 
 import { FilterEvent } from 'patternfly-ng/filter';

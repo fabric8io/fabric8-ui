@@ -25,17 +25,10 @@ import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import {
   fromOrdinal,
-  MemoryUnit,
   ordinal
 } from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
 import { Pods } from '../models/pods';
-import { ScaledMemoryStat } from '../models/scaled-memory-stat';
-import { ScaledNetStat } from '../models/scaled-net-stat';
-import {
-  instanceOfScaledStat,
-  ScaledStat
-} from '../models/scaled-stat';
 import { Stat } from '../models/stat';
 import {
   DeploymentStatusService,

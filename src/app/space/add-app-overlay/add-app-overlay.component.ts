@@ -11,7 +11,7 @@ import { Broadcaster } from 'ngx-base';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 
-import { DependencyCheckService } from 'ngx-forge';
+import { DependencyCheckService } from 'ngx-launcher';
 import { ContextService } from '../../shared/context.service';
 import { Application, DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 
@@ -110,7 +110,20 @@ export class AddAppOverlayComponent implements OnDestroy {
   validateProjectName(): void {
     this.projectName = this.projectName.toLowerCase();
     this.isProjectNameValid =
-      this.dependencyCheckService.validateProjectName(this.projectName);
+      this.isValidProjectName(this.projectName);
     this.isProjectNameAvailable = this.applications.indexOf(this.projectName) === -1 ? true : false;
+  }
+
+   /**
+   * Validate the project name and returns a boolean value
+   *
+   * @param  {string} projectName
+   * @returns boolean
+   */
+  isValidProjectName(projectName: string): boolean {
+    // allows only '-', '_' and 4-40 characters (must start with alphabetic and end with alphanumeric)
+    // no continuous '-' or '_' is allowed
+    const pattern = /^[a-zA-Z](?!.*--)(?!.*__)[a-zA-Z0-9-_]{2,38}[a-zA-Z0-9]$/;
+    return pattern.test(projectName);
   }
 }

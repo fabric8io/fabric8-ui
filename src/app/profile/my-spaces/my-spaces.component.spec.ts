@@ -7,6 +7,7 @@ import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { Action } from 'patternfly-ng/action';
 import { Observable } from 'rxjs/Observable';
 
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
@@ -14,9 +15,7 @@ import { spaceMock } from '../../shared/context.service.mock';
 import { EventService } from '../../shared/event.service';
 import { MySpacesComponent } from './my-spaces.component';
 
-
 describe('MySpacesComponent', () => {
-
   let fixture: ComponentFixture<MySpacesComponent>;
   let component: DebugNode['componentInstance'];
   let mockContexts: any = jasmine.createSpy('Contexts');
@@ -97,7 +96,7 @@ describe('MySpacesComponent', () => {
     spaceMock1 = cloneDeep(spaceMock);
     spaceMock2 = cloneDeep(spaceMock);
     spaceMock2.id = '2';
-    spaceMock2.attributes.name = 'spaceMock2-id';
+    spaceMock2.attributes.name = 'spaceMock2-name';
     mockContexts.current = Observable.of(mockContext);
     mockUserService.loggedInUser = Observable.of(mockUser);
     mockGettingStartedService.createTransientProfile.and.returnValue(mockExtProfile);
@@ -146,7 +145,7 @@ describe('MySpacesComponent', () => {
     it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', () => {
       spyOn(component, 'savePins').and.callFake(() => {});
       spyOn(component, 'updateSpaces');
-      component.allSpaces = [ spaceMock1 ];
+      component.allSpaces = [spaceMock1];
       component.handlePinChange(spaceMock1);
       expect(component.savePins).toHaveBeenCalled();
       expect(component.updateSpaces).toHaveBeenCalled();
@@ -173,10 +172,17 @@ describe('MySpacesComponent', () => {
       spyOn(component, 'savePins').and.callFake(() => {});
       spyOn(component, 'updateSpaces');
       spaceMock1.showPin = true;
-      component.allSpaces = [ spaceMock1 ];
+      component.allSpaces = [spaceMock1];
       component.handlePinChange(spaceMock1);
       expect(spaceMock1.showPin).toBeDefined();
       expect(spaceMock1.showPin).toBeFalsy();
+    });
+  });
+
+  describe('#handleCreateSpaceAction', () => {
+    it('should broadcast event when create space is clicked', () => {
+        component.handleAction({ id: 'createSpace'} as Action);
+        expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
     });
   });
 
@@ -186,10 +192,12 @@ describe('MySpacesComponent', () => {
 
   describe('#applyFilters', () => {
     it('should use matchesFilters to select qualifying spaces', () => {
+      spyOn(component, 'matchesFilters');
       component.appliedFilters = [mockFilter1, mockFilter2]; // 'space' && '2'
+      component.allSpaces = [spaceMock1, spaceMock2];
       component.ngOnInit();
       component.applyFilters();
-      expect(component._spaces).toEqual([spaceMock2]);
+      expect(component.matchesFilters).toHaveBeenCalled();
     });
 
     it('should return all spaces if there are no filters', () => {
@@ -215,18 +223,25 @@ describe('MySpacesComponent', () => {
       let result: boolean = component.matchesFilter(spaceMock1, mockFilter3);
       expect(result).toBeTruthy();
     });
+
+    it('should be case-insensitive', () => {
+      let mockFilterCaseInsensitive = cloneDeep(mockFilter1);
+      mockFilterCaseInsensitive.value = mockFilter1.value.toUpperCase();
+      let result: boolean = component.matchesFilter(spaceMock1, mockFilterCaseInsensitive);
+      expect(result).toBe(true);
+    });
   });
 
   describe('#matchesFilters', () => {
     it('should delegate to the matchesFilter method for each filter', () => {
       let mockFilters = [mockFilter1, mockFilter2];
       spyOn(component, 'matchesFilter');
-      let result = component.matchesFilters(spaceMock1, mockFilters);
+      component.matchesFilters(spaceMock1, mockFilters);
       expect(component.matchesFilter).toHaveBeenCalledTimes(2);
     });
 
     it('should return true if all of the filters are satisfied', () => {
-      let mockFilters = [mockFilter1, mockFilter2];
+      let mockFilters = [mockFilter1, mockFilter3];
       let result = component.matchesFilters(spaceMock2, mockFilters);
       expect(result).toBeTruthy();
     });
@@ -234,7 +249,7 @@ describe('MySpacesComponent', () => {
     it('should return false if at least one of the filters results in zero matches', () => {
       let mockFilters = [mockFilter1, mockFilter2, mockFilter3];
       let result = component.matchesFilters(spaceMock1, mockFilters);
-      expect(result).toBeFalsy();
+      expect(result).toBe(false);
     });
   });
 
@@ -283,9 +298,7 @@ describe('MySpacesComponent', () => {
     });
 
     it('should retrieve the user\'s space information and show all spaces', () => {
-      expect(component.showSpaces).toBeFalsy();
       component.initSpaces(mockEvent);
-      expect(component.showSpaces).toBeTruthy();
       expect(component.allSpaces).toEqual([spaceMock1, spaceMock2]);
     });
 

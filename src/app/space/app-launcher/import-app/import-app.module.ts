@@ -14,7 +14,7 @@ import {
   ProjectSummaryService,
   TargetEnvironmentService,
   TokenProvider
-} from 'ngx-forge';
+} from 'ngx-launcher';
 
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
 import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovider.service';

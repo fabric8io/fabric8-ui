@@ -39,7 +39,6 @@ import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 import { Feature, FeatureFlagModule, FeatureTogglesService } from 'ngx-feature-flag';
 import { BuildConfig } from '../../../../a-runtime-console/index';
-import { PipelinesService as RuntimePipelinesService } from '../../../shared/runtime-console/pipelines.service';
 
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesService } from './services/pipelines.service';

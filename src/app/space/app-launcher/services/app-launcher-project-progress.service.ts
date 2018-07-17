@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import {
-  Subject
-} from 'rxjs';
 
 import {
   HelperService,
   ProjectProgressService
-} from 'ngx-forge';
+} from 'ngx-launcher';
 
 @Injectable()
 export class AppLauncherProjectProgressService implements ProjectProgressService {

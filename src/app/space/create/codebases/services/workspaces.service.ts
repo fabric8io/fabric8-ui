@@ -6,7 +6,6 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
-import { Codebase } from './codebase';
 import { Workspace, WorkspaceLinks } from './workspace';
 
 @Injectable()

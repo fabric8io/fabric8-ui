@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 
-import { ModalDirective } from 'ngx-bootstrap';
+import {
+  ModalDirective,
+  ModalModule
+} from 'ngx-bootstrap/modal';
 
 import { createMock } from 'testing/mock';
 import {
@@ -11,39 +14,41 @@ import {
 import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 
 @Component({
-  template: '<delete-deployment-modal></delete-deployment-modal>'
+  template: `<delete-deployment-modal
+    [applicationId]="'fooApplicationId'"
+    [environmentName]="'fooEnvironmentName'"
+  ></delete-deployment-modal>`
 })
 class HostComponent { }
 
 describe('DeleteDeploymentModal', (): void => {
   type TestingContext = TestContext<DeleteDeploymentModal, HostComponent>;
 
-  initContext(DeleteDeploymentModal, HostComponent, {}, (modal: DeleteDeploymentModal): void => {
-    const mockHost: jasmine.SpyObj<ModalDirective> = createMock(ModalDirective);
-    modal.host = mockHost;
-    mockHost.show.and.stub();
-    mockHost.hide.and.stub();
+  initContext(DeleteDeploymentModal, HostComponent, {
+    imports: [ModalModule.forRoot()]
+  });
 
-    modal.applicationId = 'fooApplicationId';
-    modal.environmentName = 'fooEnvironmentName';
+  beforeEach(function(this: TestingContext): void {
+    spyOn(this.testedDirective.host, 'show');
+    spyOn(this.testedDirective.host, 'hide');
   });
 
   it('should be instantiable', function(this: TestingContext): void {
     expect(this.testedDirective).toBeTruthy();
   });
 
-  describe('#openModal', (): void => {
+  describe('#show', (): void => {
     it('should call host.show()', function(this: TestingContext): void {
       expect(this.testedDirective.host.show).not.toHaveBeenCalled();
-      this.testedDirective.openModal();
+      this.testedDirective.show();
       expect(this.testedDirective.host.show).toHaveBeenCalled();
     });
   });
 
-  describe('#closeModal', (): void => {
+  describe('#hide', (): void => {
     it('should call host.hide()', function(this: TestingContext): void {
       expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-      this.testedDirective.closeModal();
+      this.testedDirective.hide();
       expect(this.testedDirective.host.hide).toHaveBeenCalled();
     });
   });

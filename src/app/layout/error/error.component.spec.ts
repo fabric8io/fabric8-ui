@@ -15,10 +15,6 @@ import {
   AuthenticationService,
   UserService
 } from 'ngx-login-client';
-import {
-  Observable,
-  Subject
-} from 'rxjs';
 
 import { ErrorComponent } from './error.component';
 import { ErrorService } from './error.service';

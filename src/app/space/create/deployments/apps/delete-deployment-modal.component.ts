@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -12,21 +12,22 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 })
 export class DeleteDeploymentModal {
 
-  @Input() host: ModalDirective;
-  @Input() applicationId: string = '';
-  @Input() environmentName: string = '';
+  @Input() applicationId: string;
+  @Input() environmentName: string;
   @Output() deleteEvent: EventEmitter<void> = new EventEmitter<void>();
 
-  openModal(): void {
+  @ViewChild('modal') host: ModalDirective;
+
+  show(): void {
     this.host.show();
   }
 
-  closeModal(): void {
+  hide(): void {
     this.host.hide();
   }
 
   confirmDeletion(): void {
     this.deleteEvent.emit();
-    this.host.hide();
+    this.hide();
   }
 }

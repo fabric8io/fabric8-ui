@@ -18,8 +18,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { createMock } from 'testing/mock';
 import {
-  initContext,
-  TestContext
+  initContext
 } from 'testing/test-context';
 
 import {

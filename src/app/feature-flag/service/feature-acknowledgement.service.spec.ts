@@ -1,5 +1,5 @@
 import { async, TestBed } from '@angular/core/testing';
-import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { Logger } from 'ngx-base';

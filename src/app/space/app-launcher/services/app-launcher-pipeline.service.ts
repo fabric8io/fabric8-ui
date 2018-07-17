@@ -7,7 +7,7 @@ import {
   Pipeline,
   PipelineService,
   TokenProvider
-} from 'ngx-forge';
+} from 'ngx-launcher';
 
 @Injectable()
 export class AppLauncherPipelineService implements PipelineService {

@@ -121,10 +121,6 @@ import { TogglesModule } from './feature-flag/toggles.module';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 import { RavenExceptionHandler } from './shared/exception.handler';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
-<<<<<<< HEAD
-=======
-
->>>>>>> fa48a801... refactor(feature-flag): use ext library
 
 // Application wide providers
 const APP_PROVIDERS = [

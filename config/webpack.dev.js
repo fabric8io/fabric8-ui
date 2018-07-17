@@ -174,7 +174,7 @@ module.exports = function (options) {
             /\/ng2-dnd/,
             /\/ng2-truncate/,
             /\/ngx-dropdown/,
-            /\/ngx-forge/,
+            /\/ngx-launcher/,
             /\/ngx-modal/
           ],
           use: ["source-map-loader"],

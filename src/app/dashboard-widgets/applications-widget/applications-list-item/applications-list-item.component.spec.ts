@@ -8,7 +8,6 @@ import { initContext, TestContext } from 'testing/test-context';
 
 import { Build } from '../../../../a-runtime-console/index';
 
-import { InputActionDialog } from '../../../../a-runtime-console/kubernetes/ui/pipeline/input-action-dialog/input-action-dialog.component';
 import { ApplicationsListItemComponent } from './applications-list-item.component';
 
 @Component({

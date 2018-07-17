@@ -1,5 +1,3 @@
-import { LinkCategory } from './link-category';
-
 export class LinkType {
   id: string;
   type: string;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 
-import { AuthHelperService, GitHubDetails, GitProviderService, HelperService, TokenProvider } from 'ngx-forge';
+import { AuthHelperService, GitHubDetails, GitProviderService, HelperService, TokenProvider } from 'ngx-launcher';
 
 @Injectable()
 export class AppLauncherGitproviderService implements GitProviderService {

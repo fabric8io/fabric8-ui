@@ -52,15 +52,8 @@
   </div>
 </ng-container>
 
-<div class="modal fade" bsModal #modal="bs-modal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <delete-deployment-modal #deleteDeploymentModal
-      (deleteEvent)="delete()"
-      [host]="modal"
-      [applicationId]="applicationId"
-      [environmentName]="environment"
-      ></delete-deployment-modal>
-    </div>
-  </div>
-</div>
+<delete-deployment-modal
+  [applicationId]="applicationId"
+  [environmentName]="environment"
+  (deleteEvent)="delete()"
+></delete-deployment-modal>

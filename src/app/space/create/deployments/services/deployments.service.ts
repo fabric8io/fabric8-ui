@@ -1,5 +1,4 @@
 import {
-  ErrorHandler,
   Inject,
   Injectable,
   InjectionToken,
@@ -42,7 +41,6 @@ import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
 import {
   Application,
-  ApplicationAttributes,
   CoresSeries,
   Deployment,
   DeploymentApiService,

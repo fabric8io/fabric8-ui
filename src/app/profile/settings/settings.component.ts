@@ -1,6 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 

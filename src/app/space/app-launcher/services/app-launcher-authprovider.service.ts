@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AuthHelperService } from 'ngx-forge';
+import { AuthHelperService } from 'ngx-launcher';
 
 @Injectable()
 export class AuthAPIProvider extends AuthHelperService {

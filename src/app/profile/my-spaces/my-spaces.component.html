@@ -16,7 +16,7 @@
             [itemHeadingTemplate]="itemHeadingTemplate"
             [itemTemplate]="itemTemplate"
             (onPinChange)="handlePinChange($event.item)"
-            *ngIf="showSpaces">
+            (onActionSelect)="handleAction($event)">
           <ng-template #itemHeadingTemplate>
             <my-spaces-item-heading></my-spaces-item-heading>
           </ng-template>

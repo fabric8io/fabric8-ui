@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { TargetEnvironment, TargetEnvironmentService } from 'ngx-forge';
+import { TargetEnvironment, TargetEnvironmentService } from 'ngx-launcher';
 
 @Injectable()
 export class AppLauncherTargetEnvironmentService implements TargetEnvironmentService {

@@ -3,7 +3,7 @@
 // rc2 workaround
 import { ApplicationRef, enableProdMode } from '@angular/core';
 import { enableDebugTools } from '@angular/platform-browser';
-import { StaticInjector } from 'ngx-forge';
+import { StaticInjector } from 'ngx-launcher';
 
 // Environment Providers
 let PROVIDERS: any[] = [

@@ -1,12 +1,9 @@
-import { discardPeriodicTasks, fakeAsync, flush, inject, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import {
   Headers,
-  Http,
   HttpModule,
   Request,
-  RequestMethod,
-  RequestOptions,
-  RequestOptionsArgs, Response, ResponseOptions, XHRBackend } from '@angular/http';
+  Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 import { createMock } from 'testing/mock';
 

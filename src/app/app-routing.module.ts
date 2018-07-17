@@ -136,34 +136,6 @@ export const routes: Routes = [
     }
   },
 
-  // // Plan board
-  // {
-  //   path: ':entity/:space/plan/board',
-  //   resolve: {
-  //     context: ContextResolver,
-  //     featureFlagConfig: FeatureFlagResolver
-  //   },
-  //   loadChildren: './space/plan/board/board.module#BoardModule',
-  //   data: {
-  //     title: 'Plan: Board',
-  //     featureName: 'Planner'
-  //   }
-  // },
-
-  // Plan details
-  {
-    path: ':entity/:space/plan/detail',
-    resolve: {
-      context: ContextResolver,
-      featureFlagConfig: FeatureFlagResolver
-    },
-    loadChildren: './space/plan/detail/detail.module#DetailModule',
-    data: {
-      title: 'Plan: Detail',
-      featureName: 'Planner'
-    }
-  },
-
   // Create
   {
     path: ':entity/:space/create',

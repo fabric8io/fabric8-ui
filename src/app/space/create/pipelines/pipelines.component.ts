@@ -2,7 +2,6 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  TemplateRef,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -15,18 +14,12 @@ import { SortEvent, SortField } from 'patternfly-ng/sort';
 import { ToolbarConfig } from 'patternfly-ng/toolbar';
 
 import {
-  BsModalRef,
-  BsModalService
-} from 'ngx-bootstrap/modal';
-import {
   Context,
   Contexts,
   Space
 } from 'ngx-fabric8-wit';
 import { BuildConfig } from '../../../../a-runtime-console/index';
-import { pathJoin } from '../../../../a-runtime-console/kubernetes/model/utils';
 import { PipelinesService } from './services/pipelines.service';
-import { SwitchableNamespaceScope } from './switchable-namepsace.scope';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

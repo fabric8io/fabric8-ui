@@ -2,19 +2,15 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
 
 import {
   Component,
-  DebugElement,
-  Input,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
-import { Feature, FeatureFlagModule, FeatureTogglesService } from 'ngx-feature-flag';
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Subscription } from 'rxjs';
 import { Observable, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
@@ -47,9 +43,6 @@ describe('AnalyzeOverviewComponent', () => {
   mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
 
   initContext(AnalyzeOverviewComponent, HostComponent, {
-    imports: [
-      FeatureFlagModule
-    ],
     providers: [
       { provide: BsModalService, useFactory: (): jasmine.SpyObj<BsModalService> => createMock(BsModalService) },
       { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },

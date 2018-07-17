@@ -12,7 +12,7 @@ import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-
 import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
+import { UserService } from 'ngx-login-client';
 import { Observable, Subscription } from 'rxjs';
 
 import { ContextService } from '../../shared/context.service';

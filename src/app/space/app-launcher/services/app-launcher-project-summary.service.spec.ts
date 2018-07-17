@@ -4,7 +4,7 @@ import { MockBackend } from '@angular/http/testing';
 
 import {
   AuthHelperService, Config, HelperService, Summary, TokenProvider
-} from 'ngx-forge';
+} from 'ngx-launcher';
 
 import { ContextService } from '../../../shared/context.service';
 import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';

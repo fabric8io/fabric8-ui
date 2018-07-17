@@ -6,7 +6,6 @@ import {
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
 
-import { Environment } from '../models/environment';
 import { DeploymentsService } from '../services/deployments.service';
 
 @Component({

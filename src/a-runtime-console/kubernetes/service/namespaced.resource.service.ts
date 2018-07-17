@@ -3,8 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { KubernetesResource } from '../model/kubernetesresource.model';
 import { pathJoin } from '../model/utils';
 import { KubernetesService } from './kubernetes.service';
-import { INamespaceScope, NamespaceScope } from './namespace.scope';
-import { Watcher } from './watcher';
+import { INamespaceScope } from './namespace.scope';
 import { WatcherFactory } from './watcher-factory.service';
 
 
