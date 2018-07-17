@@ -44,13 +44,6 @@ const routes: Routes = [
         data: {
           title: 'Settings'
         }
-      },
-      {
-        path: '_tenant',
-        loadChildren: './tenant/tenant.module#TenantModule',
-        data: {
-          title: 'Tenant'
-        }
       }
     ]
   }
