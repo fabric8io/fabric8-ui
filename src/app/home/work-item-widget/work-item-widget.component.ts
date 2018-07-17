@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { WorkItem, WorkItemService } from 'fabric8-planner';
-import { Space, Spaces } from 'ngx-fabric8-wit';
+import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
@@ -20,15 +20,19 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   loggedInUser: User;
   recentSpaces: Space[] = [];
   recentSpaceIndex: number = 0;
+  spaces: Space[] = [];
   subscriptions: Subscription[] = [];
   workItems: WorkItem[] = [];
 
   constructor(
+      private spaceService: SpaceService,
       private spacesService: Spaces,
       private workItemService: WorkItemService,
       private userService: UserService) {
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
+    this.loggedInUser = this.userService.currentLoggedInUser;
+    this.subscriptions.push(this.spaceService.getSpacesByUser(this.loggedInUser.attributes.username).subscribe(spaces => {
+      this.spaces = spaces;
+      this.loading = false;
     }));
     this.subscriptions.push(spacesService.recent.subscribe(spaces => {
       this.recentSpaces = spaces;
@@ -62,51 +66,47 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
    */
   private fetchWorkItemsBySpace(space: Space): void {
     this.currentSpace = space;
-    this.subscriptions.push(this.userService
-      .getUser()
-      .do(() => this.workItemService._currentSpace = space)
-      .do(() => this.workItemService.buildUserIdMap())
-      .switchMap(() => this.userService.loggedInUser)
-      .map(user => [{
-        paramKey: 'filter[assignee]',
-        value: user.id,
-        active: true
-      }])
-      .switchMap(filters => this.workItemService
-        .getWorkItems(100000, filters))
-      .map(val => val.workItems)
-      .map(workItems => filterOutClosedItems(workItems))
-      // Resolve the work item type, creator and area
-      .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
-      .do(workItems => workItems.forEach(workItem => {
-        try {
-          this.workItemService.resolveAreaForWorkItem(workItem);
-        } catch (error) { /* No space */ }
-      }))
-      .do(workItems => {
-        workItems.forEach(workItem => {
+    this.workItemService._currentSpace = space;
+    this.workItemService.buildUserIdMap();
+    let filters: any[] = [{
+      paramKey: 'filter[assignee]',
+      value: this.loggedInUser.id,
+      active: true
+    }];
+    this.subscriptions.push(
+      this.workItemService
+        .getWorkItems(100000, filters)
+        .map(val => val.workItems)
+        .map(workItems => filterOutClosedItems(workItems))
+        .do(workItems => workItems.forEach(workItem => {
+          this.workItemService.resolveType(workItem);
+          try {
+            this.workItemService.resolveAreaForWorkItem(workItem);
+          } catch (error) {
+            /* No space */
+          }
           if (workItem.relationalData === undefined) {
             workItem.relationalData = {};
           }
-        });
-      })
-      .do(workItems => workItems.forEach(workItem => this.workItemService.resolveCreator(workItem)))
-      .subscribe(workItems => {
-        this.workItems = workItems;
-        this.selectRecentSpace(workItems);
-      }));
+          this.workItemService.resolveCreator(workItem);
+        }))
+        .subscribe(workItems => {
+          this.workItems = workItems;
+          this.selectRecentSpace(workItems);
+        })
+    );
   }
 
   /**
-   * Helper method to retrieve space using ID stored in select menu
+   * Helper method to retrieve space with work items using ID stored in select menu
    *
    * @param id The ID associated with a space
    * @returns {Space} Returns null if space cannot be found
    */
   private getSpaceById(id: string): Space {
-    for (let i = 0; i < this.recentSpaces.length; i++) {
-      if (id === this.recentSpaces[i].id) {
-        return this.recentSpaces[i];
+    for (let i = 0; i < this.spaces.length; i++) {
+      if (id === this.spaces[i].id) {
+        return this.spaces[i];
       }
     }
     return null;
@@ -136,7 +136,9 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       return;
     }
     if (workItems !== undefined && workItems.length !== 0) {
-      this.currentSpaceId = this.recentSpaces[this.recentSpaceIndex].id;
+      if (this.recentSpaces[this.recentSpaceIndex]) {
+        this.currentSpaceId = this.recentSpaces[this.recentSpaceIndex].id;
+      }
       this.recentSpaceIndex = -1;
     } else {
       this.recentSpaceIndex++;
