@@ -44,7 +44,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
   codebases: Codebase[] = [];
   contextPath: Observable<string>;
   limit: number = 5; // the number of workspaces to display
-  loading: boolean = true;
+  loading: boolean = false;
   recent: ExtSpace[];
   subscriptions: Subscription[] = [];
   _workspaces: Workspace[] = [];
@@ -61,7 +61,6 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
       if (recent !== undefined) {
         this.recent = recent;
         this.initWorkspaces();
-        this.loading = false;
       }
     }));
   }
@@ -137,6 +136,7 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
         return Observable.of([]);
       }
       return Observable.forkJoin(val.map((space: ExtSpace) => {
+        this.loading = true;
         return this.fetchCodebases(space.id)
           .map(codebases => {
             space.codebases = codebases;
@@ -144,6 +144,9 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
           })
           .catch((error) => {
             return Observable.of([]);
+          })
+          .do(() => {
+            this.loading = false;
           });
         })
       );
