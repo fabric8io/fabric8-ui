@@ -38,7 +38,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
       this.loggedInUser = user;
     }));
 
-    this.subscriptions.push(this.featureTogglesService.getFeature('MyWorkItemsCard').subscribe((feature) => {
+    this.subscriptions.push(this.featureTogglesService.getFeature('Analyze.MyWorkItemsCard').subscribe((feature) => {
       if (feature.attributes['enabled'] && feature.attributes['user-enabled']) {
         this._myWorkItemsCard = true;
       }
