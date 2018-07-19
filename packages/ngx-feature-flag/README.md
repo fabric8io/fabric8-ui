@@ -81,7 +81,6 @@ Take the new launchpad wizard as an example:
     }
   },
 ```
-* [add your feature to the context](https://github.com/fabric8-ui/fabric8-ui/commit/b7a519c884829acc24b5c890608516e777d7e004#diff-bd6978b546f7bb2e79fe4e8ea80f12a7): this is where fabrci8-ui queries the fabric8-toggles-service to display (or not) the menu. This is required only for menu (ie: routing) main feature.
 
 #### use case 2: My feature is accessible on to a given set of user emails
 Atm we have 2 rollout strategies to use with `fabric8-toggles-service`:
@@ -102,12 +101,21 @@ For example, while working on `new dashboard` feature, Adam wanted to share the 
 
 ### Compoment
 `ngx-feature-flag` provides 2 components to help you hide and show your features under feature-flag.
+
+> <b>TIP: As a best practise,</b> if you know a page of your app will have several features flag, group them per page. We use a naming convention:
+`Page.MyFeature` where `Page` is the name you use in the FeatureFlagResolver. 
+
 #### use case 1: My feature is a component I want to hide/show
-For example, let's hide `EnvironmentWidgetComponent`.
-* In unleash admin ui, add your new feature with a `featureName` (here `Test`), associate a `enableByLevel` strategy, enter the `level` parameter (`internal`, `experimental`, `beta`, `released`). If this level (for ex: experimental) is below your user-consent level (for ex: beta), you won't see the component. 
+For example, let's hide `EnvironmentWidgetComponent` which is shown in a `Enviroment` page. Follow the best pratices and name your feature `Enviroment.Test`. If your don't want to "group" features, you can call it simply `Test`.
+* In unleash admin ui, add your new feature with a `featureName` (here `Enviroment.Test`), associate a `enableByLevel` strategy, enter the `level` parameter (`internal`, `experimental`, `beta`, `released`). If this level (for ex: experimental) is below your user-consent level (for ex: beta), you won't see the component. 
+* In your [routing file](https://github.com/fabric8-ui/fabric8-ui/commit/b7a519c884829acc24b5c890608516e777d7e004#diff-959f71d9b4ce6d41e637aaf363c42a18): 
+add `FeatureFlagResolver`(responsible to query the `fabric8-toggles-service`, also specify the name of 
+your feature in `featureName`. Here `Enviroment.Test` should exactly match the feature name 
+(ie: this is the external key between fabric8-ui and fabric8-toggles) defined in fabric8-toggles admin UI.
+Note: this step is optional if you do not group your component per page.
 * In your page or component template:
 ```
-<f8-feature-toggle featureName="Test">
+<f8-feature-toggle featureName="Enviroment.Test">
   <div user-level>
     YOUR HTML
   </div>
@@ -145,8 +153,8 @@ For example:
 This use case could be while the feature is under development and you want to make sure loading the component will not break the whole UI.
 
 For example, let's dynamically load `EnvironmentWidgetComponent` to carry-on with the same example. but now we don't want to just hide the component, we want to make sure the component code is not loaded at all (this could be useful if for some reasons the component code may cause runtime failure).
-* In unleash admin ui, add your new feature with a `featureName` (here `Test`), associate a `enableByLevel` strategy, enter the `level` parameter (`internal`, `experimental`, `beta`, `released`). If this level (for ex: experimental) is below your user-consent level (for ex: beta), you won't see the component. 
-* In `analyze-overview.component.html` template, replace `<fabric8-environment-widget />` by `<f8-feature-toggle-loader featureName="Test"></f8-feature-toggle-loader>` where `Test` is the name of the feature. Choose an meaningful name like: `env.widget`. For test purpose here we reuse `Test`.
+* In unleash admin ui, add your new feature with a `featureName` (here `Enviroment.Test`), associate a `enableByLevel` strategy, enter the `level` parameter (`internal`, `experimental`, `beta`, `released`). If this level (for ex: experimental) is below your user-consent level (for ex: beta), you won't see the component. 
+* In `analyze-overview.component.html` template, replace `<fabric8-environment-widget />` by `<f8-feature-toggle-loader featureName="Enviroment.Test"></f8-feature-toggle-loader>` where `Enviroment.Test` is the name of the feature. Choose an meaningful name like: `env.widget`. For test purpose here we reuse `Enviroment.Test`.
 * In the module associated to your dynamically loaded component add an `entryComponents`. For ex, in `analyze-overview.module.ts`:
 ```
 @NgModule({
@@ -178,7 +186,7 @@ Because we use Feature-flag, we've also added `FeatureFlagModule` in the imports
 ```
   convertFeatureNameToComponent(name: string): Type<any> {
     switch (name) {
-      case 'Test': {
+      case 'Enviroment.Test': {
         return EnvironmentWidgetComponent;
       }
       default: {
