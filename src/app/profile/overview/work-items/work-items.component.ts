@@ -46,7 +46,7 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
                 this.spaces = spaces;
                 if (this.viewingOwnAccount) {
                   this.subscriptions.push(
-                    this.spacesService.recent.subscribe(recentSpaces => {
+                    this.spacesService.recent.subscribe((recentSpaces: Space[]): void => {
                       if (recentSpaces && recentSpaces.length > 0) {
                         this.spaces = uniqBy(spaces.concat(recentSpaces), 'id');
                         this.attemptSelectSpace(recentSpaces[0]);
@@ -102,7 +102,7 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
             totalCount?: number;
             included?: WorkItem[];
             ancestorIDs?: string[];
-          }) => {
+          }): void => {
             this.workItems = filterOutClosedItems(result.workItems);
           }
         )
