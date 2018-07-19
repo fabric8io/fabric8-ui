@@ -10,12 +10,14 @@ import { CodebasesService } from '../services/codebases.service';
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item',
-  templateUrl: './codebases-item.component.html'
+  templateUrl: './codebases-item.component.html',
+  styleUrls: ['./codebases-item.component.less']
 })
 export class CodebasesItemComponent implements OnDestroy, OnInit {
   @Input() cheState: Che;
   @Input() codebase: Codebase;
   @Input() index: number = -1;
+  @Input() cveNotify: boolean;
 
   subscriptions: Subscription[] = [];
 

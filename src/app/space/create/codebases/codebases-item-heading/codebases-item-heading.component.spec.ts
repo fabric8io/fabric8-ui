@@ -14,6 +14,8 @@ import { CodebasesItemHeadingComponent } from './codebases-item-heading.componen
 describe('Codebases Item Heading Component', () => {
   let broadcasterMock: any;
   let fixture;
+  let component: CodebasesItemHeadingComponent;
+  let element: HTMLElement;
 
   beforeEach(() => {
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['on']);
@@ -30,6 +32,9 @@ describe('Codebases Item Heading Component', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(CodebasesItemHeadingComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
   });
 
   it('Che starting message', async(() => {
@@ -62,5 +67,23 @@ describe('Codebases Item Heading Component', () => {
     fixture.detectChanges();
 
     expect(comp.getNotificationMessage()).toEqual(comp.cheFinishedMultiTenantMigrationMessage);
+  }));
+
+  it('Show Security alert in heading', async(() => {
+    let comp = fixture.componentInstance;
+    comp.cveNotify = true;
+    fixture.detectChanges();
+
+    let cveElementTag = element.querySelector('.security-alert-heading');
+    expect(cveElementTag).toBeDefined();
+  }));
+
+  it('Should not show Security alert in heading', async(() => {
+    let comp = fixture.componentInstance;
+    comp.cveNotify = false;
+    fixture.detectChanges();
+
+    let cveElementTag = element.querySelector('.security-alert-heading');
+    expect(cveElementTag).toBeNull();
   }));
 });

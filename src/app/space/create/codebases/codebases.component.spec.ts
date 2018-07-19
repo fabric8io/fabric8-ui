@@ -71,6 +71,7 @@ class FakeCodebasesToolbar {
 })
 class FakeCodebasesItemHeading {
   @Input() cheState: Che;
+  @Input() cveNotify: boolean;
 }
 
 @Component({
@@ -81,6 +82,7 @@ class FakeCodebasesItem {
   @Input() cheState: Che;
   @Input() codebase: Codebase;
   @Input() index: number;
+  @Input() cveNotify: boolean;
 }
 
 @Component({

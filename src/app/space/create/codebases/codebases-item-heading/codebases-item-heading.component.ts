@@ -12,6 +12,7 @@ import { Che } from '../services/che';
 })
 export class CodebasesItemHeadingComponent implements OnInit {
   @Input() cheState: Che;
+  @Input() cveNotify: boolean;
 
   cheErrorMessage: string = 'Your Workspaces failed to load';
   cheRunningMessage: string = 'Your Workspaces have loaded successfully';

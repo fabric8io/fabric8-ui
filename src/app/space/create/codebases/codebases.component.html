@@ -18,11 +18,17 @@
             [expandTemplate]="expandTemplate"
             (onActionSelect)="showAddAppOverlay()">
         <ng-template #itemHeadingTemplate let-item="item">
-          <codebases-item-heading [cheState]="cheState" class="codebase-item"></codebases-item-heading>
+          <f8-feature-toggle featureName="Codebases.CveNotification" class="feature-container">
+            <codebases-item-heading [cheState]="cheState" [cveNotify]="true" class="codebase-item" user-level></codebases-item-heading>
+            <codebases-item-heading [cheState]="cheState" [cveNotify]="false" class="codebase-item" default-level></codebases-item-heading>
+          </f8-feature-toggle>
         </ng-template>
-          <ng-template #itemTemplate let-item="item" let-index="index">
-            <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" class="codebase-item"></codebases-item>
-          </ng-template>
+        <ng-template #itemTemplate let-item="item" let-index="index">
+          <f8-feature-toggle featureName="Codebases.CveNotification" class="feature-container">
+            <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" [cveNotify]="true" class="codebase-item" user-level></codebases-item>
+            <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" [cveNotify]="false" class="codebase-item" default-level></codebases-item>
+          </f8-feature-toggle>
+        </ng-template>
         <ng-template #actionHeadingTemplate let-item="item">
           <!-- Extra margin for kebab -->
           <span class="margin-right-5"></span>

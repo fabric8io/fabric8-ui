@@ -13,8 +13,12 @@ const routes: Routes = [
       {
         path: 'pipelines',
         loadChildren: './pipelines/pipelines.module#PipelinesModule',
+        resolve: {
+          featureFlagConfig: FeatureFlagResolver
+        },
         data: {
-          title: 'Pipelines'
+          title: 'Pipelines',
+          featureName: 'Pipelines'
         }
       },
       {

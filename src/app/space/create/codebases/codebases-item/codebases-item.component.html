@@ -15,7 +15,7 @@
       </div>
       <div class="list-pf-description">Unavailable</div>
       <div class="list-pf-description">Unavailable</div>
-      <div class="list-pf-description">Unavailable</div>
+      <div class="list-pf-description" *ngIf="cveNotify">Unavailable</div>
     </ng-template>
     <ng-template #valid>
       <div class="list-pf-title">
@@ -23,15 +23,19 @@
       </div>
       <div class="list-pf-description">{{codebase.gitHubRepo.createdAt | date:'medium'}}</div>
       <div class="list-pf-description">{{codebase.gitHubRepo.pushedAt | date:'medium'}}</div>
-      <div class="list-pf-description">
+      <div class="list-pf-description" *ngIf="cveNotify">
           <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running && codebase.gitHubRepo"></codebases-item-workspaces>
-        </div>
+      </div>
     </ng-template>
   </div>
-  <div class="list-pf-additional-content">
+  <div class="list-pf-additional-content" *ngIf="!cveNotify">
+      <codebases-item-workspaces [codebase]="codebase" [index]="index" *ngIf="cheState && cheState.running && codebase.gitHubRepo"></codebases-item-workspaces>
+  </div>
+  <div class="list-pf-additional-content security-alert-content" *ngIf="cveNotify">
     <bSwitch
       [(ngModel)]="codebase.attributes['cve-scan']"
       [switch-readonly]="false"
+      [switch-handle-width]="40"
       (onChangeState)="onChangeSubscribe($event, codebase)">
     </bSwitch>
   </div>
