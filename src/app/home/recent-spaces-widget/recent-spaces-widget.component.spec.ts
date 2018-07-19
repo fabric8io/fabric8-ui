@@ -4,7 +4,6 @@ import {
   NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   Observable,
@@ -22,13 +21,15 @@ import {
   Logger
 } from 'ngx-base';
 import {
-  Context,
-  Contexts,
   Fabric8WitModule,
   Space,
   Spaces,
   SpaceService
 } from 'ngx-fabric8-wit';
+import {
+  User,
+  UserService
+} from 'ngx-login-client';
 
 import { RecentSpacesWidget } from './recent-spaces-widget.component';
 
@@ -46,14 +47,6 @@ describe('RecentSpacesWidget', () => {
       RouterTestingModule
     ],
     providers: [
-      {
-        provide: Router,
-        useFactory: (): Router => {
-          return {
-            url: '/_home'
-          } as Router;
-        }
-      },
       {
         provide: Broadcaster,
         useFactory: (): jasmine.SpyObj<Broadcaster> => {
@@ -79,34 +72,24 @@ describe('RecentSpacesWidget', () => {
         }
       },
       {
-        provide: Contexts,
-        useFactory: (): Contexts => {
-          return {
-            current: Observable.of({
-              user: {
-                attributes: {
-                  username: 'currentUsername'
-                }
-              }
-            } as Context),
-            default: Observable.of({
-              user: {
-                attributes: {
-                  username: 'defaultUsername'
-                }
-              }
-            } as Context),
-            recent: Observable.throw('unimplemented')
-          } as Contexts;
-        }
-      },
-      {
         provide: Spaces,
         useFactory: (): Spaces => {
           return {
             recent: new Subject<Space[]>(),
             current: Observable.throw('unimplemented')
           } as Spaces;
+        }
+      },
+      {
+        provide: UserService,
+        useFactory: (): UserService => {
+          return {
+            currentLoggedInUser: {
+              attributes: {
+                username: 'fooUser'
+              }
+            } as User
+          } as UserService;
         }
       },
       {
@@ -123,6 +106,11 @@ describe('RecentSpacesWidget', () => {
 
   it('should be instantiable', function(this: TestingContext): void {
     expect(this.testedDirective).toBeTruthy();
+  });
+
+  it('should use currentLoggedInUser username', function(this: TestingContext): void {
+    const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+    expect(spaceService.getSpacesByUser).toHaveBeenCalledWith('fooUser');
   });
 
   describe('recentSpaces', () => {
@@ -203,57 +191,6 @@ describe('RecentSpacesWidget', () => {
       });
       const service: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       (service.getSpacesByUser() as Subject<Space[]>).next([]);
-    });
-  });
-
-  describe('contexts', () => {
-    describe('_home path', () => {
-      beforeEach(function(this: TestingContext): void {
-        const router: any = TestBed.get(Router);
-        router.url = '/_home';
-        this.testedDirective.ngOnInit();
-      });
-
-      it('should get results from SpaceService based on _home path', function(this: TestingContext) {
-        const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-        expect(spaceService.getSpacesByUser).toHaveBeenCalledWith('defaultUsername');
-        const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
-        expect(logger.error).not.toHaveBeenCalled();
-        const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
-        expect(errorHandler.handleError).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('other path', () => {
-      beforeEach(function(this: TestingContext): void {
-        const router: any = TestBed.get(Router);
-        router.url = '/other';
-        this.testedDirective.ngOnInit();
-      });
-
-      it('should get results from SpaceService based on other path', function(this: TestingContext) {
-        const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-        expect(spaceService.getSpacesByUser).toHaveBeenCalledWith('currentUsername');
-        const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
-        expect(logger.error).not.toHaveBeenCalled();
-        const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
-        expect(errorHandler.handleError).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('invalid context', () => {
-      beforeEach(function(this: TestingContext): void {
-        const contexts: any = TestBed.get(Contexts);
-        contexts.default = Observable.of({});
-        this.testedDirective.ngOnInit();
-      });
-
-      it('should log an error', function(this: TestingContext) {
-        const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
-        expect(logger.error).toHaveBeenCalledWith('Failed to retrieve list of spaces owned by user');
-        const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
-        expect(errorHandler.handleError).toHaveBeenCalledWith('Failed to retrieve list of spaces owned by user');
-      });
     });
   });
 

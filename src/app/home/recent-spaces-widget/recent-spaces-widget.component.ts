@@ -4,7 +4,6 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-import { Router } from '@angular/router';
 import {
   Observable,
   ReplaySubject,
@@ -16,12 +15,11 @@ import {
   Logger
 } from 'ngx-base';
 import {
-  Context,
-  Contexts,
   Space,
   Spaces,
   SpaceService
 } from 'ngx-fabric8-wit';
+import { UserService } from 'ngx-login-client';
 
 @Component({
   selector: 'fabric8-recent-spaces-widget',
@@ -35,10 +33,9 @@ export class RecentSpacesWidget implements OnInit {
   readonly recentSpaces: Observable<Space[]>;
 
   constructor(
-    private contexts: Contexts,
     spaces: Spaces,
     private spaceService: SpaceService,
-    private router: Router,
+    private userService: UserService,
     private errorHandler: ErrorHandler,
     private broadcaster: Broadcaster,
     private logger: Logger
@@ -47,25 +44,20 @@ export class RecentSpacesWidget implements OnInit {
   }
 
   ngOnInit(): void {
-    (this.router.url.startsWith('/_home') ? this.contexts.default : this.contexts.current)
+    this.spaceService
+      .getSpacesByUser(this.userService.currentLoggedInUser.attributes.username)
       .first()
-      .flatMap((context: Context): Observable<Context> => {
-        if (context && context.user) {
-          return Observable.of(context);
-        } else {
-          return Observable.throw('Failed to retrieve list of spaces owned by user');
+      .map((spaces: Space[]): boolean => spaces.length > 0)
+      .subscribe(
+        (userHasSpaces: boolean): void => {
+          this.userHasSpaces.next(userHasSpaces);
+          this.userHasSpaces.complete();
+        },
+        (error: any): void => {
+          this.logger.error(error);
+          this.errorHandler.handleError(error);
         }
-      })
-      .flatMap((context: Context): Observable<boolean> => this.spaceService
-        .getSpacesByUser(context.user.attributes.username)
-        .map((spaces: Space[]): boolean => spaces.length > 0)
-      )
-      .catch((error: any): Observable<any> => {
-        this.logger.error(error);
-        this.errorHandler.handleError(error);
-        return Observable.empty();
-      })
-      .subscribe(this.userHasSpaces);
+      );
   }
 
   showAddSpaceOverlay(): void {
