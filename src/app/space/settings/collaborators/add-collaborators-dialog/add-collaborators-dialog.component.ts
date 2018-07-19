@@ -48,7 +48,6 @@ export class AddCollaboratorsDialogComponent implements OnInit {
     });
   }
 
-
   public onOpen() {
     this.addedCollaboratorIds = this.addedCollaborators.map(user => user.id);
     this.reset();
