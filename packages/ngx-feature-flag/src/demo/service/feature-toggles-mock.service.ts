@@ -33,7 +33,7 @@ export class FeatureTogglesServiceMock  {
     }
     return false;
   }
-  getFeatures(ids: string[]): Observable<Feature[]> {
+  getFeature(id: string): Observable<Feature> {
     const feature =  {
       attributes: {
         'user-enabled': this.isUserLevelEnabled(),
@@ -44,10 +44,10 @@ export class FeatureTogglesServiceMock  {
       },
       id: this.featureFlagName
     } as Feature;
-    let mock = [feature];
-    if (ids[0] === this.featureFlagName) {
-      return Observable.of(mock);
+
+    if (id === this.featureFlagName) {
+      return Observable.of(feature);
     }
-    return Observable.of([]);
+    return Observable.of();
   }
 }

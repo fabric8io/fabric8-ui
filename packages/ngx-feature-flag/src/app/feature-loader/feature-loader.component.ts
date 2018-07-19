@@ -13,11 +13,11 @@ export class FeatureContainerComponent implements OnInit {
   constructor(private featureService: FeatureTogglesService, private featureFlagMapping: FeatureFlagMapping) {}
 
   ngOnInit() {
-    this.featureService.getFeatures([this.featureName]).subscribe(feats => {
-      if (feats && feats.length > 0) {
-        if (this.featureName === feats[0].id) {
-          if (feats[0].attributes.enabled && feats[0].attributes['user-enabled']) {
-            this.featureComponent = this.featureFlagMapping.convertFeatureNameToComponent(feats[0].id);
+    this.featureService.getFeature(this.featureName).subscribe(feat => {
+      if (feat) {
+        if (this.featureName === feat.id) {
+          if (feat.attributes.enabled && feat.attributes['user-enabled']) {
+            this.featureComponent = this.featureFlagMapping.convertFeatureNameToComponent(feat.id);
           } else {
             this.featureComponent = null;
           }

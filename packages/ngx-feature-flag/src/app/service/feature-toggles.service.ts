@@ -37,7 +37,6 @@ export class FeatureTogglesService {
   /**
    * Check if a given feature id is user-enabled for a given user (the user identity being carried with auth token).
    * It also return if the feature is enabled for any users.
-   * @deprecated
    * @returns {Observable<Feature>}
    */
   getFeature(id: string): Observable<Feature> {

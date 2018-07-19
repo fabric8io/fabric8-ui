@@ -20,9 +20,9 @@ export class FeatureToggleComponent implements OnInit {
     if (!this.featureName) {
       throw new Error('Attribute `featureName` should not be null or empty');
     }
-    this.featureService.getFeatures([this.featureName]).subscribe((f: Feature[]) => {
-       if (f && f.length > 0) {
-         this.isEnabled = f[0].attributes.enabled && f[0].attributes['user-enabled'];
+    this.featureService.getFeature(this.featureName).subscribe((feature: Feature) => {
+       if (feature) {
+         this.isEnabled = feature.attributes.enabled && feature.attributes['user-enabled'];
        }
     },
     err => {
