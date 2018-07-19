@@ -102,7 +102,7 @@ For example, while working on `new dashboard` feature, Adam wanted to share the 
 ### Compoment
 `ngx-feature-flag` provides 2 components to help you hide and show your features under feature-flag.
 
-> <b>TIP: As a best practise,</b> if you know a page of your app will have several features flag, group them per page. We use a naming convention:
+> <b>TIP: As a best practise,</b> if you know a page of your app will have several feature flag, group them per page. We use a naming convention:
 `Page.MyFeature` where `Page` is the name you use in the FeatureFlagResolver. 
 
 #### use case 1: My feature is a component I want to hide/show
