@@ -8,7 +8,6 @@ import { BrandInformation } from '../models/brand-information';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 // use url-loader for images
-import { FeatureTogglesService } from 'ngx-feature-flag';
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
 import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
 
@@ -25,7 +24,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _loggedInUserSubscription: Subscription;
 
   constructor(
-    private featureTogglesService: FeatureTogglesService,
     private userService: UserService,
     private fabric8UIConfig: Fabric8UIConfig
   ) { }
