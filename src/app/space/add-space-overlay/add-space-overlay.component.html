@@ -28,17 +28,16 @@
                       Space Name is required to create a Space.
                     </div>
                     <div [hidden]="!name.errors.minLength">
-                      Space Name must be at least {{name.errors.minLength?.min}} characters long
+                      {{name.errors.minLength?.message}}
                     </div>
                     <div [hidden]="!name.errors.maxLength">
-                      Space Name cannot be more than {{name.errors.maxLength?.max}} characters long
+                      {{name.errors.maxLength?.message}}
                     </div>
                     <div [hidden]="!name.errors.unique">
-                      The Space Name '{{name.errors.unique?.requestedName}}' is already in use as {{name.errors.unique?.existingSpace.relationalData.creator.attributes.username}}/{{name.errors.unique?.existingSpace.attributes.name}}
+                      {{name.errors.unique?.message}}
                     </div>
                     <div [hidden]="!name.errors.invalid">
-                      Space Name must contain only letters (upper case or lower case), numbers, underscores (_) or hyphens(-)<br/>
-                      It cannot start or end with an underscore or a hyphen
+                      {{name.errors.invalid?.message}}
                     </div>
                   </div>
                 </div>
