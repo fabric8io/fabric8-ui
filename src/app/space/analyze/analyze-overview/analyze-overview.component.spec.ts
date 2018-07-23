@@ -4,14 +4,16 @@ import {
   Component,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
+import { Observable, Subject } from 'rxjs';
+
 import { Broadcaster } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable, Subject } from 'rxjs';
+
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -26,9 +28,6 @@ class HostComponent { }
 describe('AnalyzeOverviewComponent', () => {
   type TestingContext = TestContext<AnalyzeOverviewComponent, HostComponent>;
 
-  let modalService: jasmine.SpyObj<BsModalService>;
-  let broadcaster: jasmine.SpyObj<Broadcaster>;
-  let authentication: jasmine.SpyObj<AuthenticationService>;
   let ctxSubj: Subject<Context> = new Subject<Context>();
   let fakeUserObs: Subject<User> = new Subject<User>();
 
@@ -99,8 +98,6 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should recognize that the user owns the space', function(this: TestingContext) {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
     fakeUserObs.next({
       id: 'loggedInUser'
     } as User);
@@ -123,8 +120,6 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should recognize that the user does not own the space', function(this: TestingContext) {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
     fakeUserObs.next({
       id: 'loggedInUser'
     } as User);
@@ -147,8 +142,6 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should show the Create an Application button if the user owns the space', function(this: TestingContext) {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
     fakeUserObs.next({
       id: 'loggedInUser'
     } as User);
@@ -171,8 +164,6 @@ describe('AnalyzeOverviewComponent', () => {
   });
 
   it('should hide the Create an Application button if the user does not own the space', function(this: TestingContext) {
-    const userService: jasmine.SpyObj<UserService> = TestBed.get(UserService);
-
     fakeUserObs.next({
       id: 'loggedInUser'
     } as User);
