@@ -15,7 +15,7 @@ import { AuthenticationService, User, UserService } from 'ngx-login-client';
 })
 export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   context: Context;
-  isUserEnabled: boolean = false;
+  _isUserEnabled: boolean;
   isLoggedIn: boolean;
 
   private loggedInUser: User;
@@ -48,9 +48,15 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.featureTogglesService
         .getFeature('Analyze.newSpaceDashboard')
-        .subscribe((feature: Feature) => {
-          this.isUserEnabled = feature.attributes.enabled && feature.attributes['user-enabled'];
-        })
+        .timeout(2000)
+        .subscribe(
+          (feature: Feature) => {
+            this._isUserEnabled = feature.attributes.enabled && feature.attributes['user-enabled'];
+          },
+          () => {
+            this._isUserEnabled = false;
+          }
+        )
     );
 
     this.subscriptions.push(
@@ -75,6 +81,14 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((sub: Subscription) => {
       sub.unsubscribe();
     });
+  }
+
+  isUserEnabled(): boolean {
+    return this._isUserEnabled !== undefined && this._isUserEnabled;
+  }
+
+  isDefaultEnabled(): boolean {
+    return this._isUserEnabled !== undefined && !this._isUserEnabled;
   }
 
   showAddAppOverlay(): void {
