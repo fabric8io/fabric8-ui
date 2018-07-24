@@ -2,7 +2,8 @@ import { AnalyzeOverviewComponent } from './analyze-overview.component';
 
 import {
   Component,
-  NO_ERRORS_SCHEMA
+  NO_ERRORS_SCHEMA,
+  OnInit
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -19,6 +20,17 @@ import {
   initContext,
   TestContext
 } from 'testing/test-context';
+
+let callCount: number = 0;
+@Component({
+  selector: 'fabric8-analytical-report-widget',
+  template: '<div></div>'
+})
+class FakeAnalyticalReportWidget implements OnInit {
+  ngOnInit() {
+    callCount++;
+  }
+}
 
 @Component({
   template: '<alm-analyzeOverview></alm-analyzeOverview>'
@@ -41,7 +53,14 @@ describe('AnalyzeOverviewComponent', () => {
   };
   mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
 
+  beforeEach(() => {
+    callCount = 0;
+  });
+
   initContext(AnalyzeOverviewComponent, HostComponent, {
+    declarations: [
+      FakeAnalyticalReportWidget
+    ],
     providers: [
       { provide: BsModalService, useFactory: (): jasmine.SpyObj<BsModalService> => createMock(BsModalService) },
       { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },
@@ -183,5 +202,11 @@ describe('AnalyzeOverviewComponent', () => {
     this.detectChanges();
 
     expect(this.fixture.debugElement.query(By.css('#user-level-analyze-overview-dashboard-create-space-button'))).toBeNull();
+  });
+
+  it('should only instantiate visible feature flagged components', () => {
+    // There are two instances of fabric8-analytical-report-widget in the html
+    // under user and default feature level; it should only instantiate once.
+    expect(callCount).toBe(1);
   });
 });
