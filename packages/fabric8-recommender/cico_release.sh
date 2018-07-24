@@ -21,7 +21,7 @@ function release() {
     # Build and Release fabric8-recommender (It will update the tag on github and push fabric8-stack-analysis-ui to npmjs.org)
     npm run semantic-release
 
-    create_merge_PR
+    # create_merge_PR
 }
 
 # This function raises a PR against fabric8-npm-dependencies
