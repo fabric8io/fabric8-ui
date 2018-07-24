@@ -2,6 +2,7 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
+  HttpParams,
   HttpResponse
 } from '@angular/common/http';
 import {
@@ -167,8 +168,9 @@ export class DeploymentApiService {
     const encSpaceId: string = encodeURIComponent(spaceId);
     const encEnvironmentName: string = encodeURIComponent(environmentName);
     const encApplicationId: string = encodeURIComponent(applicationId);
-    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries?start=${startTime}&end=${endTime}`;
-    return this.httpGet<MultiTimeseriesResponse>(url)
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries`;
+    const params: HttpParams = new HttpParams().set('start', String(startTime)).set('end', String(endTime));
+    return this.httpGet<MultiTimeseriesResponse>(url, params)
       .map((response: MultiTimeseriesResponse) => response.data);
   }
 
@@ -194,13 +196,14 @@ export class DeploymentApiService {
     const encSpaceId: string = encodeURIComponent(spaceId);
     const encEnvironmentName: string = encodeURIComponent(environmentName);
     const encApplicationId: string = encodeURIComponent(applicationId);
-    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
-    return this.http.put(url, '', { headers: this.headers, responseType: 'text' })
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
+    const params: HttpParams = new HttpParams().set('podCount', String(desiredReplicas));
+    return this.http.put(url, '', { headers: this.headers, params, responseType: 'text' })
       .catch((err: HttpErrorResponse) => this.handleHttpError(err));
   }
 
-  private httpGet<T>(url: string): Observable<T> {
-    return this.http.get<T>(url, { headers: this.headers })
+  private httpGet<T>(url: string, params: HttpParams = new HttpParams()): Observable<T> {
+    return this.http.get<T>(url, { headers: this.headers, params })
       .catch((err: HttpErrorResponse) => this.handleHttpError(err));
   }
 
