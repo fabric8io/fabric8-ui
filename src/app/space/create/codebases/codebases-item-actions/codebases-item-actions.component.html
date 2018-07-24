@@ -6,7 +6,7 @@
     <li [ngClass]="{'disabled': workspaceBusy || !codebase.gitHubRepo}"
         [attr.role]="'menuitem'">
       <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="!workspaceBusy && codebase.gitHubRepo; else createDisabled"
-         (click)="createAndOpenWorkspace()">Create workspace</a>
+         (click)="createWorkspace()">Create workspace</a>
       <ng-template #createDisabled>
         <a href="javascript:void(0)" class="dropdown-item secondary-action" *ngIf="workspaceBusy"
           tooltip="Waiting for Che..." disabled>Create workspace</a>

@@ -9,8 +9,6 @@ import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
 import { WorkspacesService } from '../services/workspaces.service';
 
-import { WindowService } from '../../../../shared/window.service';
-
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'codebases-item-actions',
@@ -30,7 +28,6 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   constructor(
       private broadcaster: Broadcaster,
       private notifications: Notifications,
-      private windowService: WindowService,
       private cheService: CheService,
       private workspacesService: WorkspacesService,
       private codebasesService: CodebasesService) {
@@ -49,9 +46,9 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   // Actions
 
   /**
-   * Create workspace and open in editor
+   * Create workspace
    */
-  createAndOpenWorkspace(): void {
+  createWorkspace(): void {
     this.workspaceBusy = true;
     this.subscriptions.push(this.cheService.getState().switchMap(che => {
       if (!che.clusterFull) {
@@ -62,7 +59,6 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
             this.workspaceBusy = false;
             if (workspaceLinks != undefined) {
               let name = this.getWorkspaceName(workspaceLinks.links.open);
-              this.windowService.open(workspaceLinks.links.open, name);
               this.notifications.message({
                 message: `Workspace created!`,
                 type: NotificationType.SUCCESS
@@ -110,7 +106,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
   /**
    * Process the click on confirm dialog button.
    */
-  onDeleteCodebase() {
+  onDeleteCodebase(): void {
     this.deleteCodebase();
   }
 
