@@ -1,17 +1,18 @@
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import { HttpModule, Response, ResponseOptions, ResponseType, XHRBackend } from '@angular/http';
+import { MockBackend, MockConnection } from '@angular/http/testing';
 import { cloneDeep } from 'lodash';
 import { AuthenticationService } from 'ngx-login-client';
 import { FABRIC8_FEATURE_TOGGLES_API_URL, FeatureTogglesService} from './feature-toggles.service';
 import { Feature } from '../models/feature';
 
 describe('FeatureToggles service:', () => {
-  let mockAuthService: any;
-  let mockErrorHandler: any;
+  let mockAuthService: jasmine.SpyObj<AuthenticationService>;
+  let mockErrorHandler: ErrorHandler;
   let mockService: MockBackend;
   let togglesService: FeatureTogglesService;
+
   const feat1 =  {
     attributes: {
       'user-enabled': true,
@@ -32,6 +33,7 @@ describe('FeatureToggles service:', () => {
     },
     id: 'Deployments.featureB'
   } as Feature;
+
   const features1And2 = [feat1, feat2];
   const expectedResponse1And2 = {data: features1And2};
 
@@ -88,7 +90,7 @@ describe('FeatureToggles service:', () => {
           id: 'Environments'
         }
         ]};
-    mockService.connections.subscribe((connection: any) => {
+    mockService.connections.subscribe((connection: MockConnection) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
           body: JSON.stringify(expectedResponse),
@@ -97,7 +99,7 @@ describe('FeatureToggles service:', () => {
       ));
     });
     // when
-    togglesService.getFeatures(['Deployments', 'Environments']).subscribe((features: any) => {
+    togglesService.getFeatures(['Deployments', 'Environments']).subscribe((features: Feature[]) => {
       // then
       expect(features.length).toEqual(2);
       expect((features[0] as Feature).id).toEqual(expectedResponse.data[0].id);
@@ -131,7 +133,7 @@ describe('FeatureToggles service:', () => {
           id: 'Environments'
         }
       ]};
-    mockService.connections.subscribe((connection: any) => {
+    mockService.connections.subscribe((connection: MockConnection) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
           body: JSON.stringify(expectedResponse),
@@ -140,7 +142,7 @@ describe('FeatureToggles service:', () => {
       ));
     });
     // when
-    togglesService.getAllFeaturesEnabledByLevel().subscribe((features: any) => {
+    togglesService.getAllFeaturesEnabledByLevel().subscribe((features: Feature[]) => {
       // then
       expect(features.length).toEqual(2);
       expect((features[0] as Feature).id).toEqual(expectedResponse.data[0].id);
@@ -175,7 +177,7 @@ describe('FeatureToggles service:', () => {
           id: 'Deployments.featureB'
         }
       ]};
-    mockService.connections.subscribe((connection: any) => {
+    mockService.connections.subscribe((connection: MockConnection) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
           body: JSON.stringify(expectedResponse),
@@ -184,7 +186,7 @@ describe('FeatureToggles service:', () => {
       ));
     });
     // when
-    togglesService.getFeaturesPerPage('Deployments').subscribe(features => {
+    togglesService.getFeaturesPerPage('Deployments').subscribe((features: Feature[]) => {
       // then
       expect(features.length).toEqual(2);
       expect((features[0] as Feature).id).toEqual(expectedResponse.data[0].id);
@@ -238,7 +240,7 @@ describe('FeatureToggles service:', () => {
         id: 'Planner'
       }]
     };
-    mockService.connections.subscribe((connection: any) => {
+    mockService.connections.subscribe((connection: MockConnection) => {
       connection.mockRespond(new Response(
         new ResponseOptions({
           body: JSON.stringify(expectedResponse),
@@ -247,7 +249,7 @@ describe('FeatureToggles service:', () => {
       ));
     });
     // when
-    togglesService.getFeatures(['Planner']).subscribe((feature: any) => {
+    togglesService.getFeatures(['Planner']).subscribe((feature: Feature[]) => {
       // then
       expect((feature as Feature[])[0].id).toEqual(expectedResponse.data[0].id);
       expect((feature as Feature[])[0].attributes['name']).toEqual(expectedResponse.data[0].attributes['name']);
@@ -271,11 +273,74 @@ describe('FeatureToggles service:', () => {
     };
     // when
     togglesService._featureFlagCache.set('Planner', [plannerFeature]);
-    togglesService.getFeatures(['Planner']).subscribe((features: any) => {
+    togglesService.getFeatures(['Planner']).subscribe((features: Feature[]) => {
       // then
       expect((features as Feature[])[0].id).toEqual(expectedResponse.data.id);
       expect((features as Feature[])[0].attributes['name']).toEqual(expectedResponse.data.attributes['name']);
     });
+  });
+
+  it('should return  if feature is user enabled', () => {
+    const featureBody = {
+      data: {
+        attributes: {
+          'user-enabled': true,
+          'enabled': true,
+          'enablement-level': 'beta',
+          'description': 'boo',
+          'name': 'Planner'
+        },
+        id: 'Planner'
+      }
+    };
+
+    mockService.connections.subscribe((connection: MockConnection) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          body: JSON.stringify(featureBody),
+          status: 200
+        })
+      ));
+    });
+
+    togglesService.isFeatureUserEnabled('Planner').subscribe(
+      (isUserEnabled: boolean) => {
+        expect(isUserEnabled).toBe(true);
+      }
+    );
+  });
+
+  it('should return false for unexpected feature response', () => {
+    mockService.connections.subscribe((connection: MockConnection) => {
+      connection.mockRespond(new Response(
+        new ResponseOptions({
+          body: '',
+          status: 200
+        })
+      ));
+    });
+
+    togglesService.isFeatureUserEnabled('Planner').subscribe(
+      (isUserEnabled: boolean) => {
+        expect(isUserEnabled).toBe(false);
+      }
+    );
+  });
+
+  it('should return false for feature response error', () => {
+    mockService.connections.subscribe((connection: MockConnection) => {
+      connection.mockError(new Response(new ResponseOptions({
+        type: ResponseType.Error,
+        body: JSON.stringify('Mock HTTP Error'),
+        status: 404
+      })) as Response & Error);
+    });
+
+    togglesService.isFeatureUserEnabled('Planner').subscribe(
+      (isUserEnabled: boolean) => {
+        expect(isUserEnabled).toBe(false);
+      }
+    );
   });
 
 });

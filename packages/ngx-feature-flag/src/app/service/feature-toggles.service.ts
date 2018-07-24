@@ -34,6 +34,18 @@ export class FeatureTogglesService {
     this._featureFlagCache = new Map<string, Feature[]>();
   }
 
+  isFeatureUserEnabled(id: string): Observable<boolean> {
+    return this.getFeature(id)
+      .map((feature: Feature) => {
+        if (feature.attributes) {
+          return feature.attributes.enabled && feature.attributes['user-enabled'];
+        } else {
+          return false;
+        }
+      })
+      .catch(() => Observable.of(false));
+  }
+
   /**
    * Check if a given feature id is user-enabled for a given user (the user identity being carried with auth token).
    * It also return if the feature is enabled for any users.
