@@ -19,11 +19,13 @@ export class AddCollaboratorsDialogComponent implements OnInit {
 
   @Input() host: ModalDirective;
   @Input() spaceId: string;
+  @Input() addedCollaborators: User[];
 
   @Output() onAdded = new EventEmitter<User[]>();
 
   collaborators: User[] = [];
   selectedCollaborators: User[];
+  addedCollaboratorIds;
   loading: Boolean = false;
   searchTerm = new Subject<string>();
 
@@ -39,7 +41,7 @@ export class AddCollaboratorsDialogComponent implements OnInit {
       tap(() => this.loading = true),
       switchMap(term => this.userService.getUsersBySearchString(term))
     ).subscribe(users => {
-      this.collaborators = users;
+      this.collaborators = users.filter(user => !this.addedCollaboratorIds.includes(user.id));
       this.loading = false;
     }, () => {
       this.collaborators = [];
@@ -47,6 +49,7 @@ export class AddCollaboratorsDialogComponent implements OnInit {
   }
 
   public onOpen() {
+    this.addedCollaboratorIds = this.addedCollaborators.map(user => user.id);
     this.reset();
   }
 

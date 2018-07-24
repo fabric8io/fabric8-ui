@@ -76,4 +76,11 @@ describe('AddCollaboratorsDialog', () => {
     expect(this.testedDirective.collaborators).toEqual([]);
     expect(this.testedDirective.selectedCollaborators).toEqual([]);
   });
+
+  it('should map collaborator ids from added collaborators', function(this: Context) {
+    this.testedDirective.addedCollaborators = [{ id: 'foo-user' } as User, { id: 'bar-user' } as User];
+    expect(this.testedDirective.addedCollaboratorIds).toBeFalsy();
+    this.testedDirective.onOpen();
+    expect(this.testedDirective.addedCollaboratorIds).toEqual(['foo-user', 'bar-user']);
+  });
 });
