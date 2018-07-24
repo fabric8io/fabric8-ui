@@ -183,23 +183,25 @@ export class DeploymentApiService {
       .map((response: TimeseriesResponse) => response.data.attributes);
   }
 
-  deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<HttpResponse<any>> {
+  deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<void> {
     const encSpaceId: string = encodeURIComponent(spaceId);
     const encEnvironmentName: string = encodeURIComponent(environmentName);
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
     return this.http.delete(url, { headers: this.headers, responseType: 'text' })
-      .catch((err: HttpErrorResponse) => this.handleHttpError(err));
+      .catch((err: HttpErrorResponse) => this.handleHttpError(err))
+      .map(() => null);
   }
 
-  scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<HttpResponse<any>> {
+  scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<void> {
     const encSpaceId: string = encodeURIComponent(spaceId);
     const encEnvironmentName: string = encodeURIComponent(environmentName);
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
     const params: HttpParams = new HttpParams().set('podCount', String(desiredReplicas));
     return this.http.put(url, '', { headers: this.headers, params, responseType: 'text' })
-      .catch((err: HttpErrorResponse) => this.handleHttpError(err));
+      .catch((err: HttpErrorResponse) => this.handleHttpError(err))
+      .map(() => null);
   }
 
   private httpGet<T>(url: string, params: HttpParams = new HttpParams()): Observable<T> {

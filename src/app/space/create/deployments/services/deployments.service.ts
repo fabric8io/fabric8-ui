@@ -5,8 +5,6 @@ import {
   OnDestroy
 } from '@angular/core';
 
-import { HttpResponse } from '@angular/common/http';
-
 import {
   Observable,
   ReplaySubject,
@@ -137,7 +135,7 @@ export class DeploymentsService implements OnDestroy {
 
   scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<string> {
     return this.apiService.scalePods(spaceId, environmentName, applicationId, desiredReplicas)
-      .map((r: HttpResponse<any>) => `Successfully scaled ${applicationId}`)
+      .map(() => `Successfully scaled ${applicationId}`)
       .catch(err => Observable.throw(`Failed to scale ${applicationId}`));
   }
 
@@ -254,7 +252,7 @@ export class DeploymentsService implements OnDestroy {
 
   deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
     return this.apiService.deleteDeployment(spaceId, environmentName, applicationId)
-      .map((r: HttpResponse<any>) => `Deployment has successfully deleted`)
+      .map(() => `Deployment has successfully deleted`)
       .catch(err => Observable.throw(`Failed to delete ${applicationId} in ${spaceId} (${environmentName})`));
   }
 
