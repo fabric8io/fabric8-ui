@@ -140,7 +140,7 @@ export class DeploymentApiService {
 
   constructor(
     private readonly http: HttpClient,
-    @Inject(WIT_API_URL) private readonly witUrl: string,
+    @Inject(WIT_API_URL) witUrl: string,
     private readonly auth: AuthenticationService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler
@@ -158,43 +158,43 @@ export class DeploymentApiService {
   }
 
   getApplications(spaceId: string): Observable<Application[]> {
-    const encSpaceId = encodeURIComponent(spaceId);
+    const encSpaceId: string = encodeURIComponent(spaceId);
     return this.httpGet<ApplicationsResponse>(`${this.apiUrl}${encSpaceId}`)
       .map((response: ApplicationsResponse): Application[] => response.data.attributes.applications);
   }
 
   getTimeseriesData(spaceId: string, environmentName: string, applicationId: string, startTime: number, endTime: number): Observable<MultiTimeseriesData> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries?start=${startTime}&end=${endTime}`;
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    const encEnvironmentName: string = encodeURIComponent(environmentName);
+    const encApplicationId: string = encodeURIComponent(applicationId);
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries?start=${startTime}&end=${endTime}`;
     return this.httpGet<MultiTimeseriesResponse>(url)
       .map((response: MultiTimeseriesResponse) => response.data);
   }
 
   getLatestTimeseriesData(spaceId: string, environmentName: string, applicationId: string): Observable<TimeseriesData> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    const encEnvironmentName: string = encodeURIComponent(environmentName);
+    const encApplicationId: string = encodeURIComponent(applicationId);
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
     return this.httpGet<TimeseriesResponse>(url)
       .map((response: TimeseriesResponse) => response.data.attributes);
   }
 
   deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<HttpResponse<any>> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    const encEnvironmentName: string = encodeURIComponent(environmentName);
+    const encApplicationId: string = encodeURIComponent(applicationId);
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
     return this.http.delete(url, { headers: this.headers, responseType: 'text' })
       .catch((err: HttpErrorResponse) => this.handleHttpError(err));
   }
 
   scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<HttpResponse<any>> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    const encEnvironmentName: string = encodeURIComponent(environmentName);
+    const encApplicationId: string = encodeURIComponent(applicationId);
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
     return this.http.put(url, '', { headers: this.headers, responseType: 'text' })
       .catch((err: HttpErrorResponse) => this.handleHttpError(err));
   }
