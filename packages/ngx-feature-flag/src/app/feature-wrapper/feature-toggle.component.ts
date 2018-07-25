@@ -4,7 +4,6 @@ import {
   OnInit
 } from '@angular/core';
 import { FeatureTogglesService } from '../service/feature-toggles.service';
-import { Feature } from '../models/feature';
 
 @Component({
   selector: 'f8-feature-toggle',
@@ -20,14 +19,9 @@ export class FeatureToggleComponent implements OnInit {
     if (!this.featureName) {
       throw new Error('Attribute `featureName` should not be null or empty');
     }
-    this.featureService.getFeature(this.featureName).subscribe((feature: Feature) => {
-       if (feature) {
-         this.isEnabled = feature.attributes.enabled && feature.attributes['user-enabled'];
-       }
-    },
-    err => {
-      this.isEnabled = false;
-      console.log('This feature is not accessible in fabric8-toggles-service' + err);
+
+    this.featureService.isFeatureUserEnabled(this.featureName).subscribe((isEnabled: boolean) => {
+      this.isEnabled = isEnabled;
     });
   }
 

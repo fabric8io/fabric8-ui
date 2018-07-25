@@ -1,27 +1,14 @@
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Observable } from 'rxjs';
 import { FeatureTogglesService } from '../service/feature-toggles.service';
 import { FeatureToggleComponent } from './feature-toggle.component';
-import { Feature } from '../models/feature';
 
 describe('FeatureToggleComponent', () => {
-  let featureServiceMock: any;
-  let hostComponent: TestHostComponent;
+  let featureServiceMock: jasmine.SpyObj<FeatureTogglesService>;
   let hostFixture: ComponentFixture<TestHostComponent>;
-
-  let feature: Feature = {
-    attributes: {
-      name: 'Planner',
-      description: 'Description',
-      enabled: true,
-      'enablement-level': 'beta',
-      'user-enabled': true
-    },
-    id: 'Planner'
-  };
 
   @Component({
     selector: `host-component`,
@@ -30,7 +17,7 @@ describe('FeatureToggleComponent', () => {
   class TestHostComponent {
   }
   beforeEach(() => {
-    featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
+    featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['isFeatureUserEnabled']);
 
     TestBed.configureTestingModule({
       imports: [FormsModule, HttpModule],
@@ -43,45 +30,20 @@ describe('FeatureToggleComponent', () => {
     });
 
     hostFixture = TestBed.createComponent(TestHostComponent);
-    hostComponent = hostFixture.componentInstance;
   });
 
-  it('should render content if toggles is on and user-enabled on', async(() => {
+  it('should render content if feature is user enabled', async(() => {
     // given
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.isFeatureUserEnabled.and.returnValue(Observable.of(true));
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
       expect(hostFixture.nativeElement.querySelector('div').innerText).toEqual('My content here');
     });
   }));
 
-  it('should not render content if toggles is off and user-enabled on', async(() => {
+  it('should not render content if feature is not user enabled', async(() => {
     // given
-    feature.attributes.enabled = false;
-    feature.attributes['user-enabled'] = true;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
-    hostFixture.detectChanges();
-    hostFixture.whenStable().then(() => {
-      expect(hostFixture.nativeElement.querySelector('div')).toBeNull();
-    });
-  }));
-
-  it('should not render content if toggles is on and user-enabled off', async(() => {
-    // given
-    feature.attributes.enabled = true;
-    feature.attributes['user-enabled'] = false;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
-    hostFixture.detectChanges();
-    hostFixture.whenStable().then(() => {
-      expect(hostFixture.nativeElement.querySelector('div')).toBeNull();
-    });
-  }));
-
-  it('should not render content if toggles is off and user-enabled off', async(() => {
-    // given
-    feature.attributes.enabled = false;
-    feature.attributes['user-enabled'] = false;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
+    featureServiceMock.isFeatureUserEnabled.and.returnValue(Observable.of(false));
     hostFixture.detectChanges();
     hostFixture.whenStable().then(() => {
       expect(hostFixture.nativeElement.querySelector('div')).toBeNull();
