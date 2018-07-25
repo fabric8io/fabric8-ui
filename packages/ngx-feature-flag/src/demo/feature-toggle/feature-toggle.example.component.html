@@ -22,20 +22,23 @@
 
 
         </div>
-        <f8-feature-toggle featureName="Test">
-          <div style="background-color: green; opacity: .5" user-level>
+        <f8-feature-toggle featureName="Test" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
+        <ng-template #user>
+          <div style="background-color: green; opacity: .5">
             <h1>
               😀 🤪
             </h1>
             <h2>Yay activated just for you</h2>
           </div>
-          <div style="background-color: red;opacity: .5" default-level>
+        </ng-template>
+        <ng-template #default>
+          <div style="background-color: red;opacity: .5">
             <h1>
               😢 😭
             </h1>
             <h2>Not activated for your user!</h2>
           </div>
-        </f8-feature-toggle>
+        </ng-template>
 
       </div>
     </div>

@@ -1,28 +1,32 @@
 import {
   Component,
   Input,
-  OnInit
+  OnInit,
+  TemplateRef
 } from '@angular/core';
 import { FeatureTogglesService } from '../service/feature-toggles.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'f8-feature-toggle',
-  template: `<ng-content *ngIf="isEnabled" select="[user-level]"></ng-content><ng-content *ngIf="!isEnabled" select="[default-level]"></ng-content>`
+  template: `<ng-container [ngTemplateOutlet]="(enabled | async) ? userLevel : defaultLevel"></ng-container>`
 })
 export class FeatureToggleComponent implements OnInit {
+
   @Input() featureName: string;
-  isEnabled = false;
+  @Input() userLevel: TemplateRef<any>;
+  @Input() defaultLevel: TemplateRef<any>;
+
+  enabled: Observable<boolean>;
 
   constructor(private featureService: FeatureTogglesService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (!this.featureName) {
       throw new Error('Attribute `featureName` should not be null or empty');
     }
 
-    this.featureService.isFeatureUserEnabled(this.featureName).subscribe((isEnabled: boolean) => {
-      this.isEnabled = isEnabled;
-    });
+    this.enabled = this.featureService.isFeatureUserEnabled(this.featureName);
   }
 
 }
