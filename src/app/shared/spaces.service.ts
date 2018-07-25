@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { Observable, Subject } from 'rxjs';
@@ -13,7 +12,6 @@ import { ExtProfile, ProfileService } from '../profile/profile.service';
 export class SpacesService implements Spaces {
 
   static readonly RECENT_SPACE_LENGTH = 8;
-  private static readonly RECENT_SPACE_KEY = 'recentSpaceIds';
 
   addRecent: Subject<Space> = new Subject<Space>();
   private _current: Observable<Space>;
@@ -21,13 +19,12 @@ export class SpacesService implements Spaces {
 
   constructor(
     private contexts: Contexts,
-    private localStorage: LocalStorageService,
     private spaceService: SpaceService,
     private broadcaster: Broadcaster,
     private profileService: ProfileService
   ) {
     this._current = Observable.merge(
-      contexts.current
+      this.contexts.current
         .map(val => val.space),
       this.broadcaster.on<Space>('spaceUpdated'));
     // Create the recent context list
@@ -99,7 +96,7 @@ export class SpacesService implements Spaces {
       }
     } as ExtProfile;
     return this.profileService.silentSave(patch)
-      .subscribe(profile => { }, err => console.log('Error saving recent spaces:', err));
+      .subscribe(() => {}, err => console.log('Error saving recent spaces:', err));
   }
 
 }
