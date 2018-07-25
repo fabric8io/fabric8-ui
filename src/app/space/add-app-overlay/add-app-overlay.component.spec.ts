@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
+import { Broadcaster, Logger, Notifications } from 'ngx-base';
 import { PopoverConfig, PopoverModule } from 'ngx-bootstrap/popover';
 import { Context, ProcessTemplate, Space, SpaceService } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
@@ -39,7 +39,6 @@ describe('AddAppOverlayComponent', () => {
   let component: AddAppOverlayComponent;
   let fixture: ComponentFixture<AddAppOverlayComponent>;
 
-  let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast']);
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockSpaceTemplateService: any = {
     getSpaceTemplates: () => {
@@ -50,10 +49,9 @@ describe('AddAppOverlayComponent', () => {
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockUserService: any = jasmine.createSpyObj('UserService', ['getUser']);
   let mockSpaceNamespaceService: any = jasmine.createSpy('SpaceNamespaceService');
-  let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent']);
+  let mockSpacesService: any = jasmine.createSpy('SpacesService');
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
-  let mockSubject: any = jasmine.createSpy('Subject');
   let mockDependencyCheckService: any = {
     getDependencyCheck(): Observable<any> {
       return Observable.of({
@@ -157,11 +155,6 @@ describe('AddAppOverlayComponent', () => {
     id: 'template-03',
     type: 'spacetemplates'
   }] as ProcessTemplate[];
-
-  let mockMessage: Notification = {
-    message: `Failed to create "${mockSpace.name}"`,
-    type: NotificationType.DANGER
-  };
 
   class mockContextService {
     get current(): Observable<Context> { return Observable.of(mockContext); }

@@ -113,9 +113,6 @@ export class AddSpaceOverlayComponent implements OnInit {
     this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
 
     this.subscriptions.push(this.spaceService.create(this.space)
-      .do(createdSpace => {
-        this.spacesService.addRecent.next(createdSpace);
-      })
       .switchMap(createdSpace => {
         return this.spaceNamespaceService
           .updateConfigMap(Observable.of(createdSpace))
