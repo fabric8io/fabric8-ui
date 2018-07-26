@@ -9,7 +9,7 @@
       Recent Spaces
     </h2>
   </div>
-  <div class="card-pf-body f8-card-body">
+  <div class="card-pf-body {{cardBodySizeClass}}">
 
     <div *ngIf="(userHasSpaces | async) then spaceList; else emptyState"></div>
     <ng-template #emptyState>

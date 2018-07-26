@@ -28,6 +28,7 @@ import { UserService } from 'ngx-login-client';
 export class RecentSpacesWidget implements OnInit {
 
   @Input() cardSizeClass: string;
+  @Input() cardBodySizeClass: string;
 
   readonly userHasSpaces: Subject<boolean> = new ReplaySubject<boolean>(1);
   readonly recentSpaces: Observable<Space[]>;
