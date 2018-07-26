@@ -12,7 +12,7 @@ describe('FeatureToggleComponent', () => {
 
   @Component({
     selector: `host-component`,
-    template: `<f8-feature-toggle featureName="Planner"><div user-level>My content here</div></f8-feature-toggle>`
+    template: `<f8-feature-toggle featureName="Planner" [userLevel]="user"></f8-feature-toggle><ng-template #user><div>My content here</div></ng-template>`
   })
   class TestHostComponent {
   }
