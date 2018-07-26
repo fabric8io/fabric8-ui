@@ -90,7 +90,7 @@ function filterByMostRecent(buildConfigs: BuildConfigs, builds: Builds): BuildCo
 
   let answer = new BuildConfigs();
   sortedPipelines.forEach(bc => {
-    if (bc.statusPhase !== 'Complete' && bc.labels['space']) {
+    if (bc.labels['space']) {
       answer.push(bc);
     }
   });
