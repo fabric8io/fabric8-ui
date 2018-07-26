@@ -13,6 +13,7 @@ import { User, UserService } from 'ngx-login-client';
 import { ConnectableObservable } from 'rxjs';
 import { Observable, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
@@ -39,6 +40,7 @@ describe('CreateWorkItemWidgetComponent', () => {
   } as User);
 
   initContext(CreateWorkItemWidgetComponent, HostComponent, {
+    declarations: [ MockFeatureToggleComponent ],
     imports: [NgArrayPipesModule, HttpModule, RouterModule],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },

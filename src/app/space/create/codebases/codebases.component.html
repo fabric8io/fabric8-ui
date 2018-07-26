@@ -18,16 +18,22 @@
             [expandTemplate]="expandTemplate"
             (onActionSelect)="showAddAppOverlay()">
         <ng-template #itemHeadingTemplate let-item="item">
-          <f8-feature-toggle featureName="Codebases.CveNotification" class="feature-container">
-            <codebases-item-heading [cheState]="cheState" [cveNotify]="true" class="codebase-item" user-level></codebases-item-heading>
-            <codebases-item-heading [cheState]="cheState" [cveNotify]="false" class="codebase-item" default-level></codebases-item-heading>
-          </f8-feature-toggle>
+          <f8-feature-toggle featureName="Codebases.CveNotification" [userLevel]="user" [defaultLevel]="default" class="feature-container"></f8-feature-toggle>
+          <ng-template #user>
+            <codebases-item-heading [cheState]="cheState" [cveNotify]="true" class="codebase-item"></codebases-item-heading>
+          </ng-template>
+          <ng-template #default>
+            <codebases-item-heading [cheState]="cheState" [cveNotify]="false" class="codebase-item"></codebases-item-heading>
+          </ng-template>
         </ng-template>
         <ng-template #itemTemplate let-item="item" let-index="index">
-          <f8-feature-toggle featureName="Codebases.CveNotification" class="feature-container">
-            <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" [cveNotify]="true" class="codebase-item" user-level></codebases-item>
-            <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" [cveNotify]="false" class="codebase-item" default-level></codebases-item>
-          </f8-feature-toggle>
+          <f8-feature-toggle featureName="Codebases.CveNotification" [userLevel]="user" [defaultLevel]="default" class="feature-container"></f8-feature-toggle>
+          <ng-template #user>
+            <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" [cveNotify]="true" class="codebase-item"></codebases-item>
+          </ng-template>
+          <ng-template #default>
+            <codebases-item [cheState]="cheState" [codebase]="item" [index]="index" [cveNotify]="false" class="codebase-item"></codebases-item>
+          </ng-template>
         </ng-template>
         <ng-template #actionHeadingTemplate let-item="item">
           <!-- Extra margin for kebab -->

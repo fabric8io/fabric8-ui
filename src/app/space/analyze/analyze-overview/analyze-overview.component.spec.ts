@@ -13,6 +13,7 @@ import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Observable, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
@@ -26,9 +27,6 @@ class HostComponent { }
 describe('AnalyzeOverviewComponent', () => {
   type TestingContext = TestContext<AnalyzeOverviewComponent, HostComponent>;
 
-  let modalService: jasmine.SpyObj<BsModalService>;
-  let broadcaster: jasmine.SpyObj<Broadcaster>;
-  let authentication: jasmine.SpyObj<AuthenticationService>;
   let ctxSubj: Subject<Context> = new Subject<Context>();
   let fakeUserObs: Subject<User> = new Subject<User>();
 
@@ -43,6 +41,7 @@ describe('AnalyzeOverviewComponent', () => {
   mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
 
   initContext(AnalyzeOverviewComponent, HostComponent, {
+    declarations: [ MockFeatureToggleComponent ],
     providers: [
       { provide: BsModalService, useFactory: (): jasmine.SpyObj<BsModalService> => createMock(BsModalService) },
       { provide: Broadcaster, useFactory: (): jasmine.SpyObj<Broadcaster> => createMock(Broadcaster) },

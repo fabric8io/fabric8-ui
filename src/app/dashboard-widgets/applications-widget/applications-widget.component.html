@@ -1,5 +1,6 @@
-<f8-feature-toggle featureName="Analyze.ApplicationsCard">
-  <div class="applications-widget card-pf f8-card" user-level>
+<f8-feature-toggle featureName="Analyze.ApplicationsCard" [userLevel]="user"></f8-feature-toggle>
+<ng-template #user>
+  <div class="applications-widget card-pf f8-card">
     <div class="card-pf-heading f8-card-heading">
       <div class="card-pf-heading-details"
            *ngIf="applicationsInProgress > 0 && (stageConfigsAvailable || runConfigsAvailable)">
@@ -61,4 +62,4 @@
       </ng-template>
     </div>
   </div>
-</f8-feature-toggle>
+</ng-template>
