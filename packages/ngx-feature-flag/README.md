@@ -115,11 +115,10 @@ your feature in `featureName`. Here `Environment.Test` should exactly match the 
 Note: this step is optional if you do not group your component per page.
 * In your page or component template:
 ```
-<f8-feature-toggle featureName="Environment.Test">
-  <div user-level>
-    YOUR HTML
-  </div>
-</f8-feature-toggle>
+<f8-feature-toggle featureName="Environment.Test" [userLevel]="user"></f8-feature-toggle>
+<ng-template #user>
+  YOUR NEW HTML
+</ng-template>
 ```
 * In your Module, import `FeatureFlagModule`:
 ```
@@ -139,14 +138,13 @@ Similar to precedent section. You put the new code in the HTML element that cont
 For example:
 
 ```
-<f8-feature-toggle featureName="Analyze.newSpaceDashboard"
-  <div id="analyze-overview-dashboard" class="container-fluid analyze-overview-wrapper" user-level>
+<f8-feature-toggle featureName="Analyze.newSpaceDashboard" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
+<ng-template #user>
   YOUR NEW HTML
-  </div>
-  <div id="" class="container-fluid analyze-overview-wrapper" default-level>
+</ng-template>
+<ng-template #default>
   YOUR OLD HTML
-  </div>
-</f8-feature-toggle>
+</ng-template>
 ```
 
 #### use case 3: My feature is a component I want to dynamically load
