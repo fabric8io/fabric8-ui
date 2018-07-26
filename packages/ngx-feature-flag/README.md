@@ -34,32 +34,51 @@ Search for `Sign out` in the admin console. You will be logged out of fabric8-to
 * You can import the lib in your application:
 
 `npm install ngx-feature-flag`
-
-* or use the demo app:
-
-```shell
-npm run build:demo
-npm run start:demo
-```
-  
+ 
 ## Build 
  
 * Pre-requisites
-  * node 8.3.0
-  * npm 5.3.0
+  * node v8.9.1+ (required by anuglar-cli 6+)
+  * npm 5.5.1
+
+This angular library is built using [angular-cli](https://github.com/angular/angular-cli/wiki)'s workspace.
+The main application is the demo app. The library source is under [/project/ngx-feature-flag](/project/ngx-feature-flag)
 
 * Install the dependencies
  
 ```
-npm install
+npm i
 ```
  
-* Run the tests
+* Build library & demo app
+```
+npm run build
+```
+
+* Run the library tests
  
 ```
 npm test
 ```
  
+> NOTE: to run the library test in watch mode: `npm run test:lib:dev`
+
+* Fix lint errors (package import for ex)
+
+```
+npm run lint:fix
+```
+
+## Run the demo
+
+```shell
+npm i
+npm run build
+npm start
+```
+
+Open your browser on http://localhost:4200/
+
 ## Usage
 
 ### FeatureTogglesService

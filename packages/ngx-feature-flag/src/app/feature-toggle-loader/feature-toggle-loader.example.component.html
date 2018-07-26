@@ -1,0 +1,81 @@
+<div class="padding-15">
+  <div class="row">
+    <div class="col-sm-12">
+      <h4>f8-feature-toggle example</h4>
+      <hr/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <div>With `f8-feature-toggle-loader`, you can activate a feature depending on the level your user consent. It uses
+          `enableByLevel` strategy. It allows to tag a feature for a particular level. Feature flag level are: <i>internal</i>, <i>experimental</i>, <i>beta</i>, <i>released</i>.
+          <ul>
+            <li><strong>internal</strong> will only show it to accounts with an @redhat.com email. It will have a notification on the screen:
+              "This feature is open to Red Hat users only. You can manage pre-production features on your profile page."</li>
+            <li><strong>experimental</strong> will be "This feature is experimental. You can manage pre-production features on your profile page." </li>
+            <li><strong>beta</strong> notification will be "This feature is in beta. You can manage pre-production features on your profile page."</li>
+            <li><strong>released</strong> makes the feature default for everyone.</li>
+          </ul>
+
+          <p>NOTE: Anonymous user can only see the `released` state. For other level, you need to be logged-in.</p>
+
+          This use case could be while the feature is under development and you want to make sure loading the component will not break the whole UI.
+
+          For example, let's dynamically load <i>DynamicallyLoadedComponent</i>.
+          But now we don't want to just hide the component, we want to make sure the component code is not loaded at all.
+
+
+        </div>
+
+        <f8-feature-toggle-loader featureName="Test"></f8-feature-toggle-loader>
+
+      </div>
+    </div>
+  </div>
+  <div class="row padding-top-10">
+    <p class="col-sm-12">
+    <h4 class="actions-label">Settings</h4>
+    <hr/>
+    <div>To test the component you can play with mock value. Valid data for userLevel and FeatureFlagEnablementLevel are <i>internal</i>, <i>experimental</i>, <i>beta</i>, <i>released</i></div>
+    <div> To test with prod-preview in AppModule, use <i>FeatureTogglesService</i> instead of <i>FeatureTogglesServiceMock</i></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 sample-form">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label" for="FeatureFlagName">FeatureFlagName: </label>
+        <input readonly disabled id="FeatureFlagName" name="FeatureFlagName" type="text" [(ngModel)]="featureFlagName"/>
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="FeatureFlagEnablementLevel">FeatureFlagEnablementLevel: </label>
+        <input id="FeatureFlagEnablementLevel" name="FeatureFlagEnablementLevel" type="text" [(ngModel)]="featureFlagEnablementLevel" (change)="refresh($event)"/>
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="FeatureFlagEnable">FeatureFlagEnable: </label>
+        <input id="FeatureFlagEnable" name="FeatureFlagEnable" type="checkbox" [(ngModel)]="featureFlagEnable" (change)="refresh($event)"/>
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="UserLevel">UserLevel: </label>
+        <input id="UserLevel" name="UserLevel" type="text" [(ngModel)]="userLevel" (change)="refresh($event)"/>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="row padding-top-10">
+  <div class="col-sm-12">
+    <h4>Code</h4>
+    <hr/>
+  </div>
+</div>
+<div>
+  <tabset>
+    <tab heading="html">
+      <app-include-content src="app/feature-toggle-loader/feature-toggle-loader.example.component.html"></app-include-content>
+    </tab>
+    <tab heading="typescript">
+      <app-include-content src="app/feature-toggle-loader/feature-toggle-loader.example.component.ts"></app-include-content>
+    </tab>
+  </tabset>
+</div>

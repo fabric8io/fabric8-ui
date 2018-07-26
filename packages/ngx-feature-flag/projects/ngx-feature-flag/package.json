@@ -1,0 +1,19 @@
+{
+  "name": "ngx-feature-flag",
+  "version": "0.0.1",
+  "dependencies": {
+    "lodash": "^4.17.10",
+    "patternfly": "^3.28.0",
+    "patternfly-ng": "^4.0.1"
+  },
+  "peerDependencies": {
+    "@angular/common": "^6.1.0",
+    "@angular/core": "^6.1.0",
+    "ngx-base": "^2.3.6",
+    "ngx-login-client-fork": "2.0.0"
+  },
+  "devDependencies": {
+    "bootstrap": "3.3.7",
+    "font-awesome": "4.7.0"
+  }
+}

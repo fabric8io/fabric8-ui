@@ -1,47 +1,28 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
     "moduleResolution": "node",
-    "declaration": true,
-    "stripInternal": true,
-    "skipLibCheck": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "inlineSources": true,
-    "noEmitHelpers": false,
-    "strictNullChecks": false,
-    "noImplicitAny": true,
-    "baseUrl": ".",
-    "rootDir": ".",
-    "outDir": "dist",
-    "paths": {
-      "@angular/*": ["node_modules/@angular/*"],
-      "rxjs/*": ["node_modules/rxjs/*"]
-    },
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "lib": [
-      "es2015",
+      "es2017",
       "dom"
-    ]
-  },
-  "files": [
-    "index.ts"
-  ],
-  "exclude": [
-    "demo.ts",
-    "src/demo"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": true,
-    "useWebpackText": true
-  },
-  "angularCompilerOptions": {
-    "strictMetadataEmit": true,
-    "skipTemplateCodegen": true
-  },
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "atom": { "rewriteTsconfig": false }
+    ],
+    "paths": {
+      "ngx-feature-flag": [
+        "dist/ngx-feature-flag"
+      ],
+      "ngx-feature-flag/*": [
+        "dist/ngx-feature-flag/*"
+      ]
+    }
+  }
 }

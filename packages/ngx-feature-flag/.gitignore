@@ -35,6 +35,7 @@ Thumbs.db
 
 # Node Files #
 /node_modules
+projects/ngx-feature-flag/node_modules
 /bower_components
 npm-debug.log
 
@@ -56,6 +57,7 @@ npm-debug.log
 /dist/**
 /.awcache
 .webpack.json
+src/assets/README.md
 
 # Doc #
 /doc/

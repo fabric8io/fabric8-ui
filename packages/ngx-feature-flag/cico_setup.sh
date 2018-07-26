@@ -17,13 +17,14 @@ load_jenkins_vars() {
 prep() {
   yum -y update
   yum -y install docker make git gcc-c++ bzip2 fontconfig
+  cp e2e/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
+  yum install -y google-chrome-stable
   curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash -
   yum -y install nodejs
 }
 
 install_dependencies() {
   npm install;
-  chmod +x /root/payload/node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs
 
   if [ $? -eq 0 ]; then
       echo 'CICO: npm install : OK'
@@ -35,7 +36,7 @@ install_dependencies() {
 
 run_unit_tests() {
   # Exec unit tests
-  npm run test:unit
+  npm run test
 
   if [ $? -eq 0 ]; then
       echo 'CICO: unit tests OK'

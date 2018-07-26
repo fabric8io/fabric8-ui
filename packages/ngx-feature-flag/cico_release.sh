@@ -18,7 +18,7 @@ function release() {
     # Enable verbose output
     npm config set loglevel verbose
 
-    # Build and Release Planner (It will update the tag on github and push fabric8-planner to npmjs.org)
+    # Build and Release
     npm run semantic-release
 
     # create_merge_PR
