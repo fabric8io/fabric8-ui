@@ -14,8 +14,6 @@ describe('SpacesService', () => {
   let mockContext: Context;
   let mockProfile: ExtProfile;
   let mockUser: User;
-  let mockBroadcaster: jasmine.SpyObj<Broadcaster>;
-  let mockProfileService: any;
 
   beforeEach(() => {
 
@@ -51,26 +49,30 @@ describe('SpacesService', () => {
       type: 'mock-type'
     } as User;
 
-    mockBroadcaster = createMock(Broadcaster);
-    mockBroadcaster.broadcast.and.returnValue(Observable.never());
-    mockBroadcaster.on.and.callFake((key: string): Observable<Space> => {
-      if (key === 'spaceChanged') {
-        return Observable.of(mockSpace);
-      }
-      if (key === 'spaceUpdated') {
-        return Observable.of(mockSpace);
-      }
-    });
-
-    mockProfileService = jasmine.createSpyObj('ProfileService', ['silentSave']);
-    mockProfileService.current = Observable.of(mockProfile);
-
     TestBed.configureTestingModule({
-      imports: [],
       providers: [
         SpacesService,
-        { provide: Broadcaster, useValue: mockBroadcaster },
-        { provide: ProfileService, useValue: mockProfileService },
+        { provide: Broadcaster,
+          useFactory: () => {
+            const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
+            mockBroadcaster.on.and.callFake((key: string): Observable<Space> => {
+              if (key === 'spaceChanged') {
+                return Observable.of(mockSpace);
+              }
+              if (key === 'spaceUpdated') {
+                return Observable.of(mockSpace);
+              }
+            });
+            return mockBroadcaster;
+          }
+        },
+        { provide: ProfileService,
+          useFactory: () => {
+            const mockProfileService: any = jasmine.createSpyObj('ProfileService', ['silentSave']);
+            mockProfileService.current = Observable.of(mockProfile);
+            return mockProfileService;
+          }
+        },
         {
           provide: Contexts,
           useFactory: () => {
@@ -100,10 +102,11 @@ describe('SpacesService', () => {
 
   describe('#get current', () => {
     it('should return the space from contexts.current', (done: DoneFn) => {
-      mockBroadcaster.on.and.returnValue(Observable.never());
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.returnValue(Observable.never());
       const spacesService: SpacesService = TestBed.get(SpacesService);
       let result: Observable<Space> = spacesService.current;
-      result.subscribe(r => {
+      result.subscribe((r: Space) => {
         expect(r).toEqual(mockSpace);
         done();
       });
@@ -112,10 +115,11 @@ describe('SpacesService', () => {
 
   describe('#get recent', () => {
     it('should return the spaces from the profileService.store', () => {
-      mockBroadcaster.on.and.returnValue(Observable.never());
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.returnValue(Observable.never());
       const spacesService: SpacesService = TestBed.get(SpacesService);
       let result: Observable<Space[]> = spacesService.recent;
-      result.subscribe(r => {
+      result.subscribe((r: Space[]) => {
         expect(r).toEqual([mockSpace] as Space[]);
       });
     });
@@ -123,11 +127,12 @@ describe('SpacesService', () => {
 
   describe('#loadRecent', () => {
     it('should return an empty array if recentSpaces doesn\'t exist on profile.store', () => {
-      mockBroadcaster.on.and.returnValue(Observable.never());
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.returnValue(Observable.never());
       delete mockProfile.store.recentSpaces;
       const spacesService: SpacesService = TestBed.get(SpacesService);
       let result: Observable<Space[]> = spacesService.recent;
-      result.subscribe(r => {
+      result.subscribe((r: Space[]) => {
         expect(r).toEqual([] as Space[]);
       });
     });
@@ -135,30 +140,32 @@ describe('SpacesService', () => {
 
   describe('#saveRecent', () => {
     it('should silentSave after a spaceChanged has been broadcasted', () => {
-      mockProfileService.silentSave.and.returnValue(Observable.of(mockUser));
-      mockBroadcaster.broadcast('spaceChanged', mockSpace);
+      const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
+      profileService.silentSave.and.returnValue(Observable.of(mockUser));
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       let expectedPatch = {
         store: {
           recentSpaces: [mockSpace.id]
         }
       };
-      console.log = jasmine.createSpy('log');
+      spyOn(console, 'log');
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      expect(mockProfileService.silentSave).toHaveBeenCalledWith(expectedPatch);
+      expect(profileService.silentSave).toHaveBeenCalledWith(expectedPatch);
       expect(console.log).toHaveBeenCalledTimes(0);
     });
 
     it('should log an error if silentSave failed', () => {
-      mockProfileService.silentSave.and.returnValue(Observable.throw('error'));
-      mockBroadcaster.broadcast('spaceChanged', mockSpace);
+      const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
+      profileService.silentSave.and.returnValue(Observable.throw('error'));
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       let expectedPatch = {
         store: {
           recentSpaces: [mockSpace.id]
         }
       };
-      console.log = jasmine.createSpy('log');
+      spyOn(console, 'log');
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      expect(mockProfileService.silentSave).toHaveBeenCalledWith(expectedPatch);
+      expect(profileService.silentSave).toHaveBeenCalledWith(expectedPatch);
       expect(console.log).toHaveBeenCalledWith('Error saving recent spaces:', 'error');
     });
   });
