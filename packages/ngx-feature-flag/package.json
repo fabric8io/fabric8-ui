@@ -7,6 +7,7 @@
   "typings": "index.d.ts",
   "scripts": {
     "build": "npm run remove-dist && gulp build:library",
+    "prebuild": "mkdir -p node_modules/patternfly/dist/less/bootstrap/less && cp -rf node_modules/bootstrap/less/* node_modules/patternfly/dist/less/bootstrap/less && mkdir -p node_modules/patternfly/dist/less/font-awesome/less && cp node_modules/font-awesome/less/*.less node_modules/patternfly/dist/less/font-awesome/less/",
     "build:demo": "webpack --config config/webpack.demo.js --progress --profile --bail && gulp build:demo",
     "clean": "rimraf node_modules doc coverage dist dist-demo bundles",
     "bundle-webpack": "webpack --config config/webpack.prod.js --progress --profile --bail",
@@ -82,6 +83,7 @@
     "angular2-template-loader": "0.6.2",
     "awesome-typescript-loader": "3.1.2",
     "gulp-autoprefixer": "4.1.0",
+    "bootstrap": "3.3.7",
     "child_process": "1.0.2",
     "clean-webpack-plugin": "0.1.16",
     "codelyzer": "3.0.0-beta.4",
