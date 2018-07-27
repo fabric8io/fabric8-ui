@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { Logger } from 'ngx-base';
-import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { UserService } from 'ngx-login-client-fork';
+import { Observable, of } from 'rxjs';
 import { FeatureFlagResolver } from './feature-flag.resolver';
 
 import { Feature } from '../models/feature';
@@ -77,7 +77,7 @@ describe('FeatureFlag resolver: it', () => {
         beta: []
       }
     } as FeatureFlagConfig;
-    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(of([feature]));
     // when
     resolver.resolve(route as ActivatedRouteSnapshot, null).subscribe(val => {
       // then
@@ -101,7 +101,7 @@ describe('FeatureFlag resolver: it', () => {
       'user-enabled': true,
       'enablement-level': 'internal'
     }} as Feature;
-    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(of([feature]));
     // when
     resolver.resolve(route, null).subscribe(val => {
       // then
@@ -124,7 +124,7 @@ describe('FeatureFlag resolver: it', () => {
       'user-enabled': false,
        'enablement-level': 'internal'
     }} as Feature;
-    mockTogglesService.getFeaturesPerPage.and.returnValue(Observable.of([feature]));
+    mockTogglesService.getFeaturesPerPage.and.returnValue(of([feature]));
     // when
     resolver.resolve(route, null).subscribe(val => {
       // then

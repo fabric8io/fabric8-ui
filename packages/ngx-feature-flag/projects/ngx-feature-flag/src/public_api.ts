@@ -11,6 +11,7 @@ export { FeatureTogglesService, FABRIC8_FEATURE_TOGGLES_API_URL } from './lib/se
 
 export { Feature } from './lib/models/feature';
 export { FeatureFlagConfig } from './lib/models/feature-flag-config';
+export { FeatureFlagResolver } from './lib/resolver/feature-flag.resolver';
 
 export { FeatureFlagModule } from './lib/feature-flag.module';
 

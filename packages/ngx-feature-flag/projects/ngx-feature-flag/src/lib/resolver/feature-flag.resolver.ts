@@ -5,14 +5,13 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-import { Logger } from 'ngx-base';
-import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { UserService } from 'ngx-login-client-fork';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { Feature } from '../models/feature';
 import { FeatureFlagConfig } from '../models/feature-flag-config';
 import { FeatureTogglesService } from '../service/feature-toggles.service';
-
 
 enum FeatureLevel {
   internal = 'internal',
@@ -112,7 +111,7 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
       this.userLevel = (this.userService.currentLoggedInUser.attributes as any).featureLevel;
     }
     return this.toggleService.getFeaturesPerPage(featureName)
-      .map((features: Feature[]) => {
+      .pipe(map((features: Feature[]) => {
         let config = this.buildFeaturePerLevelView(features, this.userLevel);
         if (config == null) {
           this.router.navigate(['/_error']);
@@ -121,12 +120,11 @@ export class FeatureFlagResolver implements Resolve<FeatureFlagConfig> {
           return null;
         }
         return config;
-      })
-      .catch(err => {
-        return Observable.of({
+      }), catchError(err => {
+        return of({
           showBanner: FeatureLevel.systemError
         } as FeatureFlagConfig);
-      });
+      }));
   }
 
   private getBannerColor(level: string): string {
