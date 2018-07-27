@@ -92,6 +92,7 @@ export class SpacesComponent implements OnInit {
         .subscribe(spaces => {
           let index = this._spaces.indexOf(space);
           this._spaces.splice(index, 1);
+          this.broadcaster.broadcast('spaceDeleted', space);
           this.spaceToDelete = undefined;
           this.modalRef.hide();
         },

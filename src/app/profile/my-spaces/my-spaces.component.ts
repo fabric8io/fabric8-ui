@@ -213,6 +213,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
             this.savePins();
           }
           this.allSpaces.splice(index, 1);
+          this.broadcaster.broadcast('spaceDeleted', space);
           this.updateSpaces();
           this.spaceToDelete = undefined;
           this.modalRef.hide();

@@ -58,6 +58,15 @@ export class SpacesService implements Spaces {
       // update the profile's store.recentSpaces attribute
       this.saveRecent(this._recent);
     });
+
+    // if a space is deleted, check to see if it should be removed from _recent
+    this.broadcaster.on<Space>('spaceDeleted').subscribe(space => {
+      let index: number = this.findRecentIndexById(space.id);
+      if (index !== -1) {
+        this._recent.splice(index, 1);
+        this.saveRecent(this._recent);
+      }
+    });
   }
 
   get current(): Observable<Space> {
