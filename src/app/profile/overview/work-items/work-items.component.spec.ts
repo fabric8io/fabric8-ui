@@ -3,10 +3,9 @@ import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { WorkItemService } from 'fabric8-planner';
 import { List, take } from 'lodash';
-import { Broadcaster, Logger } from 'ngx-base';
 import { Contexts, Space, SpaceNamePipe, Spaces, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Observable } from 'rxjs';
+import { User } from 'ngx-login-client';
+import { Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { ContextService } from '../../../shared/context.service';
@@ -34,18 +33,7 @@ describe('WorkItemsComponent', () => {
       id: 'mock-user'
     }
   };
-  const mockSpace: any = {
-    name: 'mock-space',
-    path: 'mock-path',
-    id: 'mock-id',
-    attributes: {
-      name: 'mock-attribute',
-      description: 'mock-description',
-      'updated-at': 'mock-updated-at',
-      'created-at': 'mock-created-at',
-      version: 0
-    }
-  };
+
   const mockSpaces: any = [
     { name: 'mock-space-1', id: 'mock-space-id-1', attributes: { name: 'mock-space-1'} },
     { name: 'mock-space-2', id: 'mock-space-id-2', attributes: { name: 'mock-space-2'} },
@@ -62,6 +50,11 @@ describe('WorkItemsComponent', () => {
     { name: 'mock-space-13', id: 'mock-space-id-13', attributes: { name: 'mock-space-13'} }
   ];
 
+  const mockRecentSpaces: any = [
+    { name: 'mock-space-1', id: 'mock-space-id-1', attributes: { name: 'mock-space-1'} },
+    { name: 'mock-space-14', id: 'mock-space-id-14', attributes: { name: 'mock-space-14'} }
+  ];
+
   initContext(WorkItemsComponent, HostComponent, {
     declarations: [SpaceNamePipe, TakePipe],
     imports: [HttpModule],
@@ -74,7 +67,7 @@ describe('WorkItemsComponent', () => {
       },
       { provide: Spaces, useFactory: () => {
           let mockSpacesService: any = createMock(Spaces);
-          mockSpacesService.recent = Observable.of([mockSpace]) as Observable<Space[]>;
+          mockSpacesService.recent = Observable.of(mockRecentSpaces) as Observable<Space[]>;
           return mockSpacesService;
         }
       },
@@ -91,35 +84,10 @@ describe('WorkItemsComponent', () => {
           return mockWorkItemService;
         }
       },
-      { provide: Broadcaster, useFactory: () => {
-          let mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
-          mockBroadcaster.on.and.returnValue(Observable.of(mockContext));
-          return mockBroadcaster;
-        }
-      },
-      { provide: UserService, useFactory: () => {
-          let mockUserService: jasmine.SpyObj<UserService> = createMock(UserService);
-          mockUserService.getUser.and.returnValue(Observable.of(mockContext.user) as Observable<User>);
-          mockUserService.loggedInUser = Observable.of(mockContext.user) as ConnectableObservable<User> & jasmine.Spy;
-          mockUserService.currentLoggedInUser = mockContext.user as User & jasmine.Spy;
-          return mockUserService;
-        }
-      },
       { provide: ContextService, useFactory: () => {
           let mockContextService: jasmine.SpyObj<ContextService> = createMock(ContextService);
           mockContextService.viewingOwnContext.and.returnValue(true);
           return mockContextService;
-        }
-      },
-      { provide: Logger, useFactory: () => {
-          let mockLogger: jasmine.SpyObj<Logger> = createMock(Logger);
-          return mockLogger;
-        }
-      },
-      { provide: AuthenticationService, useFactory: () => {
-          let mockAuthService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
-          mockAuthService.getToken.and.returnValue('mock-token');
-          return mockAuthService;
         }
       },
       { provide: WIT_API_URL, useValue: 'http://example.com' }
@@ -133,13 +101,16 @@ describe('WorkItemsComponent', () => {
       expect(el).toBeDefined();
     });
 
-    it('should contain all the user\'s spaces', function(this: Context) {
+    it('should contain all the user\'s spaces and recent spaces', function(this: Context) {
       let de: DebugElement[] = this.fixture.debugElement.queryAll(By.css('option'));
-      // 13 mock spaces + default 'Select a space ..' message = 14 options
-      expect(de.length).toEqual(14);
-      for (let i: number = 1; i < mockSpaces.length; i++) {
+      // Spaces duplicated in both user and recent should only exist once
+      // default 'Select a space ..' message + 13 mock user spaces + 1 mock recent space +  = 15 options
+      expect(de.length).toEqual(15);
+      for (let i: number = 1; i < mockSpaces.length + 1; i++) {
         expect(de[i].nativeElement.textContent.trim()).toEqual(mockSpaces[i - 1].name);
       }
+
+      expect(de[14].nativeElement.textContent.trim()).toEqual(mockRecentSpaces[1].name);
     });
 
     it('should limit the select size to 10 on a mousedown event', function(this: Context) {
