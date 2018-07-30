@@ -49,9 +49,10 @@ export class WorkItemWidgetComponent implements OnInit {
     yData: []
   };
 
-  constructor(private contexts: Contexts,
-              private workItemService: WorkItemService) {
-  }
+  constructor(
+    private contexts: Contexts,
+    private workItemService: WorkItemService
+  ) { }
 
   ngOnInit(): void {
     this.subscriptions.push(this.contexts.current.subscribe(context => {
