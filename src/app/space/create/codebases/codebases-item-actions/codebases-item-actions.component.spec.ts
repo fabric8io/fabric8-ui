@@ -62,7 +62,7 @@ describe('Codebases Item Actions Component', () => {
     cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: false, multiTenant: true, running: true}));
   });
 
-  it('Create And Open Workspace successfully', async(() => {
+  it('Create Workspace successfully', async(() => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
@@ -78,14 +78,14 @@ describe('Codebases Item Actions Component', () => {
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
     fixture.detectChanges();
     // when
-    comp.createAndOpenWorkspace();
+    comp.createWorkspace();
     fixture.detectChanges();
     // then
     expect(notificationMock.message).toHaveBeenCalled();
     expect(broadcasterMock.broadcast).toHaveBeenCalled();
   }));
 
-  it('Create And Open Workspace in error', async(() => {
+  it('Create Workspace in error', async(() => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
@@ -95,13 +95,13 @@ describe('Codebases Item Actions Component', () => {
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
     fixture.detectChanges();
     // when
-    comp.createAndOpenWorkspace();
+    comp.createWorkspace();
     fixture.detectChanges();
     // then
     expect(notificationMock.message).toHaveBeenCalled();
   }));
 
-  it('Create And Open Workspace with capacity full', async(() => {
+  it('Create Workspace with capacity full', async(() => {
     // given
     let comp = fixture.componentInstance;
     cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
@@ -109,7 +109,7 @@ describe('Codebases Item Actions Component', () => {
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();
     // when
-    comp.createAndOpenWorkspace();
+    comp.createWorkspace();
     fixture.detectChanges();
     // then
     expect(notificationMock.message).toHaveBeenCalled();
