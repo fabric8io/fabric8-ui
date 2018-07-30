@@ -1,0 +1,50 @@
+<div class="card-pf {{cardSizeClass}}">
+  <div class="card-pf-heading f8-card-heading">
+    <div class="card-pf-heading-details f8-card-heading-details">
+      <a class="btn btn-link f8-card-heading-btn-link" (click)="showAddSpaceOverlay()">
+        <i class="pficon pficon-add-circle-o"></i>
+      </a>
+    </div>
+    <h2 class="card-pf-title">
+      Recent Spaces
+    </h2>
+  </div>
+  <div class="card-pf-body {{cardBodySizeClass}}">
+
+    <div *ngIf="(userHasSpaces | async) then spaceList; else emptyState"></div>
+    <ng-template #emptyState>
+      <div class="f8-blank-slate-card">
+        <h3>Create a space</h3>
+        <p>Learn how to get started
+          <a href="https://docs.openshift.io/user-guide.html#getting_started_with_openshift_io" target="top">
+            in the documentation.
+          </a>
+        </p>
+        <div class="blank-slate-pf-main-action">
+          <button class="btn btn-primary btn-lg" (click)="showAddSpaceOverlay()"> Create a Space </button>
+        </div>
+      </div>
+    </ng-template><!-- emptyState -->
+    <ng-template #spaceList>
+      <div class="f8-home-space-list-result">
+        <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
+          <li class="list-group-item" *ngFor="let space of (recentSpaces | async)">
+            <div class="list-view-pf-main-info">
+              <div class="list-view-pf-body">
+                <div class="list-view-pf-description">
+                  <div class="list-group-item-text">
+                    <a [routerLink]="['/', space.relationalData.creator.attributes.username, space.attributes.name]" tooltip="{{space.attributes.name | spaceName}}"
+                      placement="bottom">
+                      {{space.attributes.name | spaceName}}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </ng-template><!-- spaceList -->
+
+  </div>
+</div>

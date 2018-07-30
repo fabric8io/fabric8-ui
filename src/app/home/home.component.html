@@ -50,49 +50,7 @@
     <div class="cards-pf">
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">
-          <div class="card-pf f8-card-lg">
-            <div class="card-pf-heading f8-card-heading">
-              <div class="card-pf-heading-details f8-card-heading-details">
-                <a class="btn btn-link f8-card-heading-btn-link" (click)="showAddSpaceOverlay()">
-                  <i class="pficon pficon-add-circle-o"></i>
-                </a>
-              </div>
-              <h2 class="card-pf-title">
-                Recent Spaces
-              </h2>
-            </div>
-            <div class="card-pf-body f8-card-body">
-              <div class="f8-blank-slate-card" *ngIf="_spaces.length === 0">
-                <h3>Create a space</h3>
-                <p>Learn how to get started
-                  <a href="https://docs.openshift.io/user-guide.html#getting_started_with_openshift_io" target="top">
-                    in the documentation.
-                  </a>
-                </p>
-                <div class="blank-slate-pf-main-action">
-                  <button class="btn btn-primary btn-lg" (click)="showAddSpaceOverlay()"> Create a Space </button>
-                </div>
-              </div>
-              <!-- A list of the 5 most recent Spaces will be displayed in place of the Blank Slate. -->
-              <div class="f8-home-space-list-result" *ngIf="_spaces.length > 0 && loading !== true">
-                <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
-                  <li class="list-group-item" *ngFor="let space of recent">
-                    <div class="list-view-pf-main-info">
-                      <div class="list-view-pf-body">
-                        <div class="list-view-pf-description">
-                          <div class="list-group-item-text">
-                            <a [routerLink]="['/', space.relationalData.creator.attributes.username, space.attributes.name]" tooltip="{{space.attributes.name | spaceName}}" placement="bottom">
-                              {{space.attributes.name | spaceName}}
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <fabric8-recent-spaces-widget [cardSizeClass]="'f8-card-lg'" [cardBodySizeClass]="'f8-card-body-lg'"></fabric8-recent-spaces-widget>
         </div>
         <div class="col-xs-12 col-md-4">
           <fabric8-recent-workspaces-widget></fabric8-recent-workspaces-widget>
@@ -166,49 +124,7 @@
     <div class="cards-pf">
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">
-          <div class="card-pf f8-card">
-            <div class="card-pf-heading f8-card-heading">
-              <div class="card-pf-heading-details f8-card-heading-details">
-                <a class="btn btn-link f8-card-heading-btn-link" (click)="showAddSpaceOverlay()">
-                  <i class="pficon pficon-add-circle-o"></i>
-                </a>
-              </div>
-              <h2 class="card-pf-title">
-                Recent Spaces
-              </h2>
-            </div>
-            <div class="card-pf-body f8-card-body">
-              <div class="f8-blank-slate-card" *ngIf="_spaces.length === 0">
-                <h3>Create a space</h3>
-                <p>Learn how to get started
-                  <a href="https://docs.openshift.io" target="top">
-                    in the documentation.
-                  </a>
-                </p>
-                <div class="blank-slate-pf-main-action">
-                  <button class="btn btn-primary btn-lg" (click)="showAddSpaceOverlay()"> Create a Space </button>
-                </div>
-              </div>
-              <!-- A list of the 5 most recent Spaces will be displayed in place of the Blank Slate. Additional Spaces are viewed by using the 'See All' button in the Card footer -->
-              <div class="home-space-list-result" *ngIf="_spaces.length > 0 && loading !== true">
-                <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
-                  <li class="list-group-item" *ngFor="let space of recent">
-                    <div class="list-view-pf-main-info">
-                      <div class="list-view-pf-body">
-                        <div class="list-view-pf-description">
-                          <div class="list-group-item-text">
-                            <a [routerLink]="['/', space.relationalData.creator.attributes.username, space.attributes.name]">
-                              {{space.attributes.name | spaceName}}
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <fabric8-recent-spaces-widget [cardSizeClass]="'f8-card'" [cardBodySizeClass]="'f8-card-body'"></fabric8-recent-spaces-widget>
         </div>
         <div class="col-xs-12 col-md-4">
           <alm-work-item-widget></alm-work-item-widget>
