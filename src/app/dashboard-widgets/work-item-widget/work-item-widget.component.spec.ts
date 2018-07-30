@@ -8,7 +8,7 @@ import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { cloneDeep } from 'lodash';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
@@ -22,6 +22,12 @@ describe('WorkItemWidgetComponent', () => {
 
   let mockContext: Context;
   let workItem: WorkItem;
+  let workItems: WorkItem[];
+  let workItem1: WorkItem;
+  let workItem2: WorkItem;
+  let workItem3: WorkItem;
+  let workItem4: WorkItem;
+  let workItem5: WorkItem;
 
   const mockRouterEvent: Event = {
     'id': 1,
@@ -36,12 +42,6 @@ describe('WorkItemWidgetComponent', () => {
     }
   } as Feature;
 
-  let workItem1: WorkItem = cloneDeep(workItem);
-  let workItem2: WorkItem = cloneDeep(workItem);
-  let workItem3: WorkItem = cloneDeep(workItem);
-  let workItem4: WorkItem = cloneDeep(workItem);
-  let workItem5: WorkItem = cloneDeep(workItem);
-
   beforeEach(() => {
 
     mockContext = {
@@ -50,7 +50,8 @@ describe('WorkItemWidgetComponent', () => {
           'username': 'mock-username'
         },
         'id': 'mock-user'
-      }
+      },
+      'path': 'mock-path'
     } as Context;
 
     workItem = {
@@ -71,6 +72,7 @@ describe('WorkItemWidgetComponent', () => {
     workItem4.attributes['system.state'] = 'resolved';
     workItem5 = cloneDeep(workItem);
     workItem5.attributes['system.state'] = 'new';
+    workItems = [workItem1, workItem2, workItem3, workItem4, workItem5];
 
     TestBed.configureTestingModule({
       imports: [
@@ -126,7 +128,7 @@ describe('WorkItemWidgetComponent', () => {
           useFactory: () => {
             const mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
             mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
-              workItems: [workItem1, workItem2, workItem3, workItem4, workItem5]
+              workItems: workItems
             }));
             return mockWorkItemService;
           }
@@ -178,6 +180,115 @@ describe('WorkItemWidgetComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.debugElement.query(By.css('#spacehome-workitems-create-button'))).toBeNull();
+  });
+
+  describe('#updateWorkItems', () => {
+
+    afterEach(() => {
+      // ensure the component is not left in a loading state
+      expect(component.loading).toEqual(false);
+    });
+
+    it('should not detailed work item counters for work items without a system.state', () => {
+      const mockWorkItemService: jasmine.SpyObj<WorkItemService> = TestBed.get(WorkItemService);
+      mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+        workItems: [workItem] // workItem has no system.state attribute
+      }));
+
+      fixture = TestBed.createComponent(WorkItemWidgetComponent);
+      component = fixture.debugElement.componentInstance;
+      fixture.detectChanges();
+
+      // verify the work item was counted, but not towards specific counters
+      expect(component.myWorkItemsCount).toEqual(1);
+      expect(component.myWorkItemsOpen).toEqual(0);
+      expect(component.myWorkItemsInProgress).toEqual(0);
+      expect(component.myWorkItemsResolved).toEqual(0);
+    });
+
+    it('should reset the work item counters when a new context is encountered', () => {
+      const mockWorkItemService: jasmine.SpyObj<WorkItemService> = TestBed.get(WorkItemService);
+      const mockContexts: any = TestBed.get(Contexts);
+      mockContexts.current = new Subject();
+
+      fixture = TestBed.createComponent(WorkItemWidgetComponent);
+      component = fixture.debugElement.componentInstance;
+      fixture.detectChanges();
+
+      mockContexts.current.next(mockContext);
+      // verify that the work item counters have been incremented
+      expect(component.myWorkItemsCount).toBeGreaterThan(0);
+      expect(component.myWorkItemsOpen).toBeGreaterThan(0);
+      expect(component.myWorkItemsInProgress).toBeGreaterThan(0);
+      expect(component.myWorkItemsResolved).toBeGreaterThan(0);
+
+      mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+        workItems: []
+      }));
+      mockContexts.current.next(mockContext);
+      // if WI service returns empty list, counter variables should not increment after reset
+      expect(component.myWorkItemsCount).toEqual(0);
+      expect(component.myWorkItemsOpen).toEqual(0);
+      expect(component.myWorkItemsInProgress).toEqual(0);
+      expect(component.myWorkItemsResolved).toEqual(0);
+    });
+
+    it('should re-init the chart data when a new context is encountered', () => {
+      const mockWorkItemService: jasmine.SpyObj<WorkItemService> = TestBed.get(WorkItemService);
+      const mockContexts: any = TestBed.get(Contexts);
+      mockContexts.current = new Subject();
+
+      fixture = TestBed.createComponent(WorkItemWidgetComponent);
+      component = fixture.debugElement.componentInstance;
+      fixture.detectChanges();
+
+      mockContexts.current.next(mockContext);
+      // verify that chartData has been updated
+      expect(component.chartData.yData[0]).toEqual([component.LABEL_RESOLVED, 1]);
+      expect(component.chartData.yData[1]).toEqual([component.LABEL_IN_PROGRESS, 1]);
+      expect(component.chartData.yData[2]).toEqual([component.LABEL_OPEN, 2]);
+
+      mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+        workItems: [workItem1, workItem2, workItem3]
+      }));
+      mockContexts.current.next(mockContext);
+      // verify that chartData contains the 3 workItems worth of information
+      expect(component.chartData.yData[0]).toEqual([component.LABEL_RESOLVED, 0]);
+      expect(component.chartData.yData[1]).toEqual([component.LABEL_IN_PROGRESS, 1]);
+      expect(component.chartData.yData[2]).toEqual([component.LABEL_OPEN, 2]);
+    });
+
+    it('should increment the work item type counters accordingly', () => {
+      let expectedCount: number = workItems.length;
+      let expectedOpen: number = 0;
+      let expectedInProgress: number = 0;
+      let expectedResolved: number = 0;
+      workItems.forEach(w => {
+        switch (w.attributes['system.state']) {
+          case 'open':
+            expectedOpen++;
+            break;
+          case 'in progress':
+            expectedInProgress++;
+            break;
+          case 'resolved':
+            expectedResolved++;
+            break;
+        }
+      });
+      expect(expectedCount).toEqual(component.myWorkItemsCount);
+      expect(expectedOpen).toEqual(component.myWorkItemsOpen);
+      expect(expectedInProgress).toEqual(component.myWorkItemsInProgress);
+      expect(expectedResolved).toEqual(component.myWorkItemsResolved);
+    });
+  });
+
+  describe('#get myWorkItems', () => {
+    it('should return an observable containing all retreived work items', () => {
+      component.myWorkItems.subscribe((w: WorkItem[]) => {
+        expect(w).toEqual(workItems);
+      });
+    });
   });
 
 });
