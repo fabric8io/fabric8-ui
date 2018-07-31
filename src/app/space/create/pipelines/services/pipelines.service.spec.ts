@@ -565,7 +565,7 @@ describe('Pipelines Service', () => {
           }
         };
 
-        it('should emit response with repeat calls', (done: DoneFn) => {
+        it('should cache console URL', (done: DoneFn) => {
           svc.getOpenshiftConsoleUrl()
             .first()
             .subscribe(
@@ -583,7 +583,7 @@ describe('Pipelines Service', () => {
                       done.fail(err);
                     }
                   );
-                controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
+                controller.expectNone('http://example.com/user/services');
               },
               (err: string) => {
                 done.fail(err);
