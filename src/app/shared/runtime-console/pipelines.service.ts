@@ -61,6 +61,8 @@ function combineBuildConfigAndBuildsAndFilterOnSpace(buildConfigs: BuildConfigs,
   let pipelines = combineBuildConfigAndBuilds(buildConfigs, builds);
   let spaceId = '';
   if (context) {
+    // Hack to acquire spaceId from browser path
+    // If paths change, this could break
     let paths = context.path.split('/');
     if (paths[paths.length - 1]) {
       spaceId = paths[paths.length - 1];
