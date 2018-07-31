@@ -4,10 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { Broadcaster, Notifications } from 'ngx-base';
-import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 
-import { WindowService } from '../../../../shared/window.service';
 import { CheService } from '../services/che.service';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
@@ -20,7 +19,6 @@ describe('Codebases Item Actions Component', () => {
   let notificationMock: any;
   let fixture;
   let broadcasterMock: any;
-  let windowServiceMock: any;
   let cheServiceMock: any;
   let workspacesServiceMock: any;
   let codebasesServiceMock: any;
@@ -30,7 +28,6 @@ describe('Codebases Item Actions Component', () => {
     dialogMock = jasmine.createSpyObj('bs-modal', ['show', 'hide']);
     notificationMock = jasmine.createSpyObj('Notifications', ['message']);
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
-    windowServiceMock = jasmine.createSpyObj('WindowService', ['open']);
     cheServiceMock = jasmine.createSpyObj('CheService', ['getState']);
     workspacesServiceMock = jasmine.createSpyObj('WorkspacesService', ['createWorkspace']);
     codebasesServiceMock = jasmine.createSpyObj('CodebasesService', ['deleteCodebase']);
@@ -41,9 +38,6 @@ describe('Codebases Item Actions Component', () => {
       providers: [
         {
           provide: Broadcaster, useValue: broadcasterMock
-        },
-        {
-          provide: WindowService, useValue: windowServiceMock
         },
         {
           provide: CheService, useValue: cheServiceMock
@@ -68,7 +62,7 @@ describe('Codebases Item Actions Component', () => {
     cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: false, multiTenant: true, running: true}));
   });
 
-  it('Create And Open Workspace successfully', async(() => {
+  it('Create Workspace successfully', async(() => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
@@ -78,22 +72,20 @@ describe('Codebases Item Actions Component', () => {
       }
     };
     workspacesServiceMock.createWorkspace.and.returnValue(Observable.of(workspaceLinks));
-    windowServiceMock.open.and.returnValue(new WindowService());
     const notificationAction = { name: 'created' };
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     broadcasterMock.broadcast.and.returnValue();
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
     fixture.detectChanges();
     // when
-    comp.createAndOpenWorkspace();
+    comp.createWorkspace();
     fixture.detectChanges();
     // then
     expect(notificationMock.message).toHaveBeenCalled();
-    expect(windowServiceMock.open).toHaveBeenCalled();
     expect(broadcasterMock.broadcast).toHaveBeenCalled();
   }));
 
-  it('Create And Open Workspace in error', async(() => {
+  it('Create Workspace in error', async(() => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
@@ -103,13 +95,13 @@ describe('Codebases Item Actions Component', () => {
     broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
     fixture.detectChanges();
     // when
-    comp.createAndOpenWorkspace();
+    comp.createWorkspace();
     fixture.detectChanges();
     // then
     expect(notificationMock.message).toHaveBeenCalled();
   }));
 
-  it('Create And Open Workspace with capacity full', async(() => {
+  it('Create Workspace with capacity full', async(() => {
     // given
     let comp = fixture.componentInstance;
     cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
@@ -117,7 +109,7 @@ describe('Codebases Item Actions Component', () => {
     notificationMock.message.and.returnValue(Observable.of(notificationAction));
     fixture.detectChanges();
     // when
-    comp.createAndOpenWorkspace();
+    comp.createWorkspace();
     fixture.detectChanges();
     // then
     expect(notificationMock.message).toHaveBeenCalled();

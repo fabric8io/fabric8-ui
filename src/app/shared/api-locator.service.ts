@@ -19,7 +19,6 @@ const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(
 );
 
 const DEFAULT_API_PREFIXES = new Map<string, string>([
-  ['wit', 'api'],
   ['recommender', 'recommender'],
   ['analyticsRecommender', 'recommender.api'],
   ['analyticsLicense', 'license-analysis.api'],
