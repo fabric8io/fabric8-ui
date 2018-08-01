@@ -49,6 +49,10 @@ export class MenusService {
                 name: 'Board',
                 path: 'board'
               }
+              , {
+                name: 'Query',
+                path: 'query'
+              }
             ]
           }, {
             name: 'Create',
