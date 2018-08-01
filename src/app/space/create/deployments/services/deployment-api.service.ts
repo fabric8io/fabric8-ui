@@ -1,13 +1,15 @@
 import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+  HttpResponse
+} from '@angular/common/http';
+import {
   ErrorHandler,
   Inject,
   Injectable
 } from '@angular/core';
-import {
-  Headers,
-  Http,
-  Response
-} from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { Logger } from 'ngx-base';
@@ -134,79 +136,83 @@ export interface SeriesData {
 @Injectable()
 export class DeploymentApiService {
 
-  private readonly headers: Headers = new Headers();
+  private readonly headers: HttpHeaders = new HttpHeaders();
   private readonly apiUrl: string;
 
   constructor(
-    private readonly http: Http,
-    @Inject(WIT_API_URL) private readonly witUrl: string,
+    private readonly http: HttpClient,
+    @Inject(WIT_API_URL) witUrl: string,
     private readonly auth: AuthenticationService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler
   ) {
     if (this.auth.getToken() != null) {
-      this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
+      this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
     this.apiUrl = witUrl + 'deployments/spaces/';
   }
 
   getEnvironments(spaceId: string): Observable<EnvironmentStat[]> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    return this.httpGet(`${this.apiUrl}${encSpaceId}/environments`)
-      .map((response: Response): EnvironmentStat[] => (response.json() as EnvironmentsResponse).data);
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    return this.httpGet<EnvironmentsResponse>(`${this.apiUrl}${encSpaceId}/environments`)
+      .map((response: EnvironmentsResponse): EnvironmentStat[] => response.data);
   }
 
   getApplications(spaceId: string): Observable<Application[]> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    return this.httpGet(`${this.apiUrl}${encSpaceId}`)
-      .map((response: Response): Application[] => (response.json() as ApplicationsResponse).data.attributes.applications);
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    return this.httpGet<ApplicationsResponse>(`${this.apiUrl}${encSpaceId}`)
+      .map((response: ApplicationsResponse): Application[] => response.data.attributes.applications);
   }
 
   getTimeseriesData(spaceId: string, environmentName: string, applicationId: string, startTime: number, endTime: number): Observable<MultiTimeseriesData> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries?start=${startTime}&end=${endTime}`;
-    return this.httpGet(url)
-      .map((response: Response) => (response.json() as MultiTimeseriesResponse).data);
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    const encEnvironmentName: string = encodeURIComponent(environmentName);
+    const encApplicationId: string = encodeURIComponent(applicationId);
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries`;
+    const params: HttpParams = new HttpParams().set('start', String(startTime)).set('end', String(endTime));
+    return this.httpGet<MultiTimeseriesResponse>(url, params)
+      .map((response: MultiTimeseriesResponse) => response.data);
   }
 
   getLatestTimeseriesData(spaceId: string, environmentName: string, applicationId: string): Observable<TimeseriesData> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
-    return this.httpGet(url)
-      .map((response: Response) => (response.json() as TimeseriesResponse).data.attributes);
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    const encEnvironmentName: string = encodeURIComponent(environmentName);
+    const encApplicationId: string = encodeURIComponent(applicationId);
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
+    return this.httpGet<TimeseriesResponse>(url)
+      .map((response: TimeseriesResponse) => response.data.attributes);
   }
 
-  deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<Response> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
-    return this.http.delete(url, { headers: this.headers })
-      .catch((err: Response) => this.handleHttpError(err));
+  deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<void> {
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    const encEnvironmentName: string = encodeURIComponent(environmentName);
+    const encApplicationId: string = encodeURIComponent(applicationId);
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
+    return this.http.delete(url, { headers: this.headers, responseType: 'text' })
+      .catch((err: HttpErrorResponse) => this.handleHttpError(err))
+      .map(() => null);
   }
 
-  scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<Response> {
-    const encSpaceId = encodeURIComponent(spaceId);
-    const encEnvironmentName = encodeURIComponent(environmentName);
-    const encApplicationId = encodeURIComponent(applicationId);
-    const url = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}?podCount=${desiredReplicas}`;
-    return this.http.put(url, '', { headers: this.headers })
-      .catch((err: Response) => this.handleHttpError(err));
+  scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<void> {
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    const encEnvironmentName: string = encodeURIComponent(environmentName);
+    const encApplicationId: string = encodeURIComponent(applicationId);
+    const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
+    const params: HttpParams = new HttpParams().set('podCount', String(desiredReplicas));
+    return this.http.put(url, '', { headers: this.headers, params, responseType: 'text' })
+      .catch((err: HttpErrorResponse) => this.handleHttpError(err))
+      .map(() => null);
   }
 
-  private httpGet(url: string): Observable<Response> {
-    return this.http.get(url, { headers: this.headers })
-      .catch((err: Response) => this.handleHttpError(err));
+  private httpGet<T>(url: string, params: HttpParams = new HttpParams()): Observable<T> {
+    return this.http.get<T>(url, { headers: this.headers, params })
+      .catch((err: HttpErrorResponse) => this.handleHttpError(err));
   }
 
-  private handleHttpError(response: Response): Observable<Response> {
-    this.errorHandler.handleError(response);
-    this.logger.error(response);
-    return Observable.throw(response);
+  private handleHttpError(err: HttpErrorResponse): Observable<any> {
+    this.errorHandler.handleError(err);
+    this.logger.error(err);
+    return Observable.throw(err);
   }
 
 }

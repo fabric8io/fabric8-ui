@@ -81,6 +81,9 @@ export class AddAppOverlayComponent implements OnDestroy {
    */
   hideAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', false);
+    this.broadcaster.broadcast('analyticsTracker', {
+      event: 'closeAddAppOverlay'
+    });
   }
 
   /**

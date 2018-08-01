@@ -1,17 +1,10 @@
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+  TestRequest
+} from '@angular/common/http/testing';
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpModule,
-  RequestMethod,
-  Response,
-  ResponseOptions,
-  ResponseType,
-  XHRBackend
-} from '@angular/http';
-import {
-  MockBackend,
-  MockConnection
-} from '@angular/http/testing';
 
 import { createMock } from 'testing/mock';
 
@@ -21,26 +14,27 @@ import { AuthenticationService } from 'ngx-login-client';
 
 import {
   Application,
+  ApplicationsResponse,
   DeploymentApiService,
+  EnvironmentsResponse,
   EnvironmentStat,
   MultiTimeseriesData,
-  TimeseriesData
+  MultiTimeseriesResponse,
+  TimeseriesData,
+  TimeseriesResponse
 } from './deployment-api.service';
 
 type TestContext = {
   service: DeploymentApiService;
-  backend: MockBackend;
+  controller: HttpTestingController;
 };
 
 describe('DeploymentApiService', () => {
 
   beforeEach(function(this: TestContext): void {
     TestBed.configureTestingModule({
-      imports: [HttpModule],
+      imports: [ HttpClientTestingModule ],
       providers: [
-        {
-          provide: XHRBackend, useClass: MockBackend
-        },
         {
           provide: AuthenticationService, useFactory: (): jasmine.SpyObj<AuthenticationService> => {
             const authSvc: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
@@ -68,13 +62,13 @@ describe('DeploymentApiService', () => {
         DeploymentApiService
       ]
     });
-    this.backend = TestBed.get(XHRBackend);
     this.service = TestBed.get(DeploymentApiService);
+    this.controller = TestBed.get(HttpTestingController);
   });
 
-  describe('#getEnvironments', () => {
+  describe('#getEnvironments', (): void => {
     it('should return result', function(this: TestContext, done: DoneFn): void {
-      const httpResponse = {
+      const httpResponse: EnvironmentsResponse = {
         data: [
           {
             attributes: {
@@ -90,48 +84,43 @@ describe('DeploymentApiService', () => {
             id: 'barId',
             type: 'barType'
           }
-        ]
+        ] as EnvironmentStat[]
       };
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId/environments');
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
-      });
       this.service.getEnvironments('foo spaceId')
+        .first()
         .subscribe((envs: EnvironmentStat[]): void => {
-          expect(envs as any[]).toEqual(httpResponse.data);
+          expect(envs).toEqual(httpResponse.data);
+          this.controller.verify();
           done();
         });
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/environments');
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush(httpResponse);
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId/environments');
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockError(new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })) as Response & Error);
-      });
-
       this.service.getEnvironments('foo spaceId')
-      .subscribe(
-        (resp) => done.fail('should throw error'),
-        () => {
-          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
-          expect(TestBed.get(Logger).error).toHaveBeenCalled();
-          done();
-        }
-      );
+        .first()
+        .subscribe(
+          () => done.fail('should throw error'),
+          () => {
+            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+            expect(TestBed.get(Logger).error).toHaveBeenCalled();
+            this.controller.verify();
+            done();
+          }
+        );
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/environments');
+      req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
-  describe('#getApplications', () => {
+  describe('#getApplications', (): void => {
     it('should return result', function(this: TestContext, done: DoneFn): void {
-      const httpResponse = {
+      const httpResponse: ApplicationsResponse = {
         data: {
           attributes: {
             applications: [
@@ -153,47 +142,42 @@ describe('DeploymentApiService', () => {
             ]
           }
         }
-      };
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId');
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
-      });
+      } as ApplicationsResponse;
       this.service.getApplications('foo spaceId')
+        .first()
         .subscribe((apps: Application[]): void => {
-          expect(apps as any[]).toEqual(httpResponse.data.attributes.applications);
+          expect(apps).toEqual(httpResponse.data.attributes.applications);
+          this.controller.verify();
           done();
         });
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId');
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush(httpResponse);
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        expect(connection.request.url).toEqual('http://example.com/deployments/spaces/foo%20spaceId');
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockError(new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })) as Response & Error);
-      });
-
       this.service.getApplications('foo spaceId')
-      .subscribe(
-        (resp) => done.fail('should throw error'),
-        () => {
-          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
-          expect(TestBed.get(Logger).error).toHaveBeenCalled();
-          done();
-        }
-      );
+        .first()
+        .subscribe(
+          () => done.fail('should throw error'),
+          () => {
+            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+            expect(TestBed.get(Logger).error).toHaveBeenCalled();
+            this.controller.verify();
+            done();
+          }
+        );
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId');
+      req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
-  describe('#getTimeseriesData', () => {
+  describe('#getTimeseriesData', (): void => {
     it('should return result', function(this: TestContext, done: DoneFn): void {
-      const httpResponse = {
+      const httpResponse: MultiTimeseriesResponse = {
         data: {
           cores: [
             { value: 1, time: 1 },
@@ -214,49 +198,42 @@ describe('DeploymentApiService', () => {
           start: 1,
           end: 2
         }
-      };
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2';
-        expect(connection.request.url).toEqual(expectedUrl);
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
-      });
+      } as MultiTimeseriesResponse;
       this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
+        .first()
         .subscribe((data: MultiTimeseriesData): void => {
           expect(data).toEqual(httpResponse.data);
+          this.controller.verify();
           done();
         });
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2');
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush(httpResponse);
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2';
-        expect(connection.request.url).toEqual(expectedUrl);
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockError(new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })) as Response & Error);
-      });
-
       this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
-      .subscribe(
-        (resp) => done.fail('should throw error'),
-        () => {
-          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
-          expect(TestBed.get(Logger).error).toHaveBeenCalled();
-          done();
-        }
-      );
+        .first()
+        .subscribe(
+          () => done.fail('should throw error'),
+          () => {
+            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+            expect(TestBed.get(Logger).error).toHaveBeenCalled();
+            this.controller.verify();
+            done();
+          }
+        );
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2');
+      req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
   describe('#getLatestTimeseriesData', () => {
     it('should return result', function(this: TestContext, done: DoneFn): void {
-      const httpResponse = {
+      const httpResponse: TimeseriesResponse = {
         data: {
           attributes: {
             cores: {
@@ -273,125 +250,103 @@ describe('DeploymentApiService', () => {
             }
           }
         }
-      };
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats';
-        expect(connection.request.url).toEqual(expectedUrl);
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockRespond(new Response(new ResponseOptions({ body: httpResponse })));
-      });
+      } as TimeseriesResponse;
       this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
+        .first()
         .subscribe((data: TimeseriesData): void => {
           expect(data).toEqual(httpResponse.data.attributes);
+          this.controller.verify();
           done();
         });
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats');
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush(httpResponse);
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Get);
-        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats';
-        expect(connection.request.url).toEqual(expectedUrl);
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockError(new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })) as Response & Error);
-      });
-
       this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
-      .subscribe(
-        (resp) => done.fail('should throw error'),
-        () => {
-          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
-          expect(TestBed.get(Logger).error).toHaveBeenCalled();
-          done();
-        }
-      );
+        .first()
+        .subscribe(
+          () => done.fail('should throw error'),
+          () => {
+            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+            expect(TestBed.get(Logger).error).toHaveBeenCalled();
+            this.controller.verify();
+            done();
+          }
+        );
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats');
+      req.error(new ErrorEvent('Mock HTTP error'));
     });
   });
 
   describe('#deleteDeployment', () => {
     it('should return response', function(this: TestContext, done: DoneFn): void {
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Delete);
-        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env';
-        expect(connection.request.url).toEqual(expectedUrl);
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
-      });
       this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
-        .subscribe((resp: Response): void => {
-          expect(resp.status).toEqual(200);
+        .first()
+        .subscribe((): void => {
+          this.controller.verify();
           done();
         });
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env');
+      expect(req.request.method).toEqual('DELETE');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush('');
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Delete);
-        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env';
-        expect(connection.request.url).toEqual(expectedUrl);
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockError(new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })) as Response & Error);
-      });
-
       this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
-      .subscribe(
-        (resp) => done.fail('should throw error'),
-        () => {
-          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
-          expect(TestBed.get(Logger).error).toHaveBeenCalled();
-          done();
-        }
-      );
+        .first()
+        .subscribe(
+          () => done.fail('should throw error'),
+          () => {
+            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+            expect(TestBed.get(Logger).error).toHaveBeenCalled();
+            this.controller.verify();
+            done();
+          }
+        );
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env');
+      req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
   describe('#scalePods', () => {
     it('should return response', function(this: TestContext, done: DoneFn): void {
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Put);
-        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5';
-        expect(connection.request.url).toEqual(expectedUrl);
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockRespond(new Response(new ResponseOptions({ status: 200 })));
-      });
       this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
-        .subscribe((resp: Response): void => {
-          expect(resp.status).toEqual(200);
+        .first()
+        .subscribe((): void => {
+          this.controller.verify();
           done();
         });
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5');
+      expect(req.request.method).toEqual('PUT');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush('');
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.backend.connections.first().subscribe((connection: MockConnection): void => {
-        expect(connection.request.method).toEqual(RequestMethod.Put);
-        const expectedUrl: string = 'http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5';
-        expect(connection.request.url).toEqual(expectedUrl);
-        expect(connection.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
-        connection.mockError(new Response(new ResponseOptions({
-          type: ResponseType.Error,
-          body: JSON.stringify('Mock HTTP Error'),
-          status: 404
-        })) as Response & Error);
-      });
-
       this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
-      .subscribe(
-        (resp) => done.fail('should throw error'),
-        () => {
-          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
-          expect(TestBed.get(Logger).error).toHaveBeenCalled();
-          done();
-        }
-      );
+        .first()
+        .subscribe(
+          () => done.fail('should throw error'),
+          () => {
+            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+            expect(TestBed.get(Logger).error).toHaveBeenCalled();
+            this.controller.verify();
+            done();
+          }
+        );
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5');
+      req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
+
 });

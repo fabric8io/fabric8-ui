@@ -119,6 +119,12 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
   showAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', true);
+    this.broadcaster.broadcast('analyticsTracker', {
+      event: 'showAddAppOverlay',
+      data: {
+        source: 'deployment-apps'
+      }
+    });
   }
 
 }

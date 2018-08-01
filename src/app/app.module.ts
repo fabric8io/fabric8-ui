@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Http, HttpModule } from '@angular/http';
@@ -152,6 +153,7 @@ export type StoreType = {
     EffectsModule.forRoot([]),
     EmptyStateModule,
     FormsModule,
+    HttpClientModule,
     HttpModule,
     KubernetesRestangularModule,
     KubernetesStoreModule,
