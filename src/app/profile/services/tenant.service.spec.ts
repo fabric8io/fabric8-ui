@@ -2,6 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { HttpModule, RequestMethod, Response, ResponseOptions, XHRBackend } from '@angular/http';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+  TestRequest
+} from '@angular/common/http/testing';
+
+import { HttpResponse } from '@angular/common/http';
+
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
@@ -14,7 +22,7 @@ import { TenantService } from './tenant.service';
 describe('TenantService', () => {
 
   let service: TenantService;
-  let mockBackend: MockBackend;
+  let controller: HttpTestingController;
   let mockLogger: jasmine.SpyObj<Logger>;
   let mockUserService: jasmine.SpyObj<UserService>;
 
@@ -24,9 +32,8 @@ describe('TenantService', () => {
     mockLogger = jasmine.createSpyObj<Logger>('Logger', ['error']);
 
     TestBed.configureTestingModule({
-      imports: [HttpModule],
+      imports: [HttpClientTestingModule],
       providers: [
-        { provide: XHRBackend, useClass: MockBackend },
         { provide: Logger, useValue: mockLogger },
         { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: UserService, useValue: mockUserService },
@@ -35,31 +42,29 @@ describe('TenantService', () => {
       ]
     });
     service = TestBed.get(TenantService);
-    mockBackend = TestBed.get(XHRBackend);
+    controller = TestBed.get(HttpTestingController);
   });
 
   describe('#updateTenant', () => {
-    it('should make a HTTP PATCH request', (done: DoneFn) => {
+    fit('should make a HTTP PATCH request', (done: DoneFn) => {
       let mockResponse = 'mock-response';
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        expect(connection.request.method).toBe(RequestMethod.Patch);
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: mockResponse
-          })
-        ));
-      });
+
       service.updateTenant()
         .subscribe(
-          (msg: Response) => {
-            expect(msg.text()).toEqual(mockResponse);
-            subscription.unsubscribe();
+          (resp: HttpResponse) => {
+            expect(resp.text()).toEqual(mockResponse);
+            controller.verify();
             done();
           },
           (err: string) => {
             done.fail(err);
           }
         );
+
+      const req: TestRequest = controller.expectOne('http://example.com/api/user/services');
+      expect(req.request.method).toEqual('PATCH');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-token');
+      req.flush(mockResponse);
     });
 
     it('should delegate to handleError() if an error occurs', (done: DoneFn) => {

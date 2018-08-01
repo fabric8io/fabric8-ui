@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
@@ -13,6 +13,7 @@ import { SpacesComponent }     from './spaces.component';
 @NgModule({
   imports: [
     CommonModule,
+    HttpClientModule,
     SpacesRoutingModule,
     ModalModule.forRoot(),
     InfiniteScrollModule,
@@ -22,6 +23,4 @@ import { SpacesComponent }     from './spaces.component';
   ],
   declarations: [ SpacesComponent ]
 })
-export class SpacesModule {
-  constructor(http: Http) {}
-}
+export class SpacesModule {}

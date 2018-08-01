@@ -1,5 +1,5 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { NotificationsRoutingModule } from './notifications-routing.module';
 import { NotificationsComponent } from './notifications.component';
@@ -7,11 +7,10 @@ import { ToggleBarComponent } from './toggle-bar.component';
 
 @NgModule({
   imports: [
-    NotificationsRoutingModule
+    NotificationsRoutingModule,
+    HttpClientModule
   ],
   declarations: [ NotificationsComponent, ToggleBarComponent],
   exports: [ToggleBarComponent]
 })
-export class NotificationsModule {
-  constructor(http: Http) {}
-}
+export class NotificationsModule {}

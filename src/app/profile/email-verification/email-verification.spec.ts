@@ -1,6 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -22,7 +22,7 @@ describe('Email Verification Component', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule, RouterTestingModule.withRoutes([])],
+      imports: [FormsModule, HttpClientModule, RouterTestingModule.withRoutes([])],
       declarations: [EmailVerificationComponent],
       providers: [
         {

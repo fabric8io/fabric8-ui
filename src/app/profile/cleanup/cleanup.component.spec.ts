@@ -1,8 +1,9 @@
 import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
+
+import { HttpClientModule } from '@angular/common/http';
 
 import { Logger } from 'ngx-base';
 import { Contexts, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
@@ -54,7 +55,7 @@ describe('CleanupComponent', () => {
     mockSpaceService.getSpacesByUser.and.returnValue(Observable.of([mockSpace]));
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule, HttpClientModule],
       declarations: [CleanupComponent],
       providers: [
         { provide: Contexts, useValue: mockContexts },

@@ -1,7 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
@@ -14,7 +14,7 @@ describe('My Spaces Item Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [Fabric8WitModule, FormsModule, HttpModule],
+      imports: [Fabric8WitModule, FormsModule, HttpClientModule],
       declarations: [MySpacesItemComponent],
       providers: [],
       // Tells the compiler not to error on unknown elements and attributes

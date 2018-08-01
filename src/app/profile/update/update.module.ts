@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Http, HttpModule } from '@angular/http';
 
 import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2';
 import { RemainingCharsCountModule } from 'patternfly-ng/remaining-chars-count';
@@ -17,7 +17,7 @@ import { WorkItemsModule } from '../overview/work-items/work-items.module';
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     JWBootstrapSwitchModule,
     RemainingCharsCountModule,
     UpdateRoutingModule,
@@ -27,6 +27,4 @@ import { WorkItemsModule } from '../overview/work-items/work-items.module';
   declarations: [ UpdateComponent ],
   providers: [ OwnerGuard ]
 })
-export class UpdateModule {
-  constructor(http: Http) {}
-}
+export class UpdateModule {}

@@ -1,6 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
 
 import { Broadcaster, Logger } from 'ngx-base';
 import { Contexts, Fabric8WitModule, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
@@ -43,7 +43,7 @@ describe('SpacesComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         Fabric8WitModule,
-        HttpModule
+        HttpClientModule
       ],
       declarations: [SpacesComponent],
       providers: [

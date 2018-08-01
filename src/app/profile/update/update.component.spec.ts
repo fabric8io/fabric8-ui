@@ -1,7 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { DebugNode, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
 
 import { NotificationType } from 'ngx-base';
@@ -47,7 +47,7 @@ describe('UpdateComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule, HttpClientModule],
       declarations: [UpdateComponent],
       providers: [
         { provide: AuthenticationService, useValue: mockAuthenticationService },

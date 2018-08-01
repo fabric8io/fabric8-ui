@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { Http, HttpModule } from '@angular/http';
 
 import { EmailVerificationRoutingModule } from './email-verification-routing.module';
 import { EmailVerificationComponent } from './email-verification.component';
@@ -8,11 +8,9 @@ import { EmailVerificationComponent } from './email-verification.component';
 @NgModule({
   imports: [
     CommonModule,
-    HttpModule,
+    HttpClientModule,
     EmailVerificationRoutingModule
   ],
   declarations: [ EmailVerificationComponent ]
 })
-export class EmailVerificationModule {
-  constructor(http: Http) {}
-}
+export class EmailVerificationModule {}
