@@ -7,11 +7,13 @@ import { Environment, getEnvironment } from './environment';
 export class RavenExceptionHandler extends ErrorHandler {
   constructor(private injector: Injector) {
     super();
-    // TODO - replace with configuration variable
-    Raven.config('https://e71023d2bd794b708ea5a4f43e914b11@errortracking.prod-preview.openshift.io/8',
-    {
-      environment: getEnvironment()
-    }).install();
+    if (ENV !== 'test') {
+      // TODO - replace with configuration variable
+      Raven.config('https://e71023d2bd794b708ea5a4f43e914b11@errortracking.prod-preview.openshift.io/8',
+      {
+        environment: getEnvironment()
+      }).install();
+    }
   }
 
   handleError(err: any) {
