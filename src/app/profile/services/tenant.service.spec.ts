@@ -1,6 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpModule, RequestMethod, Response, ResponseOptions, XHRBackend } from '@angular/http';
-import { MockBackend, MockConnection } from '@angular/http/testing';
 
 import {
   HttpClientTestingModule,
@@ -46,13 +44,12 @@ describe('TenantService', () => {
   });
 
   describe('#updateTenant', () => {
-    fit('should make a HTTP PATCH request', (done: DoneFn) => {
+    it('should make a HTTP PATCH request', (done: DoneFn) => {
       let mockResponse = 'mock-response';
 
       service.updateTenant()
-        .subscribe(
-          (resp: HttpResponse) => {
-            expect(resp.text()).toEqual(mockResponse);
+        .subscribe((resp: HttpResponse<any>) => {
+            expect(resp.body).toEqual(mockResponse);
             controller.verify();
             done();
           },
@@ -68,66 +65,50 @@ describe('TenantService', () => {
     });
 
     it('should delegate to handleError() if an error occurs', (done: DoneFn) => {
-      let mockError: Error = new Error();
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(mockError);
-      });
       service.updateTenant()
         .subscribe(
-          (msg: string) => {
-            done.fail(msg);
+          (resp: HttpResponse<any>) => {
+            done.fail(resp.body);
           },
-          (err: string) => {
+          () => {
             // handleError() is private, verify that logger.error() is called with returned error
-            expect(mockLogger.error).toHaveBeenCalledWith(mockError);
-            subscription.unsubscribe();
+            expect(TestBed.get(mockLogger).error).toHaveBeenCalled();
+            controller.verify();
             done();
           }
         );
+      const req: TestRequest = controller.expectOne('http://example.com/api/user/services');
+      req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
   describe('#cleanupTenant', () => {
     it('should make a HTTP DELETE request', (done: DoneFn) => {
-      let mockResponse = 'mock-response';
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        expect(connection.request.method).toBe(RequestMethod.Delete);
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: mockResponse
-          })
-        ));
-      });
       service.cleanupTenant()
-        .subscribe(
-          (msg: Response) => {
-            expect(msg.text()).toEqual(mockResponse);
-            subscription.unsubscribe();
-            done();
-          },
-          (err: string) => {
-            done.fail(err);
-          }
-        );
+        .subscribe((): void => {
+          controller.verify();
+          done();
+        });
+
+      const req: TestRequest = controller.expectOne('http://example.com/api/user/services');
+      expect(req.request.method).toEqual('DELETE');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush('');
     });
 
     it('should delegate to handleError() if an error occurs', (done: DoneFn) => {
-      let mockError: Error = new Error('mock-error');
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(mockError);
-      });
       service.cleanupTenant()
         .subscribe(
-          (msg: string) => {
-            done.fail(msg);
-          },
-          (err: string) => {
+          () => done.fail('Should throw error'),
+          () => {
             // handleError() is private, verify that logger.error() is called with returned error
-            expect(mockLogger.error).toHaveBeenCalledWith(mockError);
-            subscription.unsubscribe();
+            expect(TestBed.get(mockLogger).error).toHaveBeenCalled();
+            controller.verify();
             done();
           }
         );
+      const req: TestRequest = controller.expectOne('http://example.com/api/user/services');
+      req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
