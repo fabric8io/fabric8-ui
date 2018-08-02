@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { DebugNode } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
@@ -12,22 +11,25 @@ import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
+import { ProviderService } from '../../shared/account/provider.service';
+import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { TenantService } from '../services/tenant.service';
 import { TenantComponent } from './tenant.component';
-
 
 describe('TenantComponent', () => {
 
   let fixture: ComponentFixture<TenantComponent>;
   let component: DebugNode['componentInstance'];
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-  let mockGettingStartedService: any = jasmine.createSpy('GettingStartedService');
+  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update']);
   let mockContexts: any = jasmine.createSpy('Contexts');
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
-  let mockTenantService: any = jasmine.createSpy('TenantService');
+  let mockTenantService: any = jasmine.createSpyObj('TenantService', ['updateTenant']);
   let mockUserService: any = jasmine.createSpy('UserService');
   let mockLogger: any = jasmine.createSpy('Logger');
+  let mockProviderService: any = jasmine.createSpy('ProviderService');
+  let mockGitHubService: any = jasmine.createSpy('GitHubService');
 
   mockAuthenticationService.gitHubToken = Observable.of('gh-test-user');
   mockContexts.current = Observable.of({
@@ -41,20 +43,22 @@ describe('TenantComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpClientModule],
+      imports: [FormsModule],
       declarations: [TenantComponent],
       providers: [
         { provide: AuthenticationService, useValue: mockAuthenticationService },
-        { provide: GettingStartedService, useValue: mockGettingStartedService },
         { provide: Contexts, useValue: mockContexts },
         { provide: Notifications, useValue: mockNotifications },
         { provide: Router, useValue: mockRouter },
-        { provide: TenantService, useValue: mockTenantService },
         { provide: UserService, useValue: mockUserService },
         { provide: Logger, useValue: mockLogger },
         { provide: WIT_API_URL, useValue: 'http://example.com'}
       ]
     });
+    TestBed.overrideProvider(GettingStartedService, { useValue: mockGettingStartedService });
+    TestBed.overrideProvider(GitHubService, { useValue: mockGitHubService });
+    TestBed.overrideProvider(ProviderService, { useValue: mockProviderService });
+    TestBed.overrideProvider(TenantService, { useValue: mockTenantService });
     fixture = TestBed.createComponent(TenantComponent);
     component = fixture.debugElement.componentInstance;
   });
@@ -113,9 +117,9 @@ describe('TenantComponent', () => {
         'message': 'Tenant Updated!',
         type: NotificationType.SUCCESS
       };
-      spyOn(component.gettingStartedService, 'createTransientProfile').and.returnValue({});
-      spyOn(component.gettingStartedService, 'update').and.returnValue(Observable.of({}));
-      spyOn(component.tenantService, 'updateTenant').and.returnValue(Observable.of({}));
+      component.gettingStartedService.createTransientProfile.and.returnValue({});
+      component.gettingStartedService.update.and.returnValue(Observable.of({}));
+      component.tenantService.updateTenant.and.returnValue(Observable.of({}));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -125,9 +129,9 @@ describe('TenantComponent', () => {
         'message': 'Failed to update tenant',
         type: NotificationType.DANGER
       };
-      spyOn(component.gettingStartedService, 'createTransientProfile').and.returnValue({});
-      spyOn(component.gettingStartedService, 'update').and.returnValue(Observable.of({}));
-      spyOn(component.tenantService, 'updateTenant').and.returnValue(Observable.throw('error'));
+      component.gettingStartedService.createTransientProfile.and.returnValue({});
+      component.gettingStartedService.update.and.returnValue(Observable.of({}));
+      component.tenantService.updateTenant.and.returnValue(Observable.throw('error'));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -137,8 +141,8 @@ describe('TenantComponent', () => {
         'message': 'Email already exists',
         type: NotificationType.DANGER
       };
-      spyOn(component.gettingStartedService, 'createTransientProfile').and.returnValue({});
-      spyOn(component.gettingStartedService, 'update').and.returnValue(Observable.throw({ status: 409 }));
+      component.gettingStartedService.createTransientProfile.and.returnValue({});
+      component.gettingStartedService.update.and.returnValue(Observable.throw({ status: 409 }));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -148,8 +152,8 @@ describe('TenantComponent', () => {
         'message': 'Failed to update profile',
         type: NotificationType.DANGER
       };
-      spyOn(component.gettingStartedService, 'createTransientProfile').and.returnValue({});
-      spyOn(component.gettingStartedService, 'update').and.returnValue(Observable.throw('error'));
+      component.gettingStartedService.createTransientProfile.and.returnValue({});
+      component.gettingStartedService.update.and.returnValue(Observable.throw('error'));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });

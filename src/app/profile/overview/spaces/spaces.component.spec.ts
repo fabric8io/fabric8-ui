@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -15,10 +14,8 @@ describe('SpacesComponent', () => {
   let component: DebugNode['componentInstance'];
   let mockContexts: any = jasmine.createSpy('Contexts');
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
-  let mockSpaceService: any = jasmine.createSpy('SpaceService');
+  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['getSpacesByUser', 'getMoreSpacesByUser']);
   let mockUserService: any = jasmine.createSpy('UserService');
-  let mockModalService: any = jasmine.createSpyObj('BsModalService', ['show']);
-  let mockModalRef: any = jasmine.createSpyObj('BsModalRef', ['hide']);
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getGitHubToken', 'getToken']);
   let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
   let mockEvent = jasmine.createSpy('Event');
@@ -36,20 +33,15 @@ describe('SpacesComponent', () => {
     };
     mockContexts.current = Observable.of(mockContext);
     mockAuthenticationService.gitHubToken = {};
-    mockSpaceService.deleteSpace = {};
-    mockSpaceService.getSpacesByUser = {};
-    mockSpaceService.getMoreSpacesByUser = {};
 
     TestBed.configureTestingModule({
       imports: [
-        Fabric8WitModule,
-        HttpClientModule
+        Fabric8WitModule
       ],
       declarations: [SpacesComponent],
       providers: [
         { provide: Contexts, useValue: mockContexts },
         { provide: Logger, useValue: mockLogger },
-        { provide: SpaceService, useValue: mockSpaceService },
         { provide: UserService, useValue: mockUserService},
         { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: Broadcaster, useValue: mockBroadcaster },
@@ -57,12 +49,14 @@ describe('SpacesComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA]
     });
+    TestBed.overrideProvider(SpaceService, {'useValue': mockSpaceService});
     fixture = TestBed.createComponent(SpacesComponent);
     component = fixture.debugElement.componentInstance;
   });
 
   describe('#ngOnInit', () => {
     it('should simply delegate to initSpaces() with the page size', () => {
+      console.log('compomemt', component);
       component.pageSize = 5;
       spyOn(component, 'initSpaces');
       component.ngOnInit();
@@ -73,7 +67,7 @@ describe('SpacesComponent', () => {
   describe('#initSpaces', () => {
     it('should use spaceService.getSpacesByUser to set the initial spaces', () => {
       component.context = mockContext;
-      spyOn(component.spaceService, 'getSpacesByUser').and.returnValue(Observable.of('mock-spaces'));
+      component.spaceService.getSpacesByUser.and.returnValue(Observable.of('mock-spaces'));
       component.initSpaces(mockEvent);
       expect(component.spaces).toBe('mock-spaces');
     });
@@ -88,14 +82,14 @@ describe('SpacesComponent', () => {
   describe('#fetchMoreSpaces', () => {
     it('should retrieve more spaces and add them to the current list', () => {
       component.context = mockContext;
-      spyOn(component.spaceService, 'getMoreSpacesByUser').and.returnValue(Observable.of(['more-spaces']));
+      component.spaceService.getMoreSpacesByUser.and.returnValue(Observable.of(['more-spaces']));
       component.fetchMoreSpaces(mockEvent);
       expect(component.spaces).toContain('more-spaces');
     });
 
     it('should report an error if getMoreSpaces() has an Observable error', () => {
       component.context = mockContext;
-      spyOn(component.spaceService, 'getMoreSpacesByUser').and.returnValue(Observable.throw('error'));
+      component.spaceService.getMoreSpacesByUser.and.returnValue(Observable.throw('error'));
       component.fetchMoreSpaces(mockEvent);
       expect(component.logger.error).toHaveBeenCalledWith('error');
     });

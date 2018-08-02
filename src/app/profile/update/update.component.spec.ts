@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { DebugNode, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
@@ -24,15 +23,15 @@ describe('UpdateComponent', () => {
   let fixture: ComponentFixture<UpdateComponent>;
   let component: DebugNode['componentInstance'];
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-  let mockCopyService: any = jasmine.createSpy('CopyService');
-  let mockGettingStartedService: any = jasmine.createSpy('GettingStartedService');
+  let mockCopyService: any = jasmine.createSpyObj('CopyService', ['copy']);
+  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update']);
   let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockGitHubService: any = jasmine.createSpy('GitHubService');
+  let mockGitHubService: any = jasmine.createSpyObj('GitHubService', ['getUser']);
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockProviderService: any = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'linkAll', 'linkGitHub', 'linkOpenShift']);
   let mockRenderer: any = jasmine.createSpy('Renderer2');
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
-  let mockTenantService: any = jasmine.createSpy('TenantService');
+  let mockTenantService: any = jasmine.createSpyObj('TenantService', ['updateTenant']);
   let mockUserService: any = jasmine.createSpy('UserService');
   let mockLogger: any = jasmine.createSpy('Logger');
 
@@ -47,25 +46,26 @@ describe('UpdateComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpClientModule],
+      imports: [FormsModule],
       declarations: [UpdateComponent],
       providers: [
         { provide: AuthenticationService, useValue: mockAuthenticationService },
-        { provide: CopyService, useValue: mockCopyService },
         { provide: GettingStartedService, useValue: mockGettingStartedService },
         { provide: Contexts, useValue: mockContexts },
-        { provide: GitHubService, useValue: mockGitHubService },
         { provide: Notifications, useValue: mockNotifications },
         { provide: ProviderService, useValue: mockProviderService },
         { provide: Renderer2, useValue: mockRenderer },
         { provide: Router, useValue: mockRouter },
-        { provide: TenantService, useValue: mockTenantService },
         { provide: UserService, useValue: mockUserService },
         { provide: Logger, useValue: mockLogger },
         { provide: WIT_API_URL, useValue: 'http://example.com'}
       ],
       schemas: [NO_ERRORS_SCHEMA]
     });
+    TestBed.overrideProvider(CopyService, { useValue: mockCopyService });
+    TestBed.overrideProvider(GettingStartedService, { useValue: mockGettingStartedService });
+    TestBed.overrideProvider(GitHubService, { useValue: mockGitHubService });
+    TestBed.overrideProvider(TenantService, { useValue: mockTenantService });
     mockUserService.currentLoggedInUser = {};
     fixture = TestBed.createComponent(UpdateComponent);
     component = fixture.debugElement.componentInstance;
@@ -160,7 +160,7 @@ describe('UpdateComponent', () => {
         message: 'Token copied!',
         type: NotificationType.SUCCESS
       };
-      spyOn(component.copyService, 'copy').and.returnValue(true);
+      component.copyService.copy.and.returnValue(true);
       component.copyTokenToClipboard();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -170,6 +170,7 @@ describe('UpdateComponent', () => {
         message: 'Failed to copy token',
         type: NotificationType.DANGER
       };
+      component.copyService.copy.and.returnValue(false);
       component.copyTokenToClipboard();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -192,7 +193,7 @@ describe('UpdateComponent', () => {
 
   describe('#linkImageUrl', () => {
     it('should properly link the avatar image if image exists', () => {
-      spyOn(component.gitHubService, 'getUser').and.returnValue(Observable.of({
+      component.gitHubService.getUser.and.returnValue(Observable.of({
         'avatar_url': 'mock-image'
       }));
       component.linkGithubImageUrl();
@@ -204,7 +205,7 @@ describe('UpdateComponent', () => {
         message: 'No image found',
         type: NotificationType.INFO
       };
-      spyOn(component.gitHubService, 'getUser').and.returnValue(Observable.of({}));
+      component.gitHubService.getUser.and.returnValue(Observable.of({}));
       component.linkGithubImageUrl();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -214,7 +215,7 @@ describe('UpdateComponent', () => {
         message: 'Unable to link image',
         type: NotificationType.WARNING
       };
-      spyOn(component.gitHubService, 'getUser').and.returnValue(
+      component.gitHubService.getUser.and.returnValue(
         Observable.throw('error')
       );
       component.linkGithubImageUrl();
@@ -286,8 +287,8 @@ describe('UpdateComponent', () => {
       component.imageUrl = 'new-imageUrl';
       component.url = 'new-url';
       component.emailPrivate = false;
-      spyOn(component.gettingStartedService, 'createTransientProfile').and.returnValue(mockUser.attributes);
-      spyOn(component.gettingStartedService, 'update').and.returnValue(Observable.of(mockUser));
+      component.gettingStartedService.createTransientProfile.and.returnValue(mockUser.attributes);
+      component.gettingStartedService.update.and.returnValue(Observable.of(mockUser));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -297,8 +298,8 @@ describe('UpdateComponent', () => {
         'message': 'Email already exists',
         type: NotificationType.DANGER
       };
-      spyOn(component.gettingStartedService, 'createTransientProfile').and.returnValue(mockUser.attributes);
-      spyOn(component.gettingStartedService, 'update').and.returnValue(Observable.throw({ status: 409 }));
+      component.gettingStartedService.createTransientProfile.and.returnValue(mockUser.attributes);
+      component.gettingStartedService.update.and.returnValue(Observable.throw({ status: 409 }));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -308,8 +309,8 @@ describe('UpdateComponent', () => {
         'message': 'Failed to update profile',
         type: NotificationType.DANGER
       };
-      spyOn(component.gettingStartedService, 'createTransientProfile').and.returnValue(mockUser.attributes);
-      spyOn(component.gettingStartedService, 'update').and.returnValue(Observable.throw('error'));
+      component.gettingStartedService.createTransientProfile.and.returnValue(mockUser.attributes);
+      component.gettingStartedService.update.and.returnValue(Observable.throw('error'));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -321,7 +322,7 @@ describe('UpdateComponent', () => {
         'message': 'Profile updated!',
         type: NotificationType.SUCCESS
       };
-      spyOn(component.tenantService, 'updateTenant').and.returnValue(Observable.of({ status: 200 }));
+      component.tenantService.updateTenant.and.returnValue(Observable.of({ status: 200 }));
       component.updateTenant();
       expect(component.updateTenantStatus).toBe(TenantUpdateStatus.Success);
       expect(component.notifications.message).toHaveBeenCalledWith(message);
@@ -332,7 +333,7 @@ describe('UpdateComponent', () => {
         'message': 'Error updating tenant',
         type: NotificationType.DANGER
       };
-      spyOn(component.tenantService, 'updateTenant').and.returnValue(Observable.of({ status: 404 }));
+      component.tenantService.updateTenant.and.returnValue(Observable.of({ status: 404 }));
       component.updateTenant();
       expect(component.updateTenantStatus).toBe(TenantUpdateStatus.Failure);
       expect(component.notifications.message).toHaveBeenCalledWith(message);
@@ -343,7 +344,7 @@ describe('UpdateComponent', () => {
         'message': 'Unexpected error updating tenant',
         type: NotificationType.DANGER
       };
-      spyOn(component.tenantService, 'updateTenant').and.returnValue(Observable.throw('error'));
+      component.tenantService.updateTenant.and.returnValue(Observable.throw('error'));
       component.updateTenant();
       expect(component.updateTenantStatus).toBe(TenantUpdateStatus.Failure);
       expect(component.notifications.message).toHaveBeenCalledWith(message);
@@ -377,7 +378,6 @@ describe('UpdateComponent', () => {
 
   describe('#isEmailValid', () => {
     // Test strings for e-mails borrowed from https://en.wikipedia.org/wiki/Email_address#Examples
-
     it('should verify prettyandsimple@example.com to be a valid address', () => {
       let validAddress: string = 'prettyandsimple@example.com';
       let result = component.isEmailValid(validAddress);
