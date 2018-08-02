@@ -1,5 +1,5 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, TestBed } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { Logger } from 'ngx-base';
@@ -24,7 +24,7 @@ describe('FeatureAcknowledgement service:', () => {
     mockUserService.getUserByUserId.and.returnValue(Observable.of(extUser));
     mockUserService.loggedInUser = Observable.of(extUser);
     TestBed.configureTestingModule({
-      imports: [HttpModule],
+      imports: [HttpClientTestingModule],
       providers: [
         {
           provide: Logger, useValue: mockLog
