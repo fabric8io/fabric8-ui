@@ -32,6 +32,7 @@ export class RecentSpacesWidget implements OnInit {
 
   readonly userHasSpaces: Subject<boolean> = new ReplaySubject<boolean>(1);
   readonly recentSpaces: Observable<Space[]>;
+  loading: boolean = false;
 
   constructor(
     spaces: Spaces,
@@ -45,6 +46,7 @@ export class RecentSpacesWidget implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     this.spaceService
       .getSpacesByUser(this.userService.currentLoggedInUser.attributes.username)
       .first()
@@ -53,10 +55,12 @@ export class RecentSpacesWidget implements OnInit {
         (userHasSpaces: boolean): void => {
           this.userHasSpaces.next(userHasSpaces);
           this.userHasSpaces.complete();
+          this.loading = false;
         },
         (error: any): void => {
           this.logger.error(error);
           this.errorHandler.handleError(error);
+          this.loading = false;
         }
       );
   }
