@@ -1,18 +1,10 @@
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+  TestRequest
+} from '@angular/common/http/testing';
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import {
-  HttpModule,
-  Response,
-  ResponseOptions,
-  ResponseType,
-  XHRBackend
-} from '@angular/http';
-
-import {
-  MockBackend,
-  MockConnection
-} from '@angular/http/testing';
 
 import { createMock } from 'testing/mock';
 
@@ -33,18 +25,9 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 //Avoid naming collision
 import { PipelinesService as ActualPipelinesService } from './pipelines.service';
 
-interface MockHttpParams<U> {
-  url: string;
-  response: { data: {} } | Response;
-  expected?: U;
-  expectedError?: any;
-  observable: Observable<U>;
-  done: DoneFn;
-}
-
 describe('Pipelines Service', () => {
 
-  let mockBackend: MockBackend;
+  let controller: HttpTestingController;
   let mockLogger: jasmine.SpyObj<Logger>;
   let mockErrorHandler: jasmine.SpyObj<ErrorHandler>;
   let mockNotificationsService: jasmine.SpyObj<NotificationsService>;
@@ -109,11 +92,8 @@ describe('Pipelines Service', () => {
       mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
       TestBed.configureTestingModule({
-        imports: [HttpModule],
+        imports: [HttpClientTestingModule],
         providers: [
-          {
-            provide: XHRBackend, useClass: MockBackend
-          },
           {
             provide: AuthenticationService, useValue: mockAuthService
           },
@@ -136,95 +116,84 @@ describe('Pipelines Service', () => {
         ]
       });
       svc = TestBed.get(ActualPipelinesService);
-      mockBackend = TestBed.get(XHRBackend);
+      controller = TestBed.get(HttpTestingController);
     });
 
     describe('getCurrentPipelines and getRecentPipelines', () => {
       describe('url available', () => {
-        beforeEach(() => {
-          const userServiceResponse = {
-            'data': {
-              'attributes': {
-                'created-at': '2017-05-11T16:44:56.376777Z',
-                'namespaces': [{
-                  'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
-                  'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
-                  'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
-                  'created-at': '2017-05-11T16:44:56.561538Z',
-                  'name': 'blob',
-                  'state': 'created',
-                  'type': 'user',
-                  'updated-at': '2017-05-11T16:44:56.561538Z',
-                  'version': '1.0.91'
-                }, {
-                  'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
-                  'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
-                  'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
-                  'created-at': '2017-05-11T16:45:02.916855Z',
-                  'name': 'blob-che',
-                  'state': 'created',
-                  'type': 'che',
-                  'updated-at': '2017-05-11T16:45:02.916855Z',
-                  'version': '1.0.154'
-                }, {
-                  'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
-                  'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
-                  'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
-                  'created-at': '2017-05-11T16:45:05.119179Z',
-                  'name': 'blob-jenkins',
-                  'state': 'created',
-                  'type': 'jenkins',
-                  'updated-at': '2017-05-11T16:45:05.119179Z',
-                  'version': '1.0.154'
-                }, {
-                  'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
-                  'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
-                  'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
-                  'created-at': '2017-05-11T16:45:05.296929Z',
-                  'name': 'blob-run',
-                  'state': 'created',
-                  'type': 'run',
-                  'updated-at': '2017-05-11T16:45:05.296929Z',
-                  'version': '1.0.154'
-                }, {
-                  'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
-                  'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
-                  'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
-                  'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
-                  'created-at': '2017-05-11T16:45:05.493244Z',
-                  'name': 'blob-stage',
-                  'state': 'created',
-                  'type': 'stage',
-                  'updated-at': '2017-05-11T16:45:05.493244Z',
-                  'version': '1.0.154'
-                }]
-              },
-              'id': 'eae1de87-f58f-4e67-977a-95024dd7c6aa',
-              'type': 'userservices'
-            }
-          };
-
-          const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-            connection.mockRespond(new Response(
-              new ResponseOptions({
-                body: JSON.stringify(userServiceResponse),
-                status: 200
-              })
-            ));
-          });
-        });
+        const userServiceResponse = {
+          'data': {
+            'attributes': {
+              'created-at': '2017-05-11T16:44:56.376777Z',
+              'namespaces': [{
+                'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
+                'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
+                'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
+                'created-at': '2017-05-11T16:44:56.561538Z',
+                'name': 'blob',
+                'state': 'created',
+                'type': 'user',
+                'updated-at': '2017-05-11T16:44:56.561538Z',
+                'version': '1.0.91'
+              }, {
+                'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
+                'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
+                'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
+                'created-at': '2017-05-11T16:45:02.916855Z',
+                'name': 'blob-che',
+                'state': 'created',
+                'type': 'che',
+                'updated-at': '2017-05-11T16:45:02.916855Z',
+                'version': '1.0.154'
+              }, {
+                'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
+                'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
+                'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
+                'created-at': '2017-05-11T16:45:05.119179Z',
+                'name': 'blob-jenkins',
+                'state': 'created',
+                'type': 'jenkins',
+                'updated-at': '2017-05-11T16:45:05.119179Z',
+                'version': '1.0.154'
+              }, {
+                'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
+                'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
+                'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
+                'created-at': '2017-05-11T16:45:05.296929Z',
+                'name': 'blob-run',
+                'state': 'created',
+                'type': 'run',
+                'updated-at': '2017-05-11T16:45:05.296929Z',
+                'version': '1.0.154'
+              }, {
+                'cluster-app-domain': '8a09.starter-us-east-2.openshiftapps.com',
+                'cluster-console-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-logging-url': 'https://console.starter-us-east-2.openshift.com/console/',
+                'cluster-metrics-url': 'https://metrics.starter-us-east-2.openshift.com/',
+                'cluster-url': 'https://api.starter-us-east-2.openshift.com/',
+                'created-at': '2017-05-11T16:45:05.493244Z',
+                'name': 'blob-stage',
+                'state': 'created',
+                'type': 'stage',
+                'updated-at': '2017-05-11T16:45:05.493244Z',
+                'version': '1.0.154'
+              }]
+            },
+            'id': 'eae1de87-f58f-4e67-977a-95024dd7c6aa',
+            'type': 'userservices'
+          }
+        };
 
         it('should inject urls into current pipelines result', (done: DoneFn) => {
-          svc.getCurrentPipelines().subscribe(pipelines => {
+          svc.getCurrentPipelines().first().subscribe(pipelines => {
             expect(pipelines as any[]).toContain({
               id: 'app',
               name: 'app',
@@ -255,12 +224,14 @@ describe('Pipelines Service', () => {
               openShiftConsoleUrl: 'https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines/app2',
               editPipelineUrl: 'https://console.starter-us-east-2.openshift.com/console/project/blob/edit/pipelines/app2'
             });
+            controller.verify();
             done();
           });
+          controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
         });
 
         it('should inject urls into recent pipelines result', (done: DoneFn) => {
-          svc.getCurrentPipelines().subscribe(pipelines => {
+          svc.getCurrentPipelines().first().subscribe(pipelines => {
             expect(pipelines as any[]).toContain({
               id: 'app2',
               name: 'app2',
@@ -271,10 +242,14 @@ describe('Pipelines Service', () => {
               openShiftConsoleUrl: 'https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines/app2',
               editPipelineUrl: 'https://console.starter-us-east-2.openshift.com/console/project/blob/edit/pipelines/app2'
             });
+            controller.verify();
             done();
           });
+          controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
         });
       });
+    });
+
       describe('url not available', () => {
         beforeEach(() => {
           const userServiceResponse = {
@@ -299,18 +274,8 @@ describe('Pipelines Service', () => {
             }
           };
 
-          const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-            connection.mockRespond(new Response(
-              new ResponseOptions({
-                body: JSON.stringify(userServiceResponse),
-                status: 200
-              })
-            ));
-          });
-        });
-
         it('should not inject urls into current pipelines result', (done: DoneFn) => {
-          svc.getCurrentPipelines().subscribe(pipelines => {
+          svc.getCurrentPipelines().first().subscribe(pipelines => {
             expect(pipelines as any[]).toContain({
               id: 'app',
               name: 'app',
@@ -335,11 +300,14 @@ describe('Pipelines Service', () => {
                 space: 'space'
               }
             });
+            controller.verify();
             done();
           });
+          controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
         });
+
         it('should not inject urls into recent pipelines result', (done: DoneFn) => {
-          svc.getCurrentPipelines().subscribe(pipelines => {
+          svc.getCurrentPipelines().first().subscribe(pipelines => {
             expect(pipelines as any[]).toContain({
               id: 'app2',
               name: 'app2',
@@ -348,8 +316,10 @@ describe('Pipelines Service', () => {
                 space: 'space'
               }
             });
+            controller.verify();
             done();
           });
+          controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
         });
       });
     });
@@ -427,26 +397,19 @@ describe('Pipelines Service', () => {
           }
         };
 
-        const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-          connection.mockRespond(new Response(
-            new ResponseOptions({
-              body: JSON.stringify(userServiceResponse),
-              status: 200
-            })
-          ));
-        });
-
         svc.getOpenshiftConsoleUrl()
+          .first()
           .subscribe(
             (msg: string) => {
               expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
-              subscription.unsubscribe();
+              controller.verify();
               done();
             },
             (err: string) => {
               done.fail(err);
             }
           );
+          controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
       });
 
       it('should return empty if openshift console url does not exist', (done: DoneFn) => {
@@ -472,26 +435,19 @@ describe('Pipelines Service', () => {
           }
         };
 
-        const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-          connection.mockRespond(new Response(
-            new ResponseOptions({
-              body: JSON.stringify(userServiceResponse),
-              status: 200
-            })
-          ));
-        });
-
         svc.getOpenshiftConsoleUrl()
+          .first()
           .subscribe(
             (msg: string) => {
               expect(msg).toEqual('');
-              subscription.unsubscribe();
+              controller.verify();
               done();
             },
             (err: string) => {
               done.fail(err);
             }
           );
+          controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
       });
 
       it('should return empty if no namespace of type user exists', (done: DoneFn) => {
@@ -530,38 +486,22 @@ describe('Pipelines Service', () => {
           }
         };
 
-        const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-          connection.mockRespond(new Response(
-            new ResponseOptions({
-              body: JSON.stringify(userServiceResponse),
-              status: 200
-            })
-          ));
-        });
-
         svc.getOpenshiftConsoleUrl()
+          .first()
           .subscribe(
             (msg: string) => {
               expect(msg).toEqual('');
-              subscription.unsubscribe();
+              controller.verify();
               done();
             },
             (err: string) => {
               done.fail(err);
             }
           );
+          controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
       });
 
       it('should notify error handler and logger if http response is not okay', (done: DoneFn) => {
-        const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-          connection.mockError(new Response(
-            new ResponseOptions({
-              type: ResponseType.Error,
-              status: 400
-            })
-          ) as Response & Error);
-        });
-
         svc.getOpenshiftConsoleUrl()
           .subscribe(
             (msg: string) => {
@@ -574,21 +514,14 @@ describe('Pipelines Service', () => {
               expect(mockErrorHandler.handleError).toHaveBeenCalled();
               expect(mockLogger.error).toHaveBeenCalled();
               expect(mockNotificationsService.message).toHaveBeenCalled();
+              controller.verify();
               done();
             }
           );
+          controller.expectOne('http://example.com/user/services').error(new ErrorEvent('some error'));
       });
 
       it('should notify error handler and logger if http response is 401 and user is logged in', (done: DoneFn) => {
-        const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-          connection.mockError(new Response(
-            new ResponseOptions({
-              type: ResponseType.Error,
-              status: 401
-            })
-          ) as Response & Error);
-        });
-
         svc.getOpenshiftConsoleUrl()
           .subscribe(
             (msg: string) => {
@@ -601,9 +534,11 @@ describe('Pipelines Service', () => {
               expect(mockErrorHandler.handleError).toHaveBeenCalled();
               expect(mockLogger.error).toHaveBeenCalled();
               expect(mockNotificationsService.message).toHaveBeenCalled();
+              controller.verify();
               done();
             }
           );
+          controller.expectOne('http://example.com/user/services').error(new ErrorEvent('some error'));
       });
 
       describe('OK calls', () => {
@@ -630,43 +565,31 @@ describe('Pipelines Service', () => {
           }
         };
 
-        var subscription: Subscription;
-
-        beforeEach(() => {
-          subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-            connection.mockRespond(new Response(
-              new ResponseOptions({
-                body: JSON.stringify(userServiceResponse),
-                status: 200
-              })
-            ));
-          });
-        });
-
         it('should emit response with repeat calls', (done: DoneFn) => {
           svc.getOpenshiftConsoleUrl()
+            .first()
             .subscribe(
               (msg: string) => {
                 expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
                 svc.getOpenshiftConsoleUrl()
+                  .first()
                   .subscribe(
                     (msg: string) => {
                       expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
+                      controller.verify();
                       done();
                     },
                     (err: string) => {
                       done.fail(err);
                     }
                   );
+                controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
               },
               (err: string) => {
                 done.fail(err);
               }
             );
-        });
-
-        afterEach(() => {
-          subscription.unsubscribe();
+          controller.expectOne('http://example.com/user/services').flush(userServiceResponse);
         });
       });
     });
@@ -678,11 +601,8 @@ describe('Pipelines Service', () => {
       mockAuthService.getToken.and.returnValue('');
 
       TestBed.configureTestingModule({
-        imports: [HttpModule],
+        imports: [HttpClientTestingModule],
         providers: [
-          {
-            provide: XHRBackend, useClass: MockBackend
-          },
           {
             provide: AuthenticationService, useValue: mockAuthService
           },
@@ -705,19 +625,10 @@ describe('Pipelines Service', () => {
         ]
       });
       svc = TestBed.get(ActualPipelinesService);
-      mockBackend = TestBed.get(XHRBackend);
+      controller = TestBed.get(HttpTestingController);
     });
 
     it('should not notify error handler and logger if http response is 401 and user is not logged in', (done: DoneFn) => {
-      const subscription: Subscription = mockBackend.connections.subscribe((connection: MockConnection) => {
-        connection.mockError(new Response(
-          new ResponseOptions({
-            type: ResponseType.Error,
-            status: 401
-          })
-        ) as Response & Error);
-      });
-
       svc.getOpenshiftConsoleUrl()
         .subscribe(
           (msg: string) => {
@@ -730,9 +641,11 @@ describe('Pipelines Service', () => {
             expect(mockErrorHandler.handleError).not.toHaveBeenCalled();
             expect(mockLogger.error).not.toHaveBeenCalled();
             expect(mockNotificationsService.message).not.toHaveBeenCalled();
+            controller.verify();
             done();
           }
         );
+      controller.expectOne('http://example.com/user/services').error(new ErrorEvent('some error'), { status: 401 });
     });
   });
 
