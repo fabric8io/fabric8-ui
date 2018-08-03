@@ -161,7 +161,6 @@ describe('CodebasesComponent', () => {
 
     gitHubService = createMock(GitHubService);
     gitHubService.clearCache.and.stub();
-    gitHubService.ngOnDestroy.and.stub();
     gitHubService.getRepoDetailsByUrl.and.callFake((url: string): Observable<GitHubRepoDetails> => {
       if (url === 'https://github.com/foo-org/foo-project.git') {
         const details: GitHubRepoDetails = new GitHubRepoDetails();

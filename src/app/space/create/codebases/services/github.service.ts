@@ -1,10 +1,9 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 
 import { cloneDeep } from 'lodash';
-import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import {
   GitHubRepo,
@@ -21,7 +20,7 @@ import {
  * See: https://developer.github.com/v3/
  */
 @Injectable()
-export class GitHubService implements OnDestroy {
+export class GitHubService {
 
   private static readonly HEADERS = new Headers({
     'Content-Type': 'application/json',
@@ -29,24 +28,14 @@ export class GitHubService implements OnDestroy {
   });
 
   private cache: Map<string, Observable<any>>;
-  private context: Context;
   private gitHubUrl: string;
-  private subscriptions: Subscription[] = [];
 
   constructor(
     private authService: AuthenticationService,
-      private contexts: Contexts,
       private http: Http
       ) {
-    this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
     this.gitHubUrl = 'https://api.github.com';
     this.cache = new Map();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
   }
 
   /**
