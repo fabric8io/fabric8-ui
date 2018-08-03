@@ -10,8 +10,7 @@ import { HttpResponse } from '@angular/common/http';
 
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { AuthenticationService, UserService } from 'ngx-login-client';
-import { Subscription } from 'rxjs';
+import { AuthenticationService } from 'ngx-login-client';
 
 import { createMock } from '../../../testing/mock';
 import { TenantService } from './tenant.service';
@@ -22,7 +21,6 @@ describe('TenantService', () => {
   let service: TenantService;
   let controller: HttpTestingController;
   let mockLogger: jasmine.SpyObj<Logger>;
-  let mockUserService: jasmine.SpyObj<UserService>;
 
   beforeEach(() => {
     const mockAuthenticationService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);
@@ -34,8 +32,7 @@ describe('TenantService', () => {
       providers: [
         { provide: Logger, useValue: mockLogger },
         { provide: AuthenticationService, useValue: mockAuthenticationService },
-        { provide: UserService, useValue: mockUserService },
-        { provide: WIT_API_URL, useValue: 'http://example.com' },
+        { provide: WIT_API_URL, useValue: 'http://example.com/api/' },
         TenantService
       ]
     });
@@ -72,7 +69,7 @@ describe('TenantService', () => {
           },
           () => {
             // handleError() is private, verify that logger.error() is called with returned error
-            expect(TestBed.get(mockLogger).error).toHaveBeenCalled();
+            expect(mockLogger.error).toHaveBeenCalled();
             controller.verify();
             done();
           }
@@ -92,7 +89,7 @@ describe('TenantService', () => {
 
       const req: TestRequest = controller.expectOne('http://example.com/api/user/services');
       expect(req.request.method).toEqual('DELETE');
-      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-token');
       req.flush('');
     });
 
@@ -102,7 +99,7 @@ describe('TenantService', () => {
           () => done.fail('Should throw error'),
           () => {
             // handleError() is private, verify that logger.error() is called with returned error
-            expect(TestBed.get(mockLogger).error).toHaveBeenCalled();
+            expect(mockLogger.error).toHaveBeenCalled();
             controller.verify();
             done();
           }

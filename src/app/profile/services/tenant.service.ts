@@ -3,11 +3,8 @@ import { Inject, Injectable } from '@angular/core';
 
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { AuthenticationService, UserService } from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-
-import { Codebase } from './codebase';
-import { Workspace, WorkspaceLinks } from './workspace';
 
 @Injectable()
 export class TenantService {
@@ -18,7 +15,6 @@ export class TenantService {
       private http: HttpClient,
       private logger: Logger,
       private auth: AuthenticationService,
-      private userService: UserService,
       @Inject(WIT_API_URL) apiUrl: string) {
     if (this.auth.getToken() != undefined) {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
