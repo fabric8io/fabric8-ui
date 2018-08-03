@@ -92,7 +92,6 @@ export class ContextService implements Contexts {
             message: 'Something went badly wrong. Please try again later or ask for help.',
             type: NotificationType.DANGER
           } as Notification);
-          console.log('No username attached to user', val);
           throw 'Unknown user';
         }
       })
@@ -231,14 +230,12 @@ export class ContextService implements Contexts {
       })
       .do(val => {
         if (val) {
-          console.log('Context Changed to', val);
           this._currentContextUser = val.user.attributes.username;
           this.broadcaster.broadcast('contextChanged', val);
         }
       })
       .do(val => {
         if (val && val.space) {
-          console.log('Space Changed to', val);
           this.broadcaster.broadcast('spaceChanged', val.space);
         }
       })
