@@ -8,14 +8,12 @@ import { ExtProfile, ProfileService } from '../profile/profile.service';
 import { SpacesService } from './spaces.service';
 
 describe('SpacesService', () => {
-
   let mockSpace: Space;
   let mockContext: Context;
   let mockProfile: ExtProfile;
   let mockUser: User;
 
   beforeEach(() => {
-
     mockSpace = {
       name: 'mock-space-name-1',
       path: 'mock-space-path-1' as String,
@@ -133,7 +131,8 @@ describe('SpacesService', () => {
 
   describe('#saveRecent', () => {
     it('should silentSave after a spaceChanged has been broadcasted', () => {
-      const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
+      const profileService: any = TestBed.get(ProfileService);
+      mockProfile.store.recentSpaces = [mockSpace];
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
         if (key === 'spaceChanged') {
@@ -159,6 +158,7 @@ describe('SpacesService', () => {
 
     it('should log an error if silentSave failed', () => {
       const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
+      mockProfile.store.recentSpaces = [mockSpace];
       profileService.silentSave.and.returnValue(Observable.throw('error'));
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
@@ -186,16 +186,14 @@ describe('SpacesService', () => {
 
   describe('#findRecentIndexById', () => {
     it('should return the list index of the space in _recent', () => {
-      mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: number = spacesService.findRecentIndexById(mockSpace.id);
+      let result: number = spacesService.findRecentIndexById([mockSpace], mockSpace.id);
       expect(result).toEqual(0);
     });
 
     it('should return -1 if the space does not exist in _recent', () => {
-      mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: number = spacesService.findRecentIndexById('not-a-real-index');
+      let result: number = spacesService.findRecentIndexById([mockSpace], 'not-a-real-index');
       expect(result).toEqual(-1);
     });
   });
