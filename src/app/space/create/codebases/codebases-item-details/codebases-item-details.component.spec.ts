@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
@@ -12,14 +11,13 @@ import { CodebasesItemDetailsComponent } from './codebases-item-details.componen
 
 describe('Codebases Item Details Component', () => {
   let gitHubServiceMock: any;
-  let loggerMock: any;
   let fixture;
 
   beforeEach(() => {
     gitHubServiceMock = jasmine.createSpyObj('GitHubService', ['getRepoDetailsByUrl', 'getRepoLastCommitByUrl', 'getRepoCommitStatusByUrl', 'getRepoLicenseByUrl']);
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule],
       declarations: [CodebasesItemDetailsComponent],
       providers: [
         {

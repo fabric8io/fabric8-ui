@@ -4,7 +4,6 @@ import {
   TestBed
 } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
 import { Broadcaster } from 'ngx-base';
 
@@ -14,14 +13,13 @@ import { CodebasesItemHeadingComponent } from './codebases-item-heading.componen
 describe('Codebases Item Heading Component', () => {
   let broadcasterMock: any;
   let fixture;
-  let component: CodebasesItemHeadingComponent;
   let element: HTMLElement;
 
   beforeEach(() => {
     broadcasterMock = jasmine.createSpyObj('Broadcaster', ['on']);
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule],
       declarations: [CodebasesItemHeadingComponent],
       providers: [
         {
@@ -32,7 +30,6 @@ describe('Codebases Item Heading Component', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(CodebasesItemHeadingComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
     element = fixture.nativeElement;
   });
