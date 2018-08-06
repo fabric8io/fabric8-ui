@@ -51,6 +51,7 @@ export class MenusService {
               }
               , {
                 name: 'Query',
+                feature: 'PlannerQuery',
                 path: 'query'
               }
             ]
