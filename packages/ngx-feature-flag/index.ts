@@ -7,6 +7,7 @@ export { FeatureTogglesService, FABRIC8_FEATURE_TOGGLES_API_URL } from './src/ap
 
 export { Feature } from './src/app/models/feature';
 export { FeatureFlagConfig } from './src/app/models/feature-flag-config';
+export { FeatureFlagResolver } from './src/app/resolver/feature-flag.resolver';
 
 export { FeatureFlagModule } from './src/app/feature-flag.module';
 
