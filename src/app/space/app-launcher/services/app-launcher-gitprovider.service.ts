@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Headers, Http, RequestOptions, Response} from '@angular/http';
+import {Observable} from 'rxjs';
 
-import { AuthHelperService, GitHubDetails, GitProviderService, HelperService, TokenProvider } from 'ngx-launcher';
+import {AuthHelperService, GitHubDetails, GitProviderService, HelperService, TokenProvider} from 'ngx-launcher';
 
 @Injectable()
 export class AppLauncherGitproviderService implements GitProviderService {
@@ -76,7 +76,10 @@ export class AppLauncherGitproviderService implements GitProviderService {
     let url = this.END_POINT + this.API_BASE + 'user';
     let res = this.options.flatMap((option) => {
       return this.http.get(url, option)
-        .map(response => response.json() as any)
+        .map(response => {
+          console.log(response);
+          return response.json() as any;
+        })
         .catch(error => {
           return Observable.throw(error);
         });
@@ -151,21 +154,16 @@ export class AppLauncherGitproviderService implements GitProviderService {
     } else {
       url = this.END_POINT + this.API_BASE + 'repositories/?organization=' + org;
     }
-    let res = this.options.flatMap((option) => {
+    return this.options.flatMap((option) => {
       return this.http.get(url, option)
         .map(response => {
-            let repoList: string[] =  response.json();
-            if (repoList.indexOf(fullName) === -1) {
-              return false;
-            } else {
-              return true;
-            }
-          })
+          let repoList: string[] = response.json();
+          return repoList.indexOf(fullName) !== -1;
+        })
         .catch(error => {
           return Observable.throw(error);
         });
-      });
-    return res;
+    });
   }
 
   /**

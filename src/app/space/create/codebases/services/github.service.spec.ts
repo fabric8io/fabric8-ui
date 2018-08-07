@@ -53,7 +53,7 @@ describe('Github: GitHubService', () => {
     ghService.clearCache();
   });
 
-  it('Get repo commit status by URL and sha', () => {
+  it('Get repo commit status by URL and sha', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -67,22 +67,26 @@ describe('Github: GitHubService', () => {
     ghService.getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81XX').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
+      done();
     });
   });
 
-  it('Get repo commit status by URL and sha in error', () => {
+  it('Get repo commit status by URL and sha in error', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockError(new Error('some error'));
     });
     // when
     ghService.getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81YY').subscribe((data: any) => {
-      fail('Get repo commit status by URL and sha in error');
+      done.fail('Get repo commit status by URL and sha in error');
     }, //then
-      error => expect(error).toEqual('some error'));
+      error => {
+        expect(error).toEqual('some error');
+        done();
+      });
   });
 
-  it('Get repo commit status by URL and sha with cached value', () => {
+  it('Get repo commit status by URL and sha with cached value', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -113,10 +117,11 @@ describe('Github: GitHubService', () => {
       let ghService = TestBed.get(GitHubService);
       let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit/commits/225368a414f88bd3c45fd686496a924a15ef81b0');
       expect(cachedValue !== undefined).toBeTruthy();
+      done();
     });
   });
 
-  it('Get repo details by full name', () => {
+  it('Get repo details by full name', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -130,22 +135,26 @@ describe('Github: GitHubService', () => {
     ghService.getRepoDetailsByFullName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then
       expect(data.id).toEqual(expectedGitHubRepoDetails.id);
+      done();
     });
   });
 
-  it('Get repo details by full name in error', () => {
+  it('Get repo details by full name in error', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockError(new Error('some error'));
     });
     // when
     ghService.getRepoDetailsByFullName('fabric8-services/fabric8-wit').subscribe((data: any) => {
-      fail('Get repo details by full name in error');
+      done.fail('Get repo details by full name in error');
     }, //then
-      error => expect(error).toEqual('some error'));
+      error => {
+        expect(error).toEqual('some error');
+        done();
+      });
   });
 
-  it('Get repo details by full name cached', () => {
+  it('Get repo details by full name cached', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -173,10 +182,11 @@ describe('Github: GitHubService', () => {
       let ghService = TestBed.get(GitHubService);
       let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit');
       expect(cachedValue !== undefined).toBeTruthy();
+      done();
     });
   });
 
-  it('Get repo details by URL', () => {
+  it('Get repo details by URL', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -190,10 +200,11 @@ describe('Github: GitHubService', () => {
     ghService.getRepoDetailsByUrl('https://github.com/fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then
       expect(data.full_name).toEqual(expectedGitHubRepoDetails.full_name);
+      done();
     });
   });
 
-  it('Get GitHub repo last commit for given URL', () => {
+  it('Get GitHub repo last commit for given URL', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -207,22 +218,26 @@ describe('Github: GitHubService', () => {
     ghService.getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
+      done();
     });
   });
 
-  it('Get GitHub repo last commit for given URL in error', () => {
+  it('Get GitHub repo last commit for given URL in error', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockError(new Error('some error'));
     });
     // when
     ghService.getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').subscribe((data: any) => {
-      fail('Get GitHub repo last commit for given URL in error');
+      done.fail('Get GitHub repo last commit for given URL in error');
     }, //then
-      error => expect(error).toEqual('some error'));
+      error => {
+        expect(error).toEqual('some error')
+        done();
+      });
   });
 
-  it('Get GitHub repo last commit for given URL cached', () => {
+  it('Get GitHub repo last commit for given URL cached', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -250,10 +265,11 @@ describe('Github: GitHubService', () => {
       let ghService = TestBed.get(GitHubService);
       let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit/git/refs/heads/master');
       expect(cachedValue !== undefined).toBeTruthy();
+      done();
     });
   });
 
-  it('Get GitHub repo license for given full name', () => {
+  it('Get GitHub repo license for given full name', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -267,22 +283,26 @@ describe('Github: GitHubService', () => {
     ghService.getRepoLicenseByName('fabric8-services/fabric8-wit').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
+      done();
     });
   });
 
-  it('Get GitHub repo license for given full name in error', () => {
+  it('Get GitHub repo license for given full name in error', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockError(new Error('some error'));
     });
     // when
     ghService.getRepoLicenseByName('fabric8-services/fabric8-wit').subscribe((data: any) => {
-      fail('Get GitHub repo license for given full name in error');
+      done.fail('Get GitHub repo license for given full name in error');
     }, //then
-      error => expect(error).toEqual('some error'));
+      error => {
+        expect(error).toEqual('some error')
+        done();
+      });
   });
 
-  it('Get GitHub repo license for given full name cached', () => {
+  it('Get GitHub repo license for given full name cached', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -310,10 +330,11 @@ describe('Github: GitHubService', () => {
       let ghService = TestBed.get(GitHubService);
       let cachedValue = ghService.getCache('https://api.github.com/repos/fabric8-services/fabric8-wit/license');
       expect(cachedValue !== undefined).toBeTruthy();
+      done();
     });
   });
 
-  it('Get GitHub repo license for given URL', () => {
+  it('Get GitHub repo license for given URL', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
@@ -327,12 +348,13 @@ describe('Github: GitHubService', () => {
     ghService.getRepoLicenseByUrl('https://github.com/fabric8-services/fabric8-wit.git').subscribe((data: any) => {
       // then
       expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
+      done();
     });
   });
 
   //////
 
-  it('Get GitHub repos associated with given user name', () => {
+  it('Get GitHub repos associated with given user name', (done: DoneFn) => {
     // given
     const repos = [expectedGitHubRepo];
     mockService.connections.subscribe((connection: any) => {
@@ -347,22 +369,26 @@ describe('Github: GitHubService', () => {
     ghService.getUserRepos('me').subscribe((data: any) => {
       // then
       expect(data[0].full_name).toEqual(repos[0].full_name);
+      done();
     });
   });
 
-  it('Get GitHub repos associated with given user name in error', () => {
+  it('Get GitHub repos associated with given user name in error', (done: DoneFn) => {
     // given
     mockService.connections.subscribe((connection: any) => {
       connection.mockError(new Error('some error'));
     });
     // when
     ghService.getUserRepos('me').subscribe((data: any) => {
-      fail('Get GitHub repos associated with given user name in error');
+      done.fail('Get GitHub repos associated with given user name in error');
     }, //then
-      error => expect(error).toEqual('some error'));
+      error => {
+        expect(error).toEqual('some error')
+        done();
+      });
   });
 
-  it('Get GitHub repos associated with given user name cached', () => {
+  it('Get GitHub repos associated with given user name cached', (done: DoneFn) => {
     // given
     const repos = [expectedGitHubRepo];
     mockService.connections.subscribe((connection: any) => {
@@ -391,6 +417,7 @@ describe('Github: GitHubService', () => {
       let ghService = TestBed.get(GitHubService);
       let cachedValue = ghService.getCache('https://api.github.com/users/me/repos');
       expect(cachedValue !== undefined).toBeTruthy();
+      done();
     });
   });
 });
@@ -411,7 +438,7 @@ describe('Github: GitHubService', () => {
     mockService = TestBed.get(XHRBackend);
   });
 
-  it('Get GiHub headers for given user name', () => {
+  it('Get GiHub headers for given user name', (done: DoneFn) => {
     // given
     const expectedHeaders = new Headers({
       'Content-Type': 'application/json',
@@ -423,6 +450,7 @@ describe('Github: GitHubService', () => {
       // then
       expect(data.keys()).toEqual(expectedHeaders.keys());
       expect(data.values()).toEqual(expectedHeaders.values());
+      done();
     });
   });
 });

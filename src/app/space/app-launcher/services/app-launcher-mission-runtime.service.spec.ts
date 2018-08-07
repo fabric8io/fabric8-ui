@@ -1,22 +1,12 @@
-import { inject, TestBed } from '@angular/core/testing';
-import {
-  HttpModule,
-  Response,
-  ResponseOptions,
-  XHRBackend
-} from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
+import {TestBed} from '@angular/core/testing';
+import {HttpModule, Response, ResponseOptions, XHRBackend} from '@angular/http';
+import {MockBackend, MockConnection} from '@angular/http/testing';
 
-import {
-  Catalog,
-  Config,
-  HelperService,
-  TokenProvider
-} from 'ngx-launcher';
+import {Catalog, Config, HelperService, TokenProvider} from 'ngx-launcher';
 
-import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
-import { NewForgeConfig } from '../shared/new-forge.config';
-import { AppLauncherMissionRuntimeService } from './app-launcher-mission-runtime.service';
+import {FABRIC8_FORGE_API_URL} from '../../../shared/runtime-console/fabric8-ui-forge-api';
+import {NewForgeConfig} from '../shared/new-forge.config';
+import {AppLauncherMissionRuntimeService} from './app-launcher-mission-runtime.service';
 
 
 function initTestBed() {
@@ -28,16 +18,17 @@ function initTestBed() {
       AppLauncherMissionRuntimeService,
       HelperService,
       TokenProvider,
-      { provide: Config, useClass: NewForgeConfig },
-      { provide: FABRIC8_FORGE_API_URL, useValue: 'url-here' },
-      { provide: XHRBackend, useClass: MockBackend }
+      {provide: Config, useClass: NewForgeConfig},
+      {provide: FABRIC8_FORGE_API_URL, useValue: 'url-here'},
+      {provide: XHRBackend, useClass: MockBackend}
     ]
   });
 }
 
-function fakeCatlog(): Catalog {
-  let catalog: Catalog = {
-    missions: [{
+function fakeCatalog(): Catalog {
+  return {
+    missions: [
+    {
       id: 'crud',
       name: 'CRUD',
       description: 'nice crud thing',
@@ -65,47 +56,45 @@ function fakeCatlog(): Catalog {
       ]
     }],
     boosters: [{
-        metadata: {
-          app: {
-            osio: {
-              enabled: true
-            }
+      metadata: {
+        app: {
+          osio: {
+            enabled: true
           }
-        },
-        mission: 'health-check',
-        name: 'WildFly Swarm - Health Checks',
-        description: 'Demonstrates Health Checks in Wildfly Swarm',
-        runtime: 'wildfly-swarm',
-        version: 'community'
-      }
+        }
+      },
+      mission: 'health-check',
+      name: 'WildFly Swarm - Health Checks',
+      description: 'Demonstrates Health Checks in Wildfly Swarm',
+      runtime: 'wildfly-swarm',
+      version: 'community'
+    }
     ]
   };
-
-  return catalog;
 }
 
 describe('Service: AppLauncherMissionRuntimeService', () => {
-  let helperService: HelperService;
   let appLauncherMissionRuntimeService: AppLauncherMissionRuntimeService;
+  let mockBackend: MockBackend;
 
   beforeEach(() => {
     initTestBed();
     appLauncherMissionRuntimeService = TestBed.get(AppLauncherMissionRuntimeService);
+    mockBackend = TestBed.get(XHRBackend);
+
+    mockBackend.connections.subscribe((connection: MockConnection) => {
+      connection.mockRespond(new Response(new ResponseOptions({
+        body: JSON.stringify(fakeCatalog()),
+        status: 200
+      })));
+    });
   });
 
-  it('should return catalog', () => {
-    inject([AppLauncherMissionRuntimeService, XHRBackend], (service, mockBackend) => {
-      mockBackend.connections.subscribe((connection) => {
-        connection.mockRespond(new Response(new ResponseOptions({
-          body: JSON.stringify(fakeCatlog)
-        })));
-      });
-
-      service.getMissions().subscribe(response => {
-        let catalog: Catalog = response;
-        expect(catalog.missions[0].id).toBe('crud');
-        expect(catalog.missions[0].name).toBe('CRUD');
-      });
+  it('should return catalog', (done: DoneFn) => {
+    appLauncherMissionRuntimeService.getCatalog().subscribe((catalog: Catalog) => {
+      expect(catalog.missions[0].id).toBe('crud');
+      expect(catalog.missions[0].name).toBe('CRUD');
+      done();
     });
   });
 });

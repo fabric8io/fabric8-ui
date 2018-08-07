@@ -71,9 +71,10 @@ describe('CollaboratorsComponent', () => {
     expect(this.testedDirective).toBeTruthy();
   });
 
-  it('should assign context', function(this: Ctx): void {
+  it('should assign context', function(this: Ctx, done: DoneFn): void {
     TestBed.get(ContextService).current.subscribe((context: Context): void => {
       expect(this.testedDirective.context).toEqual(context);
+      done();
     });
   });
 

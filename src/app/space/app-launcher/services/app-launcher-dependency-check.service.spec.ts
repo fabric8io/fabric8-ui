@@ -74,7 +74,7 @@ describe('Service: AppLauncherDependencyCheckService', () => {
     mockService = TestBed.get(XHRBackend);
   });
 
-  it('Get project dependencies', () => {
+  it('Get project dependencies', (done: DoneFn) => {
     mockService.connections.subscribe((connection: any) => {
         connection.mockRespond(new Response(
           new ResponseOptions({
@@ -85,6 +85,7 @@ describe('Service: AppLauncherDependencyCheckService', () => {
     });
     appLauncherDependencyCheckService.getDependencyCheck().subscribe((val) => {
         expect(val).toEqual(dependencyCheck);
+        done();
     });
   });
 
