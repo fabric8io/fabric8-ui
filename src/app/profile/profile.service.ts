@@ -1,9 +1,8 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { cloneDeep } from 'lodash';
-import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
+import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
 import { ConnectableObservable, Observable } from 'rxjs';
 
@@ -28,8 +27,6 @@ export class ProfileService {
   private _profile: ConnectableObservable<ExtProfile>;
 
   constructor(
-    private router: Router,
-    private broadcaster: Broadcaster,
     private userService: UserService,
     private auth: AuthenticationService,
     private http: HttpClient,
@@ -40,7 +37,7 @@ export class ProfileService {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
     this.profileUrl = apiUrl + 'users';
-    this._profile = userService.loggedInUser
+    this._profile = this.userService.loggedInUser
       .skipWhile(user => {
         return !user || !user.attributes;
       })
@@ -90,9 +87,7 @@ export class ProfileService {
     });
     return this.http
       .patch(this.profileUrl, payload, { headers: this.headers })
-      .map((response: User) => {
-        return response as User;
-      });
+      .map((response: HttpResponse<User>) => response);
   }
 
   get sufficient(): Observable<boolean> {

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 
 import { Logger } from 'ngx-base';
@@ -31,7 +31,7 @@ export class TenantService {
     let url = `${this.userUrl}/services`;
     return this.http
       .patch(url, null, { headers: this.headers, observe: 'response', responseType: 'text' })
-      .catch((error) => {
+      .catch((error: HttpErrorResponse) => {
         return this.handleError(error);
       });
   }
@@ -44,7 +44,7 @@ export class TenantService {
     let url = `${this.userUrl}/services`;
     return this.http
       .delete(url, { headers: this.headers, responseType: 'text' })
-      .catch((error) => {
+      .catch((error: HttpErrorResponse) => {
         return this.handleError(error);
       })
       .map(() => null);

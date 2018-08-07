@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +13,7 @@ describe('My Spaces Item Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [Fabric8WitModule, FormsModule, HttpClientModule],
+      imports: [Fabric8WitModule, FormsModule],
       declarations: [MySpacesItemComponent],
       providers: [],
       // Tells the compiler not to error on unknown elements and attributes

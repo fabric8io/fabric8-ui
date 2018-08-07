@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
@@ -50,7 +49,7 @@ describe('My Spaces Item Actions Component', () => {
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpClientModule],
+      imports: [FormsModule],
       declarations: [MySpacesItemActionsComponent],
       providers: [
         ContextService,
