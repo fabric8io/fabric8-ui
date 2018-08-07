@@ -50,7 +50,7 @@ describe('Service: AppLauncherProjectSummaryService', () => {
     mockService = TestBed.get(XHRBackend);
   });
 
-  // FIXME presumable can't mock all the http interactions with one response
+  // FIXME presumably can't mock all the http interactions with one response
   xit('Should return uuid', (done: DoneFn) => {
     mockService.connections.subscribe((connection: any) => {
       connection.mockRespond(new Response(
