@@ -37,7 +37,7 @@ export class AppLauncherPipelineService implements PipelineService {
     }));
   }
 
-  getPipelines(filterByRuntime: string = 'maven'): Observable<Pipeline[]> {
+  getPipelines(filterByRuntime?: string): Observable<Pipeline[]> {
     let runtimeEndPoint: string = this.END_POINT + this.API_BASE;
     return this.options.flatMap((option) => {
       return this.http.get(runtimeEndPoint, option)
@@ -45,7 +45,7 @@ export class AppLauncherPipelineService implements PipelineService {
         .map(pipelines => {
           // needs to filter out associated pipelines from list of pipelines
           return pipelines.filter(item => {
-            return item.platform === filterByRuntime;
+            return item.platform === (filterByRuntime || item.platform);
           });
         })
         .catch(this.handleError);
