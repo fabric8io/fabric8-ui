@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -90,7 +90,7 @@ export class ProfileService {
     });
     return this.http
       .patch(this.profileUrl, payload, { headers: this.headers })
-      .map((response) => {
+      .map((response: User) => {
         return response as User;
       });
   }

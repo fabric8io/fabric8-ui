@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -11,7 +10,6 @@ import { MySpacesItemHeadingComponent } from './my-spaces-item-heading.component
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
     TooltipModule.forRoot()
   ],
   declarations: [ MySpacesItemHeadingComponent ],

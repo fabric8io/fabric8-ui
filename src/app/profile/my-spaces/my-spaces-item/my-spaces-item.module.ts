@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -12,7 +11,6 @@ import { MySpacesItemComponent } from './my-spaces-item.component';
     CommonModule,
     Fabric8WitModule,
     FormsModule,
-    HttpClientModule,
     MySpacesItemRoutingModule
   ],
   declarations: [ MySpacesItemComponent ],

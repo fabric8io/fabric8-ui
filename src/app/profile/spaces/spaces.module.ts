@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -13,7 +12,6 @@ import { SpacesComponent }     from './spaces.component';
 @NgModule({
   imports: [
     CommonModule,
-    HttpClientModule,
     SpacesRoutingModule,
     ModalModule.forRoot(),
     InfiniteScrollModule,

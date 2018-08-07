@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { NotificationsRoutingModule } from './notifications-routing.module';
@@ -7,8 +6,7 @@ import { ToggleBarComponent } from './toggle-bar.component';
 
 @NgModule({
   imports: [
-    NotificationsRoutingModule,
-    HttpClientModule
+    NotificationsRoutingModule
   ],
   declarations: [ NotificationsComponent, ToggleBarComponent],
   exports: [ToggleBarComponent]

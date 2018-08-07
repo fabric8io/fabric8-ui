@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -17,7 +16,6 @@ import { MySpacesItemActionsComponent } from './my-spaces-item-actions.component
     ActionModule,
     BsDropdownModule.forRoot(),
     CommonModule,
-    HttpClientModule,
     DialogModule,
     FormsModule,
     ModalModule,

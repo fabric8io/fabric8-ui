@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -20,7 +19,6 @@ import { MySpacesComponent }     from './my-spaces.component';
     Fabric8WitModule,
     InfiniteScrollModule,
     ListModule,
-    HttpClientModule,
     ModalModule.forRoot(),
     MySpacesItemModule,
     MySpacesItemActionsModule,
