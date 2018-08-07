@@ -9,7 +9,7 @@ import {
 import { Router } from '@angular/router';
 
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
-import { Context, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
+import { Context, SpaceService } from 'ngx-fabric8-wit';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
@@ -45,7 +45,6 @@ export class AddSpaceOverlayComponent implements OnInit {
               private notifications: Notifications,
               private userService: UserService,
               private spaceNamespaceService: SpaceNamespaceService,
-              private spaceNamePipe: SpaceNamePipe,
               private spacesService: SpacesService,
               private spaceTemplateService: SpaceTemplateService,
               private context: ContextService,
@@ -141,15 +140,18 @@ export class AddSpaceOverlayComponent implements OnInit {
   hideAddSpaceOverlay(): void {
     this.broadcaster.broadcast('showAddSpaceOverlay', false);
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'showAddAppOverlay',
-      data: {
-        source: 'space-overlay'
-      }
+      event: 'add space closed'
     });
   }
 
   showAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', true);
+    this.broadcaster.broadcast('analyticsTracker', {
+      event: 'add app opened',
+      data: {
+        source: 'space-overlay'
+      }
+    });
   }
 
   private createTransientSpace(): Space {

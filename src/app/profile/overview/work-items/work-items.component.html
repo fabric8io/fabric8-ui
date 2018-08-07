@@ -12,7 +12,7 @@
                 onblur="this.size=0;">
           <option value="default">Select a space to work with...</option>
           <option *ngFor="let space of spaces" [value]="space.id">
-            {{space.attributes.name | spaceName}}
+            {{space.attributes.name}}
           </option>
         </select>
       </span>

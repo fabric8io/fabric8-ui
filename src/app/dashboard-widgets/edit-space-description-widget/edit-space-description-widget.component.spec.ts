@@ -1,7 +1,7 @@
 import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Broadcaster } from 'ngx-base';
-import { CollaboratorService, Contexts, Space, SpaceNamePipe, Spaces, SpaceService } from 'ngx-fabric8-wit';
+import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { ConnectableObservable, Observable } from 'rxjs';
 import { createMock } from 'testing/mock';
@@ -42,7 +42,6 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
   ];
 
   initContext(EditSpaceDescriptionWidgetComponent, HostComponent, {
-    declarations: [SpaceNamePipe],
     providers: [
       { provide: Spaces, useFactory: () => {
           let mockSpaces: jasmine.SpyObj<Spaces> = createMock(Spaces);
