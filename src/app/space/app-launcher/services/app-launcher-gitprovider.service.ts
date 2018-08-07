@@ -76,10 +76,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
     let url = this.END_POINT + this.API_BASE + 'user';
     let res = this.options.flatMap((option) => {
       return this.http.get(url, option)
-        .map(response => {
-          console.log(response);
-          return response.json() as any;
-        })
+        .map(response => response.json() as any)
         .catch(error => {
           return Observable.throw(error);
         });
