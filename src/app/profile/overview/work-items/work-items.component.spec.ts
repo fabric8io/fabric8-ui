@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { Component, DebugElement, NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -62,7 +61,6 @@ describe('WorkItemsComponent', () => {
 
   initContext(WorkItemsComponent, HostComponent, {
     declarations: [TakePipe],
-    imports: [HttpClientModule],
     providers: [
       { provide: Contexts, useFactory: () => {
           let mockContexts: any = createMock(Contexts);
