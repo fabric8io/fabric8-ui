@@ -5,7 +5,6 @@ import {
 } from '@angular/core';
 import {
   async,
-  ComponentFixture,
   TestBed
 } from '@angular/core/testing';
 
@@ -37,7 +36,6 @@ import {
 import { AuthenticationService } from 'ngx-login-client';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
 
-import { Feature, FeatureFlagModule, FeatureTogglesService } from 'ngx-feature-flag';
 import { BuildConfig } from '../../../../a-runtime-console/index';
 
 import { PipelinesComponent } from './pipelines.component';
@@ -60,35 +58,17 @@ class HostComponent { }
 describe('PipelinesComponent', () => {
   type TestingContext = TestContext<PipelinesComponent, HostComponent>;
 
-  let component: PipelinesComponent;
-  let fixture: ComponentFixture<PipelinesComponent>;
-
   let contexts: Contexts;
   let authenticationService: jasmine.SpyObj<AuthenticationService>;
-  let f8uiConfig: { openshiftConsoleUrl: string };
   let broadcaster: { broadcast: Function };
 
   let pipelinesService: jasmine.SpyObj<PipelinesService>;
-  let featureServiceMock: jasmine.SpyObj<FeatureTogglesService>;
-  let feature: Feature = {
-    attributes: {
-      name: 'AppLauncher',
-      description: 'Description',
-      enabled: true,
-      'enablement-level': 'beta',
-      'user-enabled': true
-    },
-    id: 'AppLauncher'
-  };
-
   beforeAll(() => {
     pipelinesService = createMock(PipelinesService);
-    featureServiceMock = createMock(FeatureTogglesService);
   });
 
   beforeEach(async(() => {
     TestBed.overrideProvider(PipelinesService, { useFactory: () => pipelinesService, deps: [] });
-    TestBed.overrideProvider(FeatureTogglesService, { useFactory: () => featureServiceMock, deps: [] });
   }));
 
   beforeEach(() => {
@@ -145,7 +125,6 @@ describe('PipelinesComponent', () => {
         }
       ])
     );
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
     broadcaster = { broadcast: jasmine.createSpy('broadcast') };
   });
 
@@ -154,7 +133,6 @@ describe('PipelinesComponent', () => {
       BsDropdownModule.forRoot(),
       CommonModule,
       ToolbarModule,
-      FeatureFlagModule,
       ModalModule.forRoot(),
       TooltipModule.forRoot()
     ],
@@ -167,8 +145,7 @@ describe('PipelinesComponent', () => {
       { provide: Contexts, useFactory: () => contexts },
       { provide: AuthenticationService, useFactory: () => authenticationService },
       { provide: PipelinesService, useFactory: () => pipelinesService },
-      { provide: Broadcaster, useFactory: () => broadcaster },
-      { provide: FeatureTogglesService, useFactory: () => featureServiceMock }
+      { provide: Broadcaster, useFactory: () => broadcaster }
     ]
   });
 
@@ -624,9 +601,6 @@ describe('PipelinesComponent', () => {
 
   it('should trigger showAddAppOverlay on click', function(this: TestingContext) {
     // given
-    feature.attributes.enabled = true;
-    feature.attributes['user-enabled'] = true;
-    featureServiceMock.getFeature.and.returnValue(Observable.of(feature));
     this.fixture.detectChanges();
     this.fixture.whenStable().then(() => {
       expect(this.fixture.nativeElement.querySelector('#appLauncherAnchor')).toBeDefined();

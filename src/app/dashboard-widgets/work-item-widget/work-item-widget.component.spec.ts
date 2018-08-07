@@ -16,6 +16,8 @@ import { WorkItemWidgetComponent } from './work-item-widget.component';
 import { cloneDeep } from 'lodash';
 import { Observable } from 'rxjs';
 
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
+
 describe('WorkItemWidgetComponent', () => {
   let fixture: ComponentFixture<WorkItemWidgetComponent>;
   let component: DebugNode['componentInstance'];
@@ -81,7 +83,10 @@ describe('WorkItemWidgetComponent', () => {
         RouterModule,
         WorkItemBarchartModule
       ],
-      declarations: [WorkItemWidgetComponent],
+      declarations: [
+        MockFeatureToggleComponent,
+        WorkItemWidgetComponent
+      ],
       providers: [
         { provide: FeatureTogglesService, useValue: mockFeatureTogglesService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },

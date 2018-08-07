@@ -141,15 +141,18 @@ export class AddSpaceOverlayComponent implements OnInit {
   hideAddSpaceOverlay(): void {
     this.broadcaster.broadcast('showAddSpaceOverlay', false);
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'showAddAppOverlay',
-      data: {
-        source: 'space-overlay'
-      }
+      event: 'add space closed'
     });
   }
 
   showAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', true);
+    this.broadcaster.broadcast('analyticsTracker', {
+      event: 'add app opened',
+      data: {
+        source: 'space-overlay'
+      }
+    });
   }
 
   private createTransientSpace(): Space {

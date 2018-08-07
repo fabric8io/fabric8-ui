@@ -1,5 +1,6 @@
-<f8-feature-toggle featureName="Analyze.newHomeDashboard">
-  <div id="recent-apps-card" class="card-pf f8-card-lg" user-level>
+<f8-feature-toggle featureName="Analyze.newHomeDashboard" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
+<ng-template #user>
+  <div id="recent-apps-card" class="card-pf f8-card-lg">
     <div class="card-pf-heading f8-card-heading">
       <h2 class="card-pf-title">
         Recent Workspaces
@@ -35,7 +36,9 @@
       </div> -->
     </div>
   </div>
-  <div id="recent-pipelines-card" class="pipelines-widget card-pf f8-card" default-level>
+</ng-template>
+<ng-template #default>
+  <div id="recent-pipelines-card" class="pipelines-widget card-pf f8-card">
     <div class="card-pf-heading f8-card-heading">
       <h2 class="card-pf-title">
         Recent Active Pipelines
@@ -77,5 +80,4 @@
       </ul>
     </div>
   </div>
-
-</f8-feature-toggle>
+</ng-template>

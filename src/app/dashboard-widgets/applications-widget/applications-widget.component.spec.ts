@@ -14,6 +14,7 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 
 import { createMock } from 'testing/mock';
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { initContext, TestContext } from 'testing/test-context';
 
 import { BuildConfig } from '../../../a-runtime-console/index';
@@ -202,7 +203,10 @@ describe('ApplicationsWidgetComponent', () => {
       LoadingWidgetModule,
       RouterModule
     ],
-    declarations: [ FakeApplicationsListComponent ],
+    declarations: [
+      FakeApplicationsListComponent,
+      MockFeatureToggleComponent
+    ],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
       { provide: Contexts, useValue: ({ current: ctxSubj }) },
