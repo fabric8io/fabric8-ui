@@ -1,7 +1,7 @@
 <div class="edit-space-description-widget">
   <div class="col-sm-3 f8-space-masthead-space-info">
     <div>
-      <span class="f8-space-masthead-name">{{space?.attributes.name | spaceName}}</span> <span class="f8-space-masthead-owner">{{spaceOwner | async}}</span>
+      <span class="f8-space-masthead-name">{{space?.attributes.name}}</span> <span class="f8-space-masthead-owner">{{spaceOwner | async}}</span>
     </div>
     <span class="pficon pficon-users fa-lg"></span> {{collaboratorCount | async}}
     <ng-container *ngIf='userOwnsSpace; else userDoesNotOwnSpaceHeaderInfo'>

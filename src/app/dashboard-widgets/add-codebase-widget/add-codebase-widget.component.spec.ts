@@ -1,5 +1,3 @@
-
-
 import {
   Component,
   NO_ERRORS_SCHEMA
@@ -24,6 +22,7 @@ import { CodebasesService } from '../../space/create/codebases/services/codebase
 import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
 
 import { createMock } from 'testing/mock';
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
@@ -76,6 +75,7 @@ describe('AddCodebaseWidgetComponent', () => {
   });
 
   initContext(AddCodebaseWidgetComponent, HostComponent, {
+    declarations: [ MockFeatureToggleComponent ],
     imports: [ LoadingWidgetModule ],
     providers: [
       { provide: Broadcaster, useFactory: () => mockBroadcaster },
@@ -104,8 +104,6 @@ describe('AddCodebaseWidgetComponent', () => {
 
     expect(this.fixture.debugElement.query(By.css('#test-add-codebase-circle-button'))).not.toBeNull();
     expect(this.fixture.debugElement.query(By.css('#test-add-codebase-button'))).not.toBeNull();
-    expect(this.fixture.debugElement.query(By.css('#spacehome-codebases-add-button'))).not.toBeNull();
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-codebases-create-button'))).not.toBeNull();
   });
 
   it('should disable buttons if the user does not own the space', function(this: TestingContext) {
@@ -115,8 +113,6 @@ describe('AddCodebaseWidgetComponent', () => {
 
     expect(this.fixture.debugElement.query(By.css('#test-add-codebase-circle-button'))).toBeNull();
     expect(this.fixture.debugElement.query(By.css('#test-add-codebase-button'))).toBeNull();
-    expect(this.fixture.debugElement.query(By.css('#spacehome-codebases-add-button'))).toBeNull();
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-codebases-create-button'))).toBeNull();
   });
 
   it('should listen for context space changes', function(this: TestingContext) {

@@ -1,5 +1,6 @@
-<f8-feature-toggle featureName="Analyze.MyWorkItemsCard">
-  <div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf f8-card" user-level>
+<f8-feature-toggle featureName="Analyze.MyWorkItemsCard" [userLevel]="user"></f8-feature-toggle>
+<ng-template #user>
+  <div id="spacehome-my-workitems-card" class="create-work-item-widget card-pf f8-card">
     <div class="card-pf-heading f8-card-heading">
       <div class="card-pf-heading-details f8-card-heading-details">
         <div *ngIf="userOwnsSpace">
@@ -48,4 +49,4 @@
       </ul>
     </div>
   </div>
-</f8-feature-toggle>
+</ng-template>

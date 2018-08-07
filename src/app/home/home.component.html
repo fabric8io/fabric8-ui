@@ -1,5 +1,6 @@
-<f8-feature-toggle featureName="Analyze.newHomeDashboard">
-  <div class="container-fluid container-cards-pf f8-home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes" user-level>
+<f8-feature-toggle featureName="Analyze.newHomeDashboard" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
+<ng-template #user>
+  <div class="container-fluid container-cards-pf f8-home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
     <div class="row row-cards-pf">
       <section class="card-pf card-pf-view f8-home-banner">
         <!-- this is commented out until features are added
@@ -61,7 +62,9 @@
       </div>
     </div>
   </div>
-  <div class="container-fluid container-cards-pf home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes" default-level>
+</ng-template>
+<ng-template #default>
+  <div class="container-fluid container-cards-pf home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
     <div class="row row-cards-pf">
       <div class="col-sm-12">
         <section class="card-pf card-pf-view home-banner {{brandInformation.backgroundClass}}">
@@ -135,4 +138,4 @@
       </div>
     </div>
   </div>
-</f8-feature-toggle>
+</ng-template>

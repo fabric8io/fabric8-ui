@@ -1,5 +1,6 @@
-<f8-feature-toggle featureName="Analyze.newHomeDashboard">
-  <div class="create-work-item-widget card-pf f8-card-lg" user-level>
+<f8-feature-toggle featureName="Analyze.newHomeDashboard" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
+<ng-template #user>
+  <div class="create-work-item-widget card-pf f8-card-lg">
     <div class="card-pf-heading-bg">
       <div class="card-pf-heading f8-card-heading">
         <h2 class="card-pf-title">My Work Items
@@ -10,7 +11,7 @@
               (ngModelChange)="fetchWorkItems()">
             <option value="default">Select a space to work with...</option>
             <option *ngFor="let space of recentSpaces" [value]="space.id">
-              {{space.attributes.name | spaceName}}
+              {{space.attributes.name}}
             </option>
           </select>
         </span>
@@ -53,7 +54,9 @@
       </ng-template>
     </div>
   </div>
-  <div class="create-work-item-widget card-pf f8-card" default-level>
+</ng-template>
+<ng-template #default>
+  <div class="create-work-item-widget card-pf f8-card">
     <div class="card-pf-heading-bg">
       <div class="card-pf-heading f8-card-heading">
         <h2 class="card-pf-title">My Work Items
@@ -64,7 +67,7 @@
                     (ngModelChange)="fetchWorkItems()">
               <option value="default">Select a space to work with...</option>
               <option *ngFor="let space of recentSpaces" [value]="space.id">
-                {{space.attributes.name | spaceName}}
+                {{space.attributes.name}}
               </option>
             </select>
           </span>
@@ -107,4 +110,4 @@
       </ng-template>
     </div>
   </div>
-</f8-feature-toggle>
+</ng-template>

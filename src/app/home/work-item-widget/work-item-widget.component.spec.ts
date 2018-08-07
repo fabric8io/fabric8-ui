@@ -15,6 +15,7 @@ import { User, UserService } from 'ngx-login-client';
 
 import { cloneDeep } from 'lodash';
 import { createMock } from 'testing/mock';
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
@@ -77,6 +78,7 @@ describe('WorkItemWidgetComponent', () => {
   });
 
   initContext(WorkItemWidgetComponent, HostComponent, {
+    declarations: [ MockFeatureToggleComponent ],
     imports: [
       Fabric8WitModule,
       HttpModule,
@@ -150,7 +152,7 @@ describe('WorkItemWidgetComponent', () => {
 
   it('Should have select element options', function(this: TestingContext) {
     let options = this.fixture.debugElement.queryAll(By.css('.work-item-combobox option'));
-    expect(options.length).toBe(4);
+    expect(options.length).toBe(2);
   });
 
   it('should have set the index after sifting through spaces', function(this: TestingContext) {

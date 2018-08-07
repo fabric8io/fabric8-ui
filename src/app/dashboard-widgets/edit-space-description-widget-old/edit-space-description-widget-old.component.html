@@ -1,6 +1,6 @@
 <div class="edit-space-description-widget-old">
   <h2 class="margin-0">
-    <b>{{space?.attributes.name | spaceName}}</b>
+    <b>{{space?.attributes.name}}</b>
   </h2>
   <!-- There must be no spaces here, otherwise we end up with random whitespace in the editable-->
   <div *ngIf="userOwnsSpace; else userDoesNotOwnSpace" class="form-group">
