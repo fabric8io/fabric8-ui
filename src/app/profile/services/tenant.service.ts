@@ -1,27 +1,23 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
 
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { AuthenticationService, UserService } from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-
-import { Codebase } from './codebase';
-import { Workspace, WorkspaceLinks } from './workspace';
 
 @Injectable()
 export class TenantService {
-  private headers = new Headers({ 'Content-Type': 'application/json' });
+  private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   private userUrl: string;
 
   constructor(
-      private http: Http,
+      private http: HttpClient,
       private logger: Logger,
       private auth: AuthenticationService,
-      private userService: UserService,
       @Inject(WIT_API_URL) apiUrl: string) {
     if (this.auth.getToken() != undefined) {
-      this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+      this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
     this.userUrl = apiUrl + 'user';
   }
@@ -34,11 +30,8 @@ export class TenantService {
   updateTenant(): Observable<any> {
     let url = `${this.userUrl}/services`;
     return this.http
-      .patch(url, null, { headers: this.headers })
-      .map(response => {
-        return response;
-      })
-      .catch((error) => {
+      .patch(url, null, { headers: this.headers, observe: 'response', responseType: 'text' })
+      .catch((error: HttpErrorResponse) => {
         return this.handleError(error);
       });
   }
@@ -50,13 +43,11 @@ export class TenantService {
   cleanupTenant(): Observable<any> {
     let url = `${this.userUrl}/services`;
     return this.http
-      .delete(url, { headers: this.headers })
-      .map(response => {
-        return response;
-      })
-      .catch((error) => {
+      .delete(url, { headers: this.headers, responseType: 'text' })
+      .catch((error: HttpErrorResponse) => {
         return this.handleError(error);
-      });
+      })
+      .map(() => null);
   }
 
   // Private

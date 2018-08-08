@@ -49,9 +49,8 @@ export class ProviderService {
     let tokenUrl = this.apiUrl + 'token?for=https://github.com';
     return this.http
       .delete(tokenUrl)
-      .map((response) => {
+      .map(() => {
         this.auth.clearGitHubToken();
-        console.log(response);
       });
 
   }
@@ -75,10 +74,7 @@ export class ProviderService {
   disconnectOpenShift(cluster: string): Observable<any> {
     let tokenUrl = this.apiUrl + 'token?for=' + cluster;
     return this.http
-      .delete(tokenUrl)
-      .map((response) => {
-        console.log(response);
-      });
+      .delete(tokenUrl);
   }
 
   getLegacyLinkingUrl(provider: string, redirect: string): string {
