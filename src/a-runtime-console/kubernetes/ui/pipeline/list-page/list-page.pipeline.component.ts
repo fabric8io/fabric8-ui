@@ -21,7 +21,6 @@ export class PipelinesListPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log('============ pipelines page!');
     this.apiStore.load();
     this.apiStore.loading.distinctUntilChanged().subscribe((flag) => {
       if (!flag) {
