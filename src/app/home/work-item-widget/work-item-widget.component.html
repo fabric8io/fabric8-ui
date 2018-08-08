@@ -11,7 +11,7 @@
               (ngModelChange)="fetchWorkItems()">
             <option value="default">Select a space to work with...</option>
             <option *ngFor="let space of recentSpaces" [value]="space.id">
-              {{space.attributes.name | spaceName}}
+              {{space.attributes.name}}
             </option>
           </select>
         </span>
@@ -67,7 +67,7 @@
                     (ngModelChange)="fetchWorkItems()">
               <option value="default">Select a space to work with...</option>
               <option *ngFor="let space of recentSpaces" [value]="space.id">
-                {{space.attributes.name | spaceName}}
+                {{space.attributes.name}}
               </option>
             </select>
           </span>

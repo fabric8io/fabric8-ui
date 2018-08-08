@@ -1,9 +1,6 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Observable, Subscription } from 'rxjs/Rx';
-
-import { Broadcaster } from 'ngx-base';
-import { Contexts } from 'ngx-fabric8-wit';
 
 import {
   Build,
@@ -18,7 +15,7 @@ import { PipelinesService } from '../../shared/runtime-console/pipelines.service
   templateUrl: './analytical-report-widget.component.html',
   styleUrls: ['./analytical-report-widget.component.less']
 })
-export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
+export class AnalyticalReportWidgetComponent implements OnInit {
 
   buildConfigs: Observable<BuildConfigs>;
   buildConfigsCount: number;
@@ -41,17 +38,12 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
   _contextSubscription: Subscription;
 
   constructor(
-    private context: Contexts,
-    private broadcaster: Broadcaster,
     private pipelinesService: PipelinesService
   ) {
     this.buildConfigsCount = 0;
   }
 
   ngOnInit() {
-    this._contextSubscription = this.context.current
-      .subscribe(context => console.log('Context', context));
-
     let bcs = this.pipelinesService.current
       .publish();
     this.buildConfigs = bcs;
@@ -72,10 +64,6 @@ export class AnalyticalReportWidgetComponent implements OnInit, OnDestroy {
       this.loading = false;
     });
     bcs.connect();
-  }
-
-  ngOnDestroy() {
-    this._contextSubscription.unsubscribe();
   }
 
   filterPipelines(buildConfs: Array<any>): Array<any> {

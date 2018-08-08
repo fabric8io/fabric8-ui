@@ -49,6 +49,11 @@ export class MenusService {
                 name: 'Board',
                 path: 'board'
               }
+              , {
+                name: 'Query',
+                feature: 'PlannerQuery',
+                path: 'query'
+              }
             ]
           }, {
             name: 'Create',

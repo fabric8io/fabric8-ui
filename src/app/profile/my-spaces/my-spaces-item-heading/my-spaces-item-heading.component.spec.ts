@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 
 import { MySpacesItemHeadingComponent } from './my-spaces-item-heading.component';
@@ -11,7 +10,7 @@ describe('My Spaces Item Heading Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule],
       declarations: [MySpacesItemHeadingComponent],
       providers: [],
       // Tells the compiler not to error on unknown elements and attributes

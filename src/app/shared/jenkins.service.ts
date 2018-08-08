@@ -25,7 +25,6 @@ export class JenkinsService {
         let jenkinsUrl = this.jenkinsApiUrl;
         let url = jenkinsUrl + '/api/jenkins/start';
         let token = this.authService.getToken();
-        console.log('about to invoke ' + url);
         let options = new RequestOptions();
         let headers = new Headers();
         headers.set('Authorization', 'Bearer ' + token);

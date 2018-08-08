@@ -1,14 +1,18 @@
 import { Component, DebugElement, NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
-import { WorkItemService } from 'fabric8-planner';
+
 import { List, take } from 'lodash';
-import { Contexts, Space, SpaceNamePipe, Spaces, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
-import { User } from 'ngx-login-client';
 import { Observable } from 'rxjs';
+
+import { WorkItemService } from 'fabric8-planner';
+
+import { Contexts, Space, Spaces, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
+import { User } from 'ngx-login-client';
+
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { ContextService } from '../../../shared/context.service';
+
 import { WorkItemsComponent } from './work-items.component';
 
 @Component({
@@ -56,8 +60,7 @@ describe('WorkItemsComponent', () => {
   ];
 
   initContext(WorkItemsComponent, HostComponent, {
-    declarations: [SpaceNamePipe, TakePipe],
-    imports: [HttpModule],
+    declarations: [TakePipe],
     providers: [
       { provide: Contexts, useFactory: () => {
           let mockContexts: any = createMock(Contexts);
