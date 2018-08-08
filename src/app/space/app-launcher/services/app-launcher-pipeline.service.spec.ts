@@ -1,12 +1,12 @@
-import {TestBed} from '@angular/core/testing';
-import {HttpModule, Response, ResponseOptions, XHRBackend} from '@angular/http';
-import {MockBackend} from '@angular/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 
-import {Config, HelperService, Pipeline, TokenProvider} from 'ngx-launcher';
+import { Config, HelperService, Pipeline, TokenProvider } from 'ngx-launcher';
 
-import {FABRIC8_FORGE_API_URL} from '../../../shared/runtime-console/fabric8-ui-forge-api';
-import {NewForgeConfig} from '../shared/new-forge.config';
-import {AppLauncherPipelineService} from './app-launcher-pipeline.service';
+import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
+import { NewForgeConfig } from '../shared/new-forge.config';
+import { AppLauncherPipelineService } from './app-launcher-pipeline.service';
 
 
 function initTestBed() {
@@ -108,7 +108,7 @@ describe('Service: AppLauncherPipelineService', () => {
 
     appLauncherPipelineService.getPipelines().subscribe(response => {
       let pipelines: Pipeline[] = response;
-      expect(pipelines.length).toBe(0)
+      expect(pipelines.length).toBe(0);
       done();
     });
   });
@@ -122,7 +122,7 @@ describe('Service: AppLauncherPipelineService', () => {
 
     appLauncherPipelineService.getPipelines('rust').subscribe(response => {
       let pipelines: Pipeline[] = response;
-      expect(pipelines.length).toBe(0)
+      expect(pipelines.length).toBe(0);
       done();
     });
   });
