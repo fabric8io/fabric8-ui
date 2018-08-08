@@ -55,7 +55,6 @@ export class CreateWorkItemWidgetComponent implements OnInit {
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveAreaForWorkItem(workItem)))
       // MUST DO creator after area due to bug in planner
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveCreator(workItem)))
-      .do(val => console.log(val))
       .publishReplay(1);
     this._myWorkItems.connect();
     this.myWorkItemsCount = this._myWorkItems.map(workItems => workItems.length);

@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -9,7 +8,6 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster, Notifications } from 'ngx-base';
 import {
   Contexts,
-  SpaceNamePipe,
   SpaceService
 } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
@@ -26,20 +24,17 @@ describe('My Spaces Item Actions Component', () => {
   let fixture;
   let mockRouter: any;
   let mockBroadcaster: any;
-  let mockContexts: any;
   let mockLocalStorage: any;
   let mockMenu: any;
   let mockNotifications: any;
   let mockProfileService: any;
   let mockRoute: any;
-  let mockSpaceNamePipe: any;
   let mockSpaceService: any;
   let mockUserService: any;
 
   let space: any;
 
   beforeEach(() => {
-    mockContexts = jasmine.createSpy('Contexts');
     mockRouter = jasmine.createSpy('Router');
     mockBroadcaster = jasmine.createSpy('Broadcaster');
     mockMenu = jasmine.createSpyObj('MenusService', ['attach']);
@@ -51,11 +46,10 @@ describe('My Spaces Item Actions Component', () => {
     mockRoute = jasmine.createSpy('ActivatedRoute');
     mockProfileService = jasmine.createSpy('ProfileService');
     mockProfileService.current = Observable.of(profile);
-    mockSpaceNamePipe = jasmine.createSpy('SpaceNamePipe');
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule],
       declarations: [MySpacesItemActionsComponent],
       providers: [
         ContextService,
@@ -88,9 +82,6 @@ describe('My Spaces Item Actions Component', () => {
         },
         {
           provide: LocalStorageService, useValue: mockLocalStorage
-        },
-        {
-          provide: SpaceNamePipe, useValue: mockSpaceNamePipe
         }
       ],
       // Tells the compiler not to error on unknown elements and attributes

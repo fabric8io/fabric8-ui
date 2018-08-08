@@ -51,7 +51,6 @@ export class SpaceNamespaceService {
             } catch (e) {
               // Swallow an exception from the YAML parser, we'll just dump the entire response in this case.
             }
-            console.log('Namespace does not exist or is not accessible and OpenShift gave a 403.', errDetail || err.text());
             this.notifications.message({
               message: `Something went wrong configuring your pipelines and environments as the OpenShift Project '${namespace}' is not accessible to you or does not exist.`,
               type: NotificationType.WARNING

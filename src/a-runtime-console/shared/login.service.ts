@@ -51,7 +51,6 @@ export class LoginService {
   }
 
   public redirectToLogin(currentUrl: string) {
-    console.log('Please login to access ' + currentUrl);
     this.redirectUrl = currentUrl;
     this.router.navigateByUrl(LoginService.LOGIN_URL);
   }

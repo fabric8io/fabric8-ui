@@ -8,7 +8,6 @@ import {
   Contexts,
   ContextTypes,
   Space,
-  SpaceNamePipe,
   SpaceService
 } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
@@ -54,7 +53,6 @@ export class ContextService implements Contexts {
     private userService: UserService,
     private notifications: Notifications,
     private profileService: ProfileService,
-    private spaceNamePipe: SpaceNamePipe,
     private eventService: EventService,
     private toggleService: FeatureTogglesService) {
 
@@ -92,7 +90,6 @@ export class ContextService implements Contexts {
             message: 'Something went badly wrong. Please try again later or ask for help.',
             type: NotificationType.DANGER
           } as Notification);
-          console.log('No username attached to user', val);
           throw 'Unknown user';
         }
       })
@@ -231,14 +228,12 @@ export class ContextService implements Contexts {
       })
       .do(val => {
         if (val) {
-          console.log('Context Changed to', val);
           this._currentContextUser = val.user.attributes.username;
           this.broadcaster.broadcast('contextChanged', val);
         }
       })
       .do(val => {
         if (val && val.space) {
-          console.log('Space Changed to', val);
           this.broadcaster.broadcast('spaceChanged', val.space);
         }
       })
@@ -271,7 +266,7 @@ export class ContextService implements Contexts {
       } as Context;
       c.type = ContextTypes.BUILTIN.get('space');
       c.path = '/' + c.user.attributes.username + '/' + c.space.attributes.name;
-      c.name = this.spaceNamePipe.transform(c.space.attributes.name);
+      c.name = c.space.attributes.name;
     } else if (val.user) {
       c = {
         'user': val.user,

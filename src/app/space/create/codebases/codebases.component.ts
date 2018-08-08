@@ -141,7 +141,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
   showAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', true);
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'showAddAppOverlay',
+      event: 'add app opened',
       data: {
         source: 'codebases'
       }

@@ -10,8 +10,10 @@
     </h2>
   </div>
   <div class="card-pf-body {{cardBodySizeClass}}">
-
-    <div *ngIf="(userHasSpaces | async) then spaceList; else emptyState"></div>
+    <fabric8-loading-widget message="Please wait while we load your recent spaces"
+      *ngIf="loading === true"></fabric8-loading-widget>
+    <div *ngIf="(userHasSpaces | async) === true && loading === false then spaceList"></div>
+    <div *ngIf="(userHasSpaces | async) === false && loading === false then emptyState"></div>
     <ng-template #emptyState>
       <div class="f8-blank-slate-card">
         <h3>Create a space</h3>
@@ -33,9 +35,9 @@
               <div class="list-view-pf-body">
                 <div class="list-view-pf-description">
                   <div class="list-group-item-text">
-                    <a [routerLink]="['/', space.relationalData.creator.attributes.username, space.attributes.name]" tooltip="{{space.attributes.name | spaceName}}"
+                    <a [routerLink]="['/', space.relationalData.creator.attributes.username, space.attributes.name]" tooltip="{{space.attributes.name}}"
                       placement="bottom">
-                      {{space.attributes.name | spaceName}}
+                      {{space.attributes.name}}
                     </a>
                   </div>
                 </div>
@@ -45,6 +47,5 @@
         </ul>
       </div>
     </ng-template><!-- spaceList -->
-
   </div>
 </div>

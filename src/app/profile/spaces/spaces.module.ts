@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
@@ -22,6 +21,4 @@ import { SpacesComponent }     from './spaces.component';
   ],
   declarations: [ SpacesComponent ]
 })
-export class SpacesModule {
-  constructor(http: Http) {}
-}
+export class SpacesModule {}
