@@ -1,27 +1,37 @@
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders
+} from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Headers, Http } from '@angular/http';
 
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { AuthenticationService, UserService } from 'ngx-login-client';
+import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
 
 import { Workspace, WorkspaceLinks } from './workspace';
 
+interface WorkspacesResponse {
+  data: Workspace[];
+}
+
 @Injectable()
 export class WorkspacesService {
-  private headers = new Headers({ 'Content-Type': 'application/json' });
-  private workspacesUrl: string;
+  private readonly headers: HttpHeaders;
+  private readonly workspacesUrl: string;
 
   constructor(
-      private http: Http,
-      private logger: Logger,
-      private auth: AuthenticationService,
-      private userService: UserService,
-      @Inject(WIT_API_URL) apiUrl: string) {
+    private http: HttpClient,
+    private logger: Logger,
+    private auth: AuthenticationService,
+    @Inject(WIT_API_URL) apiUrl: string
+  ) {
+    let headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     if (this.auth.getToken() != undefined) {
-      this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+      headers = headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
+    this.headers = headers;
     this.workspacesUrl = apiUrl + 'codebases';
   }
 
@@ -32,16 +42,11 @@ export class WorkspacesService {
    * @returns {Observable<Codebase>}
    */
   createWorkspace(codebaseId: string): Observable<WorkspaceLinks> {
-    let url = `${this.workspacesUrl}/${codebaseId}/create`;
+    const url: string = `${this.workspacesUrl}/${codebaseId}/create`;
     return this.http
-      .post(url, null, { headers: this.headers })
-      .retry(8) // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
-      .map(response => {
-        return response.json() as WorkspaceLinks;
-      })
-      .catch((error) => {
-        return this.handleError(error);
-      });
+      .post<WorkspaceLinks>(url, null, { headers: this.headers })
+      .catch((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error))
+      .retry(8); // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
   }
 
   /**
@@ -51,25 +56,19 @@ export class WorkspacesService {
    * @returns {Observable<Codebase>}
    */
   getWorkspaces(codebaseId: string): Observable<Workspace[]> {
-    let url = `${this.workspacesUrl}/${codebaseId}/workspaces`;
+    const url: string = `${this.workspacesUrl}/${codebaseId}/workspaces`;
     // TODO: remove the old url when it is not needed.
-    let old_url = `${this.workspacesUrl}/${codebaseId}/edit`;
+    const old_url: string = `${this.workspacesUrl}/${codebaseId}/edit`;
     return this.http
-      .get(url, { headers: this.headers })
-      .map(response => {
-        return response.json().data as Workspace[];
-      })
-      .catch((error) => {
+      .get<WorkspacesResponse>(url, { headers: this.headers })
+      .map((response: WorkspacesResponse): Workspace[] => response.data)
+      .catch((error: HttpErrorResponse): Observable<Workspace[]> => {
         // For some reason 'status: 0' is returned when endpoint does not exist
         if (error.status === 404 || error.status === 0) {
           return this.http
-            .get(old_url, {headers: this.headers})
-            .map(response => {
-              return response.json().data as Workspace[];
-            })
-            .catch((error) => {
-              return this.handleError(error);
-            });
+            .get<WorkspacesResponse>(old_url, {headers: this.headers})
+            .map((response: WorkspacesResponse): Workspace[] => response.data)
+            .catch((error: HttpErrorResponse): Observable<Workspace[]> => this.handleError(error));
         } else {
           return this.handleError(error);
         }
@@ -84,19 +83,14 @@ export class WorkspacesService {
    */
   openWorkspace(url: string): Observable<WorkspaceLinks> {
     return this.http
-      .post(url, null, { headers: this.headers })
+      .post<WorkspaceLinks>(url, null, { headers: this.headers })
       .retry(8) // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
-      .map(response => {
-        return response.json() as WorkspaceLinks;
-      })
-      .catch((error) => {
-        return this.handleError(error);
-      });
+      .catch((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error));
   }
 
   // Private
 
-  private handleError(error: any) {
+  private handleError(error: HttpErrorResponse): Observable<any> {
     this.logger.error(error);
     return Observable.throw(error.message || error);
   }

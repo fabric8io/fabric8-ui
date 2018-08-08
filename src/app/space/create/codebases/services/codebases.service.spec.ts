@@ -1,6 +1,8 @@
+import {
+  HttpClientTestingModule,
+  HttpTestingController
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
 
 import { cloneDeep } from 'lodash';
 import { Logger } from 'ngx-base';
@@ -14,7 +16,7 @@ describe('Codebase: CodebasesService', () => {
   let mockLog: any;
   let mockAuthService: any;
   let mockUserService: any;
-  let mockService: MockBackend;
+  let controller: HttpTestingController;
   let codebasesService: CodebasesService;
 
   beforeEach(() => {
@@ -23,13 +25,10 @@ describe('Codebase: CodebasesService', () => {
       mockUserService = jasmine.createSpy('UserService');
 
       TestBed.configureTestingModule({
-        imports: [HttpModule],
+        imports: [ HttpClientTestingModule ],
         providers: [
           {
             provide: Logger, useValue: mockLog
-          },
-          {
-            provide: XHRBackend, useClass: MockBackend
           },
           {
             provide: AuthenticationService,
@@ -41,16 +40,17 @@ describe('Codebase: CodebasesService', () => {
           },
           {
             provide: WIT_API_URL,
-            useValue: 'http://example.com'
+            useValue: 'http://example.com/'
           },
           CodebasesService
         ]
       });
       codebasesService = TestBed.get(CodebasesService);
-      mockService = TestBed.get(XHRBackend);
+      controller = TestBed.get(HttpTestingController);
     });
 
     const codebase = {
+      'id': 'mockid',
       'attributes': {
         'type': 'git',
         'url': 'https://github.com/fabric8-ui/fabric8-ui.git'
@@ -84,58 +84,39 @@ describe('Codebase: CodebasesService', () => {
       },
       'type': 'codebases'};
 
-    it('Add codebase', () => {
-      // given
+    it('Add codebase', (done: DoneFn) => {
       const expectedResponse = {'data': githubData};
-      mockService.connections.subscribe((connection: any) => {
-        connection.mockRespond(new Response(
-          new ResponseOptions({
-            body: JSON.stringify(expectedResponse),
-            status: 200
-          })
-        ));
-      });
-      // when
       codebasesService.addCodebase('mySpace', codebase).subscribe((data: any) => {
-        // then
         expect(data.id).toEqual(expectedResponse.data.id);
         expect(data.attributes.type).toEqual(expectedResponse.data.attributes.type);
         expect(data.attributes.url).toEqual(expectedResponse.data.attributes.url);
+        controller.verify();
+        done();
       });
+      controller.expectOne('http://example.com/spaces/mySpace/codebases').flush({ data: githubData });
   });
 
-  it('Add codebase in error', () => {
-      // given
-      const expectedResponse = {'data': githubData};
-      mockService.connections.subscribe((connection: any) => {
-        connection.mockError(new Error('some error'));
+  it('Add codebase in error', (done: DoneFn) => {
+    codebasesService.addCodebase('mySpace', codebase).subscribe(
+      () => {
+        done.fail('Add codebase in error');
+      },
+      error => {
+        expect(error).toEqual('Http failure response for http://example.com/spaces/mySpace/codebases: 0 ');
+        controller.verify();
+        done();
       });
-      // when
-      codebasesService.addCodebase('mySpace', codebase).subscribe((data: any) => {
-        fail('Add codebase in error');
-      }, // then
-      error => expect(error).toEqual('some error'));
+    controller.expectOne('http://example.com/spaces/mySpace/codebases').error(new ErrorEvent('some error'));
   });
 
-  it('List codebases', () => {
-    // given
+  it('List codebases', (done: DoneFn) => {
     const githubData2 = cloneDeep(githubData);
     githubData2.attributes.url = 'git@github.com:fabric8-services/fabric8-wit.git';
     const githubData3 = cloneDeep(githubData);
     githubData3.attributes.type = 'whatever';
     githubData3.attributes.url = 'http://something.com';
     const expectedResponse = {'data': [githubData, githubData2, githubData3], 'metadata': {'totalCount': 3}};
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockRespond(new Response(
-        new ResponseOptions({
-          body: JSON.stringify(expectedResponse),
-          status: 200
-        })
-      ));
-    });
-    // when
     codebasesService.getCodebases('mySpace').subscribe((data: any) => {
-      // then
       expect(data.length).toEqual(expectedResponse.data.length);
       // TODO(corinne): do we want this name/url formatting for https clone?
       expect(data[0].name).toEqual('https://github.com/airbnb/enzyme');
@@ -144,168 +125,136 @@ describe('Codebase: CodebasesService', () => {
       expect(data[1].url).toEqual('https://github.com/fabric8-services/fabric8-wit');
       expect(data[2].name).toEqual('http://something.com');
       expect(data[2].url).toEqual('http://something.com');
+      controller.verify();
+      done();
     });
+    controller.expectOne('http://example.com/spaces/mySpace/codebases').flush(expectedResponse);
   });
 
-  it('List codebases in error', () => {
-    // given
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockError(new Error('some error'));
-    });
-    // when
-    codebasesService.getCodebases('mySpace').subscribe((data: any) => {
-      fail('List codebases in error');
-    }, // then
-    error => expect(error).toEqual('some error'));
+  it('List codebases in error', (done: DoneFn) => {
+    codebasesService.getCodebases('mySpace').subscribe(
+      () => {
+        fail('List codebases in error');
+      },
+      error => {
+        expect(error).toEqual('Http failure response for http://example.com/spaces/mySpace/codebases: 0 ');
+        controller.verify();
+        done();
+      });
+    controller.expectOne('http://example.com/spaces/mySpace/codebases').error(new ErrorEvent('some error'));
   });
 
   // TODO(corinne): pagination is never used
-  it('List paginated codebases with empty links', () => {
-    // given
+  it('List paginated codebases with empty links', (done: DoneFn) => {
     const expectedResponse = {'data': [githubData], 'links': {}};
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockRespond(new Response(
-        new ResponseOptions({
-          body: JSON.stringify(expectedResponse),
-          status: 200
-        })
-      ));
-    });
-    // when
     codebasesService.getPagedCodebases('mySpace', 2).subscribe((data: any) => {
-      // then
       expect(data.length).toEqual(expectedResponse.data.length);
+      controller.verify();
+      done();
     });
+    controller.expectOne('http://example.com/spaces/mySpace/codebases?page[limit]=2').flush(expectedResponse);
   });
 
-  it('List paginated codebases with next link', () => {
-    // given
+  it('List paginated codebases with next link', (done: DoneFn) => {
     const expectedResponse = {'data': [githubData], 'links': {'next': 'https://morelinks.com'}};
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockRespond(new Response(
-        new ResponseOptions({
-          body: JSON.stringify(expectedResponse),
-          status: 200
-        })
-      ));
-    });
-    // when
     codebasesService.getPagedCodebases('mySpace', 2).subscribe((data: any) => {
-      // then
       expect(data.length).toEqual(expectedResponse.data.length);
+      controller.verify();
+      done();
     });
+    controller.expectOne('http://example.com/spaces/mySpace/codebases?page[limit]=2').flush(expectedResponse);
   });
 
-  it('Get more paginated codebases with empty next link', () => {
-    // given
-    const expectedResponse = {'data': [githubData], 'links': {'next': 'https://morelinks.com'}};
-
-    // when
-    codebasesService.getMoreCodebases().subscribe((data: any) => {
-      fail('Get more paginated codebases with empty next link');
-    }, // then
-    error => expect(error).toEqual('No more codebases found'));
+  it('Get more paginated codebases with empty next link', (done: DoneFn) => {
+    codebasesService.getMoreCodebases().subscribe(
+      () => {
+        done.fail('Get more paginated codebases with empty next link');
+      },
+      error => {
+        expect(error).toEqual('No more codebases found');
+        controller.verify();
+        done();
+      });
   });
 
-  it('List paginated codebases in error', () => {
-    // given
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockError(new Error('some error'));
-    });
-    // when
-    codebasesService.getPagedCodebases('mySpace', 2).subscribe((data: any) => {
-      // then
-      fail('List paginated codebases in error');
-    }, error => expect(error).toEqual('some error'));
+  it('List paginated codebases in error', (done: DoneFn) => {
+    codebasesService.getPagedCodebases('mySpace', 2).subscribe(
+      () => {
+        done.fail('List paginated codebases in error');
+      }, error => {
+        expect(error).toEqual('Http failure response for http://example.com/spaces/mySpace/codebases?page[limit]=2: 0 ');
+        controller.verify();
+        done();
+      });
+    controller.expectOne('http://example.com/spaces/mySpace/codebases?page[limit]=2').error(new ErrorEvent('some error'));
   });
 
-  it('Update codebase with CVE alert notification', () => {
-    // given
+  it('Update codebase with CVE alert notification', (done: DoneFn) => {
     const expectedResponse = {'data': [githubData]};
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockRespond(new Response(
-        new ResponseOptions({
-          body: JSON.stringify(expectedResponse),
-          status: 200
-        })
-      ));
-    });
-    // when
     codebasesService.updateCodebases(codebase).subscribe((data: any) => {
-      // then
       expect(data.length).toEqual(expectedResponse.data.length);
+      controller.verify();
+      done();
     });
+    controller.expectOne('http://example.com/codebases/mockid').flush(expectedResponse);
   });
 
-  it('Update codebase with CVE alert notification in error', () => {
-    // given
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockError(new Error('some error'));
-    });
-    // when
-    codebasesService.updateCodebases(codebase).subscribe((data: any) => {
-      fail('Update codebases in error');
-    }, // then
-    error => expect(error).toEqual('some error'));
+  it('Update codebase with CVE alert notification in error', (done: DoneFn) => {
+    codebasesService.updateCodebases(codebase).subscribe(
+      () => {
+        done.fail('Update codebases in error');
+      },
+      error => {
+        expect(error).toEqual('Http failure response for http://example.com/codebases/mockid: 0 ');
+        controller.verify();
+        done();
+      });
+    controller.expectOne('http://example.com/codebases/mockid').error(new ErrorEvent('some error'));
   });
 
-  it('Update codebases', () => {
-    // given
+  it('Update codebases', (done: DoneFn) => {
     const expectedResponse = {'data': [githubData]};
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockRespond(new Response(
-        new ResponseOptions({
-          body: JSON.stringify(expectedResponse),
-          status: 200
-        })
-      ));
-    });
-    // when
     codebasesService.update(codebase).subscribe((data: any) => {
-      // then
       expect(data.length).toEqual(expectedResponse.data.length);
+      controller.verify();
+      done();
     });
+    controller.expectOne('http://example.com/spaces/mockid').flush(expectedResponse);
   });
 
-  it('Update codebases in error', () => {
-    // given
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockError(new Error('some error'));
-    });
-    // when
-    codebasesService.update(codebase).subscribe((data: any) => {
-      fail('Update codebases in error');
-    }, // then
-    error => expect(error).toEqual('some error'));
+  it('Update codebases in error', (done: DoneFn) => {
+    codebasesService.update(codebase).subscribe(
+      () => {
+        done.fail('Update codebases in error');
+      },
+      error => {
+        expect(error).toEqual('Http failure response for http://example.com/spaces/mockid: 0 ');
+        controller.verify();
+        done();
+      });
+    controller.expectOne('http://example.com/spaces/mockid').error(new ErrorEvent('some error'));
   });
 
-  it('Delete codebase', () => {
-    // given
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockRespond(new Response(
-        new ResponseOptions({
-          status: 204
-        })
-      ));
-    });
-    // when
+  it('Delete codebase', (done: DoneFn) => {
     codebasesService.deleteCodebase(codebase).subscribe((data: any) => {
-      // then
       expect(data).toEqual(codebase);
+      controller.verify();
+      done();
     });
+    controller.expectOne('http://example.com/codebases/mockid').flush('', { status: 204, statusText: 'No Content' });
   });
 
-  it('Delete codebase in error', () => {
-    let deleteError = 'delete error';
-    // given
-    mockService.connections.subscribe((connection: any) => {
-      connection.mockError(new Error(deleteError));
-    });
-    // when
-    codebasesService.deleteCodebase(codebase).subscribe((data: any) => {
-        fail('Delete codebase in error');
-      }, // then
-      error => expect(error).toEqual(deleteError));
+  it('Delete codebase in error', (done: DoneFn) => {
+    codebasesService.deleteCodebase(codebase).subscribe(
+      () => {
+        done.fail('Delete codebase in error');
+      },
+      error => {
+        expect(error).toEqual('Http failure response for http://example.com/codebases/mockid: 0 ');
+        controller.verify();
+        done();
+      });
+    controller.expectOne('http://example.com/codebases/mockid').error(new ErrorEvent('delete error'));
   });
 
 

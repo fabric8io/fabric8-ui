@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { ConnectableObservable, Observable } from 'rxjs';
+import { ConnectableObservable, Observable, Subscription } from 'rxjs';
 
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Contexts } from 'ngx-fabric8-wit';
@@ -20,12 +20,13 @@ export class WorkItemWidgetComponent implements OnInit {
 
   @Input() userOwnsSpace: boolean;
   private _myWorkItems: ConnectableObservable<WorkItem[]>;
-  myWorkItemsCount: Observable<number>;
+  private subscriptions: Subscription[] = [];
+  myWorkItemsCount: number;
   myWorkItemsResolved: number = 0;
   myWorkItemsInProgress: number = 0;
   myWorkItemsOpen: number = 0;
-  contextPath: Observable<string>;
-  loading: boolean = true;
+  contextPath: string;
+  loading: boolean;
 
   LABEL_RESOLVED: string = 'Resolved';
   LABEL_IN_PROGRESS: string = 'In Progress';
@@ -48,15 +49,37 @@ export class WorkItemWidgetComponent implements OnInit {
     yData: []
   };
 
-  constructor(private contexts: Contexts,
-              private workItemService: WorkItemService) {
+  constructor(
+    private contexts: Contexts,
+    private workItemService: WorkItemService
+  ) { }
+
+  ngOnInit(): void {
+    this.subscriptions.push(this.contexts.current.subscribe(context => {
+      this.contextPath = context.path;
+      this.resetWorkItemCounts();
+      this.updateWorkItems();
+    }));
   }
 
-  ngOnInit() {
-    this.contextPath = this.contexts.current.map(context => context.path);
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
+  }
+
+  private resetWorkItemCounts(): void {
+    this.myWorkItemsCount = this.myWorkItemsOpen = this.myWorkItemsInProgress = this.myWorkItemsResolved = 0;
+  }
+
+  private updateWorkItems(): void {
+    this.loading = true;
     this._myWorkItems = this.workItemService.getWorkItems(100000, [])
       .map(val => val.workItems)
-      .do(workItems => workItems.forEach(workItem => {
+      .do(workItems => {
+        this.myWorkItemsCount = workItems.length;
+        this.loading = false;
+        workItems.forEach(workItem => {
           let state = workItem.attributes['system.state'];
           if (state !== undefined) {
             if (state === this.STATE_OPEN) {
@@ -67,14 +90,11 @@ export class WorkItemWidgetComponent implements OnInit {
               this.myWorkItemsResolved++;
             }
           }
-        }))
-      .do(workItems => {
+        });
         this.initChartData();
       })
       .publishReplay(1);
     this._myWorkItems.connect();
-    this.myWorkItemsCount = this._myWorkItems.map(workItems => workItems.length);
-    this.loading = false;
   }
 
   get myWorkItems(): Observable<WorkItem[]> {

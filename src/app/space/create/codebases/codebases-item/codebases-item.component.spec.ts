@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2/dist/index';
 import { Broadcaster, Notifications } from 'ngx-base';
@@ -12,7 +11,7 @@ import { CodebasesItemComponent } from './codebases-item.component';
 
 describe('Codebases Item Component', () => {
   let broadcasterMock: any;
-  let fixture, codebases, codebase;
+  let fixture, codebase;
   let mockNotifications: any;
   let mockCodebasesService: any;
 
@@ -22,7 +21,7 @@ describe('Codebases Item Component', () => {
     mockCodebasesService = jasmine.createSpy('CodebasesService');
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule, JWBootstrapSwitchModule],
+      imports: [FormsModule, JWBootstrapSwitchModule],
       declarations: [CodebasesItemComponent],
       providers: [
         { provide: Notifications, useValue: mockNotifications },
