@@ -1,5 +1,5 @@
+import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Inject, Injectable, OnDestroy } from '@angular/core';
-import { Http } from '@angular/http';
 import { ExtProfile, ExtUser, GettingStartedService } from '../../getting-started/services/getting-started.service';
 
 import { cloneDeep } from 'lodash';
@@ -17,7 +17,7 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
   showIconChanged = new EventEmitter();
   constructor(
     protected auth: AuthenticationService,
-    protected http: Http,
+    protected http: HttpClient,
     protected logger: Logger,
     protected userService: UserService,
     @Inject(WIT_API_URL) apiUrl: string) {

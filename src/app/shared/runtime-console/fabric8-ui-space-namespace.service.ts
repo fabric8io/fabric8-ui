@@ -25,8 +25,7 @@ export class Fabric8UISpaceNamespace implements SpaceNamespace {
   get labelSpace(): Observable<string> {
     return this.fabric8RuntimeConsoleService
       .loading()
-      .switchMap(() => this.spaces.current.map(space => space ? space.attributes.name : ''))
-      .do(val => console.log('labelSpaceStr', val));
+      .switchMap(() => this.spaces.current.map(space => space ? space.attributes.name : ''));
   }
 
 }

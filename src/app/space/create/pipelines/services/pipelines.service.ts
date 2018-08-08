@@ -1,13 +1,14 @@
 import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpResponse
+} from '@angular/common/http';
+import {
   ErrorHandler,
   Inject,
   Injectable
 } from '@angular/core';
-import {
-  Headers,
-  Http,
-  Response
-} from '@angular/http';
 
 import {
   Observable
@@ -48,24 +49,26 @@ export interface UserServiceNamespace {
 @Injectable()
 export class PipelinesService {
 
-  private readonly headers: Headers = new Headers({ 'Content-Type': 'application/json' });
+  private readonly headers: HttpHeaders;
   private readonly apiUrl: string;
   private loggedIn: boolean = false;
 
   constructor(
-    private readonly http: Http,
+    private readonly http: HttpClient,
     private readonly auth: AuthenticationService,
     private readonly runtimePipelinesService: RuntimePipelinesService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler,
     private readonly notifications: NotificationsService,
-    @Inject(WIT_API_URL) private readonly witUrl: string
+    @Inject(WIT_API_URL) witUrl: string
   ) {
-    let token: string = this.auth.getToken();
+    let headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const token: string = this.auth.getToken();
     if (token != null && token != '') {
-      this.headers.set('Authorization', `Bearer ${token}`);
+      headers = headers.set('Authorization', `Bearer ${token}`);
       this.loggedIn = true;
     }
+    this.headers = headers;
     this.apiUrl = witUrl + 'user/services';
   }
 
@@ -86,9 +89,8 @@ export class PipelinesService {
   }
 
   getOpenshiftConsoleUrl(): Observable<string> {
-    return this.http.get(this.apiUrl, { headers: this.headers })
-      .map((resp: Response) => resp.json() as UserServiceResponse)
-      .catch((err: Response) => this.handleHttpError(err))
+    return this.http.get<UserServiceResponse>(this.apiUrl, { headers: this.headers })
+      .catch((err: HttpErrorResponse) => this.handleHttpError(err))
       .map((resp: UserServiceResponse) => resp.data.attributes.namespaces)
       .map((namespaces: UserServiceNamespace[]) => {
         for (let namespace of namespaces) {
@@ -116,7 +118,7 @@ export class PipelinesService {
     return buildConfigs;
   }
 
-  private handleHttpError(response: Response): Observable<any> {
+  private handleHttpError(response: HttpErrorResponse): Observable<any> {
     // If it's a 401 and they are not logged in, don't trigger an error
     if (response.status === 401 && !this.loggedIn) {
       return Observable.empty();
@@ -126,7 +128,7 @@ export class PipelinesService {
     this.notifications.message({
       type: NotificationType.DANGER,
       header: `Request failed: ${response.status} (${response.statusText})`,
-      message: response.text()
+      message: response.message
     } as Notification);
     return Observable.empty();
   }

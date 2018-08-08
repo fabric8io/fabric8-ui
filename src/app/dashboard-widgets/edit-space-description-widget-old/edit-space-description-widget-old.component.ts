@@ -34,7 +34,6 @@ export class EditSpaceDescriptionWidgetOldComponent implements OnInit {
   ) {
     spaces.current.subscribe(val => {
       this.space = val;
-      console.log('newspace', val);
     });
     userService.loggedInUser.subscribe(val => this.loggedInUser = val);
   }
@@ -54,11 +53,9 @@ export class EditSpaceDescriptionWidgetOldComponent implements OnInit {
         } as Space;
         return patch;
       })
-      .do(val => console.log(val))
       .switchMap(patch => this.spaceService
         .update(patch)
         .do(val => {
-          console.log('updatedspace', val);
           this.isEditing = false;
           if (this.space && val) {
             this.space.attributes.description = val.attributes.description;

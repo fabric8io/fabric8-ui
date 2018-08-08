@@ -59,7 +59,6 @@ export class EditSpaceDescriptionWidgetComponent implements OnInit {
         } as Space;
         return patch;
       })
-      .do(val => console.log(val))
       .switchMap(patch => this.spaceService
         .update(patch)
         .do(val => {
