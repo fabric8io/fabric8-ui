@@ -1,7 +1,7 @@
 <div class="my-spaces-item" *ngIf="space?.relationalData?.creator?.attributes">
   <div class="list-pf-title">
     <a [routerLink]="['/', space?.relationalData?.creator?.attributes?.username, space?.attributes?.name]">
-      {{space?.attributes?.name | spaceName}}</a>
+      {{space?.attributes?.name}}</a>
     <span class="avatar">
       <img src="{{space?.relationalData?.creator?.attributes?.imageURL}}">
       <span class="margin-left-10">{{space?.relationalData?.creator?.attributes?.username}}</span>

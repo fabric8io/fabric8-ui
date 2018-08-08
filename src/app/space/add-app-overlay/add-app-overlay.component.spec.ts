@@ -6,10 +6,12 @@ import { Router } from '@angular/router';
 
 import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
 import { PopoverConfig, PopoverModule } from 'ngx-bootstrap/popover';
-import { Context, ProcessTemplate, Space, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
+import { Context, ProcessTemplate, Space, SpaceService } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
 import { Profile, User, UserService } from 'ngx-login-client';
+import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
+import { filter, map } from 'rxjs/operators';
 
 import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
@@ -17,6 +19,22 @@ import { SpaceTemplateService } from '../../shared/space-template.service';
 import { SpacesService } from '../../shared/spaces.service';
 import { DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 import { AddAppOverlayComponent } from './add-app-overlay.component';
+
+export class BroadcasterTestProvider {
+  private _eventBus: Subject<any>;
+  constructor() {
+    this._eventBus = new Subject<any>();
+  }
+  broadcast(key: any, data?: any) {
+    this._eventBus.next({key, data});
+  }
+  on<T>(key: any): Observable<T> {
+    return this._eventBus.asObservable()
+      .pipe(filter(event => event.key === key),
+            map(event => <T> event.data)
+      );
+  }
+}
 
 describe('AddAppOverlayComponent', () => {
   let component: AddAppOverlayComponent;
@@ -33,7 +51,6 @@ describe('AddAppOverlayComponent', () => {
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockUserService: any = jasmine.createSpyObj('UserService', ['getUser']);
   let mockSpaceNamespaceService: any = jasmine.createSpy('SpaceNamespaceService');
-  let mockSpaceNamePipe: any = jasmine.createSpy('SpaceNamePipe');
   let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent']);
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
@@ -180,14 +197,13 @@ describe('AddAppOverlayComponent', () => {
         { provide: DeploymentApiService, useValue: mockDeploymentApiService },
         { provide: DependencyCheckService, useValue: mockDependencyCheckService },
         PopoverConfig,
-        { provide: Broadcaster, useValue: mockBroadcaster },
+        { provide: Broadcaster, useValue: new BroadcasterTestProvider() },
         { provide: Router, useValue: mockRouter },
         { provide: SpaceTemplateService, useValue: mockSpaceTemplateService },
         { provide: SpaceService, useValue: mockSpaceService },
         { provide: Notifications, useValue: mockNotifications },
         { provide: UserService, useValue: mockUserService },
         { provide: SpaceNamespaceService, useValue: mockSpaceNamespaceService },
-        { provide: SpaceNamePipe, useValue: mockSpaceNamePipe },
         { provide: SpacesService, useValue: mockSpacesService },
         { provide: ContextService, useClass: mockContextService },
         { provide: Logger, useValue: mockLogger },
@@ -301,6 +317,14 @@ describe('AddAppOverlayComponent', () => {
     it('should not allow project name starting with a number', () => {
       let valProjectName = component.isValidProjectName('1app_namename');
       expect(valProjectName).toBeFalsy();
+    });
+
+    it('should broadcast a event on overlay hide', () => {
+      component.hideAddAppOverlay();
+      component.broadcaster.on('analyticsTracker')
+      .subscribe(data => {
+        expect(data['event']).toBe('add app closed');
+      });
     });
 
   });

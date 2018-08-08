@@ -61,7 +61,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
   showAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', true);
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'showAddAppOverlay',
+      event: 'add app opened',
       data: {
         source: 'analyze-overview'
       }

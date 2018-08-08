@@ -67,6 +67,12 @@ describe('MenuService service: it', () => {
             'name':  'Board',
             'path':  'board',
             'fullPath':  '/ckrych@redhat.com/test2/plan/board'
+          },
+          {
+            'name':  'Query',
+            'feature': 'PlannerQuery',
+            'path':  'query',
+            'fullPath':  '/ckrych@redhat.com/test2/plan/query'
           }
         ],
         'fullPath':  '/ckrych@redhat.com/test2/plan'
