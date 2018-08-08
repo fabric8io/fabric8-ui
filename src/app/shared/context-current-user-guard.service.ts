@@ -35,8 +35,8 @@ export class ContextCurrentUserGuard implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     return Observable.combineLatest(
-      this.contexts.current.map(val => val.user.id).do(val => console.log('context', val)),
-      this.userService.loggedInUser.map(val => val.id).do(val => console.log('user', val)),
+      this.contexts.current.map(val => val.user.id),
+      this.userService.loggedInUser.map(val => val.id),
       (a, b) => (a === b)
     )
       .do(val => {

@@ -378,7 +378,6 @@ describe('UpdateComponent', () => {
 
   describe('#isEmailValid', () => {
     // Test strings for e-mails borrowed from https://en.wikipedia.org/wiki/Email_address#Examples
-
     it('should verify prettyandsimple@example.com to be a valid address', () => {
       let validAddress: string = 'prettyandsimple@example.com';
       let result = component.isEmailValid(validAddress);

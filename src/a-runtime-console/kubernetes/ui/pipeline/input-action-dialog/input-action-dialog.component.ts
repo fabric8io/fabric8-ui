@@ -43,17 +43,14 @@ export class InputActionDialog implements OnDestroy {
 
   open() {
     this.checkJenkinsStatus();
-    console.log('opening the dialog for ' + this.build.name + ' on modal ' + this.modal);
     this.modal.open();
   }
 
   proceed() {
-    console.log('Proceeding pipeline ' + this.build.name);
     return this.invokeUrl(this.inputAction.proceedUrl);
   }
 
   abort() {
-    console.log('Aborting pipeline ' + this.build.name);
     return this.invokeUrl(this.inputAction.abortUrl);
   }
 
@@ -77,15 +74,12 @@ export class InputActionDialog implements OnDestroy {
       } else {
         url = pathJoin(forgeUrl, '/api/openshift/services/jenkins/', jenkinsNamespace, url);
         let token = this.authService.getToken();
-        console.log('about to invoke ' + url);
         let options = new RequestOptions();
         let headers = new Headers();
         headers.set('Authorization', 'Bearer ' + token);
         options.headers = headers;
         let body = null;
-        this.http.post(url, body, options).subscribe(res => {
-          console.log('posting to url: ' + url + ' and returned response ' + res.status);
-        });
+        this.http.post(url, body, options).subscribe(() => {});
       }
     }
     this.close();
