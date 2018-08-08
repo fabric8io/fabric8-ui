@@ -99,4 +99,32 @@ describe('Service: AppLauncherPipelineService', () => {
     });
   });
 
+  it('should return empty pipeline collection when response is empty', (done: DoneFn) => {
+    mockBackend.connections.subscribe((connection) => {
+      connection.mockRespond(new Response(new ResponseOptions({
+        body: JSON.stringify([])
+      })));
+    });
+
+    appLauncherPipelineService.getPipelines().subscribe(response => {
+      let pipelines: Pipeline[] = response;
+      expect(pipelines.length).toBe(0)
+      done();
+    });
+  });
+
+  it('should return empty pipelines collection when no match found for the platform name', (done: DoneFn) => {
+    mockBackend.connections.subscribe((connection) => {
+      connection.mockRespond(new Response(new ResponseOptions({
+        body: JSON.stringify(mockPipelines())
+      })));
+    });
+
+    appLauncherPipelineService.getPipelines('rust').subscribe(response => {
+      let pipelines: Pipeline[] = response;
+      expect(pipelines.length).toBe(0)
+      done();
+    });
+  });
+
 });
