@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Notifications } from 'ngx-base';
-import { SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
+import { SpaceService } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
@@ -24,7 +24,6 @@ describe('Context Service:', () => {
   let mockNotifications: any;
   let mockRoute: any;
   let mockProfileService: any;
-  let mockSpaceNamePipe: any;
   let mockLocalStorage: any;
   let mockFeatureTogglesService: any;
   let contextService: ContextService;
@@ -42,8 +41,6 @@ describe('Context Service:', () => {
     mockRoute = jasmine.createSpy('ActivatedRoute');
     mockProfileService = jasmine.createSpy('ProfileService');
     mockProfileService.current = Observable.of(profile);
-    mockSpaceNamePipe = jasmine.createSpyObj('SpaceNamePipe', ['transform']);
-    mockSpaceNamePipe.transform.and.returnValue('SPACE');
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
     mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getAllFeaturesEnabledByLevel']);
     mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
@@ -76,9 +73,6 @@ describe('Context Service:', () => {
         },
         {
           provide: LocalStorageService, useValue: mockLocalStorage
-        },
-        {
-          provide: SpaceNamePipe, useValue: mockSpaceNamePipe
         },
         {
           provide: FeatureTogglesService, useValue: mockFeatureTogglesService

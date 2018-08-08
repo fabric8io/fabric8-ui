@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
 import { PopoverConfig, PopoverModule } from 'ngx-bootstrap/popover';
-import { Context, ProcessTemplate, Space, SpaceNamePipe, SpaceService } from 'ngx-fabric8-wit';
+import { Context, ProcessTemplate, Space, SpaceService } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
 import { Profile, User, UserService } from 'ngx-login-client';
 import { Subject } from 'rxjs';
@@ -51,7 +51,6 @@ describe('AddAppOverlayComponent', () => {
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockUserService: any = jasmine.createSpyObj('UserService', ['getUser']);
   let mockSpaceNamespaceService: any = jasmine.createSpy('SpaceNamespaceService');
-  let mockSpaceNamePipe: any = jasmine.createSpy('SpaceNamePipe');
   let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent']);
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
@@ -205,7 +204,6 @@ describe('AddAppOverlayComponent', () => {
         { provide: Notifications, useValue: mockNotifications },
         { provide: UserService, useValue: mockUserService },
         { provide: SpaceNamespaceService, useValue: mockSpaceNamespaceService },
-        { provide: SpaceNamePipe, useValue: mockSpaceNamePipe },
         { provide: SpacesService, useValue: mockSpacesService },
         { provide: ContextService, useClass: mockContextService },
         { provide: Logger, useValue: mockLogger },

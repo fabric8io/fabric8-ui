@@ -62,7 +62,7 @@ import { APP_RESOLVER_PROVIDERS }      from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 
 // Header
-import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
+import { FeatureFlagResolver } from 'ngx-feature-flag';
 
 import { HeaderComponent } from './layout/header/header.component';
 import { MenusService }    from './layout/header/menus.service';

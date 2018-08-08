@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FeatureFlagResolver } from './feature-flag/resolver/feature-flag.resolver';
+import { FeatureFlagResolver } from 'ngx-feature-flag';
 
 import { trimEnd } from 'lodash';
 
