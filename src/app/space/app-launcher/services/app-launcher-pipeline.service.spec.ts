@@ -30,6 +30,7 @@ function mockPipelines(): Pipeline[] {
     id: 'maven-releaseandstage',
     platform: 'maven',
     name: 'Release and Stage',
+    description: 'Release and stage to mvn',
     stages: [
       {
         name: 'Build Release',
@@ -46,6 +47,7 @@ function mockPipelines(): Pipeline[] {
       id: 'node-releaseandstage',
       platform: 'node',
       name: 'Release and Stage',
+      description: 'Release and stage - node',
       stages: [
         {
           name: 'Build Release',
