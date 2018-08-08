@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { ResourceStatusIcon } from './resource-status-icon.component';
 import { ResourcesRoutingModule } from './resources-routing.module';
@@ -13,6 +12,4 @@ import { ResourcesComponent } from './resources.component';
   ],
   declarations: [ ResourcesComponent, ResourceStatusIcon ]
 })
-export class ResourcesModule {
-  constructor(http: Http) {}
-}
+export class ResourcesModule {}

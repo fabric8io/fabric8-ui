@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Http } from '@angular/http';
 
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 
@@ -17,6 +16,4 @@ import { MySpacesItemHeadingComponent } from './my-spaces-item-heading.component
   exports: [ MySpacesItemHeadingComponent ],
   providers: [TooltipConfig]
 })
-export class MySpacesItemHeadingModule {
-  constructor(http: Http) {}
-}
+export class MySpacesItemHeadingModule {}

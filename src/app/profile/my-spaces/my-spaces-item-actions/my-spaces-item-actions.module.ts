@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Http } from '@angular/http';
+
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -25,6 +25,4 @@ import { MySpacesItemActionsComponent } from './my-spaces-item-actions.component
   exports: [ MySpacesItemActionsComponent ],
   providers: [ BsDropdownConfig, TooltipConfig ]
 })
-export class MySpacesItemActionsModule {
-  constructor(http: Http) {}
-}
+export class MySpacesItemActionsModule {}

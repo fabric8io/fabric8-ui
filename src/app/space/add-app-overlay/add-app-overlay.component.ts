@@ -38,7 +38,7 @@ export class AddAppOverlayComponent implements OnDestroy {
 
   constructor(private contextService: ContextService,
               private dependencyCheckService: DependencyCheckService,
-              private broadcaster: Broadcaster,
+              public broadcaster: Broadcaster,
               private userService: UserService,
               private router: Router,
               private deploymentApiService: DeploymentApiService) {
@@ -82,7 +82,7 @@ export class AddAppOverlayComponent implements OnDestroy {
   hideAddAppOverlay(): void {
     this.broadcaster.broadcast('showAddAppOverlay', false);
     this.broadcaster.broadcast('analyticsTracker', {
-      event: 'closeAddAppOverlay'
+      event: 'add app closed'
     });
   }
 
