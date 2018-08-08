@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfileComponent }     from './profile.component';
@@ -13,6 +12,4 @@ import { OverviewModule } from './overview/overview.module';
   imports:      [ CommonModule, OverviewModule, ProfileRoutingModule, CleanupModule ],
   declarations: [ ProfileComponent ]
 })
-export class ProfileModule {
-  constructor(http: Http) {}
-}
+export class ProfileModule {}
