@@ -1,15 +1,15 @@
-import {inject, TestBed} from '@angular/core/testing';
-import {HttpModule, Response, ResponseOptions, XHRBackend} from '@angular/http';
-import {MockBackend} from '@angular/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { HttpModule, Response, ResponseOptions, XHRBackend } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 
 import {
   AuthHelperService, Config, HelperService, Summary, TokenProvider
 } from 'ngx-launcher';
 
-import {ContextService} from '../../../shared/context.service';
-import {FABRIC8_FORGE_API_URL} from '../../../shared/runtime-console/fabric8-ui-forge-api';
-import {NewForgeConfig} from '../shared/new-forge.config';
-import {AppLauncherProjectSummaryService} from './app-launcher-project-summary.service';
+import { ContextService } from '../../../shared/context.service';
+import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
+import { NewForgeConfig } from '../shared/new-forge.config';
+import { AppLauncherProjectSummaryService } from './app-launcher-project-summary.service';
 
 
 function initTestBed() {
