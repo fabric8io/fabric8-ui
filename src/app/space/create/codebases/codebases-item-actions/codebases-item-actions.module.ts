@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Http } from '@angular/http';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -9,13 +8,13 @@ import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { DialogModule } from 'ngx-widgets';
 
 import { CodebaseDeleteDialogModule } from '../codebases-delete/codebase-delete-dialog.module';
-import { CodebasesService } from '../services/codebases.service';
-import { WorkspacesService } from '../services/workspaces.service';
+import { CodebasesServicesModule } from '../services/codebases-services.module';
 import { CodebasesItemActionsComponent } from './codebases-item-actions.component';
 
 @NgModule({
   imports: [
     BsDropdownModule.forRoot(),
+    CodebasesServicesModule,
     CodebaseDeleteDialogModule,
     CommonModule,
     DialogModule,
@@ -24,9 +23,6 @@ import { CodebasesItemActionsComponent } from './codebases-item-actions.componen
     TooltipModule.forRoot()
   ],
   declarations: [ CodebasesItemActionsComponent ],
-  exports: [ CodebasesItemActionsComponent ],
-  providers: [ BsDropdownConfig, CodebasesService, TooltipConfig, WorkspacesService ]
+  exports: [ CodebasesItemActionsComponent ]
 })
-export class CodebasesItemActionsModule {
-  constructor(http: Http) {}
-}
+export class CodebasesItemActionsModule {}

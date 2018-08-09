@@ -34,7 +34,6 @@ export abstract class KubernetesService<T extends KubernetesResource, L extends 
       resource.kind = obj.defaultKind();
     }
     obj.updateResource(resource);
-    console.log('Creating resource with value ' + JSON.stringify(resource, null, '  '));
 
     return this.restangularService.all(this.serviceUrl).post(resource);
   }
@@ -46,8 +45,6 @@ export abstract class KubernetesService<T extends KubernetesResource, L extends 
   }
 
   updateResource(obj: T, resource: any) {
-    let id = obj.id;
-    console.log('Updating key ' + id + ' with value ' + JSON.stringify(resource, null, '  '));
     let resty: any = obj;
     return resty.customPUT(resource);
   }

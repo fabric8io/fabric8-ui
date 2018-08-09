@@ -10,5 +10,5 @@ import { LandingPageComponent }   from './landing-page.component';
   declarations: [ LandingPageComponent ]
 })
 export class LandingPageModule {
-  constructor(http: Http) {}
+  constructor() {}
 }

@@ -78,7 +78,6 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
       resource.kind = obj.defaultKind();
     }
     obj.updateResource(resource);
-    console.log('Creating resource with value ' + JSON.stringify(resource, null, '  '));
 
     return this.restangularService.all(url).post(resource);
   }

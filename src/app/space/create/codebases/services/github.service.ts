@@ -1,10 +1,12 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-import { cloneDeep } from 'lodash';
-import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import {
   GitHubRepo,
@@ -21,32 +23,22 @@ import {
  * See: https://developer.github.com/v3/
  */
 @Injectable()
-export class GitHubService implements OnDestroy {
+export class GitHubService {
 
-  private static readonly HEADERS = new Headers({
+  private static readonly HEADERS: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
     'Accept': 'application/vnd.github.v3+json'
   });
 
-  private cache: Map<string, Observable<any>>;
-  private context: Context;
-  private gitHubUrl: string;
-  private subscriptions: Subscription[] = [];
+  private readonly cache: Map<string, Observable<any>>;
+  private readonly gitHubUrl: string;
 
   constructor(
     private authService: AuthenticationService,
-      private contexts: Contexts,
-      private http: Http
-      ) {
-    this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
+    private http: HttpClient
+  ) {
     this.gitHubUrl = 'https://api.github.com';
     this.cache = new Map();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
   }
 
   /**
@@ -56,7 +48,7 @@ export class GitHubService implements OnDestroy {
    * unauthenticated requests, the rate limit allows you to make up to 60 requests per hour.
    */
   clearCache(): void {
-    this.cache = new Map();
+    this.cache.clear();
   }
 
   /**
@@ -78,12 +70,10 @@ export class GitHubService implements OnDestroy {
    *
    * @returns {Headers}
    */
-  getHeaders(): Observable<Headers> {
-    return this.authService.gitHubToken.map(token => {
-      let newHeaders = cloneDeep(GitHubService.HEADERS);
-      newHeaders.set('Authorization', `token ${token}`);
-      return newHeaders;
-    });
+  getHeaders(): Observable<HttpHeaders> {
+    return this.authService.gitHubToken.map((token: string): HttpHeaders =>
+      GitHubService.HEADERS.set('Authorization', `token ${token}`)
+    );
   }
 
   /**
@@ -94,22 +84,16 @@ export class GitHubService implements OnDestroy {
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoCommitStatusByUrl(cloneUrl: string, sha: string): Observable<GitHubRepoCommit> {
-    let fullName = this.getFullName(cloneUrl);
-    let url = `${this.gitHubUrl}/repos/${fullName}/commits/${sha}`;
+    const fullName: string = this.getFullName(cloneUrl);
+    const url: string = `${this.gitHubUrl}/repos/${fullName}/commits/${sha}`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      let res = this.getHeaders()
-        .switchMap(newHeaders => this.http
-          .get(url, { headers: newHeaders }))
-        .map(response => {
-          return response.json() as GitHubRepoCommit;
-        })
+      const res: Observable<GitHubRepoCommit> = this.getHeaders()
+        .switchMap((headers: HttpHeaders): Observable<GitHubRepoCommit> => this.http.get<GitHubRepoCommit>(url, { headers }))
         .publishReplay(1)
         .refCount()
-        .catch((error) => {
-          return this.handleError(error);
-        });
+        .catch((error: HttpErrorResponse): Observable<GitHubRepoCommit> => this.handleError(error));
       this.cache.set(url, res);
       return res;
     }
@@ -122,21 +106,15 @@ export class GitHubService implements OnDestroy {
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoDetailsByFullName(fullName: string): Observable<GitHubRepoDetails> {
-    let url = `${this.gitHubUrl}/repos/${fullName}`;
+    const url: string = `${this.gitHubUrl}/repos/${fullName}`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      let res = this.getHeaders()
-        .switchMap(newHeaders => this.http
-          .get(url, { headers: newHeaders }))
-        .map(response => {
-          return response.json() as GitHubRepoDetails;
-        })
+      const res: Observable<GitHubRepoDetails> = this.getHeaders()
+        .switchMap((headers: HttpHeaders): Observable<GitHubRepoDetails> => this.http.get<GitHubRepoDetails>(url, { headers }))
         .publishReplay(1)
         .refCount()
-        .catch((error) => {
-          return this.handleError(error);
-        });
+        .catch((error: HttpErrorResponse): Observable<GitHubRepoDetails> => this.handleError(error));
       this.cache.set(url, res);
       return res;
     }
@@ -149,7 +127,7 @@ export class GitHubService implements OnDestroy {
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoDetailsByUrl(cloneUrl: string): Observable<GitHubRepoDetails> {
-    let fullName = this.getFullName(cloneUrl);
+    const fullName: string = this.getFullName(cloneUrl);
     return this.getRepoDetailsByFullName(fullName);
   }
 
@@ -160,22 +138,16 @@ export class GitHubService implements OnDestroy {
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoLastCommitByUrl(cloneUrl: string): Observable<GitHubRepoLastCommit> {
-    let fullName = this.getFullName(cloneUrl);
-    let url = `${this.gitHubUrl}/repos/${fullName}/git/refs/heads/master`;
+    const fullName: string = this.getFullName(cloneUrl);
+    const url: string = `${this.gitHubUrl}/repos/${fullName}/git/refs/heads/master`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      let res = this.getHeaders()
-        .switchMap(newHeaders => this.http
-          .get(url, { headers: newHeaders }))
-        .map(response => {
-          return response.json() as GitHubRepoLastCommit;
-        })
+      const res: Observable<GitHubRepoLastCommit> = this.getHeaders()
+        .switchMap((headers: HttpHeaders): Observable<GitHubRepoLastCommit> => this.http.get<GitHubRepoLastCommit>(url, { headers }))
         .publishReplay(1)
         .refCount()
-        .catch((error) => {
-          return this.handleError(error);
-        });
+        .catch((error: HttpErrorResponse): Observable<GitHubRepoLastCommit> => this.handleError(error));
       this.cache.set(url, res);
       return res;
     }
@@ -188,21 +160,15 @@ export class GitHubService implements OnDestroy {
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoLicenseByName(fullName: string): Observable<GitHubRepoLicense> {
-    let url = `${this.gitHubUrl}/repos/${fullName}/license`;
+    const url: string = `${this.gitHubUrl}/repos/${fullName}/license`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      let res = this.getHeaders()
-        .switchMap(newHeaders => this.http
-          .get(url, { headers: newHeaders }))
-        .map(response => {
-          return response.json() as GitHubRepoLicense;
-        })
+      const res: Observable<GitHubRepoLicense> = this.getHeaders()
+        .switchMap((headers: HttpHeaders): Observable<GitHubRepoLicense> => this.http.get<GitHubRepoLicense>(url, { headers }))
         .publishReplay(1)
         .refCount()
-        .catch((error) => {
-          return this.handleError(error);
-        });
+        .catch((error: HttpErrorResponse): Observable<GitHubRepoLicense> => this.handleError(error));
       this.cache.set(url, res);
       return res;
     }
@@ -215,7 +181,7 @@ export class GitHubService implements OnDestroy {
    * @returns {Observable<GitHubRepoDetails>}
    */
   getRepoLicenseByUrl(cloneUrl: string): Observable<GitHubRepoLicense> {
-    let fullName = this.getFullName(cloneUrl);
+    const fullName: string = this.getFullName(cloneUrl);
     return this.getRepoLicenseByName(fullName);
   }
 
@@ -226,21 +192,15 @@ export class GitHubService implements OnDestroy {
    * @returns {Observable<GitHubRepo>}
    */
   getUserRepos(userName: string): Observable<GitHubRepo[]> {
-    let url = `${this.gitHubUrl}/users/${userName}/repos`;
+    const url: string = `${this.gitHubUrl}/users/${userName}/repos`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      let res = this.getHeaders()
-        .switchMap(newHeaders => this.http
-          .get(url, { headers: newHeaders }))
-        .map(response => {
-          return response.json() as GitHubRepo[];
-        })
+      const res: Observable<GitHubRepo[]> = this.getHeaders()
+        .switchMap((headers: HttpHeaders): Observable<GitHubRepo[]> => this.http.get<GitHubRepo[]>(url, { headers }))
         .publishReplay(1)
         .refCount()
-        .catch((error) => {
-          return this.handleError(error);
-        });
+        .catch((error: HttpErrorResponse): Observable<GitHubRepo[]> => this.handleError(error));
       this.cache.set(url, res);
       return res;
     }
@@ -252,21 +212,15 @@ export class GitHubService implements OnDestroy {
    * @returns {Observable<GitHubUser>}
    */
   getUser(): Observable<GitHubUser> {
-    let url = `${this.gitHubUrl}/user`;
+    const url: string = `${this.gitHubUrl}/user`;
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      let res = this.getHeaders()
-        .switchMap(newHeaders => this.http
-          .get(url, { headers: newHeaders }))
-        .map(response => {
-          return response.json() as GitHubUser;
-        })
+      const res: Observable<GitHubUser> = this.getHeaders()
+        .switchMap((headers: HttpHeaders): Observable<GitHubUser> => this.http.get<GitHubUser>(url, { headers }))
         .publishReplay(1)
         .refCount()
-        .catch((error) => {
-          return this.handleError(error);
-        });
+        .catch((error: HttpErrorResponse): Observable<GitHubUser> => this.handleError(error));
       this.cache.set(url, res);
       return res;
     }
@@ -281,13 +235,13 @@ export class GitHubService implements OnDestroy {
    * @returns {string} The GitHub full name (e.g., fabric8-services/fabric8-wit)
    */
   private getFullName(cloneUrl: string): string {
-    let prefix = 'https://github.com/';
-    let start = cloneUrl.indexOf(prefix);
-    let end = cloneUrl.indexOf('.git');
+    const prefix: string = 'https://github.com/';
+    const start: number = cloneUrl.indexOf(prefix);
+    const end: number = cloneUrl.indexOf('.git');
     return (start !== -1 && end !== -1) ? cloneUrl.substring(prefix.length, end) : cloneUrl;
   }
 
-  private handleError(error: any) {
+  private handleError(error: HttpErrorResponse): Observable<any> {
     return Observable.throw(error.message || error);
   }
 

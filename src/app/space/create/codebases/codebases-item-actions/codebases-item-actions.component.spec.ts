@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
 import { Broadcaster, Notifications } from 'ngx-base';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -33,7 +32,7 @@ describe('Codebases Item Actions Component', () => {
     codebasesServiceMock = jasmine.createSpyObj('CodebasesService', ['deleteCodebase']);
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule, ModalModule.forRoot()],
+      imports: [FormsModule, ModalModule.forRoot()],
       declarations: [CodebasesItemActionsComponent],
       providers: [
         {

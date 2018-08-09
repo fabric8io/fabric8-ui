@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Http } from '@angular/http';
 
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 
@@ -19,6 +18,4 @@ import { CodebasesItemHeadingComponent } from './codebases-item-heading.componen
   exports: [ CodebasesItemHeadingComponent ],
   providers: [TooltipConfig]
 })
-export class CodebasesItemHeadingModule {
-  constructor(http: Http) {}
-}
+export class CodebasesItemHeadingModule {}

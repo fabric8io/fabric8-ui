@@ -7,7 +7,7 @@
       </h2>
     </div>
     <div class="card-pf-body f8-card-body">
-      <ng-container *ngIf="(myWorkItemsCount | async) > 0; then showWorkItems else showBlankState"></ng-container>
+      <ng-container *ngIf="myWorkItemsCount > 0; then showWorkItems else showBlankState"></ng-container>
       <ng-template #showBlankState>
         <fabric8-loading-widget message="Please wait while we load your work item overview"
                                 *ngIf="loading === true"></fabric8-loading-widget>
@@ -18,7 +18,7 @@
           </p>
           <div class="f8-blank-slate-main-action">
             <div *ngIf="userOwnsSpace">
-              <button id="spacehome-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[contextPath | async, 'plan']">Create work item</button>
+              <button id="spacehome-workitems-create-button" class="btn btn-primary btn-lg" [routerLink]="[contextPath, 'plan']">Create work item</button>
             </div>
           </div>
         </div>
@@ -27,10 +27,10 @@
         <div class="f8-card-body-grid">
           <div class="f8-work-item-card-data">
             <div class="f8-work-item-card-data-totals">
-              <h1 class="f8-work-item-card-data-totals--overview" id="total">{{myWorkItemsCount | async}}</h1>
+              <h1 class="f8-work-item-card-data-totals--overview" id="total">{{myWorkItemsCount}}</h1>
               <p class="f8-work-item-card-data-totals--overview-subtitle">Total work items</p>
               <p class="f8-work-item-card-data-totals--link">
-                <a [routerLink]="[contextPath | async, 'plan']">View Planner</a>
+                <a [routerLink]="[contextPath, 'plan']">View Planner</a>
               </p>
             </div>
             <div class="f8-work-item-card-data-status">

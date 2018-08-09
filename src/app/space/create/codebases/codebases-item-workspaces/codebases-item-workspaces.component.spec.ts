@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
 import { Broadcaster, Notifications } from 'ngx-base';
 import { Observable } from 'rxjs';
@@ -28,7 +27,7 @@ describe('Codebases Item Details Component', () => {
     notificationMock = jasmine.createSpyObj('Notifications', ['message']);
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, HttpModule],
+      imports: [FormsModule],
       declarations: [CodebasesItemWorkspacesComponent],
       providers: [
         {

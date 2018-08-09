@@ -1,9 +1,11 @@
 import {
   Component,
+  DebugElement,
   ErrorHandler,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
   Observable,
@@ -111,6 +113,18 @@ describe('RecentSpacesWidget', () => {
   it('should use currentLoggedInUser username', function(this: TestingContext): void {
     const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
     expect(spaceService.getSpacesByUser).toHaveBeenCalledWith('fooUser');
+  });
+
+  it('should display the loading widget while waiting for the recent spaces', function(this: TestingContext): void {
+    let mockSpacesService: any = TestBed.get(Spaces);
+    mockSpacesService.recent = Observable.never();
+    let spaceList: DebugElement = this.fixture.debugElement.query(By.css('spaceList'));
+    let emptyList: DebugElement = this.fixture.debugElement.query(By.css('emptyList'));
+    let loading: DebugElement = this.fixture.debugElement.query(By.css('fabric8-loading-widget'));
+    expect(spaceList).toBeNull();
+    expect(emptyList).toBeNull();
+    expect(loading).toBeDefined();
+    expect(this.testedDirective.loading).toEqual(true);
   });
 
   describe('recentSpaces', () => {
