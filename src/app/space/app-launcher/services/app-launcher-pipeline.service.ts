@@ -43,7 +43,6 @@ export class AppLauncherPipelineService implements PipelineService {
       return this.http.get(runtimeEndPoint, option)
         .map(response => response.json() as Pipeline[])
         .map(pipelines => {
-          console.log(pipelines);
           // needs to filter out associated pipelines from list of pipelines
           return pipelines.filter(({platform}) => {
             return platform === (filterByRuntime || platform);
