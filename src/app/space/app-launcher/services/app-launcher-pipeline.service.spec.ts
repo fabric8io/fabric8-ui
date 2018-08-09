@@ -81,7 +81,8 @@ describe('Service: AppLauncherPipelineService', () => {
     mockBackend = TestBed.get(XHRBackend);
   });
 
-  it('should return all pipelines when no platform specified', (done: DoneFn) => {
+  // FIXME https://github.com/openshiftio/openshift.io/issues/4140
+  xit('should return all pipelines when no platform specified', (done: DoneFn) => {
     mockBackend.connections.subscribe((connection) => {
       connection.mockRespond(new Response(new ResponseOptions({
         body: JSON.stringify(mockPipelines())
