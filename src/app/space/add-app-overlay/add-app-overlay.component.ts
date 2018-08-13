@@ -35,6 +35,7 @@ export class AddAppOverlayComponent implements OnDestroy {
   subscriptions: Subscription[] = [];
   applications: string[] = [];
   isProjectNameAvailable: boolean;
+  navigationInProgress: boolean = false;
 
   constructor(private contextService: ContextService,
               private dependencyCheckService: DependencyCheckService,
@@ -97,14 +98,17 @@ export class AddAppOverlayComponent implements OnDestroy {
    * Helper to route to create/import app
    */
   routeToLaunchApp(): void {
+    this.navigationInProgress = true;
     this.broadcaster.broadcast('clickContinueAppOverlay', {
       appName: this.projectName,
       flow: this.selectedFlow
     });
     this.router.navigate(['/',
       this.loggedInUser.attributes.username, this.currentSpace.attributes.name,
-      'applauncher', this.selectedFlow, this.projectName]);
-    this.hideAddAppOverlay();
+      'applauncher', this.selectedFlow, this.projectName]).then(() => {
+        this.hideAddAppOverlay();
+        this.navigationInProgress = false;
+      });
   }
 
   /**
