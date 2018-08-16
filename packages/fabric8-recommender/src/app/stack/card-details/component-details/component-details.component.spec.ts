@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { TooltipModule } from 'ngx-bootstrap';
 
@@ -16,7 +16,8 @@ const imports = [
     TooltipModule,
     ProgressMeterModule,
     ComponentFeedbackModule,
-    ToastNotificationModule
+    ToastNotificationModule,
+    HttpClientModule
 ];
 
 describe ('ComponentDetailsComponent', () => {
@@ -32,11 +33,6 @@ describe ('ComponentDetailsComponent', () => {
                 ComponentSnippetComponent,
                 ComponentInformationComponent,
                 ComponentDetailsComponent
-            ],
-            providers: [
-                Http,
-                ConnectionBackend,
-                { provide: RequestOptions, useClass: BaseRequestOptions }
             ]
         }).compileComponents();
     }));

@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { StackDetailsComponent } from './stack-details.component';
 
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import { ModalModule } from 'ngx-modal';
@@ -46,7 +46,7 @@ describe ('StackDetailsComponent', () => {
         TestBed.configureTestingModule({
             imports: [
                 CommonModule,
-                HttpModule,
+                HttpClientModule,
                 FormsModule,
                 ModalModule,
                 // StackLevelModule,

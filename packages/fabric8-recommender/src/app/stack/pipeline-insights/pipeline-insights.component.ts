@@ -1,14 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, OnChanges, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Component, EventEmitter, Input, OnInit, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 
-import { getStackReportModel } from '../utils/stack-api-utils';
 import {
-    StackReportModel, ResultInformationModel, UserStackInfoModel,
-    ComponentInformationModel, RecommendationsModel
+    StackReportModel, ResultInformationModel,
 } from '../models/stack-report.model';
 import { PipelineInsightsService } from './pipeline-insights.service';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
@@ -40,10 +36,7 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
     public interval: number = 7000;
     // public alive: boolean = true;
 
-    constructor(private pipelineInsightsService: PipelineInsightsService,
-        private http: Http) { }
-
-
+    constructor(private pipelineInsightsService: PipelineInsightsService) { }
 
     public geturl(): void {
         let subs = null;
@@ -67,8 +60,6 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
                         if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0) && (data.statusCode === 200 || data.statusCode === 202)) {
                             alive = false;
                             subs.unsubscribe();
-                            console.log(data);
-                            console.log("Status  :" + typeof data.statusCode);
                             let response: Array<ResultInformationModel> = data.result;
                             if (response.length > 0) {
                                 for (let i = 0; i < data.result.length; ++i) {
@@ -91,12 +82,11 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
                                     if (c.user_stack_info) {
                                         if (c.user_stack_info.license_analysis) {
                                             let d = c.user_stack_info.license_analysis.status;
-                                            console.log("d value" + d);
-                                            if (d == "ComponentConflict") {
+                                            if (d === 'ComponentConflict') {
                                                 this.flag1 = true;
                                                 break;
                                             }
-                                            if (d == "StackConflict") {
+                                            if (d === 'StackConflict') {
                                                 this.flag1 = true;
                                                 break;
                                             }
@@ -110,7 +100,6 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
                             alive = false;
                             subs.unsubscribe();
                             this.onStackResponse.emit(data);
-                            console.log("Status  :" + data.statusCode);
                         }
                     }, error => {
                         alive = false;
@@ -118,7 +107,7 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
                     if (counter++ > 3) {
                         alive = false;
                     }
-                })
+                });
         }
 
 

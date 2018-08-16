@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { ReportSummaryCardComponent } from './report-summary-card.component';
@@ -10,43 +10,39 @@ import { ReportSummaryContentModule } from './report-summary-content/report-summ
 import { SaveState } from '../../utils/SaveState';
 
 const dependencies = [
-    ReportSummaryTitleComponent,
-    ReportSummaryDescriptionComponent
+  ReportSummaryTitleComponent,
+  ReportSummaryDescriptionComponent
 ];
 
 const imports = [
-    ReportSummaryContentModule
+  ReportSummaryContentModule,
+  HttpClientModule
 ];
 
-describe ('ReportSummaryCardComponent', () => {
-    let component: ReportSummaryCardComponent;
-    let fixture: ComponentFixture<ReportSummaryCardComponent>;
+describe('ReportSummaryCardComponent', () => {
+  let component: ReportSummaryCardComponent;
+  let fixture: ComponentFixture<ReportSummaryCardComponent>;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                ...imports
-            ],
-            declarations: [
-                ReportSummaryCardComponent,
-                ...dependencies
-            ],
-            providers: [
-                Http,
-                ConnectionBackend,
-                { provide: RequestOptions, useClass: BaseRequestOptions }
-            ]
-        }).compileComponents();
-    }));
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        ...imports
+      ],
+      declarations: [
+        ReportSummaryCardComponent,
+        ...dependencies
+      ]
+    }).compileComponents();
+  }));
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(ReportSummaryCardComponent);
-        component = fixture.componentInstance;
-        SaveState.ELEMENTS[0] = document.createElement('div');
-        fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ReportSummaryCardComponent);
+    component = fixture.componentInstance;
+    SaveState.ELEMENTS[0] = document.createElement('div');
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

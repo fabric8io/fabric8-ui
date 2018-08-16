@@ -66,7 +66,7 @@ export class StackReportInShortComponent implements OnChanges {
                         // Handle Errors here 'API error'
                         this.handleError({
                             title: 'We encountered an unexpected server error',
-                            detail: data.error
+                            detail: data['error']
                         });
                     }
                 }, error => {

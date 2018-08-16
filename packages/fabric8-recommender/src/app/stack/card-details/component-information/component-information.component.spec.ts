@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { ComponentInformationComponent } from './component-information.component';
 import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
@@ -84,18 +84,16 @@ describe ('ComponentInformationComponent', () => {
                 ProgressMeterModule,
                 ComponentFeedbackModule,
                 ComponentFeedbackModule,
-                ToastNotificationModule
+                ToastNotificationModule,
+                HttpClientModule
             ],
             declarations: [
                 ComponentInformationComponent,
                 ComponentSnippetComponent
             ],
             providers: [
-                Http,
                 Contexts,
                 AddWorkFlowService,
-                ConnectionBackend,
-                { provide: RequestOptions, useClass: BaseRequestOptions },
                 witApiUrlProvider,
                 ApiLocatorService,
                 authApiUrlProvider,

@@ -1,36 +1,32 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { ReportSummaryCardModule } from './report-summary-card/report-summary-card.module';
 import { ReportSummaryComponent } from './report-summary.component';
 
-describe ('ReportSummaryComponent', () => {
-    let component: ReportSummaryComponent;
-    let fixture: ComponentFixture<ReportSummaryComponent>;
+describe('ReportSummaryComponent', () => {
+  let component: ReportSummaryComponent;
+  let fixture: ComponentFixture<ReportSummaryComponent>;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                ReportSummaryCardModule
-            ],
-            declarations: [
-                ReportSummaryComponent
-            ],
-            providers: [
-                Http,
-                ConnectionBackend,
-                { provide: RequestOptions, useClass: BaseRequestOptions }
-            ]
-        }).compileComponents();
-    }));
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        ReportSummaryCardModule,
+        HttpClientModule
+      ],
+      declarations: [
+        ReportSummaryComponent
+      ]
+    }).compileComponents();
+  }));
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(ReportSummaryComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ReportSummaryComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

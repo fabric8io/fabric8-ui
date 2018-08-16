@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { GlobalConstants } from '../constants/constants.service';
@@ -9,7 +9,7 @@ import { PipelineInsightsComponent } from './pipeline-insights.component';
 @NgModule({
   imports: [
     CommonModule,
-    HttpModule,
+    HttpClientModule
   ],
   declarations: [
     PipelineInsightsComponent

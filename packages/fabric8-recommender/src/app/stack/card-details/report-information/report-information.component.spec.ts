@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Http, ConnectionBackend, RequestOptions, BaseRequestOptions } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { TooltipModule } from 'ngx-bootstrap';
 
@@ -19,48 +19,46 @@ import { ReportInformationModule } from './report-information.module';
 import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
 
 const components = [
-    ComponentSnippetComponent,
-    ComponentInformationComponent,
-    ComponentDetailsComponent,
-    ReportInformationComponent,
-    NoDataComponent
+  ComponentSnippetComponent,
+  ComponentInformationComponent,
+  ComponentDetailsComponent,
+  ReportInformationComponent,
+  NoDataComponent
 ];
 
 const imports = [
-    TooltipModule.forRoot(),
-    ProgressMeterModule,
-    ComponentFeedbackModule,
-    ToastNotificationModule
+  TooltipModule.forRoot(),
+  ProgressMeterModule,
+  ComponentFeedbackModule,
+  ToastNotificationModule,
+  HttpClientModule
 ];
 
-describe ('ReportInformationComponent', () => {
-    let component: ReportInformationComponent;
-    let fixture: ComponentFixture<ReportInformationComponent>;
+describe('ReportInformationComponent', () => {
+  let component: ReportInformationComponent;
+  let fixture: ComponentFixture<ReportInformationComponent>;
 
-    beforeEach(async(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                ...imports
-            ],
-            declarations: [
-                ...components
-            ],
-            providers: [
-                Http,
-                AddWorkFlowService,
-                ConnectionBackend,
-                { provide: RequestOptions, useClass: BaseRequestOptions }
-            ]
-        }).compileComponents();
-    }));
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        ...imports
+      ],
+      declarations: [
+        ...components
+      ],
+      providers: [
+        AddWorkFlowService
+      ]
+    }).compileComponents();
+  }));
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(ReportInformationComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ReportInformationComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-    it('should create', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { HttpErrorResponse, HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthenticationService } from 'ngx-login-client';
 import { WIT_API_URL, Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Observable';
@@ -11,7 +11,7 @@ export class AddWorkFlowService {
 
   private stackWorkItemUrl;
 
-  private headers: Headers = new Headers({ 'Content-Type': 'application/json' });
+  private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   private workItemsRoute: string = 'workitems';
   private spacesString: string = 'spaces';
   private spaceId: string;
@@ -19,7 +19,7 @@ export class AddWorkFlowService {
   private fallBackBugId: string;
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     @Inject(WIT_API_URL) private apiUrl: string,
     private auth: AuthenticationService,
     private context: Contexts
@@ -46,13 +46,13 @@ export class AddWorkFlowService {
   }
 
   fetchBugId(url: string): void {
-    let options = new RequestOptions({ headers: this.headers });
-    this.http.get(url, options)
+    let options: {} = { headers: this.headers };
+    this.http.get<any>(url, options)
       .catch(this.handleError)
-      .subscribe((response) => {
+      .subscribe((json) => {
         try {
-          if (response) {
-            this.setBugId(response.json());
+          if (json) {
+            this.setBugId(json);
           }
         } catch (error) {
           console.log('Error converting response to JSON');
@@ -89,29 +89,27 @@ export class AddWorkFlowService {
 
   addWorkFlow(workItemData: any): Observable<any> {
     workItemData.data.relationships.baseType.data.id = this.bugId || this.fallBackBugId;
-    let options = new RequestOptions({ headers: this.headers });
+    let options: any = { headers: this.headers };
     let body = JSON.stringify(workItemData);
-    return this.http.post(this.stackWorkItemUrl, body, options)
+    return this.http.post<any>(this.stackWorkItemUrl, body, options)
       .map(this.extractData)
       .catch(this.handleError);
   }
 
-  private extractData(res: Response) {
-    let body = res.json();
+  private extractData(body: any): any {
     return body || {};
   }
 
-  private handleError(error: Response | any) {
-    // In a real world app, we might use a remote logging infrastructure
+  private handleError(error: HttpErrorResponse) {
     let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
+    if (error.error instanceof ErrorEvent) {
+      errMsg = error.error.message || error.error.toString();
+    } else {
+      const body = error.error || '';
       const err = body.error || JSON.stringify(body);
       errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
     }
-    console.error(errMsg);
     return Observable.throw(errMsg);
   }
+
 }
