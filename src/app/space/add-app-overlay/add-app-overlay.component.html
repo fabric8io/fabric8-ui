@@ -135,8 +135,7 @@
                 || isProjectNameValid === undefined
                 || isProjectNameAvailable === undefined
                 || navigationInProgress"
-              (click)="routeToLaunchApp()">Continue</button>
-              <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin margin-left-5"></i>
+              (click)="routeToLaunchApp()">Continue <i *ngIf="navigationInProgress" class="pficon pficon-in-progress fa-spin"></i></button>
           </div>
         </div>
       </footer>

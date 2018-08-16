@@ -1,5 +1,5 @@
 import { ErrorHandler } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -318,7 +318,7 @@ describe('AddAppOverlayComponent', () => {
       });
     });
 
-    it('continue button should be disabled on navigation in progress', () => {
+    it('continue button should be disabled on navigation in progress', async(() => {
       const element: HTMLElement = fixture.debugElement.nativeElement;
       let btnElem = element.querySelector('.code-imports--step_toolbar > button');
       expect(btnElem.hasAttribute('disabled')).toBeTruthy();
@@ -330,13 +330,12 @@ describe('AddAppOverlayComponent', () => {
       fixture.detectChanges();
       fixture.whenStable().then(() => {
         expect(btnElem.hasAttribute('disabled')).toBeTruthy();
-        expect(fixture.debugElement.nativeElement.querySelector('.pficon-in-progress').isPresent()).toBe(true);
       });
-    });
+    }));
 
-    it('continue button should be enable on navigation is not in progress', () => {
+    it('continue button should be enable on navigation is not in progress', async(() => {
       const element: HTMLElement = fixture.debugElement.nativeElement;
-      let btnElem: HTMLButtonElement = element.querySelector('.code-imports--step_toolbar > button');
+      let btnElem = element.querySelector('.code-imports--step_toolbar > button');
       expect(btnElem.hasAttribute('disabled')).toBeTruthy();
       component.navigationInProgress = false;
       component.projectName = 'project-aug-16-2018-1';
@@ -347,7 +346,7 @@ describe('AddAppOverlayComponent', () => {
       fixture.whenStable().then(() => {
         expect(btnElem.hasAttribute('disabled')).toBeFalsy();
       });
-    });
+    }));
   });
 
 });
