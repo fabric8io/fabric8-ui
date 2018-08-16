@@ -318,6 +318,36 @@ describe('AddAppOverlayComponent', () => {
       });
     });
 
+    it('continue button should be disabled on navigation in progress', () => {
+      const element: HTMLElement = fixture.debugElement.nativeElement;
+      let btnElem = element.querySelector('.code-imports--step_toolbar > button');
+      expect(btnElem.hasAttribute('disabled')).toBeTruthy();
+      component.navigationInProgress = false;
+      component.projectName = 'project-aug-16-2018';
+      component.selectedFlow = 'createapp';
+      component.validateProjectName();
+      component.navigationInProgress = true;
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(btnElem.hasAttribute('disabled')).toBeTruthy();
+        expect(fixture.debugElement.nativeElement.querySelector('.pficon-in-progress').isPresent()).toBe(true);
+      });
+    });
+
+    it('continue button should be enable on navigation is not in progress', () => {
+      const element: HTMLElement = fixture.debugElement.nativeElement;
+      let btnElem: HTMLButtonElement = element.querySelector('.code-imports--step_toolbar > button');
+      expect(btnElem.hasAttribute('disabled')).toBeTruthy();
+      component.navigationInProgress = false;
+      component.projectName = 'project-aug-16-2018-1';
+      component.selectedFlow = 'createapp';
+      component.validateProjectName();
+      component.isProjectNameAvailable = true;
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(btnElem.hasAttribute('disabled')).toBeFalsy();
+      });
+    });
   });
 
 });
