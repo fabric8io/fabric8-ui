@@ -1,6 +1,5 @@
 import { DebugNode } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
 
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -52,7 +51,6 @@ describe('RecentWorkspacesWidgetComponent', () => {
       imports: [
         BrowserAnimationsModule,
         FormsModule,
-        HttpModule,
         LoadingWidgetModule,
         TooltipModule.forRoot()
       ],
