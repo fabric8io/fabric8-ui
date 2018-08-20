@@ -1,6 +1,5 @@
 import { LocationStrategy } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
@@ -81,7 +80,6 @@ describe('WorkItemWidgetComponent', () => {
     declarations: [ MockFeatureToggleComponent ],
     imports: [
       Fabric8WitModule,
-      HttpModule,
       NgArrayPipesModule,
       RouterModule
     ],

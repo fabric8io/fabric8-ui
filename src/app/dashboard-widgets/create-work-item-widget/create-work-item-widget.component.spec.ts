@@ -2,13 +2,12 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
 
 import { LocationStrategy } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { Broadcaster } from 'ngx-base';
-import { Context, Contexts, Space } from 'ngx-fabric8-wit';
+import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { ConnectableObservable } from 'rxjs';
 import { Observable, Subject } from 'rxjs';
@@ -41,7 +40,7 @@ describe('CreateWorkItemWidgetComponent', () => {
 
   initContext(CreateWorkItemWidgetComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],
-    imports: [NgArrayPipesModule, HttpModule, RouterModule],
+    imports: [NgArrayPipesModule, RouterModule],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
       { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
