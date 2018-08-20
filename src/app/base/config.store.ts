@@ -1,5 +1,5 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -15,7 +15,7 @@ export class ConfigStore {
   private _cache: Map<string, Observable<ValWrapper<any>>> = new Map();
 
   constructor(
-    private http: Http
+    private http: HttpClient
   ) { }
 
   get<T>(name: string, load?: LoadCallback<T>): Observable<ValWrapper<T>> {
@@ -25,10 +25,9 @@ export class ConfigStore {
     } else {
       let res = this.http
         .get(`/_config/${name}.config.json`)
-        .map(resp => resp.json())
-        .map(json => {
+        .map(resp => {
           return {
-            val: (json as any),
+            val: (resp as any),
             loading: false
           } as ValWrapper<T>;
         })

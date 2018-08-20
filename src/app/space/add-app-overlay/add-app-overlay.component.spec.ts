@@ -1,7 +1,6 @@
 import { ErrorHandler } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
 
 import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
@@ -187,7 +186,6 @@ describe('AddAppOverlayComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         FormsModule,
-        HttpModule,
         PopoverModule.forRoot()
       ],
       declarations: [

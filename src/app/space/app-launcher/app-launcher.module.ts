@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { Http } from '@angular/http';
 
 import {
   AuthHelperService,
@@ -34,7 +34,7 @@ import { NewForgeConfig } from './shared/new-forge.config';
   providers: [
     HelperService,
     {
-      provide: Http,
+      provide: HttpClient,
       useClass: Fabric8UIHttpService
     },
     { provide: Config, useClass: NewForgeConfig },
@@ -59,6 +59,4 @@ import { NewForgeConfig } from './shared/new-forge.config';
   ],
   declarations: [ AppLauncherComponent ]
 })
-export class AppLauncherModule {
-  constructor(http: Http) {}
-}
+export class AppLauncherModule {}
