@@ -1,7 +1,7 @@
 import {
   HttpClient,
-  HttpHeaders,
-  HttpResponse
+  HttpErrorResponse,
+  HttpHeaders
 } from '@angular/common/http';
 import { Inject, Injectable, OnDestroy } from '@angular/core';
 
@@ -29,7 +29,6 @@ export class ExtProfile extends Profile {
 @Injectable()
 export class GettingStartedService implements OnDestroy {
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  private loggedInUser: User;
   protected subscriptions: Subscription[] = [];
   private usersUrl: string;
 
@@ -55,7 +54,7 @@ export class GettingStartedService implements OnDestroy {
     let profile: ExtUser;
 
     this.userService.loggedInUser
-      .map(user => {
+      .map((user: User): void => {
         profile = cloneDeep(user) as ExtUser;
         if (profile.attributes !== undefined) {
           profile.attributes.contextInformation = (user as ExtUser).attributes.contextInformation || {};
@@ -76,8 +75,8 @@ export class GettingStartedService implements OnDestroy {
     let url = `${this.usersUrl}/${id}`;
     return this.http
       .get<ExtUserResponse>(url, { headers: this.headers })
-      .map(response => response.data)
-      .catch((error) => this.handleError(error));
+      .map((response: ExtUserResponse): ExtUser => response.data)
+      .catch((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error));
   }
 
   /**
@@ -87,7 +86,7 @@ export class GettingStartedService implements OnDestroy {
    * @returns {Observable<User>}
    */
   update(profile: ExtProfile): Observable<ExtUser> {
-    let payload = JSON.stringify({
+    const payload: any = JSON.stringify({
       data: {
         attributes: profile,
         type: 'identities'
@@ -95,12 +94,12 @@ export class GettingStartedService implements OnDestroy {
     });
     return this.http
       .patch<ExtUserResponse>(this.usersUrl, payload, { headers: this.headers })
-      .map(response => response.data)
-      .catch((error) => this.handleError(error));
+      .map((response: ExtUserResponse): ExtUser => response.data)
+      .catch((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error));
   }
 
   // Private
-  protected handleError(error: any) {
+  protected handleError(error: HttpErrorResponse): Observable<ExtUser> {
     this.logger.error(error);
     return Observable.throw(error.message || error);
   }
