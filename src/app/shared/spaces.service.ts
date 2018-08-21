@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { Observable, Subscription } from 'rxjs';
+import { ConnectableObservable, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class SpacesService implements Spaces {
   static readonly RECENT_SPACE_LENGTH = 8;
 
   private _current: Observable<Space>;
-  private _recent: Observable<Space[]>;
+  private _recent: ConnectableObservable<Space[]>;
 
   constructor(
     private contexts: Contexts,
@@ -31,7 +31,8 @@ export class SpacesService implements Spaces {
 
   private initRecent(): void {
     // load existing recent spaces from profile.store.recentSpaces
-    this._recent = this.loadRecent();
+    this._recent = this.loadRecent().publishReplay(1);
+    this._recent.connect();
 
     // update _recent with newly seen space when spaceChanged is emitted
     this.broadcaster.on<Space>('spaceChanged')
@@ -56,7 +57,6 @@ export class SpacesService implements Spaces {
             recentSpaces.pop();
           }
         }
-        this._recent = Observable.of(recentSpaces);
         this.saveRecent(recentSpaces);
       }
     );
@@ -70,7 +70,6 @@ export class SpacesService implements Spaces {
         let index: number = this.findRecentIndexById(recentSpaces, deletedSpace.id);
         if (index !== -1) {
           recentSpaces.splice(index, 1);
-          this._recent = Observable.of(recentSpaces);
           this.saveRecent(recentSpaces);
         }
       }
@@ -99,6 +98,7 @@ export class SpacesService implements Spaces {
   }
 
   private saveRecent(recent: Space[]): Subscription {
+    this._recent.publish();
     let patch = {
       store: {
         recentSpaces: recent.map(val => val.id)
