@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Http } from '@angular/http';
 
 import {
   DependencyCheckService,
@@ -51,6 +50,4 @@ import { CreateAppComponent } from './create-app.component';
     TokenProvider
   ]
 })
-export class CreateAppModule {
-  constructor(http: Http) {}
-}
+export class CreateAppModule {}

@@ -95,6 +95,21 @@ describe('CleanupComponent', () => {
       expect(component.showSuccessNotification).toHaveBeenCalled();
     });
 
+    it('should call deleteSpace with skipCluster set to true', () => {
+      component.spaces = [mockSpace];
+      component.spaceService.deleteSpace.and.returnValue(Observable.of(mockSpace));
+      component.tenantService.cleanupTenant.and.returnValue(Observable.of('mock-response'));
+      component.tenantService.updateTenant.and.returnValue(Observable.of('mock-response'));
+      spyOn(component, 'showSuccessNotification');
+      component.confirm();
+      expect(mockEventService.deleteSpaceSubject.next).toHaveBeenCalled();
+      expect(mockSpace['erased']).toBeTruthy();
+      expect(mockSpace['progress']).toBe('Space successfully erased');
+      expect(component.showSuccessNotification).toHaveBeenCalled();
+
+      expect(component.spaceService.deleteSpace).toHaveBeenCalledWith(mockSpace, true);
+    });
+
     it('should show a notification if a space is unable to be erased', () => {
       component.spaces = [mockSpace];
       component.spaceService.deleteSpace.and.returnValue(Observable.throw('error'));
