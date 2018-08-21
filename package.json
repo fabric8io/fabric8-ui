@@ -68,7 +68,7 @@
     "rimraf": "rimraf",
     "semantic-release": "semantic-release pre && npm run build:prod && cp -r .git dist && npm publish dist/ && semantic-release post",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
-    "server:dev": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch --content-base src/",
+    "server:dev": "node --max-old-space-size=8192 node_modules/webpack-dev-server/bin/webpack-dev-server.js --config config/webpack.dev.js --progress --profile --watch --content-base src/",
     "server:dev2:hmr": "npm run server:dev2 -- --hot",
     "server:dev2": "node config/devserver.js --keepAliveTimeout 10000",
     "server:prod": "http-server dist --cors",

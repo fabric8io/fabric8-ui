@@ -17,8 +17,13 @@
 * OpenShift.io
 */
 
+// OpenSans Fonts from CDN
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i');
+
 // PatternFly References
-@import (reference) '../../../../node_modules/patternfly/dist/less/patternfly.less';
+// Use a subset of patternfly styles, excluding the fonts which comes from CDN above
+// Pattenrfly and Pattenrfly NG additions are provided as minified CSS via vendor.browser.ts
+@import '_patternfly.less';
 
 // margin and padding formulas
 @import '_formulas.less';
