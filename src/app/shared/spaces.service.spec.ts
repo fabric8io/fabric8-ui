@@ -106,18 +106,19 @@ describe('SpacesService', () => {
   });
 
   describe('#get recent', () => {
-    it('should return the spaces from the profileService.store', () => {
+    it('should return the spaces from the profileService.store', (done: DoneFn) => {
       mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
       let result: Observable<Space[]> = spacesService.recent;
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([mockSpace] as Space[]);
+        done();
       });
     });
   });
 
   describe('#loadRecent', () => {
-    it('should return an empty array if recentSpaces doesn\'t exist on profile.store', () => {
+    it('should return an empty array if recentSpaces doesn\'t exist on profile.store', (done: DoneFn) => {
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.returnValue(Observable.never());
       delete mockProfile.store.recentSpaces;
@@ -125,6 +126,7 @@ describe('SpacesService', () => {
       let result: Observable<Space[]> = spacesService.recent;
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([] as Space[]);
+        done();
       });
     });
   });
@@ -227,7 +229,7 @@ describe('SpacesService', () => {
       }
     });
 
-    it('should re-order _recent if updated space already exists in _recent and is not index 0', () => {
+    it('should re-order _recent if updated space already exists in _recent and is not index 0', (done: DoneFn) => {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       let i: number = 0;
       spaceService.getSpaceById.and.callFake(() => {
@@ -254,10 +256,11 @@ describe('SpacesService', () => {
       // mock-space-1 should have been moved to the front of _recent
       spacesService.recent.subscribe(spaces => {
         expect(spaces[0].id).toEqual(mockSpace.id);
+        done();
       });
     });
 
-    it('should not re-order _recent if updated space already exists in _recent and is index 0', () => {
+    it('should not re-order _recent if updated space already exists in _recent and is index 0', (done: DoneFn) => {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       let i: number = 0;
       spaceService.getSpaceById.and.callFake(() => {
@@ -284,10 +287,11 @@ describe('SpacesService', () => {
       // mock-space-0 should stay at the front of _recent
       spacesService.recent.subscribe(spaces => {
         expect(spaces[0].id).toEqual(mockSpaces[0].id);
+        done();
       });
     });
 
-    it('should trim _recent if its length exceeds RECENT_SPACE_LENGTH', () => {
+    it('should trim _recent if its length exceeds RECENT_SPACE_LENGTH', (done: DoneFn) => {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       let i: number = 0;
       spaceService.getSpaceById.and.callFake(() => {
@@ -314,12 +318,13 @@ describe('SpacesService', () => {
       const spacesService: SpacesService = TestBed.get(SpacesService);
       spacesService.recent.subscribe(spaces => {
         expect(spaces.length).toEqual(SpacesService.RECENT_SPACE_LENGTH);
+        done();
       });
     });
   });
 
   describe('#initRecent - spaceDeleted', () => {
-    it('should remove deleted space from _recent', () => {
+    it('should remove deleted space from _recent', (done: DoneFn) => {
       const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
@@ -336,13 +341,14 @@ describe('SpacesService', () => {
       mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
       let result: Observable<Space[]> = spacesService.recent;
+      expect(profileService.silentSave).toHaveBeenCalledTimes(1);
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([] as Space[]);
+        done();
       });
-      expect(profileService.silentSave).toHaveBeenCalledTimes(1);
     });
 
-    it('should not remove any spaces from _recent if deleted space was not in _recent', () => {
+    it('should not remove any spaces from _recent if deleted space was not in _recent', (done: DoneFn) => {
       const profileService: any = TestBed.get(ProfileService);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       const mockSpace2: Space = {
@@ -368,10 +374,11 @@ describe('SpacesService', () => {
       mockProfile.store.recentSpaces = [mockSpace];
       const spacesService: SpacesService = TestBed.get(SpacesService);
       let result: Observable<Space[]> = spacesService.recent;
+      expect(profileService.silentSave).toHaveBeenCalledTimes(0);
       result.subscribe((r: Space[]) => {
         expect(r).toEqual([mockSpace] as Space[]);
+        done();
       });
-      expect(profileService.silentSave).toHaveBeenCalledTimes(0);
     });
   });
 
