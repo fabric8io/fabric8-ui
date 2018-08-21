@@ -33,6 +33,7 @@ export class DevNamespaceScope implements INamespaceScope {
     //  query the user namespace from WIT API
     this.namespace = this.http
       .get(this.userServicesUrl, {headers: this.headers})
+      .shareReplay()
       .map(response => {
         let namespace = this.extractUserNamespace(response.json());
         if (namespace) {
