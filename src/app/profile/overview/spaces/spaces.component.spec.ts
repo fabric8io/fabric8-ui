@@ -1,13 +1,12 @@
-import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
+import { DebugNode, ErrorHandler, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Broadcaster, Logger } from 'ngx-base';
 import { Contexts, Fabric8WitModule, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
-import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
+import { createMock } from 'testing/mock';
 import { SpacesComponent } from './spaces.component';
-
 
 describe('SpacesComponent', () => {
   let fixture: ComponentFixture<SpacesComponent>;
@@ -15,10 +14,9 @@ describe('SpacesComponent', () => {
   let mockContexts: any = jasmine.createSpy('Contexts');
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['getSpacesByUser', 'getMoreSpacesByUser']);
-  let mockUserService: any = jasmine.createSpy('UserService');
-  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getGitHubToken', 'getToken']);
   let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast', 'on']);
   let mockEvent = jasmine.createSpy('Event');
+  let mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
   let mockContext: any;
 
   beforeEach(() => {
@@ -32,7 +30,6 @@ describe('SpacesComponent', () => {
       }
     };
     mockContexts.current = Observable.of(mockContext);
-    mockAuthenticationService.gitHubToken = {};
 
     TestBed.configureTestingModule({
       imports: [
@@ -42,9 +39,8 @@ describe('SpacesComponent', () => {
       providers: [
         { provide: Contexts, useValue: mockContexts },
         { provide: Logger, useValue: mockLogger },
-        { provide: UserService, useValue: mockUserService},
-        { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: Broadcaster, useValue: mockBroadcaster },
+        { provide: ErrorHandler, useValue: mockErrorHandler },
         { provide: WIT_API_URL, useValue: 'http://example.com' }
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -56,7 +52,6 @@ describe('SpacesComponent', () => {
 
   describe('#ngOnInit', () => {
     it('should simply delegate to initSpaces() with the page size', () => {
-      console.log('compomemt', component);
       component.pageSize = 5;
       spyOn(component, 'initSpaces');
       component.ngOnInit();
@@ -65,6 +60,12 @@ describe('SpacesComponent', () => {
   });
 
   describe('#initSpaces', () => {
+
+    // ensure the component is not left in a loading state
+    afterEach(() => {
+      expect(component.loading).toEqual(false);
+    });
+
     it('should use spaceService.getSpacesByUser to set the initial spaces', () => {
       component.context = mockContext;
       component.spaceService.getSpacesByUser.and.returnValue(Observable.of('mock-spaces'));
@@ -100,9 +101,5 @@ describe('SpacesComponent', () => {
       expect(component.logger.error).toHaveBeenCalledWith('Failed to retrieve list of spaces owned by user');
     });
   });
-
-  // describe('#removeSpace', () => {});
-
-  // describe('#confirmDeleteSpace', () => {});
 
 });
