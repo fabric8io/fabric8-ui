@@ -139,7 +139,32 @@ NOTE: `fabric8-ui` is setup to do reloading and sourcemaps automatically when yo
 run `npm start`.
 
 ** To hit stack analysis api in standalone mode**
-Put a token in the environment variable with key as 'STACK_API_TOKEN'.
+To target PROD env, configure route as below
+
+```
+
+http://localhost:8088/#/analyze/<STACK_ID>?api_data={
+    "access_token": "",
+    "route_config": {
+        "api_url": "https://recommender.api.openshift.io/"
+    }
+}
+
+```
+
+To get access_token follow below steps :
+
+1. Login to https://openshift.io/[OSIO]
+
+2. Go to profile view
+
+3. Edit Profile
+
+4. Copy token 
+
+
+NOTE : STACK_ID is the ID of any stack anyses in OpenShift.io ( Can be fetched from network ).
+
 
 == CSS and LESS
 
