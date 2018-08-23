@@ -15,7 +15,7 @@ The fabric8 feature toggles is based on [unleash](https://github.com/Unleash/unl
 ## Admin console
 Admin consoles are available here:
 * [Prod UI](http://admin-dsaas-production.09b5.dsaas.openshiftapps.com/toggles/)
-* [Preview UI](http://admin-dsaas-preview.b6ff.rh-idev.openshiftapps.com/toggles/)
+* [Preview UI](https://adminproxy.prod-preview.openshift.io/toggles/)
 
 > NOTE: atm, we don't have any sync mechanism between the 2 instances. This is 2 separate DB.
 
