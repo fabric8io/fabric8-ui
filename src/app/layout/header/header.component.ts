@@ -7,8 +7,6 @@ import { Broadcaster, Logger } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 
-import { removeAction } from '../../app-routing.module';
-
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { Navigation } from '../../models/navigation';
 import { LoginService } from '../../shared/login.service';
@@ -162,12 +160,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return (this.router.url.indexOf('applauncher') !== -1);
   }
 
-  formatUrl(url: string) {
-    url = this.stripQueryFromUrl(url);
-    url = removeAction(url);
-    return url;
-  }
-
   private stripQueryFromUrl(url: string) {
     if (url.indexOf('?q=') !== -1) {
       url = url.substring(0, url.indexOf('?q='));
@@ -178,7 +170,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private updateMenus() {
     if (this.context && this.context.type && this.context.type.hasOwnProperty('menus')) {
       let foundPath = false;
-      let url = this.formatUrl(this.router.url);
+      let url = this.stripQueryFromUrl(this.router.url);
       let menus = (this.context.type as MenuedContextType).menus;
       for (let n of menus) {
         // Clear the menu's active state

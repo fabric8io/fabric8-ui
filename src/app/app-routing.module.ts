@@ -2,34 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FeatureFlagResolver } from 'ngx-feature-flag';
 
-import { trimEnd } from 'lodash';
-
-import { LoginComponent } from './login/login.component';
 import { ContextResolver } from './shared/context-resolver.service';
 import { ProfileResolver } from './shared/profile-resolver.service';
-import { SigninComponent } from './signin/signin.component';
-
-
-export function removeAction(url: string) {
-  const nestedOutletRegex: RegExp = (/^(.*\([A-z-]*?)\/{0,2}action:[A-z-]*\)$/);
-  if (url.indexOf('action:') !== -1) {
-    if (nestedOutletRegex.test(url)) {
-      // if the action outlet contains the current page
-      // e.g., /${user}/${space}/create/(pipelines//action:add-codebase)
-      url = url.match(nestedOutletRegex)[1];
-      let i = url.lastIndexOf('(');
-      url = url.substring(0, i) + url.substring(i + 1);
-      if ((url.lastIndexOf('/') + 1) === url.length) {
-       url = url.slice(0, -1); // trim trailing '/' if applicable
-      }
-    } else {
-      // if the outlet is isolated at the end of the url
-      // e.g., /${user}/${space}/create/(action:add-codebase)
-      url = trimEnd(url.replace(/\(action:[a-z-]*\)/, ''), '/');
-    }
-  }
-  return url;
-}
 
 export const routes: Routes = [
 
@@ -61,7 +35,8 @@ export const routes: Routes = [
       title: 'Getting Started'
     }
   },
-  //verify Email
+
+  // Verify Email
   {
     path: '_verifyEmail',
     loadChildren: './profile/email-verification/email-verification.module#EmailVerificationModule',
@@ -69,6 +44,7 @@ export const routes: Routes = [
       title: 'Verify'
     }
   },
+
   // Error Pages
   {
     path: '_error',
@@ -77,6 +53,7 @@ export const routes: Routes = [
       title: 'Error'
     }
   },
+
   // Feature Flag
   {
     path: '_featureflag',
@@ -85,6 +62,7 @@ export const routes: Routes = [
       title: 'Feature Flag'
     }
   },
+
   // Profile
   {
     path: '_profile',

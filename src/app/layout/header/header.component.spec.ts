@@ -142,24 +142,4 @@ describe('HeaderComponent', () => {
     });
   });
 
-  describe('#formatUrl', () => {
-    it('should remove an action outlet from the end of the url', () => {
-      let url: string = 'create/(action:add-codebase)';
-      let result = component.formatUrl(url);
-      expect(result).toEqual('create');
-    });
-
-    it('should remove an action outlet that contains a nested route', () => {
-      let url: string = 'create/(pipelines//action:add-codebase)';
-      let result = component.formatUrl(url);
-      expect(result).toEqual('create/pipelines');
-    });
-
-    it('should remove a query from the url', () => {
-      let url: string = 'space/plan?q=(space:1234567890)&showTree=true';
-      let result = component.formatUrl(url);
-      expect(result).toEqual('space/plan');
-    });
-  });
-
 });
