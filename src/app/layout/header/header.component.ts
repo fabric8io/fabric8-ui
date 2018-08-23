@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Event, NavigationEnd, Params, Router } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { Broadcaster, Logger } from 'ngx-base';
+import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { User, UserService } from 'ngx-login-client';
 
-import { FeatureTogglesService } from 'ngx-feature-flag';
+import { MenuItem } from '../../models/menu-item';
 import { Navigation } from '../../models/navigation';
 import { LoginService } from '../../shared/login.service';
 import { MenuedContextType } from './menued-context-type';
@@ -19,19 +19,18 @@ interface MenuHiddenCallback {
 @Component({
   selector: 'alm-app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.less'],
-  providers: []
+  styleUrls: ['./header.component.less']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  imgLoaded: Boolean = false;
-  isIn = false;   // store state
+  imgLoaded: boolean = false;
+  isIn: boolean = false;   // store state
 
   toggleState() { // click handler
-      let bool = this.isIn;
+      let bool: boolean = this.isIn;
       this.isIn = bool === false ? true : false;
   }
 
-  menuCallbacks = new Map<String, MenuHiddenCallback>([
+  menuCallbacks: Map<String, MenuHiddenCallback> = new Map<String, MenuHiddenCallback>([
     [
       '_settings', function(headerComponent) {
         return headerComponent.checkContextUserEqualsLoggedInUser();
@@ -54,42 +53,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
   loggedInUser: User;
   private _context: Context;
   private _defaultContext: Context;
-  private _loggedInUserSubscription: Subscription;
   private plannerFollowQueryParams: Object = {};
   private eventListeners: any[] = [];
-  private selectedFlow: string;
-  private space: string;
 
   constructor(
     public router: Router,
     public route: ActivatedRoute,
     private userService: UserService,
-    private logger: Logger,
     public loginService: LoginService,
     private broadcaster: Broadcaster,
-    private contexts: Contexts,
-    private authentication: AuthenticationService,
-    private featureTogglesService: FeatureTogglesService
+    private contexts: Contexts
   ) {
-    this.space = '';
-    router.events.subscribe((val) => {
+    router.events.subscribe((val: Event): void => {
       if (val instanceof NavigationEnd) {
         this.broadcaster.broadcast('navigate', { url: val.url } as Navigation);
         this.updateMenus();
       }
     });
-    contexts.current.subscribe(val => {
+    this.contexts.current.subscribe((val: Context): void => {
       this._context = val;
       this.updateMenus();
     });
-    contexts.default.subscribe(val => {
+    this.contexts.default.subscribe((val: Context): void => {
       this._defaultContext = val;
     });
-    contexts.recent.subscribe(val => this.recent = val);
+    this.contexts.recent.subscribe((val: Context[]): void => {
+      this.recent = val;
+    });
 
     // Currently logged in user
     this.userService.loggedInUser.subscribe(
-      val => {
+      (val: User): void => {
         if (val.id) {
           this.loggedInUser = val;
         } else {
@@ -104,13 +98,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.listenToEvents();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.eventListeners.forEach(e => e.unsubscribe());
   }
 
-  listenToEvents() {
+  listenToEvents(): void {
     this.eventListeners.push(
-      this.route.queryParams.subscribe(params => {
+      this.route.queryParams.subscribe((params: Params): void => {
         this.plannerFollowQueryParams = {};
         if (Object.keys(params).indexOf('iteration') > -1) {
           this.plannerFollowQueryParams['iteration'] = params['iteration'];
@@ -119,18 +113,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
   }
 
-  login() {
+  login(): void {
     this.loginService.redirectUrl = this.router.url;
     this.broadcaster.broadcast('login');
     this.loginService.redirectToAuth();
   }
 
-  logout() {
+  logout(): void {
     this.loginService.logout();
 
   }
 
-  onImgLoad() {
+  onImgLoad(): void {
     this.imgLoaded = true;
   }
 
@@ -167,10 +161,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return url;
   }
 
-  private updateMenus() {
+  private updateMenus(): void {
     if (this.context && this.context.type && this.context.type.hasOwnProperty('menus')) {
-      let foundPath = false;
-      let url = this.stripQueryFromUrl(this.router.url);
+      let foundPath: boolean = false;
+      let url: string = this.stripQueryFromUrl(this.router.url);
       let menus = (this.context.type as MenuedContextType).menus;
       for (let n of menus) {
         // Clear the menu's active state
@@ -181,7 +175,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         // lets go in reverse order to avoid matching
         // /namespace/space/create instead of /namespace/space/create/pipelines
         // as the 'Create' page matches to the 'Codebases' page
-        let subMenus = (n.menus || []).slice().reverse();
+        let subMenus: MenuItem[] = (n.menus || []).slice().reverse();
         if (subMenus && subMenus.length > 0) {
           for (let o of subMenus) {
             // Clear the menu's active state
@@ -232,8 +226,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private checkContextUserEqualsLoggedInUser(): Observable<boolean> {
     return Observable.combineLatest(
-      Observable.of(this.context).map(val => val.user.id),
-      this.userService.loggedInUser.map(val => val.id),
+      Observable.of(this.context).map((val: Context) => val.user.id),
+      this.userService.loggedInUser.map((val: User) => val.id),
       (a, b) => (a !== b)
     );
   }

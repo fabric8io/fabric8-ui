@@ -18,14 +18,10 @@ import {
 } from 'testing/test-context';
 
 import {
-  Broadcaster,
-  Logger
+  Broadcaster
 } from 'ngx-base';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { Contexts } from 'ngx-fabric8-wit';
-import { FeatureTogglesService } from 'ngx-feature-flag';
 import {
-  AuthenticationService,
   UserService
 } from 'ngx-login-client';
 
@@ -76,9 +72,7 @@ describe('HeaderComponent', () => {
     ],
     declarations: [ MockRoutedComponent ],
     providers: [
-      { provide: FeatureTogglesService, useClass: MockFeatureToggleService },
       { provide: UserService, useValue: { loggedInUser: Observable.never() } },
-      { provide: Logger, useValue: createMock(Logger) },
       { provide: LoginService, useValue: jasmine.createSpyObj('LoginService', ['login']) },
       { provide: Broadcaster, useValue: mockBroadcaster },
       {
@@ -87,9 +81,7 @@ describe('HeaderComponent', () => {
           current: Observable.of({ name: 'current' }),
           recent: Observable.never()
         }
-      },
-      { provide: BsModalService, useValue: createMock(BsModalService) },
-      { provide: AuthenticationService, useValue: createMock(AuthenticationService) }
+      }
     ],
     schemas: [ NO_ERRORS_SCHEMA ]
   });
