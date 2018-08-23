@@ -345,7 +345,10 @@ module.exports = function (options) {
               name: '_assets/fonts/[name]' + (isProd ? '.[hash]' : '') + '.[ext]'
             }
           },
-          exclude: path.resolve(__dirname, "../src/assets/images/")
+          exclude: [
+            path.resolve(__dirname, "../src/assets/images/"),
+            /OpenSans.*\.(woff2|woff|ttf|eot|svg)$/ // Exclude loading OpenSans fonts as it will come from CDN
+          ]
         },
         {
           test: /\.(jpg|png|svg|gif|jpeg)$/,
