@@ -163,7 +163,7 @@ To get access_token follow below steps :
 4. Copy token 
 
 
-NOTE : STACK_ID is the ID of any stack anyses in OpenShift.io ( Can be fetched from network ).
+NOTE : STACK_ID is the ID of any stack analyses in OpenShift.io ( Can be fetched from network search for `stack-analyses` ).
 
 
 == CSS and LESS
