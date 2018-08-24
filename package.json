@@ -57,6 +57,7 @@
     "lint": "find src -name '*.ts' | xargs tslint -p . -c tslint.json --force",
     "lint-fix": "find src -name '*.ts' | xargs tslint -p . -c tslint.json --force --fix",
     "postversion": "git push && git push --tags",
+    "postinstall": "./post-install.sh",
     "prebuild:dev": "npm run clean:dist",
     "prebuild:prod": "npm run clean:dist",
     "preclean:install": "npm run clean",
