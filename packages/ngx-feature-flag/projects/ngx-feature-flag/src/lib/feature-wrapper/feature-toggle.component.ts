@@ -4,8 +4,8 @@ import {
   OnInit,
   TemplateRef
 } from '@angular/core';
-import { FeatureTogglesService } from '../service/feature-toggles.service';
 import { Observable } from 'rxjs';
+import { FeatureTogglesService } from '../service/feature-toggles.service';
 
 @Component({
   selector: 'f8-feature-toggle',

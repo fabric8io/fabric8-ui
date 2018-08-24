@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ErrorHandler, Inject, Injectable, InjectionToken } from '@angular/core';
-import { AuthenticationService } from 'ngx-login-client-fork';
+import { AuthenticationService } from 'ngx-login-client/src/app';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Feature } from '../models/feature';

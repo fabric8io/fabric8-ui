@@ -4,13 +4,13 @@
   "dependencies": {
     "lodash": "^4.17.10",
     "patternfly": "^3.28.0",
-    "patternfly-ng": "^4.0.1"
+    "patternfly-ng": "^4.0.1",
+    "ngx-base": "^3.1.1",
+    "ngx-login-client": "^2.2.0"
   },
   "peerDependencies": {
     "@angular/common": "^6.1.0",
-    "@angular/core": "^6.1.0",
-    "ngx-base": "^2.3.6",
-    "ngx-login-client-fork": "2.0.0"
+    "@angular/core": "^6.1.0"
   },
   "devDependencies": {
     "bootstrap": "3.3.7",

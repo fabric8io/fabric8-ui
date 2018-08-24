@@ -5,7 +5,7 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-import { UserService } from 'ngx-login-client-fork';
+import { UserService } from 'ngx-login-client/src/app';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 

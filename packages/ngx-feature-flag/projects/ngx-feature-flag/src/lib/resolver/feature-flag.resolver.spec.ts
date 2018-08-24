@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { Logger } from 'ngx-base';
-import { UserService } from 'ngx-login-client-fork';
+import { UserService } from 'ngx-login-client/src/app';
 import { Observable, of } from 'rxjs';
 import { FeatureFlagResolver } from './feature-flag.resolver';
 
