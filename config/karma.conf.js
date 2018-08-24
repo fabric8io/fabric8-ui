@@ -91,38 +91,14 @@ module.exports = function (config) {
      * start these browsers
      * available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
      */
-    /*
-        browsers: [
-          'Chrome'
-        ],
-
-        customLaunchers: {
-          ChromeTravisCi: {
-            base: 'Chrome',
-            flags: ['--no-sandbox']
-          }
-        },
-    */
-    browsers: ['PhantomJS_custom'],
+    // See https://github.com/karma-runner/karma-chrome-launcher/issues/158#issuecomment-339265457
+    browsers: ['ChromeHeadlessNoSandbox'],
     customLaunchers: {
-      'PhantomJS_custom': {
-        base: 'PhantomJS',
-        options: {
-          windowName: 'alm-window',
-          settings: {
-            webSecurityEnabled: false
-          },
-        },
-        flags: ['--load-images=true'],
-        debug: false
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
       }
     },
-    phantomjsLauncher: {
-      // Have phantomjs exit if a ResourceError is encountered
-      // (useful if karma exits without killing phantom)
-      exitOnResourceError: true
-    },
-
     /*
      * Continuous Integration mode
      * if true, Karma captures browsers, runs the tests and exits
