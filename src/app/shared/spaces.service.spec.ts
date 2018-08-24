@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { cloneDeep } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
@@ -132,7 +133,7 @@ describe('SpacesService', () => {
   });
 
   describe('#saveRecent', () => {
-    it('should silentSave after a spaceChanged has been broadcasted', () => {
+    it('should not silentSave if the spaceChanged already exists in _recent', () => {
       const profileService: any = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = [mockSpace];
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
@@ -147,25 +148,20 @@ describe('SpacesService', () => {
           return Observable.never();
         }
       });
-      let expectedPatch = {
-        store: {
-          recentSpaces: [mockSpace.id]
-        }
-      };
       spyOn(console, 'log');
       const spacesService: SpacesService = TestBed.get(SpacesService);
-      expect(profileService.silentSave).toHaveBeenCalledWith(expectedPatch);
-      expect(console.log).toHaveBeenCalledTimes(0);
+      expect(profileService.silentSave).toHaveBeenCalledTimes(0);
     });
 
-    it('should log an error if silentSave failed', () => {
-      const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
+    it('should silentSave after a spaceChanged has been broadcasted with a new space', () => {
+      let mockSpace2: Space = cloneDeep(mockSpace);
+      mockSpace2.id = 'mock-space-id-2';
+      const profileService: any = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = [mockSpace];
-      profileService.silentSave.and.returnValue(Observable.throw('error'));
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
         if (key === 'spaceChanged') {
-          return Observable.of(mockSpace);
+          return Observable.of(mockSpace2);
         }
         if (key === 'spaceDeleted') {
           return Observable.never();
@@ -176,7 +172,36 @@ describe('SpacesService', () => {
       });
       let expectedPatch = {
         store: {
-          recentSpaces: [mockSpace.id]
+          recentSpaces: [mockSpace2.id, mockSpace.id]
+        }
+      };
+      spyOn(console, 'log');
+      const spacesService: SpacesService = TestBed.get(SpacesService);
+      expect(profileService.silentSave).toHaveBeenCalledWith(expectedPatch);
+      expect(console.log).toHaveBeenCalledTimes(0);
+    });
+
+    it('should log an error if silentSave failed', () => {
+      let mockSpace2: Space = cloneDeep(mockSpace);
+      mockSpace2.id = 'mock-space-id-2';
+      const profileService: jasmine.SpyObj<ProfileService> = TestBed.get(ProfileService);
+      mockProfile.store.recentSpaces = [mockSpace];
+      profileService.silentSave.and.returnValue(Observable.throw('error'));
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.callFake((key: string): Observable<Space> => {
+        if (key === 'spaceChanged') {
+          return Observable.of(mockSpace2);
+        }
+        if (key === 'spaceDeleted') {
+          return Observable.never();
+        }
+        if (key === 'spaceUpdated') {
+          return Observable.never();
+        }
+      });
+      let expectedPatch = {
+        store: {
+          recentSpaces: [mockSpace2.id, mockSpace.id]
         }
       };
       spyOn(console, 'log');

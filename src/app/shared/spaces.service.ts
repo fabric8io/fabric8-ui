@@ -47,6 +47,7 @@ export class SpacesService implements Spaces {
           if (recentSpaces[0].id !== changedSpace.id) {
             recentSpaces.splice(index, 1);
             recentSpaces.unshift(changedSpace);
+            this.saveRecent(recentSpaces);
           }
           // otherwise, no operation required; changedSpace is already index 0
         // if changedSpace is new to the recent spaces
@@ -56,8 +57,8 @@ export class SpacesService implements Spaces {
           if (recentSpaces.length > SpacesService.RECENT_SPACE_LENGTH) {
             recentSpaces.pop();
           }
+          this.saveRecent(recentSpaces);
         }
-        this.saveRecent(recentSpaces);
       }
     );
 
