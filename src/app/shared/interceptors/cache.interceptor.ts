@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 
 import {
-  HttpEvent, HttpHandler, HttpHeaders,
+  HttpEvent, HttpHandler,
   HttpInterceptor, HttpRequest, HttpResponse
 } from '@angular/common/http';
 

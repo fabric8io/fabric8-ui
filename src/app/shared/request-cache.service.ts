@@ -14,7 +14,7 @@ export interface RequestCache {
   set(req: HttpRequest<any>, response: HttpResponse<any>): void;
 }
 
-const maxAge = 300000; // maximum cache age (ms)
+const maxAge = 300; // maximum cache age (ms)
 
 @Injectable()
 export class RequestCacheWithMap implements RequestCache {
