@@ -3,7 +3,13 @@
     <a [routerLink]="['/', space?.relationalData?.creator?.attributes?.username, space?.attributes?.name]">
       {{space?.attributes?.name}}</a>
     <span class="avatar">
-      <img src="{{space?.relationalData?.creator?.attributes?.imageURL}}">
+      <span *ngIf="space?.relationalData?.creator?.attributes?.imageURL?.length > 0; then userAvatar else defaultAvatar"></span>
+      <ng-template #userAvatar>
+        <img [src]="space.relationalData.creator.attributes.imageURL">
+      </ng-template>
+      <ng-template #defaultAvatar>
+        <img src="../../../../../assets/images/profile-user.png">
+      </ng-template>
       <span class="margin-left-10">{{space?.relationalData?.creator?.attributes?.username}}</span>
     </span>
   </div>
