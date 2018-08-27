@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 
 import { FeatureFlagModule } from 'ngx-feature-flag';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
+import { CodebaseItemModule } from './codebase-item/codebase-item.module';
 
 import { AddCodebaseWidgetRoutingModule } from './add-codebase-widget-routing.module';
 import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
-
 
 @NgModule({
   imports: [
@@ -15,7 +15,8 @@ import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
     FormsModule,
     AddCodebaseWidgetRoutingModule,
     FeatureFlagModule,
-    LoadingWidgetModule
+    LoadingWidgetModule,
+    CodebaseItemModule
   ],
   declarations: [AddCodebaseWidgetComponent],
   exports: [AddCodebaseWidgetComponent]
