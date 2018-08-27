@@ -1,4 +1,8 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  Input
+} from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import {
   initContext,
@@ -24,13 +28,28 @@ class HostComponent {
   };
 }
 
+@Component({
+  selector: 'codebases-item-workspaces',
+  template: ''
+})
+class MockCodebasesItemWorkspacesComponent {
+  @Input() codebase: Codebase;
+}
+
 describe('AddCodebaseWidget CodebaseItemComponent', () => {
 
   type TestingContext = TestContext<CodebaseItemComponent, HostComponent>;
-  initContext(CodebaseItemComponent, HostComponent);
+  initContext(CodebaseItemComponent, HostComponent, {
+    declarations: [ MockCodebasesItemWorkspacesComponent ]
+  });
 
-  it('should be instantiable', function(this: TestingContext): void {
-    expect(this.testedDirective).toBeDefined();
+  it('should receive provided Codebase', function(this: TestingContext): void {
+    expect(this.testedDirective.codebase).toBe(this.hostComponent.codebase);
+  });
+
+  it('should provide codebase to child codebases-item-workspaces component', function(this: TestingContext): void {
+    const child: MockCodebasesItemWorkspacesComponent = this.tested.query(By.directive(MockCodebasesItemWorkspacesComponent)).componentInstance;
+    expect(child.codebase).toBe(this.testedDirective.codebase);
   });
 
 });
