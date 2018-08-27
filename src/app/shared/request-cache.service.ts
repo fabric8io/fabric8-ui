@@ -9,9 +9,9 @@ export interface RequestCacheEntry {
   lastRead: number;
 }
 
-export abstract class RequestCache {
-  abstract get(req: HttpRequest<any>): HttpResponse<any> | undefined;
-  abstract set(req: HttpRequest<any>, response: HttpResponse<any>): void;
+export interface RequestCache {
+  get(req: HttpRequest<any>): HttpResponse<any> | undefined;
+  set(req: HttpRequest<any>, response: HttpResponse<any>): void;
 }
 
 const maxAge = 300000; // maximum cache age (ms)
