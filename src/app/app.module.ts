@@ -124,7 +124,7 @@ import { RavenExceptionHandler } from './shared/exception.handler';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
 
 import { HttpInterceptorProviders } from './shared/interceptors/index';
-import { RequestCache, RequestCacheWithMap } from './shared/request-cache.service';
+import { RequestCache } from './shared/request-cache.service';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -222,10 +222,7 @@ export type StoreType = {
       provide: Http,
       useClass: Fabric8UIHttpService
     },
-    {
-      provide: RequestCache,
-      useClass: RequestCacheWithMap
-    },
+    RequestCache,
     HttpInterceptorProviders,
     fabric8UIConfigProvider,
     {
