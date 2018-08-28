@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { List, take } from 'lodash';
 import { Observable } from 'rxjs';
 
-import { WorkItemService } from 'fabric8-planner';
+import { FilterService, WorkItemService } from 'fabric8-planner';
 
 import { Contexts, Space, Spaces, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
@@ -72,6 +72,12 @@ describe('WorkItemsComponent', () => {
           let mockSpacesService: any = createMock(Spaces);
           mockSpacesService.recent = Observable.of(mockRecentSpaces) as Observable<Space[]>;
           return mockSpacesService;
+        }
+      },
+      {
+        provide: FilterService, useFactory: () => {
+          let filterServiceMock = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
+          return filterServiceMock;
         }
       },
       { provide: SpaceService, useFactory: () => {

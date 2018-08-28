@@ -10,6 +10,8 @@ import { WorkItemBarchartData } from './work-item-barchart/work-item-barchart-da
 
 import { uniqueId } from 'lodash';
 
+import { SpacesService } from './../../shared/spaces.service';
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-work-item-widget',
@@ -51,6 +53,7 @@ export class WorkItemWidgetComponent implements OnInit {
 
   constructor(
     private contexts: Contexts,
+    private spacesService: SpacesService,
     private workItemService: WorkItemService
   ) { }
 
@@ -74,7 +77,12 @@ export class WorkItemWidgetComponent implements OnInit {
 
   private updateWorkItems(): void {
     this.loading = true;
-    this._myWorkItems = this.workItemService.getWorkItems(100000, [])
+    this._myWorkItems =
+      this.spacesService.current.switchMap(space => {
+        return this.workItemService.getWorkItems(
+          100000, {expression: {'space': `${space.id}`}}
+        );
+      })
       .map(val => val.workItems)
       .do(workItems => {
         this.myWorkItemsCount = workItems.length;

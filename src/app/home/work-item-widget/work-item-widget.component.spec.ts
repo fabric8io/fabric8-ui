@@ -7,7 +7,7 @@ import { NgArrayPipesModule } from 'angular-pipes';
 import { ConnectableObservable } from 'rxjs';
 import { Observable, Subject } from 'rxjs';
 
-import { WorkItem, WorkItemService } from 'fabric8-planner';
+import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Fabric8WitModule, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
@@ -121,6 +121,11 @@ describe('WorkItemWidgetComponent', () => {
           'current': Observable.of(spaceMock),
           'recent': Observable.of([spaceMock])
         } as Spaces
+      }, {
+        provide: FilterService, useFactory: () => {
+          let filterServiceMock = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
+          return filterServiceMock;
+        }
       }
     ],
     schemas: [

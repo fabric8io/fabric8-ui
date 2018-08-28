@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { WorkItem, WorkItemService } from 'fabric8-planner';
+import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
@@ -25,6 +25,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
 
   constructor(
       private spacesService: Spaces,
+      private filterService: FilterService,
       private workItemService: WorkItemService,
       private userService: UserService) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
@@ -67,30 +68,27 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       .do(() => this.workItemService._currentSpace = space)
       .do(() => this.workItemService.buildUserIdMap())
       .switchMap(() => this.userService.loggedInUser)
-      .map(user => [{
-        paramKey: 'filter[assignee]',
-        value: user.id,
-        active: true
-      }])
+      .map(user => {
+        const assigneeQuery = this.filterService.queryJoiner(
+          {},
+          this.filterService.and_notation,
+          this.filterService.queryBuilder(
+            'assignee', this.filterService.equal_notation, user.id
+          )
+        );
+        const spaceQuery = this.filterService.queryBuilder(
+          'space', this.filterService.equal_notation, space.id
+        );
+        return this.filterService.queryJoiner(
+          assigneeQuery, this.filterService.and_notation, spaceQuery
+        );
+      })
       .switchMap(filters => this.workItemService
-        .getWorkItems(100000, filters))
+        .getWorkItems(100000, {expression: filters}))
       .map(val => val.workItems)
       .map(workItems => filterOutClosedItems(workItems))
-      // Resolve the work item type, creator and area
+      // Resolve the work item type
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
-      .do(workItems => workItems.forEach(workItem => {
-        try {
-          this.workItemService.resolveAreaForWorkItem(workItem);
-        } catch (error) { /* No space */ }
-      }))
-      .do(workItems => {
-        workItems.forEach(workItem => {
-          if (workItem.relationalData === undefined) {
-            workItem.relationalData = {};
-          }
-        });
-      })
-      .do(workItems => workItems.forEach(workItem => this.workItemService.resolveCreator(workItem)))
       .do(() => this.loading = false)
       .subscribe(workItems => {
         this.workItems = workItems;

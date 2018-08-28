@@ -13,6 +13,7 @@ import { Observable, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
+import { SpacesService } from '../../shared/spaces.service';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 
@@ -62,6 +63,9 @@ describe('WorkItemWidgetComponent', () => {
       type: 'workitems'
     } as WorkItem;
 
+    let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent', 'current']);
+    let mockSubject: any = jasmine.createSpy('Subject');
+
     workItem1 = cloneDeep(workItem);
     workItem1.attributes['system.state'] = 'open';
     workItem2 = cloneDeep(workItem);
@@ -73,6 +77,13 @@ describe('WorkItemWidgetComponent', () => {
     workItem5 = cloneDeep(workItem);
     workItem5.attributes['system.state'] = 'new';
     workItems = [workItem1, workItem2, workItem3, workItem4, workItem5];
+
+    mockSpacesService.addRecent.and.returnValue(mockSubject);
+    mockSpacesService.addRecent.next = {};
+    mockSpacesService = {
+      ...mockSpacesService,
+      ...{current: Observable.of({})}
+    };
 
     TestBed.configureTestingModule({
       imports: [
@@ -123,6 +134,7 @@ describe('WorkItemWidgetComponent', () => {
             return mockRouter;
           }
         },
+        { provide: SpacesService, useValue: mockSpacesService },
         {
           provide: WorkItemService,
           useFactory: () => {

@@ -2,18 +2,11 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { ConnectableObservable, Observable } from 'rxjs';
 
-import { WorkItem, WorkItemService } from 'fabric8-planner';
-import { Broadcaster } from 'ngx-base';
+import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 
 import { filterOutClosedItems } from '../../shared/workitem-utils';
-
-class WorkItemFilter {
-  paramKey: string;
-  value: string;
-  active: boolean;
-}
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -29,7 +22,7 @@ export class CreateWorkItemWidgetComponent implements OnInit {
   contextPath: Observable<string>;
 
   constructor(
-    private broadcaster: Broadcaster,
+    private filterService: FilterService,
     private workItemService: WorkItemService,
     private userService: UserService,
     private contexts: Contexts
@@ -41,16 +34,12 @@ export class CreateWorkItemWidgetComponent implements OnInit {
       .getUser()
       .do(() => this.workItemService.buildUserIdMap())
       .switchMap(() => this.userService.loggedInUser)
-      .map(user => [{
-        paramKey: 'filter[assignee]',
-        value: user.id,
-        active: true
-      }])
+      .map(user => this.filterService.queryBuilder('assignee', this.filterService.equal_notation, user.id))
       .switchMap(filters => this.workItemService
-        .getWorkItems(100000, filters))
+        .getWorkItems(100000, {expression: filters}))
       .map(val => val.workItems)
       .map(workItems => filterOutClosedItems(workItems))
-      // Resolve the work item type, creator and area
+      // Resolve the work item type
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveAreaForWorkItem(workItem)))
       // MUST DO creator after area due to bug in planner
