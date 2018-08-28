@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { ErrorHandler } from '@angular/core';
 import { async, getTestBed, TestBed } from '@angular/core/testing';
 import { cloneDeep } from 'lodash';
-import { AuthenticationService } from 'ngx-login-client/src/app';
+import { AuthenticationService } from 'ngx-login-client';
 import { first } from 'rxjs/operators';
 import { Feature } from '../models/feature';
 import { FABRIC8_FEATURE_TOGGLES_API_URL, FeatureTogglesService } from './feature-toggles.service';

@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Broadcaster, Logger } from 'ngx-base';
-import { AUTH_API_URL, AuthenticationService, REALM, SSO_API_URL, UserService } from 'ngx-login-client/src/app';
+import { AUTH_API_URL, AuthenticationService, REALM, SSO_API_URL, UserService } from 'ngx-login-client';
 import { FeatureFlagModule } from '../../projects/ngx-feature-flag/src/lib/feature-flag.module';
 import { FABRIC8_FEATURE_TOGGLES_API_URL, FeatureTogglesService }
  from '../../projects/ngx-feature-flag/src/lib/service/feature-toggles.service';

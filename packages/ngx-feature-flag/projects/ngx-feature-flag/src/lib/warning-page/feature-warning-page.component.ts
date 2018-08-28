@@ -5,7 +5,7 @@ import {
   OnInit
 } from '@angular/core';
 
-import { AuthenticationService, UserService } from 'ngx-login-client/src/app';
+import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
 @Component({

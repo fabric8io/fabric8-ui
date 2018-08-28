@@ -6,7 +6,7 @@
     "patternfly": "^3.28.0",
     "patternfly-ng": "^4.0.1",
     "ngx-base": "^3.1.1",
-    "ngx-login-client": "^2.2.0"
+    "ngx-login-client": "^2.3.1"
   },
   "peerDependencies": {
     "@angular/common": "^6.1.0",
