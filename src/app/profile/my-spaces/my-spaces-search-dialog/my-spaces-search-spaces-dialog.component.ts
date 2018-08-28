@@ -124,5 +124,4 @@ export class MySpacesSearchSpacesDialog implements OnDestroy, OnInit {
           }
         });
   }
-
 }

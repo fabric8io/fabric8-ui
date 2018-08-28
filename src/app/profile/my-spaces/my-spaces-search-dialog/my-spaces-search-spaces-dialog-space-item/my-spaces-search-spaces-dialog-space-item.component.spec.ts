@@ -23,5 +23,4 @@ describe('MySpacesSearchSpacesDialogSpaceItemComponent', () => {
   it('should be instantiable', function(this: TestingContext): void {
     expect(this.testedDirective).toBeDefined();
   });
-
 });

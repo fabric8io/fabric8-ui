@@ -315,5 +315,4 @@ describe('MySpacesSearchSpacesDialog', () => {
         });
     });
   });
-
 });

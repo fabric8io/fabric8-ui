@@ -8,7 +8,6 @@
         </button>
       </div>
       <div class="modal-body">
-
         <div class="input-group search-bar">
           <input #searchField type="text" class="form-control" placeholder="Enter Text to Search" [(ngModel)]="searchTerm" (keyup.enter)="search()">
           <div class="input-group-btn">
@@ -19,7 +18,6 @@
         </div>
 
         <div class="results-area">
-
           <ng-container [ngSwitch]="(viewState | async)">
             <ng-container *ngSwitchCase="'INIT'">
               <div class="init-state">
@@ -74,9 +72,7 @@
               </div>
             </ng-container>
           </ng-container><!-- ngSwitch -->
-
         </div><!-- results-area -->
-
       </div>
     </div>
   </div>
