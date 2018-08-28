@@ -16,7 +16,7 @@ load_jenkins_vars() {
 
 prep() {
   yum -y update
-  yum -y install docker make git gcc-c++ bzip2 fontconfig
+  yum -y install docker make gcc-c++ bzip2 fontconfig
   cp e2e/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
   yum install -y google-chrome-stable
 
