@@ -19,12 +19,27 @@ prep() {
   yum -y install docker make git gcc-c++ bzip2 fontconfig
   cp e2e/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
   yum install -y google-chrome-stable
+
+  # Get and set up git v2.12
+  yum -y install centos-release-scl
+  yum -y install sclo-git212.x86_64
+  export PATH=${PATH}:/opt/rh/sclo-git212/root/usr/bin/
+
+  # Get and set up Nodejs
   curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash -
   yum -y install nodejs
 }
 
 install_dependencies() {
   npm install;
+
+  # Set the branch as it defaults to the branch 'origin/master'
+  git checkout master
+  export GIT_BRANCH=master
+
+  # check where we are
+  git branch -va
+  git remote -v
 
   if [ $? -eq 0 ]; then
       echo 'CICO: npm install : OK'

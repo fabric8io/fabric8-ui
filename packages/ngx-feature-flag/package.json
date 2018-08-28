@@ -25,9 +25,12 @@
     "build:lib": "ng build --prod ngx-feature-flag",
     "pack:lib": "cd dist/ngx-feature-flag && npm pack",
     "package": "npm run build:lib && npm run pack:lib",
-    "semantic-release": "semantic-release pre && npm run build && cp -r .git dist/ngx-feature-flag && npm publish dist/ngx-feature-flag"
+    "semantic-release": "semantic-release"
+   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabric8-ui/ngx-feature-flag.git"
   },
-  "private": true,
   "dependencies": {
     "@angular/common": "^6.1.0",
     "@angular/core": "^6.1.0",
@@ -74,6 +77,11 @@
     "markdown-it": "8.4.1",
     "highlight.js": "9.12.0",
     "rimraf": "2.6.2",
-    "semantic-release": "8.2.0"
+    "semantic-release": "^15.9.12"
+  },
+  "release": {
+    "branch": "master",
+    "debug": "true",
+    "pkgRoot": "dist/ngx-feature-flag"
   }
 }
