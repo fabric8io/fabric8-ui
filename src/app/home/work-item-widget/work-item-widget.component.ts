@@ -89,6 +89,13 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       .map(workItems => filterOutClosedItems(workItems))
       // Resolve the work item type
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
+      .do(workItems => {
+        workItems.forEach(workItem => {
+          if (workItem.relationalData === undefined) {
+            workItem.relationalData = {};
+          }
+        });
+      })
       .do(() => this.loading = false)
       .subscribe(workItems => {
         this.workItems = workItems;

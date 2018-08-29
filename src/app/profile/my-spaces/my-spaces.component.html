@@ -1,6 +1,7 @@
 <div class="my-spaces-page">
   <my-spaces-toolbar
     (onCreateSpace)="showAddSpaceOverlay()"
+    (onSearchSpaces)="showSearchSpacesOverlay()"
     (onFilterChange)="filterChange($event)"
     (onSortChange)="sortChange($event)"
     [resultsCount]="resultsCount">
@@ -53,3 +54,5 @@
     <button class="btn btn-danger" (click)="removeSpace()">Remove</button>
   </div>
 </ng-template>
+
+<my-spaces-search-spaces-dialog></my-spaces-search-spaces-dialog>
