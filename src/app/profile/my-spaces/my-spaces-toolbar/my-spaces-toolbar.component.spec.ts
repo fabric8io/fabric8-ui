@@ -7,7 +7,8 @@ import {
 
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
-import { initContext, TestContext } from '../../../../testing/test-context';
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
+import { initContext, TestContext } from 'testing/test-context';
 
 import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
 
@@ -40,7 +41,10 @@ class FakePfngToolbarComponent {
 describe('MySpacesToolbarComponent', () => {
   type Context = TestContext<MySpacesToolbarComponent, TestHostComponent>;
   initContext(MySpacesToolbarComponent, TestHostComponent, {
-    declarations: [FakePfngToolbarComponent]
+    declarations: [
+      FakePfngToolbarComponent,
+      MockFeatureToggleComponent
+    ]
   });
 
   it('should update filterConfig resultsCount', function(this: Context) {

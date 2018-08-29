@@ -5,9 +5,12 @@
       (onFilterChange)="filterChange($event)"
       (onSortChange)="sortChange($event)">
     <ng-template #toolbarTemplate>
-      <span class="vertical-separator padding-right-10">
-        <button class="btn btn-default" type="button" tooltip="Search Spaces" placement="top" (click)="searchSpaces($event)">Find a Space to Join</button>
-      </span>
+      <f8-feature-toggle featureName="MySpaces.SearchSpaces" [userLevel]="searchSpaces"></f8-feature-toggle>
+      <ng-template #searchSpaces>
+        <span class="vertical-separator padding-right-10">
+          <button class="btn btn-default" type="button" tooltip="Search Spaces" placement="top" (click)="searchSpaces($event)">Find a Space to Join</button>
+        </span>
+      </ng-template>
       <span class="with-cursor-pointer padding-left-10" placement="top" tooltip="Create Space"
             (click)="createSpace($event)">
         <span class="add-space-tooltip">
