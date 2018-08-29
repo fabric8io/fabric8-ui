@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
@@ -14,7 +15,8 @@ import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
     CommonModule,
     RouterModule,
     ToolbarModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    FeatureFlagModule
   ],
   declarations: [
     MySpacesToolbarComponent
