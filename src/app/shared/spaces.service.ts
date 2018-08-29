@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { ConnectableObservable, Observable, ReplaySubject, Subscription } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
 
 @Injectable()
@@ -10,7 +10,8 @@ export class SpacesService implements Spaces {
   static readonly RECENT_SPACE_LENGTH = 8;
 
   private _current: Observable<Space>;
-  private _recent: ConnectableObservable<Space[]>;
+  private _recent: ReplaySubject<Space[]> = new ReplaySubject<Space[]>(1);
+  private recentChanged: boolean = false;
 
   constructor(
     private contexts: Contexts,
@@ -31,50 +32,63 @@ export class SpacesService implements Spaces {
 
   private initRecent(): void {
     // load existing recent spaces from profile.store.recentSpaces
-    this._recent = this.loadRecent().publishReplay(1);
-    this._recent.connect();
+    this.loadRecent().subscribe(spaces => {
+      this._recent.next(spaces);
+    });
 
     // update _recent with newly seen space when spaceChanged is emitted
     this.broadcaster.on<Space>('spaceChanged')
-      .combineLatest(this._recent)
-      .subscribe((combined: [Space, Space[]]) => {
-        let changedSpace: Space = combined[0];
-        let recentSpaces: Space[] = combined[1];
-        let index: number = this.findRecentIndexById(recentSpaces, changedSpace.id);
-        // if changedSpace exists in _recent
-        if (index !== -1) {
-          // move the space to the front of the list if it is already in _recent
-          if (recentSpaces[0].id !== changedSpace.id) {
-            recentSpaces.splice(index, 1);
+      .flatMap((changedSpace: Space) => {
+        return this._recent.first().map((recentSpaces: Space[]) => {
+          let index: number = this.findRecentIndexById(recentSpaces, changedSpace.id);
+          // if changedSpace exists in _recent
+          if (index !== -1) {
+            // move the space to the front of the list if it is already in _recent
+            if (recentSpaces[0].id !== changedSpace.id) {
+              recentSpaces.splice(index, 1);
+              recentSpaces.unshift(changedSpace);
+              this.recentChanged = true;
+            }
+            // otherwise, no operation required; changedSpace is already index 0
+          // if changedSpace is new to the recent spaces
+          } else {
             recentSpaces.unshift(changedSpace);
-            this.saveRecent(recentSpaces);
+            // trim _recent if required to ensure it is length =< 8
+            if (recentSpaces.length > SpacesService.RECENT_SPACE_LENGTH) {
+              recentSpaces.pop();
+            }
+            this.recentChanged = true;
           }
-          // otherwise, no operation required; changedSpace is already index 0
-        // if changedSpace is new to the recent spaces
-        } else {
-          recentSpaces.unshift(changedSpace);
-          // trim _recent if required to ensure it is length =< 8
-          if (recentSpaces.length > SpacesService.RECENT_SPACE_LENGTH) {
-            recentSpaces.pop();
-          }
+          return recentSpaces;
+        });
+      })
+      .subscribe((recentSpaces: Space[]) => {
+        if (this.recentChanged) {
           this.saveRecent(recentSpaces);
+          this.recentChanged = false;
+          this._recent.next(recentSpaces);
         }
-      }
-    );
+      });
 
     // if a space is deleted, check to see if it should be removed from _recent
     this.broadcaster.on<Space>('spaceDeleted')
-      .combineLatest(this._recent)
-      .subscribe((combined: [Space, Space[]]) => {
-        let deletedSpace: Space = combined[0];
-        let recentSpaces: Space[] = combined[1];
-        let index: number = this.findRecentIndexById(recentSpaces, deletedSpace.id);
-        if (index !== -1) {
-          recentSpaces.splice(index, 1);
+      .flatMap((deletedSpace: Space) => {
+        return this._recent.map((recentSpaces: Space[]) => {
+          let index: number = this.findRecentIndexById(recentSpaces, deletedSpace.id);
+          if (index !== -1) {
+            recentSpaces.splice(index, 1);
+            this.recentChanged = true;
+          }
+          return recentSpaces;
+        });
+      })
+      .subscribe((recentSpaces: Space[]) => {
+        if (this.recentChanged) {
           this.saveRecent(recentSpaces);
+          this.recentChanged = false;
+          this._recent.next(recentSpaces);
         }
-      }
-    );
+      });
   }
 
   get current(): Observable<Space> {
@@ -99,7 +113,6 @@ export class SpacesService implements Spaces {
   }
 
   private saveRecent(recent: Space[]): Subscription {
-    this._recent.publish();
     let patch = {
       store: {
         recentSpaces: recent.map(val => val.id)

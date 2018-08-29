@@ -50,7 +50,8 @@ describe('SpacesService', () => {
     TestBed.configureTestingModule({
       providers: [
         SpacesService,
-        { provide: Broadcaster,
+        {
+          provide: Broadcaster,
           useFactory: () => {
             const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
             mockBroadcaster.on.and.callFake((key: string): Observable<Space> => {
@@ -67,7 +68,8 @@ describe('SpacesService', () => {
             return mockBroadcaster;
           }
         },
-        { provide: ProfileService,
+        {
+          provide: ProfileService,
           useFactory: () => {
             const mockProfileService: any = jasmine.createSpyObj('ProfileService', ['silentSave']);
             mockProfileService.current = Observable.of(mockProfile);
