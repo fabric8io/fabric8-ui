@@ -1,0 +1,17 @@
+<div class="space-item" *ngIf="space?.relationalData?.creator?.attributes">
+  <div class="list-pf-title">
+    <a [routerLink]="['/', space?.relationalData?.creator?.attributes?.username, space?.attributes?.name]">
+      {{space?.attributes?.name}}</a>
+    <span class="avatar">
+      <span *ngIf="space?.relationalData?.creator?.attributes?.imageURL?.length > 0; then userAvatar else defaultAvatar"></span>
+      <ng-template #userAvatar>
+        <img user-avatar [src]="space.relationalData.creator.attributes.imageURL">
+      </ng-template>
+      <ng-template #defaultAvatar>
+        <img default-avatar src="../../../../../assets/images/profile-user.png">
+      </ng-template>
+      <span class="margin-left-10">{{space?.relationalData?.creator?.attributes?.username}}</span>
+    </span>
+  </div>
+  <div>{{space?.attributes?.description}}</div>
+</div>

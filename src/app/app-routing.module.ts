@@ -45,6 +45,15 @@ export const routes: Routes = [
     }
   },
 
+  //redirect status pages
+  {
+    path: '_redirects/:redirectType',
+    loadChildren: './layout/redirect-status/redirect-status.module#RedirectStatusModule',
+    data: {
+      title: 'Redirect Status'
+    }
+  },
+
   // Error Pages
   {
     path: '_error',

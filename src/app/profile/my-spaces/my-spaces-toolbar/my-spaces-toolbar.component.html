@@ -1,17 +1,44 @@
-<div class="toolbar-header">
-  <pfng-toolbar class="padding-top-10"
-      [config]="toolbarConfig"
-      [viewTemplate]="addSpaceTemplate"
-      (onFilterChange)="filterChange($event)"
-      (onSortChange)="sortChange($event)">
-    <ng-template #addSpaceTemplate>
-      <span class="with-cursor-pointer" placement="top" tooltip="Create Space"
-            (click)="createSpace($event)">
-        <span class="add-space-tooltip">
-          <i class="pficon pficon-add-circle-o margin-top-4"></i>
-          Create Space
+<!-- Toggle the entire view rather than just the search button, because toggling just the search button -->
+<!-- results in the lazy-loaded user level template's onclick binding not properly attaching to the parent scope -->
+<f8-feature-toggle featureName="MySpaces.SearchSpaces" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
+<ng-template #user>
+  <div class="toolbar-header">
+    <pfng-toolbar class="padding-top-10"
+        [config]="toolbarConfig"
+        [viewTemplate]="toolbarTemplate"
+        (onFilterChange)="filterChange($event)"
+        (onSortChange)="sortChange($event)">
+      <ng-template #toolbarTemplate>
+        <span class="vertical-separator padding-right-10">
+          <button class="btn btn-default" type="button" tooltip="Search Spaces" placement="top" (click)="searchSpaces($event)">Find a Space to Join</button>
         </span>
-      </span>
-    </ng-template>
-  </pfng-toolbar>
-</div>
+        <span class="with-cursor-pointer padding-left-10" placement="top" tooltip="Create Space"
+              (click)="createSpace($event)">
+          <span class="add-space-tooltip">
+            <i class="pficon pficon-add-circle-o margin-top-4"></i>
+            Create Space
+          </span>
+        </span>
+      </ng-template>
+    </pfng-toolbar>
+  </div>
+</ng-template>
+<ng-template #default>
+  <div class="toolbar-header">
+    <pfng-toolbar class="padding-top-10"
+        [config]="toolbarConfig"
+        [viewTemplate]="toolbarTemplate"
+        (onFilterChange)="filterChange($event)"
+        (onSortChange)="sortChange($event)">
+      <ng-template #toolbarTemplate>
+        <span class="with-cursor-pointer padding-left-10" placement="top" tooltip="Create Space"
+              (click)="createSpace($event)">
+          <span class="add-space-tooltip">
+            <i class="pficon pficon-add-circle-o margin-top-4"></i>
+            Create Space
+          </span>
+        </span>
+      </ng-template>
+    </pfng-toolbar>
+  </div>
+</ng-template>

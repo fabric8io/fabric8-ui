@@ -17,10 +17,6 @@ const routes: Routes = [
         loadChildren: './feature-opt-in/feature-opt-in.module#FeatureOptInModule'
       },
       {
-        path: 'notifications',
-        loadChildren: './notifications/notifications.module#NotificationsModule'
-      },
-      {
         path: 'resources',
         loadChildren: './resources/resources.module#ResourcesModule'
       }

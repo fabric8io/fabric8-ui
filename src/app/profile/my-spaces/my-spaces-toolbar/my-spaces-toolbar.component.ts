@@ -25,6 +25,7 @@ export class MySpacesToolbarComponent implements OnInit, OnChanges {
   @Input() resultsCount: number = 0;
 
   @Output('onCreateSpace') onCreateSpace = new EventEmitter();
+  @Output('onSearchSpaces') onSearchSpaces = new EventEmitter();
   @Output('onFilterChange') onFilterChange = new EventEmitter();
   @Output('onSortChange') onSortChange = new EventEmitter();
 
@@ -79,6 +80,10 @@ export class MySpacesToolbarComponent implements OnInit, OnChanges {
 
   createSpace($event: MouseEvent): void {
     this.onCreateSpace.emit($event);
+  }
+
+  searchSpaces($event: MouseEvent): void {
+    this.onSearchSpaces.emit($event);
   }
 
   filterChange($event: FilterEvent): void {

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { uniqBy } from 'lodash';
 
-import { WorkItem, WorkItemService } from 'fabric8-planner';
+import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
@@ -30,7 +30,8 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
     private spacesService: Spaces,
     private spaceService: SpaceService,
     private workItemService: WorkItemService,
-    private contextService: ContextService
+    private contextService: ContextService,
+    private filterService: FilterService
   ) {}
 
   ngOnInit(): void {
@@ -84,28 +85,29 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
   }
 
   private fetchWorkItemsBySpace(space: Space): void {
-    let filters = [
-      {
-        paramKey: 'filter[assignee]',
-        value: this.context.user.id,
-        active: true
-      }
-    ];
-    this.workItemService._currentSpace = space;
+
+    const assigneeQuery = this.filterService.queryJoiner(
+      {},
+      this.filterService.and_notation,
+      this.filterService.queryBuilder(
+        'assignee', this.filterService.equal_notation, this.context.user.id
+      )
+    );
+    const spaceQuery = this.filterService.queryBuilder(
+      'space', this.filterService.equal_notation, space.id
+    );
+    const filters = this.filterService.queryJoiner(
+      assigneeQuery, this.filterService.and_notation, spaceQuery
+    );
     this.subscriptions.push(
       this.workItemService
-        .getWorkItems(100000, filters)
-        .subscribe(
-          (result: {
-            workItems: WorkItem[];
-            nextLink: string;
-            totalCount?: number;
-            included?: WorkItem[];
-            ancestorIDs?: string[];
-          }): void => {
-            this.workItems = filterOutClosedItems(result.workItems);
-          }
-        )
+        .getWorkItems(100000, {expression: filters})
+        .map(val => val.workItems)
+        .map(workItems => filterOutClosedItems(workItems))
+        // Resolve the work item type, creator and area
+        .subscribe(workItems => {
+          this.workItems = workItems;
+        })
     );
   }
 }

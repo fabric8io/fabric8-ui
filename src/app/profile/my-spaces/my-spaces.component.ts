@@ -3,6 +3,7 @@ import {
   OnDestroy,
   OnInit,
   TemplateRef,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -22,6 +23,8 @@ import { SortEvent, SortField } from 'patternfly-ng/sort';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { EventService } from '../../shared/event.service';
 
+import { MySpacesSearchSpacesDialog } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.component';
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-my-spaces',
@@ -33,6 +36,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   listConfig: ListConfig;
   resultsCount: number = 0;
 
+  @ViewChild(MySpacesSearchSpacesDialog) private searchSpacesDialog: MySpacesSearchSpacesDialog;
   private _spaces: Space[] = [];
   private appliedFilters: Filter[];
   private allSpaces: Space[] = [];
@@ -259,6 +263,10 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   showAddSpaceOverlay() {
     this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  }
+
+  showSearchSpacesOverlay() {
+    this.searchSpacesDialog.show();
   }
 
   // Pinned items

@@ -5,7 +5,7 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
-import { WorkItem, WorkItemService } from 'fabric8-planner';
+import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
@@ -61,6 +61,12 @@ describe('CreateWorkItemWidgetComponent', () => {
           workItemServiceMock.getWorkItems.and.returnValue([] as WorkItem[]);
 
           return workItemServiceMock;
+        }
+      },
+      {
+        provide: FilterService, useFactory: () => {
+          let filterServiceMock = jasmine.createSpyObj('FilterService', ['queryBuilder']);
+          return filterServiceMock;
         }
       },
       {
