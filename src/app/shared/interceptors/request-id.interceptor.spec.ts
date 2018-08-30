@@ -11,7 +11,7 @@ import uuid from 'uuid';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AUTH_API_URL } from 'ngx-login-client';
 
-fdescribe(`AuthHttpInterceptor`, () => {
+describe('RequestIdInterceptor', () => {
   const testUrl: string = 'http://example.com/test';
   const testUUID: string = 'some-unique-id';
 
@@ -39,7 +39,7 @@ fdescribe(`AuthHttpInterceptor`, () => {
     httpMock.verify();
   });
 
-  fit('should add an Authorization header', () => {
+  it('should add an X-Request-Id header', () => {
     httpClient.get(testUrl).subscribe(() => {});
 
     const req = httpMock.expectOne(testUrl);
