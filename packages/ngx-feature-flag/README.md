@@ -23,7 +23,7 @@ Admin consoles are available here:
 ### How to login?
 To login to toggles admin console, we use GitHub authentication and we provide some authorisation checking that your user is part of some organisation.
 * You will be prompted to authenticate though GH.
-* If not yet part of the [RHDT organization](https://github.com/rhdt-dev), please open a house keeping issues (under VPN)
+* If not yet part of the [RHDT organization](https://github.com/rhdt-dev), please open a pull request to the UserDB (under VPN; Check DevGuide for details)
 * If you're already part of the [RHDT organization](https://github.com/rhdt-dev) but not a member of either [prod-preview](https://github.com/orgs/rhdt-dev/teams/toggles-admin-preprod/members) or [prod team](https://github.com/orgs/rhdt-dev/teams/toggles-admin-prod/members), contact some admins in mattermost #fabric8-platform and ask them to add you. You will need to be an internal user to be granted access. Once granted, try again.
 
 ### How to logout?
