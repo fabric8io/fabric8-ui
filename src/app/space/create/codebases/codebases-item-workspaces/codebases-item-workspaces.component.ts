@@ -70,47 +70,47 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * Create workspace
    */
   createWorkspace(): void {
-    this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().switchMap(che => {
-      if (!che.clusterFull) {
-        // create
-        return this.workspacesService
-          .createWorkspace(this.codebase.id)
-          .map(workspaceLinks => {
-            this.workspaceBusy = false;
-            if (workspaceLinks != undefined) {
-              let name = this.getWorkspaceName(workspaceLinks.links.open);
-              this.notifications.message({
-                message: `Workspace created!`,
-                type: NotificationType.SUCCESS
-              } as Notification);
-              // Poll for new workspaces
-              this.updateWorkspacesPoll(name);
-            } else {
-              // display error message
-              this.notifications.message({
-                message: `Workspace error during creation.`,
-                type: NotificationType.DANGER
-              } as Notification);
-            }
-          });
-      } else {
-        this.workspaceBusy = false;
-        this.workspacesAvailable = false;
-        // display error message
-        this.notifications.message({
-          message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-          type: NotificationType.DANGER
-        } as Notification);
-        return Observable.of({});
-      }
-    }).subscribe(() => {},
-      err => {
-        this.notifications.message({
-          message: `Workspace error during creation.`,
-          type: NotificationType.DANGER
-        } as Notification);
-      }));
+    // this.workspaceBusy = true;
+    // this.subscriptions.push(this.cheService.getState().switchMap(che => {
+    //   if (!che.clusterFull) {
+    //     // create
+    //     return this.workspacesService
+    //       .createWorkspace(this.codebase.id)
+    //       .map(workspaceLinks => {
+    //         this.workspaceBusy = false;
+    //         if (workspaceLinks != undefined) {
+    //           let name = this.getWorkspaceName(workspaceLinks.links.open);
+    //           this.notifications.message({
+    //             message: `Workspace created!`,
+    //             type: NotificationType.SUCCESS
+    //           } as Notification);
+    //           // Poll for new workspaces
+    //           this.updateWorkspacesPoll(name);
+    //         } else {
+    //           // display error message
+    //           this.notifications.message({
+    //             message: `Workspace error during creation.`,
+    //             type: NotificationType.DANGER
+    //           } as Notification);
+    //         }
+    //       });
+    //   } else {
+    //     this.workspaceBusy = false;
+    //     this.workspacesAvailable = false;
+    //     // display error message
+    //     this.notifications.message({
+    //       message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+    //       type: NotificationType.DANGER
+    //     } as Notification);
+    //     return Observable.of({});
+    //   }
+    // }).subscribe(() => {},
+    //   err => {
+    //     this.notifications.message({
+    //       message: `Workspace error during creation.`,
+    //       type: NotificationType.DANGER
+    //     } as Notification);
+    //   }));
   }
 
   /**
@@ -124,32 +124,32 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    * Opens Eclipse Che workspace in a new tab
    */
   openWorkspace(): void {
-    let workspaceWindow = this.windowService.open('about:blank', '_blank');
-    this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().switchMap(che => {
-      if (!che.clusterFull) {
-        // create
-        return this.workspacesService.openWorkspace(this.workspaceUrl).map(workspaceLinks => {
-          this.workspaceBusy = false;
-          if (workspaceLinks != undefined) {
-            workspaceWindow.location.href = workspaceLinks.links.open;
-          }
-        });
-      } else {
-        workspaceWindow.close();
-        this.workspaceBusy = false;
-        // display error message
-        this.notifications.message({
-          message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-          type: NotificationType.DANGER
-        } as Notification);
-        return Observable.of({});
-      }
-    }).subscribe(() => {},
-      err => {
-        this.workspaceBusy = false;
-        this.handleError('Failed to open workspace', NotificationType.DANGER);
-      }));
+    // let workspaceWindow = this.windowService.open('about:blank', '_blank');
+    // this.workspaceBusy = true;
+    // this.subscriptions.push(this.cheService.getState().switchMap(che => {
+    //   if (!che.clusterFull) {
+    //     // create
+    //     return this.workspacesService.openWorkspace(this.workspaceUrl).map(workspaceLinks => {
+    //       this.workspaceBusy = false;
+    //       if (workspaceLinks != undefined) {
+    //         workspaceWindow.location.href = workspaceLinks.links.open;
+    //       }
+    //     });
+    //   } else {
+    //     workspaceWindow.close();
+    //     this.workspaceBusy = false;
+    //     // display error message
+    //     this.notifications.message({
+    //       message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+    //       type: NotificationType.DANGER
+    //     } as Notification);
+    //     return Observable.of({});
+    //   }
+    // }).subscribe(() => {},
+    //   err => {
+    //     this.workspaceBusy = false;
+    //     this.handleError('Failed to open workspace', NotificationType.DANGER);
+    //   }));
   }
 
   /**
