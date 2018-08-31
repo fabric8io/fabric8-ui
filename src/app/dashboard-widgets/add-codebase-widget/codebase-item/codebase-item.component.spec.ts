@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
@@ -40,7 +41,10 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
 
   type TestingContext = TestContext<CodebaseItemComponent, HostComponent>;
   initContext(CodebaseItemComponent, HostComponent, {
-    declarations: [ MockCodebasesItemWorkspacesComponent ]
+    declarations: [
+      MockCodebasesItemWorkspacesComponent,
+      MockFeatureToggleComponent
+    ]
   });
 
   it('should receive provided Codebase', function(this: TestingContext): void {
