@@ -1,13 +1,15 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { UserService } from 'ngx-login-client';
-import Raven from 'raven-js';
+import * as Raven from 'raven-js';
 import { Environment, getEnvironment } from './environment';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class RavenExceptionHandler extends ErrorHandler {
   constructor(private injector: Injector) {
     super();
-    if (ENV !== 'test') {
+    //if (ENV !== 'test') {
+    if (environment.production) {
       // TODO - replace with configuration variable
       Raven.config('https://e71023d2bd794b708ea5a4f43e914b11@errortracking.prod-preview.openshift.io/8',
       {

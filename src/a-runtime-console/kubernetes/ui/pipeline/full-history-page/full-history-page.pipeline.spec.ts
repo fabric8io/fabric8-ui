@@ -15,7 +15,7 @@ import { BuildStageViewComponent } from '../build-stage-view/build-stage-view.co
 import { PipelinesFullHistoryToolbarComponent } from '../full-history-toolbar/full-history-toolbar.pipeline.component';
 import { PipelinesFullHistoryComponent } from '../full-history/full-history.pipeline.component';
 import { TestAppModule } from './../../../../app.test.module';
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { StageTimePipe } from '../build-stage-view/stage-time.pipe';
 import { PipelinesFullHistoryPage } from './full-history-page.pipeline.component';
 
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';

@@ -13,7 +13,7 @@ import {
   initContext,
   TestContext
 } from 'testing/test-context';
-import { BuildConfig } from '../../../a-runtime-console/index';
+import { BuildConfig } from '../../../../a-runtime-console/index';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
 

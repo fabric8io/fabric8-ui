@@ -29,7 +29,7 @@ export class AnalyticService {
     this.init();
   }
 
-  get analytics(): SegmentAnalytics.AnalyticsJS {
+  get analytics(): any {
     return window.analytics;
   }
 

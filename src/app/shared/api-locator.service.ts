@@ -82,7 +82,7 @@ export class BaseApiLocatorService {
   }
 
   protected loadEnvVar(key: string): void {
-    this.envVars.set(key, process.env[DEFAULT_API_ENV_VAR_NAMES.get(key)]);
+    //this.envVars.set(key, process.env[DEFAULT_API_ENV_VAR_NAMES.get(key)]);
   }
 
   protected buildApiUrl(key: string): string {

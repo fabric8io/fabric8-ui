@@ -6,7 +6,7 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
 
-import { Build } from '../../../../a-runtime-console/index';
+import { Build } from '../../../../../a-runtime-console/index';
 
 import { ApplicationsListItemComponent } from './applications-list-item.component';
 

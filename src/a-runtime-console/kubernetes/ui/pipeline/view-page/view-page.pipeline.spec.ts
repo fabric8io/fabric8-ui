@@ -13,7 +13,7 @@ import { PipelineViewToolbarComponent } from '../view-toolbar/view-toolbar.pipel
 import { PipelineViewWrapperComponent } from '../view-wrapper/view-wrapper.pipeline.component';
 import { PipelineViewComponent } from '../view/view.pipeline.component';
 import { TestAppModule } from './../../../../app.test.module';
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { StageTimePipe } from '../build-stage-view/stage-time.pipe';
 import { PipelineViewPage } from './view-page.pipeline.component';
 
 describe('PipelineViewPage', () => {

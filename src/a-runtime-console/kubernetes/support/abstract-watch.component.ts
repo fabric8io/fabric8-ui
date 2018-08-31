@@ -236,15 +236,15 @@ export class AbstractWatchComponent implements OnDestroy {
 export class CachingSubject<T> extends Subject<T> {
   private _value: T;
   private _hasValue = false;
-  private _subscription: Subscription;
+  private subscription: Subscription;
 
   constructor(protected observable: Observable<T>) {
     super();
-    this._subscription = observable.subscribe(this);
+    this.subscription = observable.subscribe(this);
   }
 
   unsubscribe(): void {
-    this._subscription.unsubscribe();
+    this.subscription.unsubscribe();
     super.unsubscribe();
   }
 
@@ -255,7 +255,7 @@ export class CachingSubject<T> extends Subject<T> {
   }
 
 
-  protected _subscribe(subscriber: Subscriber<T>): Subscription {
+  _subscribe(subscriber: Subscriber<T>): Subscription {
     if (this._hasValue) {
       subscriber.next(this._value);
     }

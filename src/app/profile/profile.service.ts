@@ -4,7 +4,7 @@ import { Inject, Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Observable } from 'rxjs';
+import { ConnectableObservable, Observable } from 'rxjs-compat';
 
 export class ExtUser extends User {
   attributes: ExtProfile;

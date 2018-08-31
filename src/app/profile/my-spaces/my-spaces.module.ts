@@ -10,7 +10,6 @@ import { MySpacesItemActionsModule } from './my-spaces-item-actions/my-spaces-it
 import { MySpacesItemHeadingModule } from './my-spaces-item-heading/my-spaces-item-heading.module';
 import { MySpacesItemModule } from './my-spaces-item/my-spaces-item.module';
 import { MySpacesRoutingModule } from './my-spaces-routing.module';
-import { MySpacesSearchSpacesDialogModule } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.module';
 import { MySpacesToolbarModule } from './my-spaces-toolbar/my-spaces-toolbar.module';
 import { MySpacesComponent }     from './my-spaces.component';
 
@@ -25,8 +24,7 @@ import { MySpacesComponent }     from './my-spaces.component';
     MySpacesItemActionsModule,
     MySpacesItemHeadingModule,
     MySpacesToolbarModule,
-    MySpacesRoutingModule,
-    MySpacesSearchSpacesDialogModule
+    MySpacesRoutingModule
   ],
   declarations: [ MySpacesComponent ]
 })

@@ -6,7 +6,7 @@ import {
   Build,
   BuildConfig,
   BuildConfigs
-} from '../../../a-runtime-console/index';
+} from '../../../a-runtime-console';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 
 @Component({

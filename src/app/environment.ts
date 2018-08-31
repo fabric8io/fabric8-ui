@@ -4,6 +4,7 @@
 import { ApplicationRef, enableProdMode } from '@angular/core';
 import { enableDebugTools } from '@angular/platform-browser';
 import { StaticInjector } from 'ngx-launcher';
+import { environment } from '../environments/environment';
 
 // Environment Providers
 let PROVIDERS: any[] = [
@@ -14,7 +15,7 @@ let PROVIDERS: any[] = [
 // https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
 let _decorateModuleRef = function identity<T>(value: T): T { return value; };
 
-if ('production' === ENV) {
+if (environment.production) {
   // Production
   // disableDebugTools(); // https://github.com/qdouble/angular-webpack2-starter/issues/263
   enableProdMode();
@@ -22,7 +23,8 @@ if ('production' === ENV) {
   /* Below code is needed to get the broadcaster instance from AppModule which is
   used in `ngx-launcher` to broadcast events for telemetry */
   _decorateModuleRef = (modRef: any) => {
-    StaticInjector.setInjector(modRef.injector);
+     StaticInjector.setInjector(modRef.injector);
+     return modRef;
   };
 
   PROVIDERS = [

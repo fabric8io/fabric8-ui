@@ -36,7 +36,7 @@ import {
 import { AuthenticationService } from 'ngx-login-client';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
 
-import { BuildConfig } from '../../../../a-runtime-console/index';
+import { BuildConfig } from '../../../../../a-runtime-console/index';
 
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesService } from './services/pipelines.service';

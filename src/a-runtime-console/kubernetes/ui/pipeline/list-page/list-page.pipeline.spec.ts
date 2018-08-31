@@ -17,7 +17,7 @@ import { InputActionDialog } from '../input-action-dialog/input-action-dialog.co
 import { PipelinesListToolbarComponent } from '../list-toolbar/list-toolbar.pipeline.component';
 import { PipelinesListComponent } from '../list/list.pipeline.component';
 import { TestAppModule } from './../../../../app.test.module';
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { StageTimePipe } from '../build-stage-view/stage-time.pipe';
 import { PipelinesListPage } from './list-page.pipeline.component';
 
 describe('PipelinesListPage', () => {

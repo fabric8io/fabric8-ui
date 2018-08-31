@@ -15,7 +15,7 @@ import { RouterTestingModule } from '@angular/router/testing';
   import { AUTH_API_URL } from 'ngx-login-client';
 
 import { ApiLocatorService } from '../../shared/api-locator.service';
-import { Fabric8UIHttpService } from '../../shared/fabric8-ui-http.service';
+//import { Fabric8UIHttpService } from '../../shared/fabric8-ui-http.service';
 import { AppLauncherComponent } from './app-launcher.component';
 import { AuthAPIProvider } from './services/app-launcher-authprovider.service';
 import { AnalyticsUrlService } from './shared/analytics-url.service';
@@ -36,10 +36,10 @@ describe('LauncherComponent', () => {
       ],
       providers: [
         TokenProvider,
-        {
-          provide: HttpClient,
-          useClass: Fabric8UIHttpService
-        },
+        // {
+        //   provide: HttpClient,
+        //   useClass: Fabric8UIHttpService
+        // },
         {
           provide: AuthHelperService,
           useFactory: (AUTH_API_URL) => new AuthAPIProvider(AUTH_API_URL),

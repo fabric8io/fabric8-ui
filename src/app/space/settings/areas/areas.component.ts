@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { Action, ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
-import { TreeListConfig } from 'patternfly-ng/list';
+//import { TreeListConfig } from 'patternfly-ng/list/';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 
 import { ContextService } from '../../../shared/context.service';
@@ -52,7 +52,7 @@ export class AreasComponent implements OnInit, OnDestroy {
   selectedAreaId: string;
   subscriptions: Subscription[] = [];
   resultsCount: number = 0;
-  treeListConfig: TreeListConfig;
+  //treeListConfig: TreeListConfig;
 
   constructor(private contexts: ContextService,
               private areaService: AreaService) {
@@ -81,17 +81,17 @@ export class AreasComponent implements OnInit, OnDestroy {
       info: 'Start by adding an area.'
     } as EmptyStateConfig;
 
-    this.treeListConfig = {
-      dblClick: false,
-      emptyStateConfig: this.emptyStateConfig,
-      multiSelect: false,
-      selectItems: false,
-      showCheckbox: false,
-      treeOptions: {
-        allowDrag: false,
-        isExpandedField: 'expanded'
-      }
-    } as TreeListConfig;
+    // this.treeListConfig = {
+    //   dblClick: false,
+    //   emptyStateConfig: this.emptyStateConfig,
+    //   multiSelect: false,
+    //   selectItems: false,
+    //   showCheckbox: false,
+    //   treeOptions: {
+    //     allowDrag: false,
+    //     isExpandedField: 'expanded'
+    //   }
+    // } as TreeListConfig;
 
     this.subscriptions.push(this.areaService.getAllBySpaceId(this.context.space.id).subscribe(areas => {
       this.selectedAreaId = this.context.space.id;

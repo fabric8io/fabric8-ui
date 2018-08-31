@@ -1,12 +1,12 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Http, HttpModule } from '@angular/http';
+// import { Http, HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
-import './rxjs-extensions';
+//import './rxjs-extensions';
 
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
 import { EffectsModule } from '@ngrx/effects';
@@ -26,7 +26,6 @@ import {
 } from 'ngx-fabric8-wit';
 import {
   AuthenticationService,
-  HttpService,
   UserService
 } from 'ngx-login-client';
 import { RestangularModule } from 'ngx-restangular';
@@ -47,7 +46,7 @@ import {
   KubernetesStoreModule,
   OnLogin,
   SpaceNamespace
-} from '../a-runtime-console/index';
+} from '../a-runtime-console';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -81,7 +80,6 @@ import { ContextCurrentUserGuard }       from './shared/context-current-user-gua
 import { ContextResolver }               from './shared/context-resolver.service';
 import { ContextService }                from './shared/context.service';
 import { EventService }                  from './shared/event.service';
-import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
 import { jenkinsApiUrlProvider }           from './shared/jenkins-api.provider';
 import { LoginService }                  from './shared/login.service';
@@ -111,14 +109,14 @@ import { AddSpaceOverlayModule } from './space/add-space-overlay/add-space-overl
 
 // About Modal
 import { AboutModalModule } from './layout/about-modal/about-modal.module';
-
+// TODO to be removed
+import { HttpService } from 'fabric8-planner';
 import { TooltipModule } from 'ngx-bootstrap';
 import {
   FeatureTogglesService
 } from 'ngx-feature-flag';
 import { FeatureFooterModule } from './feature-flag/notification-footer/feature-footer.module';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
-import { TogglesModule } from './feature-flag/toggles.module';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
 import { RavenExceptionHandler } from './shared/exception.handler';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
@@ -154,7 +152,7 @@ export type StoreType = {
     EmptyStateModule,
     FormsModule,
     HttpClientModule,
-    HttpModule,
+    //HttpModule,
     KubernetesRestangularModule,
     KubernetesStoreModule,
     LocalStorageModule.withConfig({
@@ -215,10 +213,11 @@ export type StoreType = {
     FeatureAcknowledgementService,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
-    {
-      provide: Http,
-      useClass: Fabric8UIHttpService
-    },
+    //Http,
+    // {
+    //   provide: Http,
+    //   useClass: Fabric8UIHttpService
+    // },
     fabric8UIConfigProvider,
     {
       provide: OnLogin,
@@ -226,7 +225,7 @@ export type StoreType = {
     },
     forgeApiUrlProvider,
     GettingStartedService,
-    HttpService,
+    //HttpService,
     jenkinsApiUrlProvider,
     Logger,
     LoginService,

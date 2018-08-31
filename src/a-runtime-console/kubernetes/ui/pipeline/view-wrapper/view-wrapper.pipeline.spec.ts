@@ -13,7 +13,7 @@ import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildc
 import { PipelineViewToolbarComponent } from '../view-toolbar/view-toolbar.pipeline.component';
 import { PipelineViewComponent } from '../view/view.pipeline.component';
 import { TestAppModule } from './../../../../app.test.module';
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { StageTimePipe } from '../build-stage-view/stage-time.pipe';
 import { PipelineViewWrapperComponent } from './view-wrapper.pipeline.component';
 
 describe('PipelineViewWrapperComponent', () => {

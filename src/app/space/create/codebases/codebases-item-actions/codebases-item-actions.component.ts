@@ -3,7 +3,7 @@ import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Dialog } from 'ngx-widgets';
 import { Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { CheService } from '../services/che.service';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
@@ -49,49 +49,49 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    * Create workspace
    */
   createWorkspace(): void {
-    this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().switchMap(che => {
-      if (!che.clusterFull) {
-        // create
-        return this.workspacesService
-          .createWorkspace(this.codebase.id)
-          .map(workspaceLinks => {
-            this.workspaceBusy = false;
-            if (workspaceLinks != undefined) {
-              let name = this.getWorkspaceName(workspaceLinks.links.open);
-              this.notifications.message({
-                message: `Workspace created!`,
-                type: NotificationType.SUCCESS
-              } as Notification);
-              // Poll for new workspaces
-              this.broadcaster.broadcast('workspaceCreated', {
-                codebase: this.codebase,
-                workspaceName: name
-              });
-            } else {
-              // display error message
-              this.notifications.message({
-                message: `Workspace error during creation.`,
-                type: NotificationType.DANGER
-              } as Notification);
-            }
-          });
-      } else {
-        // display error message
-        this.workspaceBusy = false;
-        this.notifications.message({
-          message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
-          type: NotificationType.DANGER
-        } as Notification);
-        return Observable.of({});
-      }
-    }).subscribe(() => {},
-        err => {
-          this.notifications.message({
-            message: `Workspace error during creation.`,
-            type: NotificationType.DANGER
-          } as Notification);
-        }));
+    // this.workspaceBusy = true;
+    // this.subscriptions.push(this.cheService.getState().switchMap(che => {
+    //   if (!che.clusterFull) {
+    //     // create
+    //     return this.workspacesService
+    //       .createWorkspace(this.codebase.id)
+    //       .map(workspaceLinks => {
+    //         this.workspaceBusy = false;
+    //         if (workspaceLinks != undefined) {
+    //           let name = this.getWorkspaceName(workspaceLinks.links.open);
+    //           this.notifications.message({
+    //             message: `Workspace created!`,
+    //             type: NotificationType.SUCCESS
+    //           } as Notification);
+    //           // Poll for new workspaces
+    //           this.broadcaster.broadcast('workspaceCreated', {
+    //             codebase: this.codebase,
+    //             workspaceName: name
+    //           });
+    //         } else {
+    //           // display error message
+    //           this.notifications.message({
+    //             message: `Workspace error during creation.`,
+    //             type: NotificationType.DANGER
+    //           } as Notification);
+    //         }
+    //       });
+    //   } else {
+    //     // display error message
+    //     this.workspaceBusy = false;
+    //     this.notifications.message({
+    //       message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
+    //       type: NotificationType.DANGER
+    //     } as Notification);
+    //     return Observable.of({});
+    //   }
+    // }).subscribe(() => {},
+    //     err => {
+    //       this.notifications.message({
+    //         message: `Workspace error during creation.`,
+    //         type: NotificationType.DANGER
+    //       } as Notification);
+    //     }));
   }
 
   /**

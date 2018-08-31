@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { Broadcaster } from 'ngx-base';
-
-import { OAuthConfigStore } from '../../a-runtime-console/index';
+import { OAuthConfigStore } from '../../a-runtime-console';
+import { Observable} from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Injectable()
 export class BootstrapService {
@@ -13,9 +14,8 @@ export class BootstrapService {
   ) { }
 
   public bootstrap(): Promise<any> {
-    let oauthLoading = this.oauthConfig.loading
-      .first(val => val === false)
-      .toPromise();
-    return oauthLoading;
+    const subj: Observable<boolean>  = this.oauthConfig.loading;
+    const oauthLoading = subj.pipe(first(val => val === false));
+    return oauthLoading.toPromise();
   }
 }

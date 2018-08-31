@@ -9,7 +9,7 @@ import {
   BuildConfigStore,
   Builds,
   BuildStore
-} from '../../../a-runtime-console/index';
+} from '../../../../a-runtime-console/index';
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 import { PipelinesService } from './pipelines.service';
 

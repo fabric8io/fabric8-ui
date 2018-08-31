@@ -7,7 +7,7 @@ import { ModalModule } from 'ngx-modal';
 
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';
 
-import { KubernetesComponentsModule } from '../../../../a-runtime-console/kubernetes/components/components.module';
+import { KubernetesComponentsModule } from '../../../../../a-runtime-console/kubernetes/components/components.module';
 import { ApplicationsStackReportComponent } from './applications-stack-report.component';
 
 @NgModule({

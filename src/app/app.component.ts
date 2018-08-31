@@ -11,7 +11,7 @@ import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Observable } from 'rxjs';
 
 import { FeatureFlagConfig } from 'ngx-feature-flag';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs';
 import { OnLogin } from '../a-runtime-console/index';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { ErrorService } from './layout/error/error.service';
@@ -21,6 +21,7 @@ import { AnalyticService } from './shared/analytics.service';
 import { BrandingService } from './shared/branding.service';
 import { LoginService } from './shared/login.service';
 import { NotificationsService } from './shared/notifications.service';
+
 
 /*
  * App Component
