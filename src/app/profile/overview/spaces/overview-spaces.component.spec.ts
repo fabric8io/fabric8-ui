@@ -6,7 +6,7 @@ import { Contexts, Fabric8WitModule, SpaceService, WIT_API_URL } from 'ngx-fabri
 import { Observable } from 'rxjs/Observable';
 
 import { createMock } from 'testing/mock';
-import { SpacesComponent } from './spaces.component';
+import { SpacesComponent } from './overview-spaces.component';
 
 describe('SpacesComponent', () => {
   let fixture: ComponentFixture<SpacesComponent>;
@@ -55,7 +55,7 @@ describe('SpacesComponent', () => {
       component.pageSize = 5;
       spyOn(component, 'initSpaces');
       component.ngOnInit();
-      expect(component.initSpaces).toHaveBeenCalledWith({pageSize: 5});
+      expect(component.initSpaces).toHaveBeenCalledWith(5);
     });
   });
 

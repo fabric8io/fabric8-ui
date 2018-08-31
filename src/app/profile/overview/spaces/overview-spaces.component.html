@@ -30,7 +30,7 @@
     <ng-template #showSpaces>
       <div class="no-vertical-scroll col-xs-12 f8-card-list">
         <div class="spaces-list-scroll" almInfiniteScroll
-             (fetchMore)='fetchMoreSpaces($event)'>
+             (fetchMore)='fetchMoreSpaces()'>
           <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
             <li class="list-group-item" *ngFor="let space of spaces">
               <div class="list-view-pf-main-info">
