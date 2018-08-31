@@ -144,7 +144,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.toggleService.getAllFeaturesEnabledByLevel()
       .subscribe(features => {
-      let featurePerLevel = this.featureByLevel(features);
+      let featurePerLevel = this.featureByLevel(features as Feature[]);
       for (let item of this.items) {
         item.features = featurePerLevel[item.name];
       }

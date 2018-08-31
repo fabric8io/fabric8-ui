@@ -23,7 +23,7 @@ import {
 } from 'rxjs';
 
 
-import { createMock } from 'testing/mock';
+import { createMock } from 'src/app/testing/mock';
 
 import {
   Logger
@@ -38,7 +38,7 @@ import {
   OAuthConfigStore
 } from './oauth-config-store';
 
-import { NotificationsService } from '../../../app/shared/notifications.service';
+import { NotificationsService } from '../../../app/app/shared/notifications.service';
 
 describe('OauthConfigStore', () => {
 

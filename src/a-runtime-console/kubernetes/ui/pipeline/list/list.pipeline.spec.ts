@@ -15,7 +15,7 @@ import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildc
 import { BuildStageViewComponent } from '../build-stage-view/build-stage-view.component';
 import { InputActionDialog } from '../input-action-dialog/input-action-dialog.component';
 import { TestAppModule } from './../../../../app.test.module';
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { StageTimePipe } from '../build-stage-view/stage-time.pipe';
 import { PipelinesListComponent } from './list.pipeline.component';
 
 describe('PipelinesListComponent', () => {

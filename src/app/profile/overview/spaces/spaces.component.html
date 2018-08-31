@@ -8,10 +8,7 @@
     </div>
   </div>
   <div class="card-pf-body f8-card-body">
-    <fabric8-loading-widget message="Please wait while we load the spaces"
-                            *ngIf="loading"></fabric8-loading-widget>
-    <div *ngIf="spaces.length > 0 && !loading then showSpaces"></div>
-    <div *ngIf="spaces.length === 0 && !loading then showBlankState"></div>
+    <div *ngIf="spaces.length === 0; then showBlankState else showSpaces"></div>
     <ng-template #showBlankState>
       <div class="f8-blank-slate-card">
         <div class="f8-blank-slate-icon">

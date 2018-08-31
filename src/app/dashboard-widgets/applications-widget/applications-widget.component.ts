@@ -13,10 +13,10 @@ import { Observable, Subscription } from 'rxjs/Rx';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 
-import { BuildConfig } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 
 import { isEmpty, orderBy } from 'lodash';
+import { BuildConfig } from '../../../a-runtime-console';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

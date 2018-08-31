@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import * as jwt_decode from 'jwt-decode';
 import { Logger } from 'ngx-base';
@@ -13,8 +13,6 @@ import { Link } from './link';
 export class ProviderService {
   private loginUrl: string;
   private linkUrl: string;
-  private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-
 
   constructor(
       private http: HttpClient,
@@ -23,9 +21,6 @@ export class ProviderService {
       @Inject(AUTH_API_URL) private apiUrl: string) {
     this.loginUrl = apiUrl + 'link';
     this.linkUrl = apiUrl + 'token/link';
-    if (this.auth.getToken() != null) {
-      this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
-    }
   }
 
   /**
@@ -54,7 +49,7 @@ export class ProviderService {
   disconnectGitHub(): Observable<any> {
     let tokenUrl = this.apiUrl + 'token?for=https://github.com';
     return this.http
-      .delete(tokenUrl, { headers: this.headers })
+      .delete(tokenUrl)
       .map(() => {
         this.auth.clearGitHubToken();
       });
@@ -63,17 +58,17 @@ export class ProviderService {
 
   getGitHubStatus(): Observable<any> {
     let tokenUrl = this.apiUrl + 'token?force_pull=true&for=https://github.com';
-    return this.http.get(tokenUrl, { headers: this.headers });
+    return this.http.get(tokenUrl);
   }
 
   getOpenShiftStatus(cluster: string): Observable<any> {
     let tokenUrl = this.apiUrl + 'token?force_pull=true&for=' + cluster;
-    return this.http.get(tokenUrl, { headers: this.headers });
+    return this.http.get(tokenUrl);
   }
 
   disconnectOpenShift(cluster: string): Observable<any> {
     let tokenUrl = this.apiUrl + 'token?for=' + cluster;
-    return this.http.delete(tokenUrl, { headers: this.headers });
+    return this.http.delete(tokenUrl);
   }
 
   getLegacyLinkingUrl(provider: string, redirect: string): string {
@@ -113,7 +108,7 @@ export class ProviderService {
    */
   link(provider: string, redirect: string): void {
     let linkURL = this.linkUrl + '?for=' + provider + '&redirect=' +  encodeURIComponent(redirect) ;
-    this.http.get(linkURL, { headers: this.headers })
+    this.http.get(linkURL)
       .map((resp: Link) => {
         this.redirectToAuth(resp.redirect_location);
       })

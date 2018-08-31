@@ -4,15 +4,15 @@ import { Injectable } from '@angular/core';
 export class AboutService {
 
   get buildNumber(): string {
-    return process.env.BUILD_NUMBER;
+    return ''; // process.env.BUILD_NUMBER;
   }
 
   get buildTimestamp(): string {
-    return process.env.BUILD_TIMESTAMP;
+    return ''; //process.env.BUILD_TIMESTAMP;
   }
 
   get buildVersion(): string {
-    return (process.env.BUILD_VERSION !== '0.0.0-development' ? process.env.BUILD_VERSION : null);
+    return '0.0.0-development'; //(process.env.BUILD_VERSION !== '0.0.0-development' ? process.env.BUILD_VERSION : null);
   }
 
 }

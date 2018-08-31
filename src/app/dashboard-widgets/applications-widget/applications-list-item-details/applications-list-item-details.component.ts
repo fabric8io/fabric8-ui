@@ -11,6 +11,7 @@ import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pi
 
 import { isEmpty } from 'lodash';
 
+
 export class ExtPipelineStage extends PipelineStage {
   currentStage: boolean;
 }

@@ -7,26 +7,26 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-12">
-      <pfng-tree-list
-          [actionTemplate]="actionTemplate"
-          [config]="treeListConfig"
-          [itemTemplate]="itemTemplate"
-          [items]="treeAreas"
-          (onActionSelect)="handleAction($event)">
-        <ng-template #itemTemplate let-node="node" let-index="index">
-          <div class="list-pf-content-wrapper">
-            <div class="list-pf-main-content">
-              <div class="list-pf-title">{{node.data?.attributes?.name}}</div>
-            </div>
-          </div>
-        </ng-template>
-        <ng-template #actionTemplate let-node="node" let-index="index">
-          <pfng-action class="list-pf-actions"
-                       [config]="actionConfig"
-                       (onActionSelect)="handleAction($event, node)">
-          </pfng-action>
-        </ng-template>
-      </pfng-tree-list>
+      <!--<pfng-tree-list-->
+          <!--[actionTemplate]="actionTemplate"-->
+          <!--[config]="treeListConfig"-->
+          <!--[itemTemplate]="itemTemplate"-->
+          <!--[items]="treeAreas"-->
+          <!--(onActionSelect)="handleAction($event)">-->
+        <!--<ng-template #itemTemplate let-node="node" let-index="index">-->
+          <!--<div class="list-pf-content-wrapper">-->
+            <!--<div class="list-pf-main-content">-->
+              <!--<div class="list-pf-title">{{node.data?.attributes?.name}}</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</ng-template>-->
+        <!--<ng-template #actionTemplate let-node="node" let-index="index">-->
+          <!--<pfng-action class="list-pf-actions"-->
+                       <!--[config]="actionConfig"-->
+                       <!--(onActionSelect)="handleAction($event, node)">-->
+          <!--</pfng-action>-->
+        <!--</ng-template>-->
+      <!--</pfng-tree-list>-->
     </div>
   </div>
 </div>

@@ -7,7 +7,7 @@ import { initContext, TestContext } from 'testing/test-context';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
 
-import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
+import { PipelineStage } from '../../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
 import { ApplicationsListItemDetailsComponent } from './applications-list-item-details.component';
 
 @Component({

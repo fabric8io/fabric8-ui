@@ -13,7 +13,7 @@ import { KubernetesStoreModule } from '../../../kubernetes.store.module';
 import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildconfig.dialogs.module';
 import { BuildStageViewComponent } from '../build-stage-view/build-stage-view.component';
 import { TestAppModule } from './../../../../app.test.module';
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { StageTimePipe } from '../build-stage-view/stage-time.pipe';
 import { PipelinesHistoryComponent } from './history.pipeline.component';
 
 import { StackDetailsModule } from 'fabric8-stack-analysis-ui';

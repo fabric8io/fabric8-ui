@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { OpaqueToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
 import { URLProvider } from 'ngx-launcher';
 
 import { ApiLocatorService } from '../../../shared/api-locator.service';
 
-export let ANALYTICS_RECOMMENDER_URL = new OpaqueToken('analytics.recommender.url');
-export let ANALYTICS_LICENSE_URL = new OpaqueToken('analytics.license.url');
+export let ANALYTICS_RECOMMENDER_URL = new InjectionToken('analytics.recommender.url');
+export let ANALYTICS_LICENSE_URL = new InjectionToken('analytics.license.url');
 
 let analyticsRecommendeApiUrlFactory = (api: ApiLocatorService) => {
   return api.analyticsRecommenderApiUrl;

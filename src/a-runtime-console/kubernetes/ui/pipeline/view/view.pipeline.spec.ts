@@ -11,7 +11,7 @@ import { Fabric8CommonModule } from '../../../../common/common.module';
 import { KubernetesStoreModule } from '../../../kubernetes.store.module';
 import { BuildConfigDialogsModule } from '../../buildconfig/delete-dialog/buildconfig.dialogs.module';
 import { TestAppModule } from './../../../../app.test.module';
-import { StageTimePipe } from './../build-stage-view/stage-time.pipe';
+import { StageTimePipe } from '../build-stage-view/stage-time.pipe';
 import { PipelineViewComponent } from './view.pipeline.component';
 
 describe('PipelineViewComponent', () => {

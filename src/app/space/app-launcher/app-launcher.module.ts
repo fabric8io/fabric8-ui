@@ -13,7 +13,7 @@ import {
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 
 import { ApiLocatorService } from '../../shared/api-locator.service';
-import { Fabric8UIHttpService } from '../../shared/fabric8-ui-http.service';
+//import { Fabric8UIHttpService } from '../../shared/fabric8-ui-http.service';
 import { AppLauncherRoutingModule } from './app-launcher-routing.module';
 import { AppLauncherComponent } from './app-launcher.component';
 import { CreateAppModule } from './create-app/create-app.module';
@@ -33,10 +33,10 @@ import { NewForgeConfig } from './shared/new-forge.config';
   ],
   providers: [
     HelperService,
-    {
-      provide: HttpClient,
-      useClass: Fabric8UIHttpService
-    },
+    // {
+    //   provide: HttpClient,
+    //   useClass: Fabric8UIHttpService
+    // },
     { provide: Config, useClass: NewForgeConfig },
     analyticsLicenseApiUrlProvider,
     analyticsRecommendeApiUrlProvider,

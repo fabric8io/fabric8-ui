@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-import { OnLogin } from './../../shared/onlogin.service';
+import { OnLogin } from '../../shared/onlogin.service';
 import { PollerFactory } from './poller-factory.service';
 import { Watcher } from './watcher';
 

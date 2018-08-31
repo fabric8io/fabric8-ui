@@ -10,7 +10,7 @@ import { initContext, TestContext } from 'testing/test-context';
 
 import { Context, Contexts } from 'ngx-fabric8-wit';
 
-import { BuildConfig } from '../../../../a-runtime-console/index';
+import { BuildConfig } from '../../../../../a-runtime-console/index';
 import { ApplicatonsListComponent } from './applicatons-list.component';
 
 @Component({

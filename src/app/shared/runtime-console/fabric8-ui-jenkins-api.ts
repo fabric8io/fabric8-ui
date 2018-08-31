@@ -1,4 +1,4 @@
-import { OpaqueToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
-export let FABRIC8_JENKINS_API_URL = new OpaqueToken('fabric8.jenkins.api.url');
+export let FABRIC8_JENKINS_API_URL = new InjectionToken('fabric8.jenkins.api.url');
 

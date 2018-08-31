@@ -5,7 +5,7 @@ import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
-import { FeatureTogglesService } from 'ngx-feature-flag';
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 
 
 @Component({
@@ -39,7 +39,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.push(this.featureTogglesService.getFeature('Analyze.MyWorkItemsCard').subscribe((feature) => {
-      if (feature.attributes['enabled'] && feature.attributes['user-enabled']) {
+      if ((feature as Feature).attributes['enabled'] && (feature as Feature).attributes['user-enabled']) {
         this._myWorkItemsCard = true;
       }
     }));

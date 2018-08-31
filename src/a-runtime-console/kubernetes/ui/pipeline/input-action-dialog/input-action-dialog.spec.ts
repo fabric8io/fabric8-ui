@@ -10,9 +10,9 @@ import { ModalModule } from 'ngx-modal';
 import { Observable } from 'rxjs';
 
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
-import { JenkinsService } from '../../../../../app/shared/jenkins.service';
-import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
-import { FABRIC8_JENKINS_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-jenkins-api';
+import { JenkinsService } from '../../../../../app/app/shared/jenkins.service';
+import { FABRIC8_FORGE_API_URL } from '../../../../../app/app/shared/runtime-console/fabric8-ui-forge-api';
+import { FABRIC8_JENKINS_API_URL } from '../../../../../app/app/shared/runtime-console/fabric8-ui-jenkins-api';
 
 import { InputActionDialog } from './input-action-dialog.component';
 

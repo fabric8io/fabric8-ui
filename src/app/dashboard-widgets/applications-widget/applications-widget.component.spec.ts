@@ -17,7 +17,7 @@ import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { initContext, TestContext } from 'testing/test-context';
 
-import { BuildConfig } from '../../../a-runtime-console/index';
+import { BuildConfig } from '../../../../a-runtime-console/index';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 import { ApplicationsWidgetComponent } from './applications-widget.component';

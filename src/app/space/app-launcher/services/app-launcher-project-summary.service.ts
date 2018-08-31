@@ -6,7 +6,7 @@ import {
   Response
 } from '@angular/http';
 
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 
 import {

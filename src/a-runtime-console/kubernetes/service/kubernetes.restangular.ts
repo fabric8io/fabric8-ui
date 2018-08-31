@@ -1,4 +1,4 @@
-import { NgModule, OpaqueToken } from '@angular/core';
+import { InjectionToken, NgModule } from '@angular/core';
 import { OAuthService } from 'angular2-oauth2/oauth-service';
 import { Restangular } from 'ngx-restangular';
 import { LoginService } from '../../shared/login.service';
@@ -18,7 +18,7 @@ import { Route } from '../model/route.model';
 import { Service } from '../model/service.model';
 import { currentOAuthConfig } from '../store/oauth-config-store';
 
-export const KUBERNETES_RESTANGULAR = new OpaqueToken('KubernetesRestangular');
+export const KUBERNETES_RESTANGULAR = new InjectionToken('KubernetesRestangular');
 
 
 function convertToKubernetesResource(resource) {
