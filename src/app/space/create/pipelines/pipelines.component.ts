@@ -1,15 +1,16 @@
 import {
+  AfterViewInit,
   Component,
   OnDestroy,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
 
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
-import { AuthenticationService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
-import { Filter, FilterConfig, FilterEvent, FilterQuery, FilterType } from 'patternfly-ng/filter';
+import { Filter, FilterConfig, FilterEvent, FilterType } from 'patternfly-ng/filter';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import { ToolbarConfig } from 'patternfly-ng/toolbar';
 
@@ -30,7 +31,7 @@ import { PipelinesService } from './services/pipelines.service';
     PipelinesService
   ]
 })
-export class PipelinesComponent implements OnInit, OnDestroy {
+export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
   toolbarConfig: ToolbarConfig;
   consoleAvailable: boolean = false;
   openshiftConsoleUrl: string;
@@ -49,9 +50,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
+    private route: ActivatedRoute,
     private contexts: Contexts,
-    private authService: AuthenticationService,
     private pipelinesService: PipelinesService,
+    private router: Router,
     private broadcaster: Broadcaster
   ) {
     this.toolbarConfig = {
@@ -119,6 +121,10 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     );
   }
 
+  ngAfterViewInit() {
+    this.checkUrl();
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub: Subscription) => {
       sub.unsubscribe();
@@ -143,6 +149,26 @@ export class PipelinesComponent implements OnInit, OnDestroy {
     this._appliedFilters = $event.appliedFilters;
     this.applyFilters();
     this.applySort();
+    let urlFilter: object = {};
+      this._appliedFilters.forEach((f) => {
+        if (f.field.id === 'codebase') {
+          if (urlFilter['codebase'] === undefined) {
+            urlFilter['codebase'] = [];
+          }
+          urlFilter['codebase'].indexOf(f.value) === -1 ?
+          urlFilter['codebase'].push(f.value) : urlFilter['codebase'];
+        } else if (f.field.id === 'application') {
+          if (urlFilter['application'] === undefined) {
+            urlFilter['application'] = [];
+          }
+          urlFilter['application'].indexOf(f.value) === -1 ?
+          urlFilter['application'].push(f.value) : urlFilter['application'];
+        }
+      });
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: this._appliedFilters.length ? {q: JSON.stringify(urlFilter)} : {}
+      });
   }
 
   sortChange($event: SortEvent): void {
@@ -205,6 +231,49 @@ export class PipelinesComponent implements OnInit, OnDestroy {
       }
       return res;
     });
+  }
+
+  checkUrl(): void {
+    this.subscriptions.push(
+      this.route.queryParams.subscribe(query => {
+        if (query.hasOwnProperty('q')) {
+          let queryJson = JSON.parse(query.q);
+          let application = queryJson.application;
+          let codebase = queryJson.codebase;
+          let appliedFilter = [];
+          if (application !== undefined) {
+            application.map(app => {
+              appliedFilter.push({
+                field: {
+                  id: 'application',
+                  title: 'Application',
+                  type: 'text'
+                },
+                value: app
+              });
+            });
+          }
+          if (codebase !== undefined) {
+            codebase.map(code => {
+              appliedFilter.push({
+                field: {
+                  id: 'codebase',
+                  title: 'Codebase',
+                  type: 'text'
+                },
+                value: code
+              });
+            });
+          }
+          this._appliedFilters = appliedFilter;
+          setTimeout(() => {
+            this.toolbarConfig.filterConfig.appliedFilters = appliedFilter;
+          }, 0);
+          this.applyFilters();
+          this.applySort();
+        }
+      })
+    );
   }
 
 }
