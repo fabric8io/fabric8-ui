@@ -18,11 +18,17 @@ function release() {
     # Enable verbose output
     npm config set loglevel verbose
 
-    # Build and Release fabric8-recommender (It will update the tag on github and push fabric8-stack-analysis-ui to npmjs.org)
-    npm run semantic-release
+    # Set the branch as it defaults to the branch 'origin/master'
+    git checkout master
+    export GIT_BRANCH=master
+    # check where we are
+    git branch -va
+    git remote -v
 
-    # create_merge_PR
+    # Build and Release dependency-editor (It will update the tag on github and push fabric8-analytics-dependency-editor to npmjs.org)
+    npm run semantic-release
 }
+
 
 # This function raises a PR against fabric8-npm-dependencies
 function create_merge_PR {
@@ -107,3 +113,4 @@ function waitUntilSuccess {
         sleep $(( NEXT_WAIT_TIME++ ))
     done
 }
+

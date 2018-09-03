@@ -152,7 +152,7 @@ http://localhost:8088/#/analyze/<STACK_ID>?api_data={
 
 ```
 
-To get access_token follow below steps :
+To get OSIO-TOKEN follow below steps :
 
 1. Login to https://openshift.io/[OSIO]
 
@@ -163,7 +163,7 @@ To get access_token follow below steps :
 4. Copy token 
 
 
-NOTE : STACK_ID is the ID of any stack analyses in OpenShift.io ( Can be fetched from network search for `stack-analyses` ).
+NOTE : STACK_ID is the ID of any stack anyses in OpenShift.io ( Can be fetched from network ).
 
 
 == CSS and LESS

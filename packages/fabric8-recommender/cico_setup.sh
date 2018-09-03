@@ -16,7 +16,16 @@ load_jenkins_vars() {
 
 prep() {
   yum -y update
-  yum -y install docker make git gcc-c++ bzip2 fontconfig
+  yum -y install docker make gcc-c++ bzip2 fontconfig
+  cp e2e/google-chrome.repo /etc/yum.repos.d/google-chrome.repo
+  yum install -y google-chrome-stable
+
+  # Get and set up git v2.12
+  yum -y install centos-release-scl
+  yum -y install sclo-git212.x86_64
+  export PATH=${PATH}:/opt/rh/sclo-git212/root/usr/bin/
+
+  # Get and set up Nodejs
   curl -sL https://rpm.nodesource.com/setup_8.x | sudo -E bash -
   yum -y install nodejs
 }
@@ -24,7 +33,6 @@ prep() {
 install_dependencies() {
   # Build fabric8-analytics-stack-reports-ui
   npm install;
-  chmod +x /root/payload/node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs
 
   if [ $? -eq 0 ]; then
       echo 'CICO: npm install : OK'
@@ -36,7 +44,7 @@ install_dependencies() {
 
 run_unit_tests() {
   # Exec unit tests
-  npm run test:unit
+  npm run test
 
   if [ $? -eq 0 ]; then
       echo 'CICO: unit tests OK'

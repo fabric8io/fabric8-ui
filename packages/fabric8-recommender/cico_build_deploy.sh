@@ -6,8 +6,8 @@ set -ex
 
 install_dependencies
 
-run_unit_tests
-
 build_project
+
+run_unit_tests
 
 release
