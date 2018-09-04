@@ -8,7 +8,10 @@
     </div>
   </div>
   <div class="card-pf-body f8-card-body">
-    <div *ngIf="spaces.length === 0; then showBlankState else showSpaces"></div>
+    <fabric8-loading-widget message="Please wait while we load the spaces"
+                            *ngIf="loading"></fabric8-loading-widget>
+    <div *ngIf="spaces.length > 0 && !loading then showSpaces"></div>
+    <div *ngIf="spaces.length === 0 && !loading then showBlankState"></div>
     <ng-template #showBlankState>
       <div class="f8-blank-slate-card">
         <div class="f8-blank-slate-icon">
@@ -27,7 +30,7 @@
     <ng-template #showSpaces>
       <div class="no-vertical-scroll col-xs-12 f8-card-list">
         <div class="spaces-list-scroll" almInfiniteScroll
-             (fetchMore)='fetchMoreSpaces($event)'>
+             (fetchMore)='fetchMoreSpaces()'>
           <ul class="list-group list-view-pf list-view-pf-view list-view-pf-striped">
             <li class="list-group-item" *ngFor="let space of spaces">
               <div class="list-view-pf-main-info">

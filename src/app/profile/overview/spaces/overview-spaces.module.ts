@@ -8,7 +8,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule, WidgetsModule } from 'ngx-widgets';
 
-import { SpacesComponent } from './spaces.component';
+import { LoadingWidgetModule } from '../../../dashboard-widgets/loading-widget/loading-widget.module';
+import { SpacesComponent } from './overview-spaces.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { SpacesComponent } from './spaces.component';
     Fabric8WitModule,
     FormsModule,
     InfiniteScrollModule,
+    LoadingWidgetModule,
     ModalModule.forRoot(),
     WidgetsModule,
     NgArrayPipesModule

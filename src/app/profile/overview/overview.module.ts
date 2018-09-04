@@ -5,7 +5,7 @@ import { TabsModule } from 'ngx-bootstrap';
 
 import { OverviewRoutingModule } from './overview-routing.module';
 import { OverviewComponent } from './overview.component';
-import { SpacesModule } from './spaces/spaces.module';
+import { SpacesModule } from './spaces/overview-spaces.module';
 import { WorkItemsModule } from './work-items/work-items.module';
 
 @NgModule({

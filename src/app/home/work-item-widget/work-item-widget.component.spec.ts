@@ -28,7 +28,7 @@ import { WorkItemWidgetComponent } from './work-item-widget.component';
 })
 class HostComponent {}
 
-describe('WorkItemWidgetComponent', () => {
+describe('Home: WorkItemWidgetComponent', () => {
   type TestingContext = TestContext<WorkItemWidgetComponent, HostComponent>;
 
   let fakeUser: Observable<User> = Observable.of({

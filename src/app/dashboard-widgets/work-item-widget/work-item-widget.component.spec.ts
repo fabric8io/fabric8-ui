@@ -17,7 +17,7 @@ import { SpacesService } from '../../shared/spaces.service';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 
-describe('WorkItemWidgetComponent', () => {
+describe('Dashboard: WorkItemWidgetComponent', () => {
   let fixture: ComponentFixture<WorkItemWidgetComponent>;
   let component: DebugNode['componentInstance'];
 
