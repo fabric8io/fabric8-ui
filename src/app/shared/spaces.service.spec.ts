@@ -213,20 +213,6 @@ describe('SpacesService', () => {
     });
   });
 
-  describe('#findRecentIndexById', () => {
-    it('should return the list index of the space in _recent', () => {
-      const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: number = spacesService.findRecentIndexById([mockSpace], mockSpace.id);
-      expect(result).toEqual(0);
-    });
-
-    it('should return -1 if the space does not exist in _recent', () => {
-      const spacesService: SpacesService = TestBed.get(SpacesService);
-      let result: number = spacesService.findRecentIndexById([mockSpace], 'not-a-real-index');
-      expect(result).toEqual(-1);
-    });
-  });
-
   describe('#initRecent - spaceChanged', () => {
     let mockSpaces: Space[] = [];
     let mockSpacesObs: Observable<Space>[] = [];

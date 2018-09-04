@@ -32,7 +32,7 @@ export class SpacesService implements Spaces {
 
   private initRecent(): void {
     // load existing recent spaces from profile.store.recentSpaces
-    this.loadRecent().subscribe(spaces => {
+    this.loadRecent().subscribe((spaces: Space[]) => {
       this._recent.next(spaces);
     });
 
@@ -40,7 +40,7 @@ export class SpacesService implements Spaces {
     this.broadcaster.on<Space>('spaceChanged')
       .flatMap((changedSpace: Space) => {
         return this._recent.first().map((recentSpaces: Space[]) => {
-          let index: number = this.findRecentIndexById(recentSpaces, changedSpace.id);
+          let index: number = recentSpaces.findIndex((space: Space) => space.id === changedSpace.id);
           // if changedSpace exists in _recent
           if (index !== -1) {
             // move the space to the front of the list if it is already in _recent
@@ -72,7 +72,7 @@ export class SpacesService implements Spaces {
     this.broadcaster.on<Space>('spaceDeleted')
       .flatMap((deletedSpace: Space) => {
         return this._recent.first().map((recentSpaces: Space[]) => {
-          let index: number = this.findRecentIndexById(recentSpaces, deletedSpace.id);
+          let index: number = recentSpaces.findIndex((space: Space) => space.id === deletedSpace.id);
           if (index !== -1) {
             recentSpaces.splice(index, 1);
             this.recentChanged = true;
@@ -118,13 +118,6 @@ export class SpacesService implements Spaces {
     } as ExtProfile;
     return this.profileService.silentSave(patch)
       .subscribe(() => {}, err => console.log('Error saving recent spaces:', err));
-  }
-
-  /**
-   * Given the id of a space, returns the index of the space in _recent
-   */
-  findRecentIndexById(spaces: Space[], id: string): number {
-    return spaces.findIndex(space => space.id === id);
   }
 
 }
