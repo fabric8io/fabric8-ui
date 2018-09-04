@@ -65,15 +65,13 @@ export class SpacesService implements Spaces {
       .subscribe((recentSpaces: Space[]) => {
         if (this.recentChanged) {
           this.saveRecent(recentSpaces);
-          this.recentChanged = false;
-          this._recent.next(recentSpaces);
         }
       });
 
     // if a space is deleted, check to see if it should be removed from _recent
     this.broadcaster.on<Space>('spaceDeleted')
       .flatMap((deletedSpace: Space) => {
-        return this._recent.map((recentSpaces: Space[]) => {
+        return this._recent.first().map((recentSpaces: Space[]) => {
           let index: number = this.findRecentIndexById(recentSpaces, deletedSpace.id);
           if (index !== -1) {
             recentSpaces.splice(index, 1);
@@ -85,8 +83,6 @@ export class SpacesService implements Spaces {
       .subscribe((recentSpaces: Space[]) => {
         if (this.recentChanged) {
           this.saveRecent(recentSpaces);
-          this.recentChanged = false;
-          this._recent.next(recentSpaces);
         }
       });
   }
@@ -113,6 +109,8 @@ export class SpacesService implements Spaces {
   }
 
   private saveRecent(recent: Space[]): Subscription {
+    this._recent.next(recent);
+    this.recentChanged = false;
     let patch = {
       store: {
         recentSpaces: recent.map(val => val.id)
@@ -126,12 +124,7 @@ export class SpacesService implements Spaces {
    * Given the id of a space, returns the index of the space in _recent
    */
   findRecentIndexById(spaces: Space[], id: string): number {
-    for (let i: number = 0; i < spaces.length; i++) {
-      if (spaces[i].id === id) {
-        return i;
-      }
-    }
-    return -1;
+    return spaces.findIndex(space => space.id === id);
   }
 
 }
