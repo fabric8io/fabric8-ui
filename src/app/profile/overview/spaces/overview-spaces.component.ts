@@ -8,20 +8,19 @@ import { Subscription } from 'rxjs';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: 'alm-spaces',
-  templateUrl: './spaces.component.html',
-  styleUrls: ['./spaces.component.less'],
+  selector: 'alm-overview-spaces',
+  templateUrl: './overview-spaces.component.html',
+  styleUrls: ['./overview-spaces.component.less'],
   providers: [SpaceService]
 })
 export class SpacesComponent implements OnDestroy, OnInit  {
   context: Context;
   loggedInUser: User;
-  pageSize: number = 20;
   subscriptions: Subscription[] = [];
-  // spaceToDelete: Space;
   spaces: Space[] = [];
   loading: boolean = false;
-  private space: string;
+
+  private pageSize: number = 20;
 
   constructor(
       private contexts: Contexts,
@@ -29,17 +28,13 @@ export class SpacesComponent implements OnDestroy, OnInit  {
       private spaceService: SpaceService,
       private broadcaster: Broadcaster,
       private errorHandler: ErrorHandler
-  ) {
-    this.space = '';
-    this.subscriptions.push(this.contexts.current.subscribe(val => this.context = val));
-    this.subscriptions.push(this.broadcaster.on('contextChanged').subscribe(val => {
-      this.context = val as Context;
-      this.initSpaces({pageSize: this.pageSize});
-     }));
-  }
+  ) { }
 
   ngOnInit(): void {
-    this.initSpaces({pageSize: this.pageSize});
+    this.subscriptions.push(this.contexts.current.subscribe((ctx: Context) => {
+      this.context = ctx;
+      this.initSpaces();
+    }));
   }
 
   ngOnDestroy(): void {
@@ -48,11 +43,8 @@ export class SpacesComponent implements OnDestroy, OnInit  {
     });
   }
 
-  // Actions
-
-  initSpaces(event: any): void {
+  initSpaces(): void {
     this.loading = true;
-    this.pageSize = event.pageSize;
     if (this.context && this.context.user) {
       this.subscriptions.push(this.spaceService
         .getSpacesByUser(this.context.user.attributes.username, this.pageSize)
@@ -72,7 +64,7 @@ export class SpacesComponent implements OnDestroy, OnInit  {
     }
   }
 
-  fetchMoreSpaces($event: any): void {
+  fetchMoreSpaces(): void {
     if (this.context && this.context.user) {
       this.subscriptions.push(this.spaceService.getMoreSpacesByUser()
         .subscribe(

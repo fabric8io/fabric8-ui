@@ -9,7 +9,7 @@ import { OwnerGuard } from '../../shared/owner-guard.service';
 import { UpdateRoutingModule } from './update-routing.module';
 import { UpdateComponent } from './update.component';
 
-import { SpacesModule } from '../overview/spaces/spaces.module';
+import { SpacesModule } from '../overview/spaces/overview-spaces.module';
 import { WorkItemsModule } from '../overview/work-items/work-items.module';
 
 @NgModule({

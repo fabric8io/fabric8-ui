@@ -9,7 +9,7 @@ import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule, WidgetsModule } from 'ngx-widgets';
 
 import { LoadingWidgetModule } from '../../../dashboard-widgets/loading-widget/loading-widget.module';
-import { SpacesComponent } from './spaces.component';
+import { SpacesComponent } from './overview-spaces.component';
 
 @NgModule({
   imports: [
