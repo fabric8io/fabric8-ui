@@ -1,7 +1,7 @@
 <div class="stack-report-inshort">
   <div *ngIf="!error || !progress">
     <tabset *ngIf="tabs && tabs.length > 0">
-      <tab *ngFor="let tabz of tabs" (select)="tabSelection(tabz)" (deselect)="tabDeSelection(tabz)" (removed)="removeTabHandler(tabz)"
+      <tab *ngFor="let tabz of tabs" (select)="tabSelection(tabz)"
         [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
         <ng-template tabHeading>
           <i *ngIf="tabz.hasWarning" [ngClass]="{'pficon-warning-triangle-o': true, 'icon-severe': tabz.severity === 1, 'icon-moderate': tabz.severity === 2}"></i>

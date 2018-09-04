@@ -63,7 +63,7 @@ export class MGithub {
 }
 
 export class MOsio {
-    constructor(usage: number = -1) {}
+    constructor(public usage: number = -1) {}
 }
 
 export class MCrowdSourcing {

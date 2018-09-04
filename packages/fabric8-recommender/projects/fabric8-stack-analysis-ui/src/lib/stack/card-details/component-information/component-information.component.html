@@ -13,7 +13,7 @@
                         <div *ngSwitchCase="'component'">
                             <!-- Dependency Names -->
                             <span [innerText]="comp?.name"></span>
-                            <span class="recommendation-reason" [tooltip]="component?.reason" *ngIf="component?.reason && type === 'recommendation' && comp?.name">Why this dependency?</span>
+                            <span class="recommendation-reason" [tooltip]="component['reason']" *ngIf="component['reason'] && type === 'recommendation' && comp?.name">Why this dependency?</span>
                             <!--
                                 <reco-name [name]="comp?.name" [reason]="comp?.recommendation?.reason" *ngIf="comp?.recommendation && (comp?.recommendation?.type === 'companion')"></reco-name>
                             -->
@@ -24,12 +24,12 @@
                         </div>
                         <div *ngSwitchCase="'highestCVSS'">
                             <!-- highestCVSS -->
-                            <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
+                            <span *ngIf="!comp?.hasSecurityIssue" [innerText]="'NA'"></span>
                             <ana-progress-meter *ngIf="comp?.hasSecurityIssue" [config]="comp?.securityDetails?.progressReport"></ana-progress-meter>
                         </div>
                         <div *ngSwitchCase="'cveIdOfH'">
                             <!-- cveIdOfHeighest CVSS -->
-                            <span *ngIf="!comp?.hasSecurityIssue" [innerText]="NA"></span>
+                            <span *ngIf="!comp?.hasSecurityIssue" [innerText]="'NA'"></span>
                             <span *ngIf="comp?.hasSecurityIssue" [innerText]="comp?.securityDetails && comp?.securityDetails?.highestIssue?.cve"></span>
                         </div>
                         <div *ngSwitchCase="'action'" class="action">

@@ -324,7 +324,7 @@ export class StackDetailsComponent implements OnChanges, OnInit {
         };
     }
 
-    private init(): void {
+    init(): void {
         if (this.stackResponse && this.cacheResponse !== this.stackResponse) {
             this.cacheResponse = this.stackResponse;
             // Change this to some other logic

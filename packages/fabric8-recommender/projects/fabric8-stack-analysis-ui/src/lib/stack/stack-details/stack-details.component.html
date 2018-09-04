@@ -3,12 +3,11 @@
   <pipleine-insights-details (onStackResponse)="stackResponse = $event" (click)="showStackModal($event)" *ngIf="stack && showF" [url]="stack"></pipleine-insights-details>
   <modal #stackModule title="Stack report for {{appName}}, Build #{{buildNumber}}" modalClass="modal-lg modal-fullscreen modal-width-class" (onClose)="handleModalClose();" (onOpen)="init();">
     <modal-content>
-      <div *ngIf="!error">
+      <div>
         <tabset *ngIf="dataLoaded">
             <tab *ngFor="let tabz of tabs"
                 (select)="tabSelection(tabz)"
                 (deselect)="tabDeSelection(tabz)"
-                (removed)="removeTabHandler(tabz)"
                 [customClass]="tabz.active ? 'active-menu-item' : 'inactive-menu'">
                 <ng-template tabHeading>
                   <i *ngIf="tabz.hasWarning" [ngClass]="{'pficon-warning-triangle-o': true, 'icon-severe': tabz.severity === 1, 'icon-moderate': tabz.severity === 2}"></i>

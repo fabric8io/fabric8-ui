@@ -3,5 +3,6 @@
   "dest": "../../dist/fabric8-stack-analysis-ui",
   "lib": {
     "entryFile": "src/public_api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": ["."]
 }

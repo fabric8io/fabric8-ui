@@ -25,7 +25,7 @@ import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
     templateUrl: './component-information.component.html'
 })
 export class ComponentInformationComponent implements OnInit, OnChanges {
-    @Input() component: MComponentInformation | MRecommendationInformation;
+    @Input() component: any;
     @Input() positions: Array<MComponentHeaderColumn>;
     @Input() genericInformation: MGenericStackInformation;
     @Input() serial: number;
