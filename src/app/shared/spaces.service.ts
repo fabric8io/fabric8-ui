@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { Observable, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
 
 @Injectable()
@@ -10,8 +10,7 @@ export class SpacesService implements Spaces {
   static readonly RECENT_SPACE_LENGTH = 8;
 
   private _current: Observable<Space>;
-  private _recent: ReplaySubject<Space[]> = new ReplaySubject<Space[]>(1);
-  private recentChanged: boolean = false;
+  private _recent: Subject<Space[]>;
 
   constructor(
     private contexts: Contexts,
@@ -19,6 +18,7 @@ export class SpacesService implements Spaces {
     private broadcaster: Broadcaster,
     private profileService: ProfileService
   ) {
+    this._recent = new ReplaySubject<Space[]>(1);
     this.initCurrent();
     this.initRecent();
   }
@@ -32,58 +32,61 @@ export class SpacesService implements Spaces {
 
   private initRecent(): void {
     // load existing recent spaces from profile.store.recentSpaces
-    this.loadRecent().subscribe((spaces: Space[]) => {
+    this.loadRecent().subscribe((spaces: Space[]): void => {
       this._recent.next(spaces);
     });
 
     // update _recent with newly seen space when spaceChanged is emitted
     this.broadcaster.on<Space>('spaceChanged')
-      .flatMap((changedSpace: Space) => {
-        return this._recent.first().map((recentSpaces: Space[]) => {
-          let index: number = recentSpaces.findIndex((space: Space) => space.id === changedSpace.id);
-          // if changedSpace exists in _recent
-          if (index !== -1) {
-            // move the space to the front of the list if it is already in _recent
-            if (recentSpaces[0].id !== changedSpace.id) {
-              recentSpaces.splice(index, 1);
-              recentSpaces.unshift(changedSpace);
-              this.recentChanged = true;
-            }
-            // otherwise, no operation required; changedSpace is already index 0
-          // if changedSpace is new to the recent spaces
-          } else {
-            recentSpaces.unshift(changedSpace);
-            // trim _recent if required to ensure it is length =< 8
-            if (recentSpaces.length > SpacesService.RECENT_SPACE_LENGTH) {
-              recentSpaces.pop();
-            }
-            this.recentChanged = true;
-          }
-          return recentSpaces;
-        });
+      .withLatestFrom(this.recent)
+      .map(([changedSpace, recentSpaces]: [Space, Space[]]): [Space, Space[], number] => {
+        let index: number = recentSpaces.findIndex((space: Space): boolean => space.id === changedSpace.id);
+        return [changedSpace, recentSpaces, index];
       })
-      .subscribe((recentSpaces: Space[]) => {
-        if (this.recentChanged) {
-          this.saveRecent(recentSpaces);
+      .filter(([changedSpace, recentSpaces, index]: [Space, Space[], number]): boolean => {
+        return index !== 0; // continue only if the changed space is new, or requires a move in _recent
+      })
+      .map(([changedSpace, recentSpaces, index]: [Space, Space[], number]): Space[] => {
+        // if changedSpace exists in recentSpaces
+        if (index !== -1) {
+          // move the space to the front of the list if it is already in _recent
+          if (recentSpaces[0].id !== changedSpace.id) {
+            recentSpaces.splice(index, 1);
+            recentSpaces.unshift(changedSpace);
+          }
+          // otherwise, no operation required; changedSpace is already index 0
+        // if changedSpace is new to the recent spaces
+        } else {
+          recentSpaces.unshift(changedSpace);
+          // trim recentSpaces if required to ensure it is length =< 8
+          if (recentSpaces.length > SpacesService.RECENT_SPACE_LENGTH) {
+            recentSpaces.pop();
+          }
         }
+        return recentSpaces;
+      })
+      .subscribe((recentSpaces: Space[]): void => {
+        this.saveRecent(recentSpaces);
       });
 
     // if a space is deleted, check to see if it should be removed from _recent
     this.broadcaster.on<Space>('spaceDeleted')
-      .flatMap((deletedSpace: Space) => {
-        return this._recent.first().map((recentSpaces: Space[]) => {
-          let index: number = recentSpaces.findIndex((space: Space) => space.id === deletedSpace.id);
-          if (index !== -1) {
-            recentSpaces.splice(index, 1);
-            this.recentChanged = true;
-          }
-          return recentSpaces;
-        });
+      .withLatestFrom(this.recent)
+      .map(([changedSpace, recentSpaces]: [Space, Space[]]): [Space, Space[], number] => {
+        let index: number = recentSpaces.findIndex((space: Space): boolean => space.id === changedSpace.id);
+        return [changedSpace, recentSpaces, index];
       })
-      .subscribe((recentSpaces: Space[]) => {
-        if (this.recentChanged) {
-          this.saveRecent(recentSpaces);
+      .filter(([changedSpace, recentSpaces, index]: [Space, Space[], number]): boolean => {
+        return index !== -1;
+      })
+      .map(([changedSpace, recentSpaces, index]: [Space, Space[], number]): Space[] => {
+        if (index !== -1) {
+          recentSpaces.splice(index, 1);
         }
+        return recentSpaces;
+      })
+      .subscribe((recentSpaces: Space[]): void => {
+        this.saveRecent(recentSpaces);
       });
   }
 
@@ -96,10 +99,10 @@ export class SpacesService implements Spaces {
   }
 
   private loadRecent(): Observable<Space[]> {
-    return this.profileService.current.switchMap(profile => {
+    return this.profileService.current.switchMap((profile: ExtProfile): Observable<Space[]> => {
       if (profile.store.recentSpaces) {
         return Observable.forkJoin((profile.store.recentSpaces as string[])
-          .map(id => {
+          .map((id: string): Observable<Space> => {
             return this.spaceService.getSpaceById(id);
           }));
       } else {
@@ -110,14 +113,13 @@ export class SpacesService implements Spaces {
 
   private saveRecent(recent: Space[]): Subscription {
     this._recent.next(recent);
-    this.recentChanged = false;
     let patch = {
       store: {
-        recentSpaces: recent.map(val => val.id)
+        recentSpaces: recent.map((val: Space): string => val.id)
       }
     } as ExtProfile;
     return this.profileService.silentSave(patch)
-      .subscribe(() => {}, err => console.log('Error saving recent spaces:', err));
+      .subscribe((): void => {}, (err: string): void => console.log('Error saving recent spaces:', err));
   }
 
 }
