@@ -28,11 +28,12 @@ export class RequestIdInterceptor implements HttpInterceptor {
     // Attach a X-Request-Id to all requests that don't have one
     if (url.startsWith(this.witApiUrl) || url.startsWith(this.authApiUrl)) {
       if (!request.headers.has('X-Request-Id')) {
-        request = request.clone({
+        const newReq = request.clone({
           setHeaders: {
             'X-Request-Id': uuid.v4()
           }
         });
+        return next.handle(newReq);
       }
     }
 
