@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'ngx-bootstrap';
 /** Vendor imports Go HERE */
 
+import { Contexts } from 'ngx-fabric8-wit';
+
 import { ProgressMeterModule } from '../../utils/progress-meter/progress-meter.module';
 import { ComponentFeedbackModule } from '../../utils/component-feedback/component-feedback.module';
 
@@ -44,7 +46,7 @@ const imports = [
       ValidSpaceNameValidatorDirective,
         ...components
     ],
-    providers: [ AddWorkFlowService ],
+    providers: [ AddWorkFlowService, Contexts ],
     exports: [
         ...components
     ]

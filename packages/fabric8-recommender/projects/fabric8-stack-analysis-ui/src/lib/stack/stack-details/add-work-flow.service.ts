@@ -25,8 +25,8 @@ export class AddWorkFlowService {
     private auth: AuthenticationService,
     private context: Contexts
   ) {
-    if (this.auth.getToken() !== null) {
-      this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+    if (this.auth.getToken && this.auth.getToken() !== null) {
+      this.headers = this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
     this.setMetaInformation();
   }

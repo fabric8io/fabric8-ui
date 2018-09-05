@@ -17,7 +17,7 @@ import { ComponentFeedbackService } from './component-feedback.service';
 @Component({
     selector: 'component-feedback',
     styleUrls: ['./component-feedback.component.less'],
-    providers: [ComponentFeedbackService],
+    // providers: [ComponentFeedbackService],
     templateUrl: './component-feedback.component.html'
 })
 export class ComponentFeedbackComponent implements OnChanges {

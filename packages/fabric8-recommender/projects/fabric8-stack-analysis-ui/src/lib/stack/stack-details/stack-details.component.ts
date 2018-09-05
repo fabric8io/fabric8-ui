@@ -23,7 +23,7 @@ import { CommonService } from '../utils/common.service';
 
 @Component({
     selector: 'stack-details',
-    providers: [StackAnalysesService],
+    // providers: [StackAnalysesService],
     encapsulation: ViewEncapsulation.None,
     styleUrls: ['./stack-details.component.less'],
     templateUrl: './stack-details.component.html'

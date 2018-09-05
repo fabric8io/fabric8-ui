@@ -3,7 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AuthenticationService } from 'ngx-login-client';
-import { MockAuthenticationService } from '../../../shared/mock-auth.service';
+import { MockAuthenticationService } from '../../../../../../../src/app/shared/mock-auth.service';
+import { ComponentFeedbackService } from './component-feedback.service';
 
 import { ComponentFeedbackComponent } from './component-feedback.component';
 import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
@@ -24,7 +25,8 @@ describe('ComponentFeedbackComponent', () => {
       providers: [
         {
           provide: AuthenticationService, useClass: MockAuthenticationService
-        }
+        },
+        ComponentFeedbackService
       ]
     }).compileComponents();
   }));

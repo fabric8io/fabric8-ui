@@ -20,18 +20,20 @@ import { Broadcaster } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, AUTH_API_URL, SSO_API_URL } from 'ngx-login-client';
 
-import { witApiUrlProvider } from '../../shared/wit-api.provider';
-import { ApiLocatorService } from '../../shared/api-locator.service';
-import { authApiUrlProvider } from '../../shared/auth-api.provider';
-import { ssoApiUrlProvider } from '../../shared/sso-api.provider';
-import { realmProvider } from '../../shared/realm-token.provider';
-import { MockAuthenticationService } from '../../shared/mock-auth.service';
+import { witApiUrlProvider } from '../../../../../../src/app/shared/wit-api.provider';
+import { ApiLocatorService } from '../../../../../../src/app/shared/api-locator.service';
+import { authApiUrlProvider } from '../../../../../../src/app/shared/auth-api.provider';
+import { ssoApiUrlProvider } from '../../../../../../src/app/shared/sso-api.provider';
+import { realmProvider } from '../../../../../../src/app/shared/realm-token.provider';
+import { MockAuthenticationService } from '../../../../../../src/app/shared/mock-auth.service';
 
 /** Stack Report Revamp - Latest */
 import { ReportSummaryModule } from '../report-summary/report-summary.module';
 import { CardDetailsModule } from '../card-details/card-details.module';
 import { CommonService } from '../utils/common.service';
 /** Stack Report Revamp - Latest */
+
+import { StackAnalysesService } from '../stack-analyses.service';
 
 const revampImports = [
   ReportSummaryModule,
@@ -71,7 +73,8 @@ describe ('StackDetailsComponent', () => {
                     provide: AuthenticationService, useClass: MockAuthenticationService
                 },
                 Contexts,
-                CommonService
+                CommonService,
+                StackAnalysesService
             ]
         }).compileComponents();
     }));

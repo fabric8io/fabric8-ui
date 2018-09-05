@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ApiLocatorService {
@@ -41,7 +42,8 @@ export class ApiLocatorService {
   }
 
   private loadEnvVar(key: string): void {
-    this.envVars.set(key, process.env[this.DEFAULT_API_ENV_VAR_NAMES.get(key)]);
+    // this.envVars.set(key, process.env[this.DEFAULT_API_ENV_VAR_NAMES.get(key)]);
+    this.envVars.set(key, environment[this.DEFAULT_API_ENV_VAR_NAMES.get(key)]);
   }
 
   private buildApiUrl(key: string): string {

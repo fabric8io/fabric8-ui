@@ -10,7 +10,7 @@ import { CommonService } from '../utils/common.service';
 
 @Component({
     selector: 'stack-report-inshort',
-    providers: [StackAnalysesService],
+    // providers: [StackAnalysesService],
     encapsulation: ViewEncapsulation.None,
     styleUrls: ['./stack-report-inshort.component.less'],
     templateUrl: './stack-report-inshort.component.html'

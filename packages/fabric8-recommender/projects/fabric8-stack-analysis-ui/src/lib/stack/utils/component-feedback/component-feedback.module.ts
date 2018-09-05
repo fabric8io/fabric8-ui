@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 import { ComponentFeedbackComponent } from './component-feedback.component';
 import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
+import { ComponentFeedbackService } from './component-feedback.service';
 
 @NgModule({
     imports: [
@@ -14,6 +15,7 @@ import { ToastNotificationModule } from '../../toast-notification/toast-notifica
     declarations: [
         ComponentFeedbackComponent
     ],
+    providers: [ComponentFeedbackService],
     exports: [
         ComponentFeedbackComponent
     ]

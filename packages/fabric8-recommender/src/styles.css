@@ -1,1 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
+/* import PatternFly CSS */
+@import '../node_modules/patternfly/dist/css/patternfly.min.css';
+@import '../node_modules/patternfly/dist/css/patternfly-additions.min.css';

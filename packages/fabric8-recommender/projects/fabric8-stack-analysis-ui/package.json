@@ -7,11 +7,12 @@
   },
   "dependencies": {
     "c3": "^0.4.18",
-    "ngx-bootstrap": "^3.0.1",
     "ngx-modal": "^0.0.29",
     "ngx-base": "^3.1.1",
-    "ngx-fabric8-wit": "^6.20.3",
-    "ngx-login-client": "^2.3.1"
+    "ngx-fabric8-wit": "^7.1.0",
+    "ngx-login-client": "^2.3.1",
+    "ngx-bootstrap": "^3.0.1",
+    "patternfly": "^3.54.1"
   },
   "peerDependencies": {
     "@angular/common": "^6.1.1",

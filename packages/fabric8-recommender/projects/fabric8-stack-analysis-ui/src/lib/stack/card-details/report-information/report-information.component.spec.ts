@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
-
+import { Observable, of } from 'rxjs';
 import { TooltipModule } from 'ngx-bootstrap';
 
 import { ProgressMeterModule } from '../../utils/progress-meter/progress-meter.module';
@@ -17,6 +17,17 @@ import { NoDataComponent } from './no-data/no-data.component';
 
 import { ReportInformationModule } from './report-information.module';
 import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
+
+const mockAddWorkFlowService = {
+  addWorkFlow(): Observable<any> {
+    const wfDetails = of( <any>{
+      links: { self: 'https://openshift.io/api/spaces/41006333-2d18-4de8-98f8-8d00d0196e15/workitems'},
+      type: 'workitems',
+      id: 'b682f960-0df2-479f-ba16-aec7c0c6f117'
+    });
+    return wfDetails;
+  }
+};
 
 const components = [
   ComponentSnippetComponent,
@@ -47,7 +58,10 @@ describe('ReportInformationComponent', () => {
         ...components
       ],
       providers: [
-        AddWorkFlowService
+        {
+          provide: AddWorkFlowService,
+          useValue: mockAddWorkFlowService
+        }
       ]
     }).compileComponents();
   }));

@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  STACK_API_TOKEN: '%STACK_API_TOKEN%',
+  FABRIC8_WIT_API_URL: '%FABRIC8_WIT_API_URL%',
+  FABRIC8_REALM: '%FABRIC8_REALM%',
+  FABRIC8_RECOMMENDER_API_URL: '%FABRIC8_RECOMMENDER_API_URL%'
 };
 
 /*
