@@ -26,13 +26,11 @@ export class RequestCache {
 
     const isExpired = cached.lastRead < (Date.now() - CACHE_TTL);
     const expired = isExpired ? 'expired ' : '';
-    console.log(`Found ${expired}cached response for "${req.url}".`);
     return isExpired ? undefined : cached.asyncResponse;
   }
 
   set(req: HttpRequest<any>, asyncResponse: AsyncSubject<HttpResponse<any>>): void {
     const cacheKey = createCacheKey(req);
-    console.log(`Caching response from "${req.url}".`);
 
     const cacheItem = { asyncResponse, lastRead: Date.now() };
     this.cache.set(cacheKey, cacheItem);
@@ -44,8 +42,6 @@ export class RequestCache {
         this.cache.delete(cacheKey);
       }
     });
-
-    console.log(`Request cache size: ${this.cache.size}.`);
   }
 }
 
