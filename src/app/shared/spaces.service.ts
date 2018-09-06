@@ -72,17 +72,15 @@ export class SpacesService implements Spaces {
     // if a space is deleted, check to see if it should be removed from _recent
     this.broadcaster.on<Space>('spaceDeleted')
       .withLatestFrom(this.recent)
-      .map(([changedSpace, recentSpaces]: [Space, Space[]]): [Space, Space[], number] => {
-        let index: number = recentSpaces.findIndex((space: Space): boolean => space.id === changedSpace.id);
-        return [changedSpace, recentSpaces, index];
+      .map(([deletedSpace, recentSpaces]: [Space, Space[]]): [Space, Space[], number] => {
+        let index: number = recentSpaces.findIndex((space: Space): boolean => space.id === deletedSpace.id);
+        return [deletedSpace, recentSpaces, index];
       })
-      .filter(([changedSpace, recentSpaces, index]: [Space, Space[], number]): boolean => {
+      .filter(([deletedSpace, recentSpaces, index]: [Space, Space[], number]): boolean => {
         return index !== -1;
       })
-      .map(([changedSpace, recentSpaces, index]: [Space, Space[], number]): Space[] => {
-        if (index !== -1) {
-          recentSpaces.splice(index, 1);
-        }
+      .map(([deletedSpace, recentSpaces, index]: [Space, Space[], number]): Space[] => {
+        recentSpaces.splice(index, 1);
         return recentSpaces;
       })
       .subscribe((recentSpaces: Space[]): void => {
