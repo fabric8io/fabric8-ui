@@ -40,6 +40,7 @@ import { BuildConfig } from '../../../../a-runtime-console/index';
 
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesService } from './services/pipelines.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 @Component({
   selector: 'fabric8-pipelines-list',
@@ -132,6 +133,7 @@ describe('PipelinesComponent', () => {
     imports: [
       BsDropdownModule.forRoot(),
       CommonModule,
+      RouterTestingModule,
       ToolbarModule,
       ModalModule.forRoot(),
       TooltipModule.forRoot()
@@ -609,4 +611,25 @@ describe('PipelinesComponent', () => {
     });
   });
 
+  it('should add queryParams to URL on filter change', function(this: TestingContext) {
+    this.testedDirective.filterChange(
+      {
+        appliedFilters: [
+          {
+            field: {
+              id: 'application',
+              title: 'Application',
+              placeholder: 'Filter by Application...',
+              type: 'text'
+            },
+            value: 'app2'
+          }
+        ]
+      }
+    );
+    this.fixture.detectChanges();
+    this.fixture.whenStable().then(() => {
+      expect(this.testedDirective.addQueryParams).toHaveBeenCalled();
+    });
+  })
 });

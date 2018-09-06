@@ -6,7 +6,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Subscription } from 'rxjs';
 
@@ -149,26 +149,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     this._appliedFilters = $event.appliedFilters;
     this.applyFilters();
     this.applySort();
-    let urlFilter: object = {};
-      this._appliedFilters.forEach((f) => {
-        if (f.field.id === 'codebase') {
-          if (urlFilter['codebase'] === undefined) {
-            urlFilter['codebase'] = [];
-          }
-          urlFilter['codebase'].indexOf(f.value) === -1 ?
-          urlFilter['codebase'].push(f.value) : urlFilter['codebase'];
-        } else if (f.field.id === 'application') {
-          if (urlFilter['application'] === undefined) {
-            urlFilter['application'] = [];
-          }
-          urlFilter['application'].indexOf(f.value) === -1 ?
-          urlFilter['application'].push(f.value) : urlFilter['application'];
-        }
-      });
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: this._appliedFilters.length ? {q: JSON.stringify(urlFilter)} : {}
-      });
+    this.addQueryParams();
   }
 
   sortChange($event: SortEvent): void {
@@ -230,6 +211,29 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
         res = res * -1;
       }
       return res;
+    });
+  }
+
+  addQueryParams() {
+    let urlFilter: object = {};
+    this._appliedFilters.forEach((f) => {
+      if (f.field.id === 'codebase') {
+        if (urlFilter['codebase'] === undefined) {
+          urlFilter['codebase'] = [];
+        }
+        urlFilter['codebase'].indexOf(f.value) === -1 ?
+        urlFilter['codebase'].push(f.value) : urlFilter['codebase'];
+      } else if (f.field.id === 'application') {
+        if (urlFilter['application'] === undefined) {
+          urlFilter['application'] = [];
+        }
+        urlFilter['application'].indexOf(f.value) === -1 ?
+        urlFilter['application'].push(f.value) : urlFilter['application'];
+      }
+    });
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: this._appliedFilters.length ? {q: JSON.stringify(urlFilter)} : {}
     });
   }
 
