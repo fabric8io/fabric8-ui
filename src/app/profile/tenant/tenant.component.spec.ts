@@ -21,7 +21,7 @@ describe('TenantComponent', () => {
   let fixture: ComponentFixture<TenantComponent>;
   let component: DebugNode['componentInstance'];
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
-  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update']);
+  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update', 'ngOnDestroy']);
   let mockContexts: any = jasmine.createSpy('Contexts');
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
@@ -61,6 +61,8 @@ describe('TenantComponent', () => {
     TestBed.overrideProvider(TenantService, { useValue: mockTenantService });
     fixture = TestBed.createComponent(TenantComponent);
     component = fixture.debugElement.componentInstance;
+
+    fixture.detectChanges();
   });
 
   describe('#isUpdateProfileDisabled', () => {
