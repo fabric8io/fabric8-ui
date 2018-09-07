@@ -1,149 +1,55 @@
 = Fabric8 Recommender
 
+image:https://ci.centos.org/buildStatus/icon?job=devtools-fabric8-recommender-npm-publish-build-master[build, link="https://ci.centos.org/job/devtools-fabric8-recommender-npm-publish-build-master"]
 image:https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic%20release-b4d455.svg[Semantic Release, link="https://github.com/semantic-release/semantic-release"]
 
 **Fabric8 Recommender is a stack analysis feature.**
 
-== Running the app
 
-=== Set NODE_ENV
-If you're just trying to test the application, please use inmemory mode which
-will load the app with mock data for you. If you, however, want to contribute
-to the codebase, unset it back or to "development" (default) mode and rebuild.
+== Build
 
+* Pre-requisites:
+- node v8.9.1+ (required by anuglar-cli 6+)
+- npm 5.5.1
 
-[source,shell]
+This angular library is built using link:https://github.com/angular/angular-cli/wiki[angular-cli].
+The main application is the demo app. The library source is under link:/projects/fabric8-stack-analysis-ui[/projects/fabric8-stack-analysis-ui].
+
+* Install the dependencies
+
 ```
-$ export NODE_ENV=inmemory # <1>
-$ export NODE_ENV=development # <2>
-$ export NODE_ENV=production # <3>
-
-<1> In-memory mode for trying-out the app
-<2> Development mode for contributing to the source
-<2> Production mode for deploying the application
+npm i
 ```
 
-Once you're done setting the environment, you can proceed with the next step(s)
+* Build library & demo app
+```
+npm run build
+```
 
-NOTE: If you're directly trying to run the app in dev mode, you can skip this
-step, as *`NODE_ENV`* is treated as `"development"` by default.
+* Run the library tests
 
-=== First run
+```
+npm test
+```
 
-If you're trying to run the app for the first time:
+> NOTE: to run the library test in watch mode: `npm run test:lib:dev`
 
- $ npm install
+
+== Running the demo
+
+To work with stack analysis demo, targeting PROD backend services:
+
+ $ npm install; npm run build
 
 Then, start the app with:
 
  $ npm start
 
-=== Fresh run
-
-If you trying to refresh your installation, you need to run:
-
- $ npm run reinstall
-
-Then, start the app with:
-
- $ npm start
-
-=== Testcase run
-
-To run the linter, unit tests, and functional test use:
-
- $ npm test
-
-== Other useful scripts
-
-The *`package.json`* file's `scripts:` section lists _all the tasks_ we run.
-
-Here are some of the most useful/frequently used scripts you may need to run:
-
-[cols="1,2,4", options="header"]
-|===
-|Scipt
-|Command
-|Description
-
-|Lint
-|`$ npm run lint`
-|Runs the TypeScript and Angular 2 linter
-
-|Validation
-|`$ npm run validate`
-|Validates the webpack build
-
-|Unit Tests
-|`$ npm run test:unit`
-|Runs the unit tests
-
-|Functional Tests
-|`$ npm run test:func`
-|Runs the functional tests
-
-|Continuous Tests
-|`$ npm run watch:test`
-|Looks for changes in source code and runs unit tests
-|===
-
-== Building the app
-
-=== Production build
-
-To generate production build, set API URL and run build script as follows:
-
-----
-$ npm run build:prod
-----
-
-The build output will be under `dist` directory.
-
-*To create a docker image,* run this command immediately after the production
-build completion:
-
-=== Library Build
-
-==== For production:
-
-To build the fabric8-stack-analysis-ui as an npm library, use:
-
-----
-$ npm run build
-----
-
-The created library will be placed in `dist`.
-
-IMPORTANT: *You shouldn't ever publish the build manually,* instead you should
-let the CD pipeline do a semantic release.
-
-==== For development:
-
-To build fabric8-stack-analysis-ui as an npm library and embed it into a webapp such as
-fabric8-ui, you should:
-
-Step 1: Run `npm run watch:library` in the source directory::
-This will build fabric8-stack-analysis-ui as a library and then set up a watch task to
-rebuild any ts, html and scss files you change.
-
-Step 2: Run `npm link <path to fabric8-stack-analysis-ui>/dist-watch --production`::
-In the webapp into which you are embedding. This will create a symlink from
-`node_modules/fabric8-stack-analysis-ui` to the `dist-watch` directory and install that
-symlinked node module into your webapp.
-
-Step 3: Run your webapp in development mode::
-Make sure you have a watch on `node_modules/fabric8-stack-analysis-ui` enabled. You will
-have access to both JS and SASS sourcemaps if your webapp is properly setup.
-
-NOTE: `fabric8-ui` is setup to do reloading and sourcemaps automatically when you
-run `npm start`.
-
-** To hit stack analysis api in standalone mode**
-To target PROD env, configure route as below
+Open your browser:
 
 ```
 
-http://localhost:8088/#/analyze/<STACK_ID>?api_data={
+http://localhost:4200/#/analyze/<STACK_ID>?api_data={
     "access_token": "",
     "route_config": {
         "api_url": "https://recommender.api.openshift.io/"
@@ -160,27 +66,27 @@ To get OSIO-TOKEN follow below steps :
 
 3. Edit Profile
 
-4. Copy token 
+4. Copy token
 
 
-NOTE : STACK_ID is the ID of any stack anyses in OpenShift.io ( Can be fetched from network ).
+NOTE : STACK_ID is the ID of any stack analyses in OpenShift.io (can be fetched from network tab).
 
+== Release
 
-== CSS and LESS
+Semantic release are done via fabric8cd using `semantic-release`.
+- merging each PR will result with an automatic build of master
+- and a release apatch, minor or major version. You should use correct link:https://github.com/semantic-release/semantic-release#commit-message-format[commit message].
 
-fabric8-stack-analysis-ui uses LESS for it's stylesheets. It also uses the Angular emulation
-of the shadow dom, so you will normally want to place your styles in the
-`.component.LESS` file next to the html and the typescript.
-
-We use mixins to avoid polluting components with uncessary style classes, and to avoid
-an explosion of shared files.
-
-The `src/assets/stylesheets/` directory includes a `shared` directory. These are
-shared global styles that we will refactor out in to a shared library at some point.
-Only update these styles if you are making a truly global style, and are going to
-synchronise your changes across all the various UI projects.
-
-== Contributing to the app
+To test a distribution package:
+```
+npm run package
+```
+will generate `fabric8-stack-analysis-ui-0.0.1.tgz` in `dist/fabric8-stack-analysis-ui` folder.
+```
+npm install fabric8-stack-analysis-ui-0.0.1.tgz
+```
+to test your distribution within your app.
+== Contributing
 
 The development guide is part of the link:./CONTRIBUTING.adoc[contributors'
 instructions]. Please check it out in order to contribute to this project. 

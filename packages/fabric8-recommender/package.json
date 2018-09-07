@@ -21,6 +21,8 @@
     "test:lib": "ng test fabric8-stack-analysis-ui --watch=false --browsers ChromeHeadlessNoSandbox",
     "test:lib:dev": "ng test fabric8-stack-analysis-ui",
     "rimraf": "rimraf",
+    "pack:lib": "cd dist/fabric8-stack-analysis-ui && npm pack",
+    "package": "npm run build:lib && npm run pack:lib",
     "semantic-release": "semantic-release"
   },
   "private": true,
