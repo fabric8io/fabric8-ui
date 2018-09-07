@@ -1,47 +1,40 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "noEmitHelpers": true,
-    "strictNullChecks": false,
-    "removeComments": false,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "baseUrl": ".",
-    "paths": {
-      "@angular/*": [
-        "./node_modules/@angular/*"
-      ],
-      "rxjs": [
-        "./node_modules/rxjs"
-      ]
-    },
-    "mapRoot": "",
-    "rootDir": ".",
-    "outDir": "lib",
-    "lib": [
-      "dom",
-      "es2015"
-    ],
-    "types": [
-      "jasmine",
-      "node",
-      "protractor",
-      "selenium-webdriver",
-      "source-map",
-      "segment-analytics",
-      "webpack"
-    ]
-  },
   "angularCompilerOptions": {
     "genDir": "src/app/generated",
     "entryModule": "src/app/app.module#AppModule",
     "skipMetadataEmit" : true
   }
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["dom", "es6"],
+    "mapRoot": "",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noEmitHelpers": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": false,
+    "outDir": "lib",
+    "paths": {
+      "@angular/*": ["./node_modules/@angular/*"],
+      "rxjs": ["./node_modules/rxjs"]
+    },
+    "removeComments": false,
+    "rootDir": ".",
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5",
+    "types": [
+      "jasmine",
+      "node",
+      "protractor",
+      "segment-analytics",
+      "selenium-webdriver",
+      "source-map",
+      "webpack"
+    ]
+  },
 }

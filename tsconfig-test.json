@@ -1,50 +1,47 @@
 {
+  "angularCompilerOptions": {
+    "genDir": "compiled",
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true
+  },
+  "atom": { "rewriteTsconfig": false },
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": false,
+    "transpileOnly": true,
+    "useWebpackText": true,
+    "useCache": true
+  },
+  "buildOnSave": false,
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "moduleResolution": "node",
+    "allowUnreachableCode": false,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
     "declaration": false,
-    "stripInternal": true,
-    "skipLibCheck": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": false,
     "inlineSources": false,
-    "noEmitHelpers": false,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "allowUnreachableCode": false,
-    "baseUrl": "./src",
+    "lib": ["es2015", "dom"],
+    "module": "es2015",
+    "moduleResolution": "node",
     "noEmit": true,
+    "noEmitHelpers": false,
+    "noImplicitAny": false,
     "paths": {
       "@angular/core": ["node_modules/@angular/core"],
       "@angular/common": ["node_modules/@angular/common"],
       "@angular/forms": ["node_modules/@angular/forms"],
       "rxjs/*": ["node_modules/rxjs/*"],
-      "moment": ["node_modules/moment"]
+      "moment": ["node_modules/moment"],
     },
-    "lib": [
-      "es2015",
-      "dom"
-    ]
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "strictNullChecks": false,
+    "stripInternal": true
+    "target": "es5"
   },
   "exclude": [
     "node_modules",
     "dist"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": false,
-    "useWebpackText": true,
-    "useCache": true,
-    "transpileOnly": true
-  },
-  "angularCompilerOptions": {
-    "strictMetadataEmit": true,
-    "skipTemplateCodegen": true,
-    "genDir": "compiled"
-  },
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "atom": { "rewriteTsconfig": false }
+  ]
 }
