@@ -3,7 +3,7 @@
     "genDir": "src/app/generated",
     "entryModule": "src/app/app.module#AppModule",
     "skipMetadataEmit" : true
-  }
+  },
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
@@ -36,5 +36,5 @@
       "source-map",
       "webpack"
     ]
-  },
+  }
 }
