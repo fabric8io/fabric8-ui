@@ -20,14 +20,14 @@ import { GitHubService } from '../../../space/create/codebases/services/github.s
 export class CodebaseItemComponent implements OnInit {
 
   @Input() codebase: Codebase;
-  lastUpdated$: Observable<string>;
+  lastUpdated: Observable<string>;
 
   constructor(
     private readonly githubService: GitHubService
   ) { }
 
   ngOnInit(): void {
-    this.lastUpdated$ = this.githubService
+    this.lastUpdated = this.githubService
       .getRepoDetailsByUrl(this.codebase.attributes.url)
       .pipe(
         map((details: GitHubRepoDetails): string => details.pushed_at)

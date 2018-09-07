@@ -70,10 +70,10 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
     expect(child.codebase).toBe(this.testedDirective.codebase);
   });
 
-  describe('lastUpdated$', () => {
+  describe('lastUpdated', () => {
     it('should emit the pushed_at property of the GitHubRepoDetails', function(this: TestingContext, done: DoneFn): void {
       const timestamp: string = '12345';
-      this.testedDirective.lastUpdated$.first().subscribe((lastUpdated: string): void => {
+      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
         expect(lastUpdated).toEqual(timestamp);
         done();
       });
