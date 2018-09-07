@@ -83,9 +83,15 @@ export class WorkItemWidgetComponent implements OnInit {
           100000, {expression: {'space': `${space.id}`}}
         );
       })
+      .do((val: { workItems: WorkItem[], nextLink: string, totalCount?: number, included?: WorkItem[], ancestorIDs?: string[]}): void => {
+        if (val.totalCount) {
+          this.myWorkItemsCount = val.totalCount;
+        } else {
+          this.myWorkItemsCount = val.workItems.length;
+        }
+      })
       .map(val => val.workItems)
       .do(workItems => {
-        this.myWorkItemsCount = workItems.length;
         this.loading = false;
         workItems.forEach(workItem => {
           let state = workItem.attributes['system.state'];

@@ -270,6 +270,21 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       expect(component.chartData.yData[2]).toEqual([component.LABEL_OPEN, 2]);
     });
 
+    it('should use the totalCount value for myWorkItemsCount if it exists', () => {
+      const mockWorkItemService: jasmine.SpyObj<WorkItemService> = TestBed.get(WorkItemService);
+
+      fixture = TestBed.createComponent(WorkItemWidgetComponent);
+      component = fixture.debugElement.componentInstance;
+      fixture.detectChanges();
+
+      mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+        workItems: [workItem1, workItem2, workItem3],
+        nextLink: 'mock-nextLink',
+        totalCount: 5
+      }));
+      expect(component.myWorkItemsCount).toEqual(5);
+    });
+
     it('should increment the work item type counters accordingly', () => {
       let expectedCount: number = workItems.length;
       let expectedOpen: number = 0;
