@@ -32,12 +32,12 @@
       "@angular/common": ["node_modules/@angular/common"],
       "@angular/forms": ["node_modules/@angular/forms"],
       "rxjs/*": ["node_modules/rxjs/*"],
-      "moment": ["node_modules/moment"],
+      "moment": ["node_modules/moment"]
     },
     "skipLibCheck": true,
     "sourceMap": false,
     "strictNullChecks": false,
-    "stripInternal": true
+    "stripInternal": true,
     "target": "es5"
   },
   "exclude": [
