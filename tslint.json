@@ -1,6 +1,8 @@
 {
   "rulesDirectory": [
-    "node_modules/codelyzer"
+    "node_modules/codelyzer",
+    "node_modules/rxjs-tslint",
+    "node_modules/tslint/lib/rules"
   ],
   "linterOptions": {
     "exclude": [
@@ -9,6 +11,11 @@
     ]
   },
   "rules": {
+    "rxjs-collapse-imports": true,
+    "rxjs-pipeable-operators-only": true,
+    "rxjs-no-static-observable-methods": true,
+    "rxjs-proper-imports": true,
+
 //    "adjacent-overload-signatures": true,
 //    "ban-comma-operator": true,
 //    "ban-types": [
