@@ -9,7 +9,7 @@
           <a href="{{codebase.attributes.url}}" target="_blank" class="f8-card-codebase-url truncate">{{codebase.name}}</a>
         </div>
         <div class="list-group-item-text f8-card-list-group-item-text">
-          codebase last updated {{ lastUpdated | async | date:'short' }}
+          last updated {{ lastUpdated | async | date:'short' }}
         </div>
         <f8-feature-toggle featureName="Codebases.QuickChe" [userLevel]="workspaceSelector"></f8-feature-toggle>
         <ng-template #workspaceSelector>
