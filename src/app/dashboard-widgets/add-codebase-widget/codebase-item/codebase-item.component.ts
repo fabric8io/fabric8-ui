@@ -5,7 +5,9 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators/catchError';
 import { map } from 'rxjs/operators/map';
+import { share } from 'rxjs/operators/share';
 
 import { Codebase } from '../../../space/create/codebases/services/codebase';
 import { GitHubRepoDetails } from '../../../space/create/codebases/services/github';
@@ -30,7 +32,11 @@ export class CodebaseItemComponent implements OnInit {
     this.lastUpdated = this.githubService
       .getRepoDetailsByUrl(this.codebase.attributes.url)
       .pipe(
-        map((details: GitHubRepoDetails): string => details.pushed_at)
+        map((details: GitHubRepoDetails): string => details.pushed_at || 'invalid'),
+        catchError(() => 'invalid'),
+        map((timestamp: string): string => new Date(timestamp).toString()),
+        map((timestamp: string): string => timestamp === 'Invalid Date' ? '' : timestamp),
+        share()
       );
   }
 

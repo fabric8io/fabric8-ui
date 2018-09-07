@@ -8,9 +8,14 @@
         <div class="list-group-item-heading f8-card-list-group-item-heading">
           <a href="{{codebase.attributes.url}}" target="_blank" class="f8-card-codebase-url truncate">{{codebase.name}}</a>
         </div>
-        <div class="list-group-item-text f8-card-list-group-item-text">
-          last updated {{ lastUpdated | async | date:'short' }}
+        <div class="list-group-item-text f8-card-list-group-item-text" *ngIf="(lastUpdated | async); let timestamp; else noTimestamp">
+          last updated {{ timestamp | date:'short' }}
         </div>
+        <ng-template #noTimestamp>
+          <div class="list-group-item-text f8-card-list-group-item-text">
+            last update unknown
+          </div>
+        </ng-template>
         <f8-feature-toggle featureName="Codebases.QuickChe" [userLevel]="workspaceSelector"></f8-feature-toggle>
         <ng-template #workspaceSelector>
           <div class="list-group-item-text f8-card-list-group-item-text">

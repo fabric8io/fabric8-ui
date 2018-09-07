@@ -72,12 +72,38 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
 
   describe('lastUpdated', () => {
     it('should emit the pushed_at property of the GitHubRepoDetails', function(this: TestingContext, done: DoneFn): void {
-      const timestamp: string = '12345';
+      const pushed_at: string = '2018-09-07T20:15:52.465Z';
       this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
-        expect(lastUpdated).toEqual(timestamp);
+        expect(lastUpdated).toEqual(new Date(pushed_at).toString());
         done();
       });
-      this.gitHubService.getRepoDetailsByUrl().next({ pushed_at: timestamp });
+      this.gitHubService.getRepoDetailsByUrl().next({ pushed_at });
+    });
+
+    it('should emit empty string if pushed_at is an invalid date string', function(this: TestingContext, done: DoneFn): void {
+      const pushed_at: string = 'invalid date';
+      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+        expect(lastUpdated).toEqual('');
+        done();
+      });
+      this.gitHubService.getRepoDetailsByUrl().next({ pushed_at });
+    });
+
+    it('should emit empty string if pushed_at is undefined', function(this: TestingContext, done: DoneFn): void {
+      const pushed_at: string = undefined;
+      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+        expect(lastUpdated).toEqual('');
+        done();
+      });
+      this.gitHubService.getRepoDetailsByUrl().next({ pushed_at });
+    });
+
+    it('should emit empty string if request produces an error', function(this: TestingContext, done: DoneFn): void {
+      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+        expect(lastUpdated).toEqual('');
+        done();
+      });
+      this.gitHubService.getRepoDetailsByUrl().error('some error');
     });
   });
 
