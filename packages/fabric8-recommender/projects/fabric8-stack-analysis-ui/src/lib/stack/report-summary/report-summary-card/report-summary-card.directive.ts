@@ -8,7 +8,7 @@ import { SaveState } from '../../utils/SaveState';
 export class ReportSummaryCardDirective {
     element: HTMLElement;
     private stack: Array<HTMLElement> = [];
-    private HIGHLIGHT: string = 'highlight';
+    private HIGHLIGHT = 'highlight';
     constructor(private elementRef: ElementRef) {
         this.element = elementRef.nativeElement;
         SaveState.ELEMENTS.push(this.element);
@@ -23,8 +23,9 @@ export class ReportSummaryCardDirective {
         if (SaveState && SaveState.ELEMENTS.length > 0) {
             SaveState.ELEMENTS.forEach((elem) => {
                 if (elem !== element) {
-                    if (elem && elem.classList && elem.classList.contains(this.HIGHLIGHT))
-                    elem.classList.remove(this.HIGHLIGHT);
+                    if (elem && elem.classList && elem.classList.contains(this.HIGHLIGHT)) {
+                        elem.classList.remove(this.HIGHLIGHT);
+                    }
                 }
             });
         }

@@ -23,8 +23,8 @@ import { ComponentFeedbackService } from './component-feedback.service';
 export class ComponentFeedbackComponent implements OnChanges {
     @Input() feedback: MComponentFeedback;
     feedbackMessages: Array<any> = [];
-    feedbackColorTypeUp: boolean = false;
-    feedbackColorTypeDown: boolean = false;
+    feedbackColorTypeUp = false;
+    feedbackColorTypeDown = false;
 
     constructor(private feedbackService: ComponentFeedbackService) {}
 
@@ -54,7 +54,7 @@ export class ComponentFeedbackComponent implements OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let summary: any = changes['feedback'];
+        const summary: any = changes['feedback'];
         if (summary) {
             this.feedback = <MComponentFeedback> summary.currentValue;
         }

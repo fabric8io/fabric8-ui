@@ -11,8 +11,8 @@ import {FeedbackService} from './feedback.service';
 
 export class FeedbackComponent implements OnChanges {
     @Input() config: any;
-    public canShowModal: boolean = false;
-    public hasEnteredFeedback: boolean = false;
+    public canShowModal = false;
+    public hasEnteredFeedback = false;
     public result: any = {};
     public mouseover: Array<any> = [];
 
@@ -40,7 +40,7 @@ export class FeedbackComponent implements OnChanges {
     }
 
     public getFeedInActive(index: number, value: number): boolean {
-        let max: number = Math.max(this.result[index], this.mouseover[index]);
+        const max: number = Math.max(this.result[index], this.mouseover[index]);
         return max < value || this.result[index] === undefined;
     }
 

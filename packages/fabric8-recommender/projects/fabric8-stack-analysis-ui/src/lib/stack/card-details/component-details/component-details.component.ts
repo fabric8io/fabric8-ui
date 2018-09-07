@@ -27,7 +27,7 @@ export class ComponentDetailsComponent implements OnChanges {
     @Input() repoInfo: any;
 
     ngOnChanges(changes: SimpleChanges) {
-        let summary: any = changes['compDetails'];
+        const summary: any = changes['compDetails'];
         if (summary) {
             this.compDetails = <MComponentDetails> summary.currentValue;
         }

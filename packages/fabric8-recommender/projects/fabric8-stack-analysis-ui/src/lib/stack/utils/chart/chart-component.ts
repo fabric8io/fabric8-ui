@@ -8,9 +8,9 @@ import * as c3 from 'c3';
 // require('../../node_modules/c3/c3');
 
 /**
- * 
+ *
  * This chart uses C3 for generating and rendering charts.
- * 
+ *
  * Minimum Requirements:
  * C3, D3 (As C3 internally uses D3)
  *

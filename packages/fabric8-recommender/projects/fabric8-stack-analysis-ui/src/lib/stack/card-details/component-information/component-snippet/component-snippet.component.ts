@@ -35,14 +35,14 @@ export class ComponentSnippetComponent implements OnInit, OnChanges {
         usage: 'Usage'
     };
 
-    public showOSIOUsage: boolean = false;
+    public showOSIOUsage = false;
 
     ngOnInit() {
         this.paint();
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let summary: any = changes['component'];
+        const summary: any = changes['component'];
         if (summary) {
             this.component = <MComponentInformation> summary.currentValue;
         }
@@ -53,7 +53,7 @@ export class ComponentSnippetComponent implements OnInit, OnChanges {
         this.githubEntries = [];
         if (this.component) {
             if (this.component.github) {
-                let github = this.component.github;
+                const github = this.component.github;
                 let value = '';
                 for (let key in github) {
                     if (key === 'users') continue;

@@ -3,6 +3,9 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { Observable, of } from 'rxjs';
 
+import { Contexts } from 'ngx-fabric8-wit';
+import { AuthenticationService } from 'ngx-login-client';
+
 import { ComponentInformationComponent } from './component-information.component';
 import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
 
@@ -12,10 +15,6 @@ import { ComponentSnippetComponent } from './component-snippet/component-snippet
 
 import { ProgressMeterModule } from '../../utils/progress-meter/progress-meter.module';
 import { ComponentFeedbackModule } from '../../utils/component-feedback/component-feedback.module';
-
-import { Broadcaster } from 'ngx-base';
-import { Contexts } from 'ngx-fabric8-wit';
-import { AuthenticationService, AUTH_API_URL, SSO_API_URL } from 'ngx-login-client';
 
 import { witApiUrlProvider } from '../../../../../../../src/app/shared/wit-api.provider';
 import { ApiLocatorService } from '../../../../../../../src/app/shared/api-locator.service';
@@ -49,18 +48,18 @@ describe ('ComponentInformationComponent', () => {
     let component: ComponentInformationComponent;
     let fixture: ComponentFixture<ComponentInformationComponent>;
     let element: HTMLElement;
-    let genericInformation: MGenericStackInformation = new MGenericStackInformation(
+    const genericInformation: MGenericStackInformation = new MGenericStackInformation(
         '',
         ''
     );
-    let positions: Array<MComponentHeaderColumn> = [new MComponentHeaderColumn(
+    const positions: Array<MComponentHeaderColumn> = [new MComponentHeaderColumn(
         'component',
         'component name',
         'class-name',
         false,
         false
     )];
-    let componentInformation: MComponentInformation = new MComponentInformation (
+    const componentInformation: MComponentInformation = new MComponentInformation (
         'component',
         '1.3.2',
         '1.4.3',
@@ -138,7 +137,8 @@ describe ('ComponentInformationComponent', () => {
     });
 
     it('check if the input received in "component" is either of type  MComponentInformation or MRecommendationInformation', () => {
-        expect(component.component instanceof MComponentInformation || component.component instanceof MRecommendationInformation).toBeTruthy();
+        expect(component.component instanceof MComponentInformation ||
+             component.component instanceof MRecommendationInformation).toBeTruthy();
     });
 
     it('check if the input received in "genericInformation" is of type  MGenericStackInformation', () => {
@@ -152,14 +152,14 @@ describe ('ComponentInformationComponent', () => {
     it('should expand if "isOpen" is true', () => {
         (<MComponentInformation>component.component).isOpen = true;
         fixture.detectChanges();
-        let parent = element.querySelector('.analytics-component-information');
+        const parent = element.querySelector('.analytics-component-information');
         expect(parent.querySelector('.accordion-body')).toBeDefined();
     });
 
     it('should be normal if "isOpen" is false', () => {
         (<MComponentInformation>component.component).isOpen = false;
         fixture.detectChanges();
-        let parent = element.querySelector('.analytics-component-information');
+        const parent = element.querySelector('.analytics-component-information');
         expect(parent.querySelector('.accordion-body')).toBeNull();
     });
 
@@ -195,7 +195,7 @@ describe ('ComponentInformationComponent', () => {
             null
         );
         fixture.detectChanges();
-        let parent = element.querySelector('.analytics-component-information');
+        const parent = element.querySelector('.analytics-component-information');
         expect(parent.querySelector('.accordion-body').children.length).toBe(2);
     });
 

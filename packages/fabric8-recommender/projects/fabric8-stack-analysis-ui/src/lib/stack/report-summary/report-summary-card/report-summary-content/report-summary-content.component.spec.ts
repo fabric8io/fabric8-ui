@@ -16,7 +16,7 @@ describe('ReportSummaryContentComponent', () => {
   let element: HTMLElement;
   let summaryContent: MReportSummaryContent = new MReportSummaryContent();
 
-  let jsons = [{
+  const jsons = [{
     infoText: 'text1',
     infoValue: {},
     infoType: 'text',
@@ -67,21 +67,21 @@ describe('ReportSummaryContentComponent', () => {
   });
 
   it('should have empty HTMLDOM when there are no information to show', () => {
-    let parent = element.querySelector('.analytics-summary-content');
+    const parent = element.querySelector('.analytics-summary-content');
     expect(parent.children.length).toBe(0);
   });
 
   it('should have some children when there are some information to show', () => {
     component.content = summaryContent;
     fixture.detectChanges();
-    let parent = element.querySelector('.analytics-summary-content');
+    const parent = element.querySelector('.analytics-summary-content');
     expect(parent.children.length).toBe(1);
   });
 
   it('should have created ' + summaryContent.infoEntries.length + ' entries of ana-summary-info element', () => {
     component.content = summaryContent;
     fixture.detectChanges();
-    let parent = element.querySelector('.analytics-summary-content');
+    const parent = element.querySelector('.analytics-summary-content');
     expect(parent.children[0].children.length).toBe(summaryContent.infoEntries.length);
   });
 });

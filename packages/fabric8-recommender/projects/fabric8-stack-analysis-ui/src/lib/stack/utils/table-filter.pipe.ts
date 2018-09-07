@@ -4,17 +4,17 @@ import { Pipe, PipeTransform, Injectable } from '@angular/core';
     name: 'filter'
 })
 
-/* 
+/*
  *  A generic filter that gives you the filtered output
  *  on passing the key and value to be filtered upon
  *  Takes a key - fielname, and a value - fieldValue
  *  Returns the filtered Array of objects or anything
- * 
+ *
  *  Name: 'filter'
- *  Usage: 
- *  
+ *  Usage:
+ *
  *  Use as a pipe,
- *  In a loop: 
+ *  In a loop:
  *  *ngFor="let something of (manythings | filter : fieldNameAsVariable {or 'simply name'} : fieldValueAsVariable {or 'simply value'})"
  */
 

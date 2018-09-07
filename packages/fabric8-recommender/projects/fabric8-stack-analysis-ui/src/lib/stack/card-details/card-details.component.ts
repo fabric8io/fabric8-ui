@@ -99,7 +99,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let summary: any = changes['cardDetails'];
+        const summary: any = changes['cardDetails'];
 
         if (summary) {
             this.cardDetails = <any> summary.currentValue;
@@ -114,7 +114,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     }
 
     private canInclude(cardType: string, component: MComponentInformation): boolean {
-        let processFlag: boolean = true;
+        let processFlag = true;
         if (component) {
             switch (cardType) {
                 case 'security':
@@ -249,7 +249,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
         let github: MGithub = null;
         let osio: MOsio = null;
         let headers: Array<MComponentHeaderColumn> = this.fillColumnHeaders(cardType);
-        let compInfoType: string = 'component';
+        let compInfoType = 'component';
         let components: Array<ComponentInformationModel> = null;
         if (this.report.user_stack_info
             && this.report.user_stack_info.analyzed_dependencies
@@ -453,7 +453,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             let latestVersion: string = component.latest_version;
             let github: GithubModel = component.github;
             let hasLicenseIssue: boolean = this.hasLicenseIssue(component);
-            let isUsageOutlier: boolean = false;
+            let isUsageOutlier = false;
             let securityDetails: MSecurityDetails = this.getComponentSecurity(component);
             let recommendation: RecommendationsModel = this.report.recommendation;
             let recommendationInformation: MRecommendationInformation = null;
@@ -461,7 +461,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
             if (recommendation) {
                 usageOutliers = recommendation.usage_outliers;
                 if (usageOutliers) {
-                    let outlierLen: number = usageOutliers.length;
+                    const outlierLen: number = usageOutliers.length;
                     for (let i = 0; i < outlierLen; ++ i) {
                         if (component.name === usageOutliers[i].package_name) {
                             isUsageOutlier = true;
@@ -585,7 +585,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                         ) {
                             let compConflicts: Array<ComponentConflictUnknownModel> = licenseAnalysis.unknown_licenses.component_conflict;
 
-                            let len: number = compConflicts.length;
+                            const len: number = compConflicts.length;
                             for (let i = 0; i < len; ++ i) {
                                 if (compConflicts[i] && compConflicts[i].package === component.name) {
                                     let affectedLicenses: Array<MConflictsWithInLicenses> = [];
@@ -612,7 +612,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
                         ) {
                             let stackConflicts: Array<ConflictPackageModel> = licenseAnalysis.conflict_packages;
 
-                            let len: number = stackConflicts.length;
+                            const len: number = stackConflicts.length;
                             let affectedComponents: Array<MStackLicenseConflictDetails> = [];
                             for (let i = 0; i < len; ++ i) {
                                 if (stackConflicts[i] && stackConflicts[i].package1 === component.name) {
@@ -647,7 +647,7 @@ export class CardDetailsComponent implements OnInit, OnChanges {
     private getComponentSecurityInformation(component: ComponentInformationModel): MSecurityDetails {
         if (component) {
             let securityDetails: MSecurityDetails = null;
-            let securityIssues: number = 0;
+            let securityIssues = 0;
             let maxIssue: SecurityInformationModel = null,
             temp: SecurityInformationModel = null;
             if (component.security && component.security.length > 0) {

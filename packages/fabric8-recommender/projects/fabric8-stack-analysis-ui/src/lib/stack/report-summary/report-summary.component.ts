@@ -87,7 +87,7 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    let summary: any = changes['report'];
+    const summary: any = changes['report'];
     if (summary) {
       this.report = < ResultInformationModel > summary.currentValue;
       this.repaintView();
@@ -96,7 +96,7 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
 
   public handleSummaryClick(card: MReportSummaryCard): void {
     if (card) {
-      let cardType: string = card.identifier || '';
+      const cardType: string = card.identifier || '';
       this.onCardClick.emit({
         cardType: cardType,
         report: this.report,
@@ -115,7 +115,7 @@ export class ReportSummaryComponent implements OnInit, OnChanges {
   private getComponentSecurityInformation(component: ComponentInformationModel): MSecurityDetails {
     if (component) {
       let securityDetails: MSecurityDetails = new MSecurityDetails();
-      let securityIssues: number = 0;
+      let securityIssues = 0;
       let maxIssue: SecurityInformationModel = null,
         temp: SecurityInformationModel = null;
       if (component.security && component.security.length > 0) {

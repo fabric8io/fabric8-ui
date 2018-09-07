@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-modal';
 import { TabsModule, AccordionModule } from 'ngx-bootstrap';
 
-import { GlobalConstants } from '../constants/constants.service';
 
 /** New UX */
 // import {StackLevelModule} from '../stack-level/stack-level.module';

@@ -64,7 +64,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let summary: any = changes['component'];
+        const summary: any = changes['component'];
         if (summary) {
             this.component = <MComponentInformation | MRecommendationInformation> summary.currentValue;
         }
@@ -87,9 +87,9 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
 
     public handleAction(event: MouseEvent, comp: MComponentInformation) {
         event.preventDefault();
-        let workItems = [];
-        let message: string = '';
-        let codebase = {
+        const workItems = [];
+        let message = '';
+        const codebase = {
             'repository': '',
             'branch': '',
             'filename': this.component['manifestFilePath'],
@@ -98,7 +98,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
         let key = '';
 
         // TODO form data to be shared with recommender object
-        let titleHdr: string = '';
+        let titleHdr = '';
         if (comp && comp.recommendation) {
             message = `Stack analysis has identified alternate component
             for **${comp.name}**.
@@ -114,7 +114,8 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
             key = comp.name;
         } else if (comp && comp.hasSecurityIssue) {
             message = `Stack analysis has identified some security issues for dependency **${comp.name}**
-            with **${comp.currentVersion}** in your application stack. CVE id for the highest security issue is **${comp.securityDetails.highestIssue.cve}**`;
+            with **${comp.currentVersion}** in your application stack. CVE id for the highest security
+             issue is **${comp.securityDetails.highestIssue.cve}**`;
             titleHdr = `${comp.name} has some security issues`;
             key = comp.name;
         }
@@ -127,7 +128,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
         message += '\n\n **Branch:** ' + codebase['branch'];
         message += '\n\n **Filename:** ' + codebase['filename'];
         message += '\n\n **Line Number:**' + codebase['linenumber'];
-        let item: any = {
+        const item: any = {
             title: titleHdr,
             description: {
                 content: message,
@@ -152,7 +153,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
      *  for work item creation request.
      */
     private getWorkItemData(): any {
-        let workItemData = {
+        const workItemData = {
             'data': {
                 'attributes': {
                     'system.title': '',
@@ -176,7 +177,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
      *  addWorkItems - takes workitems array, return nothing
      *  A generic function that recieves workitems in a predefined format
      *  Creates work items based on the data
-     *  Handles single as well as multiple work items 
+     *  Handles single as well as multiple work items
      */
     private addWorkItems(workItem: Array<any>, comp: MComponentInformation): void {
         let newItem: any; // , workItem: any;
@@ -204,8 +205,8 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
                     data.data.attributes) {
                     comp.workItem.isWorkItemCreated = true;
                     inputUrlArr = data.links.self.split('/api/');
-                    let hostString = inputUrlArr[0] ? inputUrlArr[0].replace('api.', '') : '';
-                    let baseUrl: string = hostString +
+                    const hostString = inputUrlArr[0] ? inputUrlArr[0].replace('api.', '') : '';
+                    const baseUrl: string = hostString +
                         `/${this.userName}/${this.getSpaceName(this.spaceName)}/plan/detail/` +
                         data.data.attributes['system.number'];
                     comp.workItem.url = baseUrl;
@@ -228,7 +229,7 @@ export class ComponentInformationComponent implements OnInit, OnChanges {
      * Displays the response received from the creation of work items
      */
     private displayWorkItemResponse(url: string, id: any): void {
-        let notification = {
+        const notification = {
             iconClass: '',
             alertClass: '',
             text: null,

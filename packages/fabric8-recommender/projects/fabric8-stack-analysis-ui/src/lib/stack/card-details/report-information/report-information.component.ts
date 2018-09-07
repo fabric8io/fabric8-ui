@@ -30,7 +30,7 @@ export class ReportInformationComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let summary: any = changes['report'];
+        const summary: any = changes['report'];
         if (summary) {
             this.report = <MReportInformation> summary.currentValue;
             this.paint();

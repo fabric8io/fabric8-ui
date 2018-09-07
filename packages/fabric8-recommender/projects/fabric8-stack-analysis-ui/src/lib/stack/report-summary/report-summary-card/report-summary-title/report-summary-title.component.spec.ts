@@ -47,30 +47,30 @@ describe('ReportSummaryTitleComponent', () => {
   });
 
   it('should have proper title icon', () => {
-    let parent = element.querySelector('.analytics-summary-title');
-    let span = parent.querySelector('.card-pf-title').querySelector('span');
+    const parent = element.querySelector('.analytics-summary-title');
+    const span = parent.querySelector('.card-pf-title').querySelector('span');
     expect(span.classList.contains(title.titleIcon)).toBe(true);
   });
 
   it('should have proper title text', () => {
-    let parent = element.querySelector('.analytics-summary-title');
-    let titleElem = <HTMLDivElement>parent.querySelector('.card-pf-title');
+    const parent = element.querySelector('.analytics-summary-title');
+    const titleElem = <HTMLDivElement>parent.querySelector('.card-pf-title');
     let titleText: string = titleElem.innerText;
     titleText = titleText ? titleText.trim() : null;
     expect(titleText).toEqual(title.titleText);
   });
 
   it('should notification icon only if there are notifications', () => {
-    let parent = element.querySelector('.analytics-summary-title');
-    let notificationElem = <HTMLSpanElement>parent.querySelector('.ana-notification-icon');
+    const parent = element.querySelector('.analytics-summary-title');
+    const notificationElem = <HTMLSpanElement>parent.querySelector('.ana-notification-icon');
     expect(notificationElem).toBeDefined();
   });
 
   it('should not show notification icon if there are no notifications', () => {
     component.title = noNotification;
     fixture.detectChanges();
-    let parent = element.querySelector('.analytics-summary-title');
-    let notificationElem = <HTMLSpanElement>parent.querySelector('.ana-notification-icon');
+    const parent = element.querySelector('.analytics-summary-title');
+    const notificationElem = <HTMLSpanElement>parent.querySelector('.ana-notification-icon');
     expect(notificationElem).toBeNull();
   });
 });

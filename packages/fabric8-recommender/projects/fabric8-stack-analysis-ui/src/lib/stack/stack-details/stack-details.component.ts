@@ -59,21 +59,21 @@ export class StackDetailsComponent implements OnChanges, OnInit {
     public componentLevelInformation: any = {};
     public userComponentInformation: Array<ComponentInformationModel> = [];
     public companionLevelRecommendation: any = {};
-    public dataLoaded: boolean = false;
+    public dataLoaded = false;
     public recommendationsArray: Array<RecommendationsModel> = [];
     public stackLevelOutliers: any = {};
 
     public companionLevel: any = {};
     public componentLevel: any = {};
 
-    public componentFilterBy: string = '';
-    public customClass: string = 'accordion-custom';
+    public componentFilterBy = '';
+    public customClass = 'accordion-custom';
     public analysis: any = {};
 
     public feedbackConfig: any = {};
 
     public tabs: Array<any> = [];
-    public showF: boolean = true;
+    public showF = true;
 
     private userStackInformationArray: Array<UserStackInfoModel> = [];
     private totalManifests: number;
@@ -117,7 +117,7 @@ export class StackDetailsComponent implements OnChanges, OnInit {
             tab['active'] = true;
             let currentIndex: number = tab['index'];
             let recommendations: RecommendationsModel = this.recommendationsArray[currentIndex];
-            let alternate: number = 0, companion: number = 0;
+            let alternate = 0, companion = 0;
             if (recommendations) {
                 this.stackLevelOutliers = {
                     'usage': recommendations.usage_outliers
@@ -130,9 +130,9 @@ export class StackDetailsComponent implements OnChanges, OnInit {
                 alternate = recommendations.alternate ? recommendations.alternate.length : 0;
                 companion = recommendations.companion ? recommendations.companion.length : 0;
             }
-            let total: number = 0;
-            let analyzed: number = 0;
-            let unknown: number = 0;
+            let total = 0;
+            let analyzed = 0;
+            let unknown = 0;
 
             if (tab.content && tab.content.user_stack_info) {
                 let userStackInfo: UserStackInfoModel = tab.content.user_stack_info;
@@ -183,7 +183,7 @@ export class StackDetailsComponent implements OnChanges, OnInit {
             this.resetFields();
             if (this.stack && this.stack.split('/').length > 0) {
                 let chunks: Array<string> = this.stack.split('/');
-                let count: number = chunks.length;
+                let count = chunks.length;
                 this.stackId = chunks[count - 1];
             }
             // this.init(this.stack);
@@ -224,7 +224,7 @@ export class StackDetailsComponent implements OnChanges, OnInit {
      */
     private getBaseUrl(url: string): string {
         if (url && url !== '') {
-            let splitter: string = 'api/v1';
+            let splitter = 'api/v1';
             return url.indexOf(splitter) !== -1 ? url.split(splitter)[0] : '';
         }
         return '';
@@ -340,7 +340,7 @@ export class StackDetailsComponent implements OnChanges, OnInit {
                         this.handleResponse(data);
                     },
                     error => {
-                        let title: string = '';
+                        let title = '';
                         if (error.status >= 500) {
                             title = 'Something unexpected happened';
                         } else if (error.status === 404) {

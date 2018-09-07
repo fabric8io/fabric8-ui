@@ -1,3 +1,3 @@
-import { OpaqueToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
-export let RECOMMENDER_API_URL = new OpaqueToken('fabric8.recommender.api.url');
+export let RECOMMENDER_API_URL = new InjectionToken('fabric8.recommender.api.url');

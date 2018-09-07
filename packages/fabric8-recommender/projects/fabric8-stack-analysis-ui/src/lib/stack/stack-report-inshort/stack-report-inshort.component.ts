@@ -30,12 +30,12 @@ export class StackReportInShortComponent implements OnChanges {
     public recommendations: RecommendationsModel;
     public securityInfo: any;
     public stackLevelOutliers: any;
-    public dataLoaded: boolean = false;
+    public dataLoaded = false;
     public error: any;
     public progress: any;
     public licenseAnalysis: any;
 
-    private cache: string = '';
+    private cache = '';
     private reportSummaryUtils = new ReportSummaryUtils();
 
     constructor(private stackAnalysisService: StackAnalysesService, private commonService: CommonService) {}
@@ -140,8 +140,8 @@ export class StackReportInShortComponent implements OnChanges {
             });
             let cvssValue: number = final.cve.CVSS;
             let indicator: number;
-            let iconClass: string = 'fa fa-shield';
-            let displayClass: string = 'progress-bar-warning';
+            let iconClass = 'fa fa-shield';
+            let displayClass = 'progress-bar-warning';
 
             if (cvssValue < 0) {
                 indicator = -1;

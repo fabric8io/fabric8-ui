@@ -14,7 +14,6 @@ describe ('ComponentSnippetComponent', () => {
     let fixture: ComponentFixture<ComponentSnippetComponent>;
     let element: HTMLElement;
 
-    let view: string = 'split';
     let componentInformation: MComponentInformation = new MComponentInformation (
         'component',
         '1.3.2',
@@ -79,8 +78,8 @@ describe ('ComponentSnippetComponent', () => {
         component.view = 'split';
         component.ngOnInit();
         fixture.detectChanges();
-        let parent = element.querySelector('.analytics-snippet-information');
-        let versionContainer = parent.querySelector('.component-version');
+        const parent = element.querySelector('.analytics-snippet-information');
+        const versionContainer = parent.querySelector('.component-version');
         expect(versionContainer.classList.contains('normal-version-box')).toBeTruthy();
     });
 
@@ -88,8 +87,8 @@ describe ('ComponentSnippetComponent', () => {
         component.view = 'normal';
         component.ngOnInit();
         fixture.detectChanges();
-        let parent = element.querySelector('.analytics-snippet-information');
-        let versionContainer = parent.querySelector('.component-version');
+        const parent = element.querySelector('.analytics-snippet-information');
+        const versionContainer = parent.querySelector('.component-version');
         expect(versionContainer.classList.contains('small-version-box')).toBeTruthy();
     });
 
@@ -97,8 +96,8 @@ describe ('ComponentSnippetComponent', () => {
         component.view = 'normal';
         component.ngOnInit();
         fixture.detectChanges();
-        let parent = element.querySelector('.analytics-snippet-information');
-        let versionContainer = parent.querySelector('.component-version');
+        const parent = element.querySelector('.analytics-snippet-information');
+        const versionContainer = parent.querySelector('.component-version');
         expect((<HTMLParagraphElement>versionContainer.children[0].children[1]).innerText).toBe(componentInformation.currentVersion);
     });
 
@@ -106,10 +105,9 @@ describe ('ComponentSnippetComponent', () => {
         component.view = 'normal';
         component.ngOnInit();
         fixture.detectChanges();
-        let parent = element.querySelector('.analytics-snippet-information');
-        let versionContainer = parent.querySelector('.component-version');
+        const parent = element.querySelector('.analytics-snippet-information');
+        const versionContainer = parent.querySelector('.component-version');
         expect((<HTMLParagraphElement>versionContainer.children[1].children[1]).innerText).toBe(componentInformation.latestVersion);
     });
 
-    //TODO improve coverage
 });

@@ -22,7 +22,7 @@ export class MTab {
 export class MReportSummaryInfoEntry {
     public infoText: string;
     public infoValue: any;
-    public infoType: string = 'text'; // Defaults to text, can also have chart
+    public infoType = 'text'; // Defaults to text, can also have chart
     public config?: any; // Can be made as a class later. It can have chart type, values and other related configurations
 }
 

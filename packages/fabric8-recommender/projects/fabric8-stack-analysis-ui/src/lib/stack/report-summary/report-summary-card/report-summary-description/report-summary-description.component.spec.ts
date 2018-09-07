@@ -8,7 +8,7 @@ describe ('ReportSummaryDescriptionComponent', () => {
     let component: ReportSummaryDescriptionComponent;
     let fixture: ComponentFixture<ReportSummaryDescriptionComponent>;
     let element: HTMLDocument;
-    let description: string = 'This is a test description';
+    const description = 'This is a test description';
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -36,7 +36,7 @@ describe ('ReportSummaryDescriptionComponent', () => {
     });
 
     it('should have the description inside paragraph element', () => {
-        let pElem: HTMLParagraphElement = element.querySelector('p');
+        const pElem: HTMLParagraphElement = element.querySelector('p');
         expect(pElem.innerText).toBe(description);
     });
 });

@@ -34,17 +34,17 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
 
     public cve_Info: string;
     public stackUrl: string;
-    public flag: boolean = false;
-    public flag1: boolean = false;
-    public interval: number = 7000;
+    public flag = false;
+    public flag1 = false;
+    public interval = 7000;
     // public alive: boolean = true;
 
     constructor(private pipelineInsightsService: PipelineInsightsService) { }
 
     public geturl(): void {
         let subs = null;
-        let alive: boolean = true;
-        let counter: number = 0;
+        let alive = true;
+        let counter = 0;
         if (this.url && this.url !== '') {
             if (this.stackUrl === this.url) {
                 return;
@@ -83,10 +83,10 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
 
                                 }
                                 for (let i = 0; i < data.result.length; ++i) {
-                                    let c = data.result[i];
+                                    const c = data.result[i];
                                     if (c.user_stack_info) {
                                         if (c.user_stack_info.license_analysis) {
-                                            let d = c.user_stack_info.license_analysis.status;
+                                            const d = c.user_stack_info.license_analysis.status;
                                             if (d === 'ComponentConflict') {
                                                 this.flag1 = true;
                                                 break;

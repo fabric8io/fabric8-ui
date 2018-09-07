@@ -37,7 +37,7 @@ export class ReportSummaryCardComponent implements AfterContentInit {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        let summary: any = changes['card'];
+        const summary: any = changes['card'];
         if (summary) {
             this.card = <MReportSummaryCard> summary.currentValue;
             this.repaintView();

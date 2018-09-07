@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/operators/map';
 import { catchError, map } from 'rxjs/operators';
 
 import { MComponentFeedback } from '../../models/ui.model';
@@ -12,7 +10,7 @@ import { MComponentFeedback } from '../../models/ui.model';
 export class ComponentFeedbackService {
 
   private headers: HttpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
-  private FEEDBACK_URL: string = '';
+  private FEEDBACK_URL = '';
 
   constructor(
     private http: HttpClient,

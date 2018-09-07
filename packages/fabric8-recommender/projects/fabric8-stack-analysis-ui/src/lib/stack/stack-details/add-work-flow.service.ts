@@ -13,8 +13,8 @@ export class AddWorkFlowService {
   private stackWorkItemUrl;
 
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  private workItemsRoute: string = 'workitems';
-  private spacesString: string = 'spaces';
+  private workItemsRoute = 'workitems';
+  private spacesString = 'spaces';
   private spaceId: string;
   private bugId: string;
   private fallBackBugId: string;
@@ -71,8 +71,8 @@ export class AddWorkFlowService {
           dataItem = data[i];
           if (dataItem) {
             if (dataItem.attributes) {
-              let id: string = dataItem.id;
-              let attributes: any = dataItem.attributes;
+              const id: string = dataItem.id;
+              const attributes: any = dataItem.attributes;
               if (attributes && attributes['can-construct'] === true) {
                 if (!this.fallBackBugId) {
                   this.fallBackBugId = id;

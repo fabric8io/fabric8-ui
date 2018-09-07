@@ -53,7 +53,7 @@ describe('ReportSummaryInfoEntriesComponent', () => {
     sumInfoEntry.infoType = 'progress';
     component.entry = sumInfoEntry;
     fixture.detectChanges();
-    let parent = element.querySelector('.ana-summary-info');
+    const parent = element.querySelector('.ana-summary-info');
     expect(parent.children[0].classList.contains('ana-custom')).toBeTruthy();
   });
 });

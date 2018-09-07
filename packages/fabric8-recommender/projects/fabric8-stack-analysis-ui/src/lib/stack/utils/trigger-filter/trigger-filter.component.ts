@@ -12,7 +12,7 @@ export class TriggerFilterComponent implements OnChanges {
     @Output() filter: EventEmitter<any> = new EventEmitter();
 
     ngOnChanges(): void {
-        
+
     }
 
     handleClick(): void {
