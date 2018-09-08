@@ -14,7 +14,7 @@ const CACHE_TTL = 300; // maximum cache age (ms)
 @Injectable()
 export class RequestCache {
 
-  cache = new Map<string, RequestCacheItem>();
+  private cache = new Map<string, RequestCacheItem>();
 
   get(req: HttpRequest<any>): AsyncSubject<HttpResponse<any>> | undefined {
     const cacheKey = createCacheKey(req);
@@ -25,7 +25,6 @@ export class RequestCache {
     }
 
     const isExpired = cached.lastRead < (Date.now() - CACHE_TTL);
-    const expired = isExpired ? 'expired ' : '';
     return isExpired ? undefined : cached.asyncResponse;
   }
 
@@ -47,8 +46,7 @@ export class RequestCache {
 
 // Creates a cache key from headers, query params, and URL
 function createCacheKey(req: HttpRequest<any>): string {
-  let key;
-  key = req.urlWithParams;
+  let key = req.urlWithParams;
   if (req.headers) {
     key += `:${JSON.stringify(req.headers)}`;
   }

@@ -21,18 +21,20 @@ export class CacheInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     // continue if not cachable.
-    if (!isCachable(req)) { return next.handle(req); }
+    if (!isCachable(req)) {
+      return next.handle(req);
+    }
 
     const cachedResponse = this.cache.get(req);
 
     return Observable.create(observer => {
       if (cachedResponse) {
         return cachedResponse.subscribeOn(Scheduler.async).subscribe(observer);
-      } else {
-        const asyncResponse = new AsyncSubject<HttpResponse<any>>();
-        this.cache.set(req, asyncResponse);
-        return next.handle(req).subscribe(asyncResponse);
       }
+
+      const asyncResponse = new AsyncSubject<HttpResponse<any>>();
+      this.cache.set(req, asyncResponse);
+      return next.handle(req).subscribe(asyncResponse);
     });
   }
 }
