@@ -2,17 +2,23 @@ import {
   Component,
   Input
 } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+import { Subject } from 'rxjs';
+
+import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
 
-import { CodebaseItemComponent } from './codebase-item.component';
-
 import { Codebase } from '../../../space/create/codebases/services/codebase';
+import { GitHubRepoDetails } from '../../../space/create/codebases/services/github';
+import { GitHubService } from '../../../space/create/codebases/services/github.service';
+
+import { CodebaseItemComponent } from './codebase-item.component';
 
 @Component({
   template: `
@@ -39,7 +45,15 @@ class MockCodebasesItemWorkspacesComponent {
 
 describe('AddCodebaseWidget CodebaseItemComponent', () => {
 
-  type TestingContext = TestContext<CodebaseItemComponent, HostComponent>;
+  type TestingContext = TestContext<CodebaseItemComponent, HostComponent> & {
+    gitHubService: jasmine.SpyObj<GitHubService>
+  };
+
+  beforeEach(function(this: TestingContext): void {
+    this.gitHubService = createMock(GitHubService);
+    this.gitHubService.getRepoDetailsByUrl.and.returnValue(new Subject<GitHubRepoDetails>());
+    TestBed.overrideProvider(GitHubService, { useValue: this.gitHubService });
+  });
   initContext(CodebaseItemComponent, HostComponent, {
     declarations: [
       MockCodebasesItemWorkspacesComponent,
@@ -54,6 +68,43 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
   it('should provide codebase to child codebases-item-workspaces component', function(this: TestingContext): void {
     const child: MockCodebasesItemWorkspacesComponent = this.tested.query(By.directive(MockCodebasesItemWorkspacesComponent)).componentInstance;
     expect(child.codebase).toBe(this.testedDirective.codebase);
+  });
+
+  describe('lastUpdated', () => {
+    it('should emit the pushed_at property of the GitHubRepoDetails', function(this: TestingContext, done: DoneFn): void {
+      const pushed_at: string = '2018-09-07T20:15:52.465Z';
+      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+        expect(lastUpdated).toEqual(new Date(pushed_at).toString());
+        done();
+      });
+      this.gitHubService.getRepoDetailsByUrl().next({ pushed_at });
+    });
+
+    it('should emit empty string if pushed_at is an invalid date string', function(this: TestingContext, done: DoneFn): void {
+      const pushed_at: string = 'invalid date';
+      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+        expect(lastUpdated).toEqual('');
+        done();
+      });
+      this.gitHubService.getRepoDetailsByUrl().next({ pushed_at });
+    });
+
+    it('should emit empty string if pushed_at is undefined', function(this: TestingContext, done: DoneFn): void {
+      const pushed_at: string = undefined;
+      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+        expect(lastUpdated).toEqual('');
+        done();
+      });
+      this.gitHubService.getRepoDetailsByUrl().next({ pushed_at });
+    });
+
+    it('should emit empty string if request produces an error', function(this: TestingContext, done: DoneFn): void {
+      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+        expect(lastUpdated).toEqual('');
+        done();
+      });
+      this.gitHubService.getRepoDetailsByUrl().error('some error');
+    });
   });
 
 });
