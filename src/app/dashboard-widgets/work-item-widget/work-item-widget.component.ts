@@ -10,6 +10,7 @@ import { WorkItemBarchartData } from './work-item-barchart/work-item-barchart-da
 
 import { uniqueId } from 'lodash';
 
+import { WorkItemsData } from '../../shared/workitem-utils';
 import { SpacesService } from './../../shared/spaces.service';
 
 @Component({
@@ -83,7 +84,7 @@ export class WorkItemWidgetComponent implements OnInit {
           100000, {expression: {'space': `${space.id}`}}
         );
       })
-      .do((val: { workItems: WorkItem[], nextLink: string, totalCount?: number, included?: WorkItem[], ancestorIDs?: string[]}): void => {
+      .do((val: WorkItemsData): void => {
         if (val.totalCount) {
           this.myWorkItemsCount = val.totalCount;
         } else {

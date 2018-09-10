@@ -14,6 +14,7 @@ import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { SpacesService } from '../../shared/spaces.service';
+import { WorkItemsData } from '../../shared/workitem-utils';
 import { WorkItemBarchartModule } from './work-item-barchart/work-item-barchart.module';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
 
@@ -141,7 +142,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
             const mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
             mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
               workItems: workItems
-            }));
+            } as WorkItemsData));
             return mockWorkItemService;
           }
         }
@@ -205,7 +206,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       const mockWorkItemService: jasmine.SpyObj<WorkItemService> = TestBed.get(WorkItemService);
       mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
         workItems: [workItem] // workItem has no system.state attribute
-      }));
+      } as WorkItemsData));
 
       fixture = TestBed.createComponent(WorkItemWidgetComponent);
       component = fixture.debugElement.componentInstance;
@@ -236,7 +237,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
 
       mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
         workItems: []
-      }));
+      } as WorkItemsData));
       mockContexts.current.next(mockContext);
       // if WI service returns empty list, counter variables should not increment after reset
       expect(component.myWorkItemsCount).toEqual(0);
@@ -262,7 +263,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
 
       mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
         workItems: [workItem1, workItem2, workItem3]
-      }));
+      } as WorkItemsData));
       mockContexts.current.next(mockContext);
       // verify that chartData contains the 3 workItems worth of information
       expect(component.chartData.yData[0]).toEqual([component.LABEL_RESOLVED, 0]);
@@ -281,7 +282,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
         workItems: [workItem1, workItem2, workItem3],
         nextLink: 'mock-nextLink',
         totalCount: 5
-      }));
+      } as WorkItemsData));
       expect(component.myWorkItemsCount).toEqual(5);
     });
 

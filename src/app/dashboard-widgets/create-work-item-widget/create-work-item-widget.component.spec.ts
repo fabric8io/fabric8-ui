@@ -17,6 +17,7 @@ import {
   initContext,
   TestContext
 } from 'testing/test-context';
+import { WorkItemsData } from '../../shared/workitem-utils';
 
 @Component({
   template: '<fabric8-create-work-item-widget [userOwnsSpace]="userOwnsSpace"></fabric8-create-work-item-widget>'
@@ -58,8 +59,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         provide: WorkItemService, useFactory: () => {
           let workItemServiceMock = jasmine.createSpyObj('WorkItemService', ['buildUserIdMap', 'getWorkItems']);
           workItemServiceMock.buildUserIdMap.and.returnValue(fakeUser);
-          workItemServiceMock.getWorkItems.and.returnValue([] as WorkItem[]);
-
+          workItemServiceMock.getWorkItems.and.returnValue(Observable.of({ workItems: [] }) as Observable<WorkItemsData>);
           return workItemServiceMock;
         }
       },

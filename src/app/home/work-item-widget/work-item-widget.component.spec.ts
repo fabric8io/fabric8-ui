@@ -21,7 +21,9 @@ import {
 } from 'testing/test-context';
 
 import { spaceMock } from '../../shared/context.service.mock';
+import { WorkItemsData } from '../../shared/workitem-utils';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
+
 
 @Component({
   template: '<alm-work-item-widget></alm-work-item-widget>'
@@ -72,9 +74,9 @@ describe('Home: WorkItemWidgetComponent', () => {
 
   let fakeWorkItems: WorkItem[] = [fakeWorkItem1, fakeWorkItem2, fakeWorkItem3, fakeWorkItem4, fakeWorkItem5];
 
-  let fakeWorkItemsObs: Observable<{workItems: WorkItem[]}> = Observable.of({
+  let fakeWorkItemsObs: Observable<WorkItemsData> = Observable.of({
     workItems: fakeWorkItems
-  });
+  } as WorkItemsData);
 
   initContext(WorkItemWidgetComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],
