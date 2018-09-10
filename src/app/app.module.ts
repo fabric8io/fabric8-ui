@@ -123,6 +123,9 @@ import { GettingStartedService } from './getting-started/services/getting-starte
 import { RavenExceptionHandler } from './shared/exception.handler';
 import { togglesApiUrlProvider } from './shared/toggles.api.provider';
 
+import { HttpInterceptorProviders } from './shared/interceptors/index';
+import { RequestCache } from './shared/request-cache.service';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -219,6 +222,8 @@ export type StoreType = {
       provide: Http,
       useClass: Fabric8UIHttpService
     },
+    RequestCache,
+    HttpInterceptorProviders,
     fabric8UIConfigProvider,
     {
       provide: OnLogin,
