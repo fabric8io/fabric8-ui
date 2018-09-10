@@ -93,6 +93,11 @@ module.exports = function (options) {
   return webpackMerge(commonConfig({ env: ENV }), {
 
     /**
+     * As of Webpack 4 we need to set the mode.
+     */
+    mode: 'development',
+
+    /**
      * Developer tool to enhance debugging
      *
      * See: http://webpack.github.io/docs/configuration.html#devtool

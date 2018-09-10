@@ -47,6 +47,11 @@ module.exports = function (env) {
   return {
 
     /**
+     * As of Webpack 4 we need to set the mode.
+     */
+    mode: 'production',
+
+    /**
      * Developer tool to enhance debugging
      *
      * See: http://webpack.github.io/docs/configuration.html#devtool

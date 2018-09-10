@@ -11,6 +11,11 @@ const commonConfig = require('./webpack.common.js');
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
 module.exports = {
+  /**
+   * As of Webpack 4 we need to set the mode.
+   */
+  mode: 'production',
+
   resolve: {
     extensions: ['.ts', '.js']
   },
