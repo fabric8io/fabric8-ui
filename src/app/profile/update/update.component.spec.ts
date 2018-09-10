@@ -1,4 +1,4 @@
-import { DebugNode, NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
+import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,7 +11,6 @@ import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
 
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
 import { TenantService } from '../services/tenant.service';
@@ -22,14 +21,13 @@ describe('UpdateComponent', () => {
 
   let fixture: ComponentFixture<UpdateComponent>;
   let component: DebugNode['componentInstance'];
+
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
   let mockCopyService: any = jasmine.createSpyObj('CopyService', ['copy']);
-  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update']);
+  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update', 'ngOnDestroy']);
   let mockContexts: any = jasmine.createSpy('Contexts');
   let mockGitHubService: any = jasmine.createSpyObj('GitHubService', ['getUser']);
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
-  let mockProviderService: any = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'linkAll', 'linkGitHub', 'linkOpenShift']);
-  let mockRenderer: any = jasmine.createSpy('Renderer2');
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockTenantService: any = jasmine.createSpyObj('TenantService', ['updateTenant']);
   let mockUserService: any = jasmine.createSpy('UserService');
@@ -50,11 +48,8 @@ describe('UpdateComponent', () => {
       declarations: [UpdateComponent],
       providers: [
         { provide: AuthenticationService, useValue: mockAuthenticationService },
-        { provide: GettingStartedService, useValue: mockGettingStartedService },
         { provide: Contexts, useValue: mockContexts },
         { provide: Notifications, useValue: mockNotifications },
-        { provide: ProviderService, useValue: mockProviderService },
-        { provide: Renderer2, useValue: mockRenderer },
         { provide: Router, useValue: mockRouter },
         { provide: UserService, useValue: mockUserService },
         { provide: Logger, useValue: mockLogger },
@@ -66,38 +61,13 @@ describe('UpdateComponent', () => {
     TestBed.overrideProvider(GettingStartedService, { useValue: mockGettingStartedService });
     TestBed.overrideProvider(GitHubService, { useValue: mockGitHubService });
     TestBed.overrideProvider(TenantService, { useValue: mockTenantService });
+
     mockUserService.currentLoggedInUser = {};
+
     fixture = TestBed.createComponent(UpdateComponent);
     component = fixture.debugElement.componentInstance;
-  });
 
-  describe('#isConnectAccountsDisabled', () => {
-    it('should be true if GitHub & OpenShift are linked and authorized', () => {
-      component.authGitHub = true;
-      component.gitHubLinked = true;
-      component.authOpenShift = true;
-      component.openShiftLinked = true;
-      let result: boolean = component.isConnectAccountsDisabled;
-      expect(result).toBeTruthy();
-    });
-
-    it('should be true if at least one of the GitHub or Openshift are linked but not authorized', () => {
-      component.authGitHub = false;
-      component.gitHubLinked = true;
-      component.authOpenShift = true;
-      component.openShiftLinked = true;
-      let result: boolean = component.isConnectAccountsDisabled;
-      expect(result).toBeTruthy();
-    });
-
-    it('should be false if at least one of the GitHub or Openshift are authorized but not linked', () => {
-      component.authGitHub = true;
-      component.gitHubLinked = false;
-      component.authOpenShift = true;
-      component.openShiftLinked = true;
-      let result: boolean = component.isConnectAccountsDisabled;
-      expect(result).toBeFalsy();
-    });
+    fixture.detectChanges();
   });
 
   describe('#isUpdateProfileDisabled', () => {
@@ -114,43 +84,6 @@ describe('UpdateComponent', () => {
       component.emailInvalid = true;
       let result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeTruthy();
-    });
-  });
-
-  describe('#connectAccounts', () => {
-    it('should connect both GitHub and OpenShift if authorized but not linked', () => {
-      component.loggedInUser = jasmine.createSpy('user');
-      component.loggedInUser.attributes = {
-        'cluster': 'mock-cluster'
-      };
-      component.authGitHub = true;
-      component.gitHubLinked = false;
-      component.authOpenShift = true;
-      component.openShiftLinked = false;
-      component.connectAccounts();
-      expect(component.providerService.linkAll).toHaveBeenCalled();
-    });
-
-    it('should connect GitHub if authorized but not linked', () => {
-      component.authGitHub = true;
-      component.gitHubLinked = false;
-      component.authOpenShift = true;
-      component.openShiftLinked = true;
-      component.connectAccounts();
-      expect(component.providerService.linkGitHub).toHaveBeenCalled();
-    });
-
-    it('should connect OpenShift if authorized but not linked', () => {
-      component.loggedInUser = jasmine.createSpy('user');
-      component.loggedInUser.attributes = {
-        'cluster': 'mock-cluster'
-      };
-      component.authGitHub = true;
-      component.gitHubLinked = true;
-      component.authOpenShift = true;
-      component.openShiftLinked = false;
-      component.connectAccounts();
-      expect(component.providerService.linkOpenShift).toHaveBeenCalled();
     });
   });
 
@@ -176,20 +109,6 @@ describe('UpdateComponent', () => {
     });
   });
 
-  describe('#handleBioChange', () => {
-    it('should update the bio to be the passed $event string', () => {
-      let mockEvent = 'mockEvent';
-      component.handleBioChange(mockEvent);
-      expect(component.bio).toBe(mockEvent);
-    });
-    it('should truncate bio to 255 chars if limit exceeds', () => {
-      let mockBio = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-      component.bio = mockBio;
-      expect(component.bio.length).toBe(mockBio.length);
-      component.handleOverCharsMaxLimit();
-      expect(component.bio.length).toBeLessThan(mockBio.length);
-    });
-  });
 
   describe('#linkImageUrl', () => {
     it('should properly link the avatar image if image exists', () => {
@@ -236,16 +155,6 @@ describe('UpdateComponent', () => {
       spyOn(window, 'open');
       component.resetPasswordUrl();
       expect(window.open).toHaveBeenCalledWith(url);
-    });
-  });
-
-  describe('#setElementFocus', () => {
-    it('should focus the provided element', () => {
-      let mockEvent = jasmine.createSpy('MouseEvent');
-      let mockElement = document.createElement('mock-element');
-      spyOn(mockElement, 'focus');
-      component.setElementFocus(mockEvent, mockElement);
-      expect(mockElement.focus).toHaveBeenCalled();
     });
   });
 

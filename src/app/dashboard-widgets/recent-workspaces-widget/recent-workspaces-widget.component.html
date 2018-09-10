@@ -25,7 +25,10 @@
               <div class="list-view-pf-description">
                 <div class="list-group-item-text">
                   <a placement="bottom" tooltip="{{workspace.attributes.description || workspace.attributes.name}}"
-                     (click)="openWorkspace(workspace)">{{workspace.attributes.name}}</a>
+                     (click)="openWorkspace(workspace)">
+                    <img class="link-icon" src="https://www.eclipse.org/che/images/logo-eclipseche.svg">
+                    <span>{{workspace.attributes.name}}</span>
+                  </a>
                 </div>
               </div>
             </div>
