@@ -5,7 +5,6 @@ import { ChartModule } from '../utils/chart/chart.module';
 import { StackDetailsModule } from '../stack-details/stack-details.module';
 import { StackAnalysesService } from '../stack-analyses.service';
 import { AuthenticationService } from 'ngx-login-client';
-import { MockAuthenticationService } from '../../../../../../src/app/shared/mock-auth.service';
 import { ReportSummaryModule } from '../report-summary/report-summary.module';
 import { CommonService } from '../utils/common.service';
 
@@ -24,7 +23,7 @@ describe ('StackReportInShortComponent', () => {
             providers: [
                 StackAnalysesService,
                 {
-                    provide: AuthenticationService, useClass: MockAuthenticationService
+                    provide: AuthenticationService, useValue: {}
                 },
                 CommonService
             ],

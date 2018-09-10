@@ -16,13 +16,6 @@ import { ComponentSnippetComponent } from './component-snippet/component-snippet
 import { ProgressMeterModule } from '../../utils/progress-meter/progress-meter.module';
 import { ComponentFeedbackModule } from '../../utils/component-feedback/component-feedback.module';
 
-import { witApiUrlProvider } from '../../../../../../../src/app/shared/wit-api.provider';
-import { ApiLocatorService } from '../../../../../../../src/app/shared/api-locator.service';
-import { authApiUrlProvider } from '../../../../../../../src/app/shared/auth-api.provider';
-import { ssoApiUrlProvider } from '../../../../../../../src/app/shared/sso-api.provider';
-import { realmProvider } from '../../../../../../../src/app/shared/realm-token.provider';
-import { MockAuthenticationService } from '../../../../../../../src/app/shared/mock-auth.service';
-
 import {
     MRecommendationInformation,
     MComponentInformation,
@@ -106,13 +99,13 @@ describe ('ComponentInformationComponent', () => {
             ],
             providers: [
                 Contexts,
-                witApiUrlProvider,
-                ApiLocatorService,
-                authApiUrlProvider,
-                ssoApiUrlProvider,
-                realmProvider,
+                // witApiUrlProvider,
+                // ApiLocatorService,
+                // authApiUrlProvider,
+                // ssoApiUrlProvider,
+                // realmProvider,
                 {
-                    provide: AuthenticationService, useClass: MockAuthenticationService
+                    provide: AuthenticationService, useValue: {}
                 },
                 {
                     provide: AddWorkFlowService,

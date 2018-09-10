@@ -5,22 +5,19 @@ import {
 } from '../models/stack-report.model';
 import { PipelineInsightsService } from './pipeline-insights.service';
 import { Injectable } from '@angular/core';
-// import 'rxjs/add/operator/map';
-// import { TimerObservable } from 'rxjs/observable/TimerObservable';
-import { timeInterval, pluck, take} from 'rxjs/operators';
+import { of } from 'rxjs';
+import { takeWhile, catchError } from 'rxjs/operators';
 
 import { timer } from 'rxjs';
 
 @Component({
     selector: 'pipleine-insights-details',
-    providers: [PipelineInsightsService],
-    // encapsulation: ViewEncapsulation.None,
     styleUrls: ['./pipeline-insights.component.less'],
     templateUrl: './pipeline-insights.component.html'
 })
 @Injectable()
 export class PipelineInsightsComponent implements OnInit, OnChanges {
-    // @Input() gatewayConfig: any;
+
     @Input() stack: string;
     @Input() buildNumber;
     @Input() appName;
@@ -37,7 +34,6 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
     public flag = false;
     public flag1 = false;
     public interval = 7000;
-    // public alive: boolean = true;
 
     constructor(private pipelineInsightsService: PipelineInsightsService) { }
 
@@ -50,13 +46,13 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
                 return;
             }
             this.stackUrl = this.url;
-            let observable: any = this  .pipelineInsightsService
+            const observable: any = this.pipelineInsightsService
                                         .getStackAnalyses(this.url);
 
-            timer(0, this.interval).pipe(
-                timeInterval(),
-                pluck('interval'),
-                take(3))
+            timer(0, this.interval)
+                .pipe(
+                    takeWhile(() => alive),
+                    catchError(error => of(`error: ${error}`)))
                 .subscribe(() => {
                     if (subs) {
                         subs.unsubscribe();
@@ -65,14 +61,14 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
                         if (data && (!data.hasOwnProperty('error') && Object.keys(data).length !== 0) && (data.statusCode === 200 || data.statusCode === 202)) {
                             alive = false;
                             subs.unsubscribe();
-                            let response: Array<ResultInformationModel> = data.result;
+                            const response: Array<ResultInformationModel> = data.result;
                             if (response.length > 0) {
                                 for (let i = 0; i < data.result.length; ++i) {
-                                    let c = data.result[i];
+                                    const c = data.result[i];
                                     if (c.user_stack_info) {
                                         if (c.user_stack_info.analyzed_dependencies) {
                                             for (let j = 0; j < c.user_stack_info.analyzed_dependencies.length; ++j) {
-                                                let d = c.user_stack_info.analyzed_dependencies[j];
+                                                const d = c.user_stack_info.analyzed_dependencies[j];
                                                 if (d.security && d.security.length > 0) {
                                                     this.flag = true;
                                                     break;
@@ -114,9 +110,6 @@ export class PipelineInsightsComponent implements OnInit, OnChanges {
                     }
                 });
         }
-
-
-
     }
 
 

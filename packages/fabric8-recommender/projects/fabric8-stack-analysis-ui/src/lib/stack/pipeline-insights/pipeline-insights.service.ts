@@ -15,15 +15,15 @@ export class PipelineInsightsService {
     private http: HttpClient,
     private auth: AuthenticationService
   ) {
-    if (this.auth.getToken() !== null) {
-      this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+    if (this.auth && this.auth.getToken && this.auth.getToken() !== null) {
+      this.headers = this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
   }
 
   getStackAnalyses(url: string, params?: any): Observable<StackReportModel> {
     const options: any = { headers: this.headers, observe: 'response' };
     if (params && params['access_token']) {
-      this.headers.set('Authorization', 'Bearer ' + params['access_token']);
+      this.headers = this.headers.set('Authorization', 'Bearer ' + params['access_token']);
     }
     return this.http.get<StackReportModel>(url, options)
       .pipe(map(this.extractData),

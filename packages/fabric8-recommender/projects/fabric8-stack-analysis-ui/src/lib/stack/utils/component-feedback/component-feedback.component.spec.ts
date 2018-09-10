@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AuthenticationService } from 'ngx-login-client';
-import { MockAuthenticationService } from '../../../../../../../src/app/shared/mock-auth.service';
 import { ComponentFeedbackService } from './component-feedback.service';
 
 import { ComponentFeedbackComponent } from './component-feedback.component';
@@ -24,7 +23,7 @@ describe('ComponentFeedbackComponent', () => {
       ],
       providers: [
         {
-          provide: AuthenticationService, useClass: MockAuthenticationService
+          provide: AuthenticationService, useValue: {}
         },
         ComponentFeedbackService
       ]
