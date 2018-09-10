@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
-import { Broadcaster, Logger, Notification, Notifications, NotificationType } from 'ngx-base';
+import { Broadcaster, Logger, Notifications } from 'ngx-base';
 import { ProcessTemplate, Space, SpaceService } from 'ngx-fabric8-wit';
 import { Profile, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
@@ -31,11 +31,10 @@ describe('AddSpaceOverlayComponent', () => {
   let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
   let mockUserService: any = jasmine.createSpy('UserService');
   let mockSpaceNamespaceService: any = jasmine.createSpy('SpaceNamespaceService');
-  let mockSpacesService: any = jasmine.createSpyObj('SpacesService', ['addRecent']);
+  let mockSpacesService: any = jasmine.createSpy('SpacesService');
   let mockContextService: any = jasmine.createSpy('ContextService');
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
-  let mockSubject: any = jasmine.createSpy('Subject');
   let mockElementRef: any = jasmine.createSpyObj('ElementRef', ['nativeElement']);
 
   let mockProfile: Profile = {
@@ -111,17 +110,10 @@ describe('AddSpaceOverlayComponent', () => {
     type: 'spacetemplates'
   }] as ProcessTemplate[];
 
-  let mockMessage: Notification = {
-    message: `Failed to create "${mockSpace.name}"`,
-    type: NotificationType.DANGER
-  };
-
   beforeEach(() => {
     mockElementRef.nativeElement.value = {};
     mockSpaceNamespaceService.updateConfigMap = {};
     mockSpaceService.create.and.returnValue(Observable.of(mockSpace));
-    mockSpacesService.addRecent.and.returnValue(mockSubject);
-    mockSpacesService.addRecent.next = {};
     mockUserService.currentLoggedInUser = mockUser;
 
     TestBed.configureTestingModule({
