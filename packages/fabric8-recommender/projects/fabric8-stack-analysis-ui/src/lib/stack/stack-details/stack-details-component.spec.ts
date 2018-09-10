@@ -10,9 +10,6 @@ import { TabsModule, AccordionModule } from 'ngx-bootstrap';
 
 
 /** New UX */
-// import {StackLevelModule} from '../stack-level/stack-level.module';
-// import {ComponentLevelModule} from '../component-level/component-level.module';
-import { FeedbackModule } from '../feedback/feedback.module';
 import { PipelineInsightsModule } from '../pipeline-insights/pipeline-insights.module';
 
 import { Broadcaster } from 'ngx-base';
@@ -50,9 +47,6 @@ describe ('StackDetailsComponent', () => {
                 HttpClientModule,
                 FormsModule,
                 ModalModule,
-                // StackLevelModule,
-                // ComponentLevelModule,
-                FeedbackModule,
                 PipelineInsightsModule,
                 AccordionModule.forRoot(),
                 TabsModule.forRoot(),

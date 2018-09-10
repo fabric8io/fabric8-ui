@@ -15,7 +15,6 @@ import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
 
 import { NoDataComponent } from './no-data/no-data.component';
 
-import { ReportInformationModule } from './report-information.module';
 import { ToastNotificationModule } from '../../toast-notification/toast-notification.module';
 
 const mockAddWorkFlowService = {

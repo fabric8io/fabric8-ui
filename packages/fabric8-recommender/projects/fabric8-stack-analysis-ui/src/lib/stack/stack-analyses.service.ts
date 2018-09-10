@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { StackReportModel } from './models/stack-report.model';
@@ -87,7 +87,7 @@ export class StackAnalysesService {
         statusText: error.statusText
       };
     }
-    return Observable.throw(body);
+    return throwError(body);
   }
 
 }

@@ -2,9 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpErrorResponse, HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { AuthenticationService } from 'ngx-login-client';
 import { WIT_API_URL, Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/operators/map';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
@@ -111,7 +109,7 @@ export class AddWorkFlowService {
       const err = body.error || JSON.stringify(body);
       errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
     }
-    return Observable.throw(errMsg);
+    return throwError(errMsg);
   }
 
 }
