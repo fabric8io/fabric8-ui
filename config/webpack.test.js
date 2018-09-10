@@ -40,8 +40,6 @@ module.exports = function () {
 
     /**
      * As of Webpack 4 we need to set the mode.
-     * Since this is a library and it uses gulp to build the library,
-     * we only have Test and Perf.
      */
     mode: 'development',
 
