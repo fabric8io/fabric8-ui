@@ -1,6 +1,7 @@
 <div class="content">
   <f8launcher
       [importApp]="true"
+      [nextButtons]="nextButtonsEnable | async"
       (onCancel)="cancel()"
       (onComplete)="complete()"></f8launcher>
 </div>

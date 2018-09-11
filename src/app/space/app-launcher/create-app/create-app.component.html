@@ -1,15 +1,8 @@
 <div class="content">
-  <f8-feature-toggle featureName="AppLauncher.DependencyEditor" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
-  <ng-template #user>
-    <f8launcher
-      [depEditorFlag]="true"
-      (onCancel)="cancel()"
-      (onComplete)="complete()"></f8launcher>
-  </ng-template>
-  <ng-template #default>
-    <f8launcher
-      [depEditorFlag]="false"
-      (onCancel)="cancel()"
-      (onComplete)="complete()"></f8launcher>
-  </ng-template>
+  <f8launcher
+    [depEditorFlag]="depEditorEnable | async"
+    [nextButtons]="nextButtonsEnable | async"
+    (onCancel)="cancel()"
+    (onComplete)="complete()">
+  </f8launcher>
 </div>
