@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 
 import {
-  HttpHandler, HttpInterceptor,
-  HttpRequest, HttpResponse
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse
 } from '@angular/common/http';
 
 import { AsyncSubject, Observable, Scheduler } from 'rxjs';
@@ -19,7 +22,7 @@ import { RequestCache } from '../request-cache.service';
 export class CacheInterceptor implements HttpInterceptor {
   constructor(private cache: RequestCache) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // continue if not cachable.
     if (!isCachable(req)) {
       return next.handle(req);
