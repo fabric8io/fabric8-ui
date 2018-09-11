@@ -13,6 +13,7 @@ import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { ContextService } from '../../../shared/context.service';
 
+import { WorkItemsData } from '../../../shared/workitem-utils';
 import { WorkItemsComponent } from './work-items.component';
 
 @Component({
@@ -88,7 +89,7 @@ describe('WorkItemsComponent', () => {
       },
       { provide: WorkItemService, useFactory: () => {
           let mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
-          mockWorkItemService.getWorkItems.and.returnValue(Observable.of({ workItems: [] }) as Observable<{workItems}>);
+          mockWorkItemService.getWorkItems.and.returnValue(Observable.of({ workItems: [] }) as Observable<WorkItemsData>);
           mockWorkItemService.buildUserIdMap.and.returnValue(Observable.of(mockContext.user) as Observable<User>);
           return mockWorkItemService;
         }

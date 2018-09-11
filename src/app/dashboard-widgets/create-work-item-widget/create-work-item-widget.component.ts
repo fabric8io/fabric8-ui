@@ -6,7 +6,7 @@ import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 
-import { filterOutClosedItems } from '../../shared/workitem-utils';
+import { filterOutClosedItems, WorkItemsData } from '../../shared/workitem-utils';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -37,7 +37,7 @@ export class CreateWorkItemWidgetComponent implements OnInit {
       .map(user => this.filterService.queryBuilder('assignee', this.filterService.equal_notation, user.id))
       .switchMap(filters => this.workItemService
         .getWorkItems(100000, {expression: filters}))
-      .map(val => val.workItems)
+      .map((val: WorkItemsData) => val.workItems)
       .map(workItems => filterOutClosedItems(workItems))
       // Resolve the work item type
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))

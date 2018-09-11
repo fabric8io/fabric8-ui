@@ -5,7 +5,7 @@ import { Space, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
-import { filterOutClosedItems } from '../../shared/workitem-utils';
+import { filterOutClosedItems, WorkItemsData } from '../../shared/workitem-utils';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -85,7 +85,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       })
       .switchMap(filters => this.workItemService
         .getWorkItems(100000, {expression: filters}))
-      .map(val => val.workItems)
+      .map((val: WorkItemsData) => val.workItems)
       .map(workItems => filterOutClosedItems(workItems))
       // Resolve the work item type
       .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
