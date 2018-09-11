@@ -225,9 +225,13 @@ describe('AddAppOverlayComponent', () => {
   });
 
   describe('component', () => {
+    let element: HTMLElement;
+    let btnElem;
     beforeEach(() => {
       fixture = TestBed.createComponent(AddAppOverlayComponent);
       component = fixture.componentInstance;
+      element = fixture.debugElement.nativeElement;
+      btnElem = element.querySelector('.code-imports--step_toolbar > button');
       fixture.detectChanges();
     });
 
@@ -236,8 +240,6 @@ describe('AddAppOverlayComponent', () => {
     });
 
     it('continue button is disabled on load', () => {
-      const element: HTMLElement = fixture.debugElement.nativeElement;
-      let btnElem = element.querySelector('.code-imports--step_toolbar > button');
       expect(btnElem.hasAttribute('disabled')).toBeTruthy();
     });
 
@@ -319,8 +321,6 @@ describe('AddAppOverlayComponent', () => {
     });
 
     it('continue button should be disabled on navigation in progress', async(() => {
-      const element: HTMLElement = fixture.debugElement.nativeElement;
-      let btnElem = element.querySelector('.code-imports--step_toolbar > button');
       expect(btnElem.hasAttribute('disabled')).toBeTruthy();
       component.navigationInProgress = false;
       component.projectName = 'project-aug-16-2018';
@@ -334,8 +334,6 @@ describe('AddAppOverlayComponent', () => {
     }));
 
     it('continue button should be enable on navigation is not in progress', async(() => {
-      const element: HTMLElement = fixture.debugElement.nativeElement;
-      let btnElem = element.querySelector('.code-imports--step_toolbar > button');
       expect(btnElem.hasAttribute('disabled')).toBeTruthy();
       component.navigationInProgress = false;
       component.projectName = 'project-aug-16-2018-1';
