@@ -6,7 +6,7 @@ import {
 import { By } from '@angular/platform-browser';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { initContext, TestContext } from 'testing/test-context';
 
 import { DeploymentsResourceUsageComponent } from './deployments-resource-usage.component';
@@ -36,8 +36,8 @@ describe('DeploymentsResourceUsageComponent', () => {
       declarations: [FakeResourceCardComponent]
     },
     (component: DeploymentsResourceUsageComponent) => {
-      component.environments = Observable.of(mockEnvironmentData);
-      component.spaceId = Observable.of('spaceId');
+      component.environments = of(mockEnvironmentData);
+      component.spaceId = of('spaceId');
     }
   );
 
