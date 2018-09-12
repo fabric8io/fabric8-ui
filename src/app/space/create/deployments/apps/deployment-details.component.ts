@@ -20,6 +20,12 @@ import {
   Subject,
   Subscription
 } from 'rxjs';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { empty } from 'rxjs/observable/empty';
+import { of } from 'rxjs/observable/of';
+import { first } from 'rxjs/operators/first';
+import { map } from 'rxjs/operators/map';
+import { switchMap } from 'rxjs/operators/switchMap';
 
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
@@ -150,9 +156,9 @@ export class DeploymentDetailsComponent {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.deploymentsService.getPods(this.spaceId, this.environment, this.applicationId)
-        .map((p: Pods) => p.total > 0)
-        .subscribe(this.hasPods)
+      this.deploymentsService.getPods(this.spaceId, this.environment, this.applicationId).pipe(
+        map((p: Pods) => p.total > 0)
+      ).subscribe(this.hasPods)
     );
 
     this.subscriptions.push(
@@ -179,12 +185,12 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.cpuChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
+      this.cpuChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return Observable.empty();
+          return empty();
         }
-        return Observable.combineLatest(Observable.of(chart), this.deploymentStatusService.getDeploymentCpuStatus(this.spaceId, this.environment, this.applicationId));
-      })
+        return combineLatest(of(chart), this.deploymentStatusService.getDeploymentCpuStatus(this.spaceId, this.environment, this.applicationId));
+      }))
         .subscribe((v: [ChartAPI, Status]): void => {
           const chart: ChartAPI = v[0];
           const status: Status = v[1];
@@ -208,12 +214,12 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.memChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
+      this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return Observable.empty();
+          return empty();
         }
-        return Observable.combineLatest(Observable.of(chart), this.deploymentStatusService.getDeploymentMemoryStatus(this.spaceId, this.environment, this.applicationId));
-      })
+        return combineLatest(of(chart), this.deploymentStatusService.getDeploymentMemoryStatus(this.spaceId, this.environment, this.applicationId));
+      }))
         .subscribe((v: [ChartAPI, Status]): void => {
           const chart: ChartAPI = v[0];
           const status: Status = v[1];
@@ -243,12 +249,12 @@ export class DeploymentDetailsComponent {
       this.deploymentsService.getDeploymentMemoryStat(this.spaceId, this.environment, this.applicationId);
 
     this.subscriptions.push(
-      this.cpuChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, CpuStat[]]> => {
+      this.cpuChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, CpuStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return Observable.empty();
+          return empty();
         }
-        return Observable.combineLatest(Observable.of(chart), this.cpuStat);
-      })
+        return combineLatest(of(chart), this.cpuStat);
+      }))
         .subscribe((v: [ChartAPI, CpuStat[]]): void => {
           const chart: ChartAPI = v[0];
           const stats: CpuStat[] = v[1];
@@ -264,12 +270,12 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.memChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, MemoryStat[]]> => {
+      this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, MemoryStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return Observable.empty();
+          return empty();
         }
-        return Observable.combineLatest(Observable.of(chart), this.memStat);
-      })
+        return combineLatest(of(chart), this.memStat);
+      }))
         .subscribe((v: [ChartAPI, MemoryStat[]]): void => {
           const chart: ChartAPI = v[0];
           const stats: MemoryStat[] = v[1];
@@ -286,15 +292,15 @@ export class DeploymentDetailsComponent {
     );
 
     this.subscriptions.push(
-      this.memChart.switchMap((chart: ChartAPI): Observable<[ChartAPI, NetworkStat[]]> => {
+      this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, NetworkStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return Observable.empty();
+          return empty();
         }
-        return Observable.combineLatest(
-          Observable.of(chart),
+        return combineLatest(
+          of(chart),
           this.deploymentsService.getDeploymentNetworkStat(this.spaceId, this.environment, this.applicationId)
         );
-      })
+      }))
         .subscribe((v: [ChartAPI, NetworkStat[]]): void => {
           const chart: ChartAPI = v[0];
           const stats: NetworkStat[] = v[1];
@@ -314,11 +320,11 @@ export class DeploymentDetailsComponent {
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub: Subscription): void => sub.unsubscribe());
 
-    Observable.combineLatest(
+    combineLatest(
       this.cpuChart,
       this.memChart,
       this.netChart
-    ).first().subscribe((charts: ChartAPI[]): void =>
+    ).pipe(first()).subscribe((charts: ChartAPI[]): void =>
       charts.forEach((chart: ChartAPI): void => {
         if (chart !== DeploymentDetailsComponent.NO_CHART) {
           chart.destroy();
