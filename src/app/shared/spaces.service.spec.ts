@@ -133,6 +133,22 @@ describe('SpacesService', () => {
         done();
       });
     });
+
+    it('should still return values if spaceService.getSpaceById throws an error', (done: DoneFn) => {
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.returnValue(Observable.never());
+
+      const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+      spaceService.getSpaceById.and.returnValue(Observable.throw('error'));
+      mockProfile.store.recentSpaces = [mockSpace];
+
+      const spacesService: SpacesService = TestBed.get(SpacesService);
+      let result: Observable<Space[]> = spacesService.recent;
+      result.subscribe((r: Space[]) => {
+        expect(r).toEqual([] as Space[]);
+        done();
+      });
+    });
   });
 
   describe('#saveRecent', () => {
