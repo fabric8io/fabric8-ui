@@ -1,6 +1,5 @@
 {
   "angularCompilerOptions": {
-    "genDir": "src/app/generated",
     "entryModule": "src/app/app.module#AppModule",
     "skipMetadataEmit" : true
   },
