@@ -109,10 +109,13 @@ export class SpacesService implements Spaces {
   private loadRecent(): Observable<Space[]> {
     return this.profileService.current.switchMap((profile: ExtProfile): Observable<Space[]> => {
       if (profile.store.recentSpaces) {
-        return forkJoin((profile.store.recentSpaces as string[])
-          .map((id: string): Observable<Space> => {
-            return this.spaceService.getSpaceById(id);
-          }));
+        return forkJoin((profile.store.recentSpaces as string[]).map((id: string): Observable<Space> => {
+          // if getSpaceById() throws an error, forkJoin will not complete and loadRecent will not return
+          return this.spaceService.getSpaceById(id).catch((): Observable<Space> => Observable.of(null));
+        }))
+        .map((spaces: Space[]): Space[] => {
+          return spaces.filter(((space: Space): boolean => { return space !== null; }));
+        });
       } else {
         return of([]);
       }
