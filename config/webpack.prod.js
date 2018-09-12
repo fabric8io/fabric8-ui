@@ -81,14 +81,6 @@ module.exports = function (env) {
   return webpackMerge({
     plugins: [
       /**
-       * Plugin: ModuleConcatenationPlugin
-       * Description: Hoist modules into one closure for performance.
-       *
-       * See: https://webpack.js.org/plugins/module-concatenation-plugin/
-       */
-      new webpack.optimize.ModuleConcatenationPlugin(),
-
-      /**
        * Plugin: HashedModuleIdsPlugin
        * Description: This plugin will cause hashes to be based on the relative path of the module,
        * generating a four character string as the module id.
