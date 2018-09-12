@@ -10,7 +10,6 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
  * Webpack Plugins
  */
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const cloneDeep = require('lodash/cloneDeep');
@@ -237,14 +236,6 @@ module.exports = function (options) {
           'ANALYTICS_LICENSE_URL': JSON.stringify(ANALYTICS_LICENSE_URL)
         }
       }),
-
-      /**
-       * Plugin: NamedModulesPlugin (experimental)
-       * Description: Uses file names as module name.
-       *
-       * See: https://github.com/webpack/webpack/commit/a04ffb928365b19feb75087c63f13cadfc08e1eb
-       */
-      new NamedModulesPlugin(),
 
       /**
        * Plugin LoaderOptionsPlugin (experimental)
