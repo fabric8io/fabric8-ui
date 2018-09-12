@@ -14,7 +14,7 @@ import {
   TestContext
 } from 'testing/test-context';
 
-import { Filter, FilterEvent } from 'patternfly-ng/filter';
+import { FilterEvent } from 'patternfly-ng/filter';
 
 import { DeploymentsAppsComponent } from './deployments-apps.component';
 
