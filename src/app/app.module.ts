@@ -25,7 +25,6 @@ import {
 } from 'ngx-fabric8-wit';
 import {
   AuthenticationService,
-  HttpService,
   UserService
 } from 'ngx-login-client';
 import { RestangularModule } from 'ngx-restangular';
@@ -227,7 +226,6 @@ export type StoreType = {
     },
     forgeApiUrlProvider,
     GettingStartedService,
-    HttpService,
     jenkinsApiUrlProvider,
     Logger,
     LoginService,
