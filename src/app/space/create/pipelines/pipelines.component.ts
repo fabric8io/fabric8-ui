@@ -22,6 +22,11 @@ import {
 import { BuildConfig } from '../../../../a-runtime-console/index';
 import { PipelinesService } from './services/pipelines.service';
 
+export type QueryJson = {
+  application: string[];
+  codebase: string[];
+};
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-pipelines',
@@ -216,19 +221,21 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   addQueryParams() {
     let urlFilter: object = {};
-    this._appliedFilters.forEach((f) => {
+    this._appliedFilters.forEach((f: Filter) => {
       if (f.field.id === 'codebase') {
         if (urlFilter['codebase'] === undefined) {
           urlFilter['codebase'] = [];
         }
-        urlFilter['codebase'].indexOf(f.value) === -1 ?
-        urlFilter['codebase'].push(f.value) : urlFilter['codebase'];
+        if (urlFilter['codebase'].indexOf(f.value) === -1) {
+          urlFilter['codebase'].push(f.value);
+        }
       } else if (f.field.id === 'application') {
         if (urlFilter['application'] === undefined) {
           urlFilter['application'] = [];
         }
-        urlFilter['application'].indexOf(f.value) === -1 ?
-        urlFilter['application'].push(f.value) : urlFilter['application'];
+        if (urlFilter['application'].indexOf(f.value) === -1) {
+          urlFilter['application'].push(f.value);
+        }
       }
     });
     this.router.navigate([], {
@@ -241,12 +248,12 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.push(
       this.route.queryParams.subscribe(query => {
         if (query.hasOwnProperty('q')) {
-          let queryJson = JSON.parse(query.q);
-          let application = queryJson.application;
-          let codebase = queryJson.codebase;
-          let appliedFilter = [];
+          let queryJson: QueryJson = JSON.parse(query.q);
+          let application: string[] = queryJson.application;
+          let codebase: string[] = queryJson.codebase;
+          let appliedFilter: Filter[] = [];
           if (application !== undefined) {
-            application.map(app => {
+            application.forEach((app: string)  => {
               appliedFilter.push({
                 field: {
                   id: 'application',
@@ -258,7 +265,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
             });
           }
           if (codebase !== undefined) {
-            codebase.map(code => {
+            codebase.forEach((code: string) => {
               appliedFilter.push({
                 field: {
                   id: 'codebase',
@@ -270,6 +277,11 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
             });
           }
           this._appliedFilters = appliedFilter;
+          /**
+           * need setTimeout because of this error
+           * ERROR Error: ExpressionChangedAfterItHasBeenCheckedError:
+           * Expression has changed after it was checked. Previous value: 'false'. Current value: 'true'.
+           */
           setTimeout(() => {
             this.toolbarConfig.filterConfig.appliedFilters = appliedFilter;
           }, 0);

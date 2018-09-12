@@ -38,9 +38,9 @@ import { ToolbarModule } from 'patternfly-ng/toolbar';
 
 import { BuildConfig } from '../../../../a-runtime-console/index';
 
+import { RouterTestingModule } from '@angular/router/testing';
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesService } from './services/pipelines.service';
-import { RouterTestingModule } from '@angular/router/testing';
 
 @Component({
   selector: 'fabric8-pipelines-list',
@@ -611,7 +611,8 @@ describe('PipelinesComponent', () => {
     });
   });
 
-  it('should add queryParams to URL on filter change', function(this: TestingContext) {
+  it('should add queryParams to URL on filter change', function(this: TestingContext, done) {
+    spyOn(this.testedDirective, 'addQueryParams');
     this.testedDirective.filterChange(
       {
         appliedFilters: [
@@ -630,6 +631,7 @@ describe('PipelinesComponent', () => {
     this.fixture.detectChanges();
     this.fixture.whenStable().then(() => {
       expect(this.testedDirective.addQueryParams).toHaveBeenCalled();
+      done();
     });
-  })
+  });
 });
