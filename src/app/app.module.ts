@@ -1,7 +1,6 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ApplicationRef, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Http, HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -157,7 +156,6 @@ export type StoreType = {
     EmptyStateModule,
     FormsModule,
     HttpClientModule,
-    HttpModule,
     KubernetesRestangularModule,
     KubernetesStoreModule,
     LocalStorageModule.withConfig({
@@ -219,7 +217,7 @@ export type StoreType = {
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
     {
-      provide: Http,
+      provide: HttpClient,
       useClass: Fabric8UIHttpService
     },
     RequestCache,
