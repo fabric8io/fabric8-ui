@@ -6,6 +6,8 @@ import {
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { first } from 'rxjs/operators/first';
+
 import { createMock } from 'testing/mock';
 
 import { Logger } from 'ngx-base';
@@ -86,9 +88,9 @@ describe('DeploymentApiService', () => {
           }
         ] as EnvironmentStat[]
       };
-      this.service.getEnvironments('foo spaceId')
-        .first()
-        .subscribe((envs: EnvironmentStat[]): void => {
+      this.service.getEnvironments('foo spaceId').pipe(
+        first()
+      ).subscribe((envs: EnvironmentStat[]): void => {
           expect(envs).toEqual(httpResponse.data);
           this.controller.verify();
           done();
@@ -101,9 +103,9 @@ describe('DeploymentApiService', () => {
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getEnvironments('foo spaceId')
-        .first()
-        .subscribe(
+      this.service.getEnvironments('foo spaceId').pipe(
+        first()
+      ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
@@ -143,9 +145,9 @@ describe('DeploymentApiService', () => {
           }
         }
       } as ApplicationsResponse;
-      this.service.getApplications('foo spaceId')
-        .first()
-        .subscribe((apps: Application[]): void => {
+      this.service.getApplications('foo spaceId').pipe(
+        first()
+      ).subscribe((apps: Application[]): void => {
           expect(apps).toEqual(httpResponse.data.attributes.applications);
           this.controller.verify();
           done();
@@ -158,9 +160,9 @@ describe('DeploymentApiService', () => {
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getApplications('foo spaceId')
-        .first()
-        .subscribe(
+      this.service.getApplications('foo spaceId').pipe(
+        first()
+      ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
@@ -199,9 +201,9 @@ describe('DeploymentApiService', () => {
           end: 2
         }
       } as MultiTimeseriesResponse;
-      this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
-        .first()
-        .subscribe((data: MultiTimeseriesData): void => {
+      this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2).pipe(
+        first()
+      ).subscribe((data: MultiTimeseriesData): void => {
           expect(data).toEqual(httpResponse.data);
           this.controller.verify();
           done();
@@ -214,9 +216,9 @@ describe('DeploymentApiService', () => {
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2)
-        .first()
-        .subscribe(
+      this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2).pipe(
+        first()
+      ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
@@ -251,9 +253,9 @@ describe('DeploymentApiService', () => {
           }
         }
       } as TimeseriesResponse;
-      this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
-        .first()
-        .subscribe((data: TimeseriesData): void => {
+      this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId').pipe(
+        first()
+      ).subscribe((data: TimeseriesData): void => {
           expect(data).toEqual(httpResponse.data.attributes);
           this.controller.verify();
           done();
@@ -266,9 +268,9 @@ describe('DeploymentApiService', () => {
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId')
-        .first()
-        .subscribe(
+      this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId').pipe(
+        first()
+      ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
@@ -285,9 +287,9 @@ describe('DeploymentApiService', () => {
 
   describe('#deleteDeployment', () => {
     it('should return response', function(this: TestContext, done: DoneFn): void {
-      this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
-        .first()
-        .subscribe((): void => {
+      this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId').pipe(
+        first()
+      ).subscribe((): void => {
           this.controller.verify();
           done();
         });
@@ -299,9 +301,9 @@ describe('DeploymentApiService', () => {
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId')
-        .first()
-        .subscribe(
+      this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId').pipe(
+        first()
+      ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
@@ -318,9 +320,9 @@ describe('DeploymentApiService', () => {
 
   describe('#scalePods', () => {
     it('should return response', function(this: TestContext, done: DoneFn): void {
-      this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
-        .first()
-        .subscribe((): void => {
+      this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5).pipe(
+        first()
+      ).subscribe((): void => {
           this.controller.verify();
           done();
         });
@@ -332,9 +334,9 @@ describe('DeploymentApiService', () => {
     });
 
     it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5)
-        .first()
-        .subscribe(
+      this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5).pipe(
+        first()
+      ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
