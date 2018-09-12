@@ -3,6 +3,7 @@ import { By } from '@angular/platform-browser';
 
 import { List, take } from 'lodash';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import { FilterService, WorkItemService } from 'fabric8-planner';
 
@@ -65,13 +66,13 @@ describe('WorkItemsComponent', () => {
     providers: [
       { provide: Contexts, useFactory: () => {
           let mockContexts: any = createMock(Contexts);
-          mockContexts.current = Observable.of(mockContext) as Observable<Context>;
+          mockContexts.current = of(mockContext) as Observable<Context>;
           return mockContexts;
         }
       },
       { provide: Spaces, useFactory: () => {
           let mockSpacesService: any = createMock(Spaces);
-          mockSpacesService.recent = Observable.of(mockRecentSpaces) as Observable<Space[]>;
+          mockSpacesService.recent = of(mockRecentSpaces) as Observable<Space[]>;
           return mockSpacesService;
         }
       },
@@ -83,14 +84,14 @@ describe('WorkItemsComponent', () => {
       },
       { provide: SpaceService, useFactory: () => {
           let mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
-          mockSpaceService.getSpacesByUser.and.returnValue(Observable.of(mockSpaces) as Observable<Space[]>);
+          mockSpaceService.getSpacesByUser.and.returnValue(of(mockSpaces) as Observable<Space[]>);
           return mockSpaceService;
         }
       },
       { provide: WorkItemService, useFactory: () => {
           let mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
-          mockWorkItemService.getWorkItems.and.returnValue(Observable.of({ workItems: [] }) as Observable<WorkItemsData>);
-          mockWorkItemService.buildUserIdMap.and.returnValue(Observable.of(mockContext.user) as Observable<User>);
+          mockWorkItemService.getWorkItems.and.returnValue(of({ workItems: [] }) as Observable<WorkItemsData>);
+          mockWorkItemService.buildUserIdMap.and.returnValue(of(mockContext.user) as Observable<User>);
           return mockWorkItemService;
         }
       },

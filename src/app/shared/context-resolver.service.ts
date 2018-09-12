@@ -7,6 +7,8 @@ import {
 
 import { Context } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+import { catchError, first } from 'rxjs/operators';
 
 import { Navigation } from '../models/navigation';
 import { ContextService } from './context.service';
@@ -19,15 +21,20 @@ export class ContextResolver implements Resolve<Context> {
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Context> {
     // Resolve the context
     return this.contextService
-      .changeContext(Observable.of({
-        url: state.url,
-        user: route.params['entity'],
-        space: route.params['space']
-      } as Navigation)).first()
-      .catch((err: any, caught: Observable<Context>) => {
-        console.log(`Caught in resolver ${err}`);
-        return Observable.throw(err);
-      });
+      .changeContext(
+        of({
+          url: state.url,
+          user: route.params['entity'],
+          space: route.params['space']
+        } as Navigation)
+      )
+      .pipe(
+        first(),
+        catchError((err: any, caught: Observable<Context>) => {
+          console.log(`Caught in resolver ${err}`);
+          return Observable.throw(err);
+        })
+      );
   }
 
 }

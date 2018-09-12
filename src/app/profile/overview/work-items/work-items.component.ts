@@ -6,6 +6,7 @@ import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ContextService } from '../../../shared/context.service';
 
 import { filterOutClosedItems, WorkItemsData } from '../../../shared/workitem-utils';
@@ -102,10 +103,11 @@ export class WorkItemsComponent implements OnDestroy, OnInit {
     this.subscriptions.push(
       this.workItemService
         .getWorkItems(100000, {expression: filters})
-        .map((val: WorkItemsData) => val.workItems)
-        .map(workItems => filterOutClosedItems(workItems))
+        .pipe(
+          map((val: WorkItemsData) => val.workItems),
+          map(workItems => filterOutClosedItems(workItems))
         // Resolve the work item type, creator and area
-        .subscribe(workItems => {
+        ).subscribe(workItems => {
           this.workItems = workItems;
         })
     );

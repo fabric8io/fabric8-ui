@@ -6,11 +6,12 @@ import { Router } from '@angular/router';
 import { Logger } from 'ngx-base';
 import { Contexts, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs/Observable';
-
 import { EventService } from '../../shared/event.service';
 import { TenantService } from '../services/tenant.service';
 import { CleanupComponent } from './cleanup.component';
+
+import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 
 describe('CleanupComponent', () => {
@@ -41,7 +42,7 @@ describe('CleanupComponent', () => {
         version: 0
       }
     };
-    mockContexts.current = Observable.of({
+    mockContexts.current = of({
       'user': {
         'attributes': {
           'username': 'mock-username'
@@ -50,7 +51,7 @@ describe('CleanupComponent', () => {
       }
     });
     mockEventService.deleteSpaceSubject = jasmine.createSpyObj('deleteSpaceSubject', ['next']);
-    mockSpaceService.getSpacesByUser.and.returnValue(Observable.of([mockSpace]));
+    mockSpaceService.getSpacesByUser.and.returnValue(of([mockSpace]));
 
     TestBed.configureTestingModule({
       imports: [FormsModule],
@@ -84,9 +85,9 @@ describe('CleanupComponent', () => {
   describe('#confirm', () => {
     it('should show a success message if spaces were erased successfully', () => {
       component.spaces = [mockSpace];
-      component.spaceService.deleteSpace.and.returnValue(Observable.of(mockSpace));
-      component.tenantService.cleanupTenant.and.returnValue(Observable.of('mock-response'));
-      component.tenantService.updateTenant.and.returnValue(Observable.of('mock-response'));
+      component.spaceService.deleteSpace.and.returnValue(of(mockSpace));
+      component.tenantService.cleanupTenant.and.returnValue(of('mock-response'));
+      component.tenantService.updateTenant.and.returnValue(of('mock-response'));
       spyOn(component, 'showSuccessNotification');
       component.confirm();
       expect(mockEventService.deleteSpaceSubject.next).toHaveBeenCalled();
@@ -97,9 +98,9 @@ describe('CleanupComponent', () => {
 
     it('should call deleteSpace with skipCluster set to true', () => {
       component.spaces = [mockSpace];
-      component.spaceService.deleteSpace.and.returnValue(Observable.of(mockSpace));
-      component.tenantService.cleanupTenant.and.returnValue(Observable.of('mock-response'));
-      component.tenantService.updateTenant.and.returnValue(Observable.of('mock-response'));
+      component.spaceService.deleteSpace.and.returnValue(of(mockSpace));
+      component.tenantService.cleanupTenant.and.returnValue(of('mock-response'));
+      component.tenantService.updateTenant.and.returnValue(of('mock-response'));
       spyOn(component, 'showSuccessNotification');
       component.confirm();
       expect(mockEventService.deleteSpaceSubject.next).toHaveBeenCalled();
@@ -113,8 +114,8 @@ describe('CleanupComponent', () => {
     it('should show a notification if a space is unable to be erased', () => {
       component.spaces = [mockSpace];
       component.spaceService.deleteSpace.and.returnValue(Observable.throw('error'));
-      component.tenantService.cleanupTenant.and.returnValue(Observable.of('mock-response'));
-      component.tenantService.updateTenant.and.returnValue(Observable.of('mock-response'));
+      component.tenantService.cleanupTenant.and.returnValue(of('mock-response'));
+      component.tenantService.updateTenant.and.returnValue(of('mock-response'));
       spyOn(component, 'showWarningNotification');
       component.confirm();
       expect(mockSpace['erased']).toBeFalsy();
@@ -133,9 +134,9 @@ describe('CleanupComponent', () => {
 
     it('should show a successful notification if tenant update & reset worked', () => {
       component.spaces = [mockSpace];
-      component.spaceService.deleteSpace.and.returnValue(Observable.of(mockSpace));
-      component.tenantService.cleanupTenant.and.returnValue(Observable.of('mock-response'));
-      component.tenantService.updateTenant.and.returnValue(Observable.of('mock-response'));
+      component.spaceService.deleteSpace.and.returnValue(of(mockSpace));
+      component.tenantService.cleanupTenant.and.returnValue(of('mock-response'));
+      component.tenantService.updateTenant.and.returnValue(of('mock-response'));
       spyOn(component, 'showSuccessNotification');
       component.confirm();
       expect(component.showSuccessNotification).toHaveBeenCalled();
@@ -143,7 +144,7 @@ describe('CleanupComponent', () => {
     });
 
     it('should show a warning notification if tenant update failed', () => {
-      component.tenantService.cleanupTenant.and.returnValue(Observable.of('mock-response'));
+      component.tenantService.cleanupTenant.and.returnValue(of('mock-response'));
       component.tenantService.updateTenant.and.returnValue(Observable.throw('error'));
       spyOn(component, 'showWarningNotification');
       component.confirm();
@@ -152,7 +153,7 @@ describe('CleanupComponent', () => {
     });
 
     it('should show a warning notification if the fork joined observable results in an error', () => {
-      component.tenantService.cleanupTenant.and.returnValue(Observable.of('mock-response'));
+      component.tenantService.cleanupTenant.and.returnValue(of('mock-response'));
       spyOn(Observable, 'forkJoin').and.returnValue(Observable.throw('error'));
       spyOn(component, 'showWarningNotification');
       component.tenantCleanError = true;

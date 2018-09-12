@@ -9,6 +9,7 @@ import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Action } from 'patternfly-ng/action';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
@@ -97,11 +98,11 @@ describe('MySpacesComponent', () => {
     spaceMock2 = cloneDeep(spaceMock);
     spaceMock2.id = '2';
     spaceMock2.attributes.name = 'spaceMock2-name';
-    mockContexts.current = Observable.of(mockContext);
-    mockUserService.loggedInUser = Observable.of(mockUser);
+    mockContexts.current = of(mockContext);
+    mockUserService.loggedInUser = of(mockUser);
     mockGettingStartedService.createTransientProfile.and.returnValue(mockExtProfile);
-    mockGettingStartedService.update.and.returnValue(Observable.of({}));
-    mockSpaceService.getSpacesByUser.and.returnValue(Observable.of([spaceMock1, spaceMock2])); // called by ngOnInit() to initialize allSpaces
+    mockGettingStartedService.update.and.returnValue(of({}));
+    mockSpaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2])); // called by ngOnInit() to initialize allSpaces
 
     TestBed.configureTestingModule({
       imports: [FormsModule],
@@ -312,7 +313,7 @@ describe('MySpacesComponent', () => {
 
   describe('#removeSpace', () => {
     it('should delegate to spaceService.deleteSpace for deletion', () => {
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(Observable.of(spaceMock1));
+      spyOn(component.spaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
       component.modalRef = mockModalRef;
       component.spaceToDelete = spaceMock1;
       component.ngOnInit();
@@ -321,7 +322,7 @@ describe('MySpacesComponent', () => {
     });
 
     it('should remove the selected space out of allSpaces', () => {
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(Observable.of(spaceMock1));
+      spyOn(component.spaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
       spyOn(component, 'savePins').and.callThrough();
       component.modalRef = mockModalRef;
       component.spaceToDelete = spaceMock1;
@@ -532,7 +533,7 @@ describe('MySpacesComponent', () => {
         }
       };
       component.pageName = 'myspaces';
-      mockGettingStartedService.update.and.returnValue(Observable.of(mockContext.user.attributes));
+      mockGettingStartedService.update.and.returnValue(of(mockContext.user.attributes));
       component.ngOnInit();
       component.savePins();
       expect(mockExtProfile.contextInformation.pins['myspaces']).toEqual([spaceMock1.id]);

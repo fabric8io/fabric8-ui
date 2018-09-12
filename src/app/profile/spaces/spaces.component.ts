@@ -1,13 +1,11 @@
 import { Component, Input, OnInit, TemplateRef, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
-import { AuthenticationService } from 'ngx-login-client';
 import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
-import { FeatureTogglesService } from 'ngx-feature-flag';
 import { EventService } from '../../shared/event.service';
 
 @Component({
@@ -29,14 +27,11 @@ export class SpacesComponent implements OnInit {
   private space: string;
 
   constructor(
-    private featureTogglesService: FeatureTogglesService,
-    private router: Router,
     private spaceService: SpaceService,
     private logger: Logger,
     private contexts: Contexts,
     private eventService: EventService,
     private modalService: BsModalService,
-    private authentication: AuthenticationService,
     private broadcaster: Broadcaster
   ) {
     this.space = '';
@@ -44,15 +39,15 @@ export class SpacesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.searchTermStream
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .switchMap((searchText: string) => {
+    this.searchTermStream.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((searchText: string) => {
         return this.spaceService.search(searchText);
       })
-      .subscribe(values => {
-        this._spaces = values;
-      });
+    ).subscribe(values => {
+      this._spaces = values;
+    });
   }
 
   initSpaces(event: any): void {
@@ -85,22 +80,20 @@ export class SpacesComponent implements OnInit {
   removeSpace(): void {
     if (this.context && this.context.user && this.spaceToDelete) {
       let space = this.spaceToDelete;
-      this.spaceService.deleteSpace(space)
-        .do(() => {
-          this.eventService.deleteSpaceSubject.next(space);
-        })
-        .subscribe(spaces => {
-          let index = this._spaces.indexOf(space);
-          this._spaces.splice(index, 1);
-          this.broadcaster.broadcast('spaceDeleted', space);
-          this.spaceToDelete = undefined;
-          this.modalRef.hide();
-        },
-        err => {
-          this.logger.error(err);
-          this.spaceToDelete = undefined;
-          this.modalRef.hide();
-        });
+      this.spaceService.deleteSpace(space).pipe(
+        tap(() => this.eventService.deleteSpaceSubject.next(space))
+      ).subscribe(() => {
+        let index = this._spaces.indexOf(space);
+        this._spaces.splice(index, 1);
+        this.broadcaster.broadcast('spaceDeleted', space);
+        this.spaceToDelete = undefined;
+        this.modalRef.hide();
+      },
+      err => {
+        this.logger.error(err);
+        this.spaceToDelete = undefined;
+        this.modalRef.hide();
+      });
     } else {
       this.logger.error('Failed to retrieve list of spaces owned by user');
     }

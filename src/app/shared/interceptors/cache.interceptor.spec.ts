@@ -14,6 +14,7 @@ import {
 } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { CacheInterceptor } from './cache.interceptor';
 
 import { RequestCache } from '../request-cache.service';
@@ -111,7 +112,7 @@ describe(`CacheHttpInterceptor`, () => {
         return null;
       }
     };
-    const handleSpy = spyOn(mockHandler, 'handle').and.returnValue(Observable.of({ body: testResponse } as HttpResponse<string>));
+    const handleSpy = spyOn(mockHandler, 'handle').and.returnValue(of({ body: testResponse } as HttpResponse<string>));
 
     let received1: string = null;
     let received2: string = null;

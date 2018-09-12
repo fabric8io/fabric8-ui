@@ -9,6 +9,7 @@ import { Notifications } from 'ngx-base/src/app/notifications/notifications';
 import { Contexts, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
@@ -33,8 +34,8 @@ describe('UpdateComponent', () => {
   let mockUserService: any = jasmine.createSpy('UserService');
   let mockLogger: any = jasmine.createSpy('Logger');
 
-  mockAuthenticationService.gitHubToken = Observable.of('gh-test-user');
-  mockContexts.current = Observable.of({
+  mockAuthenticationService.gitHubToken = of('gh-test-user');
+  mockContexts.current = of({
     'user': {
       'attributes': {
         'username': 'foobar'
@@ -112,7 +113,7 @@ describe('UpdateComponent', () => {
 
   describe('#linkImageUrl', () => {
     it('should properly link the avatar image if image exists', () => {
-      component.gitHubService.getUser.and.returnValue(Observable.of({
+      component.gitHubService.getUser.and.returnValue(of({
         'avatar_url': 'mock-image'
       }));
       component.linkGithubImageUrl();
@@ -124,7 +125,7 @@ describe('UpdateComponent', () => {
         message: 'No image found',
         type: NotificationType.INFO
       };
-      component.gitHubService.getUser.and.returnValue(Observable.of({}));
+      component.gitHubService.getUser.and.returnValue(of({}));
       component.linkGithubImageUrl();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -197,7 +198,7 @@ describe('UpdateComponent', () => {
       component.url = 'new-url';
       component.emailPrivate = false;
       component.gettingStartedService.createTransientProfile.and.returnValue(mockUser.attributes);
-      component.gettingStartedService.update.and.returnValue(Observable.of(mockUser));
+      component.gettingStartedService.update.and.returnValue(of(mockUser));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -231,7 +232,7 @@ describe('UpdateComponent', () => {
         'message': 'Profile updated!',
         type: NotificationType.SUCCESS
       };
-      component.tenantService.updateTenant.and.returnValue(Observable.of({ status: 200 }));
+      component.tenantService.updateTenant.and.returnValue(of({ status: 200 }));
       component.updateTenant();
       expect(component.updateTenantStatus).toBe(TenantUpdateStatus.Success);
       expect(component.notifications.message).toHaveBeenCalledWith(message);
@@ -242,7 +243,7 @@ describe('UpdateComponent', () => {
         'message': 'Error updating tenant',
         type: NotificationType.DANGER
       };
-      component.tenantService.updateTenant.and.returnValue(Observable.of({ status: 404 }));
+      component.tenantService.updateTenant.and.returnValue(of({ status: 404 }));
       component.updateTenant();
       expect(component.updateTenantStatus).toBe(TenantUpdateStatus.Failure);
       expect(component.notifications.message).toHaveBeenCalledWith(message);

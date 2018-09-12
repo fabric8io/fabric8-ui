@@ -10,6 +10,7 @@ import {
 import { Logger } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import { LoginService } from './login.service';
 import { Fabric8RuntimeConsoleService } from './runtime-console/fabric8-runtime-console.service';
@@ -31,7 +32,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     if (!this.auth.isLoggedIn()) {
       this.login.redirectToLogin(state.url);
-      return Observable.of(false);
+      return of(false);
     } else {
       return this.fabric8RuntimeConsoleService.loadingOpenShiftToken();
     }

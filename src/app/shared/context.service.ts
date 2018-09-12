@@ -14,6 +14,18 @@ import { FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
 import { Observable, Scheduler } from 'rxjs';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { merge } from 'rxjs/observable/merge';
+import { of } from 'rxjs/observable/of';
+import {
+  catchError,
+  distinctUntilChanged,
+  distinctUntilKeyChanged,
+  map,
+  scan,
+  switchMap,
+  tap
+} from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
 import { MenusService } from '../layout/header/menus.service';
@@ -60,64 +72,66 @@ export class ContextService implements Contexts {
     this._deleteFromRecent = new Subject<Context>();
     // subscribe to delete space event
     this.eventService.deleteSpaceSubject
-      .map(val => {
-        if (val && val.id) {
-          return {
-            user: null,
-            space: val,
-            type: ContextTypes.BUILTIN.get('user'),
-            name: 'TO_DELETE',
-            path: null
-          } as Context;
-        } else {
-          return {} as Context;
-        }
-      })
-      .subscribe(val => {
+      .pipe(
+        map(val => {
+          if (val && val.id) {
+            return {
+              user: null,
+              space: val,
+              type: ContextTypes.BUILTIN.get('user'),
+              name: 'TO_DELETE',
+              path: null
+            } as Context;
+          } else {
+            return {} as Context;
+          }
+        })
+      ).subscribe(val => {
         this._deleteFromRecent.next(val);
       });
     // Initialize the default context when the logged in user changes
     this._default = this.userService.loggedInUser
+      .pipe(
       // First use map to convert the broadcast event to just a username
-      .map(val => {
-        if (!(val && val.id)) {
-          // this is a logout event
-        } else if (val.attributes.username) {
-          this._currentUser = val.attributes.username;
-          return val.attributes.username;
-        } else {
-          this.notifications.message({
-            message: 'Something went badly wrong. Please try again later or ask for help.',
-            type: NotificationType.DANGER
-          } as Notification);
-          throw 'Unknown user';
-        }
-      })
-      .distinctUntilChanged()
-      // Then, perform another map to create a context from the user
-      .switchMap(val => this.userService.getUserByUsername(val))
-      .map(val => {
-        if (val && val.id) {
-          return {
-            user: val,
-            space: null,
-            type: ContextTypes.BUILTIN.get('user'),
-            name: val.attributes.username,
-            path: '/' + val.attributes.username
-          } as Context;
-        } else {
-          return {} as Context;
-        }
-      })
-      .multicast(() => new ReplaySubject(1));
+        map(val => {
+          if (!(val && val.id)) {
+            // this is a logout event
+          } else if (val.attributes.username) {
+            this._currentUser = val.attributes.username;
+            return val.attributes.username;
+          } else {
+            this.notifications.message({
+              message: 'Something went badly wrong. Please try again later or ask for help.',
+              type: NotificationType.DANGER
+            } as Notification);
+            throw 'Unknown user';
+          }
+        }),
+        distinctUntilChanged(),
+        // Then, perform another map to create a context from the user
+        switchMap(val => this.userService.getUserByUsername(val)),
+        map(val => {
+          if (val && val.id) {
+            return {
+              user: val,
+              space: null,
+              type: ContextTypes.BUILTIN.get('user'),
+              name: val.attributes.username,
+              path: '/' + val.attributes.username
+            } as Context;
+          } else {
+            return {} as Context;
+          }
+        })
+      ).multicast(() => new ReplaySubject(1));
 
     // Create the recent space list
-    this._recent = Observable.merge(this._addRecent, this._deleteFromRecent)
+    this._recent = merge(this._addRecent, this._deleteFromRecent).pipe(
       // Map from the context being added to an array of recent contexts
       // The scan operator allows us to access the list of recent contexts and add ours
-      .scan(this.updateRecentSpaceList, [])  // The final value to scan is the initial value, used when the app starts
+      scan(this.updateRecentSpaceList, []),  // The final value to scan is the initial value, used when the app starts
       // Finally save the list of recent contexts
-      .do(val => {
+      tap(val => {
         // Truncate the number of recent contexts to the correct length
         if (val.length > this.RECENT_CONTEXT_LENGTH) {
           val.splice(
@@ -125,11 +139,11 @@ export class ContextService implements Contexts {
             val.length - this.RECENT_CONTEXT_LENGTH
           );
         }
-      })
-      .do(val => {
+      }),
+      tap(val => {
         this.saveRecent(val);
       })
-      .multicast(() => new ReplaySubject(1));
+    ).multicast(() => new ReplaySubject(1));
     // Finally, start broadcasting
     this._default.connect();
     this._recent.connect();
@@ -179,72 +193,79 @@ export class ContextService implements Contexts {
   }
 
   changeContext(navigation: Observable<Navigation>): Observable<Context> {
-    let res = navigation
+    let res = navigation.pipe(
       // Fetch the objects from the REST API
-      .switchMap(val => {
+      switchMap(val => {
         if (val.space) {
           // If it's a space that's been requested then load the space creator as the owner
           return this
             .loadSpace(val.user, val.space)
-            .map(space => {
-              return { user: space.relationalData.creator, space: space } as RawContext;
-            })
-            .catch((err, caught) => {
-              console.log(`Space with name ${val.space} and owner ${val.user}
-                from path ${val.url} was not found because of ${err}`);
-              return Observable.throw(`Space with name ${val.space} and owner ${val.user}
-                from path ${val.url} was not found because of ${err}`);
-            });
+            .pipe(
+              map(space => {
+                return { user: space.relationalData.creator, space: space } as RawContext;
+              }),
+              catchError((err, caught) => {
+                console.log(`Space with name ${val.space} and owner ${val.user}
+                  from path ${val.url} was not found because of ${err}`);
+                return Observable.throw(`Space with name ${val.space} and owner ${val.user}
+                  from path ${val.url} was not found because of ${err}`);
+              })
+            );
         } else {
           // Otherwise, load the user and use that as the owner
           return this
             .loadUser(val.user)
-            .map(user => {
-              return { user: user, space: null } as RawContext;
-            })
-            .catch((err, caught) => {
-              console.log(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
-              return Observable.throw(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
-            });
+            .pipe(
+              map(user => {
+                return { user: user, space: null } as RawContext;
+              }),
+              catchError((err, caught) => {
+                console.log(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
+                return Observable.throw(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
+              })
+            );
         }
-      })
+      }),
       // Get the list of features enabled for this given user to know whether we should display feature menu.
-      .switchMap(val => {
+      switchMap(val => {
         return this.toggleService.getAllFeaturesEnabledByLevel()
-          .map(features => {
-          val.user.features = features;
-          return val;
-        }).catch(err => {
-          return Observable.of(val);
-        });
-      })
+          .pipe(
+            map(features => {
+              val.user.features = features;
+              return val;
+            }),
+            catchError(err => {
+              return of(val);
+            })
+          );
+      }),
       // Use a map to convert from a navigation url to a context
-      .map(val => this.buildContext(val))
-      .distinctUntilKeyChanged('path')
+      map(val => this.buildContext(val)),
+      distinctUntilKeyChanged('path'),
       // Broadcast the spaceChanged event
       // Ensure the menus are built
-      .do(val => {
+      tap(val => {
         if (val) { this.menus.attach(val); }
-      })
-      .do(val => {
+      }),
+      tap(val => {
         if (val) {
           this._currentContextUser = val.user.attributes.username;
           this.broadcaster.broadcast('contextChanged', val);
         }
-      })
-      .do(val => {
+      }),
+      tap(val => {
         if (val && val.space) {
           this.broadcaster.broadcast('spaceChanged', val.space);
         }
-      })
+      }),
       // Subscribe the current context to the revent space collector
-      .do(val => {
+      tap(val => {
         if (val) { this._addRecent.next(val); }
-      })
-      .do(val => {
+      }),
+      tap(val => {
         this._current.next(val);
       })
-      .multicast(() => new Subject());
+    ).multicast(() => new Subject());
     res.connect();
     return res;
   }
@@ -301,13 +322,15 @@ export class ContextService implements Contexts {
     }
     return this.userService
       .getUserByUsername(userName)
-      .map(val => {
-        if (val && val.id) {
-          return val;
-        } else {
-          throw new Error(`No user found for ${userName}`);
-        }
-      });
+      .pipe(
+        map(val => {
+          if (val && val.id) {
+            return val;
+          } else {
+            throw new Error(`No user found for ${userName}`);
+          }
+        })
+      );
   }
 
   public extractSpace(): string {
@@ -341,7 +364,7 @@ export class ContextService implements Contexts {
     if (userName && spaceName) {
       return this.spaceService.getSpaceByName(userName, spaceName);
     } else {
-      return Observable.of({} as Space);
+      return of({} as Space);
     }
   }
 
@@ -363,27 +386,30 @@ export class ContextService implements Contexts {
   private loadRecent(): Observable<Context[]> {
     return this.profileService.current.switchMap(profile => {
       if (profile.store.recentContexts) {
-        return Observable.forkJoin((profile.store.recentContexts as RawContext[])
+        return forkJoin((profile.store.recentContexts as RawContext[])
           // We invert the order above when we add recent contexts
           .reverse()
           .map(raw => {
             if (raw.space) {
               return this.spaceService.getSpaceById(raw.space)
-                .map(val => this
-                  .buildContext({ space: val } as RawContext));
+                .pipe(
+                  map(val => this.buildContext({ space: val } as RawContext))
+                );
             } else {
               return this.userService.getUserByUserId(raw.user)
-                .catch(err => {
-                  console.log('Unable to restore recent context', err);
-                  return Observable.empty<Context>();
-                })
-                .map(val => {
-                  return this.buildContext({ user: val } as RawContext);
-                });
+                .pipe(
+                  catchError(err => {
+                    console.log('Unable to restore recent context', err);
+                    return Observable.empty<Context>();
+                  }),
+                  map(val => {
+                    return this.buildContext({ user: val } as RawContext);
+                  })
+                );
             }
           }));
       } else {
-        return Observable.of([]);
+        return of([]);
       }
     });
   }

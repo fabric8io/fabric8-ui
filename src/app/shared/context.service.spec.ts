@@ -7,7 +7,7 @@ import { Broadcaster, Notifications } from 'ngx-base';
 import { SpaceService } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { MenusService } from '../layout/header/menus.service';
 import { ProfileService } from '../profile/profile.service';
 import { ContextService } from './context.service';
@@ -32,17 +32,17 @@ describe('Context Service:', () => {
     mockBroadcaster = jasmine.createSpyObj('Broadcaster', ['broadcast']);
     mockMenu = jasmine.createSpyObj('MenusService', ['attach']);
     mockSpaceService = jasmine.createSpyObj('SpaceService', ['getSpaceByName']);
-    mockSpaceService.getSpaceByName.and.returnValue(Observable.of(spaceMock));
+    mockSpaceService.getSpaceByName.and.returnValue(of(spaceMock));
     mockUserService = jasmine.createSpyObj('UserService', ['getUserByUserId']);
-    mockUserService.getUserByUserId.and.returnValue(Observable.of(loggedInUser));
-    mockUserService.loggedInUser = Observable.of(loggedInUser);
+    mockUserService.getUserByUserId.and.returnValue(of(loggedInUser));
+    mockUserService.loggedInUser = of(loggedInUser);
     mockNotifications = jasmine.createSpy('Notifications');
     mockRoute = jasmine.createSpy('ActivatedRoute');
     mockProfileService = jasmine.createSpy('ProfileService');
-    mockProfileService.current = Observable.of(profile);
+    mockProfileService.current = of(profile);
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
     mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getAllFeaturesEnabledByLevel']);
-    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
+    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(of([]));
     TestBed.configureTestingModule({
       providers: [
         {
@@ -156,8 +156,8 @@ describe('Context Service:', () => {
           enabled: false
         }
       }];
-    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of(features));
-    const navigation = Observable.of({
+    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(of(features));
+    const navigation = of({
       space: 'TEST',
       url: '/user_name/TEST',
       user: 'user_name'
@@ -175,7 +175,7 @@ describe('Context Service:', () => {
   xit('Feature-flag - getFeatures return an error', (done: DoneFn) => {
     // given
     mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.throwError({});
-    const navigation = Observable.of({
+    const navigation = of({
       space: 'TEST',
       url: '/user_name/TEST',
       user: 'user_name'
@@ -190,7 +190,7 @@ describe('Context Service:', () => {
   });
 
   it('emits error when requested user contains reserved characters', (done: DoneFn) => {
-    const navigation = Observable.of({
+    const navigation = of({
       space: 'TEST',
       url: '/_user/TEST',
       user: '_user'
@@ -202,7 +202,7 @@ describe('Context Service:', () => {
   });
 
   it('emits error when requested space contains reserved characters', (done: DoneFn) => {
-    const navigation = Observable.of({
+    const navigation = of({
       space: '_TEST',
       url: '/user/_TEST',
       user: 'user'

@@ -8,10 +8,11 @@ import {
 
 import {
   BehaviorSubject,
-  Observable,
   Subject,
   Subscription
 } from 'rxjs';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { filter, first, flatMap, map, tap } from 'rxjs/operators';
 
 import { flatten } from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -19,6 +20,7 @@ import {
   Space,
   SpaceService
 } from 'ngx-fabric8-wit';
+
 
 export enum ViewState {
   INIT = 'INIT',
@@ -95,33 +97,33 @@ export class MySpacesSearchSpacesDialog implements OnDestroy, OnInit {
       return;
     }
     this.viewState.next(ViewState.PRESHOW);
-    this.viewState
-      .filter((viewState: ViewState): boolean => viewState === ViewState.LOADING)
-      .first()
-      .flatMap(() => this.spaceService.search(this.searchTerm.trim(), this.pageSize).first())
-      .first()
-      .do(() => (this.searchField.nativeElement as HTMLElement).blur())
-      .do(() => this.spaceService.getTotalCount().first().subscribe((count: number): void => this.totalCount.next(count)))
-      .do((spaces: Space[]) => this.viewState.next(spaces.length === 0 ? ViewState.EMPTY : ViewState.SHOW))
-      .subscribe(
-        (spaces: Space[]): void => this.spaces.next(spaces),
-        (err: any): void => console.error(err)
-      );
+    this.viewState.pipe(
+      filter((viewState: ViewState): boolean => viewState === ViewState.LOADING),
+      first(),
+      flatMap(() => this.spaceService.search(this.searchTerm.trim(), this.pageSize).first()),
+      first(),
+      tap(() => (this.searchField.nativeElement as HTMLElement).blur()),
+      tap(() => this.spaceService.getTotalCount().first().subscribe((count: number): void => this.totalCount.next(count))),
+      tap((spaces: Space[]) => this.viewState.next(spaces.length === 0 ? ViewState.EMPTY : ViewState.SHOW))
+    ).subscribe(
+      (spaces: Space[]): void => this.spaces.next(spaces),
+      (err: any): void => console.error(err)
+    );
   }
 
   fetchMoreSpaces(): void {
-    Observable.combineLatest(
+    combineLatest(
       this.spaces,
       this.spaceService.getMoreSearchResults()
-    )
-      .first()
-      .map(flatten)
-      .subscribe(
-        (spaces: Space[]): void => this.spaces.next(spaces),
-        (err: any): void => {
-          if (err !== 'No more spaces found') {
-            console.error(err);
-          }
-        });
+    ).pipe(
+      first(),
+      map(flatten)
+    ).subscribe(
+      (spaces: Space[]): void => this.spaces.next(spaces),
+      (err: any): void => {
+        if (err !== 'No more spaces found') {
+          console.error(err);
+        }
+    });
   }
 }

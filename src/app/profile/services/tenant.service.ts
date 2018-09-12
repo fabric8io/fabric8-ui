@@ -5,6 +5,7 @@ import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class TenantService {
@@ -31,9 +32,11 @@ export class TenantService {
     let url = `${this.userUrl}/services`;
     return this.http
       .patch(url, null, { headers: this.headers, observe: 'response', responseType: 'text' })
-      .catch((error: HttpErrorResponse) => {
-        return this.handleError(error);
-      });
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return this.handleError(error);
+        })
+      );
   }
 
   /**
@@ -44,10 +47,12 @@ export class TenantService {
     let url = `${this.userUrl}/services`;
     return this.http
       .delete(url, { headers: this.headers, responseType: 'text' })
-      .catch((error: HttpErrorResponse) => {
-        return this.handleError(error);
-      })
-      .map(() => null);
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return this.handleError(error);
+        }),
+        map(() => null)
+      );
   }
 
   // Private

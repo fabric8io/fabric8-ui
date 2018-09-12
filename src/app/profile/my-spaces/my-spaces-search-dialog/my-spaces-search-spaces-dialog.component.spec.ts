@@ -10,7 +10,6 @@ import {
 } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
 
 import { createMock } from 'testing/mock';
 import {
@@ -23,6 +22,9 @@ import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { InfiniteScrollModule } from 'ngx-widgets';
 
 import { MySpacesSearchSpacesDialog, ViewState } from './my-spaces-search-spaces-dialog.component';
+
+import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Component({
   template: '<my-spaces-search-spaces-dialog></my-spaces-search-spaces-dialog>'
@@ -108,12 +110,12 @@ describe('MySpacesSearchSpacesDialog', () => {
         .subscribe((spaces: Space[]): void => {
           expect(spaces).toEqual([{ name: 'foo-space' } as Space]);
           this.testedDirective.clear();
-          this.testedDirective.spaces
-            .first()
-            .subscribe((spaces: Space[]): void => {
-              expect(spaces).toEqual([]);
-              done();
-            });
+          this.testedDirective.spaces.pipe(
+            first()
+          ).subscribe((spaces: Space[]): void => {
+            expect(spaces).toEqual([]);
+            done();
+          });
         });
     });
 
@@ -123,12 +125,12 @@ describe('MySpacesSearchSpacesDialog', () => {
         .subscribe((count: number): void => {
           expect(count).toEqual(1);
           this.testedDirective.clear();
-          this.testedDirective.totalCount
-            .first()
-            .subscribe((count: number): void => {
-              expect(count).toEqual(0);
-              done();
-            });
+          this.testedDirective.totalCount.pipe(
+            first()
+          ).subscribe((count: number): void => {
+            expect(count).toEqual(0);
+            done();
+          });
         });
     });
 
@@ -138,12 +140,12 @@ describe('MySpacesSearchSpacesDialog', () => {
         .subscribe((state: ViewState): void => {
           expect(state).toEqual(ViewState.SHOW);
           this.testedDirective.clear();
-          this.testedDirective.viewState
-            .first()
-            .subscribe((state: ViewState): void => {
-              expect(state).toEqual(ViewState.INIT);
-              done();
-            });
+          this.testedDirective.viewState.pipe(
+            first()
+          ).subscribe((state: ViewState): void => {
+            expect(state).toEqual(ViewState.INIT);
+            done();
+          });
         });
     });
 
@@ -170,21 +172,21 @@ describe('MySpacesSearchSpacesDialog', () => {
       this.testedDirective.initItems({ pageSize });
       this.testedDirective.search();
       tick();
-      this.testedDirective.spaces
-        .first()
-        .subscribe(() => {
-          expect(spaceService.search).toHaveBeenCalledWith(jasmine.any(String), pageSize);
-        });
+      this.testedDirective.spaces.pipe(
+        first()
+      ).subscribe(() => {
+        expect(spaceService.search).toHaveBeenCalledWith(jasmine.any(String), pageSize);
+      });
     }));
 
     it('should set view state to LOADING', fakeAsync(function(this: TestingContext): void {
       this.testedDirective.initItems({ pageSize: 10 });
       tick();
-      this.testedDirective.viewState
-        .first()
-        .subscribe((state: ViewState): void => {
-          expect(state).toEqual(ViewState.LOADING);
-        });
+      this.testedDirective.viewState.pipe(
+        first()
+      ).subscribe((state: ViewState): void => {
+        expect(state).toEqual(ViewState.LOADING);
+      });
     }));
   });
 
@@ -222,61 +224,61 @@ describe('MySpacesSearchSpacesDialog', () => {
       tick();
       expect(spaceService.getTotalCount).toHaveBeenCalled();
 
-      this.testedDirective.totalCount
-        .first()
-        .subscribe((count: number): void => {
-          expect(count).toBe(456);
-        });
+      this.testedDirective.totalCount.pipe(
+        first()
+      ).subscribe((count: number): void => {
+        expect(count).toBe(456);
+      });
     }));
 
     it('should set view state to SHOW when results are received', fakeAsync(function(this: TestingContext): void {
-      this.testedDirective.viewState
-        .first()
-        .subscribe((state: ViewState): void => {
-          expect(state).toEqual(ViewState.INIT);
-        });
+      this.testedDirective.viewState.pipe(
+        first()
+      ).subscribe((state: ViewState): void => {
+        expect(state).toEqual(ViewState.INIT);
+      });
       this.testedDirective.search();
       this.testedDirective.initItems({ pageSize: 123 });
       tick();
-      this.testedDirective.viewState
-        .first()
-        .subscribe((state: ViewState): void => {
-          expect(state).toEqual(ViewState.SHOW);
-        });
+      this.testedDirective.viewState.pipe(
+        first()
+      ).subscribe((state: ViewState): void => {
+        expect(state).toEqual(ViewState.SHOW);
+      });
     }));
 
     it('should set view state to EMPTY when no results are received', fakeAsync(function(this: TestingContext): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.search.and.returnValue(Observable.of([]));
-      this.testedDirective.viewState
-        .first()
-        .subscribe((state: ViewState): void => {
-          expect(state).toEqual(ViewState.INIT);
-        });
+      this.testedDirective.viewState.pipe(
+        first()
+      ).subscribe((state: ViewState): void => {
+        expect(state).toEqual(ViewState.INIT);
+      });
       this.testedDirective.search();
       this.testedDirective.initItems({ pageSize: 123 });
       tick();
-      this.testedDirective.viewState
-        .first()
-        .subscribe((state: ViewState): void => {
-          expect(state).toEqual(ViewState.EMPTY);
-        });
+      this.testedDirective.viewState.pipe(
+        first()
+      ).subscribe((state: ViewState): void => {
+        expect(state).toEqual(ViewState.EMPTY);
+      });
     }));
 
     it('should update spaces with received results', fakeAsync(function(this: TestingContext): void {
-      this.testedDirective.spaces
-        .first()
-        .subscribe((spaces: Space[]): void => {
-          expect(spaces).toEqual([]);
-        });
+      this.testedDirective.spaces.pipe(
+        first()
+      ).subscribe((spaces: Space[]): void => {
+        expect(spaces).toEqual([]);
+      });
       this.testedDirective.search();
       this.testedDirective.initItems({ pageSize: 123 });
       tick();
-      this.testedDirective.spaces
-        .first()
-        .subscribe((spaces: Space[]): void => {
-          expect(spaces).toEqual([ { name: 'foo-space' } as Space ]);
-        });
+      this.testedDirective.spaces.pipe(
+        first()
+      ).subscribe((spaces: Space[]): void => {
+        expect(spaces).toEqual([ { name: 'foo-space' } as Space ]);
+      });
     }));
   });
 
@@ -285,34 +287,34 @@ describe('MySpacesSearchSpacesDialog', () => {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.getMoreSearchResults.and.returnValue(Observable.of([ { name: 'more-space' } ]));
 
-      this.testedDirective.spaces
-        .first()
-        .subscribe((spaces: Space[]): void => {
-          expect(spaces).toEqual([]);
-        });
+      this.testedDirective.spaces.pipe(
+        first()
+      ).subscribe((spaces: Space[]): void => {
+        expect(spaces).toEqual([]);
+      });
       this.testedDirective.fetchMoreSpaces();
-      this.testedDirective.spaces
-        .first()
-        .subscribe((spaces: Space[]): void => {
-          expect(spaces).toEqual([ { name: 'more-space' } as Space ]);
-        });
+      this.testedDirective.spaces.pipe(
+        first()
+      ).subscribe((spaces: Space[]): void => {
+        expect(spaces).toEqual([ { name: 'more-space' } as Space ]);
+      });
     });
 
     it('should silently fail if no more spaces are found', function(this: TestingContext): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.getMoreSearchResults.and.returnValue(Observable.throw('No more spaces found'));
 
-      this.testedDirective.spaces
-        .first()
-        .subscribe((spaces: Space[]): void => {
-          expect(spaces).toEqual([]);
-        });
+      this.testedDirective.spaces.pipe(
+        first()
+      ).subscribe((spaces: Space[]): void => {
+        expect(spaces).toEqual([]);
+      });
       this.testedDirective.fetchMoreSpaces();
-      this.testedDirective.spaces
-        .first()
-        .subscribe((spaces: Space[]): void => {
-          expect(spaces).toEqual([]);
-        });
+      this.testedDirective.spaces.pipe(
+        first()
+      ).subscribe((spaces: Space[]): void => {
+        expect(spaces).toEqual([]);
+      });
     });
   });
 });

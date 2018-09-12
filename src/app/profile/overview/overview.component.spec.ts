@@ -8,7 +8,7 @@ import { Notifications } from 'ngx-base/src/app/notifications/notifications';
 import { Contexts } from 'ngx-fabric8-wit';
 import { SpaceService } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 import { ContextService } from '../../shared/context.service';
 import { OverviewComponent } from './overview.component';
@@ -63,13 +63,13 @@ describe('OverviewComponent', () => {
   };
 
   beforeEach(() => {
-    mockBroadcaster.on.and.returnValue(Observable.of(mockContext));
-    mockContexts.current = Observable.of(mockContext);
-    mockRouter.events = Observable.of(mockRouterEvent);
+    mockBroadcaster.on.and.returnValue(of(mockContext));
+    mockContexts.current = of(mockContext);
+    mockRouter.events = of(mockRouterEvent);
     mockRouter.createUrlTree.and.returnValue({});
-    mockUserService.loggedInUser = Observable.of(mockContext.user);
-    mockUserService.currentLoggedInUser = Observable.of(mockContext.user);
-    mockSpaceService.getSpacesByUser.and.returnValue(Observable.of([mockSpace]));
+    mockUserService.loggedInUser = of(mockContext.user);
+    mockUserService.currentLoggedInUser = of(mockContext.user);
+    mockSpaceService.getSpacesByUser.and.returnValue(of([mockSpace]));
 
     TestBed.configureTestingModule({
       imports: [

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import {
   UserService
 } from 'ngx-login-client';
+import { first } from 'rxjs/operators';
 
 @Injectable()
 export class AuthUserResolve implements Resolve<any> {
@@ -14,7 +15,9 @@ export class AuthUserResolve implements Resolve<any> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<any> | Promise<any> | any {
-    return this.userService.getUser().first();
+    return this.userService.getUser().pipe(
+      first()
+    );
   }
 }
 

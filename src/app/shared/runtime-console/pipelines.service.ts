@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { orderBy, take } from 'lodash';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
 import {
   BuildConfig,
@@ -28,32 +30,48 @@ export class PipelinesService {
   get current(): Observable<BuildConfig[]> {
     return this.fabric8RuntimeConsoleService
       .loading()
-      .switchMap(() =>
-        Observable.combineLatest(
-          this.pipelinesStore
-            .loadAll()
-            .distinctUntilChanged(),
-          this.buildStore
-            .loadAll()
-            .distinctUntilChanged(),
-          this.contexts.current,
-          combineBuildConfigAndBuildsAndFilterOnSpace))
-      .map(filterPipelines);
+      .pipe(
+        switchMap(() =>
+          combineLatest(
+            this.pipelinesStore
+              .loadAll()
+              .pipe(
+                distinctUntilChanged()
+              ),
+            this.buildStore
+              .loadAll()
+              .pipe(
+                distinctUntilChanged()
+              ),
+            this.contexts.current,
+            combineBuildConfigAndBuildsAndFilterOnSpace
+          )
+        ),
+        map(filterPipelines)
+      );
   }
 
   get recentPipelines(): Observable<BuildConfig[]> {
     return this.fabric8RuntimeConsoleService
       .loading()
-      .switchMap(() =>
-        Observable.combineLatest(
-          this.pipelinesStore
-            .loadAll()
-            .distinctUntilChanged(),
-          this.buildStore
-            .loadAll()
-            .distinctUntilChanged(),
-          filterByMostRecent))
-      .map(filterPipelines);
+      .pipe(
+        switchMap(() =>
+          combineLatest(
+            this.pipelinesStore
+              .loadAll()
+              .pipe(
+                distinctUntilChanged()
+              ),
+            this.buildStore
+              .loadAll()
+              .pipe(
+                distinctUntilChanged()
+              ),
+            filterByMostRecent
+          )
+        ),
+        map(filterPipelines)
+      );
   }
 }
 

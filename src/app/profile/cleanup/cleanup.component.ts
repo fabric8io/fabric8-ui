@@ -9,6 +9,10 @@ import { EventService } from '../../shared/event.service';
 import { IModalHost } from '../../space/wizard/models/modal-host';
 import { TenantService } from '../services/tenant.service';
 
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { of } from 'rxjs/observable/of';
+import { catchError, map } from 'rxjs/operators';
+
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-cleanup',
@@ -92,36 +96,40 @@ export class CleanupComponent implements OnInit, OnDestroy {
       if (!space['erased']) {
         space['progress'] = 'Erasing space';
         space['statusIcon'] = 'spinner spinner-lg';
-        let spaceObservable = this.spaceService.deleteSpace(space, true).map(() => {
-          this.eventService.deleteSpaceSubject.next(space);
-          space['erased'] = true;
-          space['progress'] = 'Space successfully erased';
-          space['statusIcon'] = 'pficon pficon-ok';
-        }).catch((error) => {
-          space['progress'] = 'Error: Unable to erase';
-          space['statusIcon'] = 'pficon pficon-warning-triangle-o';
-          spaceDeleteError = true;
-          this.showWarningNotification();
-          return Observable.of(error);
-        });
+        let spaceObservable = this.spaceService.deleteSpace(space, true).pipe(
+          map(() => {
+            this.eventService.deleteSpaceSubject.next(space);
+            space['erased'] = true;
+            space['progress'] = 'Space successfully erased';
+            space['statusIcon'] = 'pficon pficon-ok';
+          }),
+          catchError((error) => {
+            space['progress'] = 'Error: Unable to erase';
+            space['statusIcon'] = 'pficon pficon-warning-triangle-o';
+            spaceDeleteError = true;
+            this.showWarningNotification();
+            return of(error);
+          })
+        );
         observableArray.push(spaceObservable);
       }
     });
 
     this.tenantResult = 'Cleaning up tenant';
-    let tenantServiceCleanup = this.tenantService.cleanupTenant()
-      .catch((error) => {
+    let tenantServiceCleanup = this.tenantService.cleanupTenant().pipe(
+      catchError((error) => {
         tenantCleanError = true;
         this.tenantResult = 'Tenant cleanup failed';
         this.tenantError = error;
         this.tenantIcon = 'pficon pficon-warning-triangle-o cleanup-row-account-icon';
-        return Observable.of(error);
-    });
+        return of(error);
+      })
+    );
 
     observableArray.push(tenantServiceCleanup);
 
     //join all space delete observables and wait for completion before running tenant cleanup
-    Observable.forkJoin(...observableArray).subscribe((result) => {
+    forkJoin(...observableArray).subscribe((result) => {
       if (!tenantCleanError) {
         this.tenantService.updateTenant().subscribe(() => {
           if (!spaceDeleteError) {

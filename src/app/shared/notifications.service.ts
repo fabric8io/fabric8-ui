@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Notification, NotificationAction, Notifications } from 'ngx-base';
 import { NotificationService } from 'patternfly-ng/notification';
 import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class NotificationsService implements Notifications {
@@ -12,7 +13,9 @@ export class NotificationsService implements Notifications {
   actionSubject = new Subject<any>();
   private _actionObserver = this.actionSubject
     .asObservable()
-    .map(val => val as NotificationAction);
+    .pipe(
+      map(val => val as NotificationAction)
+    );
 
   private _stream: Subject<Notification> = new Subject();
 

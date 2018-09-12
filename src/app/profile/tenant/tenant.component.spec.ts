@@ -9,6 +9,7 @@ import { Notifications } from 'ngx-base/src/app/notifications/notifications';
 import { Contexts, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { ProviderService } from '../../shared/account/provider.service';
@@ -31,8 +32,8 @@ describe('TenantComponent', () => {
   let mockProviderService: any = jasmine.createSpy('ProviderService');
   let mockGitHubService: any = jasmine.createSpy('GitHubService');
 
-  mockAuthenticationService.gitHubToken = Observable.of('gh-test-user');
-  mockContexts.current = Observable.of({
+  mockAuthenticationService.gitHubToken = of('gh-test-user');
+  mockContexts.current = of({
     'user': {
       'attributes': {
         'username': 'foobar'
@@ -120,8 +121,8 @@ describe('TenantComponent', () => {
         type: NotificationType.SUCCESS
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
-      component.gettingStartedService.update.and.returnValue(Observable.of({}));
-      component.tenantService.updateTenant.and.returnValue(Observable.of({}));
+      component.gettingStartedService.update.and.returnValue(of({}));
+      component.tenantService.updateTenant.and.returnValue(of({}));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -132,7 +133,7 @@ describe('TenantComponent', () => {
         type: NotificationType.DANGER
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
-      component.gettingStartedService.update.and.returnValue(Observable.of({}));
+      component.gettingStartedService.update.and.returnValue(of({}));
       component.tenantService.updateTenant.and.returnValue(Observable.throw('error'));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);

@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Spaces } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { createMock } from 'testing/mock';
 
 import { AnalyticService } from './analytics.service';
@@ -26,8 +27,8 @@ describe('Analytic Service:', () => {
   beforeEach(() => {
     mockRouter = jasmine.createSpy('Router');
     mockUserService = jasmine.createSpyObj('UserService', ['getUserByUserId']);
-    mockUserService.getUserByUserId.and.returnValue(Observable.of(loggedInUser));
-    mockUserService.loggedInUser = Observable.of(loggedInUser);
+    mockUserService.getUserByUserId.and.returnValue(of(loggedInUser));
+    mockUserService.loggedInUser = of(loggedInUser);
     mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
     mockBroadcaster = createMock(Broadcaster);
     mockBroadcaster.on.and.returnValue(() => {

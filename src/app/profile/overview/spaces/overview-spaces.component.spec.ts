@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Broadcaster, Logger } from 'ngx-base';
 import { Contexts, Fabric8WitModule, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 import { createMock } from 'testing/mock';
 import { SpacesComponent } from './overview-spaces.component';
@@ -19,7 +20,7 @@ describe('SpacesComponent', () => {
   let mockContext: any;
 
   beforeEach(() => {
-    mockBroadcaster.on.and.returnValue(Observable.of({}));
+    mockBroadcaster.on.and.returnValue(of({}));
     mockContext = {
       'user': {
         'attributes': {
@@ -28,7 +29,7 @@ describe('SpacesComponent', () => {
         'id': 'mock-user'
       }
     };
-    mockContexts.current = Observable.of(mockContext);
+    mockContexts.current = of(mockContext);
 
     TestBed.configureTestingModule({
       imports: [
@@ -57,7 +58,7 @@ describe('SpacesComponent', () => {
 
     it('should use spaceService.getSpacesByUser to set the initial spaces', () => {
       component.context = mockContext;
-      component.spaceService.getSpacesByUser.and.returnValue(Observable.of('mock-spaces'));
+      component.spaceService.getSpacesByUser.and.returnValue(of('mock-spaces'));
       component.initSpaces();
       expect(component.spaces).toBe('mock-spaces');
     });
@@ -72,7 +73,7 @@ describe('SpacesComponent', () => {
   describe('#fetchMoreSpaces', () => {
     it('should retrieve more spaces and add them to the current list', () => {
       component.context = mockContext;
-      component.spaceService.getMoreSpacesByUser.and.returnValue(Observable.of(['more-spaces']));
+      component.spaceService.getMoreSpacesByUser.and.returnValue(of(['more-spaces']));
       component.fetchMoreSpaces();
       expect(component.spaces).toContain('more-spaces');
     });

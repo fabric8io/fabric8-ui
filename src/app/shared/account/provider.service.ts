@@ -6,6 +6,7 @@ import * as jwt_decode from 'jwt-decode';
 import { Logger } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { Link } from './link';
 
@@ -55,9 +56,11 @@ export class ProviderService {
     let tokenUrl = this.apiUrl + 'token?for=https://github.com';
     return this.http
       .delete(tokenUrl, { headers: this.headers })
-      .map(() => {
-        this.auth.clearGitHubToken();
-      });
+      .pipe(
+        map(() => {
+          this.auth.clearGitHubToken();
+        })
+      );
 
   }
 
@@ -114,12 +117,14 @@ export class ProviderService {
   link(provider: string, redirect: string): void {
     let linkURL = this.linkUrl + '?for=' + provider + '&redirect=' +  encodeURIComponent(redirect) ;
     this.http.get(linkURL, { headers: this.headers })
-      .map((resp: Link) => {
-        this.redirectToAuth(resp.redirect_location);
-      })
-      .catch((err: HttpErrorResponse) => {
-        return this.handleError(err);
-      }).subscribe();
+      .pipe(
+        map((resp: Link) => {
+          this.redirectToAuth(resp.redirect_location);
+        }),
+        catchError((err: HttpErrorResponse) => {
+          return this.handleError(err);
+        })
+      ).subscribe();
   }
 
   // Private

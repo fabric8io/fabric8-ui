@@ -7,7 +7,7 @@ import { Notifications, NotificationType } from 'ngx-base';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
 import { ListModule } from 'patternfly-ng';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
@@ -41,8 +41,8 @@ describe('FeatureOptInComponent', () => {
         emailVerified: true
       }
     };
-    toggleServiceMock.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
-    toggleAckServiceMock.getToggle.and.returnValue(Observable.of(true));
+    toggleServiceMock.getAllFeaturesEnabledByLevel.and.returnValue(of([]));
+    toggleAckServiceMock.getToggle.and.returnValue(of(true));
   });
 
   initContext(FeatureOptInComponent, HostComponent, {
@@ -56,12 +56,12 @@ describe('FeatureOptInComponent', () => {
       { provide: GettingStartedService, useFactory: (): jasmine.SpyObj<GettingStartedService> => {
         const mock: jasmine.SpyObj<GettingStartedService> = createMock(GettingStartedService);
         mock.createTransientProfile.and.returnValue({ featureLevel: 'beta' } as ExtProfile);
-        mock.update.and.returnValue(Observable.of({}));
+        mock.update.and.returnValue(of({}));
         return mock;
       }},
       { provide: Notifications, useFactory: (): jasmine.SpyObj<Notifications> => {
         const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
-        mock.message.and.returnValue(Observable.of({}));
+        mock.message.and.returnValue(of({}));
         return mock;
       }},
       { provide: UserService, useFactory: (): jasmine.SpyObj<UserService> => {
@@ -77,7 +77,7 @@ describe('FeatureOptInComponent', () => {
       }},
       { provide: FeatureTogglesService, useFactory: (): jasmine.SpyObj<FeatureTogglesService> => {
         const mock: jasmine.SpyObj<FeatureTogglesService> = createMock(FeatureTogglesService);
-        mock.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of([]));
+        mock.getAllFeaturesEnabledByLevel.and.returnValue(of([]));
         return mock;
       }},
       { provide: FeatureAcknowledgementService, useFactory: () => toggleAckServiceMock }

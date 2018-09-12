@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { createMock } from 'testing/mock';
 
 import {
@@ -63,7 +64,7 @@ describe('LoginService', () => {
 
         const authService: jasmine.SpyObj<AuthenticationService> = TestBed.get(AuthenticationService);
         authService.logIn.and.stub();
-        authService.getOpenShiftToken.and.returnValue(Observable.of('some_token'));
+        authService.getOpenShiftToken.and.returnValue(of('some_token'));
 
         const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
         notifications.message.and.stub();
@@ -95,7 +96,7 @@ describe('LoginService', () => {
         const authService: jasmine.SpyObj<AuthenticationService> = TestBed.get(AuthenticationService);
         authService.isLoggedIn.and.returnValue(true);
         authService.onLogIn.and.stub();
-        authService.getOpenShiftToken.and.returnValue(Observable.of('mock-openshift-token'));
+        authService.getOpenShiftToken.and.returnValue(of('mock-openshift-token'));
 
         const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
         notifications.message.and.stub();

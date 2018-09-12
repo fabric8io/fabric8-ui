@@ -9,6 +9,7 @@ import { FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService } from 'ngx-login-client';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
 
 import { EventService } from '../../shared/event.service';
 import { SpacesComponent } from './spaces.component';
@@ -31,7 +32,7 @@ describe('SpacesComponent', () => {
   let mockEvent = jasmine.createSpy('Event');
 
   mockAuthenticationService.getGitHubToken = {};
-  mockContexts.current = Observable.of({
+  mockContexts.current = of({
     'user': {
       'attributes': {
         'username': 'mock-username'
@@ -68,7 +69,7 @@ describe('SpacesComponent', () => {
 
   describe('#initSpaces', () => {
     it('should use spaceService.getSpacesByUser to set the initial spaces', () => {
-      spyOn(component.spaceService, 'getSpacesByUser').and.returnValue(Observable.of('mock-spaces'));
+      spyOn(component.spaceService, 'getSpacesByUser').and.returnValue(of('mock-spaces'));
       component.initSpaces(mockEvent);
       expect(component._spaces).toBe('mock-spaces');
     });
@@ -82,7 +83,7 @@ describe('SpacesComponent', () => {
 
   describe('#fetchMoreSpaces', () => {
     it('should retrieve more spaces and add them to the current list', () => {
-      spyOn(component.spaceService, 'getMoreSpacesByUser').and.returnValue(Observable.of('more-spaces'));
+      spyOn(component.spaceService, 'getMoreSpacesByUser').and.returnValue(of('more-spaces'));
       component.fetchMoreSpaces(mockEvent);
       expect(component._spaces).toContain('more-spaces');
     });
@@ -103,7 +104,7 @@ describe('SpacesComponent', () => {
   describe('#removeSpace', () => {
     it('should remove the space if the conditions are met', () => {
       let mockSpaces = ['mock-space1', 'mock-space2'];
-      let mockSpacesObservable = Observable.of(mockSpaces);
+      let mockSpacesObservable = of(mockSpaces);
       component.spaceToDelete = 'mock-space1'; // want to remove mock-space1 from _spaces
       component.modalRef = mockModalRef;
 
@@ -151,7 +152,7 @@ describe('SpacesComponent', () => {
   describe('#spaces', () => {
     it('should return the contents of _space', () => {
       let mockSpace = ['mock-space1', 'mock-space2'];
-      spyOn(component.spaceService, 'getSpacesByUser').and.returnValue(Observable.of(mockSpace));
+      spyOn(component.spaceService, 'getSpacesByUser').and.returnValue(of(mockSpace));
       component.initSpaces(mockSpace);
       let result = component.spaces;
       expect(result).toBe(mockSpace);

@@ -6,6 +6,7 @@ import { UserService } from 'ngx-login-client';
 import {
   Observable
 } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ScaledMemoryStat } from '../../../space/create/deployments/models/scaled-memory-stat';
 import { DeploymentApiService, EnvironmentStat } from '../../../space/create/deployments/services/deployment-api.service';
@@ -33,7 +34,9 @@ export class ResourceService {
 
   public getEnvironmentsWithScaleAndIcon(): Observable<UsageSeverityEnvironmentStat[]> {
     let envResponse: Observable<EnvironmentStat[]> = this.apiService.getEnvironments(FAKE_SPACE_ID);
-    return envResponse.map((stats: EnvironmentStat[]) => this.transformAndSortEnvironments(stats));
+    return envResponse.pipe(
+      map((stats: EnvironmentStat[]) => this.transformAndSortEnvironments(stats))
+    );
   }
 
   transformAndSortEnvironments(stats: EnvironmentStat[]): UsageSeverityEnvironmentStat[] {

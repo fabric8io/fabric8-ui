@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 
 import { ProcessTemplate } from 'ngx-fabric8-wit';
 
@@ -17,6 +18,8 @@ export class SpaceTemplateService {
 
   getSpaceTemplates(): Observable<ProcessTemplate[]> {
     return this.http.get(this.apiUrl + 'spacetemplates')
-      .map(d => d['data'] as ProcessTemplate[]);
+      .pipe(
+        map(d => d['data'] as ProcessTemplate[])
+      );
   }
 }

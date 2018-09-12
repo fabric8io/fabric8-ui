@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService, UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+import { catchError } from 'rxjs/operators';
 
 import { WindowService } from './window.service';
 
@@ -91,11 +92,12 @@ export class LoginService {
       this.authService.logIn(result['token_json']);
       this.authService
         .getOpenShiftToken()
-        .catch(err => {
-          console.log('Unable to get OpenShift token', err);
-          return Observable.of(null);
-        })
-        .subscribe(token => this.openShiftToken = token);
+        .pipe(
+          catchError(err => {
+            console.log('Unable to get OpenShift token', err);
+            return of(null);
+          })
+        ).subscribe(token => this.openShiftToken = token);
       // Navigate back to the current URL to clear up the query string
       this.router.navigateByUrl(this.router.url);
     } else if (this.authService.isLoggedIn()) {
@@ -103,11 +105,12 @@ export class LoginService {
       this.authService.onLogIn();
       this.authService
         .getOpenShiftToken()
-        .catch(err => {
-          console.log('Unable to get OpenShift token', err);
-          return Observable.of(null);
-        })
-        .subscribe(token => this.openShiftToken = token);
+        .pipe(
+          catchError(err => {
+            console.log('Unable to get OpenShift token', err);
+            return of(null);
+          })
+        ).subscribe(token => this.openShiftToken = token);
     }
   }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
+import { first, map, skipWhile, tap } from 'rxjs/operators';
 
 import { OAuthConfigStore } from '../../../a-runtime-console/index';
 import { LoginService } from '../login.service';
@@ -20,19 +21,20 @@ export class Fabric8RuntimeConsoleService {
   }
 
   loadingOAuthConfigStore(): Observable<boolean> {
-    return this.oAuthConfigStore.loading
+    return this.oAuthConfigStore.loading.pipe(
       // Wait until loaded
-      .skipWhile(loading => loading)
+      skipWhile(loading => loading),
       // Take the first false as done
-      .first();
+      first()
+    );
   }
 
   loadingOpenShiftToken(): Observable<boolean> {
-    return this.auth
-      .getOpenShiftToken()
-      .do (token => this.login.openShiftToken = token)
-      .map(() => true)
-      .first();
+    return this.auth.getOpenShiftToken().pipe(
+      tap(token => this.login.openShiftToken = token),
+      map(() => true),
+      first()
+    );
   }
 
 }

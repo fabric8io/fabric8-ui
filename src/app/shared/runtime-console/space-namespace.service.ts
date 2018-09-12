@@ -7,6 +7,8 @@ import { Notifications, NotificationType } from 'ngx-base';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { catchError, first, map, switchMap, tap } from 'rxjs/operators';
 
 import { ConfigMap, ConfigMapService } from '../../../a-runtime-console/index';
 import { DevNamespaceScope } from '../../../a-runtime-console/kubernetes/service/devnamespace.scope';
@@ -36,39 +38,41 @@ export class SpaceNamespaceService {
   ) { }
 
   getConfigMap(): Observable<ConfigMapWrapper> {
-    return Observable.forkJoin(
+    return forkJoin(
       this.buildNamespace().first(),
       this.fabric8RuntimeConsoleService.loading(),
       (namespace, loading) => namespace
-    )
-      .switchMap(namespace => this.configMapService
+    ).pipe(
+      switchMap(namespace => this.configMapService
         .list(namespace)
-        .map(configMaps => ({ namespace: namespace, configMaps: configMaps } as ConfigMapWrapper))
-        .catch((err: HttpErrorResponse, caught) => {
-          if (err.status === 403) {
-            let errDetail;
-            try {
-              errDetail = yaml.safeLoad(err.message);
-            } catch (e) {
-              // Swallow an exception from the YAML parser, we'll just dump the entire response in this case.
+        .pipe(
+          map(configMaps => ({ namespace: namespace, configMaps: configMaps } as ConfigMapWrapper)),
+          catchError((err: HttpErrorResponse, caught) => {
+            if (err.status === 403) {
+              let errDetail;
+              try {
+                errDetail = yaml.safeLoad(err.message);
+              } catch (e) {
+                // Swallow an exception from the YAML parser, we'll just dump the entire response in this case.
+              }
+              this.notifications.message({
+                message: `Something went wrong configuring your pipelines and environments as the OpenShift Project '${namespace}' is not accessible to you or does not exist.`,
+                type: NotificationType.WARNING
+              });
             }
-            this.notifications.message({
-              message: `Something went wrong configuring your pipelines and environments as the OpenShift Project '${namespace}' is not accessible to you or does not exist.`,
-              type: NotificationType.WARNING
-            });
-          }
-          return Observable.throw(err);
-        })
-      )
-      .map(val => {
+            return Observable.throw(err);
+          })
+        )
+      ),
+      map(val => {
         for (let configMap of val.configMaps) {
           if (configMap.labels['kind'] === 'spaces' && configMap.labels['provider'] === 'fabric8') {
             val.configMap = configMap;
           }
         }
         return val as ConfigMapWrapper;
-      })
-      .do(val => {
+      }),
+      tap(val => {
         let res: Map<string, any[]> = new Map();
         if (val.configMap) {
           for (let c in val.configMap) {
@@ -78,19 +82,20 @@ export class SpaceNamespaceService {
           }
         }
         val.data = res;
-      });
+      })
+    );
   }
 
   updateConfigMap(spaceObservable: Observable<Space>): Observable<ConfigMap> {
-    return Observable.forkJoin(
-      this.getConfigMap().first(),
-      spaceObservable.first(),
+    return forkJoin(
+      this.getConfigMap().pipe(first()),
+      spaceObservable.pipe(first()),
       (val, space) => {
         val.space = space;
         return val;
       }
-    )
-      .do(val => {
+    ).pipe(
+      tap(val => {
         if (val.space) {
           val.data[val.space.attributes.name] = val.data.get(val.space.attributes.name) || {};
           val.data[val.space.attributes.name]['name'] = val.space.attributes.name;
@@ -101,8 +106,8 @@ export class SpaceNamespaceService {
           val.data[val.space.attributes.name]['id'] = val.space.id;
           val.data[val.space.attributes.name]['version'] = 'v1';
         }
-      })
-      .switchMap(val => {
+      }),
+      switchMap(val => {
         let cm = val.configMap;
         if (!cm) {
           cm = new ConfigMap();
@@ -127,7 +132,8 @@ export class SpaceNamespaceService {
         } else {
           return this.configMapService.create(cm, cm.namespace);
         }
-      });
+      })
+    );
   }
 
   buildNamespace(): Observable<string> {

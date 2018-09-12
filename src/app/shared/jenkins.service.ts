@@ -5,6 +5,7 @@ import { AuthenticationService } from 'ngx-login-client';
 import { FABRIC8_JENKINS_API_URL } from './runtime-console/fabric8-ui-jenkins-api';
 
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 
 @Injectable()
@@ -30,9 +31,11 @@ export class JenkinsService {
       };
       return this.http
         .post(url, null, httpOptions)
-        .catch((err: HttpErrorResponse) => {
-            return this.handleError(err);
-        });
+        .pipe(
+          catchError((err: HttpErrorResponse) => {
+              return this.handleError(err);
+          })
+        );
   }
 
   private handleError(error: HttpErrorResponse) {

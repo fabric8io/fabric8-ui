@@ -11,6 +11,8 @@ import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
 import { Observable } from 'rxjs/Observable';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { filter, first, map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class ContextCurrentUserGuard implements Resolve<any> {
@@ -27,32 +29,39 @@ export class ContextCurrentUserGuard implements Resolve<any> {
     this._lastRoute = '/_home';
     // Store the last visited URL so we can navigate back if the context
     // cannot be resolved
-    this.router.events
-      .filter(e => e instanceof NavigationEnd)
-      .map((e: NavigationEnd) => e.urlAfterRedirects)
-      .subscribe(val => this._lastRoute = val);
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      map((e: NavigationEnd) => e.urlAfterRedirects)
+    ).subscribe(val => this._lastRoute = val);
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-    return Observable.combineLatest(
-      this.contexts.current.map(val => val.user.id),
-      this.userService.loggedInUser.map(val => val.id),
+    return combineLatest(
+      this.contexts.current.pipe(
+        map(val => val.user.id)
+      ),
+      this.userService.loggedInUser.pipe(
+        map(val => val.id)
+      ),
       (a, b) => (a === b)
-    )
-      .do(val => {
+    ).pipe(
+      tap(val => {
         if (!val) {
           this.notifications.message({
             message: `You cannot access ${state.url}`,
             type: NotificationType.WARNING
           } as Notification);
         }
-      }).map(val => {
+      }),
+      map(val => {
         if (val) {
           return true;
         } else {
           this.router.navigateByUrl(this._lastRoute);
           return false;
         }
-      }).first();
+      }),
+      first()
+    );
   }
 }

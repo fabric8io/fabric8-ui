@@ -4,6 +4,7 @@ import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
 import { ConnectableObservable, Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { createMock } from 'testing/mock';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
 import { SpacesService } from './spaces.service';
@@ -72,8 +73,8 @@ describe('SpacesService', () => {
           provide: ProfileService,
           useFactory: () => {
             const mockProfileService: any = jasmine.createSpyObj('ProfileService', ['silentSave']);
-            mockProfileService.current = Observable.of(mockProfile);
-            mockProfileService.silentSave.and.returnValue(Observable.of(mockUser));
+            mockProfileService.current = of(mockProfile);
+            mockProfileService.silentSave.and.returnValue(of(mockUser));
             return mockProfileService;
           }
         },
@@ -81,7 +82,7 @@ describe('SpacesService', () => {
           provide: Contexts,
           useFactory: () => {
             const mockContexts: jasmine.SpyObj<Contexts> = createMock(Contexts);
-            mockContexts.current = Observable.of(mockContext) as ConnectableObservable<Context> & jasmine.Spy;
+            mockContexts.current = of(mockContext) as ConnectableObservable<Context> & jasmine.Spy;
             return mockContexts;
           }
         },
@@ -89,7 +90,7 @@ describe('SpacesService', () => {
           provide: SpaceService,
           useFactory: () => {
             const mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
-            mockSpaceService.getSpaceById.and.returnValue(Observable.of(mockSpace));
+            mockSpaceService.getSpaceById.and.returnValue(of(mockSpace));
             return mockSpaceService;
           }
         }
@@ -141,7 +142,7 @@ describe('SpacesService', () => {
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
         if (key === 'spaceChanged') {
-          return Observable.of(mockSpace);
+          return of(mockSpace);
         }
         if (key === 'spaceDeleted') {
           return Observable.never();
@@ -163,7 +164,7 @@ describe('SpacesService', () => {
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
         if (key === 'spaceChanged') {
-          return Observable.of(mockSpace2);
+          return of(mockSpace2);
         }
         if (key === 'spaceDeleted') {
           return Observable.never();
@@ -192,7 +193,7 @@ describe('SpacesService', () => {
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
         if (key === 'spaceChanged') {
-          return Observable.of(mockSpace2);
+          return of(mockSpace2);
         }
         if (key === 'spaceDeleted') {
           return Observable.never();
@@ -238,7 +239,7 @@ describe('SpacesService', () => {
           }
         } as Space;
         mockSpaces[i] = space;
-        mockSpacesObs[i] = Observable.of(space);
+        mockSpacesObs[i] = of(space);
       }
     });
 
@@ -252,11 +253,11 @@ describe('SpacesService', () => {
       });
       const profileService: any = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = mockSpaces;
-      profileService.current = Observable.of(mockProfile);
+      profileService.current = of(mockProfile);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
         if (key === 'spaceChanged') {
-          return Observable.of(mockSpace);
+          return of(mockSpace);
         }
         if (key === 'spaceDeleted') {
           return Observable.never();
@@ -283,7 +284,7 @@ describe('SpacesService', () => {
       });
       const profileService: any = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = mockSpaces;
-      profileService.current = Observable.of(mockProfile);
+      profileService.current = of(mockProfile);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
         if (key === 'spaceChanged') {
@@ -315,11 +316,11 @@ describe('SpacesService', () => {
       // make recentSpaces contain 8 spaces, adding another one will force a .pop()
       const profileService: any = TestBed.get(ProfileService);
       mockProfile.store.recentSpaces = mockSpaces;
-      profileService.current = Observable.of(mockProfile);
+      profileService.current = of(mockProfile);
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       broadcaster.on.and.callFake((key: string): Observable<Space> => {
         if (key === 'spaceChanged') {
-          return Observable.of(mockSpace8);
+          return of(mockSpace8);
         }
         if (key === 'spaceDeleted') {
           return Observable.never();
@@ -345,7 +346,7 @@ describe('SpacesService', () => {
           return Observable.never();
         }
         if (key === 'spaceDeleted') {
-          return Observable.of(mockSpace);
+          return of(mockSpace);
         }
         if (key === 'spaceUpdated') {
           return Observable.never();
@@ -378,7 +379,7 @@ describe('SpacesService', () => {
           return Observable.never();
         }
         if (key === 'spaceDeleted') {
-          return Observable.of(mockSpace2);
+          return of(mockSpace2);
         }
         if (key === 'spaceUpdated') {
           return Observable.never();
