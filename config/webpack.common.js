@@ -15,7 +15,6 @@ var fs = require('fs');
  */
 const autoprefixer = require('autoprefixer');
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
-const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
@@ -381,32 +380,6 @@ module.exports = function (options) {
        */
       new CheckerPlugin(),
 
-      /*
-       * Plugin: CommonsChunkPlugin
-       * Description: Shares common code between the pages.
-       * It identifies common modules and put them into a commons chunk.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-       * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-       */
-      new CommonsChunkPlugin({
-        name: 'polyfills',
-        minChunks: Infinity,
-      }),
-      new CommonsChunkPlugin({
-        name: 'vendor',
-        async: true,
-        minChunks: Infinity,
-      }),
-      new CommonsChunkPlugin({
-        name: 'main',
-        async: true,
-        minChunks: 2,
-      }),
-      new CommonsChunkPlugin({
-        name: 'manifest',
-        minChunks: Infinity,
-      }),
 
       /*
        * Plugin: ContextReplacementPlugin
@@ -492,6 +465,45 @@ module.exports = function (options) {
         quiet: false,
       })
     ],
+
+     /**
+     * Version 4 webpack runs optimizations for you depending on the chosen mode.
+     *
+     * The following plugins have been removed from Webpack 4 which were extensively used in previous versions.
+     *  - NoEmitOnErrorsPlugin
+     *  - ModuleConcatenationPlugin
+     *  - NamedModulesPlugin
+     *  - CommonsChunkPlugin
+     *
+     * see: https://webpack.js.org/configuration/optimization/
+     */
+    optimization: {
+      namedModules: true, // NamedModulesPlugin()
+      splitChunks: { // CommonsChunkPlugin()
+        cacheGroups: {
+          polyfills: {
+            name: 'polyfills',
+            minChunks: Infinity
+          },
+          vendor: {
+            name: 'vendor',
+            chunks: 'async',
+            minChunks: Infinity
+          },
+          main: {
+            name: 'main',
+            chunks: 'async',
+            minChunks: 2
+          },
+          manifest: {
+            name: 'manifest',
+            minChunks: Infinity
+          },
+        }
+      },
+      noEmitOnErrors: true, // NoEmitOnErrorsPlugin
+      concatenateModules: true //ModuleConcatenationPlugin
+    },
 
     /*
      * Include polyfills or mocks for various node stuff
