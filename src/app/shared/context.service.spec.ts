@@ -323,4 +323,35 @@ describe('Context Service:', () => {
       () => done()
     );
   });
+
+  describe('#loadRecent', () => {
+    it('should return an empty array if recentContexts doesn\'t exist on profile.store', (done: DoneFn) => {
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.returnValue(Observable.never());
+      delete (profile as ExtProfile).store.recentContexts;
+      const contextService: ContextService = TestBed.get(ContextService);
+      let result: Observable<Context[]> = contextService.recent;
+      result.subscribe((r: Context[]): void => {
+        expect(r).toEqual([] as Context[]);
+        done();
+      });
+    });
+
+    it('should still return if spaceService.getSpaceById throws an error', (done: DoneFn) => {
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.returnValue(Observable.never());
+
+      const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+      spaceService.getSpaceById.and.returnValue(Observable.throw('error'));
+      (profile as ExtProfile).store.recentContexts = [context1];
+
+      const contextService: ContextService = TestBed.get(ContextService);
+      let result: Observable<Context[]> = contextService.recent;
+      result.subscribe((r: Context[]): void => {
+        expect(r).toEqual([] as Context[]);
+        done();
+      });
+    });
+  });
+
 });
