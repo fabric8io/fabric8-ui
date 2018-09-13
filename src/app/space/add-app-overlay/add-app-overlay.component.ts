@@ -5,13 +5,12 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-
 import { Broadcaster } from 'ngx-base';
 import { Context, Space } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
-
 import { DependencyCheckService } from 'ngx-launcher';
+import { User, UserService } from 'ngx-login-client';
+import { empty as observableEmpty,  Observable, Subscription } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
 import { Application, DeploymentApiService } from '../create/deployments/services/deployment-api.service';
 
@@ -49,16 +48,16 @@ export class AddAppOverlayComponent implements OnDestroy {
     }));
     if (this.contextService && this.contextService.current) {
       this.subscriptions.push(
-        this.contextService.current
-          .map((ctx: Context) => ctx.space)
-          .switchMap(space => {
+        this.contextService.current.pipe(
+          map((ctx: Context) => ctx.space),
+          switchMap(space => {
             if (space) {
               this.currentSpace = space;
               return this.deploymentApiService.getApplications(space.id);
             } else {
-              return Observable.empty();
+              return observableEmpty();
             }
-          })
+          }))
           .subscribe((response: Application[]) => {
             if (response) {
               const applications: string[] = response.map(app => {

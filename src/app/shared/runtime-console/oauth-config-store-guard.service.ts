@@ -5,9 +5,7 @@ import {
   CanActivateChild,
   RouterStateSnapshot
 } from '@angular/router';
-
 import { Observable } from 'rxjs';
-
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 
 

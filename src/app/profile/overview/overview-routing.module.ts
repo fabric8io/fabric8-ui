@@ -1,6 +1,5 @@
 import { NgModule }  from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { OverviewComponent } from './overview.component';
 import { SpacesComponent } from './spaces/overview-spaces.component';
 import { WorkItemsComponent } from './work-items/work-items.component';

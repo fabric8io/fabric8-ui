@@ -1,14 +1,13 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
 import {
   HelperService,
   Pipeline,
   PipelineService
 } from 'ngx-launcher';
-
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { AuthenticationService } from 'ngx-login-client';
+import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class AppLauncherPipelineService implements PipelineService {
@@ -39,14 +38,14 @@ export class AppLauncherPipelineService implements PipelineService {
   getPipelines(filterByRuntime: string = 'maven'): Observable<Pipeline[]> {
     let runtimeEndPoint: string = this.END_POINT + this.API_BASE;
     return this.http
-      .get(runtimeEndPoint, { headers: this.headers })
-      .map((pipelines: Pipeline[]) => {
+      .get(runtimeEndPoint, { headers: this.headers }).pipe(
+      map((pipelines: Pipeline[]) => {
         // needs to filter out associated pipelines from list of pipelines
         return pipelines.filter(({platform}) => {
           return platform === (filterByRuntime || platform);
         });
-      })
-      .catch(this.handleError);
+      }),
+      catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse | any) {
@@ -58,6 +57,6 @@ export class AppLauncherPipelineService implements PipelineService {
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
-    return Observable.throw(errMsg);
+    return observableThrowError(errMsg);
   }
 }

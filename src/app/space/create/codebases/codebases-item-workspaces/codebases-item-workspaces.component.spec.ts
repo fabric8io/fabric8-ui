@@ -1,10 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-
 import { Broadcaster, Notifications } from 'ngx-base';
-import { Observable } from 'rxjs';
-
+import { Observable,  of as observableOf } from 'rxjs';
 import { WindowService } from '../../../../shared/window.service';
 import { CheService } from '../services/che.service';
 import { WorkspacesService } from '../services/workspaces.service';
@@ -65,9 +63,9 @@ describe('Codebases Item Details Component', () => {
       codebase: { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8', attributes: { type: 'git', url: 'toto/toto' } },
       workspaceName: 'MyWorkspace'
     };
-    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: false, multiTenant: true, running: true}));
-    workspacesServiceMock.getWorkspaces.and.returnValue(Observable.of(expectedWorkspaces));
-    broadcasterMock.on.and.returnValue(Observable.of(workspaceCreatedEvent));
+    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: false, multiTenant: true, running: true}));
+    workspacesServiceMock.getWorkspaces.and.returnValue(observableOf(expectedWorkspaces));
+    broadcasterMock.on.and.returnValue(observableOf(workspaceCreatedEvent));
     spyOn(comp, 'updateWorkspacesPoll');
   });
 
@@ -86,9 +84,9 @@ describe('Codebases Item Details Component', () => {
 
   it('Create workspace', async(() => {
     // given
-    workspacesServiceMock.createWorkspace.and.returnValue(Observable.of(expectedWorkspace));
+    workspacesServiceMock.createWorkspace.and.returnValue(observableOf(expectedWorkspace));
     const notificationAction = { name: 'created' };
-    notificationMock.message.and.returnValue(Observable.of(notificationAction));
+    notificationMock.message.and.returnValue(observableOf(notificationAction));
     fixture.detectChanges();
 
     // when
@@ -102,9 +100,9 @@ describe('Codebases Item Details Component', () => {
   it('Create Workspace with capacity full', async(() => {
     // given
     let comp = fixture.componentInstance;
-    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: true, multiTenant: true, running: true}));
     const notificationAction = { name: 'ERROR' };
-    notificationMock.message.and.returnValue(Observable.of(notificationAction));
+    notificationMock.message.and.returnValue(observableOf(notificationAction));
     fixture.detectChanges();
     // when
     comp.createWorkspace();
@@ -120,7 +118,7 @@ describe('Codebases Item Details Component', () => {
         open: 'http://somewhere.com'
       }
     };
-    workspacesServiceMock.openWorkspace.and.returnValue(Observable.of(workspaceLinks));
+    workspacesServiceMock.openWorkspace.and.returnValue(observableOf(workspaceLinks));
     windowServiceMock.open.and.returnValue({location: { href: 'test'}});
     fixture.detectChanges();
 
@@ -133,9 +131,9 @@ describe('Codebases Item Details Component', () => {
 
   it('Open workspace with capacity full', async(() => {
     // given
-    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: true, multiTenant: true, running: true}));
     const notificationAction = { name: 'ERROR' };
-    notificationMock.message.and.returnValue(Observable.of(notificationAction));
+    notificationMock.message.and.returnValue(observableOf(notificationAction));
     fixture.detectChanges();
 
     // when

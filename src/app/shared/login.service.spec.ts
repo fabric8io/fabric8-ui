@@ -2,10 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { LocalStorageService } from 'angular-2-local-storage';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { createMock } from 'testing/mock';
-
 import {
   Broadcaster,
   Notifications
@@ -15,7 +11,8 @@ import {
   AuthenticationService,
   UserService
 } from 'ngx-login-client';
-
+import { never as observableNever,  Observable ,  of } from 'rxjs';
+import { createMock } from 'testing/mock';
 import { LoginService } from './login.service';
 import { WindowService } from './window.service';
 
@@ -41,7 +38,7 @@ describe('LoginService', () => {
           provide: Broadcaster,
           useFactory: () => {
             const broadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
-            broadcaster.on.and.returnValue(Observable.never());
+            broadcaster.on.and.returnValue(observableNever());
             return broadcaster;
           }
         },

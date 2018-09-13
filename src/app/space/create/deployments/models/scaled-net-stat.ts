@@ -1,11 +1,10 @@
+import { round } from 'lodash';
 import {
   MemoryUnit,
   ordinal
 } from './memory-unit';
 import { NetStat } from './network-stat';
 import { ScaledStat } from './scaled-stat';
-
-import { round } from 'lodash';
 
 export class ScaledNetStat implements NetStat, ScaledStat {
 

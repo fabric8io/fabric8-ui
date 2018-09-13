@@ -4,12 +4,10 @@ import {
   HttpTestingController
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { RequestIdInterceptor } from './request-id.interceptor';
-
-import uuid from 'uuid';
-
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AUTH_API_URL } from 'ngx-login-client';
+import uuid from 'uuid';
+import { RequestIdInterceptor } from './request-id.interceptor';
 
 describe('RequestIdInterceptor', () => {
   const testUrl: string = 'http://example.com/test';

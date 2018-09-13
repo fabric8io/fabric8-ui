@@ -1,15 +1,11 @@
-import { Injectable } from '@angular/core';
-
 import { HttpErrorResponse } from '@angular/common/http';
-
+import { Injectable } from '@angular/core';
 import * as yaml from 'js-yaml';
 import { Notifications, NotificationType } from 'ngx-base';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { forkJoin,  Observable ,  throwError as observableThrowError } from 'rxjs';
 import { catchError, first, map, switchMap, tap } from 'rxjs/operators';
-
 import { ConfigMap, ConfigMapService } from '../../../a-runtime-console/index';
 import { DevNamespaceScope } from '../../../a-runtime-console/kubernetes/service/devnamespace.scope';
 import { Fabric8UIConfig } from './../config/fabric8-ui-config';
@@ -39,7 +35,7 @@ export class SpaceNamespaceService {
 
   getConfigMap(): Observable<ConfigMapWrapper> {
     return forkJoin(
-      this.buildNamespace().first(),
+      this.buildNamespace().pipe(first()),
       this.fabric8RuntimeConsoleService.loading(),
       (namespace, loading) => namespace
     ).pipe(
@@ -60,7 +56,7 @@ export class SpaceNamespaceService {
                 type: NotificationType.WARNING
               });
             }
-            return Observable.throw(err);
+            return observableThrowError(err);
           })
         )
       ),

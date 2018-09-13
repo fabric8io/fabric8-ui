@@ -2,7 +2,7 @@ import { DebugNode } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService, UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs/Observable';
+import { Observable,  of as observableOf } from 'rxjs';
 import { ProviderService } from '../shared/account/provider.service';
 import { GettingStartedComponent } from './getting-started.component';
 
@@ -47,8 +47,8 @@ describe('GettingStartedComponent', () => {
   });
 
   it('should automatically link openshift when it is not connected', () => {
-    mockUserService.loggedInUser = Observable.of(mockUser);
-    mockAuthenticationService.isOpenShiftConnected.and.returnValue(Observable.of(false));
+    mockUserService.loggedInUser = observableOf(mockUser);
+    mockAuthenticationService.isOpenShiftConnected.and.returnValue(observableOf(false));
     fixture.detectChanges();
     expect(mockProvider.linkOpenShift).toHaveBeenCalled();
     expect(component.errorConnecting).toBe(false);
@@ -56,8 +56,8 @@ describe('GettingStartedComponent', () => {
 
   it('should not link openshift when it is connected', () => {
 
-    mockUserService.loggedInUser = Observable.of(mockUser);
-    mockAuthenticationService.isOpenShiftConnected.and.returnValue(Observable.of(true));
+    mockUserService.loggedInUser = observableOf(mockUser);
+    mockAuthenticationService.isOpenShiftConnected.and.returnValue(observableOf(true));
     spyOn(component, 'routeToHomeIfCompleted');
     spyOn(component, 'isGettingStartedPage').and.returnValue(true);
     fixture.detectChanges();
@@ -66,8 +66,8 @@ describe('GettingStartedComponent', () => {
   });
 
   it('should not link openshift when it fails to connect', () => {
-    mockUserService.loggedInUser = Observable.of(mockUser);
-    mockAuthenticationService.isOpenShiftConnected.and.returnValue(Observable.of(false));
+    mockUserService.loggedInUser = observableOf(mockUser);
+    mockAuthenticationService.isOpenShiftConnected.and.returnValue(observableOf(false));
     component.route = {
       snapshot: {
         queryParams: {

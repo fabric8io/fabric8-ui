@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
-
 import { Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
+import { empty as observableEmpty, Observable,  of ,  throwError as observableThrowError } from 'rxjs';
 import { initContext, TestContext } from '../../../../testing/test-context';
 import { ProviderService } from '../../../shared/account/provider.service';
 import { ConnectedAccountsComponent } from './connected-accounts.component';
@@ -36,13 +33,13 @@ describe('Connected Accounts Component', () => {
     let userServiceMock: any = jasmine.createSpy('UserService');
 
     beforeAll(() => {
-      authMock.gitHubToken = Observable.empty();
+      authMock.gitHubToken = observableEmpty();
       //authMock.openShiftToken = of('oso-token');
       authMock.isOpenShiftConnected.and.returnValue(of(true));
       contextsMock.current = of(ctx);
-      userServiceMock.loggedInUser = Observable.empty();
+      userServiceMock.loggedInUser = observableEmpty();
       userServiceMock.currentLoggedInUser = ctx.user;
-      providersMock.getGitHubStatus.and.returnValue(Observable.throw('failure'));
+      providersMock.getGitHubStatus.and.returnValue(observableThrowError('failure'));
       providersMock.getOpenShiftStatus.and.returnValue(of({'username': expectedOsoUser}));
     });
 
@@ -77,7 +74,7 @@ describe('Connected Accounts Component', () => {
       //authMock.openShiftToken = of('oso-token');
       authMock.isOpenShiftConnected.and.returnValue(of(true));
       contextsMock.current = of(ctx);
-      userServiceMock.loggedInUser = Observable.empty();
+      userServiceMock.loggedInUser = observableEmpty();
       userServiceMock.currentLoggedInUser = ctx.user;
       providersMock.getGitHubStatus.and.returnValue(of({'username': 'username'}));
       providersMock.getOpenShiftStatus.and.returnValue(of({'username': expectedOsoUser}));

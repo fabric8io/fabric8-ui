@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
-
+import { map, switchMap, tap } from 'rxjs/operators';
 import { filterOutClosedItems, WorkItemsData } from '../../shared/workitem-utils';
 
 @Component({
@@ -82,19 +81,20 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
 
     this.subscriptions.push(
       this.workItemService
-        .getWorkItems(100000, {expression: filters})
-        .map((val: WorkItemsData) => val.workItems)
-        .map(workItems => filterOutClosedItems(workItems))
-        // Resolve the work item type
-        .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
-        .do(workItems => {
-          workItems.forEach(workItem => {
-            if (workItem.relationalData === undefined) {
-              workItem.relationalData = {};
-            }
-          });
-        })
-        .do(() => this.loading = false)
+        .getWorkItems(100000, {expression: filters}).pipe(
+          map((val: WorkItemsData) => val.workItems),
+          map(workItems => filterOutClosedItems(workItems)),
+          // Resolve the work item type
+          tap(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem))),
+          tap(workItems => {
+            workItems.forEach(workItem => {
+              if (workItem.relationalData === undefined) {
+                workItem.relationalData = {};
+              }
+            });
+          }),
+          tap(() => this.loading = false),
+        )
         .subscribe(workItems => {
           this.workItems = workItems;
           this.selectRecentSpace(workItems);

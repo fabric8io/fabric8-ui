@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { last } from 'lodash';
-import { Observable } from 'rxjs';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { map } from 'rxjs/operators/map';
-
+import { combineLatest ,  Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { Pods } from '../models/pods';

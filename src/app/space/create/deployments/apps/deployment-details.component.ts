@@ -2,7 +2,6 @@ import {
   Component,
   Input
 } from '@angular/core';
-
 import { ChartAPI } from 'c3';
 import {
   round,
@@ -15,18 +14,17 @@ import {
 } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
+  combineLatest,
+  EMPTY as empty,
   Observable,
+  of,
   ReplaySubject,
   Subject,
   Subscription
 } from 'rxjs';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
-import { first } from 'rxjs/operators/first';
-import { map } from 'rxjs/operators/map';
-import { switchMap } from 'rxjs/operators/switchMap';
-
+import { first, map, switchMap } from 'rxjs/operators';
+import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
+import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import {
@@ -42,9 +40,6 @@ import {
   StatusType
 } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
-
-import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
-import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
 
 enum ChartClass {
   OK = '',

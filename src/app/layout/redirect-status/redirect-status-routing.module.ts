@@ -1,6 +1,5 @@
 import { NgModule }  from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { RedirectStatusComponent } from './redirect-status.component';
 
 const routes: Routes = [

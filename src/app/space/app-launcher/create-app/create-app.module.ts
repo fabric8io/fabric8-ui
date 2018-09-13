@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { FeatureFlagModule } from 'ngx-feature-flag';
 import {
   DependencyCheckService,
   DependencyEditorService,
@@ -15,8 +15,6 @@ import {
   TargetEnvironmentService,
   TokenProvider
 } from 'ngx-launcher';
-
-import { FeatureFlagModule } from 'ngx-feature-flag';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
 import { AppLauncherDependencyEditorService } from '../services/app-launcher-dependency-editor.service';
 import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovider.service';

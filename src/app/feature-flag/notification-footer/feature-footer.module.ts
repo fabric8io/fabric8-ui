@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FeatureFooterComponent } from './feature-footer.component';
 
-import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 @NgModule({
   imports: [
     CommonModule,

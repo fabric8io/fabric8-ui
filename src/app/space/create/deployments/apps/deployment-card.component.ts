@@ -7,16 +7,13 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-
 import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
 import {
   Observable,
   Subscription
 } from 'rxjs';
-import { finalize } from 'rxjs/operators/finalize';
-import { first } from 'rxjs/operators/first';
-
+import { finalize, first } from 'rxjs/operators';
 import { NotificationsService } from '../../../../shared/notifications.service';
 import {
   DeploymentStatusService,

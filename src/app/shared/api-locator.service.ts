@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { Fabric8UIConfig } from './config/fabric8-ui-config';
 
 const DEFAULT_API_ENV_VAR_NAMES = new Map<string, string>(

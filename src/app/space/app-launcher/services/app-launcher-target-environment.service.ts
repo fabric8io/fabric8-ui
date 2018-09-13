@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
 import { TargetEnvironment, TargetEnvironmentService } from 'ngx-launcher';
+import { Observable,  of as observableOf } from 'rxjs';
 
 @Injectable()
 export class AppLauncherTargetEnvironmentService implements TargetEnvironmentService {
@@ -11,7 +10,7 @@ export class AppLauncherTargetEnvironmentService implements TargetEnvironmentSer
    * @returns {Observable<TargetEnvironment>} The target environments
    */
   getTargetEnvironments(): Observable<TargetEnvironment[]> {
-    return Observable.of([{
+    return observableOf([{
       description: 'Here is a brief description of what OpenShift Online is. ' +
         'There is a distinction between what OpenShift Online does compared to OpenShift.io.',
       benefits: [

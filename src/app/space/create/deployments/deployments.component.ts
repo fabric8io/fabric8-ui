@@ -2,18 +2,12 @@ import {
   Component,
   ViewEncapsulation
 } from '@angular/core';
-
 import {
   Space,
   Spaces
 } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-import { timer } from 'rxjs/observable/timer';
-import { first } from 'rxjs/operators/first';
-import { map } from 'rxjs/operators/map';
-import { mergeMap } from 'rxjs/operators/mergeMap';
-import { share } from 'rxjs/operators/share';
-
+import { Observable, timer } from 'rxjs';
+import { first, map, mergeMap, share } from 'rxjs/operators';
 import { DeploymentStatusService } from './services/deployment-status.service';
 import {
   DeploymentsService,

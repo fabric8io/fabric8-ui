@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-
 import { initContext, TestContext } from 'testing/test-context';
-
 import { LoadingWidgetComponent } from './loading-widget.component';
 
 @Component({

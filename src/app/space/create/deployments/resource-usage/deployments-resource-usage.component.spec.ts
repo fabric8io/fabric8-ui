@@ -4,11 +4,9 @@ import {
   Input
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
-
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
-
 import { DeploymentsResourceUsageComponent } from './deployments-resource-usage.component';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BuildConfig } from '../../../model/buildconfig.model';
 import { BuildConfigStore } from '../../../store/buildconfig.store';
 import { AbstractViewWrapperComponent } from '../../../support/abstract-viewwrapper-component';

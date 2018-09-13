@@ -1,13 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Notifications } from 'ngx-base';
 import { Context, Space, SpaceAttributes, SpaceService } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { ConnectableObservable, Observable, of } from 'rxjs';
 
 import { createMock } from 'testing/mock';
 import { MenusService } from '../layout/header/menus.service';

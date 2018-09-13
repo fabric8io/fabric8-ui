@@ -1,5 +1,3 @@
-import { AnalyzeOverviewComponent } from './analyze-overview.component';
-
 import {
   Component,
   NO_ERRORS_SCHEMA
@@ -11,13 +9,14 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable, Subject } from 'rxjs';
+import { Observable,  of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
+import { AnalyzeOverviewComponent } from './analyze-overview.component';
 
 @Component({
   template: '<alm-analyzeOverview></alm-analyzeOverview>'
@@ -38,7 +37,7 @@ describe('AnalyzeOverviewComponent', () => {
       'user-enabled': true
     }
   };
-  mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
+  mockFeatureTogglesService.getFeature.and.returnValue(observableOf(mockFeature));
 
   initContext(AnalyzeOverviewComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],

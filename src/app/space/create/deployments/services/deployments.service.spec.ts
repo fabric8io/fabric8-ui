@@ -1,27 +1,25 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import { createMock } from 'testing/mock';
-
-import {
-  Observable,
-  Subject,
-  VirtualTimeScheduler
-} from 'rxjs';
-import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
-import { timer } from 'rxjs/observable/timer';
-import { first } from 'rxjs/operators/first';
-import { takeUntil } from 'rxjs/operators/takeUntil';
-import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
-
 import {
   Logger,
   Notification,
   NotificationType
 } from 'ngx-base';
-
+import {
+  EMPTY as empty,
+  Observable,
+  of,
+  Subject,
+  throwError as _throw,
+  timer,
+  VirtualTimeScheduler } from 'rxjs';
+import {
+  first,
+  takeUntil
+} from 'rxjs/operators';
+import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
+import { createMock } from 'testing/mock';
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
@@ -37,8 +35,6 @@ import {
   TIMER_TOKEN,
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
-
-import { HttpErrorResponse } from '@angular/common/http';
 
 type TestContext = {
   service: DeploymentsService;

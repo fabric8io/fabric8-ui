@@ -3,12 +3,10 @@ import {
   HttpTestingController
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-
 import { cloneDeep } from 'lodash';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
-
 import { Codebase } from './codebase';
 import { CodebasesService } from './codebases.service';
 

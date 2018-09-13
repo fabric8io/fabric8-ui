@@ -4,9 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-
-import './rxjs-extensions';
-
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -29,16 +26,12 @@ import {
 } from 'ngx-login-client';
 import { RestangularModule } from 'ngx-restangular';
 import { WidgetsModule } from 'ngx-widgets';
-
 import { ActionModule } from 'patternfly-ng/action';
 import { EmptyStateModule } from 'patternfly-ng/empty-state';
 import {
   NotificationService,
   ToastNotificationListModule
 } from 'patternfly-ng/notification';
-
-import { BootstrapModule } from './bootstrap/bootstrap.module';
-
 import {
   // Base functionality for the runtime console
   KubernetesRestangularModule,
@@ -46,11 +39,12 @@ import {
   OnLogin,
   SpaceNamespace
 } from '../a-runtime-console/index';
+import { BootstrapModule } from './bootstrap/bootstrap.module';
+import './rxjs-extensions';
 
 /*
  * Platform and Environment providers/directives/pipes
  */
-
 import { AppRoutingModule } from './app-routing.module';
 import { ENV_PROVIDERS }    from './environment';
 
@@ -61,7 +55,6 @@ import { AppState, InternalStateType } from './app.service';
 
 // Header
 import { FeatureFlagResolver } from 'ngx-feature-flag';
-
 import { HeaderComponent } from './layout/header/header.component';
 import { MenusService }    from './layout/header/menus.service';
 
@@ -106,8 +99,6 @@ import { AddAppOverlayModule }   from './space/add-app-overlay/add-app-overlay.m
 import { AddSpaceOverlayModule } from './space/add-space-overlay/add-space-overlay.module';
 
 // About Modal
-import { AboutModalModule } from './layout/about-modal/about-modal.module';
-
 import { TooltipModule } from 'ngx-bootstrap';
 import {
   FeatureTogglesService
@@ -116,11 +107,11 @@ import { FeatureFooterModule } from './feature-flag/notification-footer/feature-
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { TogglesModule } from './feature-flag/toggles.module';
 import { GettingStartedService } from './getting-started/services/getting-started.service';
+import { AboutModalModule } from './layout/about-modal/about-modal.module';
 import { RavenExceptionHandler } from './shared/exception.handler';
-import { togglesApiUrlProvider } from './shared/toggles.api.provider';
-
 import { HttpInterceptorProviders } from './shared/interceptors/index';
 import { RequestCache } from './shared/request-cache.service';
+import { togglesApiUrlProvider } from './shared/toggles.api.provider';
 
 // Application wide providers
 const APP_PROVIDERS = [

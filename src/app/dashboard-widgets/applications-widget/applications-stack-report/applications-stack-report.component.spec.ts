@@ -1,12 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { initContext, TestContext } from 'testing/test-context';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-
+import { BehaviorSubject,  never as observableNever, Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 import { ApplicationsStackReportComponent } from './applications-stack-report.component';
 
 @Component({
@@ -74,8 +70,8 @@ describe('ApplicationsStackReportComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
   });
 

@@ -1,14 +1,12 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Inject, Input, OnDestroy, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs';
-
+import { Observable,  Subscription, timer as observableTimer } from 'rxjs';
 import { JenkinsService } from '../../../../../app/shared/jenkins.service';
 import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
 import { Build, PendingInputAction } from '../../../model/build.model';
 import { PipelineStage } from '../../../model/pipelinestage.model';
 import { pathJoin } from '../../../model/utils';
-
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'input-action-dialog',
@@ -89,7 +87,7 @@ export class InputActionDialog implements OnDestroy {
   checkJenkinsStatus() {
     this.jenkinsStatus = false;
     this.unsubscribeJenkinsSubscription();
-    this._jenkinsTimerSubscription = Observable.timer(0, 20000).subscribe(t => {
+    this._jenkinsTimerSubscription = observableTimer(0, 20000).subscribe(t => {
       // stop polling after 6 minutes
       if (t <= 17) {
       this._jenkinsSubscription = this.jenkinsService.getJenkinsStatus()

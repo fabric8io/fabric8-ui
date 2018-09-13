@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-
-import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
-
 import fabric8Logo from '../../assets/images/fabric8_logo.png';
 import openshiftLogo from '../../assets/images/OpenShift-io_logo.png';
+import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 
 @Injectable()
 export class BrandingService {

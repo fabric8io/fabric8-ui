@@ -2,9 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
-
 import { MySpacesItemComponent } from './my-spaces-item.component';
 
 describe('My Spaces Item Component', () => {

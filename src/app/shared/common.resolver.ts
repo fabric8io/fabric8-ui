@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-
-import { Observable } from 'rxjs/Observable';
-
 import {
   UserService
 } from 'ngx-login-client';
+import { Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 @Injectable()
