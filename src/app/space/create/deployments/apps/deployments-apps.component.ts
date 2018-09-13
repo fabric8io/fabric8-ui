@@ -40,7 +40,6 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
 
   private applicationsList: string[];
   private currentFilters: Filter[];
-  private currentSortField: SortField;
   private isAscendingSort: boolean = true;
   private subscriptions: Subscription[] = [];
 
@@ -71,7 +70,6 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   }
 
   sortChange(event: SortEvent): void {
-    this.currentSortField = event.field;
     this.isAscendingSort = event.isAscending;
 
     this.sortApplications();

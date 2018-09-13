@@ -16,6 +16,8 @@ import {
   TestContext
 } from 'testing/test-context';
 
+import { FilterEvent } from 'patternfly-ng/filter';
+
 import { DeploymentsAppsComponent } from './deployments-apps.component';
 
 @Component({
@@ -70,6 +72,31 @@ describe('DeploymentsAppsComponent', () => {
     it('should delegate to Broadcaster to display the launcher', function(this: Context) {
       this.testedDirective.showAddAppOverlay();
       expect(TestBed.get(Broadcaster).broadcast).toHaveBeenCalledWith('showAddAppOverlay', true);
+    });
+  });
+
+  describe('#filterApplications', () => {
+    it('should supply filtered applications list to deployment card container', function(this: Context) {
+      let filter: FilterEvent = {
+        appliedFilters: [{
+          field: {
+            id: 'applicationId',
+            placeholder: 'Filter by Application Name...',
+            title: 'Application Name',
+            type: 'text'
+          },
+          value: 'abc'
+        }]
+      };
+      this.testedDirective.filterChange(filter);
+      this.fixture.detectChanges();
+
+
+      const arrayOfComponents: DebugElement[] =
+      this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
+      expect(arrayOfComponents.length).toEqual(1);
+
+      expect(arrayOfComponents[0].componentInstance.applications).toEqual([]);
     });
   });
 
