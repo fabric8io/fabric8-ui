@@ -151,6 +151,7 @@
     "ngx-widgets": "3.1.2",
     "offline-plugin": "5.0.5",
     "patternfly-ng": "4.5.1",
+    "patternfly-sandbox-ng": "^0.1.0",
     "pluralize": "7.0.0",
     "raven-js": "3.27.0",
     "rxjs": "6.3.2",
