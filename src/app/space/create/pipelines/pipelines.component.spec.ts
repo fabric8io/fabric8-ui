@@ -288,16 +288,9 @@ describe('PipelinesComponent', () => {
           space: 'space'
         }
       }]);
+
       this.testedDirective.filterChange({ appliedFilters: [] });
       expect(this.testedDirective.pipelines as any[]).toEqual([
-        {
-          id: 'app2',
-          name: 'app2',
-          gitUrl: 'https://example.com/app2.git',
-          labels: {
-            space: 'space'
-          }
-        },
         {
           id: 'app',
           name: 'app',
@@ -310,6 +303,14 @@ describe('PipelinesComponent', () => {
               buildNumber: 2
             }
           ],
+          labels: {
+            space: 'space'
+          }
+        },
+        {
+          id: 'app2',
+          name: 'app2',
+          gitUrl: 'https://example.com/app2.git',
           labels: {
             space: 'space'
           }
