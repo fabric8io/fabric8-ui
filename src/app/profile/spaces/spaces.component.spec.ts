@@ -11,7 +11,6 @@ import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
-import { EventService } from '../../shared/event.service';
 import { SpacesComponent } from './spaces.component';
 
 
@@ -24,7 +23,6 @@ describe('SpacesComponent', () => {
   let mockSpaceService: any = jasmine.createSpy('SpaceService');
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockEventService: any = jasmine.createSpy('EventService');
   let mockBsModalService: any = jasmine.createSpyObj('BsModalService', ['show']);
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
   let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast']);
@@ -40,7 +38,6 @@ describe('SpacesComponent', () => {
       'id': 'mock-user'
     }
   });
-  mockEventService.deleteSpaceSubject = new Subject<String>();
   mockSpaceService.deleteSpace = {};
   mockSpaceService.getSpacesByUser = {};
   mockSpaceService.getMoreSpacesByUser = {};
@@ -56,7 +53,6 @@ describe('SpacesComponent', () => {
         { provide: SpaceService, useValue: mockSpaceService },
         { provide: Logger, useValue: mockLogger },
         { provide: Contexts, useValue: mockContexts },
-        { provide: EventService, useValue: mockEventService },
         { provide: BsModalService, useValue: mockBsModalService },
         { provide: AuthenticationService, useValue: mockAuthenticationService },
         { provide: Broadcaster, useValue: mockBroadcaster }

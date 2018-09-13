@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { Broadcaster, Logger } from 'ngx-base';
 import { Contexts, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
-import { EventService } from '../../shared/event.service';
 import { TenantService } from '../services/tenant.service';
 import { CleanupComponent } from './cleanup.component';
 
@@ -24,7 +23,6 @@ describe('CleanupComponent', () => {
   let mockContexts: any = jasmine.createSpy('Contexts');
   let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['deleteSpace', 'getSpacesByUser']);
   let mockTenantService: any = jasmine.createSpyObj('TenantService', ['cleanupTenant', 'updateTenant']);
-  let mockEventService: any = jasmine.createSpy('EventService');
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockLogger: any = jasmine.createSpy('Logger');
   let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getToken']);
@@ -53,7 +51,6 @@ describe('CleanupComponent', () => {
         'id': 'mock-user'
       }
     });
-    mockEventService.deleteSpaceSubject = jasmine.createSpyObj('deleteSpaceSubject', ['next']);
     mockSpaceService.getSpacesByUser.and.returnValue(of([mockSpace]));
 
     TestBed.configureTestingModule({
@@ -62,7 +59,6 @@ describe('CleanupComponent', () => {
       providers: [
         { provide: Contexts, useValue: mockContexts },
         { provide: SpaceService, useValue: mockSpaceService },
-        { provide: EventService, useValue: mockEventService },
         { provide: Router, useValue: mockRouter },
         { provide: Logger, useValue: mockLogger },
         { provide: AuthenticationService, useValue: mockAuthenticationService },
@@ -94,7 +90,6 @@ describe('CleanupComponent', () => {
       component.tenantService.updateTenant.and.returnValue(of('mock-response'));
       spyOn(component, 'showSuccessNotification');
       component.confirm();
-      expect(mockEventService.deleteSpaceSubject.next).toHaveBeenCalled();
       expect(mockSpace['erased']).toBeTruthy();
       expect(mockSpace['progress']).toBe('Space successfully erased');
       expect(component.showSuccessNotification).toHaveBeenCalled();
@@ -107,7 +102,6 @@ describe('CleanupComponent', () => {
       component.tenantService.updateTenant.and.returnValue(of('mock-response'));
       spyOn(component, 'showSuccessNotification');
       component.confirm();
-      expect(mockEventService.deleteSpaceSubject.next).toHaveBeenCalled();
       expect(mockSpace['erased']).toBeTruthy();
       expect(mockSpace['progress']).toBe('Space successfully erased');
       expect(component.showSuccessNotification).toHaveBeenCalled();

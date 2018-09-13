@@ -6,7 +6,6 @@ import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
-import { EventService } from '../../shared/event.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -30,7 +29,6 @@ export class SpacesComponent implements OnInit {
     private spaceService: SpaceService,
     private logger: Logger,
     private contexts: Contexts,
-    private eventService: EventService,
     private modalService: BsModalService,
     private broadcaster: Broadcaster
   ) {
@@ -80,20 +78,19 @@ export class SpacesComponent implements OnInit {
   removeSpace(): void {
     if (this.context && this.context.user && this.spaceToDelete) {
       let space = this.spaceToDelete;
-      this.spaceService.deleteSpace(space).pipe(
-        tap(() => this.eventService.deleteSpaceSubject.next(space))
-      ).subscribe(() => {
-        let index = this._spaces.indexOf(space);
-        this._spaces.splice(index, 1);
-        this.broadcaster.broadcast('spaceDeleted', space);
-        this.spaceToDelete = undefined;
-        this.modalRef.hide();
-      },
-      err => {
-        this.logger.error(err);
-        this.spaceToDelete = undefined;
-        this.modalRef.hide();
-      });
+      this.spaceService.deleteSpace(space)
+        .subscribe(() => {
+          let index = this._spaces.indexOf(space);
+          this._spaces.splice(index, 1);
+          this.broadcaster.broadcast('spaceDeleted', space);
+          this.spaceToDelete = undefined;
+          this.modalRef.hide();
+        },
+        err => {
+          this.logger.error(err);
+          this.spaceToDelete = undefined;
+          this.modalRef.hide();
+        });
     } else {
       this.logger.error('Failed to retrieve list of spaces owned by user');
     }

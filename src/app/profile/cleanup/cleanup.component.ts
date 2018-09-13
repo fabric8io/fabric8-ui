@@ -6,7 +6,6 @@ import { Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { ListConfig } from 'patternfly-ng/list';
 import { Observable, Subscription } from 'rxjs';
 
-import { EventService } from '../../shared/event.service';
 import { IModalHost } from '../../space/wizard/models/modal-host';
 import { TenantService } from '../services/tenant.service';
 
@@ -44,7 +43,6 @@ export class CleanupComponent implements OnInit, OnDestroy {
   constructor(private contexts: Contexts,
                private spaceService: SpaceService,
                private tenantService: TenantService,
-               private eventService: EventService,
                private router: Router,
                private broadcaster: Broadcaster) {
   }
@@ -100,7 +98,6 @@ export class CleanupComponent implements OnInit, OnDestroy {
         space['statusIcon'] = 'spinner spinner-lg';
         let spaceObservable = this.spaceService.deleteSpace(space, true).pipe(
           map(() => {
-            this.eventService.deleteSpaceSubject.next(space);
             space['erased'] = true;
             space['progress'] = 'Space successfully erased';
             space['statusIcon'] = 'pficon pficon-ok';

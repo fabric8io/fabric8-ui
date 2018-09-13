@@ -21,7 +21,6 @@ import { ListConfig } from 'patternfly-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
-import { EventService } from '../../shared/event.service';
 
 import { MySpacesSearchSpacesDialog } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.component';
 
@@ -54,7 +53,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
 
   constructor(
     private contexts: Contexts,
-    private eventService: EventService,
     private gettingStartedService: GettingStartedService,
     private logger: Logger,
     private broadcaster: Broadcaster,
@@ -202,9 +200,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     if (this.context && this.context.user && this.spaceToDelete) {
       let space = this.spaceToDelete;
       this.spaceService.deleteSpace(space)
-        .do(() => {
-          this.eventService.deleteSpaceSubject.next(space);
-        })
         .subscribe(spaces => {
           let index: any = findIndex(this.allSpaces, (obj) => {
             return obj.id === space.id;

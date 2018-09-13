@@ -80,7 +80,6 @@ import { fabric8UIConfigProvider }       from './shared/config/fabric8-ui-config
 import { ContextCurrentUserGuard }       from './shared/context-current-user-guard.service';
 import { ContextResolver }               from './shared/context-resolver.service';
 import { ContextService }                from './shared/context.service';
-import { EventService }                  from './shared/event.service';
 import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
 import { jenkinsApiUrlProvider }           from './shared/jenkins-api.provider';
@@ -187,7 +186,6 @@ export type StoreType = {
   providers: [ // expose our Services and Providers into Angular's dependency injection
     // Broadcaster must come first
     BsDropdownConfig,
-    EventService,
     ENV_PROVIDERS,
     AboutService,
     AnalyticService,

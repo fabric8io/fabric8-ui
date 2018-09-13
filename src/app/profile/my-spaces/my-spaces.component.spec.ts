@@ -13,14 +13,12 @@ import { of } from 'rxjs/observable/of';
 
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
-import { EventService } from '../../shared/event.service';
 import { MySpacesComponent } from './my-spaces.component';
 
 describe('MySpacesComponent', () => {
   let fixture: ComponentFixture<MySpacesComponent>;
   let component: DebugNode['componentInstance'];
   let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockEventService: any = jasmine.createSpy('EventService');
   let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update']);
   let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
   let mockBsModalService: any = jasmine.createSpyObj('BsModalService', ['show']);
@@ -66,7 +64,6 @@ describe('MySpacesComponent', () => {
 
   mockAuthenticationService.getGitHubToken = {};
   mockSpaceService.deleteSpace = {};
-  mockEventService.deleteSpaceSubject = jasmine.createSpyObj('deleteSpaceSubject', ['next']);
 
   beforeEach(() => {
 
@@ -109,7 +106,6 @@ describe('MySpacesComponent', () => {
       declarations: [MySpacesComponent],
       providers: [
         { provide: Contexts, useValue: mockContexts },
-        { provide: EventService, useValue: mockEventService },
         { provide: GettingStartedService, useValue: mockGettingStartedService },
         { provide: Logger, useValue: mockLogger },
         { provide: BsModalService, useValue: mockBsModalService },
