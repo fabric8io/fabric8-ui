@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, mergeMap } from 'rxjs/operators';
 
 export interface INamespaceScope {
   namespace: Observable<string>;
@@ -13,16 +14,19 @@ export class NamespaceScope implements INamespaceScope {
   public namespace: Observable<string>;
 
   constructor(protected activatedRoute: ActivatedRoute, protected router: Router) {
-    this.namespace = this.router.events
-      .filter(event => event instanceof NavigationEnd)
-      .map(() => this.activatedRoute)
-      .map(
-        route => {
+    this.namespace = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => this.activatedRoute),
+      map(route => {
           while (route.firstChild) { route = route.firstChild; }
           return route;
-        })
-      .filter(route => route.outlet === 'primary')
-      .mergeMap(route => route.params).map(params => this.getNamespace(params)).filter(n => n).distinctUntilChanged();
+      }),
+      filter(route => route.outlet === 'primary'),
+      mergeMap(route => route.params),
+      map(params => this.getNamespace(params)),
+      filter(n => n),
+      distinctUntilChanged()
+    );
   }
 
   protected getNamespace(params) {

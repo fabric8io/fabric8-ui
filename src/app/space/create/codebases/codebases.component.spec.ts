@@ -9,31 +9,6 @@ import {
   TestBed
 } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import {
-  ActionModule,
-  EmptyStateModule,
-  Filter,
-  FilterEvent,
-  FilterField,
-  ListModule,
-  SortEvent,
-  SortField
-} from 'patternfly-ng';
-
-import {
-  BehaviorSubject,
-  Observable,
-  Subject
-} from 'rxjs';
-
-import { createMock } from 'testing/mock';
-import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
 import {
   Broadcaster,
   Notifications
@@ -44,16 +19,38 @@ import {
   Space
 } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-
+import {
+  ActionModule,
+  EmptyStateModule,
+  Filter,
+  FilterEvent,
+  FilterField,
+  ListModule,
+  SortEvent,
+  SortField
+} from 'patternfly-ng';
+import {
+  BehaviorSubject,
+  never as observableNever,
+  Observable,
+  of as observableOf,
+  Subject,
+  throwError as observableThrowError
+} from 'rxjs';
+import { createMock } from 'testing/mock';
+import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { ProviderService } from '../../../shared/account/provider.service';
+import { CodebasesComponent } from './codebases.component';
 import { Che } from './services/che';
 import { CheService } from './services/che.service';
-import { CodebasesService } from './services/codebases.service';
-import { GitHubService } from './services/github.service';
-
-import { CodebasesComponent } from './codebases.component';
 import { Codebase } from './services/codebase';
+import { CodebasesService } from './services/codebases.service';
 import { GitHubRepoDetails } from './services/github';
+import { GitHubService } from './services/github.service';
 
 @Component({
   selector: 'codebases-toolbar',
@@ -136,11 +133,11 @@ describe('CodebasesComponent', () => {
       if (event === 'CodebaseAdded') {
         return broadcastSubject;
       }
-      return Observable.never();
+      return observableNever();
     });
 
     contexts = {
-      current: Observable.of({
+      current: observableOf({
         space: {
           id: 'foo-space'
         } as Space
@@ -148,8 +145,8 @@ describe('CodebasesComponent', () => {
     } as Contexts;
 
     cheService = createMock(CheService);
-    cheService.getState.and.returnValue(Observable.of({ running: false, multiTenant: false }));
-    cheService.start.and.returnValue(Observable.of({ running: true, multiTenant: false }));
+    cheService.getState.and.returnValue(observableOf({ running: false, multiTenant: false }));
+    cheService.start.and.returnValue(observableOf({ running: true, multiTenant: false }));
 
     codebasesService = createMock(CodebasesService);
     codebasesSubject = new BehaviorSubject<Codebase[]>([{
@@ -168,16 +165,16 @@ describe('CodebasesComponent', () => {
         details.full_name = 'Foo Project';
         details.created_at = '2011-04-07T10:12:58Z';
         details.pushed_at = '2011-04-07T10:12:58Z';
-        return Observable.of(details);
+        return observableOf(details);
       } else if (url === 'https://github.com/bar-org/bar-project.git') {
         const details: GitHubRepoDetails = new GitHubRepoDetails();
         details.html_url = 'https://github.com/foo-org/foo-project/html';
         details.full_name = 'Foo Project';
         details.created_at = '2010-04-07T10:12:58Z';
         details.pushed_at = '2010-04-07T10:12:58Z';
-        return Observable.of(details);
+        return observableOf(details);
       } else if (url === 'https://github.com/foo-org/bar-project.git') {
-        return Observable.throw(new Error('404 error'));
+        return observableThrowError(new Error('404 error'));
       } else {
         throw new Error('Unexpected codebase URL');
       }
@@ -187,7 +184,7 @@ describe('CodebasesComponent', () => {
     notifications.message.and.stub();
 
     authenticationService = {
-      gitHubToken: Observable.of('github-token')
+      gitHubToken: observableOf('github-token')
     } as AuthenticationService;
 
     providerService = createMock(ProviderService);

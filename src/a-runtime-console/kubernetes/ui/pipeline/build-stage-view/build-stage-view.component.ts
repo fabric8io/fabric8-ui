@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable,  Subscription, timer as observableTimer } from 'rxjs';
 import { Build, isValidInputAction, PendingInputAction } from '../../../model/build.model';
 import { InputActionDialog } from '../input-action-dialog/input-action-dialog.component';
 import { PipelineStage } from './../../../model/pipelinestage.model';
@@ -21,8 +21,7 @@ export class BuildStageViewComponent implements OnDestroy {
 
   constructor() {
     // Every 200ms check for an update
-    this._timerSubscription = Observable
-      .timer(0, 200)
+    this._timerSubscription = observableTimer(0, 200)
       .subscribe(count => {
         for (let i = 0; i < this.build.pipelineStages.length; i++) {
           // First, update the displayed stage if needed

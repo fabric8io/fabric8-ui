@@ -1,6 +1,5 @@
 /* "Barrel" of Http Interceptors */
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-
 import { CacheInterceptor } from './cache.interceptor';
 import { RequestIdInterceptor } from './request-id.interceptor';
 

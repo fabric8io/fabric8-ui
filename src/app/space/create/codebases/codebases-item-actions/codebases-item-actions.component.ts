@@ -2,8 +2,8 @@ import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } fro
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Dialog } from 'ngx-widgets';
-import { Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Rx';
+import { Observable, of as observableOf,  Subscription } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { CheService } from '../services/che.service';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
@@ -50,12 +50,12 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    */
   createWorkspace(): void {
     this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().switchMap(che => {
+    this.subscriptions.push(this.cheService.getState().pipe(switchMap(che => {
       if (!che.clusterFull) {
         // create
         return this.workspacesService
-          .createWorkspace(this.codebase.id)
-          .map(workspaceLinks => {
+          .createWorkspace(this.codebase.id).pipe(
+          map(workspaceLinks => {
             this.workspaceBusy = false;
             if (workspaceLinks != undefined) {
               let name = this.getWorkspaceName(workspaceLinks.links.open);
@@ -75,7 +75,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
                 type: NotificationType.DANGER
               } as Notification);
             }
-          });
+          }));
       } else {
         // display error message
         this.workspaceBusy = false;
@@ -83,9 +83,9 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
           message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
           type: NotificationType.DANGER
         } as Notification);
-        return Observable.of({});
+        return observableOf({});
       }
-    }).subscribe(() => {},
+    })).subscribe(() => {},
         err => {
           this.notifications.message({
             message: `Workspace error during creation.`,

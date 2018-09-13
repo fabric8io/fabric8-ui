@@ -6,18 +6,13 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
 import { Broadcaster } from 'ngx-base';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
+import { FilterEvent } from 'patternfly-ng/filter';
+import { Observable ,  of } from 'rxjs';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
-import { FilterEvent } from 'patternfly-ng/filter';
-
 import { DeploymentsAppsComponent } from './deployments-apps.component';
 
 @Component({

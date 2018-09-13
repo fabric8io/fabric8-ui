@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { Observable, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { merge } from 'rxjs/observable/merge';
-import { of } from 'rxjs/observable/of';
-import { filter, map, withLatestFrom } from 'rxjs/operators';
+import { forkJoin,  merge, Observable, of, of as observableOf ,  ReplaySubject ,  Subject ,  Subscription } from 'rxjs';
+import { catchError, filter,  map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
 
 @Injectable()
@@ -107,19 +104,19 @@ export class SpacesService implements Spaces {
   }
 
   private loadRecent(): Observable<Space[]> {
-    return this.profileService.current.switchMap((profile: ExtProfile): Observable<Space[]> => {
+    return this.profileService.current.pipe(switchMap((profile: ExtProfile): Observable<Space[]> => {
       if (profile.store.recentSpaces && profile.store.recentSpaces.length > 0) {
         return forkJoin((profile.store.recentSpaces as string[]).map((id: string): Observable<Space> => {
           // if getSpaceById() throws an error, forkJoin will not complete and loadRecent will not return
-          return this.spaceService.getSpaceById(id).catch((): Observable<Space> => Observable.of(null));
-        }))
-        .map((spaces: Space[]): Space[] => {
+          return this.spaceService.getSpaceById(id).pipe(catchError((): Observable<Space> => observableOf(null)));
+        })).pipe(
+        map((spaces: Space[]): Space[] => {
           return spaces.filter(((space: Space): boolean => { return space !== null; }));
-        });
+        }));
       } else {
         return of([]);
       }
-    });
+    }));
   }
 
   private saveRecent(recent: Space[]): Subscription {

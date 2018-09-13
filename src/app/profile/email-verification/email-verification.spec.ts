@@ -2,7 +2,6 @@ import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-
 import { EmailVerificationComponent } from './email-verification.component';
 
 describe('Email Verification Component', () => {

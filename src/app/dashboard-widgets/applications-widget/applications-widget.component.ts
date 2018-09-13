@@ -8,15 +8,12 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs/Rx';
-
+import { isEmpty, orderBy } from 'lodash';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-
+import { Observable, Subscription } from 'rxjs/Rx';
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
-
-import { isEmpty, orderBy } from 'lodash';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

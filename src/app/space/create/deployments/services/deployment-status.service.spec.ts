@@ -1,14 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-
 import {
   BehaviorSubject,
+  combineLatest,
   Observable
 } from 'rxjs';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { first } from 'rxjs/operators/first';
-
+import { first } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
-
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { MemoryUnit } from '../models/memory-unit';

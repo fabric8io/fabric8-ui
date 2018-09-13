@@ -2,14 +2,12 @@ import { LocationStrategy } from '@angular/common';
 import { Component, DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
 import { Broadcaster } from 'ngx-base';
 import { Notifications } from 'ngx-base/src/app/notifications/notifications';
 import { Contexts } from 'ngx-fabric8-wit';
 import { SpaceService } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { of } from 'rxjs/observable/of';
-
+import { of } from 'rxjs';
 import { ContextService } from '../../shared/context.service';
 import { OverviewComponent } from './overview.component';
 

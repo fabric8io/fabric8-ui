@@ -7,11 +7,9 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-
+import { cloneDeep } from 'lodash';
 import { Build } from '../../../../a-runtime-console/kubernetes/model/build.model';
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
-
-import { cloneDeep } from 'lodash';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

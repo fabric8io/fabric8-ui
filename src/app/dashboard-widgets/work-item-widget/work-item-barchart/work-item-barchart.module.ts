@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { WorkItemBarchartComponent } from './work-item-barchart.component';
 
 @NgModule({

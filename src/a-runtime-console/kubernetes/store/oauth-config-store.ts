@@ -1,17 +1,14 @@
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable } from '@angular/core';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-
 import {
   Logger,
   Notification,
   NotificationType
 } from 'ngx-base';
 import { User, UserService } from 'ngx-login-client';
-
+import { BehaviorSubject,  empty as observableEmpty, Observable } from 'rxjs';
+import { catchError, first } from 'rxjs/operators';
 import { NotificationsService } from '../../../app/shared/notifications.service';
-
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 export class OAuthConfig {
   public authorizeUri: string;
@@ -119,8 +116,8 @@ export class OAuthConfigStore {
 
   private load() {
     let configUri = '/_config/oauth.json';
-    this.http.get(configUri)
-      .catch((error: HttpErrorResponse) => {
+    this.http.get(configUri).pipe(
+      catchError((error: HttpErrorResponse) => {
         this.errorHandler.handleError(error);
         this.logger.error(error);
         this.notifications.message({
@@ -130,8 +127,8 @@ export class OAuthConfigStore {
         } as Notification);
         _currentOAuthConfig.next(_latestOAuthConfig);
         _loadingOAuthConfig.next(false);
-        return Observable.empty();
-      })
+        return observableEmpty();
+      }))
       .subscribe(
         (res: HttpResponse<any>) => {
           let data = res;
@@ -148,8 +145,8 @@ export class OAuthConfigStore {
            * Users who do need it should subscribe and wait for the
            * emission that contains the property.
            */
-          this.userService.loggedInUser
-            .first((user: User) => user.attributes != null && user.attributes.cluster != null)
+          this.userService.loggedInUser.pipe(
+            first((user: User) => user.attributes != null && user.attributes.cluster != null))
             .subscribe(
               (user: User) => {
                 let cluster = user.attributes.cluster;

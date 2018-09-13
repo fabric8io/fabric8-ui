@@ -1,21 +1,15 @@
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-
-import {
-  AuthHelperService, Config, HelperService, Summary
-} from 'ngx-launcher';
-
+import { Context } from 'ngx-fabric8-wit';
+import { AuthHelperService, Config, HelperService, Summary } from 'ngx-launcher';
+import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
+import { Observable,  of as observableOf } from 'rxjs';
+import { createMock } from 'testing/mock';
 import { ContextService } from '../../../shared/context.service';
+import { context1, context2 } from '../../../shared/context.service.mock';
 import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
 import { NewForgeConfig } from '../shared/new-forge.config';
 import { AppLauncherProjectSummaryService } from './app-launcher-project-summary.service';
-
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
-import { createMock } from 'testing/mock';
-import { context1, context2 } from '../../../shared/context.service.mock';
-
-import { Context } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
 
 describe('Service: AppLauncherProjectSummaryService', () => {
   let service: AppLauncherProjectSummaryService;
@@ -32,7 +26,7 @@ describe('Service: AppLauncherProjectSummaryService', () => {
   } as Summary;
 
   class mockContextService {
-    get current(): Observable<Context> { return Observable.of(context1); }
+    get current(): Observable<Context> { return observableOf(context1); }
   }
 
   beforeEach(() => {

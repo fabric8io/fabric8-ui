@@ -1,5 +1,4 @@
 import { REALM } from 'ngx-login-client';
-
 import { ApiLocatorService } from './api-locator.service';
 
 let realmFactory = (api: ApiLocatorService) => {

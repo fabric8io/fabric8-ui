@@ -4,7 +4,6 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-
 import { Space } from 'ngx-fabric8-wit';
 
 @Component({

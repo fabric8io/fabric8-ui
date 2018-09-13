@@ -4,12 +4,11 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-
+import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Che } from './che';
 
 @Injectable()
@@ -39,8 +38,8 @@ export class CheService {
   getState(): Observable<Che> {
     const url: string = `${this.workspacesUrl}/state`;
     return this.http
-      .get<Che>(url, { headers: this.headers })
-      .catch((error: HttpErrorResponse): Observable<Che> => this.handleError(error));
+      .get<Che>(url, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse): Observable<Che> => this.handleError(error)));
   }
 
   /**
@@ -51,14 +50,14 @@ export class CheService {
   start(): Observable<Che> {
     const url: string = `${this.workspacesUrl}/start`;
     return this.http
-      .patch<Che>(url, {}, { headers: this.headers })
-      .catch((error: HttpErrorResponse): Observable<Che> => this.handleError(error));
+      .patch<Che>(url, {}, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse): Observable<Che> => this.handleError(error)));
   }
 
   // Private
 
   private handleError(error: HttpErrorResponse): Observable<Che> {
     this.logger.error(error);
-    return Observable.throw(error.message || error);
+    return observableThrowError(error.message || error);
   }
 }

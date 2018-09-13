@@ -5,9 +5,7 @@ import {
   CanActivateChild,
   RouterStateSnapshot
 } from '@angular/router';
-
 import { AuthenticationService } from 'ngx-login-client';
-
 import { ContextService } from './context.service';
 import { LoginService } from './login.service';
 

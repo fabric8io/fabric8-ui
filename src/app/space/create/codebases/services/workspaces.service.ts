@@ -1,15 +1,14 @@
 import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders
+HttpClient,
+HttpErrorResponse,
+HttpHeaders
 } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-
+import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError, map, retry } from 'rxjs/operators';
 import { Workspace, WorkspaceLinks } from './workspace';
 
 interface WorkspacesResponse {
@@ -44,9 +43,9 @@ export class WorkspacesService {
   createWorkspace(codebaseId: string): Observable<WorkspaceLinks> {
     const url: string = `${this.workspacesUrl}/${codebaseId}/create`;
     return this.http
-      .post<WorkspaceLinks>(url, null, { headers: this.headers })
-      .catch((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error))
-      .retry(8); // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
+      .post<WorkspaceLinks>(url, null, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error)),
+      retry(8)); // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
   }
 
   /**
@@ -60,19 +59,19 @@ export class WorkspacesService {
     // TODO: remove the old url when it is not needed.
     const old_url: string = `${this.workspacesUrl}/${codebaseId}/edit`;
     return this.http
-      .get<WorkspacesResponse>(url, { headers: this.headers })
-      .map((response: WorkspacesResponse): Workspace[] => response.data)
-      .catch((error: HttpErrorResponse): Observable<Workspace[]> => {
+      .get<WorkspacesResponse>(url, { headers: this.headers }).pipe(
+      map((response: WorkspacesResponse): Workspace[] => response.data),
+      catchError((error: HttpErrorResponse): Observable<Workspace[]> => {
         // For some reason 'status: 0' is returned when endpoint does not exist
         if (error.status === 404 || error.status === 0) {
           return this.http
-            .get<WorkspacesResponse>(old_url, {headers: this.headers})
-            .map((response: WorkspacesResponse): Workspace[] => response.data)
-            .catch((error: HttpErrorResponse): Observable<Workspace[]> => this.handleError(error));
+            .get<WorkspacesResponse>(old_url, {headers: this.headers}).pipe(
+            map((response: WorkspacesResponse): Workspace[] => response.data),
+            catchError((error: HttpErrorResponse): Observable<Workspace[]> => this.handleError(error)));
         } else {
           return this.handleError(error);
         }
-      });
+      }));
   }
 
   /**
@@ -83,15 +82,15 @@ export class WorkspacesService {
    */
   openWorkspace(url: string): Observable<WorkspaceLinks> {
     return this.http
-      .post<WorkspaceLinks>(url, null, { headers: this.headers })
-      .retry(8) // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
-      .catch((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error));
+      .post<WorkspaceLinks>(url, null, { headers: this.headers }).pipe(
+      retry(8), // che-starter timeout is 3 min -- 30 sec default request timeout is not enough
+      catchError((error: HttpErrorResponse): Observable<WorkspaceLinks> => this.handleError(error)));
   }
 
   // Private
 
   private handleError(error: HttpErrorResponse): Observable<any> {
     this.logger.error(error);
-    return Observable.throw(error.message || error);
+    return observableThrowError(error.message || error);
   }
 }

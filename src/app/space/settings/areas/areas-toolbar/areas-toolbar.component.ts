@@ -10,7 +10,6 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-
 import { FilterConfig, FilterEvent, FilterField } from 'patternfly-ng/filter';
 import { SortConfig, SortEvent } from 'patternfly-ng/sort';
 import { ToolbarConfig } from 'patternfly-ng/toolbar';

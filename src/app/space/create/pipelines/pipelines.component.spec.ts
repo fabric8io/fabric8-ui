@@ -7,18 +7,7 @@ import {
   async,
   TestBed
 } from '@angular/core/testing';
-
-import {
-  BehaviorSubject,
-  Observable
-} from 'rxjs';
-
-import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { Broadcaster } from 'ngx-base';
 import {
   BsDropdownConfig,
@@ -35,10 +24,18 @@ import {
 } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
-
+import {
+  BehaviorSubject,
+  never as observableNever,
+  Observable,
+  of as observableOf
+} from 'rxjs';
+import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { BuildConfig } from '../../../../a-runtime-console/index';
-
-import { RouterTestingModule } from '@angular/router/testing';
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesService } from './services/pipelines.service';
 
@@ -83,15 +80,15 @@ describe('PipelinesComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
 
     authenticationService = createMock(AuthenticationService);
     authenticationService.getGitHubToken.and.returnValue('some-token');
 
     pipelinesService.getCurrentPipelines.and.returnValue(
-      Observable.of([
+      observableOf([
         {
           id: 'app',
           name: 'app',
@@ -153,7 +150,7 @@ describe('PipelinesComponent', () => {
 
   describe('Pipelines component with url', () => {
     beforeAll(() => {
-      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(Observable.of('http://example.com/browse/openshift'));
+      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(observableOf('http://example.com/browse/openshift'));
     });
 
     it('should set OpenShift Console URL', function(this: TestingContext) {
@@ -165,7 +162,7 @@ describe('PipelinesComponent', () => {
 
   describe('Pipelines component with empty url', () => {
     beforeAll(() => {
-      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(Observable.of(''));
+      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(observableOf(''));
     });
 
     it('should hide OpenShift Console URL', function(this: TestingContext) {

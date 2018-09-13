@@ -4,7 +4,6 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-
 import { NotificationType } from 'patternfly-ng/notification';
 
 @Component({

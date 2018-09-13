@@ -1,9 +1,7 @@
-import { ResourceService, UsageSeverityEnvironmentStat } from './resource.service';
-
 import { User, UserService } from 'ngx-login-client';
 import { createMock } from 'testing/mock';
-
 import { DeploymentApiService, EnvironmentStat } from '../../../space/create/deployments/services/deployment-api.service';
+import { ResourceService, UsageSeverityEnvironmentStat } from './resource.service';
 
 describe('ResourceService', (): void => {
 

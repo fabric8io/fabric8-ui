@@ -1,18 +1,16 @@
+import {
+  HttpClient, HttpErrorResponse,
+  HttpHeaders, HttpResponse
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
 import {
     DependencyEditorService,
     HelperService,
     URLProvider
 } from 'ngx-launcher';
-
 import { AuthenticationService } from 'ngx-login-client';
-
-import {
-  HttpClient, HttpErrorResponse,
-  HttpHeaders, HttpResponse
-} from '@angular/common/http';
+import { empty as observableEmpty, Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AppLauncherDependencyEditorService implements DependencyEditorService {
@@ -48,9 +46,9 @@ export class AppLauncherDependencyEditorService implements DependencyEditorServi
     }
     if (runtimeId) {
       let coreDependenciesEndPoint: string = this.ANALYTICS_END_POINT + `/api/v1/get-core-dependencies/${runtimeId}`;
-      return this.http.get(coreDependenciesEndPoint, { headers: this.headers }).catch(this.handleError);
+      return this.http.get(coreDependenciesEndPoint, { headers: this.headers }).pipe(catchError(this.handleError));
     }
-    return Observable.empty();
+    return observableEmpty();
   }
 
   private handleError(error: HttpErrorResponse | any) {
@@ -63,6 +61,6 @@ export class AppLauncherDependencyEditorService implements DependencyEditorServi
       errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-    return Observable.throw(errMsg);
+    return observableThrowError(errMsg);
   }
 }

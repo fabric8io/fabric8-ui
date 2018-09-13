@@ -1,26 +1,38 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs';
-
-import { Che } from './services/che';
-import { CheService } from './services/che.service';
-import { Codebase } from './services/codebase';
-import { CodebasesService } from './services/codebases.service';
-import { GitHubService } from './services/github.service';
-
 import { ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { ListConfig } from 'patternfly-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
-
+import {
+  forkJoin as observableForkJoin,
+  Observable,
+  of as observableOf,
+  Subscription,
+  timer as observableTimer
+} from 'rxjs';
+import {
+  catchError,
+  first,
+  last,
+  map,
+  mergeMap,
+  publish,
+  switchMap,
+  take
+} from 'rxjs/operators';
 import { ProviderService } from '../../../shared/account/provider.service';
+import { Che } from './services/che';
+import { CheService } from './services/che.service';
+import { Codebase } from './services/codebase';
+import { CodebasesService } from './services/codebases.service';
+import { GitHubService } from './services/github.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -244,16 +256,16 @@ export class CodebasesComponent implements OnDestroy, OnInit {
     if (this.chePollSubscription !== undefined && !this.chePollSubscription.closed) {
       this.chePollSubscription.unsubscribe();
     }
-    this.chePollTimer = Observable.timer(2000, 20000).take(30);
-    this.chePollSubscription = this.chePollTimer
-      .switchMap(() => this.cheService.getState())
-      .map(che => {
+    this.chePollTimer = observableTimer(2000, 20000).pipe(take(30));
+    this.chePollSubscription = this.chePollTimer.pipe(
+      switchMap(() => this.cheService.getState()),
+      map(che => {
         if (che !== undefined && che.running === true) {
           this.chePollSubscription.unsubscribe();
           this.cheState = che;
         }
-      })
-      .publish()
+      }),
+      publish())
       .connect();
     this.subscriptions.push(this.chePollSubscription);
   }
@@ -316,34 +328,34 @@ export class CodebasesComponent implements OnDestroy, OnInit {
    * @returns {Observable<Codebase[]>}
    */
   private fetchCodebases(): Observable<Codebase[]> {
-    return this.codebasesService.getCodebases(this.context.space.id).flatMap(codebases => {
+    return this.codebasesService.getCodebases(this.context.space.id).pipe(mergeMap(codebases => {
       if (codebases.length === 0) {
-        return Observable.of([]);
+        return observableOf([]);
       }
-      return Observable.forkJoin(
+      return observableForkJoin(
         codebases.map((codebase: Codebase) => {
           if (!this.isGitHubHtmlUrlInvalid(codebase)) {
-            return this.gitHubService.getRepoDetailsByUrl(codebase.attributes.url)
-              .map(gitHubRepoDetails => {
+            return this.gitHubService.getRepoDetailsByUrl(codebase.attributes.url).pipe(
+              map(gitHubRepoDetails => {
                 codebase.gitHubRepo = {};
                 codebase.gitHubRepo.htmlUrl = gitHubRepoDetails.html_url;
                 codebase.gitHubRepo.fullName = gitHubRepoDetails.full_name;
                 codebase.gitHubRepo.createdAt = gitHubRepoDetails.created_at;
                 codebase.gitHubRepo.pushedAt = gitHubRepoDetails.pushed_at;
                 return codebase;
-              })
-              .catch(err => {
+              }),
+              catchError(err => {
                 // this.handleError(err, NotificationType.WARNING);
-                return Observable.of(codebase);
-              })
-              .first();
+                return observableOf(codebase);
+              }),
+              first());
           } else {
             this.handleError(`Invalid URL: ${codebase.attributes.url}`, NotificationType.WARNING);
           }
         })
       );
-    })
-      .last();
+    }),
+      last());
   }
 
   /**

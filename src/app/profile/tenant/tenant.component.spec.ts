@@ -2,15 +2,12 @@ import { DebugNode } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { NotificationType } from 'ngx-base';
 import { Logger } from 'ngx-base/src/app/logger.service';
 import { Notifications } from 'ngx-base/src/app/notifications/notifications';
 import { Contexts, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-
+import { Observable,  of ,  throwError as observableThrowError } from 'rxjs';
 import { GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
@@ -134,7 +131,7 @@ describe('TenantComponent', () => {
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
       component.gettingStartedService.update.and.returnValue(of({}));
-      component.tenantService.updateTenant.and.returnValue(Observable.throw('error'));
+      component.tenantService.updateTenant.and.returnValue(observableThrowError('error'));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -145,7 +142,7 @@ describe('TenantComponent', () => {
         type: NotificationType.DANGER
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
-      component.gettingStartedService.update.and.returnValue(Observable.throw({ status: 409 }));
+      component.gettingStartedService.update.and.returnValue(observableThrowError({ status: 409 }));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });
@@ -156,7 +153,7 @@ describe('TenantComponent', () => {
         type: NotificationType.DANGER
       };
       component.gettingStartedService.createTransientProfile.and.returnValue({});
-      component.gettingStartedService.update.and.returnValue(Observable.throw('error'));
+      component.gettingStartedService.update.and.returnValue(observableThrowError('error'));
       component.updateProfile();
       expect(component.notifications.message).toHaveBeenCalledWith(message);
     });

@@ -1,11 +1,10 @@
+import { round } from 'lodash';
 import { MemoryStat } from './memory-stat';
 import {
   MemoryUnit,
   ordinal
 } from './memory-unit';
 import { ScaledStat } from './scaled-stat';
-
-import { round } from 'lodash';
 
 export class ScaledMemoryStat implements MemoryStat, ScaledStat {
 

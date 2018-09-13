@@ -1,5 +1,4 @@
 import { Component, ErrorHandler, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { Broadcaster, Logger } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Space, SpaceService } from 'ngx-fabric8-wit';

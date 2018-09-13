@@ -1,5 +1,4 @@
 import { ActivatedRoute } from '@angular/router';
-
 import { OAuthConfig } from '../store/oauth-config-store';
 import { KubernetesResource } from './kubernetesresource.model';
 import { pathJoin } from './utils';

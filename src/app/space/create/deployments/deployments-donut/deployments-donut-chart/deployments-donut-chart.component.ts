@@ -8,7 +8,6 @@ import {
   SimpleChanges,
   ViewEncapsulation
 } from '@angular/core';
-
 import * as c3 from 'c3';
 import * as d3 from 'd3';
 import {
@@ -16,7 +15,6 @@ import {
   isEqual,
   uniqueId
 } from 'lodash';
-
 import { PodPhase } from '../../models/pod-phase';
 import { Pods } from '../../models/pods';
 

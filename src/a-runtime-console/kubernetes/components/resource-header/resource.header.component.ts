@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-
 import { ParentLinkFactory } from '../../../common/parent-link-factory';
 import { MenuItem } from '../../../models/menu-item';
 

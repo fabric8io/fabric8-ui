@@ -2,12 +2,9 @@ import {
   Component,
   Input
 } from '@angular/core';
-
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators/map';
-import { mergeMap } from 'rxjs/operators/mergeMap';
-
+import { map, mergeMap } from 'rxjs/operators';
 import { DeploymentsService } from '../services/deployments.service';
 
 @Component({

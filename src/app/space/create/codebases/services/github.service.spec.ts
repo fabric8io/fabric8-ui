@@ -4,10 +4,9 @@ import {
   HttpTestingController
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-
+import { Observable, of as observableOf } from 'rxjs';
+import { first } from 'rxjs/operators';
 import {
   GitHubRepo,
   GitHubRepoCommit,
@@ -41,7 +40,7 @@ describe('Github: GitHubService', () => {
     initTestBed(mockAuthService);
     ghService = TestBed.get(GitHubService);
     controller = TestBed.get(HttpTestingController);
-    const fakeHeaderObservable = Observable.of({
+    const fakeHeaderObservable = observableOf({
       'Content-Type': 'application/json',
       'Accept': 'application/vnd.github.v3+json',
       'Authorization': 'token 51XXXX58ec9f0d0c4ee71aXXXXa48e6619efXXXX'
@@ -55,8 +54,8 @@ describe('Github: GitHubService', () => {
 
   it('Get repo commit status by URL and sha', (done: DoneFn) => {
     ghService
-      .getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81XX')
-      .first()
+      .getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81XX').pipe(
+      first())
       .subscribe((data: any) => {
         expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
         controller.verify();
@@ -67,8 +66,8 @@ describe('Github: GitHubService', () => {
 
   it('Get repo commit status by URL and sha in error', (done: DoneFn) => {
     ghService
-      .getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81YY')
-      .first()
+      .getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81YY').pipe(
+      first())
       .subscribe(
         () => {
           done.fail('Get repo commit status by URL and sha in error');
@@ -83,8 +82,8 @@ describe('Github: GitHubService', () => {
 
   it('Get repo commit status by URL and sha with cached value', (done: DoneFn) => {
     ghService
-      .getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81b0')
-      .first()
+      .getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81b0').pipe(
+      first())
       .subscribe((data: GitHubRepoCommit) => {
         expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
         const ghService: GitHubService = TestBed.get(GitHubService);
@@ -94,8 +93,8 @@ describe('Github: GitHubService', () => {
 
         controller.expectNone('https://api.github.com/repos/fabric8-services/fabric8-wit/commits/225368a414f88bd3c45fd686496a924a15ef81b0');
         ghService
-          .getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81b0')
-          .first()
+          .getRepoCommitStatusByUrl('https://github.com/fabric8-services/fabric8-wit.git', '225368a414f88bd3c45fd686496a924a15ef81b0').pipe(
+          first())
           .subscribe((data: GitHubRepoCommit) => {
             // then value cached
             expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
@@ -111,8 +110,8 @@ describe('Github: GitHubService', () => {
 
   it('Get repo details by full name', (done: DoneFn) => {
     ghService
-      .getRepoDetailsByFullName('fabric8-services/fabric8-wit')
-      .first()
+      .getRepoDetailsByFullName('fabric8-services/fabric8-wit').pipe(
+      first())
       .subscribe((data: GitHubRepoDetails) => {
         expect(data.id).toEqual(expectedGitHubRepoDetails.id);
         controller.verify();
@@ -139,16 +138,16 @@ describe('Github: GitHubService', () => {
 
   it('Get repo details by full name cached', (done: DoneFn) => {
     ghService
-      .getRepoDetailsByFullName('fabric8-services/fabric8-wit')
-      .first()
+      .getRepoDetailsByFullName('fabric8-services/fabric8-wit').pipe(
+      first())
       .subscribe((data: GitHubRepoDetails) => {
         expect(data.id).toEqual(expectedGitHubRepoDetails.id);
         controller.verify();
 
         controller.expectNone('https://api.github.com/repos/fabric8-services/fabric8-wit');
         ghService
-          .getRepoDetailsByFullName('fabric8-services/fabric8-wit')
-          .first()
+          .getRepoDetailsByFullName('fabric8-services/fabric8-wit').pipe(
+          first())
           .subscribe((data: GitHubRepoDetails) => {
             // then value cached
             expect(data.id).toEqual(expectedGitHubRepoDetails.id);
@@ -164,8 +163,8 @@ describe('Github: GitHubService', () => {
 
   it('Get repo details by URL', (done: DoneFn) => {
     ghService
-      .getRepoDetailsByUrl('https://github.com/fabric8-services/fabric8-wit.git')
-      .first()
+      .getRepoDetailsByUrl('https://github.com/fabric8-services/fabric8-wit.git').pipe(
+      first())
       .subscribe((data: GitHubRepoDetails) => {
         expect(data.full_name).toEqual(expectedGitHubRepoDetails.full_name);
         controller.verify();
@@ -176,8 +175,8 @@ describe('Github: GitHubService', () => {
 
   it('Get GitHub repo last commit for given URL', (done: DoneFn) => {
     ghService
-      .getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git')
-      .first()
+      .getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').pipe(
+      first())
       .subscribe((data: any) => {
         expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
         controller.verify();
@@ -204,16 +203,16 @@ describe('Github: GitHubService', () => {
 
   it('Get GitHub repo last commit for given URL cached', (done: DoneFn) => {
     ghService
-      .getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git')
-      .first()
+      .getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').pipe(
+      first())
       .subscribe((data: any) => {
         expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
         controller.verify();
 
         controller.expectNone('https://api.github.com/repos/fabric8-services/fabric8-wit/git/refs/heads/master');
         ghService
-          .getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git')
-          .first()
+          .getRepoLastCommitByUrl('https://github.com/fabric8-services/fabric8-wit.git').pipe(
+          first())
           .subscribe((data: any) => {
             // then value cached
             expect(data.sha).toEqual(expectedGitHubRepoCommit.sha);
@@ -229,8 +228,8 @@ describe('Github: GitHubService', () => {
 
   it('Get GitHub repo license for given full name', (done: DoneFn) => {
     ghService
-      .getRepoLicenseByName('fabric8-services/fabric8-wit')
-      .first()
+      .getRepoLicenseByName('fabric8-services/fabric8-wit').pipe(
+      first())
       .subscribe((data: GitHubRepoLicense) => {
         expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
         controller.verify();
@@ -257,16 +256,16 @@ describe('Github: GitHubService', () => {
 
   it('Get GitHub repo license for given full name cached', (done: DoneFn) => {
     ghService
-      .getRepoLicenseByName('fabric8-services/fabric8-wit')
-      .first()
+      .getRepoLicenseByName('fabric8-services/fabric8-wit').pipe(
+      first())
       .subscribe((data: GitHubRepoLicense) => {
         expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
         controller.verify();
 
         controller.expectNone('https://api.github.com/repos/fabric8-services/fabric8-wit/license');
         ghService
-          .getRepoLicenseByName('fabric8-services/fabric8-wit')
-          .first()
+          .getRepoLicenseByName('fabric8-services/fabric8-wit').pipe(
+          first())
           .subscribe((data: GitHubRepoLicense) => {
             // then value cached
             expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
@@ -282,8 +281,8 @@ describe('Github: GitHubService', () => {
 
   it('Get GitHub repo license for given URL', (done: DoneFn) => {
     ghService
-      .getRepoLicenseByUrl('https://github.com/fabric8-services/fabric8-wit.git')
-      .first()
+      .getRepoLicenseByUrl('https://github.com/fabric8-services/fabric8-wit.git').pipe(
+      first())
       .subscribe((data: GitHubRepoLicense) => {
         expect(data.sha).toEqual(expectedGitHubRepoLicense.sha);
         controller.verify();
@@ -297,8 +296,8 @@ describe('Github: GitHubService', () => {
   it('Get GitHub repos associated with given user name', (done: DoneFn) => {
     const repos: GitHubRepo[] = [expectedGitHubRepo];
     ghService
-      .getUserRepos('me')
-      .first()
+      .getUserRepos('me').pipe(
+      first())
       .subscribe((data: GitHubRepo[]) => {
         expect(data).toEqual(repos);
         controller.verify();
@@ -326,16 +325,16 @@ describe('Github: GitHubService', () => {
   it('Get GitHub repos associated with given user name cached', (done: DoneFn) => {
     const repos: GitHubRepo[] = [expectedGitHubRepo];
     ghService
-      .getUserRepos('me')
-      .first()
+      .getUserRepos('me').pipe(
+      first())
       .subscribe((data: GitHubRepo[]) => {
         expect(data).toEqual(repos);
         controller.verify();
 
         controller.expectNone('https://api.github.com/users/me/repos');
         ghService
-          .getUserRepos('me')
-          .first()
+          .getUserRepos('me').pipe(
+          first())
           .subscribe((data: any) => {
             // then value cached
             expect(data[0].full_name).toEqual(repos[0].full_name);
@@ -357,7 +356,7 @@ describe('Github: GitHubService', () => {
 
   beforeEach(() => {
     mockAuthService = jasmine.createSpy('AuthenticationService');
-    mockAuthService.gitHubToken = Observable.of('XXX');
+    mockAuthService.gitHubToken = observableOf('XXX');
     initTestBed(mockAuthService);
     ghService = TestBed.get(GitHubService);
   });
@@ -369,8 +368,8 @@ describe('Github: GitHubService', () => {
       'Authorization': 'token XXX'
     });
     ghService
-      .getHeaders()
-      .first()
+      .getHeaders().pipe(
+      first())
       .subscribe((data: HttpHeaders) => {
         expect(data.keys()).toEqual(expectedHeaders.keys());
         expectedHeaders.keys().forEach((key: string): void => {

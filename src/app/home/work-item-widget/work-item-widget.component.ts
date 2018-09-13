@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
-
+import { map, switchMap, tap } from 'rxjs/operators';
 import { filterOutClosedItems, WorkItemsData } from '../../shared/workitem-utils';
 
 @Component({
@@ -63,12 +62,12 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   private fetchWorkItemsBySpace(space: Space): void {
     this.currentSpace = space;
     this.subscriptions.push(this.userService
-      .getUser()
-      .do(() => this.loading = true)
-      .do(() => this.workItemService._currentSpace = space)
-      .do(() => this.workItemService.buildUserIdMap())
-      .switchMap(() => this.userService.loggedInUser)
-      .map(user => {
+      .getUser().pipe(
+      tap(() => this.loading = true),
+      tap(() => this.workItemService._currentSpace = space),
+      tap(() => this.workItemService.buildUserIdMap()),
+      switchMap(() => this.userService.loggedInUser),
+      map(user => {
         const assigneeQuery = this.filterService.queryJoiner(
           {},
           this.filterService.and_notation,
@@ -82,21 +81,21 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
         return this.filterService.queryJoiner(
           assigneeQuery, this.filterService.and_notation, spaceQuery
         );
-      })
-      .switchMap(filters => this.workItemService
-        .getWorkItems(100000, {expression: filters}))
-      .map((val: WorkItemsData) => val.workItems)
-      .map(workItems => filterOutClosedItems(workItems))
+      }),
+      switchMap(filters => this.workItemService
+        .getWorkItems(100000, {expression: filters})),
+      map((val: WorkItemsData) => val.workItems),
+      map(workItems => filterOutClosedItems(workItems)),
       // Resolve the work item type
-      .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
-      .do(workItems => {
+      tap(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem))),
+      tap(workItems => {
         workItems.forEach(workItem => {
           if (workItem.relationalData === undefined) {
             workItem.relationalData = {};
           }
         });
-      })
-      .do(() => this.loading = false)
+      }),
+      tap(() => this.loading = false))
       .subscribe(workItems => {
         this.workItems = workItems;
         this.selectRecentSpace(workItems);

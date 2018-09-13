@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
 import { RedirectData, RedirectStatusData } from '../../models/redirect-data';
 
 @Component({

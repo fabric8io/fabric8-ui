@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-
 import {
+  EMPTY as empty,
   Observable,
+  of,
   Subject
 } from 'rxjs';
-import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
-
 import { initContext, TestContext } from 'testing/test-context';
-
 import { Stat } from '../models/stat';
 import {
   Status,

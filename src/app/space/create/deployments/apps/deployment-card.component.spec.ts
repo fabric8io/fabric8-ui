@@ -12,7 +12,6 @@ import {
   tick
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import {
   BsDropdownConfig,
@@ -20,20 +19,17 @@ import {
   BsDropdownToggleDirective
 } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,
+  of,
   Subject
 } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
 import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';

@@ -1,5 +1,4 @@
 import { SimpleChanges } from '@angular/core';
-
 import { DeploymentGraphLabelComponent } from './deployment-graph-label.component';
 
 describe('DeploymentGraphLabel', () => {

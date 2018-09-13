@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-
 import {
   AuthHelperService,
   Config,
@@ -11,7 +10,6 @@ import {
   URLProvider
 } from 'ngx-launcher';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
-
 import { ApiLocatorService } from '../../shared/api-locator.service';
 import { AppLauncherRoutingModule } from './app-launcher-routing.module';
 import { AppLauncherComponent } from './app-launcher.component';

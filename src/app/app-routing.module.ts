@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FeatureFlagResolver } from 'ngx-feature-flag';
-
 import { ContextResolver } from './shared/context-resolver.service';
 import { ProfileResolver } from './shared/profile-resolver.service';
 

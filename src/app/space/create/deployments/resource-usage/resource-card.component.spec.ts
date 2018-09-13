@@ -5,16 +5,12 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
+import { Observable, of } from 'rxjs';
+import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
-import { createMock } from 'testing/mock';
-
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
 
 import { MemoryUnit } from '../models/memory-unit';
 import { Stat } from '../models/stat';

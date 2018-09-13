@@ -1,16 +1,13 @@
 import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Action } from 'patternfly-ng/action';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-
+import { Observable,  of ,  throwError as observableThrowError } from 'rxjs';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
 import { EventService } from '../../shared/event.service';
@@ -305,7 +302,7 @@ describe('MySpacesComponent', () => {
 
     // crashes from uncaught error if spaceService.getSpacesByUser fails
     xit('should handle an error from spaceService.getSpacesByUser', () => {
-      mockSpaceService.getSpacesByUser.and.returnValue(Observable.throw('error'));
+      mockSpaceService.getSpacesByUser.and.returnValue(observableThrowError('error'));
       component.initSpaces(mockEvent);
       // crashes ..
     });
@@ -333,7 +330,7 @@ describe('MySpacesComponent', () => {
     });
 
     it('should log an error if spaceService.deleteSpace fails', () => {
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(Observable.throw('error'));
+      spyOn(component.spaceService, 'deleteSpace').and.returnValue(observableThrowError('error'));
       component.modalRef = mockModalRef;
       component.spaceToDelete = spaceMock1;
       component.ngOnInit();
@@ -545,7 +542,7 @@ describe('MySpacesComponent', () => {
     });
 
     it('should log an error if there was a problem with subscribing to the update', () => {
-      mockGettingStartedService.update.and.returnValue(Observable.throw('error'));
+      mockGettingStartedService.update.and.returnValue(observableThrowError('error'));
       component.savePins();
       expect(mockLogger.error).toHaveBeenCalled();
     });

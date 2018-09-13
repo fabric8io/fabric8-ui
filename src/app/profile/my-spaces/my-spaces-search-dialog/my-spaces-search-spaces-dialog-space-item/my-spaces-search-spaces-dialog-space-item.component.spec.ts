@@ -5,14 +5,11 @@ import {
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-
+import { Space } from 'ngx-fabric8-wit';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
-import { Space } from 'ngx-fabric8-wit';
-
 import { MySpacesSearchSpacesDialogSpaceItemComponent } from './my-spaces-search-spaces-dialog-space-item.component';
 
 @Component({

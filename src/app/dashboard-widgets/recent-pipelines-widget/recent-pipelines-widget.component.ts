@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { share } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Rx';
 import { BuildConfigs } from '../../../a-runtime-console/index';
 import { ContextService } from '../../shared/context.service';
@@ -30,7 +31,7 @@ export class RecentPipelinesWidgetComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // these values changing asynchronously triggers changes in the DOM;
     // force Angular Change Detection via setTimeout encapsulation
-    this.subscriptions.push(this.pipelinesService.getRecentPipelines().share().subscribe(
+    this.subscriptions.push(this.pipelinesService.getRecentPipelines().pipe(share()).subscribe(
       (configs: BuildConfigs) => {
         this.loading = true;
         setTimeout(() => {

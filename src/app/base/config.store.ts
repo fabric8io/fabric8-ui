@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-import { Observable } from 'rxjs/Observable';
-
+import { Observable } from 'rxjs';
+import { map, publishReplay } from 'rxjs/operators';
 import { ValWrapper } from './val-wrapper';
 
 interface LoadCallback<T> {
@@ -24,14 +23,14 @@ export class ConfigStore {
         .get(name);
     } else {
       let res = this.http
-        .get(`/_config/${name}.config.json`)
-        .map(resp => {
+        .get(`/_config/${name}.config.json`).pipe(
+        map(resp => {
           return {
             val: (resp as any),
             loading: false
           } as ValWrapper<T>;
-        })
-        .publishReplay(1);
+        }),
+        publishReplay(1));
       this._cache.set(name, res);
       res.connect();
       return res;

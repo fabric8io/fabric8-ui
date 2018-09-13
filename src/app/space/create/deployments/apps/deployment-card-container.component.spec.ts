@@ -9,20 +9,15 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
-import { BehaviorSubject } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
 import { Contexts } from 'ngx-fabric8-wit';
+import { BehaviorSubject, of } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
-import { DeploymentCardContainerComponent } from './deployment-card-container.component';
-
 import { DeploymentsService } from '../services/deployments.service';
+import { DeploymentCardContainerComponent } from './deployment-card-container.component';
 
 @Component({
   template: '<deployment-card-container></deployment-card-container>'

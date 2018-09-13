@@ -3,12 +3,8 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators/catchError';
-import { map } from 'rxjs/operators/map';
-import { share } from 'rxjs/operators/share';
-
+import { catchError ,  map ,  share } from 'rxjs/operators';
 import { Codebase } from '../../../space/create/codebases/services/codebase';
 import { GitHubRepoDetails } from '../../../space/create/codebases/services/github';
 import { GitHubService } from '../../../space/create/codebases/services/github.service';

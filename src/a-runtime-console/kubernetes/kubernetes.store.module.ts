@@ -39,8 +39,8 @@ import { RouteStore } from './store/route.store';
 import { ServiceStore } from './store/service.store';
 import { SpaceStore } from './store/space.store';
 /*
-import {RouterModule} from "@angular/router";
-import {BrowserModule} from "@angular/platform-browser";
+import { RouterModule } from "@angular/router";
+import { BrowserModule } from "@angular/platform-browser";
 */
 
 @NgModule({
