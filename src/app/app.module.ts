@@ -79,9 +79,8 @@ import { ContextCurrentUserGuard }       from './shared/context-current-user-gua
 import { ContextResolver }               from './shared/context-resolver.service';
 import { ContextService }                from './shared/context.service';
 import { EventService }                  from './shared/event.service';
-import { Fabric8UIHttpService }          from './shared/fabric8-ui-http.service';
 import { forgeApiUrlProvider }           from './shared/forge-api.provider';
-import { jenkinsApiUrlProvider }           from './shared/jenkins-api.provider';
+import { jenkinsApiUrlProvider }         from './shared/jenkins-api.provider';
 import { LoginService }                  from './shared/login.service';
 import { NotificationsService }          from './shared/notifications.service';
 import { ProfileResolver }               from './shared/profile-resolver.service';
@@ -215,10 +214,6 @@ export type StoreType = {
     FeatureAcknowledgementService,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
-    {
-      provide: HttpClient,
-      useClass: Fabric8UIHttpService
-    },
     RequestCache,
     HttpInterceptorProviders,
     fabric8UIConfigProvider,
