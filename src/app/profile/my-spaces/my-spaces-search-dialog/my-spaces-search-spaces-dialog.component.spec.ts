@@ -10,21 +10,17 @@ import {
 } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { Space, SpaceService } from 'ngx-fabric8-wit';
+import { InfiniteScrollModule } from 'ngx-widgets';
+import { Observable, of as observableOf,  throwError as observableThrowError } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { Space, SpaceService } from 'ngx-fabric8-wit';
-import { InfiniteScrollModule } from 'ngx-widgets';
-
 import { MySpacesSearchSpacesDialog, ViewState } from './my-spaces-search-spaces-dialog.component';
-
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
 
 @Component({
   template: '<my-spaces-search-spaces-dialog></my-spaces-search-spaces-dialog>'
@@ -61,8 +57,8 @@ describe('MySpacesSearchSpacesDialog', () => {
 
   describe('#init', () => {
     it('should set spaces list to empty array', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.spaces
-        .first()
+      this.testedDirective.spaces.pipe(
+        first())
         .subscribe((spaces: Space[]): void => {
           expect(spaces).toEqual([]);
           done();
@@ -70,8 +66,8 @@ describe('MySpacesSearchSpacesDialog', () => {
     });
 
     it('should set totalCount to 0', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.totalCount
-        .first()
+      this.testedDirective.totalCount.pipe(
+        first())
         .subscribe((count: number): void => {
           expect(count).toEqual(0);
           done();
@@ -79,8 +75,8 @@ describe('MySpacesSearchSpacesDialog', () => {
     });
 
     it('should set view state to INIT', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.viewState
-        .first()
+      this.testedDirective.viewState.pipe(
+        first())
         .subscribe((state: ViewState): void => {
           expect(state).toEqual(ViewState.INIT);
           done();
@@ -95,18 +91,18 @@ describe('MySpacesSearchSpacesDialog', () => {
   describe('#clear', () => {
     beforeEach(async(function(this: TestingContext): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spaceService.search.and.returnValue(Observable.of([
+      spaceService.search.and.returnValue(observableOf([
         { name: 'foo-space' }
       ]));
-      spaceService.getTotalCount.and.returnValue(Observable.of(1));
+      spaceService.getTotalCount.and.returnValue(observableOf(1));
       this.testedDirective.searchTerm = 'mocksearch';
       this.testedDirective.search();
       this.testedDirective.initItems({ pageSize: 10 });
     }));
 
     it('should reset spaces list to empty array', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.spaces
-        .first()
+      this.testedDirective.spaces.pipe(
+        first())
         .subscribe((spaces: Space[]): void => {
           expect(spaces).toEqual([{ name: 'foo-space' } as Space]);
           this.testedDirective.clear();
@@ -120,8 +116,8 @@ describe('MySpacesSearchSpacesDialog', () => {
     });
 
     it('should set totalCount to 0', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.totalCount
-        .first()
+      this.testedDirective.totalCount.pipe(
+        first())
         .subscribe((count: number): void => {
           expect(count).toEqual(1);
           this.testedDirective.clear();
@@ -135,8 +131,8 @@ describe('MySpacesSearchSpacesDialog', () => {
     });
 
     it('should set view state to INIT', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.viewState
-        .first()
+      this.testedDirective.viewState.pipe(
+        first())
         .subscribe((state: ViewState): void => {
           expect(state).toEqual(ViewState.SHOW);
           this.testedDirective.clear();
@@ -159,10 +155,10 @@ describe('MySpacesSearchSpacesDialog', () => {
   describe('#initItems', () => {
     beforeEach(function(this: TestingContext): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spaceService.search.and.returnValue(Observable.of([
+      spaceService.search.and.returnValue(observableOf([
         { name: 'foo-space' }
       ]));
-      spaceService.getTotalCount.and.returnValue(Observable.of(1));
+      spaceService.getTotalCount.and.returnValue(observableOf(1));
       this.testedDirective.searchTerm = 'mocksearch';
     });
 
@@ -193,10 +189,10 @@ describe('MySpacesSearchSpacesDialog', () => {
   describe('#search', () => {
     beforeEach(function(this: TestingContext): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spaceService.search.and.returnValue(Observable.of([
+      spaceService.search.and.returnValue(observableOf([
         { name: 'foo-space' }
       ]));
-      spaceService.getTotalCount.and.returnValue(Observable.of(456));
+      spaceService.getTotalCount.and.returnValue(observableOf(456));
       this.testedDirective.searchTerm = ' mocksearch ';
     });
 
@@ -211,8 +207,8 @@ describe('MySpacesSearchSpacesDialog', () => {
     }));
 
     it('should call SpaceService#getTotalCount and update', fakeAsync(function(this: TestingContext): void {
-      this.testedDirective.totalCount
-        .first()
+      this.testedDirective.totalCount.pipe(
+        first())
         .subscribe((count: number): void => {
           expect(count).toBe(0);
         });
@@ -249,7 +245,7 @@ describe('MySpacesSearchSpacesDialog', () => {
 
     it('should set view state to EMPTY when no results are received', fakeAsync(function(this: TestingContext): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spaceService.search.and.returnValue(Observable.of([]));
+      spaceService.search.and.returnValue(observableOf([]));
       this.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
@@ -285,7 +281,7 @@ describe('MySpacesSearchSpacesDialog', () => {
   describe('#fetchMoreSpaces', () => {
     it('should append spaces to spaces list', function(this: TestingContext): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spaceService.getMoreSearchResults.and.returnValue(Observable.of([ { name: 'more-space' } ]));
+      spaceService.getMoreSearchResults.and.returnValue(observableOf([ { name: 'more-space' } ]));
 
       this.testedDirective.spaces.pipe(
         first()
@@ -302,7 +298,7 @@ describe('MySpacesSearchSpacesDialog', () => {
 
     it('should silently fail if no more spaces are found', function(this: TestingContext): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
-      spaceService.getMoreSearchResults.and.returnValue(Observable.throw('No more spaces found'));
+      spaceService.getMoreSearchResults.and.returnValue(observableThrowError('No more spaces found'));
 
       this.testedDirective.spaces.pipe(
         first()

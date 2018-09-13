@@ -6,17 +6,14 @@ import {
 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-import { ConnectableObservable, Subject } from 'rxjs/Rx';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-
+import { BehaviorSubject, never as observableNever,  Observable, of as observableOf } from 'rxjs';
+import { publish } from 'rxjs/operators';
+import { ConnectableObservable, Subject } from 'rxjs/Rx';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { initContext, TestContext } from 'testing/test-context';
-
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
@@ -43,7 +40,7 @@ describe('ApplicationsWidgetComponent', () => {
   let contexts: Contexts;
   let pipelinesService: { current: Observable<BuildConfig[]> };
 
-  let fakeUser: Observable<User> = Observable.of({
+  let fakeUser: Observable<User> = observableOf({
     id: 'fakeId',
     type: 'fakeType',
     attributes: {
@@ -188,8 +185,8 @@ describe('ApplicationsWidgetComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
 
     pipelinesService = {
@@ -220,7 +217,7 @@ describe('ApplicationsWidgetComponent', () => {
           };
 
           let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
-          mockRouter.events = Observable.of(mockRouterEvent);
+          mockRouter.events = observableOf(mockRouterEvent);
 
           return mockRouter;
         }
@@ -229,7 +226,7 @@ describe('ApplicationsWidgetComponent', () => {
         provide: UserService, useFactory: () => {
           let userService = createMock(UserService);
           userService.getUser.and.returnValue(fakeUser);
-          userService.loggedInUser = fakeUser.publish() as ConnectableObservable<User> & jasmine.Spy;
+          userService.loggedInUser = fakeUser.pipe(publish()) as ConnectableObservable<User> & jasmine.Spy;
           return userService;
         }
       }

@@ -1,12 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
-
+import { Inject, Injectable } from '@angular/core';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
-
 import { ProcessTemplate } from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()

@@ -1,13 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
-
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-
+import { Inject, Injectable } from '@angular/core';
 import * as jwt_decode from 'jwt-decode';
 import { Logger } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { Observable,  throwError as observableThrowError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
 import { Link } from './link';
 
 @Injectable()
@@ -135,6 +132,6 @@ export class ProviderService {
 
   private handleError(error: HttpErrorResponse) {
     this.logger.error(error);
-    return Observable.throw(error.message || error);
+    return observableThrowError(error.message || error);
   }
 }

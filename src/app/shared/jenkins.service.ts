@@ -1,11 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
-import { AuthenticationService } from 'ngx-login-client';
-import { FABRIC8_JENKINS_API_URL } from './runtime-console/fabric8-ui-jenkins-api';
-
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import { AuthenticationService } from 'ngx-login-client';
+import { Observable,  throwError as observableThrowError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { FABRIC8_JENKINS_API_URL } from './runtime-console/fabric8-ui-jenkins-api';
 
 
 @Injectable()
@@ -48,6 +46,6 @@ export class JenkinsService {
       errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-    return Observable.throw(errMsg);
+    return observableThrowError(errMsg);
   }
 }

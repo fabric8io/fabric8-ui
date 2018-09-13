@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InjectionToken } from '@angular/core';
-
 import { URLProvider } from 'ngx-launcher';
-
 import { ApiLocatorService } from '../../../shared/api-locator.service';
 
 export let ANALYTICS_RECOMMENDER_URL = new InjectionToken<string>('analytics.recommender.url');

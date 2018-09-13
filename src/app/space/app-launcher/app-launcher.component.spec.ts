@@ -10,7 +10,6 @@ import { RouterTestingModule } from '@angular/router/testing';
     URLProvider
   } from 'ngx-launcher';
   import { AUTH_API_URL } from 'ngx-login-client';
-
 import { ApiLocatorService } from '../../shared/api-locator.service';
 import { AppLauncherComponent } from './app-launcher.component';
 import { AuthAPIProvider } from './services/app-launcher-authprovider.service';

@@ -1,7 +1,5 @@
 import { plural } from 'pluralize';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-import { Observable } from 'rxjs';
+import { BehaviorSubject ,  Observable } from 'rxjs';
 import { BaseEntity } from './entity.model';
 import { RESTService } from './rest.service';
 

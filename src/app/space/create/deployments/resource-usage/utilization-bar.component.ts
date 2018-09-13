@@ -4,9 +4,7 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-
 import { Observable, Subscription } from 'rxjs';
-
 import { Stat } from '../models/stat';
 import {
   Status,

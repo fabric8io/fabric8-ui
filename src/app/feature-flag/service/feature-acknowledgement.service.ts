@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Inject, Injectable, OnDestroy } from '@angular/core';
-import { ExtProfile, ExtUser, GettingStartedService } from '../../getting-started/services/getting-started.service';
-
 import { cloneDeep } from 'lodash';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
 import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ExtProfile, ExtUser, GettingStartedService } from '../../getting-started/services/getting-started.service';
 
 /**
  * A service to manage the user acknowledgement to dismiss the warning displayed by the experimental feature banner
@@ -37,8 +37,8 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
    * @returns {boolean} True if the user want to see the icon showing the experimental features.
    */
   getToggle(): Observable<boolean> {
-    return this.userService.loggedInUser
-      .map(user => {
+    return this.userService.loggedInUser.pipe(
+      map(user => {
         let acknowledged: boolean = true;
         let profile;
         profile = cloneDeep(user) as ExtUser;
@@ -47,7 +47,7 @@ export class FeatureAcknowledgementService extends GettingStartedService impleme
           acknowledged = Boolean(profile.attributes.contextInformation.featureAcknowledgement);
         }
         return acknowledged;
-      });
+      }));
   }
 
   /**

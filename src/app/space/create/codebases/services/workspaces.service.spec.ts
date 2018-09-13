@@ -4,12 +4,11 @@ import {
   TestRequest
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { createMock } from 'testing/mock';
-
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-
+import { first } from 'rxjs/operators';
+import { createMock } from 'testing/mock';
 import {
   Workspace,
   WorkspaceLinks
@@ -57,8 +56,8 @@ describe('WorkspacesService', () => {
   describe('#createWorkspace', () => {
     it('should send Authorization header', function(this: TestContext, done: DoneFn): void {
       this.service
-        .createWorkspace('mockId')
-        .first()
+        .createWorkspace('mockId').pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -70,8 +69,8 @@ describe('WorkspacesService', () => {
 
     it('should send POST request', function(this: TestContext, done: DoneFn): void {
       this.service
-        .createWorkspace('mockId')
-        .first()
+        .createWorkspace('mockId').pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -88,8 +87,8 @@ describe('WorkspacesService', () => {
         }
       };
       this.service
-        .createWorkspace('mockId')
-        .first()
+        .createWorkspace('mockId').pipe(
+        first())
         .subscribe((links: WorkspaceLinks): void => {
           expect(links).toEqual(expectedResponse);
           this.controller.verify();
@@ -102,8 +101,8 @@ describe('WorkspacesService', () => {
   describe('#getWorkspaces', () => {
     it('should send Authorization header', function(this: TestContext, done: DoneFn): void {
       this.service
-        .getWorkspaces('mockId')
-        .first()
+        .getWorkspaces('mockId').pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -115,8 +114,8 @@ describe('WorkspacesService', () => {
 
     it('should send GET request', function(this: TestContext, done: DoneFn): void {
       this.service
-        .getWorkspaces('mockId')
-        .first()
+        .getWorkspaces('mockId').pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -137,8 +136,8 @@ describe('WorkspacesService', () => {
         }
       ];
       this.service
-        .getWorkspaces('mockId')
-        .first()
+        .getWorkspaces('mockId').pipe(
+        first())
         .subscribe((workspaces: Workspace[]): void => {
           expect(workspaces).toEqual(expectedResponse);
           this.controller.verify();
@@ -151,8 +150,8 @@ describe('WorkspacesService', () => {
   describe('#openWorkspace', () => {
     it('should send Authorization header', function(this: TestContext, done: DoneFn): void {
       this.service
-        .openWorkspace('https://example.com/workspaces/1')
-        .first()
+        .openWorkspace('https://example.com/workspaces/1').pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -164,8 +163,8 @@ describe('WorkspacesService', () => {
 
     it('should send POST request', function(this: TestContext, done: DoneFn): void {
       this.service
-        .openWorkspace('https://example.com/workspaces/1')
-        .first()
+        .openWorkspace('https://example.com/workspaces/1').pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -182,8 +181,8 @@ describe('WorkspacesService', () => {
         }
       };
       this.service
-        .openWorkspace('https://example.com/workspaces/1')
-        .first()
+        .openWorkspace('https://example.com/workspaces/1').pipe(
+        first())
         .subscribe((links: WorkspaceLinks): void => {
           expect(links).toEqual(expectedResponse);
           this.controller.verify();

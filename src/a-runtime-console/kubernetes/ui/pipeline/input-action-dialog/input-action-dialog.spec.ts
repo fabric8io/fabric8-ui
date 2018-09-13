@@ -1,20 +1,16 @@
 /* tslint:disable:no-unused-variable */
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MomentModule } from 'angular2-moment';
-import { ModalModule } from 'ngx-modal';
-import { Observable } from 'rxjs';
-
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
+import { ModalModule } from 'ngx-modal';
+import { Observable,  of as observableOf } from 'rxjs';
 import { JenkinsService } from '../../../../../app/shared/jenkins.service';
 import { FABRIC8_FORGE_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-forge-api';
 import { FABRIC8_JENKINS_API_URL } from '../../../../../app/shared/runtime-console/fabric8-ui-jenkins-api';
-
 import { InputActionDialog } from './input-action-dialog.component';
-
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('InputActionDialog', () => {
   let component: InputActionDialog;
@@ -24,7 +20,7 @@ describe('InputActionDialog', () => {
 
   let mockJenkinsService = {
     getJenkinsStatus(): Observable<any> {
-      let jenkinsStatus = Observable.of([<any> {
+      let jenkinsStatus = observableOf([<any> {
         'data': {'state': 'idled'}
       }]);
       return jenkinsStatus;

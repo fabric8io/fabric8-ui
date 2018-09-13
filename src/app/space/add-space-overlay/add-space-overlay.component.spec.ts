@@ -3,12 +3,10 @@ import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-
 import { Broadcaster, Logger, Notifications } from 'ngx-base';
 import { ProcessTemplate, Space, SpaceService } from 'ngx-fabric8-wit';
 import { Profile, User, UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs/Observable';
-
+import { Observable, of as observableOf,  throwError as observableThrowError } from 'rxjs';
 import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
@@ -24,7 +22,7 @@ describe('AddSpaceOverlayComponent', () => {
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockSpaceTemplateService: any = {
     getSpaceTemplates: () => {
-      return Observable.of(mockSpaceTemplates);
+      return observableOf(mockSpaceTemplates);
     }
   };
   let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['create']);
@@ -113,7 +111,7 @@ describe('AddSpaceOverlayComponent', () => {
   beforeEach(() => {
     mockElementRef.nativeElement.value = {};
     mockSpaceNamespaceService.updateConfigMap = {};
-    mockSpaceService.create.and.returnValue(Observable.of(mockSpace));
+    mockSpaceService.create.and.returnValue(observableOf(mockSpace));
     mockUserService.currentLoggedInUser = mockUser;
 
     TestBed.configureTestingModule({
@@ -150,7 +148,7 @@ describe('AddSpaceOverlayComponent', () => {
     it('should disable submit', () => {
       mockUserService.currentLoggedInUser = {};
       component.context = {
-        current: Observable.of(mockSpace)
+        current: observableOf(mockSpace)
       };
       component.ngOnInit();
 
@@ -177,10 +175,10 @@ describe('AddSpaceOverlayComponent', () => {
   describe('#getSpaceTemplate', () => {
     it('should fetch and store the space templates', fakeAsync(() => {
       component.context = {
-        current: Observable.of(mockSpace)
+        current: observableOf(mockSpace)
       };
       spyOn(component.spaceTemplateService, 'getSpaceTemplates').and.returnValue(
-        Observable.of(mockSpaceTemplates)
+        observableOf(mockSpaceTemplates)
       );
       component.ngOnInit();
       fixture.detectChanges();
@@ -191,10 +189,10 @@ describe('AddSpaceOverlayComponent', () => {
 
     it('should make selected space template null', fakeAsync(() => {
       component.context = {
-        current: Observable.of(mockSpace)
+        current: observableOf(mockSpace)
       };
       spyOn(component.spaceTemplateService, 'getSpaceTemplates').and.returnValue(
-        Observable.of([mockSpaceTemplates[0]])
+        observableOf([mockSpaceTemplates[0]])
       );
       component.ngOnInit();
       fixture.detectChanges();
@@ -205,10 +203,10 @@ describe('AddSpaceOverlayComponent', () => {
 
     it('should handle error and set the default spacetemplate', fakeAsync(() => {
       component.context = {
-        current: Observable.of(mockSpace)
+        current: observableOf(mockSpace)
       };
       spyOn(component.spaceTemplateService, 'getSpaceTemplates').and.returnValue(
-        Observable.throw('err')
+        observableThrowError('err')
       );
       component.ngOnInit();
       fixture.detectChanges();

@@ -1,13 +1,12 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject,  Observable ,  throwError as observableThrowError } from 'rxjs';
+import { catchError, map, shareReplay } from 'rxjs/operators';
 import { pathJoin } from '../model/utils';
 import { INamespaceScope } from './namespace.scope';
-
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 
 /**
  * Defaults to using the Dev Space rather than the runtime environment
@@ -33,18 +32,18 @@ export class DevNamespaceScope implements INamespaceScope {
 
     //  query the user namespace from WIT API
     this.namespace = this.http
-      .get(this.userServicesUrl, {headers: this.headers})
-      .shareReplay()
-      .map((resp: HttpResponse<any>) => {
+      .get(this.userServicesUrl, {headers: this.headers}).pipe(
+      shareReplay(),
+      map((resp: HttpResponse<any>) => {
         let namespace = this.extractUserNamespace(resp);
         if (namespace) {
           this.currentNamespaceValue = namespace;
         }
         return namespace;
-      })
-      .catch((error: HttpErrorResponse) => {
+      }),
+      catchError((error: HttpErrorResponse) => {
         return this.handleError(error);
-      });
+      }));
   }
 
   currentNamespace(): any {
@@ -53,7 +52,7 @@ export class DevNamespaceScope implements INamespaceScope {
 
   private handleError(error: any) {
     this.logger.error(error);
-    return Observable.throw(error.message || error);
+    return observableThrowError(error.message || error);
   }
 
   private extractUserNamespace(json: any): string {

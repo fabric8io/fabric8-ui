@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { ContextCurrentUserGuard } from '../../shared/context-current-user-guard.service';
 import { AreasComponent } from './areas/areas.component';
 import { SpaceSettingsComponent } from './space-settings.component';

@@ -1,7 +1,3 @@
-import { BaseEntity } from '../../store/entity/entity.model';
-import { currentOAuthConfig } from '../store/oauth-config-store';
-import { openShiftBrowseResourceUrl } from './helpers';
-
 import iconCamel from '../../../assets/images/icon-stack-camel.png';
 import iconFunktion from '../../../assets/images/icon-stack-funktion.png';
 import iconGo from '../../../assets/images/icon-stack-go.png';
@@ -15,6 +11,9 @@ import iconSpring from '../../../assets/images/icon-stack-spring.png';
 import iconSwift from '../../../assets/images/icon-stack-swift.png';
 import iconVertx from '../../../assets/images/icon-stack-vertx.png';
 import iconWildfly from '../../../assets/images/icon-stack-wildfly.png';
+import { BaseEntity } from '../../store/entity/entity.model';
+import { currentOAuthConfig } from '../store/oauth-config-store';
+import { openShiftBrowseResourceUrl } from './helpers';
 
 
 export class KubernetesResource implements BaseEntity {

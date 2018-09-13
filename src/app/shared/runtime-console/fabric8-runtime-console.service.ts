@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { forkJoin as observableForkJoin,  Observable } from 'rxjs';
 import { first, map, skipWhile, tap } from 'rxjs/operators';
-
 import { OAuthConfigStore } from '../../../a-runtime-console/index';
 import { LoginService } from '../login.service';
 
@@ -17,7 +15,7 @@ export class Fabric8RuntimeConsoleService {
   ) { }
 
   loading(): Observable<boolean> {
-    return Observable.forkJoin(this.loadingOAuthConfigStore(), this.loadingOpenShiftToken(), () => true);
+    return observableForkJoin(this.loadingOAuthConfigStore(), this.loadingOpenShiftToken(), () => true);
   }
 
   loadingOAuthConfigStore(): Observable<boolean> {

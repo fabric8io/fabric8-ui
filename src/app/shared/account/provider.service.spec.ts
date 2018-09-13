@@ -1,16 +1,13 @@
-import { TestBed } from '@angular/core/testing';
-
 import {
   HttpClientTestingModule,
   HttpTestingController,
   TestRequest
 } from '@angular/common/http/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { Broadcaster, Logger } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
-import { ProviderService } from './provider.service';
-
 import { createMock } from 'testing/mock';
+import { ProviderService } from './provider.service';
 
 describe('Service: Provider Service', () => {
 

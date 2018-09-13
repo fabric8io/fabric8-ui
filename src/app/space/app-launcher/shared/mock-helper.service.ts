@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { Config } from 'ngx-launcher';
 
 @Injectable()

@@ -10,15 +10,11 @@ import {
   Inject,
   Injectable
 } from '@angular/core';
-import { Observable } from 'rxjs';
-import { _throw } from 'rxjs/observable/throw';
-import { catchError } from 'rxjs/operators/catchError';
-import { map } from 'rxjs/operators/map';
-
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-
+import { Observable ,  throwError as _throw } from 'rxjs';
+import { catchError ,  map } from 'rxjs/operators';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 

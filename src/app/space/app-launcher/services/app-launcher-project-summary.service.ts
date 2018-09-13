@@ -1,17 +1,15 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import _ from 'lodash';
-import { Observable } from 'rxjs';
-
 import {
   HelperService,
   ProjectSummaryService,
   Summary
 } from 'ngx-launcher';
-
-import { ContextService } from '../../../shared/context.service';
-
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { AuthenticationService } from 'ngx-login-client';
+import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError, mergeMap } from 'rxjs/operators';
+import { ContextService } from '../../../shared/context.service';
 
 @Injectable()
 export class AppLauncherProjectSummaryService implements ProjectSummaryService {
@@ -54,14 +52,14 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
   setup(summary: Summary, retry?: number): Observable<any> {
     this.headers = this.headers.set('X-Execution-Step-Index', String(retry || 0));
 
-    return this.context.current.flatMap(c => {
+    return this.context.current.pipe(mergeMap(c => {
       let summaryEndPoint = this.END_POINT + (summary.mission ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
       let payload = this.getPayload(summary, c.space ? c.space.id : '', c.name);
       console.log('URL - ', summaryEndPoint);
       return this.http
-        .post(summaryEndPoint, payload, { headers: this.headers })
-        .catch(this.handleError);
-      });
+        .post(summaryEndPoint, payload, { headers: this.headers }).pipe(
+        catchError(this.handleError));
+      }));
   }
 
   private handleError(error: HttpErrorResponse | any) {
@@ -76,7 +74,7 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
       errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-    return Observable.throw(errMsg);
+    return observableThrowError(errMsg);
   }
 
   private getPayload(summary: Summary, spaceId: string, spaceName: string) {

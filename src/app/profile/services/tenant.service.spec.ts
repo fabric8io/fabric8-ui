@@ -1,17 +1,13 @@
-import { TestBed } from '@angular/core/testing';
-
+import { HttpResponse } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
   TestRequest
 } from '@angular/common/http/testing';
-
-import { HttpResponse } from '@angular/common/http';
-
+import { TestBed } from '@angular/core/testing';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-
 import { createMock } from '../../../testing/mock';
 import { TenantService } from './tenant.service';
 

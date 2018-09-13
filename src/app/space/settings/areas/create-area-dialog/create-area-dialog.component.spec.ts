@@ -1,7 +1,7 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { Area, AreaService } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs/Observable';
+import { Observable,  of as observableOf } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
 import { AreaCreationStatus, CreateAreaDialogComponent } from './create-area-dialog.component';
 
@@ -13,7 +13,7 @@ class HostComponent {}
 describe('CreateAreaDialogComponent', () => {
   type Context = TestContext<CreateAreaDialogComponent, HostComponent>;
   let mockAreaService: jasmine.SpyObj<AreaService> = jasmine.createSpyObj('AreaService', ['create']);
-  mockAreaService.create.and.returnValue(Observable.of({
+  mockAreaService.create.and.returnValue(observableOf({
     id: 'mock-id',
     attributes: {
       name: 'mock-name'

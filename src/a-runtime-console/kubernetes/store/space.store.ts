@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import 'rxjs/add/observable/forkJoin';
+import { combineLatest, take } from 'rxjs/operators';
 import { OnLogin } from '../../shared/onlogin.service';
 import { ConfigMap, ConfigMaps } from '../model/configmap.model';
 import { isSecretsNamespace, isSystemNamespace, Namespace, Namespaces } from '../model/namespace.model';
@@ -81,16 +81,16 @@ export class SpaceStore {
     this.spaceConfigs = new Map<String, SpaceConfig>();
     this.spaceConfigsSubject = new BehaviorSubject(this.spaceConfigs);
 
-    this.list = namespacesList.combineLatest(this.spaceConfigsSubject.asObservable(), this.combineNamespacesAndConfigMaps);
+    this.list = namespacesList.pipe(combineLatest(this.spaceConfigsSubject.asObservable(), this.combineNamespacesAndConfigMaps));
 
-    this.resource = this.list.combineLatest(this._idSubject.asObservable(), (spaces, id) => {
+    this.resource = this.list.pipe(combineLatest(this._idSubject.asObservable(), (spaces, id) => {
       for (let space of spaces) {
         if (space.name === id) {
           return space;
         }
       }
       return null;
-    });
+    }));
 
     // lets make sure we've always got an up to date map of configmaps
     namespacesList.subscribe(namespaces => {
@@ -113,7 +113,7 @@ export class SpaceStore {
               // lets load the initial value
               configMapService.list(name, {
                 labelSelector: 'provider=fabric8'
-              }).take(1).subscribe(cms => {
+              }).pipe(take(1)).subscribe(cms => {
                 if (cms && cms.length) {
                   var environmentsConfigMap: ConfigMap = null;
                   var spacesConfigMap: ConfigMap = null;

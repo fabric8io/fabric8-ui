@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { PodPhase } from '../../models/pod-phase';
 import { Pods } from '../../models/pods';
-
 import { DeploymentsDonutChartComponent } from './deployments-donut-chart.component';
 
 @Component({

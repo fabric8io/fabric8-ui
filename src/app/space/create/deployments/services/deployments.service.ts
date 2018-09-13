@@ -4,33 +4,6 @@ import {
   InjectionToken,
   OnDestroy
 } from '@angular/core';
-
-import {
-  Observable,
-  ReplaySubject,
-  Subject,
-  Subscription
-} from 'rxjs';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { empty } from 'rxjs/observable/empty';
-import { from } from 'rxjs/observable/from';
-import { _throw } from 'rxjs/observable/throw';
-import { bufferCount } from 'rxjs/operators/bufferCount';
-import { catchError } from 'rxjs/operators/catchError';
-import { concatMap } from 'rxjs/operators/concatMap';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import { filter } from 'rxjs/operators/filter';
-import { finalize } from 'rxjs/operators/finalize';
-import { map } from 'rxjs/operators/map';
-import { mergeMap } from 'rxjs/operators/mergeMap';
-import { pairwise } from 'rxjs/operators/pairwise';
-import { startWith } from 'rxjs/operators/startWith';
-
-import {
-  Notification,
-  NotificationType
-} from 'ngx-base';
-
 import {
   flatten,
   has,
@@ -39,7 +12,32 @@ import {
   isEqual as deepEqual,
   round
 } from 'lodash';
-
+import {
+  Notification,
+  NotificationType
+} from 'ngx-base';
+import {
+  combineLatest,
+  EMPTY as empty,
+  from,
+  Observable,
+  ReplaySubject,
+  Subject,
+  Subscription,
+  throwError as _throw
+} from 'rxjs';
+import {
+  bufferCount,
+  catchError,
+  concatMap,
+  distinctUntilChanged,
+  filter,
+  finalize,
+  map,
+  mergeMap,
+  pairwise,
+  startWith
+} from 'rxjs/operators';
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';

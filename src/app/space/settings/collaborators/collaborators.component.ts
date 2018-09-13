@@ -1,5 +1,4 @@
 import { Component, ErrorHandler, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-
 import { find } from 'lodash';
 import { Logger } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -8,7 +7,6 @@ import { User } from 'ngx-login-client';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { ListConfig } from 'patternfly-ng/list';
 import { Subscription } from 'rxjs';
-
 import { ContextService } from '../../../shared/context.service';
 import { AddCollaboratorsDialogComponent } from './add-collaborators-dialog/add-collaborators-dialog.component';
 

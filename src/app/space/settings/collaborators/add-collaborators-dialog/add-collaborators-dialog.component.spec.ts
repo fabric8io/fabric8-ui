@@ -4,21 +4,18 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-
-import { Observable } from 'rxjs';
-import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService } from 'ngx-fabric8-wit';
 import {
   User,
   UserService
 } from 'ngx-login-client';
-
+import { Observable,  of as observableOf } from 'rxjs';
+import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { AddCollaboratorsDialogComponent } from './add-collaborators-dialog.component';
 
 @Component({
@@ -51,7 +48,7 @@ describe('AddCollaboratorsDialog', () => {
 
   it('should reset state on add', function(this: Context) {
     const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-    collaboratorService.addCollaborators.and.returnValue(Observable.of(true));
+    collaboratorService.addCollaborators.and.returnValue(observableOf(true));
 
     expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
     this.testedDirective.collaborators = [{ id: 'foo-user' } as User, { id: 'bar-user' } as User];

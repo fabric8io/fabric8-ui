@@ -3,10 +3,8 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators/map';
-
+import { map } from 'rxjs/operators';
 import { MemoryStat } from '../models/memory-stat';
 import { DeploymentStatusService } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';

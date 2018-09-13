@@ -1,8 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Subscription } from 'rxjs';
-
 import { Codebase } from '../services/codebase';
 import { GitHubService } from '../services/github.service';
 

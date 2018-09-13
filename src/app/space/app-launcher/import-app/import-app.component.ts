@@ -5,12 +5,10 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-
 import { Broadcaster } from 'ngx-base';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-
+import { Subscription } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
 
 @Component({

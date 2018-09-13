@@ -6,18 +6,15 @@ import {
   async,
   TestBed
 } from '@angular/core/testing';
+import { Observable, of } from 'rxjs';
 
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { Spaces } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
 import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { DeploymentsComponent } from './deployments.component';
 import { DeploymentsService } from './services/deployments.service';
 

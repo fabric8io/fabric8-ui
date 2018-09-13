@@ -3,11 +3,9 @@ import {
   ComponentFixture,
   TestBed
 } from '@angular/core/testing';
-
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { WorkItemBarchartConfig } from './work-item-barchart-config';
 import { WorkItemBarchartData } from './work-item-barchart-data';
 import { WorkItemBarchartComponent } from './work-item-barchart.component';

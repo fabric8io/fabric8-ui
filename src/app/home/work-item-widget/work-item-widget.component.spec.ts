@@ -3,23 +3,19 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
-
-import { ConnectableObservable } from 'rxjs';
-import { Observable, Subject } from 'rxjs';
-
 import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
+import { cloneDeep } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Fabric8WitModule, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-
-import { cloneDeep } from 'lodash';
+import { ConnectableObservable,  Observable ,  of as observableOf, Subject } from 'rxjs';
+import { publish } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { spaceMock } from '../../shared/context.service.mock';
 import { WorkItemsData } from '../../shared/workitem-utils';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
@@ -33,7 +29,7 @@ class HostComponent {}
 describe('Home: WorkItemWidgetComponent', () => {
   type TestingContext = TestContext<WorkItemWidgetComponent, HostComponent>;
 
-  let fakeUser: Observable<User> = Observable.of({
+  let fakeUser: Observable<User> = observableOf({
     id: 'fakeId',
     type: 'fakeType',
     attributes: {
@@ -74,7 +70,7 @@ describe('Home: WorkItemWidgetComponent', () => {
 
   let fakeWorkItems: WorkItem[] = [fakeWorkItem1, fakeWorkItem2, fakeWorkItem3, fakeWorkItem4, fakeWorkItem5];
 
-  let fakeWorkItemsObs: Observable<WorkItemsData> = Observable.of({
+  let fakeWorkItemsObs: Observable<WorkItemsData> = observableOf({
     workItems: fakeWorkItems
   } as WorkItemsData);
 
@@ -93,7 +89,7 @@ describe('Home: WorkItemWidgetComponent', () => {
       { provide: UserService, useFactory: () => {
           let userService = createMock(UserService);
           userService.getUser.and.returnValue(fakeUser);
-          userService.loggedInUser = fakeUser.publish() as ConnectableObservable<User> & jasmine.Spy;
+          userService.loggedInUser = fakeUser.pipe(publish()) as ConnectableObservable<User> & jasmine.Spy;
           return userService;
         }
       }, {
@@ -115,13 +111,13 @@ describe('Home: WorkItemWidgetComponent', () => {
             'url': 'mock-url'
           };
           let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
-          mockRouter.events = Observable.of(mockRouterEvent);
+          mockRouter.events = observableOf(mockRouterEvent);
           return mockRouter;
         }
       }, {
         provide: Spaces, useValue: {
-          'current': Observable.of(spaceMock),
-          'recent': Observable.of([spaceMock])
+          'current': observableOf(spaceMock),
+          'recent': observableOf([spaceMock])
         } as Spaces
       }, {
         provide: FilterService, useFactory: () => {

@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { UserService } from 'ngx-login-client';
 import Raven from 'raven-js';
-
 import { Environment } from './environment';
 import * as environment from './environment';
 import { RavenExceptionHandler } from './exception.handler';

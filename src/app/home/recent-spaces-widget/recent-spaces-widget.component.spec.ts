@@ -8,17 +8,6 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
-  Observable,
-  Subject
-} from 'rxjs';
-
-import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
-import {
   Broadcaster,
   Logger
 } from 'ngx-base';
@@ -32,7 +21,16 @@ import {
   User,
   UserService
 } from 'ngx-login-client';
-
+import { never as observableNever, Observable,
+  Subject,
+  throwError as observableThrowError
+} from 'rxjs';
+import { first } from 'rxjs/operators';
+import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { RecentSpacesWidget } from './recent-spaces-widget.component';
 
 @Component({
@@ -78,7 +76,7 @@ describe('RecentSpacesWidget', () => {
         useFactory: (): Spaces => {
           return {
             recent: new Subject<Space[]>(),
-            current: Observable.throw('unimplemented')
+            current: observableThrowError('unimplemented')
           } as Spaces;
         }
       },
@@ -117,7 +115,7 @@ describe('RecentSpacesWidget', () => {
 
   it('should display the loading widget while waiting for the recent spaces', function(this: TestingContext): void {
     let mockSpacesService: any = TestBed.get(Spaces);
-    mockSpacesService.recent = Observable.never();
+    mockSpacesService.recent = observableNever();
     let spaceList: DebugElement = this.fixture.debugElement.query(By.css('spaceList'));
     let emptyList: DebugElement = this.fixture.debugElement.query(By.css('emptyList'));
     let loading: DebugElement = this.fixture.debugElement.query(By.css('fabric8-loading-widget'));
@@ -129,7 +127,7 @@ describe('RecentSpacesWidget', () => {
 
   describe('recentSpaces', () => {
     it('should relay empty results', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.recentSpaces.first().subscribe(function(spaces: Space[]): void {
+      this.testedDirective.recentSpaces.pipe(first()).subscribe(function(spaces: Space[]): void {
         expect(spaces).toEqual([]);
         done();
       });
@@ -164,7 +162,7 @@ describe('RecentSpacesWidget', () => {
           }
         } as Space
       ];
-      this.testedDirective.recentSpaces.first().subscribe(function(spaces: Space[]): void {
+      this.testedDirective.recentSpaces.pipe(first()).subscribe(function(spaces: Space[]): void {
         expect(spaces).toEqual(mockSpaces);
         done();
       });
@@ -175,7 +173,7 @@ describe('RecentSpacesWidget', () => {
 
   describe('userHasSpaces', () => {
     it('should emit "true" if space array is nonempty', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.userHasSpaces.first().subscribe((hasSpaces: boolean): void => {
+      this.testedDirective.userHasSpaces.pipe(first()).subscribe((hasSpaces: boolean): void => {
         expect(hasSpaces).toBeTruthy();
         done();
       });
@@ -199,7 +197,7 @@ describe('RecentSpacesWidget', () => {
     });
 
     it('should emit "false" if space array is empty', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.userHasSpaces.first().subscribe((hasSpaces: boolean): void => {
+      this.testedDirective.userHasSpaces.pipe(first()).subscribe((hasSpaces: boolean): void => {
         expect(hasSpaces).toBeFalsy();
         done();
       });

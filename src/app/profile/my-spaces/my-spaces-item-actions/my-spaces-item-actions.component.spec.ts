@@ -3,7 +3,6 @@ import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster, Notifications } from 'ngx-base';
 import {
@@ -11,8 +10,7 @@ import {
   SpaceService
 } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-
+import { Observable,  of as observableOf } from 'rxjs';
 import { MenusService } from '../../../layout/header/menus.service';
 import { ContextService } from '../../../shared/context.service';
 import { loggedInUser, profile } from '../../../shared/context.service.mock';
@@ -40,12 +38,12 @@ describe('My Spaces Item Actions Component', () => {
     mockMenu = jasmine.createSpyObj('MenusService', ['attach']);
     mockSpaceService = jasmine.createSpy('SpaceService');
     mockUserService = jasmine.createSpyObj('UserService', ['getUserByUserId']);
-    mockUserService.getUserByUserId.and.returnValue(Observable.of(loggedInUser));
-    mockUserService.loggedInUser = Observable.of(loggedInUser);
+    mockUserService.getUserByUserId.and.returnValue(observableOf(loggedInUser));
+    mockUserService.loggedInUser = observableOf(loggedInUser);
     mockNotifications = jasmine.createSpy('Notifications');
     mockRoute = jasmine.createSpy('ActivatedRoute');
     mockProfileService = jasmine.createSpy('ProfileService');
-    mockProfileService.current = Observable.of(profile);
+    mockProfileService.current = observableOf(profile);
     mockLocalStorage = jasmine.createSpy('LocalStorageService');
 
     TestBed.configureTestingModule({

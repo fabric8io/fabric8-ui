@@ -4,18 +4,15 @@ import {
   NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
+import {
+  AuthenticationService,
+  UserService
+} from 'ngx-login-client';
 import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
-import {
-  AuthenticationService,
-  UserService
-} from 'ngx-login-client';
-
 import { ErrorComponent } from './error.component';
 import { ErrorService } from './error.service';
 

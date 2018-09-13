@@ -7,7 +7,7 @@ import { Notifications, NotificationType } from 'ngx-base';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
 import { ListModule } from 'patternfly-ng';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';

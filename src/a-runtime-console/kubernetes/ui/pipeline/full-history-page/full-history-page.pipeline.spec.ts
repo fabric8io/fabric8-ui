@@ -1,14 +1,11 @@
 /* tslint:disable:no-unused-variable */
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { Observable } from 'rxjs';
-
-import { PipelinesFullHistoryPage } from './full-history-page.pipeline.component';
-
+import { empty as observableEmpty, Observable,  of as observableOf } from 'rxjs';
 import { APIsStore } from '../../../store/apis.store';
 import { BuildStore } from '../../../store/build.store';
 import { BuildConfigStore } from '../../../store/buildconfig.store';
+import { PipelinesFullHistoryPage } from './full-history-page.pipeline.component';
 
 describe('PipelinesFullHistoryPage', () => {
   let component: PipelinesFullHistoryPage;
@@ -16,13 +13,13 @@ describe('PipelinesFullHistoryPage', () => {
 
   beforeEach(async(() => {
     let mockBuildConfigStore: any = jasmine.createSpy('BuildConfigStore');
-    mockBuildConfigStore.loading = Observable.of(true);
-    mockBuildConfigStore.list = Observable.empty();
+    mockBuildConfigStore.loading = observableOf(true);
+    mockBuildConfigStore.list = observableEmpty();
     let mockBuildStore: any = jasmine.createSpy('BuildStore');
-    mockBuildStore.loading = Observable.of(true);
-    mockBuildStore.list = Observable.empty();
+    mockBuildStore.loading = observableOf(true);
+    mockBuildStore.list = observableEmpty();
     let mockAPIsStore: any = jasmine.createSpyObj('APIsStore', ['load']);
-    mockAPIsStore.loading = Observable.empty();
+    mockAPIsStore.loading = observableEmpty();
 
     TestBed.configureTestingModule({
       declarations: [

@@ -2,12 +2,11 @@ import {
   Injectable,
   OnDestroy
 } from '@angular/core';
-
-import {
-  Observable,
-  Subject
+import { Observable,
+  Subject,
+  timer as observableTimer
 } from 'rxjs';
-
+import { distinctUntilChanged, map, mergeMap, shareReplay, takeUntil } from 'rxjs/operators';
 import {
   Application,
   Deployment,
@@ -30,9 +29,9 @@ export class ApplicationOverviewService implements OnDestroy {
 
   private readonly destroyed: Subject<void> = new Subject<void>();
 
-  private readonly pollTimer: Observable<void> = Observable.timer(0, 10000)
-    .map(() => null)
-    .takeUntil(this.destroyed);
+  private readonly pollTimer: Observable<void> = observableTimer(0, 10000).pipe(
+    map(() => null),
+    takeUntil(this.destroyed));
 
   constructor(
     private deploymentApiService: DeploymentApiService
@@ -44,11 +43,11 @@ export class ApplicationOverviewService implements OnDestroy {
   }
 
   getAppsAndEnvironments(spaceId: string): Observable<ApplicationAttributesOverview[]> {
-    return this.pollTimer.mergeMap(() =>
-      this.deploymentApiService.getApplications(spaceId)
-        .map((apps: Application[]): Application[] => apps || [])
-        .map((apps: Application[]): Application[] => apps.sort((a: Application, b: Application): number => a.attributes.name.localeCompare(b.attributes.name)))
-        .map((apps: Application[]): ApplicationAttributesOverview[] =>
+    return this.pollTimer.pipe(mergeMap(() =>
+      this.deploymentApiService.getApplications(spaceId).pipe(
+        map((apps: Application[]): Application[] => apps || []),
+        map((apps: Application[]): Application[] => apps.sort((a: Application, b: Application): number => a.attributes.name.localeCompare(b.attributes.name))),
+        map((apps: Application[]): ApplicationAttributesOverview[] =>
           apps.map((app: Application): ApplicationAttributesOverview => {
             const appName: string = app.attributes.name;
             const deploymentsInfo: DeploymentPreviewInfo[] = app.attributes.deployments.map(
@@ -60,10 +59,10 @@ export class ApplicationOverviewService implements OnDestroy {
             ).sort((a: DeploymentPreviewInfo, b: DeploymentPreviewInfo): number => a.name.localeCompare(b.name));
             return { appName, deploymentsInfo };
           })
-        )
-    )
-      .distinctUntilChanged()
-      .shareReplay();
+        ))
+    ),
+      distinctUntilChanged(),
+      shareReplay());
   }
 
 }
