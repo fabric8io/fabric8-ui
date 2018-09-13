@@ -6,7 +6,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Subscription } from 'rxjs';
 
@@ -246,7 +246,7 @@ export class PipelinesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   checkUrl(): void {
     this.subscriptions.push(
-      this.route.queryParams.subscribe(query => {
+      this.route.queryParams.subscribe((query: Params) => {
         if (query.hasOwnProperty('q')) {
           let queryJson: QueryJson = JSON.parse(query.q);
           let application: string[] = queryJson.application;
