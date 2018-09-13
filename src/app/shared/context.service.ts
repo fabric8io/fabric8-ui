@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import {
@@ -12,22 +11,16 @@ import {
 } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
-import { Observable, Scheduler } from 'rxjs';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { merge } from 'rxjs/observable/merge';
-import { of } from 'rxjs/observable/of';
-import {
-  catchError,
+import { ConnectableObservable, empty as observableEmpty,  forkJoin, merge ,  Observable ,  of ,  ReplaySubject ,  Scheduler ,  Subject ,  throwError as observableThrowError } from 'rxjs';
+import { catchError,
   distinctUntilChanged,
   distinctUntilKeyChanged,
   map,
+  multicast,
   scan,
   switchMap,
   tap
 } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Subject } from 'rxjs/Subject';
 import { MenusService } from '../layout/header/menus.service';
 import { Navigation } from '../models/navigation';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
@@ -123,7 +116,7 @@ export class ContextService implements Contexts {
             return {} as Context;
           }
         })
-      ).multicast(() => new ReplaySubject(1));
+      ).pipe(multicast(() => new ReplaySubject(1)));
 
     // Create the recent space list
     this._recent = merge(this._addRecent, this._deleteFromRecent).pipe(
@@ -143,7 +136,7 @@ export class ContextService implements Contexts {
       tap(val => {
         this.saveRecent(val);
       })
-    ).multicast(() => new ReplaySubject(1));
+    ).pipe(multicast(() => new ReplaySubject(1)));
     // Finally, start broadcasting
     this._default.connect();
     this._recent.connect();
@@ -207,7 +200,7 @@ export class ContextService implements Contexts {
               catchError((err, caught) => {
                 console.log(`Space with name ${val.space} and owner ${val.user}
                   from path ${val.url} was not found because of ${err}`);
-                return Observable.throw(`Space with name ${val.space} and owner ${val.user}
+                return observableThrowError(`Space with name ${val.space} and owner ${val.user}
                   from path ${val.url} was not found because of ${err}`);
               })
             );
@@ -221,7 +214,7 @@ export class ContextService implements Contexts {
               }),
               catchError((err, caught) => {
                 console.log(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
-                return Observable.throw(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
+                return observableThrowError(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
               })
             );
         }
@@ -265,7 +258,7 @@ export class ContextService implements Contexts {
       tap(val => {
         this._current.next(val);
       })
-    ).multicast(() => new Subject());
+    ).pipe(multicast(() => new Subject()));
     res.connect();
     return res;
   }
@@ -318,7 +311,7 @@ export class ContextService implements Contexts {
 
   private loadUser(userName: string): Observable<User> {
     if (this.checkForReservedWords(userName)) {
-      return Observable.throw(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
     }
     return this.userService
       .getUserByUsername(userName)
@@ -356,9 +349,9 @@ export class ContextService implements Contexts {
 
   private loadSpace(userName: string, spaceName: string): Observable<Space> {
     if (this.checkForReservedWords(userName)) {
-      return Observable.throw(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
     } else if (this.checkForReservedWords(spaceName)) {
-      return Observable.throw(new Error(`Space name ${spaceName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`Space name ${spaceName} contains reserved characters.`), Scheduler.asap);
     }
 
     if (userName && spaceName) {
@@ -384,7 +377,7 @@ export class ContextService implements Contexts {
   }
 
   private loadRecent(): Observable<Context[]> {
-    return this.profileService.current.switchMap(profile => {
+    return this.profileService.current.pipe(switchMap(profile => {
       if (profile.store.recentContexts) {
         return forkJoin((profile.store.recentContexts as RawContext[])
           // We invert the order above when we add recent contexts
@@ -400,7 +393,7 @@ export class ContextService implements Contexts {
                 .pipe(
                   catchError(err => {
                     console.log('Unable to restore recent context', err);
-                    return Observable.empty<Context>();
+                    return observableEmpty<Context>();
                   }),
                   map(val => {
                     return this.buildContext({ user: val } as RawContext);
@@ -411,7 +404,7 @@ export class ContextService implements Contexts {
       } else {
         return of([]);
       }
-    });
+    }));
   }
 
   private saveRecent(recent: Context[]) {

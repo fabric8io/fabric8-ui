@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
 import { AreasModule } from './areas/areas.module';
 import { SettingsOverviewModule } from './settings-overview/settings-overview.module';
 import { SpaceSettingsRoutingModule } from './space-settings-routing.module';

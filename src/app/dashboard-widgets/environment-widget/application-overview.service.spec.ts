@@ -3,11 +3,8 @@ import {
   TestBed,
   tick
 } from '@angular/core/testing';
-
+import { Observable,  of as observableOf } from 'rxjs';
 import { createMock } from 'testing/mock';
-
-import { Observable } from 'rxjs';
-
 import { DeploymentApiService } from '../../space/create/deployments/services/deployment-api.service';
 import {
   ApplicationAttributesOverview,
@@ -26,7 +23,7 @@ describe('ApplicationOverviewService', () => {
 
   it('should return data from backend', (done: DoneFn): void => {
     const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
-    apiSvc.getApplications.and.returnValue(Observable.of([
+    apiSvc.getApplications.and.returnValue(observableOf([
       {
         attributes: {
           name: 'foo-app',
@@ -98,7 +95,7 @@ describe('ApplicationOverviewService', () => {
 
   it('should start immediately and then poll on a 10-second interval', fakeAsync(() => {
     const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
-    apiSvc.getApplications.and.returnValue(Observable.of([]));
+    apiSvc.getApplications.and.returnValue(observableOf([]));
 
     let emissions: number = 0;
     const svc: ApplicationOverviewService = TestBed.get(ApplicationOverviewService);

@@ -1,18 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
-
 import { Context } from 'ngx-fabric8-wit';
 import {
     DependencyCheck
 } from 'ngx-launcher';
-
+import { Observable ,  of as observableOf } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
 import { DeploymentApiService } from '../../create/deployments/services/deployment-api.service';
 import { AppLauncherDependencyCheckService } from './app-launcher-dependency-check.service';
 
 let mockDeploymentApiService: any = {
   getApplications(): Observable<any[]> {
-      return Observable.of([{
+      return observableOf([{
           attributes: {name: 'app-apr-10-2018-4-25'}
       }, {
           attributes: {name: 'app-may-11-2018'}
@@ -32,7 +30,7 @@ function initTestBed() {
   });
 }
 
-let mockContext = <Context>{
+let mockContext = <Context> {
   name: 'my-space-apr24-4-43',
   path: '/user/my-space-apr24-4-43',
   space: {
@@ -48,7 +46,7 @@ let mockContext = <Context>{
 };
 
 class mockContextService {
-  get current(): Observable<Context> { return Observable.of(mockContext); }
+  get current(): Observable<Context> { return observableOf(mockContext); }
 }
 
 describe('Service: AppLauncherDependencyCheckService', () => {

@@ -3,13 +3,11 @@ import { DebugElement, DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Event, Router, RouterModule } from '@angular/router';
-
 import { WorkItem, WorkItemService } from 'fabric8-planner';
 import { cloneDeep } from 'lodash';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
-import { Observable, Subject } from 'rxjs';
-
+import { Observable,  of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
@@ -83,7 +81,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
     mockSpacesService.addRecent.next = {};
     mockSpacesService = {
       ...mockSpacesService,
-      ...{current: Observable.of({})}
+      ...{current: observableOf({})}
     };
 
     TestBed.configureTestingModule({
@@ -101,7 +99,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
           provide: FeatureTogglesService,
           useFactory: () => {
             const mockFeatureTogglesService: jasmine.SpyObj<FeatureTogglesService> = createMock(FeatureTogglesService);
-            mockFeatureTogglesService.getFeature.and.returnValue(Observable.of(mockFeature));
+            mockFeatureTogglesService.getFeature.and.returnValue(observableOf(mockFeature));
             return mockFeatureTogglesService;
           }
         },
@@ -116,7 +114,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
           provide: Contexts,
           useFactory: () => {
             const mockContexts: any = createMock(Contexts);
-            mockContexts.current = Observable.of(mockContext);
+            mockContexts.current = observableOf(mockContext);
             return mockContexts;
           }
         },
@@ -131,7 +129,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
           provide: Router,
           useFactory: () => {
             const mockRouter: any = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
-            mockRouter.events = Observable.of(mockRouterEvent);
+            mockRouter.events = observableOf(mockRouterEvent);
             return mockRouter;
           }
         },
@@ -140,7 +138,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
           provide: WorkItemService,
           useFactory: () => {
             const mockWorkItemService: jasmine.SpyObj<WorkItemService> = createMock(WorkItemService);
-            mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+            mockWorkItemService.getWorkItems.and.returnValue(observableOf({
               workItems: workItems
             } as WorkItemsData));
             return mockWorkItemService;
@@ -181,7 +179,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
 
   it('should enable buttons if the user owns the space', () => {
     component.userOwnsSpace = true;
-    component.myWorkItemsCount = Observable.of(0);
+    component.myWorkItemsCount = observableOf(0);
     fixture.detectChanges();
 
     expect(fixture.debugElement.query(By.css('#spacehome-workitems-create-button'))).not.toBeNull();
@@ -189,7 +187,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
 
   it('should disable buttons if the user does not own the space', () => {
     component.userOwnsSpace = false;
-    component.myWorkItemsCount = Observable.of(0);
+    component.myWorkItemsCount = observableOf(0);
     fixture.detectChanges();
 
     expect(fixture.debugElement.query(By.css('#spacehome-workitems-create-button'))).toBeNull();
@@ -204,7 +202,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
 
     it('should not detailed work item counters for work items without a system.state', () => {
       const mockWorkItemService: jasmine.SpyObj<WorkItemService> = TestBed.get(WorkItemService);
-      mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+      mockWorkItemService.getWorkItems.and.returnValue(observableOf({
         workItems: [workItem] // workItem has no system.state attribute
       } as WorkItemsData));
 
@@ -235,7 +233,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       expect(component.myWorkItemsInProgress).toBeGreaterThan(0);
       expect(component.myWorkItemsResolved).toBeGreaterThan(0);
 
-      mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+      mockWorkItemService.getWorkItems.and.returnValue(observableOf({
         workItems: []
       } as WorkItemsData));
       mockContexts.current.next(mockContext);
@@ -261,7 +259,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       expect(component.chartData.yData[1]).toEqual([component.LABEL_IN_PROGRESS, 1]);
       expect(component.chartData.yData[2]).toEqual([component.LABEL_OPEN, 2]);
 
-      mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+      mockWorkItemService.getWorkItems.and.returnValue(observableOf({
         workItems: [workItem1, workItem2, workItem3]
       } as WorkItemsData));
       mockContexts.current.next(mockContext);
@@ -278,7 +276,7 @@ describe('Dashboard: WorkItemWidgetComponent', () => {
       component = fixture.debugElement.componentInstance;
       fixture.detectChanges();
 
-      mockWorkItemService.getWorkItems.and.returnValue(Observable.of({
+      mockWorkItemService.getWorkItems.and.returnValue(observableOf({
         workItems: [workItem1, workItem2, workItem3],
         nextLink: 'mock-nextLink',
         totalCount: 5

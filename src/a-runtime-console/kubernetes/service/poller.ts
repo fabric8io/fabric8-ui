@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject,  Observable, Subscription, timer as observableTimer } from 'rxjs';
 import { Operation, ResourceOperation } from './resource-operation';
 
 
@@ -58,7 +58,7 @@ export class Poller<L> {
 
   protected onSubscriptionClosed() {
     // lets wait a bit then lets recreate the subscription
-    Observable.timer(this.pollPeriod).subscribe(() => {
+    observableTimer(this.pollPeriod).subscribe(() => {
       this.recreate();
     });
   }

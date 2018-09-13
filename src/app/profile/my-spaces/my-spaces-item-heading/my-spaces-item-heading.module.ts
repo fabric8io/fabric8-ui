@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-
 import { MySpacesItemHeadingComponent } from './my-spaces-item-heading.component';
 
 @NgModule({

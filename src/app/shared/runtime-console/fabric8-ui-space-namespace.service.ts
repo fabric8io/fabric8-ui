@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { Spaces } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-
+import { map,  switchMap } from 'rxjs/operators';
 import { SpaceNamespace } from '../../../a-runtime-console/index';
 import { Fabric8RuntimeConsoleService } from './fabric8-runtime-console.service';
 import { SpaceNamespaceService } from './space-namespace.service';
@@ -29,7 +27,7 @@ export class Fabric8UISpaceNamespace implements SpaceNamespace {
     return this.fabric8RuntimeConsoleService
       .loading()
       .pipe(
-        switchMap(() => this.spaces.current.map(space => space ? space.attributes.name : ''))
+        switchMap(() => this.spaces.current.pipe(map(space => space ? space.attributes.name : '')))
       );
   }
 

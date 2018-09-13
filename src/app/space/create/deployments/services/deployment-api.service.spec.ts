@@ -5,15 +5,11 @@ import {
 } from '@angular/common/http/testing';
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import { first } from 'rxjs/operators/first';
-
-import { createMock } from 'testing/mock';
-
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-
+import { first } from 'rxjs/operators';
+import { createMock } from 'testing/mock';
 import {
   Application,
   ApplicationsResponse,

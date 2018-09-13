@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { Space } from 'ngx-fabric8-wit';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class EventService {

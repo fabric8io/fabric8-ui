@@ -1,5 +1,4 @@
 import { Type } from '@angular/core';
-
 import { uniq } from 'lodash';
 
 /*

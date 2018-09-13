@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-
 import { Logger } from 'ngx-base';
-
 import { CopyService } from './copy.service';
 
 describe('CopyService', () => {

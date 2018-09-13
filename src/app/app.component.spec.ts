@@ -15,12 +15,6 @@ import {
   RouterStateSnapshot
 } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import { createMock } from 'testing/mock';
-import {
-  initContext
-} from 'testing/test-context';
-
 import {
   Broadcaster,
   Logger
@@ -31,22 +25,24 @@ import {
   Spaces
 } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import {
+import { never as observableNever,
   Observable,
   Subject
 } from 'rxjs';
-
+import { createMock } from 'testing/mock';
+import {
+  initContext
+} from 'testing/test-context';
 import { OnLogin } from '../a-runtime-console';
+import { AppComponent } from './app.component';
+import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
+import { ErrorService } from './layout/error/error.service';
 import { AboutService } from './shared/about.service';
 import { ProviderService } from './shared/account/provider.service';
 import { AnalyticService } from './shared/analytics.service';
 import { BrandingService } from './shared/branding.service';
 import { LoginService } from './shared/login.service';
 import { NotificationsService } from './shared/notifications.service';
-
-import { AppComponent } from './app.component';
-import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
-import { ErrorService } from './layout/error/error.service';
 
 @Component({
   template: '<f8-app></f8-app>'
@@ -105,7 +101,7 @@ describe('AppComponent', () => {
       {
         provide: Broadcaster, useFactory: () => {
           const broadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
-          broadcaster.on.and.returnValue(Observable.never());
+          broadcaster.on.and.returnValue(observableNever());
           return broadcaster;
         }
       },

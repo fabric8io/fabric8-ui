@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import {
   DependencyCheckService,
   GitProviderService,
@@ -14,7 +13,6 @@ import {
   TargetEnvironmentService,
   TokenProvider
 } from 'ngx-launcher';
-
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
 import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovider.service';
 import { AppLauncherMissionRuntimeService } from '../services/app-launcher-mission-runtime.service';

@@ -1,13 +1,11 @@
 import {
   Injectable
 } from '@angular/core';
-
 import { UserService } from 'ngx-login-client';
 import {
   Observable
 } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { ScaledMemoryStat } from '../../../space/create/deployments/models/scaled-memory-stat';
 import { DeploymentApiService, EnvironmentStat } from '../../../space/create/deployments/services/deployment-api.service';
 

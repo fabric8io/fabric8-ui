@@ -1,10 +1,9 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
 import { GitHubDetails, GitProviderService, HelperService } from 'ngx-launcher';
 import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
-
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { empty as observableEmpty, Observable, of as observableOf,  throwError as observableThrowError } from 'rxjs';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 
 @Injectable()
 export class AppLauncherGitproviderService implements GitProviderService {
@@ -47,14 +46,14 @@ export class AppLauncherGitproviderService implements GitProviderService {
   link(provider: string, redirect: string): void {
     let linkURL = this.linkUrl + '?for=' + provider + '&redirect=' +  encodeURIComponent(redirect) ;
     this.http
-      .get(linkURL, { headers: this.headers })
-      .map((resp: HttpResponse<any>) => {
+      .get(linkURL, { headers: this.headers }).pipe(
+      map((resp: HttpResponse<any>) => {
         let redirectInfo = resp as any;
         this.redirectToAuth(redirectInfo.redirect_location);
-      })
-      .catch((error: HttpErrorResponse) => {
+      }),
+      catchError((error: HttpErrorResponse) => {
         return this.handleError(error);
-      })
+      }))
       .subscribe();
   }
 
@@ -75,10 +74,10 @@ export class AppLauncherGitproviderService implements GitProviderService {
   private getGitHubUserData(): Observable<any> {
     let url = this.END_POINT + this.API_BASE + 'user';
     return this.http
-      .get(url, { headers: this.headers })
-      .catch((error: HttpErrorResponse) => {
-        return Observable.throw(error);
-      });
+      .get(url, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return observableThrowError(error);
+      }));
   }
 
 
@@ -91,10 +90,10 @@ export class AppLauncherGitproviderService implements GitProviderService {
   getUserOrgs(userName: string): Observable<any> {
     let url = this.END_POINT + this.API_BASE + 'organizations';
     return this.http
-      .get(url, { headers: this.headers })
-      .catch((error: HttpErrorResponse) => {
-        return Observable.throw(error);
-      });
+      .get(url, { headers: this.headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return observableThrowError(error);
+      }));
   }
 
 
@@ -104,10 +103,10 @@ export class AppLauncherGitproviderService implements GitProviderService {
    * @returns {Observable<GitHubDetails>} The GitHub details associated with the logged in user
    */
   getGitHubDetails(): Observable<GitHubDetails> {
-    return this.getGitHubUserData().flatMap(user => {
+    return this.getGitHubUserData().pipe(mergeMap(user => {
       if (user && user.login) {
         let orgs = [];
-        return this.getUserOrgs(user.login).flatMap(orgsArr => {
+        return this.getUserOrgs(user.login).pipe(mergeMap(orgsArr => {
           if (orgsArr && orgsArr.length >= 0) {
             orgs = orgsArr;
             this.gitHubUserLogin = user.login;
@@ -119,15 +118,15 @@ export class AppLauncherGitproviderService implements GitProviderService {
               organizations: orgs,
               organization: user.login
             } as GitHubDetails;
-            return Observable.of(gitHubDetails);
+            return observableOf(gitHubDetails);
           } else {
-            return Observable.empty();
+            return observableEmpty();
           }
-        });
+        }));
       } else {
-        return Observable.empty();
+        return observableEmpty();
       }
-    });
+    }));
   }
 
   /**
@@ -146,14 +145,14 @@ export class AppLauncherGitproviderService implements GitProviderService {
       url = this.END_POINT + this.API_BASE + 'repositories/?organization=' + org;
     }
     return this.http
-      .get(url, { headers: this.headers })
-      .map((resp: HttpResponse<any>) => {
+      .get(url, { headers: this.headers }).pipe(
+      map((resp: HttpResponse<any>) => {
         let repoList: string[] = resp as any;
         return repoList.indexOf(fullName) !== -1;
-      })
-      .catch((error: HttpErrorResponse) => {
-        return Observable.throw(error);
-      });
+      }),
+      catchError((error: HttpErrorResponse) => {
+        return observableThrowError(error);
+      }));
   }
 
   /**
@@ -169,8 +168,8 @@ export class AppLauncherGitproviderService implements GitProviderService {
       url += '?organization=' + org;
     }
     return this.http
-      .get(url, { headers: this.headers })
-      .map((resp: HttpResponse<any>) => {
+      .get(url, { headers: this.headers }).pipe(
+      map((resp: HttpResponse<any>) => {
           let repoList = [];
           if (resp) {
             let responseList: string[] = resp as any;
@@ -179,10 +178,10 @@ export class AppLauncherGitproviderService implements GitProviderService {
             });
           }
           return repoList;
-        })
-      .catch((error: HttpErrorResponse) => {
-        return Observable.throw(error);
-      });
+        }),
+      catchError((error: HttpErrorResponse) => {
+        return observableThrowError(error);
+      }));
   }
 
   // Private
@@ -210,6 +209,6 @@ export class AppLauncherGitproviderService implements GitProviderService {
       errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-    return Observable.throw(errMsg);
+    return observableThrowError(errMsg);
   }
 }

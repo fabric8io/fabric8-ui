@@ -6,19 +6,16 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-
 import { cloneDeep } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
+  forkJoin,
   Observable,
   Subscription
 } from 'rxjs';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { first } from 'rxjs/operators/first';
-import { map } from 'rxjs/operators/map';
-
+import { first, map } from 'rxjs/operators';
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
 
 @Component({

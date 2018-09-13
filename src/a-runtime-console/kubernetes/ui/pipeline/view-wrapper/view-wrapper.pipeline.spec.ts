@@ -1,12 +1,10 @@
 /* tslint:disable:no-unused-variable */
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { PipelineViewWrapperComponent } from './view-wrapper.pipeline.component';
-
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Observable,  of as observableOf } from 'rxjs';
 import { BuildConfigStore } from '../../../store/buildconfig.store';
-
-import { Observable } from 'rxjs';
+import { PipelineViewWrapperComponent } from './view-wrapper.pipeline.component';
 
 describe('PipelineViewWrapperComponent', () => {
   let pipeline: PipelineViewWrapperComponent;
@@ -14,7 +12,7 @@ describe('PipelineViewWrapperComponent', () => {
 
   beforeEach(async(() => {
     let mockBuildConfigStore: any = jasmine.createSpy('BuildConfigService');
-    mockBuildConfigStore.resource = Observable.of({});
+    mockBuildConfigStore.resource = observableOf({});
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([])

@@ -5,12 +5,6 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-
-import {
-  ChartBase,
-  ChartDefaults
-} from 'patternfly-ng/chart';
-
 import {
   cloneDeep,
   defaultsDeep,
@@ -18,7 +12,10 @@ import {
   merge,
   uniqueId
 } from 'lodash';
-
+import {
+  ChartBase,
+  ChartDefaults
+} from 'patternfly-ng/chart';
 import { DeploymentsLinechartConfig } from './deployments-linechart-config';
 import { DeploymentsLinechartData } from './deployments-linechart-data';
 

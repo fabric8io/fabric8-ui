@@ -3,7 +3,6 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
 
 @Component({

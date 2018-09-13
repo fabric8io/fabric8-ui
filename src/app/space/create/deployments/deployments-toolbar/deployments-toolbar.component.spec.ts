@@ -2,12 +2,9 @@ import {
   Component,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
-
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
-
 import { initContext, TestContext } from 'testing/test-context';
-
 import { DeploymentsToolbarComponent } from './deployments-toolbar.component';
 
 @Component({

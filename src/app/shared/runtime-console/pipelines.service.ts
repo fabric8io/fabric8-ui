@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-
 import { orderBy, take } from 'lodash';
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-import { combineLatest } from 'rxjs/observable/combineLatest';
+import { combineLatest ,  Observable } from 'rxjs';
 import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
-
 import {
   BuildConfig,
   BuildConfigs,

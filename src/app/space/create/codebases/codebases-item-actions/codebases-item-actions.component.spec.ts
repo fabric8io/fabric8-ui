@@ -1,11 +1,9 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-
 import { Broadcaster, Notifications } from 'ngx-base';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { Observable } from 'rxjs';
-
+import { Observable, of as observableOf, throwError as observableThrowError } from 'rxjs';
 import { CheService } from '../services/che.service';
 import { CodebasesService } from '../services/codebases.service';
 import { GitHubService } from '../services/github.service';
@@ -58,7 +56,7 @@ describe('Codebases Item Actions Component', () => {
       schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(CodebasesItemActionsComponent);
-    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: false, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: false, multiTenant: true, running: true}));
   });
 
   it('Create Workspace successfully', async(() => {
@@ -70,11 +68,11 @@ describe('Codebases Item Actions Component', () => {
         open: 'http://somehwere.com'
       }
     };
-    workspacesServiceMock.createWorkspace.and.returnValue(Observable.of(workspaceLinks));
+    workspacesServiceMock.createWorkspace.and.returnValue(observableOf(workspaceLinks));
     const notificationAction = { name: 'created' };
-    notificationMock.message.and.returnValue(Observable.of(notificationAction));
+    notificationMock.message.and.returnValue(observableOf(notificationAction));
     broadcasterMock.broadcast.and.returnValue();
-    broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
+    broadcasterMock.on.and.returnValue(observableOf({ running: true }));
     fixture.detectChanges();
     // when
     comp.createWorkspace();
@@ -88,10 +86,10 @@ describe('Codebases Item Actions Component', () => {
     // given
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
-    workspacesServiceMock.createWorkspace.and.returnValue(Observable.throw('ERROR'));
+    workspacesServiceMock.createWorkspace.and.returnValue(observableThrowError('ERROR'));
     const notificationAction = { name: 'ERROR' };
-    notificationMock.message.and.returnValue(Observable.of(notificationAction));
-    broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
+    notificationMock.message.and.returnValue(observableOf(notificationAction));
+    broadcasterMock.on.and.returnValue(observableOf({ running: true }));
     fixture.detectChanges();
     // when
     comp.createWorkspace();
@@ -103,9 +101,9 @@ describe('Codebases Item Actions Component', () => {
   it('Create Workspace with capacity full', async(() => {
     // given
     let comp = fixture.componentInstance;
-    cheServiceMock.getState.and.returnValue(Observable.of({clusterFull: true, multiTenant: true, running: true}));
+    cheServiceMock.getState.and.returnValue(observableOf({clusterFull: true, multiTenant: true, running: true}));
     const notificationAction = { name: 'ERROR' };
-    notificationMock.message.and.returnValue(Observable.of(notificationAction));
+    notificationMock.message.and.returnValue(observableOf(notificationAction));
     fixture.detectChanges();
     // when
     comp.createWorkspace();
@@ -120,8 +118,8 @@ describe('Codebases Item Actions Component', () => {
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     comp.deleteCodebaseDialog = dialogMock;
-    codebasesServiceMock.deleteCodebase.and.returnValue(Observable.of(comp.codebase));
-    broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
+    codebasesServiceMock.deleteCodebase.and.returnValue(observableOf(comp.codebase));
+    broadcasterMock.on.and.returnValue(observableOf({ running: true }));
   //  broadcasterMock.on.and.returnValue(Observable.of(code));
     fixture.detectChanges();
     // when
@@ -135,10 +133,10 @@ describe('Codebases Item Actions Component', () => {
     let comp = fixture.componentInstance;
     comp.codebase = { 'id': '6f5b6738-170e-490e-b3bb-d10f56b587c8' };
     comp.deleteCodebaseDialog = dialogMock;
-    codebasesServiceMock.deleteCodebase.and.returnValue(Observable.throw('ERROR'));
+    codebasesServiceMock.deleteCodebase.and.returnValue(observableThrowError('ERROR'));
     const notificationAction = { name: 'ERROR' };
-    notificationMock.message.and.returnValue(Observable.of(notificationAction));
-    broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
+    notificationMock.message.and.returnValue(observableOf(notificationAction));
+    broadcasterMock.on.and.returnValue(observableOf({ running: true }));
     fixture.detectChanges();
     // when
     comp.deleteCodebase();

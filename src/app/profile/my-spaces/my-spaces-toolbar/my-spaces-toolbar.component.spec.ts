@@ -4,12 +4,10 @@ import {
   Input,
   Output
 } from '@angular/core';
-
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { initContext, TestContext } from 'testing/test-context';
-
 import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
 
 @Component({

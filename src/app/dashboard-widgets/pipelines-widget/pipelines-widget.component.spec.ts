@@ -1,5 +1,3 @@
-import { PipelinesWidgetComponent } from './pipelines-widget.component';
-
 import { LocationStrategy } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -7,7 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable, Subject } from 'rxjs';
+import { Observable,  of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -16,6 +14,7 @@ import {
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
+import { PipelinesWidgetComponent } from './pipelines-widget.component';
 
 @Component({
   template: '<fabric8-pipelines-widget></fabric8-pipelines-widget>'
@@ -39,7 +38,7 @@ describe('PipelinesWidgetComponent', () => {
       {
         provide: PipelinesService, useFactory: () => {
           let pipelinesService: jasmine.SpyObj<PipelinesService> = createMock(PipelinesService);
-          pipelinesService.getCurrentPipelines.and.returnValue(Observable.of([{}] as BuildConfig[]));
+          pipelinesService.getCurrentPipelines.and.returnValue(observableOf([{}] as BuildConfig[]));
           return pipelinesService;
         }
       },
@@ -58,7 +57,7 @@ describe('PipelinesWidgetComponent', () => {
           };
 
           let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
-          mockRouter.events = Observable.of(mockRouterEvent);
+          mockRouter.events = observableOf(mockRouterEvent);
 
           return mockRouter;
         }

@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { Broadcaster } from 'ngx-base';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Observable } from 'rxjs';
+import { ConnectableObservable,  Observable, of as observableOf } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
@@ -45,7 +45,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
     providers: [
       { provide: Spaces, useFactory: () => {
           let mockSpaces: jasmine.SpyObj<Spaces> = createMock(Spaces);
-          mockSpaces.current = Observable.of(mockSpace) as Observable<Space> & jasmine.Spy;
+          mockSpaces.current = observableOf(mockSpace) as Observable<Space> & jasmine.Spy;
           return mockSpaces;
         }
       },
@@ -56,8 +56,8 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       },
       { provide: UserService, useFactory: () => {
           let mockUserService: jasmine.SpyObj<UserService> = createMock(UserService);
-          mockUserService.loggedInUser = Observable.of(mockUsers[0]) as ConnectableObservable<User> & jasmine.Spy;
-          mockUserService.getUserByUserId.and.returnValue(Observable.of(mockUsers[0]) as Observable<User>);
+          mockUserService.loggedInUser = observableOf(mockUsers[0]) as ConnectableObservable<User> & jasmine.Spy;
+          mockUserService.getUserByUserId.and.returnValue(observableOf(mockUsers[0]) as Observable<User>);
           return mockUserService;
         }
       },
@@ -78,7 +78,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
       },
       { provide: CollaboratorService, useFactory: () => {
           let mockCollaboratorService: jasmine.SpyObj<CollaboratorService> = createMock(CollaboratorService);
-          mockCollaboratorService.getInitialBySpaceId.and.returnValue(Observable.of(mockUsers) as Observable<User[]>);
+          mockCollaboratorService.getInitialBySpaceId.and.returnValue(observableOf(mockUsers) as Observable<User[]>);
           return mockCollaboratorService;
         }
       }
@@ -114,7 +114,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
 
   describe('#saveDescription', () => {
     it('should be called when the save button is clicked', function(this: Context) {
-      spyOn(this.testedDirective, 'isEditable').and.returnValue(Observable.of(true));
+      spyOn(this.testedDirective, 'isEditable').and.returnValue(observableOf(true));
       spyOn(this.testedDirective, 'saveDescription');
       this.testedDirective.userOwnsSpace = true;
       this.testedDirective.startEditingDescription();
@@ -127,7 +127,7 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
 
   describe('#onUpdateDescription', () => {
     it('should be called when the enter key is pressed', function(this: Context) {
-      spyOn(this.testedDirective, 'isEditable').and.returnValue(Observable.of(true));
+      spyOn(this.testedDirective, 'isEditable').and.returnValue(observableOf(true));
       spyOn(this.testedDirective, 'onUpdateDescription');
       this.testedDirective.userOwnsSpace = true;
       this.testedDirective.startEditingDescription();

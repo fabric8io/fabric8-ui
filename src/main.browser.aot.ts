@@ -2,7 +2,6 @@
  * Angular bootstraping
  */
 import { platformBrowser } from '@angular/platform-browser';
-
 import { bootloader } from '@angularclass/hmr';
 
 /*

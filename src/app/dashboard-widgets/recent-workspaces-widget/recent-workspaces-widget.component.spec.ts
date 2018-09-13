@@ -1,19 +1,15 @@
 import { DebugNode } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-
 import { Notifications } from 'ngx-base';
+import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
 import { Spaces, SpaceService } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
+import { Observable, of as observableOf,  throwError as observableThrowError } from 'rxjs';
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { ContextService } from '../../shared/context.service';
 import { spaceMock } from '../../shared/context.service.mock';
-
-import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { WindowService } from '../../shared/window.service';
 import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
 import { Workspace, WorkspaceLinks } from '../../space/create/codebases/services/workspace';
@@ -42,7 +38,7 @@ describe('RecentWorkspacesWidgetComponent', () => {
     mockCodebasesService = jasmine.createSpyObj('CodebasesService', ['getCodebases']);
     mockContextService = jasmine.createSpy('ContextService');
     mockSpaceService = jasmine.createSpyObj('SpaceService', ['getSpaceByName']);
-    mockSpaceService.getSpaceByName.and.returnValue(Observable.of(spaceMock));
+    mockSpaceService.getSpaceByName.and.returnValue(observableOf(spaceMock));
     mockNotifications = jasmine.createSpy('Notifications');
     mockWindowService = jasmine.createSpyObj('WindowService', ['open']);
     mockWorkspacesService = jasmine.createSpyObj('WorkspacesService', ['getWorkspaces', 'openWorkspace']);
@@ -61,8 +57,8 @@ describe('RecentWorkspacesWidgetComponent', () => {
         { provide: SpaceService, useValue: mockSpaceService },
         { provide: Notifications, useValue: mockNotifications },
         { provide: Spaces, useValue: {
-            'current': Observable.of(spaceMock),
-            'recent': Observable.of([spaceMock])
+            'current': observableOf(spaceMock),
+            'recent': observableOf([spaceMock])
           } as Spaces
         },
         { provide: WindowService, useValue: mockWindowService },
@@ -79,7 +75,7 @@ describe('RecentWorkspacesWidgetComponent', () => {
       'type': 'codebases'
     } as ExtCodebase;
     codebases = [codebase];
-    mockCodebasesService.getCodebases.and.returnValue(Observable.of(codebases));
+    mockCodebasesService.getCodebases.and.returnValue(observableOf(codebases));
 
     workspace = {
       attributes: {
@@ -90,12 +86,12 @@ describe('RecentWorkspacesWidgetComponent', () => {
       type: 'git'
     };
     workspaces = [workspace];
-    mockWorkspacesService.getWorkspaces.and.returnValue(Observable.of(workspaces));
+    mockWorkspacesService.getWorkspaces.and.returnValue(observableOf(workspaces));
 
     workspaceLinks = {
       links: { open: 'url' }
     };
-    mockWorkspacesService.openWorkspace.and.returnValue(Observable.of(workspaceLinks));
+    mockWorkspacesService.openWorkspace.and.returnValue(observableOf(workspaceLinks));
 
     mockWindowService.open.and.returnValue({location: { href: 'url'}});
 
@@ -122,7 +118,7 @@ describe('RecentWorkspacesWidgetComponent', () => {
   }));
 
   it('Should not show loading if an error occurs with WorkspacesService', async(() => {
-    mockWorkspacesService.getWorkspaces.and.returnValue(Observable.throw('workspaces error'));
+    mockWorkspacesService.getWorkspaces.and.returnValue(observableThrowError('workspaces error'));
     let loading = fixture.debugElement.query(By.css('.f8-loading'));
     expect(loading).toBeNull();
   }));

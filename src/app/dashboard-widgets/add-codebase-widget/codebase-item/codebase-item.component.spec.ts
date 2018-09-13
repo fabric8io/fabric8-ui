@@ -4,20 +4,17 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
 import { Subject } from 'rxjs';
-
+import { first } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { Codebase } from '../../../space/create/codebases/services/codebase';
 import { GitHubRepoDetails } from '../../../space/create/codebases/services/github';
 import { GitHubService } from '../../../space/create/codebases/services/github.service';
-
 import { CodebaseItemComponent } from './codebase-item.component';
 
 @Component({
@@ -73,7 +70,7 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
   describe('lastUpdated', () => {
     it('should emit the pushed_at property of the GitHubRepoDetails', function(this: TestingContext, done: DoneFn): void {
       const pushed_at: string = '2018-09-07T20:15:52.465Z';
-      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+      this.testedDirective.lastUpdated.pipe(first()).subscribe((lastUpdated: string): void => {
         expect(lastUpdated).toEqual(new Date(pushed_at).toString());
         done();
       });
@@ -82,7 +79,7 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
 
     it('should emit empty string if pushed_at is an invalid date string', function(this: TestingContext, done: DoneFn): void {
       const pushed_at: string = 'invalid date';
-      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+      this.testedDirective.lastUpdated.pipe(first()).subscribe((lastUpdated: string): void => {
         expect(lastUpdated).toEqual('');
         done();
       });
@@ -91,7 +88,7 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
 
     it('should emit empty string if pushed_at is undefined', function(this: TestingContext, done: DoneFn): void {
       const pushed_at: string = undefined;
-      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+      this.testedDirective.lastUpdated.pipe(first()).subscribe((lastUpdated: string): void => {
         expect(lastUpdated).toEqual('');
         done();
       });
@@ -99,7 +96,7 @@ describe('AddCodebaseWidget CodebaseItemComponent', () => {
     });
 
     it('should emit empty string if request produces an error', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.lastUpdated.first().subscribe((lastUpdated: string): void => {
+      this.testedDirective.lastUpdated.pipe(first()).subscribe((lastUpdated: string): void => {
         expect(lastUpdated).toEqual('');
         done();
       });

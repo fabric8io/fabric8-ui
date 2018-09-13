@@ -1,5 +1,4 @@
 import * as jsyaml from 'js-yaml';
-
 import { Entity } from '../../models/entity';
 import { currentOAuthConfig } from '../store/oauth-config-store';
 import { ConfigMap } from './configmap.model';

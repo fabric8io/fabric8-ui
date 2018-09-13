@@ -5,20 +5,17 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
-import { Subscription } from 'rxjs';
-
-import { Filter, FilterConfig, FilterEvent, FilterType } from 'patternfly-ng/filter';
-import { SortEvent, SortField } from 'patternfly-ng/sort';
-import { ToolbarConfig } from 'patternfly-ng/toolbar';
-
 import {
   Context,
   Contexts,
   Space
 } from 'ngx-fabric8-wit';
+import { Filter, FilterConfig, FilterEvent, FilterType } from 'patternfly-ng/filter';
+import { SortEvent, SortField } from 'patternfly-ng/sort';
+import { ToolbarConfig } from 'patternfly-ng/toolbar';
+import { Subscription } from 'rxjs';
 import { BuildConfig } from '../../../../a-runtime-console/index';
 import { PipelinesService } from './services/pipelines.service';
 

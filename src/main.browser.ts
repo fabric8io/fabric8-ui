@@ -2,14 +2,13 @@
  * Angular bootstraping
  */
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
 import { bootloader } from '@angularclass/hmr';
 import 'reflect-metadata';
 
 /**
  * Offline plugin
  */
-// import {install as offlinePluginInstall} from 'offline-plugin/runtime';
+// import { install as offlinePluginInstall } from 'offline-plugin/runtime';
 
 /**
  * App Module

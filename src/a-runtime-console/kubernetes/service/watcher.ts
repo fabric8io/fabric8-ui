@@ -1,6 +1,5 @@
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-
 import { $WebSocket } from 'angular2-websocket/angular2-websocket';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { OnLogin } from '../../shared/onlogin.service';
 import { pathJoin } from '../model/utils';
 import { currentOAuthConfig } from '../store/oauth-config-store';
