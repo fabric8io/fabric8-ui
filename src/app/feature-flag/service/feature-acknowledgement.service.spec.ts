@@ -6,11 +6,12 @@ import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, UserService } from 'ngx-login-client';
 
+import { ExtUser } from '../../getting-started/services/getting-started.service';
 import { loggedInUser } from '../../shared/context.service.mock';
 import { FeatureAcknowledgementService } from './feature-acknowledgement.service';
 
 describe('FeatureAcknowledgement service:', () => {
-  let extUser = loggedInUser;
+  let extUser: ExtUser = loggedInUser as ExtUser;
   let featureAckService: FeatureAcknowledgementService;
   let mockLog: any;
   let mockAuthService: any;
