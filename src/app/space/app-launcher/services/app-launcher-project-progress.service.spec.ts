@@ -1,15 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-
-import {
-  Subject
-} from 'rxjs';
-
 import {
   Config,
   HelperService,
   TokenProvider
 } from 'ngx-launcher';
-
+import {
+  Subject
+} from 'rxjs';
 import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
 import { NewForgeConfig } from '../shared/new-forge.config';
 import { AppLauncherProjectProgressService } from './app-launcher-project-progress.service';

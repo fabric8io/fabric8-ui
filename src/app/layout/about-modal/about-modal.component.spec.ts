@@ -2,9 +2,7 @@ import { DebugElement, DebugNode, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-
 import { ModalModule } from 'ngx-bootstrap/modal';
-
 import { AboutService } from '../../shared/about.service';
 import { AboutModalComponent } from './about-modal.component';
 

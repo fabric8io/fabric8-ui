@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-
 import { NotificationsRoutingModule } from './notifications-routing.module';
 import { NotificationsComponent } from './notifications.component';
 import { ToggleBarComponent } from './toggle-bar.component';

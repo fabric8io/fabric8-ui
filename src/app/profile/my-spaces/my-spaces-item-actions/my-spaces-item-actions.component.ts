@@ -7,7 +7,6 @@ import {
   Output,
   ViewEncapsulation
 } from '@angular/core';
-
 import { has } from 'lodash';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { Action, ActionConfig } from 'patternfly-ng/action';

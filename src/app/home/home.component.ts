@@ -1,9 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
-import { Subscription } from 'rxjs';
-
 import { User, UserService } from 'ngx-login-client';
-
+import { Subscription } from 'rxjs';
 import { BrandInformation } from '../models/brand-information';
 import { Fabric8UIConfig } from '../shared/config/fabric8-ui-config';
 

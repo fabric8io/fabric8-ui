@@ -2,7 +2,8 @@ import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { Observable, Subject } from 'rxjs';
+import { Observable,  of as observableOf, Subject } from 'rxjs';
+import { debounceTime, map, switchMap, tap } from 'rxjs/operators';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 
 @Component({
@@ -39,9 +40,9 @@ export class EditSpaceDescriptionWidgetOldComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._descriptionUpdater
-      .debounceTime(1000)
-      .map(description => {
+    this._descriptionUpdater.pipe(
+      debounceTime(1000),
+      map(description => {
         let patch = {
           attributes: {
             description: description,
@@ -52,18 +53,18 @@ export class EditSpaceDescriptionWidgetOldComponent implements OnInit {
           id: this.space.id
         } as Space;
         return patch;
-      })
-      .switchMap(patch => this.spaceService
-        .update(patch)
-        .do(val => {
+      }),
+      switchMap(patch => this.spaceService
+        .update(patch).pipe(
+        tap(val => {
           this.isEditing = false;
           if (this.space && val) {
             this.space.attributes.description = val.attributes.description;
           }
-        })
-        .do(updated => this.broadcaster.broadcast('spaceUpdated', updated))
-        .switchMap(updated => this.spaceNamespaceService.updateConfigMap(Observable.of(updated)))
-      )
+        }),
+        tap(updated => this.broadcaster.broadcast('spaceUpdated', updated)),
+        switchMap(updated => this.spaceNamespaceService.updateConfigMap(observableOf(updated))))
+      ))
       .subscribe();
   }
 
@@ -88,7 +89,7 @@ export class EditSpaceDescriptionWidgetOldComponent implements OnInit {
   }
 
   isEditable(): Observable<boolean> {
-    return this.contexts.current.map(val => val.user.id === this.loggedInUser.id);
+    return this.contexts.current.pipe(map(val => val.user.id === this.loggedInUser.id));
   }
 
 }

@@ -1,19 +1,13 @@
 import { Component, DebugElement, NO_ERRORS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { By } from '@angular/platform-browser';
-
-import { List, take } from 'lodash';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
 import { FilterService, WorkItemService } from 'fabric8-planner';
-
+import { List, take } from 'lodash';
 import { Contexts, Space, Spaces, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
-
+import { Observable ,  of } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { ContextService } from '../../../shared/context.service';
-
 import { WorkItemsData } from '../../../shared/workitem-utils';
 import { WorkItemsComponent } from './work-items.component';
 

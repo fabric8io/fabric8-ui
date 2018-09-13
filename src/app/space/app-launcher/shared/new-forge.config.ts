@@ -1,8 +1,6 @@
 import { Location } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-
 import { Config } from 'ngx-launcher';
-
 import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
 
 @Injectable()

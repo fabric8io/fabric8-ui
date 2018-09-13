@@ -5,12 +5,6 @@ import {
   OnInit
 } from '@angular/core';
 import {
-  Observable,
-  ReplaySubject,
-  Subject
-} from 'rxjs';
-
-import {
   Broadcaster,
   Logger
 } from 'ngx-base';
@@ -20,6 +14,12 @@ import {
   SpaceService
 } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
+import {
+  Observable,
+  ReplaySubject,
+  Subject
+} from 'rxjs';
+import { first, map } from 'rxjs/operators';
 
 @Component({
   selector: 'fabric8-recent-spaces-widget',
@@ -48,9 +48,9 @@ export class RecentSpacesWidget implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.spaceService
-      .getSpacesByUser(this.userService.currentLoggedInUser.attributes.username)
-      .first()
-      .map((spaces: Space[]): boolean => spaces.length > 0)
+      .getSpacesByUser(this.userService.currentLoggedInUser.attributes.username).pipe(
+      first(),
+      map((spaces: Space[]): boolean => spaces.length > 0))
       .subscribe(
         (userHasSpaces: boolean): void => {
           this.userHasSpaces.next(userHasSpaces);

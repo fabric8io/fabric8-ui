@@ -1,13 +1,10 @@
 import { CommonModule, LocationStrategy } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, never as observableNever,  Observable, of as observableOf } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
-
 import { Build } from '../../../../a-runtime-console/index';
-
 import { ApplicationsListItemComponent } from './applications-list-item.component';
 
 @Component({
@@ -100,10 +97,10 @@ describe('ApplicationsListItemComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
-    mockRouter.events = Observable.of(mockRouterEvent);
+    mockRouter.events = observableOf(mockRouterEvent);
   });
 
   initContext(ApplicationsListItemComponent, HostComponent, {

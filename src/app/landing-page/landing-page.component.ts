@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { Broadcaster } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
-
 import { LoginService } from '../shared/login.service';
 
 @Component({

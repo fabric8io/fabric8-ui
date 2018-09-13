@@ -1,12 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { initContext, TestContext } from 'testing/test-context';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-
+import { BehaviorSubject,  never as observableNever, Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
 import { ApplicationsListItemDetailsComponent } from './applications-list-item-details.component';
 
@@ -73,8 +69,8 @@ describe('ApplicationsListItemDetailsComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
   });
 

@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { TooltipConfig, TooltipModule } from 'ngx-bootstrap/tooltip';
-
 import { WorkspacesNotificationModule } from '../workspaces-notification/workspaces-notification.module';
 import { CodebasesItemHeadingComponent } from './codebases-item-heading.component';
 

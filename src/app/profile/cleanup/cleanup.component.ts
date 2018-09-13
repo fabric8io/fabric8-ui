@@ -1,18 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
 import { ListConfig } from 'patternfly-ng/list';
-import { Observable, Subscription } from 'rxjs';
-
+import { forkJoin, Observable ,  of ,  Subscription } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { EventService } from '../../shared/event.service';
 import { IModalHost } from '../../space/wizard/models/modal-host';
 import { TenantService } from '../services/tenant.service';
-
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { of } from 'rxjs/observable/of';
-import { catchError, map } from 'rxjs/operators';
 
 @Component({
   encapsulation: ViewEncapsulation.None,

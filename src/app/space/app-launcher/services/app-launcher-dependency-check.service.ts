@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
 import { Context } from 'ngx-fabric8-wit';
 import { DependencyCheck, DependencyCheckService } from 'ngx-launcher';
-
+import { Observable,  of as observableOf } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
 import { Application, DeploymentApiService } from '../../create/deployments/services/deployment-api.service';
 
@@ -20,7 +18,7 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
    * @returns {Observable<DependencyCheck>} Project dependencies
    */
   getDependencyCheck(): Observable<DependencyCheck> {
-      return Observable.of({
+      return observableOf({
         mavenArtifact: 'booster-mission-runtime',
         groupId: 'io.openshift.booster',
         projectName: '',

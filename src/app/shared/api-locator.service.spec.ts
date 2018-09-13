@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
 import { ProviderService } from './account/provider.service';
 import { ApiLocatorService, BaseApiLocatorService } from './api-locator.service';
 import { Fabric8UIConfig } from './config/fabric8-ui-config';

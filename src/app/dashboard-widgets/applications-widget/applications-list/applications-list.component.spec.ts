@@ -3,13 +3,9 @@ import {
   Component,
   Input
 } from '@angular/core';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { initContext, TestContext } from 'testing/test-context';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-
+import { BehaviorSubject,  never as observableNever, Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 import { BuildConfig } from '../../../../a-runtime-console/index';
 import { ApplicatonsListComponent } from './applicatons-list.component';
 
@@ -164,8 +160,8 @@ describe('ApplicatonsListComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
   });
 

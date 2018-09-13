@@ -5,15 +5,12 @@ import {
   Output
 } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
-
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { CodebasesToolbarComponent } from './codebases-toolbar.component';
 
 @Component({

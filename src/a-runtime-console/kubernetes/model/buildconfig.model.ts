@@ -1,5 +1,4 @@
 import { Params } from '@angular/router';
-
 import { currentOAuthConfig } from '../store/oauth-config-store';
 import { AppInfo, Build, Builds, ServiceEnvironments, ServiceUrl } from './build.model';
 import { KubernetesSpecResource } from './kuberentesspecresource.model';

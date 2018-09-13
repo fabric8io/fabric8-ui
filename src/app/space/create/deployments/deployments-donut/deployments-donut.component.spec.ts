@@ -5,19 +5,16 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
 import {
-  Subject
+  of,
+  Subject,
+  throwError as _throw
 } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
-
 import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';

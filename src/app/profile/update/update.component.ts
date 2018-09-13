@@ -8,23 +8,20 @@ import {
 import { NgForm } from '@angular/forms';
 import { Response } from '@angular/http';
 import { Router } from '@angular/router';
-
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
-
 import {
   ExtProfile,
   ExtUser,
   GettingStartedService
 } from '../../getting-started/services/getting-started.service';
+import { gravatar } from '../../shared/gravatar/gravatar';
+import { GitHubUser } from '../../space/create/codebases/services/github';
 import { GitHubService } from '../../space/create/codebases/services/github.service';
 import { CopyService } from '../services/copy.service';
 import { TenantService } from '../services/tenant.service';
-
-import { gravatar } from '../../shared/gravatar/gravatar';
-import { GitHubUser } from '../../space/create/codebases/services/github';
 
 export enum TenantUpdateStatus {
   NoAction,

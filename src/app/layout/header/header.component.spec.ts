@@ -6,17 +6,6 @@ import {
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import {
-  Observable
-} from 'rxjs';
-
-import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
 import {
   Broadcaster
 } from 'ngx-base';
@@ -24,9 +13,15 @@ import { Contexts } from 'ngx-fabric8-wit';
 import {
   UserService
 } from 'ngx-login-client';
-
+import { never as observableNever, Observable,
+  of as observableOf
+} from 'rxjs';
+import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { LoginService } from '../../shared/login.service';
-
 import { HeaderComponent } from './header.component';
 
 @Component({
@@ -41,7 +36,7 @@ class MockRoutedComponent { }
 
 class MockFeatureToggleService {
   getFeature(featureName: string): Observable<any> {
-    return Observable.of({
+    return observableOf({
       attributes: {
         enabled: true,
         userEnabled: true
@@ -72,14 +67,14 @@ describe('HeaderComponent', () => {
     ],
     declarations: [ MockRoutedComponent ],
     providers: [
-      { provide: UserService, useValue: { loggedInUser: Observable.never() } },
+      { provide: UserService, useValue: { loggedInUser: observableNever() } },
       { provide: LoginService, useValue: jasmine.createSpyObj('LoginService', ['login']) },
       { provide: Broadcaster, useValue: mockBroadcaster },
       {
         provide: Contexts, useValue: {
-          default: Observable.of({ name: 'default' }),
-          current: Observable.of({ name: 'current' }),
-          recent: Observable.never()
+          default: observableOf({ name: 'default' }),
+          current: observableOf({ name: 'current' }),
+          recent: observableNever()
         }
       }
     ],

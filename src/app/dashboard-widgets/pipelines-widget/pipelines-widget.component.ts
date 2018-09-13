@@ -7,18 +7,14 @@ import {
   Output,
   ViewEncapsulation
 } from '@angular/core';
-
+import { Broadcaster } from 'ngx-base';
+import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-
+import { share } from 'rxjs/operators';
 import {
   Subscription
 } from 'rxjs/Rx';
-
-import { Broadcaster } from 'ngx-base';
-import { Context, Contexts } from 'ngx-fabric8-wit';
-
 import { BuildConfigs } from '../../../a-runtime-console/index';
-
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
 
 @Component({
@@ -57,7 +53,7 @@ export class PipelinesWidgetComponent implements OnInit, OnDestroy {
         });
       }));
 
-    this.subscriptions.push(this.pipelinesService.getCurrentPipelines().share().subscribe(
+    this.subscriptions.push(this.pipelinesService.getCurrentPipelines().pipe(share()).subscribe(
       (configs: BuildConfigs) => {
         setTimeout(() => {
           this.buildConfigsCount = configs.length;

@@ -1,16 +1,14 @@
 import { Component } from '@angular/core';
-
 import {
   ModalDirective,
   ModalModule
 } from 'ngx-bootstrap/modal';
-
+import { first } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { DeleteDeploymentModal } from './delete-deployment-modal.component';
 
 @Component({
@@ -61,7 +59,7 @@ describe('DeleteDeploymentModal', (): void => {
     });
 
     it('should emit deleteEvent', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.deleteEvent.first().subscribe((): void => done());
+      this.testedDirective.deleteEvent.pipe(first()).subscribe((): void => done());
       this.testedDirective.confirmDeletion();
     });
   });

@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-
+import { Observable,  of as observableOf } from 'rxjs';
 import {
   Build,
   BuildConfig,
@@ -80,7 +78,7 @@ describe('Runtime Console Pipelines Service', () => {
               }
             ];
 
-            mock.loadAll.and.returnValue(Observable.of(items));
+            mock.loadAll.and.returnValue(observableOf(items));
             return mock;
           }
         },
@@ -98,14 +96,14 @@ describe('Runtime Console Pipelines Service', () => {
               } as Build
             ];
 
-            mock.loadAll.and.returnValue(Observable.of(items));
+            mock.loadAll.and.returnValue(observableOf(items));
             return mock;
           }
         },
         {
           provide: Fabric8RuntimeConsoleService, useFactory: (): jasmine.SpyObj<Fabric8RuntimeConsoleService> => {
             let mock: jasmine.SpyObj<Fabric8RuntimeConsoleService> = jasmine.createSpyObj('Fabric8RuntimeConsoleService', ['loading']);
-            mock.loading.and.returnValue(Observable.of(true));
+            mock.loading.and.returnValue(observableOf(true));
             return mock;
           }
         },

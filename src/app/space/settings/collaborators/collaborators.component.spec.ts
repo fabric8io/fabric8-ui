@@ -4,13 +4,6 @@ import {
   NO_ERRORS_SCHEMA
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
 import { Logger } from 'ngx-base';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -22,8 +15,14 @@ import {
 import { User } from 'ngx-login-client';
 import {
   Observable,
+  of as observableOf,
+  throwError as observableThrowError
 } from 'rxjs';
-
+import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { ContextService } from '../../../shared/context.service';
 import { CollaboratorsComponent } from './collaborators.component';
 
@@ -44,7 +43,7 @@ describe('CollaboratorsComponent', () => {
     providers: [
       {
         provide: ContextService, useValue: ({
-          current: Observable.of({
+          current: observableOf({
             space: {
               id: 'fake-space-id',
               attributes: {
@@ -81,7 +80,7 @@ describe('CollaboratorsComponent', () => {
   describe('#initCollaborators', () => {
     it('should retrieve, sort, and set initial list of collaborators', function(this: Ctx): void {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.getInitialBySpaceId.and.returnValue(Observable.of([
+      collaboratorService.getInitialBySpaceId.and.returnValue(observableOf([
         {
           attributes: {
             username: 'userA'
@@ -126,7 +125,7 @@ describe('CollaboratorsComponent', () => {
 
     it('should handle errors', function(this: Ctx) {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.getInitialBySpaceId.and.returnValue(Observable.throw('some_error'));
+      collaboratorService.getInitialBySpaceId.and.returnValue(observableThrowError('some_error'));
 
       const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       errorHandler.handleError.and.stub();
@@ -146,7 +145,7 @@ describe('CollaboratorsComponent', () => {
   describe('#fetchMoreCollaborators', () => {
     it('should add and sort additional collaborators', function(this: Ctx) {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.getNextCollaborators.and.returnValue(Observable.of([
+      collaboratorService.getNextCollaborators.and.returnValue(observableOf([
         {
           attributes: {
             username: 'userC'
@@ -204,7 +203,7 @@ describe('CollaboratorsComponent', () => {
 
     it('should handle errors', function(this: Ctx) {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.getNextCollaborators.and.returnValue(Observable.throw('some_error'));
+      collaboratorService.getNextCollaborators.and.returnValue(observableThrowError('some_error'));
 
       const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       errorHandler.handleError.and.stub();
@@ -275,7 +274,7 @@ describe('CollaboratorsComponent', () => {
   describe('removeUser', () => {
     it('should send remove request to service', function(this: Ctx) {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.removeCollaborator.and.returnValue(Observable.of('unused'));
+      collaboratorService.removeCollaborator.and.returnValue(observableOf('unused'));
 
       spyOn(this.testedDirective.modalDelete, 'show');
       spyOn(this.testedDirective.modalDelete, 'hide');
@@ -297,7 +296,7 @@ describe('CollaboratorsComponent', () => {
 
     it('should handle errors', function(this: Ctx) {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
-      collaboratorService.removeCollaborator.and.returnValue(Observable.throw('some_error'));
+      collaboratorService.removeCollaborator.and.returnValue(observableThrowError('some_error'));
 
       const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       errorHandler.handleError.and.stub();

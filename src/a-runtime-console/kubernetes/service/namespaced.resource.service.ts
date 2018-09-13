@@ -1,5 +1,5 @@
 import { Restangular } from 'ngx-restangular';
-import { Observable, Subscription } from 'rxjs';
+import { empty as observableEmpty,  Observable, Subscription } from 'rxjs';
 import { KubernetesResource } from '../model/kubernetesresource.model';
 import { pathJoin } from '../model/utils';
 import { KubernetesService } from './kubernetes.service';
@@ -65,7 +65,7 @@ export abstract class NamespacedResourceService<T extends KubernetesResource, L 
   list(namespace: string = null, queryParams: any = null): Observable<L> {
     let url = namespace ? this.serviceUrlForNamespace(namespace) : this.serviceUrl;
     if (!url) {
-      return Observable.empty();
+      return observableEmpty();
     }
     return this.restangularService.all(url).getList(queryParams);
   }

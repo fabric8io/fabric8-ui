@@ -2,31 +2,26 @@ import {
   Component,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
-
-import {
-  Observable,
-  Subject
-} from 'rxjs';
-
+import { By } from '@angular/platform-browser';
 import { Broadcaster } from 'ngx-base';
 import {
   Context,
   Contexts
 } from 'ngx-fabric8-wit';
-
-import { By } from '@angular/platform-browser';
-
-import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
-import { Codebase } from '../../space/create/codebases/services/codebase';
-import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
-import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
-
+import { empty as observableEmpty,
+  Observable,
+  Subject
+} from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
+import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
+import { Codebase } from '../../space/create/codebases/services/codebase';
+import { CodebasesService } from '../../space/create/codebases/services/codebases.service';
+import { AddCodebaseWidgetComponent } from './add-codebase-widget.component';
 
 @Component({
   template: '<fabric8-add-codebase-widget [userOwnsSpace]="userOwnsSpace"></fabric8-add-codebase-widget>'
@@ -65,8 +60,8 @@ describe('AddCodebaseWidgetComponent', () => {
     contextSubject = new Subject<Context>();
     mockContexts = {
       current: contextSubject,
-      recent: Observable.empty(),
-      default: Observable.empty()
+      recent: observableEmpty(),
+      default: observableEmpty()
     } as Contexts;
 
     mockCodebasesService = createMock(CodebasesService);

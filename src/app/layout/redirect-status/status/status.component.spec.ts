@@ -2,9 +2,8 @@ import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { StatusComponent } from './status.component';
-
 import { RedirectStatusData } from '../../../models/redirect-data';
+import { StatusComponent } from './status.component';
 
 
 describe('StatusComponent', () => {

@@ -5,12 +5,11 @@ import {
   TestRequest
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { createMock } from 'testing/mock';
-
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-
+import { first } from 'rxjs/operators';
+import { createMock } from 'testing/mock';
 import { Che } from './che';
 import { CheService } from './che.service';
 
@@ -55,8 +54,8 @@ describe('CheService', () => {
   describe('#getState', () => {
     it('should send an Authorization header', function(this: TestContext, done: DoneFn): void {
       this.service
-        .getState()
-        .first()
+        .getState().pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -68,8 +67,8 @@ describe('CheService', () => {
 
     it('should send a GET', function(this: TestContext, done: DoneFn): void {
       this.service
-        .getState()
-        .first()
+        .getState().pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -86,8 +85,8 @@ describe('CheService', () => {
         running: true
       };
       this.service
-        .getState()
-        .first()
+        .getState().pipe(
+        first())
         .subscribe((c: Che): void => {
           expect(c).toEqual(che);
           this.controller.verify();
@@ -118,8 +117,8 @@ describe('CheService', () => {
   describe('#start', () => {
     it('should send an Authorization header', function(this: TestContext, done: DoneFn): void {
       this.service
-        .start()
-        .first()
+        .start().pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -131,8 +130,8 @@ describe('CheService', () => {
 
     it('should send a PATCH', function(this: TestContext, done: DoneFn): void {
       this.service
-        .start()
-        .first()
+        .start().pipe(
+        first())
         .subscribe((): void => {
           this.controller.verify();
           done();
@@ -149,8 +148,8 @@ describe('CheService', () => {
         running: true
       };
       this.service
-        .start()
-        .first()
+        .start().pipe(
+        first())
         .subscribe((c: Che): void => {
           expect(c).toEqual(che);
           this.controller.verify();

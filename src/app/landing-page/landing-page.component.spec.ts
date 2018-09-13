@@ -1,18 +1,14 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
 import { Broadcaster } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
-
-import { LoginService } from '../shared/login.service';
-import { LandingPageComponent } from './landing-page.component';
-
 import { createMock } from 'testing/mock';
-
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
+import { LoginService } from '../shared/login.service';
+import { LandingPageComponent } from './landing-page.component';
 
 
 @Component({

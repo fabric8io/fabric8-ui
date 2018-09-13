@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -8,7 +7,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { SparklineChartModule } from 'patternfly-ng/chart';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
-
 import { DeleteDeploymentModal } from './apps/delete-deployment-modal.component';
 import { DeploymentCardContainerComponent } from './apps/deployment-card-container.component';
 import { DeploymentCardComponent } from './apps/deployment-card.component';

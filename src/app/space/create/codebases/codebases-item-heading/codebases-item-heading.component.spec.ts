@@ -4,9 +4,7 @@ import {
   TestBed
 } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-
 import { Broadcaster } from 'ngx-base';
-
 import { Che } from '../services/che';
 import { CodebasesItemHeadingComponent } from './codebases-item-heading.component';
 

@@ -1,7 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { Context } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-
+import { Observable,  of as observableOf } from 'rxjs';
 import { GitHubRepo, GitHubRepoCommit, GitHubRepoDetails, GitHubRepoLicense } from './github';
 
 export const currentContext: Context = {
@@ -74,7 +73,7 @@ export const currentContext: Context = {
 export class ContextsMock {
   current: Observable<Context>;
   constructor() {
-    this.current = Observable.of(currentContext);
+    this.current = observableOf(currentContext);
   }
 }
 export const expectedGitHubRepo: GitHubRepo = {

@@ -1,16 +1,13 @@
-import { Inject, Injectable } from '@angular/core';
-
 import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest
 } from '@angular/common/http';
-
-import { Observable } from 'rxjs';
-
+import { Inject, Injectable } from '@angular/core';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AUTH_API_URL } from 'ngx-login-client';
+import { Observable } from 'rxjs';
 import uuid from 'uuid';
 
 

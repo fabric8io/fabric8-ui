@@ -1,13 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { LocalStorageService } from 'angular-2-local-storage';
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Notifications } from 'ngx-base';
 import { SpaceService } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { MenusService } from '../layout/header/menus.service';
 import { ProfileService } from '../profile/profile.service';
 import { ContextService } from './context.service';

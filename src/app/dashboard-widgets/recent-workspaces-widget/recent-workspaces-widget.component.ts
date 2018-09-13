@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable, Subscription } from 'rxjs/Rx';
-
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Space, Spaces } from 'ngx-fabric8-wit';
 import { RelationalData, SpaceAttributes, SpaceLink, SpaceRelationships } from 'ngx-fabric8-wit/src/app/models/space';
 import { Team } from 'ngx-fabric8-wit/src/app/models/team';
-
+import { forkJoin as observableForkJoin, of as observableOf } from 'rxjs';
+import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs/Rx';
 import { ContextService } from '../../shared/context.service';
 import { WindowService } from '../../shared/window.service';
 import { Codebase } from '../../space/create/codebases/services/codebase';
@@ -106,22 +106,22 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
    * @returns {Observable<ExtCodebase[]>}
    */
   private fetchCodebases(spaceId: string): Observable<ExtCodebase[]> {
-    return this.codebasesService.getCodebases(spaceId).flatMap(codebases => {
+    return this.codebasesService.getCodebases(spaceId).pipe(mergeMap(codebases => {
       if (codebases.length === 0) {
-        return Observable.of([]);
+        return observableOf([]);
       }
-      return Observable.forkJoin(codebases.map((codebase: ExtCodebase) => {
-        return this.workspacesService.getWorkspaces(codebase.id)
-          .map(workspaces => {
+      return observableForkJoin(codebases.map((codebase: ExtCodebase) => {
+        return this.workspacesService.getWorkspaces(codebase.id).pipe(
+          map(workspaces => {
             codebase.workspaces = workspaces;
             return codebase;
-          })
-          .catch((error) => {
-            return Observable.of([]);
-          });
+          }),
+          catchError((error) => {
+            return observableOf([]);
+          }));
         })
       );
-    });
+    }));
   }
 
   /**
@@ -129,28 +129,28 @@ export class RecentWorkspacesWidgetComponent implements OnDestroy, OnInit {
    */
   private fetchRecentSpaces(): Observable<ExtSpace[]> {
     if (this.spaces.recent === undefined) {
-      return Observable.of([]);
+      return observableOf([]);
     }
-    let recentSpaces = this.spaces.recent.switchMap(val => {
+    let recentSpaces = this.spaces.recent.pipe(switchMap(val => {
       if (val.length === 0) {
-        return Observable.of([]);
+        return observableOf([]);
       }
-      return Observable.forkJoin(val.map((space: ExtSpace) => {
+      return observableForkJoin(val.map((space: ExtSpace) => {
         this.loading = true;
-        return this.fetchCodebases(space.id)
-          .map(codebases => {
+        return this.fetchCodebases(space.id).pipe(
+          map(codebases => {
             space.codebases = codebases;
             return space;
-          })
-          .catch((error) => {
-            return Observable.of([]);
-          })
-          .do(() => {
+          }),
+          catchError((error) => {
+            return observableOf([]);
+          }),
+          tap(() => {
             this.loading = false;
-          });
+          }));
         })
       );
-    });
+    }));
     return recentSpaces;
   }
 

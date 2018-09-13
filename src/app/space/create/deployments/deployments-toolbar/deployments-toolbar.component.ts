@@ -8,7 +8,6 @@ import {
   SimpleChanges,
   ViewEncapsulation
 } from '@angular/core';
-
 import { FilterConfig, FilterEvent, FilterField, FilterType } from 'patternfly-ng/filter';
 import { SortConfig, SortEvent } from 'patternfly-ng/sort';
 import { ToolbarConfig } from 'patternfly-ng/toolbar';

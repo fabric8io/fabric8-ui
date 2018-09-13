@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
 import { Fabric8CommonModule } from '../../common/common.module';
 import { BuildStatusIconComponent } from './build-status-icon/build-status-icon.component';
 import { KubernetesLabelsComponent } from './k8s-labels/k8s-labels.component';

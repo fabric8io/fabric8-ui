@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { combineLatest } from 'rxjs/operators';
 import { enrichServiceWithRoute, Services } from '../model/service.model';
 import { RouteStore } from './route.store';
 import { ServiceStore } from './service.store';
@@ -10,8 +11,8 @@ export class RouteServiceStore  {
   public readonly loading: Observable<boolean>;
 
   constructor(public serviceStore: ServiceStore, public routeStore: RouteStore) {
-    this.loading = this.serviceStore.loading.combineLatest(this.routeStore.loading, (f, s) => f && s);
-    this.list = this.serviceStore.list.combineLatest(this.routeStore.list, enrichServiceWithRoute);
+    this.loading = this.serviceStore.loading.pipe(combineLatest(this.routeStore.loading, (f, s) => f && s));
+    this.list = this.serviceStore.list.pipe(combineLatest(this.routeStore.list, enrichServiceWithRoute));
   }
 
   loadAll() {
