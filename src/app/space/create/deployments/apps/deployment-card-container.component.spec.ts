@@ -10,10 +10,8 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import {
-  BehaviorSubject,
-  Observable
-} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import { Contexts } from 'ngx-fabric8-wit';
 import { createMock } from 'testing/mock';
@@ -53,7 +51,7 @@ describe('DeploymentCardContainer', () => {
       providers: [
         {
           provide: Contexts, useValue: {
-            current: Observable.of({
+            current: of({
               path: 'mock-path',
               user: {
                 attributes: {
@@ -75,7 +73,7 @@ describe('DeploymentCardContainer', () => {
     },
     (component: DeploymentCardContainerComponent) => {
       component.spaceId = 'space';
-      component.environments = Observable.of(environments);
+      component.environments = of(environments);
       component.applications = ['app'];
     });
 

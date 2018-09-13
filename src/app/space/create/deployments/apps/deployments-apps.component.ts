@@ -15,6 +15,9 @@ import {
   Observable,
   Subscription
 } from 'rxjs';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { first } from 'rxjs/operators/first';
+import { map } from 'rxjs/operators/map';
 
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
 
@@ -43,7 +46,10 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   constructor(private broadcaster: Broadcaster) {}
 
   ngOnInit(): void {
-    this.hasLoaded = Observable.forkJoin(this.applications.first(), this.environments.first()).map(() => true);
+    this.hasLoaded = forkJoin(
+      this.applications.pipe(first()),
+      this.environments.pipe(first())
+    ).pipe(map(() => true));
     this.subscriptions.push(
       this.applications.subscribe((applications: string[]) => {
         this.applicationsList = applications;

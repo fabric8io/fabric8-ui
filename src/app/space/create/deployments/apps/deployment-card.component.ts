@@ -10,7 +10,12 @@ import {
 
 import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Observable,
+  Subscription
+} from 'rxjs';
+import { finalize } from 'rxjs/operators/finalize';
+import { first } from 'rxjs/operators/first';
 
 import { NotificationsService } from '../../../../shared/notifications.service';
 import {
@@ -169,24 +174,24 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
         this.spaceId,
         this.environment,
         this.applicationId
-        )
-        .first()
-        .finally(() => this.deleting = false)
-        .subscribe(
-          (success: string) => {
-            this.notifications.message({
-              type: NotificationType.SUCCESS,
-              message: success
-            });
-            this.active = false;
-          },
-          (error: any) => {
-            this.notifications.message({
-              type: NotificationType.WARNING,
-              message: error
-            });
-          }
-        )
+      ).pipe(
+        first(),
+        finalize(() => this.deleting = false)
+      ).subscribe(
+        (success: string) => {
+          this.notifications.message({
+            type: NotificationType.SUCCESS,
+            message: success
+          });
+          this.active = false;
+        },
+        (error: any) => {
+          this.notifications.message({
+            type: NotificationType.WARNING,
+            message: error
+          });
+        }
+      )
     );
     this.lockAndDelete();
   }

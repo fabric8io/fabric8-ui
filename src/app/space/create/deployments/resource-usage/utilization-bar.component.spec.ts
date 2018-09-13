@@ -5,6 +5,9 @@ import {
   Observable,
   Subject
 } from 'rxjs';
+import { empty } from 'rxjs/observable/empty';
+import { of } from 'rxjs/observable/of';
+
 import { initContext, TestContext } from 'testing/test-context';
 
 import { Stat } from '../models/stat';
@@ -26,8 +29,8 @@ describe('UtilizationBarComponent', () => {
     initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = Observable.of({ used: 1, quota: 4 } as Stat);
-      component.status = Observable.of({ type: StatusType.OK, message: '' });
+      component.stat = of({ used: 1, quota: 4 } as Stat);
+      component.status = of({ type: StatusType.OK, message: '' });
     });
 
     it('should have proper stat fields set', function(this: Context) {
@@ -64,8 +67,8 @@ describe('UtilizationBarComponent', () => {
     initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = Observable.of({ used: 3, quota: 4 } as Stat);
-      component.status = Observable.of({ type: StatusType.WARN, message: '' });
+      component.stat = of({ used: 3, quota: 4 } as Stat);
+      component.status = of({ type: StatusType.WARN, message: '' });
     });
 
     it('should have proper stat fields set', function(this: Context) {
@@ -102,8 +105,8 @@ describe('UtilizationBarComponent', () => {
     initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = Observable.of({ used: 2, quota: 0 } as Stat);
-      component.status = Observable.of({ type: StatusType.ERR, message: '' });
+      component.stat = of({ used: 2, quota: 0 } as Stat);
+      component.status = of({ type: StatusType.ERR, message: '' });
     });
 
     it('should have a properly set title', function(this: Context) {
@@ -124,7 +127,7 @@ describe('UtilizationBarComponent', () => {
     initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = Observable.empty();
+      component.stat = empty();
       component.status = status;
     });
 

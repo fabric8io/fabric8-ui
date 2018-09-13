@@ -19,14 +19,15 @@ import {
   BsDropdownModule,
   BsDropdownToggleDirective
 } from 'ngx-bootstrap/dropdown';
-import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,
-  Observable,
   Subject
 } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -76,13 +77,13 @@ describe('DeploymentCardComponent', () => {
         provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
           const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
 
-          svc.getVersion.and.returnValue(Observable.of('1.2.3'));
-          svc.getDeploymentCpuStat.and.returnValue(Observable.of([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]));
-          svc.getDeploymentMemoryStat.and.returnValue(Observable.of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]));
-          svc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
-          svc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
-          svc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
-          svc.deleteDeployment.and.returnValue(Observable.of('mockDeletedMessage'));
+          svc.getVersion.and.returnValue(of('1.2.3'));
+          svc.getDeploymentCpuStat.and.returnValue(of([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]));
+          svc.getDeploymentMemoryStat.and.returnValue(of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]));
+          svc.getAppUrl.and.returnValue(of('mockAppUrl'));
+          svc.getConsoleUrl.and.returnValue(of('mockConsoleUrl'));
+          svc.getLogsUrl.and.returnValue(of('mockLogsUrl'));
+          svc.deleteDeployment.and.returnValue(of('mockDeletedMessage'));
           svc.isApplicationDeployedInEnvironment.and.returnValue(new BehaviorSubject<boolean>(true));
           svc.deleteDeployment.and.returnValue(new Subject<string>());
 
@@ -205,7 +206,7 @@ describe('DeploymentCardComponent', () => {
       }));
 
       it('should not display appUrl if none available', fakeAsync(function(this: Context) {
-        this.testedDirective.appUrl = Observable.of('');
+        this.testedDirective.appUrl = of('');
 
         this.fixture.detectChanges();
 

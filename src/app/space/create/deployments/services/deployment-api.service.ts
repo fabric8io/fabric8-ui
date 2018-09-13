@@ -11,6 +11,9 @@ import {
   Injectable
 } from '@angular/core';
 import { Observable } from 'rxjs';
+import { _throw } from 'rxjs/observable/throw';
+import { catchError } from 'rxjs/operators/catchError';
+import { map } from 'rxjs/operators/map';
 
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
@@ -154,14 +157,16 @@ export class DeploymentApiService {
 
   getEnvironments(spaceId: string): Observable<EnvironmentStat[]> {
     const encSpaceId: string = encodeURIComponent(spaceId);
-    return this.httpGet<EnvironmentsResponse>(`${this.apiUrl}${encSpaceId}/environments`)
-      .map((response: EnvironmentsResponse): EnvironmentStat[] => response.data);
+    return this.httpGet<EnvironmentsResponse>(`${this.apiUrl}${encSpaceId}/environments`).pipe(
+      map((response: EnvironmentsResponse): EnvironmentStat[] => response.data)
+    );
   }
 
   getApplications(spaceId: string): Observable<Application[]> {
     const encSpaceId: string = encodeURIComponent(spaceId);
-    return this.httpGet<ApplicationsResponse>(`${this.apiUrl}${encSpaceId}`)
-      .map((response: ApplicationsResponse): Application[] => response.data.attributes.applications);
+    return this.httpGet<ApplicationsResponse>(`${this.apiUrl}${encSpaceId}`).pipe(
+      map((response: ApplicationsResponse): Application[] => response.data.attributes.applications)
+    );
   }
 
   getTimeseriesData(spaceId: string, environmentName: string, applicationId: string, startTime: number, endTime: number): Observable<MultiTimeseriesData> {
@@ -170,8 +175,9 @@ export class DeploymentApiService {
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries`;
     const params: HttpParams = new HttpParams().set('start', String(startTime)).set('end', String(endTime));
-    return this.httpGet<MultiTimeseriesResponse>(url, params)
-      .map((response: MultiTimeseriesResponse) => response.data);
+    return this.httpGet<MultiTimeseriesResponse>(url, params).pipe(
+      map((response: MultiTimeseriesResponse) => response.data)
+    );
   }
 
   getLatestTimeseriesData(spaceId: string, environmentName: string, applicationId: string): Observable<TimeseriesData> {
@@ -179,8 +185,9 @@ export class DeploymentApiService {
     const encEnvironmentName: string = encodeURIComponent(environmentName);
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
-    return this.httpGet<TimeseriesResponse>(url)
-      .map((response: TimeseriesResponse) => response.data.attributes);
+    return this.httpGet<TimeseriesResponse>(url).pipe(
+      map((response: TimeseriesResponse) => response.data.attributes)
+    );
   }
 
   deleteDeployment(spaceId: string, environmentName: string, applicationId: string): Observable<void> {
@@ -188,9 +195,10 @@ export class DeploymentApiService {
     const encEnvironmentName: string = encodeURIComponent(environmentName);
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
-    return this.http.delete(url, { headers: this.headers, responseType: 'text' })
-      .catch((err: HttpErrorResponse) => this.handleHttpError(err))
-      .map(() => null);
+    return this.http.delete(url, { headers: this.headers, responseType: 'text' }).pipe(
+      catchError((err: HttpErrorResponse) => this.handleHttpError(err)),
+      map(() => null)
+    );
   }
 
   scalePods(spaceId: string, environmentName: string, applicationId: string, desiredReplicas: number): Observable<void> {
@@ -199,20 +207,22 @@ export class DeploymentApiService {
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
     const params: HttpParams = new HttpParams().set('podCount', String(desiredReplicas));
-    return this.http.put(url, '', { headers: this.headers, params, responseType: 'text' })
-      .catch((err: HttpErrorResponse) => this.handleHttpError(err))
-      .map(() => null);
+    return this.http.put(url, '', { headers: this.headers, params, responseType: 'text' }).pipe(
+      catchError((err: HttpErrorResponse) => this.handleHttpError(err)),
+      map(() => null)
+    );
   }
 
   private httpGet<T>(url: string, params: HttpParams = new HttpParams()): Observable<T> {
-    return this.http.get<T>(url, { headers: this.headers, params })
-      .catch((err: HttpErrorResponse) => this.handleHttpError(err));
+    return this.http.get<T>(url, { headers: this.headers, params }).pipe(
+      catchError((err: HttpErrorResponse) => this.handleHttpError(err))
+    );
   }
 
   private handleHttpError(err: HttpErrorResponse): Observable<any> {
     this.errorHandler.handleError(err);
     this.logger.error(err);
-    return Observable.throw(err);
+    return _throw(err);
   }
 
 }

@@ -9,6 +9,8 @@ import { By } from '@angular/platform-browser';
 
 import { Broadcaster } from 'ngx-base';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+
 import {
   initContext,
   TestContext
@@ -39,8 +41,8 @@ describe('DeploymentsAppsComponent', () => {
 
   const environments: string[] = ['envId1', 'envId2'];
   const applications: string[] = ['first', 'second'];
-  const mockEnvironments: Observable<string[]> = Observable.of(environments);
-  const mockApplications: Observable<string[]> = Observable.of(applications);
+  const mockEnvironments: Observable<string[]> = of(environments);
+  const mockApplications: Observable<string[]> = of(applications);
 
   initContext(DeploymentsAppsComponent, HostComponent,
     {
@@ -51,8 +53,8 @@ describe('DeploymentsAppsComponent', () => {
       schemas: [NO_ERRORS_SCHEMA]
     },
     (component: DeploymentsAppsComponent) => {
-      component.spaceId = Observable.of('spaceId');
-      component.spaceName = Observable.of('spaceName');
+      component.spaceId = of('spaceId');
+      component.spaceName = of('spaceName');
       component.environments = mockEnvironments;
       component.applications = mockApplications;
     });

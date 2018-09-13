@@ -10,6 +10,7 @@ import {
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { Spaces } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import { createMock } from 'testing/mock';
 import {
@@ -32,8 +33,8 @@ describe('DeploymentsComponent', () => {
 
   beforeEach(async(function(this: Context): void {
     this.service = createMock(DeploymentsService);
-    this.service.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
-    this.service.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
+    this.service.getApplications.and.returnValue(of(['foo-app', 'bar-app']));
+    this.service.getEnvironments.and.returnValue(of(['stage', 'prod']));
     this.service.ngOnDestroy.and.callThrough();
     TestBed.overrideProvider(DeploymentsService, { useValue: this.service });
   }));
@@ -43,7 +44,7 @@ describe('DeploymentsComponent', () => {
     providers: [
       {
         provide: Spaces, useValue: (
-          { current: Observable.of({ id: 'fake-spaceId' }) }
+          { current: of({ id: 'fake-spaceId' }) }
         )
       }
     ],

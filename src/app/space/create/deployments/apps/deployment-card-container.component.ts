@@ -5,6 +5,8 @@ import {
 
 import { Contexts } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators/map';
+import { mergeMap } from 'rxjs/operators/mergeMap';
 
 import { DeploymentsService } from '../services/deployments.service';
 
@@ -29,12 +31,12 @@ export class DeploymentCardContainerComponent {
   ) {}
 
   ngOnInit(): void {
-    this.spacePath = this.contexts.current.map(c => c.path);
-    this.username = this.contexts.current.map(c => c.user.attributes.username);
-    this.hasDeployments = this.environments.flatMap(
+    this.spacePath = this.contexts.current.pipe(map(c => c.path));
+    this.username = this.contexts.current.pipe(map(c => c.user.attributes.username));
+    this.hasDeployments = this.environments.pipe(mergeMap(
       (environments: string[]): Observable<boolean> =>
         this.deploymentsService.hasDeployments(this.spaceId, environments)
-    );
+    ));
     this.applications.forEach(app => {
       this.collapsed[app] = true;
     });

@@ -11,6 +11,8 @@ import {
   Observable,
   Subscription
 } from 'rxjs';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { first } from 'rxjs/operators/first';
 
 import { PodPhase } from '../models/pod-phase';
 
@@ -74,7 +76,7 @@ export class DeploymentsDonutComponent implements OnInit {
     );
 
     this.subscriptions.push(
-      Observable.combineLatest(
+      combineLatest(
         this.deploymentsService.getEnvironmentCpuStat(this.spaceId, this.environment),
         this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment)
       ).subscribe((stats: Stat[]): void => {
@@ -111,7 +113,7 @@ export class DeploymentsDonutComponent implements OnInit {
     this.subscriptions.push(
       this.deploymentsService.scalePods(
         this.spaceId, this.environment, this.applicationId, this.desiredReplicas
-      ).first().subscribe(
+      ).pipe(first()).subscribe(
         success => {
           this.scaleRequestPending = false;
         },

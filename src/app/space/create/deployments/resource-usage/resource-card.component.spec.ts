@@ -14,6 +14,7 @@ import {
 import { createMock } from 'testing/mock';
 
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 
 import { MemoryUnit } from '../models/memory-unit';
 import { Stat } from '../models/stat';
@@ -51,18 +52,18 @@ describe('ResourceCardComponent', () => {
         {
           provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
             const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
-            svc.getApplications.and.returnValue(Observable.of(['foo-app', 'bar-app']));
-            svc.getEnvironments.and.returnValue(Observable.of(['stage', 'prod']));
-            svc.getEnvironmentCpuStat.and.returnValue(Observable.of({ used: 1, quota: 2 }));
-            svc.getEnvironmentMemoryStat.and.returnValue(Observable.of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  }));
+            svc.getApplications.and.returnValue(of(['foo-app', 'bar-app']));
+            svc.getEnvironments.and.returnValue(of(['stage', 'prod']));
+            svc.getEnvironmentCpuStat.and.returnValue(of({ used: 1, quota: 2 }));
+            svc.getEnvironmentMemoryStat.and.returnValue(of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  }));
             return svc;
           }
         },
         {
           provide: DeploymentStatusService, useFactory: (): jasmine.SpyObj<DeploymentStatusService> => {
             const svc: jasmine.SpyObj<DeploymentStatusService> = createMock(DeploymentStatusService);
-            svc.getEnvironmentCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
-            svc.getEnvironmentMemoryStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
+            svc.getEnvironmentCpuStatus.and.returnValue(of({ type: StatusType.OK, message: '' }));
+            svc.getEnvironmentMemoryStatus.and.returnValue(of({ type: StatusType.OK, message: '' }));
             return svc;
           }
         }

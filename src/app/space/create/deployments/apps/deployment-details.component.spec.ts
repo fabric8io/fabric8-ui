@@ -11,9 +11,10 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,
-  Observable,
   Subject
 } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -137,13 +138,13 @@ describe('DeploymentDetailsComponent', () => {
       {
         provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
           const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
-          svc.getVersion.and.returnValue(Observable.of('1.2.3'));
+          svc.getVersion.and.returnValue(of('1.2.3'));
           svc.getDeploymentCpuStat.and.returnValue(new BehaviorSubject([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]));
           svc.getDeploymentMemoryStat.and.returnValue(new BehaviorSubject([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]));
-          svc.getAppUrl.and.returnValue(Observable.of('mockAppUrl'));
-          svc.getConsoleUrl.and.returnValue(Observable.of('mockConsoleUrl'));
-          svc.getLogsUrl.and.returnValue(Observable.of('mockLogsUrl'));
-          svc.deleteDeployment.and.returnValue(Observable.of('mockDeletedMessage'));
+          svc.getAppUrl.and.returnValue(of('mockAppUrl'));
+          svc.getConsoleUrl.and.returnValue(of('mockConsoleUrl'));
+          svc.getLogsUrl.and.returnValue(of('mockLogsUrl'));
+          svc.deleteDeployment.and.returnValue(of('mockDeletedMessage'));
           svc.getDeploymentNetworkStat.and.returnValue(
             new BehaviorSubject([{
               sent: new ScaledNetStat(1 * Math.pow(1024, 2), 1),
@@ -162,8 +163,8 @@ describe('DeploymentDetailsComponent', () => {
         provide: DeploymentStatusService, useFactory: (): jasmine.SpyObj<DeploymentStatusService> => {
           const svc: jasmine.SpyObj<DeploymentStatusService> = createMock(DeploymentStatusService);
           svc.getDeploymentAggregateStatus.and.returnValue(new BehaviorSubject<Status>({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
-          svc.getDeploymentCpuStatus.and.returnValue(Observable.of({ type: StatusType.OK, message: '' }));
-          svc.getDeploymentMemoryStatus.and.returnValue(Observable.of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
+          svc.getDeploymentCpuStatus.and.returnValue(of({ type: StatusType.OK, message: '' }));
+          svc.getDeploymentMemoryStatus.and.returnValue(of({ type: StatusType.WARN, message: 'Memory usage is nearing capacity.' }));
           return svc;
         }
       },

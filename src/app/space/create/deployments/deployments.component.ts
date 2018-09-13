@@ -8,6 +8,11 @@ import {
   Spaces
 } from 'ngx-fabric8-wit';
 import { Observable } from 'rxjs';
+import { timer } from 'rxjs/observable/timer';
+import { first } from 'rxjs/operators/first';
+import { map } from 'rxjs/operators/map';
+import { mergeMap } from 'rxjs/operators/mergeMap';
+import { share } from 'rxjs/operators/share';
 
 import { DeploymentStatusService } from './services/deployment-status.service';
 import {
@@ -18,10 +23,10 @@ import {
 } from './services/deployments.service';
 
 export function timerFactory(): Observable<void> {
-  return Observable
-    .timer(DeploymentsService.DEFAULT_INITIAL_UPDATE_DELAY, DeploymentsService.DEFAULT_POLL_RATE_MS)
-    .map((unused: number): void => null)
-    .share();
+  return timer(DeploymentsService.DEFAULT_INITIAL_UPDATE_DELAY, DeploymentsService.DEFAULT_POLL_RATE_MS).pipe(
+    map((): void => null),
+    share()
+  );
 }
 
 @Component({
@@ -48,10 +53,16 @@ export class DeploymentsComponent {
     private readonly spaces: Spaces,
     private readonly deploymentsService: DeploymentsService
   ) {
-    this.spaceId = this.spaces.current.first().map((space: Space): string => space.id);
-    this.spaceName = this.spaces.current.first().map((space: Space): string => space.attributes.name);
-    this.environments = this.spaceId.flatMap((spaceId: string): Observable<string[]> => this.deploymentsService.getEnvironments(spaceId));
-    this.applications = this.spaceId.flatMap((spaceId: string): Observable<string[]> => this.deploymentsService.getApplications(spaceId));
+    this.spaceId = this.spaces.current.pipe(
+      first(),
+      map((space: Space): string => space.id)
+    );
+    this.spaceName = this.spaces.current.pipe(
+      first(),
+      map((space: Space): string => space.attributes.name)
+    );
+    this.environments = this.spaceId.pipe(mergeMap((spaceId: string): Observable<string[]> => this.deploymentsService.getEnvironments(spaceId)));
+    this.applications = this.spaceId.pipe(mergeMap((spaceId: string): Observable<string[]> => this.deploymentsService.getApplications(spaceId)));
   }
 
 }

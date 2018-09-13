@@ -4,6 +4,8 @@ import {
   BehaviorSubject,
   Observable
 } from 'rxjs';
+import { combineLatest } from 'rxjs/observable/combineLatest';
+import { first } from 'rxjs/operators/first';
 
 import { createMock } from 'testing/mock';
 
@@ -54,9 +56,9 @@ describe('DeploymentStatusService', (): void => {
 
   describe('#getDeploymentAggregateStatus', (): void => {
     it('should return OK status with no message when no stats are nearing quota', function(this: TestContext, done: DoneFn): void {
-      this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.OK);
           expect(status.message).toEqual('');
           done();
@@ -65,12 +67,12 @@ describe('DeploymentStatusService', (): void => {
 
     it('should mirror single status when one stat is nearing quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
-      Observable.combineLatest(
+      combineLatest(
         this.service.getDeploymentCpuStatus('foo', 'bar', 'baz'),
         this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz')
-      )
-        .first()
-        .subscribe((statuses: [Status, Status]): void => {
+      ).pipe(
+        first()
+      ).subscribe((statuses: [Status, Status]): void => {
           expect(statuses[1]).toEqual(statuses[0]);
           done();
         });
@@ -79,9 +81,9 @@ describe('DeploymentStatusService', (): void => {
     it('should return combined status when multiple stats are nearing quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
       this.deploymentsService.getDeploymentMemoryStat().next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
-      this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.WARN);
           expect(status.message).toEqual('CPU usage is nearing capacity. Memory usage is nearing capacity.');
           done();
@@ -91,9 +93,9 @@ describe('DeploymentStatusService', (): void => {
     it('should return combined status when multiple stats are nearing or at quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
       this.deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
-      this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentAggregateStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('CPU usage is nearing capacity. Memory usage has reached capacity.');
           done();
@@ -109,9 +111,9 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return OK status when not nearing quota', function(this: TestContext, done: DoneFn): void {
-      this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.OK);
           expect(status.message).toEqual('');
           done();
@@ -120,9 +122,9 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return WARN status when nearing quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
-      this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.WARN);
           expect(status.message).toEqual('CPU usage is nearing capacity.');
           done();
@@ -131,9 +133,9 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return ERR status when at quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentCpuStat().next([{ used: 10, quota: 10 }]);
-      this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('CPU usage has reached capacity.');
           done();
@@ -142,16 +144,16 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return OK status after scaling down to 0 pods', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentCpuStat().next([{ used: 10, quota: 10 }]);
-      this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('CPU usage has reached capacity.');
           this.deploymentsService.getPods().next({ total: 0, pods: [] });
           this.deploymentsService.getDeploymentCpuStat().next([{ used: 0, quota: 0 }]);
-          this.service.getDeploymentCpuStatus('foo', 'bar', 'baz')
-            .first()
-            .subscribe((status: Status): void => {
+          this.service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
+            first()
+          ).subscribe((status: Status): void => {
               expect(status.type).toEqual(StatusType.OK);
               expect(status.message).toEqual('');
               done();
@@ -168,9 +170,9 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return OK status when not nearing quota', function(this: TestContext, done: DoneFn): void {
-      this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.OK);
           expect(status.message).toEqual('');
           done();
@@ -179,9 +181,9 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return WARN status when nearing quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentMemoryStat().next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
-      this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.WARN);
           expect(status.message).toEqual('Memory usage is nearing capacity.');
           done();
@@ -190,9 +192,9 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return ERR status when at quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
-      this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('Memory usage has reached capacity.');
           done();
@@ -201,16 +203,16 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return OK status after scaling down to 0 pods', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
-      this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('Memory usage has reached capacity.');
           this.deploymentsService.getPods().next({ total: 0, pods: [] });
           this.deploymentsService.getDeploymentMemoryStat().next([{ used: 0, quota: 0, units: MemoryUnit.MB }]);
-          this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz')
-            .first()
-            .subscribe((status: Status): void => {
+          this.service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
+            first()
+          ).subscribe((status: Status): void => {
               expect(status.type).toEqual(StatusType.OK);
               expect(status.message).toEqual('');
               done();
@@ -226,9 +228,9 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return OK status when not nearing quota', function(this: TestContext, done: DoneFn): void {
-      this.service.getEnvironmentCpuStatus('foo', 'bar')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getEnvironmentCpuStatus('foo', 'bar').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.OK);
           expect(status.message).toEqual('');
           done();
@@ -237,9 +239,9 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return WARN status when nearing quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getEnvironmentCpuStat().next({ used: 9, quota: 10 });
-      this.service.getEnvironmentCpuStatus('foo', 'bar')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getEnvironmentCpuStatus('foo', 'bar').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.WARN);
           expect(status.message).toEqual('CPU usage is nearing capacity.');
           done();
@@ -248,9 +250,9 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return ERR status when at quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getEnvironmentCpuStat().next({ used: 10, quota: 10 });
-      this.service.getEnvironmentCpuStatus('foo', 'bar')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getEnvironmentCpuStatus('foo', 'bar').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('CPU usage has reached capacity.');
           done();
@@ -265,9 +267,9 @@ describe('DeploymentStatusService', (): void => {
     });
 
     it('should return OK status when not nearing quota', function(this: TestContext, done: DoneFn): void {
-      this.service.getEnvironmentMemoryStatus('foo', 'bar')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getEnvironmentMemoryStatus('foo', 'bar').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.OK);
           expect(status.message).toEqual('');
           done();
@@ -276,9 +278,9 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return WARN status when nearing quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getEnvironmentMemoryStat().next({ used: 9, quota: 10, units: MemoryUnit.GB });
-      this.service.getEnvironmentMemoryStatus('foo', 'bar')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getEnvironmentMemoryStatus('foo', 'bar').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.WARN);
           expect(status.message).toEqual('Memory usage is nearing capacity.');
           done();
@@ -287,9 +289,9 @@ describe('DeploymentStatusService', (): void => {
 
     it('should return ERR status when at quota', function(this: TestContext, done: DoneFn): void {
       this.deploymentsService.getEnvironmentMemoryStat().next({ used: 10, quota: 10, units: MemoryUnit.GB });
-      this.service.getEnvironmentMemoryStatus('foo', 'bar')
-        .first()
-        .subscribe((status: Status): void => {
+      this.service.getEnvironmentMemoryStatus('foo', 'bar').pipe(
+        first()
+      ).subscribe((status: Status): void => {
           expect(status.type).toEqual(StatusType.ERR);
           expect(status.message).toEqual('Memory usage has reached capacity.');
           done();

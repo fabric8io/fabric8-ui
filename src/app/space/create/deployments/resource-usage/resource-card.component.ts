@@ -5,6 +5,7 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators/map';
 
 import { MemoryStat } from '../models/memory-stat';
 import { DeploymentStatusService } from '../services/deployment-status.service';
@@ -29,8 +30,9 @@ export class ResourceCardComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.spaceId && this.environment) {
-      this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment)
-        .map((stat: MemoryStat) => stat.units);
+      this.memUnit = this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment).pipe(
+        map((stat: MemoryStat) => stat.units)
+      );
     }
   }
 }

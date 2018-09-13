@@ -7,9 +7,11 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import {
-  Observable,
   Subject
 } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+import { _throw } from 'rxjs/observable/throw';
+
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -53,10 +55,10 @@ describe('DeploymentsDonutComponent', () => {
           provide: DeploymentsService, useFactory: (): jasmine.SpyObj<DeploymentsService> => {
             const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
             svc.scalePods.and.returnValue(
-              Observable.of('scalePods')
+              of('scalePods')
             );
             svc.getPods.and.returnValue(
-              Observable.of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
+              of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
             );
             svc.getEnvironmentCpuStat.and.returnValue(new Subject<CpuStat>());
             svc.getEnvironmentMemoryStat.and.returnValue(new Subject<MemoryStat>());
@@ -208,7 +210,7 @@ describe('DeploymentsDonutComponent', () => {
   describe('error handling', () => {
     it('should notify if scaling pods has an error', function(this: Context) {
       const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-      mockSvc.scalePods.and.returnValue(Observable.throw('scalePods error'));
+      mockSvc.scalePods.and.returnValue(_throw('scalePods error'));
 
       this.testedDirective.scaleUp();
       this.detectChanges();
