@@ -1,7 +1,8 @@
 import { cloneDeep } from 'lodash';
-import { Context } from 'ngx-fabric8-wit';
+import { Context, Space } from 'ngx-fabric8-wit';
+import { Profile, User } from 'ngx-login-client';
 
-export const loggedInUser = {
+export const loggedInUser: User = {
   'attributes': {
     'bio': '',
     'company': 'Red Hat',
@@ -40,9 +41,9 @@ export const loggedInUser = {
   },
   'id': 'aab214e7-1439-4fe7-aefc-cdee8b3cb475',
   'links': { 'self': 'http://localhost:8080/api/users/aab214e7-1439-4fe7-aefc-cdee8b3cb475' }, 'type': 'identities'
-};
+} as User;
 
-export const profile = {
+export const profile: Profile = {
   'bio': '',
   'company': 'Red Hat',
   'contextInformation': {
@@ -84,8 +85,9 @@ export const profile = {
       '997b85e1-fa1a-4542-82a3-4ee7d263333b'
     ]
   }
-};
-export const spaceMock = {
+} as Profile;
+
+export const spaceMock: Space = {
   attributes: {
     'created-at': '2017-06-08T15:18:39.270343Z',
     description: '',
@@ -128,8 +130,9 @@ export const spaceMock = {
       }
     }
   }
-};
-export const context1 = {
+} as Space;
+
+export const context1: Context = {
   user: {
     'attributes': {
       'fullName': 'Corinne Krych',
@@ -142,7 +145,7 @@ export const context1 = {
     },
     'type': 'identities'
   },
-  space: spaceMock,
+  space: spaceMock as Space,
   type: {
     'name': 'Space',
     'icon': 'fa fa-th-large'
@@ -151,9 +154,10 @@ export const context1 = {
   path: '/ckrych@redhat.com/space1'
 } as Context;
 
-export const context2 = cloneDeep(context1);
+export const context2: Context = cloneDeep(context1);
 context2.name = 'space2';
 context2.path = '/ckrych@redhat.com/space2';
 context2.space.name = 'space2';
 context2.space.id = '2';
 context2.space.path = '/ckrych@redhat.com/space2';
+context2.space.attributes.name = 'space2';

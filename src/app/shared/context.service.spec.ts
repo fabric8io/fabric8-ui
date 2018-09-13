@@ -1,149 +1,253 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { LocalStorageService } from 'angular-2-local-storage';
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Notifications } from 'ngx-base';
-import { SpaceService } from 'ngx-fabric8-wit';
-import { FeatureTogglesService } from 'ngx-feature-flag';
-import { UserService } from 'ngx-login-client';
+import { Context, Space, SpaceAttributes, SpaceService } from 'ngx-fabric8-wit';
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
+import { User, UserService } from 'ngx-login-client';
+import { ConnectableObservable, Observable } from 'rxjs';
 import { of } from 'rxjs/observable/of';
+
+import { createMock } from 'testing/mock';
 import { MenusService } from '../layout/header/menus.service';
-import { ProfileService } from '../profile/profile.service';
+import { Navigation } from '../models/navigation';
+import { ExtProfile, ProfileService } from '../profile/profile.service';
 import { ContextService } from './context.service';
 import { context1, context2, loggedInUser, profile, spaceMock } from './context.service.mock';
-import { EventService } from './event.service';
 
 describe('Context Service:', () => {
-  let mockRouter: any;
-  let mockBroadcaster: any;
-  let mockMenu: any;
-  let mockSpaceService: any;
-  let mockUserService: any;
-  let mockNotifications: any;
-  let mockRoute: any;
-  let mockProfileService: any;
-  let mockLocalStorage: any;
-  let mockFeatureTogglesService: any;
-  let contextService: ContextService;
 
   beforeEach(() => {
-    mockRouter = jasmine.createSpy('Router');
-    mockBroadcaster = jasmine.createSpyObj('Broadcaster', ['broadcast']);
-    mockMenu = jasmine.createSpyObj('MenusService', ['attach']);
-    mockSpaceService = jasmine.createSpyObj('SpaceService', ['getSpaceByName']);
-    mockSpaceService.getSpaceByName.and.returnValue(of(spaceMock));
-    mockUserService = jasmine.createSpyObj('UserService', ['getUserByUserId']);
-    mockUserService.getUserByUserId.and.returnValue(of(loggedInUser));
-    mockUserService.loggedInUser = of(loggedInUser);
-    mockNotifications = jasmine.createSpy('Notifications');
-    mockRoute = jasmine.createSpy('ActivatedRoute');
-    mockProfileService = jasmine.createSpy('ProfileService');
-    mockProfileService.current = of(profile);
-    mockLocalStorage = jasmine.createSpy('LocalStorageService');
-    mockFeatureTogglesService = jasmine.createSpyObj('FeatureTogglesService', ['getAllFeaturesEnabledByLevel']);
-    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(of([]));
     TestBed.configureTestingModule({
       providers: [
+        ContextService,
         {
-          provide: Router, useValue: mockRouter
+          provide: Router,
+          useFactory: (): jasmine.SpyObj<Router> => {
+            const mockRouter: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['serializeUrl']);
+            return mockRouter;
+          }
         },
         {
-          provide: Broadcaster, useValue: mockBroadcaster
+          provide: Broadcaster,
+          useFactory: (): jasmine.SpyObj<Broadcaster> => {
+            const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
+            mockBroadcaster.broadcast.and.callThrough();
+            mockBroadcaster.on.and.callFake((key: string): Observable<Context | Space> => {
+              if (key === 'contextChanged') {
+                return Observable.never();
+              }
+              if (key === 'spaceDeleted') {
+                return Observable.never();
+              }
+            });
+            return mockBroadcaster;
+          }
         },
         {
-          provide: MenusService, useValue: mockMenu
+          provide: MenusService,
+          useFactory: (): jasmine.SpyObj<MenusService> => {
+            const mockMenuService: jasmine.SpyObj<MenusService> = jasmine.createSpyObj('MenusService', ['attach']);
+            return mockMenuService;
+          }
         },
         {
-          provide: SpaceService, useValue: mockSpaceService
+          provide: SpaceService,
+          useFactory: (): jasmine.SpyObj<SpaceService> => {
+            const mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
+            mockSpaceService.getSpaceByName.and.returnValue(of(spaceMock));
+            mockSpaceService.getSpaceById.and.returnValue(of(spaceMock));
+            return mockSpaceService;
+          }
         },
         {
-          provide: UserService, useValue: mockUserService
+          provide: UserService,
+          useFactory: (): jasmine.SpyObj<UserService> => {
+            const mockUserService: any = createMock(UserService);
+            (loggedInUser as any).features = undefined;
+            mockUserService.getUserByUserId.and.returnValue(of(loggedInUser) as Observable<User>);
+            mockUserService.loggedInUser = of(loggedInUser) as ConnectableObservable<User> & jasmine.Spy;
+            return mockUserService;
+          }
         },
         {
-          provide: Notifications, useValue: mockNotifications
+          provide: Notifications,
+          useFactory: (): jasmine.SpyObj<Notifications> => {
+            const mockNotifications: jasmine.SpyObj<Notifications> = createMock(Notifications);
+            return mockNotifications;
+          }
         },
         {
-          provide: ActivatedRoute, useValue: mockRoute
+          provide: ActivatedRoute,
+          useFactory: (): jasmine.SpyObj<ActivatedRoute> => {
+            const mockActivatedRoute: jasmine.SpyObj<ActivatedRoute> = createMock(ActivatedRoute);
+            return mockActivatedRoute;
+          }
         },
         {
-          provide: ProfileService, useValue: mockProfileService
+          provide: ProfileService,
+          useFactory: (): jasmine.SpyObj<ProfileService> => {
+            const mockProfileService: any = jasmine.createSpyObj('ProfileService', ['silentSave']);
+            mockProfileService.current = Observable.of(profile);
+            mockProfileService.silentSave.and.returnValue(Observable.of(profile));
+            return mockProfileService;
+          }
         },
         {
-          provide: LocalStorageService, useValue: mockLocalStorage
-        },
-        {
-          provide: FeatureTogglesService, useValue: mockFeatureTogglesService
-        },
-        EventService,
-        ContextService
+          provide: FeatureTogglesService,
+          useFactory: (): jasmine.SpyObj<FeatureTogglesService> => {
+            const mockFeatureTogglesService: jasmine.SpyObj<FeatureTogglesService> = createMock(FeatureTogglesService);
+            mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(Observable.never());
+            return mockFeatureTogglesService;
+          }
+        }
       ]
     });
-    contextService = TestBed.get(ContextService);
   });
 
-  it('URL change to a new space, recent space list get updated successfully', () => {
+  it('URL change to a new space, recent space list get updated successfully', (done: DoneFn) => {
     // given
-    const context3 = cloneDeep(context1);
+    const context3: Context = cloneDeep(context1);
     context3.name = 'space3';
     context3.path =  '/ckrych@redhat.com/space3';
+    context3.space = {} as Space;
     context3.space.id = '3';
     context3.space.name = 'space3';
     context3.space.path =  '/ckrych@redhat.com/space3';
+    context3.space.attributes = {} as SpaceAttributes;
+    context3.space.attributes.name = 'space3';
 
-    let recent = [context1, context2];
+    let recent: Context[] = [context1, context2];
+    (profile as ExtProfile).store.recentContexts = recent;
+
+    const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+    spaceService.getSpaceById.and.returnValues(
+      Observable.of(context1.space),
+      Observable.of(context2.space)
+    );
+
     // when
-    recent = contextService.updateRecentSpaceList(recent, context3);
+    const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+    broadcaster.on.and.callFake((key: string): Observable<Context> => {
+      if (key === 'contextChanged') {
+        return Observable.of(context3);
+      }
+      if (key === 'spaceDeleted') {
+        return Observable.never();
+      }
+    });
+    const contextService: ContextService = TestBed.get(ContextService);
 
     // then
-    expect(recent.length).toEqual(3);
-    expect(recent[0]).toEqual(context3);
+    contextService.recent.subscribe((recent: Context[]) => {
+      expect(recent.length).toEqual(3);
+      expect(recent[0].name).toEqual(context3.name);
+      done();
+    });
+
   });
 
-  it('URL change to a new space - already in recent -, recent space list get updated successfully', () => {
+  it('URL change to a new space (already in recent), recent space list get updated successfully', (done: DoneFn) => {
     // given
-    const context3 = cloneDeep(context2);
-    let recent = [context1, context2];
+    let recent: Context[] = [context1, context2];
+    (profile as ExtProfile).store.recentContexts = recent;
+
+    const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+    spaceService.getSpaceById.and.returnValues(
+      Observable.of(context1.space),
+      Observable.of(context2.space)
+    );
+
     // when
-    recent = contextService.updateRecentSpaceList(recent, context3);
+    const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+    broadcaster.on.and.callFake((key: string): Observable<Context> => {
+      if (key === 'contextChanged') {
+        return Observable.of(context2);
+      }
+      if (key === 'spaceDeleted') {
+        return Observable.never();
+      }
+    });
+    const contextService: ContextService = TestBed.get(ContextService);
 
     // then
-    expect(recent.length).toEqual(2);
-    expect(recent[0]).toEqual(context2);
+    contextService.recent.subscribe((recent: Context[]) => {
+      expect(recent.length).toEqual(2);
+      expect(recent[0].name).toEqual(context2.name);
+      done();
+    });
   });
 
   it('Space - which belong to recent list - has been deleted, recent space list get updated removing it', () => {
     // given
-    const context3 = cloneDeep(context2);
-    context3.name = 'TO_DELETE';
+    let recent: Context[] = [context1, context2];
+    (profile as ExtProfile).store.recentContexts = recent;
 
-    let recent = [context1, context2];
+    const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
+    spaceService.getSpaceById.and.returnValues(
+      Observable.of(context1.space),
+      Observable.of(context2.space)
+    );
+
     // when
-    recent = contextService.updateRecentSpaceList(recent, context3);
+    const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+    broadcaster.on.and.callFake((key: string): Observable<Context | Space> => {
+      if (key === 'contextChanged') {
+        return Observable.never();
+      }
+      if (key === 'spaceDeleted') {
+        return Observable.of(context2.space);
+      }
+    });
+    const contextService: ContextService = TestBed.get(ContextService);
 
     // then
-    expect(recent.length).toEqual(1);
-    expect(recent[0]).toEqual(context1);
+    contextService.recent.subscribe((recent: Context[]) => {
+      expect(recent.length).toEqual(1);
+      expect(recent[0].name).toEqual(context1.name);
+    });
   });
 
   it('Space - which does not belong to recent list - has been deleted, recent space list not changed', () => {
     // given
-    const context3 = cloneDeep(context2);
+    const context3: Context = cloneDeep(context2);
+    context3.name = 'space3';
+    context3.path =  '/ckrych@redhat.com/space3';
+    context3.space = {} as Space;
     context3.space.id = '3';
-    context3.name = 'TO_DELETE';
+    context3.space.name = 'space3';
+    context3.space.path =  '/ckrych@redhat.com/space3';
+    context3.space.attributes = {} as SpaceAttributes;
+    context3.space.attributes.name = 'space3';
 
-    let recent = [context1, context2];
+    let recent: Context[] = [context1, context2];
+    (profile as ExtProfile).store.recentContexts = recent;
+
     // when
-    recent = contextService.updateRecentSpaceList(recent, context3);
+    const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+    broadcaster.on.and.callFake((key: string): Observable<Context | Space> => {
+      if (key === 'contextChanged') {
+        return Observable.never();
+      }
+      if (key === 'spaceDeleted') {
+        return Observable.of(context3.space);
+      }
+    });
+    const contextService: ContextService = TestBed.get(ContextService);
 
     // then
+    contextService.recent.subscribe((recent: Context[]) => {
     expect(recent.length).toEqual(2);
-    expect(recent[0]).toEqual(context1);
+      expect(recent[0].name).toEqual(context1.name);
+    });
   });
 
   it('Feature-flag - getFeatures return a list of features', (done: DoneFn) => {
+    const mockFeatureTogglesService: jasmine.SpyObj<FeatureTogglesService> = TestBed.get(FeatureTogglesService);
+
     // given
-    const features = [
+    const features: Feature[] = [
       {
         id: 'Deployments',
         attributes: {
@@ -155,46 +259,51 @@ describe('Context Service:', () => {
         attributes: {
           enabled: false
         }
-      }];
-    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(of(features));
-    const navigation = of({
+      }] as Feature[];
+    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(Observable.of(features));
+    const navigation: Observable<Navigation> = of({
       space: 'TEST',
       url: '/user_name/TEST',
       user: 'user_name'
     });
 
     // when
-    contextService.changeContext(navigation).subscribe(val => {});
-    contextService.current.subscribe(val => {
+    const contextService: ContextService = TestBed.get(ContextService);
+    contextService.changeContext(navigation).subscribe(() => {});
+    contextService.current.subscribe((val: Context) => {
       expect((val.user as any).features).toEqual(features);
       done();
     });
   });
 
-  // FIXME
-  xit('Feature-flag - getFeatures return an error', (done: DoneFn) => {
+  it('Feature-flag - getFeatures return an error', (done: DoneFn) => {
+    const mockFeatureTogglesService: jasmine.SpyObj<FeatureTogglesService> = TestBed.get(FeatureTogglesService);
+
     // given
-    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.throwError({});
-    const navigation = of({
+    mockFeatureTogglesService.getAllFeaturesEnabledByLevel.and.returnValue(Observable.throw('error'));
+    const navigation: Observable<Navigation> = of({
       space: 'TEST',
       url: '/user_name/TEST',
       user: 'user_name'
     });
 
     // when
+    const contextService: ContextService = TestBed.get(ContextService);
     contextService.changeContext(navigation).subscribe(() => {});
-    contextService.current.subscribe(val => {
-      expect((val.user as any).features).toBeNull();
+    contextService.current.subscribe((val: Context) => {
+      expect((val.user as any).features).toBeUndefined();
       done();
     });
   });
 
   it('emits error when requested user contains reserved characters', (done: DoneFn) => {
-    const navigation = of({
+    const navigation: Observable<Navigation> = of({
       space: 'TEST',
       url: '/_user/TEST',
       user: '_user'
     });
+
+    const contextService: ContextService = TestBed.get(ContextService);
     contextService.changeContext(navigation).subscribe(
       () => done.fail('should have errored'),
       () => done()
@@ -202,11 +311,13 @@ describe('Context Service:', () => {
   });
 
   it('emits error when requested space contains reserved characters', (done: DoneFn) => {
-    const navigation = of({
+    const navigation: Observable<Navigation> = of({
       space: '_TEST',
       url: '/user/_TEST',
       user: 'user'
     });
+
+    const contextService: ContextService = TestBed.get(ContextService);
     contextService.changeContext(navigation).subscribe(
       () => done.fail('should have errored'),
       () => done()

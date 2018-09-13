@@ -31,7 +31,6 @@ import { Subject } from 'rxjs/Subject';
 import { MenusService } from '../layout/header/menus.service';
 import { Navigation } from '../models/navigation';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
-import { EventService } from './event.service';
 
 interface RawContext {
   user: any;
@@ -51,9 +50,7 @@ export class ContextService implements Contexts {
   readonly RESERVED_WORDS: string[] = [];
   private _current: Subject<Context> = new ReplaySubject<Context>(1);
   private _default: ConnectableObservable<Context>;
-  private _recent: ConnectableObservable<Context[]>;
-  private _addRecent: Subject<Context>;
-  private _deleteFromRecent: Subject<Context>;
+  private _recent: Subject<Context[]>;
   private _currentUser: string;
   private _currentContextUser: string;
 
@@ -65,93 +62,112 @@ export class ContextService implements Contexts {
     private userService: UserService,
     private notifications: Notifications,
     private profileService: ProfileService,
-    private eventService: EventService,
-    private toggleService: FeatureTogglesService) {
+    private toggleService: FeatureTogglesService
+  ) {
+    this._recent = new ReplaySubject<Context[]>(1);
+    this.initDefault();
+    this.initRecent();
+  }
 
-    this._addRecent = new Subject<Context>();
-    this._deleteFromRecent = new Subject<Context>();
-    // subscribe to delete space event
-    this.eventService.deleteSpaceSubject
-      .pipe(
-        map(val => {
-          if (val && val.id) {
-            return {
-              user: null,
-              space: val,
-              type: ContextTypes.BUILTIN.get('user'),
-              name: 'TO_DELETE',
-              path: null
-            } as Context;
-          } else {
-            return {} as Context;
-          }
-        })
-      ).subscribe(val => {
-        this._deleteFromRecent.next(val);
-      });
-    // Initialize the default context when the logged in user changes
-    this._default = this.userService.loggedInUser
-      .pipe(
-      // First use map to convert the broadcast event to just a username
-        map(val => {
-          if (!(val && val.id)) {
-            // this is a logout event
-          } else if (val.attributes.username) {
-            this._currentUser = val.attributes.username;
-            return val.attributes.username;
-          } else {
-            this.notifications.message({
-              message: 'Something went badly wrong. Please try again later or ask for help.',
-              type: NotificationType.DANGER
-            } as Notification);
-            throw 'Unknown user';
-          }
-        }),
-        distinctUntilChanged(),
-        // Then, perform another map to create a context from the user
-        switchMap(val => this.userService.getUserByUsername(val)),
-        map(val => {
-          if (val && val.id) {
-            return {
-              user: val,
-              space: null,
-              type: ContextTypes.BUILTIN.get('user'),
-              name: val.attributes.username,
-              path: '/' + val.attributes.username
-            } as Context;
-          } else {
-            return {} as Context;
-          }
-        })
-      ).multicast(() => new ReplaySubject(1));
-
-    // Create the recent space list
-    this._recent = merge(this._addRecent, this._deleteFromRecent).pipe(
-      // Map from the context being added to an array of recent contexts
-      // The scan operator allows us to access the list of recent contexts and add ours
-      scan(this.updateRecentSpaceList, []),  // The final value to scan is the initial value, used when the app starts
-      // Finally save the list of recent contexts
-      tap(val => {
-        // Truncate the number of recent contexts to the correct length
-        if (val.length > this.RECENT_CONTEXT_LENGTH) {
-          val.splice(
-            this.RECENT_CONTEXT_LENGTH,
-            val.length - this.RECENT_CONTEXT_LENGTH
-          );
+  initDefault(): void {
+   // Initialize the default context when the logged in user changes
+   this._default = this.userService.loggedInUser
+    .pipe(
+    // First use map to convert the broadcast event to just a username
+      map((val: User): string => {
+        if (!(val && val.id)) {
+          // this is a logout event
+        } else if (val.attributes.username) {
+          this._currentUser = val.attributes.username;
+          return val.attributes.username;
+        } else {
+          this.notifications.message({
+            message: 'Something went badly wrong. Please try again later or ask for help.',
+            type: NotificationType.DANGER
+          } as Notification);
+          throw 'Unknown user';
         }
       }),
-      tap(val => {
-        this.saveRecent(val);
+      distinctUntilChanged(),
+      // Then, perform another map to create a context from the user
+      switchMap((val: string): Observable<User> => this.userService.getUserByUsername(val)),
+      map((val: User): Context => {
+        if (val && val.id) {
+          return {
+            user: val,
+            space: null,
+            type: ContextTypes.BUILTIN.get('user'),
+            name: val.attributes.username,
+            path: '/' + val.attributes.username
+          } as Context;
+        } else {
+          return {} as Context;
+        }
       })
     ).multicast(() => new ReplaySubject(1));
-    // Finally, start broadcasting
     this._default.connect();
-    this._recent.connect();
-    this.loadRecent().subscribe(
-      val => {
-        val.forEach(space => this._addRecent.next(space));
-      }
-    );
+  }
+
+  initRecent(): void {
+    this.loadRecent().subscribe((contexts: Context[]) => {
+      this._recent.next(contexts);
+    });
+
+    this.broadcaster.on<Context>('contextChanged')
+      .withLatestFrom(this.recent)
+      .map(([changedContext, recentContexts]: [Context, Context[]]): [Context, Context[], number] => {
+        let index: number = recentContexts.findIndex((context: Context) => context.name === changedContext.name);
+        return [changedContext, recentContexts, index];
+      })
+      .filter(([changedContext, recentContexts, index]: [Context, Context[], number]): boolean => {
+        return index !== 0; // continue only if the changed context is new, or requires a move in _recent
+      })
+      .map(([changedContext, recentContexts, index]: [Context, Context[], number]): Context[] => {
+        // if changedContext exists in _recent
+        if (index !== -1) {
+          // move the context to the front of the list if it is already in _recent
+          if (recentContexts[0].name !== changedContext.name) {
+            recentContexts.splice(index, 1);
+            recentContexts.unshift(changedContext);
+          }
+          // otherwise, no operation required; changedContext is already index 0
+        // if changedContext is new to the recent contexts
+        } else {
+          recentContexts.unshift(changedContext);
+          // trim _recent if required to ensure it is length =< 8
+          if (recentContexts.length > this.RECENT_CONTEXT_LENGTH) {
+            recentContexts.pop();
+          }
+        }
+        return recentContexts;
+      })
+      .subscribe((recentContexts: Context[]) => {
+        this.saveRecent(recentContexts);
+      });
+
+    // if a space is deleted, check to see if it should be removed from _recent
+    this.broadcaster.on<Space>('spaceDeleted')
+      .withLatestFrom(this.recent)
+      .map(([deletedSpace, recentContexts]: [Space, Context[]]): [Space, Context[], number] => {
+        let index: number = recentContexts.findIndex((context: Context): boolean => {
+          if (context.space) {
+            return context.space.id === deletedSpace.id;
+          } else {
+            return false;
+          }
+        });
+        return [deletedSpace, recentContexts, index];
+      })
+      .filter(([deletedSpace, recentContexts, index]: [Space, Context[], number]): boolean => {
+        return index !== -1;
+      })
+      .map(([deletedSpace, recentContexts, index]: [Space, Context[], number]): Context[] => {
+        recentContexts.splice(index, 1);
+        return recentContexts;
+      })
+      .subscribe((recentContexts: Context[]) => {
+        this.saveRecent(recentContexts);
+      });
   }
 
   get recent(): Observable<Context[]> {
@@ -257,10 +273,6 @@ export class ContextService implements Contexts {
         if (val && val.space) {
           this.broadcaster.broadcast('spaceChanged', val.space);
         }
-      }),
-      // Subscribe the current context to the revent space collector
-      tap(val => {
-        if (val) { this._addRecent.next(val); }
       }),
       tap(val => {
         this._current.next(val);
@@ -387,13 +399,17 @@ export class ContextService implements Contexts {
     return this.profileService.current.switchMap(profile => {
       if (profile.store.recentContexts) {
         return forkJoin((profile.store.recentContexts as RawContext[])
-          // We invert the order above when we add recent contexts
-          .reverse()
           .map(raw => {
             if (raw.space) {
-              return this.spaceService.getSpaceById(raw.space)
+              // if getSpaceById() throws an error, forkJoin will not complete and loadRecent will not return
+              return this.spaceService.getSpaceById(raw.space).catch((): Observable<Space> => of(null))
                 .pipe(
-                  map(val => this.buildContext({ space: val } as RawContext))
+                  map((val: Space): Context => {
+                    if (val) {
+                      return this.buildContext({ space: val } as RawContext);
+                    }
+                    return null;
+                  })
                 );
             } else {
               return this.userService.getUserByUserId(raw.user)
@@ -407,7 +423,11 @@ export class ContextService implements Contexts {
                   })
                 );
             }
-          }));
+          }))
+          .map((contexts: Context[]): Context[] => {
+            // remove null context values resulting from getSpaceById throwing an error
+            return contexts.filter((context: Context): boolean => context !== null);
+          });
       } else {
         return of([]);
       }
@@ -415,6 +435,7 @@ export class ContextService implements Contexts {
   }
 
   private saveRecent(recent: Context[]) {
+    this._recent.next(recent);
     let patch = {
       store: {
         recentContexts: recent.map(ctx => ({
