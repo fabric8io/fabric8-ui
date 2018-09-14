@@ -11,6 +11,7 @@ import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { ListConfig } from 'patternfly-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
+  ConnectableObservable,
   forkJoin as observableForkJoin,
   Observable,
   of as observableOf,
@@ -257,7 +258,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       this.chePollSubscription.unsubscribe();
     }
     this.chePollTimer = observableTimer(2000, 20000).pipe(take(30));
-    this.chePollSubscription = this.chePollTimer.pipe(
+    this.chePollSubscription = (this.chePollTimer.pipe(
       switchMap(() => this.cheService.getState()),
       map(che => {
         if (che !== undefined && che.running === true) {
@@ -265,8 +266,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
           this.cheState = che;
         }
       }),
-      publish())
-      .connect();
+      publish()) as ConnectableObservable<any>).connect();
     this.subscriptions.push(this.chePollSubscription);
   }
 
