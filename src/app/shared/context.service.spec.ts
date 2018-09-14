@@ -352,6 +352,18 @@ describe('Context Service:', () => {
         done();
       });
     });
+
+    it('should still return if the recentSpaces on the profile is empty', (done: DoneFn) => {
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.returnValue(Observable.never());
+      (profile as ExtProfile).store.recentContexts = [];
+      const contextService: ContextService = TestBed.get(ContextService);
+      let result: Observable<Context[]> = contextService.recent;
+      result.subscribe((r: Context[]) => {
+        expect(r).toEqual([] as Context[]);
+        done();
+      });
+    });
   });
 
 });

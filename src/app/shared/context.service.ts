@@ -340,7 +340,7 @@ export class ContextService implements Contexts {
 
   private loadRecent(): Observable<Context[]> {
     return this.profileService.current.switchMap((profile: ExtProfile): Observable<Context[]> => {
-      if (profile.store.recentContexts) {
+      if (profile.store.recentContexts && profile.store.recentContexts.length > 0) {
         return forkJoin((profile.store.recentContexts as RawContext[])
           .map((raw: RawContext): Observable<Context> => {
             if (raw.space) {
