@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {ConnectableObservable, Observable} from 'rxjs';
 import { map, publishReplay } from 'rxjs/operators';
 import { ValWrapper } from './val-wrapper';
 
@@ -30,7 +30,7 @@ export class ConfigStore {
             loading: false
           } as ValWrapper<T>;
         }),
-        publishReplay(1));
+        publishReplay(1)) as ConnectableObservable<ValWrapper<T>>;
       this._cache.set(name, res);
       res.connect();
       return res;

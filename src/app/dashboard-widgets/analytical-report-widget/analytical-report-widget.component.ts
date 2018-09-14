@@ -7,6 +7,7 @@ import {
   BuildConfigs
 } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
+import {ConnectableObservable} from "rxjs";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -44,7 +45,7 @@ export class AnalyticalReportWidgetComponent implements OnInit {
 
   ngOnInit() {
     let bcs = this.pipelinesService.current.pipe(
-      publish());
+      publish()) as ConnectableObservable<BuildConfig[]>;
     this.buildConfigs = bcs;
 
     this.buildConfigs.subscribe((data) => {
