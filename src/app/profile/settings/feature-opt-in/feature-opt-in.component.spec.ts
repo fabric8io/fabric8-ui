@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2/dist/index';
+import { JwBootstrapSwitchNg2Module } from 'jw-bootstrap-switch-ng2/dist/index';
 import { Notifications, NotificationType } from 'ngx-base';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
@@ -50,7 +50,7 @@ describe('FeatureOptInComponent', () => {
       CommonModule,
       FormsModule,
       ListModule,
-      JWBootstrapSwitchModule
+      JwBootstrapSwitchNg2Module
     ],
     providers: [
       { provide: GettingStartedService, useFactory: (): jasmine.SpyObj<GettingStartedService> => {

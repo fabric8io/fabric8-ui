@@ -155,12 +155,12 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
     this.toggleServiceAck.setToggle(event.currentValue);
   }
 
-  featureByLevel(features: Feature[]): any {
+  featureByLevel(features: {} | Feature[]): any {
     let released: Feature[] = [];
     let internal: Feature[] = [];
     let experimental: Feature[] = [];
     let beta: Feature[] = [];
-    for (let feature of features) {
+    for (let feature of features as Feature[]) {
       feature.attributes.name = feature.id.replace('.', ' ');
       switch (feature.attributes['enablement-level']) {
         case 'released': {

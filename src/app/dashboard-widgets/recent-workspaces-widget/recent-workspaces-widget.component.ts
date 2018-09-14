@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
-import { Space, Spaces } from 'ngx-fabric8-wit';
-import { RelationalData, SpaceAttributes, SpaceLink, SpaceRelationships } from 'ngx-fabric8-wit/src/app/models/space';
-import { Team } from 'ngx-fabric8-wit/src/app/models/team';
+import { Space, Spaces, Team } from 'ngx-fabric8-wit';
+import { RelationalData, SpaceAttributes, SpaceLink, SpaceRelationships } from 'ngx-fabric8-wit';
 import { forkJoin as observableForkJoin, of as observableOf } from 'rxjs';
 import { catchError, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs/Rx';
@@ -24,8 +23,8 @@ export class ExtSpace implements Space {
   name: string;
   path: String;
   privateSpace?: boolean;
-  //teams: Team[];
-  //defaultTeam: Team;
+  teams: Team[];
+  defaultTeam: Team;
   id: string;
   attributes: SpaceAttributes;
   type: string;
