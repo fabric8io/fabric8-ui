@@ -5,7 +5,7 @@ import { Area, AreaService, Context } from 'ngx-fabric8-wit';
 import { Action, ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
-import { TreeListConfig } from 'patternfly-ng/list';
+import { TreeListConfig } from 'patternfly-sandbox-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import { Subscription } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
