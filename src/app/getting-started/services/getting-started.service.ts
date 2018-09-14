@@ -8,7 +8,7 @@ import { cloneDeep } from 'lodash';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
-import { Observable,  Subscription, throwError as observableThrowError } from 'rxjs';
+import {ConnectableObservable, Observable, Subscription, throwError as observableThrowError} from 'rxjs';
 import { catchError, map, publish } from 'rxjs/operators';
 
 interface ExtUserResponse {
@@ -52,14 +52,14 @@ export class GettingStartedService implements OnDestroy {
   createTransientProfile(): ExtProfile {
     let profile: ExtUser;
 
-    this.userService.loggedInUser.pipe(
+    (this.userService.loggedInUser.pipe(
       map((user: User): void => {
         profile = cloneDeep(user) as ExtUser;
         if (profile.attributes !== undefined) {
           profile.attributes.contextInformation = (user as ExtUser).attributes.contextInformation || {};
         }
       }),
-      publish()).connect();
+      publish()) as ConnectableObservable<User>).connect();
 
     return (profile !== undefined && profile.attributes !== undefined) ? profile.attributes : {} as ExtProfile;
   }
