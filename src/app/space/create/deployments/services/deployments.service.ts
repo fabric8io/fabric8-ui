@@ -18,7 +18,7 @@ import {
 } from 'ngx-base';
 import {
   combineLatest,
-  EMPTY as empty,
+  empty as emptyObservable,
   from,
   Observable,
   ReplaySubject,
@@ -393,7 +393,7 @@ export class DeploymentsService implements OnDestroy {
         const wasDeployed: boolean = prev[0] && prev[1] > 0;
 
         if (!isDeployed) {
-          return empty();
+          return emptyObservable();
         }
 
         if (!wasDeployed) {
@@ -469,6 +469,6 @@ export class DeploymentsService implements OnDestroy {
       header: header,
       message: message
     } as Notification);
-    return empty();
+    return emptyObservable();
   }
 }

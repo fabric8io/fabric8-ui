@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable,  empty as observableEmpty, Observable } from 'rxjs';
+import { ConnectableObservable, empty as observableEmpty, Observable } from 'rxjs';
 import { catchError, map, publishReplay, skipWhile, tap } from 'rxjs/operators';
 
 export class ExtUser extends User {
