@@ -263,7 +263,7 @@ export class CachingSubject<T> extends Subject<T> {
   }
 
 
-  protected _subscribe(subscriber: Subscriber<T>): Subscription {
+  _subscribe(subscriber: Subscriber<T>): Subscription {
     if (this._hasValue) {
       subscriber.next(this._value);
     }

@@ -104,7 +104,7 @@ export class WorkItemWidgetComponent implements OnInit {
         });
         this.initChartData();
       }),
-      publishReplay(1));
+      publishReplay(1)) as ConnectableObservable<WorkItem[]>;
     this._myWorkItems.connect();
   }
 

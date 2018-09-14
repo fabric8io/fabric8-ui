@@ -9,7 +9,8 @@ import {
   User,
   UserService
 } from 'ngx-login-client';
-import { BehaviorSubject,
+import {
+  BehaviorSubject, ConnectableObservable,
   Observable,
   ReplaySubject,
   Subscription,
@@ -67,7 +68,7 @@ describe('OauthConfigStore', () => {
   describe('success state', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = new BehaviorSubject(user).pipe(multicast(() => new ReplaySubject(1)));
+      mockUserService.loggedInUser = new BehaviorSubject(user).pipe<User>(multicast(() => new ReplaySubject(1))) as ConnectableObservable<User>;
 
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
@@ -129,7 +130,7 @@ describe('OauthConfigStore', () => {
   describe('user service empty', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = new BehaviorSubject({} as User).pipe(multicast(() => new ReplaySubject(1)));
+      mockUserService.loggedInUser = new BehaviorSubject({} as User).pipe<User>(multicast(() => new ReplaySubject(1))) as ConnectableObservable<User>;
 
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
@@ -195,7 +196,7 @@ describe('OauthConfigStore', () => {
       scheduler = new VirtualTimeScheduler(VirtualAction);
 
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = observableThrowError({error : 'error'}, scheduler).pipe(multicast(() => new ReplaySubject(1)));
+      mockUserService.loggedInUser = observableThrowError({error : 'error'}, scheduler).pipe<User>(multicast(() => new ReplaySubject(1))) as ConnectableObservable<User>;
 
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
@@ -249,7 +250,7 @@ describe('OauthConfigStore', () => {
   describe('config request error', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = new BehaviorSubject(user).pipe(multicast(() => new ReplaySubject(1)));
+      mockUserService.loggedInUser = new BehaviorSubject(user).pipe<User>(multicast(() => new ReplaySubject(1))) as ConnectableObservable<User>;
 
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
