@@ -8,9 +8,15 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { BehaviorSubject, never as observableNever,  Observable, of as observableOf } from 'rxjs';
+import {
+  BehaviorSubject,
+  ConnectableObservable,
+  never as observableNever,
+  Observable,
+  of as observableOf,
+  Subject
+} from 'rxjs';
 import { publish } from 'rxjs/operators';
-import { ConnectableObservable, Subject } from 'rxjs/Rx';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { initContext, TestContext } from 'testing/test-context';

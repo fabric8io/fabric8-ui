@@ -10,10 +10,8 @@ import {
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
+import { Subscription } from 'rxjs';
 import { share } from 'rxjs/operators';
-import {
-  Subscription
-} from 'rxjs/Rx';
 import { BuildConfigs } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
 
