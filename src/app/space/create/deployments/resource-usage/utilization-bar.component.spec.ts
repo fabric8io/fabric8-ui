@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import {
-  EMPTY as empty,
+  empty as emptyObservable,
   Observable,
   of,
   Subject
@@ -124,7 +124,7 @@ describe('UtilizationBarComponent', () => {
     initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent) => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = empty();
+      component.stat = emptyObservable();
       component.status = status;
     });
 

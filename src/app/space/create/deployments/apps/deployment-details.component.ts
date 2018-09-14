@@ -15,7 +15,7 @@ import {
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   combineLatest,
-  EMPTY as empty,
+  empty as emptyObservable,
   Observable,
   of,
   ReplaySubject,
@@ -182,7 +182,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.cpuChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return empty();
+          return emptyObservable();
         }
         return combineLatest(of(chart), this.deploymentStatusService.getDeploymentCpuStatus(this.spaceId, this.environment, this.applicationId));
       }))
@@ -211,7 +211,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return empty();
+          return emptyObservable();
         }
         return combineLatest(of(chart), this.deploymentStatusService.getDeploymentMemoryStatus(this.spaceId, this.environment, this.applicationId));
       }))
@@ -246,7 +246,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.cpuChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, CpuStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return empty();
+          return emptyObservable();
         }
         return combineLatest(of(chart), this.cpuStat);
       }))
@@ -267,7 +267,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, MemoryStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return empty();
+          return emptyObservable();
         }
         return combineLatest(of(chart), this.memStat);
       }))
@@ -289,7 +289,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, NetworkStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return empty();
+          return emptyObservable();
         }
         return combineLatest(
           of(chart),
