@@ -6,7 +6,6 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';

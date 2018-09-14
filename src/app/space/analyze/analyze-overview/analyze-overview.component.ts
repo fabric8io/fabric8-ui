@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
-import { FeatureTogglesService } from 'ngx-feature-flag';
+import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
@@ -36,7 +36,7 @@ export class AnalyzeOverviewComponent implements OnInit, OnDestroy {
       this.loggedInUser = user;
     }));
 
-    this.subscriptions.push(this.featureTogglesService.getFeature('Analyze.MyWorkItemsCard').subscribe((feature) => {
+    this.subscriptions.push(this.featureTogglesService.getFeature('Analyze.MyWorkItemsCard').subscribe((feature: Feature) => {
       if (feature.attributes['enabled'] && feature.attributes['user-enabled']) {
         this._myWorkItemsCard = true;
       }
