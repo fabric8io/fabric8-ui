@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Contexts, Spaces } from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
-import { Observable } from 'rxjs/Rx';
 import {
   ApplicationAttributesOverview,
   ApplicationOverviewService

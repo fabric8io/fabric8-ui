@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ConnectableObservable, Observable, Subscription } from 'rxjs';
 import { publish } from 'rxjs/operators';
-import { Observable, Subscription } from 'rxjs/Rx';
 import {
   Build,
   BuildConfig,
   BuildConfigs
 } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
-import {ConnectableObservable} from "rxjs";
 
 @Component({
   encapsulation: ViewEncapsulation.None,

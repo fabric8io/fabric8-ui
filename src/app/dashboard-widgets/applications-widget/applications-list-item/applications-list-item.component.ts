@@ -8,8 +8,8 @@ import {
 } from '@angular/core';
 import { isEmpty } from 'lodash';
 import { Contexts } from 'ngx-fabric8-wit';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs/Rx';
 import { BuildConfig } from '../../../../a-runtime-console/index';
 import { Build, isValidInputAction } from '../../../../a-runtime-console/kubernetes/model/build.model';
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';

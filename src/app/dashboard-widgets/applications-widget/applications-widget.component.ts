@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { isEmpty, orderBy } from 'lodash';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { Observable, Subscription } from 'rxjs';
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { PipelinesService } from '../../shared/runtime-console/pipelines.service';
 
