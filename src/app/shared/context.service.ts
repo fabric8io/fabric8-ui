@@ -116,7 +116,7 @@ export class ContextService implements Contexts {
             return {} as Context;
           }
         })
-      ).pipe(multicast(() => new ReplaySubject(1)));
+      ).pipe(multicast(() => new ReplaySubject(1))) as ConnectableObservable<Context>;
 
     // Create the recent space list
     this._recent = merge(this._addRecent, this._deleteFromRecent).pipe(
@@ -136,7 +136,7 @@ export class ContextService implements Contexts {
       tap(val => {
         this.saveRecent(val);
       })
-    ).pipe(multicast(() => new ReplaySubject(1)));
+    ).pipe(multicast(() => new ReplaySubject(1))) as ConnectableObservable<Context[]>;
     // Finally, start broadcasting
     this._default.connect();
     this._recent.connect();
@@ -258,7 +258,7 @@ export class ContextService implements Contexts {
       tap(val => {
         this._current.next(val);
       })
-    ).pipe(multicast(() => new Subject()));
+    ).pipe(multicast(() => new Subject())) as ConnectableObservable<Context>;
     res.connect();
     return res;
   }

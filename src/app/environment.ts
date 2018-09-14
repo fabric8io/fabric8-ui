@@ -23,6 +23,7 @@ if ('production' === ENV) {
   used in `ngx-launcher` to broadcast events for telemetry */
   _decorateModuleRef = (modRef: any) => {
     StaticInjector.setInjector(modRef.injector);
+    return modRef;
   };
 
   PROVIDERS = [

@@ -24,8 +24,8 @@ export class ExtSpace implements Space {
   name: string;
   path: String;
   privateSpace?: boolean;
-  teams: Team[];
-  defaultTeam: Team;
+  //teams: Team[];
+  //defaultTeam: Team;
   id: string;
   attributes: SpaceAttributes;
   type: string;
