@@ -149,6 +149,18 @@ describe('SpacesService', () => {
         done();
       });
     });
+
+    it('should still return if the recentSpaces on the profile is empty', (done: DoneFn) => {
+      const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      broadcaster.on.and.returnValue(Observable.never());
+      mockProfile.store.recentSpaces = [];
+      const spacesService: SpacesService = TestBed.get(SpacesService);
+      let result: Observable<Space[]> = spacesService.recent;
+      result.subscribe((r: Space[]) => {
+        expect(r).toEqual([] as Space[]);
+        done();
+      });
+    });
   });
 
   describe('#saveRecent', () => {
