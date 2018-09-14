@@ -14,7 +14,7 @@ var fs = require('fs');
  * Webpack Plugins
  */
 const autoprefixer = require('autoprefixer');
-const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+//const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
@@ -26,9 +26,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-// const TsConfigPathsPlugin = require('awesome-typescript-loader');
 
 /*
  * Webpack Constants
@@ -122,7 +120,7 @@ module.exports = function (options) {
             '@ngtools/webpack'
           ] : [
               '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-              'awesome-typescript-loader',
+              'ts-loader',
               'angular2-template-loader',
               'angular2-router-loader'
             ],
@@ -378,7 +376,7 @@ module.exports = function (options) {
        *
        * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
        */
-      new CheckerPlugin(),
+      //new CheckerPlugin(),
 
 
       /*
