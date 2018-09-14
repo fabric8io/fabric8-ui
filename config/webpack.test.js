@@ -49,14 +49,14 @@ module.exports = function () {
      * Do not change, leave as is or it wont work.
      * See: https://github.com/webpack/karma-webpack#source-maps
      */
-    devtool: 'inline-source-map',
+    // devtool: 'inline-source-map',
 
-    // entry: {
-    //   'vendor': './src/vendor.browser.ts',
-    //   'polyfills': './src/polyfills.browser.ts',
-    //   // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
-    //   'main': './src/main.browser.ts'
-    // },
+    entry: {
+      'vendor': './src/vendor.browser.ts',
+      'polyfills': './src/polyfills.browser.ts',
+      // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
+      'main': './src/main.browser.ts'
+    },
 
     /**
      * Options affecting the resolving of modules.
@@ -65,9 +65,9 @@ module.exports = function () {
      */
     resolve: {
 
-      alias: {
-        "testing": path.resolve(__dirname, "../src/testing")
-      },
+      // alias: {
+      //   "testing": path.resolve(__dirname, "../src/testing")
+      // },
 
       /**
        * An array that automatically resolve certain extensions.
@@ -75,16 +75,13 @@ module.exports = function () {
        *
        * See: https://webpack.js.org/configuration/resolve/#resolve-extensions
        */
-      extensions: ['.webpack.js', '.ts', '.js', '.json']
+      extensions: ['.js', '.ts', '.json']
     },
 
-    /**
-     * Options affecting the normal modules.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#module
-     */
-    module: {
+    // require those dependencies but don't bundle them
+    // externals: [/^@angular\//, /^rxjs\//],
 
+    module: {
       /**
        * An array of automatically applied loaders.
        *
@@ -108,6 +105,13 @@ module.exports = function () {
             // these packages have problems with their sourcemaps
             helpers.root('node_modules/rxjs'),
             helpers.root('node_modules/@angular')
+            //     helpers.nodeModulePath("mydatepicker"),
+            //     helpers.nodeModulePath("ng2-completer"),
+            //     helpers.nodeModulePath("angular2-flash-messages"),
+            //     helpers.nodeModulePath("ngx-dropdown"),
+            //     helpers.nodeModulePath("ngx-modal"),
+            //     helpers.nodeModulePath("ngx-modal"),
+            //     helpers.nodeModulePath("ng2-dnd")
           ]
         },
 
@@ -132,26 +136,6 @@ module.exports = function () {
         //   ]
         // },
 
-        // {
-        //   test: /\.js$/,
-        //   use: ['source-map-loader'],
-        //   exclude: [
-        //     // these packages have problems with their sourcemaps
-        //     helpers.nodeModulePath("mydatepicker"),
-        //     helpers.nodeModulePath("ng2-completer"),
-        //     helpers.nodeModulePath("angular2-flash-messages"),
-        //     helpers.nodeModulePath("ngx-dropdown"),
-        //     helpers.nodeModulePath("ngx-modal"),
-        //     helpers.nodeModulePath("ngx-modal"),
-        //     helpers.nodeModulePath("ng2-dnd")
-        //   ]
-        // },
-
-        /**
-         * Typescript loader support for .ts and Angular 2 async routes via .async.ts
-         *
-         * See: https://github.com/s-panferov/awesome-typescript-loader
-         */
         {
           test: /\.ts$/,
           use: [
