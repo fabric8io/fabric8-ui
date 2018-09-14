@@ -15,7 +15,6 @@ import {
   TokenProvider,
   WorkSpacesService
 } from 'ngx-launcher';
-
 import { AppLaunchCheService } from '../services/app-launcher-che.service';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
 import { AppLauncherGitproviderService } from '../services/app-launcher-gitprovider.service';

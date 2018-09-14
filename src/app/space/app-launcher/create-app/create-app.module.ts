@@ -17,8 +17,6 @@ import {
   TokenProvider,
   WorkSpacesService
 } from 'ngx-launcher';
-
-import { FeatureFlagModule } from 'ngx-feature-flag';
 import { AppLaunchCheService } from '../services/app-launcher-che.service';
 import { AppLauncherDependencyCheckService } from '../services/app-launcher-dependency-check.service';
 import { AppLauncherDependencyEditorService } from '../services/app-launcher-dependency-editor.service';

@@ -27,7 +27,6 @@ export class CheService {
       headers = headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
     this.headers = headers;
-    console.log('####-346', this.headers);
     this.workspacesUrl = apiUrl + 'codebases/che';
   }
 
@@ -38,7 +37,6 @@ export class CheService {
    */
   getState(): Observable<Che> {
     const url: string = `${this.workspacesUrl}/state`;
-    console.log(url, this.headers, '####-345', this.auth.getToken());
     return this.http
       .get<Che>(url, { headers: this.headers }).pipe(
       catchError((error: HttpErrorResponse): Observable<Che> => this.handleError(error)));
