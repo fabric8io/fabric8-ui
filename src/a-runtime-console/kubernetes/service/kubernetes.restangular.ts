@@ -1,5 +1,5 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { OAuthService } from 'angular2-oauth2/oauth-service';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { Restangular } from 'ngx-restangular';
 import { LoginService } from '../../shared/login.service';
 import { OnLogin } from '../../shared/onlogin.service';

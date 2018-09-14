@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, empty as observableEmpty, Observable } from 'rxjs';
+import { ConnectableObservable, EMPTY, Observable } from 'rxjs';
 import { catchError, map, publishReplay, skipWhile, tap } from 'rxjs/operators';
 
 export class ExtUser extends User {
@@ -50,7 +50,7 @@ export class ProfileService {
         }
       }),
       map(user => user.attributes),
-      publishReplay(1));
+      publishReplay(1)) as ConnectableObservable<ExtProfile> ;
     this._profile.connect();
   }
 
@@ -69,7 +69,7 @@ export class ProfileService {
           type: NotificationType.DANGER
         } as Notification);
         console.log('Error updating user profile', error);
-        return observableEmpty();
+        return EMPTY;
       }));
   }
 

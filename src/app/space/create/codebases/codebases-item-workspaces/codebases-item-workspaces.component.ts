@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
-import { Observable, of as observableOf,  Subscription, timer as observableTimer } from 'rxjs';
+import {ConnectableObservable, Observable, of as observableOf, Subscription, timer as observableTimer} from 'rxjs';
 import { map, publish, switchMap, take } from 'rxjs/operators';
 import { WindowService } from '../../../../shared/window.service';
 import { CheService } from '../services/che.service';
@@ -225,7 +225,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
       this.workspacePollSubscription.unsubscribe();
     }
     this.workspacePollTimer = observableTimer(2000, 20000).pipe(take(30));
-    this.workspacePollSubscription = this.workspacePollTimer.pipe(
+    this.workspacePollSubscription = (this.workspacePollTimer.pipe(
       switchMap(() => this.workspacesService.getWorkspaces(this.codebase.id)),
       map(workspaces => {
         if (workspaces != undefined && workspaces.length > 0
@@ -236,8 +236,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
           this.setWorkspaceUrl(name);
         }
       }),
-      publish())
-      .connect();
+      publish()) as ConnectableObservable<number>).connect();
     this.subscriptions.push(this.workspacePollSubscription);
   }
 

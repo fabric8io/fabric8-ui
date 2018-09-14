@@ -42,7 +42,7 @@ export class CreateWorkItemWidgetComponent implements OnInit {
       tap(workItems => workItems.forEach(workItem => this.workItemService.resolveAreaForWorkItem(workItem))),
       // MUST DO creator after area due to bug in planner
       tap(workItems => workItems.forEach(workItem => this.workItemService.resolveCreator(workItem))),
-      publishReplay(1));
+      publishReplay(1)) as ConnectableObservable<WorkItem[]>;
     this._myWorkItems.connect();
     this.myWorkItemsCount = this._myWorkItems.pipe(map(workItems => workItems.length));
   }
