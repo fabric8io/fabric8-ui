@@ -2,8 +2,9 @@ import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } fro
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Dialog } from 'ngx-widgets';
-import { Observable, of as observableOf,  Subscription } from 'rxjs';
+import { EMPTY, Observable, of as observableOf, Subscription } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { Che } from '../services/che';
 import { CheService } from '../services/che.service';
 import { Codebase } from '../services/codebase';
 import { CodebasesService } from '../services/codebases.service';
@@ -50,7 +51,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
    */
   createWorkspace(): void {
     this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().pipe(switchMap(che => {
+    this.subscriptions.push(this.cheService.getState().pipe(switchMap((che: Che, index: number) => {
       if (!che.clusterFull) {
         // create
         return this.workspacesService
@@ -83,7 +84,7 @@ export class CodebasesItemActionsComponent implements OnDestroy, OnInit {
           message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
           type: NotificationType.DANGER
         } as Notification);
-        return observableOf({});
+        return EMPTY;
       }
     })).subscribe(() => {},
         err => {

@@ -11,7 +11,18 @@ import {
 } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, empty as observableEmpty,  forkJoin, merge ,  Observable ,  of ,  ReplaySubject ,  Scheduler ,  Subject ,  throwError as observableThrowError } from 'rxjs';
+import {
+  asapScheduler,
+  ConnectableObservable,
+  EMPTY,
+  forkJoin,
+  merge,
+  Observable,
+  of,
+  ReplaySubject,
+  Subject,
+  throwError as observableThrowError
+} from 'rxjs';
 import { catchError,
   distinctUntilChanged,
   distinctUntilKeyChanged,
@@ -311,7 +322,7 @@ export class ContextService implements Contexts {
 
   private loadUser(userName: string): Observable<User> {
     if (this.checkForReservedWords(userName)) {
-      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), asapScheduler);
     }
     return this.userService
       .getUserByUsername(userName)
@@ -349,9 +360,9 @@ export class ContextService implements Contexts {
 
   private loadSpace(userName: string, spaceName: string): Observable<Space> {
     if (this.checkForReservedWords(userName)) {
-      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), asapScheduler);
     } else if (this.checkForReservedWords(spaceName)) {
-      return observableThrowError(new Error(`Space name ${spaceName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`Space name ${spaceName} contains reserved characters.`), asapScheduler);
     }
 
     if (userName && spaceName) {
@@ -393,7 +404,7 @@ export class ContextService implements Contexts {
                 .pipe(
                   catchError(err => {
                     console.log('Unable to restore recent context', err);
-                    return observableEmpty<Context>();
+                    return EMPTY;
                   }),
                   map(val => {
                     return this.buildContext({ user: val } as RawContext);

@@ -6,8 +6,9 @@ import {
   HttpResponse
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AsyncSubject, Observable, Scheduler } from 'rxjs';
+import { AsyncSubject, Observable } from 'rxjs';
 import { subscribeOn } from 'rxjs/operators';
+import { async } from 'rxjs/scheduler/async';
 import { RequestCache } from '../request-cache.service';
 
 /**
@@ -36,7 +37,7 @@ export class CacheInterceptor implements HttpInterceptor {
         next.handle(req).subscribe(asyncResponse);
       }
 
-      return asyncResponse.pipe(subscribeOn(Scheduler.async)).subscribe(observer);
+      return asyncResponse.pipe(subscribeOn(async)).subscribe(observer);
     });
   }
 }
