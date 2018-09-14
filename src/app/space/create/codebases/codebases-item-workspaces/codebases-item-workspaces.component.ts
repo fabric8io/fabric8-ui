@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
-import {ConnectableObservable, Observable, of as observableOf, Subscription, timer as observableTimer} from 'rxjs';
+import { ConnectableObservable, Observable, of as observableOf, Subscription, timer as observableTimer } from 'rxjs';
 import { map, publish, switchMap, take } from 'rxjs/operators';
 import { WindowService } from '../../../../shared/window.service';
 import { CheService } from '../services/che.service';
