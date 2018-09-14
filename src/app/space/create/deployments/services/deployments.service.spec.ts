@@ -7,7 +7,7 @@ import {
   NotificationType
 } from 'ngx-base';
 import {
-  EMPTY as empty,
+  empty as emptyObservable,
   Observable,
   of,
   Subject,
@@ -1243,7 +1243,7 @@ describe('DeploymentsService', () => {
           },
           err => {
             done.fail(err.message || err);
-            return empty();
+            return emptyObservable();
           },
           () => {
             expect(this.logger.error).not.toHaveBeenCalled();

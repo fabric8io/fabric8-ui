@@ -2,7 +2,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { empty as observableEmpty, Observable,  of as observableOf } from 'rxjs';
+import { empty as observableEmpty, Observable, of as observableOf } from 'rxjs';
 import { APIsStore } from '../../../store/apis.store';
 import { BuildStore } from '../../../store/build.store';
 import { BuildConfigStore } from '../../../store/buildconfig.store';
