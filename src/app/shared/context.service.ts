@@ -10,8 +10,9 @@ import {
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
 import {
+  asapScheduler,
   ConnectableObservable,
-  empty as observableEmpty,
+  EMPTY,
   forkJoin,
   merge,
   Observable,
@@ -296,7 +297,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
 
   private loadUser(userName: string): Observable<User> {
     if (this.checkForReservedWords(userName)) {
-      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), asapScheduler);
     }
     return this.userService
       .getUserByUsername(userName)
@@ -313,9 +314,9 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
 
   private loadSpace(userName: string, spaceName: string): Observable<Space> {
     if (this.checkForReservedWords(userName)) {
-      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), asapScheduler);
     } else if (this.checkForReservedWords(spaceName)) {
-      return observableThrowError(new Error(`Space name ${spaceName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`Space name ${spaceName} contains reserved characters.`), asapScheduler);
     }
 
     if (userName && spaceName) {
@@ -361,7 +362,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
                 .pipe(
                   catchError((err: string): Observable<Context> => {
                     console.log('Unable to restore recent context', err);
-                    return observableEmpty<Context>();
+                    return EMPTY;
                   }),
                   map((val: Context | User): Context => {
                     return this.buildContext({ user: val } as RawContext);
