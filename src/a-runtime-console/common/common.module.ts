@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { OAuthService } from 'angular2-oauth2/oauth-service';
+import { OAuthService } from 'angular-oauth2-oidc/oauth-service';
 import { BsDropdownConfig, BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ResourceHeaderComponent } from '../kubernetes/components/resource-header/resource.header.component';
 import { OnLogin } from '../shared/onlogin.service';
