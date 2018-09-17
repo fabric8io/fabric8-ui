@@ -158,14 +158,6 @@ describe('CleanupComponent', () => {
       expect(component.tenantResult).toBe('Tenant update failed');
     });
 
-    it('should show a warning notification if the fork joined observable results in an error', () => {
-      component.tenantService.cleanupTenant.and.returnValue(of('mock-response'));
-      spyOn(Observable, 'forkJoin').and.returnValue(observableThrowError('error'));
-      spyOn(component, 'showWarningNotification');
-      component.tenantCleanError = true;
-      component.confirm();
-      expect(component.showWarningNotification).toHaveBeenCalled();
-    });
   });
 
   describe('#userNameMatches', () => {
