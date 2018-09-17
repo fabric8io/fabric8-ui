@@ -1,6 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { LocalStorageModule } from 'angular-2-local-storage';
-import { OAuthService } from 'angular-oauth2-oidc/oauth-service';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { RestangularModule } from 'ngx-restangular';
 import { SpaceNamespace } from './model/space-namespace';
 import { BuildService } from './service/build.service';
