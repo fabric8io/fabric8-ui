@@ -206,27 +206,31 @@ module.exports = function (options) {
         },
 
 
-        /*
+        /**
          * Json loader support for *.json files.
          *
          * See: https://github.com/webpack/json-loader
          */
         {
           test: /\.json$/,
+          type: "javascript/auto",
           use: ['json-loader']
         },
 
-        /* HTML Linter
+        /**
+         *  HTML Linter
          * Checks all files against .htmlhintrc
-        */
+         */
         {
           enforce: 'pre',
           test: /\.html$/,
-          loader: 'htmlhint-loader',
-          exclude: [/node_modules/,/src\/a-runtime-console/],
-          options: {
-            configFile: './.htmlhintrc'
-          }
+          use: {
+            loader: 'htmlhint-loader',
+            options: {
+              configFile: './.htmlhintrc'
+            }
+          },
+          exclude: [/node_modules/, /src\/a-runtime-console/]
         },
 
         /* Raw loader support for *.html
