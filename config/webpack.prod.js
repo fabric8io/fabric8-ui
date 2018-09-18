@@ -1,6 +1,7 @@
 /**
  * @author: @AngularClass
  */
+const path = require('path');
 const webpack = require('webpack');
 const helpers = require('./helpers');
 const branding = require('./branding');
@@ -136,7 +137,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-filename
        */
-      filename: '_assets/lib/[name].[chunkhash].bundle.js',
+      filename: '_assets/lib/[name].[chunkhash:8].bundle.js',
 
       /**
        * The filename of the SourceMaps for the JavaScript files.
@@ -144,7 +145,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
        */
-      sourceMapFilename: '_assets/lib/[name].[chunkhash].bundle.map',
+      sourceMapFilename: '_assets/lib/[name].[chunkhash:8].bundle.map',
 
       /**
        * The filename of non-entry chunks as relative path
@@ -152,7 +153,11 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
-      chunkFilename: '_assets/lib/[id].[chunkhash].chunk.js'
+      chunkFilename: '_assets/lib/[name].[chunkhash:8].chunk.js',
+
+      // Point sourcemap entries to original disk location (format as URL on Windows)
+      devtoolModuleFilenameTemplate: (info) =>
+        path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
 
     },
 
