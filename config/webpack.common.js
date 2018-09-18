@@ -424,10 +424,6 @@ module.exports = function (options) {
       new HtmlWebpackPlugin({
         template: 'src/index.ejs',
         title: branding.assets[METADATA.FABRIC8_BRANDING].title.prefix,
-        chunksSortMode: function (a, b) {
-          const entryPoints = ["manifest", "polyfills", "vendor", "main"];
-          return entryPoints.indexOf(a.names[0]) - entryPoints.indexOf(b.names[0]);
-        },
         metadata: METADATA
       }),
 
@@ -481,27 +477,11 @@ module.exports = function (options) {
      */
     optimization: {
       namedModules: true, // NamedModulesPlugin()
+      // Keep the runtime chunk seperated to enable long term caching
+      // https://twitter.com/wSokra/status/969679223278505985
+      runtimeChunk: true,
       splitChunks: { // CommonsChunkPlugin()
-        cacheGroups: {
-          polyfills: {
-            name: 'polyfills',
-            minChunks: Infinity
-          },
-          vendor: {
-            name: 'vendor',
-            chunks: 'async',
-            minChunks: Infinity
-          },
-          main: {
-            name: 'main',
-            chunks: 'async',
-            minChunks: 2
-          },
-          manifest: {
-            name: 'manifest',
-            minChunks: Infinity
-          },
-        }
+        chunks: 'async'
       },
       noEmitOnErrors: true, // NoEmitOnErrorsPlugin
       concatenateModules: true //ModuleConcatenationPlugin
