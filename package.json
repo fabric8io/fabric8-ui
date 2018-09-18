@@ -169,6 +169,7 @@
     "@types/node": "10.9.4",
     "@types/segment-analytics": "0.0.28",
     "@types/selenium-webdriver": "3.0.10",
+    "@types/source-map": "0.5.7",
     "@types/webpack": "4.4.11",
     "angular-2-local-storage": "2.0.0",
     "angular2-router-loader": "0.3.5",
