@@ -166,7 +166,9 @@ module.exports = function (options) {
         {
           test: /\.js$/,
           exclude: [
-            // Example \/\fabric8-planner/,
+            helpers.root('node_modules/reflect-metadata'),
+            helpers.root('node_modules/rxjs'),
+            helpers.root('node_modules/@angular'),
             // Exclude any problematic sourcemaps
             /\/@angular/,
             /\/angular-2-dropdown-multiselect/,
