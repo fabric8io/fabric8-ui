@@ -2,6 +2,7 @@
  * @author: @AngularClass
  */
 
+const path = require('path');
 const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
@@ -142,11 +143,11 @@ module.exports = function (options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
-      chunkFilename: '[id].chunk.js',
+      chunkFilename: '[name].chunk.js',
 
-      library: 'ac_[name]',
-
-      libraryTarget: 'var'
+      // Point sourcemap entries to original disk location (format as URL on Windows)
+      devtoolModuleFilenameTemplate: (info) =>
+        path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
 
     resolve: {
