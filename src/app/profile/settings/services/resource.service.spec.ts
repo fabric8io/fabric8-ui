@@ -11,15 +11,10 @@ describe('ResourceService', (): void => {
     ICON_ERR = 'pficon-error-circle-o'
   }
 
-  const spaceId = 'mockSpaceId';
-  const environmentName = 'mockEnvName';
-  const applicationName = 'mockAppName';
-
   let svc: ResourceService;
   let deploymentsApiService: jasmine.SpyObj<DeploymentApiService>;
   let userService: jasmine.SpyObj<UserService>;
   let envStats: EnvironmentStat[];
-
 
   beforeEach((): void => {
     deploymentsApiService = createMock(DeploymentApiService);

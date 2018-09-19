@@ -22,17 +22,13 @@ class HostComponent {}
 describe('FeatureOptInComponent', () => {
   type Context = TestContext<FeatureOptInComponent, HostComponent>;
 
-  let gettingStartedServiceMock: jasmine.SpyObj<GettingStartedService>;
-  let notificationsMock: jasmine.SpyObj<Notifications>;
   let userServiceMock: jasmine.SpyObj<UserService>;
   let toggleServiceMock: jasmine.SpyObj<FeatureTogglesService>;
   let toggleAckServiceMock: jasmine.SpyObj<FeatureAcknowledgementService>;
 
   beforeEach(() => {
-    gettingStartedServiceMock = createMock(GettingStartedService);
     toggleServiceMock = createMock(FeatureTogglesService);
     toggleAckServiceMock = createMock(FeatureAcknowledgementService);
-    notificationsMock = createMock(Notifications);
     userServiceMock = createMock(UserService);
     (userServiceMock as any).currentLoggedInUser = {
       attributes: {

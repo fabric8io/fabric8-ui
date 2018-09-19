@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { TooltipModule } from 'ngx-bootstrap';
 import { Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { UserService } from 'ngx-login-client';
-import { empty as observableEmpty, Observable,  of ,  throwError as observableThrowError } from 'rxjs';
+import { empty, of, throwError } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
-
-import { TooltipModule } from 'ngx-bootstrap';
 import { ProviderService } from '../../../shared/account/provider.service';
 import { TenantService } from '../../services/tenant.service';
 import { ConnectedAccountsComponent } from './connected-accounts.component';
@@ -47,13 +46,13 @@ describe('Connected Accounts Component', () => {
   describe('User has only OpenShift account connected', () => {
 
     beforeAll(() => {
-      authMock.gitHubToken = observableEmpty();
+      authMock.gitHubToken = empty();
       //authMock.openShiftToken = of('oso-token');
       authMock.isOpenShiftConnected.and.returnValue(of(true));
       contextsMock.current = of(ctx);
-      userServiceMock.loggedInUser = observableEmpty();
+      userServiceMock.loggedInUser = empty();
       userServiceMock.currentLoggedInUser = ctx.user;
-      providersMock.getGitHubStatus.and.returnValue(observableThrowError('failure'));
+      providersMock.getGitHubStatus.and.returnValue(throwError('failure'));
       providersMock.getOpenShiftStatus.and.returnValue(of({'username': expectedOsoUser}));
       tenantSeriveMock.getTenant.and.returnValue(of(mockTenantData));
     });
@@ -92,7 +91,7 @@ describe('Connected Accounts Component', () => {
       //authMock.openShiftToken = of('oso-token');
       authMock.isOpenShiftConnected.and.returnValue(of(true));
       contextsMock.current = of(ctx);
-      userServiceMock.loggedInUser = observableEmpty();
+      userServiceMock.loggedInUser = empty();
       userServiceMock.currentLoggedInUser = ctx.user;
       providersMock.getGitHubStatus.and.returnValue(of({'username': 'username'}));
       providersMock.getOpenShiftStatus.and.returnValue(of({'username': expectedOsoUser}));

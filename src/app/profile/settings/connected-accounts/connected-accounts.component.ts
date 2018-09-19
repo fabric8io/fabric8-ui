@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { UserService } from 'ngx-login-client';
+import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ProviderService } from '../../../shared/account/provider.service';
@@ -15,7 +15,6 @@ import { TenantService } from '../../services/tenant.service';
 })
 export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   context: Context;
-  subscriptions: Subscription[] = [];
 
   gitHubLinked: boolean = false;
   gitHubUserName: string;
@@ -30,23 +29,25 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   consoleUrl: string;
   clusterName: string;
 
+  private readonly subscriptions: Subscription[] = [];
+
   constructor(
-    private contexts: Contexts,
-    private auth: AuthenticationService,
-    private userService: UserService,
-    private providerService: ProviderService,
+    contexts: Contexts,
+    auth: AuthenticationService,
+    userService: UserService,
+    private readonly providerService: ProviderService,
     private tenantService: TenantService
   ) {
-    this.subscriptions.push(auth.gitHubToken.subscribe(token => {
+    this.subscriptions.push(auth.gitHubToken.subscribe((token: string): void => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
     }));
-    this.subscriptions.push(contexts.current.subscribe(val => {
+    this.subscriptions.push(contexts.current.subscribe((val: Context): void => {
       this.contextUserName = val.user.attributes.username;
     }));
 
     if (userService.currentLoggedInUser.attributes) {
-      let user = userService.currentLoggedInUser;
-      this.subscriptions.push(auth.isOpenShiftConnected(user.attributes.cluster).subscribe(isConnected => {
+      const user: User = userService.currentLoggedInUser;
+      this.subscriptions.push(auth.isOpenShiftConnected(user.attributes.cluster).subscribe((isConnected: boolean): void => {
         this.openShiftLinked = isConnected;
       }));
       this.cluster = user.attributes.cluster;
@@ -63,9 +64,7 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
 
   ngOnInit(): void {
@@ -74,47 +73,53 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
     this.updateOpenShiftStatus();
   }
 
-  public disconnectGitHub(): void {
-    this.providerService.disconnectGitHub().subscribe(() => {
+  disconnectGitHub(): void {
+    this.providerService.disconnectGitHub().subscribe((): void => {
       this.gitHubLinked = false;
       this.gitHubError = 'Disconnected';
     });
   }
 
-  public refreshGitHub(): void {
+  refreshGitHub(): void {
     // call linking api again to reconnect if a connection doesn't exist
     this.connectGitHub();
   }
 
-  public connectGitHub(): void {
+  connectGitHub(): void {
     this.providerService.linkGitHub(window.location.href);
   }
 
-  public connectOpenShift(): void {
+  connectOpenShift(): void {
     this.providerService.linkOpenShift(this.cluster, window.location.href);
   }
 
-  public refreshOpenShift(): void {
+  refreshOpenShift(): void {
     this.connectOpenShift();
   }
 
   private updateGitHubStatus(): void {
-    this.providerService.getGitHubStatus().subscribe((result) => {
-      this.gitHubLinked = true;
-      this.gitHubUserName = result.username;
-    }, (error) => {
-      this.gitHubError = 'Disconnected';
-      this.gitHubLinked = false;
-    });
+    this.providerService.getGitHubStatus().subscribe(
+      (result: any): void => {
+        this.gitHubLinked = true;
+        this.gitHubUserName = result.username;
+      },
+      () => {
+        this.gitHubError = 'Disconnected';
+        this.gitHubLinked = false;
+      }
+    );
   }
 
   private updateOpenShiftStatus(): void {
-    this.providerService.getOpenShiftStatus(this.cluster).subscribe((result) => {
-      this.openShiftLinked = true;
-      this.openShiftUserName = result.username;
-    }, (error) => {
-      this.openShiftError = 'Not Connected';
-      this.openShiftLinked = false;
-    });
+    this.providerService.getOpenShiftStatus(this.cluster).subscribe(
+      (result: any): void => {
+        this.openShiftLinked = true;
+        this.openShiftUserName = result.username;
+      },
+      () => {
+        this.openShiftError = 'Not Connected';
+        this.openShiftLinked = false;
+      }
+    );
   }
 }

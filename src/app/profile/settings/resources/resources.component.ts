@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { first } from 'rxjs/operators';
 import { ResourceService, UsageSeverityEnvironmentStat } from '../services/resource.service';
 
 @Component({
@@ -7,28 +7,20 @@ import { ResourceService, UsageSeverityEnvironmentStat } from '../services/resou
   selector: 'resources-component',
   templateUrl: 'resources.component.html',
   styleUrls: ['./resources.component.less'],
-  providers: [
-    ResourceService
-  ]
+  providers: [ResourceService]
 })
-export class ResourcesComponent implements OnInit, OnDestroy {
+export class ResourcesComponent implements OnInit {
 
-  subscriptions: Subscription[] = [];
   data: UsageSeverityEnvironmentStat[];
 
   constructor(
-    private resourceService: ResourceService
+    private readonly resourceService: ResourceService
   ) { }
 
-  ngOnInit() {
-    this.subscriptions.push(this.resourceService.getEnvironmentsWithScaleAndIcon().subscribe(
-      (stats: UsageSeverityEnvironmentStat[]) => { this.data = stats; }
-    ));
+  ngOnInit(): void {
+    this.resourceService.getEnvironmentsWithScaleAndIcon().pipe(first()).subscribe(
+      (stats: UsageSeverityEnvironmentStat[]): void => { this.data = stats; }
+    );
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => {
-      subscription.unsubscribe();
-    });
-  }
 }
