@@ -23,6 +23,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 // const ngcWebpack = require('ngc-webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
@@ -50,8 +51,14 @@ module.exports = function (options) {
   console.log('The options from the webpack config: ' + stringify(options, null, 2));
 
   // ExtractTextPlugin
-  const extractCSS = new ExtractTextPlugin({
-    filename: '_assets/stylesheets/[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
+  // const extractCSS = new ExtractTextPlugin({
+  //   filename: '_assets/stylesheets/[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
+  // });
+
+// MiniCssExtractPlugin
+  const extractCSS = new MiniCssExtractPlugin({
+    filename: '_assets/stylesheets/[name]' + ( isProd ? '.[contenthash]' : '' ) + '.css',
+    chunkFilename: '_assets/stylesheets/[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
   });
 
   // const entryFile = aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts';
@@ -82,8 +89,8 @@ module.exports = function (options) {
       'main': [
         './src/main.browser.ts',
         // workaround for https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/456
-        'style-loader/lib/addStyles',
-        'css-loader/lib/css-base',
+        // 'style-loader/lib/addStyles',
+        // 'css-loader/lib/css-base',
       ]
     },
 
@@ -255,25 +262,38 @@ module.exports = function (options) {
          */
         {
           test: /^(?!.*component).*\.css$/,
-          use: extractCSS.extract({
-            fallback: "style-loader",
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  sourceMap: true,
-                  context: '/'
-                },
+          use: [
+            // {
+            //   loader: MiniCssExtractPlugin.loader,
+            //   options: {
+            //     // you can specify a publicPath here
+            //     // by default it use publicPath in webpackOptions.output
+            //     publicPath: '../'
+            //   }
+            // },
+            "style-loader",
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                context: '/'
               },
-            ]
-          })
+            },
+          ]
         },
         {
           test: /\.component\.css$/,
           use: [
+            // {
+            //   loader: MiniCssExtractPlugin.loader,
+            //   options: {
+            //     // you can specify a publicPath here
+            //     // by default it use publicPath in webpackOptions.output
+            //     publicPath: '../'
+            //   }
+            // },
+            'to-string-loader',
             {
-              loader: 'to-string-loader'
-            }, {
               loader: 'css-loader',
               options: {
                 minimize: true,
@@ -285,36 +305,17 @@ module.exports = function (options) {
         },
         {
           test: /^(?!.*component).*\.less$/,
-          use: extractCSS.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  minimize: true,
-                  sourceMap: true,
-                  context: '/'
-                }
-              }, {
-                loader: 'less-loader',
-                options: {
-                  paths: [
-                    path.resolve(__dirname, "../node_modules/patternfly/dist/less"),
-                    path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies"),
-                    path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
-                    path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
-                  ],
-                  sourceMap: true
-                }
-              }
-            ],
-          })
-        }, {
-          test: /\.component\.less$/,
           use: [
+            // {
+            //   loader: MiniCssExtractPlugin.loader,
+            //   options: {
+            //     // you can specify a publicPath here
+            //     // by default it use publicPath in webpackOptions.output
+            //     publicPath: '../'
+            //   }
+            // },
+            'style-loader',
             {
-              loader: 'to-string-loader'
-            }, {
               loader: 'css-loader',
               options: {
                 minimize: true,
@@ -333,7 +334,39 @@ module.exports = function (options) {
                 sourceMap: true
               }
             }
-          ],
+          ]
+        }, {
+          test: /\.component\.less$/,
+          use: [
+            // {
+            //   loader: MiniCssExtractPlugin.loader,
+            //   options: {
+            //     // you can specify a publicPath here
+            //     // by default it use publicPath in webpackOptions.output
+            //     publicPath: '../'
+            //   }
+            // },
+            'to-string-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: true,
+                sourceMap: true,
+                context: '/'
+              }
+            }, {
+              loader: 'less-loader',
+              options: {
+                paths: [
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
+                ],
+                sourceMap: true
+              }
+            }
+          ]
         },
 
         /**
