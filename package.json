@@ -227,6 +227,7 @@
     "less-plugin-autoprefix": "2.0.0",
     "lesshint": "5.1.0",
     "marked": "0.5.0",
+    "mini-css-extract-plugin": "0.4.3",
     "mocha": "5.2.0",
     "ng-router-loader": "2.1.0",
     "ngc-webpack": "4.1.2",
