@@ -79,7 +79,12 @@ module.exports = function (options) {
       'vendor': './src/vendor.browser.ts',
       'polyfills': './src/polyfills.browser.ts',
       // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
-      'main': './src/main.browser.ts'
+      'main': [
+        './src/main.browser.ts',
+        // workaround for https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/456
+        'style-loader/lib/addStyles',
+        'css-loader/lib/css-base',
+      ]
     },
 
     /*
