@@ -1,5 +1,5 @@
 import { InjectionToken, NgModule } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { Restangular } from 'ngx-restangular';
 import { LoginService } from '../../shared/login.service';
 import { OnLogin } from '../../shared/onlogin.service';
@@ -169,6 +169,9 @@ export function KubernetesRestangularFactory(restangular: Restangular, oauthServ
 }
 
 @NgModule({
+  imports: [
+    OAuthModule.forRoot()
+  ],
   providers: [
     {provide: KUBERNETES_RESTANGULAR, useFactory: KubernetesRestangularFactory, deps: [Restangular, OAuthService, OnLogin]}
   ]

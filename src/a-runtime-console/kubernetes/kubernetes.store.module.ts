@@ -1,6 +1,6 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { LocalStorageModule } from 'angular-2-local-storage';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { OAuthModule } from 'angular-oauth2-oidc';
 import { RestangularModule } from 'ngx-restangular';
 import { SpaceNamespace } from './model/space-namespace';
 import { BuildService } from './service/build.service';
@@ -54,7 +54,8 @@ import { BrowserModule } from "@angular/platform-browser";
     LocalStorageModule.withConfig({
       prefix: 'fabric8',
       storageType: 'localStorage'
-    })
+    }),
+    OAuthModule.forRoot()
   ],
   providers: [
     APIsStore,
@@ -76,8 +77,6 @@ import { BrowserModule } from "@angular/platform-browser";
     EventStore,
     NamespaceService,
     NamespaceStore,
-    // TODO Move to app.module
-    OAuthService,
     PodService,
     PodStore,
     PollerFactory,
