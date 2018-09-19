@@ -1,5 +1,5 @@
 <div class="container-fluid content">
-  <div *ngIf="!context.user.attributes.emailVerified && viewingOwnAccount"
+  <div *ngIf="!user.attributes.emailVerified && viewingOwnAccount"
     class="row email-alert padding-top-20">
     <div class="col-xs-12 col-md-10 col-md-offset-1">
       <div class="alert alert-warning">
@@ -11,14 +11,14 @@
   </div>
   <div class="row profile-overview-masthead">
     <div class="col-xs-4 col-md-1">
-      <div *ngIf="(context.user.attributes.imageURL !== undefined && context.user.attributes.imageURL.length !== 0); then showImageURL else addImageURL"></div>
+      <div *ngIf="(user.attributes.imageURL !== undefined && user.attributes.imageURL.length !== 0); then showImageURL else addImageURL"></div>
       <ng-template #showImageURL>
-        <img src="{{context.user.attributes.imageURL}}" class="img-responsive icon-user">
+        <img src="{{user.attributes.imageURL}}" class="img-responsive icon-user">
       </ng-template>
       <ng-template #addImageURL>
         <a href="javascript:void(0)"
             *ngIf="viewingOwnAccount"
-            [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+            [routerLink]="['/', user?.attributes?.username, '_update']"
             [queryParams]="{ imageUrl: true }">
           <img src="../../../assets/images/profile-user.png" class="img-responsive profile-img-none">
           <span class="pficon pficon-edit edit-profile-img"></span>
@@ -26,31 +26,31 @@
       </ng-template>
     </div>
     <div class="col-xs-12 col-md-2">
-      <p class="profile-wrapper-name">{{context?.user?.attributes?.fullName}}</p>
-      <p class="profile-wrapper-username">{{context?.user?.attributes?.username}}</p>
-      <div *ngIf="(context.user.attributes.email !== undefined && context.user.attributes.email.length !== 0); then showEmail else addEmail"></div>
+      <p class="profile-wrapper-name">{{user?.attributes?.fullName}}</p>
+      <p class="profile-wrapper-username">{{user?.attributes?.username}}</p>
+      <div *ngIf="(user.attributes.email !== undefined && user.attributes.email.length !== 0); then showEmail else addEmail"></div>
       <ng-template #showEmail>
-        <p class="profile-wrapper-email truncate" *ngIf="!context.user.attributes.emailPrivate">
-          <a href="mailto:{{context.user.attributes.email}}">{{context.user.attributes.email}}</a>
+        <p class="profile-wrapper-email truncate" *ngIf="!user.attributes.emailPrivate">
+          <a href="mailto:{{user.attributes.email}}">{{user.attributes.email}}</a>
         </p>
       </ng-template>
       <ng-template #addEmail>
-        <p class="profile-wrapper-email" *ngIf="!context.user.attributes.emailPrivate && viewingOwnAccount">
+        <p class="profile-wrapper-email" *ngIf="!user.attributes.emailPrivate && viewingOwnAccount">
           <a href="javascript:void(0)"
-            [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+            [routerLink]="['/', user?.attributes?.username, '_update']"
             [queryParams]="{ email: true }">Add an email</a>
         </p>
       </ng-template>
-      <div *ngIf="(context.user.attributes.url !== undefined && context.user.attributes.url.length !== 0); then showUrl else addUrl"></div>
+      <div *ngIf="(user.attributes.url !== undefined && user.attributes.url.length !== 0); then showUrl else addUrl"></div>
       <ng-template #showUrl>
         <p class="profile-wrapper-url truncate">
-          <a href="{{context.user.attributes.url}}" target="_blank">{{context.user.attributes.url}}</a>
+          <a href="{{user.attributes.url}}" target="_blank">{{user.attributes.url}}</a>
         </p>
       </ng-template>
       <ng-template #addUrl>
         <p class="profile-wrapper-url" *ngIf="viewingOwnAccount">
           <a href="javascript:void(0)"
-            [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+            [routerLink]="['/', user?.attributes?.username, '_update']"
             [queryParams]="{ url: true }">Add a url</a>
         </p>
       </ng-template>
@@ -78,14 +78,14 @@
       </div>
       <hr class="col-sm-12 line-break"> -->
       <div class="row profile-bio">
-        <div *ngIf="(context.user.attributes.bio !== undefined && context.user.attributes.bio.length !== 0); then showBio else addBio"></div>
+        <div *ngIf="(user.attributes.bio !== undefined && user.attributes.bio.length !== 0); then showBio else addBio"></div>
         <ng-template #showBio>
-          <p class="col-sm-12 profile-wrapper-bio" lang="en">{{context.user.attributes.bio}}</p>
+          <p class="col-sm-12 profile-wrapper-bio" lang="en">{{user.attributes.bio}}</p>
         </ng-template>
         <ng-template #addBio>
           <p class="col-sm-12 profile-wrapper-bio" *ngIf="viewingOwnAccount">
             <a href="javascript:void(0)"
-                [routerLink]="['/', context?.user?.attributes?.username, '_update']"
+                [routerLink]="['/', user?.attributes?.username, '_update']"
                 [queryParams]="{ bio: true }">Add a bio</a>
           </p>
         </ng-template>
@@ -97,13 +97,13 @@
     <div class="col-md-10 col-md-offset-1">
       <ul class="nav nav-tabs nav-tabs-pf">
         <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          <a [routerLink]="['/', context?.user?.attributes?.username, '_profile', 'workitems']">
-            {{ viewingOwnAccount ? 'My' : context.user.attributes.fullName + '\'s'}} Work Items
+          <a [routerLink]="['/', user?.attributes?.username, '_profile', 'workitems']">
+            {{ viewingOwnAccount ? 'My' : user.attributes.fullName + '\'s'}} Work Items
           </a>
         </li>
         <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-          <a [routerLink]="['/', context?.user?.attributes?.username, '_profile', 'spaces']">
-            {{ viewingOwnAccount ? 'My' : context.user.attributes.fullName + '\'s'}} Spaces
+          <a [routerLink]="['/', user?.attributes?.username, '_profile', 'spaces']">
+            {{ viewingOwnAccount ? 'My' : user.attributes.fullName + '\'s'}} Spaces
           </a>
         </li>
       </ul>

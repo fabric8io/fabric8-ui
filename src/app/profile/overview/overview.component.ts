@@ -1,10 +1,15 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { Router } from '@angular/router';
-import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
-import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Space, SpaceService } from 'ngx-fabric8-wit';
+import { Notifications, NotificationType } from 'ngx-base';
+import { Context } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
 
 @Component({
@@ -14,75 +19,65 @@ import { ContextService } from '../../shared/context.service';
   styleUrls: ['./overview.component.less']
 })
 export class OverviewComponent implements OnDestroy, OnInit {
-  context: Context;
-  loggedInUser: User;
-  subscriptions: Subscription[] = [];
-  spaces: Space[] = [];
+
+  user: User;
   viewingOwnAccount: boolean;
 
-  constructor(
-      private contexts: Contexts,
-      private spaceService: SpaceService,
-      private userService: UserService,
-      private notifications: Notifications,
-      private contextService: ContextService,
-      private broadcaster: Broadcaster,
-      private router: Router) {
-    this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
-    this.subscriptions.push(userService.loggedInUser.subscribe(user => {
-      this.loggedInUser = user;
-      if (user.attributes) {
-        this.subscriptions.push(spaceService.getSpacesByUser(user.attributes.username, 10).subscribe(spaces => {
-          this.spaces = spaces;
-        }));
-      }
-    }));
-    this.subscriptions.push(this.broadcaster.on('contextChanged').subscribe(val => {
-      this.context = val as Context;
-      this.viewingOwnAccount = this.contextService.viewingOwnContext();
-    }));
-  }
+  private readonly subscriptions: Subscription[] = [];
 
-  ngOnInit() {
-    this.viewingOwnAccount = this.contextService.viewingOwnContext();
-    if (this.viewingOwnAccount && this.userService.currentLoggedInUser.attributes) {
-      this.context.user = this.userService.currentLoggedInUser;
-    }
+  constructor(
+    private readonly userService: UserService,
+    private readonly notifications: Notifications,
+    private readonly contextService: ContextService,
+    private readonly router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.contextService.current
+        .pipe(map((context: Context): User => context.user))
+        .subscribe((user: User): void => {
+          this.viewingOwnAccount = this.contextService.viewingOwnContext();
+          if (!!user.attributes) {
+            this.user = user;
+          }
+        })
+    );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
 
   routeToUpdateProfile(): void {
-    this.router.navigate(['/', this.context.user.attributes.username, '_update']);
+    this.router.navigate(['/', this.user.attributes.username, '_update']);
   }
 
   sendEmailVerificationLink(): void {
-    this.subscriptions.push(this.userService.sendEmailVerificationLink()
-      .subscribe(res => {
+    this.userService.sendEmailVerificationLink().pipe(first()).subscribe(
+      (res: Response): void => {
         if (res.status === 204) {
           this.notifications.message({
-            message: `Email Verification link sent!`,
+            message: 'Email Verification link sent!',
             type: NotificationType.SUCCESS
-          } as Notification);
+          });
         } else {
           this.notifications.message({
-            message: `Error sending email verification link!`,
+            message: 'Error sending email verification link!',
             type: NotificationType.DANGER
-          } as Notification);
+          });
         }
-      }, error => {
+      },
+      () => {
         this.handleError('Unexpected error sending link!', NotificationType.DANGER);
-      }));
+      }
+    );
   }
 
-  private handleError(error: string, type: NotificationType) {
+  private handleError(error: string, type: NotificationType): void {
     this.notifications.message({
       message: error,
       type: type
-    } as Notification);
+    });
   }
 }

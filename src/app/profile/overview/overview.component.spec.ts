@@ -1,12 +1,14 @@
-import { LocationStrategy } from '@angular/common';
-import { Component, DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Broadcaster, Notifications } from 'ngx-base';
-import { Contexts } from 'ngx-fabric8-wit';
-import { SpaceService } from 'ngx-fabric8-wit';
-import { UserService } from 'ngx-login-client';
-import { of } from 'rxjs';
+import { Location } from '@angular/common';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { fakeAsync, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Notifications } from 'ngx-base';
+import { Context } from 'ngx-fabric8-wit';
+import { Profile, UserService } from 'ngx-login-client';
+import { BehaviorSubject } from 'rxjs';
+import { createMock } from 'testing/mock';
+import { initContext } from 'testing/test-context';
 import { ContextService } from '../../shared/context.service';
 import { OverviewComponent } from './overview.component';
 
@@ -22,146 +24,117 @@ class MockWorkItemsComponent { }
 })
 class MockSpacesComponent { }
 
-describe('OverviewComponent', () => {
-  let fixture: ComponentFixture<OverviewComponent>;
-  let component: DebugNode['componentInstance'];
-  let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['getSpacesByUser']);
-  let mockUserService: any = jasmine.createSpy('UserService');
-  let mockContextService: any = jasmine.createSpyObj('ContextService', ['viewingOwnContext']);
-  let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['on']);
-  let mockNotifications: any = jasmine.createSpyObj('Notifications', ['message']);
-  let mockRouter: any = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
-  let mockActivatedRoute: any = jasmine.createSpy('ActivatedRoute');
-  let mockLocationStrategy: any = jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']);
-  let mockRouterEvent: any = {
-    'id': 1,
-    'url': 'mock-url'
-  };
-  let mockContext: any = {
-    'user': {
-      'attributes': {
-        'username': 'mock-username'
+@Component({
+  template: ''
+})
+class MockComponent { }
+
+@Component({
+  template: '<alm-overview></alm-overview>'
+})
+class HostComponent { }
+
+describe('OverviewComponent', (): void => {
+
+  const testContext = initContext(OverviewComponent, HostComponent, {
+    imports: [
+      RouterTestingModule.withRoutes([
+        {
+          path: '',
+          component: OverviewComponent,
+          children: [
+            {
+              path: '',
+              redirectTo: '_workitems',
+              pathMatch: 'full'
+            },
+            {
+              path: '_workitems',
+              component: MockWorkItemsComponent,
+              pathMatch: 'full'
+            },
+            {
+              path: '_spaces',
+              component: MockSpacesComponent,
+              pathMatch: 'full'
+            }
+          ]
+        },
+        {
+          path: ':username',
+          component: MockComponent,
+          children: [
+            {
+              path: '_update',
+              component: MockComponent
+            }
+          ]
+        }
+      ])
+    ],
+    declarations: [
+      OverviewComponent,
+      MockWorkItemsComponent,
+      MockSpacesComponent,
+      MockComponent
+    ],
+    providers: [
+      { provide: UserService, useFactory: (): jasmine.SpyObj<UserService> => createMock(UserService) },
+      {
+        provide: Notifications, useFactory: (): jasmine.SpyObj<Notifications> => {
+          const mock: jasmine.SpyObj<Notifications> = createMock(Notifications);
+          mock.message.and.stub();
+          return mock;
+        }
       },
-      'id': 'mock-user'
-    }
-  };
-  let mockSpace: any = {
-    name: 'mock-space',
-    path: 'mock-path',
-    id: 'mock-id',
-    attributes: {
-      name: 'mock-attribute',
-      description: 'mock-description',
-      'updated-at': 'mock-updated-at',
-      'created-at': 'mock-created-at',
-      version: 0
-    }
-  };
-
-  beforeEach((done: DoneFn) => {
-    mockBroadcaster.on.and.returnValue(of(mockContext));
-    mockContexts.current = of(mockContext);
-    mockRouter.events = of(mockRouterEvent);
-    mockRouter.createUrlTree.and.returnValue({});
-    mockUserService.loggedInUser = of(mockContext.user);
-    mockUserService.currentLoggedInUser = of(mockContext.user);
-    mockSpaceService.getSpacesByUser.and.returnValue(of([mockSpace]));
-
-    TestBed.configureTestingModule({
-      imports: [
-        RouterModule.forRoot([
-          {
-            path: '',
-            component: OverviewComponent,
-            children: [
-              {
-                path: '',
-                redirectTo: '_workitems'
-              },
-              {
-                path: '_workitems',
-                component: MockWorkItemsComponent
-              },
-              {
-                path: '_spaces',
-                component: MockSpacesComponent
-              }
-            ]
-          }
-        ])
-      ],
-      declarations: [
-        OverviewComponent,
-        MockWorkItemsComponent,
-        MockSpacesComponent
-      ],
-      providers: [
-        { provide: Contexts, useValue: mockContexts },
-        { provide: SpaceService, useValue: mockSpaceService },
-        { provide: UserService, useValue: mockUserService },
-        { provide: ContextService, useValue: mockContextService },
-        { provide: Notifications, useValue: mockNotifications },
-        { provide: Broadcaster, useValue: mockBroadcaster },
-        { provide: Router, useValue: mockRouter },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        { provide: LocationStrategy, useValue: mockLocationStrategy }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents().then(() => done());
+      {
+        provide: ContextService, useFactory: (): jasmine.SpyObj<ContextService> => {
+          const mock: jasmine.SpyObj<ContextService> = createMock(ContextService);
+          mock.viewingOwnContext.and.returnValue(true);
+          (mock as any).current = new BehaviorSubject<Context>({ user: { attributes: { username: 'mock-username' } } } as Context);
+          return mock;
+        }
+      }
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
   });
 
-  describe('#constructor', () => {
-    it('should not subscribe to spaceService if there are no user attributes', () => {
-      mockContext.user.attributes = undefined;
-      fixture = TestBed.createComponent(OverviewComponent);
-      component = fixture.debugElement.componentInstance;
-      expect(component.spaceService.getSpacesByUser).toHaveBeenCalledTimes(0);
+  it('should set the user value to be userService.currentLoggedInUser.attributes', (): void => {
+    expect(testContext.testedDirective.user.attributes).toEqual({ username: 'mock-username' } as Profile);
+  });
+
+  describe(`when viewing another user's account`, (): void => {
+    it('should update user', (): void => {
+      expect(testContext.testedDirective.viewingOwnAccount).toBeTruthy();
+      expect(testContext.testedDirective.user.attributes).toEqual({ username: 'mock-username' } as Profile);
+
+      TestBed.get(ContextService).viewingOwnContext.and.returnValue(false);
+      TestBed.get(ContextService).current.next({ user: { attributes: { username: 'some-other-user' } } });
+
+      expect(testContext.testedDirective.viewingOwnAccount).toBeFalsy();
+      expect(testContext.testedDirective.user.attributes).toEqual({ username: 'some-other-user' } as Profile);
     });
   });
 
-  describe('#ngOnInit', () => {
-    it('should set the context.user value to be userService.currentLoggedInUser.attributes', () => {
-      fixture = TestBed.createComponent(OverviewComponent);
-      component = fixture.debugElement.componentInstance;
-      component.userService.currentLoggedInUser.attributes = 'different-attributes';
-      mockContextService.viewingOwnContext.and.returnValue(true);
-      component.ngOnInit();
-      expect(component.context.user.attributes).toEqual('different-attributes');
-      component.ngOnDestroy();
+  describe('when logged user attributes are unavailable', (): void => {
+    beforeEach((): void => {
+      TestBed.get(ContextService).viewingOwnContext.and.returnValue(true);
+      TestBed.get(ContextService).current.next({ user: {} });
     });
 
-    it('should not update context.user if userService.currentLoggedInUser.attributes does not exist', () => {
-      fixture = TestBed.createComponent(OverviewComponent);
-      component = fixture.debugElement.componentInstance;
-      mockContextService.viewingOwnContext.and.returnValue(true);
-      component.userService.currentLoggedInUser.attributes = undefined;
-      component.ngOnInit();
-      expect(component.context.user.attributes).toEqual(mockContext.user.attributes);
-      component.ngOnDestroy();
+    it('should not update user', (): void => {
+      expect(testContext.testedDirective.viewingOwnAccount).toBeTruthy();
+      expect(testContext.testedDirective.user.attributes).toEqual({ username: 'mock-username' } as Profile);
     });
-
-    it('should not update context.user if not viewing own account', () => {
-      fixture = TestBed.createComponent(OverviewComponent);
-      component = fixture.debugElement.componentInstance;
-      mockContextService.viewingOwnContext.and.returnValue(false);
-      component.userService.currentLoggedInUser.attributes = 'different-attributes';
-      component.ngOnInit();
-      expect(component.context.user.attributes).toEqual(mockContext.user.attributes);
-      component.ngOnDestroy();
-    });
-
   });
 
   describe('#routeToUpdateProfile()', () => {
-    it('should route to the _update page for the given user', () => {
-      fixture = TestBed.createComponent(OverviewComponent);
-      component = fixture.debugElement.componentInstance;
-      component.ngOnInit();
-      component.routeToUpdateProfile();
-      expect(component.router.navigate).toHaveBeenCalledWith(['/', mockContext.user.attributes.username, '_update']);
-      component.ngOnDestroy();
-    });
+    it('should route to the _update page for the given user', fakeAsync((): void => {
+      const locationSpy: Location = TestBed.get(Location);
+      testContext.testedDirective.routeToUpdateProfile();
+      tick();
+      expect(locationSpy.path()).toEqual('/mock-username/_update');
+    }));
   });
 
 });
