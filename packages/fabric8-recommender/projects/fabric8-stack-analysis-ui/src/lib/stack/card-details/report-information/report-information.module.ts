@@ -18,7 +18,7 @@ import { ToastNotificationModule } from '../../toast-notification/toast-notifica
 import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
 
 import { NoDataComponent } from './no-data/no-data.component';
-import { Fabric8WitModule, UniqueSpaceNameValidatorDirective, ValidSpaceNameValidatorDirective} from 'ngx-fabric8-wit';
+import { Fabric8WitModule, SpaceNameModule} from 'ngx-fabric8-wit';
 
 const components = [
     ComponentSnippetComponent,
@@ -30,6 +30,7 @@ const components = [
 
 const imports = [
     Fabric8WitModule,
+    SpaceNameModule,
     TooltipModule.forRoot(),
     ProgressMeterModule,
     ComponentFeedbackModule,
@@ -42,8 +43,6 @@ const imports = [
         ...imports
     ],
     declarations: [
-      UniqueSpaceNameValidatorDirective,
-      ValidSpaceNameValidatorDirective,
         ...components
     ],
     providers: [ AddWorkFlowService, Contexts ],
