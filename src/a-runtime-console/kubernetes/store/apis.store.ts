@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { Restangular } from 'ngx-restangular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { KUBERNETES_RESTANGULAR } from './../service/kubernetes.restangular';
@@ -39,7 +38,7 @@ export function isOpenShift(): boolean {
 @Injectable()
 export class APIsStore {
 
-  constructor(@Inject(KUBERNETES_RESTANGULAR) private kubernetesRestangular: Restangular, private http: Http) {
+  constructor(@Inject(KUBERNETES_RESTANGULAR) private kubernetesRestangular: Restangular) {
     this.load();
   }
 
