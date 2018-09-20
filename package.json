@@ -166,7 +166,7 @@
     "@types/jasmine": "2.8.8",
     "@types/js-yaml": "3.11.2",
     "@types/lodash": "4.14.116",
-    "@types/node": "10.9.4",
+    "@types/node": "10.10.1",
     "@types/segment-analytics": "0.0.28",
     "@types/selenium-webdriver": "3.0.10",
     "@types/source-map": "0.5.7",
