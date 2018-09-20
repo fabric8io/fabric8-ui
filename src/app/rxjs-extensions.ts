@@ -8,3 +8,5 @@ import 'rxjs/operators/distinctUntilChanged';
 import 'rxjs/operators/filter';
 import 'rxjs/operators/map';
 import 'rxjs/operators/switchMap';
+
+import 'rxjs-compat';
