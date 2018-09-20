@@ -28,6 +28,7 @@ const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplaceme
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
 /*
  * Webpack Constants
@@ -37,7 +38,8 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
 const METADATA = {
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer(),
-  FABRIC8_BRANDING: process.env.FABRIC8_BRANDING || 'fabric8'
+  FABRIC8_BRANDING: process.env.FABRIC8_BRANDING || 'fabric8',
+  PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
 };
 
 /*
@@ -486,6 +488,14 @@ module.exports = function (options) {
       extractCSS,
 
       new webpack.IgnorePlugin(/^\.\/locale$/, /[^-]moment$/),
+
+      // Generate a manifest file which contains a mapping of all asset filenames
+      // to their corresponding output file so that tools can pick it up without
+      // having to parse `index.html`.
+      new ManifestPlugin({
+        fileName: 'asset-manifest.json',
+        publicPath: METADATA.PUBLIC_PATH,
+      }),
 
       /*
        * StyleLintPlugin
