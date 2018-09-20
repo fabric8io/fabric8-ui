@@ -1,6 +1,6 @@
 <div *ngIf="workspacesAvailable; then showOpenWorkspace else showCreateWorkspace"></div>
 <ng-template #showOpenWorkspace>
-  <div class="row no-gutters">
+  <div class="row no-gutter margin-left-0 margin-right-0">
     <span class="col-xs-12 col-lg-8">
       <select class="form-control workspace-select"
               [disabled]="!workspacesAvailable || workspaceBusy"
