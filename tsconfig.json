@@ -31,7 +31,6 @@
       "protractor",
       "segment-analytics",
       "selenium-webdriver",
-      "source-map",
       "webpack"
     ]
   },
