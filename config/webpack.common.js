@@ -6,9 +6,9 @@ const webpack = require('webpack');
 const helpers = require('./helpers');
 const ngtools = require('@ngtools/webpack');
 const branding = require('./branding');
-var path = require('path');
-var stringify = require('json-stringify');
-var fs = require('fs');
+const path = require('path');
+const stringify = require('json-stringify');
+const fs = require('fs');
 
 /*
  * Webpack Plugins
@@ -51,17 +51,6 @@ module.exports = function (options) {
   const isProd = options.env === 'production';
   const aotMode = false;//options && options.aot !== undefined;
   console.log('The options from the webpack config: ' + stringify(options, null, 2));
-
-  // ExtractTextPlugin
-  // const extractCSS = new ExtractTextPlugin({
-  //   filename: '_assets/stylesheets/[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
-  // });
-
-// MiniCssExtractPlugin
-  const extractCSS = new MiniCssExtractPlugin({
-    filename: '_assets/stylesheets/[name]' + ( isProd ? '.[contenthash]' : '' ) + '.css',
-    chunkFilename: '_assets/stylesheets/[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
-  });
 
   // const entryFile = aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts';
   // const outPath = aotMode ? 'dist' : 'aot';
@@ -265,15 +254,8 @@ module.exports = function (options) {
         {
           test: /^(?!.*component).*\.css$/,
           use: [
-            // {
-            //   loader: MiniCssExtractPlugin.loader,
-            //   options: {
-            //     // you can specify a publicPath here
-            //     // by default it use publicPath in webpackOptions.output
-            //     publicPath: '../'
-            //   }
-            // },
-            "style-loader",
+            'style-loader',
+            // isProd ? MiniCssExtractPlugin.loader : 'style-loader',
             {
               loader: 'css-loader',
               options: {
@@ -286,14 +268,6 @@ module.exports = function (options) {
         {
           test: /\.component\.css$/,
           use: [
-            // {
-            //   loader: MiniCssExtractPlugin.loader,
-            //   options: {
-            //     // you can specify a publicPath here
-            //     // by default it use publicPath in webpackOptions.output
-            //     publicPath: '../'
-            //   }
-            // },
             'to-string-loader',
             {
               loader: 'css-loader',
@@ -308,14 +282,6 @@ module.exports = function (options) {
         {
           test: /^(?!.*component).*\.less$/,
           use: [
-            // {
-            //   loader: MiniCssExtractPlugin.loader,
-            //   options: {
-            //     // you can specify a publicPath here
-            //     // by default it use publicPath in webpackOptions.output
-            //     publicPath: '../'
-            //   }
-            // },
             'style-loader',
             {
               loader: 'css-loader',
@@ -340,14 +306,6 @@ module.exports = function (options) {
         }, {
           test: /\.component\.less$/,
           use: [
-            // {
-            //   loader: MiniCssExtractPlugin.loader,
-            //   options: {
-            //     // you can specify a publicPath here
-            //     // by default it use publicPath in webpackOptions.output
-            //     publicPath: '../'
-            //   }
-            // },
             'to-string-loader',
             {
               loader: 'css-loader',
@@ -423,7 +381,7 @@ module.exports = function (options) {
       //new CheckerPlugin(),
 
 
-      /*
+      /**
        * Plugin: ContextReplacementPlugin
        * Description: Provides context to Angular's use of System.import
        *
@@ -432,8 +390,14 @@ module.exports = function (options) {
        */
       new ContextReplacementPlugin(
         // The (\\|\/) piece accounts for path separators in *nix and Windows
-        /(.+)?angular(\\|\/)core(.+)?/,
-        path.resolve(__dirname, 'src') // location of your src
+        // /angular(\\|\/)core(\\|\/)@angular/,
+        /\@angular(\\|\/)core(\\|\/)fesm5/,
+        helpers.root('./src')
+      ),
+      new ContextReplacementPlugin(
+        // The (\\|\/) piece accounts for path separators in *nix and Windows
+        /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+        helpers.root('src') // location of your src
       ),
 
       /*
@@ -485,7 +449,17 @@ module.exports = function (options) {
        */
       new LoaderOptionsPlugin({}),
 
-      extractCSS,
+      // ExtractTextPlugin
+      // const extractCSS = new ExtractTextPlugin({
+      //   filename: '_assets/stylesheets/[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
+      // });
+
+      // MiniCssExtractPlugin
+      // new MiniCssExtractPlugin({
+      //   // filename: '[name].css',
+      //   filename: '_assets/stylesheets/[name]' + ( isProd ? '.[contenthash]' : '' ) + '.css',
+      //   chunkFilename: '_assets/stylesheets/[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
+      // }),
 
       new webpack.IgnorePlugin(/^\.\/locale$/, /[^-]moment$/),
 
