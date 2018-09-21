@@ -10,7 +10,7 @@ import {
 } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
-import { Observable, Scheduler } from 'rxjs';
+import { Observable, Scheduler, Subscription } from 'rxjs';
 import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { of } from 'rxjs/observable/of';
@@ -49,6 +49,7 @@ export class ContextService implements Contexts {
   private _recent: Subject<Context[]>;
   private _currentUser: string;
   private _currentContextUser: string;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private broadcaster: Broadcaster,
@@ -62,6 +63,12 @@ export class ContextService implements Contexts {
     this._recent = new ReplaySubject<Context[]>(1);
     this.initDefault();
     this.initRecent();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription): void => {
+      subscription.unsubscribe();
+    });
   }
 
   initDefault(): void {
@@ -104,44 +111,48 @@ export class ContextService implements Contexts {
   }
 
   initRecent(): void {
-    this.loadRecent().subscribe((contexts: Context[]): void => {
-      this._recent.next(contexts);
-    });
+    this.subscriptions.push(
+      this.loadRecent().subscribe((contexts: Context[]): void => {
+        this._recent.next(contexts);
+      })
+    );
 
-    this.broadcaster.on<Context>('contextChanged')
-      .withLatestFrom(this.recent)
-      .map(([changedContext, recentContexts]: [Context, Context[]]): [Context, Context[], number] => {
-        let index: number = recentContexts.findIndex((context: Context) => context.name === changedContext.name);
-        return [changedContext, recentContexts, index];
-      })
-      .filter(([changedContext, recentContexts, index]: [Context, Context[], number]): boolean => {
-        return index !== 0; // continue only if the changed context is new, or requires a move in _recent
-      })
-      .map(([changedContext, recentContexts, index]: [Context, Context[], number]): Context[] => {
-        // if changedContext exists in _recent
-        if (index !== -1) {
-          // move the context to the front of the list if it is already in _recent
-          if (recentContexts[0].name !== changedContext.name) {
-            recentContexts.splice(index, 1);
+    this.subscriptions.push(
+      this.broadcaster.on<Context>('contextChanged')
+        .withLatestFrom(this.recent)
+        .map(([changedContext, recentContexts]: [Context, Context[]]): [Context, Context[], number] => {
+          let index: number = recentContexts.findIndex((context: Context) => context.name === changedContext.name);
+          return [changedContext, recentContexts, index];
+        })
+        .filter(([changedContext, recentContexts, index]: [Context, Context[], number]): boolean => {
+          return index !== 0; // continue only if the changed context is new, or requires a move in _recent
+        })
+        .map(([changedContext, recentContexts, index]: [Context, Context[], number]): Context[] => {
+          // if changedContext exists in _recent
+          if (index !== -1) {
+            // move the context to the front of the list if it is already in _recent
+            if (recentContexts[0].name !== changedContext.name) {
+              recentContexts.splice(index, 1);
+              recentContexts.unshift(changedContext);
+            }
+            // otherwise, no operation required; changedContext is already index 0
+          // if changedContext is new to the recent contexts
+          } else {
             recentContexts.unshift(changedContext);
+            // trim _recent if required to ensure it is length =< 8
+            if (recentContexts.length > this.RECENT_CONTEXT_LENGTH) {
+              recentContexts.pop();
+            }
           }
-          // otherwise, no operation required; changedContext is already index 0
-        // if changedContext is new to the recent contexts
-        } else {
-          recentContexts.unshift(changedContext);
-          // trim _recent if required to ensure it is length =< 8
-          if (recentContexts.length > this.RECENT_CONTEXT_LENGTH) {
-            recentContexts.pop();
-          }
-        }
-        return recentContexts;
-      })
-      .subscribe((recentContexts: Context[]): void => {
-        this.saveRecent(recentContexts);
-      });
+          return recentContexts;
+        })
+        .subscribe((recentContexts: Context[]): void => {
+          this.saveRecent(recentContexts);
+        })
+    );
 
-    // if a space is deleted, check to see if it should be removed from _recent
-    this.broadcaster.on<Space>('spaceDeleted')
+    this.subscriptions.push(
+      this.broadcaster.on<Space>('spaceDeleted')
       .withLatestFrom(this.recent)
       .map(([deletedSpace, recentContexts]: [Space, Context[]]): [Space, Context[], number] => {
         let index: number = recentContexts.findIndex((context: Context): boolean => {
@@ -162,7 +173,8 @@ export class ContextService implements Contexts {
       })
       .subscribe((recentContexts: Context[]): void => {
         this.saveRecent(recentContexts);
-      });
+      })
+    );
   }
 
   get recent(): Observable<Context[]> {
@@ -377,7 +389,7 @@ export class ContextService implements Contexts {
     });
   }
 
-  private saveRecent(recent: Context[]) {
+  private saveRecent(recent: Context[]): void {
     this._recent.next(recent);
     let patch = {
       store: {
@@ -387,8 +399,12 @@ export class ContextService implements Contexts {
         } as RawContext))
       }
     } as ExtProfile;
-    return this.profileService.silentSave(patch)
-      .subscribe((): void => {}, (err: string): void => console.log('Error saving recent spaces:', err));
+    this.subscriptions.push(
+      this.profileService.silentSave(patch).subscribe(
+        (): void => {},
+        (err: string): void => console.log('Error saving recent spaces:', err)
+      )
+    );
   }
 
 }
