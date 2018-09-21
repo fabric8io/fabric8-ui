@@ -158,8 +158,7 @@ module.exports = function () {
         {
           test: /\.json$/,
           type: "javascript/auto",
-          use: ['json-loader'],
-          exclude: [helpers.root('src/index.html')]
+          use: ['json-loader']
         },
 
         /**
@@ -195,37 +194,70 @@ module.exports = function () {
          *
          */
         {
-          test: /\.css$/,
+          test: /^(?!.*component).*\.css$/,
           use: [
-            {
-              loader: 'to-string-loader'
-            },
-            {
-              loader: 'style-loader'
-            },
+            'style-loader',
+            // isProd ? MiniCssExtractPlugin.loader : 'style-loader',
             {
               loader: 'css-loader',
               options: {
                 sourceMap: true,
+                context: '/'
+              },
+            },
+          ]
+        },
+        {
+          test: /\.component\.css$/,
+          use: [
+            'to-string-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: false,
+                sourceMap: true,
+                context: '/'
               }
             }
           ]
         },
 
         {
-          test: /\.less$/,
+          test: /^(?!.*component).*\.less$/,
           use: [
-            {
-              loader: 'css-to-string-loader'
-            },
+            'style-loader',
             {
               loader: 'css-loader',
               options: {
+                minimize: false,
                 sourceMap: true,
                 context: '/'
               }
-            },
+            }, {
+              loader: 'less-loader',
+              options: {
+                paths: [
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
+                ],
+                sourceMap: true
+              }
+            }
+          ]
+        }, {
+          test: /\.component\.less$/,
+          use: [
+            'to-string-loader',
             {
+              loader: 'css-loader',
+              options: {
+                minimize: false,
+                sourceMap: true,
+                context: '/'
+              }
+            }, {
               loader: 'less-loader',
               options: {
                 paths: [
@@ -241,31 +273,38 @@ module.exports = function () {
         },
 
         /**
-         *  File loader for supporting fonts, for example, in CSS files.
+         * File loader for supporting fonts, for example, in CSS files.
          */
         {
-          test: /\.woff2?$|\.ttf$|\.eot$|\.svg$/,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                limit: 3000,
-                includePaths: [
-                  path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
-                ],
-                name: 'vendor/fonts/[name].[hash].[ext]'
-              }
-            }
-          ]
-        }, {
-          test: /\.jpg$|\.png$|\.gif$|\.jpeg$/,
+          test: /\.(woff2|woff|ttf|eot|svg)$/,
           use: {
             loader: 'url-loader',
-            options: {
+            query: {
               limit: 3000,
-              name: 'vendor/images/[name].[hash].[ext]'
+              includePaths: [
+                path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
+              ],
+              name: '_assets/fonts/[name]' + '.[ext]'
             }
-          }
+          },
+          exclude: [
+            path.resolve(__dirname, "../src/assets/images/"),
+            /OpenSans.*\.(woff2|woff|ttf|eot|svg)$/ // Exclude loading OpenSans fonts as it will come from CDN
+          ]
+        },
+        {
+          test: /\.(jpg|png|svg|gif|jpeg)$/,
+          use: {
+            loader: 'url-loader',
+            query: {
+              limit: 3000,
+              includePaths: [
+                path.resolve(__dirname, "../src/assets/images/")
+              ],
+              name: '_assets/images/[name]' + '.[ext]'
+            }
+          },
+          exclude: path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
         },
 
         /**
@@ -364,7 +403,7 @@ module.exports = function () {
         dry: false
       }),
 
-      /*
+      /**
        * StyleLintPlugin
        */
       new StyleLintPlugin({
@@ -374,7 +413,7 @@ module.exports = function () {
         files: '**/*.less',
         failOnError: true,
         quiet: false,
-      }),
+      })
     ],
 
     /**
