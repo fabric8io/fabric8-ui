@@ -1,3 +1,4 @@
+import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { cloneDeep } from 'lodash';
 import { Broadcaster } from 'ngx-base';
@@ -7,6 +8,7 @@ import { ConnectableObservable, Observable } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 import { createMock } from 'testing/mock';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
+import { RECENT_LENGTH } from './recent-utils';
 import { SpacesService } from './spaces.service';
 
 describe('SpacesService', () => {
@@ -92,6 +94,14 @@ describe('SpacesService', () => {
             const mockSpaceService: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
             mockSpaceService.getSpaceById.and.returnValue(of(mockSpace));
             return mockSpaceService;
+          }
+        },
+        {
+          provide: ErrorHandler,
+          useFactory: () => {
+            const mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
+            mockErrorHandler.handleError.and.stub();
+            return mockErrorHandler;
           }
         }
       ]
@@ -206,10 +216,10 @@ describe('SpacesService', () => {
           recentSpaces: [mockSpace2.id, mockSpace.id]
         }
       };
-      spyOn(console, 'log');
+      const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       const spacesService: SpacesService = TestBed.get(SpacesService);
       expect(profileService.silentSave).toHaveBeenCalledWith(expectedPatch);
-      expect(console.log).toHaveBeenCalledTimes(0);
+      expect(errorHandler.handleError).toHaveBeenCalledTimes(0);
     });
 
     it('should log an error if silentSave failed', () => {
@@ -235,10 +245,10 @@ describe('SpacesService', () => {
           recentSpaces: [mockSpace2.id, mockSpace.id]
         }
       };
-      spyOn(console, 'log');
+      const errorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       const spacesService: SpacesService = TestBed.get(SpacesService);
       expect(profileService.silentSave).toHaveBeenCalledWith(expectedPatch);
-      expect(console.log).toHaveBeenCalledWith('Error saving recent spaces:', 'error');
+      expect(errorHandler.handleError).toHaveBeenCalled();
     });
   });
 
@@ -359,7 +369,7 @@ describe('SpacesService', () => {
       });
       const spacesService: SpacesService = TestBed.get(SpacesService);
       spacesService.recent.subscribe(spaces => {
-        expect(spaces.length).toEqual(SpacesService.RECENT_SPACE_LENGTH);
+        expect(spaces.length).toEqual(RECENT_LENGTH);
         done();
       });
     });
