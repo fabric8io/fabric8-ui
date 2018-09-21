@@ -49,14 +49,14 @@ module.exports = function () {
      * Do not change, leave as is or it wont work.
      * See: https://github.com/webpack/karma-webpack#source-maps
      */
-    // devtool: 'inline-source-map',
+    devtool: 'inline-source-map',
 
-    entry: {
-      'vendor': './src/vendor.browser.ts',
-      'polyfills': './src/polyfills.browser.ts',
-      // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
-      'main': './src/main.browser.ts'
-    },
+    // entry: {
+    //   'vendor': './src/vendor.browser.ts',
+    //   'polyfills': './src/polyfills.browser.ts',
+    //   // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
+    //   'main': './src/main.browser.ts'
+    // },
 
     /**
      * Options affecting the resolving of modules.

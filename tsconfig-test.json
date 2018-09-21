@@ -32,7 +32,7 @@
     },
     "rootDir": ".",
     "skipLibCheck": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "strictNullChecks": false,
     "stripInternal": true,
     "suppressImplicitAnyIndexErrors": true,
@@ -41,8 +41,5 @@
   "exclude": [
     "node_modules",
     "dist"
-  ],
-  "files": [
-    "src/app/index.ts"
   ]
 }
