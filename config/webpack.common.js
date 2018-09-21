@@ -85,7 +85,7 @@ module.exports = function (options) {
       ]
     },
 
-    /*
+    /**
      * Options affecting the resolving of modules.
      *
      * See: https://webpack.js.org/configuration/resolve
@@ -208,7 +208,6 @@ module.exports = function (options) {
           }
         },
 
-
         /**
          * Json loader support for *.json files.
          *
@@ -221,7 +220,7 @@ module.exports = function (options) {
         },
 
         /**
-         *  HTML Linter
+         * HTML Linter
          * Checks all files against .htmlhintrc
          */
         {
@@ -236,7 +235,8 @@ module.exports = function (options) {
           exclude: [/node_modules/, /src\/a-runtime-console/]
         },
 
-        /* Raw loader support for *.html
+        /**
+         * Raw loader support for *.html
          * Returns file content as string
          *
          * See: https://github.com/webpack/raw-loader
@@ -246,7 +246,7 @@ module.exports = function (options) {
           use: ['html-loader']
         },
 
-        /*
+        /**
          * to string and css loader support for *.css files
          * Returns file content as string
          *
@@ -277,8 +277,9 @@ module.exports = function (options) {
                 context: '/'
               }
             }
-          ],
+          ]
         },
+
         {
           test: /^(?!.*component).*\.less$/,
           use: [
@@ -366,13 +367,13 @@ module.exports = function (options) {
       ]
     },
 
-    /*
+    /**
      * Add additional plugins to the compiler.
      *
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-      /*
+      /**
        * Plugin: ForkCheckerPlugin
        * Description: Do type checking in a separate process, so webpack don't need to wait.
        *
@@ -471,9 +472,9 @@ module.exports = function (options) {
         publicPath: METADATA.PUBLIC_PATH,
       }),
 
-      /*
+      /**
        * StyleLintPlugin
-      */
+       */
       new StyleLintPlugin({
         configFile: '.stylelintrc',
         syntax: 'less',
@@ -509,18 +510,18 @@ module.exports = function (options) {
       concatenateModules: true //ModuleConcatenationPlugin
     },
 
-    /*
+    /**
      * Include polyfills or mocks for various node stuff
      * Description: Node configuration
      *
      * See: https://webpack.github.io/docs/configuration.html#node
      */
     node: {
-      global: true,
-      crypto: 'empty',
-      process: true,
-      module: false,
       clearImmediate: false,
+      crypto: 'empty',
+      global: true,
+      module: false,
+      process: true,
       setImmediate: false
     }
   };
