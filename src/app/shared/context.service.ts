@@ -18,6 +18,7 @@ import {
   catchError,
   distinctUntilChanged,
   distinctUntilKeyChanged,
+  filter,
   map,
   switchMap,
   tap
@@ -79,6 +80,7 @@ export class ContextService implements Contexts {
       map((val: User): string => {
         if (!(val && val.id)) {
           // this is a logout event
+          return null;
         } else if (val.attributes.username) {
           this._currentUser = val.attributes.username;
           return val.attributes.username;
@@ -90,6 +92,7 @@ export class ContextService implements Contexts {
           throw 'Unknown user';
         }
       }),
+      filter((val: string): boolean => val !== null),
       distinctUntilChanged(),
       // Then, perform another map to create a context from the user
       switchMap((val: string): Observable<User> => this.userService.getUserByUsername(val)),
