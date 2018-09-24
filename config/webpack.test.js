@@ -51,12 +51,12 @@ module.exports = function () {
      */
     devtool: 'inline-source-map',
 
-    // entry: {
-    //   'vendor': './src/vendor.browser.ts',
-    //   'polyfills': './src/polyfills.browser.ts',
-    //   // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
-    //   'main': './src/main.browser.ts'
-    // },
+    entry: {
+      'vendor': './src/vendor.browser.ts',
+      'polyfills': './src/polyfills.browser.ts',
+      // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
+      'main': './src/main.browser.ts'
+    },
 
     /**
      * Options affecting the resolving of modules.
