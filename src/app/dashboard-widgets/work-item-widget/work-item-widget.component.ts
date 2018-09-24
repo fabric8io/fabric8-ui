@@ -97,11 +97,11 @@ export class WorkItemWidgetComponent implements OnInit {
         workItems.forEach(workItem => {
           let state = workItem.attributes['system.state'];
           if (state !== undefined) {
-            if (state === this.STATE_OPEN) {
+            if (this.isStateEqual(state, this.STATE_OPEN)) {
               this.myWorkItemsOpen++;
-            } else if (state === this.STATE_IN_PROGRESS) {
+            } else if (this.isStateEqual(state, this.STATE_IN_PROGRESS)) {
               this.myWorkItemsInProgress++;
-            } if (state === this.STATE_RESOLVED) {
+            } else if (this.isStateEqual(state, this.STATE_RESOLVED)) {
               this.myWorkItemsResolved++;
             }
           }
@@ -110,6 +110,10 @@ export class WorkItemWidgetComponent implements OnInit {
       })
       .publishReplay(1);
     this._myWorkItems.connect();
+  }
+
+  private isStateEqual(state1: string, state2: string): boolean {
+    return state1.localeCompare(state2, 'en', { sensitivity: 'base' }) === 0;
   }
 
   get myWorkItems(): Observable<WorkItem[]> {
