@@ -73,12 +73,11 @@ export class DeploymentsDonutComponent implements OnInit {
     );
 
     this.subscriptions.push(
-      combineLatest(
-        this.deploymentsService.getEnvironmentCpuStat(this.spaceId, this.environment),
-        this.deploymentsService.getEnvironmentMemoryStat(this.spaceId, this.environment)
-      ).subscribe((stats: Stat[]): void => {
-        this.atQuota = stats.some((stat: Stat): boolean => stat.used >= stat.quota);
-      })
+      this.deploymentsService
+        .canScale(this.spaceId, this.environment, this.applicationId)
+        .subscribe((canScale: boolean): void => {
+          this.atQuota = !canScale;
+        })
     );
   }
 

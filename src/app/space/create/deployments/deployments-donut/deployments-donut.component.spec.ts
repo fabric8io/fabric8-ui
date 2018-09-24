@@ -56,8 +56,7 @@ describe('DeploymentsDonutComponent', () => {
             svc.getPods.and.returnValue(
               of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
             );
-            svc.getEnvironmentCpuStat.and.returnValue(new Subject<CpuStat>());
-            svc.getEnvironmentMemoryStat.and.returnValue(new Subject<MemoryStat>());
+            svc.canScale.and.returnValue(new Subject<boolean>());
             return svc;
           }
         },
@@ -174,31 +173,11 @@ describe('DeploymentsDonutComponent', () => {
       expect(testContext.testedDirective.atQuota).toBeFalsy();
     });
 
-    it('should be "false" when both stats are below quota', function() {
-      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-      mockSvc.getEnvironmentCpuStat().next({ used: 0, quota: 2 });
-      mockSvc.getEnvironmentMemoryStat().next({ used: 0, quota: 2, units: MemoryUnit.GB });
+    it('should mirror inverted DeploymentsService#canScale()', function() {
+      TestBed.get(DeploymentsService).canScale().next(true);
       expect(testContext.testedDirective.atQuota).toBeFalsy();
-    });
 
-    it('should be "true" when CPU usage reaches quota', function() {
-      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-      mockSvc.getEnvironmentCpuStat().next({ used: 2, quota: 2 });
-      mockSvc.getEnvironmentMemoryStat().next({ used: 1, quota: 2, units: MemoryUnit.GB });
-      expect(testContext.testedDirective.atQuota).toBeTruthy();
-    });
-
-    it('should be "true" when Memory usage reaches quota', function() {
-      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-      mockSvc.getEnvironmentCpuStat().next({ used: 1, quota: 2 });
-      mockSvc.getEnvironmentMemoryStat().next({ used: 2, quota: 2, units: MemoryUnit.GB });
-      expect(testContext.testedDirective.atQuota).toBeTruthy();
-    });
-
-    it('should be "true" when both stats usage reaches quota', function() {
-      const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-      mockSvc.getEnvironmentCpuStat().next({ used: 2, quota: 2 });
-      mockSvc.getEnvironmentMemoryStat().next({ used: 2, quota: 2, units: MemoryUnit.GB });
+      TestBed.get(DeploymentsService).canScale().next(false);
       expect(testContext.testedDirective.atQuota).toBeTruthy();
     });
   });

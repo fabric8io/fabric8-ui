@@ -2,9 +2,9 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpHeaders,
-  HttpParams,
-  HttpResponse
+  HttpParams
 } from '@angular/common/http';
+
 import {
   ErrorHandler,
   Inject,
@@ -13,8 +13,8 @@ import {
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable ,  throwError as _throw } from 'rxjs';
-import { catchError ,  map } from 'rxjs/operators';
+import { Observable , of, throwError as _throw } from 'rxjs';
+import { catchError , map } from 'rxjs/operators';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 
@@ -132,6 +132,15 @@ export interface SeriesData {
   value: number;
 }
 
+export interface PodQuotaRequirementResponse {
+  limits: PodQuotaRequirement;
+}
+
+export interface PodQuotaRequirement {
+  cpucores: number;
+  memory: number;
+}
+
 @Injectable()
 export class DeploymentApiService {
 
@@ -207,6 +216,14 @@ export class DeploymentApiService {
       catchError((err: HttpErrorResponse) => this.handleHttpError(err)),
       map(() => null)
     );
+  }
+
+  getQuotaRequirementPerPod(spaceId: string, environmentName: string, applicationId: string): Observable<PodQuotaRequirement> {
+    const gb: number = Math.pow(1024, 3);
+    return of({
+      cpucores: 1,
+      memory: 0.5 * gb
+    });
   }
 
   private httpGet<T>(url: string, params: HttpParams = new HttpParams()): Observable<T> {

@@ -559,6 +559,108 @@ describe('DeploymentsService', () => {
     });
   });
 
+  describe('#canScale', () => {
+    const GB: number = Math.pow(1024, 3);
+    it('should return true when remaining quota is sufficient', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 1,
+                quota: 2
+              },
+              memory: {
+                used: 0.5 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 1,
+        memory: 0.5 * GB
+      }));
+
+      this.service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((canScale: boolean): void => {
+          expect(canScale).toBeTruthy();
+          done();
+        });
+      this.timer.next();
+    });
+
+    it('should return false when remaining CPU quota is insufficient', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 2,
+                quota: 2
+              },
+              memory: {
+                used: 0.5 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 1,
+        memory: 0.5 * GB
+      }));
+
+      this.service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((canScale: boolean): void => {
+          expect(canScale).toBeFalsy();
+          done();
+        });
+      this.timer.next();
+    });
+
+    it('should return false when remaining Memory quota is insufficient', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 1,
+                quota: 2
+              },
+              memory: {
+                used: 0.75 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 1,
+        memory: 0.5 * GB
+      }));
+
+      this.service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((canScale: boolean): void => {
+          expect(canScale).toBeFalsy();
+          done();
+        });
+      this.timer.next();
+    });
+  });
+
   describe('#scalePods', () => {
     it('should return success message on success', function(done: DoneFn): void {
       apiService.scalePods.and.returnValue(of({}));
