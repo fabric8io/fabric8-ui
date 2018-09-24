@@ -66,13 +66,10 @@ if [ ! -d dist ]; then
   echo 'CICO: unit tests OK'
   ./upload_to_codecov.sh
 
-  ## Exec functional tests
-  docker exec "${BUILDER_CONT}" ./run_functional_tests.sh
 
   ## Run the prod build
   docker exec "${BUILDER_CONT}" npm run build:prod
 
-  echo 'CICO: functional tests OK'
   docker exec "${BUILDER_CONT}" npm run semantic-release || :
   docker exec -u root "${BUILDER_CONT}" cp -r /home/fabric8/fabric8-ui/dist /
 fi
