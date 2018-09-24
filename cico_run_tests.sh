@@ -66,9 +66,6 @@ echo 'CICO: unit tests OK'
 
 ./upload_to_codecov.sh
 
-## Exec functional tests
-docker exec fabric8-ui-builder ./run_functional_tests.sh
-echo 'CICO: functional tests OK'
 
 ## All ok, build prod version
 docker exec fabric8-ui-builder npm run build:prod
