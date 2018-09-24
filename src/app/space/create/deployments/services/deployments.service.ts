@@ -33,6 +33,7 @@ import {
   distinctUntilChanged,
   filter,
   finalize,
+  first,
   map,
   mergeMap,
   pairwise,
@@ -170,6 +171,27 @@ export class DeploymentsService implements OnDestroy {
 
         return cpuRemaining >= quotaRequirement.cpucores &&
           memRemaining >= quotaRequirement.memory;
+      })
+    );
+  }
+
+  // similar to canScale above, but is "one-shot" - emits one maximum value and completes. canScale provides ongoing status emissions.
+  getMaximumPods(spaceId: string, environmentName: string, applicationId: string): Observable<number> {
+    return combineLatest(
+      this.getEnvironmentCpuStat(spaceId, environmentName),
+      this.getEnvironmentMemoryStat(spaceId, environmentName)
+    ).pipe(
+      first(),
+      withLatestFrom(this.apiService.getQuotaRequirementPerPod(spaceId, environmentName, applicationId)),
+      map((v: [[CpuStat, MemoryStat], PodQuotaRequirement]): number => {
+        const requirement: PodQuotaRequirement = v[1];
+        const cpuQuota: CpuStat = v[0][0];
+        const memQuota: MemoryStat = ScaledMemoryStat.from(v[0][1], MemoryUnit.B);
+
+        const maxCpu: number = Math.floor(cpuQuota.quota / requirement.cpucores);
+        const maxMem: number = Math.floor(memQuota.quota / requirement.memory);
+
+        return Math.min(maxCpu, maxMem);
       })
     );
   }

@@ -6,6 +6,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import {
+  BehaviorSubject,
   of,
   Subject,
   throwError as _throw
@@ -54,9 +55,10 @@ describe('DeploymentsDonutComponent', () => {
               of('scalePods')
             );
             svc.getPods.and.returnValue(
-              of({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
+              new BehaviorSubject<Pods>({ pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 })
             );
             svc.canScale.and.returnValue(new Subject<boolean>());
+            svc.getMaximumPods.and.returnValue(of(2));
             return svc;
           }
         },
@@ -85,6 +87,29 @@ describe('DeploymentsDonutComponent', () => {
     testContext.testedDirective.scaleUp();
     testContext.detectChanges();
     expect(testContext.testedDirective.desiredReplicas).toBe(desired + 1);
+  });
+
+  it('should detect when detected scale attempt reaches maximum supported pods', function() {
+    TestBed.get(DeploymentsService).getPods().next({ pods: [], total: 0 });
+
+    expect(testContext.testedDirective.desiredReplicas).toBe(0);
+    expect(testContext.testedDirective.requestedScaleIsMaximum).toBeFalsy();
+
+    testContext.testedDirective.scaleUp();
+    expect(testContext.testedDirective.desiredReplicas).toBe(1);
+    expect(testContext.testedDirective.requestedScaleIsMaximum).toBeFalsy();
+
+    testContext.testedDirective.scaleUp();
+    expect(testContext.testedDirective.desiredReplicas).toBe(2);
+    expect(testContext.testedDirective.requestedScaleIsMaximum).toBeTruthy();
+
+    testContext.testedDirective.scaleDown();
+    expect(testContext.testedDirective.desiredReplicas).toBe(1);
+    expect(testContext.testedDirective.requestedScaleIsMaximum).toBeFalsy();
+
+    testContext.testedDirective.scaleDown();
+    expect(testContext.testedDirective.desiredReplicas).toBe(0);
+    expect(testContext.testedDirective.requestedScaleIsMaximum).toBeFalsy();
   });
 
   it('should decrement desired replicas on scale down by one', function() {

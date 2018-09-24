@@ -32,6 +32,7 @@ export class DeploymentsDonutComponent implements OnInit {
   @Input() environment: string;
 
   atQuota: boolean = false;
+  requestedScaleIsMaximum: boolean = false;
   isIdled: boolean = false;
   pods: Observable<Pods>;
   desiredReplicas: number = 1;
@@ -54,6 +55,7 @@ export class DeploymentsDonutComponent implements OnInit {
 
   private replicas: number;
   private scaleRequestPending: boolean = false;
+  private maxPods: number;
 
   constructor(
     private deploymentsService: DeploymentsService,
@@ -79,6 +81,14 @@ export class DeploymentsDonutComponent implements OnInit {
           this.atQuota = !canScale;
         })
     );
+
+    this.subscriptions.push(
+      this.deploymentsService
+        .getMaximumPods(this.spaceId, this.environment, this.applicationId)
+        .subscribe((maxPods: number): void => {
+          this.maxPods = maxPods;
+        })
+    );
   }
 
   ngOnDestroy(): void {
@@ -86,20 +96,20 @@ export class DeploymentsDonutComponent implements OnInit {
   }
 
   scaleUp(): void {
-    let desired = this.desiredReplicas;
-    this.desiredReplicas = desired + 1;
+    this.desiredReplicas++;
+    this.requestedScaleIsMaximum = this.desiredReplicas >= this.maxPods;
 
     this.debounceScale();
     this.scaleRequestPending = true;
   }
 
   scaleDown(): void {
+    this.requestedScaleIsMaximum = false;
     if (this.desiredReplicas === 0) {
       return;
     }
 
-    let desired = this.desiredReplicas;
-    this.desiredReplicas = desired - 1;
+    this.desiredReplicas--;
 
     this.debounceScale();
     this.scaleRequestPending = true;

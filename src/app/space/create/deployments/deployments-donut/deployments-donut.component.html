@@ -2,7 +2,7 @@
 </deployments-donut-chart>
 <div column class="deployments-donut-scale-controls fade-inline" *ngIf="!isIdled && !mini">
   <div>
-    <a id="scaleUp" title="Scale up" role="button" (click)="$event.preventDefault(); scaleUp()" *ngIf="!atQuota; else scaleUpDisabled">
+    <a id="scaleUp" title="Scale up" role="button" (click)="$event.preventDefault(); scaleUp()" *ngIf="!atQuota && !requestedScaleIsMaximum; else scaleUpDisabled">
       <i class="fa fa-chevron-up"></i>
       <span class="sr-only">Scale up</span>
     </a>

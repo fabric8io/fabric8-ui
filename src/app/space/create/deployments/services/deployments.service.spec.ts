@@ -661,6 +661,73 @@ describe('DeploymentsService', () => {
     });
   });
 
+  describe('#getMaximumPods', () => {
+    const GB: number = Math.pow(1024, 3);
+    it('should return appropriate number of maximum pods for typical scenario', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 0,
+                quota: 2
+              },
+              memory: {
+                used: 0,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 1,
+        memory: 0.5 * GB
+      }));
+
+      this.service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((maxPods: number): void => {
+          expect(maxPods).toEqual(2);
+          done();
+        });
+      this.timer.next();
+    });
+
+    it('should return maximum based on resource with least available quota', function(this: TestContext, done: DoneFn): void {
+      this.apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 0,
+                quota: 2
+              },
+              memory: {
+                used: 0,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 2,
+        memory: 0.5 * GB
+      }));
+
+      this.service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+        .subscribe((maxPods: number): void => {
+          expect(maxPods).toEqual(1); // only one CPU allocation will fit
+          done();
+        });
+      this.timer.next();
+    });
+  });
+
   describe('#scalePods', () => {
     it('should return success message on success', function(done: DoneFn): void {
       apiService.scalePods.and.returnValue(of({}));
