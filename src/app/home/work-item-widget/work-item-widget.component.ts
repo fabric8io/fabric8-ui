@@ -18,7 +18,6 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   currentSpaceId: string = 'default';
   loading: boolean = false;
   loggedInUser: User;
-  loggedInUserId: string;
   recentSpaces: Space[] = [];
   recentSpaceIndex: number = 0;
   subscriptions: Subscription[] = [];
@@ -31,7 +30,6 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       private userService: UserService) {
     this.subscriptions.push(userService.loggedInUser.subscribe(user => {
       this.loggedInUser = user;
-      this.loggedInUserId = user.id;
     }));
     this.subscriptions.push(spacesService.recent.subscribe(spaces => {
       this.recentSpaces = spaces;
@@ -72,7 +70,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
       {},
       this.filterService.and_notation,
       this.filterService.queryBuilder(
-        'assignee', this.filterService.equal_notation, this.loggedInUserId
+        'assignee', this.filterService.equal_notation, this.loggedInUser.id
       )
     );
     const spaceQuery = this.filterService.queryBuilder(
