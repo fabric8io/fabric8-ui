@@ -3,7 +3,7 @@ import { Component, DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
-import { Notifications } from 'ngx-base/src/app/notifications/notifications';
+import { Notifications } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { SpaceService } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';

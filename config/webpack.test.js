@@ -49,7 +49,7 @@ module.exports = function () {
      * Do not change, leave as is or it wont work.
      * See: https://github.com/webpack/karma-webpack#source-maps
      */
-    devtool: 'inline-source-map',
+    //devtool: 'inline-source-map',
 
     entry: {
       'vendor': './src/vendor.browser.ts',
@@ -65,9 +65,9 @@ module.exports = function () {
      */
     resolve: {
 
-      // alias: {
-      //   "testing": path.resolve(__dirname, "../src/testing")
-      // },
+      alias: {
+        "testing": path.resolve(__dirname, "../src/testing")
+      },
 
       /**
        * An array that automatically resolve certain extensions.
@@ -165,17 +165,17 @@ module.exports = function () {
          * HTML Linter
          * Checks all files against .htmlhintrc
          */
-        {
-          enforce: 'pre',
-          test: /\.html$/,
-          use: {
-            loader: 'htmlhint-loader',
-            options: {
-              configFile: './.htmlhintrc'
-            }
-          },
-          exclude: [/node_modules/]
-        },
+        // {
+        //   enforce: 'pre',
+        //   test: /\.html$/,
+        //   use: {
+        //     loader: 'htmlhint-loader',
+        //     options: {
+        //       configFile: './.htmlhintrc'
+        //     }
+        //   },
+        //   exclude: [/node_modules/]
+        // },
 
         /**
          * Raw loader support for *.html
@@ -276,7 +276,7 @@ module.exports = function () {
          * File loader for supporting fonts, for example, in CSS files.
          */
         {
-          test: /\.(woff2|woff|ttf|eot|svg)$/,
+          test: /\.(woff2|woff|ttf|eot)$/,
           use: {
             loader: 'url-loader',
             query: {
@@ -288,7 +288,7 @@ module.exports = function () {
             }
           },
           exclude: [
-            path.resolve(__dirname, "../src/assets/images/"),
+            path.resolve(__dirname, "./src/assets/images/"),
             /OpenSans.*\.(woff2|woff|ttf|eot|svg)$/ // Exclude loading OpenSans fonts as it will come from CDN
           ]
         },
@@ -299,7 +299,7 @@ module.exports = function () {
             query: {
               limit: 3000,
               includePaths: [
-                path.resolve(__dirname, "../src/assets/images/")
+                path.resolve(__dirname, "./src/assets/images/")
               ],
               name: '_assets/images/[name]' + '.[ext]'
             }
@@ -313,32 +313,32 @@ module.exports = function () {
          *
          * See: https://github.com/webpack/raw-loader
          */
-        {
-          test: /\.html$/,
-          loader: 'raw-loader',
-          exclude: [ path.resolve(__dirname, 'src/index.html') ]
-        },
+        // {
+        //   test: /\.html$/,
+        //   loader: 'raw-loader',
+        //   exclude: [ path.resolve(__dirname, 'src/index.html') ]
+        // },
         /**
          * Instruments JS files with Istanbul for subsequent code coverage reporting.
          * Instrument only testing sources.
          *
          * See: https://github.com/deepsweet/istanbul-instrumenter-loader
          */
-        {
-          enforce: 'post',
-          test: /\.(js|ts)$/,
-          use: {
-            loader: 'istanbul-instrumenter-loader',
-            options: {
-              esModules: true
-            }
-          },
-          include: helpers.root('src'),
-          exclude: [
-            /\.(e2e|spec|mock)\.ts$/,
-            /node_modules/
-          ]
-        }
+        // {
+        //   enforce: 'post',
+        //   test: /\.(js|ts)$/,
+        //   use: {
+        //     loader: 'istanbul-instrumenter-loader',
+        //     options: {
+        //       esModules: true
+        //     }
+        //   },
+        //   include: helpers.root('src'),
+        //   exclude: [
+        //     /\.(e2e|spec|mock)\.ts$/,
+        //     /node_modules/
+        //   ]
+        // }
       ]
     },
 
@@ -381,17 +381,17 @@ module.exports = function () {
        * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
        * See: https://github.com/angular/angular/issues/11580
        */
-      new ContextReplacementPlugin(
-        // The (\\|\/) piece accounts for path separators in *nix and Windows
-        // /angular(\\|\/)core(\\|\/)@angular/,
-        /\@angular(\\|\/)core(\\|\/)fesm5/,
-        helpers.root('./src')
-      ),
-      new ContextReplacementPlugin(
-        // The (\\|\/) piece accounts for path separators in *nix and Windows
-        /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-        helpers.root('src') // location of your src
-      ),
+      // new ContextReplacementPlugin(
+      //   // The (\\|\/) piece accounts for path separators in *nix and Windows
+      //   // /angular(\\|\/)core(\\|\/)@angular/,
+      //   /\@angular(\\|\/)core(\\|\/)fesm5/,
+      //   helpers.root('./src')
+      // ),
+      // new ContextReplacementPlugin(
+      //   // The (\\|\/) piece accounts for path separators in *nix and Windows
+      //   /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+      //   helpers.root('src') // location of your src
+      // ),
 
       new HtmlWebpackPlugin(),
 

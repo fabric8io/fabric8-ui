@@ -10,7 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "baseUrl": ".",
-    "declaration": true,
+    "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "inlineSources": true,
