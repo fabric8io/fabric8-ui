@@ -13,12 +13,12 @@ import {
   Subject,
   throwError as _throw,
   timer,
+  VirtualAction,
   VirtualTimeScheduler } from 'rxjs';
 import {
   first,
   takeUntil
 } from 'rxjs/operators';
-import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
 import { createMock } from 'testing/mock';
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
