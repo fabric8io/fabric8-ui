@@ -93,7 +93,7 @@ describe('Home: WorkItemWidgetComponent', () => {
       { provide: UserService, useFactory: () => {
           let userService = createMock(UserService);
           userService.getUser.and.returnValue(fakeUser);
-          userService.loggedInUser = fakeUser.publish() as ConnectableObservable<User> & jasmine.Spy;
+          userService.loggedInUser = fakeUser as ConnectableObservable<User> & jasmine.Spy;
           return userService;
         }
       }, {
