@@ -47,11 +47,8 @@ fi
 
 mkdir -p dist
 
-if ! docker pull $BUILDER_IMAGE; then
-  docker build -t fabric8-ui-builder -f Dockerfile.builder .
-  docker tag fabric8-ui-builder $BUILDER_IMAGE
-  docker push $BUILDER_IMAGE
-fi
+docker build -t fabric8-ui-builder -f Dockerfile.builder .
+docker tag fabric8-ui-builder $BUILDER_IMAGE
 
 docker run --detach=true --name=fabric8-ui-builder -t \
   -v $(pwd)/dist:/dist:Z \
