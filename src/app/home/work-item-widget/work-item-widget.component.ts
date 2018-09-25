@@ -61,46 +61,46 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
    * @param space The space to retrieve work items for
    */
   private fetchWorkItemsBySpace(space: Space): void {
+    const userId = this.loggedInUser.id;
     this.currentSpace = space;
-    this.subscriptions.push(this.userService
-      .getUser()
-      .do(() => this.loading = true)
-      .do(() => this.workItemService._currentSpace = space)
-      .do(() => this.workItemService.buildUserIdMap())
-      .switchMap(() => this.userService.loggedInUser)
-      .map(user => {
-        const assigneeQuery = this.filterService.queryJoiner(
-          {},
-          this.filterService.and_notation,
-          this.filterService.queryBuilder(
-            'assignee', this.filterService.equal_notation, user.id
-          )
-        );
-        const spaceQuery = this.filterService.queryBuilder(
-          'space', this.filterService.equal_notation, space.id
-        );
-        return this.filterService.queryJoiner(
-          assigneeQuery, this.filterService.and_notation, spaceQuery
-        );
-      })
-      .switchMap(filters => this.workItemService
-        .getWorkItems(100000, {expression: filters}))
-      .map((val: WorkItemsData) => val.workItems)
-      .map(workItems => filterOutClosedItems(workItems))
-      // Resolve the work item type
-      .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
-      .do(workItems => {
-        workItems.forEach(workItem => {
-          if (workItem.relationalData === undefined) {
-            workItem.relationalData = {};
-          }
-        });
-      })
-      .do(() => this.loading = false)
-      .subscribe(workItems => {
-        this.workItems = workItems;
-        this.selectRecentSpace(workItems);
-      }));
+    this.loading = true;
+    this.workItemService._currentSpace = space;
+    this.workItemService.buildUserIdMap();
+
+    const assigneeQuery = this.filterService.queryJoiner(
+      {},
+      this.filterService.and_notation,
+      this.filterService.queryBuilder(
+        'assignee', this.filterService.equal_notation, userId
+      )
+    );
+    const spaceQuery = this.filterService.queryBuilder(
+      'space', this.filterService.equal_notation, space.id
+    );
+    const filters = this.filterService.queryJoiner(
+      assigneeQuery, this.filterService.and_notation, spaceQuery
+    );
+
+    this.subscriptions.push(
+      this.workItemService
+        .getWorkItems(100000, {expression: filters})
+        .map((val: WorkItemsData) => val.workItems)
+        .map(workItems => filterOutClosedItems(workItems))
+        // Resolve the work item type
+        .do(workItems => workItems.forEach(workItem => this.workItemService.resolveType(workItem)))
+        .do(workItems => {
+          workItems.forEach(workItem => {
+            if (workItem.relationalData === undefined) {
+              workItem.relationalData = {};
+            }
+          });
+        })
+        .do(() => this.loading = false)
+        .subscribe(workItems => {
+          this.workItems = workItems;
+          this.selectRecentSpace(workItems);
+        })
+    );
   }
 
   /**
