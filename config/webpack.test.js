@@ -65,9 +65,9 @@ module.exports = function () {
      */
     resolve: {
 
-      // alias: {
-      //   "testing": path.resolve(__dirname, "../src/testing")
-      // },
+      alias: {
+        "testing": path.resolve(__dirname, "../src/testing")
+      },
 
       /**
        * An array that automatically resolve certain extensions.
