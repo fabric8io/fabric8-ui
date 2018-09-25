@@ -46,37 +46,37 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
   private initRecent(): void {
     // load existing recent spaces from profile.store.recentSpaces
     this.subscriptions.push(
-      this.loadRecentSpaces().subscribe((spaces: Space[]): void => {
-        this._recent.next(spaces);
-      })
+      this.loadRecentSpaces().subscribe((spaces: Space[]): void =>
+        this._recent.next(spaces)
+      )
     );
 
     this.subscriptions.push(
       this.broadcaster.on<Space>('spaceChanged')
         .pipe(
           withLatestFrom(this.recent),
-          map(([changedSpace, recentSpaces]: [Space, Space[]]): RecentData<Space> => {
-            return this.onBroadcastChanged(changedSpace, recentSpaces);
-          }),
-          filter((recentData: RecentData<Space>): boolean => recentData.isSaveRequired === true)
+          map(([changedSpace, recentSpaces]: [Space, Space[]]): RecentData<Space> =>
+            this.onBroadcastChanged(changedSpace, recentSpaces)
+          ),
+          filter((recentData: RecentData<Space>): boolean => recentData.isSaveRequired)
         )
-        .subscribe((recentData: RecentData<Space>): void => {
-          this.saveRecentSpaces(recentData.data);
-        })
+        .subscribe((recentData: RecentData<Space>): void =>
+          this.saveRecentSpaces(recentData.data)
+        )
     );
 
     this.subscriptions.push(
       this.broadcaster.on<Space>('spaceDeleted')
         .pipe(
           withLatestFrom(this.recent),
-          map(([deletedSpace, recentSpaces]): RecentData<Space> => {
-            return this.onBroadcastDeleted(deletedSpace, recentSpaces);
-          }),
-          filter((recentData: RecentData<Space>) => recentData.isSaveRequired === true)
+          map(([deletedSpace, recentSpaces]): RecentData<Space> =>
+            this.onBroadcastDeleted(deletedSpace, recentSpaces)
+          ),
+          filter((recentData: RecentData<Space>) => recentData.isSaveRequired)
         )
-        .subscribe((recentData: RecentData<Space>): void => {
-          this.saveRecentSpaces(recentData.data);
-        })
+        .subscribe((recentData: RecentData<Space>): void =>
+          this.saveRecentSpaces(recentData.data)
+        )
     );
   }
 
@@ -92,7 +92,7 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
           return this.spaceService.getSpaceById(id).catch((): Observable<Space> => Observable.of(null));
         }))
         .map((spaces: Space[]): Space[] => {
-          return spaces.filter(((space: Space): boolean => { return space !== null; }));
+          return spaces.filter((space: Space): boolean => space !== null);
         });
       } else {
         return of([]);

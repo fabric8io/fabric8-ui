@@ -116,37 +116,37 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
 
   private initRecent(): void {
     this.subscriptions.push(
-      this.loadRecentContexts().subscribe((contexts: Context[]): void => {
-        this._recent.next(contexts);
-      })
+      this.loadRecentContexts().subscribe((contexts: Context[]): void =>
+        this._recent.next(contexts)
+      )
     );
 
     this.subscriptions.push(
       this.broadcaster.on<Context>('contextChanged')
         .pipe(
           withLatestFrom(this.recent),
-          map(([changedContext, recentContexts]: [Context, Context[]]): RecentData<Context> => {
-            return this.onBroadcastChanged(changedContext, recentContexts);
-          }),
-          filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired === true)
-          )
-        .subscribe((recentData: RecentData<Context>): void => {
-          this.saveRecentContexts(recentData.data);
-        })
+          map(([changedContext, recentContexts]: [Context, Context[]]): RecentData<Context> =>
+            this.onBroadcastChanged(changedContext, recentContexts)
+          ),
+          filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired)
+        )
+        .subscribe((recentData: RecentData<Context>): void =>
+          this.saveRecentContexts(recentData.data)
+        )
     );
 
     this.subscriptions.push(
       this.broadcaster.on<Space>('spaceDeleted')
         .pipe(
           withLatestFrom(this._recent),
-          map(([deletedSpace, recentContexts]: [Space, Context[]]): RecentData<Context> => {
-            return this.onBroadcastDeleted(deletedSpace, recentContexts);
-          }),
-          filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired === true)
+          map(([deletedSpace, recentContexts]: [Space, Context[]]): RecentData<Context> =>
+            this.onBroadcastDeleted(deletedSpace, recentContexts)
+          ),
+          filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired)
         )
-        .subscribe((recentData: RecentData<Context>): void => {
-          this.saveRecentContexts(recentData.data);
-        })
+        .subscribe((recentData: RecentData<Context>): void =>
+          this.saveRecentContexts(recentData.data)
+        )
     );
 
   }
@@ -359,7 +359,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
     });
   }
 
-  private saveRecentContexts(recent: Context[]) {
+  private saveRecentContexts(recent: Context[]): void {
     this._recent.next(recent);
     let patch = {
       store: {
