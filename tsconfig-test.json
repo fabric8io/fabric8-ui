@@ -1,5 +1,6 @@
 {
   "angularCompilerOptions": {
+    "preserveWhitespaces": true,
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true
   },
