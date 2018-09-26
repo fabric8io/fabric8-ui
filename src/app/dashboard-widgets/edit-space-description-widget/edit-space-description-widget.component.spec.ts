@@ -1,4 +1,5 @@
 import { Component, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Broadcaster } from 'ngx-base';
 import { CollaboratorService, Contexts, Space, Spaces, SpaceService } from 'ngx-fabric8-wit';
@@ -127,6 +128,12 @@ describe('EditSpaceDescriptionWidgetComponent', () => {
 
   describe('#onUpdateDescription', () => {
     it('should be called when the enter key is pressed', function() {
+      const mockedSpaceService = TestBed.get(SpaceService);
+      mockedSpaceService.update.and.returnValue(observableOf({
+        attributes: {
+          description: 'some mock description'
+        }
+      }));
       spyOn(testContext.testedDirective, 'isEditable').and.returnValue(observableOf(true));
       spyOn(testContext.testedDirective, 'onUpdateDescription');
       testContext.testedDirective.userOwnsSpace = true;
