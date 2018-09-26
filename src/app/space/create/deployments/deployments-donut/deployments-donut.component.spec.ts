@@ -161,7 +161,7 @@ describe('DeploymentsDonutComponent', () => {
     expect(mockSvc.scalePods).toHaveBeenCalledTimes(2);
   });
 
-  it('should not call notifications when scaling successfully', function(this: Context) {
+  xit('should not call notifications when scaling successfully', function(this: Context) {
     this.testedDirective.scaleUp();
     this.detectChanges();
     this.testedDirective.debounceScale.flush();
