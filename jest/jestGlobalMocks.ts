@@ -93,7 +93,7 @@ const spyOnShim = (object, method, accessType) => {
 
 global['spyOnProperty'] = (...args) => {
   warnSpyApi('spyOnProperty');
-  return spyOnShim.call(this, args);
+  return spyOnShim.call(this, ...args);
 };
 
 global['spyOn'] = spyOnShim;
