@@ -18,6 +18,8 @@ import {
   EnvironmentStat,
   MultiTimeseriesData,
   MultiTimeseriesResponse,
+  PodQuotaRequirement,
+  PodQuotaRequirementResponse,
   TimeseriesData,
   TimeseriesResponse
 } from './deployment-api.service';
@@ -342,6 +344,50 @@ describe('DeploymentApiService', () => {
 
       const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5');
       req.error(new ErrorEvent('Mock HTTP Error'));
+    });
+  });
+
+  // TODO uncomment once backend is available and implementation is updated
+  xdescribe('#getQuotaRequirementPerPod', () => {
+    it('should return result', function(this: TestContext, done: DoneFn): void {
+      const gb: number = Math.pow(1024, 3);
+      const httpResponse: PodQuotaRequirementResponse = {
+        data: {
+          limits: {
+            cpucores: 1,
+            memory: 0.5 * gb
+          }
+        }
+      } as PodQuotaRequirementResponse;
+      this.service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
+        first()
+      ).subscribe((data: PodQuotaRequirement): void => {
+          expect(data).toEqual(httpResponse.data.limits);
+          this.controller.verify();
+          done();
+        });
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/podlimits');
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush(httpResponse);
+    });
+
+    it('should report errors', function(this: TestContext, done: DoneFn): void {
+      this.service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
+        first()
+      ).subscribe(
+          () => done.fail('should throw error'),
+          () => {
+            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+            expect(TestBed.get(Logger).error).toHaveBeenCalled();
+            this.controller.verify();
+            done();
+          }
+        );
+
+      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/podlimits');
+      req.error(new ErrorEvent('Mock HTTP error'));
     });
   });
 
