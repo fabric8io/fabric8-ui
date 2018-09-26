@@ -71,7 +71,7 @@ describe('AboutModalComponent', () => {
 
   describe('#open', () => {
     it('should show the model when called', () => {
-      spyOn(component.staticModal, 'show');
+      jest.spyOn(component.staticModal, 'show').mockImplementation(() => {});
       component.open();
       expect(component.staticModal.show).toHaveBeenCalled();
     });
