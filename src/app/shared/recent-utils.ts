@@ -1,24 +1,16 @@
 import { ErrorHandler } from '@angular/core';
-import { Context, Space } from 'ngx-fabric8-wit';
+import { Space } from 'ngx-fabric8-wit';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
 
 export const RECENT_LENGTH: number = 8;
 
-export interface RecentData <T extends Context | Space> {
+export interface RecentData <T> {
   data: T[];
   isSaveRequired: boolean;
 }
 
-export function isContext(context: any): context is Context {
-  return (<Context> context.user !== undefined);
-}
-
-export function isSpace(space: any): space is Space {
-  return (<Space> space.id !== undefined);
-}
-
-export abstract class RecentUtils <T extends Context | Space> {
+export abstract class RecentUtils<T> {
 
   protected _recent: Subject<T[]>;
 
@@ -33,16 +25,12 @@ export abstract class RecentUtils <T extends Context | Space> {
     return this._recent;
   }
 
-  onBroadcastChanged(changed: T, recent: T[]): RecentData<T> {
-    let index: number = 0;
-    if (isContext(changed)) {
-      index = (recent as Context[]).findIndex((context: Context) => context.name === (changed as Context).name);
-    } else if (isSpace(changed)) {
-      index = (recent as Space[]).findIndex((space: Space): boolean => space.id === (changed as Space).id);
-    }
+  abstract compareElements<T>(t1: T, t2: T);
 
+  onBroadcastChanged(changed: T, recent: T[], compareFn: Function = this.compareElements): RecentData<T> {
+    let index: number = recent.findIndex((t: T) => compareFn(t, changed));
     if (index === 0) { // continue only if changed is new, or requires a move within recent
-      return { data: recent, isSaveRequired: false } as RecentData<T>;
+      return { data: recent, isSaveRequired: false };
     } else if (index > 0) { // if changed exists in recent, move it to the front
       recent.splice(index, 1);
       recent.unshift(changed);
@@ -53,28 +41,16 @@ export abstract class RecentUtils <T extends Context | Space> {
         recent.pop();
       }
     }
-    return { data: recent, isSaveRequired: true } as RecentData<T>;
+    return { data: recent, isSaveRequired: true };
   }
 
-  onBroadcastDeleted(deletedSpace: Space, recent: T[]): RecentData<T> {
-    let index: number = -1;
-    if (recent.length !== 0 && isContext(recent[0])) {
-      index = (recent as Context[]).findIndex((context: Context): boolean => {
-        if (context.space) {
-          return context.space.id === deletedSpace.id;
-        } else {
-          return false;
-        }
-      });
-    } else if (recent.length !== 0 && isSpace(recent[0])) {
-      index = (recent as Space[]).findIndex((space: Space): boolean => space.id === deletedSpace.id);
-    }
-
+  onBroadcastSpaceDeleted(deletedSpace: Space, recent: T[], compareFn: Function = this.compareElements): RecentData<T> {
+    let index: number = recent.findIndex((t: T) => compareFn(t, deletedSpace));
     if (index === -1) {
-      return { data: recent, isSaveRequired: false } as RecentData<T>;
+      return { data: recent, isSaveRequired: false };
     }
     recent.splice(index, 1);
-    return { data: recent, isSaveRequired: true } as RecentData<T>;
+    return { data: recent, isSaveRequired: true };
   }
 
   saveProfile(patch: ExtProfile): void {

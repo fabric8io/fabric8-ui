@@ -70,7 +70,7 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
         .pipe(
           withLatestFrom(this.recent),
           map(([deletedSpace, recentSpaces]): RecentData<Space> =>
-            this.onBroadcastDeleted(deletedSpace, recentSpaces)
+            this.onBroadcastSpaceDeleted(deletedSpace, recentSpaces)
           ),
           filter((recentData: RecentData<Space>) => recentData.isSaveRequired)
         )
@@ -78,6 +78,11 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
           this.saveRecentSpaces(recentData.data)
         )
     );
+  }
+
+  // implements recent-utils compareElements()
+  compareElements(s1: Space, s2: Space): boolean {
+    return s1.id === s2.id;
   }
 
   get current(): Observable<Space> {

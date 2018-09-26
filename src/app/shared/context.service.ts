@@ -140,7 +140,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
         .pipe(
           withLatestFrom(this._recent),
           map(([deletedSpace, recentContexts]: [Space, Context[]]): RecentData<Context> =>
-            this.onBroadcastDeleted(deletedSpace, recentContexts)
+            this.onBroadcastSpaceDeleted(deletedSpace, recentContexts, this.compareContextToSpace)
           ),
           filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired)
         )
@@ -148,7 +148,20 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
           this.saveRecentContexts(recentData.data)
         )
     );
+  }
 
+  // implements recent-utils compareElements()
+  compareElements(c1: Context, c2: Context): boolean {
+    return c1.name === c2.name;
+  }
+
+  // comparator function for space deletion events
+  compareContextToSpace(c: Context, s: Space): boolean {
+    if (c.space) {
+      return c.space.id === s.id;
+    } else {
+      return false;
+    }
   }
 
   get current(): Observable<Context> {
