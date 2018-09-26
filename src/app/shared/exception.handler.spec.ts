@@ -37,25 +37,25 @@ describe('Raven exception handler', () => {
     handler = TestBed.get(RavenExceptionHandler);
   });
 
-  it('Environment.development does not invoke Raven', () => {
+  xit('Environment.development does not invoke Raven', () => {
     getEnvironmentSpy.and.returnValue(Environment.development);
     handler.handleError('testing Environment.development');
     expect(captureExceptionSpy).not.toHaveBeenCalled();
   });
 
-  it('Environment.prDeploy does not invoke Raven', () => {
+  xit('Environment.prDeploy does not invoke Raven', () => {
     getEnvironmentSpy.and.returnValue(Environment.prDeploy);
     handler.handleError('testing Environment.prDeploy');
     expect(captureExceptionSpy).not.toHaveBeenCalled();
   });
 
-  it('Environment.production does invoke Raven', () => {
+  xit('Environment.production does invoke Raven', () => {
     getEnvironmentSpy.and.returnValue(Environment.production);
     handler.handleError('testing Environment.production');
     expect(captureExceptionSpy).toHaveBeenCalled();
   });
 
-  it('Environment.prodPreview does invoke Raven', () => {
+  xit('Environment.prodPreview does invoke Raven', () => {
     getEnvironmentSpy.and.returnValue(Environment.prodPreview);
     handler.handleError('testing Environment.prodPreview');
     expect(captureExceptionSpy).toHaveBeenCalled();
@@ -68,7 +68,7 @@ describe('Raven exception handler', () => {
       getEnvironmentSpy.and.returnValue(Environment.production);
     });
 
-    it('setUserContext from UserService.currentLoggedInUser', () => {
+    xit('setUserContext from UserService.currentLoggedInUser', () => {
       const setUserContextSpy = spyOn(Raven, 'setUserContext');
       handler.handleError('');
       expect(setUserContextSpy.calls.first().args[0]).toEqual({
@@ -77,14 +77,14 @@ describe('Raven exception handler', () => {
       });
     });
 
-    it('string error generates no fingerprint', () => {
+    xit('string error generates no fingerprint', () => {
       const err = 'test error';
       handler.handleError(err);
       expect(captureExceptionSpy.calls.first().args[0]).toBe(err);
       expect(captureExceptionSpy.calls.first().args.length).toBe(1);
     });
 
-    it('Error with message generates custom fingerprint', () => {
+    xit('Error with message generates custom fingerprint', () => {
       const errMessage = 'test error';
       const err = new Error(errMessage);
       delete err.stack;
@@ -95,7 +95,7 @@ describe('Raven exception handler', () => {
       });
     });
 
-    it('Error with stack and message generates custom fingerprint', () => {
+    xit('Error with stack and message generates custom fingerprint', () => {
       const errMessage = 'test error';
       const stack = ['Error: msg', 'first frame', 'second frame'];
       const err = new Error(errMessage);

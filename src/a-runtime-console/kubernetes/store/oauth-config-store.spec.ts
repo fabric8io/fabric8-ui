@@ -103,7 +103,7 @@ describe('OauthConfigStore', () => {
       oauthStore = TestBed.get(OAuthConfigStore);
     });
 
-    it('should load and set oauthconfig with openshift console on init', (done: DoneFn) => {
+    xit('should load and set oauthconfig with openshift console on init', (done: DoneFn) => {
       mockUserService.loggedInUser.connect();
       subscriptions.push(oauthStore.loading.subscribe((val: boolean) => {
         if (!val) {
