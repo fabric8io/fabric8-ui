@@ -22,7 +22,7 @@ import { ErrorService } from './error.service';
 class HostComponent { }
 
 describe('ErrorComponent', () => {
-  initContext(ErrorComponent, HostComponent, {
+  const testContext = initContext(ErrorComponent, HostComponent, {
     providers: [
       ErrorService,
       { provide: UserService, useValue: createMock(UserService) },
@@ -44,7 +44,7 @@ describe('ErrorComponent', () => {
     schemas: [ NO_ERRORS_SCHEMA ]
   });
 
-  it('should replace location state if a failed route is available', function(this: TestContext<ErrorComponent, HostComponent>) {
+  it('should replace location state if a failed route is available', function() {
     const location: Location = TestBed.get(Location);
     const errorService: ErrorService = TestBed.get(ErrorService);
     expect(location.replaceState).not.toHaveBeenCalled();
@@ -52,7 +52,7 @@ describe('ErrorComponent', () => {
     expect(location.replaceState).toHaveBeenCalledWith('/foo/path');
   });
 
-  it('should not replace location state if failed route is unavailable', function(this: TestContext<ErrorComponent, HostComponent>) {
+  it('should not replace location state if failed route is unavailable', function() {
     const location: Location = TestBed.get(Location);
     const errorService: ErrorService = TestBed.get(ErrorService);
     expect(location.replaceState).not.toHaveBeenCalled();

@@ -27,7 +27,7 @@ describe('PipelinesWidgetComponent', () => {
   let ctxSubj: Subject<Context> = new Subject<Context>();
   let fakeUserObs: Subject<User> = new Subject<User>();
 
-  initContext(PipelinesWidgetComponent, HostComponent, {
+  const testContext = initContext(PipelinesWidgetComponent, HostComponent, {
     imports: [LoadingWidgetModule, RouterModule],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
@@ -68,31 +68,31 @@ describe('PipelinesWidgetComponent', () => {
     ]
   });
 
-  it('should enable button if the user owns the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = true;
-    this.testedDirective.loading = false;
-    this.detectChanges();
+  it('should enable button if the user owns the space', function() {
+    testContext.testedDirective.userOwnsSpace = true;
+    testContext.testedDirective.loading = false;
+    testContext.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).not.toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).not.toBeNull();
   });
 
-  it('should disable button if the user does not own the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = false;
-    this.detectChanges();
+  it('should disable button if the user does not own the space', function() {
+    testContext.testedDirective.userOwnsSpace = false;
+    testContext.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).toBeNull();
   });
 
-  it('should not show the add button if the user does not own the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = false;
-    this.detectChanges();
-    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).toBeNull();
+  it('should not show the add button if the user does not own the space', function() {
+    testContext.testedDirective.userOwnsSpace = false;
+    testContext.detectChanges();
+    expect(testContext.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).toBeNull();
   });
 
-  it('should show the add button if the user owns the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = true;
-    this.testedDirective.loading = false;
-    this.detectChanges();
-    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).not.toBeNull();
+  it('should show the add button if the user owns the space', function() {
+    testContext.testedDirective.userOwnsSpace = true;
+    testContext.testedDirective.loading = false;
+    testContext.detectChanges();
+    expect(testContext.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).not.toBeNull();
   });
 });

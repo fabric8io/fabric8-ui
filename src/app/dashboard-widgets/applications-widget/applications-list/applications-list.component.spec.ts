@@ -165,7 +165,7 @@ describe('ApplicatonsListComponent', () => {
     };
   });
 
-  initContext(ApplicatonsListComponent, HostComponent, {
+  const testContext = initContext(ApplicatonsListComponent, HostComponent, {
     imports: [
       CommonModule
     ],
@@ -180,10 +180,10 @@ describe('ApplicatonsListComponent', () => {
   });
 
   describe('Applications list with build configs', () => {
-    it('Build configs should be set', function(this: TestingContext) {
-      expect(this.testedDirective.buildConfigs as any[]).toContain(buildConfig1);
-      expect(this.testedDirective.buildConfigs as any[]).toContain(buildConfig2);
-      expect(this.testedDirective.buildConfigs as any[]).toContain(buildConfig3);
+    it('Build configs should be set', function() {
+      expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig1);
+      expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig2);
+      expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig3);
     });
   });
 });

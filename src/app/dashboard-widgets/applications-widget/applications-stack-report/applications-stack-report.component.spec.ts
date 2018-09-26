@@ -75,7 +75,7 @@ describe('ApplicationsStackReportComponent', () => {
     };
   });
 
-  initContext(ApplicationsStackReportComponent, HostComponent, {
+  const testContext = initContext(ApplicationsStackReportComponent, HostComponent, {
     imports: [
       CommonModule
     ],
@@ -90,21 +90,21 @@ describe('ApplicationsStackReportComponent', () => {
   });
 
   describe('Applications stack report with build', () => {
-    it('Build should be set', function(this: TestingContext) {
-      expect(this.testedDirective.build as any).toEqual(build);
+    it('Build should be set', function() {
+      expect(testContext.testedDirective.build as any).toEqual(build);
     });
 
-    it('Pipelines should be set', function(this: TestingContext) {
-      expect(this.testedDirective.pipelineStages as any[]).toEqual(build.pipelineStages);
+    it('Pipelines should be set', function() {
+      expect(testContext.testedDirective.pipelineStages as any[]).toEqual(build.pipelineStages);
     });
 
-    it('Should call showStackReport', function(this: TestingContext) {
+    it('Should call showStackReport', function() {
       let mockElement = document.createElement('a');
-      spyOn(this.testedDirective.stackReport.nativeElement, 'querySelector').and.returnValue(mockElement);
+      spyOn(testContext.testedDirective.stackReport.nativeElement, 'querySelector').and.returnValue(mockElement);
       spyOn(mockElement, 'click');
 
-      // this.testedDirective.stackReport = mockElementRef;
-      this.testedDirective.showStackReport();
+      // testContext.testedDirective.stackReport = mockElementRef;
+      testContext.testedDirective.showStackReport();
       expect(mockElement.click).toHaveBeenCalled();
     });
   });

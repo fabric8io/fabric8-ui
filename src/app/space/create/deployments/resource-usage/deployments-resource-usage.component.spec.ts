@@ -24,11 +24,10 @@ class FakeResourceCardComponent {
 }
 
 describe('DeploymentsResourceUsageComponent', () => {
-  type Context = TestContext<DeploymentsResourceUsageComponent, HostComponent>;
 
   const mockEnvironmentData: string[] = ['envId1', 'envId2'];
 
-  initContext(DeploymentsResourceUsageComponent, HostComponent,
+  const testContext = initContext(DeploymentsResourceUsageComponent, HostComponent,
     {
       imports: [CollapseModule.forRoot()],
       declarations: [FakeResourceCardComponent]
@@ -39,9 +38,9 @@ describe('DeploymentsResourceUsageComponent', () => {
     }
   );
 
-  it('should create children components with proper environment objects', function(this: Context) {
+  it('should create children components with proper environment objects', function() {
     let arrayOfComponents: DebugElement[] =
-      this.fixture.debugElement.queryAll(By.directive(FakeResourceCardComponent));
+      testContext.fixture.debugElement.queryAll(By.directive(FakeResourceCardComponent));
     expect(arrayOfComponents.length).toEqual(mockEnvironmentData.length);
 
     mockEnvironmentData.forEach((envData: string, index: number) => {

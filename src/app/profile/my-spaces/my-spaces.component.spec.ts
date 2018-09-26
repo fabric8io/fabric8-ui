@@ -61,8 +61,8 @@ describe('MySpacesComponent', () => {
     value: 'zzz'
   };
 
-  mockAuthenticationService.getGitHubToken = {};
-  mockSpaceService.deleteSpace = {};
+  mockAuthenticationService.getGitHubToken = () => {};
+  mockSpaceService.deleteSpace = () => {};
   mockEventService.deleteSpaceSubject = jasmine.createSpyObj('deleteSpaceSubject', ['next']);
 
   beforeEach(() => {

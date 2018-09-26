@@ -125,7 +125,7 @@ describe('DeploymentDetailsComponent', () => {
     };
   });
 
-  initContext(DeploymentDetailsComponent, HostComponent, {
+  const testContext = initContext(DeploymentDetailsComponent, HostComponent, {
     imports: [CollapseModule.forRoot()],
     declarations: [
       FakeDeploymentsDonutComponent,
@@ -175,7 +175,7 @@ describe('DeploymentDetailsComponent', () => {
       component.netChartLoaded(netChart as any);
     });
 
-  it('should correctly call deployments service functions with the correct arguments', function(this: Context) {
+  it('should correctly call deployments service functions with the correct arguments', function() {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
 
     expect(mockSvc.getPods).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
@@ -184,23 +184,23 @@ describe('DeploymentDetailsComponent', () => {
     expect(mockSvc.getDeploymentNetworkStat).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
   });
 
-  it('should generate unique chartIds for each DeploymentDetailsComponent instance', function(this: Context) {
-    const detailsComponent: DeploymentDetailsComponent = this.testedDirective;
+  it('should generate unique chartIds for each DeploymentDetailsComponent instance', function() {
+    const detailsComponent: DeploymentDetailsComponent = testContext.testedDirective;
     expect(detailsComponent.cpuConfig.chartId).not.toBe(detailsComponent.memConfig.chartId);
   });
 
-  it('should create a child donut component with proper values', function(this: Context) {
+  it('should create a child donut component with proper values', function() {
     const arrayOfComponents: DebugElement[] =
-      this.fixture.debugElement.queryAll(By.directive(FakeDeploymentsDonutComponent));
+      testContext.fixture.debugElement.queryAll(By.directive(FakeDeploymentsDonutComponent));
     expect(arrayOfComponents.length).toEqual(1);
 
     const container: DeploymentDetailsComponent = arrayOfComponents[0].componentInstance;
     expect(container.applicationId).toEqual('mockAppId');
   });
 
-  it('should set hasPods to false for state without pods', function(this: Context, done: DoneFn) {
+  it('should set hasPods to false for state without pods', function(done: DoneFn) {
     TestBed.get(DeploymentsService).getPods().next({ total: 0, pods: [] });
-    this.testedDirective.hasPods.subscribe((b: boolean) => {
+    testContext.testedDirective.hasPods.subscribe((b: boolean) => {
       expect(b).toBeFalsy();
       done();
     });
@@ -209,8 +209,8 @@ describe('DeploymentDetailsComponent', () => {
   describe('cpu label', () => {
     let de: DebugElement;
 
-    beforeEach(function(this: Context) {
-      const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
+    beforeEach(function() {
+      const charts: DebugElement[] = testContext.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const cpuChart: DebugElement = charts[0];
       de = cpuChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
@@ -233,18 +233,18 @@ describe('DeploymentDetailsComponent', () => {
       expect(de.componentInstance.valueUpperBound).toEqual(2);
     });
 
-    it('should be set to OK (empty) class status', function(this: Context) {
+    it('should be set to OK (empty) class status', function() {
       expect(cpuChart.data.colors).toHaveBeenCalledWith({ CPU: '#0088ce' });
-      expect(this.testedDirective.cpuLabelClass).toEqual('');
-      expect(this.testedDirective.cpuChartClass).toEqual('');
+      expect(testContext.testedDirective.cpuLabelClass).toEqual('');
+      expect(testContext.testedDirective.cpuChartClass).toEqual('');
     });
   });
 
   describe('memory label', () => {
     let de: DebugElement;
 
-    beforeEach(function(this: Context) {
-      const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
+    beforeEach(function() {
+      const charts: DebugElement[] = testContext.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const memoryChart: DebugElement = charts[1];
       de = memoryChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
@@ -264,41 +264,41 @@ describe('DeploymentDetailsComponent', () => {
       expect(de.componentInstance.valueUpperBound).toEqual(4);
     });
 
-    it('should be set to WARN class status', function(this: Context) {
+    it('should be set to WARN class status', function() {
       expect(memChart.data.colors).toHaveBeenCalledWith({ Memory: '#ec7a08' });
-      expect(this.testedDirective.memLabelClass).toEqual('label-warn');
-      expect(this.testedDirective.memChartClass).toEqual('chart-warn');
+      expect(testContext.testedDirective.memLabelClass).toEqual('label-warn');
+      expect(testContext.testedDirective.memChartClass).toEqual('chart-warn');
     });
   });
 
   describe('usage message', () => {
-    it('should be an empty string when status is OK', function(this: Context) {
+    it('should be an empty string when status is OK', function() {
       const status: Subject<Status> = TestBed.get(DeploymentStatusService).getDeploymentAggregateStatus();
 
       status.next({ type: StatusType.OK, message: '' });
-      expect(this.testedDirective.usageMessage).toEqual('');
+      expect(testContext.testedDirective.usageMessage).toEqual('');
     });
 
-    it('should be "Nearing quota" when status is WARN', function(this: Context) {
+    it('should be "Nearing quota" when status is WARN', function() {
       const status: Subject<Status> = TestBed.get(DeploymentStatusService).getDeploymentAggregateStatus();
 
       status.next({ type: StatusType.WARN, message: '' });
-      expect(this.testedDirective.usageMessage).toEqual('Nearing quota');
+      expect(testContext.testedDirective.usageMessage).toEqual('Nearing quota');
     });
 
-    it('should be "Reached quota" when status is WARN', function(this: Context) {
+    it('should be "Reached quota" when status is WARN', function() {
       const status: Subject<Status> = TestBed.get(DeploymentStatusService).getDeploymentAggregateStatus();
 
       status.next({ type: StatusType.ERR, message: '' });
-      expect(this.testedDirective.usageMessage).toEqual('Reached quota');
+      expect(testContext.testedDirective.usageMessage).toEqual('Reached quota');
     });
   });
 
   describe('network label', () => {
     let de: DebugElement;
 
-    beforeEach(function(this: Context) {
-      const charts: DebugElement[] = this.fixture.debugElement.queryAll(By.css('.deployment-chart'));
+    beforeEach(function() {
+      const charts: DebugElement[] = testContext.fixture.debugElement.queryAll(By.css('.deployment-chart'));
       const networkChart: DebugElement = charts[2];
       de = networkChart.query(By.directive(FakeDeploymentGraphLabelComponent));
     });
@@ -323,11 +323,11 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   describe('sparkline data', () => {
-    it('should set CPU Y axis max to quota', function(this: Context) {
+    it('should set CPU Y axis max to quota', function() {
       expect(cpuChart.axis.max).toHaveBeenCalledWith({ y: 2 });
     });
 
-    it('should set CPU Y axis max to maximum value or maximum quota', function(this: Context) {
+    it('should set CPU Y axis max to maximum value or maximum quota', function() {
       TestBed.get(DeploymentsService).getDeploymentCpuStat().next([
         {
           used: 1,
@@ -349,11 +349,11 @@ describe('DeploymentDetailsComponent', () => {
       expect(cpuChart.axis.max).toHaveBeenCalledWith({ y: 200 });
     });
 
-    it('should set Memory Y axis max to quota', function(this: Context) {
+    it('should set Memory Y axis max to quota', function() {
       expect(memChart.axis.max).toHaveBeenCalledWith({ y: 4 });
     });
 
-    it('should set Memory Y axis max to maximum value or maximum quota', function(this: Context) {
+    it('should set Memory Y axis max to maximum value or maximum quota', function() {
       TestBed.get(DeploymentsService).getDeploymentMemoryStat().next([
         {
           used: 1,
@@ -381,7 +381,7 @@ describe('DeploymentDetailsComponent', () => {
   });
 
   describe('linechart data', () => {
-    it('should be rounded to whole numbers when units are bytes', function(this: Context) {
+    it('should be rounded to whole numbers when units are bytes', function() {
       TestBed.get(DeploymentsService).getDeploymentNetworkStat().next([
         {
           sent: new ScaledNetStat(1 * Math.pow(1024, 2), 1),
@@ -392,14 +392,14 @@ describe('DeploymentDetailsComponent', () => {
           received: new ScaledNetStat(200.234, 2)
         }
       ] as NetworkStat[]);
-      expect(this.testedDirective.netVal).toEqual(301);
-      expect(this.testedDirective.netData.xData).toEqual(['time', 1, 2]);
-      expect(this.testedDirective.netData.yData.length).toEqual(2);
-      expect(this.testedDirective.netData.yData[0][2]).toEqual(101);
-      expect(this.testedDirective.netData.yData[1][2]).toEqual(200);
+      expect(testContext.testedDirective.netVal).toEqual(301);
+      expect(testContext.testedDirective.netData.xData).toEqual(['time', 1, 2]);
+      expect(testContext.testedDirective.netData.yData.length).toEqual(2);
+      expect(testContext.testedDirective.netData.yData[0][2]).toEqual(101);
+      expect(testContext.testedDirective.netData.yData[1][2]).toEqual(200);
     });
 
-    it('should be rounded to tenths when units are larger than bytes', function(this: Context) {
+    it('should be rounded to tenths when units are larger than bytes', function() {
       TestBed.get(DeploymentsService).getDeploymentNetworkStat().next([
         {
           sent: new ScaledNetStat(1 * Math.pow(1024, 2), 1),
@@ -410,12 +410,12 @@ describe('DeploymentDetailsComponent', () => {
           received: new ScaledNetStat(45.67 * 1024, 2)
         }
       ] as NetworkStat[]);
-      expect(this.testedDirective.netVal).toEqual(58);
-      expect(this.testedDirective.netData.xData).toEqual(['time', 1, 2]);
-      expect(this.testedDirective.netData.yData.length).toEqual(2);
-      expect(this.testedDirective.netData.yData[0][2]).toEqual(12.3);
-      expect(this.testedDirective.netData.yData[1][2]).toEqual(45.7);
-      expect(this.testedDirective.netUnits).toEqual(MemoryUnit.KB);
+      expect(testContext.testedDirective.netVal).toEqual(58);
+      expect(testContext.testedDirective.netData.xData).toEqual(['time', 1, 2]);
+      expect(testContext.testedDirective.netData.yData.length).toEqual(2);
+      expect(testContext.testedDirective.netData.yData[0][2]).toEqual(12.3);
+      expect(testContext.testedDirective.netData.yData[1][2]).toEqual(45.7);
+      expect(testContext.testedDirective.netUnits).toEqual(MemoryUnit.KB);
     });
   });
 

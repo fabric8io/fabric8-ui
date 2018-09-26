@@ -55,7 +55,7 @@ describe('WorkItemsComponent', () => {
     { name: 'mock-space-14', id: 'mock-space-id-14', attributes: { name: 'mock-space-14'} }
   ];
 
-  initContext(WorkItemsComponent, HostComponent, {
+  const testContext = initContext(WorkItemsComponent, HostComponent, {
     declarations: [TakePipe],
     providers: [
       { provide: Contexts, useFactory: () => {
@@ -101,13 +101,13 @@ describe('WorkItemsComponent', () => {
   });
 
   describe('Combobox', () => {
-    it('should exist when > 0 spaces', function(this: Context) {
-      let el: DebugElement = this.fixture.debugElement.query(By.css('.work-item-dropdown')).nativeElement;
+    it('should exist when > 0 spaces', function() {
+      let el: DebugElement = testContext.fixture.debugElement.query(By.css('.work-item-dropdown')).nativeElement;
       expect(el).toBeDefined();
     });
 
-    it('should contain all the user\'s spaces and recent spaces', function(this: Context) {
-      let de: DebugElement[] = this.fixture.debugElement.queryAll(By.css('option'));
+    it('should contain all the user\'s spaces and recent spaces', function() {
+      let de: DebugElement[] = testContext.fixture.debugElement.queryAll(By.css('option'));
       // Spaces duplicated in both user and recent should only exist once
       // default 'Select a space ..' message + 13 mock user spaces + 1 mock recent space +  = 15 options
       expect(de.length).toEqual(15);
@@ -118,14 +118,14 @@ describe('WorkItemsComponent', () => {
       expect(de[14].nativeElement.textContent.trim()).toEqual(mockRecentSpaces[1].name);
     });
 
-    it('should limit the select size to 10 on a mousedown event', function(this: Context) {
-      let select = this.fixture.debugElement.query(By.css('select'));
+    it('should limit the select size to 10 on a mousedown event', function() {
+      let select = testContext.fixture.debugElement.query(By.css('select'));
       expect(select.attributes['size']).toBeDefined();
       expect(select.attributes['onmousedown']).toContain('this.size=10');
     });
 
-    it('should reset the select options size to 0 on change and blur', function(this: Context) {
-      let select = this.fixture.debugElement.query(By.css('select'));
+    it('should reset the select options size to 0 on change and blur', function() {
+      let select = testContext.fixture.debugElement.query(By.css('select'));
       expect(select.attributes['onchange']).toEqual('this.size=0;');
       expect(select.attributes['onblur']).toEqual('this.size=0;');
     });

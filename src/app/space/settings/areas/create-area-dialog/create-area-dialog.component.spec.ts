@@ -11,7 +11,7 @@ import { AreaCreationStatus, CreateAreaDialogComponent } from './create-area-dia
 class HostComponent {}
 
 describe('CreateAreaDialogComponent', () => {
-  type Context = TestContext<CreateAreaDialogComponent, HostComponent>;
+
   let mockAreaService: jasmine.SpyObj<AreaService> = jasmine.createSpyObj('AreaService', ['create']);
   mockAreaService.create.and.returnValue(observableOf({
     id: 'mock-id',
@@ -20,7 +20,7 @@ describe('CreateAreaDialogComponent', () => {
     }
   } as Area));
 
-  initContext(CreateAreaDialogComponent, HostComponent, {
+  const testContext = initContext(CreateAreaDialogComponent, HostComponent, {
     declarations: [NgForm, NgModel],
     providers: [
       { provide: AreaService, useValue: mockAreaService}
@@ -29,53 +29,53 @@ describe('CreateAreaDialogComponent', () => {
   });
 
   describe('#validateAreaName', () => {
-    it('should reset the current error state when called', function(this: Context) {
-      spyOn(this.testedDirective, 'resetErrors');
-      this.testedDirective.name = 'mock-name';
-      this.testedDirective.validateAreaName();
-      expect(this.testedDirective.resetErrors).toHaveBeenCalled();
+    it('should reset the current error state when called', function() {
+      spyOn(testContext.testedDirective, 'resetErrors');
+      testContext.testedDirective.name = 'mock-name';
+      testContext.testedDirective.validateAreaName();
+      expect(testContext.testedDirective.resetErrors).toHaveBeenCalled();
     });
 
-    it('should not set an error state if the name is valid', function(this: Context) {
-      spyOn(this.testedDirective, 'handleError');
-      this.testedDirective.host = jasmine.createSpyObj('ModalDirective', ['hide']);
-      this.testedDirective.name = 'mock-name';
-      this.testedDirective.validateAreaName();
-      this.testedDirective.createArea();
-      expect(this.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.OK);
-      expect(this.testedDirective.handleError).toHaveBeenCalledTimes(0);
+    it('should not set an error state if the name is valid', function() {
+      spyOn(testContext.testedDirective, 'handleError');
+      testContext.testedDirective.host = jasmine.createSpyObj('ModalDirective', ['hide']);
+      testContext.testedDirective.name = 'mock-name';
+      testContext.testedDirective.validateAreaName();
+      testContext.testedDirective.createArea();
+      expect(testContext.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.OK);
+      expect(testContext.testedDirective.handleError).toHaveBeenCalledTimes(0);
     });
 
-    it('should set the areaCreationStatus to EMPTY_NAME_FAILURE if the name is an empty string', function(this: Context) {
-      this.testedDirective.name = ' ';
-      this.testedDirective.validateAreaName();
-      expect(this.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.EMPTY_NAME_FAILURE);
+    it('should set the areaCreationStatus to EMPTY_NAME_FAILURE if the name is an empty string', function() {
+      testContext.testedDirective.name = ' ';
+      testContext.testedDirective.validateAreaName();
+      expect(testContext.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.EMPTY_NAME_FAILURE);
     });
 
-    it('should set the areaCreationStatus to EXCEED_LENGTH_FAILURE if the name is longer than 63 chars', function(this: Context) {
-      this.testedDirective.name = 'thisisanareanamethatisprettylongitsactuallymorethan63characters!';
-      this.testedDirective.validateAreaName();
-      expect(this.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.EXCEED_LENGTH_FAILURE);
+    it('should set the areaCreationStatus to EXCEED_LENGTH_FAILURE if the name is longer than 63 chars', function() {
+      testContext.testedDirective.name = 'thisisanareanamethatisprettylongitsactuallymorethan63characters!';
+      testContext.testedDirective.validateAreaName();
+      expect(testContext.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.EXCEED_LENGTH_FAILURE);
     });
   });
 
   describe('#handleError', () => {
-    it('should set the areaCreationStatus to UNIQUE_VALIDATION_FAILURE if a 409 error is recorded', function(this: Context) {
+    it('should set the areaCreationStatus to UNIQUE_VALIDATION_FAILURE if a 409 error is recorded', function() {
       let error: any = {
         errors: [{
           status: '409'
         }]
       };
-      this.testedDirective.handleError(error);
-      expect(this.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.UNIQUE_VALIDATION_FAILURE);
+      testContext.testedDirective.handleError(error);
+      expect(testContext.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.UNIQUE_VALIDATION_FAILURE);
     });
 
-    it('should set the areaCreationStatus to OK if there are no errors', function(this: Context) {
+    it('should set the areaCreationStatus to OK if there are no errors', function() {
       let error: any = {
         errors: []
       };
-      this.testedDirective.handleError(error);
-      expect(this.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.OK);
+      testContext.testedDirective.handleError(error);
+      expect(testContext.testedDirective.areaCreationStatus).toEqual(AreaCreationStatus.OK);
     });
   });
 

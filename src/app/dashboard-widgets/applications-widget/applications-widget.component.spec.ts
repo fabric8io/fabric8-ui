@@ -200,7 +200,7 @@ describe('ApplicationsWidgetComponent', () => {
     };
   });
 
-  initContext(ApplicationsWidgetComponent, HostComponent, {
+  const testContext = initContext(ApplicationsWidgetComponent, HostComponent, {
     imports: [
       CommonModule,
       LoadingWidgetModule,
@@ -241,77 +241,77 @@ describe('ApplicationsWidgetComponent', () => {
   });
 
   describe('Applications widget with build configs', () => {
-    it('Build configs should be available', function(this: TestingContext) {
-      expect(this.testedDirective.buildConfigsAvailable).toBeTruthy();
+    it('Build configs should be available', function() {
+      expect(testContext.testedDirective.buildConfigsAvailable).toBeTruthy();
     });
 
-    it('Build configs should be set', function(this: TestingContext) {
-      expect(this.testedDirective.buildConfigs as any[]).toContain(buildConfig1);
-      expect(this.testedDirective.buildConfigs as any[]).toContain(buildConfig2);
-      expect(this.testedDirective.buildConfigs as any[]).toContain(buildConfig3);
+    it('Build configs should be set', function() {
+      expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig1);
+      expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig2);
+      expect(testContext.testedDirective.buildConfigs as any[]).toContain(buildConfig3);
     });
 
-    it('Stage build configs should be set', function(this: TestingContext) {
-      expect(this.testedDirective.stageBuildConfigs as any[]).toContain(buildConfig1);
-      expect(this.testedDirective.stageBuildConfigs as any[]).toContain(buildConfig2);
-      expect(this.testedDirective.stageBuildConfigs as any[]).toContain(buildConfig3);
+    it('Stage build configs should be set', function() {
+      expect(testContext.testedDirective.stageBuildConfigs as any[]).toContain(buildConfig1);
+      expect(testContext.testedDirective.stageBuildConfigs as any[]).toContain(buildConfig2);
+      expect(testContext.testedDirective.stageBuildConfigs as any[]).toContain(buildConfig3);
     });
 
-    it('Run build configs should be set', function(this: TestingContext) {
-      expect(this.testedDirective.runBuildConfigs as any[]).toContain(buildConfig1);
-      expect(this.testedDirective.runBuildConfigs as any[]).not.toContain(buildConfig2);
-      expect(this.testedDirective.runBuildConfigs as any[]).toContain(buildConfig3);
+    it('Run build configs should be set', function() {
+      expect(testContext.testedDirective.runBuildConfigs as any[]).toContain(buildConfig1);
+      expect(testContext.testedDirective.runBuildConfigs as any[]).not.toContain(buildConfig2);
+      expect(testContext.testedDirective.runBuildConfigs as any[]).toContain(buildConfig3);
     });
 
-    it('Stage build configs to be sorted', function(this: TestingContext) {
-      expect(this.testedDirective.stageBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3, buildConfig2]);
+    it('Stage build configs to be sorted', function() {
+      expect(testContext.testedDirective.stageBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3, buildConfig2]);
     });
 
-    it('Run build configs to be sorted', function(this: TestingContext) {
-      expect(this.testedDirective.runBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3]);
+    it('Run build configs to be sorted', function() {
+      expect(testContext.testedDirective.runBuildConfigs as any[]).toEqual([buildConfig1, buildConfig3]);
     });
 
-    it('Empty build configs to not show empty state', function(this: TestingContext) {
-      this.hostComponent.userOwnsSpace = true;
-      this.detectChanges();
-      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
+    it('Empty build configs to not show empty state', function() {
+      testContext.hostComponent.userOwnsSpace = true;
+      testContext.detectChanges();
+      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
     });
 
-    it('Empty build configs to show empty state', function(this: TestingContext) {
-      this.hostComponent.userOwnsSpace = true;
-      this.testedDirective.buildConfigs.length = 0;
-      this.detectChanges();
-      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
+    it('Empty build configs to show empty state', function() {
+      testContext.hostComponent.userOwnsSpace = true;
+      testContext.testedDirective.buildConfigs.length = 0;
+      testContext.detectChanges();
+      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
     });
 
-    it('Empty stage and run build configs to show empty state', function(this: TestingContext) {
-      this.testedDirective.runBuildConfigs.length = 0;
-      this.testedDirective.stageBuildConfigs.length = 0;
-      this.detectChanges();
-      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).not.toBeNull();
+    it('Empty stage and run build configs to show empty state', function() {
+      testContext.testedDirective.runBuildConfigs.length = 0;
+      testContext.testedDirective.stageBuildConfigs.length = 0;
+      testContext.detectChanges();
+      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).not.toBeNull();
     });
 
-    it('Stage or run build configs not to show empty state', function(this: TestingContext) {
-      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).toBeNull();
+    it('Stage or run build configs not to show empty state', function() {
+      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-pipelines-link'))).toBeNull();
     });
   });
 
   describe('Applications widget without build configs', () => {
 
-    it('should enable buttons if the user owns the space', function(this: TestingContext) {
-      this.hostComponent.userOwnsSpace = true;
-      this.testedDirective.buildConfigs.length = 0;
-      this.detectChanges();
+    it('should enable buttons if the user owns the space', function() {
+      testContext.hostComponent.userOwnsSpace = true;
+      testContext.testedDirective.buildConfigs.length = 0;
+      testContext.detectChanges();
 
-      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
+      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).not.toBeNull();
     });
 
-    it('should disable buttons if the user does not own the space', function(this: TestingContext) {
-      this.hostComponent.userOwnsSpace = false;
-      this.testedDirective.buildConfigs.length = 0;
-      this.detectChanges();
+    it('should disable buttons if the user does not own the space', function() {
+      testContext.hostComponent.userOwnsSpace = false;
+      testContext.testedDirective.buildConfigs.length = 0;
+      testContext.detectChanges();
 
-      expect(this.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
+      expect(testContext.fixture.debugElement.query(By.css('#spacehome-applications-add-button'))).toBeNull();
     });
   });
 });

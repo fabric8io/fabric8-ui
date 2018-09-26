@@ -22,14 +22,12 @@ import {
   TimeseriesResponse
 } from './deployment-api.service';
 
-type TestContext = {
-  service: DeploymentApiService;
-  controller: HttpTestingController;
-};
-
 describe('DeploymentApiService', () => {
 
-  beforeEach(function(this: TestContext): void {
+  let service: DeploymentApiService;
+  let controller: HttpTestingController;
+
+  beforeEach(function(): void {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
@@ -60,12 +58,12 @@ describe('DeploymentApiService', () => {
         DeploymentApiService
       ]
     });
-    this.service = TestBed.get(DeploymentApiService);
-    this.controller = TestBed.get(HttpTestingController);
+    service = TestBed.get(DeploymentApiService);
+    controller = TestBed.get(HttpTestingController);
   });
 
   describe('#getEnvironments', (): void => {
-    it('should return result', function(this: TestContext, done: DoneFn): void {
+    it('should return result', function(done: DoneFn): void {
       const httpResponse: EnvironmentsResponse = {
         data: [
           {
@@ -84,40 +82,40 @@ describe('DeploymentApiService', () => {
           }
         ] as EnvironmentStat[]
       };
-      this.service.getEnvironments('foo spaceId').pipe(
+      service.getEnvironments('foo spaceId').pipe(
         first()
       ).subscribe((envs: EnvironmentStat[]): void => {
           expect(envs).toEqual(httpResponse.data);
-          this.controller.verify();
+          controller.verify();
           done();
         });
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/environments');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/environments');
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getEnvironments('foo spaceId').pipe(
+    it('should report errors', function(done: DoneFn): void {
+      service.getEnvironments('foo spaceId').pipe(
         first()
       ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
-            this.controller.verify();
+            controller.verify();
             done();
           }
         );
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/environments');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/environments');
       req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
   describe('#getApplications', (): void => {
-    it('should return result', function(this: TestContext, done: DoneFn): void {
+    it('should return result', function(done: DoneFn): void {
       const httpResponse: ApplicationsResponse = {
         data: {
           attributes: {
@@ -141,40 +139,40 @@ describe('DeploymentApiService', () => {
           }
         }
       } as ApplicationsResponse;
-      this.service.getApplications('foo spaceId').pipe(
+      service.getApplications('foo spaceId').pipe(
         first()
       ).subscribe((apps: Application[]): void => {
           expect(apps).toEqual(httpResponse.data.attributes.applications);
-          this.controller.verify();
+          controller.verify();
           done();
         });
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId');
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getApplications('foo spaceId').pipe(
+    it('should report errors', function(done: DoneFn): void {
+      service.getApplications('foo spaceId').pipe(
         first()
       ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
-            this.controller.verify();
+            controller.verify();
             done();
           }
         );
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId');
       req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
   describe('#getTimeseriesData', (): void => {
-    it('should return result', function(this: TestContext, done: DoneFn): void {
+    it('should return result', function(done: DoneFn): void {
       const httpResponse: MultiTimeseriesResponse = {
         data: {
           cores: [
@@ -197,40 +195,40 @@ describe('DeploymentApiService', () => {
           end: 2
         }
       } as MultiTimeseriesResponse;
-      this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2).pipe(
+      service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2).pipe(
         first()
       ).subscribe((data: MultiTimeseriesData): void => {
           expect(data).toEqual(httpResponse.data);
-          this.controller.verify();
+          controller.verify();
           done();
         });
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2');
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2).pipe(
+    it('should report errors', function(done: DoneFn): void {
+      service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2).pipe(
         first()
       ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
-            this.controller.verify();
+            controller.verify();
             done();
           }
         );
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/statseries?start=1&end=2');
       req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
   describe('#getLatestTimeseriesData', () => {
-    it('should return result', function(this: TestContext, done: DoneFn): void {
+    it('should return result', function(done: DoneFn): void {
       const httpResponse: TimeseriesResponse = {
         data: {
           attributes: {
@@ -249,100 +247,100 @@ describe('DeploymentApiService', () => {
           }
         }
       } as TimeseriesResponse;
-      this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId').pipe(
+      service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe((data: TimeseriesData): void => {
           expect(data).toEqual(httpResponse.data.attributes);
-          this.controller.verify();
+          controller.verify();
           done();
         });
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats');
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId').pipe(
+    it('should report errors', function(done: DoneFn): void {
+      service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
-            this.controller.verify();
+            controller.verify();
             done();
           }
         );
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/stats');
       req.error(new ErrorEvent('Mock HTTP error'));
     });
   });
 
   describe('#deleteDeployment', () => {
-    it('should return response', function(this: TestContext, done: DoneFn): void {
-      this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId').pipe(
+    it('should return response', function(done: DoneFn): void {
+      service.deleteDeployment('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe((): void => {
-          this.controller.verify();
+          controller.verify();
           done();
         });
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env');
       expect(req.request.method).toEqual('DELETE');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush('');
     });
 
-    it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.deleteDeployment('foo spaceId', 'stage env', 'foo appId').pipe(
+    it('should report errors', function(done: DoneFn): void {
+      service.deleteDeployment('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
-            this.controller.verify();
+            controller.verify();
             done();
           }
         );
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env');
       req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
 
   describe('#scalePods', () => {
-    it('should return response', function(this: TestContext, done: DoneFn): void {
-      this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5).pipe(
+    it('should return response', function(done: DoneFn): void {
+      service.scalePods('foo spaceId', 'stage env', 'foo appId', 5).pipe(
         first()
       ).subscribe((): void => {
-          this.controller.verify();
+          controller.verify();
           done();
         });
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5');
       expect(req.request.method).toEqual('PUT');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush('');
     });
 
-    it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.scalePods('foo spaceId', 'stage env', 'foo appId', 5).pipe(
+    it('should report errors', function(done: DoneFn): void {
+      service.scalePods('foo spaceId', 'stage env', 'foo appId', 5).pipe(
         first()
       ).subscribe(
           () => done.fail('should throw error'),
           () => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
-            this.controller.verify();
+            controller.verify();
             done();
           }
         );
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env?podCount=5');
       req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });

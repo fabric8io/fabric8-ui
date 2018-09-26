@@ -22,45 +22,45 @@ class HostComponent { }
 describe('DeleteDeploymentModal', (): void => {
   type TestingContext = TestContext<DeleteDeploymentModal, HostComponent>;
 
-  initContext(DeleteDeploymentModal, HostComponent, {
+  const testContext = initContext(DeleteDeploymentModal, HostComponent, {
     imports: [ModalModule.forRoot()]
   });
 
-  beforeEach(function(this: TestingContext): void {
-    spyOn(this.testedDirective.host, 'show');
-    spyOn(this.testedDirective.host, 'hide');
+  beforeEach(function(): void {
+    spyOn(testContext.testedDirective.host, 'show');
+    spyOn(testContext.testedDirective.host, 'hide');
   });
 
-  it('should be instantiable', function(this: TestingContext): void {
-    expect(this.testedDirective).toBeTruthy();
+  it('should be instantiable', function(): void {
+    expect(testContext.testedDirective).toBeTruthy();
   });
 
   describe('#show', (): void => {
-    it('should call host.show()', function(this: TestingContext): void {
-      expect(this.testedDirective.host.show).not.toHaveBeenCalled();
-      this.testedDirective.show();
-      expect(this.testedDirective.host.show).toHaveBeenCalled();
+    it('should call host.show()', function(): void {
+      expect(testContext.testedDirective.host.show).not.toHaveBeenCalled();
+      testContext.testedDirective.show();
+      expect(testContext.testedDirective.host.show).toHaveBeenCalled();
     });
   });
 
   describe('#hide', (): void => {
-    it('should call host.hide()', function(this: TestingContext): void {
-      expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-      this.testedDirective.hide();
-      expect(this.testedDirective.host.hide).toHaveBeenCalled();
+    it('should call host.hide()', function(): void {
+      expect(testContext.testedDirective.host.hide).not.toHaveBeenCalled();
+      testContext.testedDirective.hide();
+      expect(testContext.testedDirective.host.hide).toHaveBeenCalled();
     });
   });
 
   describe('#confirmDeletion', (): void => {
-    it('should call host.hide()', function(this: TestingContext): void {
-      expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-      this.testedDirective.confirmDeletion();
-      expect(this.testedDirective.host.hide).toHaveBeenCalled();
+    it('should call host.hide()', function(): void {
+      expect(testContext.testedDirective.host.hide).not.toHaveBeenCalled();
+      testContext.testedDirective.confirmDeletion();
+      expect(testContext.testedDirective.host.hide).toHaveBeenCalled();
     });
 
-    it('should emit deleteEvent', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.deleteEvent.pipe(first()).subscribe((): void => done());
-      this.testedDirective.confirmDeletion();
+    it('should emit deleteEvent', function(done: DoneFn): void {
+      testContext.testedDirective.deleteEvent.pipe(first()).subscribe((): void => done());
+      testContext.testedDirective.confirmDeletion();
     });
   });
 

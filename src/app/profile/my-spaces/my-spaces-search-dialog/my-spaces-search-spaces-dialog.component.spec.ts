@@ -38,7 +38,7 @@ class MockSpaceItem {
 describe('MySpacesSearchSpacesDialog', () => {
 
   type TestingContext = TestContext<MySpacesSearchSpacesDialog, HostComponent>;
-  initContext(MySpacesSearchSpacesDialog, HostComponent, {
+  const testContext = initContext(MySpacesSearchSpacesDialog, HostComponent, {
     imports: [
       CommonModule,
       FormsModule,
@@ -51,13 +51,13 @@ describe('MySpacesSearchSpacesDialog', () => {
     ]
   });
 
-  it('should be instantiable', function(this: TestingContext): void {
-    expect(this.testedDirective).toBeDefined();
+  it('should be instantiable', function(): void {
+    expect(testContext.testedDirective).toBeDefined();
   });
 
   describe('#init', () => {
-    it('should set spaces list to empty array', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.spaces.pipe(
+    it('should set spaces list to empty array', function(done: DoneFn): void {
+      testContext.testedDirective.spaces.pipe(
         first())
         .subscribe((spaces: Space[]): void => {
           expect(spaces).toEqual([]);
@@ -65,8 +65,8 @@ describe('MySpacesSearchSpacesDialog', () => {
         });
     });
 
-    it('should set totalCount to 0', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.totalCount.pipe(
+    it('should set totalCount to 0', function(done: DoneFn): void {
+      testContext.testedDirective.totalCount.pipe(
         first())
         .subscribe((count: number): void => {
           expect(count).toEqual(0);
@@ -74,8 +74,8 @@ describe('MySpacesSearchSpacesDialog', () => {
         });
     });
 
-    it('should set view state to INIT', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.viewState.pipe(
+    it('should set view state to INIT', function(done: DoneFn): void {
+      testContext.testedDirective.viewState.pipe(
         first())
         .subscribe((state: ViewState): void => {
           expect(state).toEqual(ViewState.INIT);
@@ -83,30 +83,30 @@ describe('MySpacesSearchSpacesDialog', () => {
         });
     });
 
-    it('should set search term to empty', function(this: TestingContext): void {
-      expect(this.testedDirective.searchTerm).toBe('');
+    it('should set search term to empty', function(): void {
+      expect(testContext.testedDirective.searchTerm).toBe('');
     });
   });
 
   describe('#clear', () => {
-    beforeEach(async(function(this: TestingContext): void {
+    beforeEach(async(function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.search.and.returnValue(observableOf([
         { name: 'foo-space' }
       ]));
       spaceService.getTotalCount.and.returnValue(observableOf(1));
-      this.testedDirective.searchTerm = 'mocksearch';
-      this.testedDirective.search();
-      this.testedDirective.initItems({ pageSize: 10 });
+      testContext.testedDirective.searchTerm = 'mocksearch';
+      testContext.testedDirective.search();
+      testContext.testedDirective.initItems({ pageSize: 10 });
     }));
 
-    it('should reset spaces list to empty array', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.spaces.pipe(
+    it('should reset spaces list to empty array', function(done: DoneFn): void {
+      testContext.testedDirective.spaces.pipe(
         first())
         .subscribe((spaces: Space[]): void => {
           expect(spaces).toEqual([{ name: 'foo-space' } as Space]);
-          this.testedDirective.clear();
-          this.testedDirective.spaces.pipe(
+          testContext.testedDirective.clear();
+          testContext.testedDirective.spaces.pipe(
             first()
           ).subscribe((spaces: Space[]): void => {
             expect(spaces).toEqual([]);
@@ -115,13 +115,13 @@ describe('MySpacesSearchSpacesDialog', () => {
         });
     });
 
-    it('should set totalCount to 0', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.totalCount.pipe(
+    it('should set totalCount to 0', function(done: DoneFn): void {
+      testContext.testedDirective.totalCount.pipe(
         first())
         .subscribe((count: number): void => {
           expect(count).toEqual(1);
-          this.testedDirective.clear();
-          this.testedDirective.totalCount.pipe(
+          testContext.testedDirective.clear();
+          testContext.testedDirective.totalCount.pipe(
             first()
           ).subscribe((count: number): void => {
             expect(count).toEqual(0);
@@ -130,13 +130,13 @@ describe('MySpacesSearchSpacesDialog', () => {
         });
     });
 
-    it('should set view state to INIT', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.viewState.pipe(
+    it('should set view state to INIT', function(done: DoneFn): void {
+      testContext.testedDirective.viewState.pipe(
         first())
         .subscribe((state: ViewState): void => {
           expect(state).toEqual(ViewState.SHOW);
-          this.testedDirective.clear();
-          this.testedDirective.viewState.pipe(
+          testContext.testedDirective.clear();
+          testContext.testedDirective.viewState.pipe(
             first()
           ).subscribe((state: ViewState): void => {
             expect(state).toEqual(ViewState.INIT);
@@ -145,40 +145,40 @@ describe('MySpacesSearchSpacesDialog', () => {
         });
     });
 
-    it('should reset search term', function(this: TestingContext): void {
-      expect(this.testedDirective.searchTerm).toEqual('mocksearch');
-      this.testedDirective.clear();
-      expect(this.testedDirective.searchTerm).toEqual('');
+    it('should reset search term', function(): void {
+      expect(testContext.testedDirective.searchTerm).toEqual('mocksearch');
+      testContext.testedDirective.clear();
+      expect(testContext.testedDirective.searchTerm).toEqual('');
     });
   });
 
   describe('#initItems', () => {
-    beforeEach(function(this: TestingContext): void {
+    beforeEach(function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.search.and.returnValue(observableOf([
         { name: 'foo-space' }
       ]));
       spaceService.getTotalCount.and.returnValue(observableOf(1));
-      this.testedDirective.searchTerm = 'mocksearch';
+      testContext.testedDirective.searchTerm = 'mocksearch';
     });
 
-    it('should set page size', fakeAsync(function(this: TestingContext): void {
+    it('should set page size', fakeAsync(function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       const pageSize: number = 123;
-      this.testedDirective.initItems({ pageSize });
-      this.testedDirective.search();
+      testContext.testedDirective.initItems({ pageSize });
+      testContext.testedDirective.search();
       tick();
-      this.testedDirective.spaces.pipe(
+      testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe(() => {
         expect(spaceService.search).toHaveBeenCalledWith(jasmine.any(String), pageSize);
       });
     }));
 
-    it('should set view state to LOADING', fakeAsync(function(this: TestingContext): void {
-      this.testedDirective.initItems({ pageSize: 10 });
+    it('should set view state to LOADING', fakeAsync(function(): void {
+      testContext.testedDirective.initItems({ pageSize: 10 });
       tick();
-      this.testedDirective.viewState.pipe(
+      testContext.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
         expect(state).toEqual(ViewState.LOADING);
@@ -187,27 +187,27 @@ describe('MySpacesSearchSpacesDialog', () => {
   });
 
   describe('#search', () => {
-    beforeEach(function(this: TestingContext): void {
+    beforeEach(function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.search.and.returnValue(observableOf([
         { name: 'foo-space' }
       ]));
       spaceService.getTotalCount.and.returnValue(observableOf(456));
-      this.testedDirective.searchTerm = ' mocksearch ';
+      testContext.testedDirective.searchTerm = ' mocksearch ';
     });
 
-    it('should call SpaceService#search with trimmed search term', fakeAsync(function(this: TestingContext): void {
+    it('should call SpaceService#search with trimmed search term', fakeAsync(function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       expect(spaceService.search).not.toHaveBeenCalled();
-      this.testedDirective.search();
+      testContext.testedDirective.search();
       const pageSize: number = 123;
-      this.testedDirective.initItems({ pageSize });
+      testContext.testedDirective.initItems({ pageSize });
       tick();
       expect(spaceService.search).toHaveBeenCalledWith('mocksearch', pageSize);
     }));
 
-    it('should call SpaceService#getTotalCount and update', fakeAsync(function(this: TestingContext): void {
-      this.testedDirective.totalCount.pipe(
+    it('should call SpaceService#getTotalCount and update', fakeAsync(function(): void {
+      testContext.testedDirective.totalCount.pipe(
         first())
         .subscribe((count: number): void => {
           expect(count).toBe(0);
@@ -215,62 +215,62 @@ describe('MySpacesSearchSpacesDialog', () => {
 
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       expect(spaceService.getTotalCount).not.toHaveBeenCalled();
-      this.testedDirective.search();
-      this.testedDirective.initItems({ pageSize: 123 });
+      testContext.testedDirective.search();
+      testContext.testedDirective.initItems({ pageSize: 123 });
       tick();
       expect(spaceService.getTotalCount).toHaveBeenCalled();
 
-      this.testedDirective.totalCount.pipe(
+      testContext.testedDirective.totalCount.pipe(
         first()
       ).subscribe((count: number): void => {
         expect(count).toBe(456);
       });
     }));
 
-    it('should set view state to SHOW when results are received', fakeAsync(function(this: TestingContext): void {
-      this.testedDirective.viewState.pipe(
+    it('should set view state to SHOW when results are received', fakeAsync(function(): void {
+      testContext.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
         expect(state).toEqual(ViewState.INIT);
       });
-      this.testedDirective.search();
-      this.testedDirective.initItems({ pageSize: 123 });
+      testContext.testedDirective.search();
+      testContext.testedDirective.initItems({ pageSize: 123 });
       tick();
-      this.testedDirective.viewState.pipe(
+      testContext.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
         expect(state).toEqual(ViewState.SHOW);
       });
     }));
 
-    it('should set view state to EMPTY when no results are received', fakeAsync(function(this: TestingContext): void {
+    it('should set view state to EMPTY when no results are received', fakeAsync(function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.search.and.returnValue(observableOf([]));
-      this.testedDirective.viewState.pipe(
+      testContext.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
         expect(state).toEqual(ViewState.INIT);
       });
-      this.testedDirective.search();
-      this.testedDirective.initItems({ pageSize: 123 });
+      testContext.testedDirective.search();
+      testContext.testedDirective.initItems({ pageSize: 123 });
       tick();
-      this.testedDirective.viewState.pipe(
+      testContext.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
         expect(state).toEqual(ViewState.EMPTY);
       });
     }));
 
-    it('should update spaces with received results', fakeAsync(function(this: TestingContext): void {
-      this.testedDirective.spaces.pipe(
+    it('should update spaces with received results', fakeAsync(function(): void {
+      testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe((spaces: Space[]): void => {
         expect(spaces).toEqual([]);
       });
-      this.testedDirective.search();
-      this.testedDirective.initItems({ pageSize: 123 });
+      testContext.testedDirective.search();
+      testContext.testedDirective.initItems({ pageSize: 123 });
       tick();
-      this.testedDirective.spaces.pipe(
+      testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe((spaces: Space[]): void => {
         expect(spaces).toEqual([ { name: 'foo-space' } as Space ]);
@@ -279,34 +279,34 @@ describe('MySpacesSearchSpacesDialog', () => {
   });
 
   describe('#fetchMoreSpaces', () => {
-    it('should append spaces to spaces list', function(this: TestingContext): void {
+    it('should append spaces to spaces list', function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.getMoreSearchResults.and.returnValue(observableOf([ { name: 'more-space' } ]));
 
-      this.testedDirective.spaces.pipe(
+      testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe((spaces: Space[]): void => {
         expect(spaces).toEqual([]);
       });
-      this.testedDirective.fetchMoreSpaces();
-      this.testedDirective.spaces.pipe(
+      testContext.testedDirective.fetchMoreSpaces();
+      testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe((spaces: Space[]): void => {
         expect(spaces).toEqual([ { name: 'more-space' } as Space ]);
       });
     });
 
-    it('should silently fail if no more spaces are found', function(this: TestingContext): void {
+    it('should silently fail if no more spaces are found', function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.getMoreSearchResults.and.returnValue(observableThrowError('No more spaces found'));
 
-      this.testedDirective.spaces.pipe(
+      testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe((spaces: Space[]): void => {
         expect(spaces).toEqual([]);
       });
-      this.testedDirective.fetchMoreSpaces();
-      this.testedDirective.spaces.pipe(
+      testContext.testedDirective.fetchMoreSpaces();
+      testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe((spaces: Space[]): void => {
         expect(spaces).toEqual([]);

@@ -32,9 +32,8 @@ import { CollaboratorsComponent } from './collaborators.component';
 class HostComponent { }
 
 describe('CollaboratorsComponent', () => {
-  type Ctx = TestContext<CollaboratorsComponent, HostComponent>;
 
-  initContext(CollaboratorsComponent, HostComponent, {
+  const testContext = initContext(CollaboratorsComponent, HostComponent, {
     imports: [
       BsDropdownModule.forRoot(),
       Fabric8WitModule,
@@ -66,19 +65,19 @@ describe('CollaboratorsComponent', () => {
     schemas: [ NO_ERRORS_SCHEMA ]
   });
 
-  it('should be instantiable', function(this: Ctx): void {
-    expect(this.testedDirective).toBeTruthy();
+  it('should be instantiable', function(): void {
+    expect(testContext.testedDirective).toBeTruthy();
   });
 
-  it('should assign context', function(this: Ctx, done: DoneFn): void {
+  it('should assign context', function(done: DoneFn): void {
     TestBed.get(ContextService).current.subscribe((context: Context): void => {
-      expect(this.testedDirective.context).toEqual(context);
+      expect(testContext.testedDirective.context).toEqual(context);
       done();
     });
   });
 
   describe('#initCollaborators', () => {
-    it('should retrieve, sort, and set initial list of collaborators', function(this: Ctx): void {
+    it('should retrieve, sort, and set initial list of collaborators', function(): void {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.getInitialBySpaceId.and.returnValue(observableOf([
         {
@@ -99,12 +98,12 @@ describe('CollaboratorsComponent', () => {
       ]));
 
       expect(collaboratorService.getInitialBySpaceId).not.toHaveBeenCalled();
-      expect(this.testedDirective.collaborators).toEqual([]);
+      expect(testContext.testedDirective.collaborators).toEqual([]);
 
-      this.testedDirective.initCollaborators({ pageSize: 123 });
+      testContext.testedDirective.initCollaborators({ pageSize: 123 });
 
       expect(collaboratorService.getInitialBySpaceId).toHaveBeenCalledWith('fake-space-id', 20);
-      expect(this.testedDirective.collaborators).toEqual([
+      expect(testContext.testedDirective.collaborators).toEqual([
         {
           attributes: {
             username: 'userA'
@@ -123,7 +122,7 @@ describe('CollaboratorsComponent', () => {
       ] as any[]);
     });
 
-    it('should handle errors', function(this: Ctx) {
+    it('should handle errors', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.getInitialBySpaceId.and.returnValue(observableThrowError('some_error'));
 
@@ -133,17 +132,17 @@ describe('CollaboratorsComponent', () => {
       const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       logger.error.and.stub();
 
-      this.testedDirective.initCollaborators({});
+      testContext.testedDirective.initCollaborators({});
 
       expect(collaboratorService.getInitialBySpaceId).toHaveBeenCalled();
-      expect(this.testedDirective.collaborators).toEqual([]);
+      expect(testContext.testedDirective.collaborators).toEqual([]);
       expect(errorHandler.handleError).toHaveBeenCalledWith('some_error');
       expect(logger.error).toHaveBeenCalledWith('some_error');
     });
   });
 
   describe('#fetchMoreCollaborators', () => {
-    it('should add and sort additional collaborators', function(this: Ctx) {
+    it('should add and sort additional collaborators', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.getNextCollaborators.and.returnValue(observableOf([
         {
@@ -164,9 +163,9 @@ describe('CollaboratorsComponent', () => {
       ]));
 
       expect(collaboratorService.getNextCollaborators).not.toHaveBeenCalled();
-      expect(this.testedDirective.collaborators).toEqual([]);
+      expect(testContext.testedDirective.collaborators).toEqual([]);
 
-      this.testedDirective.collaborators = [
+      testContext.testedDirective.collaborators = [
         {
           attributes: {
             username: 'userD'
@@ -174,10 +173,10 @@ describe('CollaboratorsComponent', () => {
         }
       ] as User[];
 
-      this.testedDirective.fetchMoreCollaborators({});
+      testContext.testedDirective.fetchMoreCollaborators({});
 
       expect(collaboratorService.getNextCollaborators).toHaveBeenCalled();
-      expect(this.testedDirective.collaborators).toEqual([
+      expect(testContext.testedDirective.collaborators).toEqual([
         {
           attributes: {
             username: 'userA'
@@ -201,7 +200,7 @@ describe('CollaboratorsComponent', () => {
       ] as any[]);
     });
 
-    it('should handle errors', function(this: Ctx) {
+    it('should handle errors', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.getNextCollaborators.and.returnValue(observableThrowError('some_error'));
 
@@ -211,20 +210,20 @@ describe('CollaboratorsComponent', () => {
       const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       logger.error.and.stub();
 
-      this.testedDirective.fetchMoreCollaborators({});
+      testContext.testedDirective.fetchMoreCollaborators({});
 
       expect(collaboratorService.getNextCollaborators).toHaveBeenCalled();
-      expect(this.testedDirective.collaborators).toEqual([]);
+      expect(testContext.testedDirective.collaborators).toEqual([]);
       expect(errorHandler.handleError).toHaveBeenCalledWith('some_error');
       expect(logger.error).toHaveBeenCalledWith('some_error');
     });
   });
 
   describe('#addCollaboratorsToParent', () => {
-    it('should add and sort new collaborators', function(this: Ctx) {
-      expect(this.testedDirective.collaborators).toEqual([]);
+    it('should add and sort new collaborators', function() {
+      expect(testContext.testedDirective.collaborators).toEqual([]);
 
-      this.testedDirective.collaborators = [
+      testContext.testedDirective.collaborators = [
         {
           id: '1',
           attributes: {
@@ -233,7 +232,7 @@ describe('CollaboratorsComponent', () => {
         }
       ] as User[];
 
-      this.testedDirective.addCollaboratorsToParent([
+      testContext.testedDirective.addCollaboratorsToParent([
         {
           id: '3',
           attributes: {
@@ -248,7 +247,7 @@ describe('CollaboratorsComponent', () => {
         }
       ] as User[]);
 
-      expect(this.testedDirective.collaborators).toEqual([
+      expect(testContext.testedDirective.collaborators).toEqual([
         {
           id: '1',
           attributes: {
@@ -272,29 +271,29 @@ describe('CollaboratorsComponent', () => {
   });
 
   describe('removeUser', () => {
-    it('should send remove request to service', function(this: Ctx) {
+    it('should send remove request to service', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.removeCollaborator.and.returnValue(observableOf('unused'));
 
-      spyOn(this.testedDirective.modalDelete, 'show');
-      spyOn(this.testedDirective.modalDelete, 'hide');
+      spyOn(testContext.testedDirective.modalDelete, 'show');
+      spyOn(testContext.testedDirective.modalDelete, 'hide');
 
-      expect(this.testedDirective.modalDelete.show).not.toHaveBeenCalled();
-      this.testedDirective.confirmUserRemove({
+      expect(testContext.testedDirective.modalDelete.show).not.toHaveBeenCalled();
+      testContext.testedDirective.confirmUserRemove({
         id: '1',
         attributes: {
           username: 'userA'
         }
       } as User);
-      expect(this.testedDirective.modalDelete.show).toHaveBeenCalled();
+      expect(testContext.testedDirective.modalDelete.show).toHaveBeenCalled();
 
-      expect(this.testedDirective.modalDelete.hide).not.toHaveBeenCalled();
-      this.testedDirective.removeUser();
-      expect(this.testedDirective.modalDelete.hide).toHaveBeenCalled();
+      expect(testContext.testedDirective.modalDelete.hide).not.toHaveBeenCalled();
+      testContext.testedDirective.removeUser();
+      expect(testContext.testedDirective.modalDelete.hide).toHaveBeenCalled();
       expect(collaboratorService.removeCollaborator).toHaveBeenCalledWith('fake-space-id', '1');
     });
 
-    it('should handle errors', function(this: Ctx) {
+    it('should handle errors', function() {
       const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
       collaboratorService.removeCollaborator.and.returnValue(observableThrowError('some_error'));
 
@@ -304,13 +303,13 @@ describe('CollaboratorsComponent', () => {
       const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       logger.error.and.stub();
 
-      this.testedDirective.confirmUserRemove({
+      testContext.testedDirective.confirmUserRemove({
         id: '1',
         attributes: {
           username: 'userA'
         }
       } as User);
-      this.testedDirective.removeUser();
+      testContext.testedDirective.removeUser();
 
       expect(collaboratorService.removeCollaborator).toHaveBeenCalled();
       expect(errorHandler.handleError).toHaveBeenCalledWith('some_error');

@@ -168,10 +168,10 @@ describe('CodebasesComponent', () => {
         return observableOf(details);
       } else if (url === 'https://github.com/bar-org/bar-project.git') {
         const details: GitHubRepoDetails = new GitHubRepoDetails();
-        details.html_url = 'https://github.com/foo-org/foo-project/html';
+        details.html_url = 'https://github.com/bar-org/bar-project/html';
         details.full_name = 'Foo Project';
-        details.created_at = '2010-04-07T10:12:58Z';
-        details.pushed_at = '2010-04-07T10:12:58Z';
+        details.created_at = '2010-04-07T10:10:58Z';
+        details.pushed_at = '2010-04-07T10:10:58Z';
         return observableOf(details);
       } else if (url === 'https://github.com/foo-org/bar-project.git') {
         return observableThrowError(new Error('404 error'));
@@ -197,7 +197,7 @@ describe('CodebasesComponent', () => {
     TestBed.overrideProvider(GitHubService, { useFactory: () => gitHubService, deps: [] });
   }));
 
-  initContext(CodebasesComponent, HostComponent, {
+  const testContext = initContext(CodebasesComponent, HostComponent, {
     providers: [
       { provide: Broadcaster, useFactory: () => broadcaster },
       { provide: Contexts, useFactory: () => contexts },
@@ -222,7 +222,7 @@ describe('CodebasesComponent', () => {
   });
 
   describe('GitHub repo details', () => {
-    it('should handle Codebases where GitHub repo no longer exists', function(this: TestingContext) {
+    it('should handle Codebases where GitHub repo no longer exists', function() {
       broadcastSubject.next();
       codebasesSubject.next([
         {
@@ -238,16 +238,16 @@ describe('CodebasesComponent', () => {
       ]);
       codebasesSubject.complete();
 
-      expect(this.testedDirective.allCodebases.length).toEqual(2);
+      expect(testContext.testedDirective.allCodebases.length).toEqual(2);
 
-      const first: Codebase = this.testedDirective.allCodebases[0];
+      const first: Codebase = testContext.testedDirective.allCodebases[0];
       expect(first.attributes.url).toEqual('https://github.com/foo-org/foo-project.git');
       expect(first.gitHubRepo.htmlUrl).toEqual('https://github.com/foo-org/foo-project/html');
       expect(first.gitHubRepo.fullName).toEqual('Foo Project');
       expect(first.gitHubRepo.createdAt).toEqual('2011-04-07T10:12:58Z');
       expect(first.gitHubRepo.pushedAt).toEqual('2011-04-07T10:12:58Z');
 
-      const second: Codebase = this.testedDirective.allCodebases[1];
+      const second: Codebase = testContext.testedDirective.allCodebases[1];
       expect(second.attributes.url).toEqual('https://github.com/foo-org/bar-project.git');
       expect(second.gitHubRepo).not.toBeDefined();
     });
@@ -266,18 +266,18 @@ describe('CodebasesComponent', () => {
         {
           name: 'beta',
           attributes: {
-            url: 'https://github.com/foo-org/foo-project.git'
+            url: 'https://github.com/bar-org/bar-project.git'
           }
         } as Codebase
       ]);
       codebasesSubject.complete();
     });
 
-    it('should filter codebases by name', function(this: TestingContext) {
-      expect(this.testedDirective.allCodebases.length).toEqual(2);
-      expect(this.testedDirective.codebases[0].name).toBe('alpha');
-      expect(this.testedDirective.codebases[1].name).toBe('beta');
-      this.testedDirective.filterChange({
+    it('should filter codebases by name', function() {
+      expect(testContext.testedDirective.allCodebases.length).toEqual(2);
+      expect(testContext.testedDirective.codebases[0].name).toBe('alpha');
+      expect(testContext.testedDirective.codebases[1].name).toBe('beta');
+      testContext.testedDirective.filterChange({
         appliedFilters: [
           {
             field: {
@@ -288,8 +288,8 @@ describe('CodebasesComponent', () => {
         ]
       } as FilterEvent);
 
-      expect(this.testedDirective.codebases.length).toEqual(1);
-      expect(this.testedDirective.codebases[0].name).toBe('beta');
+      expect(testContext.testedDirective.codebases.length).toEqual(1);
+      expect(testContext.testedDirective.codebases[0].name).toBe('beta');
     });
   });
 
@@ -306,58 +306,58 @@ describe('CodebasesComponent', () => {
         {
           name: 'beta',
           attributes: {
-            url: 'https://github.com/foo-org/foo-project.git'
+            url: 'https://github.com/bar-org/bar-project.git'
           }
         } as Codebase
       ]);
       codebasesSubject.complete();
     });
 
-    it('should sort codebases by name', function(this: TestingContext) {
-      expect(this.testedDirective.allCodebases.length).toEqual(2);
-      expect(this.testedDirective.codebases[0].name).toBe('alpha');
-      expect(this.testedDirective.codebases[1].name).toBe('beta');
-      this.testedDirective.sortChange({
+    it('should sort codebases by name', function() {
+      expect(testContext.testedDirective.allCodebases.length).toEqual(2);
+      expect(testContext.testedDirective.codebases[0].name).toBe('alpha');
+      expect(testContext.testedDirective.codebases[1].name).toBe('beta');
+      testContext.testedDirective.sortChange({
         field: {
           id: 'name',
           sortType: 'alpha'
         } as SortField,
         isAscending: false
       } as SortEvent);
-      expect(this.testedDirective.codebases[0].name).toBe('beta');
-      expect(this.testedDirective.codebases[1].name).toBe('alpha');
+      expect(testContext.testedDirective.codebases[0].name).toBe('beta');
+      expect(testContext.testedDirective.codebases[1].name).toBe('alpha');
     });
 
-    it('should sort codebases by repository created at', function(this: TestingContext) {
-      expect(this.testedDirective.allCodebases.length).toEqual(2);
-      expect(this.testedDirective.codebases[0].name).toBe('alpha');
-      expect(this.testedDirective.codebases[1].name).toBe('beta');
+    it('should sort codebases by repository created at', function() {
+      expect(testContext.testedDirective.allCodebases.length).toEqual(2);
+      expect(testContext.testedDirective.codebases[0].name).toBe('alpha');
+      expect(testContext.testedDirective.codebases[1].name).toBe('beta');
 
-      this.testedDirective.sortChange({
+      testContext.testedDirective.sortChange({
         field: {
           id: 'createdAt',
           sortType: 'numeric'
         } as SortField,
         isAscending: true
       } as SortEvent);
-      expect(this.testedDirective.codebases[0].name).toBe('beta');
-      expect(this.testedDirective.codebases[1].name).toBe('alpha');
+      expect(testContext.testedDirective.codebases[0].name).toBe('beta');
+      expect(testContext.testedDirective.codebases[1].name).toBe('alpha');
     });
 
-    it('should sort codebases by repository pushed at', function(this: TestingContext) {
-      expect(this.testedDirective.allCodebases.length).toEqual(2);
-      expect(this.testedDirective.codebases[0].name).toBe('alpha');
-      expect(this.testedDirective.codebases[1].name).toBe('beta');
+    it('should sort codebases by repository pushed at', function() {
+      expect(testContext.testedDirective.allCodebases.length).toEqual(2);
+      expect(testContext.testedDirective.codebases[0].name).toBe('alpha');
+      expect(testContext.testedDirective.codebases[1].name).toBe('beta');
 
-      this.testedDirective.sortChange({
+      testContext.testedDirective.sortChange({
         field: {
           id: 'pushedAt',
           sortType: 'numeric'
         } as SortField,
         isAscending: true
       } as SortEvent);
-      expect(this.testedDirective.codebases[0].name).toBe('beta');
-      expect(this.testedDirective.codebases[1].name).toBe('alpha');
+      expect(testContext.testedDirective.codebases[0].name).toBe('beta');
+      expect(testContext.testedDirective.codebases[1].name).toBe('alpha');
     });
   });
 });

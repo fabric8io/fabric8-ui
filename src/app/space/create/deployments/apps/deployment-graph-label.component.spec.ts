@@ -19,12 +19,12 @@ describe('DeploymentGraphLabel', () => {
     component.type = 'type';
     component.ngOnChanges(emptyChanges);
     expect(component.label).toEqual(`${value} ${dataMeasure}`);
+  });
 
-    it('should set the label to N/A when given an undefined value after it has a valid label', () => {
-      component.value = undefined;
-      component.ngOnChanges(emptyChanges);
-      expect(component.label).toEqual('N/A');
-    });
+  it('should set the label to N/A when given an undefined value after it has a valid label', () => {
+    component.value = undefined;
+    component.ngOnChanges(emptyChanges);
+    expect(component.label).toEqual('N/A');
   });
 
   it('should have the expected label when a proper value and upper bound are provided', () => {

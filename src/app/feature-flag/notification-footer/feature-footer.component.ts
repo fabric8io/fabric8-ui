@@ -3,7 +3,7 @@ import {
   OnDestroy,
   OnInit, ViewChild, ViewEncapsulation
 } from '@angular/core';
-import { TooltipDirective } from 'ngx-bootstrap/tooltip/tooltip.directive';
+import { TooltipDirective } from 'ngx-bootstrap/tooltip';
 import { FeatureFlagConfig } from 'ngx-feature-flag';
 import { Subscription } from 'rxjs';
 import 'rxjs/operators/map';

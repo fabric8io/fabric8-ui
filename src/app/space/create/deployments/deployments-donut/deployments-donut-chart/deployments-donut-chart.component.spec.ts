@@ -39,55 +39,54 @@ class TestHostComponent {
 }
 
 describe('DeploymentsDonutChartComponent', () => {
-  type Context = TestContext<DeploymentsDonutChartComponent, TestHostComponent>;
-  initContext(DeploymentsDonutChartComponent, TestHostComponent);
+  const testContext = initContext(DeploymentsDonutChartComponent, TestHostComponent);
 
-  it('should set unique chartId', function(this: Context) {
-    expect(this.testedDirective.chartId).toMatch('deployments-donut-chart.*');
+  it('should set unique chartId', function() {
+    expect(testContext.testedDirective.chartId).toMatch(/deployments\-donut\-chart.*/);
   });
 
-  it('should not show mini text', function(this: Context) {
-    expect(this.testedDirective.mini).toBe(false);
-    let text = this.fixture.debugElement.query(By.css('deployments-donut-chart-mini-text'));
+  it('should not show mini text', function() {
+    expect(testContext.testedDirective.mini).toBe(false);
+    let text = testContext.fixture.debugElement.query(By.css('deployments-donut-chart-mini-text'));
     expect(text).toBeFalsy();
   });
 
   describe('Mini chart', () => {
-    beforeEach(function(this: Context) {
-      this.hostComponent.mini = true;
-      this.detectChanges();
+    beforeEach(function() {
+      testContext.hostComponent.mini = true;
+      testContext.detectChanges();
     });
 
-    it('should show mini text', function(this: Context) {
-      expect(this.testedDirective.mini).toBe(true);
-      let text = this.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
+    it('should show mini text', function() {
+      expect(testContext.testedDirective.mini).toBe(true);
+      let text = testContext.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
       expect(text).toBeTruthy();
       let textEl = text.nativeElement;
-      expect(textEl.innerText).toEqual('2 pods');
+      expect(textEl.textContent.trim()).toEqual('2 pods');
     });
 
-    it('should show pods status', function(this: Context) {
-      let runningText = this.fixture.debugElement.query(By.css('#pod_status_Running'));
+    it('should show pods status', function() {
+      let runningText = testContext.fixture.debugElement.query(By.css('#pod_status_Running'));
       expect(runningText).toBeTruthy();
-      expect(runningText.nativeElement.innerText).toBe('1 Running');
+      expect(runningText.nativeElement.textContent.trim()).toBe('1 Running');
 
-      let terminating = this.fixture.debugElement.query(By.css('#pod_status_Terminating'));
+      let terminating = testContext.fixture.debugElement.query(By.css('#pod_status_Terminating'));
       expect(terminating).toBeTruthy();
-      expect(terminating.nativeElement.innerText).toBe('1 Terminating');
+      expect(terminating.nativeElement.textContent.trim()).toBe('1 Terminating');
     });
 
     describe('Mini Idle chart', () => {
-      beforeEach(function(this: Context) {
-        this.hostComponent.isIdled = true;
-        this.detectChanges();
+      beforeEach(function() {
+        testContext.hostComponent.isIdled = true;
+        testContext.detectChanges();
       });
 
-      it('should show idled text', function(this: Context) {
-        expect(this.testedDirective.idled).toBe(true);
-        let idle = this.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
+      it('should show idled text', function() {
+        expect(testContext.testedDirective.idled).toBe(true);
+        let idle = testContext.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
         expect(idle).toBeTruthy();
         let idleEl = idle.nativeElement;
-        expect(idleEl.innerText).toEqual('Idle');
+        expect(idleEl.textContent.trim()).toEqual('Idle');
       });
     });
   });

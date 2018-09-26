@@ -69,7 +69,7 @@ describe('Codebases Item Details Component', () => {
     spyOn(comp, 'updateWorkspacesPoll');
   });
 
-  it('Init component fetches workspaces', async(() => {
+  it('Init component fetches workspaces', () => {
     // given
     fixture.detectChanges();
 
@@ -80,9 +80,9 @@ describe('Codebases Item Details Component', () => {
     expect(workspacesServiceMock.getWorkspaces).toHaveBeenCalled();
     expect(comp.updateWorkspacesPoll).toHaveBeenCalled();
     expect(broadcasterMock.on).toHaveBeenCalled();
-  }));
+  });
 
-  it('Create workspace', async(() => {
+  it('Create workspace', () => {
     // given
     workspacesServiceMock.createWorkspace.and.returnValue(observableOf(expectedWorkspace));
     const notificationAction = { name: 'created' };
@@ -95,9 +95,9 @@ describe('Codebases Item Details Component', () => {
     // then
     expect(workspacesServiceMock.createWorkspace).toHaveBeenCalled();
     expect(notificationMock.message).toHaveBeenCalled();
-  }));
+  });
 
-  it('Create Workspace with capacity full', async(() => {
+  it('Create Workspace with capacity full', () => {
     // given
     let comp = fixture.componentInstance;
     cheServiceMock.getState.and.returnValue(observableOf({clusterFull: true, multiTenant: true, running: true}));
@@ -109,9 +109,9 @@ describe('Codebases Item Details Component', () => {
     fixture.detectChanges();
     // then
     expect(notificationMock.message).toHaveBeenCalled();
-  }));
+  });
 
-  it('Open workspace with valid url', async(() => {
+  it('Open workspace with valid url', () => {
     // given
     const workspaceLinks = {
       links: {
@@ -127,9 +127,9 @@ describe('Codebases Item Details Component', () => {
 
     // then
     expect(windowServiceMock.open).toHaveBeenCalled();
-  }));
+  });
 
-  it('Open workspace with capacity full', async(() => {
+  it('Open workspace with capacity full', () => {
     // given
     cheServiceMock.getState.and.returnValue(observableOf({clusterFull: true, multiTenant: true, running: true}));
     const notificationAction = { name: 'ERROR' };
@@ -141,5 +141,5 @@ describe('Codebases Item Details Component', () => {
 
     // then
     expect(notificationMock.message).toHaveBeenCalled();
-  }));
+  });
 });

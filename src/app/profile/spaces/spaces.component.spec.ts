@@ -37,9 +37,9 @@ describe('SpacesComponent', () => {
     }
   });
   mockEventService.deleteSpaceSubject = new Subject<String>();
-  mockSpaceService.deleteSpace = {};
-  mockSpaceService.getSpacesByUser = {};
-  mockSpaceService.getMoreSpacesByUser = {};
+  mockSpaceService.deleteSpace = () => {};
+  mockSpaceService.getSpacesByUser = () => {};
+  mockSpaceService.getMoreSpacesByUser = () => {};
 
   beforeEach(() => {
     featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);

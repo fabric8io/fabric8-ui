@@ -26,6 +26,7 @@
     "strictNullChecks": false,
     "target": "es5",
     "types": [
+      "jest",
       "jasmine",
       "node",
       "protractor",

@@ -3,7 +3,7 @@ import { Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { UserService } from 'ngx-login-client';
 import { empty as observableEmpty, Observable,  of ,  throwError as observableThrowError } from 'rxjs';
-import { initContext, TestContext } from '../../../../testing/test-context';
+import { initContext, TestContext } from 'testing/test-context';
 import { ProviderService } from '../../../shared/account/provider.service';
 import { ConnectedAccountsComponent } from './connected-accounts.component';
 
@@ -43,21 +43,21 @@ describe('Connected Accounts Component', () => {
       providersMock.getOpenShiftStatus.and.returnValue(of({'username': expectedOsoUser}));
     });
 
-    initContext(ConnectedAccountsComponent, SampleTestComponent,  {
+    const testContext = initContext(ConnectedAccountsComponent, SampleTestComponent,  {
       providers: [ { provide: AuthenticationService, useValue: authMock },
         { provide: Contexts, useValue: contextsMock },
         { provide: UserService, useValue: userServiceMock },
         { provide: ProviderService, useValue: providersMock }]
     });
 
-    it('should have absence of GitHub connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('GitHub Disconnected');
+    it('should have absence of GitHub connection indicated', function() {
+      const actualText = testContext.testedElement.textContent;
+      expect(actualText).toMatch(new RegExp('GitHub\\s+Disconnected'));
     });
 
-    it('should have OpenShift connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('OpenShift ' + expectedOsoUser);
+    it('should have OpenShift connection indicated', function() {
+      const actualText = testContext.testedElement.textContent;
+      expect(actualText).toMatch(new RegExp('OpenShift\\s+' + expectedOsoUser));
     });
 
   });
@@ -80,26 +80,22 @@ describe('Connected Accounts Component', () => {
       providersMock.getOpenShiftStatus.and.returnValue(of({'username': expectedOsoUser}));
     });
 
-    initContext(ConnectedAccountsComponent, SampleTestComponent,  {
+    const testContext = initContext(ConnectedAccountsComponent, SampleTestComponent,  {
       providers: [ { provide: AuthenticationService, useValue: authMock },
         { provide: Contexts, useValue: contextsMock },
         { provide: UserService, useValue: userServiceMock },
         { provide: ProviderService, useValue: providersMock }]
     });
 
-    it('should have GitHub connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
+    it('should have GitHub connection indicated', function() {
+      const actualText = testContext.testedElement.textContent;
       expect(actualText).toContain('username');
     });
 
-    it('should have OpenShift connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('OpenShift ' + expectedOsoUser);
+    it('should have OpenShift connection indicated', function() {
+      const actualText = testContext.testedElement.textContent;
+      expect(actualText).toMatch(new RegExp('OpenShift\\s+' + expectedOsoUser));
     });
   });
 
 });
-
-function trimCarriageReturns(str: string) {
-  return str.replace(/[\n\r]+/g, ' ');
-}

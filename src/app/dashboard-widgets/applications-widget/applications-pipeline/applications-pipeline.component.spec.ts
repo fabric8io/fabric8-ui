@@ -37,7 +37,7 @@ describe('ApplicationsPipelineComponent', () => {
     };
   });
 
-  initContext(ApplicationsPipelineComponent, HostComponent, {
+  const testContext = initContext(ApplicationsPipelineComponent, HostComponent, {
     imports: [
       CommonModule
     ],
@@ -49,12 +49,12 @@ describe('ApplicationsPipelineComponent', () => {
   });
 
   describe('Applications pipeline with stage', () => {
-    it('Pipeline stage should be set', function(this: TestingContext) {
-      expect(this.testedDirective.stage as any).toEqual(pipelineStage);
+    it('Pipeline stage should be set', function() {
+      expect(testContext.testedDirective.stage as any).toEqual(pipelineStage);
     });
 
-    it('Show line should be set', function(this: TestingContext) {
-      expect(this.testedDirective.showLine).toBeTruthy();
+    it('Show line should be set', function() {
+      expect(testContext.testedDirective.showLine).toBeTruthy();
     });
   });
 });
