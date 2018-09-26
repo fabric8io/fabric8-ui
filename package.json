@@ -310,7 +310,7 @@
       "<rootDir>/src/**/*.{js,ts}"
     ],
     "testMatch": [
-      "<rootDir>/src/**/*.(spec|test).{js,ts}"
+      "<rootDir>/src/(app|a-runtime-console)/**/*.(spec|test).{js,ts}"
     ],
     "testEnvironment": "node",
     "testURL": "http://localhost:8080",
