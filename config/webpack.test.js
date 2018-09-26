@@ -312,11 +312,11 @@ module.exports = function () {
          *
          * See: https://github.com/webpack/raw-loader
          */
-        {
-          test: /\.html$/,
-          loader: 'raw-loader',
-          exclude: [ path.resolve(__dirname, 'src/index.html') ]
-        },
+        // {
+        //   test: /\.html$/,
+        //   loader: 'raw-loader',
+        //   exclude: [ path.resolve(__dirname, 'src/index.html') ]
+        // },
         /**
          * Instruments JS files with Istanbul for subsequent code coverage reporting.
          * Instrument only testing sources.
