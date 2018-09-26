@@ -115,27 +115,6 @@ module.exports = function () {
           ]
         },
 
-        // {
-        //   test: /\.ts$/,
-        //   enforce: 'pre',
-        //   use: [{
-        //     loader: 'tslint-loader',
-        //     options: {
-        //       configFile: "tslint.json",
-        //       tsConfigFile: 'tsconfig.json',
-        //       formattersDirectory: 'node_modules/tslint-loader/formatters/',
-        //       formatter: 'custom',
-        //       emitErrors: false,
-        //       failOnHint: true,
-        //       resourcePath: 'src',
-        //       typeCheck: true,
-        //     }
-        //   }],
-        //   exclude: [
-        //     helpers.root('node_modules')
-        //   ]
-        // },
-
         {
           test: /\.ts$/,
           use: [
@@ -149,6 +128,25 @@ module.exports = function () {
           ],
           exclude: [/\.e2e\.ts$/]
         },
+
+        /**
+         * Static analysis linter for TypeScript advanced options configuration
+         * Description: An extensible linter for the TypeScript language.
+         *
+         * See: https://github.com/wbuchwalter/tslint-loader
+         */
+        // {
+        //   test: /\.ts$/,
+        //   enforce: 'pre',
+        //   loader: 'tslint-loader',
+        //   exclude: [
+        //     /node_modules/,
+        //     /src\/a-runtime-console/,
+        //     // /src\/main.browser.ts/,
+        //     // /src\/polyfills.browser.ts/,
+        //     // /src\/vendor.browser.ts/
+        //   ],
+        // },
 
         /**
          * Json loader support for *.json files.
@@ -246,7 +244,8 @@ module.exports = function () {
               }
             }
           ]
-        }, {
+        },
+        {
           test: /\.component\.less$/,
           use: [
             'to-string-loader',
@@ -279,12 +278,12 @@ module.exports = function () {
           test: /\.(woff2|woff|ttf|eot|svg)$/,
           use: {
             loader: 'url-loader',
-            query: {
+            options: {
               limit: 3000,
               includePaths: [
                 path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
               ],
-              name: '_assets/fonts/[name]' + '.[ext]'
+              name: '_assets/fonts/[name].[ext]'
             }
           },
           exclude: [
@@ -296,12 +295,12 @@ module.exports = function () {
           test: /\.(jpg|png|svg|gif|jpeg)$/,
           use: {
             loader: 'url-loader',
-            query: {
+            options: {
               limit: 3000,
               includePaths: [
                 path.resolve(__dirname, "../src/assets/images/")
               ],
-              name: '_assets/images/[name]' + '.[ext]'
+              name: '_assets/images/[name].[ext]'
             }
           },
           exclude: path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
