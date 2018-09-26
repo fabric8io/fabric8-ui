@@ -131,7 +131,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
           filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired)
         )
         .subscribe((recentData: RecentData<Context>): void =>
-          this.saveRecentContexts(recentData.data)
+          this.saveRecentContexts(recentData.recent)
         )
     );
 
@@ -145,7 +145,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
           filter((recentData: RecentData<Context>): boolean => recentData.isSaveRequired)
         )
         .subscribe((recentData: RecentData<Context>): void =>
-          this.saveRecentContexts(recentData.data)
+          this.saveRecentContexts(recentData.recent)
         )
     );
   }

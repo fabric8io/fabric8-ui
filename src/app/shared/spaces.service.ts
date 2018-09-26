@@ -61,7 +61,7 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
           filter((recentData: RecentData<Space>): boolean => recentData.isSaveRequired)
         )
         .subscribe((recentData: RecentData<Space>): void =>
-          this.saveRecentSpaces(recentData.data)
+          this.saveRecentSpaces(recentData.recent)
         )
     );
 
@@ -75,7 +75,7 @@ export class SpacesService extends RecentUtils<Space> implements Spaces {
           filter((recentData: RecentData<Space>) => recentData.isSaveRequired)
         )
         .subscribe((recentData: RecentData<Space>): void =>
-          this.saveRecentSpaces(recentData.data)
+          this.saveRecentSpaces(recentData.recent)
         )
     );
   }

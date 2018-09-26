@@ -6,7 +6,7 @@ import { ExtProfile, ProfileService } from '../profile/profile.service';
 export const RECENT_LENGTH: number = 8;
 
 export interface RecentData <T> {
-  data: T[];
+  recent: T[];
   isSaveRequired: boolean;
 }
 
@@ -30,7 +30,7 @@ export abstract class RecentUtils<T> {
   onBroadcastChanged(changed: T, recent: T[], compareFn: Function = this.compareElements): RecentData<T> {
     let index: number = recent.findIndex((t: T) => compareFn(t, changed));
     if (index === 0) { // continue only if changed is new, or requires a move within recent
-      return { data: recent, isSaveRequired: false };
+      return { recent: recent, isSaveRequired: false };
     } else if (index > 0) { // if changed exists in recent, move it to the front
       recent.splice(index, 1);
       recent.unshift(changed);
@@ -41,16 +41,16 @@ export abstract class RecentUtils<T> {
         recent.pop();
       }
     }
-    return { data: recent, isSaveRequired: true };
+    return { recent: recent, isSaveRequired: true };
   }
 
   onBroadcastSpaceDeleted(deletedSpace: Space, recent: T[], compareFn: Function = this.compareElements): RecentData<T> {
     let index: number = recent.findIndex((t: T) => compareFn(t, deletedSpace));
     if (index === -1) {
-      return { data: recent, isSaveRequired: false };
+      return { recent: recent, isSaveRequired: false };
     }
     recent.splice(index, 1);
-    return { data: recent, isSaveRequired: true };
+    return { recent: recent, isSaveRequired: true };
   }
 
   saveProfile(patch: ExtProfile): void {
