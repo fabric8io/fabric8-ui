@@ -134,7 +134,7 @@ describe('MySpacesSearchSpacesDialog', () => {
       testContext.testedDirective.viewState.pipe(
         first())
         .subscribe((state: ViewState): void => {
-          expect(state).toEqual(ViewState.SHOW);
+          expect(state).not.toEqual(ViewState.INIT);
           testContext.testedDirective.clear();
           testContext.testedDirective.viewState.pipe(
             first()
@@ -199,14 +199,14 @@ describe('MySpacesSearchSpacesDialog', () => {
     it('should call SpaceService#search with trimmed search term', fakeAsync(function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       expect(spaceService.search).not.toHaveBeenCalled();
-      testContext.testedDirective.search();
       const pageSize: number = 123;
       testContext.testedDirective.initItems({ pageSize });
+      testContext.testedDirective.search();
       tick();
       expect(spaceService.search).toHaveBeenCalledWith('mocksearch', pageSize);
     }));
 
-    it('should call SpaceService#getTotalCount and update', fakeAsync(function(): void {
+    it('should call SpaceService#getTotalCount and update', function(): void {
       testContext.testedDirective.totalCount.pipe(
         first())
         .subscribe((count: number): void => {
@@ -216,8 +216,6 @@ describe('MySpacesSearchSpacesDialog', () => {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       expect(spaceService.getTotalCount).not.toHaveBeenCalled();
       testContext.testedDirective.search();
-      testContext.testedDirective.initItems({ pageSize: 123 });
-      tick();
       expect(spaceService.getTotalCount).toHaveBeenCalled();
 
       testContext.testedDirective.totalCount.pipe(
@@ -225,25 +223,23 @@ describe('MySpacesSearchSpacesDialog', () => {
       ).subscribe((count: number): void => {
         expect(count).toBe(456);
       });
-    }));
+    });
 
-    it('should set view state to SHOW when results are received', fakeAsync(function(): void {
+    it('should set view state to SHOW when results are received', function(): void {
       testContext.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
         expect(state).toEqual(ViewState.INIT);
       });
       testContext.testedDirective.search();
-      testContext.testedDirective.initItems({ pageSize: 123 });
-      tick();
       testContext.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
         expect(state).toEqual(ViewState.SHOW);
       });
-    }));
+    });
 
-    it('should set view state to EMPTY when no results are received', fakeAsync(function(): void {
+    it('should set view state to EMPTY when no results are received', function(): void {
       const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spaceService.search.and.returnValue(observableOf([]));
       testContext.testedDirective.viewState.pipe(
@@ -252,30 +248,26 @@ describe('MySpacesSearchSpacesDialog', () => {
         expect(state).toEqual(ViewState.INIT);
       });
       testContext.testedDirective.search();
-      testContext.testedDirective.initItems({ pageSize: 123 });
-      tick();
       testContext.testedDirective.viewState.pipe(
         first()
       ).subscribe((state: ViewState): void => {
         expect(state).toEqual(ViewState.EMPTY);
       });
-    }));
+    });
 
-    it('should update spaces with received results', fakeAsync(function(): void {
+    it('should update spaces with received results', function(): void {
       testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe((spaces: Space[]): void => {
         expect(spaces).toEqual([]);
       });
       testContext.testedDirective.search();
-      testContext.testedDirective.initItems({ pageSize: 123 });
-      tick();
       testContext.testedDirective.spaces.pipe(
         first()
       ).subscribe((spaces: Space[]): void => {
         expect(spaces).toEqual([ { name: 'foo-space' } as Space ]);
       });
-    }));
+    });
   });
 
   describe('#fetchMoreSpaces', () => {
