@@ -10,7 +10,7 @@ const path = require('path');
 const stringify = require('json-stringify');
 const fs = require('fs');
 
-/*
+/**
  * Webpack Plugins
  */
 const autoprefixer = require('autoprefixer');
@@ -30,7 +30,7 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 
-/*
+/**
  * Webpack Constants
  */
 // const HMR = helpers.hasProcessFlag('hot');
@@ -337,7 +337,7 @@ module.exports = function (options) {
           test: /\.(woff2|woff|ttf|eot|svg)$/,
           use: {
             loader: 'url-loader',
-            query: {
+            options: {
               limit: 3000,
               includePaths: [
                 path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
@@ -354,7 +354,7 @@ module.exports = function (options) {
           test: /\.(jpg|png|svg|gif|jpeg)$/,
           use: {
             loader: 'url-loader',
-            query: {
+            options: {
               limit: 3000,
               includePaths: [
                 path.resolve(__dirname, "../src/assets/images/")
