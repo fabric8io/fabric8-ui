@@ -6,19 +6,24 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AUTH_API_URL } from 'ngx-login-client';
-import uuid from 'uuid';
 import { RequestIdInterceptor } from './request-id.interceptor';
+
+const testUUID: string = 'some-unique-id';
+jest.mock('uuid/v4', () => ({
+  default: () => testUUID
+}));
 
 describe('RequestIdInterceptor', () => {
   const testUrl: string = 'http://example.com/test';
-  const testUUID: string = 'some-unique-id';
 
   let httpMock: HttpTestingController;
   let httpClient: HttpClient;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [
+        HttpClientTestingModule
+      ],
       providers: [
         { provide: WIT_API_URL, useValue: 'http://example.com' },
         { provide: AUTH_API_URL, useValue: 'http://example.com' },
@@ -31,8 +36,8 @@ describe('RequestIdInterceptor', () => {
     });
     httpMock = TestBed.get(HttpTestingController);
     httpClient = TestBed.get(HttpClient);
-    spyOn(uuid, 'v4').and.returnValue(testUUID);
   });
+
   afterEach(() => {
     httpMock.verify();
   });
