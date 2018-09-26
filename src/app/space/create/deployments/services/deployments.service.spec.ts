@@ -8,7 +8,6 @@ import {
 } from 'ngx-base';
 import {
   empty as emptyObservable,
-  Observable,
   of,
   Subject,
   throwError as _throw,

@@ -7,7 +7,6 @@ import {
 import { debounce } from 'lodash';
 import { NotificationType } from 'ngx-base';
 import {
-  combineLatest,
   Observable,
   Subscription
 } from 'rxjs';
@@ -15,7 +14,6 @@ import { first } from 'rxjs/operators';
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
-import { Stat } from '../models/stat';
 import { DeploymentsService } from '../services/deployments.service';
 
 @Component({

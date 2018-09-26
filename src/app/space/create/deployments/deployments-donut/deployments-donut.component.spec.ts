@@ -12,14 +12,8 @@ import {
   throwError as _throw
 } from 'rxjs';
 import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext } from 'testing/test-context';
 import { NotificationsService } from '../../../../shared/notifications.service';
-import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
-import { MemoryUnit } from '../models/memory-unit';
 import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
 import { DeploymentsService } from '../services/deployments.service';
