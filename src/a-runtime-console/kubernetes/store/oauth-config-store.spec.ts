@@ -14,13 +14,11 @@ import {
   Observable,
   ReplaySubject,
   Subscription,
-  throwError as observableThrowError
-} from 'rxjs';
-import { multicast } from 'rxjs/operators';
-import {
+  throwError as observableThrowError,
   VirtualAction,
   VirtualTimeScheduler
-} from 'rxjs/scheduler/VirtualTimeScheduler';
+} from 'rxjs';
+import { multicast } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
 import { NotificationsService } from '../../../app/shared/notifications.service';
 import {
