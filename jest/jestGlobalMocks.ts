@@ -1,4 +1,5 @@
 global['CSS'] = null;
+global['ENV'] = 'test';
 
 const mock = () => {
   let storage = {};
@@ -55,25 +56,33 @@ function createProxy() {
 jest.mock('c3', createProxy);
 // jest.mock('d3', createProxy);
 
+function warnSpyApi(name) {
+  console.warn(`Using API '${name}' is non-standard jest. Update test to use 'jest.spyOn' API.`);
+}
+
 // helper to migrate from jasmine to jest
-global['spyOnProperty'] = (object, method, accessType) => {
+const spyOnShim = (object, method, accessType) => {
   const spy = jest.spyOn(object, method, accessType);
   if (!spy['and']) {
     spy['and'] = {
       returnValue(value: any) {
+        warnSpyApi('Spy#returnValue');
         spy.mockReturnValue(value);
         return spy;
       },
       callThrough() {
+        warnSpyApi('Spy#callThrough');
         return spy;
       },
       throwError(value) {
         spy.mockImplementation(() => {
+          warnSpyApi('Spy#mockImplementation');
           throw new Error(value);
         });
         return spy;
       },
       callFake(fn) {
+        warnSpyApi('Spy#callFake');
         spy.mockImplementation(fn);
         return spy;
       }
@@ -82,4 +91,9 @@ global['spyOnProperty'] = (object, method, accessType) => {
   return spy;
 };
 
-global['spyOn'] = global['spyOnProperty'];
+global['spyOnProperty'] = (...args) => {
+  warnSpyApi('spyOnProperty');
+  return spyOnShim.call(this, args);
+};
+
+global['spyOn'] = spyOnShim;
