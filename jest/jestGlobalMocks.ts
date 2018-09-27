@@ -13,6 +13,7 @@ const mock = () => {
 
 Object.defineProperty(window, 'localStorage', {value: mock()});
 Object.defineProperty(window, 'sessionStorage', {value: mock()});
+window.open = jest.fn();
 Object.defineProperty(document, 'doctype', {
   value: '<!DOCTYPE html>'
 });
