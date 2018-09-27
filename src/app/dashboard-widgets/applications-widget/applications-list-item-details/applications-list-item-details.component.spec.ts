@@ -74,7 +74,7 @@ describe('ApplicationsListItemDetailsComponent', () => {
     };
   });
 
-  initContext(ApplicationsListItemDetailsComponent, HostComponent, {
+  const testContext = initContext(ApplicationsListItemDetailsComponent, HostComponent, {
     imports: [
       CommonModule
     ],
@@ -89,23 +89,23 @@ describe('ApplicationsListItemDetailsComponent', () => {
   });
 
   describe('Applications list item details with build', () => {
-    it('Build should be set', function(this: TestingContext) {
-      expect(this.testedDirective.build as any).toEqual(build);
+    it('Build should be set', function() {
+      expect(testContext.testedDirective.build as any).toEqual(build);
     });
 
-    it('Pipeline stages should be trimmed', function(this: TestingContext) {
-      let stages = this.testedDirective.pipelineStages as any[];
+    it('Pipeline stages should be trimmed', function() {
+      let stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages.length).toBe(2);
     });
 
-    it('Pipeline stages should be set', function(this: TestingContext) {
-      let stages = this.testedDirective.pipelineStages as any[];
+    it('Pipeline stages should be set', function() {
+      let stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages[0].name).toEqual('Approve');
       expect(stages[1].name).toEqual('Rollout to Run');
     });
 
-    it('Current stage should be set', function(this: TestingContext) {
-      let stages = this.testedDirective.pipelineStages as any[];
+    it('Current stage should be set', function() {
+      let stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages[1].currentStage).toBeTruthy();
     });
   });

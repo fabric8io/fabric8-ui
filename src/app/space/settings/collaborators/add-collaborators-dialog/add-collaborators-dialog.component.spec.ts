@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService } from 'ngx-fabric8-wit';
 import {
@@ -24,10 +25,9 @@ import { AddCollaboratorsDialogComponent } from './add-collaborators-dialog.comp
 class HostComponent { }
 
 describe('AddCollaboratorsDialog', () => {
-  type Context = TestContext<AddCollaboratorsDialogComponent, HostComponent>;
 
-  initContext(AddCollaboratorsDialogComponent, HostComponent, {
-    imports: [ FormsModule ],
+  const testContext = initContext(AddCollaboratorsDialogComponent, HostComponent, {
+    imports: [ FormsModule, NgSelectModule ],
     providers: [
       { provide: UserService, useValue: createMock(UserService) },
       { provide: CollaboratorService, useValue: createMock(CollaboratorService) }
@@ -42,35 +42,35 @@ describe('AddCollaboratorsDialog', () => {
     component.host = modalDirective;
   });
 
-  it('should be instantiable', function(this: Context) {
-    expect(this.testedDirective).toBeTruthy();
+  it('should be instantiable', function() {
+    expect(testContext.testedDirective).toBeTruthy();
   });
 
-  it('should reset state on add', function(this: Context) {
+  it('should reset state on add', function() {
     const collaboratorService: jasmine.SpyObj<CollaboratorService> = TestBed.get(CollaboratorService);
     collaboratorService.addCollaborators.and.returnValue(observableOf(true));
 
-    expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-    this.testedDirective.collaborators = [{ id: 'foo-user' } as User, { id: 'bar-user' } as User];
-    this.testedDirective.selectedCollaborators = [{ id: 'foo-user' } as User];
+    expect(testContext.testedDirective.host.hide).not.toHaveBeenCalled();
+    testContext.testedDirective.collaborators = [{ id: 'foo-user' } as User, { id: 'bar-user' } as User];
+    testContext.testedDirective.selectedCollaborators = [{ id: 'foo-user' } as User];
 
-    this.testedDirective.addCollaborators();
+    testContext.testedDirective.addCollaborators();
 
     expect(collaboratorService.addCollaborators).toHaveBeenCalledWith('fake-space-id', [{ id: 'foo-user' }]);
-    expect(this.testedDirective.host.hide).toHaveBeenCalled();
-    expect(this.testedDirective.collaborators).toEqual([]);
-    expect(this.testedDirective.selectedCollaborators).toEqual([]);
+    expect(testContext.testedDirective.host.hide).toHaveBeenCalled();
+    expect(testContext.testedDirective.collaborators).toEqual([]);
+    expect(testContext.testedDirective.selectedCollaborators).toEqual([]);
   });
 
-  it('should reset state on cancel', function(this: Context) {
-    expect(this.testedDirective.host.hide).not.toHaveBeenCalled();
-    this.testedDirective.collaborators = [{ id: 'foo-user' } as User, { id: 'bar-user' } as User];
-    this.testedDirective.selectedCollaborators = [{ id: 'foo-user' } as User];
+  it('should reset state on cancel', function() {
+    expect(testContext.testedDirective.host.hide).not.toHaveBeenCalled();
+    testContext.testedDirective.collaborators = [{ id: 'foo-user' } as User, { id: 'bar-user' } as User];
+    testContext.testedDirective.selectedCollaborators = [{ id: 'foo-user' } as User];
 
-    this.testedDirective.cancel();
+    testContext.testedDirective.cancel();
 
-    expect(this.testedDirective.host.hide).toHaveBeenCalled();
-    expect(this.testedDirective.collaborators).toEqual([]);
-    expect(this.testedDirective.selectedCollaborators).toEqual([]);
+    expect(testContext.testedDirective.host.hide).toHaveBeenCalled();
+    expect(testContext.testedDirective.collaborators).toEqual([]);
+    expect(testContext.testedDirective.selectedCollaborators).toEqual([]);
   });
 });

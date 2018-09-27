@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import _ from 'lodash';
+import { get } from 'lodash';
 import {
   HelperService,
   ProjectSummaryService,
@@ -79,23 +79,23 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
 
   private getPayload(summary: Summary, spaceId: string, spaceName: string) {
     let payload = '';
-    let missionId: string = _.get(summary, 'mission.id', '');
+    let missionId: string = get(summary, 'mission.id', '');
     let blankMissionId: string = 'blank-mission';
     if (missionId === blankMissionId) {
-      missionId = _.get(summary, 'mission.meta', '');
+      missionId = get(summary, 'mission.meta', '');
       payload += 'emptyGitRepository=true&';
     }
     payload += 'mission=' + missionId;
-    payload += '&runtime=' + _.get(summary, 'runtime.id', '');
-    payload += '&runtimeVersion=' + _.get(summary, 'runtime.version.id', '');
-    payload += '&pipeline=' + _.get(summary, 'pipeline.id', '');
-    payload += '&projectName=' + _.get(summary, 'dependencyCheck.projectName', '');
-    payload += '&projectVersion=' + _.get(summary, 'dependencyCheck.projectVersion', '');
-    payload += '&gitRepository=' + _.get(summary, 'gitHubDetails.repository', '');
-    payload += '&groupId=' + _.get(summary, 'dependencyCheck.groupId', '');
+    payload += '&runtime=' + get(summary, 'runtime.id', '');
+    payload += '&runtimeVersion=' + get(summary, 'runtime.version.id', '');
+    payload += '&pipeline=' + get(summary, 'pipeline.id', '');
+    payload += '&projectName=' + get(summary, 'dependencyCheck.projectName', '');
+    payload += '&projectVersion=' + get(summary, 'dependencyCheck.projectVersion', '');
+    payload += '&gitRepository=' + get(summary, 'gitHubDetails.repository', '');
+    payload += '&groupId=' + get(summary, 'dependencyCheck.groupId', '');
     /* artifactId has to be same as projectName in OSIO to get correct links for
       stage/prod to be shown in pipelines view */
-    payload += '&artifactId=' + _.get(summary, 'dependencyCheck.projectName', '');
+    payload += '&artifactId=' + get(summary, 'dependencyCheck.projectName', '');
     payload += '&spacePath=' + spaceName;
     payload += '&space=' + spaceId;
     if (summary.dependencyEditor && summary.dependencyEditor.dependencySnapshot) {

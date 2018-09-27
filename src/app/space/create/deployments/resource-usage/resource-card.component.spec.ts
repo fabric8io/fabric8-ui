@@ -39,9 +39,8 @@ class FakeUtilizationBarComponent {
 }
 
 describe('ResourceCardComponent', () => {
-  type Context = TestContext<ResourceCardComponent, HostComponent>;
 
-  initContext(ResourceCardComponent, HostComponent,
+  const testContext = initContext(ResourceCardComponent, HostComponent,
     {
       declarations: [FakeUtilizationBarComponent],
       providers: [
@@ -72,15 +71,15 @@ describe('ResourceCardComponent', () => {
     }
   );
 
-  it('should correctly request the deployed environment data', function(this: Context) {
+  it('should correctly request the deployed environment data', function() {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
     expect(mockSvc.getEnvironmentCpuStat).toHaveBeenCalledWith('spaceId', 'stage');
     expect(mockSvc.getEnvironmentMemoryStat).toHaveBeenCalledWith('spaceId', 'stage');
   });
 
-  it('should have its children passed the proper values', function(this: Context) {
+  it('should have its children passed the proper values', function() {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-    let arrayOfComponents = this.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
+    let arrayOfComponents = testContext.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
     expect(arrayOfComponents.length).toEqual(2);
 
     let cpuUtilBar = arrayOfComponents[0].componentInstance;

@@ -40,7 +40,7 @@ describe('DeploymentCardContainer', () => {
   type Context = TestContext<DeploymentCardContainerComponent, HostComponent>;
   const environments: string[] = ['envId1', 'envId2'];
 
-  initContext(DeploymentCardContainerComponent, HostComponent,
+  const testContext = initContext(DeploymentCardContainerComponent, HostComponent,
     {
       declarations: [FakeDeploymentCardComponent],
       providers: [
@@ -75,7 +75,7 @@ describe('DeploymentCardContainer', () => {
   describe('User has deployed applications', () => {
     it('should create child components with proper inputs', function(this: Context) {
       const arrayOfComponents: DebugElement[] =
-        this.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
+        testContext.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardComponent));
       expect(arrayOfComponents.length).toEqual(environments.length);
 
       environments.forEach((envData: string, index: number) => {
@@ -86,7 +86,7 @@ describe('DeploymentCardContainer', () => {
     });
 
     it('should set the application title properly', function(this: Context) {
-      const el: any = this.fixture.debugElement.query(By.css('#deploymentCardApplicationTitle')).nativeElement;
+      const el: any = testContext.fixture.debugElement.query(By.css('#deploymentCardApplicationTitle')).nativeElement;
       expect(el.textContent.trim()).toEqual('app');
     });
   });
@@ -94,16 +94,16 @@ describe('DeploymentCardContainer', () => {
   describe('Empty State', () => {
     beforeEach(function(this: Context): void {
       TestBed.get(DeploymentsService).hasDeployments().next(false);
-      this.detectChanges();
+      testContext.detectChanges();
     });
 
     it('should display the empty state template', function(this: Context) {
-      const el: any = this.fixture.debugElement.query(By.css('.deployments-empty-state')).nativeElement;
+      const el: any = testContext.fixture.debugElement.query(By.css('.deployments-empty-state')).nativeElement;
       expect(el).toBeDefined();
     });
 
     it('should still display the application title properly', function(this: Context) {
-      const el: any = this.fixture.debugElement.query(By.css('.not-deployed-application-title')).nativeElement;
+      const el: any = testContext.fixture.debugElement.query(By.css('.not-deployed-application-title')).nativeElement;
       expect(el.textContent.trim()).toEqual('app');
     });
   });

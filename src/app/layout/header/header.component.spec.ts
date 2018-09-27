@@ -55,7 +55,7 @@ describe('HeaderComponent', () => {
   let fixture: ComponentFixture<HeaderComponent>;
   let component: DebugNode['componentInstance'];
 
-  initContext(HeaderComponent, HostComponent, {
+  const testContext = initContext(HeaderComponent, HostComponent, {
     imports: [
       RouterTestingModule.withRoutes([
         { path: '_home', component: MockRoutedComponent },
@@ -87,43 +87,43 @@ describe('HeaderComponent', () => {
     component = fixture.debugElement.componentInstance;
   });
 
-  it('should return default context when in _home state', function(this: TestingContext, done: DoneFn) {
+  it('should return default context when in _home state', function(done: DoneFn) {
     testRouter.navigate(['_home']).then((status: boolean): void => {
       expect(status).toBeTruthy();
-      expect(this.testedDirective.context.name).toEqual('default');
+      expect(testContext.testedDirective.context.name).toEqual('default');
       done();
     });
   });
 
-  it('should return default context when in _featureflag state', function(this: TestingContext, done: DoneFn) {
+  it('should return default context when in _featureflag state', function(done: DoneFn) {
     testRouter.navigate(['_featureflag']).then((status: boolean): void => {
       expect(status).toBeTruthy();
-      expect(this.testedDirective.context.name).toEqual('default');
+      expect(testContext.testedDirective.context.name).toEqual('default');
       done();
     });
   });
 
-  it('should return current context when in non-home valid state', function(this: TestingContext, done: DoneFn) {
+  it('should return current context when in non-home valid state', function(done: DoneFn) {
     testRouter.navigate(['_other']).then((status: boolean): void => {
       expect(status).toBeTruthy();
-      expect(this.testedDirective.context.name).toEqual('current');
+      expect(testContext.testedDirective.context.name).toEqual('current');
       done();
     });
   });
 
   describe('_error state handling', () => {
-    it('should return no context when directly visiting _error', function(this: TestingContext, done: DoneFn) {
+    it('should return no context when directly visiting _error', function(done: DoneFn) {
       testRouter.navigate(['_error']).then((status: boolean): void => {
         expect(status).toBeTruthy();
-        expect(this.testedDirective.context).toBeFalsy();
+        expect(testContext.testedDirective.context).toBeFalsy();
         done();
       });
     });
 
-    it('should return no context when redirected to _error', function(this: TestingContext, done: DoneFn) {
+    it('should return no context when redirected to _error', function(done: DoneFn) {
       testRouter.navigateByUrl('/nonexistent/app/path').then((status: boolean): void => {
         expect(status).toBeTruthy();
-        expect(this.testedDirective.context).toBeFalsy();
+        expect(testContext.testedDirective.context).toBeFalsy();
         done();
       });
     });

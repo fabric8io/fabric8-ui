@@ -224,7 +224,7 @@ export class CodebasesComponent implements OnDestroy, OnInit {
       let date2 = new Date(codebase2.gitHubRepo.pushedAt);
       compValue = (date1 > date2) ? 1 : -1;
     }
-    if (!this.isAscendingSort) {
+    if (!this.isAscendingSort && compValue) {
       compValue = compValue * -1;
     }
     return compValue;

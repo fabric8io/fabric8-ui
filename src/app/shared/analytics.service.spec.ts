@@ -75,28 +75,28 @@ describe('Analytic Service:', () => {
       analytics = analyticService.analytics;
     });
 
-    xit('analytics.initialize should be falsy', () => {
+    it('analytics.initialize should be falsy', () => {
       expect(analytics.initialize).toBeFalsy();
     });
 
-    xit('analytics.invoked is truthy', () => {
+    it('analytics.invoked is truthy', () => {
       expect(analytics.invoked).toBeTruthy();
     });
 
-    xit('analytics object is defined', () => {
+    it('analytics object is defined', () => {
       expect(analytics).toBeDefined();
     });
 
-    xit('analytics object should have track method', () => {
+    it('analytics object should have track method', () => {
       expect(analytics.methods).toBeDefined();
       expect(analytics.methods).toContain('track');
     });
 
-    xit('analytics object should have page method', () => {
+    it('analytics object should have page method', () => {
       expect(analytics.methods).toContain('page');
     });
 
-    xit('analytics object should have identify method', () => {
+    it('analytics object should have identify method', () => {
       expect(analytics.methods).toContain('identify');
     });
 

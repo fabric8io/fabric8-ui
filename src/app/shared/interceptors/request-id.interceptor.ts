@@ -8,8 +8,7 @@ import { Inject, Injectable } from '@angular/core';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AUTH_API_URL } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-import uuid from 'uuid';
-
+import * as uuidv4 from 'uuid/v4';
 
 @Injectable()
 export class RequestIdInterceptor implements HttpInterceptor {
@@ -27,7 +26,7 @@ export class RequestIdInterceptor implements HttpInterceptor {
       if (!request.headers.has('X-Request-Id')) {
         const newReq = request.clone({
           setHeaders: {
-            'X-Request-Id': uuid.v4()
+            'X-Request-Id': uuidv4()
           }
         });
         return next.handle(newReq);

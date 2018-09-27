@@ -42,9 +42,8 @@ class FakeDeploymentsDonutChartComponent {
 }
 
 describe('DeploymentsDonutComponent', () => {
-  type Context = TestContext<DeploymentsDonutComponent, HostComponent>;
 
-  initContext(DeploymentsDonutComponent, HostComponent,
+  const testContext = initContext(DeploymentsDonutComponent, HostComponent,
     {
       declarations: [FakeDeploymentsDonutChartComponent],
       providers: [
@@ -72,51 +71,51 @@ describe('DeploymentsDonutComponent', () => {
       component.environment = 'environmentName';
     });
 
-  it('should get the pods with the correct arguments', function(this: Context) {
+  it('should get the pods with the correct arguments', function() {
     expect(TestBed.get(DeploymentsService).getPods).toHaveBeenCalledWith('space', 'environmentName', 'application');
   });
 
-  it('should use pods data for initial desired replicas', function(this: Context) {
-    expect(this.testedDirective.desiredReplicas).toEqual(2);
+  it('should use pods data for initial desired replicas', function() {
+    expect(testContext.testedDirective.desiredReplicas).toEqual(2);
   });
 
-  it('should increment desired replicas on scale up by one', function(this: Context) {
+  it('should increment desired replicas on scale up by one', function() {
     let desired: number = 2;
-    expect(this.testedDirective.desiredReplicas).toBe(desired);
+    expect(testContext.testedDirective.desiredReplicas).toBe(desired);
 
-    this.testedDirective.scaleUp();
-    this.detectChanges();
-    expect(this.testedDirective.desiredReplicas).toBe(desired + 1);
+    testContext.testedDirective.scaleUp();
+    testContext.detectChanges();
+    expect(testContext.testedDirective.desiredReplicas).toBe(desired + 1);
   });
 
-  it('should decrement desired replicas on scale down by one', function(this: Context) {
+  it('should decrement desired replicas on scale down by one', function() {
     let desired: number = 2;
-    expect(this.testedDirective.desiredReplicas).toBe(desired);
+    expect(testContext.testedDirective.desiredReplicas).toBe(desired);
 
-    this.testedDirective.scaleDown();
-    this.detectChanges();
-    expect(this.testedDirective.desiredReplicas).toBe(desired - 1);
+    testContext.testedDirective.scaleDown();
+    testContext.detectChanges();
+    expect(testContext.testedDirective.desiredReplicas).toBe(desired - 1);
   });
 
-  it('should not decrement desired replicas below zero when scaling down', function(this: Context) {
+  it('should not decrement desired replicas below zero when scaling down', function() {
     let desired: number = 2;
-    expect(this.testedDirective.desiredReplicas).toBe(desired);
+    expect(testContext.testedDirective.desiredReplicas).toBe(desired);
 
-    this.testedDirective.scaleDown();
-    this.detectChanges();
-    expect(this.testedDirective.desiredReplicas).toBe(desired - 1);
+    testContext.testedDirective.scaleDown();
+    testContext.detectChanges();
+    expect(testContext.testedDirective.desiredReplicas).toBe(desired - 1);
 
-    this.testedDirective.scaleDown();
-    this.detectChanges();
-    expect(this.testedDirective.desiredReplicas).toBe(0);
+    testContext.testedDirective.scaleDown();
+    testContext.detectChanges();
+    expect(testContext.testedDirective.desiredReplicas).toBe(0);
 
-    this.testedDirective.scaleDown();
-    this.detectChanges();
-    expect(this.testedDirective.desiredReplicas).toBe(0);
+    testContext.testedDirective.scaleDown();
+    testContext.detectChanges();
+    expect(testContext.testedDirective.desiredReplicas).toBe(0);
   });
 
-  it('should acquire pods data', function(this: Context, done: DoneFn) {
-    this.testedDirective.pods.subscribe((pods: Pods) => {
+  it('should acquire pods data', function(done: DoneFn) {
+    testContext.testedDirective.pods.subscribe((pods: Pods) => {
       expect(pods).toEqual({
         pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]],
         total: 2
@@ -125,93 +124,93 @@ describe('DeploymentsDonutComponent', () => {
     });
   });
 
-  it('should call scalePods when scaling up', function(this: Context) {
-    let de: DebugElement = this.fixture.debugElement.query(By.css('#scaleUp'));
+  it('should call scalePods when scaling up', function() {
+    let de: DebugElement = testContext.fixture.debugElement.query(By.css('#scaleUp'));
     let el: any = de.nativeElement;
 
     el.click();
-    this.testedDirective.debounceScale.flush();
+    testContext.testedDirective.debounceScale.flush();
     expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
   });
 
-  it('should call scalePods when scaling down', function(this: Context) {
-    let de: DebugElement = this.fixture.debugElement.query(By.css('#scaleDown'));
+  it('should call scalePods when scaling down', function() {
+    let de: DebugElement = testContext.fixture.debugElement.query(By.css('#scaleDown'));
     let el: any = de.nativeElement;
 
     el.click();
-    this.testedDirective.debounceScale.flush();
+    testContext.testedDirective.debounceScale.flush();
     expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 1);
   });
 
-  it('should not call scalePods when scaling below 0', function(this: Context) {
+  it('should not call scalePods when scaling below 0', function() {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-    let de: DebugElement = this.fixture.debugElement.query(By.css('#scaleDown'));
+    let de: DebugElement = testContext.fixture.debugElement.query(By.css('#scaleDown'));
     let el: any = de.nativeElement;
 
     el.click();
-    this.testedDirective.debounceScale.flush();
+    testContext.testedDirective.debounceScale.flush();
     expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 1);
 
     el.click();
-    this.testedDirective.debounceScale.flush();
+    testContext.testedDirective.debounceScale.flush();
     expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 0);
 
     el.click();
-    this.testedDirective.debounceScale.flush();
+    testContext.testedDirective.debounceScale.flush();
     expect(mockSvc.scalePods).toHaveBeenCalledTimes(2);
   });
 
-  xit('should not call notifications when scaling successfully', function(this: Context) {
-    this.testedDirective.scaleUp();
-    this.detectChanges();
-    this.testedDirective.debounceScale.flush();
+  it('should not call notifications when scaling successfully', function() {
+    testContext.testedDirective.scaleUp();
+    testContext.detectChanges();
+    testContext.testedDirective.debounceScale.flush();
 
     expect(TestBed.get(DeploymentsService).scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
     expect(TestBed.get(NotificationsService).message).not.toHaveBeenCalled();
   });
 
   describe('atQuota', () => {
-    it('should default to "false"', function(this: Context) {
-      expect(this.testedDirective.atQuota).toBeFalsy();
+    it('should default to "false"', function() {
+      expect(testContext.testedDirective.atQuota).toBeFalsy();
     });
 
-    it('should be "false" when both stats are below quota', function(this: Context) {
+    it('should be "false" when both stats are below quota', function() {
       const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
       mockSvc.getEnvironmentCpuStat().next({ used: 0, quota: 2 });
       mockSvc.getEnvironmentMemoryStat().next({ used: 0, quota: 2, units: MemoryUnit.GB });
-      expect(this.testedDirective.atQuota).toBeFalsy();
+      expect(testContext.testedDirective.atQuota).toBeFalsy();
     });
 
-    it('should be "true" when CPU usage reaches quota', function(this: Context) {
+    it('should be "true" when CPU usage reaches quota', function() {
       const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
       mockSvc.getEnvironmentCpuStat().next({ used: 2, quota: 2 });
       mockSvc.getEnvironmentMemoryStat().next({ used: 1, quota: 2, units: MemoryUnit.GB });
-      expect(this.testedDirective.atQuota).toBeTruthy();
+      expect(testContext.testedDirective.atQuota).toBeTruthy();
     });
 
-    it('should be "true" when Memory usage reaches quota', function(this: Context) {
+    it('should be "true" when Memory usage reaches quota', function() {
       const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
       mockSvc.getEnvironmentCpuStat().next({ used: 1, quota: 2 });
       mockSvc.getEnvironmentMemoryStat().next({ used: 2, quota: 2, units: MemoryUnit.GB });
-      expect(this.testedDirective.atQuota).toBeTruthy();
+      expect(testContext.testedDirective.atQuota).toBeTruthy();
     });
 
-    it('should be "true" when both stats usage reaches quota', function(this: Context) {
+    it('should be "true" when both stats usage reaches quota', function() {
       const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
       mockSvc.getEnvironmentCpuStat().next({ used: 2, quota: 2 });
       mockSvc.getEnvironmentMemoryStat().next({ used: 2, quota: 2, units: MemoryUnit.GB });
-      expect(this.testedDirective.atQuota).toBeTruthy();
+      expect(testContext.testedDirective.atQuota).toBeTruthy();
     });
   });
 
   describe('error handling', () => {
-    it('should notify if scaling pods has an error', function(this: Context) {
+    it('should notify if scaling pods has an error', function() {
       const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
       mockSvc.scalePods.and.returnValue(_throw('scalePods error'));
 
-      this.testedDirective.scaleUp();
-      this.detectChanges();
-      this.testedDirective.debounceScale.flush();
+      testContext.testedDirective.scaleUp();
+      testContext.detectChanges();
+      testContext.testedDirective.debounceScale.flush();
 
       expect(mockSvc.scalePods).toHaveBeenCalledWith('space', 'environmentName', 'application', 3);
       expect(TestBed.get(NotificationsService).message).toHaveBeenCalled();

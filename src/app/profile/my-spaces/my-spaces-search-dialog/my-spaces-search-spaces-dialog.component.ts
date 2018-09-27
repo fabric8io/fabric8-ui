@@ -94,17 +94,15 @@ export class MySpacesSearchSpacesDialog implements OnDestroy, OnInit {
       return;
     }
     this.viewState.next(ViewState.PRESHOW);
-    this.viewState.pipe(
-      filter((viewState: ViewState): boolean => viewState === ViewState.LOADING),
-      first(),
-      flatMap(() => this.spaceService.search(this.searchTerm.trim(), this.pageSize).pipe(first())),
-      first(),
-      tap(() => (this.searchField.nativeElement as HTMLElement).blur()),
-      tap(() => this.spaceService.getTotalCount().pipe(first()).subscribe((count: number): void => this.totalCount.next(count))),
-      tap((spaces: Space[]) => this.viewState.next(spaces.length === 0 ? ViewState.EMPTY : ViewState.SHOW))
-    ).subscribe(
-      (spaces: Space[]): void => this.spaces.next(spaces),
-      (err: any): void => console.error(err)
+
+    (this.searchField.nativeElement as HTMLElement).blur();
+
+    this.spaceService.search(this.searchTerm.trim(), this.pageSize).pipe(first()).subscribe(
+      (spaces: Space[]): void => {
+        this.spaceService.getTotalCount().subscribe((count: number): void => this.totalCount.next(count));
+        this.viewState.next(spaces.length === 0 ? ViewState.EMPTY : ViewState.SHOW);
+        this.spaces.next(spaces);
+      }
     );
   }
 

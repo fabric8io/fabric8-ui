@@ -42,47 +42,46 @@ describe('StatusComponent', () => {
 
     // get test component from the fixture
     component = fixture.componentInstance;
+  });
 
+  function updateFixture() {
+    fixture.detectChanges();
     successImgEl = fixture.debugElement.query(By.css('.success-img'));
     failImgEl = fixture.debugElement.query(By.css('.fail-img'));
     ctaEl = fixture.debugElement.query(By.css('.cta-button'));
     msgEl = fixture.debugElement.query(By.css('.primary-msg'));
     secMsgEl = fixture.debugElement.query(By.css('.secondary-msg'));
-  });
+  }
 
-  it('should have success image, msg and cta_link set', () => {
+  it('should have success image, msg and cta_link set', async(() => {
     component.status = 'success';
     component.data = successData;
-    fixture.detectChanges();
-    fixture.whenStable().then(async(() => {
-      expect(msgEl.nativeElement.innerText).toBe(successData.statusMessage);
-      expect(secMsgEl.nativeElement.innerText).toBe(successData.secondaryStatusMessage);
+    updateFixture();
+    expect(msgEl.nativeElement.textContent.trim()).toBe(successData.statusMessage);
+    expect(secMsgEl.nativeElement.textContent.trim()).toBe(successData.secondaryStatusMessage);
 
-      expect(successImgEl.nativeElement).toBeTruthy();
-      expect(failImgEl.nativeElement).toBeFalsy();
-      expect(successImgEl.nativeElement.getAttribute('src'))
-        .toEqual('../../../../assets/images/trophy.png');
+    expect(successImgEl).toBeTruthy();
+    expect(failImgEl).toBeFalsy();
+    expect(successImgEl.nativeElement.getAttribute('src'))
+      .toEqual('../../../../assets/images/trophy.png');
 
-      expect(ctaEl.nativeElement.getAttribute('href'))
-        .toEqual('/' + successData.callToActionUrl);
-    }));
-  });
+    expect(ctaEl.nativeElement.getAttribute('href'))
+      .toEqual('/' + successData.callToActionUrl);
+  }));
 
-  it('should have fail image, msg and cta_link set', () => {
+  it('should have fail image, msg and cta_link set', async(() => {
     component.status = 'fail';
     component.data = failData;
-    fixture.detectChanges();
-    fixture.whenStable().then(async(() => {
-      expect(msgEl.nativeElement.innerText).toBe(failData.statusMessage);
-      expect(secMsgEl.nativeElement.innerText).toBe(failData.secondaryStatusMessage);
-      expect(successImgEl.nativeElement).toBeFalsy();
-      expect(failImgEl.nativeElement).toBeTruthy();
-      expect(failImgEl.nativeElement.getAttribute('src'))
-        .toEqual('../../../../assets/images/neutralface.png');
+    updateFixture();
+    expect(msgEl.nativeElement.textContent.trim()).toBe(failData.statusMessage);
+    expect(secMsgEl.nativeElement.textContent.trim()).toBe(failData.secondaryStatusMessage);
+    expect(successImgEl).toBeFalsy();
+    expect(failImgEl).toBeTruthy();
+    expect(failImgEl.nativeElement.getAttribute('src'))
+      .toEqual('../../../../assets/images/neutralface.png');
 
-      expect(ctaEl.nativeElement.getAttribute('href'))
-        .toEqual('/' + failData.callToActionUrl);
-    }));
-  });
+    expect(ctaEl.nativeElement.getAttribute('href'))
+      .toEqual('/' + failData.callToActionUrl);
+  }));
 
 });

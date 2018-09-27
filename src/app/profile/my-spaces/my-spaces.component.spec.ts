@@ -59,8 +59,8 @@ describe('MySpacesComponent', () => {
     value: 'zzz'
   };
 
-  mockAuthenticationService.getGitHubToken = {};
-  mockSpaceService.deleteSpace = {};
+  mockAuthenticationService.getGitHubToken = () => {};
+  mockSpaceService.deleteSpace = () => {};
 
   beforeEach(() => {
 

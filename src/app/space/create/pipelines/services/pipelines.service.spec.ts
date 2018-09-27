@@ -190,7 +190,7 @@ describe('Pipelines Service', () => {
 
         it('should inject urls into current pipelines result', (done: DoneFn) => {
           svc.getCurrentPipelines().pipe(first()).subscribe(pipelines => {
-            expect(pipelines as any[]).toContain({
+            expect(pipelines as any[]).toContainEqual({
               id: 'app',
               name: 'app',
               gitUrl: 'https://example.com/app.git',
@@ -210,7 +210,7 @@ describe('Pipelines Service', () => {
               openShiftConsoleUrl: 'https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines/app',
               editPipelineUrl: 'https://console.starter-us-east-2.openshift.com/console/project/blob/edit/pipelines/app'
             });
-            expect(pipelines as any[]).toContain({
+            expect(pipelines as any[]).toContainEqual({
               id: 'app2',
               name: 'app2',
               gitUrl: 'https://example.com/app2.git',
@@ -228,7 +228,7 @@ describe('Pipelines Service', () => {
 
         it('should inject urls into recent pipelines result', (done: DoneFn) => {
           svc.getCurrentPipelines().pipe(first()).subscribe(pipelines => {
-            expect(pipelines as any[]).toContain({
+            expect(pipelines as any[]).toContainEqual({
               id: 'app2',
               name: 'app2',
               gitUrl: 'https://example.com/app2.git',
@@ -272,7 +272,7 @@ describe('Pipelines Service', () => {
 
         it('should not inject urls into current pipelines result', (done: DoneFn) => {
           svc.getCurrentPipelines().pipe(first()).subscribe(pipelines => {
-            expect(pipelines as any[]).toContain({
+            expect(pipelines as any[]).toContainEqual({
               id: 'app',
               name: 'app',
               gitUrl: 'https://example.com/app.git',
@@ -288,7 +288,7 @@ describe('Pipelines Service', () => {
                 space: 'space'
               }
             });
-            expect(pipelines as any[]).toContain({
+            expect(pipelines as any[]).toContainEqual({
               id: 'app2',
               name: 'app2',
               gitUrl: 'https://example.com/app2.git',
@@ -304,7 +304,7 @@ describe('Pipelines Service', () => {
 
         it('should not inject urls into recent pipelines result', (done: DoneFn) => {
           svc.getCurrentPipelines().pipe(first()).subscribe(pipelines => {
-            expect(pipelines as any[]).toContain({
+            expect(pipelines as any[]).toContainEqual({
               id: 'app2',
               name: 'app2',
               gitUrl: 'https://example.com/app2.git',

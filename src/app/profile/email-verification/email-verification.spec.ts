@@ -47,7 +47,7 @@ describe('Email Verification Component', () => {
     fixture = TestBed.createComponent(EmailVerificationComponent);
   });
 
-  xit('should verify email is verified', async(() => {
+  it('should verify email is verified', async(() => {
     let comp = fixture.componentInstance;
     let element = fixture.debugElement.nativeElement;
     comp.email_true = email_true;
@@ -58,7 +58,7 @@ describe('Email Verification Component', () => {
     });
   }));
 
-  xit('should verify email has already been used', async(() => {
+  it('should verify email has already been used', async(() => {
     let comp = fixture.componentInstance;
     let element = fixture.debugElement.nativeElement;
     comp.email_true = email_true;

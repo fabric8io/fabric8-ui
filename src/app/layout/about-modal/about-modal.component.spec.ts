@@ -71,7 +71,7 @@ describe('AboutModalComponent', () => {
 
   describe('#open', () => {
     it('should show the model when called', () => {
-      spyOn(component.staticModal, 'show');
+      spyOn(component.staticModal, 'show').and.callFake(() => {});
       component.open();
       expect(component.staticModal.show).toHaveBeenCalled();
     });

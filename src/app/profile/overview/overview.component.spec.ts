@@ -59,7 +59,7 @@ describe('OverviewComponent', () => {
     }
   };
 
-  beforeEach(() => {
+  beforeEach((done: DoneFn) => {
     mockBroadcaster.on.and.returnValue(of(mockContext));
     mockContexts.current = of(mockContext);
     mockRouter.events = of(mockRouterEvent);
@@ -108,11 +108,11 @@ describe('OverviewComponent', () => {
         { provide: LocationStrategy, useValue: mockLocationStrategy }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    });
+    }).compileComponents().then(() => done());
   });
 
   describe('#constructor', () => {
-    xit('should not subscribe to spaceService if there are no user attributes', () => {
+    it('should not subscribe to spaceService if there are no user attributes', () => {
       mockContext.user.attributes = undefined;
       fixture = TestBed.createComponent(OverviewComponent);
       component = fixture.debugElement.componentInstance;

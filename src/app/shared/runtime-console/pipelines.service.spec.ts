@@ -13,11 +13,9 @@ import { PipelinesService } from './pipelines.service';
 
 describe('Runtime Console Pipelines Service', () => {
 
-  type TestContext = {
-    service: PipelinesService;
-  };
+  let service: PipelinesService;
 
-  beforeEach(function(this: TestContext): void {
+  beforeEach(function(): void {
     TestBed.configureTestingModule({
       providers: [
         {
@@ -110,20 +108,20 @@ describe('Runtime Console Pipelines Service', () => {
         PipelinesService
       ]
     });
-    this.service = TestBed.get(PipelinesService);
+    service = TestBed.get(PipelinesService);
   });
 
   describe('Current pipelines', () => {
-    it('should show builds for the context space', function(this: TestContext): void {
-      this.service.current.subscribe((buildConfigs: BuildConfig[]) => {
+    it('should show builds for the context space', function(): void {
+      service.current.subscribe((buildConfigs: BuildConfig[]) => {
         expect(buildConfigs.length).toBe(2);
       });
     });
   });
 
   describe('Recent pipelines', () => {
-    it('should show last four builds including completed builds', function(this: TestContext): void {
-      this.service.recentPipelines.subscribe((buildConfigs: BuildConfig[]) => {
+    it('should show last four builds including completed builds', function(): void {
+      service.recentPipelines.subscribe((buildConfigs: BuildConfig[]) => {
         expect(buildConfigs.length).toBe(4);
       });
     });

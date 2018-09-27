@@ -38,7 +38,7 @@ describe('CreateWorkItemWidgetComponent', () => {
     }
   } as User);
 
-  initContext(CreateWorkItemWidgetComponent, HostComponent, {
+  const testContext = initContext(CreateWorkItemWidgetComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],
     imports: [NgArrayPipesModule, RouterModule],
     providers: [
@@ -87,22 +87,22 @@ describe('CreateWorkItemWidgetComponent', () => {
     ]
   });
 
-  it('should enable buttons if the user owns the space', function(this: TestingContext) {
-    this.hostComponent.userOwnsSpace = true;
-    this.testedDirective.myWorkItemsCount = observableOf(0);
-    this.detectChanges();
+  it('should enable buttons if the user owns the space', function() {
+    testContext.hostComponent.userOwnsSpace = true;
+    testContext.testedDirective.myWorkItemsCount = observableOf(0);
+    testContext.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).not.toBeNull();
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).not.toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).not.toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).not.toBeNull();
 
   });
 
-  it('should disable buttons if the user does not own the space', function(this: TestingContext) {
-    this.hostComponent.userOwnsSpace = false;
-    this.testedDirective.myWorkItemsCount = observableOf(0);
-    this.detectChanges();
+  it('should disable buttons if the user does not own the space', function() {
+    testContext.hostComponent.userOwnsSpace = false;
+    testContext.testedDirective.myWorkItemsCount = observableOf(0);
+    testContext.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).toBeNull();
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).toBeNull();
   });
 });

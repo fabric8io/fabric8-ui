@@ -232,7 +232,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     if (this.currentSortField && this.currentSortField.id === 'name') {
       compValue = space1.attributes.name.localeCompare(space2.attributes.name);
     }
-    if (!this.isAscendingSort) {
+    if (!this.isAscendingSort && compValue) {
       compValue = compValue * -1;
     }
     return compValue;

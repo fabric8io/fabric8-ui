@@ -16,21 +16,21 @@ describe('LoadingWidgetComponent', () => {
   beforeEach(() => {
   });
 
-  initContext(LoadingWidgetComponent, HostComponent, {
+  const testContext = initContext(LoadingWidgetComponent, HostComponent, {
     imports: [
       CommonModule
     ]
   });
 
   describe('Loading widget', () => {
-    it('Should have message', function(this: TestingContext) {
-      this.detectChanges();
-      expect(this.testedDirective.message).toEqual('test1');
+    it('Should have message', function() {
+      testContext.detectChanges();
+      expect(testContext.testedDirective.message).toEqual('test1');
     });
 
-    it('Should have message title', function(this: TestingContext) {
-      this.detectChanges();
-      expect(this.testedDirective.title).toEqual('test2');
+    it('Should have message title', function() {
+      testContext.detectChanges();
+      expect(testContext.testedDirective.title).toEqual('test2');
     });
   });
 });

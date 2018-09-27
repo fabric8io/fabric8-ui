@@ -19,8 +19,7 @@ class HostComponent { }
 
 describe('MySpacesSearchSpacesDialogSpaceItemComponent', () => {
 
-  type TestingContext = TestContext<MySpacesSearchSpacesDialogSpaceItemComponent, HostComponent>;
-  initContext(MySpacesSearchSpacesDialogSpaceItemComponent, HostComponent,
+  const testContext = initContext(MySpacesSearchSpacesDialogSpaceItemComponent, HostComponent,
     {
       imports: [
         CommonModule,
@@ -44,13 +43,13 @@ describe('MySpacesSearchSpacesDialogSpaceItemComponent', () => {
     }
   );
 
-  it('should be instantiable', function(this: TestingContext): void {
-    expect(this.testedDirective).toBeDefined();
+  it('should be instantiable', function(): void {
+    expect(testContext.testedDirective).toBeDefined();
   });
 
   describe('invalid (missing) creator avatar URL', () => {
-    it('should load default image', function(this: TestingContext): void {
-      const imgElement: DebugElement = this.tested.query(By.css('img'));
+    it('should load default image', function(): void {
+      const imgElement: DebugElement = testContext.tested.query(By.css('img'));
       // within test harness the src attribute is undefined (rather than set to a specific URL),
       // probably due to Webpack processing of the component template and image loader
       expect(imgElement.properties['src']).toBeUndefined();
@@ -60,15 +59,15 @@ describe('MySpacesSearchSpacesDialogSpaceItemComponent', () => {
   });
 
   describe('valid creator avatar URL', () => {
-    beforeEach(function(this: TestingContext): void {
+    beforeEach(function(): void {
       // would actually be a remote URL, but for testing purposes, we will use a relative path to an existing asset to avoid 404s
-      this.testedDirective.space.relationalData.creator.attributes.imageURL = '../../../../../assets/images/icon-stack-nodejs.png';
-      this.detectChanges();
+      testContext.testedDirective.space.relationalData.creator.attributes.imageURL = '../../../../../assets/images/icon-stack-nodejs.png';
+      testContext.detectChanges();
     });
 
-    it('should load specified image', function(this: TestingContext): void {
-      const imgElement: DebugElement = this.tested.query(By.css('img'));
-      expect(imgElement.properties['src']).toEqual(this.testedDirective.space.relationalData.creator.attributes.imageURL);
+    it('should load specified image', function(): void {
+      const imgElement: DebugElement = testContext.tested.query(By.css('img'));
+      expect(imgElement.properties['src']).toEqual(testContext.testedDirective.space.relationalData.creator.attributes.imageURL);
       expect(imgElement.attributes['user-avatar']).toBeDefined();
       expect(imgElement.attributes['default-avatar']).toBeUndefined();
     });
