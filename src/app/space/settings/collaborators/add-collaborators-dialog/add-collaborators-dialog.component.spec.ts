@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CollaboratorService } from 'ngx-fabric8-wit';
 import {
@@ -26,7 +27,7 @@ class HostComponent { }
 describe('AddCollaboratorsDialog', () => {
 
   const testContext = initContext(AddCollaboratorsDialogComponent, HostComponent, {
-    imports: [ FormsModule ],
+    imports: [ FormsModule, NgSelectModule ],
     providers: [
       { provide: UserService, useValue: createMock(UserService) },
       { provide: CollaboratorService, useValue: createMock(CollaboratorService) }
