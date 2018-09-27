@@ -1,5 +1,6 @@
 import {
   Component,
+  DebugElement,
   Input,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
@@ -7,10 +8,7 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext } from 'testing/test-context';
 
 import { MemoryUnit } from '../models/memory-unit';
 import { Stat } from '../models/stat';
@@ -50,7 +48,7 @@ describe('ResourceCardComponent', () => {
             svc.getApplications.and.returnValue(of(['foo-app', 'bar-app']));
             svc.getEnvironments.and.returnValue(of(['stage', 'prod']));
             svc.getEnvironmentCpuStat.and.returnValue(of({ used: 1, quota: 2 }));
-            svc.getEnvironmentMemoryStat.and.returnValue(of({ used: 3, quota: 4, units: 'GB' as MemoryUnit  }));
+            svc.getEnvironmentMemoryStat.and.returnValue(of({ used: 3, quota: 4, units: MemoryUnit.GB }));
             return svc;
           }
         },
@@ -65,29 +63,29 @@ describe('ResourceCardComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA]
     },
-    (component: ResourceCardComponent) => {
+    (component: ResourceCardComponent): void => {
       component.spaceId = 'spaceId';
       component.environment = 'stage';
     }
   );
 
-  it('should correctly request the deployed environment data', function() {
+  it('should correctly request the deployed environment data', (): void => {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
     expect(mockSvc.getEnvironmentCpuStat).toHaveBeenCalledWith('spaceId', 'stage');
     expect(mockSvc.getEnvironmentMemoryStat).toHaveBeenCalledWith('spaceId', 'stage');
   });
 
-  it('should have its children passed the proper values', function() {
+  it('should have its children passed the proper values', (): void => {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-    let arrayOfComponents = testContext.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
+    const arrayOfComponents: DebugElement[] = testContext.fixture.debugElement.queryAll(By.directive(FakeUtilizationBarComponent));
     expect(arrayOfComponents.length).toEqual(2);
 
-    let cpuUtilBar = arrayOfComponents[0].componentInstance;
+    const cpuUtilBar: FakeUtilizationBarComponent = arrayOfComponents[0].componentInstance;
     expect(cpuUtilBar.resourceTitle).toEqual('CPU');
     expect(cpuUtilBar.resourceUnit).toEqual('Cores');
     expect(cpuUtilBar.stat).toEqual(mockSvc.getEnvironmentCpuStat());
 
-    let memoryUtilBar = arrayOfComponents[1].componentInstance;
+    const memoryUtilBar: FakeUtilizationBarComponent = arrayOfComponents[1].componentInstance;
     expect(memoryUtilBar.resourceTitle).toEqual('Memory');
     expect(memoryUtilBar.resourceUnit).toEqual('GB');
     expect(memoryUtilBar.stat).toEqual(mockSvc.getEnvironmentMemoryStat());

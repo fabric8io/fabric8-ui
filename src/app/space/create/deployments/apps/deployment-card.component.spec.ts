@@ -26,13 +26,8 @@ import {
   Subject
 } from 'rxjs';
 import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext } from 'testing/test-context';
 import { NotificationsService } from '../../../../shared/notifications.service';
-import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
 import {
   DeploymentStatusService,
   Status,
@@ -73,8 +68,8 @@ describe('DeploymentCardComponent', () => {
           const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
 
           svc.getVersion.and.returnValue(of('1.2.3'));
-          svc.getDeploymentCpuStat.and.returnValue(of([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]));
-          svc.getDeploymentMemoryStat.and.returnValue(of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]));
+          svc.getDeploymentCpuStat.and.returnValue(of([{ used: 1, quota: 2, timestamp: 1 }]));
+          svc.getDeploymentMemoryStat.and.returnValue(of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }]));
           svc.getAppUrl.and.returnValue(of('mockAppUrl'));
           svc.getConsoleUrl.and.returnValue(of('mockConsoleUrl'));
           svc.getLogsUrl.and.returnValue(of('mockLogsUrl'));
@@ -95,23 +90,23 @@ describe('DeploymentCardComponent', () => {
     ],
     schemas: [NO_ERRORS_SCHEMA]
   },
-    (component: DeploymentCardComponent) => {
+    (component: DeploymentCardComponent): void => {
       component.spaceId = 'mockSpaceId';
       component.applicationId = 'mockAppId';
       component.environment = 'mockEnvironment';
     });
 
-  it('should be active by default', function() {
+  it('should be active by default', (): void => {
     expect(testContext.testedDirective).toBeTruthy();
   });
 
-  it('should not display inactive environments', fakeAsync(function() {
+  it('should not display inactive environments', fakeAsync((): void => {
     TestBed.get(DeploymentsService).isApplicationDeployedInEnvironment().next(false);
     expect(testContext.testedDirective.active).toBeFalsy();
   }));
 
-  describe('#delete', () => {
-    it('should clear "deleting" flag when request completes successfully', function() {
+  describe('#delete', (): void => {
+    it('should clear "deleting" flag when request completes successfully', (): void => {
       const deleting: Subject<string> = TestBed.get(DeploymentsService).deleteDeployment();
 
       expect(testContext.testedDirective.active).toBeTruthy();
@@ -126,7 +121,7 @@ describe('DeploymentCardComponent', () => {
       expect(testContext.testedDirective.deleting).toBeFalsy();
     });
 
-    it('should clear "deleting" flag when request completes with error', function() {
+    it('should clear "deleting" flag when request completes with error', (): void => {
       const deleting: Subject<string> = TestBed.get(DeploymentsService).deleteDeployment();
 
       expect(testContext.testedDirective.active).toBeTruthy();
@@ -142,16 +137,16 @@ describe('DeploymentCardComponent', () => {
     });
   });
 
-  it('should set versionLabel from mockSvc.getVersion result', function() {
+  it('should set versionLabel from mockSvc.getVersion result', (): void => {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
 
-    let de: DebugElement = testContext.fixture.debugElement.query(By.css('#versionLabel'));
-    let el: HTMLElement = de.nativeElement;
+    const de: DebugElement = testContext.fixture.debugElement.query(By.css('#versionLabel'));
+    const el: HTMLElement = de.nativeElement;
     expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     expect(el.textContent).toEqual('1.2.3');
   });
 
-  it('should invoke deployments service calls with the correct arguments', function() {
+  it('should invoke deployments service calls with the correct arguments', (): void => {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
 
     expect(mockSvc.isApplicationDeployedInEnvironment).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
@@ -160,7 +155,7 @@ describe('DeploymentCardComponent', () => {
     expect(mockSvc.getAppUrl).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
   });
 
-  it('should set icon status from DeploymentStatusService aggregate', function() {
+  it('should set icon status from DeploymentStatusService aggregate', (): void => {
     const mockStatusSvc: jasmine.SpyObj<DeploymentStatusService> = TestBed.get(DeploymentStatusService);
     const mockStatus: Subject<Status> = mockStatusSvc.getDeploymentAggregateStatus();
 
@@ -180,16 +175,16 @@ describe('DeploymentCardComponent', () => {
     expect(testContext.testedDirective.cardStatusClass).toEqual('');
   });
 
-  describe('async tests', () => {
-    describe('dropdown menus', () => {
+  describe('async tests', (): void => {
+    describe('dropdown menus', (): void => {
       let menuItems: DebugElement[];
 
       function getItemByLabel(label: string): DebugElement {
         return menuItems
-          .filter((item: DebugElement) => item.nativeElement.textContent.includes(label))[0];
+          .filter((item: DebugElement): boolean => item.nativeElement.textContent.includes(label))[0];
       }
 
-      beforeEach(fakeAsync(function() {
+      beforeEach(fakeAsync((): void => {
         const de: DebugElement = testContext.fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
         de.triggerEventHandler('click', new CustomEvent('click'));
 
@@ -200,7 +195,7 @@ describe('DeploymentCardComponent', () => {
         menuItems = menu.queryAll(By.css('li'));
       }));
 
-      it('should not display appUrl if none available', fakeAsync(function() {
+      it('should not display appUrl if none available', fakeAsync((): void => {
         testContext.testedDirective.appUrl = of('');
 
         testContext.fixture.detectChanges();
@@ -211,8 +206,8 @@ describe('DeploymentCardComponent', () => {
         expect(item).toBeFalsy();
       }));
 
-      it('should call the delete modal open method', fakeAsync(function() {
-        spyOn(testContext.testedDirective, 'openModal').and.callFake(() => {});
+      it('should call the delete modal open method', fakeAsync((): void => {
+        spyOn(testContext.testedDirective, 'openModal').and.callFake((): void => {});
 
         const item: DebugElement = getItemByLabel('Delete');
         expect(item).toBeTruthy();
@@ -222,7 +217,7 @@ describe('DeploymentCardComponent', () => {
         expect(testContext.testedDirective.openModal).toHaveBeenCalled();
       }));
 
-      it('should call the delete service method when the modal event fires', fakeAsync(function() {
+      it('should call the delete service method when the modal event fires', fakeAsync((): void => {
         const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
         const de: DebugElement = testContext.fixture.debugElement.query(By.directive(FakeDeleteDeploymentModal));
         expect(mockSvc.deleteDeployment).not.toHaveBeenCalled();

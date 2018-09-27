@@ -9,10 +9,7 @@ import { By } from '@angular/platform-browser';
 import { Broadcaster } from 'ngx-base';
 import { FilterEvent } from 'patternfly-ng/filter';
 import { Observable ,  of } from 'rxjs';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext } from 'testing/test-context';
 import { DeploymentsAppsComponent } from './deployments-apps.component';
 
 @Component({
@@ -31,7 +28,7 @@ class FakeDeploymentCardContainerComponent {
   @Input() environments: Observable<string[]>;
 }
 
-describe('DeploymentsAppsComponent', () => {
+describe('DeploymentsAppsComponent', (): void => {
 
   const environments: string[] = ['envId1', 'envId2'];
   const applications: string[] = ['first', 'second'];
@@ -46,14 +43,14 @@ describe('DeploymentsAppsComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA]
     },
-    (component: DeploymentsAppsComponent) => {
+    (component: DeploymentsAppsComponent): void => {
       component.spaceId = of('spaceId');
       component.spaceName = of('spaceName');
       component.environments = mockEnvironments;
       component.applications = mockApplications;
     });
 
-  it('should create a single container to hold application and environment cards', function() {
+  it('should create a single container to hold application and environment cards', (): void => {
     const arrayOfComponents: DebugElement[] =
       testContext.fixture.debugElement.queryAll(By.directive(FakeDeploymentCardContainerComponent));
     expect(arrayOfComponents.length).toEqual(1);
@@ -63,15 +60,15 @@ describe('DeploymentsAppsComponent', () => {
   });
 
   describe('#showAddAppOverlay', () => {
-    it('should delegate to Broadcaster to display the launcher', function() {
+    it('should delegate to Broadcaster to display the launcher', (): void => {
       testContext.testedDirective.showAddAppOverlay();
       expect(TestBed.get(Broadcaster).broadcast).toHaveBeenCalledWith('showAddAppOverlay', true);
     });
   });
 
   describe('#filterApplications', () => {
-    it('should supply filtered applications list to deployment card container', function() {
-      let filter: FilterEvent = {
+    it('should supply filtered applications list to deployment card container', (): void => {
+      const filter: FilterEvent = {
         appliedFilters: [{
           field: {
             id: 'applicationId',

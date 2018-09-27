@@ -36,7 +36,7 @@ export class DeploymentsDonutComponent implements OnInit {
   desiredReplicas: number = 1;
   debounceScale = debounce(this.scale, 650);
 
-  private subscriptions: Subscription[] = [];
+  private readonly subscriptions: Subscription[] = [];
 
   colors: { [s in PodPhase]: string} = {
     'Empty': '#fafafa', // pf-black-100
@@ -56,15 +56,15 @@ export class DeploymentsDonutComponent implements OnInit {
   private maxPods: number;
 
   constructor(
-    private deploymentsService: DeploymentsService,
-    private notifications: NotificationsService
+    private readonly deploymentsService: DeploymentsService,
+    private readonly notifications: NotificationsService
   ) { }
 
   ngOnInit(): void {
     this.pods = this.deploymentsService.getPods(this.spaceId, this.environment,  this.applicationId);
 
     this.subscriptions.push(
-      this.pods.subscribe(pods => {
+      this.pods.subscribe((pods: Pods): void => {
         this.replicas = pods.total;
         if (!this.scaleRequestPending) {
           this.desiredReplicas = this.replicas;
@@ -118,10 +118,10 @@ export class DeploymentsDonutComponent implements OnInit {
       this.deploymentsService.scalePods(
         this.spaceId, this.environment, this.applicationId, this.desiredReplicas
       ).pipe(first()).subscribe(
-        success => {
+        () => {
           this.scaleRequestPending = false;
         },
-        error => {
+        (error: any) => {
           this.scaleRequestPending = false;
           this.notifications.message({
             type: NotificationType.WARNING,

@@ -37,7 +37,7 @@ enum CardStatusClass {
 })
 export class DeploymentCardComponent implements OnDestroy, OnInit {
 
-  public static readonly OK_TOOLTIP: string = 'Everything is ok';
+  static readonly OK_TOOLTIP: string = 'Everything is ok';
   private static readonly DEBOUNCE_TIME: number = 5000; // 5 seconds
   private static readonly MAX_DEBOUNCE_TIME: number = 10000; // 10 seconds
 
@@ -67,9 +67,9 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   private readonly debouncedUpdateDetails = debounce(this.updateDetails, DeploymentCardComponent.DEBOUNCE_TIME, { maxWait: DeploymentCardComponent.MAX_DEBOUNCE_TIME });
 
   constructor(
-    private deploymentsService: DeploymentsService,
-    private statusService: DeploymentStatusService,
-    private notifications: NotificationsService
+    private readonly deploymentsService: DeploymentsService,
+    private readonly statusService: DeploymentStatusService,
+    private readonly notifications: NotificationsService
   ) { }
 
   @Input() set collapsed(collapsed: boolean) {
@@ -85,7 +85,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
+    this.subscriptions.forEach((sub: Subscription): void => sub.unsubscribe());
   }
 
   ngOnInit(): void {
@@ -100,7 +100,7 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
     this.subscriptions.push(
       this.deploymentsService
         .isApplicationDeployedInEnvironment(this.spaceId, this.environment, this.applicationId)
-        .subscribe((active: boolean) => {
+        .subscribe((active: boolean): void => {
           this.active = active;
 
           if (active) {
@@ -173,16 +173,18 @@ export class DeploymentCardComponent implements OnDestroy, OnInit {
         this.applicationId
       ).pipe(
         first(),
-        finalize(() => this.deleting = false)
+        finalize((): void => {
+          this.deleting = false;
+        })
       ).subscribe(
-        (success: string) => {
+        (success: string): void => {
           this.notifications.message({
             type: NotificationType.SUCCESS,
             message: success
           });
           this.active = false;
         },
-        (error: any) => {
+        (error: any): void => {
           this.notifications.message({
             type: NotificationType.WARNING,
             message: error

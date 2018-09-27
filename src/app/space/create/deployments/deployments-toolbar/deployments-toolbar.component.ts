@@ -20,18 +20,17 @@ import { ToolbarConfig } from 'patternfly-ng/toolbar';
 })
 export class DeploymentsToolbarComponent implements OnChanges, OnInit {
 
-  public static readonly APPLICATION_ID: string = 'applicationId';
+  static readonly APPLICATION_ID: string = 'applicationId';
 
-  @Input() public resultsCount: number;
+  @Input() resultsCount: number;
 
-  @Output('onFilterChange') public onFilterChange: EventEmitter<FilterEvent> = new EventEmitter<FilterEvent>();
-  @Output('onSortChange') public onSortChange: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
+  @Output('onFilterChange') onFilterChange: EventEmitter<FilterEvent> = new EventEmitter<FilterEvent>();
+  @Output('onSortChange') onSortChange: EventEmitter<SortEvent> = new EventEmitter<SortEvent>();
 
   filterConfig: FilterConfig;
   isAscendingSort: boolean = true;
-
-  private sortConfig: SortConfig;
-  private toolbarConfig: ToolbarConfig;
+  sortConfig: SortConfig;
+  toolbarConfig: ToolbarConfig;
 
   ngOnInit(): void {
     this.filterConfig = {

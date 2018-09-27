@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import {
   BehaviorSubject,
-  combineLatest,
-  Observable
+  combineLatest
 } from 'rxjs';
 import { first } from 'rxjs/operators';
+
 import { createMock } from 'testing/mock';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
@@ -27,7 +27,7 @@ describe('DeploymentStatusService', (): void => {
   let service: DeploymentStatusService;
   let deploymentsService: jasmine.SpyObj<DeploymentsService>;
 
-  beforeEach(function(): void {
+  beforeEach((): void => {
     TestBed.configureTestingModule({
       providers: [
         DeploymentStatusService,
@@ -50,7 +50,7 @@ describe('DeploymentStatusService', (): void => {
   });
 
   describe('#getDeploymentAggregateStatus', (): void => {
-    it('should return OK status with no message when no stats are nearing quota', function(done: DoneFn): void {
+    it('should return OK status with no message when no stats are nearing quota', (done: DoneFn): void => {
       service.getDeploymentAggregateStatus('foo', 'bar', 'baz').pipe(
         first()
       ).subscribe((status: Status): void => {
@@ -60,7 +60,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should mirror single status when one stat is nearing quota', function(done: DoneFn): void {
+    it('should mirror single status when one stat is nearing quota', (done: DoneFn): void => {
       deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
       combineLatest(
         service.getDeploymentCpuStatus('foo', 'bar', 'baz'),
@@ -73,7 +73,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return combined status when multiple stats are nearing quota', function(done: DoneFn): void {
+    it('should return combined status when multiple stats are nearing quota', (done: DoneFn): void => {
       deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
       deploymentsService.getDeploymentMemoryStat().next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
       service.getDeploymentAggregateStatus('foo', 'bar', 'baz').pipe(
@@ -85,7 +85,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return combined status when multiple stats are nearing or at quota', function(done: DoneFn): void {
+    it('should return combined status when multiple stats are nearing or at quota', (done: DoneFn): void => {
       deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
       deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       service.getDeploymentAggregateStatus('foo', 'bar', 'baz').pipe(
@@ -99,13 +99,13 @@ describe('DeploymentStatusService', (): void => {
   });
 
   describe('#getDeploymentCpuStatus', (): void => {
-    it('should correctly invoke the deployments service', function(): void {
+    it('should correctly invoke the deployments service', (): void => {
       service.getDeploymentCpuStatus(spaceId, environmentName, applicationName);
       expect(deploymentsService.getPods).toHaveBeenCalledWith(spaceId, environmentName, applicationName);
       expect(deploymentsService.getDeploymentCpuStat).toHaveBeenCalledWith(spaceId, environmentName, applicationName, 1);
     });
 
-    it('should return OK status when not nearing quota', function(done: DoneFn): void {
+    it('should return OK status when not nearing quota', (done: DoneFn): void => {
       service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
         first()
       ).subscribe((status: Status): void => {
@@ -115,7 +115,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return WARN status when nearing quota', function(done: DoneFn): void {
+    it('should return WARN status when nearing quota', (done: DoneFn): void => {
       deploymentsService.getDeploymentCpuStat().next([{ used: 9, quota: 10 }]);
       service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
         first()
@@ -126,7 +126,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return ERR status when at quota', function(done: DoneFn): void {
+    it('should return ERR status when at quota', (done: DoneFn): void => {
       deploymentsService.getDeploymentCpuStat().next([{ used: 10, quota: 10 }]);
       service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
         first()
@@ -137,7 +137,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return OK status after scaling down to 0 pods', function(done: DoneFn): void {
+    it('should return OK status after scaling down to 0 pods', (done: DoneFn): void => {
       deploymentsService.getDeploymentCpuStat().next([{ used: 10, quota: 10 }]);
       service.getDeploymentCpuStatus('foo', 'bar', 'baz').pipe(
         first()
@@ -158,13 +158,13 @@ describe('DeploymentStatusService', (): void => {
   });
 
   describe('#getDeploymentMemoryStatus', (): void => {
-    it('should correctly invoke the deployments service', function(): void {
+    it('should correctly invoke the deployments service', (): void => {
       service.getDeploymentMemoryStatus(spaceId, environmentName, applicationName);
       expect(deploymentsService.getPods).toHaveBeenCalledWith(spaceId, environmentName, applicationName);
       expect(deploymentsService.getDeploymentMemoryStat).toHaveBeenCalledWith(spaceId, environmentName, applicationName, 1);
     });
 
-    it('should return OK status when not nearing quota', function(done: DoneFn): void {
+    it('should return OK status when not nearing quota', (done: DoneFn): void => {
       service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
         first()
       ).subscribe((status: Status): void => {
@@ -174,7 +174,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return WARN status when nearing quota', function(done: DoneFn): void {
+    it('should return WARN status when nearing quota', (done: DoneFn): void => {
       deploymentsService.getDeploymentMemoryStat().next([{ used: 9, quota: 10, units: MemoryUnit.MB }]);
       service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
         first()
@@ -185,7 +185,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return ERR status when at quota', function(done: DoneFn): void {
+    it('should return ERR status when at quota', (done: DoneFn): void => {
       deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
         first()
@@ -196,7 +196,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return OK status after scaling down to 0 pods', function(done: DoneFn): void {
+    it('should return OK status after scaling down to 0 pods', (done: DoneFn): void => {
       deploymentsService.getDeploymentMemoryStat().next([{ used: 10, quota: 10, units: MemoryUnit.MB }]);
       service.getDeploymentMemoryStatus('foo', 'bar', 'baz').pipe(
         first()
@@ -217,12 +217,12 @@ describe('DeploymentStatusService', (): void => {
   });
 
   describe('getEnvironmentCpuStatus', (): void => {
-    it('should correctly invoke the deployments service', function(): void {
+    it('should correctly invoke the deployments service', (): void => {
       service.getEnvironmentCpuStatus(spaceId, environmentName);
       expect(deploymentsService.getEnvironmentCpuStat).toHaveBeenCalledWith(spaceId, environmentName);
     });
 
-    it('should return OK status when not nearing quota', function(done: DoneFn): void {
+    it('should return OK status when not nearing quota', (done: DoneFn): void => {
       service.getEnvironmentCpuStatus('foo', 'bar').pipe(
         first()
       ).subscribe((status: Status): void => {
@@ -232,7 +232,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return WARN status when nearing quota', function(done: DoneFn): void {
+    it('should return WARN status when nearing quota', (done: DoneFn): void => {
       deploymentsService.getEnvironmentCpuStat().next({ used: 9, quota: 10 });
       service.getEnvironmentCpuStatus('foo', 'bar').pipe(
         first()
@@ -243,7 +243,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return ERR status when at quota', function(done: DoneFn): void {
+    it('should return ERR status when at quota', (done: DoneFn): void => {
       deploymentsService.getEnvironmentCpuStat().next({ used: 10, quota: 10 });
       service.getEnvironmentCpuStatus('foo', 'bar').pipe(
         first()
@@ -256,12 +256,12 @@ describe('DeploymentStatusService', (): void => {
   });
 
   describe('getEnvironmentMemoryStatus', (): void => {
-    it('should correctly invoke the deployments service', function(): void {
+    it('should correctly invoke the deployments service', (): void => {
       service.getEnvironmentMemoryStatus(spaceId, environmentName);
       expect(deploymentsService.getEnvironmentMemoryStat).toHaveBeenCalledWith(spaceId, environmentName);
     });
 
-    it('should return OK status when not nearing quota', function(done: DoneFn): void {
+    it('should return OK status when not nearing quota', (done: DoneFn): void => {
       service.getEnvironmentMemoryStatus('foo', 'bar').pipe(
         first()
       ).subscribe((status: Status): void => {
@@ -271,7 +271,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return WARN status when nearing quota', function(done: DoneFn): void {
+    it('should return WARN status when nearing quota', (done: DoneFn): void => {
       deploymentsService.getEnvironmentMemoryStat().next({ used: 9, quota: 10, units: MemoryUnit.GB });
       service.getEnvironmentMemoryStatus('foo', 'bar').pipe(
         first()
@@ -282,7 +282,7 @@ describe('DeploymentStatusService', (): void => {
         });
     });
 
-    it('should return ERR status when at quota', function(done: DoneFn): void {
+    it('should return ERR status when at quota', (done: DoneFn): void => {
       deploymentsService.getEnvironmentMemoryStat().next({ used: 10, quota: 10, units: MemoryUnit.GB });
       service.getEnvironmentMemoryStatus('foo', 'bar').pipe(
         first()

@@ -8,14 +8,13 @@ import {
   uniqueId
 } from 'lodash';
 import {
-  ChartDefaults,
   SparklineChartConfig,
   SparklineChartData
 } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   combineLatest,
-  empty as emptyObservable,
+  empty,
   Observable,
   of,
   ReplaySubject,
@@ -145,14 +144,13 @@ export class DeploymentDetailsComponent {
 
   constructor(
     private deploymentsService: DeploymentsService,
-    private deploymentStatusService: DeploymentStatusService,
-    private chartDefaults: ChartDefaults
+    private deploymentStatusService: DeploymentStatusService
   ) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.deploymentsService.getPods(this.spaceId, this.environment, this.applicationId).pipe(
-        map((p: Pods) => p.total > 0)
+        map((p: Pods): boolean => p.total > 0)
       ).subscribe(this.hasPods)
     );
 
@@ -182,7 +180,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.cpuChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return emptyObservable();
+          return empty();
         }
         return combineLatest(of(chart), this.deploymentStatusService.getDeploymentCpuStatus(this.spaceId, this.environment, this.applicationId));
       }))
@@ -211,7 +209,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, Status]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return emptyObservable();
+          return empty();
         }
         return combineLatest(of(chart), this.deploymentStatusService.getDeploymentMemoryStatus(this.spaceId, this.environment, this.applicationId));
       }))
@@ -246,7 +244,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.cpuChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, CpuStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return emptyObservable();
+          return empty();
         }
         return combineLatest(of(chart), this.cpuStat);
       }))
@@ -267,7 +265,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, MemoryStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return emptyObservable();
+          return empty();
         }
         return combineLatest(of(chart), this.memStat);
       }))
@@ -289,7 +287,7 @@ export class DeploymentDetailsComponent {
     this.subscriptions.push(
       this.memChart.pipe(switchMap((chart: ChartAPI): Observable<[ChartAPI, NetworkStat[]]> => {
         if (chart === DeploymentDetailsComponent.NO_CHART) {
-          return emptyObservable();
+          return empty();
         }
         return combineLatest(
           of(chart),
@@ -342,12 +340,12 @@ export class DeploymentDetailsComponent {
 
   private getTooltipContents(): any {
     return {
-      contents: (d: any) => {
+      contents: (d: any): string => {
         // d is an object containing the data displayed for a given data point in the tooltip
         // example: [{ x: Date, value: number, id: string, index: number, name: string }]
         // http://c3js.org/reference.html#tooltip-contents
         let tipRows: string = '';
-        let color = '#0088ce'; // pf-blue-400
+        const color: string = '#0088ce'; // pf-blue-400
         let units: string = '';
         if (d[0].name === 'CPU') {
           units = this.cpuConfig.units;

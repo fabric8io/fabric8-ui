@@ -1,9 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
+import { initContext } from 'testing/test-context';
 import { PodPhase } from '../../models/pod-phase';
 import { Pods } from '../../models/pods';
 import { DeploymentsDonutChartComponent } from './deployments-donut-chart.component';
@@ -21,7 +18,7 @@ import { DeploymentsDonutChartComponent } from './deployments-donut-chart.compon
 })
 class TestHostComponent {
   mini = false;
-  pods: Pods = { pods: [['Running' as PodPhase, 1], ['Terminating' as PodPhase, 1]], total: 2 };
+  pods: Pods = { pods: [[PodPhase.RUNNING, 1], [PodPhase.TERMINATING, 1]], total: 2 };
   desiredReplicas: number = 1;
   isIdled: boolean = false;
   colors: { [s in PodPhase]: string } = {
@@ -38,54 +35,54 @@ class TestHostComponent {
   };
 }
 
-describe('DeploymentsDonutChartComponent', () => {
+describe('DeploymentsDonutChartComponent', (): void => {
   const testContext = initContext(DeploymentsDonutChartComponent, TestHostComponent);
 
-  it('should set unique chartId', function() {
+  it('should set unique chartId', (): void => {
     expect(testContext.testedDirective.chartId).toMatch(/deployments\-donut\-chart.*/);
   });
 
-  it('should not show mini text', function() {
+  it('should not show mini text', (): void => {
     expect(testContext.testedDirective.mini).toBe(false);
-    let text = testContext.fixture.debugElement.query(By.css('deployments-donut-chart-mini-text'));
+    const text: DebugElement = testContext.fixture.debugElement.query(By.css('deployments-donut-chart-mini-text'));
     expect(text).toBeFalsy();
   });
 
-  describe('Mini chart', () => {
-    beforeEach(function() {
+  describe('Mini chart', (): void => {
+    beforeEach((): void => {
       testContext.hostComponent.mini = true;
       testContext.detectChanges();
     });
 
-    it('should show mini text', function() {
+    it('should show mini text', (): void => {
       expect(testContext.testedDirective.mini).toBe(true);
-      let text = testContext.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
+      const text: DebugElement = testContext.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
       expect(text).toBeTruthy();
-      let textEl = text.nativeElement;
+      const textEl: HTMLElement = text.nativeElement;
       expect(textEl.textContent.trim()).toEqual('2 pods');
     });
 
-    it('should show pods status', function() {
-      let runningText = testContext.fixture.debugElement.query(By.css('#pod_status_Running'));
+    it('should show pods status', (): void => {
+      const runningText: DebugElement = testContext.fixture.debugElement.query(By.css('#pod_status_Running'));
       expect(runningText).toBeTruthy();
       expect(runningText.nativeElement.textContent.trim()).toBe('1 Running');
 
-      let terminating = testContext.fixture.debugElement.query(By.css('#pod_status_Terminating'));
+      const terminating: DebugElement = testContext.fixture.debugElement.query(By.css('#pod_status_Terminating'));
       expect(terminating).toBeTruthy();
       expect(terminating.nativeElement.textContent.trim()).toBe('1 Terminating');
     });
 
-    describe('Mini Idle chart', () => {
-      beforeEach(function() {
+    describe('Mini Idle chart', (): void => {
+      beforeEach((): void => {
         testContext.hostComponent.isIdled = true;
         testContext.detectChanges();
       });
 
-      xit('should show idled text', function() {
+      xit('should show idled text', (): void => {
         expect(testContext.testedDirective.idled).toBe(true);
-        let idle = testContext.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
+        const idle: DebugElement = testContext.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
         expect(idle).toBeTruthy();
-        let idleEl = idle.nativeElement;
+        const idleEl: HTMLElement = idle.nativeElement;
         expect(idleEl.textContent.trim()).toEqual('Idle');
       });
     });

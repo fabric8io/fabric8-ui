@@ -13,7 +13,7 @@ import {
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable , of, throwError as _throw } from 'rxjs';
+import { Observable , of, throwError } from 'rxjs';
 import { catchError , map } from 'rxjs/operators';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
@@ -185,7 +185,7 @@ export class DeploymentApiService {
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/statseries`;
     const params: HttpParams = new HttpParams().set('start', String(startTime)).set('end', String(endTime));
     return this.httpGet<MultiTimeseriesResponse>(url, params).pipe(
-      map((response: MultiTimeseriesResponse) => response.data)
+      map((response: MultiTimeseriesResponse): MultiTimeseriesData => response.data)
     );
   }
 
@@ -195,7 +195,7 @@ export class DeploymentApiService {
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/stats`;
     return this.httpGet<TimeseriesResponse>(url).pipe(
-      map((response: TimeseriesResponse) => response.data.attributes)
+      map((response: TimeseriesResponse): TimeseriesData => response.data.attributes)
     );
   }
 
@@ -205,8 +205,8 @@ export class DeploymentApiService {
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
     return this.http.delete(url, { headers: this.headers, responseType: 'text' }).pipe(
-      catchError((err: HttpErrorResponse) => this.handleHttpError(err)),
-      map(() => null)
+      catchError((err: HttpErrorResponse): Observable<void> => this.handleHttpError(err)),
+      map((): void => null)
     );
   }
 
@@ -217,8 +217,8 @@ export class DeploymentApiService {
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}`;
     const params: HttpParams = new HttpParams().set('podCount', String(desiredReplicas));
     return this.http.put(url, '', { headers: this.headers, params, responseType: 'text' }).pipe(
-      catchError((err: HttpErrorResponse) => this.handleHttpError(err)),
-      map(() => null)
+      catchError((err: HttpErrorResponse): Observable<void> => this.handleHttpError(err)),
+      map((): void => null)
     );
   }
 
@@ -243,14 +243,14 @@ export class DeploymentApiService {
 
   private httpGet<T>(url: string, params: HttpParams = new HttpParams()): Observable<T> {
     return this.http.get<T>(url, { headers: this.headers, params }).pipe(
-      catchError((err: HttpErrorResponse) => this.handleHttpError(err))
+      catchError((err: HttpErrorResponse): Observable<T> => this.handleHttpError(err))
     );
   }
 
   private handleHttpError(err: HttpErrorResponse): Observable<any> {
     this.errorHandler.handleError(err);
     this.logger.error(err);
-    return _throw(err);
+    return throwError(err);
   }
 
 }
