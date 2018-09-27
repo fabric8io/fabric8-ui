@@ -599,13 +599,16 @@ describe('PipelinesComponent', () => {
     });
   });
 
-  it('should trigger showAddAppOverlay on click', function() {
+  it('should trigger showAddAppOverlay on click', function(done: DoneFn) {
     // given
+    spyOn(testContext.testedDirective, 'showAddAppOverlay');
+    testContext.fixture.nativeElement.querySelector('.openshift-links .dropdown-toggle').click();
     testContext.fixture.detectChanges();
     testContext.fixture.whenStable().then(() => {
       expect(testContext.fixture.nativeElement.querySelector('#appLauncherAnchor')).toBeDefined();
       testContext.fixture.nativeElement.querySelector('#appLauncherAnchor').click();
       expect(testContext.testedDirective.showAddAppOverlay).toHaveBeenCalled();
+      done();
     });
   });
 
