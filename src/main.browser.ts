@@ -28,7 +28,7 @@ import './assets/stylesheets/shared/osio.less';
  */
 export function main(): Promise < any > {
   return platformBrowserDynamic()
-    .bootstrapModule(AppModule)
+    .bootstrapModule(AppModule, { preserveWhitespaces: true })
     .then(decorateModuleRef)
     .catch(err => console.error(err));
 }
