@@ -1,6 +1,7 @@
 {
   "angularCompilerOptions": {
     "entryModule": "src/app/app.module#AppModule",
+    "preserveWhitespaces": true,
     "skipMetadataEmit" : true
   },
   "compilerOptions": {
@@ -8,7 +9,8 @@
     "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["dom", "es6"],
+    "inlineSources": true,
+    "lib": [ "dom", "es6" ],
     "mapRoot": "",
     "module": "es2015",
     "moduleResolution": "node",
@@ -22,8 +24,10 @@
     },
     "removeComments": false,
     "rootDir": ".",
+    "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": false,
+    "stripInternal": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
     "types": [
@@ -32,8 +36,11 @@
       "protractor",
       "segment-analytics",
       "selenium-webdriver",
-      "source-map",
       "webpack"
     ]
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

@@ -1,9 +1,10 @@
 {
-  "atom": { "rewriteTsconfig": false },
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": true,
-    "useWebpackText": true
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true
   },
+  "atom": { "rewriteTsconfig": false },
   "buildOnSave": false,
   "compileOnSave": false,
   "compilerOptions": {
@@ -11,7 +12,8 @@
     "baseUrl": "./src",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["dom", "es6"],
+    "inlineSources": true,
+    "lib": [ "dom", "es6" ],
     "module": "es2015",
     "moduleResolution": "node",
     "noEmitHelpers": true,
@@ -21,9 +23,13 @@
       "@angular/*": ["../node_modules/@angular/*"],
       "rxjs": ["../node_modules/rxjs"]
     },
+    "removeComments": false,
+    "rootDir": ".",
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": false,
+    "stripInternal": true,
+    "suppressImplicitAnyIndexErrors": true,
     "target": "es5",
     "types": [
       "jest",

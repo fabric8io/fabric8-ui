@@ -1,5 +1,6 @@
 {
   "angularCompilerOptions": {
+    "preserveWhitespaces": true,
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true
   },
@@ -32,7 +33,7 @@
     },
     "rootDir": ".",
     "skipLibCheck": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "strictNullChecks": false,
     "stripInternal": true,
     "suppressImplicitAnyIndexErrors": true,
