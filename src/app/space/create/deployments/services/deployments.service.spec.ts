@@ -560,8 +560,8 @@ describe('DeploymentsService', () => {
 
   describe('#canScale', () => {
     const GB: number = Math.pow(1024, 3);
-    it('should return true when remaining quota is sufficient', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+    it('should return true when remaining quota is sufficient', function(done: DoneFn): void {
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'stage',
@@ -579,22 +579,22 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
         cpucores: 1,
         memory: 0.5 * GB
       }));
 
-      this.service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+      service.canScale('foo-spaceId', 'stage', 'vertx-hello')
         .pipe(first())
         .subscribe((canScale: boolean): void => {
           expect(canScale).toBeTruthy();
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return false when remaining CPU quota is insufficient', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+    it('should return false when remaining CPU quota is insufficient', function(done: DoneFn): void {
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'stage',
@@ -612,22 +612,22 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
         cpucores: 1,
         memory: 0.5 * GB
       }));
 
-      this.service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+      service.canScale('foo-spaceId', 'stage', 'vertx-hello')
         .pipe(first())
         .subscribe((canScale: boolean): void => {
           expect(canScale).toBeFalsy();
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return false when remaining Memory quota is insufficient', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+    it('should return false when remaining Memory quota is insufficient', function(done: DoneFn): void {
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'stage',
@@ -645,25 +645,25 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
         cpucores: 1,
         memory: 0.5 * GB
       }));
 
-      this.service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+      service.canScale('foo-spaceId', 'stage', 'vertx-hello')
         .pipe(first())
         .subscribe((canScale: boolean): void => {
           expect(canScale).toBeFalsy();
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
   describe('#getMaximumPods', () => {
     const GB: number = Math.pow(1024, 3);
-    it('should return appropriate number of maximum pods for typical scenario', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+    it('should return appropriate number of maximum pods for typical scenario', function(done: DoneFn): void {
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'stage',
@@ -681,21 +681,21 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
         cpucores: 1,
         memory: 0.5 * GB
       }));
 
-      this.service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+      service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
         .subscribe((maxPods: number): void => {
           expect(maxPods).toEqual(2);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return maximum based on resource with least available quota', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+    it('should return maximum based on resource with least available quota', function(done: DoneFn): void {
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'stage',
@@ -713,17 +713,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.apiService.getQuotaRequirementPerPod.and.returnValue(of({
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
         cpucores: 2,
         memory: 0.5 * GB
       }));
 
-      this.service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+      service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
         .subscribe((maxPods: number): void => {
           expect(maxPods).toEqual(1); // only one CPU allocation will fit
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 

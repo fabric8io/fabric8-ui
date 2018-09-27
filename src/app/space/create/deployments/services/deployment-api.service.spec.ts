@@ -349,7 +349,7 @@ describe('DeploymentApiService', () => {
 
   // TODO uncomment once backend is available and implementation is updated
   xdescribe('#getQuotaRequirementPerPod', () => {
-    it('should return result', function(this: TestContext, done: DoneFn): void {
+    it('should return result', function(done: DoneFn): void {
       const gb: number = Math.pow(1024, 3);
       const httpResponse: PodQuotaRequirementResponse = {
         data: {
@@ -359,7 +359,7 @@ describe('DeploymentApiService', () => {
           }
         }
       } as PodQuotaRequirementResponse;
-      this.service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
+      service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe((data: PodQuotaRequirement): void => {
           expect(data).toEqual(httpResponse.data.limits);
@@ -373,8 +373,8 @@ describe('DeploymentApiService', () => {
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(this: TestContext, done: DoneFn): void {
-      this.service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
+    it('should report errors', function(done: DoneFn): void {
+      service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe(
           () => done.fail('should throw error'),
