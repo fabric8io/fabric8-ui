@@ -371,10 +371,12 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
                 );
             }
           }))
-          .map((contexts: Context[]): Context[] => {
-            // remove null context values resulting from getSpaceById throwing an error
-            return contexts.filter((context: Context): boolean => context !== null);
-          });
+          .pipe(
+            map((contexts: Context[]): Context[] => {
+              // remove null context values resulting from getSpaceById throwing an error
+              return contexts.filter((context: Context): boolean => context !== null);
+            })
+          );
       } else {
         return of([]);
       }
