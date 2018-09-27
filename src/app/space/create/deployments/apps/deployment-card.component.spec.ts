@@ -212,7 +212,7 @@ describe('DeploymentCardComponent', () => {
       }));
 
       it('should call the delete modal open method', fakeAsync(function() {
-        spyOn(testContext.testedDirective, 'openModal');
+        spyOn(testContext.testedDirective, 'openModal').and.callFake(() => {});
 
         const item: DebugElement = getItemByLabel('Delete');
         expect(item).toBeTruthy();
