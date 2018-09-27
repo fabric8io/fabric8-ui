@@ -1,5 +1,5 @@
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
-import { NgForm, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Area, AreaService } from 'ngx-fabric8-wit';
 import { Observable,  of as observableOf } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
@@ -21,7 +21,7 @@ describe('CreateAreaDialogComponent', () => {
   } as Area));
 
   const testContext = initContext(CreateAreaDialogComponent, HostComponent, {
-    declarations: [NgForm, NgModel],
+    imports: [FormsModule],
     providers: [
       { provide: AreaService, useValue: mockAreaService}
     ],
