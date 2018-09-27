@@ -93,7 +93,7 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
               }
             });
           }),
-          tap(() => this.loading = false),
+          tap(() => this.loading = false)
         )
         .subscribe((workItems: WorkItem[]) => {
           this.workItems = workItems;

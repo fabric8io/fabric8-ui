@@ -14,16 +14,15 @@ import {
   ConnectableObservable,
   EMPTY,
   forkJoin,
-  merge,
   Observable,
   of,
   ReplaySubject,
-  Scheduler,
   Subject,
   Subscription,
   throwError as observableThrowError
 } from 'rxjs';
-import { catchError,
+import {
+  catchError,
   distinctUntilChanged,
   distinctUntilKeyChanged,
   filter,
@@ -116,8 +115,9 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
         } else {
           return {} as Context;
         }
-      })
-      ).pipe(multicast(() => new ReplaySubject(1))) as ConnectableObservable<Context>;
+      }),
+      multicast(() => new ReplaySubject(1))
+    ) as ConnectableObservable<Context>;
     this._default.connect();
   }
 
@@ -251,8 +251,9 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
       }),
       tap((val: Context): void => {
         this._current.next(val);
-      })
-    ).pipe(multicast(() => new Subject())) as ConnectableObservable<Context>;
+      }),
+      multicast(() => new Subject())
+    ) as ConnectableObservable<Context>;
     res.connect();
     return res;
   }
@@ -347,8 +348,9 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
           .map((raw: RawContext): Observable<Context> => {
             if (raw.space) {
               // if getSpaceById() throws an error, forkJoin will not complete and loadRecent will not return
-              return this.spaceService.getSpaceById(raw.space).catch((): Observable<Space> => of(null))
+              return this.spaceService.getSpaceById(raw.space)
                 .pipe(
+                  catchError((): Observable<Space> => of(null)),
                   map((val: Space): Context => {
                     if (val) {
                       return this.buildContext({ space: val } as RawContext);
