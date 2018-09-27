@@ -8,8 +8,7 @@ import { Inject, Injectable } from '@angular/core';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AUTH_API_URL } from 'ngx-login-client';
 import { Observable } from 'rxjs';
-import uuidv4 from 'uuid/v4';
-
+import * as uuidv4 from 'uuid/v4';
 
 @Injectable()
 export class RequestIdInterceptor implements HttpInterceptor {

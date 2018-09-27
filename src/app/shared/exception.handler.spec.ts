@@ -10,14 +10,14 @@ describe('Raven exception handler', () => {
   const testEmail = 'email@email.com';
 
   let handler: RavenExceptionHandler;
-  let captureExceptionSpy: jest.SpyInstance;
-  let getEnvironmentSpy: jest.SpyInstance;
+  let captureExceptionSpy: jasmine.Spy;
+  let getEnvironmentSpy: jasmine.Spy;
 
   beforeEach(() => {
-    captureExceptionSpy = jest.spyOn(Raven, 'captureException');
+    captureExceptionSpy = spyOn(Raven, 'captureException');
 
     // default environment to Environment.production
-    getEnvironmentSpy = jest.spyOn(environment, 'getEnvironment');
+    getEnvironmentSpy = spyOn(environment, 'getEnvironment');
 
     // init TestBed
     TestBed.configureTestingModule({
@@ -39,27 +39,27 @@ describe('Raven exception handler', () => {
 
   it('Environment.development does not invoke Raven', () => {
     spyOn(console, 'error').and.callFake(() => {});
-    getEnvironmentSpy.mockReturnValue(Environment.development);
+    getEnvironmentSpy.and.returnValue(Environment.development);
     handler.handleError('testing Environment.development (not a real error)');
     expect(captureExceptionSpy).not.toHaveBeenCalled();
   });
 
   it('Environment.prDeploy does not invoke Raven', () => {
     spyOn(console, 'error').and.callFake(() => {});
-    getEnvironmentSpy.mockReturnValue(Environment.prDeploy);
+    getEnvironmentSpy.and.returnValue(Environment.prDeploy);
     handler.handleError('testing Environment.prDeploy (not a real error)');
     expect(captureExceptionSpy).not.toHaveBeenCalled();
   });
 
   it('Environment.production does invoke Raven', () => {
     spyOn(console, 'error').and.callFake(() => {});
-    getEnvironmentSpy.mockReturnValue(Environment.production);
+    getEnvironmentSpy.and.returnValue(Environment.production);
     handler.handleError('testing Environment.production (not a real error)');
     expect(captureExceptionSpy).toHaveBeenCalled();
   });
 
   it('Environment.prodPreview does invoke Raven', () => {
-    getEnvironmentSpy.mockReturnValue(Environment.prodPreview);
+    getEnvironmentSpy.and.returnValue(Environment.prodPreview);
     handler.handleError('testing Environment.prodPreview');
     expect(captureExceptionSpy).toHaveBeenCalled();
   });
@@ -68,7 +68,7 @@ describe('Raven exception handler', () => {
 
     beforeEach(() => {
       // default environment to Environment.production
-      getEnvironmentSpy.mockReturnValue(Environment.production);
+      getEnvironmentSpy.and.returnValue(Environment.production);
     });
 
     it('setUserContext from UserService.currentLoggedInUser', () => {
