@@ -53,7 +53,7 @@ describe('TenantComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: UserService, useValue: mockUserService },
         { provide: Logger, useValue: mockLogger },
-        { provide: WIT_API_URL, useValue: 'http://example.com'}
+        { provide: WIT_API_URL, useValue: 'http://example.com' }
       ]
     });
     TestBed.overrideProvider(GettingStartedService, { useValue: mockGettingStartedService });
@@ -73,15 +73,22 @@ describe('TenantComponent', () => {
       expect(result).toBeFalsy();
     });
 
-    it('should be false if not modified and all versions are valid', () => {
+    it('should be false if not modified and all fields are valid', () => {
       component.modifiedFromRequestParam = false;
       let result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeFalsy();
     });
 
-    it('should be true if not modified and at least one of the versions/repos is invalid', () => {
+    it('should be true if only template repo and template repo dir fields are modified', () => {
+      this.templatesRepoDirBlob = "path/to/dir"
+      this.templatesRepoDirBlob = "https://github.com/fabric8-services/fabric8-tenant"
+      let result: boolean = component.isUpdateProfileDisabled;
+      expect(result).toBeFalsy();
+    });
+
+    it('should be true if not modified and at least one of the template repo fields is invalid', () => {
       component.modifiedFromRequestParam = false;
-      component.jenkinsVersionInvalid = true;
+      component.templatesRepoInvalid = true;
       let result: boolean = component.isUpdateProfileDisabled;
       expect(result).toBeTruthy();
     });
@@ -190,29 +197,36 @@ describe('TenantComponent', () => {
     });
   });
 
-  describe('#mavenRepoValidate', () => {
+  describe('#templatesRepoValidate', () => {
 
-    let mavenUrl = '';
+    let repoUrl = '';
 
-    it('should verify not-a-maven-repo to be an invalid maven repo', () => {
-      mavenUrl = 'not-a-maven-repo';
-      component.mavenRepo = mavenUrl;
-      component.mavenRepoValidate();
-      expect(component.mavenRepoInvalid).toBe(true);
+    it('should verify not-a-git-repo to be an invalid template Git repo', () => {
+      repoUrl = 'not-a-git-repo';
+      component.templatesRepo = repoUrl;
+      component.templatesRepoValidate();
+      expect(component.templatesRepoInvalid).toBe(true);
     });
 
-    it('should verify http://real-maven-repo to be a valid maven repo', () => {
-      mavenUrl = 'http://real-maven-repo';
-      component.mavenRepo = mavenUrl;
-      component.mavenRepoValidate();
-      expect(component.mavenRepoInvalid).toBe(false);
+    it('should verify git@github.com:my-services/fabric8-tenant.git to be an invalid template Git repo', () => {
+      repoUrl = 'git@github.com:my-services/fabric8-tenant.git';
+      component.templatesRepo = repoUrl;
+      component.templatesRepoValidate();
+      expect(component.templatesRepoInvalid).toBe(true);
     });
 
-    it('should verify https://real-maven-repo to be a valid maven repo', () => {
-      mavenUrl = 'https://real-maven-repo';
-      component.mavenRepo = mavenUrl;
-      component.mavenRepoValidate();
-      expect(component.mavenRepoInvalid).toBe(false);
+    it('should verify https://github.com/my-services/fabric8-tenant to be a valid template Git repo', () => {
+      repoUrl = 'https://github.com/my-services/fabric8-tenant';
+      component.templatesRepo = repoUrl;
+      component.templatesRepoValidate();
+      expect(component.templatesRepoInvalid).toBe(false);
+    });
+
+    it('should verify http://github.com/my-services/fabric8-tenant to be a valid template Git repo', () => {
+      repoUrl = 'http://github.com/my-services/fabric8-tenant';
+      component.templatesRepo = repoUrl;
+      component.templatesRepoValidate();
+      expect(component.templatesRepoInvalid).toBe(false);
     });
   });
 

@@ -21,19 +21,17 @@ import { TenantService } from '../services/tenant.service';
   providers: [CopyService, GettingStartedService, GitHubService, ProviderService, TenantService]
 })
 export class TenantComponent implements AfterViewInit, OnInit {
-  @ViewChild('_jenkinsVersion') jenkinsVersionElement: HTMLElement;
-  @ViewChild('_cheVersion') cheVersionElement: HTMLElement;
-  @ViewChild('_teamVersion') teamVersionElement: HTMLElement;
-  @ViewChild('_mavenRepo') mavenRepoElement: ElementRef;
+  @ViewChild('_templatesRepoBlob') templatesRepoBlobElement: HTMLElement;
+  @ViewChild('_templatesRepo') templatesRepoElement: ElementRef;
+  @ViewChild('_templatesRepoDir') templatesRepoDirElement: HTMLElement;
   @ViewChild('_boosterGitRef') boosterGitRefElement: HTMLElement;
   @ViewChild('_boosterGitRepo') boosterGitRepoElement: HTMLElement;
 
   @ViewChild('tenantForm') profileForm: NgForm;
 
-  jenkinsVersion: string;
-  cheVersion: string;
-  teamVersion: string;
-  mavenRepo: string;
+  templatesRepoBlob: string;
+  templatesRepo: string;
+  templatesRepoDir: string;
   updateTenant: boolean = true;
 
   boosterGitRef: string;
@@ -41,10 +39,9 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
   context: Context;
 
-  jenkinsVersionInvalid: boolean = false;
-  cheVersionInvalid: boolean = false;
-  teamVersionInvalid: boolean = false;
-  mavenRepoInvalid: boolean = false;
+  templatesRepoBlobInvalid: boolean = false;
+  templatesRepoInvalid: boolean = false;
+  templatesRepoDirInvalid: boolean = false;
 
   boosterGitRefInvalid: boolean = false;
   boosterGitRepoInvalid: boolean = false;
@@ -64,13 +61,13 @@ export class TenantComponent implements AfterViewInit, OnInit {
   private modifiedFromRequestParam: boolean = false;
 
   constructor(
-      private auth: AuthenticationService,
-      private gettingStartedService: GettingStartedService,
-      private contexts: Contexts,
-      private notifications: Notifications,
-      private router: Router,
-      private tenantService: TenantService,
-      private userService: UserService) {
+    private auth: AuthenticationService,
+    private gettingStartedService: GettingStartedService,
+    private contexts: Contexts,
+    private notifications: Notifications,
+    private router: Router,
+    private tenantService: TenantService,
+    private userService: UserService) {
     this.subscriptions.push(contexts.current.subscribe(val => this.context = val));
 
     if (userService.currentLoggedInUser.attributes) {
@@ -87,8 +84,8 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
     // Set focus
-    if (this.getRequestParam('jenkinsVersion') !== null) {
-      this.setElementFocus(null, this.jenkinsVersionElement);
+    if (this.getRequestParam('templatesRepoBlob') !== null) {
+      this.setElementFocus(null, this.templatesRepoBlobElement);
     } else if (this.getRequestParam('boosterGitRef') !== null) {
       this.setElementFocus(null, this.boosterGitRefElement);
     }
@@ -110,8 +107,8 @@ export class TenantComponent implements AfterViewInit, OnInit {
       return false;
     }
     return ((!this.profileForm.dirty && !(!this.loadedFormEmpty && this.formValuesEmpty())) ||
-            (this.jenkinsVersionInvalid || this.cheVersionInvalid || this.teamVersionInvalid || this.mavenRepoInvalid ||
-              this.boosterGitRefInvalid || this.boosterGitRepoInvalid));
+      (this.templatesRepoBlobInvalid || this.templatesRepoInvalid || this.templatesRepoDirInvalid ||
+        this.boosterGitRefInvalid || this.boosterGitRepoInvalid));
   }
 
   /**
@@ -167,10 +164,9 @@ export class TenantComponent implements AfterViewInit, OnInit {
       tenantConfig = {};
       contextInformation['tenantConfig'] = tenantConfig;
     }
-    tenantConfig['jenkinsVersion'] = this.jenkinsVersion;
-    tenantConfig['cheVersion'] = this.cheVersion;
-    tenantConfig['teamVersion'] = this.teamVersion;
-    tenantConfig['mavenRepo'] = this.mavenRepo;
+    tenantConfig['templatesRepoBlob'] = this.templatesRepoBlob;
+    tenantConfig['templatesRepo'] = this.templatesRepo;
+    tenantConfig['templatesRepoDir'] = this.templatesRepoDir;
     tenantConfig['updateTenant'] = this.updateTenant;
 
 
@@ -201,8 +197,8 @@ export class TenantComponent implements AfterViewInit, OnInit {
     this.boosterGitRefInvalid = !this.isUrlValid(this.boosterGitRepo);
   }
 
-  mavenRepoValidate(): void {
-    this.mavenRepoInvalid = !this.isUrlValid(this.mavenRepo);
+  templatesRepoValidate(): void {
+    this.templatesRepoInvalid = !this.isUrlValid(this.templatesRepo);
   }
 
   // Private
@@ -212,10 +208,9 @@ export class TenantComponent implements AfterViewInit, OnInit {
    */
   private defaultValuesFromRequestParams() {
     this.modifiedFromRequestParam = false;
-    this.cheVersion = this.defaultRequestParam('cheVersion', this.cheVersion);
-    this.jenkinsVersion = this.defaultRequestParam('jenkinsVersion', this.jenkinsVersion);
-    this.teamVersion = this.defaultRequestParam('teamVersion', this.teamVersion);
-    this.mavenRepo = this.defaultRequestParam('mavenRepo', this.mavenRepo);
+    this.templatesRepoBlob = this.defaultRequestParam('templatesRepoBlob', this.templatesRepoBlob);
+    this.templatesRepo = this.defaultRequestParam('templatesRepo', this.templatesRepo);
+    this.templatesRepoDir = this.defaultRequestParam('templatesRepoDir', this.templatesRepoDir);
 
     this.boosterGitRef = this.defaultRequestParam('boosterGitRef', this.boosterGitRef);
     this.boosterGitRepo = this.defaultRequestParam('boosterGitRepo', this.boosterGitRepo);
@@ -283,10 +278,9 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
     let tenantConfig = contextInformation['tenantConfig'];
     if (tenantConfig) {
-      this.jenkinsVersion = tenantConfig['jenkinsVersion'] || '';
-      this.cheVersion = tenantConfig['cheVersion'] || '';
-      this.teamVersion = tenantConfig['teamVersion'] || '';
-      this.mavenRepo = tenantConfig['mavenRepo'] || '';
+      this.templatesRepoBlob = tenantConfig['templatesRepoBlob'] || '';
+      this.templatesRepo = tenantConfig['templatesRepo'] || '';
+      this.templatesRepoDir = tenantConfig['templatesRepoDir'] || '';
       this.updateTenant = tenantConfig['updateTenant'] || false;
     }
 
@@ -321,7 +315,7 @@ export class TenantComponent implements AfterViewInit, OnInit {
 
   private formValuesEmpty() {
     return !(this.boosterGitRef || this.boosterGitRepo ||
-      this.jenkinsVersion || this.cheVersion || this.teamVersion || this.mavenRepo || !this.updateTenant);
+      this.templatesRepoBlob || this.templatesRepo || this.templatesRepoDir || !this.updateTenant);
   }
 
 }
