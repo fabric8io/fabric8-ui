@@ -38,18 +38,21 @@ describe('Raven exception handler', () => {
   });
 
   it('Environment.development does not invoke Raven', () => {
+    spyOn(console, 'error').and.callFake(() => {});
     getEnvironmentSpy.mockReturnValue(Environment.development);
-    handler.handleError('testing Environment.development');
+    handler.handleError('testing Environment.development (not a real error)');
     expect(captureExceptionSpy).not.toHaveBeenCalled();
   });
 
   it('Environment.prDeploy does not invoke Raven', () => {
+    spyOn(console, 'error').and.callFake(() => {});
     getEnvironmentSpy.mockReturnValue(Environment.prDeploy);
     handler.handleError('testing Environment.prDeploy (not a real error)');
     expect(captureExceptionSpy).not.toHaveBeenCalled();
   });
 
   it('Environment.production does invoke Raven', () => {
+    spyOn(console, 'error').and.callFake(() => {});
     getEnvironmentSpy.mockReturnValue(Environment.production);
     handler.handleError('testing Environment.production (not a real error)');
     expect(captureExceptionSpy).toHaveBeenCalled();
