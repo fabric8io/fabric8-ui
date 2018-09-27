@@ -78,7 +78,7 @@
     "start": "npm run server:dev",
     "stylelint": "stylelint '**/*.less'; exit 0",
     "jest": "jest --env=jsdom",
-    "jest:debug": "node --inspect-brk ./node_modules/.bin/jest --env=jsdom",
+    "jest:debug": "node --inspect-brk ./node_modules/.bin/jest --runInBand --env=jsdom",
     "test": "npm run jest",
     "test-karma:unit": "karma start",
     "test-karma:debug": "karma start --no-single-run --browsers Chrome",
