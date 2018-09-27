@@ -178,7 +178,7 @@ describe('SpacesService', () => {
           return observableNever();
         }
       });
-      spyOn(console, 'log');
+      spyOn(console, 'log').and.callFake(() => {});
       const spacesService: SpacesService = TestBed.get(SpacesService);
       expect(profileService.silentSave).toHaveBeenCalledTimes(0);
     });
