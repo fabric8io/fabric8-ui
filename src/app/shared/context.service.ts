@@ -118,7 +118,6 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
         }
       })
       ).pipe(multicast(() => new ReplaySubject(1))) as ConnectableObservable<Context>;
-    ).pipe(multicast(() => new ReplaySubject(1))) as ConnectableObservable<Context[]>;
     this._default.connect();
   }
 
