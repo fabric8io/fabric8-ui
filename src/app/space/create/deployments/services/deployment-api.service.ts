@@ -228,16 +228,8 @@ export class DeploymentApiService {
     const encApplicationId: string = encodeURIComponent(applicationId);
     const url: string = `${this.apiUrl}${encSpaceId}/applications/${encApplicationId}/deployments/${encEnvironmentName}/podlimits`;
     return this.httpGet<PodQuotaRequirementResponse>(url).pipe(
-      map((response: PodQuotaRequirementResponse) => response.data.limits),
-      catchError((err: HttpErrorResponse): Observable<PodQuotaRequirement> => {
-        this.handleHttpError(err);
-        // 1 core/512MB is the default allocation on the backend
-        const gb: number = Math.pow(1024, 3);
-        return of({
-          cpucores: 1,
-          memory: 0.5 * gb
-        });
-      })
+      catchError((err: HttpErrorResponse): Observable<PodQuotaRequirement> => this.handleHttpError(err)),
+      map((response: PodQuotaRequirementResponse) => response.data.limits)
     );
   }
 
