@@ -347,46 +347,47 @@ describe('DeploymentApiService', () => {
     });
   });
 
-  // TODO uncomment once backend is available and implementation is updated
-  xdescribe('#getQuotaRequirementPerPod', () => {
+  describe('#getQuotaRequirementPerPod', () => {
+    const gb: number = Math.pow(1024, 3);
+
     it('should return result', function(done: DoneFn): void {
-      const gb: number = Math.pow(1024, 3);
       const httpResponse: PodQuotaRequirementResponse = {
         data: {
           limits: {
-            cpucores: 1,
-            memory: 0.5 * gb
+            cpucores: 2,
+            memory: 1 * gb
           }
         }
       } as PodQuotaRequirementResponse;
       service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe((data: PodQuotaRequirement): void => {
-          expect(data).toEqual(httpResponse.data.limits);
-          this.controller.verify();
-          done();
-        });
+        expect(data).toEqual(httpResponse.data.limits);
+        controller.verify();
+        done();
+      });
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/podlimits');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/podlimits');
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(done: DoneFn): void {
+    it('should report errors and return default', function(done: DoneFn): void {
       service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
-      ).subscribe(
-          () => done.fail('should throw error'),
-          () => {
-            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
-            expect(TestBed.get(Logger).error).toHaveBeenCalled();
-            this.controller.verify();
-            done();
-          }
-        );
+      ).subscribe((data: PodQuotaRequirement): void => {
+        expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+        expect(TestBed.get(Logger).error).toHaveBeenCalled();
+        expect(data).toEqual({
+          cpucores: 1,
+          memory: 0.5 * gb
+        });
+        controller.verify();
+        done();
+      });
 
-      const req: TestRequest = this.controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/podlimits');
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/applications/foo%20appId/deployments/stage%20env/podlimits');
       req.error(new ErrorEvent('Mock HTTP error'));
     });
   });
