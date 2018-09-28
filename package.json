@@ -67,7 +67,7 @@
     "protractor": "protractor",
     "reinstall": "npm run clean && npm install",
     "rimraf": "rimraf",
-    "semantic-release": "semantic-release pre && npm run build:prod && cp -r .git dist && npm publish dist/ && semantic-release post",
+    "semantic-release": "semantic-release",
     "server:dev:hmr": "npm run server:dev -- --inline --hot",
     "server:dev": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch --content-base src/",
     "server:dev2:hmr": "npm run server:dev2 -- --hot",
@@ -296,9 +296,8 @@
   },
   "release": {
     "branch": "master",
-    "verifyConditions": {
-      "path": "./node_modules/@krux/condition-jenkins"
-    }
+    "debug": "true",
+    "pkgRoot": "dist"
   },
   "config": {
     "commitizen": {
