@@ -54,7 +54,7 @@ describe('DeploymentsDonutChartComponent', (): void => {
       testContext.detectChanges();
     });
 
-    it('should show mini text', (): void => {
+    xit('should show mini text', (): void => {
       expect(testContext.testedDirective.mini).toBe(true);
       const text: DebugElement = testContext.fixture.debugElement.query(By.css('.deployments-donut-chart-mini-text'));
       expect(text).toBeTruthy();
