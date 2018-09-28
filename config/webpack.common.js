@@ -254,12 +254,11 @@ module.exports = function (options) {
         {
           test: /^(?!.*component).*\.css$/,
           use: [
-            'style-loader',
-            // isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+            isProd ? MiniCssExtractPlugin.loader : 'style-loader',
             {
               loader: 'css-loader',
               options: {
-                sourceMap: true,
+                sourceMap: !isProd,
                 context: '/'
               },
             },
@@ -273,7 +272,7 @@ module.exports = function (options) {
               loader: 'css-loader',
               options: {
                 minimize: true,
-                sourceMap: true,
+                sourceMap: !isProd,
                 context: '/'
               }
             }
@@ -283,12 +282,12 @@ module.exports = function (options) {
         {
           test: /^(?!.*component).*\.less$/,
           use: [
-            'style-loader',
+            isProd ? MiniCssExtractPlugin.loader : 'style-loader',
             {
               loader: 'css-loader',
               options: {
                 minimize: true,
-                sourceMap: true,
+                sourceMap: !isProd,
                 context: '/'
               }
             }, {
@@ -300,7 +299,7 @@ module.exports = function (options) {
                   path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
                   path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
                 ],
-                sourceMap: true
+                sourceMap: !isProd
               }
             }
           ]
@@ -312,7 +311,7 @@ module.exports = function (options) {
               loader: 'css-loader',
               options: {
                 minimize: true,
-                sourceMap: true,
+                sourceMap: !isProd,
                 context: '/'
               }
             }, {
@@ -324,7 +323,7 @@ module.exports = function (options) {
                   path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
                   path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
                 ],
-                sourceMap: true
+                sourceMap: !isProd
               }
             }
           ]
@@ -456,11 +455,11 @@ module.exports = function (options) {
       // });
 
       // MiniCssExtractPlugin
-      // new MiniCssExtractPlugin({
-      //   // filename: '[name].css',
-      //   filename: '_assets/stylesheets/[name]' + ( isProd ? '.[contenthash]' : '' ) + '.css',
-      //   chunkFilename: '_assets/stylesheets/[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
-      // }),
+      new MiniCssExtractPlugin({
+        // filename: '[name].css',
+        filename: '_assets/stylesheets/[name]' + ( isProd ? '.[contenthash:8]' : '' ) + '.css',
+        chunkFilename: '_assets/stylesheets/[id]' + ( isProd ? '.[contenthash:8]' : '' ) + '.css'
+      }),
 
       new webpack.IgnorePlugin(/^\.\/locale$/, /[^-]moment$/),
 
