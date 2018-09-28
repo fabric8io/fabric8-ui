@@ -3,7 +3,9 @@ import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ProviderService } from '../../../shared/account/provider.service';
+import { TenantService } from '../../services/tenant.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -25,11 +27,16 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
   userName: string;
   contextUserName: string;
   cluster: string;
+  consoleUrl: string;
+  clusterName: string;
 
-  constructor(private contexts: Contexts,
+  constructor(
+    private contexts: Contexts,
     private auth: AuthenticationService,
     private userService: UserService,
-    private providerService: ProviderService) {
+    private providerService: ProviderService,
+    private tenantService: TenantService
+  ) {
     this.subscriptions.push(auth.gitHubToken.subscribe(token => {
       this.gitHubLinked = (token !== undefined && token.length !== 0);
     }));
@@ -44,6 +51,15 @@ export class ConnectedAccountsComponent implements OnDestroy, OnInit {
       }));
       this.cluster = user.attributes.cluster;
     }
+
+    this.subscriptions.push(this.tenantService.getTenant()
+      .pipe(
+        map(data => data.attributes.namespaces[0]['cluster-console-url'])
+      ).subscribe(url => {
+        this.consoleUrl = url;
+        this.clusterName = url.split('.')[1];
+      })
+    );
   }
 
   ngOnDestroy(): void {

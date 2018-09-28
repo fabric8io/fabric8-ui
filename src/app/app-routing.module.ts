@@ -35,15 +35,6 @@ export const routes: Routes = [
     }
   },
 
-  // Verify Email
-  {
-    path: '_verifyEmail',
-    loadChildren: './profile/email-verification/email-verification.module#EmailVerificationModule',
-    data: {
-      title: 'Verify'
-    }
-  },
-
   //redirect status pages
   {
     path: '_redirects/:redirectType',

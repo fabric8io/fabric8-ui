@@ -9,7 +9,7 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable()
 export class TenantService {
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  private userUrl: string;
+  private tenantUrl: string;
 
   constructor(
       private http: HttpClient,
@@ -19,7 +19,22 @@ export class TenantService {
     if (this.auth.getToken() != undefined) {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
-    this.userUrl = apiUrl + 'user';
+    this.tenantUrl = apiUrl + 'user/services';
+  }
+
+  /**
+   * Get user tenant services
+   * @returns {Observable<any>}
+   */
+  getTenant(): Observable<any> {
+    return this.http
+      .get(this.tenantUrl, { headers: this.headers })
+      .pipe(
+        map((res: any) => res.data),
+        catchError((error: HttpErrorResponse) => {
+          return this.handleError(error);
+        })
+      );
   }
 
   /**
@@ -28,9 +43,8 @@ export class TenantService {
    * @returns {Observable<any>}
    */
   updateTenant(): Observable<any> {
-    let url = `${this.userUrl}/services`;
     return this.http
-      .patch(url, null, { headers: this.headers, observe: 'response', responseType: 'text' })
+      .patch(this.tenantUrl, null, { headers: this.headers, observe: 'response', responseType: 'text' })
       .pipe(
         catchError((error: HttpErrorResponse) => {
           return this.handleError(error);
@@ -43,9 +57,8 @@ export class TenantService {
    * @returns {Observable<any>}
    */
   cleanupTenant(): Observable<any> {
-    let url = `${this.userUrl}/services`;
     return this.http
-      .delete(url, { headers: this.headers, responseType: 'text' })
+      .delete(this.tenantUrl, { headers: this.headers, responseType: 'text' })
       .pipe(
         catchError((error: HttpErrorResponse) => {
           return this.handleError(error);
