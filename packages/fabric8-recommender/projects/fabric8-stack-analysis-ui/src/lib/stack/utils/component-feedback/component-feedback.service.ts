@@ -17,7 +17,7 @@ export class ComponentFeedbackService {
     private auth: AuthenticationService
   ) {
     if (this.auth && this.auth.getToken && this.auth.getToken() !== null) {
-      this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
+      this.headers = this.headers.set('Authorization', 'Bearer ' + this.auth.getToken());
     }
   }
 

@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'ngx-bootstrap';
 /** Vendor imports Go HERE */
 
-import { Contexts } from 'ngx-fabric8-wit';
 
 import { ProgressMeterModule } from '../../utils/progress-meter/progress-meter.module';
 import { ComponentFeedbackModule } from '../../utils/component-feedback/component-feedback.module';
@@ -18,7 +17,6 @@ import { ToastNotificationModule } from '../../toast-notification/toast-notifica
 import { AddWorkFlowService } from '../../stack-details/add-work-flow.service';
 
 import { NoDataComponent } from './no-data/no-data.component';
-import { Fabric8WitModule, SpaceNameModule} from 'ngx-fabric8-wit';
 
 const components = [
     ComponentSnippetComponent,
@@ -29,8 +27,6 @@ const components = [
 ];
 
 const imports = [
-    Fabric8WitModule,
-    SpaceNameModule,
     TooltipModule.forRoot(),
     ProgressMeterModule,
     ComponentFeedbackModule,
@@ -45,7 +41,7 @@ const imports = [
     declarations: [
         ...components
     ],
-    providers: [ AddWorkFlowService, Contexts ],
+    providers: [ AddWorkFlowService ],
     exports: [
         ...components
     ]

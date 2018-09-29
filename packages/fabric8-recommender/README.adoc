@@ -89,4 +89,4 @@ to test your distribution within your app.
 == Contributing
 
 The development guide is part of the link:./CONTRIBUTING.adoc[contributors'
-instructions]. Please check it out in order to contribute to this project. 
+instructions]. Please check it out in order to contribute to this project.
