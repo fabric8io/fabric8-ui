@@ -1,14 +1,13 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
 import {
   Catalog,
   HelperService,
   MissionRuntimeService
 } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
-
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
@@ -36,8 +35,8 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
       this.headers = this.headers.set('X-App', this.ORIGIN);
     }
     return this.http
-      .get(this.END_POINT + this.API_BASE, { headers: this.headers })
-      .map((resp: HttpResponse<any>) => {
+      .get(this.END_POINT + this.API_BASE, { headers: this.headers }).pipe(
+      map((resp: HttpResponse<any>) => {
         let catalog = resp as any;
         let blank = {
           description: 'Creates a customized mission',
@@ -61,8 +60,8 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
         });
 
         return catalog as Catalog;
-      })
-      .catch(this.handleError);
+      }),
+      catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse | any) {
@@ -76,6 +75,6 @@ export class AppLauncherMissionRuntimeService extends MissionRuntimeService {
       errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-    return Observable.throw(errMsg);
+    return observableThrowError(errMsg);
   }
 }

@@ -4,13 +4,12 @@
 
 const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
-const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
+const prodConfig = require('./webpack.prod.js'); // the settings that are common to prod and dev
 
 /**
  * Webpack Plugins
  */
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -18,11 +17,11 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 /**
  * Webpack Constants
  */
-const ENV = process.env.ENV = process.env.NODE_ENV = 'performance';
+const ENV = process.env.ENV = process.env.NODE_ENV = 'production';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
-const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
+const METADATA = webpackMerge(prodConfig({env: ENV}).metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
@@ -35,7 +34,7 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function () {
-  return webpackMerge(commonConfig({env: ENV}), {
+  return webpackMerge(prodConfig({env: ENV}), {
 
     /**
      * Developer tool to enhance debugging
@@ -98,7 +97,7 @@ module.exports = function () {
       /**
        * Displays an overview of what webpack bundled.
        */
-      new DashboardPlugin(),
+      // new DashboardPlugin(),
 
       /**
        * Plugin: DefinePlugin
@@ -119,14 +118,6 @@ module.exports = function () {
           'HMR': METADATA.HMR
         }
       }),
-
-      /**
-       * Plugin: NamedModulesPlugin (experimental)
-       * Description: Uses file names as module name.
-       *
-       * See: https://github.com/webpack/webpack/commit/a04ffb928365b19feb75087c63f13cadfc08e1eb
-       */
-      new NamedModulesPlugin(),
 
       /**
        * Plugin LoaderOptionsPlugin (experimental)

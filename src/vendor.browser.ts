@@ -18,9 +18,8 @@
 import '@angularclass/hmr';
 
 // RxJS
-import 'rxjs';
-
 import 'ngx-bootstrap';
+import 'rxjs';
 //import 'ng2-dnd';
 //
 

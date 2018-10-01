@@ -1,16 +1,12 @@
 import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Contexts, Fabric8WitModule, Space, SpaceService } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { AuthenticationService } from 'ngx-login-client';
-import { Subject } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-
+import { Observable,  of ,  Subject ,  throwError as observableThrowError } from 'rxjs';
 import { SpacesComponent } from './spaces.component';
 
 
@@ -38,9 +34,9 @@ describe('SpacesComponent', () => {
       'id': 'mock-user'
     }
   });
-  mockSpaceService.deleteSpace = {};
-  mockSpaceService.getSpacesByUser = {};
-  mockSpaceService.getMoreSpacesByUser = {};
+  mockSpaceService.deleteSpace = () => {};
+  mockSpaceService.getSpacesByUser = () => {};
+  mockSpaceService.getMoreSpacesByUser = () => {};
 
   beforeEach(() => {
     featureServiceMock = jasmine.createSpyObj('FeatureTogglesService', ['getFeature']);
@@ -85,7 +81,7 @@ describe('SpacesComponent', () => {
     });
 
     it('should report an error if getMoreSpaces() has an Observable error', () => {
-      spyOn(component.spaceService, 'getMoreSpacesByUser').and.returnValue(Observable.throw('error'));
+      spyOn(component.spaceService, 'getMoreSpacesByUser').and.returnValue(observableThrowError('error'));
       component.fetchMoreSpaces(mockEvent);
       expect(component.logger.error).toHaveBeenCalledWith('error');
     });
@@ -119,7 +115,7 @@ describe('SpacesComponent', () => {
       let error = 'error';
       component.spaceToDelete = 'mock-spaceToDelete';
       component.modalRef = mockModalRef;
-      spyOn(component.spaceService, 'deleteSpace').and.returnValue(Observable.throw(error));
+      spyOn(component.spaceService, 'deleteSpace').and.returnValue(observableThrowError(error));
       component.removeSpace();
       expect(component.logger.error).toHaveBeenCalledWith(error);
       expect(component.modalRef.hide).toHaveBeenCalled();

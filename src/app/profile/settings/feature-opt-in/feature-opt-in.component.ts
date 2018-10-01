@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Notification, Notifications, NotificationType } from 'ngx-base';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Notifications, NotificationType } from 'ngx-base';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
-import { ListComponent, ListConfig } from 'patternfly-ng';
-import { Subscription } from 'rxjs';
+import { ListComponent, ListConfig, ListEvent } from 'patternfly-ng';
+import { first } from 'rxjs/operators';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
-import { ExtProfile, GettingStartedService } from '../../../getting-started/services/getting-started.service';
+import { ExtProfile, ExtUser, GettingStartedService } from '../../../getting-started/services/getting-started.service';
 
 interface FeatureLevel {
   name: string;
@@ -23,23 +23,22 @@ interface FeatureLevel {
   templateUrl: './feature-opt-in.component.html',
   styleUrls: ['./feature-opt-in.component.less']
 })
-export class FeatureOptInComponent implements OnInit, OnDestroy {
+export class FeatureOptInComponent implements OnInit {
 
   @ViewChild(ListComponent) listComponent: ListComponent;
 
-  public featureLevel: string;
-  private subscriptions: Subscription[] = [];
+  featureLevel: string;
   listConfig: ListConfig;
-  private items: FeatureLevel[];
-
   state: boolean;
 
+  private items: FeatureLevel[];
+
   constructor(
-    private gettingStartedService: GettingStartedService,
-    private notifications: Notifications,
-    private userService: UserService,
-    private toggleService: FeatureTogglesService,
-    private toggleServiceAck: FeatureAcknowledgementService
+    private readonly gettingStartedService: GettingStartedService,
+    private readonly notifications: Notifications,
+    private readonly userService: UserService,
+    private readonly toggleService: FeatureTogglesService,
+    private readonly toggleServiceAck: FeatureAcknowledgementService
   ) {
     this.listConfig = {
       dblClick: false,
@@ -52,7 +51,7 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
     } as ListConfig;
   }
 
-  updateProfile(event): void {
+  updateProfile(event: ListEvent): void {
     if (event.selectedItems.length === 0) {
       // Do not allow item deselection events - one item should always be selected. If a
       // deselection occurs, re-select the item and ignore the event.
@@ -60,23 +59,25 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
       return;
     }
     this.featureLevel = event.item.name;
-    let profile = this.getTransientProfile();
-    this.subscriptions.push(this.gettingStartedService.update(profile).subscribe(user => {
-      this.userService.currentLoggedInUser = user;
-      this.notifications.message({
-        message: `Profile updated!`,
-        type: NotificationType.SUCCESS
-      } as Notification);
-    }, error => {
-      this.notifications.message({
-        message: 'Failed to update profile',
-        type: NotificationType.DANGER
-      } as Notification);
-    }));
+    const profile: ExtProfile = this.getTransientProfile();
+    this.gettingStartedService.update(profile).pipe(first()).subscribe(
+      (user: ExtUser): void => {
+        this.userService.currentLoggedInUser = user;
+        this.notifications.message({
+          message: `Profile updated!`,
+          type: NotificationType.SUCCESS
+        });
+      },
+      () => {
+        this.notifications.message({
+          message: 'Failed to update profile',
+          type: NotificationType.DANGER
+        });
+      });
   }
 
   private getTransientProfile(): ExtProfile {
-    let profile = this.gettingStartedService.createTransientProfile();
+    const profile: ExtProfile = this.gettingStartedService.createTransientProfile();
     if (!profile.contextInformation) {
       profile.contextInformation = {};
     }
@@ -93,10 +94,10 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.toggleServiceAck.getToggle().subscribe(val => {
-      this.state = val;
+    this.toggleServiceAck.getToggle().pipe(first()).subscribe((state: boolean): void => {
+      this.state = state;
     });
-    this.featureLevel =  (this.userService.currentLoggedInUser.attributes as ExtProfile).featureLevel;
+    this.featureLevel = (this.userService.currentLoggedInUser.attributes as ExtProfile).featureLevel;
     this.items = [
       {
         name: 'released',
@@ -142,25 +143,24 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.subscriptions.push(this.toggleService.getAllFeaturesEnabledByLevel()
-      .subscribe(features => {
-      let featurePerLevel = this.featureByLevel(features);
-      for (let item of this.items) {
+    this.toggleService.getAllFeaturesEnabledByLevel().pipe(first()).subscribe((features: Feature[]): void => {
+      const featurePerLevel = this.featureByLevel(features);
+      for (const item of this.items) {
         item.features = featurePerLevel[item.name];
       }
-    }));
+    });
   }
 
-  onChange(event: {previousValue: boolean, currentValue: boolean}): void {
+  onChange(event: { previousValue: boolean, currentValue: boolean }): void {
     this.toggleServiceAck.setToggle(event.currentValue);
   }
 
-  featureByLevel(features: Feature[]): any {
-    let released: Feature[] = [];
-    let internal: Feature[] = [];
-    let experimental: Feature[] = [];
-    let beta: Feature[] = [];
-    for (let feature of features) {
+  featureByLevel(features: {} | Feature[]): any {
+    const released: Feature[] = [];
+    const internal: Feature[] = [];
+    const experimental: Feature[] = [];
+    const beta: Feature[] = [];
+    for (const feature of features as Feature[]) {
       feature.attributes.name = feature.id.replace('.', ' ');
       switch (feature.attributes['enablement-level']) {
         case 'released': {
@@ -198,12 +198,6 @@ export class FeatureOptInComponent implements OnInit, OnDestroy {
       beta,
       released
     };
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
   }
 
 }

@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-
+import { Observable,  of as observableOf } from 'rxjs';
 import {
   Build,
   BuildConfig,
@@ -15,11 +13,9 @@ import { PipelinesService } from './pipelines.service';
 
 describe('Runtime Console Pipelines Service', () => {
 
-  type TestContext = {
-    service: PipelinesService;
-  };
+  let service: PipelinesService;
 
-  beforeEach(function(this: TestContext): void {
+  beforeEach(function(): void {
     TestBed.configureTestingModule({
       providers: [
         {
@@ -80,7 +76,7 @@ describe('Runtime Console Pipelines Service', () => {
               }
             ];
 
-            mock.loadAll.and.returnValue(Observable.of(items));
+            mock.loadAll.and.returnValue(observableOf(items));
             return mock;
           }
         },
@@ -98,34 +94,34 @@ describe('Runtime Console Pipelines Service', () => {
               } as Build
             ];
 
-            mock.loadAll.and.returnValue(Observable.of(items));
+            mock.loadAll.and.returnValue(observableOf(items));
             return mock;
           }
         },
         {
           provide: Fabric8RuntimeConsoleService, useFactory: (): jasmine.SpyObj<Fabric8RuntimeConsoleService> => {
             let mock: jasmine.SpyObj<Fabric8RuntimeConsoleService> = jasmine.createSpyObj('Fabric8RuntimeConsoleService', ['loading']);
-            mock.loading.and.returnValue(Observable.of(true));
+            mock.loading.and.returnValue(observableOf(true));
             return mock;
           }
         },
         PipelinesService
       ]
     });
-    this.service = TestBed.get(PipelinesService);
+    service = TestBed.get(PipelinesService);
   });
 
   describe('Current pipelines', () => {
-    it('should show builds for the context space', function(this: TestContext): void {
-      this.service.current.subscribe((buildConfigs: BuildConfig[]) => {
+    it('should show builds for the context space', function(): void {
+      service.current.subscribe((buildConfigs: BuildConfig[]) => {
         expect(buildConfigs.length).toBe(2);
       });
     });
   });
 
   describe('Recent pipelines', () => {
-    it('should show last four builds including completed builds', function(this: TestContext): void {
-      this.service.recentPipelines.subscribe((buildConfigs: BuildConfig[]) => {
+    it('should show last four builds including completed builds', function(): void {
+      service.recentPipelines.subscribe((buildConfigs: BuildConfig[]) => {
         expect(buildConfigs.length).toBe(4);
       });
     });

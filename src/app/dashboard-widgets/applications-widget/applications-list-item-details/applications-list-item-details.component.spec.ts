@@ -1,12 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { initContext, TestContext } from 'testing/test-context';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-
+import { BehaviorSubject,  never as observableNever, Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
 import { ApplicationsListItemDetailsComponent } from './applications-list-item-details.component';
 
@@ -73,12 +69,12 @@ describe('ApplicationsListItemDetailsComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
   });
 
-  initContext(ApplicationsListItemDetailsComponent, HostComponent, {
+  const testContext = initContext(ApplicationsListItemDetailsComponent, HostComponent, {
     imports: [
       CommonModule
     ],
@@ -93,23 +89,23 @@ describe('ApplicationsListItemDetailsComponent', () => {
   });
 
   describe('Applications list item details with build', () => {
-    it('Build should be set', function(this: TestingContext) {
-      expect(this.testedDirective.build as any).toEqual(build);
+    it('Build should be set', function() {
+      expect(testContext.testedDirective.build as any).toEqual(build);
     });
 
-    it('Pipeline stages should be trimmed', function(this: TestingContext) {
-      let stages = this.testedDirective.pipelineStages as any[];
+    it('Pipeline stages should be trimmed', function() {
+      let stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages.length).toBe(2);
     });
 
-    it('Pipeline stages should be set', function(this: TestingContext) {
-      let stages = this.testedDirective.pipelineStages as any[];
+    it('Pipeline stages should be set', function() {
+      let stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages[0].name).toEqual('Approve');
       expect(stages[1].name).toEqual('Rollout to Run');
     });
 
-    it('Current stage should be set', function(this: TestingContext) {
-      let stages = this.testedDirective.pipelineStages as any[];
+    it('Current stage should be set', function() {
+      let stages = testContext.testedDirective.pipelineStages as any[];
       expect(stages[1].currentStage).toBeTruthy();
     });
   });

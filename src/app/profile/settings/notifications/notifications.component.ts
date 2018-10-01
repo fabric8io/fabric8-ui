@@ -1,36 +1,23 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
-import { UserService } from 'ngx-login-client';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { User, UserService } from 'ngx-login-client';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
-  selector: '',
+  selector: 'alm-notifications',
   templateUrl: 'notifications.component.html',
   styleUrls: ['notifications.component.less']
 })
-export class NotificationsComponent implements OnInit, OnDestroy {
+export class NotificationsComponent implements OnInit {
 
   loggedInUserName: String;
-  subscriptions: Subscription[] = [];
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private readonly userService: UserService
+  ) { }
 
-  ngOnInit() {
-    this.subscriptions.push(this.userService.loggedInUser.subscribe(
-      val => {
-        if (val.id) {
-          this.loggedInUserName = val.attributes.username;
-        } else {
-          this.loggedInUserName = '';
-        }
-      }));
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+  ngOnInit(): void {
+    const currentUser: User = this.userService.currentLoggedInUser;
+    this.loggedInUserName = currentUser.id ? currentUser.attributes.username : '';
   }
 
 }

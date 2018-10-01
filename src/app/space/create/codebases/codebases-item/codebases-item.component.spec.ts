@@ -2,10 +2,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2/dist/index';
+import { JwBootstrapSwitchNg2Module } from 'jw-bootstrap-switch-ng2';
 import { Broadcaster, Notifications } from 'ngx-base';
-import { Observable } from 'rxjs';
-
+import { Observable, of as observableOf } from 'rxjs';
 import { CodebasesService } from '../services/codebases.service';
 import { CodebasesItemComponent } from './codebases-item.component';
 
@@ -21,7 +20,7 @@ describe('Codebases Item Component', () => {
     mockCodebasesService = jasmine.createSpy('CodebasesService');
 
     TestBed.configureTestingModule({
-      imports: [FormsModule, JWBootstrapSwitchModule],
+      imports: [FormsModule, JwBootstrapSwitchNg2Module],
       declarations: [CodebasesItemComponent],
       providers: [
         { provide: Notifications, useValue: mockNotifications },
@@ -76,7 +75,7 @@ describe('Codebases Item Component', () => {
     let comp = fixture.componentInstance;
     let debug = fixture.debugElement;
     comp.codebase = codebase;
-    broadcasterMock.on.and.returnValue(Observable.of({ running: true }));
+    broadcasterMock.on.and.returnValue(observableOf({ running: true }));
     fixture.detectChanges();
     let spanDisplayedInformation = debug.queryAll(By.css('.list-pf-title'));
     fixture.whenStable().then(() => {

@@ -1,17 +1,15 @@
 import { Component, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Event, NavigationEnd, NavigationError, Router } from '@angular/router';
-
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Spaces } from 'ngx-fabric8-wit';
+import { FeatureFlagConfig } from 'ngx-feature-flag';
 import { AuthenticationService } from 'ngx-login-client';
 import { ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
-import { Observable } from 'rxjs';
-
-import { FeatureFlagConfig } from 'ngx-feature-flag';
-import { Subscription } from 'rxjs/Rx';
+import { merge as observableMerge, Subscription } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs/operators';
 import { OnLogin } from '../a-runtime-console/index';
 import { FeatureAcknowledgementService } from './feature-flag/service/feature-acknowledgement.service';
 import { ErrorService } from './layout/error/error.service';
@@ -83,32 +81,32 @@ export class AppComponent {
         this.show = val.value;
       }));
     }
-    this.subscriptions.push(Observable.merge(
-      this.router.events
-        .filter((event: Event): boolean => event instanceof NavigationEnd)
-        .filter((event: NavigationEnd): boolean => event.url !== '/_error')
-        .filter((event: NavigationEnd): boolean => event.urlAfterRedirects === '/_error')
-        .map((event: NavigationEnd): string => event.url),
-      this.router.events
-        .filter((event: Event): boolean => event instanceof NavigationError)
-        .map((event: NavigationError): string => event.url)
+    this.subscriptions.push(observableMerge(
+      this.router.events.pipe(
+        filter((event: Event): boolean => event instanceof NavigationEnd),
+        filter((event: NavigationEnd): boolean => event.url !== '/_error'),
+        filter((event: NavigationEnd): boolean => event.urlAfterRedirects === '/_error'),
+        map((event: NavigationEnd): string => event.url)),
+      this.router.events.pipe(
+        filter((event: Event): boolean => event instanceof NavigationError),
+        map((event: NavigationError): string => event.url))
     ).subscribe((url: string): void => this.handleNavigationError(url)));
 
     this.router.errorHandler = this.logger.error;
 
-    this.subscriptions.push(this.router.events
-      .filter(event => event instanceof NavigationEnd)
-      .map(() => this.activatedRoute)
-      .map(route => {
+    this.subscriptions.push(this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => this.activatedRoute),
+      map(route => {
         // reset all experimental feature flag properties
         this.featureConfig = null;
         while (route.firstChild) {
           route = route.firstChild;
         }
         return route;
-      })
-      .filter(route => route.outlet === 'primary')
-      .mergeMap(route => route.data)
+      }),
+      filter(route => route.outlet === 'primary'),
+      mergeMap(route => route.data))
       .subscribe((event) => {
         let routeTree = this.activatedRoute.snapshot;
         let featureFlagsInTree;

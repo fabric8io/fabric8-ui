@@ -1,6 +1,7 @@
 /**
  * @author: @AngularClass
  */
+const path = require('path');
 const webpack = require('webpack');
 const helpers = require('./helpers');
 const branding = require('./branding');
@@ -11,18 +12,19 @@ const stringify = require('json-stringify');
 /**
  * Webpack Plugins
  */
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
+// const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
-const ngtools = require('@ngtools/webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const OfflinePlugin = require('offline-plugin');
+// const ProvidePlugin = require('webpack/lib/ProvidePlugin');
+// const ngtools = require('@ngtools/webpack');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const OfflinePlugin = require('offline-plugin');
 
 
 /**
@@ -81,14 +83,6 @@ module.exports = function (env) {
   return webpackMerge({
     plugins: [
       /**
-       * Plugin: ModuleConcatenationPlugin
-       * Description: Hoist modules into one closure for performance.
-       *
-       * See: https://webpack.js.org/plugins/module-concatenation-plugin/
-       */
-      new webpack.optimize.ModuleConcatenationPlugin(),
-
-      /**
        * Plugin: HashedModuleIdsPlugin
        * Description: This plugin will cause hashes to be based on the relative path of the module,
        * generating a four character string as the module id.
@@ -103,6 +97,11 @@ module.exports = function (env) {
   commonConfig({ env: ENV }),
 
   {
+
+    /**
+     * As of Webpack 4 we need to set the mode.
+     */
+    mode: 'production',
 
     /**
      * Developer tool to enhance debugging
@@ -139,7 +138,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-filename
        */
-      filename: '_assets/lib/[name].[chunkhash].bundle.js',
+      filename: '_assets/lib/[name].[chunkhash:8].bundle.js',
 
       /**
        * The filename of the SourceMaps for the JavaScript files.
@@ -147,7 +146,7 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
        */
-      sourceMapFilename: '_assets/lib/[name].[chunkhash].bundle.map',
+      sourceMapFilename: '_assets/lib/[name].[chunkhash:8].bundle.map',
 
       /**
        * The filename of non-entry chunks as relative path
@@ -155,8 +154,55 @@ module.exports = function (env) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
-      chunkFilename: '_assets/lib/[id].[chunkhash].chunk.js'
+      chunkFilename: '_assets/lib/[name].[chunkhash:8].chunk.js',
 
+      // Point sourcemap entries to original disk location (format as URL on Windows)
+      devtoolModuleFilenameTemplate: (info) =>
+        path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+
+    },
+
+    optimization: {
+      minimizer: [
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            parse: {
+              // we want uglify-js to parse ecma 8 code. However, we don't want it
+              // to apply any minfication steps that turns valid ecma 5 code
+              // into invalid ecma 5 code. This is why the 'compress' and 'output'
+              // sections only apply transformations that are ecma 5 safe
+              // https://github.com/facebook/create-react-app/pull/4234
+              ecma: 8,
+            },
+            compress: {
+              ecma: 5,
+              warnings: false,
+              // Disabled because of an issue with Uglify breaking seemingly valid code:
+              // https://github.com/facebook/create-react-app/issues/2376
+              // Pending further investigation:
+              // https://github.com/mishoo/UglifyJS2/issues/2011
+              comparisons: false,
+            },
+            mangle: {
+              safari10: true,
+            },
+            output: {
+              ecma: 5,
+              comments: false,
+              // Turned on because emoji and regex is not minified properly using default
+              // https://github.com/facebook/create-react-app/issues/2488
+              ascii_only: true,
+            },
+          },
+          // Use multi-process parallel running to improve the build speed
+          // Default number of concurrent runs: os.cpus().length - 1
+          parallel: true,
+          // Enable file caching
+          cache: true,
+          sourceMap: true,
+        }),
+        new OptimizeCSSAssetsPlugin(),
+      ],
     },
 
     /**
@@ -246,43 +292,6 @@ module.exports = function (env) {
       new FaviconsWebpackPlugin({
         logo: branding.assets[METADATA.FABRIC8_BRANDING].favicon.path,
         prefix: '_assets/icons-[hash]/'
-      }),
-
-      /**
-       * Plugin: UglifyJsPlugin
-       * Description: Minimize all JavaScript output of chunks.
-       * Loaders are switched into minimizing mode.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-       */
-      // NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
-      new UglifyJsPlugin({
-        // beautify: true, //debug
-        // mangle: false, //debug
-        // dead_code: false, //debug
-        // unused: false, //debug
-        // deadCode: false, //debug
-        // compress: {
-        //   screw_ie8: true,
-        //   keep_fnames: true,
-        //   drop_debugger: false,
-        //   dead_code: false,
-        //   unused: false
-        // }, // debug
-        // comments: true, //debug
-
-
-        beautify: false, //prod
-        mangle: {
-          screw_ie8: true,
-          keep_fnames: true
-        }, //prod
-        compress: {
-          screw_ie8: true,
-          warnings: false
-        }, //prod
-        comments: false, //prod
-        sourceMap: true
       }),
 
       /**

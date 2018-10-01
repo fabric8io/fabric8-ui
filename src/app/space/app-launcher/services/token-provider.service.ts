@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { TokenProvider } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
 

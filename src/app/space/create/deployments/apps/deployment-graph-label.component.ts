@@ -1,8 +1,7 @@
 import {
   Component,
   Input,
-  OnChanges,
-  SimpleChanges
+  OnChanges
 } from '@angular/core';
 
 @Component({
@@ -16,9 +15,9 @@ export class DeploymentGraphLabelComponent implements OnChanges {
   @Input() value: number;
   @Input() valueUpperBound: number;
 
-  public label: string;
+  label: string;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.value === undefined) {
       this.label = 'N/A';
       return;

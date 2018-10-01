@@ -6,19 +6,16 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-
 import { cloneDeep } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
-import { SortEvent, SortField } from 'patternfly-ng/sort';
+import { SortEvent } from 'patternfly-ng/sort';
 import {
+  forkJoin,
   Observable,
   Subscription
 } from 'rxjs';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { first } from 'rxjs/operators/first';
-import { map } from 'rxjs/operators/map';
-
+import { first, map } from 'rxjs/operators';
 import { DeploymentsToolbarComponent } from '../deployments-toolbar/deployments-toolbar.component';
 
 @Component({
@@ -41,17 +38,17 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   private applicationsList: string[];
   private currentFilters: Filter[];
   private isAscendingSort: boolean = true;
-  private subscriptions: Subscription[] = [];
+  private readonly subscriptions: Subscription[] = [];
 
-  constructor(private broadcaster: Broadcaster) {}
+  constructor(private readonly broadcaster: Broadcaster) { }
 
   ngOnInit(): void {
     this.hasLoaded = forkJoin(
       this.applications.pipe(first()),
       this.environments.pipe(first())
-    ).pipe(map(() => true));
+    ).pipe(map((): boolean => true));
     this.subscriptions.push(
-      this.applications.subscribe((applications: string[]) => {
+      this.applications.subscribe((applications: string[]): void => {
         this.applicationsList = applications;
         this.applyFilters();
       })
@@ -59,7 +56,7 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
+    this.subscriptions.forEach((sub: Subscription): void => sub.unsubscribe());
   }
 
   filterChange(event: FilterEvent): void {
@@ -79,9 +76,8 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
     this.filteredApplicationsList.sort((a: string, b: string) => {
       let v: number = a.localeCompare(b);
       if (!this.isAscendingSort) {
-        v = v * -1;
+        return -v;
       }
-
       return v;
     });
   }
@@ -89,7 +85,7 @@ export class DeploymentsAppsComponent implements OnInit, OnDestroy {
   applyFilters(): void {
     this.filteredApplicationsList = [];
     if (this.currentFilters && this.currentFilters.length > 0) {
-      this.applicationsList.forEach((application: string) => {
+      this.applicationsList.forEach((application: string): void => {
         if (this.matchesFilters(application, this.currentFilters)) {
           this.filteredApplicationsList.push(application);
         }

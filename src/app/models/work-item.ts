@@ -1,5 +1,4 @@
 import { User } from 'ngx-login-client';
-
 import { Comment } from './comment';
 
 export class WorkItem {

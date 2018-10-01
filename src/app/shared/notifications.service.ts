@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { Notification, NotificationAction, Notifications } from 'ngx-base';
 import { NotificationService } from 'patternfly-ng/notification';
-import { Observable, Subject } from 'rxjs';
+import { empty as observableEmpty,  Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -53,7 +52,7 @@ export class NotificationsService implements Notifications {
   }
 
   get recent(): Observable<Notification[]> {
-    return Observable.empty();
+    return observableEmpty();
   }
 
 }

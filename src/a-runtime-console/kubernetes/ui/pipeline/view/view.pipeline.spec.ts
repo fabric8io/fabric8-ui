@@ -2,9 +2,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MomentModule } from 'angular2-moment';
-import { PipelineViewComponent } from './view.pipeline.component';
-
 import { Fabric8CommonModule } from '../../../../common/common.module';
+import { PipelineViewComponent } from './view.pipeline.component';
 
 describe('PipelineViewComponent', () => {
   let pipeline: PipelineViewComponent;

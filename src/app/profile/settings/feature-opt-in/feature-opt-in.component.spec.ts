@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2/dist/index';
+import { JwBootstrapSwitchNg2Module } from 'jw-bootstrap-switch-ng2';
 import { Notifications, NotificationType } from 'ngx-base';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { UserService } from 'ngx-login-client';
 import { ListModule } from 'patternfly-ng';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { FeatureAcknowledgementService } from '../../../feature-flag/service/feature-acknowledgement.service';
@@ -22,17 +22,13 @@ class HostComponent {}
 describe('FeatureOptInComponent', () => {
   type Context = TestContext<FeatureOptInComponent, HostComponent>;
 
-  let gettingStartedServiceMock: jasmine.SpyObj<GettingStartedService>;
-  let notificationsMock: jasmine.SpyObj<Notifications>;
   let userServiceMock: jasmine.SpyObj<UserService>;
   let toggleServiceMock: jasmine.SpyObj<FeatureTogglesService>;
   let toggleAckServiceMock: jasmine.SpyObj<FeatureAcknowledgementService>;
 
   beforeEach(() => {
-    gettingStartedServiceMock = createMock(GettingStartedService);
     toggleServiceMock = createMock(FeatureTogglesService);
     toggleAckServiceMock = createMock(FeatureAcknowledgementService);
-    notificationsMock = createMock(Notifications);
     userServiceMock = createMock(UserService);
     (userServiceMock as any).currentLoggedInUser = {
       attributes: {
@@ -45,12 +41,12 @@ describe('FeatureOptInComponent', () => {
     toggleAckServiceMock.getToggle.and.returnValue(of(true));
   });
 
-  initContext(FeatureOptInComponent, HostComponent, {
+  const testContext = initContext(FeatureOptInComponent, HostComponent, {
     imports: [
       CommonModule,
       FormsModule,
       ListModule,
-      JWBootstrapSwitchModule
+      JwBootstrapSwitchNg2Module
     ],
     providers: [
       { provide: GettingStartedService, useFactory: (): jasmine.SpyObj<GettingStartedService> => {
@@ -84,7 +80,7 @@ describe('FeatureOptInComponent', () => {
     ]
   });
 
-  it('should sort feature per level', function(this: Context) {
+  it('should sort feature per level', function() {
     const features = [   {
       'attributes': {
         'description': 'main dashboard view',
@@ -112,8 +108,8 @@ describe('FeatureOptInComponent', () => {
         },
         'id': 'Analyze.newSpaceDashboard'
       }] as Feature[];
-    this.testedDirective.featureLevel = 'experimental';
-    const result = this.testedDirective.featureByLevel(features);
+    testContext.testedDirective.featureLevel = 'experimental';
+    const result = testContext.testedDirective.featureByLevel(features);
 
     expect(result.released[0].id).toEqual(features[0].id);
     expect(result.internal[0].id).toEqual(features[1].id);
@@ -122,11 +118,11 @@ describe('FeatureOptInComponent', () => {
   });
 
   describe('updateProfile', () => {
-    it('should call GettingStartedService#update and send a notification', function(this: Context) {
+    it('should call GettingStartedService#update and send a notification', function() {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
-      this.testedDirective.updateProfile({
+      testContext.testedDirective.updateProfile({
         item: { name: 'beta' },
         selectedItems: [ { name: 'beta' } ]
       });
@@ -134,13 +130,13 @@ describe('FeatureOptInComponent', () => {
       expect(notifications.message).toHaveBeenCalled();
     });
 
-    it('should update the feature level', function(this: Context) {
+    it('should update the feature level', function() {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
-      expect(this.testedDirective.featureLevel).toBe('beta');
-      this.testedDirective.featureLevel = 'experimental';
-      this.testedDirective.updateProfile({
+      expect(testContext.testedDirective.featureLevel).toBe('beta');
+      testContext.testedDirective.featureLevel = 'experimental';
+      testContext.testedDirective.updateProfile({
         item: { name: 'experimental' },
         selectedItems: [{ name: 'experimental' }]
       });
@@ -152,11 +148,11 @@ describe('FeatureOptInComponent', () => {
       }));
     });
 
-    it('should cancel events deselecting a feature level', function(this: Context) {
+    it('should cancel events deselecting a feature level', function() {
       const gettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
       const notifications: jasmine.SpyObj<Notifications> = TestBed.get(Notifications);
 
-      this.testedDirective.updateProfile({
+      testContext.testedDirective.updateProfile({
         item: { name: 'beta' },
         selectedItems: []
       });

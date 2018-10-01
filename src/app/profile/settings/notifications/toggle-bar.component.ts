@@ -7,7 +7,5 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
   styleUrls: ['toggle-bar.component.less']
 })
 export class ToggleBarComponent {
-  @Input() id: String;
-
-  constructor() { }
+  @Input() id: string;
 }

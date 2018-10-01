@@ -5,11 +5,9 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-
+import { isEmpty } from 'lodash';
 import { Build } from '../../../../a-runtime-console/kubernetes/model/build.model';
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
-
-import { isEmpty } from 'lodash';
 
 export class ExtPipelineStage extends PipelineStage {
   currentStage: boolean;

@@ -1,6 +1,5 @@
 import { NgModule }  from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { MySpacesComponent } from './my-spaces.component';
 
 const routes: Routes = [

@@ -5,22 +5,18 @@ import {
 } from '@angular/common/http/testing';
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import { createMock } from 'testing/mock';
-
+import { Logger } from 'ngx-base';
+import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { AuthenticationService } from 'ngx-login-client';
 import {
   Observable,
+  of as observableOf,
   Subscription
 } from 'rxjs';
-
-import { Logger } from 'ngx-base';
-
+import { first } from 'rxjs/operators';
+import { createMock } from 'testing/mock';
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { PipelinesService } from '../../../../shared/runtime-console/pipelines.service';
-
-import { AuthenticationService } from 'ngx-login-client';
-
-import { WIT_API_URL } from 'ngx-fabric8-wit';
 
 //Avoid naming collision
 import { PipelinesService as ActualPipelinesService } from './pipelines.service';
@@ -43,7 +39,7 @@ describe('Pipelines Service', () => {
     mockErrorHandler = jasmine.createSpyObj<ErrorHandler>('ErrorHandler', ['handleError']);
     mockNotificationsService = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
 
-    spyOnProperty(mockRuntimePipelinesService, 'current', 'get').and.returnValue(Observable.of([
+    spyOnProperty(mockRuntimePipelinesService, 'current', 'get').and.returnValue(observableOf([
       {
         id: 'app',
         name: 'app',
@@ -70,7 +66,7 @@ describe('Pipelines Service', () => {
       }
     ]));
 
-    spyOnProperty(mockRuntimePipelinesService, 'recentPipelines', 'get').and.returnValue(Observable.of([
+    spyOnProperty(mockRuntimePipelinesService, 'recentPipelines', 'get').and.returnValue(observableOf([
       {
         id: 'app2',
         name: 'app2',
@@ -193,8 +189,8 @@ describe('Pipelines Service', () => {
         };
 
         it('should inject urls into current pipelines result', (done: DoneFn) => {
-          svc.getCurrentPipelines().first().subscribe(pipelines => {
-            expect(pipelines as any[]).toContain({
+          svc.getCurrentPipelines().pipe(first()).subscribe(pipelines => {
+            expect(pipelines as any[]).toContainEqual({
               id: 'app',
               name: 'app',
               gitUrl: 'https://example.com/app.git',
@@ -214,7 +210,7 @@ describe('Pipelines Service', () => {
               openShiftConsoleUrl: 'https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines/app',
               editPipelineUrl: 'https://console.starter-us-east-2.openshift.com/console/project/blob/edit/pipelines/app'
             });
-            expect(pipelines as any[]).toContain({
+            expect(pipelines as any[]).toContainEqual({
               id: 'app2',
               name: 'app2',
               gitUrl: 'https://example.com/app2.git',
@@ -231,8 +227,8 @@ describe('Pipelines Service', () => {
         });
 
         it('should inject urls into recent pipelines result', (done: DoneFn) => {
-          svc.getCurrentPipelines().first().subscribe(pipelines => {
-            expect(pipelines as any[]).toContain({
+          svc.getCurrentPipelines().pipe(first()).subscribe(pipelines => {
+            expect(pipelines as any[]).toContainEqual({
               id: 'app2',
               name: 'app2',
               gitUrl: 'https://example.com/app2.git',
@@ -275,8 +271,8 @@ describe('Pipelines Service', () => {
           };
 
         it('should not inject urls into current pipelines result', (done: DoneFn) => {
-          svc.getCurrentPipelines().first().subscribe(pipelines => {
-            expect(pipelines as any[]).toContain({
+          svc.getCurrentPipelines().pipe(first()).subscribe(pipelines => {
+            expect(pipelines as any[]).toContainEqual({
               id: 'app',
               name: 'app',
               gitUrl: 'https://example.com/app.git',
@@ -292,7 +288,7 @@ describe('Pipelines Service', () => {
                 space: 'space'
               }
             });
-            expect(pipelines as any[]).toContain({
+            expect(pipelines as any[]).toContainEqual({
               id: 'app2',
               name: 'app2',
               gitUrl: 'https://example.com/app2.git',
@@ -307,8 +303,8 @@ describe('Pipelines Service', () => {
         });
 
         it('should not inject urls into recent pipelines result', (done: DoneFn) => {
-          svc.getCurrentPipelines().first().subscribe(pipelines => {
-            expect(pipelines as any[]).toContain({
+          svc.getCurrentPipelines().pipe(first()).subscribe(pipelines => {
+            expect(pipelines as any[]).toContainEqual({
               id: 'app2',
               name: 'app2',
               gitUrl: 'https://example.com/app2.git',
@@ -397,8 +393,8 @@ describe('Pipelines Service', () => {
           }
         };
 
-        svc.getOpenshiftConsoleUrl()
-          .first()
+        svc.getOpenshiftConsoleUrl().pipe(
+          first())
           .subscribe(
             (msg: string) => {
               expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
@@ -435,8 +431,8 @@ describe('Pipelines Service', () => {
           }
         };
 
-        svc.getOpenshiftConsoleUrl()
-          .first()
+        svc.getOpenshiftConsoleUrl().pipe(
+          first())
           .subscribe(
             (msg: string) => {
               expect(msg).toEqual('');
@@ -486,8 +482,8 @@ describe('Pipelines Service', () => {
           }
         };
 
-        svc.getOpenshiftConsoleUrl()
-          .first()
+        svc.getOpenshiftConsoleUrl().pipe(
+          first())
           .subscribe(
             (msg: string) => {
               expect(msg).toEqual('');
@@ -566,13 +562,13 @@ describe('Pipelines Service', () => {
         };
 
         it('should cache console URL', (done: DoneFn) => {
-          svc.getOpenshiftConsoleUrl()
-            .first()
+          svc.getOpenshiftConsoleUrl().pipe(
+            first())
             .subscribe(
               (msg: string) => {
                 expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');
-                svc.getOpenshiftConsoleUrl()
-                  .first()
+                svc.getOpenshiftConsoleUrl().pipe(
+                  first())
                   .subscribe(
                     (msg: string) => {
                       expect(msg).toEqual('https://console.starter-us-east-2.openshift.com/console/project/blob/browse/pipelines');

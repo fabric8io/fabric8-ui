@@ -1,5 +1,5 @@
-import { NgModule, OpaqueToken } from '@angular/core';
-import { OAuthService } from 'angular2-oauth2/oauth-service';
+import { InjectionToken, NgModule } from '@angular/core';
+import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 import { Restangular } from 'ngx-restangular';
 import { LoginService } from '../../shared/login.service';
 import { OnLogin } from '../../shared/onlogin.service';
@@ -18,7 +18,7 @@ import { Route } from '../model/route.model';
 import { Service } from '../model/service.model';
 import { currentOAuthConfig } from '../store/oauth-config-store';
 
-export const KUBERNETES_RESTANGULAR = new OpaqueToken('KubernetesRestangular');
+export const KUBERNETES_RESTANGULAR = new InjectionToken<string>('KubernetesRestangular');
 
 
 function convertToKubernetesResource(resource) {
@@ -169,6 +169,9 @@ export function KubernetesRestangularFactory(restangular: Restangular, oauthServ
 }
 
 @NgModule({
+  imports: [
+    OAuthModule.forRoot()
+  ],
   providers: [
     {provide: KUBERNETES_RESTANGULAR, useFactory: KubernetesRestangularFactory, deps: [Restangular, OAuthService, OnLogin]}
   ]

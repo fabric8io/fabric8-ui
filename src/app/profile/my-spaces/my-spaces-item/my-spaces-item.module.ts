@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { MySpacesItemRoutingModule } from './my-spaces-item-routing.module';
 import { MySpacesItemComponent } from './my-spaces-item.component';

@@ -8,17 +8,6 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import {
-  Observable,
-  Subject
-} from 'rxjs';
-
-import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
-import {
   Broadcaster,
   Logger
 } from 'ngx-base';
@@ -32,7 +21,16 @@ import {
   User,
   UserService
 } from 'ngx-login-client';
-
+import { never as observableNever, Observable,
+  Subject,
+  throwError as observableThrowError
+} from 'rxjs';
+import { first } from 'rxjs/operators';
+import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { RecentSpacesWidget } from './recent-spaces-widget.component';
 
 @Component({
@@ -43,7 +41,7 @@ class HostComponent { }
 describe('RecentSpacesWidget', () => {
   type TestingContext = TestContext<RecentSpacesWidget, HostComponent>;
 
-  initContext(RecentSpacesWidget, HostComponent, {
+  const testContext = initContext(RecentSpacesWidget, HostComponent, {
     imports: [
       Fabric8WitModule,
       RouterTestingModule
@@ -78,7 +76,7 @@ describe('RecentSpacesWidget', () => {
         useFactory: (): Spaces => {
           return {
             recent: new Subject<Space[]>(),
-            current: Observable.throw('unimplemented')
+            current: observableThrowError('unimplemented')
           } as Spaces;
         }
       },
@@ -106,30 +104,30 @@ describe('RecentSpacesWidget', () => {
     schemas: [NO_ERRORS_SCHEMA]
   });
 
-  it('should be instantiable', function(this: TestingContext): void {
-    expect(this.testedDirective).toBeTruthy();
+  it('should be instantiable', function(): void {
+    expect(testContext.testedDirective).toBeTruthy();
   });
 
-  it('should use currentLoggedInUser username', function(this: TestingContext): void {
+  it('should use currentLoggedInUser username', function(): void {
     const spaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
     expect(spaceService.getSpacesByUser).toHaveBeenCalledWith('fooUser');
   });
 
-  it('should display the loading widget while waiting for the recent spaces', function(this: TestingContext): void {
+  it('should display the loading widget while waiting for the recent spaces', function(): void {
     let mockSpacesService: any = TestBed.get(Spaces);
-    mockSpacesService.recent = Observable.never();
-    let spaceList: DebugElement = this.fixture.debugElement.query(By.css('spaceList'));
-    let emptyList: DebugElement = this.fixture.debugElement.query(By.css('emptyList'));
-    let loading: DebugElement = this.fixture.debugElement.query(By.css('fabric8-loading-widget'));
+    mockSpacesService.recent = observableNever();
+    let spaceList: DebugElement = testContext.fixture.debugElement.query(By.css('spaceList'));
+    let emptyList: DebugElement = testContext.fixture.debugElement.query(By.css('emptyList'));
+    let loading: DebugElement = testContext.fixture.debugElement.query(By.css('fabric8-loading-widget'));
     expect(spaceList).toBeNull();
     expect(emptyList).toBeNull();
     expect(loading).toBeDefined();
-    expect(this.testedDirective.loading).toEqual(true);
+    expect(testContext.testedDirective.loading).toEqual(true);
   });
 
   describe('recentSpaces', () => {
-    it('should relay empty results', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.recentSpaces.first().subscribe(function(spaces: Space[]): void {
+    it('should relay empty results', function(done: DoneFn): void {
+      testContext.testedDirective.recentSpaces.pipe(first()).subscribe(function(spaces: Space[]): void {
         expect(spaces).toEqual([]);
         done();
       });
@@ -137,7 +135,7 @@ describe('RecentSpacesWidget', () => {
       (spaces.recent as Subject<Space[]>).next([]);
     });
 
-    it('should relay nonempty results', function(this: TestingContext, done: DoneFn): void {
+    it('should relay nonempty results', function(done: DoneFn): void {
       const mockSpaces: Space[] = [
         {
           attributes: {
@@ -164,7 +162,7 @@ describe('RecentSpacesWidget', () => {
           }
         } as Space
       ];
-      this.testedDirective.recentSpaces.first().subscribe(function(spaces: Space[]): void {
+      testContext.testedDirective.recentSpaces.pipe(first()).subscribe(function(spaces: Space[]): void {
         expect(spaces).toEqual(mockSpaces);
         done();
       });
@@ -174,8 +172,8 @@ describe('RecentSpacesWidget', () => {
   });
 
   describe('userHasSpaces', () => {
-    it('should emit "true" if space array is nonempty', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.userHasSpaces.first().subscribe((hasSpaces: boolean): void => {
+    it('should emit "true" if space array is nonempty', function(done: DoneFn): void {
+      testContext.testedDirective.userHasSpaces.pipe(first()).subscribe((hasSpaces: boolean): void => {
         expect(hasSpaces).toBeTruthy();
         done();
       });
@@ -198,8 +196,8 @@ describe('RecentSpacesWidget', () => {
       );
     });
 
-    it('should emit "false" if space array is empty', function(this: TestingContext, done: DoneFn): void {
-      this.testedDirective.userHasSpaces.first().subscribe((hasSpaces: boolean): void => {
+    it('should emit "false" if space array is empty', function(done: DoneFn): void {
+      testContext.testedDirective.userHasSpaces.pipe(first()).subscribe((hasSpaces: boolean): void => {
         expect(hasSpaces).toBeFalsy();
         done();
       });
@@ -209,7 +207,7 @@ describe('RecentSpacesWidget', () => {
   });
 
   describe('error handling', () => {
-    it('should log errors if SpaceService emits errors', function(this: TestingContext): void {
+    it('should log errors if SpaceService emits errors', function(): void {
       const logger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       expect(logger.error).not.toHaveBeenCalled();
       const service: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
@@ -221,10 +219,10 @@ describe('RecentSpacesWidget', () => {
   });
 
   describe('showAddSpaceOverlay', () => {
-    it('should trigger broadcast event', function(this: TestingContext) {
+    it('should trigger broadcast event', function() {
       const broadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
       expect(broadcaster.broadcast).not.toHaveBeenCalled();
-      this.testedDirective.showAddSpaceOverlay();
+      testContext.testedDirective.showAddSpaceOverlay();
       expect(broadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
     });
   });

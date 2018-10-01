@@ -6,12 +6,9 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-
 import { Logger } from 'ngx-base';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
+import { Observable, of } from 'rxjs';
 import { LoginService } from './login.service';
 import { Fabric8RuntimeConsoleService } from './runtime-console/fabric8-runtime-console.service';
 

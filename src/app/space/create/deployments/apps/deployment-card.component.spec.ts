@@ -12,7 +12,6 @@ import {
   tick
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import {
   BsDropdownConfig,
@@ -20,23 +19,15 @@ import {
   BsDropdownToggleDirective
 } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
   BehaviorSubject,
+  of,
   Subject
 } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
 import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
+import { initContext } from 'testing/test-context';
 import { NotificationsService } from '../../../../shared/notifications.service';
-import { CpuStat } from '../models/cpu-stat';
-import { MemoryStat } from '../models/memory-stat';
 import {
   DeploymentStatusService,
   Status,
@@ -61,9 +52,8 @@ class FakeDeleteDeploymentModal {
 }
 
 describe('DeploymentCardComponent', () => {
-  type Context = TestContext<DeploymentCardComponent, HostComponent>;
 
-  initContext(DeploymentCardComponent, HostComponent, {
+  const testContext = initContext(DeploymentCardComponent, HostComponent, {
     declarations: [FakeDeleteDeploymentModal],
     imports: [
       BsDropdownModule.forRoot(),
@@ -78,8 +68,8 @@ describe('DeploymentCardComponent', () => {
           const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
 
           svc.getVersion.and.returnValue(of('1.2.3'));
-          svc.getDeploymentCpuStat.and.returnValue(of([{ used: 1, quota: 2, timestamp: 1 }] as CpuStat[]));
-          svc.getDeploymentMemoryStat.and.returnValue(of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }] as MemoryStat[]));
+          svc.getDeploymentCpuStat.and.returnValue(of([{ used: 1, quota: 2, timestamp: 1 }]));
+          svc.getDeploymentMemoryStat.and.returnValue(of([{ used: 3, quota: 4, units: 'GB', timestamp: 1 }]));
           svc.getAppUrl.and.returnValue(of('mockAppUrl'));
           svc.getConsoleUrl.and.returnValue(of('mockConsoleUrl'));
           svc.getLogsUrl.and.returnValue(of('mockLogsUrl'));
@@ -100,63 +90,63 @@ describe('DeploymentCardComponent', () => {
     ],
     schemas: [NO_ERRORS_SCHEMA]
   },
-    (component: DeploymentCardComponent) => {
+    (component: DeploymentCardComponent): void => {
       component.spaceId = 'mockSpaceId';
       component.applicationId = 'mockAppId';
       component.environment = 'mockEnvironment';
     });
 
-  it('should be active by default', function(this: Context) {
-    expect(this.testedDirective).toBeTruthy();
+  it('should be active by default', (): void => {
+    expect(testContext.testedDirective).toBeTruthy();
   });
 
-  it('should not display inactive environments', fakeAsync(function(this: Context) {
+  it('should not display inactive environments', fakeAsync((): void => {
     TestBed.get(DeploymentsService).isApplicationDeployedInEnvironment().next(false);
-    expect(this.testedDirective.active).toBeFalsy();
+    expect(testContext.testedDirective.active).toBeFalsy();
   }));
 
-  describe('#delete', () => {
-    it('should clear "deleting" flag when request completes successfully', function(this: Context) {
+  describe('#delete', (): void => {
+    it('should clear "deleting" flag when request completes successfully', (): void => {
       const deleting: Subject<string> = TestBed.get(DeploymentsService).deleteDeployment();
 
-      expect(this.testedDirective.active).toBeTruthy();
-      expect(this.testedDirective.deleting).toBeFalsy();
+      expect(testContext.testedDirective.active).toBeTruthy();
+      expect(testContext.testedDirective.deleting).toBeFalsy();
 
-      this.testedDirective.delete();
-      expect(this.testedDirective.active).toBeTruthy();
-      expect(this.testedDirective.deleting).toBeTruthy();
+      testContext.testedDirective.delete();
+      expect(testContext.testedDirective.active).toBeTruthy();
+      expect(testContext.testedDirective.deleting).toBeTruthy();
 
       deleting.next('delete success');
-      expect(this.testedDirective.active).toBeFalsy();
-      expect(this.testedDirective.deleting).toBeFalsy();
+      expect(testContext.testedDirective.active).toBeFalsy();
+      expect(testContext.testedDirective.deleting).toBeFalsy();
     });
 
-    it('should clear "deleting" flag when request completes with error', function(this: Context) {
+    it('should clear "deleting" flag when request completes with error', (): void => {
       const deleting: Subject<string> = TestBed.get(DeploymentsService).deleteDeployment();
 
-      expect(this.testedDirective.active).toBeTruthy();
-      expect(this.testedDirective.deleting).toBeFalsy();
+      expect(testContext.testedDirective.active).toBeTruthy();
+      expect(testContext.testedDirective.deleting).toBeFalsy();
 
-      this.testedDirective.delete();
-      expect(this.testedDirective.active).toBeTruthy();
-      expect(this.testedDirective.deleting).toBeTruthy();
+      testContext.testedDirective.delete();
+      expect(testContext.testedDirective.active).toBeTruthy();
+      expect(testContext.testedDirective.deleting).toBeTruthy();
 
       deleting.error('delete failure');
-      expect(this.testedDirective.active).toBeTruthy();
-      expect(this.testedDirective.deleting).toBeFalsy();
+      expect(testContext.testedDirective.active).toBeTruthy();
+      expect(testContext.testedDirective.deleting).toBeFalsy();
     });
   });
 
-  it('should set versionLabel from mockSvc.getVersion result', function(this: Context) {
+  it('should set versionLabel from mockSvc.getVersion result', (): void => {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
 
-    let de: DebugElement = this.fixture.debugElement.query(By.css('#versionLabel'));
-    let el: HTMLElement = de.nativeElement;
+    const de: DebugElement = testContext.fixture.debugElement.query(By.css('#versionLabel'));
+    const el: HTMLElement = de.nativeElement;
     expect(mockSvc.getVersion).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
     expect(el.textContent).toEqual('1.2.3');
   });
 
-  it('should invoke deployments service calls with the correct arguments', function(this: Context) {
+  it('should invoke deployments service calls with the correct arguments', (): void => {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
 
     expect(mockSvc.isApplicationDeployedInEnvironment).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
@@ -165,71 +155,71 @@ describe('DeploymentCardComponent', () => {
     expect(mockSvc.getAppUrl).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
   });
 
-  it('should set icon status from DeploymentStatusService aggregate', function(this: Context) {
+  it('should set icon status from DeploymentStatusService aggregate', (): void => {
     const mockStatusSvc: jasmine.SpyObj<DeploymentStatusService> = TestBed.get(DeploymentStatusService);
     const mockStatus: Subject<Status> = mockStatusSvc.getDeploymentAggregateStatus();
 
     expect(mockStatusSvc.getDeploymentAggregateStatus).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');
-    expect(this.testedDirective.toolTip).toEqual('warning message');
-    expect(this.testedDirective.iconClass).toEqual('pficon-warning-triangle-o');
-    expect(this.testedDirective.cardStatusClass).toEqual('status-ribbon-warn');
+    expect(testContext.testedDirective.toolTip).toEqual('warning message');
+    expect(testContext.testedDirective.iconClass).toEqual('pficon-warning-triangle-o');
+    expect(testContext.testedDirective.cardStatusClass).toEqual('status-ribbon-warn');
 
     mockStatus.next({ type: StatusType.ERR, message: 'error message' });
-    expect(this.testedDirective.toolTip).toEqual('error message');
-    expect(this.testedDirective.iconClass).toEqual('pficon-error-circle-o');
-    expect(this.testedDirective.cardStatusClass).toEqual('status-ribbon-err');
+    expect(testContext.testedDirective.toolTip).toEqual('error message');
+    expect(testContext.testedDirective.iconClass).toEqual('pficon-error-circle-o');
+    expect(testContext.testedDirective.cardStatusClass).toEqual('status-ribbon-err');
 
     mockStatus.next({ type: StatusType.OK, message: '' });
-    expect(this.testedDirective.toolTip).toEqual(DeploymentCardComponent.OK_TOOLTIP);
-    expect(this.testedDirective.iconClass).toEqual('pficon-ok');
-    expect(this.testedDirective.cardStatusClass).toEqual('');
+    expect(testContext.testedDirective.toolTip).toEqual(DeploymentCardComponent.OK_TOOLTIP);
+    expect(testContext.testedDirective.iconClass).toEqual('pficon-ok');
+    expect(testContext.testedDirective.cardStatusClass).toEqual('');
   });
 
-  describe('async tests', () => {
-    describe('dropdown menus', () => {
+  describe('async tests', (): void => {
+    describe('dropdown menus', (): void => {
       let menuItems: DebugElement[];
 
       function getItemByLabel(label: string): DebugElement {
         return menuItems
-          .filter((item: DebugElement) => item.nativeElement.textContent.includes(label))[0];
+          .filter((item: DebugElement): boolean => item.nativeElement.textContent.includes(label))[0];
       }
 
-      beforeEach(fakeAsync(function(this: Context) {
-        const de: DebugElement = this.fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
+      beforeEach(fakeAsync((): void => {
+        const de: DebugElement = testContext.fixture.debugElement.query(By.directive(BsDropdownToggleDirective));
         de.triggerEventHandler('click', new CustomEvent('click'));
 
-        this.fixture.detectChanges();
+        testContext.fixture.detectChanges();
         tick();
 
-        const menu: DebugElement = this.fixture.debugElement.query(By.css('.dropdown-menu'));
+        const menu: DebugElement = testContext.fixture.debugElement.query(By.css('.dropdown-menu'));
         menuItems = menu.queryAll(By.css('li'));
       }));
 
-      it('should not display appUrl if none available', fakeAsync(function(this: Context) {
-        this.testedDirective.appUrl = of('');
+      it('should not display appUrl if none available', fakeAsync((): void => {
+        testContext.testedDirective.appUrl = of('');
 
-        this.fixture.detectChanges();
+        testContext.fixture.detectChanges();
 
-        const menu: DebugElement = this.fixture.debugElement.query(By.css('.dropdown-menu'));
+        const menu: DebugElement = testContext.fixture.debugElement.query(By.css('.dropdown-menu'));
         menuItems = menu.queryAll(By.css('li'));
         const item: DebugElement = getItemByLabel('Open Application');
         expect(item).toBeFalsy();
       }));
 
-      it('should call the delete modal open method', fakeAsync(function(this: Context) {
-        spyOn(this.testedDirective, 'openModal');
+      it('should call the delete modal open method', fakeAsync((): void => {
+        spyOn(testContext.testedDirective, 'openModal').and.callFake((): void => {});
 
         const item: DebugElement = getItemByLabel('Delete');
         expect(item).toBeTruthy();
         item.query(By.css('a')).triggerEventHandler('click', new CustomEvent('click'));
-        this.fixture.detectChanges();
+        testContext.fixture.detectChanges();
 
-        expect(this.testedDirective.openModal).toHaveBeenCalled();
+        expect(testContext.testedDirective.openModal).toHaveBeenCalled();
       }));
 
-      it('should call the delete service method when the modal event fires', fakeAsync(function(this: Context) {
+      it('should call the delete service method when the modal event fires', fakeAsync((): void => {
         const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-        const de: DebugElement = this.fixture.debugElement.query(By.directive(FakeDeleteDeploymentModal));
+        const de: DebugElement = testContext.fixture.debugElement.query(By.directive(FakeDeleteDeploymentModal));
         expect(mockSvc.deleteDeployment).not.toHaveBeenCalled();
         de.componentInstance.deleteEvent.emit();
         expect(mockSvc.deleteDeployment).toHaveBeenCalledWith('mockSpaceId', 'mockEnvironment', 'mockAppId');

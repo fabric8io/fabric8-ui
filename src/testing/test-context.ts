@@ -25,7 +25,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { DebugElement, Type } from '@angular/core';
+import { ChangeDetectionStrategy, DebugElement, Type } from '@angular/core';
 import { async, ComponentFixture, TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -39,32 +39,28 @@ export class TestContext<T, H> {
   detectChanges() {
     this.fixture.detectChanges();
   }
-
 }
 
 export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, moduleMetadata: TestModuleMetadata = {},
-  customizer?: (t: T) => void) {
-  beforeEach(function() {
-    /*
-     * Jasmine creates plain objects and modifying their prototype is definitely a bad idea.
-     * So until we find better way..
-     */
-    Object.assign(this, TestContext.prototype);
-  });
+  customizer?: (t: T) => void): TestContext<T, H> {
 
-  beforeEach(async(function(this: TestContext<T, H>) {
+  const context = new TestContext<T, H>();
+
+  beforeEach(async(function() {
     const declarations = [ testedType, hostType ];
     if (moduleMetadata && moduleMetadata.declarations) {
       declarations.push(...moduleMetadata.declarations);
     }
-    TestBed.configureTestingModule({...moduleMetadata, declarations: declarations })
+    TestBed
+      .configureCompiler({ preserveWhitespaces: true } as any)
+      .configureTestingModule({...moduleMetadata, declarations})
       .compileComponents();
   }));
 
-  beforeEach(function(this: TestContext<T, H>) {
-    this.fixture = TestBed.createComponent(hostType);
-    this.hostComponent = this.fixture.componentInstance;
-    const testedDebugElement = this.fixture.debugElement.query(By.directive(testedType));
+  beforeEach(function() {
+    context.fixture = TestBed.createComponent(hostType);
+    context.hostComponent = context.fixture.componentInstance;
+    const testedDebugElement = context.fixture.debugElement.query(By.directive(testedType));
     if (!testedDebugElement) {
       throw new Error('Unable to find component under test of type '
         + testedType.name
@@ -72,21 +68,22 @@ export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, module
         + hostType.name
         + ' in the failing test');
     }
-    this.tested = testedDebugElement;
-    this.testedDirective = testedDebugElement.injector.get(testedType);
-    this.testedElement = testedDebugElement.nativeElement;
+    context.tested = testedDebugElement;
+    context.testedDirective = testedDebugElement.injector.get(testedType);
+    context.testedElement = testedDebugElement.nativeElement;
 
     if (customizer) {
-      customizer(this.testedDirective);
+      customizer(context.testedDirective);
     }
-    this.fixture.detectChanges();
+    context.fixture.detectChanges();
   });
 
-  afterEach(function(this: TestContext<T, H>) {
-    if (this.fixture) {
-      this.fixture.destroy();
-      this.fixture.nativeElement.remove();
+  afterEach(function() {
+    if (context.fixture) {
+      context.fixture.destroy();
+      context.fixture.nativeElement.remove();
     }
   });
+
+  return context;
 }
-

@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-
+import { TooltipModule } from 'ngx-bootstrap';
 import { Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-
-import { initContext, TestContext } from '../../../../testing/test-context';
+import { empty, of, throwError } from 'rxjs';
+import { initContext } from 'testing/test-context';
 import { ProviderService } from '../../../shared/account/provider.service';
+import { TenantService } from '../../services/tenant.service';
 import { ConnectedAccountsComponent } from './connected-accounts.component';
 
 @Component({
@@ -26,83 +25,95 @@ describe('Connected Accounts Component', () => {
     }
   };
 
-  type Context = TestContext<ConnectedAccountsComponent, SampleTestComponent>;
+  const mockTenantData: any = {
+    attributes: {
+      namespaces: [
+        {
+          'cluster-console-url': 'http://example.cluster-name.something.com'
+        }
+      ]
+    }
+  };
 
-  describe('User has only OpenShift account connected', () => {
+  let contextsMock: any = jasmine.createSpy('Contexts');
+  let authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
+  let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'getOpenShiftStatus']);
+  let userServiceMock: any = jasmine.createSpy('UserService');
+  let tenantSeriveMock: any = jasmine.createSpyObj('TenantService', ['getTenant']);
 
-    let contextsMock: any = jasmine.createSpy('Contexts');
-    let authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
-    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'getOpenShiftStatus']);
-    let userServiceMock: any = jasmine.createSpy('UserService');
+  describe('User has only OpenShift account connected', (): void => {
 
-    beforeAll(() => {
-      authMock.gitHubToken = Observable.empty();
+    beforeAll((): void => {
+      authMock.gitHubToken = empty();
       //authMock.openShiftToken = of('oso-token');
       authMock.isOpenShiftConnected.and.returnValue(of(true));
       contextsMock.current = of(ctx);
-      userServiceMock.loggedInUser = Observable.empty();
+      userServiceMock.loggedInUser = empty();
       userServiceMock.currentLoggedInUser = ctx.user;
-      providersMock.getGitHubStatus.and.returnValue(Observable.throw('failure'));
+      providersMock.getGitHubStatus.and.returnValue(throwError('failure'));
       providersMock.getOpenShiftStatus.and.returnValue(of({'username': expectedOsoUser}));
+      tenantSeriveMock.getTenant.and.returnValue(of(mockTenantData));
     });
 
-    initContext(ConnectedAccountsComponent, SampleTestComponent,  {
-      providers: [ { provide: AuthenticationService, useValue: authMock },
+    const testContext = initContext(ConnectedAccountsComponent, SampleTestComponent,  {
+      imports: [ TooltipModule.forRoot() ],
+      providers: [
+        { provide: AuthenticationService, useValue: authMock },
         { provide: Contexts, useValue: contextsMock },
         { provide: UserService, useValue: userServiceMock },
-        { provide: ProviderService, useValue: providersMock }]
+        { provide: ProviderService, useValue: providersMock },
+        { provide: TenantService, useValue: tenantSeriveMock}
+      ]
     });
 
-    it('should have absence of GitHub connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('GitHub Disconnected');
+    it('should have absence of GitHub connection indicated', (): void => {
+      const actualText: string = testContext.testedElement.textContent;
+      expect(actualText).toMatch(new RegExp('GitHub\\s+Disconnected'));
     });
 
-    it('should have OpenShift connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('OpenShift ' + expectedOsoUser);
+    it('should have OpenShift connection indicated', (): void => {
+      const actualText: string = testContext.testedElement.textContent;
+      expect(actualText).toMatch(new RegExp(expectedOsoUser));
     });
 
+    it('should set cluster name and cluster url by calling tenant service', (): void => {
+      expect(testContext.testedDirective.consoleUrl).toBe('http://example.cluster-name.something.com');
+      expect(testContext.testedDirective.clusterName).toBe('cluster-name');
+    });
   });
 
-  describe('User has both Github and OpenShift accounts connected', () => {
+  describe('User has both Github and OpenShift accounts connected', (): void => {
 
-    let contextsMock: any = jasmine.createSpy('Contexts');
-    let authMock: any = jasmine.createSpyObj('AuthenticationService', ['isOpenShiftConnected']);
-    let providersMock: any  = jasmine.createSpyObj('ProviderService', ['getGitHubStatus', 'getOpenShiftStatus']);
-    let userServiceMock: any = jasmine.createSpy('UserService');
-
-    beforeAll(() => {
+    beforeAll((): void => {
       authMock.gitHubToken = of('gh-test-user');
       //authMock.openShiftToken = of('oso-token');
       authMock.isOpenShiftConnected.and.returnValue(of(true));
       contextsMock.current = of(ctx);
-      userServiceMock.loggedInUser = Observable.empty();
+      userServiceMock.loggedInUser = empty();
       userServiceMock.currentLoggedInUser = ctx.user;
       providersMock.getGitHubStatus.and.returnValue(of({'username': 'username'}));
       providersMock.getOpenShiftStatus.and.returnValue(of({'username': expectedOsoUser}));
     });
 
-    initContext(ConnectedAccountsComponent, SampleTestComponent,  {
-      providers: [ { provide: AuthenticationService, useValue: authMock },
+    const testContext = initContext(ConnectedAccountsComponent, SampleTestComponent,  {
+      imports: [ TooltipModule.forRoot() ],
+      providers: [
+        { provide: AuthenticationService, useValue: authMock },
         { provide: Contexts, useValue: contextsMock },
         { provide: UserService, useValue: userServiceMock },
-        { provide: ProviderService, useValue: providersMock }]
+        { provide: ProviderService, useValue: providersMock },
+        { provide: TenantService, useValue: tenantSeriveMock }
+      ]
     });
 
-    it('should have GitHub connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
+    it('should have GitHub connection indicated', (): void => {
+      const actualText: string = testContext.testedElement.textContent;
       expect(actualText).toContain('username');
     });
 
-    it('should have OpenShift connection indicated', function(this: Context) {
-      let actualText = trimCarriageReturns(this.testedElement.innerText);
-      expect(actualText).toContain('OpenShift ' + expectedOsoUser);
+    it('should have OpenShift connection indicated', (): void => {
+      const actualText: string = testContext.testedElement.textContent;
+      expect(actualText).toMatch(new RegExp(expectedOsoUser));
     });
   });
-
 });
-
-function trimCarriageReturns(str: string) {
-  return str.replace(/[\n\r]+/g, ' ');
-}

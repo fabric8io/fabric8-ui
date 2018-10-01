@@ -5,13 +5,10 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-
 import { Context } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { catchError, first, switchMap } from 'rxjs/operators';
-
+import { Observable, of, throwError as observableThrowError } from 'rxjs';
+import { catchError, first, switchMap, take } from 'rxjs/operators';
 import { Navigation } from '../models/navigation';
 import { ContextService } from './context.service';
 
@@ -36,11 +33,11 @@ export class ProfileResolver implements Resolve<Context> {
             first(),
             catchError((err: any, caught: Observable<Context>) => {
               console.log(`Caught in resolver ${err}`);
-              return Observable.throw(err);
+              return observableThrowError(err);
             })
           );
       })
-    ).take(1);
+    ).pipe(take(1));
   }
 
 }

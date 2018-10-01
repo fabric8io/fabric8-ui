@@ -9,11 +9,6 @@ import {
   Inject,
   Injectable
 } from '@angular/core';
-
-import {
-  Observable
-} from 'rxjs';
-
 import {
   Logger,
   Notification,
@@ -21,11 +16,14 @@ import {
 } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-
-import { NotificationsService } from '../../../../shared/notifications.service';
-
+import {
+  combineLatest as observableCombineLatest,
+  empty as observableEmpty,
+  Observable
+} from 'rxjs';
+import { catchError, distinctUntilChanged, map, shareReplay } from 'rxjs/operators';
 import { BuildConfig } from '../../../../../a-runtime-console/index';
-
+import { NotificationsService } from '../../../../shared/notifications.service';
 import { PipelinesService as RuntimePipelinesService } from '../../../../shared/runtime-console/pipelines.service';
 
 export interface UserServiceResponse {
@@ -74,16 +72,16 @@ export class PipelinesService {
   }
 
   getCurrentPipelines(): Observable<BuildConfig[]> {
-    return Observable.combineLatest(
-      this.runtimePipelinesService.current.distinctUntilChanged(),
+    return observableCombineLatest(
+      this.runtimePipelinesService.current.pipe(distinctUntilChanged()),
       this.getOpenshiftConsoleUrl(),
       this.setupBuildConfigLinks
     );
   }
 
   getRecentPipelines(): Observable<BuildConfig[]> {
-    return Observable.combineLatest(
-      this.runtimePipelinesService.recentPipelines.distinctUntilChanged(),
+    return observableCombineLatest(
+      this.runtimePipelinesService.recentPipelines.pipe(distinctUntilChanged()),
       this.getOpenshiftConsoleUrl(),
       this.setupBuildConfigLinks
     );
@@ -91,18 +89,18 @@ export class PipelinesService {
 
   getOpenshiftConsoleUrl(): Observable<string> {
     if (!this.openshiftConsoleUrl) {
-      this.openshiftConsoleUrl = this.http.get<UserServiceResponse>(this.apiUrl, { headers: this.headers })
-        .catch((err: HttpErrorResponse): Observable<UserServiceResponse> => this.handleHttpError(err))
-        .map((resp: UserServiceResponse): UserServiceNamespace[] => resp.data.attributes.namespaces)
-        .map((namespaces: UserServiceNamespace[]): string => {
+      this.openshiftConsoleUrl = this.http.get<UserServiceResponse>(this.apiUrl, { headers: this.headers }).pipe(
+        catchError((err: HttpErrorResponse): Observable<UserServiceResponse> => this.handleHttpError(err)),
+        map((resp: UserServiceResponse): UserServiceNamespace[] => resp.data.attributes.namespaces),
+        map((namespaces: UserServiceNamespace[]): string => {
           for (let namespace of namespaces) {
             if (namespace.name && namespace.type && namespace.type === 'user' && namespace['cluster-console-url']) {
               return namespace['cluster-console-url'] + 'project/' + namespace.name + '/browse/pipelines';
             }
           }
           return '';
-        })
-        .shareReplay();
+        }),
+        shareReplay());
     }
 
     return this.openshiftConsoleUrl;
@@ -126,7 +124,7 @@ export class PipelinesService {
   private handleHttpError(response: HttpErrorResponse): Observable<any> {
     // If it's a 401 and they are not logged in, don't trigger an error
     if (response.status === 401 && !this.loggedIn) {
-      return Observable.empty();
+      return observableEmpty();
     }
     this.errorHandler.handleError(response);
     this.logger.error(response);
@@ -135,6 +133,6 @@ export class PipelinesService {
       header: `Request failed: ${response.status} (${response.statusText})`,
       message: response.message
     } as Notification);
-    return Observable.empty();
+    return observableEmpty();
   }
 }

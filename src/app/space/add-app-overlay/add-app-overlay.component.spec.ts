@@ -2,16 +2,13 @@ import { ErrorHandler } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { Broadcaster, Logger, Notifications } from 'ngx-base';
 import { PopoverConfig, PopoverModule } from 'ngx-bootstrap/popover';
 import { Context, ProcessTemplate, Space, SpaceService } from 'ngx-fabric8-wit';
 import { DependencyCheckService } from 'ngx-launcher';
 import { Profile, User, UserService } from 'ngx-login-client';
-import { Subject } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
+import { Observable,  of as observableOf ,  Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-
 import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
@@ -42,7 +39,7 @@ describe('AddAppOverlayComponent', () => {
   let mockRouter: any = jasmine.createSpyObj('Router', ['navigate']);
   let mockSpaceTemplateService: any = {
     getSpaceTemplates: () => {
-      return Observable.of(mockSpaceTemplates);
+      return observableOf(mockSpaceTemplates);
     }
   };
   let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['create']);
@@ -54,7 +51,7 @@ describe('AddAppOverlayComponent', () => {
   let mockErrorHandler: any = jasmine.createSpyObj('ErrorHandler', ['handleError']);
   let mockDependencyCheckService: any = {
     getDependencyCheck(): Observable<any> {
-      return Observable.of({
+      return observableOf({
         mavenArtifact: 'd4-345',
         groupId: 'io.openshift.booster',
         projectName: 'app-test-1',
@@ -70,7 +67,7 @@ describe('AddAppOverlayComponent', () => {
   };
   let mockDeploymentApiService: any = jasmine.createSpyObj('DeploymentApiService', ['getApplications']);
   mockDeploymentApiService.getApplications.and.returnValue(
-    Observable.of([{
+    observableOf([{
       attributes: { name: 'app-apr-10-2018-4-25' }
     }, {
       attributes: { name: 'app-may-11-2018' }
@@ -157,7 +154,7 @@ describe('AddAppOverlayComponent', () => {
   }] as ProcessTemplate[];
 
   class mockContextService {
-    get current(): Observable<Context> { return Observable.of(mockContext); }
+    get current(): Observable<Context> { return observableOf(mockContext); }
   }
 
   beforeEach(() => {

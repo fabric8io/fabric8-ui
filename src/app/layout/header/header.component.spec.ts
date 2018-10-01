@@ -6,17 +6,6 @@ import {
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import {
-  Observable
-} from 'rxjs';
-
-import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
 import {
   Broadcaster
 } from 'ngx-base';
@@ -24,9 +13,15 @@ import { Contexts } from 'ngx-fabric8-wit';
 import {
   UserService
 } from 'ngx-login-client';
-
+import { never as observableNever, Observable,
+  of as observableOf
+} from 'rxjs';
+import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { LoginService } from '../../shared/login.service';
-
 import { HeaderComponent } from './header.component';
 
 @Component({
@@ -41,7 +36,7 @@ class MockRoutedComponent { }
 
 class MockFeatureToggleService {
   getFeature(featureName: string): Observable<any> {
-    return Observable.of({
+    return observableOf({
       attributes: {
         enabled: true,
         userEnabled: true
@@ -60,7 +55,7 @@ describe('HeaderComponent', () => {
   let fixture: ComponentFixture<HeaderComponent>;
   let component: DebugNode['componentInstance'];
 
-  initContext(HeaderComponent, HostComponent, {
+  const testContext: TestingContext = initContext(HeaderComponent, HostComponent, {
     imports: [
       RouterTestingModule.withRoutes([
         { path: '_home', component: MockRoutedComponent },
@@ -72,14 +67,14 @@ describe('HeaderComponent', () => {
     ],
     declarations: [ MockRoutedComponent ],
     providers: [
-      { provide: UserService, useValue: { loggedInUser: Observable.never() } },
+      { provide: UserService, useValue: { loggedInUser: observableNever() } },
       { provide: LoginService, useValue: jasmine.createSpyObj('LoginService', ['login']) },
       { provide: Broadcaster, useValue: mockBroadcaster },
       {
         provide: Contexts, useValue: {
-          default: Observable.of({ name: 'default' }),
-          current: Observable.of({ name: 'current' }),
-          recent: Observable.never()
+          default: observableOf({ name: 'default' }),
+          current: observableOf({ name: 'current' }),
+          recent: observableNever()
         }
       }
     ],
@@ -92,43 +87,43 @@ describe('HeaderComponent', () => {
     component = fixture.debugElement.componentInstance;
   });
 
-  it('should return default context when in _home state', function(this: TestingContext, done: DoneFn) {
+  it('should return default context when in _home state', function(done: DoneFn) {
     testRouter.navigate(['_home']).then((status: boolean): void => {
       expect(status).toBeTruthy();
-      expect(this.testedDirective.context.name).toEqual('default');
+      expect(testContext.testedDirective.context.name).toEqual('default');
       done();
     });
   });
 
-  it('should return default context when in _featureflag state', function(this: TestingContext, done: DoneFn) {
+  it('should return default context when in _featureflag state', function(done: DoneFn) {
     testRouter.navigate(['_featureflag']).then((status: boolean): void => {
       expect(status).toBeTruthy();
-      expect(this.testedDirective.context.name).toEqual('default');
+      expect(testContext.testedDirective.context.name).toEqual('default');
       done();
     });
   });
 
-  it('should return current context when in non-home valid state', function(this: TestingContext, done: DoneFn) {
+  it('should return current context when in non-home valid state', function(done: DoneFn) {
     testRouter.navigate(['_other']).then((status: boolean): void => {
       expect(status).toBeTruthy();
-      expect(this.testedDirective.context.name).toEqual('current');
+      expect(testContext.testedDirective.context.name).toEqual('current');
       done();
     });
   });
 
   describe('_error state handling', () => {
-    it('should return no context when directly visiting _error', function(this: TestingContext, done: DoneFn) {
+    it('should return no context when directly visiting _error', function(done: DoneFn) {
       testRouter.navigate(['_error']).then((status: boolean): void => {
         expect(status).toBeTruthy();
-        expect(this.testedDirective.context).toBeFalsy();
+        expect(testContext.testedDirective.context).toBeFalsy();
         done();
       });
     });
 
-    it('should return no context when redirected to _error', function(this: TestingContext, done: DoneFn) {
+    it('should return no context when redirected to _error', function(done: DoneFn) {
       testRouter.navigateByUrl('/nonexistent/app/path').then((status: boolean): void => {
         expect(status).toBeTruthy();
-        expect(this.testedDirective.context).toBeFalsy();
+        expect(testContext.testedDirective.context).toBeFalsy();
         done();
       });
     });

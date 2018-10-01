@@ -1,9 +1,15 @@
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
-import { Observable, Subscription } from 'rxjs';
-
+import {
+  ConnectableObservable,
+  EMPTY,
+  Observable,
+  Subscription,
+  timer as observableTimer
+} from 'rxjs';
+import { map, publish, switchMap, take } from 'rxjs/operators';
 import { WindowService } from '../../../../shared/window.service';
+import { Che } from '../services/che';
 import { CheService } from '../services/che.service';
 import { Codebase } from '../services/codebase';
 import { Workspace } from '../services/workspace';
@@ -71,12 +77,12 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
    */
   createWorkspace(): void {
     this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().switchMap(che => {
+    this.subscriptions.push(this.cheService.getState().pipe(switchMap((che: Che, index: number) => {
       if (!che.clusterFull) {
         // create
         return this.workspacesService
-          .createWorkspace(this.codebase.id)
-          .map(workspaceLinks => {
+          .createWorkspace(this.codebase.id).pipe(
+          map(workspaceLinks => {
             this.workspaceBusy = false;
             if (workspaceLinks != undefined) {
               let name = this.getWorkspaceName(workspaceLinks.links.open);
@@ -93,7 +99,7 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
                 type: NotificationType.DANGER
               } as Notification);
             }
-          });
+          }));
       } else {
         this.workspaceBusy = false;
         this.workspacesAvailable = false;
@@ -102,9 +108,9 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
           message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
           type: NotificationType.DANGER
         } as Notification);
-        return Observable.of({});
+        return EMPTY;
       }
-    }).subscribe(() => {},
+    })).subscribe(() => {},
       err => {
         this.notifications.message({
           message: `Workspace error during creation.`,
@@ -126,15 +132,15 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
   openWorkspace(): void {
     let workspaceWindow = this.windowService.open('about:blank', '_blank');
     this.workspaceBusy = true;
-    this.subscriptions.push(this.cheService.getState().switchMap(che => {
+    this.subscriptions.push(this.cheService.getState().pipe(switchMap((che: Che, index: number) => {
       if (!che.clusterFull) {
         // create
-        return this.workspacesService.openWorkspace(this.workspaceUrl).map(workspaceLinks => {
+        return this.workspacesService.openWorkspace(this.workspaceUrl).pipe(map(workspaceLinks => {
           this.workspaceBusy = false;
           if (workspaceLinks != undefined) {
             workspaceWindow.location.href = workspaceLinks.links.open;
           }
-        });
+        }));
       } else {
         workspaceWindow.close();
         this.workspaceBusy = false;
@@ -143,9 +149,9 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
           message: `OpenShift Online cluster is currently out of capacity, workspace cannot be started.`,
           type: NotificationType.DANGER
         } as Notification);
-        return Observable.of({});
+        return EMPTY;
       }
-    }).subscribe(() => {},
+    })).subscribe(() => {},
       err => {
         this.workspaceBusy = false;
         this.handleError('Failed to open workspace', NotificationType.DANGER);
@@ -225,10 +231,10 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
     if (this.workspacePollSubscription !== undefined && !this.workspacePollSubscription.closed) {
       this.workspacePollSubscription.unsubscribe();
     }
-    this.workspacePollTimer = Observable.timer(2000, 20000).take(30);
-    this.workspacePollSubscription = this.workspacePollTimer
-      .switchMap(() => this.workspacesService.getWorkspaces(this.codebase.id))
-      .map(workspaces => {
+    this.workspacePollTimer = observableTimer(2000, 20000).pipe(take(30));
+    this.workspacePollSubscription = (this.workspacePollTimer.pipe(
+      switchMap(() => this.workspacesService.getWorkspaces(this.codebase.id)),
+      map(workspaces => {
         if (workspaces != undefined && workspaces.length > 0
             && workspaces.length !== this.workspaces.length) {
           this.workspacePollSubscription.unsubscribe();
@@ -236,9 +242,8 @@ export class CodebasesItemWorkspacesComponent implements OnDestroy, OnInit {
           this.setWorkspacesAvailable();
           this.setWorkspaceUrl(name);
         }
-      })
-      .publish()
-      .connect();
+      }),
+      publish()) as ConnectableObservable<number>).connect();
     this.subscriptions.push(this.workspacePollSubscription);
   }
 

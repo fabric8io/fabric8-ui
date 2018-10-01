@@ -1,5 +1,3 @@
-import { PipelinesWidgetComponent } from './pipelines-widget.component';
-
 import { LocationStrategy } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -7,7 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
-import { Observable, Subject } from 'rxjs';
+import { Observable,  of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import {
   initContext,
@@ -16,6 +14,7 @@ import {
 import { BuildConfig } from '../../../a-runtime-console/index';
 import { LoadingWidgetModule } from '../../dashboard-widgets/loading-widget/loading-widget.module';
 import { PipelinesService } from '../../space/create/pipelines/services/pipelines.service';
+import { PipelinesWidgetComponent } from './pipelines-widget.component';
 
 @Component({
   template: '<fabric8-pipelines-widget></fabric8-pipelines-widget>'
@@ -28,7 +27,7 @@ describe('PipelinesWidgetComponent', () => {
   let ctxSubj: Subject<Context> = new Subject<Context>();
   let fakeUserObs: Subject<User> = new Subject<User>();
 
-  initContext(PipelinesWidgetComponent, HostComponent, {
+  const testContext = initContext(PipelinesWidgetComponent, HostComponent, {
     imports: [LoadingWidgetModule, RouterModule],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
@@ -39,7 +38,7 @@ describe('PipelinesWidgetComponent', () => {
       {
         provide: PipelinesService, useFactory: () => {
           let pipelinesService: jasmine.SpyObj<PipelinesService> = createMock(PipelinesService);
-          pipelinesService.getCurrentPipelines.and.returnValue(Observable.of([{}] as BuildConfig[]));
+          pipelinesService.getCurrentPipelines.and.returnValue(observableOf([{}] as BuildConfig[]));
           return pipelinesService;
         }
       },
@@ -58,7 +57,7 @@ describe('PipelinesWidgetComponent', () => {
           };
 
           let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
-          mockRouter.events = Observable.of(mockRouterEvent);
+          mockRouter.events = observableOf(mockRouterEvent);
 
           return mockRouter;
         }
@@ -69,31 +68,31 @@ describe('PipelinesWidgetComponent', () => {
     ]
   });
 
-  it('should enable button if the user owns the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = true;
-    this.testedDirective.loading = false;
-    this.detectChanges();
+  it('should enable button if the user owns the space', function() {
+    testContext.testedDirective.userOwnsSpace = true;
+    testContext.testedDirective.loading = false;
+    testContext.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).not.toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).not.toBeNull();
   });
 
-  it('should disable button if the user does not own the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = false;
-    this.detectChanges();
+  it('should disable button if the user does not own the space', function() {
+    testContext.testedDirective.userOwnsSpace = false;
+    testContext.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-pipelines-add-button'))).toBeNull();
   });
 
-  it('should not show the add button if the user does not own the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = false;
-    this.detectChanges();
-    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).toBeNull();
+  it('should not show the add button if the user does not own the space', function() {
+    testContext.testedDirective.userOwnsSpace = false;
+    testContext.detectChanges();
+    expect(testContext.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).toBeNull();
   });
 
-  it('should show the add button if the user owns the space', function(this: TestingContext) {
-    this.testedDirective.userOwnsSpace = true;
-    this.testedDirective.loading = false;
-    this.detectChanges();
-    expect(this.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).not.toBeNull();
+  it('should show the add button if the user owns the space', function() {
+    testContext.testedDirective.userOwnsSpace = true;
+    testContext.testedDirective.loading = false;
+    testContext.detectChanges();
+    expect(testContext.fixture.debugElement.query(By.css('#pipelines-add-to-space-icon'))).not.toBeNull();
   });
 });

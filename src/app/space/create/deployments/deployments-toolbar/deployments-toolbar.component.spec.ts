@@ -2,11 +2,7 @@ import {
   Component,
   NO_ERRORS_SCHEMA
 } from '@angular/core';
-
-import { FilterEvent } from 'patternfly-ng/filter';
-import { SortEvent } from 'patternfly-ng/sort';
-
-import { initContext, TestContext } from 'testing/test-context';
+import { initContext } from 'testing/test-context';
 
 import { DeploymentsToolbarComponent } from './deployments-toolbar.component';
 
@@ -21,42 +17,42 @@ import { DeploymentsToolbarComponent } from './deployments-toolbar.component';
 })
 class TestHostComponent {
   resultsCount: number = 0;
-  filterChange(event: FilterEvent): void { }
-  sortChange(event: SortEvent): void { }
+  filterChange(): void { }
+  sortChange(): void { }
 }
 
-describe('DeploymentsToolbarComponent', () => {
-  type Context = TestContext<DeploymentsToolbarComponent, TestHostComponent>;
-  initContext(DeploymentsToolbarComponent, TestHostComponent, {
+describe('DeploymentsToolbarComponent', (): void => {
+
+  const testContext = initContext(DeploymentsToolbarComponent, TestHostComponent, {
     schemas: [NO_ERRORS_SCHEMA]
   });
 
-  it('should update filterConfig resultsCount', function(this: Context) {
+  it('should update filterConfig resultsCount', (): void => {
     const initialCount: number = 0;
-    expect(this.testedDirective.filterConfig.resultsCount).toBe(initialCount);
+    expect(testContext.testedDirective.filterConfig.resultsCount).toBe(initialCount);
 
     const nextCount: number = 5;
-    this.hostComponent.resultsCount = nextCount;
-    this.detectChanges();
+    testContext.hostComponent.resultsCount = nextCount;
+    testContext.detectChanges();
 
-    expect(this.testedDirective.filterConfig.resultsCount).toBe(nextCount);
+    expect(testContext.testedDirective.filterConfig.resultsCount).toBe(nextCount);
   });
 
-  it('should emit filterChange event', function(this: Context) {
-    spyOn(this.hostComponent, 'filterChange');
-    this.testedDirective.filterChange({});
-    expect(this.hostComponent.filterChange).toHaveBeenCalledWith({});
+  it('should emit filterChange event', (): void => {
+    spyOn(testContext.hostComponent, 'filterChange');
+    testContext.testedDirective.filterChange({});
+    expect(testContext.hostComponent.filterChange).toHaveBeenCalledWith({});
   });
 
-  it('should emit sortChange event', function(this: Context) {
-    spyOn(this.hostComponent, 'sortChange');
-    this.testedDirective.sortChange({
+  it('should emit sortChange event', (): void => {
+    spyOn(testContext.hostComponent, 'sortChange');
+    testContext.testedDirective.sortChange({
       field: {
         sortType: 'alphanumeric'
       },
       isAscending: false
     });
-    expect(this.hostComponent.sortChange).toHaveBeenCalledWith({
+    expect(testContext.hostComponent.sortChange).toHaveBeenCalledWith({
       field: {
         sortType: 'alphanumeric'
       },

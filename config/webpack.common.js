@@ -6,16 +6,15 @@ const webpack = require('webpack');
 const helpers = require('./helpers');
 const ngtools = require('@ngtools/webpack');
 const branding = require('./branding');
-var path = require('path');
-var stringify = require('json-stringify');
-var fs = require('fs');
+const path = require('path');
+const stringify = require('json-stringify');
+const fs = require('fs');
 
-/*
+/**
  * Webpack Plugins
  */
 const autoprefixer = require('autoprefixer');
-const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
-const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
+//const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
@@ -24,14 +23,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 // const ngcWebpack = require('ngc-webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-// const TsConfigPathsPlugin = require('awesome-typescript-loader');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
-/*
+/**
  * Webpack Constants
  */
 // const HMR = helpers.hasProcessFlag('hot');
@@ -39,7 +38,8 @@ const StyleLintPlugin = require('stylelint-webpack-plugin');
 const METADATA = {
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer(),
-  FABRIC8_BRANDING: process.env.FABRIC8_BRANDING || 'fabric8'
+  FABRIC8_BRANDING: process.env.FABRIC8_BRANDING || 'fabric8',
+  PUBLIC_PATH: process.env.PUBLIC_PATH || '/',
 };
 
 /*
@@ -51,11 +51,6 @@ module.exports = function (options) {
   const isProd = options.env === 'production';
   const aotMode = false;//options && options.aot !== undefined;
   console.log('The options from the webpack config: ' + stringify(options, null, 2));
-
-  // ExtractTextPlugin
-  const extractCSS = new ExtractTextPlugin({
-    filename: '_assets/stylesheets/[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
-  });
 
   // const entryFile = aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts';
   // const outPath = aotMode ? 'dist' : 'aot';
@@ -82,10 +77,15 @@ module.exports = function (options) {
       'vendor': './src/vendor.browser.ts',
       'polyfills': './src/polyfills.browser.ts',
       // 'main': aotMode ? './src/main.browser.aot.ts' : './src/main.browser.ts'
-      'main': './src/main.browser.ts'
+      'main': [
+        './src/main.browser.ts',
+        // workaround for https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/456
+        // 'style-loader/lib/addStyles',
+        // 'css-loader/lib/css-base',
+      ]
     },
 
-    /*
+    /**
      * Options affecting the resolving of modules.
      *
      * See: https://webpack.js.org/configuration/resolve
@@ -123,7 +123,7 @@ module.exports = function (options) {
             '@ngtools/webpack'
           ] : [
               '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-              'awesome-typescript-loader',
+              'ts-loader',
               'angular2-template-loader',
               'angular2-router-loader'
             ],
@@ -208,31 +208,35 @@ module.exports = function (options) {
           }
         },
 
-
-        /*
+        /**
          * Json loader support for *.json files.
          *
          * See: https://github.com/webpack/json-loader
          */
         {
           test: /\.json$/,
+          type: "javascript/auto",
           use: ['json-loader']
         },
 
-        /* HTML Linter
+        /**
+         * HTML Linter
          * Checks all files against .htmlhintrc
-        */
+         */
         {
           enforce: 'pre',
           test: /\.html$/,
-          loader: 'htmlhint-loader',
-          exclude: [/node_modules/,/src\/a-runtime-console/],
-          options: {
-            configFile: './.htmlhintrc'
-          }
+          use: {
+            loader: 'htmlhint-loader',
+            options: {
+              configFile: './.htmlhintrc'
+            }
+          },
+          exclude: [/node_modules/, /src\/a-runtime-console/]
         },
 
-        /* Raw loader support for *.html
+        /**
+         * Raw loader support for *.html
          * Returns file content as string
          *
          * See: https://github.com/webpack/raw-loader
@@ -242,77 +246,48 @@ module.exports = function (options) {
           use: ['html-loader']
         },
 
-        /*
+        /**
          * to string and css loader support for *.css files
          * Returns file content as string
          *
          */
         {
           test: /^(?!.*component).*\.css$/,
-          use: extractCSS.extract({
-            fallback: "style-loader",
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  sourceMap: true,
-                  context: '/'
-                },
+          use: [
+            isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: !isProd,
+                context: '/'
               },
-            ]
-          })
+            },
+          ]
         },
         {
           test: /\.component\.css$/,
           use: [
+            'to-string-loader',
             {
-              loader: 'to-string-loader'
-            }, {
               loader: 'css-loader',
               options: {
                 minimize: true,
-                sourceMap: true,
+                sourceMap: !isProd,
                 context: '/'
               }
             }
-          ],
+          ]
         },
+
         {
           test: /^(?!.*component).*\.less$/,
-          use: extractCSS.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  minimize: true,
-                  sourceMap: true,
-                  context: '/'
-                }
-              }, {
-                loader: 'less-loader',
-                options: {
-                  paths: [
-                    path.resolve(__dirname, "../node_modules/patternfly/dist/less"),
-                    path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies"),
-                    path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
-                    path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
-                  ],
-                  sourceMap: true
-                }
-              }
-            ],
-          })
-        }, {
-          test: /\.component\.less$/,
           use: [
+            isProd ? MiniCssExtractPlugin.loader : 'style-loader',
             {
-              loader: 'to-string-loader'
-            }, {
               loader: 'css-loader',
               options: {
                 minimize: true,
-                sourceMap: true,
+                sourceMap: !isProd,
                 context: '/'
               }
             }, {
@@ -324,10 +299,34 @@ module.exports = function (options) {
                   path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
                   path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
                 ],
-                sourceMap: true
+                sourceMap: !isProd
               }
             }
-          ],
+          ]
+        }, {
+          test: /\.component\.less$/,
+          use: [
+            'to-string-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                minimize: true,
+                sourceMap: !isProd,
+                context: '/'
+              }
+            }, {
+              loader: 'less-loader',
+              options: {
+                paths: [
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/bootstrap"),
+                  path.resolve(__dirname, "../node_modules/patternfly/dist/less/dependencies/font-awesome"),
+                ],
+                sourceMap: !isProd
+              }
+            }
+          ]
         },
 
         /**
@@ -337,7 +336,7 @@ module.exports = function (options) {
           test: /\.(woff2|woff|ttf|eot|svg)$/,
           use: {
             loader: 'url-loader',
-            query: {
+            options: {
               limit: 3000,
               includePaths: [
                 path.resolve(__dirname, "../node_modules/patternfly/dist/fonts/")
@@ -354,7 +353,7 @@ module.exports = function (options) {
           test: /\.(jpg|png|svg|gif|jpeg)$/,
           use: {
             loader: 'url-loader',
-            query: {
+            options: {
               limit: 3000,
               includePaths: [
                 path.resolve(__dirname, "../src/assets/images/")
@@ -367,48 +366,22 @@ module.exports = function (options) {
       ]
     },
 
-    /*
+    /**
      * Add additional plugins to the compiler.
      *
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-      /*
+      /**
        * Plugin: ForkCheckerPlugin
        * Description: Do type checking in a separate process, so webpack don't need to wait.
        *
        * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
        */
-      new CheckerPlugin(),
+      //new CheckerPlugin(),
 
-      /*
-       * Plugin: CommonsChunkPlugin
-       * Description: Shares common code between the pages.
-       * It identifies common modules and put them into a commons chunk.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-       * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-       */
-      new CommonsChunkPlugin({
-        name: 'polyfills',
-        minChunks: Infinity,
-      }),
-      new CommonsChunkPlugin({
-        name: 'vendor',
-        async: true,
-        minChunks: Infinity,
-      }),
-      new CommonsChunkPlugin({
-        name: 'main',
-        async: true,
-        minChunks: 2,
-      }),
-      new CommonsChunkPlugin({
-        name: 'manifest',
-        minChunks: Infinity,
-      }),
 
-      /*
+      /**
        * Plugin: ContextReplacementPlugin
        * Description: Provides context to Angular's use of System.import
        *
@@ -417,8 +390,14 @@ module.exports = function (options) {
        */
       new ContextReplacementPlugin(
         // The (\\|\/) piece accounts for path separators in *nix and Windows
-        /(.+)?angular(\\|\/)core(.+)?/,
-        path.resolve(__dirname, 'src') // location of your src
+        // /angular(\\|\/)core(\\|\/)@angular/,
+        /\@angular(\\|\/)core(\\|\/)fesm5/,
+        helpers.root('./src')
+      ),
+      new ContextReplacementPlugin(
+        // The (\\|\/) piece accounts for path separators in *nix and Windows
+        /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+        helpers.root('src') // location of your src
       ),
 
       /*
@@ -449,10 +428,6 @@ module.exports = function (options) {
       new HtmlWebpackPlugin({
         template: 'src/index.ejs',
         title: branding.assets[METADATA.FABRIC8_BRANDING].title.prefix,
-        chunksSortMode: function (a, b) {
-          const entryPoints = ["manifest", "polyfills", "vendor", "main"];
-          return entryPoints.indexOf(a.names[0]) - entryPoints.indexOf(b.names[0]);
-        },
         metadata: METADATA
       }),
 
@@ -474,13 +449,31 @@ module.exports = function (options) {
        */
       new LoaderOptionsPlugin({}),
 
-      extractCSS,
+      // ExtractTextPlugin
+      // const extractCSS = new ExtractTextPlugin({
+      //   filename: '_assets/stylesheets/[name].[id]' + ( isProd ? '.[contenthash]' : '' ) + '.css'
+      // });
+
+      // MiniCssExtractPlugin
+      new MiniCssExtractPlugin({
+        // filename: '[name].css',
+        filename: '_assets/stylesheets/[name]' + ( isProd ? '.[contenthash:8]' : '' ) + '.css',
+        chunkFilename: '_assets/stylesheets/[id]' + ( isProd ? '.[contenthash:8]' : '' ) + '.css'
+      }),
 
       new webpack.IgnorePlugin(/^\.\/locale$/, /[^-]moment$/),
 
-      /*
+      // Generate a manifest file which contains a mapping of all asset filenames
+      // to their corresponding output file so that tools can pick it up without
+      // having to parse `index.html`.
+      new ManifestPlugin({
+        fileName: 'asset-manifest.json',
+        publicPath: METADATA.PUBLIC_PATH,
+      }),
+
+      /**
        * StyleLintPlugin
-      */
+       */
       new StyleLintPlugin({
         configFile: '.stylelintrc',
         syntax: 'less',
@@ -493,18 +486,41 @@ module.exports = function (options) {
       })
     ],
 
-    /*
+     /**
+     * Version 4 webpack runs optimizations for you depending on the chosen mode.
+     *
+     * The following plugins have been removed from Webpack 4 which were extensively used in previous versions.
+     *  - NoEmitOnErrorsPlugin
+     *  - ModuleConcatenationPlugin
+     *  - NamedModulesPlugin
+     *  - CommonsChunkPlugin
+     *
+     * see: https://webpack.js.org/configuration/optimization/
+     */
+    optimization: {
+      namedModules: true, // NamedModulesPlugin()
+      // Keep the runtime chunk seperated to enable long term caching
+      // https://twitter.com/wSokra/status/969679223278505985
+      runtimeChunk: true,
+      splitChunks: { // CommonsChunkPlugin()
+        chunks: 'async'
+      },
+      noEmitOnErrors: true, // NoEmitOnErrorsPlugin
+      concatenateModules: true //ModuleConcatenationPlugin
+    },
+
+    /**
      * Include polyfills or mocks for various node stuff
      * Description: Node configuration
      *
      * See: https://webpack.github.io/docs/configuration.html#node
      */
     node: {
-      global: true,
-      crypto: 'empty',
-      process: true,
-      module: false,
       clearImmediate: false,
+      crypto: 'empty',
+      global: true,
+      module: false,
+      process: true,
       setImmediate: false
     }
   };

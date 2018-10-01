@@ -4,10 +4,9 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
-
+import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError, map, publishReplay, refCount, switchMap } from 'rxjs/operators';
 import {
   GitHubRepo,
   GitHubRepoCommit,
@@ -71,9 +70,9 @@ export class GitHubService {
    * @returns {Headers}
    */
   getHeaders(): Observable<HttpHeaders> {
-    return this.authService.gitHubToken.map((token: string): HttpHeaders =>
+    return this.authService.gitHubToken.pipe(map((token: string): HttpHeaders =>
       GitHubService.HEADERS.set('Authorization', `token ${token}`)
-    );
+    ));
   }
 
   /**
@@ -89,11 +88,11 @@ export class GitHubService {
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      const res: Observable<GitHubRepoCommit> = this.getHeaders()
-        .switchMap((headers: HttpHeaders): Observable<GitHubRepoCommit> => this.http.get<GitHubRepoCommit>(url, { headers }))
-        .publishReplay(1)
-        .refCount()
-        .catch((error: HttpErrorResponse): Observable<GitHubRepoCommit> => this.handleError(error));
+      const res: Observable<GitHubRepoCommit> = this.getHeaders().pipe(
+        switchMap((headers: HttpHeaders): Observable<GitHubRepoCommit> => this.http.get<GitHubRepoCommit>(url, { headers })),
+        publishReplay(1),
+        refCount(),
+        catchError((error: HttpErrorResponse): Observable<GitHubRepoCommit> => this.handleError(error)));
       this.cache.set(url, res);
       return res;
     }
@@ -110,11 +109,11 @@ export class GitHubService {
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      const res: Observable<GitHubRepoDetails> = this.getHeaders()
-        .switchMap((headers: HttpHeaders): Observable<GitHubRepoDetails> => this.http.get<GitHubRepoDetails>(url, { headers }))
-        .publishReplay(1)
-        .refCount()
-        .catch((error: HttpErrorResponse): Observable<GitHubRepoDetails> => this.handleError(error));
+      const res: Observable<GitHubRepoDetails> = this.getHeaders().pipe(
+        switchMap((headers: HttpHeaders): Observable<GitHubRepoDetails> => this.http.get<GitHubRepoDetails>(url, { headers })),
+        publishReplay(1),
+        refCount(),
+        catchError((error: HttpErrorResponse): Observable<GitHubRepoDetails> => this.handleError(error)));
       this.cache.set(url, res);
       return res;
     }
@@ -143,11 +142,11 @@ export class GitHubService {
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      const res: Observable<GitHubRepoLastCommit> = this.getHeaders()
-        .switchMap((headers: HttpHeaders): Observable<GitHubRepoLastCommit> => this.http.get<GitHubRepoLastCommit>(url, { headers }))
-        .publishReplay(1)
-        .refCount()
-        .catch((error: HttpErrorResponse): Observable<GitHubRepoLastCommit> => this.handleError(error));
+      const res: Observable<GitHubRepoLastCommit> = this.getHeaders().pipe(
+        switchMap((headers: HttpHeaders): Observable<GitHubRepoLastCommit> => this.http.get<GitHubRepoLastCommit>(url, { headers })),
+        publishReplay(1),
+        refCount(),
+        catchError((error: HttpErrorResponse): Observable<GitHubRepoLastCommit> => this.handleError(error)));
       this.cache.set(url, res);
       return res;
     }
@@ -164,11 +163,11 @@ export class GitHubService {
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      const res: Observable<GitHubRepoLicense> = this.getHeaders()
-        .switchMap((headers: HttpHeaders): Observable<GitHubRepoLicense> => this.http.get<GitHubRepoLicense>(url, { headers }))
-        .publishReplay(1)
-        .refCount()
-        .catch((error: HttpErrorResponse): Observable<GitHubRepoLicense> => this.handleError(error));
+      const res: Observable<GitHubRepoLicense> = this.getHeaders().pipe(
+        switchMap((headers: HttpHeaders): Observable<GitHubRepoLicense> => this.http.get<GitHubRepoLicense>(url, { headers })),
+        publishReplay(1),
+        refCount(),
+        catchError((error: HttpErrorResponse): Observable<GitHubRepoLicense> => this.handleError(error)));
       this.cache.set(url, res);
       return res;
     }
@@ -196,11 +195,11 @@ export class GitHubService {
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      const res: Observable<GitHubRepo[]> = this.getHeaders()
-        .switchMap((headers: HttpHeaders): Observable<GitHubRepo[]> => this.http.get<GitHubRepo[]>(url, { headers }))
-        .publishReplay(1)
-        .refCount()
-        .catch((error: HttpErrorResponse): Observable<GitHubRepo[]> => this.handleError(error));
+      const res: Observable<GitHubRepo[]> = this.getHeaders().pipe(
+        switchMap((headers: HttpHeaders): Observable<GitHubRepo[]> => this.http.get<GitHubRepo[]>(url, { headers })),
+        publishReplay(1),
+        refCount(),
+        catchError((error: HttpErrorResponse): Observable<GitHubRepo[]> => this.handleError(error)));
       this.cache.set(url, res);
       return res;
     }
@@ -216,11 +215,11 @@ export class GitHubService {
     if (this.cache.has(url)) {
       return this.cache.get(url);
     } else {
-      const res: Observable<GitHubUser> = this.getHeaders()
-        .switchMap((headers: HttpHeaders): Observable<GitHubUser> => this.http.get<GitHubUser>(url, { headers }))
-        .publishReplay(1)
-        .refCount()
-        .catch((error: HttpErrorResponse): Observable<GitHubUser> => this.handleError(error));
+      const res: Observable<GitHubUser> = this.getHeaders().pipe(
+        switchMap((headers: HttpHeaders): Observable<GitHubUser> => this.http.get<GitHubUser>(url, { headers })),
+        publishReplay(1),
+        refCount(),
+        catchError((error: HttpErrorResponse): Observable<GitHubUser> => this.handleError(error)));
       this.cache.set(url, res);
       return res;
     }
@@ -242,7 +241,7 @@ export class GitHubService {
   }
 
   private handleError(error: HttpErrorResponse): Observable<any> {
-    return Observable.throw(error.message || error);
+    return observableThrowError(error.message || error);
   }
 
 }

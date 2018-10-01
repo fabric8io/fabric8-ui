@@ -19,7 +19,6 @@ const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 const AssetsPlugin = require('assets-webpack-plugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const HtmlElementsPlugin = require('./html-elements-plugin');
@@ -45,6 +44,11 @@ const METADATA = webpackMerge(commonConfig({
 module.exports = function (env) {
   isProd = true;
   return {
+
+    /**
+     * As of Webpack 4 we need to set the mode.
+     */
+    mode: 'production',
 
     /**
      * Developer tool to enhance debugging
@@ -235,18 +239,6 @@ module.exports = function (env) {
        * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
        */
       new ForkCheckerPlugin(),
-
-      /*
-       * Plugin: CommonsChunkPlugin
-       * Description: Shares common code between the pages.
-       * It identifies common modules and put them into a commons chunk.
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-       * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-       */
-      new CommonsChunkPlugin({
-        name: ['polyfills', 'vendor'].reverse()
-      }),
 
       /**
        * Plugin: ContextReplacementPlugin
@@ -458,6 +450,45 @@ module.exports = function (env) {
         }
       })
     ],
+
+    /**
+     * Version 4 webpack runs optimizations for you depending on the chosen mode.
+     *
+     * The following plugins have been removed from Webpack 4 which were extensively used in previous versions.
+     *  - NoEmitOnErrorsPlugin
+     *  - ModuleConcatenationPlugin
+     *  - NamedModulesPlugin
+     *  - CommonsChunkPlugin
+     *
+     * see: https://webpack.js.org/configuration/optimization/
+     */
+    optimization: {
+      namedModules: true, // NamedModulesPlugin()
+      splitChunks: { // CommonsChunkPlugin()
+        cacheGroups: {
+          polyfills: {
+            name: 'polyfills',
+            minChunks: Infinity
+          },
+          vendor: {
+            name: 'vendor',
+            chunks: 'async',
+            minChunks: Infinity
+          },
+          main: {
+            name: 'main',
+            chunks: 'async',
+            minChunks: 2
+          },
+          manifest: {
+            name: 'manifest',
+            minChunks: Infinity
+          },
+        }
+      },
+      noEmitOnErrors: true, // NoEmitOnErrorsPlugin
+      concatenateModules: true //ModuleConcatenationPlugin
+    },
 
     /*
      * Include polyfills or mocks for various node stuff

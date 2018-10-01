@@ -1,16 +1,15 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-import { Observable } from 'rxjs';
+import { Observable,  throwError as observableThrowError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable()
 export class TenantService {
   private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-  private userUrl: string;
+  private tenantUrl: string;
 
   constructor(
       private http: HttpClient,
@@ -20,7 +19,22 @@ export class TenantService {
     if (this.auth.getToken() != undefined) {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
-    this.userUrl = apiUrl + 'user';
+    this.tenantUrl = apiUrl + 'user/services';
+  }
+
+  /**
+   * Get user tenant services
+   * @returns {Observable<any>}
+   */
+  getTenant(): Observable<any> {
+    return this.http
+      .get(this.tenantUrl, { headers: this.headers })
+      .pipe(
+        map((res: any) => res.data),
+        catchError((error: HttpErrorResponse) => {
+          return this.handleError(error);
+        })
+      );
   }
 
   /**
@@ -29,9 +43,8 @@ export class TenantService {
    * @returns {Observable<any>}
    */
   updateTenant(): Observable<any> {
-    let url = `${this.userUrl}/services`;
     return this.http
-      .patch(url, null, { headers: this.headers, observe: 'response', responseType: 'text' })
+      .patch(this.tenantUrl, null, { headers: this.headers, observe: 'response', responseType: 'text' })
       .pipe(
         catchError((error: HttpErrorResponse) => {
           return this.handleError(error);
@@ -44,9 +57,8 @@ export class TenantService {
    * @returns {Observable<any>}
    */
   cleanupTenant(): Observable<any> {
-    let url = `${this.userUrl}/services`;
     return this.http
-      .delete(url, { headers: this.headers, responseType: 'text' })
+      .delete(this.tenantUrl, { headers: this.headers, responseType: 'text' })
       .pipe(
         catchError((error: HttpErrorResponse) => {
           return this.handleError(error);
@@ -59,6 +71,6 @@ export class TenantService {
 
   private handleError(error: any) {
     this.logger.error(error);
-    return Observable.throw(error.message || error);
+    return observableThrowError(error.message || error);
   }
 }

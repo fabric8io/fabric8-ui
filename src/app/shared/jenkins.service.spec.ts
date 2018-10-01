@@ -1,11 +1,10 @@
+import { HttpResponse } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { AuthenticationService } from 'ngx-login-client';
+import { createMock } from 'testing/mock';
 import { JenkinsService } from './jenkins.service';
 import { FABRIC8_JENKINS_API_URL } from './runtime-console/fabric8-ui-jenkins-api';
-
-import { HttpRequest, HttpResponse } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { createMock } from 'testing/mock';
 
 describe('Service: JenkinsService', () => {
   let service: JenkinsService;
@@ -14,7 +13,7 @@ describe('Service: JenkinsService', () => {
     'data': {
       'state': 'idled'
     }
-  }
+  };
 
   beforeEach(() => {
     const mockAuthenticationService: jasmine.SpyObj<AuthenticationService> = createMock(AuthenticationService);

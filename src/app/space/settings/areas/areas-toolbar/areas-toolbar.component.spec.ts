@@ -5,15 +5,12 @@ import {
   Output
 } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
-
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { AreasToolbarComponent } from './areas-toolbar.component';
 
 @Component({
@@ -42,20 +39,20 @@ class FakePfngToolbarComponent {
 
 describe('AreasToolbarComponent', () => {
   type Context = TestContext<AreasToolbarComponent, HostComponent>;
-  initContext(AreasToolbarComponent, HostComponent,
+  const testContext = initContext(AreasToolbarComponent, HostComponent,
   {
     declarations: [FakePfngToolbarComponent],
     imports: [RouterTestingModule]
   });
 
-  it('should update filterConfig resultsCount', function(this: Context) {
+  it('should update filterConfig resultsCount', function() {
     let initialCount = 0;
-    expect(this.testedDirective.filterConfig.resultsCount).toBe(initialCount);
+    expect(testContext.testedDirective.filterConfig.resultsCount).toBe(initialCount);
 
     let nextCount = 5;
-    this.hostComponent.resultsCount = nextCount;
-    this.detectChanges();
+    testContext.hostComponent.resultsCount = nextCount;
+    testContext.detectChanges();
 
-    expect(this.testedDirective.filterConfig.resultsCount).toBe(nextCount);
+    expect(testContext.testedDirective.filterConfig.resultsCount).toBe(nextCount);
   });
 });

@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "baseUrl": "./src",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noEmitHelpers": false,
+    "isolatedModules": false,
+    "lib": [
+      "es2016",
+      "dom"
+    ],
+    "types": [
+      "jest",
+      "jasmine",
+      "node",
+      "segment-analytics"
+    ]
+  }
+}

@@ -1,18 +1,15 @@
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-
 import {
   Config, GitHubDetails, HelperService, URLProvider
 } from 'ngx-launcher';
-
+import { AUTH_API_URL, AuthenticationService } from 'ngx-login-client';
+import { createMock } from 'testing/mock';
 import { FABRIC8_FORGE_API_URL } from '../../../shared/runtime-console/fabric8-ui-forge-api';
 import { NewForgeConfig } from '../shared/new-forge.config';
 import { AppLauncherGitproviderService } from './app-launcher-gitprovider.service';
 
-import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { AuthenticationService } from 'ngx-login-client';
-import { createMock } from 'testing/mock';
 import { ProviderService } from '../../../shared/account/provider.service';
-
 
 describe('Service: AppLauncherGitproviderService', () => {
 

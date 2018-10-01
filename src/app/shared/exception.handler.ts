@@ -1,6 +1,6 @@
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
 import { UserService } from 'ngx-login-client';
-import Raven from 'raven-js';
+import * as Raven from 'raven-js';
 import { Environment, getEnvironment } from './environment';
 
 @Injectable()

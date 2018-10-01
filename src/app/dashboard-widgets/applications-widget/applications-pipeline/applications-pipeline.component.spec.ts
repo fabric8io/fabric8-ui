@@ -1,12 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { initContext, TestContext } from 'testing/test-context';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-
+import { BehaviorSubject,  never as observableNever, Observable } from 'rxjs';
+import { initContext, TestContext } from 'testing/test-context';
 import { ApplicationsPipelineComponent } from './applications-pipeline.component';
 
 @Component({
@@ -36,12 +32,12 @@ describe('ApplicationsPipelineComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
   });
 
-  initContext(ApplicationsPipelineComponent, HostComponent, {
+  const testContext = initContext(ApplicationsPipelineComponent, HostComponent, {
     imports: [
       CommonModule
     ],
@@ -53,12 +49,12 @@ describe('ApplicationsPipelineComponent', () => {
   });
 
   describe('Applications pipeline with stage', () => {
-    it('Pipeline stage should be set', function(this: TestingContext) {
-      expect(this.testedDirective.stage as any).toEqual(pipelineStage);
+    it('Pipeline stage should be set', function() {
+      expect(testContext.testedDirective.stage as any).toEqual(pipelineStage);
     });
 
-    it('Show line should be set', function(this: TestingContext) {
-      expect(this.testedDirective.showLine).toBeTruthy();
+    it('Show line should be set', function() {
+      expect(testContext.testedDirective.showLine).toBeTruthy();
     });
   });
 });

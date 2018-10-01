@@ -1,47 +1,46 @@
 {
+  "angularCompilerOptions": {
+    "entryModule": "src/app/app.module#AppModule",
+    "preserveWhitespaces": true,
+    "skipMetadataEmit" : true
+  },
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "noEmitHelpers": true,
-    "strictNullChecks": false,
-    "removeComments": false,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "baseUrl": ".",
-    "paths": {
-      "@angular/*": [
-        "./node_modules/@angular/*"
-      ],
-      "rxjs": [
-        "./node_modules/rxjs"
-      ]
-    },
+    "inlineSources": true,
+    "lib": [ "dom", "es6" ],
     "mapRoot": "",
-    "rootDir": ".",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "noEmitHelpers": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": false,
     "outDir": "lib",
-    "lib": [
-      "dom",
-      "es2015"
-    ],
+    "paths": {
+      "@angular/*": ["./node_modules/@angular/*"],
+      "rxjs": ["./node_modules/rxjs"]
+    },
+    "removeComments": false,
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "stripInternal": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5",
     "types": [
       "jasmine",
       "node",
       "protractor",
-      "selenium-webdriver",
-      "source-map",
       "segment-analytics",
+      "selenium-webdriver",
       "webpack"
     ]
   },
-  "angularCompilerOptions": {
-    "genDir": "src/app/generated",
-    "entryModule": "src/app/app.module#AppModule",
-    "skipMetadataEmit" : true
-  }
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

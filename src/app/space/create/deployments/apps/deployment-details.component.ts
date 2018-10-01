@@ -2,31 +2,28 @@ import {
   Component,
   Input
 } from '@angular/core';
-
 import { ChartAPI } from 'c3';
 import {
   round,
   uniqueId
 } from 'lodash';
 import {
-  ChartDefaults,
   SparklineChartConfig,
   SparklineChartData
 } from 'patternfly-ng/chart';
 import 'patternfly/dist/js/patternfly-settings.js';
 import {
+  combineLatest,
+  empty,
   Observable,
+  of,
   ReplaySubject,
   Subject,
   Subscription
 } from 'rxjs';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
-import { first } from 'rxjs/operators/first';
-import { map } from 'rxjs/operators/map';
-import { switchMap } from 'rxjs/operators/switchMap';
-
+import { first, map, switchMap } from 'rxjs/operators';
+import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
+import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import {
@@ -42,9 +39,6 @@ import {
   StatusType
 } from '../services/deployment-status.service';
 import { DeploymentsService } from '../services/deployments.service';
-
-import { DeploymentsLinechartConfig } from '../deployments-linechart/deployments-linechart-config';
-import { DeploymentsLinechartData } from '../deployments-linechart/deployments-linechart-data';
 
 enum ChartClass {
   OK = '',
@@ -150,14 +144,13 @@ export class DeploymentDetailsComponent {
 
   constructor(
     private deploymentsService: DeploymentsService,
-    private deploymentStatusService: DeploymentStatusService,
-    private chartDefaults: ChartDefaults
+    private deploymentStatusService: DeploymentStatusService
   ) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.deploymentsService.getPods(this.spaceId, this.environment, this.applicationId).pipe(
-        map((p: Pods) => p.total > 0)
+        map((p: Pods): boolean => p.total > 0)
       ).subscribe(this.hasPods)
     );
 
@@ -347,12 +340,12 @@ export class DeploymentDetailsComponent {
 
   private getTooltipContents(): any {
     return {
-      contents: (d: any) => {
+      contents: (d: any): string => {
         // d is an object containing the data displayed for a given data point in the tooltip
         // example: [{ x: Date, value: number, id: string, index: number, name: string }]
         // http://c3js.org/reference.html#tooltip-contents
         let tipRows: string = '';
-        let color = '#0088ce'; // pf-blue-400
+        const color: string = '#0088ce'; // pf-blue-400
         let units: string = '';
         if (d[0].name === 'CPU') {
           units = this.cpuConfig.units;

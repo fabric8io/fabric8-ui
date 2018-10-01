@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-
-import { Observable } from 'rxjs/Rx';
-
 import { Contexts, Spaces } from 'ngx-fabric8-wit';
-
+import { Observable } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 import {
   ApplicationAttributesOverview,
   ApplicationOverviewService
@@ -25,7 +23,7 @@ export class EnvironmentWidgetComponent implements OnInit {
   constructor(private context: Contexts,
               private spaces: Spaces,
               private applicationOverviewService: ApplicationOverviewService) {
-    this.spaceId = this.spaces.current.first().map(space => space.id);
+    this.spaceId = this.spaces.current.pipe(first(), map(space => space.id));
   }
 
   ngOnInit() {
@@ -33,6 +31,6 @@ export class EnvironmentWidgetComponent implements OnInit {
       this.appInfos = this.applicationOverviewService.getAppsAndEnvironments(spaceId);
     });
 
-    this.contextPath = this.context.current.map(context => context.path);
+    this.contextPath = this.context.current.pipe(map(context => context.path));
   }
 }

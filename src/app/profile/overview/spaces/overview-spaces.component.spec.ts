@@ -1,11 +1,8 @@
 import { DebugNode, ErrorHandler, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { Broadcaster, Logger } from 'ngx-base';
 import { Contexts, Fabric8WitModule, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-
+import { Observable,  of ,  throwError as observableThrowError } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { SpacesComponent } from './overview-spaces.component';
 
@@ -80,7 +77,7 @@ describe('SpacesComponent', () => {
 
     it('should report an error if getMoreSpaces() has an Observable error', () => {
       component.context = mockContext;
-      component.spaceService.getMoreSpacesByUser.and.returnValue(Observable.throw('error'));
+      component.spaceService.getMoreSpacesByUser.and.returnValue(observableThrowError('error'));
       component.fetchMoreSpaces();
       expect(component.logger.error).toHaveBeenCalledWith('error');
     });

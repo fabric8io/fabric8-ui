@@ -2,9 +2,7 @@ import { DebugElement, DebugNode, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-
 import { ModalModule } from 'ngx-bootstrap/modal';
-
 import { AboutService } from '../../shared/about.service';
 import { AboutModalComponent } from './about-modal.component';
 
@@ -73,7 +71,7 @@ describe('AboutModalComponent', () => {
 
   describe('#open', () => {
     it('should show the model when called', () => {
-      spyOn(component.staticModal, 'show');
+      spyOn(component.staticModal, 'show').and.callFake(() => {});
       component.open();
       expect(component.staticModal.show).toHaveBeenCalled();
     });

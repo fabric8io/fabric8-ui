@@ -2,6 +2,7 @@
  * @author: @AngularClass
  */
 
+const path = require('path');
 const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
@@ -10,7 +11,6 @@ const commonConfig = require('./webpack.common.js'); // the settings that are co
  * Webpack Plugins
  */
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const cloneDeep = require('lodash/cloneDeep');
@@ -93,6 +93,11 @@ module.exports = function (options) {
   return webpackMerge(commonConfig({ env: ENV }), {
 
     /**
+     * As of Webpack 4 we need to set the mode.
+     */
+    mode: 'development',
+
+    /**
      * Developer tool to enhance debugging
      *
      * See: http://webpack.github.io/docs/configuration.html#devtool
@@ -138,11 +143,11 @@ module.exports = function (options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
-      chunkFilename: '[id].chunk.js',
+      chunkFilename: '[name].chunk.js',
 
-      library: 'ac_[name]',
-
-      libraryTarget: 'var'
+      // Point sourcemap entries to original disk location (format as URL on Windows)
+      devtoolModuleFilenameTemplate: (info) =>
+        path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
 
     resolve: {
@@ -162,7 +167,9 @@ module.exports = function (options) {
         {
           test: /\.js$/,
           exclude: [
-            // Example \/\fabric8-planner/,
+            helpers.root('node_modules/reflect-metadata'),
+            helpers.root('node_modules/rxjs'),
+            helpers.root('node_modules/@angular'),
             // Exclude any problematic sourcemaps
             /\/@angular/,
             /\/angular-2-dropdown-multiselect/,
@@ -232,14 +239,6 @@ module.exports = function (options) {
           'ANALYTICS_LICENSE_URL': JSON.stringify(ANALYTICS_LICENSE_URL)
         }
       }),
-
-      /**
-       * Plugin: NamedModulesPlugin (experimental)
-       * Description: Uses file names as module name.
-       *
-       * See: https://github.com/webpack/webpack/commit/a04ffb928365b19feb75087c63f13cadfc08e1eb
-       */
-      new NamedModulesPlugin(),
 
       /**
        * Plugin LoaderOptionsPlugin (experimental)

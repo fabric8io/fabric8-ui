@@ -1,5 +1,13 @@
 import { OnDestroy } from '@angular/core';
-import { Observable, Subject, Subscriber, Subscription } from 'rxjs';
+import {
+  combineLatest as observableCombineLatest,
+  Observable,
+  of as observableOf,
+  Subject,
+  Subscriber,
+  Subscription
+} from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Deployment, Deployments } from '../model/deployment.model';
 import { DeploymentConfig } from '../model/deploymentconfig.model';
 import { KubernetesResource } from '../model/kubernetesresource.model';
@@ -46,7 +54,7 @@ export class AbstractWatchComponent implements OnDestroy {
   }
 
   protected listAndWatchServices(namespace: string, serviceService: ServiceService, routeService: RouteService): Observable<Services> {
-    return Observable.combineLatest(
+    return observableCombineLatest(
       this.listAndWatch(serviceService, namespace, Service),
       this.listAndWatch(routeService, namespace, Route),
       enrichServiceWithRoute
@@ -54,7 +62,7 @@ export class AbstractWatchComponent implements OnDestroy {
   }
 
   listAndWatchCombinedDeployments(namespace: string, deploymentService: DeploymentService, deploymentConfigService: DeploymentConfigService): Observable<Deployments> {
-    return Observable.combineLatest(
+    return observableCombineLatest(
       this.listAndWatch(deploymentService, namespace, Deployment),
       this.listAndWatch(deploymentConfigService, namespace, DeploymentConfig),
       combineDeployments
@@ -65,7 +73,7 @@ export class AbstractWatchComponent implements OnDestroy {
     const servicesObservable = this.listAndWatchServices(namespace, serviceService, routeService);
 
     let deployments = this.listAndWatchCombinedDeployments(namespace, deploymentService, deploymentConfigService);
-    let runtimeDeployments = Observable.combineLatest(
+    let runtimeDeployments = observableCombineLatest(
       deployments,
       servicesObservable,
       createDeploymentViews
@@ -76,12 +84,12 @@ export class AbstractWatchComponent implements OnDestroy {
   listAndWatchReplicas(namespace: string, replicaSetService: ReplicaSetService, replicationControllerService: ReplicationControllerService, serviceService: ServiceService, routeService: RouteService): Observable<ReplicaSetViews> {
     const servicesObservable = this.listAndWatchServices(namespace, serviceService, routeService);
 
-    let replicas = Observable.combineLatest(
+    let replicas = observableCombineLatest(
       this.listAndWatch(replicaSetService, namespace, ReplicaSet),
       this.listAndWatch(replicationControllerService, namespace, ReplicationController),
       combineReplicaSets
     );
-    let replicaViews = Observable.combineLatest(
+    let replicaViews = observableCombineLatest(
       replicas,
       servicesObservable,
       createReplicaSetViews
@@ -97,12 +105,12 @@ export class AbstractWatchComponent implements OnDestroy {
   ): Observable<L> {
     let key = namespace + '/' + type.name;
     return this.getOrCreateSubject(key, () =>
-       Observable.combineLatest(
+       observableCombineLatest(
               //this.getOrCreateList(service, namespace, type),
               service.list(namespace),
               // We just emit an empty item if the watch fails
               this.getOrCreateWatch(service, namespace, type)
-                .dataStream.catch(() => Observable.of(null)),
+                .dataStream.pipe(catchError(() => observableOf(null))),
               (list, msg) => this.combineListAndWatchEvent(list, msg, service, type, namespace)
             )
     );
@@ -255,7 +263,7 @@ export class CachingSubject<T> extends Subject<T> {
   }
 
 
-  protected _subscribe(subscriber: Subscriber<T>): Subscription {
+  _subscribe(subscriber: Subscriber<T>): Subscription {
     if (this._hasValue) {
       subscriber.next(this._value);
     }

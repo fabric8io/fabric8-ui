@@ -2,7 +2,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Observable } from 'rxjs';
+import { empty as observableEmpty, Observable, of as observableOf } from 'rxjs';
 import { APIsStore } from '../../../store/apis.store';
 import { BuildStore } from '../../../store/build.store';
 import { BuildConfigStore } from '../../../store/buildconfig.store';
@@ -14,13 +14,13 @@ describe('PipelinesHistoryPage', () => {
 
   beforeEach(async(() => {
     let mockBuildConfigStore: any = jasmine.createSpy('BuildConfigService');
-    mockBuildConfigStore.loading = Observable.of(false);
-    mockBuildConfigStore.list = Observable.empty();
+    mockBuildConfigStore.loading = observableOf(false);
+    mockBuildConfigStore.list = observableEmpty();
     let mockBuildStore: any = jasmine.createSpy('BuildStore');
-    mockBuildStore.loading = Observable.of(true);
-    mockBuildStore.list = Observable.empty();
+    mockBuildStore.loading = observableOf(true);
+    mockBuildStore.list = observableEmpty();
     let mockAPIsStore: any = jasmine.createSpyObj('APIsStore', ['load']);
-    mockAPIsStore.loading = Observable.empty();
+    mockAPIsStore.loading = observableEmpty();
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule

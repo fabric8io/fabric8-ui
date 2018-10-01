@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Params, Router } from '@angular/router';
-
-import { Observable } from 'rxjs';
-
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-
+import { combineLatest as observableCombineLatest, Observable,  of as observableOf } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { MenuItem } from '../../models/menu-item';
 import { Navigation } from '../../models/navigation';
 import { LoginService } from '../../shared/login.service';
@@ -225,9 +223,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private checkContextUserEqualsLoggedInUser(): Observable<boolean> {
-    return Observable.combineLatest(
-      Observable.of(this.context).map((val: Context) => val.user.id),
-      this.userService.loggedInUser.map((val: User) => val.id),
+    return observableCombineLatest(
+      observableOf(this.context).pipe(map((val: Context) => val.user.id)),
+      this.userService.loggedInUser.pipe(map((val: User) => val.id)),
       (a, b) => (a !== b)
     );
   }

@@ -1,17 +1,13 @@
-import { TestBed } from '@angular/core/testing';
-
+import { HttpResponse } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
   TestRequest
 } from '@angular/common/http/testing';
-
-import { HttpResponse } from '@angular/common/http';
-
+import { TestBed } from '@angular/core/testing';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
-
 import { createMock } from '../../../testing/mock';
 import { TenantService } from './tenant.service';
 
@@ -38,6 +34,45 @@ describe('TenantService', () => {
     });
     service = TestBed.get(TenantService);
     controller = TestBed.get(HttpTestingController);
+  });
+
+  describe('#getTenant', () => {
+    it('should make a HTTP GET request', (done: DoneFn) => {
+      let mockResponse = 'mock-response';
+
+      service.getTenant()
+        .subscribe((resp: any) => {
+            expect(resp).toEqual(mockResponse);
+            controller.verify();
+            done();
+          },
+          (err: string) => {
+            done.fail(err);
+          }
+        );
+
+      const req: TestRequest = controller.expectOne('http://example.com/api/user/services');
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-token');
+      req.flush({data: mockResponse});
+    });
+
+    it('should delegate to handleError() if an error occurs', (done: DoneFn) => {
+      service.getTenant()
+        .subscribe(
+          (resp: any) => {
+            done.fail(resp);
+          },
+          () => {
+            // handleError() is private, verify that logger.error() is called with returned error
+            expect(mockLogger.error).toHaveBeenCalled();
+            controller.verify();
+            done();
+          }
+        );
+      const req: TestRequest = controller.expectOne('http://example.com/api/user/services');
+      req.error(new ErrorEvent('Mock HTTP Error'));
+    });
   });
 
   describe('#updateTenant', () => {

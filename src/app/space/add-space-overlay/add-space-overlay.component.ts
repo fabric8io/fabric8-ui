@@ -7,14 +7,13 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
-import { Context, SpaceService } from 'ngx-fabric8-wit';
 import { ProcessTemplate } from 'ngx-fabric8-wit';
+import { Context, SpaceService } from 'ngx-fabric8-wit';
 import { Space, SpaceAttributes } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs';
-
+import { Observable,  of as observableOf, Subscription } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { ContextService } from '../../shared/context.service';
 import { SpaceNamespaceService } from '../../shared/runtime-console/space-namespace.service';
 import { SpaceTemplateService } from '../../shared/space-template.service';
@@ -112,14 +111,14 @@ export class AddSpaceOverlayComponent implements OnInit {
     this.canSubmit = false;
     this.space.relationships['owned-by'].data.id = this.userService.currentLoggedInUser.id;
 
-    this.subscriptions.push(this.spaceService.create(this.space)
-      .switchMap(createdSpace => {
+    this.subscriptions.push(this.spaceService.create(this.space).pipe(
+      switchMap(createdSpace => {
         return this.spaceNamespaceService
-          .updateConfigMap(Observable.of(createdSpace))
-          .map(() => createdSpace)
+          .updateConfigMap(observableOf(createdSpace)).pipe(
+          map(() => createdSpace),
           // Ignore any errors coming out here, we've logged and notified them earlier
-          .catch(err => Observable.of(createdSpace));
-      })
+          catchError(err => observableOf(createdSpace)));
+      }))
       .subscribe(createdSpace => {
           this.router.navigate([createdSpace.relationalData.creator.attributes.username,
             createdSpace.attributes.name]);

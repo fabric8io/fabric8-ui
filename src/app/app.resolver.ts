@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-
-import 'rxjs/add/observable/of';
-import { Observable } from 'rxjs/Observable';
+import { of as observableOf } from 'rxjs';
 
 @Injectable()
 export class DataResolver implements Resolve<any> {
@@ -10,7 +8,7 @@ export class DataResolver implements Resolve<any> {
 
   }
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return Observable.of({ res: 'I am data'});
+    return observableOf({ res: 'I am data'});
   }
 }
 

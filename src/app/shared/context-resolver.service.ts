@@ -4,12 +4,9 @@ import {
   Resolve,
   RouterStateSnapshot
 } from '@angular/router';
-
 import { Context } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable,  of ,  throwError as observableThrowError } from 'rxjs';
 import { catchError, first } from 'rxjs/operators';
-
 import { Navigation } from '../models/navigation';
 import { ContextService } from './context.service';
 
@@ -32,7 +29,7 @@ export class ContextResolver implements Resolve<Context> {
         first(),
         catchError((err: any, caught: Observable<Context>) => {
           console.log(`Caught in resolver ${err}`);
-          return Observable.throw(err);
+          return observableThrowError(err);
         })
       );
   }

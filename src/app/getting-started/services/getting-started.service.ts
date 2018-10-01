@@ -4,13 +4,12 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import { Inject, Injectable, OnDestroy } from '@angular/core';
-
+import { cloneDeep } from 'lodash';
 import { Logger } from 'ngx-base';
 import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs';
-
-import { cloneDeep } from 'lodash';
+import { ConnectableObservable, Observable, Subscription, throwError as observableThrowError } from 'rxjs';
+import { catchError, map, publish } from 'rxjs/operators';
 
 interface ExtUserResponse {
   data: ExtUser;
@@ -53,14 +52,14 @@ export class GettingStartedService implements OnDestroy {
   createTransientProfile(): ExtProfile {
     let profile: ExtUser;
 
-    this.userService.loggedInUser
-      .map((user: User): void => {
+    (this.userService.loggedInUser.pipe(
+      map((user: User): void => {
         profile = cloneDeep(user) as ExtUser;
         if (profile.attributes !== undefined) {
           profile.attributes.contextInformation = (user as ExtUser).attributes.contextInformation || {};
         }
-      })
-      .publish().connect();
+      }),
+      publish()) as ConnectableObservable<User>).connect();
 
     return (profile !== undefined && profile.attributes !== undefined) ? profile.attributes : {} as ExtProfile;
   }
@@ -74,9 +73,9 @@ export class GettingStartedService implements OnDestroy {
   getExtProfile(id: string): Observable<ExtUser> {
     let url = `${this.usersUrl}/${id}`;
     return this.http
-      .get<ExtUserResponse>(url, { headers: this.headers })
-      .map((response: ExtUserResponse): ExtUser => response.data)
-      .catch((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error));
+      .get<ExtUserResponse>(url, { headers: this.headers }).pipe(
+      map((response: ExtUserResponse): ExtUser => response.data),
+      catchError((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error)));
   }
 
   /**
@@ -93,14 +92,14 @@ export class GettingStartedService implements OnDestroy {
       }
     });
     return this.http
-      .patch<ExtUserResponse>(this.usersUrl, payload, { headers: this.headers })
-      .map((response: ExtUserResponse): ExtUser => response.data)
-      .catch((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error));
+      .patch<ExtUserResponse>(this.usersUrl, payload, { headers: this.headers }).pipe(
+      map((response: ExtUserResponse): ExtUser => response.data),
+      catchError((error: HttpErrorResponse): Observable<ExtUser> => this.handleError(error)));
   }
 
   // Private
   protected handleError(error: HttpErrorResponse): Observable<ExtUser> {
     this.logger.error(error);
-    return Observable.throw(error.message || error);
+    return observableThrowError(error.message || error);
   }
 }

@@ -13,11 +13,6 @@
  */
 Error.stackTraceLimit = Infinity;
 
-// to fix issue with phamtomjs/polufill
-// https://github.com/angular/angular-cli/issues/1675
-require('intl');
-require('intl/locale-data/jsonp/en');
-
 require('core-js/es6');
 require('core-js/es7/reflect');
 
@@ -34,7 +29,8 @@ require('zone.js/dist/async-test');
 require('zone.js/dist/fake-async-test');
 
 // RxJS
-require('rxjs/Rx');
+require('rxjs');
+require('rxjs/operators');
 
 var testing = require('@angular/core/testing');
 var browser = require('@angular/platform-browser-dynamic/testing');

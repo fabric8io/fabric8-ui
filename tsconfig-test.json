@@ -1,50 +1,46 @@
 {
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true
+  },
+  "atom": { "rewriteTsconfig": false },
+  "buildOnSave": false,
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "moduleResolution": "node",
-    "declaration": false,
-    "stripInternal": true,
-    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "baseUrl": ".",
+    "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": false,
-    "inlineSources": false,
+    "inlineSources": true,
+    "lib": [ "dom", "es6" ],
+    "module": "es2015",
+    "moduleResolution": "node",
     "noEmitHelpers": false,
-    "strictNullChecks": false,
     "noImplicitAny": false,
-    "allowUnreachableCode": false,
-    "baseUrl": "./src",
-    "noEmit": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "paths": {
       "@angular/core": ["node_modules/@angular/core"],
       "@angular/common": ["node_modules/@angular/common"],
       "@angular/forms": ["node_modules/@angular/forms"],
+      "@angular/http": ["node_modules/@angular/http"],
+      "@angular/router": ["node_modules/@angular/router"],
       "rxjs/*": ["node_modules/rxjs/*"],
       "moment": ["node_modules/moment"]
     },
-    "lib": [
-      "es2015",
-      "dom"
-    ]
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "stripInternal": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5"
   },
   "exclude": [
     "node_modules",
     "dist"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": false,
-    "useWebpackText": true,
-    "useCache": true,
-    "transpileOnly": true
-  },
-  "angularCompilerOptions": {
-    "strictMetadataEmit": true,
-    "skipTemplateCodegen": true,
-    "genDir": "compiled"
-  },
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "atom": { "rewriteTsconfig": false }
+  ]
 }

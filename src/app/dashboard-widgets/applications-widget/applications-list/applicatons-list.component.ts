@@ -4,7 +4,6 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-
 import { BuildConfig } from '../../../../a-runtime-console/index';
 
 @Component({

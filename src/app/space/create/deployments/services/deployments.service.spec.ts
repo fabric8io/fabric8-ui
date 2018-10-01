@@ -1,32 +1,31 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-
-import { createMock } from 'testing/mock';
-
-import {
-  Observable,
-  Subject,
-  VirtualTimeScheduler
-} from 'rxjs';
-import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
-import { _throw } from 'rxjs/observable/throw';
-import { timer } from 'rxjs/observable/timer';
-import { first } from 'rxjs/operators/first';
-import { takeUntil } from 'rxjs/operators/takeUntil';
-import { VirtualAction } from 'rxjs/scheduler/VirtualTimeScheduler';
-
 import {
   Logger,
   Notification,
   NotificationType
 } from 'ngx-base';
-
+import {
+  empty,
+  Observable,
+  of,
+  Subject,
+  throwError,
+  timer,
+  VirtualAction,
+  VirtualTimeScheduler } from 'rxjs';
+import {
+  first,
+  takeUntil
+} from 'rxjs/operators';
+import { createMock } from 'testing/mock';
 import { NotificationsService } from '../../../../shared/notifications.service';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
 import { MemoryUnit } from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
+import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
@@ -38,46 +37,22 @@ import {
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
 
-import { HttpErrorResponse } from '@angular/common/http';
+describe('DeploymentsService', (): void => {
 
-type TestContext = {
-  service: DeploymentsService;
-  apiService: jasmine.SpyObj<DeploymentApiService>;
-  notifications: jasmine.SpyObj<NotificationsService>;
-  logger: jasmine.SpyObj<Logger>;
-  errorHandler: jasmine.SpyObj<ErrorHandler>;
-  timer: Subject<void>;
-};
+  let service: DeploymentsService;
+  let apiService: jasmine.SpyObj<DeploymentApiService>;
+  let notifications: jasmine.SpyObj<NotificationsService>;
+  let logger: jasmine.SpyObj<Logger>;
+  let errorHandler: jasmine.SpyObj<ErrorHandler>;
+  let timerToken: Subject<void>;
 
-describe('DeploymentsService', () => {
-
-  beforeEach(function(this: TestContext): void {
+  beforeEach((): void => {
     TestBed.configureTestingModule({
       providers: [
-        {
-          provide: DeploymentApiService, useFactory: (): jasmine.SpyObj<DeploymentApiService> => {
-            const svc: jasmine.SpyObj<DeploymentApiService> = createMock(DeploymentApiService);
-            return svc;
-          }
-        },
-        {
-          provide: NotificationsService, useFactory: (): jasmine.SpyObj<NotificationsService> => {
-            const notifications: jasmine.SpyObj<NotificationsService> = jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']);
-            return notifications;
-          }
-        },
-        {
-          provide: Logger, useFactory: (): jasmine.SpyObj<Logger> => {
-            const logger: jasmine.SpyObj<Logger> = createMock(Logger);
-            return logger;
-          }
-        },
-        {
-          provide: ErrorHandler, useFactory: (): jasmine.SpyObj<ErrorHandler> => {
-            const handler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
-            return handler;
-          }
-        },
+        { provide: DeploymentApiService, useValue: createMock(DeploymentApiService) },
+        { provide: NotificationsService, useValue: jasmine.createSpyObj<NotificationsService>('NotificationsService', ['message']) },
+        { provide: Logger, useValue: createMock(Logger) },
+        { provide: ErrorHandler, useValue: createMock(ErrorHandler) },
         { provide: TIMER_TOKEN, useValue: new Subject<void>() },
         { provide: TIMESERIES_SAMPLES_TOKEN, useValue: 3 },
         { provide: POLL_RATE_TOKEN, useValue: 1 },
@@ -85,17 +60,17 @@ describe('DeploymentsService', () => {
       ]
     });
 
-    this.service = TestBed.get(DeploymentsService);
-    this.apiService = TestBed.get(DeploymentApiService);
-    this.notifications = TestBed.get(NotificationsService);
-    this.logger = TestBed.get(Logger);
-    this.errorHandler = TestBed.get(ErrorHandler);
-    this.timer = TestBed.get(TIMER_TOKEN);
+    service = TestBed.get(DeploymentsService);
+    apiService = TestBed.get(DeploymentApiService);
+    notifications = TestBed.get(NotificationsService);
+    logger = TestBed.get(Logger);
+    errorHandler = TestBed.get(ErrorHandler);
+    timerToken = TestBed.get(TIMER_TOKEN);
   });
 
-  describe('#getApplications', () => {
-    it('should publish faked application names', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+  describe('#getApplications', (): void => {
+    it('should publish faked application names', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello'
@@ -112,50 +87,54 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getApplications('foo-spaceId')
-        .subscribe((applications: string[]): void => {
+      service.getApplications('foo-spaceId').pipe(
+        first()
+      ).subscribe((applications: string[]): void => {
           expect(applications).toEqual(['vertx-hello', 'vertx-paint', 'vertx-wiki']);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return empty array if no applications', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([]));
-      this.service.getApplications('foo-spaceId')
-        .subscribe((applications: string[]): void => {
+    it('should return empty array if no applications', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([]));
+      service.getApplications('foo-spaceId').pipe(
+        first()
+      ).subscribe((applications: string[]): void => {
           expect(applications).toEqual([]);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return singleton array result', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([{
+    it('should return singleton array result', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([{
         attributes: { name: 'vertx-hello' }
       }]));
-      this.service.getApplications('foo-spaceId')
-        .subscribe((applications: string[]): void => {
+      service.getApplications('foo-spaceId').pipe(
+        first()
+      ).subscribe((applications: string[]): void => {
           expect(applications).toEqual(['vertx-hello']);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return empty array for null applications response', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of(null));
-      this.service.getApplications('foo-spaceId')
-        .subscribe((applications: string[]): void => {
+    it('should return empty array for null applications response', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of(null));
+      service.getApplications('foo-spaceId').pipe(
+        first()
+      ).subscribe((applications: string[]): void => {
           expect(applications).toEqual([]);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('#getEnvironments', () => {
-    it('should sort environments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+  describe('#getEnvironments', (): void => {
+    it('should sort environments', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'run'
@@ -166,16 +145,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getEnvironments('foo-spaceId')
-        .subscribe((environments: string[]): void => {
+      service.getEnvironments('foo-spaceId').pipe(
+        first()
+      ).subscribe((environments: string[]): void => {
           expect(environments).toEqual(['stage', 'run']);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should only emit on change', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+    it('should only emit on change', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'run'
@@ -187,8 +167,8 @@ describe('DeploymentsService', () => {
         }
       ]));
       let callCount: number = 0;
-      this.service.getEnvironments('foo-spaceId').pipe(
-        takeUntil(timer(1000))
+      service.getEnvironments('foo-spaceId').pipe(
+        takeUntil(timer(200))
       ).subscribe(
           (environments: string[]): void => {
             expect(environments).toEqual(['stage', 'run']);
@@ -196,50 +176,53 @@ describe('DeploymentsService', () => {
             if (callCount > 1) {
               return done.fail('should only have been called once');
             }
-            this.timer.next();
+            timerToken.next();
           },
-          err => done.fail(err),
-          () => done()
+          (err: any): void => done.fail(err),
+          (): void => done()
         );
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return singleton array result', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+    it('should return singleton array result', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
         { attributes: { name: 'stage' } }
       ]));
-      this.service.getEnvironments('foo-spaceId')
-        .subscribe((environments: string[]): void => {
+      service.getEnvironments('foo-spaceId').pipe(
+        first()
+      ).subscribe((environments: string[]): void => {
           expect(environments).toEqual(['stage']);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return empty array if no environments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([]));
-      this.service.getEnvironments('foo-spaceId')
-        .subscribe((environments: string[]): void => {
+    it('should return empty array if no environments', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([]));
+      service.getEnvironments('foo-spaceId').pipe(
+        first()
+      ).subscribe((environments: string[]): void => {
           expect(environments).toEqual([]);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return empty array for null environments response', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of(null));
-      this.service.getEnvironments('foo-spaceId')
-        .subscribe((environments: string[]): void => {
+    it('should return empty array for null environments response', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of(null));
+      service.getEnvironments('foo-spaceId').pipe(
+        first()
+      ).subscribe((environments: string[]): void => {
           expect(environments).toEqual([]);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('#isApplicationDeployedInEnvironment', () => {
-    it('should be true for included deployments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+  describe('#isApplicationDeployedInEnvironment', (): void => {
+    it('should be true for included deployments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -253,16 +236,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello')
-        .subscribe((deployed: boolean): void => {
+      service.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(true);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be true if included in multiple deployments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be true if included in multiple deployments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -281,16 +265,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello')
-        .subscribe((deployed: boolean): void => {
+      service.isApplicationDeployedInEnvironment('foo-spaceId', 'run', 'vertx-hello').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(true);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false for excluded deployments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be false for excluded deployments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -304,16 +289,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
-        .subscribe((deployed: boolean): void => {
+      service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false if excluded in multiple deployments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be false if excluded in multiple deployments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -332,16 +318,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
-        .subscribe((deployed: boolean): void => {
+      service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false if no deployments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be false if no deployments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -349,16 +336,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
-        .subscribe((deployed: boolean): void => {
+      service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false if deployments is null', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be false if deployments is null', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -366,18 +354,19 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello')
-        .subscribe((deployed: boolean): void => {
+      service.isApplicationDeployedInEnvironment('foo-spaceId', 'stage', 'vertx-hello').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('#isDeployedInEnvironment', () => {
-    it('should be true for included environments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+  describe('#isDeployedInEnvironment', (): void => {
+    it('should be true for included environments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -390,16 +379,17 @@ describe('DeploymentsService', () => {
             ]
           }
         }]));
-      this.service.isDeployedInEnvironment('foo-spaceId', 'run')
-        .subscribe((deployed: boolean): void => {
+      service.isDeployedInEnvironment('foo-spaceId', 'run').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(true);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be true if included in multiple applications and environments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be true if included in multiple applications and environments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -435,16 +425,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isDeployedInEnvironment('foo-spaceId', 'run')
-        .subscribe((deployed: boolean): void => {
+      service.isDeployedInEnvironment('foo-spaceId', 'run').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(true);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false for excluded environments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be false for excluded environments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -470,16 +461,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
-        .subscribe((deployed: boolean): void => {
+      service.isDeployedInEnvironment('foo-spaceId', 'stage').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false if no environments are deployed', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be false if no environments are deployed', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -493,36 +485,39 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
-        .subscribe((deployed: boolean): void => {
+      service.isDeployedInEnvironment('foo-spaceId', 'stage').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false if no applications exist', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([]));
-      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
-        .subscribe((deployed: boolean): void => {
+    it('should be false if no applications exist', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([]));
+      service.isDeployedInEnvironment('foo-spaceId', 'stage').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false if applications are null', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of(null));
-      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
-        .subscribe((deployed: boolean): void => {
+    it('should be false if applications are null', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of(null));
+      service.isDeployedInEnvironment('foo-spaceId', 'stage').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should be false if deployments is null', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should be false if deployments is null', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -530,18 +525,19 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.isDeployedInEnvironment('foo-spaceId', 'stage')
-        .subscribe((deployed: boolean): void => {
+      service.isDeployedInEnvironment('foo-spaceId', 'stage').pipe(
+        first()
+      ).subscribe((deployed: boolean): void => {
           expect(deployed).toEqual(false);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('#getVersion', () => {
-    it('should return 1.0.2', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+  describe('#getVersion', (): void => {
+    it('should return 1.0.2', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -556,20 +552,253 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getVersion('foo-spaceId', 'stage', 'vertx-hello')
-        .subscribe((version: string): void => {
+      service.getVersion('foo-spaceId', 'stage', 'vertx-hello').pipe(
+        first()
+      ).subscribe((version: string): void => {
           expect(version).toEqual('1.0.2');
           done();
         });
-      this.timer.next();
+      timerToken.next();
+    });
+  });
+
+  describe('#canScale', (): void => {
+    const GB: number = Math.pow(1024, 3);
+    it('should return true when remaining quota is sufficient', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 1,
+                quota: 2
+              },
+              memory: {
+                used: 0.5 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 1,
+        memory: 0.5 * GB
+      }));
+
+      service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((canScale: boolean): void => {
+          expect(canScale).toBeTruthy();
+          done();
+        });
+      timerToken.next();
+    });
+
+    it('should return false when remaining CPU quota is insufficient', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 2,
+                quota: 2
+              },
+              memory: {
+                used: 0.5 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 1,
+        memory: 0.5 * GB
+      }));
+
+      service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((canScale: boolean): void => {
+          expect(canScale).toBeFalsy();
+          done();
+        });
+      timerToken.next();
+    });
+
+    it('should return false when remaining Memory quota is insufficient', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 1,
+                quota: 2
+              },
+              memory: {
+                used: 0.75 * GB,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 1,
+        memory: 0.5 * GB
+      }));
+
+      service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((canScale: boolean): void => {
+          expect(canScale).toBeFalsy();
+          done();
+        });
+      timerToken.next();
+    });
+
+    it('should assume default values if pod quota query fails', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 0,
+                quota: 2
+              },
+              memory: {
+                used: 0,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(throwError('Some HTTP Error'));
+
+      service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((canScale: boolean): void => {
+          expect(canScale).toBeTruthy();
+          done();
+        });
+      timerToken.next();
+    });
+  });
+
+  describe('#getMaximumPods', () => {
+    const GB: number = Math.pow(1024, 3);
+    it('should return appropriate number of maximum pods for typical scenario', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 0,
+                quota: 2
+              },
+              memory: {
+                used: 0,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 1,
+        memory: 0.5 * GB
+      }));
+
+      service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((maxPods: number): void => {
+          expect(maxPods).toEqual(2);
+          done();
+        });
+      timerToken.next();
+    });
+
+    it('should return maximum based on resource with least available quota', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 0,
+                quota: 2
+              },
+              memory: {
+                used: 0,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(of({
+        cpucores: 2,
+        memory: 0.5 * GB
+      }));
+
+      service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((maxPods: number): void => {
+          expect(maxPods).toEqual(1); // only one CPU allocation will fit
+          done();
+        });
+      timerToken.next();
+    });
+
+    it('should assume default values if pod quota query fails', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 0,
+                quota: 2
+              },
+              memory: {
+                used: 0,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(throwError('Some HTTP Error'));
+
+      service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((maxPods: number): void => {
+          expect(maxPods).toEqual(2);
+          done();
+        });
+      timerToken.next();
     });
   });
 
   describe('#scalePods', () => {
-    it('should return success message on success', function(this: TestContext, done: DoneFn): void {
-      this.apiService.scalePods.and.returnValue(of({}));
-      this.service.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
-        .subscribe(
+    it('should return success message on success', (done: DoneFn): void => {
+      apiService.scalePods.and.returnValue(of({}));
+      service.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2).pipe(
+        first()
+      ).subscribe(
           (msg: string) => {
             expect(msg).toEqual('Successfully scaled vertx-hello');
             done();
@@ -580,10 +809,11 @@ describe('DeploymentsService', () => {
         );
     });
 
-    it('should return failure message on error', function(this: TestContext, done: DoneFn): void {
-      this.apiService.scalePods.and.returnValue(_throw('fail'));
-      this.service.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2)
-        .subscribe(
+    it('should return failure message on error', (done: DoneFn): void => {
+      apiService.scalePods.and.returnValue(throwError('fail'));
+      service.scalePods('foo-spaceId', 'stage', 'vertx-hello', 2).pipe(
+        first()
+      ).subscribe(
           (msg: string) => {
             done.fail(msg);
           },
@@ -595,9 +825,9 @@ describe('DeploymentsService', () => {
     });
   });
 
-  describe('#getPods', () => {
-    it('should return pods for an existing deployment', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+  describe('#getPods', (): void => {
+    it('should return pods for an existing deployment', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -607,9 +837,9 @@ describe('DeploymentsService', () => {
                   name: 'stage',
                   pod_total: 2,
                   pods: [
-                    ['Running', '1'],
-                    ['Starting', '0'],
-                    ['Stopping', '1']
+                    [PodPhase.RUNNING, '1'],
+                    [PodPhase.PENDING, '0'],
+                    [PodPhase.TERMINATING, '1']
                   ]
                 }
               }
@@ -625,9 +855,9 @@ describe('DeploymentsService', () => {
                   name: 'run',
                   pod_total: 1,
                   pods: [
-                    ['Running', '0'],
-                    ['Starting', '0'],
-                    ['Stopping', '1']
+                    [PodPhase.RUNNING, '0'],
+                    [PodPhase.PENDING, '0'],
+                    [PodPhase.TERMINATING, '1']
                   ]
                 }
               }
@@ -635,23 +865,24 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getPods('foo-spaceId', 'stage', 'vertx-hello')
-        .subscribe((pods: Pods): void => {
+      service.getPods('foo-spaceId', 'stage', 'vertx-hello').pipe(
+        first()
+      ).subscribe((pods: Pods): void => {
           expect(pods).toEqual({
             total: 2,
             pods: [
-              ['Running', 1],
-              ['Starting', 0],
-              ['Stopping', 1]
+              [PodPhase.PENDING, 0],
+              [PodPhase.RUNNING, 1],
+              [PodPhase.TERMINATING, 1]
             ]
-          } as Pods);
+          });
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return pods when there are multiple deployments', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should return pods when there are multiple deployments', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -661,9 +892,9 @@ describe('DeploymentsService', () => {
                   name: 'stage',
                   pod_total: 2,
                   pods: [
-                    ['Running', '1'],
-                    ['Starting', '0'],
-                    ['Stopping', '1']
+                    [PodPhase.RUNNING, '1'],
+                    [PodPhase.PENDING, '0'],
+                    [PodPhase.TERMINATING, '1']
                   ]
                 }
               },
@@ -672,9 +903,9 @@ describe('DeploymentsService', () => {
                   name: 'run',
                   pod_total: 6,
                   pods: [
-                    ['Running', '3'],
-                    ['Starting', '2'],
-                    ['Stopping', '1']
+                    [PodPhase.RUNNING, '3'],
+                    [PodPhase.PENDING, '2'],
+                    [PodPhase.TERMINATING, '1']
                   ]
                 }
               }
@@ -682,23 +913,24 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getPods('foo-spaceId', 'run', 'vertx-hello')
-        .subscribe((pods: Pods): void => {
+      service.getPods('foo-spaceId', 'run', 'vertx-hello').pipe(
+        first()
+      ).subscribe((pods: Pods): void => {
           expect(pods).toEqual({
             total: 6,
             pods: [
-              ['Running', 3],
-              ['Starting', 2],
-              ['Stopping', 1]
+              [PodPhase.PENDING, 2],
+              [PodPhase.RUNNING, 3],
+              [PodPhase.TERMINATING, 1]
             ]
           } as Pods);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return pods array', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should return pods array', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'vertx-hello',
@@ -708,11 +940,11 @@ describe('DeploymentsService', () => {
                   name: 'stage',
                   pod_total: 15,
                   pods: [
-                    ['Terminating', 5],
-                    ['Stopping', '3'],
-                    ['Running', '1'],
-                    ['Not Running', 4],
-                    ['Starting', '2']
+                    [PodPhase.ERROR, 5],
+                    [PodPhase.TERMINATING, '3'],
+                    [PodPhase.RUNNING, '1'],
+                    [PodPhase.NOT_READY, 4],
+                    [PodPhase.PENDING, '2']
                   ]
                 }
               }
@@ -720,27 +952,28 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getPods('foo-spaceId', 'stage', 'vertx-hello')
-        .subscribe((pods: Pods): void => {
+      service.getPods('foo-spaceId', 'stage', 'vertx-hello').pipe(
+        first()
+      ).subscribe((pods: Pods): void => {
           expect(pods).toEqual({
             total: 15,
             pods: [
-              ['Not Running', 4],
-              ['Running', 1],
-              ['Starting', 2],
-              ['Stopping', 3],
-              ['Terminating', 5]
+              [PodPhase.ERROR, 5],
+              [PodPhase.NOT_READY, 4],
+              [PodPhase.PENDING, 2],
+              [PodPhase.RUNNING, 1],
+              [PodPhase.TERMINATING, 3]
             ]
           } as Pods);
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('#getDeploymentCpuStat', () => {
-    it('should combine timeseries and quota data', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getTimeseriesData.and.returnValue(of({
+  describe('#getDeploymentCpuStat', (): void => {
+    it('should combine timeseries and quota data', (done: DoneFn): void => {
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 1, time: 1 },
           { value: 2, time: 2 }
@@ -760,7 +993,7 @@ describe('DeploymentsService', () => {
         start: 1,
         end: 8
       }));
-      this.apiService.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 9, value: 9
         },
@@ -774,7 +1007,7 @@ describe('DeploymentsService', () => {
           time: 12, value: 12
         }
       }));
-      this.apiService.getApplications.and.returnValue(of([
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -782,7 +1015,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1,
                   pods_quota: {
                     cpucores: 3,
@@ -794,9 +1027,9 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
+      service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
         first()
-      ).subscribe((stats: CpuStat[]) => {
+      ).subscribe((stats: CpuStat[]): void => {
           expect(stats).toEqual([
             { used: 1, quota: 3, timestamp: 1 },
             { used: 2, quota: 3, timestamp: 2 },
@@ -804,12 +1037,12 @@ describe('DeploymentsService', () => {
           ]);
           done();
         });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
     });
 
-    it('should round usage data points', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getTimeseriesData.and.returnValue(of({
+    it('should round usage data points', (done: DoneFn): void => {
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 0.0001, time: 1 },
           { value: 0.00001, time: 2 }
@@ -829,7 +1062,7 @@ describe('DeploymentsService', () => {
         start: 1,
         end: 8
       }));
-      this.apiService.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 9, value: 0.00015
         },
@@ -843,7 +1076,7 @@ describe('DeploymentsService', () => {
           time: 12, value: 12
         }
       }));
-      this.apiService.getApplications.and.returnValue(of([
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -851,7 +1084,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1,
                   pods_quota: {
                     cpucores: 3,
@@ -863,9 +1096,9 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
+      service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
         first()
-      ).subscribe((stats: CpuStat[]) => {
+      ).subscribe((stats: CpuStat[]): void => {
           expect(stats).toEqual([
             { used: 0.0001, quota: 3, timestamp: 1 },
             { used: 0, quota: 3, timestamp: 2 },
@@ -873,14 +1106,14 @@ describe('DeploymentsService', () => {
           ]);
           done();
         });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
     });
   });
 
-  describe('#getDeploymentMemoryStat', () => {
-    it('should combine timeseries and quota data', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getTimeseriesData.and.returnValue(of({
+  describe('#getDeploymentMemoryStat', (): void => {
+    it('should combine timeseries and quota data', (done: DoneFn): void => {
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 1, time: 1 },
           { value: 2, time: 2 }
@@ -900,7 +1133,7 @@ describe('DeploymentsService', () => {
         start: 1,
         end: 8
       }));
-      this.apiService.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 9, value: 9
         },
@@ -914,7 +1147,7 @@ describe('DeploymentsService', () => {
           time: 12, value: 12
         }
       }));
-      this.apiService.getApplications.and.returnValue(of([
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -922,7 +1155,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1,
                   pods_quota: {
                     cpucores: 3,
@@ -934,9 +1167,9 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
+      service.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
         first()
-      ).subscribe((stats: MemoryStat[]) => {
+      ).subscribe((stats: MemoryStat[]): void => {
           expect(stats).toEqual([
             new ScaledMemoryStat(3, 3, 3),
             new ScaledMemoryStat(4, 3, 4),
@@ -944,12 +1177,12 @@ describe('DeploymentsService', () => {
           ]);
           done();
         });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
     });
 
-    it('should scale results to the sample with greatest unit', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getTimeseriesData.and.returnValue(of({
+    it('should scale results to the sample with greatest unit', (done: DoneFn): void => {
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 0, time: 0 },
           { value: 0, time: 1 }
@@ -969,7 +1202,7 @@ describe('DeploymentsService', () => {
         start: 0,
         end: 1
       }));
-      this.apiService.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 0, value: 0
         },
@@ -983,7 +1216,7 @@ describe('DeploymentsService', () => {
           time: 2, value: 110 * Math.pow(1024, 2)
         }
       }));
-      this.apiService.getApplications.and.returnValue(of([
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -991,7 +1224,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1,
                   pods_quota: {
                     cpucores: 0,
@@ -1003,9 +1236,9 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
+      service.getDeploymentMemoryStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
         first()
-      ).subscribe((stats: MemoryStat[]) => {
+      ).subscribe((stats: MemoryStat[]): void => {
           expect(stats).toEqual([
             jasmine.objectContaining({
               used: 0.8,
@@ -1025,14 +1258,14 @@ describe('DeploymentsService', () => {
           ] as any[]);
           done();
         });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
     });
   });
 
-  describe('#getDeploymentNetworkStat', () => {
-    it('should return scaled timeseries data', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getTimeseriesData.and.returnValue(of({
+  describe('#getDeploymentNetworkStat', (): void => {
+    it('should return scaled timeseries data', (done: DoneFn): void => {
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 1, time: 1 },
           { value: 2, time: 2 }
@@ -1052,7 +1285,7 @@ describe('DeploymentsService', () => {
         start: 1,
         end: 8
       }));
-      this.apiService.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 9, value: 9
         },
@@ -1066,7 +1299,7 @@ describe('DeploymentsService', () => {
           time: 12, value: 12
         }
       }));
-      this.apiService.getApplications.and.returnValue(of([
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1074,7 +1307,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1
                 }
               }
@@ -1082,9 +1315,9 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
+      service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
         first()
-      ).subscribe((stats: NetworkStat[]) => {
+      ).subscribe((stats: NetworkStat[]): void => {
           expect(stats).toEqual([
             { sent: new ScaledNetStat(7, 7), received: new ScaledNetStat(5, 5) },
             { sent: new ScaledNetStat(8, 8), received: new ScaledNetStat(6, 6) },
@@ -1092,12 +1325,12 @@ describe('DeploymentsService', () => {
           ]);
           done();
         });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
     });
 
-    it('should scale results to the sample with greatest unit', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getTimeseriesData.and.returnValue(of({
+    it('should scale results to the sample with greatest unit', (done: DoneFn): void => {
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 0, time: 0 },
           { value: 0, time: 1 }
@@ -1117,7 +1350,7 @@ describe('DeploymentsService', () => {
         start: 0,
         end: 1
       }));
-      this.apiService.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 0, value: 0
         },
@@ -1131,7 +1364,7 @@ describe('DeploymentsService', () => {
           time: 0, value: 0
         }
       }));
-      this.apiService.getApplications.and.returnValue(of([
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1139,7 +1372,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1,
                   pods_quota: {
                     cpucores: 0,
@@ -1151,9 +1384,9 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
+      service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
         first()
-      ).subscribe((stats: NetworkStat[]) => {
+      ).subscribe((stats: NetworkStat[]): void => {
           expect(stats).toEqual([
             {
               sent: jasmine.objectContaining({ used: 0.5, units: MemoryUnit.GB }),
@@ -1170,14 +1403,14 @@ describe('DeploymentsService', () => {
           ] as any[]);
           done();
         });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
     });
   });
 
-  describe('#getTimeseriesData', () => {
-    it('should complete without errors if the deployment disappears', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getTimeseriesData.and.returnValue(of({
+  describe('#getTimeseriesData', (): void => {
+    it('should complete without errors if the deployment disappears', (done: DoneFn): void => {
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 1, time: 1 },
           { value: 2, time: 2 }
@@ -1197,7 +1430,7 @@ describe('DeploymentsService', () => {
         start: 1,
         end: 8
       }));
-      this.apiService.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 9, value: 9
         },
@@ -1211,7 +1444,7 @@ describe('DeploymentsService', () => {
           time: 12, value: 12
         }
       }));
-      this.apiService.getApplications.and.returnValue(of([
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1223,18 +1456,18 @@ describe('DeploymentsService', () => {
                     cpucores: 3
                   },
                   pod_total: 1,
-                  pods: [['Running', '1']]
+                  pods: [[PodPhase.RUNNING, '1']]
                 }
               }
             ]
           }
         }
       ]));
-      this.service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
-        takeUntil(timer(1000))
+      service.getDeploymentNetworkStat('foo-space', 'foo-env', 'foo-app', 3).pipe(
+        takeUntil(timer(200))
       ).subscribe(
-          (stat: NetworkStat[]): void => {
-            this.apiService.getApplications.and.returnValue(of([
+          (): void => {
+            apiService.getApplications.and.returnValue(of([
               {
                 attributes: {
                   name: 'foo-app',
@@ -1242,27 +1475,27 @@ describe('DeploymentsService', () => {
                 }
               }
             ]));
-            this.apiService.getLatestTimeseriesData.and.returnValue(_throw('Generic error message'));
-            this.timer.next();
+            apiService.getLatestTimeseriesData.and.returnValue(throwError('Generic error message'));
+            timerToken.next();
           },
-          err => {
+          (err: any): Observable<NetworkStat[]> => {
             done.fail(err.message || err);
             return empty();
           },
-          () => {
-            expect(this.logger.error).not.toHaveBeenCalled();
-            expect(this.notifications.message).not.toHaveBeenCalled();
-            expect(this.errorHandler.handleError).not.toHaveBeenCalled();
+          (): void => {
+            expect(logger.error).not.toHaveBeenCalled();
+            expect(notifications.message).not.toHaveBeenCalled();
+            expect(errorHandler.handleError).not.toHaveBeenCalled();
             done();
           }
         );
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('#getEnvironmentCpuStat', () => {
-    it('should return a "used" value of 8 and a "quota" value of 10', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getEnvironments.and.returnValue(of([
+  describe('#getEnvironmentCpuStat', (): void => {
+    it('should return a "used" value of 8 and a "quota" value of 10', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'stage',
@@ -1275,19 +1508,20 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getEnvironmentCpuStat('foo-spaceId', 'stage')
-        .subscribe((cpuStat: CpuStat): void => {
+      service.getEnvironmentCpuStat('foo-spaceId', 'stage').pipe(
+        first()
+      ).subscribe((cpuStat: CpuStat): void => {
           expect(cpuStat).toEqual({ quota: 10, used: 8 });
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('#getEnvironmentMemoryStat', () => {
-    it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', function(this: TestContext, done: DoneFn): void {
+  describe('#getEnvironmentMemoryStat', (): void => {
+    it('should return a "used" value of 512 and a "quota" value of 1024 with units in "MB"', (done: DoneFn): void => {
       const GB: number = Math.pow(1024, 3);
-      this.apiService.getEnvironments.and.returnValue(of([
+      apiService.getEnvironments.and.returnValue(of([
         {
           attributes: {
             name: 'stage',
@@ -1301,48 +1535,47 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getEnvironmentMemoryStat('foo-spaceId', 'stage')
-        .subscribe((memoryStat: MemoryStat): void => {
+      service.getEnvironmentMemoryStat('foo-spaceId', 'stage').pipe(
+        first()
+      ).subscribe((memoryStat: MemoryStat): void => {
           expect(memoryStat).toEqual(new ScaledMemoryStat(0.5 * GB, 1 * GB));
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('#deleteDeployment', () => {
-    it('should delete a deployment with the correct URL', function(this: TestContext, done: DoneFn): void {
-      this.apiService.deleteDeployment.and.returnValue(of('OK'));
-      expect(this.apiService.deleteDeployment).not.toHaveBeenCalled();
-      this.service.deleteDeployment('spaceId', 'envId', 'appId')
-        .subscribe(
-          (msg: string) => {
+  describe('#deleteDeployment', (): void => {
+    it('should delete a deployment with the correct URL', (done: DoneFn): void => {
+      apiService.deleteDeployment.and.returnValue(of('OK'));
+      expect(apiService.deleteDeployment).not.toHaveBeenCalled();
+      service.deleteDeployment('spaceId', 'envId', 'appId').pipe(
+        first()
+      ).subscribe(
+          (msg: string): void => {
             expect(msg).toEqual('Deployment has successfully deleted');
-            expect(this.apiService.deleteDeployment).toHaveBeenCalledWith(
+            expect(apiService.deleteDeployment).toHaveBeenCalledWith(
               'spaceId', 'envId', 'appId'
             );
             done();
           },
-          (err: string) => {
-            done.fail(err);
-          }
+          (err: string): void => done.fail(err)
         );
     });
 
-    it('should throw an error if it cannot delete', function(this: TestContext, done: DoneFn): void {
+    it('should throw an error if it cannot delete', (done: DoneFn): void => {
       const spaceId: string = 'someSpaceId';
       const environmentId: string = 'someStage';
       const appId: string = 'someAppName';
-      this.apiService.deleteDeployment.and.returnValue(_throw('FAIL'));
-      expect(this.apiService.deleteDeployment).not.toHaveBeenCalled();
-      this.service.deleteDeployment(spaceId, environmentId, appId)
-        .subscribe(
-          (msg: string) => {
-            done.fail();
-          },
-          (err: string) => {
+      apiService.deleteDeployment.and.returnValue(throwError('FAIL'));
+      expect(apiService.deleteDeployment).not.toHaveBeenCalled();
+      service.deleteDeployment(spaceId, environmentId, appId).pipe(
+        first()
+      ).subscribe(
+          (): void => done.fail(),
+          (err: string): void => {
             expect(err).toEqual(`Failed to delete ${appId} in ${spaceId} (${environmentId})`);
-            expect(this.apiService.deleteDeployment).toHaveBeenCalledWith(
+            expect(apiService.deleteDeployment).toHaveBeenCalledWith(
               spaceId, environmentId, appId
             );
             done();
@@ -1351,9 +1584,9 @@ describe('DeploymentsService', () => {
     });
   });
 
-  describe('application links', () => {
-    it('should provide logs URL', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+  describe('application links', (): void => {
+    it('should provide logs URL', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1370,16 +1603,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getLogsUrl('foo-space', 'foo-env', 'foo-app')
-        .subscribe((url: string): void => {
+      service.getLogsUrl('foo-space', 'foo-env', 'foo-app').pipe(
+        first()
+      ).subscribe((url: string): void => {
           expect(url).toEqual('http://example.com/logs');
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should provide console URL', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should provide console URL', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1396,16 +1630,17 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getConsoleUrl('foo-space', 'foo-env', 'foo-app')
-        .subscribe((url: string): void => {
+      service.getConsoleUrl('foo-space', 'foo-env', 'foo-app').pipe(
+        first()
+      ).subscribe((url: string): void => {
           expect(url).toEqual('http://example.com/console');
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should provide application URL', function(this: TestContext, done: DoneFn): void {
-      this.apiService.getApplications.and.returnValue(of([
+    it('should provide application URL', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1422,21 +1657,22 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      this.service.getAppUrl('foo-space', 'foo-env', 'foo-app')
-        .subscribe((url: string): void => {
+      service.getAppUrl('foo-space', 'foo-env', 'foo-app').pipe(
+        first()
+      ).subscribe((url: string): void => {
           expect(url).toEqual('http://example.com/application');
           done();
         });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
 
-  describe('#hasDeployments', () => {
+  describe('#hasDeployments', (): void => {
     const environments: string[] = ['stage', 'run'];
 
-    it('should return true if there are deployed applications', function(this: TestContext, done: DoneFn): void {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
+    it('should return true if there are deployed applications', (done: DoneFn): void => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = apiService;
       apiSvc.getApplications.and.returnValue(of([
         {
           attributes: {
@@ -1473,16 +1709,18 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      const svc: DeploymentsService = this.service;
-      svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
+      const svc: DeploymentsService = service;
+      svc.hasDeployments('foo-spaceId', environments).pipe(
+        first()
+      ).subscribe((bool: boolean): void => {
         expect(bool).toEqual(true);
         done();
       });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return true if there are is at least one deployed application', function(this: TestContext, done: DoneFn): void {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
+    it('should return true if there are is at least one deployed application', (done: DoneFn): void => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = apiService;
       apiSvc.getApplications.and.returnValue(of([
         {
           attributes: {
@@ -1503,16 +1741,18 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      const svc: DeploymentsService = this.service;
-      svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
+      const svc: DeploymentsService = service;
+      svc.hasDeployments('foo-spaceId', environments).pipe(
+        first()
+      ).subscribe((bool: boolean): void => {
         expect(bool).toEqual(true);
         done();
       });
-      this.timer.next();
+      timerToken.next();
     });
 
-    it('should return false if there are no deployed applications', function(this: TestContext, done: DoneFn): void {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
+    it('should return false if there are no deployed applications', (done: DoneFn): void => {
+      const apiSvc: jasmine.SpyObj<DeploymentApiService> = apiService;
       apiSvc.getApplications.and.returnValue(of([
         {
           attributes: {
@@ -1527,34 +1767,36 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      const svc: DeploymentsService = this.service;
-      svc.hasDeployments('foo-spaceId', environments).subscribe(bool => {
+      const svc: DeploymentsService = service;
+      svc.hasDeployments('foo-spaceId', environments).pipe(
+        first()
+      ).subscribe((bool: boolean): void => {
         expect(bool).toEqual(false);
         done();
       });
-      this.timer.next();
+      timerToken.next();
     });
   });
 
-  describe('getApplications', () => {
-    function testApplicationsError(status: number, expectedMessage: Notification) {
+  describe('getApplications', (): void => {
+    function testApplicationsError(status: number, expectedMessage: Notification): void {
       const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
       const error: HttpErrorResponse = new HttpErrorResponse({
         statusText: 'Mock HTTP Error',
         status: status
       });
 
-      const vs = new VirtualTimeScheduler(VirtualAction);
+      const vs: VirtualTimeScheduler = new VirtualTimeScheduler(VirtualAction);
 
       apiSvc.getApplications.and.returnValue(
-        _throw(error, vs)
+        throwError(error, vs)
       );
 
       const svc: DeploymentsService = TestBed.get(DeploymentsService);
       svc.getApplications('spaceId').pipe(first()).subscribe(
-        () => fail('should not emit'),
-        () => fail('should not emit'),
-        () => fail('should not emit')
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit')
       );
 
       TestBed.get(TIMER_TOKEN).next();
@@ -1563,7 +1805,7 @@ describe('DeploymentsService', () => {
       expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
-    it('should notify on 401', function(this: TestContext): void {
+    it('should notify on 401', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get applications',
@@ -1572,7 +1814,7 @@ describe('DeploymentsService', () => {
       testApplicationsError(401, expectedMessage);
     });
 
-    it('should notify on 403', function(this: TestContext): void {
+    it('should notify on 403', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get applications',
@@ -1581,7 +1823,7 @@ describe('DeploymentsService', () => {
       testApplicationsError(403, expectedMessage);
     });
 
-    it('should notify on 404', function(this: TestContext): void {
+    it('should notify on 404', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get applications',
@@ -1590,7 +1832,7 @@ describe('DeploymentsService', () => {
       testApplicationsError(404, expectedMessage);
     });
 
-    it('should notify on 500', function(this: TestContext): void {
+    it('should notify on 500', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get applications',
@@ -1599,7 +1841,7 @@ describe('DeploymentsService', () => {
       testApplicationsError(500, expectedMessage);
     });
 
-    it('should notify on unknown', function(this: TestContext): void {
+    it('should notify on unknown', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get applications',
@@ -1609,25 +1851,25 @@ describe('DeploymentsService', () => {
     });
   });
 
-  describe('getEnvironments', () => {
-    function testEnvironmentsError(status: number, expectedMessage: Notification) {
+  describe('getEnvironments', (): void => {
+    function testEnvironmentsError(status: number, expectedMessage: Notification): void {
       const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
       const error: HttpErrorResponse = new HttpErrorResponse({
         statusText: JSON.stringify('Mock HTTP Error'),
         status: status
       });
 
-      const vs = new VirtualTimeScheduler(VirtualAction);
+      const vs: VirtualTimeScheduler = new VirtualTimeScheduler(VirtualAction);
 
       apiSvc.getEnvironments.and.returnValue(
-        _throw(error, vs)
+        throwError(error, vs)
       );
 
       const svc: DeploymentsService = TestBed.get(DeploymentsService);
       svc.getEnvironments('spaceId').pipe(first()).subscribe(
-        () => fail('should not emit'),
-        () => fail('should not emit'),
-        () => fail('should not emit')
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit')
       );
 
       TestBed.get(TIMER_TOKEN).next();
@@ -1636,7 +1878,7 @@ describe('DeploymentsService', () => {
       expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
-    it('should notify on 401', function(this: TestContext): void {
+    it('should notify on 401', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get environments',
@@ -1645,7 +1887,7 @@ describe('DeploymentsService', () => {
       testEnvironmentsError(401, expectedMessage);
     });
 
-    it('should notify on 403', function(this: TestContext): void {
+    it('should notify on 403', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get environments',
@@ -1654,7 +1896,7 @@ describe('DeploymentsService', () => {
       testEnvironmentsError(403, expectedMessage);
     });
 
-    it('should notify on 404', function(this: TestContext): void {
+    it('should notify on 404', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get environments',
@@ -1663,7 +1905,7 @@ describe('DeploymentsService', () => {
       testEnvironmentsError(404, expectedMessage);
     });
 
-    it('should notify on 500', function(this: TestContext): void {
+    it('should notify on 500', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get environments',
@@ -1672,7 +1914,7 @@ describe('DeploymentsService', () => {
       testEnvironmentsError(500, expectedMessage);
     });
 
-    it('should notify on unknown', function(this: TestContext): void {
+    it('should notify on unknown', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get environments',
@@ -1682,8 +1924,8 @@ describe('DeploymentsService', () => {
     });
   });
 
-  describe('getDeploymentCpuStat', () => {
-    function setupErrorTests() {
+  describe('getDeploymentCpuStat', (): void => {
+    function setupErrorTests(): void {
       const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
       apiSvc.getApplications.and.returnValue(of([
         {
@@ -1693,7 +1935,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1,
                   pods_quota: {
                     cpucores: 3,
@@ -1743,26 +1985,26 @@ describe('DeploymentsService', () => {
       }));
     }
 
-    function testGetTimeSeriesError(status: number, expectedMessage: Notification) {
+    function testGetTimeSeriesError(status: number, expectedMessage: Notification): void {
       setupErrorTests();
       const error: HttpErrorResponse = new HttpErrorResponse({
         statusText: JSON.stringify('Mock HTTP Error'),
         status: status
       });
 
-      const vs = new VirtualTimeScheduler(VirtualAction);
+      const vs: VirtualTimeScheduler = new VirtualTimeScheduler(VirtualAction);
       const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
 
       apiSvc.getTimeseriesData.and.returnValue(
-        _throw(error)
+        throwError(error)
       );
 
       const svc: DeploymentsService = TestBed.get(DeploymentsService);
 
       svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe(
-        () => fail('should not emit'),
-        () => fail('should not emit'),
-        () => fail('should not emit')
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit')
       );
 
       TestBed.get(TIMER_TOKEN).next();
@@ -1774,26 +2016,26 @@ describe('DeploymentsService', () => {
       expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
-    function testGetLatestTimeSeriesError(status: number, expectedMessage: Notification) {
+    function testGetLatestTimeSeriesError(status: number, expectedMessage: Notification): void {
       setupErrorTests();
       const error: HttpErrorResponse = new HttpErrorResponse({
         statusText: JSON.stringify('Mock HTTP Error'),
         status: status
       });
 
-      const vs = new VirtualTimeScheduler(VirtualAction);
+      const vs: VirtualTimeScheduler = new VirtualTimeScheduler(VirtualAction);
       const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
 
       apiSvc.getLatestTimeseriesData.and.returnValue(
-        _throw(error)
+        throwError(error)
       );
 
       const svc: DeploymentsService = TestBed.get(DeploymentsService);
 
       svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe(
-        () => fail('should not emit'),
-        () => fail('should not emit'),
-        () => fail('should not emit')
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit')
       );
 
       TestBed.get(TIMER_TOKEN).next();
@@ -1802,26 +2044,26 @@ describe('DeploymentsService', () => {
       expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
-    function testGetApplicationsError(status: number, expectedMessage: Notification) {
+    function testGetApplicationsError(status: number, expectedMessage: Notification): void {
       setupErrorTests();
       const error: HttpErrorResponse = new HttpErrorResponse({
         statusText: JSON.stringify('Mock HTTP Error'),
         status: status
       });
 
-      const vs = new VirtualTimeScheduler(VirtualAction);
+      const vs: VirtualTimeScheduler = new VirtualTimeScheduler(VirtualAction);
       const apiSvc: jasmine.SpyObj<DeploymentApiService> = TestBed.get(DeploymentApiService);
 
       apiSvc.getApplications.and.returnValue(
-        _throw(error)
+        throwError(error)
       );
 
       const svc: DeploymentsService = TestBed.get(DeploymentsService);
 
       svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe(
-        () => fail('should not emit'),
-        () => fail('should not emit'),
-        () => fail('should not emit')
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit'),
+        (): void => fail('should not emit')
       );
 
       TestBed.get(TIMER_TOKEN).next();
@@ -1830,7 +2072,7 @@ describe('DeploymentsService', () => {
       expect(TestBed.get(NotificationsService).message).toHaveBeenCalledWith(expectedMessage);
     }
 
-    it('should notify on unknown', function(this: TestContext): void {
+    it('should notify on unknown', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.DANGER,
         header: 'Cannot get initial application statistics',
@@ -1840,7 +2082,7 @@ describe('DeploymentsService', () => {
       testGetTimeSeriesError(411, expectedMessage);
     });
 
-    it('should notify on 404', function(this: TestContext): void {
+    it('should notify on 404', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get latest application statistics',
@@ -1849,7 +2091,7 @@ describe('DeploymentsService', () => {
       testGetLatestTimeSeriesError(404, expectedMessage);
     });
 
-    it('should notify on 500', function(this: TestContext): void {
+    it('should notify on 500', (): void => {
       const expectedMessage: Notification = {
         type: NotificationType.WARNING,
         header: 'Cannot get applications',
@@ -1858,9 +2100,8 @@ describe('DeploymentsService', () => {
       testGetApplicationsError(500, expectedMessage);
     });
 
-    it('should return data', function(this: TestContext, done: DoneFn): void {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
-      apiSvc.getApplications.and.returnValue(of([
+    it('should return data', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1868,7 +2109,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'foo-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1,
                   pods_quota: {
                     cpucores: 3,
@@ -1880,7 +2121,7 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      apiSvc.getTimeseriesData.and.returnValue(of({
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 1, time: 1 },
           { value: 2, time: 2 }
@@ -1900,7 +2141,7 @@ describe('DeploymentsService', () => {
         start: 1,
         end: 8
       }));
-      apiSvc.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 9, value: 9
         },
@@ -1915,8 +2156,7 @@ describe('DeploymentsService', () => {
         }
       }));
 
-      const svc: DeploymentsService = this.service;
-      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe((stats: CpuStat[]): void => {
+      service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe((stats: CpuStat[]): void => {
         expect(stats).toEqual([
           { used: 1, quota: 3, timestamp: 1 },
           { used: 2, quota: 3, timestamp: 2 },
@@ -1924,13 +2164,12 @@ describe('DeploymentsService', () => {
         ]);
         done();
       });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
     });
 
-    it('should return nothing when application is not deployed in environment', function(this: TestContext, done: DoneFn): void {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
-      apiSvc.getApplications.and.returnValue(of([
+    it('should return nothing when application is not deployed in environment', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1938,7 +2177,7 @@ describe('DeploymentsService', () => {
               {
                 attributes: {
                   name: 'bar-env',
-                  pods: [['Running', '1']],
+                  pods: [[PodPhase.RUNNING, '1']],
                   pod_total: 1,
                   pods_quota: {
                     cpucores: 3,
@@ -1951,19 +2190,17 @@ describe('DeploymentsService', () => {
         }
       ]));
 
-      const svc: DeploymentsService = this.service;
-      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').subscribe((stats: CpuStat[]): void => {
+      service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe((): void => {
         done.fail('should not have emitted');
       });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
 
-      timer(500).pipe(first()).subscribe(() => done());
+      timer(200).pipe(first()).subscribe(() => done());
     });
 
-    it('should return nothing when application has no pods', function(this: TestContext, done: DoneFn): void {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
-      apiSvc.getApplications.and.returnValue(of([
+    it('should return nothing when application has no pods', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -1984,19 +2221,17 @@ describe('DeploymentsService', () => {
         }
       ]));
 
-      const svc: DeploymentsService = this.service;
-      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').subscribe((stats: CpuStat[]): void => {
+      service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe((): void => {
         done.fail('should not have emitted');
       });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
 
-      timer(500).pipe(first()).subscribe(() => done());
+      timer(200).pipe(first()).subscribe(() => done());
     });
 
-    it('should emit updates when deployment reappears', function(this: TestContext, done: DoneFn): void {
-      const apiSvc: jasmine.SpyObj<DeploymentApiService> = this.apiService;
-      apiSvc.getApplications.and.returnValue(of([
+    it('should emit updates when deployment reappears', (done: DoneFn): void => {
+      apiService.getApplications.and.returnValue(of([
         {
           attributes: {
             name: 'foo-app',
@@ -2016,7 +2251,7 @@ describe('DeploymentsService', () => {
           }
         }
       ]));
-      apiSvc.getLatestTimeseriesData.and.returnValue(of({
+      apiService.getLatestTimeseriesData.and.returnValue(of({
         cores: {
           time: 9, value: 9
         },
@@ -2030,7 +2265,7 @@ describe('DeploymentsService', () => {
           time: 12, value: 12
         }
       }));
-      apiSvc.getTimeseriesData.and.returnValue(of({
+      apiService.getTimeseriesData.and.returnValue(of({
         cores: [
           { value: 1, time: 1 },
           { value: 2, time: 2 }
@@ -2053,8 +2288,7 @@ describe('DeploymentsService', () => {
 
       let delayPassed: boolean = false;
 
-      const svc: DeploymentsService = this.service;
-      svc.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe((stats: CpuStat[]): void => {
+      service.getDeploymentCpuStat('foo-space', 'foo-env', 'foo-app').pipe(first()).subscribe((stats: CpuStat[]): void => {
         if (!delayPassed) {
           done.fail('should not have emitted before delay passed');
         }
@@ -2065,13 +2299,13 @@ describe('DeploymentsService', () => {
         ]);
         done();
       });
-      this.timer.next();
-      this.timer.next();
+      timerToken.next();
+      timerToken.next();
 
-      timer(500).pipe(first()).subscribe(() => {
+      timer(200).pipe(first()).subscribe(() => {
         delayPassed = true;
 
-        apiSvc.getApplications.and.returnValue(of([
+        apiService.getApplications.and.returnValue(of([
           {
             attributes: {
               name: 'foo-app',
@@ -2079,7 +2313,7 @@ describe('DeploymentsService', () => {
                 {
                   attributes: {
                     name: 'foo-env',
-                    pods: [['Running', '1']],
+                    pods: [[PodPhase.RUNNING, '1']],
                     pod_total: 1,
                     pods_quota: {
                       cpucores: 2,
@@ -2091,8 +2325,8 @@ describe('DeploymentsService', () => {
             }
           }
         ]));
-        this.timer.next();
-        this.timer.next();
+        timerToken.next();
+        timerToken.next();
       });
     });
   });

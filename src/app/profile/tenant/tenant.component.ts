@@ -1,12 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
-
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { ProviderService } from '../../shared/account/provider.service';
 import { GitHubService } from '../../space/create/codebases/services/github.service';

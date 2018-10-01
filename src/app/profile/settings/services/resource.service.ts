@@ -1,13 +1,7 @@
-import {
-  Injectable
-} from '@angular/core';
-
+import { Injectable } from '@angular/core';
 import { UserService } from 'ngx-login-client';
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { ScaledMemoryStat } from '../../../space/create/deployments/models/scaled-memory-stat';
 import { DeploymentApiService, EnvironmentStat } from '../../../space/create/deployments/services/deployment-api.service';
 
@@ -19,7 +13,7 @@ enum CLASSES {
   ICON_ERR = 'pficon-error-circle-o'
 }
 
-export declare interface UsageSeverityEnvironmentStat {
+export interface UsageSeverityEnvironmentStat {
   environmentStat: EnvironmentStat;
   iconClass: string;
 }
@@ -27,36 +21,38 @@ export declare interface UsageSeverityEnvironmentStat {
 @Injectable()
 export class ResourceService {
 
-  constructor(
-    private apiService: DeploymentApiService,
-    private userService: UserService
-  ) {}
+  private static readonly WARNING_THRESHOLD = 0.6;
 
-  public getEnvironmentsWithScaleAndIcon(): Observable<UsageSeverityEnvironmentStat[]> {
-    let envResponse: Observable<EnvironmentStat[]> = this.apiService.getEnvironments(FAKE_SPACE_ID);
+  constructor(
+    private readonly apiService: DeploymentApiService,
+    private readonly userService: UserService
+  ) { }
+
+  getEnvironmentsWithScaleAndIcon(): Observable<UsageSeverityEnvironmentStat[]> {
+    const envResponse: Observable<EnvironmentStat[]> = this.apiService.getEnvironments(FAKE_SPACE_ID);
     return envResponse.pipe(
-      map((stats: EnvironmentStat[]) => this.transformAndSortEnvironments(stats))
+      map((stats: EnvironmentStat[]): UsageSeverityEnvironmentStat[] => this.transformAndSortEnvironments(stats))
     );
   }
 
   transformAndSortEnvironments(stats: EnvironmentStat[]): UsageSeverityEnvironmentStat[] {
-    stats.sort(((a: EnvironmentStat, b: EnvironmentStat) => -1 * a.attributes.name.localeCompare(b.attributes.name)));
+    stats.sort(((a: EnvironmentStat, b: EnvironmentStat): number => -1 * a.attributes.name.localeCompare(b.attributes.name)));
 
-    stats.forEach((stat) => {
+    stats.forEach((stat: EnvironmentStat): void => {
       this.scaleMemoryStat(stat);
       this.renameEnvironment(stat);
     });
-    return stats.map((stat) => this.packageStatAndClass(stat));
+    return stats.map((stat: EnvironmentStat): UsageSeverityEnvironmentStat => this.packageStatAndClass(stat));
   }
 
-  renameEnvironment(envStat: EnvironmentStat) {
-    let loggedInUser: string = this.userService.currentLoggedInUser.attributes.username;
-    let curName = envStat.attributes.name;
+  renameEnvironment(envStat: EnvironmentStat): void {
+    const loggedInUser: string = this.userService.currentLoggedInUser.attributes.username;
+    const curName: string = envStat.attributes.name;
     envStat.attributes.name = (curName === 'test') ? loggedInUser : loggedInUser + '/' + curName;
   }
 
   scaleMemoryStat(envStat: EnvironmentStat): void {
-    let scaledStat: ScaledMemoryStat = new ScaledMemoryStat(
+    const scaledStat: ScaledMemoryStat = new ScaledMemoryStat(
       envStat.attributes.quota.memory.used,
       envStat.attributes.quota.memory.quota
     );
@@ -64,20 +60,20 @@ export class ResourceService {
     envStat.attributes.quota.memory = scaledStat;
   }
 
-  packageStatAndClass(envStat: EnvironmentStat): UsageSeverityEnvironmentStat {
-    let cpuQuota = envStat.attributes.quota.cpucores.used / envStat.attributes.quota.cpucores.quota;
-    let memQuota = envStat.attributes.quota.memory.used / envStat.attributes.quota.memory.quota;
-    let icon: string = this.calculateEnvironmentStatusClass(cpuQuota, memQuota);
+  packageStatAndClass(environmentStat: EnvironmentStat): UsageSeverityEnvironmentStat {
+    const cpuQuota: number = environmentStat.attributes.quota.cpucores.used / environmentStat.attributes.quota.cpucores.quota;
+    const memQuota: number = environmentStat.attributes.quota.memory.used / environmentStat.attributes.quota.memory.quota;
+    const iconClass: string = this.calculateEnvironmentStatusClass(cpuQuota, memQuota);
 
-    return {environmentStat: envStat, iconClass: icon} as UsageSeverityEnvironmentStat;
+    return { environmentStat, iconClass };
   }
 
   calculateEnvironmentStatusClass(cpuQuota: number, memQuota: number): string {
     let icon: string = CLASSES.ICON_OK;
 
-    if (cpuQuota == 1 || memQuota == 1) {
+    if (cpuQuota >= 1 || memQuota >= 1) {
       icon = CLASSES.ICON_ERR;
-    } else if (cpuQuota >= .6 || memQuota >= .6) {
+    } else if (cpuQuota >= ResourceService.WARNING_THRESHOLD || memQuota >= ResourceService.WARNING_THRESHOLD) {
       icon = CLASSES.ICON_WARN;
     }
 

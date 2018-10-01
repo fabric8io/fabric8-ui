@@ -3,10 +3,8 @@ import { Router } from '@angular/router';
 import { Broadcaster } from 'ngx-base';
 import { Contexts, Spaces } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Subject } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { of, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
-
 import { AnalyticService } from './analytics.service';
 import { Fabric8UIConfig } from './config/fabric8-ui-config';
 import { loggedInUser } from './context.service.mock';

@@ -1,12 +1,10 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { LocalStorageService } from 'angular-2-local-storage';
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService, UserService } from 'ngx-login-client';
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { WindowService } from './window.service';
 
 @Injectable()

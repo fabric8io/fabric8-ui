@@ -1,19 +1,7 @@
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ErrorHandler } from '@angular/core';
 import { fakeAsync, TestBed } from '@angular/core/testing';
-
-import {
-  BehaviorSubject,
-  Observable,
-  ReplaySubject,
-  Subscription
-} from 'rxjs';
-import {
-  VirtualAction,
-  VirtualTimeScheduler
-} from 'rxjs/scheduler/VirtualTimeScheduler';
-
-import { createMock } from 'testing/mock';
-
 import {
   Logger
 } from 'ngx-base';
@@ -21,16 +9,22 @@ import {
   User,
   UserService
 } from 'ngx-login-client';
-
+import {
+  BehaviorSubject, ConnectableObservable,
+  Observable,
+  ReplaySubject,
+  Subscription,
+  throwError as observableThrowError,
+  VirtualAction,
+  VirtualTimeScheduler
+} from 'rxjs';
+import { multicast } from 'rxjs/operators';
+import { createMock } from 'testing/mock';
+import { NotificationsService } from '../../../app/shared/notifications.service';
 import {
   OAuthConfig,
   OAuthConfigStore
 } from './oauth-config-store';
-
-import { NotificationsService } from '../../../app/shared/notifications.service';
-
-import { HttpClient } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 describe('OauthConfigStore', () => {
 
@@ -72,7 +66,7 @@ describe('OauthConfigStore', () => {
   describe('success state', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = new BehaviorSubject(user).multicast(() => new ReplaySubject(1));
+      mockUserService.loggedInUser = new BehaviorSubject(user).pipe<User>(multicast(() => new ReplaySubject(1))) as ConnectableObservable<User>;
 
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
@@ -134,7 +128,7 @@ describe('OauthConfigStore', () => {
   describe('user service empty', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = new BehaviorSubject({} as User).multicast(() => new ReplaySubject(1));
+      mockUserService.loggedInUser = new BehaviorSubject({} as User).pipe<User>(multicast(() => new ReplaySubject(1))) as ConnectableObservable<User>;
 
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
@@ -200,7 +194,7 @@ describe('OauthConfigStore', () => {
       scheduler = new VirtualTimeScheduler(VirtualAction);
 
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = Observable.throw({error : 'error'}, scheduler).multicast(() => new ReplaySubject(1));
+      mockUserService.loggedInUser = observableThrowError({error : 'error'}, scheduler).pipe<User>(multicast(() => new ReplaySubject(1))) as ConnectableObservable<User>;
 
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
@@ -254,7 +248,7 @@ describe('OauthConfigStore', () => {
   describe('config request error', () => {
     beforeEach(() => {
       mockUserService = createMock(UserService);
-      mockUserService.loggedInUser = new BehaviorSubject(user).multicast(() => new ReplaySubject(1));
+      mockUserService.loggedInUser = new BehaviorSubject(user).pipe<User>(multicast(() => new ReplaySubject(1))) as ConnectableObservable<User>;
 
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],

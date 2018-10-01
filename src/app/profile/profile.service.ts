@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-
 import { cloneDeep } from 'lodash';
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { AUTH_API_URL, AuthenticationService, Profile, User, UserService } from 'ngx-login-client';
-import { ConnectableObservable, Observable } from 'rxjs';
+import { ConnectableObservable, EMPTY, Observable } from 'rxjs';
+import { catchError, map, publishReplay, skipWhile, tap } from 'rxjs/operators';
 
 export class ExtUser extends User {
   attributes: ExtProfile;
@@ -37,20 +37,20 @@ export class ProfileService {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
     this.profileUrl = apiUrl + 'users';
-    this._profile = this.userService.loggedInUser
-      .skipWhile(user => {
+    this._profile = this.userService.loggedInUser.pipe(
+      skipWhile(user => {
         return !user || !user.attributes;
-      })
-      .map(user => cloneDeep(user) as ExtUser)
-      .do(user => {
+      }),
+      map(user => cloneDeep(user) as ExtUser),
+      tap(user => {
         if (user.attributes) {
           user.attributes.store = (user as any).attributes.contextInformation || {};
         } else {
           user.attributes = { 'fullName': '', 'imageURL': '', 'username': '', 'store': { } };
         }
-      })
-      .map(user => user.attributes)
-      .publishReplay(1);
+      }),
+      map(user => user.attributes),
+      publishReplay(1)) as ConnectableObservable<ExtProfile> ;
     this._profile.connect();
   }
 
@@ -59,18 +59,18 @@ export class ProfileService {
   }
 
   save(profile: Profile) {
-    return this.silentSave(profile).do(val => this.notifications.message({
+    return this.silentSave(profile).pipe(tap(val => this.notifications.message({
       message: 'User profile updated',
       type: NotificationType.SUCCESS
-    } as Notification))
-      .catch(error => {
+    } as Notification)),
+      catchError(error => {
         this.notifications.message({
           message: 'Ooops, something went wrong, your profile was not updated',
           type: NotificationType.DANGER
         } as Notification);
         console.log('Error updating user profile', error);
-        return Observable.empty();
-      });
+        return EMPTY;
+      }));
   }
 
   silentSave(profile: Profile) {
@@ -86,12 +86,12 @@ export class ProfileService {
       }
     });
     return this.http
-      .patch(this.profileUrl, payload, { headers: this.headers })
-      .map((response: HttpResponse<User>) => response);
+      .patch(this.profileUrl, payload, { headers: this.headers }).pipe(
+      map((response: HttpResponse<User>) => response));
   }
 
   get sufficient(): Observable<boolean> {
-    return this.current.map(current => {
+    return this.current.pipe(map(current => {
       if (current &&
         current.fullName &&
         current.email &&
@@ -103,7 +103,7 @@ export class ProfileService {
       } else {
         return false;
       }
-    });
+    }));
   }
 
 }

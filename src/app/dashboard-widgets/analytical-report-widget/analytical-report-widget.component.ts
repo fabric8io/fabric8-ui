@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-
-import { Observable, Subscription } from 'rxjs/Rx';
-
+import { ConnectableObservable, Observable, Subscription } from 'rxjs';
+import { publish } from 'rxjs/operators';
 import {
   Build,
   BuildConfig,
@@ -44,8 +43,8 @@ export class AnalyticalReportWidgetComponent implements OnInit {
   }
 
   ngOnInit() {
-    let bcs = this.pipelinesService.current
-      .publish();
+    let bcs = this.pipelinesService.current.pipe(
+      publish()) as ConnectableObservable<BuildConfig[]>;
     this.buildConfigs = bcs;
 
     this.buildConfigs.subscribe((data) => {

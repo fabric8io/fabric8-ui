@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FeatureFlagResolver } from 'ngx-feature-flag';
-
 import { ContextResolver } from './shared/context-resolver.service';
 import { ProfileResolver } from './shared/profile-resolver.service';
 
@@ -33,15 +32,6 @@ export const routes: Routes = [
     loadChildren: './getting-started/getting-started.module#GettingStartedModule',
     data: {
       title: 'Getting Started'
-    }
-  },
-
-  // Verify Email
-  {
-    path: '_verifyEmail',
-    loadChildren: './profile/email-verification/email-verification.module#EmailVerificationModule',
-    data: {
-      title: 'Verify'
     }
   },
 

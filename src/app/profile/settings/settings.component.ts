@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { UserService } from 'ngx-login-client';
+import { User, UserService } from 'ngx-login-client';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -11,24 +11,25 @@ import { Subscription } from 'rxjs';
 export class SettingsComponent implements OnInit, OnDestroy {
 
   loggedInUserName: String;
-  subscriptions: Subscription[] = [];
 
-  constructor(private userService: UserService) { }
+  private readonly subscriptions: Subscription[] = [];
 
-  ngOnInit() {
+  constructor(
+    private readonly userService: UserService
+  ) { }
+
+  ngOnInit(): void {
     this.subscriptions.push(this.userService.loggedInUser.subscribe(
-      val => {
-        if (val.id) {
-          this.loggedInUserName = val.attributes.username;
+      (user: User): void => {
+        if (user.id) {
+          this.loggedInUserName = user.attributes.username;
         } else {
           this.loggedInUserName = '';
         }
       }));
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
   }
 }

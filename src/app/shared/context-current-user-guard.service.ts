@@ -6,12 +6,10 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-
 import { Notification, Notifications, NotificationType } from 'ngx-base';
 import { Contexts } from 'ngx-fabric8-wit';
 import { UserService } from 'ngx-login-client';
-import { Observable } from 'rxjs/Observable';
-import { combineLatest } from 'rxjs/observable/combineLatest';
+import { combineLatest ,  Observable } from 'rxjs';
 import { filter, first, map, tap } from 'rxjs/operators';
 
 @Injectable()

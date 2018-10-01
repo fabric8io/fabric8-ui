@@ -1,17 +1,15 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import _ from 'lodash';
-import { Observable } from 'rxjs';
-
+import { get } from 'lodash';
 import {
   HelperService,
   ProjectSummaryService,
   Summary
 } from 'ngx-launcher';
-
-import { ContextService } from '../../../shared/context.service';
-
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { AuthenticationService } from 'ngx-login-client';
+import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError, mergeMap } from 'rxjs/operators';
+import { ContextService } from '../../../shared/context.service';
 
 @Injectable()
 export class AppLauncherProjectSummaryService implements ProjectSummaryService {
@@ -54,14 +52,14 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
   setup(summary: Summary, retry?: number): Observable<any> {
     this.headers = this.headers.set('X-Execution-Step-Index', String(retry || 0));
 
-    return this.context.current.flatMap(c => {
+    return this.context.current.pipe(mergeMap(c => {
       let summaryEndPoint = this.END_POINT + (summary.mission ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
       let payload = this.getPayload(summary, c.space ? c.space.id : '', c.name);
       console.log('URL - ', summaryEndPoint);
       return this.http
-        .post(summaryEndPoint, payload, { headers: this.headers })
-        .catch(this.handleError);
-      });
+        .post(summaryEndPoint, payload, { headers: this.headers }).pipe(
+        catchError(this.handleError));
+      }));
   }
 
   private handleError(error: HttpErrorResponse | any) {
@@ -76,28 +74,28 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
       errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-    return Observable.throw(errMsg);
+    return observableThrowError(errMsg);
   }
 
   private getPayload(summary: Summary, spaceId: string, spaceName: string) {
     let payload = '';
-    let missionId: string = _.get(summary, 'mission.id', '');
+    let missionId: string = get(summary, 'mission.id', '');
     let blankMissionId: string = 'blank-mission';
     if (missionId === blankMissionId) {
-      missionId = _.get(summary, 'mission.meta', '');
+      missionId = get(summary, 'mission.meta', '');
       payload += 'emptyGitRepository=true&';
     }
     payload += 'mission=' + missionId;
-    payload += '&runtime=' + _.get(summary, 'runtime.id', '');
-    payload += '&runtimeVersion=' + _.get(summary, 'runtime.version.id', '');
-    payload += '&pipeline=' + _.get(summary, 'pipeline.id', '');
-    payload += '&projectName=' + _.get(summary, 'dependencyCheck.projectName', '');
-    payload += '&projectVersion=' + _.get(summary, 'dependencyCheck.projectVersion', '');
-    payload += '&gitRepository=' + _.get(summary, 'gitHubDetails.repository', '');
-    payload += '&groupId=' + _.get(summary, 'dependencyCheck.groupId', '');
+    payload += '&runtime=' + get(summary, 'runtime.id', '');
+    payload += '&runtimeVersion=' + get(summary, 'runtime.version.id', '');
+    payload += '&pipeline=' + get(summary, 'pipeline.id', '');
+    payload += '&projectName=' + get(summary, 'dependencyCheck.projectName', '');
+    payload += '&projectVersion=' + get(summary, 'dependencyCheck.projectVersion', '');
+    payload += '&gitRepository=' + get(summary, 'gitHubDetails.repository', '');
+    payload += '&groupId=' + get(summary, 'dependencyCheck.groupId', '');
     /* artifactId has to be same as projectName in OSIO to get correct links for
       stage/prod to be shown in pipelines view */
-    payload += '&artifactId=' + _.get(summary, 'dependencyCheck.projectName', '');
+    payload += '&artifactId=' + get(summary, 'dependencyCheck.projectName', '');
     payload += '&spacePath=' + spaceName;
     payload += '&space=' + spaceId;
     if (summary.dependencyEditor && summary.dependencyEditor.dependencySnapshot) {

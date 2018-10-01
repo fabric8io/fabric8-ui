@@ -5,11 +5,6 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-
-import {
-  ChartBase
-} from 'patternfly-ng/chart';
-
 import {
   cloneDeep,
   defaultsDeep,
@@ -17,7 +12,9 @@ import {
   merge,
   uniqueId
 } from 'lodash';
-
+import {
+  ChartBase
+} from 'patternfly-ng/chart';
 import { WorkItemBarchartConfig } from './work-item-barchart-config';
 import { WorkItemBarchartData } from './work-item-barchart-data';
 

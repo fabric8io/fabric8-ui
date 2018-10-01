@@ -6,17 +6,15 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
-
+import { isEmpty } from 'lodash';
 import { Contexts } from 'ngx-fabric8-wit';
-
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { BuildConfig } from '../../../../a-runtime-console/index';
 import { Build, isValidInputAction } from '../../../../a-runtime-console/kubernetes/model/build.model';
 import { PipelineStage } from '../../../../a-runtime-console/kubernetes/model/pipelinestage.model';
 import { InputActionDialog } from '../../../../a-runtime-console/kubernetes/ui/pipeline/input-action-dialog/input-action-dialog.component';
 import { ApplicationsStackReportComponent } from '../applications-stack-report/applications-stack-report.component';
-
-import { isEmpty } from 'lodash';
 
 export class BuildInput {
   build: Build;
@@ -43,7 +41,7 @@ export class ApplicationsListItemComponent implements DoCheck, OnInit {
   private _promoteBuildInput: BuildInput;
 
   constructor(private context: Contexts) {
-    this.contextPath = this.context.current.map(context => context.path);
+    this.contextPath = this.context.current.pipe(map(context => context.path));
   }
 
   ngOnInit(): void {

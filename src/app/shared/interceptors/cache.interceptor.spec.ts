@@ -13,11 +13,9 @@ import {
   HttpTestingController
 } from '@angular/common/http/testing';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { CacheInterceptor } from './cache.interceptor';
-
+import { Observable, of } from 'rxjs';
 import { RequestCache } from '../request-cache.service';
+import { CacheInterceptor } from './cache.interceptor';
 
 describe(`CacheHttpInterceptor`, () => {
   const testUrl: string = 'http://localhost/test';

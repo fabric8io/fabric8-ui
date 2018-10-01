@@ -1,5 +1,3 @@
-import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
-
 import { LocationStrategy } from '@angular/common';
 import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -9,8 +7,8 @@ import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { ConnectableObservable } from 'rxjs';
-import { Observable, Subject } from 'rxjs';
+import { ConnectableObservable,  Observable ,  of as observableOf, Subject } from 'rxjs';
+import { publish } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
@@ -18,6 +16,7 @@ import {
   TestContext
 } from 'testing/test-context';
 import { WorkItemsData } from '../../shared/workitem-utils';
+import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
 
 @Component({
   template: '<fabric8-create-work-item-widget [userOwnsSpace]="userOwnsSpace"></fabric8-create-work-item-widget>'
@@ -29,7 +28,7 @@ class HostComponent {
 describe('CreateWorkItemWidgetComponent', () => {
   type TestingContext = TestContext<CreateWorkItemWidgetComponent, HostComponent>;
 
-  let fakeUser: Observable<User> = Observable.of({
+  let fakeUser: Observable<User> = observableOf({
     id: 'fakeId',
     type: 'fakeType',
     attributes: {
@@ -39,7 +38,7 @@ describe('CreateWorkItemWidgetComponent', () => {
     }
   } as User);
 
-  initContext(CreateWorkItemWidgetComponent, HostComponent, {
+  const testContext = initContext(CreateWorkItemWidgetComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],
     imports: [NgArrayPipesModule, RouterModule],
     providers: [
@@ -51,7 +50,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         provide: UserService, useFactory: () => {
           let userService = createMock(UserService);
           userService.getUser.and.returnValue(fakeUser);
-          userService.loggedInUser = fakeUser.publish() as ConnectableObservable<User> & jasmine.Spy;
+          userService.loggedInUser = fakeUser.pipe(publish()) as ConnectableObservable<User> & jasmine.Spy;
           return userService;
         }
       },
@@ -59,7 +58,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         provide: WorkItemService, useFactory: () => {
           let workItemServiceMock = jasmine.createSpyObj('WorkItemService', ['buildUserIdMap', 'getWorkItems']);
           workItemServiceMock.buildUserIdMap.and.returnValue(fakeUser);
-          workItemServiceMock.getWorkItems.and.returnValue(Observable.of({ workItems: [] }) as Observable<WorkItemsData>);
+          workItemServiceMock.getWorkItems.and.returnValue(observableOf({ workItems: [] }) as Observable<WorkItemsData>);
           return workItemServiceMock;
         }
       },
@@ -77,7 +76,7 @@ describe('CreateWorkItemWidgetComponent', () => {
           };
 
           let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
-          mockRouter.events = Observable.of(mockRouterEvent);
+          mockRouter.events = observableOf(mockRouterEvent);
 
           return mockRouter;
         }
@@ -88,22 +87,22 @@ describe('CreateWorkItemWidgetComponent', () => {
     ]
   });
 
-  it('should enable buttons if the user owns the space', function(this: TestingContext) {
-    this.hostComponent.userOwnsSpace = true;
-    this.testedDirective.myWorkItemsCount = Observable.of(0);
-    this.detectChanges();
+  it('should enable buttons if the user owns the space', function() {
+    testContext.hostComponent.userOwnsSpace = true;
+    testContext.testedDirective.myWorkItemsCount = observableOf(0);
+    testContext.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).not.toBeNull();
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).not.toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).not.toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).not.toBeNull();
 
   });
 
-  it('should disable buttons if the user does not own the space', function(this: TestingContext) {
-    this.hostComponent.userOwnsSpace = false;
-    this.testedDirective.myWorkItemsCount = Observable.of(0);
-    this.detectChanges();
+  it('should disable buttons if the user does not own the space', function() {
+    testContext.hostComponent.userOwnsSpace = false;
+    testContext.testedDirective.myWorkItemsCount = observableOf(0);
+    testContext.detectChanges();
 
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).toBeNull();
-    expect(this.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).toBeNull();
+    expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-create-button'))).toBeNull();
   });
 });

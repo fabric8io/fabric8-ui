@@ -1,5 +1,4 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-
 import { Broadcaster, Notification, Notifications, NotificationType } from 'ngx-base';
 import {
   Context,
@@ -10,22 +9,29 @@ import {
 } from 'ngx-fabric8-wit';
 import { Feature, FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
-import { Observable, Scheduler, Subscription } from 'rxjs';
-import { ConnectableObservable } from 'rxjs/observable/ConnectableObservable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { of } from 'rxjs/observable/of';
+import {
+  asapScheduler,
+  ConnectableObservable,
+  EMPTY,
+  forkJoin,
+  Observable,
+  of,
+  ReplaySubject,
+  Subject,
+  Subscription,
+  throwError as observableThrowError
+} from 'rxjs';
 import {
   catchError,
   distinctUntilChanged,
   distinctUntilKeyChanged,
   filter,
   map,
+  multicast,
   switchMap,
   tap,
   withLatestFrom
 } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Subject } from 'rxjs/Subject';
 import { MenusService } from '../layout/header/menus.service';
 import { Navigation } from '../models/navigation';
 import { ExtProfile, ProfileService } from '../profile/profile.service';
@@ -109,8 +115,9 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
         } else {
           return {} as Context;
         }
-      })
-    ).multicast(() => new ReplaySubject(1));
+      }),
+      multicast(() => new ReplaySubject(1))
+    ) as ConnectableObservable<Context>;
     this._default.connect();
   }
 
@@ -191,7 +198,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
               catchError((err: string): Observable<RawContext> => {
                 console.log(`Space with name ${val.space} and owner ${val.user}
                   from path ${val.url} was not found because of ${err}`);
-                return Observable.throw(`Space with name ${val.space} and owner ${val.user}
+                return observableThrowError(`Space with name ${val.space} and owner ${val.user}
                   from path ${val.url} was not found because of ${err}`);
               })
             );
@@ -205,7 +212,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
               }),
               catchError((err: string): Observable<RawContext> => {
                 console.log(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
-                return Observable.throw(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
+                return observableThrowError(`Owner ${val.user} from path ${val.url} was not found because of ${err}`);
               })
             );
         }
@@ -244,8 +251,9 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
       }),
       tap((val: Context): void => {
         this._current.next(val);
-      })
-    ).multicast(() => new Subject());
+      }),
+      multicast(() => new Subject())
+    ) as ConnectableObservable<Context>;
     res.connect();
     return res;
   }
@@ -289,7 +297,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
 
   private loadUser(userName: string): Observable<User> {
     if (this.checkForReservedWords(userName)) {
-      return Observable.throw(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), asapScheduler);
     }
     return this.userService
       .getUserByUsername(userName)
@@ -306,9 +314,9 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
 
   private loadSpace(userName: string, spaceName: string): Observable<Space> {
     if (this.checkForReservedWords(userName)) {
-      return Observable.throw(new Error(`User name ${userName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`User name ${userName} contains reserved characters.`), asapScheduler);
     } else if (this.checkForReservedWords(spaceName)) {
-      return Observable.throw(new Error(`Space name ${spaceName} contains reserved characters.`), Scheduler.asap);
+      return observableThrowError(new Error(`Space name ${spaceName} contains reserved characters.`), asapScheduler);
     }
 
     if (userName && spaceName) {
@@ -334,14 +342,15 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
   }
 
   private loadRecentContexts(): Observable<Context[]> {
-    return this.profileService.current.switchMap((profile: ExtProfile): Observable<Context[]> => {
+    return this.profileService.current.pipe(switchMap((profile: ExtProfile): Observable<Context[]> => {
       if (profile.store.recentContexts && profile.store.recentContexts.length > 0) {
         return forkJoin((profile.store.recentContexts as RawContext[])
           .map((raw: RawContext): Observable<Context> => {
             if (raw.space) {
               // if getSpaceById() throws an error, forkJoin will not complete and loadRecent will not return
-              return this.spaceService.getSpaceById(raw.space).catch((): Observable<Space> => of(null))
+              return this.spaceService.getSpaceById(raw.space)
                 .pipe(
+                  catchError((): Observable<Space> => of(null)),
                   map((val: Space): Context => {
                     if (val) {
                       return this.buildContext({ space: val } as RawContext);
@@ -354,7 +363,7 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
                 .pipe(
                   catchError((err: string): Observable<Context> => {
                     console.log('Unable to restore recent context', err);
-                    return Observable.empty<Context>();
+                    return EMPTY;
                   }),
                   map((val: Context | User): Context => {
                     return this.buildContext({ user: val } as RawContext);
@@ -362,14 +371,16 @@ export class ContextService extends RecentUtils<Context> implements Contexts {
                 );
             }
           }))
-          .map((contexts: Context[]): Context[] => {
-            // remove null context values resulting from getSpaceById throwing an error
-            return contexts.filter((context: Context): boolean => context !== null);
-          });
+          .pipe(
+            map((contexts: Context[]): Context[] => {
+              // remove null context values resulting from getSpaceById throwing an error
+              return contexts.filter((context: Context): boolean => context !== null);
+            })
+          );
       } else {
         return of([]);
       }
-    });
+    }));
   }
 
   private saveRecentContexts(recent: Context[]): void {

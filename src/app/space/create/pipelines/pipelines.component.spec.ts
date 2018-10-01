@@ -7,18 +7,7 @@ import {
   async,
   TestBed
 } from '@angular/core/testing';
-
-import {
-  BehaviorSubject,
-  Observable
-} from 'rxjs';
-
-import { createMock } from 'testing/mock';
-import {
-  initContext,
-  TestContext
-} from 'testing/test-context';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { Broadcaster } from 'ngx-base';
 import {
   BsDropdownConfig,
@@ -35,10 +24,18 @@ import {
 } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { ToolbarModule } from 'patternfly-ng/toolbar';
-
+import {
+  BehaviorSubject,
+  never as observableNever,
+  Observable,
+  of as observableOf
+} from 'rxjs';
+import { createMock } from 'testing/mock';
+import {
+  initContext,
+  TestContext
+} from 'testing/test-context';
 import { BuildConfig } from '../../../../a-runtime-console/index';
-
-import { RouterTestingModule } from '@angular/router/testing';
 import { PipelinesComponent } from './pipelines.component';
 import { PipelinesService } from './services/pipelines.service';
 
@@ -83,15 +80,15 @@ describe('PipelinesComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
 
     authenticationService = createMock(AuthenticationService);
     authenticationService.getGitHubToken.and.returnValue('some-token');
 
     pipelinesService.getCurrentPipelines.and.returnValue(
-      Observable.of([
+      observableOf([
         {
           id: 'app',
           name: 'app',
@@ -129,7 +126,7 @@ describe('PipelinesComponent', () => {
     broadcaster = { broadcast: jasmine.createSpy('broadcast') };
   });
 
-  initContext(PipelinesComponent, HostComponent, {
+  const testContext = initContext(PipelinesComponent, HostComponent, {
     imports: [
       BsDropdownModule.forRoot(),
       CommonModule,
@@ -153,29 +150,29 @@ describe('PipelinesComponent', () => {
 
   describe('Pipelines component with url', () => {
     beforeAll(() => {
-      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(Observable.of('http://example.com/browse/openshift'));
+      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(observableOf('http://example.com/browse/openshift'));
     });
 
-    it('should set OpenShift Console URL', function(this: TestingContext) {
-      expect(this.testedDirective.consoleAvailable).toBeTruthy();
-      expect(this.testedDirective.openshiftConsoleUrl).toEqual('http://example.com/browse/openshift');
+    it('should set OpenShift Console URL', function() {
+      expect(testContext.testedDirective.consoleAvailable).toBeTruthy();
+      expect(testContext.testedDirective.openshiftConsoleUrl).toEqual('http://example.com/browse/openshift');
     });
   });
 
 
   describe('Pipelines component with empty url', () => {
     beforeAll(() => {
-      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(Observable.of(''));
+      pipelinesService.getOpenshiftConsoleUrl.and.returnValue(observableOf(''));
     });
 
-    it('should hide OpenShift Console URL', function(this: TestingContext) {
-      expect(this.testedDirective.consoleAvailable).toBeFalsy();
-      expect(this.testedDirective.openshiftConsoleUrl).toEqual('');
+    it('should hide OpenShift Console URL', function() {
+      expect(testContext.testedDirective.consoleAvailable).toBeFalsy();
+      expect(testContext.testedDirective.openshiftConsoleUrl).toEqual('');
     });
   });
 
-  it('should only display pipelines within the current space', function(this: TestingContext) {
-    expect(this.testedDirective.pipelines as any[]).toContain({
+  it('should only display pipelines within the current space', function() {
+    expect(testContext.testedDirective.pipelines as any[]).toContainEqual({
       id: 'app',
       name: 'app',
       gitUrl: 'https://example.com/app.git',
@@ -191,7 +188,7 @@ describe('PipelinesComponent', () => {
         space: 'space'
       }
     });
-    expect(this.testedDirective.pipelines as any[]).toContain({
+    expect(testContext.testedDirective.pipelines as any[]).toContainEqual({
       id: 'app2',
       name: 'app2',
       gitUrl: 'https://example.com/app2.git',
@@ -199,7 +196,7 @@ describe('PipelinesComponent', () => {
         space: 'space'
       }
     });
-    expect(this.testedDirective.pipelines as any[]).not.toContain({
+    expect(testContext.testedDirective.pipelines as any[]).not.toContainEqual({
       id: 'app3',
       name: 'app3',
       gitUrl: 'https://example.com/app3.git',
@@ -210,8 +207,8 @@ describe('PipelinesComponent', () => {
   });
 
   describe('filtering', () => {
-    it('should filter by application', function(this: TestingContext) {
-      this.testedDirective.filterChange(
+    it('should filter by application', function() {
+      testContext.testedDirective.filterChange(
         {
           appliedFilters: [
             {
@@ -226,7 +223,7 @@ describe('PipelinesComponent', () => {
           ]
         }
       );
-      expect(this.testedDirective.pipelines as any[]).toEqual([{
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([{
         id: 'app2',
         name: 'app2',
         gitUrl: 'https://example.com/app2.git',
@@ -234,11 +231,11 @@ describe('PipelinesComponent', () => {
           space: 'space'
         }
       }]);
-      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
+      expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
     });
 
-    it('should filter by codebase', function(this: TestingContext) {
-      this.testedDirective.filterChange(
+    it('should filter by codebase', function() {
+      testContext.testedDirective.filterChange(
         {
           appliedFilters: [
             {
@@ -253,7 +250,7 @@ describe('PipelinesComponent', () => {
           ]
         }
       );
-      expect(this.testedDirective.pipelines as any[]).toEqual([{
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([{
         id: 'app2',
         name: 'app2',
         gitUrl: 'https://example.com/app2.git',
@@ -261,11 +258,11 @@ describe('PipelinesComponent', () => {
           space: 'space'
         }
       }]);
-      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
+      expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
     });
 
-    it('should display all pipelines in space when filters cleared', function(this: TestingContext) {
-      this.testedDirective.filterChange(
+    it('should display all pipelines in space when filters cleared', function() {
+      testContext.testedDirective.filterChange(
         {
           appliedFilters: [
             {
@@ -280,7 +277,7 @@ describe('PipelinesComponent', () => {
           ]
         }
       );
-      expect(this.testedDirective.pipelines as any[]).toEqual([{
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([{
         id: 'app2',
         name: 'app2',
         gitUrl: 'https://example.com/app2.git',
@@ -289,8 +286,8 @@ describe('PipelinesComponent', () => {
         }
       }]);
 
-      this.testedDirective.filterChange({ appliedFilters: [] });
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      testContext.testedDirective.filterChange({ appliedFilters: [] });
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app',
           name: 'app',
@@ -316,13 +313,13 @@ describe('PipelinesComponent', () => {
           }
         }
       ]);
-      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
+      expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
     });
   });
 
   describe('sorting', () => {
-    it('should sort by application descending', function(this: TestingContext) {
-      this.testedDirective.sortChange({
+    it('should sort by application descending', function() {
+      testContext.testedDirective.sortChange({
         field: {
           id: 'application',
           title: 'Application',
@@ -330,7 +327,7 @@ describe('PipelinesComponent', () => {
         },
         isAscending: false
       });
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
           name: 'app2',
@@ -358,8 +355,8 @@ describe('PipelinesComponent', () => {
       ]);
     });
 
-    it('should sort by application ascending', function(this: TestingContext) {
-      this.testedDirective.sortChange({
+    it('should sort by application ascending', function() {
+      testContext.testedDirective.sortChange({
         field: {
           id: 'application',
           title: 'Application',
@@ -367,7 +364,7 @@ describe('PipelinesComponent', () => {
         },
         isAscending: true
       });
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app',
           name: 'app',
@@ -395,8 +392,8 @@ describe('PipelinesComponent', () => {
       ]);
     });
 
-    it('should sort by codebase descending', function(this: TestingContext) {
-      this.testedDirective.sortChange({
+    it('should sort by codebase descending', function() {
+      testContext.testedDirective.sortChange({
         field: {
           id: 'codebase',
           title: 'Codebase',
@@ -404,7 +401,7 @@ describe('PipelinesComponent', () => {
         },
         isAscending: false
       });
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
           name: 'app2',
@@ -432,8 +429,8 @@ describe('PipelinesComponent', () => {
       ]);
     });
 
-    it('should sort by codebase ascending', function(this: TestingContext) {
-      this.testedDirective.sortChange({
+    it('should sort by codebase ascending', function() {
+      testContext.testedDirective.sortChange({
         field: {
           id: 'codebase',
           title: 'Codebase',
@@ -441,7 +438,7 @@ describe('PipelinesComponent', () => {
         },
         isAscending: true
       });
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app',
           name: 'app',
@@ -469,8 +466,8 @@ describe('PipelinesComponent', () => {
       ]);
     });
 
-    it('should sort after filters change', function(this: TestingContext) {
-      this.testedDirective.sortChange({
+    it('should sort after filters change', function() {
+      testContext.testedDirective.sortChange({
         field: {
           id: 'application',
           title: 'Application',
@@ -478,7 +475,7 @@ describe('PipelinesComponent', () => {
         },
         isAscending: true
       });
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app',
           name: 'app',
@@ -504,9 +501,9 @@ describe('PipelinesComponent', () => {
           }
         }
       ]);
-      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
+      expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
 
-      this.testedDirective.sortChange({
+      testContext.testedDirective.sortChange({
         field: {
           id: 'application',
           title: 'Application',
@@ -514,7 +511,7 @@ describe('PipelinesComponent', () => {
         },
         isAscending: false
       });
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
           name: 'app2',
@@ -540,9 +537,9 @@ describe('PipelinesComponent', () => {
           }
         }
       ]);
-      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
+      expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
 
-      this.testedDirective.filterChange(
+      testContext.testedDirective.filterChange(
         {
           appliedFilters: [
             {
@@ -557,7 +554,7 @@ describe('PipelinesComponent', () => {
           ]
         }
       );
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
           name: 'app2',
@@ -567,12 +564,12 @@ describe('PipelinesComponent', () => {
           }
         }
       ]);
-      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
+      expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(1);
 
-      this.testedDirective.filterChange({
+      testContext.testedDirective.filterChange({
         appliedFilters: []
       });
-      expect(this.testedDirective.pipelines as any[]).toEqual([
+      expect(testContext.testedDirective.pipelines as any[]).toEqual([
         {
           id: 'app2',
           name: 'app2',
@@ -598,23 +595,26 @@ describe('PipelinesComponent', () => {
           }
         }
       ]);
-      expect(this.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
+      expect(testContext.testedDirective.toolbarConfig.filterConfig.resultsCount).toEqual(2);
     });
   });
 
-  it('should trigger showAddAppOverlay on click', function(this: TestingContext) {
+  it('should trigger showAddAppOverlay on click', function(done: DoneFn) {
     // given
-    this.fixture.detectChanges();
-    this.fixture.whenStable().then(() => {
-      expect(this.fixture.nativeElement.querySelector('#appLauncherAnchor')).toBeDefined();
-      this.fixture.nativeElement.querySelector('#appLauncherAnchor').click();
-      expect(this.testedDirective.showAddAppOverlay).toHaveBeenCalled();
+    spyOn(testContext.testedDirective, 'showAddAppOverlay');
+    testContext.fixture.nativeElement.querySelector('.openshift-links .dropdown-toggle').click();
+    testContext.fixture.detectChanges();
+    testContext.fixture.whenStable().then(() => {
+      expect(testContext.fixture.nativeElement.querySelector('#appLauncherAnchor')).toBeDefined();
+      testContext.fixture.nativeElement.querySelector('#appLauncherAnchor').click();
+      expect(testContext.testedDirective.showAddAppOverlay).toHaveBeenCalled();
+      done();
     });
   });
 
-  it('should add queryParams to URL on filter change', function(this: TestingContext, done) {
-    spyOn(this.testedDirective, 'addQueryParams');
-    this.testedDirective.filterChange(
+  it('should add queryParams to URL on filter change', function(done) {
+    spyOn(testContext.testedDirective, 'addQueryParams');
+    testContext.testedDirective.filterChange(
       {
         appliedFilters: [
           {
@@ -629,9 +629,9 @@ describe('PipelinesComponent', () => {
         ]
       }
     );
-    this.fixture.detectChanges();
-    this.fixture.whenStable().then(() => {
-      expect(this.testedDirective.addQueryParams).toHaveBeenCalled();
+    testContext.fixture.detectChanges();
+    testContext.fixture.whenStable().then(() => {
+      expect(testContext.testedDirective.addQueryParams).toHaveBeenCalled();
       done();
     });
   });

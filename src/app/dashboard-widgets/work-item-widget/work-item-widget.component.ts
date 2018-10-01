@@ -1,17 +1,13 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-
-import { ConnectableObservable, Observable, Subscription } from 'rxjs';
-
 import { WorkItem, WorkItemService } from 'fabric8-planner';
-import { Contexts } from 'ngx-fabric8-wit';
-
-import { WorkItemBarchartConfig } from './work-item-barchart/work-item-barchart-config';
-import { WorkItemBarchartData } from './work-item-barchart/work-item-barchart-data';
-
 import { uniqueId } from 'lodash';
-
+import { Contexts } from 'ngx-fabric8-wit';
+import { ConnectableObservable, Observable, Subscription } from 'rxjs';
+import { map, publishReplay, switchMap, tap } from 'rxjs/operators';
 import { WorkItemsData } from '../../shared/workitem-utils';
 import { SpacesService } from './../../shared/spaces.service';
+import { WorkItemBarchartConfig } from './work-item-barchart/work-item-barchart-config';
+import { WorkItemBarchartData } from './work-item-barchart/work-item-barchart-data';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -79,20 +75,20 @@ export class WorkItemWidgetComponent implements OnInit {
   private updateWorkItems(): void {
     this.loading = true;
     this._myWorkItems =
-      this.spacesService.current.switchMap(space => {
+      this.spacesService.current.pipe(switchMap(space => {
         return this.workItemService.getWorkItems(
           100000, {expression: {'space': `${space.id}`}}
         );
-      })
-      .do((val: WorkItemsData): void => {
+      }),
+      tap((val: WorkItemsData): void => {
         if (val.totalCount) {
           this.myWorkItemsCount = val.totalCount;
         } else {
           this.myWorkItemsCount = val.workItems.length;
         }
-      })
-      .map(val => val.workItems)
-      .do(workItems => {
+      }),
+      map(val => val.workItems),
+      tap(workItems => {
         this.loading = false;
         workItems.forEach(workItem => {
           let state = workItem.attributes['system.state'];
@@ -107,8 +103,8 @@ export class WorkItemWidgetComponent implements OnInit {
           }
         });
         this.initChartData();
-      })
-      .publishReplay(1);
+      }),
+      publishReplay(1)) as ConnectableObservable<WorkItem[]>;
     this._myWorkItems.connect();
   }
 

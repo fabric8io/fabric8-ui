@@ -3,23 +3,18 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
-
-import { ConnectableObservable } from 'rxjs';
-import { Observable, Subject } from 'rxjs';
-
 import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
+import { cloneDeep } from 'lodash';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Fabric8WitModule, Spaces } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-
-import { cloneDeep } from 'lodash';
+import { ConnectableObservable,  Observable ,  of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
   initContext,
   TestContext
 } from 'testing/test-context';
-
 import { spaceMock } from '../../shared/context.service.mock';
 import { WorkItemsData } from '../../shared/workitem-utils';
 import { WorkItemWidgetComponent } from './work-item-widget.component';
@@ -33,7 +28,7 @@ class HostComponent {}
 describe('Home: WorkItemWidgetComponent', () => {
   type TestingContext = TestContext<WorkItemWidgetComponent, HostComponent>;
 
-  let fakeUser: Observable<User> = Observable.of({
+  let fakeUser: Observable<User> = observableOf({
     id: 'fakeId',
     type: 'fakeType',
     attributes: {
@@ -74,11 +69,11 @@ describe('Home: WorkItemWidgetComponent', () => {
 
   let fakeWorkItems: WorkItem[] = [fakeWorkItem1, fakeWorkItem2, fakeWorkItem3, fakeWorkItem4, fakeWorkItem5];
 
-  let fakeWorkItemsObs: Observable<WorkItemsData> = Observable.of({
+  let fakeWorkItemsObs: Observable<WorkItemsData> = observableOf({
     workItems: fakeWorkItems
   } as WorkItemsData);
 
-  initContext(WorkItemWidgetComponent, HostComponent, {
+  const testContext: TestingContext = initContext(WorkItemWidgetComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],
     imports: [
       Fabric8WitModule,
@@ -115,13 +110,13 @@ describe('Home: WorkItemWidgetComponent', () => {
             'url': 'mock-url'
           };
           let mockRouter = jasmine.createSpyObj('Router', ['createUrlTree', 'navigate', 'serializeUrl']);
-          mockRouter.events = Observable.of(mockRouterEvent);
+          mockRouter.events = observableOf(mockRouterEvent);
           return mockRouter;
         }
       }, {
         provide: Spaces, useValue: {
-          'current': Observable.of(spaceMock),
-          'recent': Observable.of([spaceMock])
+          'current': observableOf(spaceMock),
+          'recent': observableOf([spaceMock])
         } as Spaces
       }, {
         provide: FilterService, useFactory: () => {
@@ -135,62 +130,62 @@ describe('Home: WorkItemWidgetComponent', () => {
     ]
   });
 
-  it('Should show blank state if there are no workitems', function(this: TestingContext) {
-    this.testedDirective.workItems.length = 0;
-    this.detectChanges();
-    expect(this.fixture.debugElement.query(By.css('.f8-blank-slate-card'))).not.toBeNull();
+  it('Should show blank state if there are no workitems', function() {
+    testContext.testedDirective.workItems.length = 0;
+    testContext.detectChanges();
+    expect(testContext.fixture.debugElement.query(By.css('.f8-blank-slate-card'))).not.toBeNull();
   });
 
-  it('Should have logged in user', function(this: TestingContext) {
-    expect(this.testedDirective.loggedInUser).not.toBeNull();
+  it('Should have logged in user', function() {
+    expect(testContext.testedDirective.loggedInUser).not.toBeNull();
   });
 
-  it('Should have recent space', function(this: TestingContext) {
-    expect(this.testedDirective.recentSpaces.length).toBe(1);
-    expect(this.testedDirective.recentSpaces[0].name).toBe('space1');
+  it('Should have recent space', function() {
+    expect(testContext.testedDirective.recentSpaces.length).toBe(1);
+    expect(testContext.testedDirective.recentSpaces[0].name).toBe('space1');
   });
 
-  it('Should have select element', function(this: TestingContext) {
-    let select = this.fixture.debugElement.query(By.css('.work-item-combobox'));
+  it('Should have select element', function() {
+    let select = testContext.fixture.debugElement.query(By.css('.work-item-combobox'));
     expect(select).not.toBeNull();
   });
 
-  it('Should have select element options', function(this: TestingContext) {
-    let options = this.fixture.debugElement.queryAll(By.css('.work-item-combobox option'));
+  it('Should have select element options', function() {
+    let options = testContext.fixture.debugElement.queryAll(By.css('.work-item-combobox option'));
     expect(options.length).toBe(2);
   });
 
-  it('should have set the index after sifting through spaces', function(this: TestingContext) {
-    expect(this.testedDirective.recentSpaceIndex).toBe(-1);
+  it('should have set the index after sifting through spaces', function() {
+    expect(testContext.testedDirective.recentSpaceIndex).toBe(-1);
   });
 
-  it('should set relational data to an empty obj if it does not exist prior', function(this: TestingContext) {
+  it('should set relational data to an empty obj if it does not exist prior', function() {
     expect(fakeWorkItem1.relationalData).toBeDefined();
     expect(fakeWorkItem1.relationalData).toEqual({});
   });
 
-  it('should not overwrite pre-existing relational data', function(this: TestingContext) {
+  it('should not overwrite pre-existing relational data', function() {
     expect(fakeWorkItem2.relationalData).toEqual({parent: fakeWorkItem3});
   });
 
   describe('#fetchWorkItems', () => {
 
-    it('should fetch the correct work items', function(this: TestingContext) {
-      this.testedDirective.workItems.length = 0;
-      this.testedDirective.fetchWorkItems();
-      expect(this.testedDirective.workItems).toEqual(fakeWorkItems);
+    it('should fetch the correct work items', function() {
+      testContext.testedDirective.workItems.length = 0;
+      testContext.testedDirective.fetchWorkItems();
+      expect(testContext.testedDirective.workItems).toEqual(fakeWorkItems);
     });
 
-    it('should update the recentSpaceIndex when it filters through all the work items', function(this: TestingContext) {
-      this.testedDirective.workItems.length = 0;
-      this.testedDirective.fetchWorkItems();
-      expect(this.testedDirective.recentSpaceIndex).toBe(-1);
+    it('should update the recentSpaceIndex when it filters through all the work items', function() {
+      testContext.testedDirective.workItems.length = 0;
+      testContext.testedDirective.fetchWorkItems();
+      expect(testContext.testedDirective.recentSpaceIndex).toBe(-1);
     });
 
-    it('should not fetch closed workitems', function(this: TestingContext) {
+    it('should not fetch closed workitems', function() {
       fakeWorkItem1.attributes['system.state'] = 'closed';
-      this.testedDirective.fetchWorkItems();
-      expect(this.testedDirective.workItems).toEqual(fakeWorkItems.slice(1));
+      testContext.testedDirective.fetchWorkItems();
+      expect(testContext.testedDirective.workItems).toEqual(fakeWorkItems.slice(1));
     });
   });
 });

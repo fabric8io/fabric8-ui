@@ -1,10 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-
 import { Contexts } from 'ngx-fabric8-wit';
-import { Observable } from 'rxjs';
-
+import { Observable, of as observableOf } from 'rxjs';
 import { GitHubService } from '../services/github.service';
 import { ContextsMock, expectedGitHubRepoCommit, expectedGitHubRepoDetails, expectedGitHubRepoLicense } from '../services/github.service.mock';
 import { CodebasesItemDetailsComponent } from './codebases-item-details.component';
@@ -58,10 +56,10 @@ describe('Codebases Item Details Component', () => {
         'url': 'toto'
       }
     };
-    gitHubServiceMock.getRepoDetailsByUrl.and.returnValue(Observable.of(expectedGitHubRepoDetails));
-    gitHubServiceMock.getRepoLastCommitByUrl.and.returnValue(Observable.of(expectedLastCommit));
-    gitHubServiceMock.getRepoLicenseByUrl.and.returnValue(Observable.of(expectedGitHubRepoLicense));
-    gitHubServiceMock.getRepoCommitStatusByUrl.and.returnValue(Observable.of(expectedGitHubRepoCommit));
+    gitHubServiceMock.getRepoDetailsByUrl.and.returnValue(observableOf(expectedGitHubRepoDetails));
+    gitHubServiceMock.getRepoLastCommitByUrl.and.returnValue(observableOf(expectedLastCommit));
+    gitHubServiceMock.getRepoLicenseByUrl.and.returnValue(observableOf(expectedGitHubRepoLicense));
+    gitHubServiceMock.getRepoCommitStatusByUrl.and.returnValue(observableOf(expectedGitHubRepoCommit));
     fixture.detectChanges();
 
     // when init

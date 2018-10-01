@@ -1,13 +1,10 @@
 import { CommonModule, LocationStrategy } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
 import { Context, Contexts } from 'ngx-fabric8-wit';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, never as observableNever,  Observable, of as observableOf } from 'rxjs';
 import { initContext, TestContext } from 'testing/test-context';
-
 import { Build } from '../../../../a-runtime-console/index';
-
 import { ApplicationsListItemComponent } from './applications-list-item.component';
 
 @Component({
@@ -100,13 +97,13 @@ describe('ApplicationsListItemComponent', () => {
           }
         }
       } as Context),
-      recent: Observable.never(),
-      default: Observable.never()
+      recent: observableNever(),
+      default: observableNever()
     };
-    mockRouter.events = Observable.of(mockRouterEvent);
+    mockRouter.events = observableOf(mockRouterEvent);
   });
 
-  initContext(ApplicationsListItemComponent, HostComponent, {
+  const testContext = initContext(ApplicationsListItemComponent, HostComponent, {
     imports: [
       CommonModule,
       RouterModule
@@ -126,37 +123,37 @@ describe('ApplicationsListItemComponent', () => {
   });
 
   describe('Applications list item with build config', () => {
-    it('Build config should be set', function(this: TestingContext) {
-      expect(this.testedDirective.buildConfig as any).toEqual(buildConfig);
+    it('Build config should be set', function() {
+      expect(testContext.testedDirective.buildConfig as any).toEqual(buildConfig);
     });
 
-    it('Expand toggle should be called', function(this: TestingContext) {
-      expect(this.testedDirective.expanded).toBeFalsy();
-      this.testedDirective.toggleExpanded();
-      expect(this.testedDirective.expanded).toBeTruthy();
+    it('Expand toggle should be called', function() {
+      expect(testContext.testedDirective.expanded).toBeFalsy();
+      testContext.testedDirective.toggleExpanded();
+      expect(testContext.testedDirective.expanded).toBeTruthy();
     });
 
-    it('Should set service URL', function(this: TestingContext) {
-      expect(this.testedDirective.applicationUrl).toEqual('https://example.com/app1.git');
+    it('Should set service URL', function() {
+      expect(testContext.testedDirective.applicationUrl).toEqual('https://example.com/app1.git');
     });
 
-    it('Pipeline should be available', function(this: TestingContext) {
-      expect(this.testedDirective.pipelineAvailable).toBeTruthy();
+    it('Pipeline should be available', function() {
+      expect(testContext.testedDirective.pipelineAvailable).toBeTruthy();
     });
 
-    it('Should set build number', function(this: TestingContext) {
-      expect(this.testedDirective.promoteBuildInput.build.buildNumber).toEqual('1');
+    it('Should set build number', function() {
+      expect(testContext.testedDirective.promoteBuildInput.build.buildNumber).toEqual('1');
     });
 
-    it('Should set stage name', function(this: TestingContext) {
-      expect(this.testedDirective.promoteBuildInput.stage.name).toEqual('Rollout to Run');
+    it('Should set stage name', function() {
+      expect(testContext.testedDirective.promoteBuildInput.stage.name).toEqual('Rollout to Run');
     });
 
-    it('Should call proceed', function(this: TestingContext) {
+    it('Should call proceed', function() {
       let mockInputActionDialog: any = jasmine.createSpyObj('InputActionDialog', ['proceed']);
 
-      this.testedDirective.inputActionDialog = mockInputActionDialog;
-      this.testedDirective.promoteBuild();
+      testContext.testedDirective.inputActionDialog = mockInputActionDialog;
+      testContext.testedDirective.promoteBuild();
       expect(mockInputActionDialog.proceed).toHaveBeenCalled();
     });
   });

@@ -1,49 +1,48 @@
 {
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true,
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true
+  },
+  "atom": { "rewriteTsconfig": false },
+  "buildOnSave": false,
+  "compileOnSave": false,
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
+    "inlineSources": true,
+    "lib": [ "dom", "es6" ],
+    "module": "es2015",
+    "moduleResolution": "node",
     "noEmitHelpers": true,
-    "strictNullChecks": false,
-    "noUnusedLocals": false,
-    "skipLibCheck": true,
     "noStrictGenericChecks": true,
-    "baseUrl": "./src",
+    "noUnusedLocals": false,
     "paths": {
-      "@angular/*": [
-        "../node_modules/@angular/*"
-      ],
-      "rxjs": [
-        "../node_modules/rxjs"
-      ]
+      "@angular/*": ["../node_modules/@angular/*"],
+      "rxjs": ["../node_modules/rxjs"]
     },
-    "lib": [
-      "dom",
-      "es6"
-    ],
+    "removeComments": false,
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "stripInternal": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5",
     "types": [
+      "jest",
       "jasmine",
       "node",
       "protractor",
-      "selenium-webdriver",
-      "source-map",
       "segment-analytics",
+      "selenium-webdriver",
       "webpack"
     ]
   },
   "exclude": [
     "node_modules",
     "dist"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": true,
-    "useWebpackText": true
-  },
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "atom": { "rewriteTsconfig": false }
+  ]
 }
