@@ -18,6 +18,7 @@ import {
   empty,
   from,
   Observable,
+  of,
   ReplaySubject,
   Subject,
   Subscription,
@@ -81,6 +82,7 @@ export class DeploymentsService implements OnDestroy {
   private readonly appsObservables: Map<string, Observable<Application[]>> = new Map<string, Observable<Application[]>>();
   private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
   private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData[]>> = new Map<string, Subject<TimeseriesData[]>>();
+  private readonly podQuotaRequirements: Map<string, Subject<PodQuotaRequirement>> = new Map<string, Subject<PodQuotaRequirement>>();
   private readonly frontLoadWindowWidth: number;
 
   private readonly serviceSubscriptions: Subscription[] = [];
@@ -167,7 +169,7 @@ export class DeploymentsService implements OnDestroy {
       this.getEnvironmentCpuStat(spaceId, environmentName),
       this.getEnvironmentMemoryStat(spaceId, environmentName)
     ).pipe(
-      withLatestFrom(this.apiService.getQuotaRequirementPerPod(spaceId, environmentName, applicationId)),
+      withLatestFrom(this.getQuotaRequirementPerPod(spaceId, environmentName, applicationId)),
       map((v: [[CpuStat, MemoryStat], PodQuotaRequirement]): boolean => {
         const cpuStat: CpuStat = v[0][0];
         const memStat: ScaledMemoryStat = ScaledMemoryStat.from(v[0][1], MemoryUnit.B);
@@ -189,11 +191,11 @@ export class DeploymentsService implements OnDestroy {
       this.getEnvironmentMemoryStat(spaceId, environmentName)
     ).pipe(
       first(),
-      withLatestFrom(this.apiService.getQuotaRequirementPerPod(spaceId, environmentName, applicationId)),
+      withLatestFrom(this.getQuotaRequirementPerPod(spaceId, environmentName, applicationId)),
       map((v: [[CpuStat, MemoryStat], PodQuotaRequirement]): number => {
-        const requirement: PodQuotaRequirement = v[1];
         const cpuQuota: CpuStat = v[0][0];
         const memQuota: MemoryStat = ScaledMemoryStat.from(v[0][1], MemoryUnit.B);
+        const requirement: PodQuotaRequirement = v[1];
 
         const maxCpu: number = Math.floor(cpuQuota.quota / requirement.cpucores);
         const maxMem: number = Math.floor(memQuota.quota / requirement.memory);
@@ -407,7 +409,7 @@ export class DeploymentsService implements OnDestroy {
   }
 
   private getTimeseriesData(spaceId: string, environmentName: string, applicationId: string, maxSamples: number): Observable<TimeseriesData[]> {
-    const key: string = `${spaceId}:${applicationId}:${environmentName}`;
+    const key: string = DeploymentsService.makeCacheKey(spaceId, environmentName, applicationId);
     if (!this.timeseriesSubjects.has(key)) {
       const subject: Subject<TimeseriesData[]> = new ReplaySubject<TimeseriesData[]>(this.timeseriesSamples);
 
@@ -499,6 +501,30 @@ export class DeploymentsService implements OnDestroy {
         return from(results);
       })
     );
+  }
+
+  private getQuotaRequirementPerPod(spaceId: string, environmentName: string, applicationId: string): Observable<PodQuotaRequirement> {
+    const key: string = DeploymentsService.makeCacheKey(spaceId, environmentName, applicationId);
+    if (!this.podQuotaRequirements.has(key)) {
+      const subj: Subject<PodQuotaRequirement> = new ReplaySubject<PodQuotaRequirement>(1);
+      this.podQuotaRequirements.set(key, subj);
+      this.apiService.getQuotaRequirementPerPod(spaceId, environmentName, applicationId)
+        .pipe(
+          catchError((): Observable<PodQuotaRequirement> => {
+            // 1 core/512MB is the default allocation on the backend
+            const gb: number = Math.pow(1024, 3);
+            return of({
+              cpucores: 1,
+              memory: 0.5 * gb
+            });
+          })
+        ).subscribe(subj);
+    }
+    return this.podQuotaRequirements.get(key).asObservable();
+  }
+
+  private static makeCacheKey(spaceId: string, environmentName: string, applicationId: string): string {
+    return `${spaceId}:${applicationId}:${environmentName}`;
   }
 
   private handleHttpError(header: string, response: Response): Observable<any> {

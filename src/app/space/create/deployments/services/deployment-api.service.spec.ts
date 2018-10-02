@@ -29,7 +29,7 @@ describe('DeploymentApiService', () => {
   let service: DeploymentApiService;
   let controller: HttpTestingController;
 
-  beforeEach(function(): void {
+  beforeEach((): void => {
     TestBed.configureTestingModule({
       imports: [ HttpClientTestingModule ],
       providers: [
@@ -65,7 +65,7 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#getEnvironments', (): void => {
-    it('should return result', function(done: DoneFn): void {
+    it('should return result', (done: DoneFn): void => {
       const httpResponse: EnvironmentsResponse = {
         data: [
           {
@@ -98,12 +98,12 @@ describe('DeploymentApiService', () => {
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(done: DoneFn): void {
+    it('should report errors', (done: DoneFn): void => {
       service.getEnvironments('foo spaceId').pipe(
         first()
       ).subscribe(
-          () => done.fail('should throw error'),
-          () => {
+          (): void => done.fail('should throw error'),
+          (): void => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
             controller.verify();
@@ -117,7 +117,7 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#getApplications', (): void => {
-    it('should return result', function(done: DoneFn): void {
+    it('should return result', (done: DoneFn): void => {
       const httpResponse: ApplicationsResponse = {
         data: {
           attributes: {
@@ -155,12 +155,12 @@ describe('DeploymentApiService', () => {
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(done: DoneFn): void {
+    it('should report errors', (done: DoneFn): void => {
       service.getApplications('foo spaceId').pipe(
         first()
       ).subscribe(
-          () => done.fail('should throw error'),
-          () => {
+          (): void => done.fail('should throw error'),
+          (): void => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
             controller.verify();
@@ -174,7 +174,7 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#getTimeseriesData', (): void => {
-    it('should return result', function(done: DoneFn): void {
+    it('should return result', (done: DoneFn): void => {
       const httpResponse: MultiTimeseriesResponse = {
         data: {
           cores: [
@@ -211,12 +211,12 @@ describe('DeploymentApiService', () => {
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(done: DoneFn): void {
+    it('should report errors', (done: DoneFn): void => {
       service.getTimeseriesData('foo spaceId', 'stage env', 'foo appId', 1, 2).pipe(
         first()
       ).subscribe(
-          () => done.fail('should throw error'),
-          () => {
+          (): void => done.fail('should throw error'),
+          (): void => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
             controller.verify();
@@ -230,7 +230,7 @@ describe('DeploymentApiService', () => {
   });
 
   describe('#getLatestTimeseriesData', () => {
-    it('should return result', function(done: DoneFn): void {
+    it('should return result', (done: DoneFn): void => {
       const httpResponse: TimeseriesResponse = {
         data: {
           attributes: {
@@ -263,12 +263,12 @@ describe('DeploymentApiService', () => {
       req.flush(httpResponse);
     });
 
-    it('should report errors', function(done: DoneFn): void {
+    it('should report errors', (done: DoneFn): void => {
       service.getLatestTimeseriesData('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe(
-          () => done.fail('should throw error'),
-          () => {
+          (): void => done.fail('should throw error'),
+          (): void => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
             controller.verify();
@@ -281,8 +281,8 @@ describe('DeploymentApiService', () => {
     });
   });
 
-  describe('#deleteDeployment', () => {
-    it('should return response', function(done: DoneFn): void {
+  describe('#deleteDeployment', (): void => {
+    it('should return response', (done: DoneFn): void => {
       service.deleteDeployment('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe((): void => {
@@ -296,12 +296,12 @@ describe('DeploymentApiService', () => {
       req.flush('');
     });
 
-    it('should report errors', function(done: DoneFn): void {
+    it('should report errors', (done: DoneFn): void => {
       service.deleteDeployment('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
       ).subscribe(
-          () => done.fail('should throw error'),
-          () => {
+          (): void => done.fail('should throw error'),
+          (): void => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
             controller.verify();
@@ -314,8 +314,8 @@ describe('DeploymentApiService', () => {
     });
   });
 
-  describe('#scalePods', () => {
-    it('should return response', function(done: DoneFn): void {
+  describe('#scalePods', (): void => {
+    it('should return response', (done: DoneFn): void => {
       service.scalePods('foo spaceId', 'stage env', 'foo appId', 5).pipe(
         first()
       ).subscribe((): void => {
@@ -329,12 +329,12 @@ describe('DeploymentApiService', () => {
       req.flush('');
     });
 
-    it('should report errors', function(done: DoneFn): void {
+    it('should report errors', (done: DoneFn): void => {
       service.scalePods('foo spaceId', 'stage env', 'foo appId', 5).pipe(
         first()
       ).subscribe(
-          () => done.fail('should throw error'),
-          () => {
+          (): void => done.fail('should throw error'),
+          (): void => {
             expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
             expect(TestBed.get(Logger).error).toHaveBeenCalled();
             controller.verify();
@@ -347,10 +347,10 @@ describe('DeploymentApiService', () => {
     });
   });
 
-  describe('#getQuotaRequirementPerPod', () => {
+  describe('#getQuotaRequirementPerPod', (): void => {
     const gb: number = Math.pow(1024, 3);
 
-    it('should return result', function(done: DoneFn): void {
+    it('should return result', (done: DoneFn): void => {
       const httpResponse: PodQuotaRequirementResponse = {
         data: {
           limits: {
@@ -373,16 +373,14 @@ describe('DeploymentApiService', () => {
       req.flush(httpResponse);
     });
 
-    it('should report errors and return default', function(done: DoneFn): void {
+    it('should report errors', (done: DoneFn): void => {
       service.getQuotaRequirementPerPod('foo spaceId', 'stage env', 'foo appId').pipe(
         first()
-      ).subscribe((data: PodQuotaRequirement): void => {
+      ).subscribe(
+        (): void => done.fail('should throw error'),
+        (): void => {
         expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
         expect(TestBed.get(Logger).error).toHaveBeenCalled();
-        expect(data).toEqual({
-          cpucores: 1,
-          memory: 0.5 * gb
-        });
         controller.verify();
         done();
       });

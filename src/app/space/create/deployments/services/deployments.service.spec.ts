@@ -662,6 +662,36 @@ describe('DeploymentsService', (): void => {
         });
       timerToken.next();
     });
+
+    it('should assume default values if pod quota query fails', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 0,
+                quota: 2
+              },
+              memory: {
+                used: 0,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(throwError('Some HTTP Error'));
+
+      service.canScale('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((canScale: boolean): void => {
+          expect(canScale).toBeTruthy();
+          done();
+        });
+      timerToken.next();
+    });
   });
 
   describe('#getMaximumPods', () => {
@@ -691,6 +721,7 @@ describe('DeploymentsService', (): void => {
       }));
 
       service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
         .subscribe((maxPods: number): void => {
           expect(maxPods).toEqual(2);
           done();
@@ -723,8 +754,39 @@ describe('DeploymentsService', (): void => {
       }));
 
       service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
         .subscribe((maxPods: number): void => {
           expect(maxPods).toEqual(1); // only one CPU allocation will fit
+          done();
+        });
+      timerToken.next();
+    });
+
+    it('should assume default values if pod quota query fails', (done: DoneFn): void => {
+      apiService.getEnvironments.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            quota: {
+              cpucores: {
+                used: 0,
+                quota: 2
+              },
+              memory: {
+                used: 0,
+                quota: 1 * GB,
+                units: 'bytes'
+              }
+            }
+          }
+        }
+      ]));
+      apiService.getQuotaRequirementPerPod.and.returnValue(throwError('Some HTTP Error'));
+
+      service.getMaximumPods('foo-spaceId', 'stage', 'vertx-hello')
+        .pipe(first())
+        .subscribe((maxPods: number): void => {
+          expect(maxPods).toEqual(2);
           done();
         });
       timerToken.next();
