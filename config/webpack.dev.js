@@ -103,7 +103,7 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#devtool
      * See: https://github.com/webpack/docs/wiki/build-performance#sourcemaps
      */
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
 
     /**
      * Options affecting the output of the compilation.
@@ -144,10 +144,6 @@ module.exports = function (options) {
        * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
        */
       chunkFilename: '[name].chunk.js',
-
-      // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: (info) =>
-        path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
 
     resolve: {
