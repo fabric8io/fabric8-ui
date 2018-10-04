@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "plugin:osio/scripts",
+    "plugin:osio/node",
+    "plugin:osio/prettier"
+  ],
+  "root": true,
+  "env": {
+    "browser": true,
+    "jest": true,
+    "node": true
+  }
+}

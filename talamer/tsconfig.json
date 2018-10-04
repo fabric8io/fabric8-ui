@@ -1,0 +1,4 @@
+{
+  "extends": "./packages/scripts/config/tsconfig/tsconfig.json",
+  "exclude": ["bak", "node_modules", "build", "dist", "coverage"]
+}

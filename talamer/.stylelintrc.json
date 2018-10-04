@@ -1,0 +1,12 @@
+{
+  "extends": ["stylelint-config-osio/prettier"],
+  "ignoreFiles": ["**/*.(js|ts|tsx|jsx)"],
+  "rules": {
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "extends": ["plugin:osio/base", "plugin:osio/node", "plugin:osio/prettier"],
+  "root": true
+}

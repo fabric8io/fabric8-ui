@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "plugin:osio/scripts",
+    "plugin:osio/node",
+    "plugin:osio/prettier"
+  ],
+  "root": true
+}
