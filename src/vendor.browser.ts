@@ -28,6 +28,7 @@ import 'rxjs';
 import '../node_modules/patternfly/dist/css/patternfly.fontless.min.css';
 import '../node_modules/patternfly/dist/css/patternfly-additions.min.css';
 import '../node_modules/patternfly-ng/dist/css/patternfly-ng.min.css';
+import '../node_modules/patternfly-sandbox-ng/dist/css/patternfly-sandbox-ng.min.css';
 
 if ('production' === ENV) {
   // Production
