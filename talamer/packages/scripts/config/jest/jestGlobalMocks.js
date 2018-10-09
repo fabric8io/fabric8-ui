@@ -4,13 +4,14 @@ global.ENV = 'test';
 const mock = () => {
   let storage = {};
   return {
-    getItem: (key: string) => (key in storage ? storage[key] : null),
-    setItem: (key: string, value: any) => {
+    getItem: (key) => (key in storage ? storage[key] : null),
+    setItem: (key, value) => {
       storage[key] = value || '';
     },
-    removeItem: (key: string) => delete storage[key],
+    removeItem: (key) => delete storage[key],
     clear: () => {
       storage = {};
+      return storage;
     },
   };
 };
@@ -25,9 +26,7 @@ Object.defineProperty(window, 'getComputedStyle', {
   value: () => ({
     display: 'none',
     appearance: ['-webkit-appearance'],
-    getPropertyValue() {
-      return '';
-    },
+    getPropertyValue: () => '',
   }),
 });
 document.execCommand = () => true;
@@ -48,12 +47,8 @@ function createProxy() {
   return new Proxy(
     {},
     {
-      get() {
-        return () => createProxy();
-      },
-      set() {
-        return true;
-      },
+      get: () => () => createProxy(),
+      set: () => true,
     },
   );
 }
@@ -69,7 +64,7 @@ const spyOnShim = (object, method, accessType) => {
   const spy = jest.spyOn(object, method, accessType);
   if (!spy.and) {
     spy.and = {
-      returnValue(value: any) {
+      returnValue(value) {
         warnSpyApi('Spy#returnValue');
         spy.mockReturnValue(value);
         return spy;
