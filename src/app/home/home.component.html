@@ -1,53 +1,6 @@
 <f8-feature-toggle featureName="Analyze.newHomeDashboard" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
 <ng-template #user>
   <div class="container-fluid container-cards-pf f8-home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
-    <div class="row row-cards-pf">
-      <section class="card-pf card-pf-view f8-home-banner">
-        <!-- this is commented out until features are added
-        <!-- this expands to show what is new. If nothing new, then should be collapsed and not show the carousel
-        <div class="row f8-home-banner-whats-new">
-          <div class="col-sm-12">
-            <span class="badge">
-              2 <!-- based on the slide below
-            </span>
-            <span>
-              What's New? <span class="fa fa-angle-down"></span>
-            </span>
-          </div>
-        </div> -->
-        <div class="row">
-          <!-- slides are fixed and updated manually -->
-          <carousel [interval]="0" [noWrap]="true">
-            <slide>
-              <div class="carousel-background"></div>
-              <img src="../../assets/images/whatsnew_custom-space-avatars.png" class="f8-home-carousel-image" width="20%" height="75%">
-              <div class="carousel-caption d-none d-md-block">
-                <h1>Custom User Avatars!</h1>
-                <p>
-                  Breathe life into your user profile with custom avatars. A favorite picture? A whimsical image? It's up to you!
-                </p>
-                <p>
-                  <a href="https://docs.openshift.io" target="_blank" class="btn btn-primary">Learn more</a>
-                </p>
-              </div>
-            </slide>
-            <slide>
-              <div class="carousel-background"></div>
-              <img src="../../assets/images/whatsnew_usersettings.png" class="f8-home-carousel-image" width="20%" height="75%">
-              <div class="carousel-caption d-none d-md-block">
-                <h1>Feature Opt-in!</h1>
-                <p>
-                  Decide which level of features you’d like to use.  You can stay safe with production, be on the edge with beta, or venture on the wild side with our experimental features!
-                </p>
-                <p>
-                  <a href="https://docs.openshift.io" target="_blank" class="btn btn-primary">Learn more</a> <!-- where does this link to? -->
-                </p>
-              </div>
-            </slide>
-          </carousel>
-        </div>
-      </section>
-    </div>
     <div class="cards-pf">
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">
@@ -65,65 +18,6 @@
 </ng-template>
 <ng-template #default>
   <div class="container-fluid container-cards-pf home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
-    <div class="row row-cards-pf">
-      <div class="col-sm-12">
-        <section class="card-pf card-pf-view home-banner {{brandInformation.backgroundClass}}">
-          <aside class="col-sm-12 col-lg-3 vert-center">
-            <div class="card-pf-body text-center">
-              <div class="col-sm-12">
-                <img [src]="brandInformation.logo" class="home-logo" />
-              </div>
-              <div class="col-sm-12 margin-top-15">
-                <p class="card-pf-info home-banner-title">{{brandInformation.description}}</p>
-              </div>
-            </div>
-          </aside>
-          <aside class="col-sm-12 col-lg-9 vert-center">
-            <div class="col-sm-4 col-lg-4">
-              <div class="card-pf-body text-center">
-                <div class="card-pf-top-element">
-                  <span class="fa fa-book card-pf-icon-circle home-icon"></span>
-                </div>
-                <h2 class="card-pf-title home-title">
-                  Get Started
-                </h2>
-                <p class="card-pf-info">
-                  <a href="https://docs.openshift.io/getting-started-guide.html" class="home-banner-link" target="_blank">Follow our guide</a>
-                  to build your first application.
-                </p>
-              </div>
-            </div>
-            <div class="col-sm-4 col-lg-4">
-              <div class="card-pf-body text-center">
-                <div class="card-pf-top-element">
-                  <span class="pficon pficon-user card-pf-icon-circle home-icon"></span>
-                </div>
-                <h2 class="card-pf-title home-title">
-                  Setup your profile
-                </h2>
-                <p class="card-pf-info">Let others know who you are by filling out
-                  <a [routerLink]="['/', loggedInUser.attributes.username]" class="home-banner-link">your profile</a>.
-                </p>
-              </div>
-            </div>
-            <div class="col-sm-4 col-lg-4">
-              <div class="card-pf-body text-center">
-                <div class="card-pf-top-element">
-                  <span class="fa fa-search card-pf-icon-circle home-icon"></span>
-                </div>
-                <h2 class="card-pf-title home-title">
-                  {{brandInformation.name}} information
-                </h2>
-                <p class="card-pf-info">
-                  <a [href]="brandInformation.moreInfoLink" class="home-banner-link" target="_blank">Learn more</a>
-                  about what {{brandInformation.name}} can do for you.
-                </p>
-              </div>
-            </div>
-          </aside>
-        </section>
-      </div>
-    </div>
     <div class="cards-pf">
       <div class="row row-cards-pf">
         <div class="col-xs-12 col-md-4">

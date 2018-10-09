@@ -63,7 +63,10 @@ import { AboutService }                  from './shared/about.service';
 import { ProviderService }               from './shared/account/provider.service';
 import { AnalyticService }               from './shared/analytics.service';
 import { ApiLocatorService }             from './shared/api-locator.service';
-import { authApiUrlProvider }            from './shared/auth-api.provider';
+import {
+  authApiUrlProvider,
+  witApiProxyProvider
+} from './shared/auth-api.provider';
 import { AuthGuard }                     from './shared/auth-guard.service';
 import { BrandingService }               from './shared/branding.service';
 import { AuthUserResolve }               from './shared/common.resolver';
@@ -202,8 +205,6 @@ export type StoreType = {
     FeatureAcknowledgementService,
     Fabric8RuntimeConsoleResolver,
     Fabric8RuntimeConsoleService,
-    RequestCache,
-    HttpInterceptorProviders,
     fabric8UIConfigProvider,
     {
       provide: OnLogin,
@@ -211,6 +212,7 @@ export type StoreType = {
     },
     forgeApiUrlProvider,
     GettingStartedService,
+    HttpInterceptorProviders,
     jenkinsApiUrlProvider,
     Logger,
     LoginService,
@@ -226,6 +228,8 @@ export type StoreType = {
     ProfileResolver,
     ProfileService,
     ProviderService,
+    realmProvider,
+    RequestCache,
     SpacesService,
     SpaceService,
     {
@@ -238,11 +242,11 @@ export type StoreType = {
       useClass: Fabric8UISpaceNamespace
     },
     ssoApiUrlProvider,
+    togglesApiUrlProvider,
     UserService,
     WindowService,
     witApiUrlProvider,
-    togglesApiUrlProvider,
-    realmProvider
+    witApiProxyProvider
   ],
   schemas: [],
   bootstrap: [AppComponent]

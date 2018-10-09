@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import {
   Component,
   OnDestroy,
@@ -55,7 +56,7 @@ export class OverviewComponent implements OnDestroy, OnInit {
 
   sendEmailVerificationLink(): void {
     this.userService.sendEmailVerificationLink().pipe(first()).subscribe(
-      (res: Response): void => {
+      (res: HttpResponse<any>): void => {
         if (res.status === 204) {
           this.notifications.message({
             message: 'Email Verification link sent!',

@@ -31,8 +31,36 @@ Requires `node` version 8.3.0 and `npm` 5.3.0. Consider using [Node Version Mana
 Run `npm install`. 
 This will download all the required dependencies to be able to start the UI.
 
-
 Run `npm start`. This will start the UI with live reload enabled. Then navigate to <http://localhost:3000>.
+
+### Run test
+
+We use [jest](https://github.com/facebook/jest) test loader because it's faster than karma execution.
+
+#### All tests
+```
+npm run test
+```
+> Note: the first execution of the test take longer, subsequent calls are cached and much faster.
+
+#### Watch mode
+If you want to run all test in a `feature-flag` folder in watch mode:
+```
+npm run test -- feature-flag -- --watch=true
+```
+> Note: You don't need to specify full path for the name of the test.
+#### Debug
+```
+npm run test:debug
+```
+or to debug a specific test: 
+```
+npm run test:debug -- feature-flag.service
+```
+* Go to chrome: chrome://inspect
+* Let go the debugger and put debugger in your test.
+
+To debug in your prefer IDE consolt [Jest debugging documentation](https://jestjs.io/docs/en/troubleshooting#debugging-in-vs-code).
 
 ### VS Code
 

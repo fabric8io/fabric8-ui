@@ -127,16 +127,19 @@
               <div class="arrow"></div>
               <ul class="list-group">
                 <li class="list-group-item">
-                  <span>
-                    <a href="https://docs.openshift.io" target="_blank">Documentation</a>
-                  </span>
+                  <a href="https://docs.openshift.io" target="_blank">
+                    Documentation
+                  </a>
+                </li>
+                <li id="header_loggedinChat" class="list-group-item">
+                  <a href="https://chat.openshift.io/developers/channels/town-square" target="top" class="pointer">
+                    Chat with us
+                  </a>
                 </li>
                 <li id="header_loggedinAbout" class="list-group-item">
-                  <span>
-                    <a (click)="aboutModal.open()" class="pointer">
-                      About OpenShift.io
-                    </a>
-                  </span>
+                  <a (click)="aboutModal.open()" class="pointer">
+                    About OpenShift.io
+                  </a>
                 </li>
               </ul>
             </div>
@@ -169,11 +172,6 @@
               <li>
                 <a [routerLink]="[loggedInUser.attributes.username + '/_settings']">
                   Settings
-                </a>
-              </li>
-              <li id="header_loggedinChat">
-                <a href="https://chat.openshift.io/developers/channels/town-square" target="top" class="pointer">
-                  Chat with us
                 </a>
               </li>
               <li class="divider"></li>
