@@ -10,7 +10,7 @@ const routes: Routes = [
     children: [
       { path: '', component: OverviewComponent },
       {
-        path: '_myspaces',
+        path: '_spaces',
         loadChildren: './my-spaces/my-spaces.module#MySpacesModule',
         data: {
           title: 'Spaces'
