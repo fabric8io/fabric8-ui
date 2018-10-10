@@ -72,22 +72,21 @@
     > .active > a {
       background-color: @color-pf-black-900;
       background-image: linear-gradient(to top, @color-pf-black-700 0, @color-pf-black-900 100%);
+      border-bottom-color: @color-pf-black-900;
     }
     &.persistent-secondary {
-      //background-color: @color-pf-black-150;
+      background: none;
       > li {
         &.active {
           &.with-no-children { margin-bottom: 0; }
         }
         .navbar-persistent {
-          background-color: @color-pf-black-150;
-          > li:hover:before {
-            background: none;
-          }
+          border-bottom: 1px solid;
+          border-bottom-color: @color-pf-black;
+          background-color: @color-pf-black-900;
           > li a {
-            &:hover {
-              color: @color-pf-blue;
-            }
+            color: @color-pf-white;
+            &:hover { color: @color-pf-black-300; }
           }
         }
       }
