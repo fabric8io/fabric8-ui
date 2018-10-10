@@ -9,8 +9,7 @@ import { Broadcaster } from 'ngx-base';
 import { Context, Space } from 'ngx-fabric8-wit';
 import { FeatureTogglesService } from 'ngx-feature-flag';
 import { User, UserService } from 'ngx-login-client';
-import { Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subscription } from 'rxjs';
 import { ContextService } from '../../../shared/context.service';
 
 @Component({

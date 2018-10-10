@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { WorkspaceLinks } from './../../create/codebases/services/workspace';
 import { AppLaunchWorkSpaceService } from './app-launcher-work-space.service';
 
@@ -12,19 +12,19 @@ describe('AppLaunchWorkSpaceService: ', () => {
 
   const mockAppLaunchWorkSpaceService = {
     createWorkSpace(): Observable<WorkspaceLinks> {
-      return Observable.of(mockCreateWorkSpace);
+      return of(mockCreateWorkSpace);
     }
   };
 
   let appLaunchWorkSpaceService: AppLaunchWorkSpaceService;
 
   beforeEach(() => {
-    appLaunchWorkSpaceService = TestBed.get(AppLaunchWorkSpaceService);
     TestBed.configureTestingModule({
       providers: [
-        {provide: AppLaunchWorkSpaceService, useClass: mockAppLaunchWorkSpaceService}
+        {provide: AppLaunchWorkSpaceService, useValue: mockAppLaunchWorkSpaceService}
       ]
     });
+    appLaunchWorkSpaceService = TestBed.get(AppLaunchWorkSpaceService);
   });
 
   it('Create workSpace', async () => {

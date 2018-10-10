@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { Che } from './../../create/codebases/services/che';
 import { AppLaunchCheService } from './app-launcher-che.service';
 
@@ -12,19 +12,19 @@ describe('AppLaunchCheService: ', () => {
 
   const mockAppLauncherCheService = {
     getState(): Observable<Che> {
-      return Observable.of(mockCheState);
+      return of(mockCheState);
     }
   };
 
   let appLaunchCheService: AppLaunchCheService;
 
   beforeEach(() => {
-    appLaunchCheService = TestBed.get(AppLaunchCheService);
     TestBed.configureTestingModule({
       providers: [
-        { provide: AppLaunchCheService, useClass: mockAppLauncherCheService }
+        { provide: AppLaunchCheService, useValue: mockAppLauncherCheService }
       ]
     });
+    appLaunchCheService = TestBed.get(AppLaunchCheService);
   });
 
   it('Get che state', async () => {
