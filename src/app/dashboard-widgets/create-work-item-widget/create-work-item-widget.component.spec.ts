@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
 import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Broadcaster } from 'ngx-base';
-import { Context, Contexts } from 'ngx-fabric8-wit';
+import { Context, Contexts, Space } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
 import { ConnectableObservable,  Observable ,  of as observableOf, Subject } from 'rxjs';
 import { publish } from 'rxjs/operators';
@@ -19,16 +19,21 @@ import { WorkItemsData } from '../../shared/workitem-utils';
 import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
 
 @Component({
-  template: '<fabric8-create-work-item-widget [userOwnsSpace]="userOwnsSpace"></fabric8-create-work-item-widget>'
+  template: `
+    <fabric8-create-work-item-widget
+      [userOwnsSpace]="userOwnsSpace"
+      [currentSpace]="space"
+      [loggedInUser]="loggedInUser">
+    </fabric8-create-work-item-widget>
+  `
 })
 class HostComponent {
   userOwnsSpace: boolean;
-}
-
-describe('CreateWorkItemWidgetComponent', () => {
-  type TestingContext = TestContext<CreateWorkItemWidgetComponent, HostComponent>;
-
-  let fakeUser: Observable<User> = observableOf({
+  space: Space = {
+    attributes: {},
+    id: 'some-space-id'
+  } as Space;
+  loggedInUser: User = {
     id: 'fakeId',
     type: 'fakeType',
     attributes: {
@@ -36,7 +41,11 @@ describe('CreateWorkItemWidgetComponent', () => {
       imageURL: 'null',
       username: 'fakeUserName'
     }
-  } as User);
+  };
+}
+
+describe('CreateWorkItemWidgetComponent', () => {
+  type TestingContext = TestContext<CreateWorkItemWidgetComponent, HostComponent>;
 
   const testContext = initContext(CreateWorkItemWidgetComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],
@@ -47,24 +56,15 @@ describe('CreateWorkItemWidgetComponent', () => {
       { provide: Broadcaster, useValue: createMock(Broadcaster) },
       { provide: Contexts, useValue: ({ current: new Subject<Context>() }) },
       {
-        provide: UserService, useFactory: () => {
-          let userService = createMock(UserService);
-          userService.getUser.and.returnValue(fakeUser);
-          userService.loggedInUser = fakeUser.pipe(publish()) as ConnectableObservable<User> & jasmine.Spy;
-          return userService;
-        }
-      },
-      {
         provide: WorkItemService, useFactory: () => {
           let workItemServiceMock = jasmine.createSpyObj('WorkItemService', ['buildUserIdMap', 'getWorkItems']);
-          workItemServiceMock.buildUserIdMap.and.returnValue(fakeUser);
           workItemServiceMock.getWorkItems.and.returnValue(observableOf({ workItems: [] }) as Observable<WorkItemsData>);
           return workItemServiceMock;
         }
       },
       {
         provide: FilterService, useFactory: () => {
-          let filterServiceMock = jasmine.createSpyObj('FilterService', ['queryBuilder']);
+          let filterServiceMock = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
           return filterServiceMock;
         }
       },
@@ -89,7 +89,7 @@ describe('CreateWorkItemWidgetComponent', () => {
 
   it('should enable buttons if the user owns the space', function() {
     testContext.hostComponent.userOwnsSpace = true;
-    testContext.testedDirective.myWorkItemsCount = observableOf(0);
+    testContext.testedDirective.myWorkItemsCount = 0;
     testContext.detectChanges();
 
     expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).not.toBeNull();
@@ -99,7 +99,7 @@ describe('CreateWorkItemWidgetComponent', () => {
 
   it('should disable buttons if the user does not own the space', function() {
     testContext.hostComponent.userOwnsSpace = false;
-    testContext.testedDirective.myWorkItemsCount = observableOf(0);
+    testContext.testedDirective.myWorkItemsCount = 0;
     testContext.detectChanges();
 
     expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).toBeNull();

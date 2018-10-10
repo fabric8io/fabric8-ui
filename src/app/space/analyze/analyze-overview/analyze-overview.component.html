@@ -60,7 +60,7 @@
     <div class="cards-pf">
       <div class="row row-cards-pf padding-top-0">
         <div class="col-xs-12 col-md-4" *ngIf="myWorkItemsCard">
-          <fabric8-create-work-item-widget [userOwnsSpace]="userOwnsSpace"></fabric8-create-work-item-widget>
+          <fabric8-create-work-item-widget [userOwnsSpace]="userOwnsSpace" [currentSpace]="space" [loggedInUser]="loggedInUser"></fabric8-create-work-item-widget>
         </div>
         <div class="col-xs-12"
             [ngClass]="{'col-md-4': myWorkItemsCard, 'col-md-6': !myWorkItemsCard}">

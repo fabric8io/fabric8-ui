@@ -11,11 +11,11 @@
       </div>
       <h2 class="card-pf-title">
         <a id="spacehome-my-workitems-title" [routerLink]="[contextPath | async, 'plan']">My Work Items</a>
-        <span id="spacehome-my-workitems-badge" class="badge f8-card-badge">{{myWorkItemsCount | async}}</span>
+        <span id="spacehome-my-workitems-badge" class="badge f8-card-badge">{{myWorkItemsCount}}</span>
       </h2>
     </div>
     <div class="card-pf-body f8-card-body">
-      <div class="f8-blank-slate-card" *ngIf="(myWorkItemsCount | async) === 0">
+      <div class="f8-blank-slate-card" *ngIf="myWorkItemsCount === 0">
         <h3>You can view your recent work items</h3>
         <p>
           Planner will help you to create different types of work-items, allows you to assign team members and iterations.
@@ -27,8 +27,8 @@
         </div>
       </div>
       <ul id="spacehome-my-workitems-list" class="list-group list-view-pf list-view-pf-view list-view-pf-striped f8-card-list"
-        *ngIf="(myWorkItemsCount | async) > 0">
-        <li class="list-group-item" *ngFor="let workItem of myWorkItems | async | take: 6">
+        *ngIf="myWorkItemsCount > 0">
+        <li class="list-group-item" *ngFor="let workItem of myWorkItems | take: 6">
           <div class="list-view-pf-main-info">
             <div class="list-view-pf-body">
               <div class="list-view-pf-description">
