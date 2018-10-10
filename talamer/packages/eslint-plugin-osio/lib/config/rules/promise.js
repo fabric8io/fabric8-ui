@@ -11,7 +11,7 @@ module.exports = {
   // Ensure that inside a then() you make sure to return a new promise or value.
   'promise/always-return': 'off',
   // Enforce standard parameter names for Promise constructors.
-  'promise/param-names': 'error',
+  'promise/param-names': 'off',
   // Ensure that Promise is included fresh in each file instead of relying on the existence of a native promise implementation.
   'promise/no-native': 'off',
   // Avoid nested .then() or .catch() statements
