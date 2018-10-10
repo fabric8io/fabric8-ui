@@ -17,13 +17,6 @@ const routes: Routes = [
         }
       },
       {
-        path: '_spaces',
-        loadChildren: './spaces/spaces.module#SpacesModule',
-        data: {
-          title: 'Spaces'
-        }
-      },
-      {
         path: '_update',
         loadChildren: './update/update.module#UpdateModule',
         data: {
