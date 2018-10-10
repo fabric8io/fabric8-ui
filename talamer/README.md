@@ -1,3 +1,12 @@
+This monorepo is managed with [Lerna](https://lernajs.io/).
+
+To get started, install the project dependencies and bootstrap all packages. The bootstrap process will update all packages with all their dependencies and link any cross-dependencies.
+
+```
+npm install
+npm run bootstrap
+```
+
 ### VSCode Extensions
 
 - Prettier - Code formatter

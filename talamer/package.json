@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "description": "OpenShift.io platform UI",
   "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "lerna": "lerna",
     "lint": "npm-run-all lint:js lint:css",
     "lint:css": "stylelint './packages/**/src/**/*.{css,scss}' --max-warnings 0",
     "lint:js": "eslint './packages/**/src/**/*.{js,ts,tsx}' --max-warnings 0 --format codeframe",
@@ -10,11 +12,11 @@
     "format:css": "npm run lint:css -- --fix",
     "format:js": "npm run lint:js -- --fix",
     "format:md": "prettier '**/*.md' --write",
-    "test": "osio-scripts test --env=jsdom",
-    "test:watch": "osio-scripts test --env=jsdom --watchAll",
-    "test:coverage": "osio-scripts test:coverage --env=jsdom",
-    "test:debug": "osio-scripts test:debug --env=jsdom",
-    "test:update": "osio-scripts test:update --env=jsdom"
+    "test": "CI=true osio-scripts test",
+    "test:watch": "osio-scripts test",
+    "test:coverage": "osio-scripts test:coverage",
+    "test:debug": "osio-scripts test:debug",
+    "test:update": "osio-scripts test:update"
   },
   "keywords": [
     "osio",
@@ -43,8 +45,8 @@
     "@types/react-dom": "^16.0.7",
     "@types/react-router": "^4.0.30",
     "@types/react-router-dom": "^4.3.0",
-    "babel-eslint": "^8.2.6",
-    "eslint": "^5.5.0",
+    "babel-eslint": "^9.0.0",
+    "eslint": "5.6.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^2.10.0",
@@ -58,7 +60,7 @@
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-sort-class-members": "^1.3.1",
     "eslint-plugin-typescript": "^0.12.0",
-    "lerna": "^3.4.1",
+    "lerna": "^2.11.0",
     "npm-run-all": "^4.1.3",
     "prettier": "^1.14.2",
     "prettier-stylelint-formatter": "^0.5.1-beta.1",
@@ -68,7 +70,7 @@
     "stylelint": "^9.5.0",
     "stylelint-config-osio": "file:./packages/stylelint-config-osio",
     "tslib": "^1.9.3",
-    "typescript": "^3.0.3",
+    "typescript": "^3.1.2",
     "typescript-eslint-parser": "^20.0.0"
   },
   "browserslist": {
@@ -80,10 +82,9 @@
       "firefox esr"
     ],
     "production": [
-      ">0.2%",
-      "not dead",
-      "not ie <= 11",
-      "not op_mini all"
+      ">0.25%",
+      "not op_mini all",
+      "ie 11"
     ]
   }
 }
