@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Show command before executing
-set -x
-
 # Exit on error
 set -e
 
@@ -20,6 +17,8 @@ eval "$(./env-toolkit load -f jenkins-env.json \
         QUAY_PASSWORD \
         DEVSHIFT_TAG_LEN)"
 export BUILD_TIMESTAMP=`date -u +%Y-%m-%dT%H:%M:%S`+00:00
+
+# Show command before executing
 set -x
 
 # We need to disable selinux for now, XXX
@@ -56,7 +55,7 @@ docker run --detach=true --name=fabric8-ui-builder -t \
 
 echo "NPM Install starting: $(date)"
 
-# Build almighty-ui
+# Build fabric8-ui
 docker exec fabric8-ui-builder npm install
 echo "NPM Install Complete: $(date)"
 
