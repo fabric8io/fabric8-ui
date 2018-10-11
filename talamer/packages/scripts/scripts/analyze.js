@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'production';
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
-require('./rewire-scripts')(true);
+require('../lib/rewire-scripts')(true);
 
 const webpackConfigProd = require('react-scripts/config/webpack.config.prod');
 
