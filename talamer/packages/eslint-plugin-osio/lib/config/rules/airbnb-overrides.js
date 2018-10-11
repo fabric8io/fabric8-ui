@@ -9,4 +9,8 @@ module.exports = {
   'no-plusplus': 'off',
 
   'func-names': 'off',
+
+  'class-methods-use-this': 'off',
+
+  'no-return-assign': ['error', 'except-parens'],
 };
