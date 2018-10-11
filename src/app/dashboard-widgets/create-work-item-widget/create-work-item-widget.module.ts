@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
 import { PlannerListModule, WorkItemDetailModule } from 'fabric8-planner';
+import { NgLetModule } from 'fabric8-planner/app/shared/ng-let';
 import { FeatureFlagModule } from 'ngx-feature-flag';
 import { WidgetsModule } from 'ngx-widgets';
 import { CreateWorkItemWidgetComponent } from './create-work-item-widget.component';
@@ -17,7 +18,8 @@ import { CreateWorkItemWidgetComponent } from './create-work-item-widget.compone
     WidgetsModule,
     PlannerListModule,
     NgArrayPipesModule,
-    WorkItemDetailModule
+    WorkItemDetailModule,
+    NgLetModule
   ],
   declarations: [CreateWorkItemWidgetComponent],
   exports: [CreateWorkItemWidgetComponent]
