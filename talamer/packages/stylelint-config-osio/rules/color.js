@@ -6,7 +6,7 @@ module.exports = {
   // Require (where possible) or disallow named colors.
   'color-named': null,
   // Disallow hex colors.
-  'color-no-hex': true,
+  'color-no-hex': null,
   // Disallow invalid hex colors.
   'color-no-invalid-hex': true,
 };
