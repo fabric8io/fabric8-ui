@@ -33,6 +33,9 @@ describe('BuildStageViewComponent', () => {
       'buildConfigName': 'app-test-apr-18-10-43',
       'buildNumber': 1,
       'buildNumberInt': 1,
+      'annotations': {
+        'fabric8.io/bayesian.analysisUrl': 'https://recommender.api.openshift.io/api/v1/stack-analyses/2347877889989'
+      },
       'pipelineStages': [{
         'durationMillis': 172579,
         'id': '20',
@@ -58,6 +61,42 @@ describe('BuildStageViewComponent', () => {
         'name': 'Approve',
         'pauseDurationMillis': 0,
         'status': 'FAILED'
+    }
+    ]
+  };
+
+  let buildDataStage: any = {
+    'statusPhase': 'Complete',
+    'logURL': 'https://jenkins.openshift.io/job/invinciblejai/job/app-test-apr-18-10-43/job/master/1/console',
+    'name': 'app-test-apr-18-10-43-1',
+    'namespace': 'jakumar',
+    'icon': '',
+    'iconStyle': 'pficon-ok',
+    'id': 'app-test-apr-18-10-43-1',
+    'buildConfigName': 'app-test-apr-18-10-43',
+    'buildNumber': 1,
+    'buildNumberInt': 1,
+    'annotations': {
+      'fabric8.io/bayesian.analysisUrl': 'https://recommender.api.openshift.io/api/v1/stack-analyses/2347877889989'
+    },
+    'pipelineStages': [{
+      'durationMillis': 172579,
+      'id': '20',
+      'name': 'Build Image',
+      'pauseDurationMillis': 0,
+      'status': 'SUCCESS'
+    },
+    {
+      'durationMillis': 172579,
+      'environmentName': 'Stage',
+      'id': '60',
+      'name': 'Rollout to Stage',
+      'pauseDurationMillis': 0,
+      'serviceUrl': 'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com',
+      'serviceUrlMap': {
+          'app-test-apr-12-11': 'http://app-test-apr-12-11-jakumar-stage.8a09.starter-us-east-2.openshiftapps.com'
+      },
+      'status': 'FAILED'
     }
     ]
   };
@@ -192,6 +231,33 @@ describe('BuildStageViewComponent', () => {
     let buildStatusMessageNoStage = element.
       querySelector('#pipeine-stage-name-no-stages');
     expect(buildStatusMessageNoStage).toBeNull();
+  });
+
+  it('should show stack report button when stage Build Release completed', () => {
+    component.build = buildData;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let buildStackReportShow = element.
+      querySelector('#stack-report-btn-cntr');
+    expect(buildStackReportShow).toBeDefined();
+  });
+
+  it('should show stack report button when stage Build Image completed', () => {
+    component.build = buildDataStage;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let buildStackReportShow = element.
+      querySelector('#stack-report-btn-cntr');
+    expect(buildStackReportShow).toBeDefined();
+  });
+
+  it('should not show stack report button when pipeline stages are not there', () => {
+    component.build = buildDataTrigger;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    let buildStackReportShow = element.
+      querySelector('#stack-report-btn-cntr');
+    expect(buildStackReportShow).toBeNull();
   });
 
 });

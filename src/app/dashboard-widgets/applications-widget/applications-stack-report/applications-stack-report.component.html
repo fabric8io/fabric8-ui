@@ -5,6 +5,6 @@
                  [repoInfo]="build.repositoryInformation"
                  [stack]="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl']"
                  *ngIf="build && build.annotations && build.annotations['fabric8.io/bayesian.analysisUrl'] &&
-                        stage.name === 'Build Release' && stage.status === 'SUCCESS'">
+                  ['Build Release','Build Image'].includes(stage.name) && stage.status === 'SUCCESS'">
   </stack-details>
 </div>
