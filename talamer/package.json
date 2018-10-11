@@ -30,13 +30,27 @@
     "packages/*"
   ],
   "dependencies": {
+    "@angular/animations": "6.1.8",
+    "@angular/common": "6.1.8",
+    "@angular/compiler": "6.1.8",
+    "@angular/compiler-cli": "6.1.8",
+    "@angular/core": "6.1.8",
+    "@angular/forms": "6.1.8",
+    "@angular/http": "6.1.8",
+    "@angular/platform-browser": "6.1.8",
+    "@angular/platform-browser-dynamic": "6.1.8",
+    "@angular/platform-server": "6.1.8",
+    "@angular/router": "6.1.8",
     "graphql": "0.13.2",
-    "mobx": "^5.1.0",
-    "mobx-react": "^5.2.6",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1"
+    "mobx": "5.5.0",
+    "mobx-react": "5.2.8",
+    "react": "16.5.2",
+    "react-dom": "16.5.2",
+    "react-router": "4.3.1",
+    "react-router-dom": "4.3.1",
+    "rxjs": "6.3.3",
+    "rxjs-compat": "6.3.3",
+    "zone.js": "0.8.26"
   },
   "devDependencies": {
     "@angular/language-service": "6.1.8",

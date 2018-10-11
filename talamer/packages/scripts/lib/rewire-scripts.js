@@ -46,18 +46,79 @@ function rewireWebpack(prod) {
   };
 
   const {oneOf} = config.module.rules[2];
-  oneOf.unshift({
-    test: /\.(ts|tsx)$/,
-    use: [
-      {
-        loader: require.resolve('ts-loader'),
-        options: {
-          // disable type checker - we will use it in fork plugin
-          transpileOnly: true,
+  oneOf.unshift(
+    // add loaders for angular support
+    {
+      test: /\.html$/,
+      loader: 'raw-loader',
+    },
+    {
+      test: /\.component\.css$/,
+      use: [
+        'to-string-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            minimize: true,
+            sourceMap: !prod,
+            context: '/',
+          },
         },
-      },
-    ],
-  });
+
+        // copied from react-scripts/config/webpack.config.dev.js
+        {
+          // Options for PostCSS as we reference these options twice
+          // Adds vendor prefixing based on your specified browser support in
+          // package.json
+          loader: require.resolve('postcss-loader'),
+          options: {
+            // Necessary for external CSS imports to work
+            // https://github.com/facebook/create-react-app/issues/2677
+            ident: 'postcss',
+            plugins: () => [
+              // eslint-disable-next-line node/no-extraneous-require
+              require('postcss-flexbugs-fixes'),
+              // eslint-disable-next-line node/no-extraneous-require
+              require('postcss-preset-env')({
+                autoprefixer: {
+                  flexbox: 'no-2009',
+                },
+                stage: 3,
+              }),
+            ],
+          },
+        },
+      ],
+    },
+    {
+      test: /\.component\.ts$/,
+      use: [
+        {
+          loader: require.resolve('ts-loader'),
+          options: {
+            // disable type checker - we will use it in fork plugin
+            transpileOnly: true,
+          },
+        },
+        'angular2-template-loader',
+        'angular2-router-loader',
+      ],
+    },
+
+    // default tsx? loader
+    {
+      test: /\.tsx?$/,
+      use: [
+        {
+          loader: require.resolve('ts-loader'),
+          options: {
+            // disable type checker - we will use it in fork plugin
+            transpileOnly: true,
+          },
+        },
+      ],
+    },
+  );
 
   oneOf[oneOf.length - 1].exclude = [/\.(ts|tsx|js|jsx|mjs)$/, /\.html$/, /\.json$/];
   config.plugins.push(new CheckerPlugin());
