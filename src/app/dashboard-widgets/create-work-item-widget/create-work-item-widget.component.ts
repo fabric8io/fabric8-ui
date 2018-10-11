@@ -1,12 +1,18 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
 import { Contexts, Space } from 'ngx-fabric8-wit';
 import { User } from 'ngx-login-client';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { filterOutClosedItems, WorkItemsData } from '../../shared/workitem-utils';
+import {
+  buildAssigneeQuery,
+  buildClosedWorkItemQuery,
+  buildSpaceQuery,
+  WorkItemsData
+} from '../../shared/workitem-utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   selector: 'fabric8-create-work-item-widget',
   templateUrl: './create-work-item-widget.component.html'
@@ -17,10 +23,8 @@ export class CreateWorkItemWidgetComponent implements OnInit {
   @Input() loggedInUser: User;
   @Input() currentSpace: Space;
 
-  private _myWorkItems: WorkItem[];
-  myWorkItemsCount: number;
+  private _myWorkItems: Observable<WorkItem[]>;
   contextPath: Observable<string>;
-  subscriptions: Subscription[] = [];
 
   constructor(
     private filterService: FilterService,
@@ -37,50 +41,35 @@ export class CreateWorkItemWidgetComponent implements OnInit {
     this.getCurrentSpaceWorkItems();
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
-  }
-
-  get myWorkItems(): WorkItem[] {
+  get myWorkItems(): Observable<WorkItem[]> {
     return this._myWorkItems;
   }
 
-  getCurrentSpaceWorkItems() {
-    const assigneeQuery = this.filterService.queryJoiner(
-      {},
-      this.filterService.and_notation,
-      this.filterService.queryBuilder(
-        'assignee', this.filterService.equal_notation, this.loggedInUser.id
-      )
-    );
-    const spaceQuery = this.filterService.queryBuilder(
-      'space', this.filterService.equal_notation, this.currentSpace.id
-    );
-    const filters = this.filterService.queryJoiner(
-      assigneeQuery, this.filterService.and_notation, spaceQuery
-    );
-    this.subscriptions.push(
-      this.workItemService
-       .getWorkItems(100000, {expression: filters}).pipe(
-          map((val: WorkItemsData) => val.workItems),
-          map((workItems: WorkItem[]) => filterOutClosedItems(workItems)),
-          // Resolve the work item type
-          tap((workItems: WorkItem[]) => workItems.forEach((workItem: WorkItem) => this.workItemService.resolveType(workItem))),
-          tap((workItems: WorkItem[]) => workItems.forEach((workItem: WorkItem) => this.workItemService.resolveAreaForWorkItem(workItem))),
-          tap((workItems: WorkItem[]) => {
-            workItems.forEach((workItem: WorkItem) => {
-              if (workItem.relationalData === undefined) {
-                workItem.relationalData = {};
-              }
-            });
-          })
-        ).subscribe((workitems: WorkItem[]) => {
-          this._myWorkItems = workitems;
-          this.myWorkItemsCount = workitems.length;
-        }
-      )
-    );
+  getCurrentSpaceWorkItems(): void {
+    let filters = {};
+    [
+      buildAssigneeQuery(this.filterService, this.loggedInUser.id),
+      buildSpaceQuery(this.filterService, this.currentSpace.id),
+      buildClosedWorkItemQuery(this.filterService)
+    ].forEach(query => {
+      filters = this.filterService.queryJoiner(
+        filters, this.filterService.and_notation, query
+      );
+    });
+
+    this._myWorkItems = this.workItemService
+      .getWorkItems(100000, {expression: filters}).pipe(
+        map((val: WorkItemsData): WorkItem[] => val.workItems),
+        // Resolve the work item type
+        tap((workItems: WorkItem[]): void => workItems.forEach((workItem: WorkItem): void => this.workItemService.resolveType(workItem))),
+        tap((workItems: WorkItem[]): void => workItems.forEach((workItem: WorkItem): void => this.workItemService.resolveAreaForWorkItem(workItem))),
+        tap((workItems: WorkItem[]): void => {
+          workItems.forEach((workItem: WorkItem): void => {
+            if (workItem.relationalData === undefined) {
+              workItem.relationalData = {};
+            }
+          });
+        })
+      );
   }
 }

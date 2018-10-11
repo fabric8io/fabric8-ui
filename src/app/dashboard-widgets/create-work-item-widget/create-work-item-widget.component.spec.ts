@@ -3,12 +3,12 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NgArrayPipesModule } from 'angular-pipes';
-import { FilterService, WorkItem, WorkItemService } from 'fabric8-planner';
+import { FilterService, WorkItemService } from 'fabric8-planner';
+import { NgLetModule } from 'fabric8-planner/app/shared/ng-let';
 import { Broadcaster } from 'ngx-base';
 import { Context, Contexts, Space } from 'ngx-fabric8-wit';
-import { User, UserService } from 'ngx-login-client';
-import { ConnectableObservable,  Observable ,  of as observableOf, Subject } from 'rxjs';
-import { publish } from 'rxjs/operators';
+import { User } from 'ngx-login-client';
+import { Observable, of as observableOf, Subject } from 'rxjs';
 import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import {
@@ -47,9 +47,9 @@ class HostComponent {
 describe('CreateWorkItemWidgetComponent', () => {
   type TestingContext = TestContext<CreateWorkItemWidgetComponent, HostComponent>;
 
-  const testContext = initContext(CreateWorkItemWidgetComponent, HostComponent, {
+  const testContext: TestingContext = initContext(CreateWorkItemWidgetComponent, HostComponent, {
     declarations: [ MockFeatureToggleComponent ],
-    imports: [NgArrayPipesModule, RouterModule],
+    imports: [NgArrayPipesModule, RouterModule, NgLetModule],
     providers: [
       { provide: ActivatedRoute, useValue: jasmine.createSpy('ActivatedRoute') },
       { provide: LocationStrategy, useValue: jasmine.createSpyObj('LocationStrategy', ['prepareExternalUrl']) },
@@ -64,7 +64,7 @@ describe('CreateWorkItemWidgetComponent', () => {
       },
       {
         provide: FilterService, useFactory: () => {
-          let filterServiceMock = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
+          let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
           return filterServiceMock;
         }
       },
@@ -89,7 +89,6 @@ describe('CreateWorkItemWidgetComponent', () => {
 
   it('should enable buttons if the user owns the space', function() {
     testContext.hostComponent.userOwnsSpace = true;
-    testContext.testedDirective.myWorkItemsCount = 0;
     testContext.detectChanges();
 
     expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).not.toBeNull();
@@ -99,7 +98,6 @@ describe('CreateWorkItemWidgetComponent', () => {
 
   it('should disable buttons if the user does not own the space', function() {
     testContext.hostComponent.userOwnsSpace = false;
-    testContext.testedDirective.myWorkItemsCount = 0;
     testContext.detectChanges();
 
     expect(testContext.fixture.debugElement.query(By.css('#spacehome-my-workitems-add-button'))).toBeNull();
