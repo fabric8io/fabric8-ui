@@ -60,7 +60,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         { provide: Broadcaster, useValue: createMock(Broadcaster) },
         { provide: Contexts, useValue: ({ current: new Subject<Context>() }) },
         {
-          provide: WorkItemService, useFactory: () => {
+          provide: WorkItemService, useFactory: (): WorkItemService => {
             let workItemServiceMock = jasmine.createSpyObj('WorkItemService', ['resolveType', 'resolveAreaForWorkItem', 'getWorkItems']);
             workItemServiceMock.resolveType.and.stub();
             workItemServiceMock.resolveAreaForWorkItem.and.stub();
@@ -69,7 +69,7 @@ describe('CreateWorkItemWidgetComponent', () => {
           }
         },
         {
-          provide: FilterService, useFactory: () => {
+          provide: FilterService, useFactory: (): FilterService => {
             let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
             return filterServiceMock;
           }
@@ -164,7 +164,7 @@ describe('CreateWorkItemWidgetComponent', () => {
         { provide: Broadcaster, useValue: createMock(Broadcaster) },
         { provide: Contexts, useValue: ({ current: new Subject<Context>() }) },
         {
-          provide: WorkItemService, useFactory: () => {
+          provide: WorkItemService, useFactory: (): WorkItemService => {
             let workItemServiceMock = jasmine.createSpyObj('WorkItemService', ['resolveType', 'resolveAreaForWorkItem', 'getWorkItems']);
             workItemServiceMock.resolveType.and.stub();
             workItemServiceMock.resolveAreaForWorkItem.and.stub();
@@ -173,7 +173,7 @@ describe('CreateWorkItemWidgetComponent', () => {
           }
         },
         {
-          provide: FilterService, useFactory: () => {
+          provide: FilterService, useFactory: (): FilterService => {
             let filterServiceMock: jasmine.SpyObj<FilterService> = jasmine.createSpyObj('FilterService', ['queryBuilder', 'queryJoiner']);
             return filterServiceMock;
           }
@@ -197,7 +197,7 @@ describe('CreateWorkItemWidgetComponent', () => {
       ]
     });
 
-    it('should fetch the correct work items', async(function() {
+    it('should fetch the correct work items', async(() => {
       testContext.testedDirective.myWorkItems = observableOf([]);
       testContext.testedDirective.fetchWorkItems();
       testContext.testedDirective.myWorkItems.subscribe((workItems: WorkItem[]) => {
