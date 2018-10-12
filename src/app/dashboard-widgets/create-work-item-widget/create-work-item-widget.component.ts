@@ -34,18 +34,22 @@ export class CreateWorkItemWidgetComponent implements OnInit {
 
   ngOnInit() {
     this.contextPath = this.contexts.current.pipe(map(context => context.path));
-    this.getCurrentSpaceWorkItems();
+    this.fetchWorkItems();
   }
 
   ngOnChanges() {
-    this.getCurrentSpaceWorkItems();
+    this.fetchWorkItems();
   }
 
   get myWorkItems(): Observable<WorkItem[]> {
     return this._myWorkItems;
   }
 
-  getCurrentSpaceWorkItems(): void {
+  set myWorkItems(workItems: Observable<WorkItem[]>) {
+    this._myWorkItems = workItems;
+  }
+
+  fetchWorkItems(): void {
     let filters = {};
     [
       buildAssigneeQuery(this.filterService, this.loggedInUser.id),
@@ -57,7 +61,7 @@ export class CreateWorkItemWidgetComponent implements OnInit {
       );
     });
 
-    this._myWorkItems = this.workItemService
+    this.myWorkItems = this.workItemService
       .getWorkItems(100000, {expression: filters}).pipe(
         map((val: WorkItemsData): WorkItem[] => val.workItems),
         // Resolve the work item type
