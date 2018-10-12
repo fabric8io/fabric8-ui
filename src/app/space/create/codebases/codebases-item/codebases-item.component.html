@@ -36,7 +36,7 @@
       [(ngModel)]="codebase.attributes['cve-scan']"
       [switch-readonly]="false"
       [switch-handle-width]="40"
-      (onChangeState)="onChangeSubscribe($event, codebase)">
+      (changeState)="onChangeSubscribe($event, codebase)">
     </bSwitch>
   </div>
 </div>

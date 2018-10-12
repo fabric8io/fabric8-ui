@@ -62,8 +62,6 @@ export class WorkItemWidgetComponent implements OnDestroy, OnInit  {
   private fetchWorkItemsBySpace(space: Space): void {
     this.currentSpace = space;
     this.loading = true;
-    this.workItemService._currentSpace = space;
-    this.workItemService.buildUserIdMap();
 
     const assigneeQuery = this.filterService.queryJoiner(
       {},
