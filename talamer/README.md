@@ -18,3 +18,5 @@ npm run bootstrap
 - Jest
   - Snapshot syntax highlighting.
   - Augment unit tests with inline error reports.
+- Angular Language Service (angular.ng-template)
+  - Provides a rich editing experience for Angular templates.
