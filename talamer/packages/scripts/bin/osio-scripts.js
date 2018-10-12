@@ -27,6 +27,7 @@ const scriptOptions = {
   },
 };
 
+// eslint-disable-next-line node/no-extraneous-require
 const spawn = require('react-dev-utils/crossSpawn');
 
 const args = process.argv.slice(2);
