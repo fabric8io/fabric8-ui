@@ -4,8 +4,10 @@ import {
   Input,
   Output
 } from '@angular/core';
+import { Broadcaster } from 'ngx-base';
 import { FilterEvent } from 'patternfly-ng/filter';
 import { SortEvent } from 'patternfly-ng/sort';
+import { createMock } from 'testing/mock';
 import { MockFeatureToggleComponent } from 'testing/mock-feature-toggle.component';
 import { initContext } from 'testing/test-context';
 import { MySpacesToolbarComponent } from './my-spaces-toolbar.component';
@@ -31,6 +33,7 @@ class TestHostComponent {
 })
 class FakePfngToolbarComponent {
   @Input() config: any;
+  @Input() actionTemplate: any;
   @Input() viewTemplate: any;
   @Output() onFilterChange = new EventEmitter<FilterEvent>();
   @Output() onSortChange = new EventEmitter<SortEvent>();
@@ -41,6 +44,14 @@ describe('MySpacesToolbarComponent', () => {
     declarations: [
       FakePfngToolbarComponent,
       MockFeatureToggleComponent
+    ],
+    providers: [
+      {
+        provide: Broadcaster,
+        useFactory: (): jasmine.SpyObj<Broadcaster> => {
+          return createMock(Broadcaster);
+        }
+      }
     ]
   });
 

@@ -1,13 +1,20 @@
-import { DebugNode, NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { DebugNode, ErrorHandler, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { Context, Contexts, SpaceService } from 'ngx-fabric8-wit';
+import { Context, Contexts, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService, User, UserService } from 'ngx-login-client';
 import { Action } from 'patternfly-ng/action';
-import { of, throwError as observableThrowError } from 'rxjs';
+import {
+  ConnectableObservable,
+  Observable,
+  of,
+  throwError as observableThrowError
+} from 'rxjs';
+import { createMock } from 'testing/mock';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
 import { MySpacesComponent } from './my-spaces.component';
@@ -15,18 +22,9 @@ import { MySpacesComponent } from './my-spaces.component';
 describe('MySpacesComponent', () => {
   let fixture: ComponentFixture<MySpacesComponent>;
   let component: DebugNode['componentInstance'];
-  let mockContexts: any = jasmine.createSpy('Contexts');
-  let mockGettingStartedService: any = jasmine.createSpyObj('GettingStartedService', ['createTransientProfile', 'update']);
-  let mockLogger: any = jasmine.createSpyObj('Logger', ['error']);
-  let mockBsModalService: any = jasmine.createSpyObj('BsModalService', ['show']);
-  let mockSpaceService: any = jasmine.createSpyObj('SpaceService', ['getSpacesByUser']);
-  let mockUserService: any = jasmine.createSpy('UserService');
-  let mockModalRef: any = jasmine.createSpyObj('BsModalRef', ['hide']);
-  let mockTemplateRef = jasmine.createSpy('TemplateRef');
-  let mockBroadcaster: any = jasmine.createSpyObj('Broadcaster', ['broadcast']);
-  let mockAuthenticationService: any = jasmine.createSpyObj('AuthenticationService', ['getGithubToken']);
-  let mockUser: User;
+  const mockTemplateRef = jasmine.createSpy('TemplateRef');
   let mockExtProfile: ExtProfile;
+  let mockUser: User;
   let mockContext: Context;
   let spaceMock1: any;
   let spaceMock2: any;
@@ -59,29 +57,31 @@ describe('MySpacesComponent', () => {
     value: 'zzz'
   };
 
-  mockAuthenticationService.getGitHubToken = () => {};
-  mockSpaceService.deleteSpace = () => {};
-
   beforeEach(() => {
-
     mockExtProfile = {
-        'bio': 'mock-bio',
-        'company': 'mock-company',
-        'email': 'mock-email',
-        'emailPrivate': false,
-        'fullName': 'mock-fullName',
-        'imageURL': 'mock-imageUrl',
-        'url': 'mock-url',
-        'username': 'mock-username',
-        'contextInformation': undefined,
-        'registrationCompleted': true,
-        'featureLevel': 'mock-featureLevel'
+      bio: 'mock-bio',
+      company: 'mock-company',
+      email: 'mock-email',
+      emailPrivate: false,
+      fullName: 'mock-fullName',
+      imageURL: 'mock-imageUrl',
+      url: 'mock-url',
+      username: 'mock-username',
+      contextInformation: {
+        pins: {
+          'myspaces': []
+        }
+      },
+      registrationCompleted: true,
+      featureLevel: 'mock-featureLevel'
     };
+
     mockUser = {
-      'attributes': mockExtProfile,
-      'id': 'mock-id',
-      'type': 'mock-type'
+      attributes: mockExtProfile,
+      id: 'mock-id',
+      type: 'mock-type'
     };
+
     mockContext = {
       user: mockUser,
       type: jasmine.createSpy('ContextType'),
@@ -92,29 +92,103 @@ describe('MySpacesComponent', () => {
     spaceMock2 = cloneDeep(spaceMock);
     spaceMock2.id = '2';
     spaceMock2.attributes.name = 'spaceMock2-name';
-    mockContexts.current = of(mockContext);
-    mockUserService.loggedInUser = of(mockUser);
-    mockGettingStartedService.createTransientProfile.and.returnValue(mockExtProfile);
-    mockGettingStartedService.update.and.returnValue(of({}));
-    mockSpaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2])); // called by ngOnInit() to initialize allSpaces
 
     TestBed.configureTestingModule({
-      imports: [FormsModule],
+      imports: [FormsModule, HttpClientTestingModule],
       declarations: [MySpacesComponent],
       providers: [
-        { provide: Contexts, useValue: mockContexts },
-        { provide: GettingStartedService, useValue: mockGettingStartedService },
-        { provide: Logger, useValue: mockLogger },
-        { provide: BsModalService, useValue: mockBsModalService },
-        { provide: SpaceService, useValue: mockSpaceService },
-        { provide: UserService, useValue: mockUserService },
-        { provide: AuthenticationService, useValue: mockAuthenticationService },
-        { provide: Broadcaster, useValue: mockBroadcaster }
+        {
+          provide: Contexts,
+          useFactory: (): jasmine.SpyObj<Contexts> => {
+            const mockContexts: jasmine.SpyObj<Contexts> = createMock(Contexts);
+            mockContexts.current = of(mockContext) as Observable<Context> & jasmine.Spy;
+            return mockContexts;
+          }
+        },
+        {
+          provide: GettingStartedService,
+          useFactory: (): jasmine.SpyObj<GettingStartedService> => {
+            const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = createMock(GettingStartedService);
+            mockGettingStartedService.createTransientProfile.and.returnValue(mockExtProfile);
+            mockGettingStartedService.update.and.returnValue(of({}));
+            return mockGettingStartedService;
+          }
+        },
+        {
+          provide: Logger,
+          useFactory: (): jasmine.SpyObj<Logger> => {
+            const mockLogger: jasmine.SpyObj<Logger> = createMock(Logger);
+            mockLogger.error.and.stub();
+            return mockLogger;
+          }
+        },
+        {
+          provide: Broadcaster,
+          useFactory: (): jasmine.SpyObj<Broadcaster> => {
+            const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
+            mockBroadcaster.on.and.callFake((key: string): Observable<any> => {
+              if (key === 'displayMySpaces') {
+                return of([spaceMock1, spaceMock2]);
+              }
+              if (key === 'displaySharedSpaces') {
+                return of([spaceMock1, spaceMock2]);
+              }
+            });
+            mockBroadcaster.broadcast.and.callThrough();
+            return mockBroadcaster;
+          }
+        },
+        {
+          provide: BsModalService,
+          useFactory: (): jasmine.SpyObj<BsModalService> => {
+            const mockBsModalService: jasmine.SpyObj<BsModalService> = createMock(BsModalService);
+            mockBsModalService.show.and.callThrough();
+            return mockBsModalService;
+          }
+        },
+        {
+          provide: SpaceService,
+          useFactory: (): jasmine.SpyObj<SpaceService> => {
+            const mockSpaceService: any = createMock(SpaceService);
+            mockSpaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2]));
+            mockSpaceService.deleteSpace = () => {};
+            return mockSpaceService;
+          }
+        },
+        {
+          provide: UserService,
+          useFactory: (): jasmine.SpyObj<UserService> => {
+            const mockUserService: jasmine.SpyObj<UserService> = createMock(UserService);
+            mockUserService.loggedInUser = of(mockUser) as ConnectableObservable<User> & jasmine.Spy;
+            return mockUserService;
+          }
+        },
+        {
+          provide: AuthenticationService,
+          useFactory: (): jasmine.SpyObj<AuthenticationService> => {
+            const mockAuthenticationService: any = createMock(AuthenticationService);
+            mockAuthenticationService.getGitHubToken = () => {};
+            mockAuthenticationService.getToken.and.returnValue('mock-token');
+            return mockAuthenticationService;
+          }
+        },
+        {
+          provide: ErrorHandler,
+          useFactory: (): jasmine.SpyObj<ErrorHandler> => {
+            const mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
+            mockErrorHandler.handleError.and.callThrough();
+            return mockErrorHandler;
+          }
+        },
+        { provide: WIT_API_URL, useValue: 'https://example.com/api/' }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     });
     fixture = TestBed.createComponent(MySpacesComponent);
     component = fixture.debugElement.componentInstance;
+    component.context = mockContext;
+    component.loggedInUser = mockUser;
+    component.modalRef = jasmine.createSpyObj('BsModalRef', ['hide']);
   });
 
   /**
@@ -139,7 +213,7 @@ describe('MySpacesComponent', () => {
     it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', () => {
       spyOn(component, 'savePins').and.callFake(() => {});
       spyOn(component, 'updateSpaces');
-      component.allSpaces = [spaceMock1];
+      component._spaces = [spaceMock1];
       component.handlePinChange(spaceMock1);
       expect(component.savePins).toHaveBeenCalled();
       expect(component.updateSpaces).toHaveBeenCalled();
@@ -147,36 +221,17 @@ describe('MySpacesComponent', () => {
 
     it('should not adjust the pins if the space does not exist in the user\'s spaces', () => {
       spyOn(component, 'savePins');
-      component.allSpaces = [];
+      component._spaces = [];
       component.handlePinChange(spaceMock1);
       expect(component.savePins).toHaveBeenCalledTimes(0);
-    });
-
-    it('should show the pin for the space if pinned', () => {
-      spyOn(component, 'savePins').and.callFake(() => {});
-      spyOn(component, 'updateSpaces');
-      spaceMock1.showPin = false;
-      component.allSpaces = [spaceMock1];
-      component.handlePinChange(spaceMock1);
-      expect(spaceMock1.showPin).toBeDefined();
-      expect(spaceMock1.showPin).toBeTruthy();
-    });
-
-    it('should remove the pin from the space if unpinned', () => {
-      spyOn(component, 'savePins').and.callFake(() => {});
-      spyOn(component, 'updateSpaces');
-      spaceMock1.showPin = true;
-      component.allSpaces = [spaceMock1];
-      component.handlePinChange(spaceMock1);
-      expect(spaceMock1.showPin).toBeDefined();
-      expect(spaceMock1.showPin).toBeFalsy();
     });
   });
 
   describe('#handleCreateSpaceAction', () => {
     it('should broadcast event when create space is clicked', () => {
-        component.handleAction({ id: 'createSpace'} as Action);
-        expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
+      const mockBroadcaster: jasmine.SpyObj<Broadcaster> = TestBed.get(Broadcaster);
+      component.handleAction({ id: 'createSpace'} as Action);
+      expect(mockBroadcaster.broadcast).toHaveBeenCalledWith('showAddSpaceOverlay', true);
     });
   });
 
@@ -188,7 +243,7 @@ describe('MySpacesComponent', () => {
     it('should use matchesFilters to select qualifying spaces', () => {
       spyOn(component, 'matchesFilters');
       component.appliedFilters = [mockFilter1, mockFilter2]; // 'space' && '2'
-      component.allSpaces = [spaceMock1, spaceMock2];
+      component._spaces = [spaceMock1, spaceMock2];
       component.ngOnInit();
       component.applyFilters();
       expect(component.matchesFilters).toHaveBeenCalled();
@@ -198,7 +253,7 @@ describe('MySpacesComponent', () => {
       component.appliedFilters = [];
       component.ngOnInit();
       component.applyFilters();
-      expect(component._spaces).toEqual([spaceMock1, spaceMock2]);
+      expect(component.displayedSpaces).toEqual([spaceMock1, spaceMock2]);
     });
   });
 
@@ -286,18 +341,20 @@ describe('MySpacesComponent', () => {
 
   describe('#initSpaces', () => {
     it('should log an error if it failed to retrieve a list of the user\'s spaces', () => {
+      const mockErrorHandler: jasmine.SpyObj<ErrorHandler> = TestBed.get(ErrorHandler);
       component.context = {};
       component.initSpaces(mockEvent);
-      expect(component.logger.error).toHaveBeenCalled();
+      expect(mockErrorHandler.handleError).toHaveBeenCalled();
     });
 
     it('should retrieve the user\'s space information and show all spaces', () => {
       component.initSpaces(mockEvent);
-      expect(component.allSpaces).toEqual([spaceMock1, spaceMock2]);
+      expect(component.displayedSpaces).toEqual([spaceMock1, spaceMock2]);
     });
 
     // crashes from uncaught error if spaceService.getSpacesByUser fails
     xit('should handle an error from spaceService.getSpacesByUser', () => {
+      const mockSpaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       mockSpaceService.getSpacesByUser.and.returnValue(observableThrowError('error'));
       component.initSpaces(mockEvent);
       // crashes ..
@@ -307,27 +364,24 @@ describe('MySpacesComponent', () => {
   describe('#removeSpace', () => {
     it('should delegate to spaceService.deleteSpace for deletion', () => {
       spyOn(component.spaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
-      component.modalRef = mockModalRef;
       component.spaceToDelete = spaceMock1;
       component.ngOnInit();
       component.removeSpace();
       expect(component.spaceService.deleteSpace).toHaveBeenCalledWith(spaceMock1);
     });
 
-    it('should remove the selected space out of allSpaces', () => {
+    it('should remove the selected space out of _spaces', () => {
       spyOn(component.spaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
       spyOn(component, 'savePins').and.callThrough();
-      component.modalRef = mockModalRef;
       component.spaceToDelete = spaceMock1;
       component.ngOnInit();
-      expect(component.allSpaces).toEqual([spaceMock1, spaceMock2]);
+      expect(component.displayedSpaces).toEqual([spaceMock1, spaceMock2]);
       component.removeSpace();
-      expect(component.allSpaces).toEqual([spaceMock2]);
+      expect(component.displayedSpaces).toEqual([spaceMock2]);
     });
 
     it('should log an error if spaceService.deleteSpace fails', () => {
       spyOn(component.spaceService, 'deleteSpace').and.returnValue(observableThrowError('error'));
-      component.modalRef = mockModalRef;
       component.spaceToDelete = spaceMock1;
       component.ngOnInit();
       component.removeSpace();
@@ -412,7 +466,7 @@ describe('MySpacesComponent', () => {
       component.applyFilters(); // initialize _spaces first using applyFilters()
       component.sort();
       expect(Array.prototype.sort).toHaveBeenCalled();
-      expect(component._spaces).toEqual([spaceMock2, spaceMock1]);
+      expect(component.displayedSpaces).toEqual([spaceMock2, spaceMock1]);
     });
   });
 
@@ -438,7 +492,6 @@ describe('MySpacesComponent', () => {
 
   describe('#closeModal', () => {
     it('should hide the modal', () => {
-      component.modalRef = mockModalRef;
       component.closeModal(mockEvent);
       expect(component.modalRef.hide).toHaveBeenCalled();
     });
@@ -462,8 +515,7 @@ describe('MySpacesComponent', () => {
           'myspaces': [] // no pins
         }
       };
-      component.pageName = 'myspaces';
-      component.allSpaces = [spaceMock1, spaceMock2];
+      component._spaces = [spaceMock1, spaceMock2];
       expect(spaceMock1.showPin).toBeUndefined();
       expect(spaceMock2.showPin).toBeUndefined();
       component.restorePins();
@@ -477,7 +529,6 @@ describe('MySpacesComponent', () => {
           'myspaces': [] // no pins
         }
       };
-      component.pageName = 'myspaces';
       component.ngOnInit();
       component.restorePins();
       expect(spaceMock1.showPin).toBeFalsy();
@@ -492,7 +543,6 @@ describe('MySpacesComponent', () => {
           ]
         }
       };
-      component.pageName = 'myspaces';
       component.ngOnInit();
       component.restorePins();
       expect(spaceMock1.showPin).toBeTruthy();
@@ -501,21 +551,22 @@ describe('MySpacesComponent', () => {
 
     it('should return and do nothing if the user has no attributes', () => {
       component.loggedInUser.attributes = undefined;
-      spyOn(component.allSpaces, 'forEach');
+      spyOn(component._spaces, 'forEach');
       component.restorePins();
-      expect(component.allSpaces.forEach).toHaveBeenCalledTimes(0);
+      expect(component._spaces.forEach).toHaveBeenCalledTimes(0);
     });
   });
 
   describe('#savePins', () => {
     it('should initialize the contextInformation and pins if undefined', () => {
-      expect(mockExtProfile.contextInformation).toBeUndefined();
+      mockExtProfile.contextInformation = undefined;
       component.savePins();
       expect(mockExtProfile.contextInformation).toBeDefined();
       expect(mockExtProfile.contextInformation.pins).toBeDefined();
     });
 
     it('should save the pins that are currently showing', () => {
+      const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
       spaceMock1.showPin = true;
       spaceMock2.showPin = false;
       mockContext.user.attributes['contextInformation'] = {
@@ -525,7 +576,6 @@ describe('MySpacesComponent', () => {
           ]
         }
       };
-      component.pageName = 'myspaces';
       mockGettingStartedService.update.and.returnValue(of(mockContext.user.attributes));
       component.ngOnInit();
       component.savePins();
@@ -538,6 +588,8 @@ describe('MySpacesComponent', () => {
     });
 
     it('should log an error if there was a problem with subscribing to the update', () => {
+      const mockGettingStartedService: jasmine.SpyObj<GettingStartedService> = TestBed.get(GettingStartedService);
+      const mockLogger: jasmine.SpyObj<Logger> = TestBed.get(Logger);
       mockGettingStartedService.update.and.returnValue(observableThrowError('error'));
       component.savePins();
       expect(mockLogger.error).toHaveBeenCalled();

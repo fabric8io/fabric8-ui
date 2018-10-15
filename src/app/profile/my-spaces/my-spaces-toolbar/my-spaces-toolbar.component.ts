@@ -10,9 +10,15 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+import { Broadcaster } from 'ngx-base';
 import { FilterConfig, FilterEvent, FilterField } from 'patternfly-ng/filter';
 import { SortConfig, SortEvent } from 'patternfly-ng/sort';
 import { ToolbarConfig } from 'patternfly-ng/toolbar';
+
+enum SpacesType {
+  MYSPACES = 'mySpaces',
+  SHAREDSPACES = 'sharedSpaces'
+}
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -34,8 +40,10 @@ export class MySpacesToolbarComponent implements OnInit, OnChanges {
   isAscendingSort: boolean = true;
   sortConfig: SortConfig;
   toolbarConfig: ToolbarConfig;
+  activeButton: string = SpacesType.MYSPACES;
+  SpacesType: typeof SpacesType = SpacesType;
 
-  constructor() {
+  constructor(private broadcaster: Broadcaster) {
   }
 
   // Initialization
@@ -73,6 +81,16 @@ export class MySpacesToolbarComponent implements OnInit, OnChanges {
     if (changes.resultsCount && this.filterConfig) {
       this.filterConfig.resultsCount = changes.resultsCount.currentValue;
     }
+  }
+
+  showMySpaces(): void {
+    this.activeButton = SpacesType.MYSPACES;
+    this.broadcaster.broadcast('displayMySpaces');
+  }
+
+  showSharedSpaces(): void {
+    this.activeButton = SpacesType.SHAREDSPACES;
+    this.broadcaster.broadcast('displaySharedSpaces');
   }
 
   // Actions
