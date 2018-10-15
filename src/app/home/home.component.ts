@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { Subscription } from 'rxjs';
+import { first, map } from 'rxjs/operators';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -8,20 +9,26 @@ import { Subscription } from 'rxjs';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit {
 
   loggedInUser: User;
-  private _loggedInUserSubscription: Subscription;
+  spacesCount: number = -1;
 
   constructor(
-    private userService: UserService
+    private readonly userService: UserService,
+    private readonly spaceService: SpaceService
   ) { }
 
   ngOnInit() {
-    this._loggedInUserSubscription = this.userService.loggedInUser.subscribe(val => this.loggedInUser = val);
+    this.loggedInUser = this.userService.currentLoggedInUser;
+    this.spaceService.getSpacesByUser(this.loggedInUser.attributes.username)
+      .pipe(
+        first(),
+        map((spaces: Space[]): number => spaces.length)
+      )
+      .subscribe((spacesCount: number): void => {
+        this.spacesCount = spacesCount;
+      });
   }
 
-  ngOnDestroy() {
-    this._loggedInUserSubscription.unsubscribe();
-  }
 }

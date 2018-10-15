@@ -1,20 +1,24 @@
 <f8-feature-toggle featureName="Analyze.newHomeDashboard" [userLevel]="user" [defaultLevel]="default"></f8-feature-toggle>
 <ng-template #user>
-  <div class="container-fluid container-cards-pf f8-home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
-    <div class="cards-pf">
-      <div class="row row-cards-pf">
-        <div class="col-xs-12 col-md-4">
-          <fabric8-recent-spaces-widget [cardSizeClass]="'f8-card-lg'" [cardBodySizeClass]="'f8-card-body-lg'"></fabric8-recent-spaces-widget>
-        </div>
-        <div class="col-xs-12 col-md-4">
-          <fabric8-recent-workspaces-widget></fabric8-recent-workspaces-widget>
-        </div>
-        <div class="col-xs-12 col-md-4">
-          <alm-work-item-widget></alm-work-item-widget>
+  <fabric8-loading-widget message="Please wait while we load your spaces" *ngIf="spacesCount === -1"></fabric8-loading-widget>
+  <fabric8-home-empty-state *ngIf="spacesCount === 0"></fabric8-home-empty-state>
+  <ng-container *ngIf="spacesCount > 0">
+    <div class="container-fluid container-cards-pf f8-home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
+      <div class="cards-pf">
+        <div class="row row-cards-pf">
+          <div class="col-xs-12 col-md-4">
+            <fabric8-recent-spaces-widget [cardSizeClass]="'f8-card-lg'" [cardBodySizeClass]="'f8-card-body-lg'"></fabric8-recent-spaces-widget>
+          </div>
+          <div class="col-xs-12 col-md-4">
+            <fabric8-recent-workspaces-widget></fabric8-recent-workspaces-widget>
+          </div>
+          <div class="col-xs-12 col-md-4">
+            <alm-work-item-widget></alm-work-item-widget>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </ng-template>
 <ng-template #default>
   <div class="container-fluid container-cards-pf home-wrapper" *ngIf="loggedInUser && loggedInUser.attributes">
