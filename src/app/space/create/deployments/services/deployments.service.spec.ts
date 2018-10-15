@@ -27,6 +27,10 @@ import { MemoryUnit } from '../models/memory-unit';
 import { NetworkStat } from '../models/network-stat';
 import { PodPhase } from '../models/pod-phase';
 import { Pods } from '../models/pods';
+import {
+  CpuResourceUtilization,
+  MemoryResourceUtilization
+} from '../models/resource-utilization';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
 import { DeploymentApiService } from './deployment-api.service';
@@ -36,7 +40,6 @@ import {
   TIMER_TOKEN,
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
-import { CpuResourceUtilization, MemoryResourceUtilization } from '../models/resource-utilization';
 
 describe('DeploymentsService', (): void => {
 

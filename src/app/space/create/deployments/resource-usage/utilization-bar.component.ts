@@ -39,7 +39,6 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.subscriptions.push(
       this.stat.subscribe((val: ResourceUtilization): void => {
-        console.log('TAG', val);
         this.used = val.currentSpaceUsage.used;
         this.otherSpacesUsed = val.otherSpacesUsage.used;
         this.total = val.currentSpaceUsage.quota;
