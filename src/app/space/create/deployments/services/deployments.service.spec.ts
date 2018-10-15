@@ -36,6 +36,7 @@ import {
   TIMER_TOKEN,
   TIMESERIES_SAMPLES_TOKEN
 } from './deployments.service';
+import { CpuResourceUtilization, MemoryResourceUtilization } from '../models/resource-utilization';
 
 describe('DeploymentsService', (): void => {
 
@@ -1545,6 +1546,128 @@ describe('DeploymentsService', (): void => {
     });
   });
 
+  describe('#getEnvironmentCpuUtilization', (): void => {
+    it('should return CPU utilization for specified and other spaces', (done: DoneFn): void => {
+      const gb: number = Math.pow(1024, 3);
+      apiService.getQuotas.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            space_usage: {
+              cpucores: 1,
+              memory: 0.5 * gb
+            },
+            other_usage: {
+              cpucores: {
+                used: 1,
+                quota: 2
+              },
+              memory: {
+                used: 0.5 * gb,
+                quota: 1,
+                units: MemoryUnit.GB
+              }
+            }
+          }
+        },
+        {
+          attributes: {
+            name: 'run',
+            space_usage: {
+              cpucores: 0,
+              memory: 0
+            },
+            other_usage: {
+              cpucores: {
+                used: 1,
+                quota: 2
+              },
+              memory: {
+                used: 0.5 * gb,
+                quota: 1,
+                units: MemoryUnit.GB
+              }
+            }
+          }
+        }
+      ]));
+      service.getEnvironmentCpuUtilization('foo-spaceId', 'run').pipe(
+        first()
+      ).subscribe((utilization: CpuResourceUtilization): void => {
+          expect(utilization).toEqual({
+            currentSpaceUsage: {
+              used: 0,
+              quota: 2
+            },
+            otherSpacesUsage: {
+              used: 1,
+              quota: 2
+            }
+          });
+          done();
+        });
+      timerToken.next();
+    });
+  });
+
+  describe('#getEnvironmentMemoryUtilization', (): void => {
+    it('should return Memory utilization for specified and other spaces', (done: DoneFn): void => {
+      const gb: number = Math.pow(1024, 3);
+      apiService.getQuotas.and.returnValue(of([
+        {
+          attributes: {
+            name: 'stage',
+            space_usage: {
+              cpucores: 1,
+              memory: 0.5 * gb
+            },
+            other_usage: {
+              cpucores: {
+                used: 1,
+                quota: 2
+              },
+              memory: {
+                used: 0.5 * gb,
+                quota: 1 * gb,
+                units: MemoryUnit.GB
+              }
+            }
+          }
+        },
+        {
+          attributes: {
+            name: 'run',
+            space_usage: {
+              cpucores: 0,
+              memory: 0
+            },
+            other_usage: {
+              cpucores: {
+                used: 1,
+                quota: 2
+              },
+              memory: {
+                used: 0.5 * gb,
+                quota: 1 * gb,
+                units: MemoryUnit.GB
+              }
+            }
+          }
+        }
+      ]));
+      service.getEnvironmentMemoryUtilization('foo-spaceId', 'run').pipe(
+        first()
+      ).subscribe((utilization: MemoryResourceUtilization): void => {
+          expect(utilization).toEqual({
+            currentSpaceUsage: ScaledMemoryStat.from(new ScaledMemoryStat(0, 1 * gb), MemoryUnit.MB),
+            otherSpacesUsage: ScaledMemoryStat.from(new ScaledMemoryStat(0.5 * gb, 1 * gb), MemoryUnit.MB)
+          });
+          done();
+        });
+      timerToken.next();
+    });
+  });
+
   describe('#deleteDeployment', (): void => {
     it('should delete a deployment with the correct URL', (done: DoneFn): void => {
       apiService.deleteDeployment.and.returnValue(of('OK'));
@@ -2328,6 +2451,16 @@ describe('DeploymentsService', (): void => {
         timerToken.next();
         timerToken.next();
       });
+    });
+  });
+
+  describe('makeCacheKey', () => {
+    it('should correctly key space, environment, application ID tuples', () => {
+      expect(DeploymentsService.makeCacheKey('foo', 'bar', 'baz')).toEqual('foo:bar:baz');
+    });
+
+    it('should correctly key space and environment tuples', () => {
+      expect(DeploymentsService.makeCacheKey('foo', 'bar')).toEqual('foo:bar');
     });
   });
 

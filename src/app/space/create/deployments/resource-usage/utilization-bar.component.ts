@@ -5,7 +5,7 @@ import {
   OnInit
 } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Stat } from '../models/stat';
+import { ResourceUtilization } from '../models/resource-utilization';
 import {
   Status,
   StatusType
@@ -20,26 +20,33 @@ export class UtilizationBarComponent implements OnDestroy, OnInit {
 
   @Input() resourceTitle: string;
   @Input() resourceUnit: string;
-  @Input() stat: Observable<Stat>;
+  @Input() stat: Observable<ResourceUtilization>;
   @Input() status: Observable<Status>;
 
   warn: boolean = false;
 
   used: number;
+  otherSpacesUsed: number;
+
   total: number;
+
   usedPercent: number;
+  othersPercent: number;
   unusedPercent: number;
 
   private readonly subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.stat.subscribe((val: Stat): void => {
-        this.used = val.used;
-        this.total = val.quota;
+      this.stat.subscribe((val: ResourceUtilization): void => {
+        console.log('TAG', val);
+        this.used = val.currentSpaceUsage.used;
+        this.otherSpacesUsed = val.otherSpacesUsage.used;
+        this.total = val.currentSpaceUsage.quota;
 
         this.usedPercent = (this.total !== 0) ? Math.floor(this.used / this.total * 100) : 0;
-        this.unusedPercent = 100 - this.usedPercent;
+        this.othersPercent = (this.total !== 0) ? Math.floor(this.otherSpacesUsed / this.total * 100) : 0;
+        this.unusedPercent = 100 - (this.usedPercent + this.othersPercent);
       })
     );
 

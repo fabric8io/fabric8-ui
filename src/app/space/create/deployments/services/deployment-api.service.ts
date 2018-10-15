@@ -17,6 +17,7 @@ import { Observable , of, throwError } from 'rxjs';
 import { catchError , map } from 'rxjs/operators';
 import { CpuStat } from '../models/cpu-stat';
 import { MemoryStat } from '../models/memory-stat';
+import { Stat } from '../models/stat';
 
 export interface ApplicationsResponse {
   data: Space;
@@ -89,6 +90,36 @@ export interface Quota {
   memory: MemoryStat;
 }
 
+export interface EnvironmentQuotaResponse {
+  id: string;
+  type: string;
+  data: EnvironmentQuota[];
+}
+
+export interface EnvironmentQuota {
+  attributes: EnvironmentQuotaAttributes;
+}
+
+export interface EnvironmentQuotaAttributes {
+  name: string;
+  space_usage: EnvironmentResourceUsage;
+  other_usage: OtherUsage;
+}
+
+export interface EnvironmentResourceUsage {
+  cpucores: number;
+  memory: number;
+}
+
+export interface OtherUsage {
+  cpucores: CpuStat;
+  memory: MemoryStat;
+  persistent_volume_claims: Stat;
+  replication_controllers: Stat;
+  secrets: Stat;
+  services: Stat;
+}
+
 export interface TimeseriesResponse {
   data: DeploymentStats;
 }
@@ -153,7 +184,7 @@ export class DeploymentApiService {
 
   constructor(
     private readonly http: HttpClient,
-    @Inject(WIT_API_URL) witUrl: string,
+    @Inject(WIT_API_URL) private readonly witUrl: string,
     private readonly auth: AuthenticationService,
     private readonly logger: Logger,
     private readonly errorHandler: ErrorHandler
@@ -168,6 +199,13 @@ export class DeploymentApiService {
     const encSpaceId: string = encodeURIComponent(spaceId);
     return this.httpGet<EnvironmentsResponse>(`${this.apiUrl}${encSpaceId}/environments`).pipe(
       map((response: EnvironmentsResponse): EnvironmentStat[] => response.data)
+    );
+  }
+
+  getQuotas(spaceId: string): Observable<EnvironmentQuota[]> {
+    const encSpaceId: string = encodeURIComponent(spaceId);
+    return this.httpGet<{}>(`${this.witUrl}deployments/environments/spaces/${encSpaceId}`).pipe(
+      map((response: EnvironmentQuotaResponse): EnvironmentQuota[] => response.data)
     );
   }
 

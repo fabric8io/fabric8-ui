@@ -9,7 +9,6 @@ import {
   Subject
 } from 'rxjs';
 import { initContext } from 'testing/test-context';
-
 import {
   Status,
   StatusType
@@ -27,14 +26,25 @@ describe('UtilizationBarComponent', (): void => {
     const testContext = initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent): void => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = of({ used: 1, quota: 4 });
+      component.stat = of({
+        currentSpaceUsage: {
+          used: 1,
+          quota: 4
+        },
+        otherSpacesUsage: {
+          used: 0,
+          quota: 4
+        }
+      });
       component.status = of({ type: StatusType.OK, message: '' });
     });
 
     it('should have proper stat fields set', (): void => {
       expect(testContext.testedDirective.used).toEqual(1);
+      expect(testContext.testedDirective.otherSpacesUsed).toEqual(0);
       expect(testContext.testedDirective.total).toEqual(4);
       expect(testContext.testedDirective.usedPercent).toEqual(25);
+      expect(testContext.testedDirective.othersPercent).toEqual(0);
       expect(testContext.testedDirective.unusedPercent).toEqual(75);
     });
 
@@ -61,11 +71,118 @@ describe('UtilizationBarComponent', (): void => {
     });
   });
 
+  describe('with valid Stat and other space usage', (): void => {
+    const testContext = initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent): void => {
+      component.resourceTitle = 'someTitle';
+      component.resourceUnit = 'someUnit';
+      component.stat = of({
+        currentSpaceUsage: {
+          used: 1,
+          quota: 4
+        },
+        otherSpacesUsage: {
+          used: 1,
+          quota: 4
+        }
+      });
+      component.status = of({ type: StatusType.OK, message: '' });
+    });
+
+    it('should have proper stat fields set', (): void => {
+      expect(testContext.testedDirective.used).toEqual(1);
+      expect(testContext.testedDirective.otherSpacesUsed).toEqual(1);
+      expect(testContext.testedDirective.total).toEqual(4);
+      expect(testContext.testedDirective.usedPercent).toEqual(25);
+      expect(testContext.testedDirective.othersPercent).toEqual(25);
+      expect(testContext.testedDirective.unusedPercent).toEqual(50);
+    });
+
+    it('should have a properly set title', (): void => {
+      const de: DebugElement = testContext.fixture.debugElement.query(By.css('.progress-description'));
+      const el: HTMLElement = de.nativeElement;
+      expect(el.textContent.trim()).toEqual('someTitle (someUnit)');
+    });
+
+    it('should have properly set card label information', function() {
+      const de: DebugElement = testContext.fixture.debugElement.query(By.css('#resourceCardLabel'));
+      const el: HTMLElement = de.nativeElement;
+      expect(el.textContent.trim()).toEqual('2 of 4');
+    });
+
+    it('should clear warning when under 60% used', function() {
+      expect(testContext.testedDirective.warn).toBeFalsy();
+
+      const de: DebugElement = testContext.fixture.debugElement.query(By.css(`.utilization-okay`));
+      expect(de).toBeTruthy();
+
+      const de2: DebugElement = testContext.fixture.debugElement.query(By.css(`.utilization-warning`));
+      expect(de2).toBeFalsy();
+    });
+  });
+
+  describe('with valid Stat and only other space usage', (): void => {
+    const testContext = initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent): void => {
+      component.resourceTitle = 'someTitle';
+      component.resourceUnit = 'someUnit';
+      component.stat = of({
+        currentSpaceUsage: {
+          used: 0,
+          quota: 4
+        },
+        otherSpacesUsage: {
+          used: 1,
+          quota: 4
+        }
+      });
+      component.status = of({ type: StatusType.OK, message: '' });
+    });
+
+    it('should have proper stat fields set', (): void => {
+      expect(testContext.testedDirective.used).toEqual(0);
+      expect(testContext.testedDirective.otherSpacesUsed).toEqual(1);
+      expect(testContext.testedDirective.total).toEqual(4);
+      expect(testContext.testedDirective.usedPercent).toEqual(0);
+      expect(testContext.testedDirective.othersPercent).toEqual(25);
+      expect(testContext.testedDirective.unusedPercent).toEqual(75);
+    });
+
+    it('should have a properly set title', (): void => {
+      const de: DebugElement = testContext.fixture.debugElement.query(By.css('.progress-description'));
+      const el: HTMLElement = de.nativeElement;
+      expect(el.textContent.trim()).toEqual('someTitle (someUnit)');
+    });
+
+    it('should have properly set card label information', function() {
+      const de: DebugElement = testContext.fixture.debugElement.query(By.css('#othersResourceCardLabel'));
+      const el: HTMLElement = de.nativeElement;
+      expect(el.textContent.trim()).toEqual('1 of 4');
+    });
+
+    it('should clear warning when under 60% used', function() {
+      expect(testContext.testedDirective.warn).toBeFalsy();
+
+      const de: DebugElement = testContext.fixture.debugElement.query(By.css(`.utilization-others`));
+      expect(de).toBeTruthy();
+
+      const de2: DebugElement = testContext.fixture.debugElement.query(By.css(`.utilization-others-warning`));
+      expect(de2).toBeFalsy();
+    });
+  });
+
   describe('with Warning level Stat', (): void => {
     const testContext = initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent): void => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = of({ used: 3, quota: 4 });
+      component.stat = of({
+        currentSpaceUsage: {
+          used: 3,
+          quota: 4
+        },
+        otherSpacesUsage: {
+          used: 0,
+          quota: 4
+        }
+      });
       component.status = of({ type: StatusType.WARN, message: '' });
     });
 
@@ -103,7 +220,16 @@ describe('UtilizationBarComponent', (): void => {
     const testContext = initContext(UtilizationBarComponent, HostComponent, {}, (component: UtilizationBarComponent): void => {
       component.resourceTitle = 'someTitle';
       component.resourceUnit = 'someUnit';
-      component.stat = of({ used: 2, quota: 0 });
+      component.stat = of({
+        currentSpaceUsage: {
+          used: 2,
+          quota: 0
+        },
+        otherSpacesUsage: {
+          used: 0,
+          quota: 0
+        }
+      });
       component.status = of({ type: StatusType.ERR, message: '' });
     });
 
@@ -111,12 +237,6 @@ describe('UtilizationBarComponent', (): void => {
       const de: DebugElement = testContext.fixture.debugElement.query(By.css('.progress-description'));
       const el: HTMLElement = de.nativeElement;
       expect(el.textContent.trim()).toEqual('someTitle (someUnit)');
-    });
-
-    it('should have properly set card label information', (): void => {
-      const de: DebugElement = testContext.fixture.debugElement.query(By.css('#resourceCardLabel'));
-      const el: HTMLElement = de.nativeElement;
-      expect(el.textContent.trim()).toEqual('2 of 0');
     });
   });
 

@@ -3,13 +3,13 @@
     <utilization-bar
       [resourceTitle]="'CPU'"
       [resourceUnit]="'Cores'"
-      [stat]="deploymentsService.getEnvironmentCpuStat(spaceId, environment)"
+      [stat]="deploymentsService.getEnvironmentCpuUtilization(spaceId, environment)"
       [status]="deploymentStatusService.getEnvironmentCpuStatus(spaceId, environment)"
     ></utilization-bar>
     <utilization-bar
       [resourceTitle]="'Memory'"
       [resourceUnit]="memUnit | async"
-      [stat]="deploymentsService.getEnvironmentMemoryStat(spaceId, environment)"
+      [stat]="deploymentsService.getEnvironmentMemoryUtilization(spaceId, environment)"
       [status]="deploymentStatusService.getEnvironmentMemoryStatus(spaceId, environment)"
     ></utilization-bar>
   </div>

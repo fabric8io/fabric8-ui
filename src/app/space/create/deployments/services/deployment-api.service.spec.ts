@@ -10,10 +10,13 @@ import { WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 import { first } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
+import { MemoryUnit } from '../models/memory-unit';
 import {
   Application,
   ApplicationsResponse,
   DeploymentApiService,
+  EnvironmentQuota,
+  EnvironmentQuotaResponse,
   EnvironmentsResponse,
   EnvironmentStat,
   MultiTimeseriesData,
@@ -112,6 +115,70 @@ describe('DeploymentApiService', () => {
         );
 
       const req: TestRequest = controller.expectOne('http://example.com/deployments/spaces/foo%20spaceId/environments');
+      req.error(new ErrorEvent('Mock HTTP Error'));
+    });
+  });
+
+  describe('#getQuotas', (): void => {
+    it('should return result', (done: DoneFn): void => {
+      const gb: number = Math.pow(1024, 3);
+      const httpResponse: EnvironmentQuotaResponse = {
+        data: [
+          {
+            attributes: {
+              name: 'stage',
+              space_usage: {
+                cpucores: 1,
+                memory: 0.5 * gb
+              },
+              other_usage: {
+                cpucores: {
+                  used: 1,
+                  quota: 2
+                },
+                memory: {
+                  used: 0.5 * gb,
+                  quota: 1,
+                  units: MemoryUnit.GB
+                }
+              }
+            }
+          },
+          {
+            attributes: {
+              name: 'run'
+            }
+          }
+        ]
+      } as EnvironmentQuotaResponse;
+      service.getQuotas('foo spaceId').pipe(
+        first()
+      ).subscribe((quotas: EnvironmentQuota[]): void => {
+          expect(quotas).toEqual(httpResponse.data);
+          controller.verify();
+          done();
+        });
+
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/environments/spaces/foo%20spaceId');
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush(httpResponse);
+    });
+
+    it('should report errors', (done: DoneFn): void => {
+      service.getQuotas('foo spaceId').pipe(
+        first()
+      ).subscribe(
+          (): void => done.fail('should throw error'),
+          (): void => {
+            expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+            expect(TestBed.get(Logger).error).toHaveBeenCalled();
+            controller.verify();
+            done();
+          }
+        );
+
+      const req: TestRequest = controller.expectOne('http://example.com/deployments/environments/spaces/foo%20spaceId');
       req.error(new ErrorEvent('Mock HTTP Error'));
     });
   });
