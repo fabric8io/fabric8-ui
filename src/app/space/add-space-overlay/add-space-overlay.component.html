@@ -21,6 +21,7 @@
                 <div class="form-group">
                   <label for="name" class="control-label">Space Name</label>
                   <input id="add-space-overlay-name" name="name" type="text" class="form-control" placeholder="Enter a unique name for your space"
+                         #addSpaceOverlayNameInput
                          [(ngModel)]="space.name" #name="ngModel" required uniqueSpaceName validSpaceName
                          (keyup.enter)="createSpaceButton.click()"/>
                   <div *ngIf="name.errors && name.dirty" class="alert-danger">

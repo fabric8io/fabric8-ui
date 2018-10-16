@@ -1,5 +1,5 @@
 import { DebugNode, ErrorHandler } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -182,6 +182,7 @@ describe('AddSpaceOverlayComponent', () => {
       );
       component.ngOnInit();
       fixture.detectChanges();
+      tick();
       expect(component.spaceTemplateService.getSpaceTemplates).toHaveBeenCalled();
       expect(component.spaceTemplates.length).toBe(2);
       expect(component.selectedTemplate).toEqual(mockSpaceTemplates[1]);
@@ -196,6 +197,7 @@ describe('AddSpaceOverlayComponent', () => {
       );
       component.ngOnInit();
       fixture.detectChanges();
+      tick();
       expect(component.spaceTemplateService.getSpaceTemplates).toHaveBeenCalled();
       expect(component.spaceTemplates.length).toBe(0);
       expect(component.selectedTemplate).toBeNull();
@@ -210,6 +212,7 @@ describe('AddSpaceOverlayComponent', () => {
       );
       component.ngOnInit();
       fixture.detectChanges();
+      tick();
       expect(component.spaceTemplateService.getSpaceTemplates).toHaveBeenCalled();
       expect(component.spaceTemplates.length).toBe(1);
       expect(component.selectedTemplate.id).toBe('0');

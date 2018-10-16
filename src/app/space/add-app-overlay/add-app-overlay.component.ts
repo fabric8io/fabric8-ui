@@ -1,7 +1,10 @@
 import {
   Component,
+  ElementRef,
   HostListener,
   OnDestroy,
+  OnInit,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
@@ -20,10 +23,11 @@ import { Application, DeploymentApiService } from '../create/deployments/service
   styleUrls: ['./add-app-overlay.component.less'],
   templateUrl: './add-app-overlay.component.html'
 })
-export class AddAppOverlayComponent implements OnDestroy {
+export class AddAppOverlayComponent implements OnInit, OnDestroy {
   @HostListener('document:keyup.escape', ['$event']) onKeydownHandler(evt: KeyboardEvent) {
     this.hideAddAppOverlay();
   }
+  @ViewChild('projectNameInput') projectNameInput: ElementRef;
 
   currentSpace: Space;
   isProjectNameValid: boolean;
@@ -70,6 +74,10 @@ export class AddAppOverlayComponent implements OnDestroy {
     }
   }
 
+  ngOnInit(): void {
+    setTimeout(() => this.projectNameInput.nativeElement.focus());
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
@@ -84,6 +92,7 @@ export class AddAppOverlayComponent implements OnDestroy {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add app closed'
     });
+    setTimeout(() => this.projectNameInput.nativeElement.blur());
   }
 
   /**

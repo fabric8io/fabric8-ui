@@ -31,6 +31,7 @@ export class AddSpaceOverlayComponent implements OnInit {
   }
 
   @ViewChild('description') description: ElementRef;
+  @ViewChild('addSpaceOverlayNameInput') spaceNameInput: ElementRef;
 
   currentSpace: Space;
   selectedTemplate: ProcessTemplate = null;
@@ -72,6 +73,7 @@ export class AddSpaceOverlayComponent implements OnInit {
         } as ProcessTemplate];
         this.selectedTemplate = this.spaceTemplates[0];
     }));
+    setTimeout(() => this.spaceNameInput.nativeElement.focus());
   }
 
   ngOnDestroy(): void {
@@ -138,6 +140,7 @@ export class AddSpaceOverlayComponent implements OnInit {
     this.broadcaster.broadcast('analyticsTracker', {
       event: 'add space closed'
     });
+    this.spaceNameInput.nativeElement.blur();
   }
 
   showAddAppOverlay(): void {
