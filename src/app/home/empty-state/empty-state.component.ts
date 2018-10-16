@@ -13,8 +13,8 @@ export class EmptyStateComponent {
     private readonly broadcaster: Broadcaster
   ) { }
 
-  showAddSpaceOverlay(): void {
-    this.broadcaster.broadcast('showAddSpaceOverlay', true);
+  showAddSpaceOverlay(flow: string): void {
+    this.broadcaster.broadcast('showAddSpaceOverlay', { show: true, flow });
   }
 
 }

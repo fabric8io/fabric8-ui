@@ -37,6 +37,7 @@ export class AppComponent {
   private showAddAppOverlay: boolean = false;
   private showAddSpaceOverlay: boolean = false;
   private show: boolean;
+  private addAppFlow: string;
   protected subscriptions: Subscription[] = [];
 
   @ViewChild('connectToGithubModal') connectToGithubModal: TemplateRef<any>;
@@ -131,8 +132,16 @@ export class AppComponent {
       this.showGitHubConnectModal();
     }));
 
-    this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((show: boolean) => {
-      this.showAddSpaceOverlay = show;
+    this.subscriptions.push(this.broadcaster.on('showAddSpaceOverlay').subscribe((arg: any) => {
+      if (typeof arg === 'boolean') {
+        this.showAddSpaceOverlay = arg;
+        if (arg) {
+          this.addAppFlow = null;
+        }
+      } else if (typeof arg === 'object') {
+        this.showAddSpaceOverlay = arg.show;
+        this.addAppFlow = arg.flow;
+      }
     }));
 
     this.subscriptions.push(this.broadcaster.on('showAddAppOverlay').subscribe((show: boolean) => {

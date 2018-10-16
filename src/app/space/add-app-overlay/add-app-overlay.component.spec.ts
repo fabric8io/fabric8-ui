@@ -1,5 +1,5 @@
 import { ErrorHandler } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Broadcaster, Logger, Notifications } from 'ngx-base';
@@ -342,6 +342,21 @@ describe('AddAppOverlayComponent', () => {
         expect(btnElem.hasAttribute('disabled')).toBeFalsy();
       });
     }));
+
+    describe('preselectedFlow', () => {
+      it('should default to none if not provided', fakeAsync(() => {
+        component.ngOnInit();
+        tick();
+        expect(component.selectedFlow).toEqual('');
+      }));
+
+      it('should match when provided', fakeAsync(() => {
+        component.preselectedFlow = 'createapp';
+        component.ngOnInit();
+        tick();
+        expect(component.selectedFlow).toEqual('createapp');
+      }));
+    });
   });
 
 });

@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -28,6 +29,7 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
     this.hideAddAppOverlay();
   }
   @ViewChild('projectNameInput') projectNameInput: ElementRef;
+  @Input() preselectedFlow: string;
 
   currentSpace: Space;
   isProjectNameValid: boolean;
@@ -75,6 +77,9 @@ export class AddAppOverlayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this.preselectedFlow) {
+      this.selectedFlow = this.preselectedFlow;
+    }
     setTimeout(() => this.projectNameInput.nativeElement.focus());
   }
 

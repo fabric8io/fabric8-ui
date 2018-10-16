@@ -5,17 +5,18 @@
         <h1 class="welcome-text">Welcome to OpenShift.io</h1>
         <div class="card-pf f8-card">
           <h2 class="card-pf-title title-text">
-            To get started, create an application by creating a new Space and populating it with a Codebase
+            To get started, create an application by creating a new codebase or importing an existing one
           </h2>
           <div class="card-pf-body f8-card-body">
             <div class="f8-blank-slate-card">
               <img class="codebase-icon" src="../../../assets/images/codebase_icon.svg">
               <div class="blank-slate-pf-main-action">
-                <button class="btn btn-primary btn-lg" (click)="showAddSpaceOverlay()">Create New Space</button>
+                <button class="btn btn-primary btn-lg" (click)="showAddSpaceOverlay('createapp')">Create New Codebase</button>
               </div>
             </div>
           </div>
         </div>
+        <h4 class="import-text">Or <a class="import-action" (click)="showAddSpaceOverlay('importapp')">Import Existing Codebase</a></h4>
       </div>
     </div>
   </div>
