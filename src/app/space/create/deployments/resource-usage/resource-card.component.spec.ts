@@ -47,8 +47,28 @@ describe('ResourceCardComponent', () => {
             const svc: jasmine.SpyObj<DeploymentsService> = createMock(DeploymentsService);
             svc.getApplications.and.returnValue(of(['foo-app', 'bar-app']));
             svc.getEnvironments.and.returnValue(of(['stage', 'prod']));
-            svc.getEnvironmentCpuStat.and.returnValue(of({ used: 1, quota: 2 }));
-            svc.getEnvironmentMemoryStat.and.returnValue(of({ used: 3, quota: 4, units: MemoryUnit.GB }));
+            svc.getEnvironmentCpuUtilization.and.returnValue(of({
+              currentSpaceUsage: {
+                used: 1,
+                quota: 2
+              },
+              otherSpacesUsage: {
+                used: 0,
+                quota: 2
+              }
+            }));
+            svc.getEnvironmentMemoryUtilization.and.returnValue(of({
+              currentSpaceUsage: {
+                used: 3,
+                quota: 4,
+                units: MemoryUnit.GB
+              },
+              otherSpacesUsage: {
+                used: 0,
+                quota: 4,
+                units: MemoryUnit.GB
+              }
+            }));
             return svc;
           }
         },
@@ -71,8 +91,8 @@ describe('ResourceCardComponent', () => {
 
   it('should correctly request the deployed environment data', (): void => {
     const mockSvc: jasmine.SpyObj<DeploymentsService> = TestBed.get(DeploymentsService);
-    expect(mockSvc.getEnvironmentCpuStat).toHaveBeenCalledWith('spaceId', 'stage');
-    expect(mockSvc.getEnvironmentMemoryStat).toHaveBeenCalledWith('spaceId', 'stage');
+    expect(mockSvc.getEnvironmentCpuUtilization).toHaveBeenCalledWith('spaceId', 'stage');
+    expect(mockSvc.getEnvironmentMemoryUtilization).toHaveBeenCalledWith('spaceId', 'stage');
   });
 
   it('should have its children passed the proper values', (): void => {
@@ -83,11 +103,11 @@ describe('ResourceCardComponent', () => {
     const cpuUtilBar: FakeUtilizationBarComponent = arrayOfComponents[0].componentInstance;
     expect(cpuUtilBar.resourceTitle).toEqual('CPU');
     expect(cpuUtilBar.resourceUnit).toEqual('Cores');
-    expect(cpuUtilBar.stat).toEqual(mockSvc.getEnvironmentCpuStat());
+    expect(cpuUtilBar.stat).toEqual(mockSvc.getEnvironmentCpuUtilization());
 
     const memoryUtilBar: FakeUtilizationBarComponent = arrayOfComponents[1].componentInstance;
     expect(memoryUtilBar.resourceTitle).toEqual('Memory');
     expect(memoryUtilBar.resourceUnit).toEqual('GB');
-    expect(memoryUtilBar.stat).toEqual(mockSvc.getEnvironmentMemoryStat());
+    expect(memoryUtilBar.stat).toEqual(mockSvc.getEnvironmentMemoryUtilization());
   });
 });

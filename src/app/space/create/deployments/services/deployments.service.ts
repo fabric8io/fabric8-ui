@@ -51,6 +51,10 @@ import {
   Pods,
   PodsData
 } from '../models/pods';
+import {
+  CpuResourceUtilization,
+  MemoryResourceUtilization
+} from '../models/resource-utilization';
 import { ScaledMemoryStat } from '../models/scaled-memory-stat';
 import { ScaledNetStat } from '../models/scaled-net-stat';
 import {
@@ -60,6 +64,7 @@ import {
   DeploymentApiService,
   DeploymentAttributes,
   EnvironmentAttributes,
+  EnvironmentQuota,
   EnvironmentStat,
   MemorySeries,
   MultiTimeseriesData,
@@ -83,6 +88,7 @@ export class DeploymentsService implements OnDestroy {
   private readonly envsObservables: Map<string, Observable<EnvironmentStat[]>> = new Map<string, Observable<EnvironmentStat[]>>();
   private readonly timeseriesSubjects: Map<string, Subject<TimeseriesData[]>> = new Map<string, Subject<TimeseriesData[]>>();
   private readonly podQuotaRequirements: Map<string, Subject<PodQuotaRequirement>> = new Map<string, Subject<PodQuotaRequirement>>();
+  private readonly environmentResourceUtilization: Map<string, Subject<EnvironmentQuota[]>> = new Map<string, Subject<EnvironmentQuota[]>>();
   private readonly frontLoadWindowWidth: number;
 
   private readonly serviceSubscriptions: Subscription[] = [];
@@ -309,16 +315,58 @@ export class DeploymentsService implements OnDestroy {
     );
   }
 
+  // Reports usage per environment due to deployments within any space, not only the one specified
   getEnvironmentCpuStat(spaceId: string, environmentName: string): Observable<CpuStat> {
     return this.getEnvironment(spaceId, environmentName).pipe(
       map((env: EnvironmentStat): CpuStat => env.attributes.quota.cpucores)
     );
   }
 
+  // Reports usage per environment due to deployments within any space, not only the one specified
   getEnvironmentMemoryStat(spaceId: string, environmentName: string): Observable<MemoryStat> {
     return this.getEnvironment(spaceId, environmentName).pipe(
       map((env: EnvironmentStat): MemoryStat => new ScaledMemoryStat(env.attributes.quota.memory.used, env.attributes.quota.memory.quota))
     );
+  }
+
+  // Reports utilization of resource for specified environment due to deployments in any space,
+  // with utilization for the given space differentiated from utilization from all other spaces in aggregate
+  getEnvironmentCpuUtilization(spaceId: string, environmentName: string): Observable<CpuResourceUtilization> {
+    return this.getResourceUtilization(spaceId)
+      .pipe(
+        map((quotas: EnvironmentQuota[]): EnvironmentQuota => quotas.filter((q: EnvironmentQuota): boolean => q.attributes.name === environmentName)[0]),
+        map((eq: EnvironmentQuota): CpuResourceUtilization => {
+          const currentCpu: number = eq.attributes.space_usage.cpucores;
+          const othersCpu: number = eq.attributes.other_usage.cpucores.used;
+          const quota: number = eq.attributes.other_usage.cpucores.quota;
+          return {
+            currentSpaceUsage: { used: currentCpu, quota },
+            otherSpacesUsage: { used: othersCpu, quota }
+          };
+        })
+      );
+  }
+
+  // Reports utilization of resource for specified environment due to deployments in any space,
+  // with utilization for the given space differentiated from utilization from all other spaces in aggregate
+  getEnvironmentMemoryUtilization(spaceId: string, environmentName: string): Observable<MemoryResourceUtilization> {
+    return this.getResourceUtilization(spaceId)
+      .pipe(
+        map((quotas: EnvironmentQuota[]): EnvironmentQuota => quotas.filter((q: EnvironmentQuota): boolean => q.attributes.name === environmentName)[0]),
+        map((eq: EnvironmentQuota): MemoryResourceUtilization => {
+          const currentMem: number = eq.attributes.space_usage.memory;
+          const othersMem: number = eq.attributes.other_usage.memory.used;
+          const quota: number = eq.attributes.other_usage.memory.quota;
+
+          const combinedStat: MemoryStat = new ScaledMemoryStat(currentMem + othersMem, quota);
+          const currentMemStat: MemoryStat = ScaledMemoryStat.from(new ScaledMemoryStat(currentMem, quota), combinedStat.units);
+          const othersMemStat: MemoryStat = ScaledMemoryStat.from(new ScaledMemoryStat(othersMem, quota), combinedStat.units);
+          return {
+            currentSpaceUsage: currentMemStat,
+            otherSpacesUsage: othersMemStat
+          };
+        })
+      );
   }
 
   getLogsUrl(spaceId: string, environmentName: string, applicationId: string): Observable<string> {
@@ -523,8 +571,24 @@ export class DeploymentsService implements OnDestroy {
     return this.podQuotaRequirements.get(key).asObservable();
   }
 
-  private static makeCacheKey(spaceId: string, environmentName: string, applicationId: string): string {
-    return `${spaceId}:${applicationId}:${environmentName}`;
+  private getResourceUtilization(spaceId: string): Observable<EnvironmentQuota[]> {
+    const key: string = DeploymentsService.makeCacheKey(spaceId);
+    if (!this.environmentResourceUtilization.has(key)) {
+      const subj: Subject<EnvironmentQuota[]> = new ReplaySubject<EnvironmentQuota[]>(1);
+      this.environmentResourceUtilization.set(key, subj);
+      this.apiService.getQuotas(spaceId)
+        .pipe(
+          catchError((err: Response): Observable<TimeseriesData> => {
+            const header: string = 'Cannot get environment resource utilization';
+            return this.handleHttpError(header, err);
+          })
+        ).subscribe(subj);
+    }
+    return this.environmentResourceUtilization.get(key).asObservable();
+  }
+
+  static makeCacheKey(...ids: string[]): string {
+    return ids.join(':');
   }
 
   private handleHttpError(header: string, response: Response): Observable<any> {
