@@ -28,6 +28,7 @@ import {
 import { LoadingWidgetComponent } from '../dashboard-widgets/loading-widget/loading-widget.component';
 import { LoadingWidgetModule } from '../dashboard-widgets/loading-widget/loading-widget.module';
 import { HomeComponent } from './home.component';
+import { UserSpacesService } from './user-spaces.service';
 
 @Component({
   template: '<alm-home></alm-home>'
@@ -73,7 +74,14 @@ const mockUser: User = {
   }
 } as User;
 
-function getModuleMetadata(spacesObservable: Observable<Space[]>): TestModuleMetadata {
+function getModuleMetadata(countObservable: Observable<number>): TestModuleMetadata {
+  const mockUserSpacesService: jasmine.SpyObj<UserSpacesService> = createMock(UserSpacesService);
+  mockUserSpacesService.getInvolvedSpacesCount.and.returnValue(countObservable);
+
+  beforeEach((): void => {
+    TestBed.overrideProvider(UserSpacesService, { useValue: mockUserSpacesService });
+  });
+
   return {
     declarations: [
       MockFeatureToggleComponent,
@@ -92,12 +100,8 @@ function getModuleMetadata(spacesObservable: Observable<Space[]>): TestModuleMet
         useFactory: (): UserService => ({ currentLoggedInUser: mockUser } as UserService)
       },
       {
-        provide: SpaceService,
-        useFactory: (): SpaceService => {
-          const svc: jasmine.SpyObj<SpaceService> = createMock(SpaceService);
-          svc.getSpacesByUser.and.returnValue(spacesObservable);
-          return svc;
-        }
+        provide: UserSpacesService,
+        useFactory: (): UserSpacesService => mockUserSpacesService
       }
     ]
   };
@@ -106,7 +110,7 @@ function getModuleMetadata(spacesObservable: Observable<Space[]>): TestModuleMet
 describe('HomeComponent', (): void => {
 
   describe('no Spaces', (): void => {
-    const testContext: TestContext<HomeComponent, HostComponent> = initContext(HomeComponent, HostComponent, getModuleMetadata(of([])));
+    const testContext: TestContext<HomeComponent, HostComponent> = initContext(HomeComponent, HostComponent, getModuleMetadata(of(0)));
 
     it('should count 0 spaces', (): void => {
       expect(testContext.testedDirective.spacesCount).toEqual(0);
@@ -131,7 +135,7 @@ describe('HomeComponent', (): void => {
     });
 
     it('should request user spaces', (): void => {
-      expect(TestBed.get(SpaceService).getSpacesByUser).toHaveBeenCalledWith(mockUser.attributes.username);
+      expect(TestBed.get(UserSpacesService).getInvolvedSpacesCount).toHaveBeenCalled();
     });
 
     it('should default to -1 spaces', (): void => {
@@ -150,15 +154,7 @@ describe('HomeComponent', (): void => {
   });
 
   describe('with Spaces', (): void => {
-    const spaces: Space[] = [
-      {
-        name: 'foo-space'
-      },
-      {
-        name: 'bar-space'
-      }
-    ] as Space[];
-    const testContext: TestContext<HomeComponent, HostComponent> = initContext(HomeComponent, HostComponent, getModuleMetadata(of(spaces)));
+    const testContext: TestContext<HomeComponent, HostComponent> = initContext(HomeComponent, HostComponent, getModuleMetadata(of(2)));
 
     it('should count 2 spaces', (): void => {
       expect(testContext.testedDirective.spacesCount).toEqual(2);

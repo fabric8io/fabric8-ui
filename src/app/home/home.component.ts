@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Space, SpaceService } from 'ngx-fabric8-wit';
 import { User, UserService } from 'ngx-login-client';
-import { first, map } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
+import { UserSpacesService } from './user-spaces.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'alm-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.less']
+  styleUrls: ['./home.component.less'],
+  providers: [UserSpacesService]
 })
 export class HomeComponent implements OnInit {
 
@@ -16,16 +17,13 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private readonly userService: UserService,
-    private readonly spaceService: SpaceService
+    private readonly userSpacesService: UserSpacesService
   ) { }
 
   ngOnInit() {
     this.loggedInUser = this.userService.currentLoggedInUser;
-    this.spaceService.getSpacesByUser(this.loggedInUser.attributes.username)
-      .pipe(
-        first(),
-        map((spaces: Space[]): number => spaces.length)
-      )
+    this.userSpacesService.getInvolvedSpacesCount()
+      .pipe(first())
       .subscribe((spacesCount: number): void => {
         this.spacesCount = spacesCount;
       });
