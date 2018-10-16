@@ -12,6 +12,7 @@ process.on('unhandledRejection', (err) => {
 const supportedScripts = [
   'analyze',
   'build',
+  'prod',
   'start',
   'test',
   'test:coverage',
