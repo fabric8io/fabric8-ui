@@ -3,13 +3,15 @@ import {
   HttpHeaders
 } from '@angular/common/http';
 import {
+  ErrorHandler,
   Inject,
   Injectable
 } from '@angular/core';
 
 import {
   Observable,
-  of
+  of,
+  throwError
 } from 'rxjs';
 import {
   catchError,
@@ -18,6 +20,7 @@ import {
 } from 'rxjs/operators';
 
 import { WorkItem } from 'fabric8-planner';
+import { Logger } from 'ngx-base';
 import {
   CollaboratorService,
   Space,
@@ -59,7 +62,9 @@ export class MySpacesItemService {
     @Inject(WIT_API_URL) private readonly apiUrl: string,
     private readonly collaboratorService: CollaboratorService,
     private readonly http: HttpClient,
-    private readonly auth: AuthenticationService
+    private readonly auth: AuthenticationService,
+    private readonly errorHandler: ErrorHandler,
+    private readonly logger: Logger
   ) {
     if (this.auth.getToken() != null) {
       this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
@@ -81,7 +86,7 @@ export class MySpacesItemService {
       .pipe(
         map((users: User[]): number => users.length),
         concatMap((count: number): Observable<number> => this.loadFurtherCollaborators(accum + count)),
-        catchError(() => of(accum))
+        catchError((err: any): Observable<number> => this.handleError(err, accum))
       );
   }
 
@@ -92,8 +97,16 @@ export class MySpacesItemService {
       .get<WorkItemsResponse>(queryUrl, { headers: this.headers })
       .pipe(
         map((resp: WorkItemsResponse): number => resp.meta ? resp.meta.totalCount : 0),
-        catchError(() => of(0))
+        catchError((err: any): Observable<number> => this.handleError(err, 0))
       );
+  }
+
+  private handleError(err: any, defaultValue: number): Observable<number> {
+    if (err !== 'No more collaborators found') {
+      this.errorHandler.handleError(err);
+      this.logger.error(err);
+    }
+    return of(defaultValue);
   }
 
 }
