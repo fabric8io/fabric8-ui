@@ -72,7 +72,9 @@ export class InputActionDialog implements OnDestroy {
         console.log('Warning no jenkinsNamespace on the Build!');
       } else {
         url = pathJoin(forgeUrl, '/api/openshift/services/jenkins/', jenkinsNamespace, url);
-        const headers = new HttpHeaders({ 'Authorization': 'Bearer ' + this.authService.getToken() });
+        const headers = new HttpHeaders({
+          'Authorization': 'Bearer ' + this.authService.getToken(),
+          'X-App': 'OSIO'});
         let body = null;
         this.http.post(url, body, { headers }).subscribe(() => {});
       }
