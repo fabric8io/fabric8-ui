@@ -22,6 +22,7 @@ export class MySpacesItemComponent implements OnInit, OnDestroy {
 
   @Input() space: Space;
   collaboratorCount: string = '-';
+  workItemCount: string = '-';
 
   private readonly subscriptions: Subscription[] = [];
 
@@ -32,11 +33,17 @@ export class MySpacesItemComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptions.push(
       this.svc.getCollaboratorCount(this.space)
-        .pipe(
-          map((count: number): string => String(count))
-        )
+        .pipe(map(String))
         .subscribe((count: string): void => {
           this.collaboratorCount = count;
+        })
+    );
+
+    this.subscriptions.push(
+      this.svc.getWorkItemCount(this.space)
+        .pipe(map(String))
+        .subscribe((count: string): void => {
+          this.workItemCount = count;
         })
     );
   }

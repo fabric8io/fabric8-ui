@@ -14,7 +14,8 @@ describe('My Spaces Item Component', () => {
 
   beforeEach(() => {
     const itemService: jasmine.SpyObj<MySpacesItemService> = createMock(MySpacesItemService);
-    itemService.getCollaboratorCount.and.stub();
+    itemService.getCollaboratorCount.and.returnValue(never());
+    itemService.getWorkItemCount.and.returnValue(never());
 
     TestBed.configureTestingModule({
       imports: [Fabric8WitModule, FormsModule],
@@ -86,6 +87,19 @@ describe('My Spaces Item Component', () => {
     fixture.whenStable().then(() => {
       // 2 from initial, 3 from first call to next and 0 from second call to next
       expect(comp.collaboratorCount).toEqual('5');
+    });
+  }));
+
+  it('should retrieve number of workitems from service', async(() => {
+    TestBed.get(MySpacesItemService).getWorkItemCount.and.returnValue(of(10));
+
+    let comp: MySpacesItemComponent = fixture.componentInstance;
+    comp.space = space;
+    expect(comp.workItemCount).toEqual('-');
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(comp.workItemCount).toEqual('10');
     });
   }));
 });
