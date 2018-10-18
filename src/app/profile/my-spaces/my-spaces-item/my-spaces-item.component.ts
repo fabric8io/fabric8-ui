@@ -5,28 +5,18 @@ import {
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-import {
-  Observable,
-  of,
-  Subscription
-} from 'rxjs';
-import {
-  catchError,
-  concatMap,
-  map
-} from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import {
-  CollaboratorService,
-  Space
-} from 'ngx-fabric8-wit';
-import { User } from 'ngx-login-client';
+import { Space } from 'ngx-fabric8-wit';
+import { MySpacesItemService } from './my-spaces-item.service';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
   selector: 'my-spaces-item',
   styleUrls: ['./my-spaces-item.component.less'],
-  templateUrl: './my-spaces-item.component.html'
+  templateUrl: './my-spaces-item.component.html',
+  providers: [MySpacesItemService]
 })
 export class MySpacesItemComponent implements OnInit, OnDestroy {
 
@@ -36,39 +26,23 @@ export class MySpacesItemComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription[] = [];
 
   constructor(
-    private readonly collaboratorService: CollaboratorService
+    private readonly svc: MySpacesItemService
   ) { }
 
   ngOnInit(): void {
-    this.loadCollaboratorCount();
+    this.subscriptions.push(
+      this.svc.getCollaboratorCount(this.space)
+        .pipe(
+          map((count: number): string => String(count))
+        )
+        .subscribe((count: string): void => {
+          this.collaboratorCount = count;
+        })
+    );
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
-  }
-
-  private loadCollaboratorCount(): void {
-    this.subscriptions.push(
-      this.collaboratorService.getInitialBySpaceId(this.space.id)
-        .pipe(
-          map((users: User[]): number => users.length),
-          concatMap((count: number): Observable<number> => this.loadFurtherCollaborators(count))
-        )
-      .subscribe((count: number): void => {
-        this.collaboratorCount = String(count);
-      })
-    );
-  }
-
-  // TODO: replace these cascading requests with a single request returning the meta totalCount property
-  // of the response
-  private loadFurtherCollaborators(accum: number): Observable<number> {
-    return this.collaboratorService.getNextCollaborators()
-      .pipe(
-        map((users: User[]): number => users.length),
-        concatMap((count: number): Observable<number> => this.loadFurtherCollaborators(accum + count)),
-        catchError(() => of(accum))
-      );
   }
 
 }
