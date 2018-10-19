@@ -25,7 +25,7 @@ import { createMock } from 'testing/mock';
 
 import {
   MySpacesItemService,
-  queryString,
+  workItemsQueryString,
   WorkItemsResponse
 } from './my-spaces-item.service';
 
@@ -149,7 +149,7 @@ describe('MySpacesItemService', (): void => {
           done.fail
         );
 
-      const expectedUrl: string = `http://example.com/search?${queryString(space)}`;
+      const expectedUrl: string = `http://example.com/search?${workItemsQueryString(space)}`;
       const req: TestRequest = controller.expectOne(expectedUrl);
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
@@ -170,7 +170,7 @@ describe('MySpacesItemService', (): void => {
           done.fail
         );
 
-      const expectedUrl: string = `http://example.com/search?${queryString(space)}`;
+      const expectedUrl: string = `http://example.com/search?${workItemsQueryString(space)}`;
       const req: TestRequest = controller.expectOne(expectedUrl);
       expect(req.request.method).toEqual('GET');
       expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
