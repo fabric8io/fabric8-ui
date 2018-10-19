@@ -23,7 +23,7 @@ describe('Service: AppLauncherGitproviderService', () => {
     authenticated: true,
     avatar: 'avatar-url',
     login: 'some-user',
-    organizations: ['fabric8-ui', 'some-user'],
+    organizations: {'fabric8-ui': 'fabric8-ui'},
     organization: 'some-user'
   } as GitHubDetails;
   let orgs = ['fabric8-ui'];

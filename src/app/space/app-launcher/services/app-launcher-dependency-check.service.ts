@@ -23,7 +23,8 @@ export class AppLauncherDependencyCheckService implements DependencyCheckService
         groupId: 'io.openshift.booster',
         projectName: '',
         projectVersion: '1.0.0',
-        spacePath: '/' + (this.context ? (this.context.space ? this.context.space.id : '') : '')
+        spacePath: '/' + (this.context ? (this.context.space ? this.context.space.id : '') : ''),
+        targetEnvironment: 'os'
       });
   }
 

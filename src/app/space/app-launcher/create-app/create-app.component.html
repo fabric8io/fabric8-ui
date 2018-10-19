@@ -1,8 +1,59 @@
-<div class="content">
-  <f8launcher
-    [depEditorFlag]="depEditorEnable | async"
-    [nextButtons]="nextButtonsEnable | async"
-    (onCancel)="cancel()"
-    (onComplete)="complete()">
-  </f8launcher>
-</div>
+<f8launcher
+  (onCancel)="cancel()" [gettingStartedInfo]="true">
+  <div class="f8launcher-container_nav">
+    <f8launcher-step-indicator #stepIndicator></f8launcher-step-indicator>
+  </div>
+  <div class="f8launcher-container_main">
+    <f8launcher-missionruntime-step
+      #missionRuntimeStep
+      id="MissionRuntime"
+      styleClass="mission-runtime"
+      title="Select Mission & Runtime" [canChangeVersion]="false">
+    </f8launcher-missionruntime-step>
+    <f8launcher-dependencychecker-step
+      #dependencychecker
+      id="SelectDependencies"
+      [depEditorFlag]="true"
+      [hidden]="false"
+      styleClass="select-dependencies"
+      title="Select Dependencies">
+    </f8launcher-dependencychecker-step>
+    <f8launcher-releasestrategy-step
+      #releasestrategy
+      id="ReleaseStrategy"
+      styleClass="release-strategy"
+      title="Select Pipeline">
+    </f8launcher-releasestrategy-step>
+    <f8launcher-gitprovider-step
+      #gitProvider
+      id="GitProvider"
+      styleClass="git-provider"
+      title="Authorize Git Provider">
+    </f8launcher-gitprovider-step>
+    <f8launcher-projectsummary-step
+      id="ProjectSummary"
+      styleClass="project-summary"
+      title="Confirm Application Summary & Setup">
+      <f8launcher-mission-runtime-review
+        [stepId]="missionRuntimeStep.id">
+      </f8launcher-mission-runtime-review>
+      <f8launcher-dependency-editor-review
+        [stepId]="dependencychecker.id">
+      </f8launcher-dependency-editor-review>
+      <f8launcher-release-strategy-review
+        [stepId]="releasestrategy.id">
+      </f8launcher-release-strategy-review>
+      <f8launcher-target-environment-review
+        stepId="shared">
+      </f8launcher-target-environment-review>
+      <f8launcher-gitprovider-review
+        [stepId]="gitProvider.id">
+      </f8launcher-gitprovider-review>
+    </f8launcher-projectsummary-step>
+  </div>
+  <div class="f8launcher-container_completed-footer">
+    <button class="btn btn-primary btn-lg" (click)="complete()">
+      Return to your dashboard
+    </button>
+  </div>
+</f8launcher>

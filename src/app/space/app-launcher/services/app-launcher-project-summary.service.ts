@@ -1,15 +1,13 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { get } from 'lodash';
 import {
   HelperService,
-  ProjectSummaryService,
-  Summary
+  Projectile,
+  ProjectSummaryService
 } from 'ngx-launcher';
 import { AuthenticationService } from 'ngx-login-client';
 import { Observable,  throwError as observableThrowError } from 'rxjs';
-import { catchError, mergeMap } from 'rxjs/operators';
-import { ContextService } from '../../../shared/context.service';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class AppLauncherProjectSummaryService implements ProjectSummaryService {
@@ -26,7 +24,6 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
 
   constructor(
     private http: HttpClient,
-    private context: ContextService,
     private helperService: HelperService,
     private auth: AuthenticationService
   ) {
@@ -49,17 +46,12 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
    * @param  {boolean} isImport
    * @returns Observable
    */
-  setup(summary: Summary, retry?: number): Observable<any> {
+  setup(summary: Projectile<any>, retry?: number): Observable<any> {
     this.headers = this.headers.set('X-Execution-Step-Index', String(retry || 0));
-
-    return this.context.current.pipe(mergeMap(c => {
-      let summaryEndPoint = this.END_POINT + (summary.mission ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
-      let payload = this.getPayload(summary, c.space ? c.space.id : '', c.name);
-      console.log('URL - ', summaryEndPoint);
-      return this.http
-        .post(summaryEndPoint, payload, { headers: this.headers }).pipe(
-        catchError(this.handleError));
-      }));
+    let summaryEndPoint = this.END_POINT + (summary.getState('MissionRuntime') ? this.API_BASE_CREATE : this.API_BASE_IMPORT);
+    return this.http
+      .post(summaryEndPoint, summary.toHttpPayload(), { headers: this.headers }).pipe(
+      catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse | any) {
@@ -75,38 +67,5 @@ export class AppLauncherProjectSummaryService implements ProjectSummaryService {
     }
     console.error(errMsg);
     return observableThrowError(errMsg);
-  }
-
-  private getPayload(summary: Summary, spaceId: string, spaceName: string) {
-    let payload = '';
-    let missionId: string = get(summary, 'mission.id', '');
-    let blankMissionId: string = 'blank-mission';
-    if (missionId === blankMissionId) {
-      missionId = get(summary, 'mission.meta', '');
-      payload += 'emptyGitRepository=true&';
-    }
-    payload += 'mission=' + missionId;
-    payload += '&runtime=' + get(summary, 'runtime.id', '');
-    payload += '&runtimeVersion=' + get(summary, 'runtime.version.id', '');
-    payload += '&pipeline=' + get(summary, 'pipeline.id', '');
-    payload += '&projectName=' + get(summary, 'dependencyCheck.projectName', '');
-    payload += '&projectVersion=' + get(summary, 'dependencyCheck.projectVersion', '');
-    payload += '&gitRepository=' + get(summary, 'gitHubDetails.repository', '');
-    payload += '&groupId=' + get(summary, 'dependencyCheck.groupId', '');
-    /* artifactId has to be same as projectName in OSIO to get correct links for
-      stage/prod to be shown in pipelines view */
-    payload += '&artifactId=' + get(summary, 'dependencyCheck.projectName', '');
-    payload += '&spacePath=' + spaceName;
-    payload += '&space=' + spaceId;
-    if (summary.dependencyEditor && summary.dependencyEditor.dependencySnapshot) {
-      summary.dependencyEditor.dependencySnapshot.forEach(i => {
-        payload += '&dependency=' + i.package + ':' + i.version;
-      });
-    }
-    if (summary.gitHubDetails.login !== summary.gitHubDetails.organization) {
-      payload += '&gitOrganization=' + summary.gitHubDetails.organization;
-    }
-
-    return payload;
   }
 }

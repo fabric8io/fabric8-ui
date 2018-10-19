@@ -85,12 +85,14 @@ export class AppLauncherGitproviderService implements GitProviderService {
   getGitHubDetails(): Observable<GitHubDetails> {
     return this.getGitHubUserData().pipe(mergeMap(user => {
       if (user && user.login) {
-        let orgs = [];
+        let orgs: { [name: string]: string } = {};
         return this.getUserOrgs(user.login).pipe(mergeMap(orgsArr => {
           if (orgsArr && orgsArr.length >= 0) {
-            orgs = orgsArr;
             this.gitHubUserLogin = user.login;
-            orgs.push(this.gitHubUserLogin);
+            for (let i = 0; i < orgsArr.length; i++) {
+              orgs[orgsArr[i]] = orgsArr[i];
+            }
+            orgs[this.gitHubUserLogin] = this.gitHubUserLogin;
             let gitHubDetails = {
               authenticated: true,
               avatar: user.avatarUrl,
@@ -154,7 +156,7 @@ export class AppLauncherGitproviderService implements GitProviderService {
           if (resp) {
             let responseList: string[] = resp as any;
             responseList.forEach(function(ele) {
-              repoList.push(ele.replace(location, ''));
+              repoList.push(ele.split('/')[1]);
             });
           }
           return repoList;

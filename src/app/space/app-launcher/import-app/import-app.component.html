@@ -1,7 +1,45 @@
-<div class="content">
-  <f8launcher
-      [importApp]="true"
-      [nextButtons]="nextButtonsEnable | async"
-      (onCancel)="cancel()"
-      (onComplete)="complete()"></f8launcher>
-</div>
+<f8launcher (onCancel)="cancel()">
+  <div class="f8launcher-container_nav">
+    <f8launcher-step-indicator #stepIndicator></f8launcher-step-indicator>
+  </div>
+  <div class="f8launcher-container_main">
+    <section class="f8launcher-container_main--spacer"></section>
+    <f8launcher-gitprovider-step
+      #gitProvider
+      [import]="true"
+      id="GitProvider"
+      styleClass="git-provider"
+      title="Authorize Git Provider">
+    </f8launcher-gitprovider-step>
+    <f8launcher-releasestrategy-step
+      #releasestrategy
+      id="ReleaseStrategy"
+      styleClass="release-strategy"
+      title="Select Pipeline">
+    </f8launcher-releasestrategy-step>
+    <f8launcher-projectsummary-step
+      id="ProjectSummary"
+      styleClass="project-summary"
+      submitButtonText="Import Application"
+      title="Confirm Application Summary & Setup">
+      <f8launcher-release-strategy-review [stepId]="releasestrategy.id"></f8launcher-release-strategy-review>
+      <f8launcher-target-environment-review stepId="shared"></f8launcher-target-environment-review>
+      <f8launcher-gitprovider-review [stepId]="gitProvider.id"></f8launcher-gitprovider-review>
+    </f8launcher-projectsummary-step>
+  </div>
+  <div class="f8launcher-container_close">
+    <div class="sticky close">
+      <span class="pficon pficon-close" aria-hidden="true" title="Leave Setup" (click)="cancel()"></span>
+    </div>
+  </div>
+  <div class="f8launcher-container_completed-footer">
+    <button class="btn btn-primary btn-lg" (click)="complete()">
+      Return to your dashboard
+    </button>
+    <span>
+      <a class="btn btn-primary btn-lg margin-left-10 f8launcher-viewpipeline" [routerLink]="['/', 'pipelines']">
+        View Pipeline
+      </a>
+    </span>
+  </div>
+</f8launcher>
