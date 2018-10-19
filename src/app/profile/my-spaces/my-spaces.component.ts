@@ -18,7 +18,6 @@ import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { ListConfig } from 'patternfly-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
-  Observable,
   Subscription
 } from 'rxjs';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
@@ -175,7 +174,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       return obj.id === $event.id;
     });
     if (index > -1) {
-      let space: any = this._spaces[index];
+      let space: any = this.displayedSpaces[index];
       space.showPin = (space.showPin === undefined) ? true : !space.showPin;
       this.savePins();
       this.updateSpaces();

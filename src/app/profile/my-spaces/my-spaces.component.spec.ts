@@ -221,7 +221,7 @@ describe('MySpacesComponent', (): void => {
 
     it('should toggle the pin state', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      spyOn(component, 'savePins').and.callFake((): void => {});
+      spyOn(component, 'savePins').and.callThrough();
       spyOn(component, 'updateSpaces');
       component.handlePinChange(spaceMock1);
       expect((component.spaces[0] as any).showPin).toBe(false);
