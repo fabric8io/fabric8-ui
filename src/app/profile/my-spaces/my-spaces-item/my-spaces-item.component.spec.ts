@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { Fabric8WitModule } from 'ngx-fabric8-wit';
 import { never, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { createMock } from 'testing/mock';
 import { MySpacesItemComponent } from './my-spaces-item.component';
 import { MySpacesItemService } from './my-spaces-item.service';
@@ -76,30 +77,54 @@ describe('My Spaces Item Component', () => {
     });
   }));
 
-  it('should retrieve number of collaborators from service', async(() => {
+  it('should retrieve number of collaborators from service', (done: DoneFn): void => {
     TestBed.get(MySpacesItemService).getCollaboratorCount.and.returnValue(of(5));
 
-    let comp: MySpacesItemComponent = fixture.componentInstance;
+    const comp: MySpacesItemComponent = fixture.componentInstance;
     comp.space = space;
-    expect(comp.collaboratorCount).toEqual('-');
 
+    let emissionCount: number = 0;
     fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      // 2 from initial, 3 from first call to next and 0 from second call to next
-      expect(comp.collaboratorCount).toEqual('5');
-    });
-  }));
+    comp.collaboratorCount
+      .pipe(
+        take(2)
+      )
+      .subscribe((count: string): void => {
+        emissionCount++;
+        if (emissionCount === 1) {
+          expect(count).toEqual('-');
+        } else if (emissionCount === 2) {
+          // 2 from initial, 3 from first call to next and 0 from second call to next
+          expect(count).toEqual('5');
+          done();
+        } else {
+          done.fail('too many emissions');
+        }
+      });
+  });
 
-  it('should retrieve number of workitems from service', async(() => {
+  it('should retrieve number of workitems from service', (done: DoneFn): void => {
     TestBed.get(MySpacesItemService).getWorkItemCount.and.returnValue(of(10));
 
-    let comp: MySpacesItemComponent = fixture.componentInstance;
+    const comp: MySpacesItemComponent = fixture.componentInstance;
     comp.space = space;
-    expect(comp.workItemCount).toEqual('-');
 
+    let emissionCount: number = 0;
     fixture.detectChanges();
-    fixture.whenStable().then(() => {
-      expect(comp.workItemCount).toEqual('10');
-    });
-  }));
+    comp.workItemCount
+      .pipe(
+        take(2)
+      )
+      .subscribe((count: string): void => {
+        emissionCount++;
+        if (emissionCount === 1) {
+          expect(count).toEqual('-');
+        } else if (emissionCount === 2) {
+          expect(count).toEqual('10');
+          done();
+        } else {
+          done.fail('too many emissions');
+        }
+      });
+  });
 });

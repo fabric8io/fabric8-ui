@@ -1,12 +1,14 @@
 import {
   Component,
   Input,
-  OnDestroy,
   OnInit,
   ViewEncapsulation
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import {
+  map,
+  startWith
+} from 'rxjs/operators';
 
 import { Space } from 'ngx-fabric8-wit';
 import { MySpacesItemService } from './my-spaces-item.service';
@@ -18,38 +20,27 @@ import { MySpacesItemService } from './my-spaces-item.service';
   templateUrl: './my-spaces-item.component.html',
   providers: [MySpacesItemService]
 })
-export class MySpacesItemComponent implements OnInit, OnDestroy {
+export class MySpacesItemComponent implements OnInit {
 
   @Input() space: Space;
-  collaboratorCount: string = '-';
-  workItemCount: string = '-';
-
-  private readonly subscriptions: Subscription[] = [];
+  collaboratorCount: Observable<string>;
+  workItemCount: Observable<string>;
 
   constructor(
     private readonly svc: MySpacesItemService
   ) { }
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.svc.getCollaboratorCount(this.space)
-        .pipe(map(String))
-        .subscribe((count: string): void => {
-          this.collaboratorCount = count;
-        })
-    );
-
-    this.subscriptions.push(
-      this.svc.getWorkItemCount(this.space)
-        .pipe(map(String))
-        .subscribe((count: string): void => {
-          this.workItemCount = count;
-        })
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription): void => subscription.unsubscribe());
+    this.collaboratorCount = this.svc.getCollaboratorCount(this.space)
+      .pipe(
+        map(String),
+        startWith('-')
+      );
+    this.workItemCount = this.svc.getWorkItemCount(this.space)
+      .pipe(
+        map(String),
+        startWith('-')
+      );
   }
 
 }
