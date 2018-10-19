@@ -21,6 +21,7 @@ import { ExtProfile, GettingStartedService } from '../../getting-started/service
 import { spaceMock } from '../../shared/context.service.mock';
 import { UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesComponent } from './my-spaces.component';
+import { SpacesType } from './my-spaces-toolbar/my-spaces-toolbar.component';
 
 @Component({
   template: '<alm-my-spaces></alm-my-spaces>'
@@ -185,6 +186,12 @@ describe('MySpacesComponent', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       const result: Space[] = component.spaces;
       expect(result).toEqual([spaceMock1, spaceMock2]);
+    });
+
+    it('should toggle to show Shared Spaces', (): void => {
+      const component: MySpacesComponent = testContext.testedDirective;
+      component.toggleChange(SpacesType.SHAREDSPACES);
+      expect(component.spaces).toEqual([spaceMock3]);
     });
   });
 
