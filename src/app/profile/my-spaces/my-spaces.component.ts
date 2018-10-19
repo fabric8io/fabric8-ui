@@ -24,6 +24,7 @@ import {
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesSearchSpacesDialog } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.component';
+import { SpacesType } from './my-spaces-toolbar/my-spaces-toolbar.component';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -78,22 +79,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     this.subscriptions.push(
       this.userService.loggedInUser.subscribe((user: User): void => {
         this.loggedInUser = user;
-      })
-    );
-
-    this.subscriptions.push(
-      this.broadcaster.on('displayMySpaces').subscribe((): void => {
-        this.listConfig.emptyStateConfig = this.mySpacesEmptyStateConfig;
-        this._spaces = this.mySpaces;
-        this.updateSpaces();
-      })
-    );
-
-    this.subscriptions.push(
-      this.broadcaster.on('displaySharedSpaces').subscribe((): void => {
-        this.listConfig.emptyStateConfig = this.sharedSpacesEmptyStateConfig;
-        this._spaces = this.sharedSpaces;
-        this.updateSpaces();
       })
     );
 
@@ -169,6 +154,18 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   // returns an Observable containing the list of spaces the user owns
   getMySpaces(): Observable<Space[]> {
     return this.spaceService.getSpacesByUser(this.context.user.attributes.username);
+  }
+
+  toggleChange(event: SpacesType): void {
+    if (event === SpacesType.MYSPACES) {
+      this.listConfig.emptyStateConfig = this.mySpacesEmptyStateConfig;
+      this._spaces = this.mySpaces;
+      this.updateSpaces();
+    } else if (event === SpacesType.SHAREDSPACES) {
+      this.listConfig.emptyStateConfig = this.sharedSpacesEmptyStateConfig;
+      this._spaces = this.sharedSpaces;
+      this.updateSpaces();
+    }
   }
 
   // Accessors

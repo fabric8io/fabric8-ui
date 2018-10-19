@@ -129,14 +129,7 @@ describe('MySpacesComponent', (): void => {
         provide: Broadcaster,
         useFactory: (): jasmine.SpyObj<Broadcaster> => {
           const mockBroadcaster: jasmine.SpyObj<Broadcaster> = createMock(Broadcaster);
-          mockBroadcaster.on.and.callFake((key: string): Observable<any> => {
-            if (key === 'displayMySpaces') {
-              return of([spaceMock1, spaceMock2]);
-            }
-            if (key === 'displaySharedSpaces') {
-              return of([spaceMock3]);
-            }
-          });
+          mockBroadcaster.on.and.stub();
           mockBroadcaster.broadcast.and.callThrough();
           return mockBroadcaster;
         }
