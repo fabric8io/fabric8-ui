@@ -11,8 +11,7 @@ import {
 import {
   forkJoin,
   Observable,
-  of,
-  Subscription
+  of
 } from 'rxjs';
 import {
   catchError,
@@ -23,7 +22,7 @@ import {
 } from 'rxjs/operators';
 
 import { Logger } from 'ngx-base';
-import { Context, Space, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
+import { Space, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
 export interface UserSpacesResponse {
@@ -58,12 +57,19 @@ export class UserSpacesService {
     private readonly spaceService: SpaceService
   ) { }
 
-  getInvolvedSpacesCount(): Observable<number> {
+  private getUserSpacesResponse(): Observable<UserSpacesResponse> {
     let headers: HttpHeaders = this.headers;
     if (this.auth.getToken() != null) {
       headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
     }
     return this.http.get(`${this.witUrl}user/spaces`, { headers })
+      .pipe(
+        map((response: UserSpacesResponse) => response)
+      );
+  }
+
+  getInvolvedSpacesCount(): Observable<number> {
+    return this.getUserSpacesResponse()
       .pipe(
         map((response: UserSpacesResponse) => response.meta.totalCount),
         catchError((err: HttpErrorResponse): Observable<number> => {
@@ -76,19 +82,15 @@ export class UserSpacesService {
 
     // Currently the backend returns values that look like Space[], but isn't
     getInvolvedSpaces(): Observable<SpaceInformation[]> {
-      let headers: HttpHeaders = this.headers;
-      if (this.auth.getToken() != null) {
-        headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
-      }
-      return this.http.get(`${this.witUrl}user/spaces`, { headers })
-        .pipe(
-          map((response: UserSpacesResponse): SpaceInformation[] => response.data),
-          catchError((err: HttpErrorResponse): Observable<Space[]> => {
-            this.errorHandler.handleError(err);
-            this.logger.error(err);
-            return of([]);
-          })
-        );
+      return this.getUserSpacesResponse()
+      .pipe(
+        map((response: UserSpacesResponse): SpaceInformation[] => response.data),
+        catchError((err: HttpErrorResponse): Observable<Space[]> => {
+          this.errorHandler.handleError(err);
+          this.logger.error(err);
+          return of([]);
+        })
+      );
     }
 
     // returns a list of spaces the user is a collaborator on

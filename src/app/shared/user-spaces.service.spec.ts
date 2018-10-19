@@ -132,7 +132,7 @@ describe('UserSpacesService', () => {
     });
   });
 
-  describe('#getInvovledSpaces', (): void => {
+  describe('#getInvolvedSpaces', (): void => {
     it('should return the data portion of the response', (done: DoneFn): void => {
       const mockSpaceInformation: SpaceInformation[] = [{
         attributes: {
