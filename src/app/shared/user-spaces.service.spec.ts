@@ -15,7 +15,8 @@ import { AuthenticationService } from 'ngx-login-client';
 
 import {
   UserSpacesResponse,
-  UserSpacesService
+  UserSpacesService,
+  SpaceInformation
 } from './user-spaces.service';
 
 describe('UserSpacesService', () => {
@@ -107,6 +108,59 @@ describe('UserSpacesService', () => {
       ).subscribe(
         (count: number): void => {
           expect(count).toEqual(0);
+          expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
+          expect(TestBed.get(Logger).error).toHaveBeenCalled();
+          done();
+        },
+        (): void => {
+          done.fail('should continue with 0 value');
+        }
+      );
+
+      const req: TestRequest = controller.expectOne('http://example.com/user/spaces');
+      req.error(new ErrorEvent('Mock HTTP Error'));
+    });
+  });
+
+  describe('#getInvovledSpaces', (): void => {
+    it('should return the data portion of the response', (done: DoneFn): void => {
+      const mockSpaceInformation: SpaceInformation[] = [{
+        attributes: {
+          name: 'mock-space'
+        },
+        id: 'mock-space-id',
+        links: {
+          self: 'mock-self'
+        },
+        type: 'mock-type'
+      }];
+
+      const httpResponse: UserSpacesResponse = {
+        data: mockSpaceInformation,
+        meta: {
+          totalCount: 1
+        }
+      };
+      service.getInvolvedSpaces().pipe(
+        first()
+      ).subscribe((spaceInformation: SpaceInformation[]): void => {
+        expect(spaceInformation).toEqual(mockSpaceInformation);
+        controller.verify();
+        done();
+      });
+
+      const req: TestRequest = controller.expectOne('http://example.com/user/spaces');
+      expect(req.request.method).toEqual('GET');
+      expect(req.request.headers.get('Authorization')).toEqual('Bearer mock-auth-token');
+      req.flush(httpResponse);
+    });
+
+    it('should report errors', (done: DoneFn): void => {
+      service.getInvolvedSpaces().pipe(
+        first()
+      ).subscribe(
+        (spaceInformation: SpaceInformation[]): void => {
+          expect(spaceInformation).toEqual([]);
           expect(TestBed.get(ErrorHandler).handleError).toHaveBeenCalled();
           expect(TestBed.get(Logger).error).toHaveBeenCalled();
           done();

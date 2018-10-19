@@ -1,8 +1,6 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import {
   Component,
   ErrorHandler,
-  Inject,
   OnDestroy,
   OnInit,
   TemplateRef,
@@ -12,21 +10,19 @@ import {
 import { cloneDeep, findIndex, has } from 'lodash';
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Context, Contexts, Space, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
+import { User, UserService } from 'ngx-login-client';
 import { Action, ActionConfig } from 'patternfly-ng/action';
 import { EmptyStateConfig } from 'patternfly-ng/empty-state';
 import { Filter, FilterEvent } from 'patternfly-ng/filter';
 import { ListConfig } from 'patternfly-ng/list';
 import { SortEvent, SortField } from 'patternfly-ng/sort';
 import {
-  empty as emptyObservable,
   forkJoin,
   Observable,
   Subscription
 } from 'rxjs';
 import {
-  catchError,
   filter,
   map,
   switchMap,
@@ -34,25 +30,8 @@ import {
   zip
 } from 'rxjs/operators';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
+import { SpaceInformation, UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesSearchSpacesDialog } from './my-spaces-search-dialog/my-spaces-search-spaces-dialog.component';
-
-class UserSpaces {
-  data: SpaceInformation[];
-  meta: {
-    totalCount: number
-  };
-}
-
-class SpaceInformation {
-  attributes: {
-    name: string
-  };
-  id: string;
-  links: {
-    self: string
-  };
-  type: string;
-}
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -77,7 +56,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   private currentSortField: SortField;
   private mySpacesEmptyStateConfig: EmptyStateConfig;
   private sharedSpacesEmptyStateConfig: EmptyStateConfig;
-  private headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   private isAscendingSort: boolean = true;
   private loggedInUser: User;
   private modalRef: BsModalRef;
@@ -92,39 +70,40 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     private modalService: BsModalService,
     private spaceService: SpaceService,
     private userService: UserService,
-    private auth: AuthenticationService,
-    private http: HttpClient,
     private errorHandler: ErrorHandler,
-    @Inject(WIT_API_URL) private readonly witUrl: string
+    private userSpacesService: UserSpacesService
   ) { }
 
   ngOnInit() {
+    this.initPfListConfigs();
+
     this.subscriptions.push(
       this.contexts.current.subscribe(val => this.context = val)
     );
+
     this.subscriptions.push(
       this.userService.loggedInUser.subscribe(user => { this.loggedInUser = user; })
     );
+
     this.subscriptions.push(
       this.broadcaster.on('displayMySpaces').subscribe((): void => {
-        if (this.listConfig) {
-          this.listConfig.emptyStateConfig = this.mySpacesEmptyStateConfig;
-        }
+        this.listConfig.emptyStateConfig = this.mySpacesEmptyStateConfig;
         this._spaces = this.mySpaces;
         this.updateSpaces();
     }));
+
     this.subscriptions.push(
       this.broadcaster.on('displaySharedSpaces').subscribe((): void => {
-        if (this.listConfig) {
-          this.listConfig.emptyStateConfig = this.sharedSpacesEmptyStateConfig;
-        }
+        this.listConfig.emptyStateConfig = this.sharedSpacesEmptyStateConfig;
         this._spaces = this.sharedSpaces;
         this.updateSpaces();
       })
     );
 
     this.initSpaces();
+  }
 
+  initPfListConfigs(): void {
     this.currentSortField = {
       id: 'name',
       sortType: 'alpha',
@@ -179,12 +158,12 @@ export class MySpacesComponent implements OnDestroy, OnInit {
               this._spaces = this.mySpaces = mySpaces;
               this.updateSpaces();
             }),
-            zip(this.getRoledSpaces()),
-            // find the difference between roledSpaces and mySpaces, if any - these IDs belong to shared spaces
-            map(([mySpaces, roledSpaces]: [Space[], SpaceInformation[]]): string[] => {
-              let roledSpaceIds: string[] = roledSpaces.map((space: SpaceInformation): string => space.id);
+            zip(this.userSpacesService.getInvolvedSpaces()),
+            // find the difference between involvedSpaces and mySpaces, if any - these IDs belong to shared spaces
+            map(([mySpaces, involvedSpaces]: [Space[], SpaceInformation[]]): string[] => {
+              let involvedSpacesIds: string[] = involvedSpaces.map((space: SpaceInformation): string => space.id);
               let mySpaceIds: string[] = mySpaces.map((space: Space): string => space.id);
-              return roledSpaceIds.filter((id: string) => mySpaceIds.indexOf(id) < 0);
+              return involvedSpacesIds.filter((id: string) => mySpaceIds.indexOf(id) < 0);
             }),
             filter((ids: string[]): boolean => ids.length > 0),
             switchMap((ids: string[]): Observable<Space[]> =>
@@ -203,23 +182,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   // returns an Observable containing the list of spaces the user owns
   getMySpaces(): Observable<Space[]> {
     return this.spaceService.getSpacesByUser(this.context.user.attributes.username);
-  }
-
-  // TODO - move to UserSpacesService when available
-  // returns an Observable containing the list of the spaces the user has a role in
-  getRoledSpaces(): Observable<SpaceInformation[]> {
-    if (this.auth.getToken() != null) {
-      this.headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
-    }
-    return this.http.get(`${this.witUrl}user/spaces`, { headers: this.headers })
-      .pipe(
-        map((response: UserSpaces): SpaceInformation[] => response.data),
-        catchError((err: HttpErrorResponse): Observable<Space[]> => {
-          this.errorHandler.handleError(err);
-          this.logger.error(err);
-          return emptyObservable();
-        })
-      );
   }
 
   // Accessors

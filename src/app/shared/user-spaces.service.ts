@@ -18,14 +18,25 @@ import {
 } from 'rxjs/operators';
 
 import { Logger } from 'ngx-base';
-import { WIT_API_URL } from 'ngx-fabric8-wit';
+import { Space, WIT_API_URL } from 'ngx-fabric8-wit';
 import { AuthenticationService } from 'ngx-login-client';
 
 export interface UserSpacesResponse {
-  data: Object[];
+  data: SpaceInformation[];
   meta: {
     totalCount: number
   };
+}
+
+export class SpaceInformation {
+  attributes: {
+    name: string
+  };
+  id: string;
+  links: {
+    self: string
+  };
+  type: string;
 }
 
 @Injectable()
@@ -57,4 +68,20 @@ export class UserSpacesService {
       );
   }
 
+    // Currently the backend returns values that look like Space[], but isn't
+    getInvolvedSpaces(): Observable<SpaceInformation[]> {
+      let headers: HttpHeaders = this.headers;
+      if (this.auth.getToken() != null) {
+        headers = this.headers.set('Authorization', `Bearer ${this.auth.getToken()}`);
+      }
+      return this.http.get(`${this.witUrl}user/spaces`, { headers })
+        .pipe(
+          map((response: UserSpacesResponse): SpaceInformation[] => response.data),
+          catchError((err: HttpErrorResponse): Observable<Space[]> => {
+            this.errorHandler.handleError(err);
+            this.logger.error(err);
+            return of([]);
+          })
+        );
+    }
 }

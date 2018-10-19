@@ -5,8 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { cloneDeep } from 'lodash';
 import { Broadcaster, Logger } from 'ngx-base';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Context, Contexts, Space, SpaceService, WIT_API_URL } from 'ngx-fabric8-wit';
-import { AuthenticationService, User, UserService } from 'ngx-login-client';
+import { Context, Contexts, Space, SpaceService } from 'ngx-fabric8-wit';
+import { User, UserService } from 'ngx-login-client';
 import { Filter, SortEvent, SortField } from 'patternfly-ng';
 import { Action } from 'patternfly-ng/action';
 import {
@@ -19,6 +19,7 @@ import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
+import { UserSpacesService, SpaceInformation } from '../../shared/user-spaces.service';
 import { MySpacesComponent } from './my-spaces.component';
 
 @Component({
@@ -84,9 +85,9 @@ describe('MySpacesComponent', (): void => {
       path: 'mock-path',
       name: 'mock-name'
     } as Context;
-    spaceMock1 = cloneDeep(spaceMock);
-    spaceMock2 = cloneDeep(spaceMock);
-    spaceMock3 = cloneDeep(spaceMock);
+    spaceMock1 = cloneDeep(spaceMock); // owned space
+    spaceMock2 = cloneDeep(spaceMock); // owned space
+    spaceMock3 = cloneDeep(spaceMock); // collaborating space
     (spaceMock1 as any).showPin = true;
     spaceMock2.id = '2';
     (spaceMock2 as any).showPin = false;
@@ -133,7 +134,7 @@ describe('MySpacesComponent', (): void => {
               return of([spaceMock1, spaceMock2]);
             }
             if (key === 'displaySharedSpaces') {
-              return of([spaceMock1, spaceMock2]);
+              return of([spaceMock3]);
             }
           });
           mockBroadcaster.broadcast.and.callThrough();
@@ -153,6 +154,7 @@ describe('MySpacesComponent', (): void => {
         useFactory: (): jasmine.SpyObj<SpaceService> => {
           const mockSpaceService: any = createMock(SpaceService);
           mockSpaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2]));
+          mockSpaceService.getSpaceById.and.returnValue(of([spaceMock3]));
           mockSpaceService.deleteSpace = () => {};
           return mockSpaceService;
         }
@@ -166,15 +168,6 @@ describe('MySpacesComponent', (): void => {
         }
       },
       {
-        provide: AuthenticationService,
-        useFactory: (): jasmine.SpyObj<AuthenticationService> => {
-          const mockAuthenticationService: any = createMock(AuthenticationService);
-          mockAuthenticationService.getGitHubToken = () => {};
-          mockAuthenticationService.getToken.and.returnValue('mock-token');
-          return mockAuthenticationService;
-        }
-      },
-      {
         provide: ErrorHandler,
         useFactory: (): jasmine.SpyObj<ErrorHandler> => {
           const mockErrorHandler: jasmine.SpyObj<ErrorHandler> = createMock(ErrorHandler);
@@ -182,14 +175,32 @@ describe('MySpacesComponent', (): void => {
           return mockErrorHandler;
         }
       },
-      { provide: WIT_API_URL, useValue: 'https://example.com/api/' }
+      {
+        provide: UserSpacesService,
+        useFactory: (): jasmine.SpyObj<UserSpacesService> => {
+          const mockUserSpacesService: jasmine.SpyObj<UserSpacesService> = createMock(UserSpacesService);
+          const mockSpaceInformation: SpaceInformation[] = [{
+            attributes: {
+              name: 'spaceMock3-name'
+            },
+            id: '3',
+            links: {
+              self: 'mock-link'
+            },
+            type: 'mock-type'
+          }];
+          mockUserSpacesService.getInvolvedSpaces.and.returnValue(of(mockSpaceInformation));
+          return mockUserSpacesService;
+        }
+      }
     ],
     schemas: [NO_ERRORS_SCHEMA]
   });
 
   describe('#spaces', (): void => {
     it('should return the contents of _spaces', (): void => {
-      let result: Space[] = testContext.testedDirective.spaces;
+      const component: MySpacesComponent = testContext.testedDirective;
+      let result: Space[] = component.spaces;
       expect(result).toEqual([spaceMock1, spaceMock2]);
     });
   });
