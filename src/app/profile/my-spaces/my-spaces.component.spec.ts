@@ -19,7 +19,7 @@ import { createMock } from 'testing/mock';
 import { initContext, TestContext } from 'testing/test-context';
 import { ExtProfile, GettingStartedService } from '../../getting-started/services/getting-started.service';
 import { spaceMock } from '../../shared/context.service.mock';
-import { UserSpacesService, SpaceInformation } from '../../shared/user-spaces.service';
+import { UserSpacesService } from '../../shared/user-spaces.service';
 import { MySpacesComponent } from './my-spaces.component';
 
 @Component({
@@ -155,7 +155,7 @@ describe('MySpacesComponent', (): void => {
           const mockSpaceService: any = createMock(SpaceService);
           mockSpaceService.getSpacesByUser.and.returnValue(of([spaceMock1, spaceMock2]));
           mockSpaceService.getSpaceById.and.returnValue(of([spaceMock3]));
-          mockSpaceService.deleteSpace = () => {};
+          mockSpaceService.deleteSpace.and.stub();
           return mockSpaceService;
         }
       },
@@ -179,17 +179,7 @@ describe('MySpacesComponent', (): void => {
         provide: UserSpacesService,
         useFactory: (): jasmine.SpyObj<UserSpacesService> => {
           const mockUserSpacesService: jasmine.SpyObj<UserSpacesService> = createMock(UserSpacesService);
-          const mockSpaceInformation: SpaceInformation[] = [{
-            attributes: {
-              name: 'spaceMock3-name'
-            },
-            id: '3',
-            links: {
-              self: 'mock-link'
-            },
-            type: 'mock-type'
-          }];
-          mockUserSpacesService.getInvolvedSpaces.and.returnValue(of(mockSpaceInformation));
+          mockUserSpacesService.getSharedSpaces.and.returnValue(of([spaceMock3]));
           return mockUserSpacesService;
         }
       }
@@ -200,7 +190,7 @@ describe('MySpacesComponent', (): void => {
   describe('#spaces', (): void => {
     it('should return the contents of _spaces', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let result: Space[] = component.spaces;
+      const result: Space[] = component.spaces;
       expect(result).toEqual([spaceMock1, spaceMock2]);
     });
   });
@@ -208,7 +198,7 @@ describe('MySpacesComponent', (): void => {
   describe('#handlePinChange', (): void => {
     it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      spyOn(component, 'savePins').and.callFake((): void => {});
+      spyOn(component, 'savePins').and.callThrough();
       spyOn(component, 'updateSpaces');
       component.handlePinChange(spaceMock1);
       expect(component.savePins).toHaveBeenCalled();
@@ -222,7 +212,7 @@ describe('MySpacesComponent', (): void => {
   describe('#handlePinChange', (): void => {
     it('should delegate to savePins and updateSpaces if the selected space exists in the user\'s spaces', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      spyOn(component, 'savePins').and.callFake((): void => {});
+      spyOn(component, 'savePins').and.callThrough();
       spyOn(component, 'updateSpaces');
       component.handlePinChange(spaceMock1);
       expect(component.savePins).toHaveBeenCalled();
@@ -278,19 +268,19 @@ describe('MySpacesComponent', (): void => {
   describe('#matchesFilter', (): void => {
     it('should return true if there is a space that matches the filter value', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let result: boolean = component.matchesFilter(spaceMock1, mockFilter1);
+      const result: boolean = component.matchesFilter(spaceMock1, mockFilter1);
       expect(result).toBe(true);
     });
 
     it('should return false if there is no space that matches the filter value', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let result: boolean = component.matchesFilter(spaceMock1, mockFilter2);
+      const result: boolean = component.matchesFilter(spaceMock1, mockFilter2);
       expect(result).toBe(false);
     });
 
     it('should simply return true if the filter id isn\'t name, because this is not supported functionality', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let result: boolean = component.matchesFilter(spaceMock1, mockFilter3);
+      const result: boolean = component.matchesFilter(spaceMock1, mockFilter3);
       expect(result).toBe(true);
     });
 
@@ -298,7 +288,7 @@ describe('MySpacesComponent', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       const mockFilterCaseInsensitive: Filter = cloneDeep(mockFilter1);
       mockFilterCaseInsensitive.value = mockFilter1.value.toUpperCase();
-      let result: boolean = component.matchesFilter(spaceMock1, mockFilterCaseInsensitive);
+      const result: boolean = component.matchesFilter(spaceMock1, mockFilterCaseInsensitive);
       expect(result).toBe(true);
     });
   });
@@ -315,14 +305,14 @@ describe('MySpacesComponent', (): void => {
     it('should return true if all of the filters are satisfied', () => {
       const component: MySpacesComponent = testContext.testedDirective;
       let mockFilters: Filter[] = [mockFilter1, mockFilter3];
-      let result: boolean = component.matchesFilters(spaceMock2, mockFilters);
+      const result: boolean = component.matchesFilters(spaceMock2, mockFilters);
       expect(result).toBe(true);
     });
 
     it('should return false if at least one of the filters results in zero matches', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
       let mockFilters: Filter[] = [mockFilter1, mockFilter2, mockFilter3];
-      let result: boolean = component.matchesFilters(spaceMock1, mockFilters);
+      const result: boolean = component.matchesFilters(spaceMock1, mockFilters);
       expect(result).toBe(false);
     });
   });
@@ -334,13 +324,13 @@ describe('MySpacesComponent', (): void => {
   describe('#canDeleteSpace', (): void => {
     it('should be true if the creator and user are the same people', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let result: boolean = component.canDeleteSpace('mock-id');
+      const result: boolean = component.canDeleteSpace('mock-id');
       expect(result).toBe(true);
     });
 
     it('should be false if the creator and user are different people', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let result: boolean = component.canDeleteSpace('not-mock-id');
+      const result: boolean = component.canDeleteSpace('not-mock-id');
       expect(result).toBe(false);
     });
   });
@@ -373,7 +363,7 @@ describe('MySpacesComponent', (): void => {
     });
 
     it('should remove the selected space out of _spaces', (): void => {
-      let component: MySpacesComponent = testContext.testedDirective;
+      const component: MySpacesComponent = testContext.testedDirective;
       const mockSpaceService: jasmine.SpyObj<SpaceService> = TestBed.get(SpaceService);
       spyOn(mockSpaceService, 'deleteSpace').and.returnValue(of(spaceMock1));
       spyOn(component, 'savePins').and.callThrough();
@@ -427,7 +417,7 @@ describe('MySpacesComponent', (): void => {
         isAscending: true
       };
       component.sortChange(mockSortEvent);
-      let result: number = component.compare(spaceMock1, spaceMock1);
+      const result: number = component.compare(spaceMock1, spaceMock1);
       expect(result).toBe(0);
     });
 
@@ -441,13 +431,13 @@ describe('MySpacesComponent', (): void => {
         isAscending: false
       };
       component.sortChange(mockSortEvent);
-      let result: number = component.compare(spaceMock1, spaceMock1);
+      const result: number = component.compare(spaceMock1, spaceMock1);
       expect(result).toBe(0);
     });
 
     it('should return -1 if the first space is first alphabetically, sorted ascending', (): void => {
       const component: MySpacesComponent = testContext.testedDirective;
-      let result: number = component.compare(spaceMock1, spaceMock2);
+      const result: number = component.compare(spaceMock1, spaceMock2);
       expect(result).toBe(-1);
     });
 
@@ -461,7 +451,7 @@ describe('MySpacesComponent', (): void => {
         isAscending: false
       };
       component.sortChange(mockSortEvent);
-      let result: number = component.compare(spaceMock1, spaceMock2);
+      const result: number = component.compare(spaceMock1, spaceMock2);
       expect(result).toBe(1);
     });
 
@@ -472,7 +462,7 @@ describe('MySpacesComponent', (): void => {
         isAscending: false
       };
       component.sortChange(mockSortEvent);
-      let result: number = component.compare(spaceMock1, spaceMock2);
+      const result: number = component.compare(spaceMock1, spaceMock2);
       expect(result).toBe(0);
     });
   });
