@@ -68,8 +68,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
   ) { }
 
   ngOnInit() {
-    this.initPfListConfigs();
-
     this.subscriptions.push(
       this.contexts.current.subscribe((val: Context): void => {
         this.context = val;
@@ -82,6 +80,7 @@ export class MySpacesComponent implements OnDestroy, OnInit {
       })
     );
 
+    this.initPfListConfigs();
     this.initSpaces();
   }
 
@@ -149,11 +148,6 @@ export class MySpacesComponent implements OnDestroy, OnInit {
     } else {
       this.errorHandler.handleError('Failed to retrieve list of spaces owned by user');
     }
-  }
-
-  // returns an Observable containing the list of spaces the user owns
-  getMySpaces(): Observable<Space[]> {
-    return this.spaceService.getSpacesByUser(this.context.user.attributes.username);
   }
 
   toggleChange(event: SpacesType): void {
